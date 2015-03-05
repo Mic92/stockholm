@@ -213,14 +213,9 @@ in
   users.extraUsers = extraUsers;
   users.mutableUsers = false;
 
-  #security.sudo.configFile = sudoers config.users.extraUsers;
-  security.sudo.configFile =
-    with builtins; trace
+  security.sudo.extraConfig =
     ''
-      OK
-    ''
-    sudoers;
-  security.sudo.extraConfig = ''
     Defaults mailto="tv@wu.retiolum"
-  '';
+    ${sudoers}
+    '';
 }
