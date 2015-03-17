@@ -1,0 +1,134 @@
+#! /bin/sh
+set -euf
+
+main() {
+  case "$1" in
+    (deploy)
+      "$@"
+      ;;
+    (*)
+      echo "$0: unknown command: $1" >&2
+      exit 23
+  esac
+}
+
+# deploy : nix-file x hostname -> ()
+deploy() {(
+  main=$1
+  target=$2
+
+  hosts=$(list_hosts)
+  imports=$(set -euf; list_imports "$main")
+  secrets=$(echo "$imports" | xargs cat | quoted_strings | filter_secrets)
+
+  abs_deps=$(
+    echo "$hosts"
+    echo "$imports"
+    echo "$secrets"
+  )
+
+  rel_deps=$(echo "$abs_deps" | make_relative_to "$PWD")
+  filter=$(echo "$rel_deps" | make_rsync_whitelist)
+
+  echo "$filter" \
+    | rsync -f '. -' -zvrlptD --delete-excluded ./ "$target":/etc/nixos/
+  ssh "$target" nixos-rebuild switch -I nixos-config=/etc/nixos/"$main"
+)}
+
+# list_imports : nix-file -> lines nix-file
+list_imports() {
+  if echo "$1" | grep -q ^/; then
+    :
+  else
+    set -- "./$1"
+  fi
+  imports=$(nix-instantiate \
+      --strict \
+      --json \
+      --eval \
+      -E \
+      "with builtins; with import ./lib/modules.nix; map toString (list-imports $1)")
+  echo "$imports" \
+    | jq -r .[]
+}
+
+# list_hosts : lines tinc-host-file
+# Precondition: $PWD/hosts is the correct repository :)
+list_hosts() {
+  git -C hosts ls-tree --name-only HEAD \
+    | awk '{print ENVIRON["PWD"]"/hosts/"$$0}'
+}
+
+# filter_secrets : lines string |> lines secrets-file-candidate
+# Notice how false positives are possible.
+filter_secrets() {
+  sed -n 's:^\(.*/\)\?\(secrets/.*\):'"${PWD//:/\\:}"'/\2:p'
+}
+
+
+# quoted_strings : lines string |> lines string
+# Extract all (double-) quoted strings from stdin.
+#
+# 0. find begin of string or skip line
+# 1. find end of string or skip line
+# 2. print string and continue after string
+quoted_strings() {
+  sed '
+        s:[^"]*"::                  ;t1;d
+    :1; s:\(\([^"]\|\\"\)*\)":\1\n: ;t2;d
+    :2; P;D
+  ' \
+    | sed 's:\\":":g'
+}
+
+# bre_escape : lines string |> lines bre-escaped-string
+bre_escape() {
+  sed 's:[\.\[\\\*\^\$]:\\&:g'
+}
+
+# ls_bre : directory -> BRE
+# Create a BRE from the files in a directory.
+ls_bre() {
+  ls "$1" \
+    | tr \\n / \
+    | sed '
+        s:[\.\[\\\*\^\$]:\\&:g
+        s:/$::
+        s:/:\\|:g
+      '
+}
+
+# make_relative_to : lines path |> directory -> lines path
+# Non-matching paths won't get altered.
+make_relative_to() {
+  sed "s:^$(echo "$1/" | bre_escape | sed 's/:/\\:/g')::"
+}
+
+# make_rsync_whitelist : lines rel-path |> liens rsync-filter
+make_rsync_whitelist() {
+  set -- "$(cat)"
+
+  # include all files in stdin and their directories
+  {
+    echo "$1"
+    echo "$1" | make_parent_dirs | sort | uniq
+  } \
+    | sed 's|^|+ /|'
+
+  # exclude everything else
+  echo '- *'
+}
+
+# make_parent_dirs : lines path |> lines directory
+# List all parent directories of a path.
+make_parent_dirs() {
+  set -- "$(sed -n 's|/[^/]*$||p' | grep . | sort | uniq)"
+  if echo "$1" | grep -q .; then
+    echo "$1"
+    echo "$1" | make_parent_dirs
+  fi
+}
+
+if [ "${noexec-}" != 1 ]; then
+  main "$@"
+fi
