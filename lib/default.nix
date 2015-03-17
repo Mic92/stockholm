@@ -40,5 +40,12 @@ in
   #setToList = setMap (_: v: v);
 
   shell-escape =
-    stringAsChars (c: if c == "\n" then ''"${c}"'' else "\\${c}");
+    let
+      isSafeChar = c: match "[-./0-9_a-zA-Z]" c != null;
+    in
+    stringAsChars (c:
+      if isSafeChar c then c
+      else if c == "\n" then "'\n'"
+      else "\\${c}");
+
 }
