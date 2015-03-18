@@ -9,7 +9,7 @@ with (import ./lib { inherit pkgs; });
     ./modules/urxvt.nix
     ./modules/iptables.nix
     ./modules/users.nix
-    ./modules/tools.nix
+    #./modules/tools.nix
     ./modules/hosts.nix
     ./modules/xserver.nix
     ./modules/exim.nix
@@ -280,9 +280,11 @@ with (import ./lib { inherit pkgs; });
     "slock"
   ];
 
-  security.pki.certificateFiles = [
-    ./certs/zalora-ca.crt
-  ];
+  # TODO
+  # Currently ./run doesn't know about certificates
+  #security.pki.certificateFiles = [
+  #  ./certs/zalora-ca.crt
+  #];
 
   #security.pam.loginLimits = [
   #  # for jack

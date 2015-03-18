@@ -18,12 +18,25 @@ deploy() {(
   target=$2
 
   hosts=$(list_hosts)
-  imports=$(set -euf; list_imports "$main")
-  secrets=$(echo "$imports" | xargs cat | quoted_strings | filter_secrets)
+  module_imports=$(set -euf; list_module_imports "$main")
+  other_imports=$(
+    echo "$module_imports" \
+      | xargs grep -H . \
+      | import_statements \
+      | slash_path_relpath \
+      | undot_paths \
+      | sort \
+      | uniq \
+      | sed '/\.nix$/!s:$:/default.nix:' \
+      )
+  secrets=$(echo "$module_imports" | xargs cat | quoted_strings | filter_secrets)
+
+  # TODO collect all other paths from *_imports
 
   abs_deps=$(
     echo "$hosts"
-    echo "$imports"
+    echo "$module_imports"
+    echo "$other_imports"
     echo "$secrets"
   )
 
@@ -35,8 +48,8 @@ deploy() {(
   ssh "$target" nixos-rebuild switch -I nixos-config=/etc/nixos/"$main"
 )}
 
-# list_imports : nix-file -> lines nix-file
-list_imports() {
+# list_module_imports : nix-file -> lines nix-file
+list_module_imports() {
   if echo "$1" | grep -q ^/; then
     :
   else
@@ -65,6 +78,38 @@ filter_secrets() {
   sed -n 's:^\(.*/\)\?\(secrets/.*\):'"${PWD//:/\\:}"'/\2:p'
 }
 
+# import_statements : lines (path ": " string) |> lines (path ": " relpath)
+import_statements() {
+  sed -n '
+        s@^\([^:]\+: \)\('"$(bre_invert_word import)"'\)*\<import\s\+@\1@
+        t1;d
+    :1; s@^\([^:]\+: \)\(\.*/\S*\)@\1\2\n@
+        t2;d
+    :2; P;D
+  '
+}
+
+# slash_path_relpath : lines (path ": " relpath) |> lines path
+#
+# Example: "/foo/bar: baz" => "/foo/baz"
+#
+slash_path_relpath() {
+  sed -n 's@/[^/]\+: @/@p'
+}
+
+# undot_paths : lines path |> lines path
+# Remove all dots (. and ..) from input paths.
+undot_paths() {
+  sed '
+    :0
+    s://\+:/:g
+    s:/\.\(/\|$\):\1:g
+    s:/[^/]\+/\.\.\(/\|$\):\1:g
+    s:^/\(\.\./\)\+:/:
+    t0
+    s:^$:/:
+  '
+}
 
 # quoted_strings : lines string |> lines string
 # Extract all (double-) quoted strings from stdin.
@@ -84,6 +129,21 @@ quoted_strings() {
 # bre_escape : lines string |> lines bre-escaped-string
 bre_escape() {
   sed 's:[\.\[\\\*\^\$]:\\&:g'
+}
+
+# bre_invert_word : string -> BRE
+# TODO escape chars in the resulting BRE.
+bre_invert_word() {
+  awk -v input="$1" '
+    BEGIN {
+      split(input,s,"")
+      for (i in s) {
+        c=s[i]
+        printf "\\|%s[^%s]", y, c
+        y = y c
+      }
+    }
+  '
 }
 
 # ls_bre : directory -> BRE
