@@ -78,23 +78,23 @@ filter_secrets() {
   sed -n 's:^\(.*/\)\?\(secrets/.*\):'"${PWD//:/\\:}"'/\2:p'
 }
 
-# import_statements : lines (path ": " string) |> lines (path ": " relpath)
+# import_statements : lines (path ":" string) |> lines (path ":" relpath)
 import_statements() {
   sed -n '
-        s@^\([^:]\+: \)\('"$(bre_invert_word import)"'\)*\<import\s\+@\1@
+        s@^\([^:]\+:\)\('"$(bre_invert_word import)"'\)*\<import\s\+@\1@
         t1;d
-    :1; s@^\([^:]\+: \)\(\.*/\S*\)@\1\2\n@
+    :1; s@^\([^:]\+:\)\(\.*/\S*\)@\1\2\n@
         t2;d
     :2; P;D
   '
 }
 
-# slash_path_relpath : lines (path ": " relpath) |> lines path
+# slash_path_relpath : lines (path ":" relpath) |> lines path
 #
 # Example: "/foo/bar: baz" => "/foo/baz"
 #
 slash_path_relpath() {
-  sed -n 's@/[^/]\+: @/@p'
+  sed -n 's@/[^/]\+:@/@p'
 }
 
 # undot_paths : lines path |> lines path
