@@ -104,7 +104,7 @@ make_relative_to() {
   sed "s:^$(echo "$1/" | bre_escape | sed 's/:/\\:/g')::"
 }
 
-# make_rsync_whitelist : lines rel-path |> liens rsync-filter
+# make_rsync_whitelist : lines relpath |> liens rsync-filter
 make_rsync_whitelist() {
   set -- "$(cat)"
 
