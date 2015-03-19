@@ -17,6 +17,16 @@ deploy() {(
   main=$1
   target=$2
 
+  rsync_filter "$main" \
+    | rsync -f '. -' -zvrlptD --delete-excluded ./ "$target":/etc/nixos/
+
+  ssh "$target" nixos-rebuild switch -I nixos-config=/etc/nixos/"$main"
+)}
+
+# rsync_filter : nix-file -> rsync-filter
+rsync_filter() {(
+  main=$1
+
   hosts=$(list_hosts)
   module_imports=$(set -euf; list_module_imports "$main")
   other_imports=$(
@@ -43,9 +53,7 @@ deploy() {(
   rel_deps=$(echo "$abs_deps" | make_relative_to "$PWD")
   filter=$(echo "$rel_deps" | make_rsync_whitelist)
 
-  echo "$filter" \
-    | rsync -f '. -' -zvrlptD --delete-excluded ./ "$target":/etc/nixos/
-  ssh "$target" nixos-rebuild switch -I nixos-config=/etc/nixos/"$main"
+  echo "$filter"
 )}
 
 # list_module_imports : nix-file -> lines nix-file
