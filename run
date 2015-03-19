@@ -12,7 +12,7 @@ main() {
   esac
 }
 
-# deploy : nix-file x hostname -> ()
+# deploy : nixos-config x [user@]hostname -> ()
 deploy() {(
   main=$1
   target=$2
@@ -23,7 +23,7 @@ deploy() {(
   ssh "$target" nixos-rebuild switch -I nixos-config=/etc/nixos/"$main"
 )}
 
-# rsync_filter : nix-file -> rsync-filter
+# rsync_filter : nixos-config -> rsync-filter
 rsync_filter() {(
   main=$1
 
