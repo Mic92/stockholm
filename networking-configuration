@@ -1,0 +1,96 @@
+#! /bin/sh
+#
+# usage: with cac ./generate-networking-configuration c838-828 cd
+#
+set -euf
+
+cac_servername=$1
+hostname=$2
+
+# This is somewhat required because cloudatcost requires whitelisting
+# of hosts.  If you whitelist your localhost, then leave this empty.
+# cac_via=
+#
+# cac_key=
+# cac_login=
+# cac_servername=
+
+# hostname=
+
+main() {
+  listservers=$(cac_listservers)
+
+  listserversstatus=$(echo $listservers | jq -r .status)
+  case $listserversstatus in
+    ok) : ;;
+    *)
+      echo $0: bad listservers status: $listserversstatus >&2
+      exit 1
+  esac
+
+  config=$(echo $listservers \
+      | jq -r ".data|map(select(.servername == \"$cac_servername\"))[]")
+
+  serverstatus=$(echo $config | jq -r .status)
+  case $serverstatus in
+    'Powered On') : ;;
+    *)
+      echo $0: bad server status: $serverstatus >&2
+      exit 2
+  esac
+
+  print_networking_configuraton "$config"
+}
+
+
+cac_listservers() {
+  if test -z "${cac_via-}"; then
+    curl -fsS \
+      "https://panel.cloudatcost.com/api/v1/listservers.php?key=$cac_key\&login=$cac_login"
+  else
+    ssh -q $cac_via -t curl -fsS \
+      "https://panel.cloudatcost.com/api/v1/listservers.php?key=$cac_key\\&login=$cac_login"
+  fi
+}
+
+
+print_networking_configuraton() {
+  config=$1
+  address=$(echo $config | jq -r .ip)
+  gateway=$(echo $config | jq -r .gateway)
+  nameserver=8.8.8.8
+  netmask=$(echo $config | jq -r .netmask)
+  prefixLength=$(netmaskToPrefixLengh $netmask)
+
+  # TODO generate all config and put it into a temp dir, then rsync that
+  #
+  # upload configuration (to /root)
+  #
+  printf '{...}:\n'
+  printf '{\n'
+  printf '  networking.hostName = "%s";\n' $hostname
+  printf '  networking.interfaces.enp2s1.ip4 = [\n'
+  printf '    {\n'
+  printf '      address = "%s";\n' $address
+  printf '      prefixLength = %d;\n' $prefixLength
+  printf '    }\n'
+  printf '  ];\n'
+  printf '  networking.defaultGateway = "%s";\n' $gateway
+  printf '  networking.nameservers = [\n'
+  printf '    "%s"\n' $nameserver
+  printf '  ];\n'
+  printf '}\n'
+}
+
+netmaskToPrefixLengh() {
+  binaryNetmask=$(echo $1 | sed 's/^/obase=2;/;s/\./;/g' | bc | tr -d \\n)
+  binaryPrefix=$(echo $binaryNetmask | sed -n 's/^\(1*\)0*$/\1/p')
+  if ! echo $binaryPrefix | grep -q .; then
+    echo $0: bad netmask: $netmask >&2
+    exit 4
+  fi
+  printf %s $binaryPrefix | tr -d 0 | wc -c
+}
+
+
+main "$@"
