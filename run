@@ -17,7 +17,9 @@ deploy() {(
   main=$1
   target=$2
 
-  rsync_filter "$main" \
+  filter=$(rsync_filter "$main")
+
+  echo "$filter" \
     | rsync -f '. -' -zvrlptD --delete-excluded ./ "$target":/etc/nixos/
 
   ssh "$target" nixos-rebuild switch -I nixos-config=/etc/nixos/"$main"
