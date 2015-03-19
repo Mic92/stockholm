@@ -1,0 +1,205 @@
+#! /bin/sh
+set -xeuf
+
+noexec=1 . ./run
+
+nix_url=https://nixos.org/releases/nix/nix-1.8/nix-1.8-x86_64-linux.tar.bz2
+nix_sha256=52fab207b4ce4d098a12d85357d0353e972c492bab0aa9e08e1600363e76fefb
+nix_find_sha1sum=86f8775bd4f0841edd4c816df861cebf509d58c3
+
+# This is somewhat required because cloudatcost requires whitelisting
+# of hosts.  If you whitelist your localhost, then leave this empty.
+# cac_via=
+#
+# cac_key=
+# cac_login=
+# cac_servername=
+
+# hostname=
+
+main() {
+  listservers=$(cac_listservers)
+
+  listserversstatus=$(echo $listservers | jq -r .status)
+  case $listserversstatus in
+    ok) : ;;
+    *)
+      echo $0: bad listservers status: $listserversstatus >&2
+      exit 1
+  esac
+
+  config=$(echo $listservers \
+      | jq -r ".data|map(select(.servername == \"$cac_servername\"))[]")
+
+  serverstatus=$(echo $config | jq -r .status)
+  case $serverstatus in
+    'Powered On') : ;;
+    *)
+      echo $0: bad server status: $serverstatus >&2
+      exit 2
+  esac
+
+  template=$(echo $config | jq -r .template)
+  case $template in
+    'CentOS-7-64bit') infest_centos7_64bit "$config";;
+    *)
+      echo $0: bad template: $template >&2
+      exit 3
+  esac
+}
+
+
+cac_listservers() {
+  if test -z "${cac_via-}"; then
+    curl -fsS \
+      "https://panel.cloudatcost.com/api/v1/listservers.php?key=$cac_key\&login=$cac_login"
+  else
+    ssh -q $cac_via -t curl -fsS \
+      "https://panel.cloudatcost.com/api/v1/listservers.php?key=$cac_key\\&login=$cac_login"
+  fi
+}
+
+
+infest_centos7_64bit() {
+  config=$1
+  address=$(echo $config | jq -r .ip)
+  gateway=$(echo $config | jq -r .gateway)
+  nameserver=8.8.8.8
+  netmask=$(echo $config | jq -r .netmask)
+  prefixLength=$(netmaskToPrefixLengh $netmask)
+  RSYNC_RSH='sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+  SSHPASS=$(echo $config | jq -r .rootpass)
+  export SSHPASS
+  export RSYNC_RSH
+
+  ./networking-configuration $cac_servername $hostname \
+    > modules/networking-$hostname.nix
+
+  rsync_filter "$main" \
+    | rsync -f '. -' -zvrlptD --delete-excluded ./ "$target":/etc/nixos/
+
+  #
+  #
+  #
+  echo '(
+    set -xeuf
+    type bzip2 || yum install -y bzip2
+    type rsync || yum install -y rsync
+    groupadd -g 30000 nixbld || :
+    for i in `seq 1 10`; do
+      useradd -c "foolsgarden Nix build user $i" \
+              -d /var/empty \
+              -s /sbin/nologin \
+              -g 30000 \
+              -G 30000 \
+              -l -u $(expr 30000 + $i) \
+              nixbld$i || :
+      rm -f /var/spool/mail/nixbld$i
+    done
+
+    #curl https://nixos.org/nix/install | sh
+    nix_tar=$nix_basename.tar.bz2
+    if ! echo $nix_sha256 $nix_tar | sha256sum -c; then
+      wget -c $nix_url || :
+      if ! echo $nix_sha256 $nix_tar | sha256sum -c; then
+        wget $nix_url || :
+        if ! echo $nix_sha256 $nix_tar | sha256sum -c; then
+          echo $0: cannot download $nix_url >&2
+          exit 5
+        fi
+      fi
+    fi
+
+    if ! test -d $nix_basename; then
+      tar jxf $nix_basename.tar.bz2
+    fi
+
+    nix_find=$nix_basename.find.txt
+    if ! echo $nix_find_sha1sum $nix_find | sha1sum -c; then
+      find $nix_basename | sort > $nix_find
+      if ! echo $nix_find_sha1sum $nix_find | sha1sum -c; then
+        echo $0: cannot unpack $nix_basename.tar.bz2 >&2
+        # TODO we could retry
+        exit 6
+      fi
+    fi
+
+    mkdir -p bin
+    PATH=$HOME/bin:$PATH
+    export PATH
+
+    # generate fake sudo because
+    # sudo: sorry, you must have a tty to run sudo
+    {
+      echo "#! /bin/sh"
+      echo "exec env \"\$@\""
+    } > bin/sudo
+    chmod +x bin/sudo
+
+    ./$nix_basename/install
+
+    . /root/.nix-profile/etc/profile.d/nix.sh
+
+    nixpkgs_expr="import <nixpkgs> { system = builtins.currentSystem; }"
+    nixpkgs_path=$(
+      find /nix/store -mindepth 1 -maxdepth 1 -name *-nixpkgs-* -type d
+    )
+
+    for i in nixos-generate-config nixos-install; do
+      nix-env \
+        --arg config "{ nix.package = ($nixpkgs_expr).nix; }" \
+        --arg pkgs "$nixpkgs_expr" \
+        --arg modulesPath "throw \"no modulesPath\"" \
+        -f $nixpkgs_path/nixpkgs/nixos/modules/installer/tools/tools.nix \
+        -iA config.system.build.$i
+    done
+
+    # TODO following fail when aborted in-between
+    if ! test -d /int; then
+      mkdir -p /int
+      mount --bind /int /mnt
+    fi
+    if ! test -d /mnt/boot; then
+      mkdir -p /mnt/boot
+      mount /dev/sda1 /mnt/boot
+    fi
+
+    mkdir -p /mnt/etc/nixos
+    rsync -zvrlptD --delete-excluded /etc/nixos/ /mnt/etc/nixos/
+
+    nixos-install
+
+    rsync -va --force /int/ /
+
+    # find / -type f -mtime +1 -exec rm -v {} \; 2>&1 > rm.log
+    #   ^ too aggressive, kills journal which is bad
+    # shutdown -r now
+    # nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+    # nix-channel --remove nixpkgs
+    # nix-channel --update
+
+  )' \
+    | sshpass -e ssh \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        "root@$address" \
+        -T /usr/bin/env \
+          nix_url="$nix_url" \
+          nix_basename="$(basename $nix_url .tar.bz2)" \
+          nix_sha256="$nix_sha256" \
+          nix_find_sha1sum="$nix_find_sha1sum" \
+          /bin/sh
+}
+
+netmaskToPrefixLengh() {
+  binaryNetmask=$(echo $1 | sed 's/^/obase=2;/;s/\./;/g' | bc | tr -d \\n)
+  binaryPrefix=$(echo $binaryNetmask | sed -n 's/^\(1*\)0*$/\1/p')
+  if ! echo $binaryPrefix | grep -q .; then
+    echo $0: bad netmask: $netmask >&2
+    exit 4
+  fi
+  printf %s $binaryPrefix | tr -d 0 | wc -c
+}
+
+
+main "$@"
