@@ -125,8 +125,12 @@ with lib;
             (cd ${hosts}
               printf \'\'
               for i in `ls`; do
+                names=$(hostnames $i)
+                for j in `sed -En 's|^ *Aliases *= *(.+)|\1|p' $i`; do
+                  names="$names $(hostnames $j)"
+                done
                 sed -En '
-                  s|^ *Subnet *= *([^ /]*)(/[0-9]*)? *$|\1  '"$(hostnames $i)"'|p
+                  s|^ *Subnet *= *([^ /]*)(/[0-9]*)? *$|\1  '"$names"'|p
                 ' $i
               done | sort
               printf \'\'
