@@ -68,12 +68,16 @@ rec {
         bool = toJSON content;
         int = toJSON content;
         list = concatMapStrings render content;
-        string = content;
+        string = quote content;
       };
   in
     { name, attrs, content }:
+    # XXX we're currently encoding too much information with `null`..
     if name == null
-      then ""
+      then
+        if content == null
+          then ""
+          else content
       else let
         attrs' = render-attrs attrs;
         content' = render-content content;
