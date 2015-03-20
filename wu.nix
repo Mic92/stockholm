@@ -307,7 +307,11 @@ with (import ./lib { inherit pkgs; });
 
   services.retiolum = {
     enable = true;
-    hosts = /home/tv/krebs/hosts;
+    hosts = /etc/nixos/hosts;
+    connectTo = [
+      "gum"
+      "pigstarter"
+    ];
   };
 
   # TODO
