@@ -9,6 +9,7 @@ let
     krops = import ../submodules/krops/lib;
     shell = import ./shell.nix { inherit lib; };
     types = nixpkgs-lib.types // import ./types.nix { inherit lib; };
+    xml = import ./xml.nix { inherit lib; };
 
     eq = x: y: x == y;
     ne = x: y: x != y;
