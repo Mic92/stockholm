@@ -231,7 +231,11 @@ in
 
   services.retiolum = {
     enable = true;
-    hosts = /krebs/hosts;
+    hosts = /etc/nixos/hosts;
+    connectTo = [
+      "gum"
+      "pigstarter"
+    ];
   };
 
   security.rtkit.enable = false;
