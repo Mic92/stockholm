@@ -41,6 +41,7 @@ in
         { from = "noc"; to = "root"; }
         { from = "security"; to = "root"; }
         { from = "root"; to = "tv"; }
+        { from = "mirko"; to = "mv"; }
       ];
 
       to-lsearch = concatMapStringsSep "\n" ({ from, to }: "${from}: ${to}");
@@ -276,7 +277,7 @@ in
             driver = appendfile
             maildir_format
             maildir_use_size_file
-            directory = $home/Maildir
+            directory = $home/Mail
             directory_mode = 0700
             delivery_date_add
             envelope_to_add

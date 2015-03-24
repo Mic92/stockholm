@@ -20,6 +20,7 @@
     htop
     iftop
     iotop
+    mutt    # for mv
     nethogs
     rxvt_unicode.terminfo
     tcpdump
@@ -95,7 +96,21 @@
           "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDYv5OkVrnerkzJwgi7ol7HzcWJf4oWCJTX84trFX5vgJXu1zMvSe+koY8xpnMOd7WHF2wgsjjrFlMuixTrfMPc/OjvG2N1TlnvzlFD8ivTW/AJzDwNxT//niqAYAZ9kmb8e/zE/SyNHSKZcyEKGiiW2+YW9wWHPYRP/XiNEjLP3BeTGScMwWr001V/8m7ne4SGHrE1FbHbHqaBXgqUFgnvzMY3CsfDafODZlj5xSMNGHyLGNNKvu3YR1crcAjbQrBXBdwaArThFxp+e2uWrnffshlks6WtRyR1AFVjc/gxEG74Axq1AHY6EJm2Fw/JdFNiYQ7yyQZHS9bZJYjgnWF tv@nomic"
         ];
       };
+
+      mv = rec {
+        name = "mv";
+        uid = 1338;
+        group = "users";
+        home = "/home/${name}";
+        createHome = true;
+        useDefaultShell = true;
+        openssh.authorizedKeys.keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGer9e2+Lew7vnisgBbsFNECEIkpNJgEaqQqgb9inWkQ mv@vod"
+        ];
+      };
+
     };
+
   users.mutableUsers = false;
 
 }
