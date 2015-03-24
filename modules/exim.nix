@@ -2,8 +2,12 @@
 
 {
   services.exim =
+    # This configuration makes only sense for retiolum-enabled hosts.
+    # TODO modular configuration
+    assert config.services.retiolum.enable;
     let
-      retiolumHostname = "wu.retiolum"; # TODO "${networking.hostName}.retiolum";
+      # TODO get the hostname from config.services.retiolum.
+      retiolumHostname = "${config.networking.hostName}.retiolum";
     in
       { enable = true;
         config = ''
