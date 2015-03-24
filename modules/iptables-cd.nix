@@ -50,8 +50,8 @@
           #ipXtables -A INPUT -j ACCEPT -p tcp --dport http -m conntrack --ctstate NEW
           ipXtables -A INPUT -j ACCEPT -p tcp --dport tinc -m conntrack --ctstate NEW
           ipXtables -A INPUT -j ACCEPT -p tcp --dport smtp -m conntrack --ctstate NEW
-          #ipXtables -A INPUT -j ACCEPT -p tcp --dport xmpp-client -m conntrack --ctstate NEW
-          #ipXtables -A INPUT -j ACCEPT -p tcp --dport xmpp-server -m conntrack --ctstate NEW
+          ipXtables -A INPUT -j ACCEPT -p tcp --dport xmpp-client -m conntrack --ctstate NEW
+          ipXtables -A INPUT -j ACCEPT -p tcp --dport xmpp-server -m conntrack --ctstate NEW
 
           ipXtables -A INPUT -j Retiolum -i retiolum
           ${when log "ipXtables -A INPUT -j LOG --log-level info --log-prefix 'INPUT DROP '"}
