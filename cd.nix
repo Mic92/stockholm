@@ -6,7 +6,7 @@
       <secrets/hashedPasswords.nix>
       ./modules/base-cac-CentOS-7-64bit.nix
       ./modules/exim-cd.nix
-      #./modules/ejabberd-cd.nix # XXX echtes modul
+      ./modules/ejabberd-cd.nix # XXX echtes modul
       ./modules/iptables-cd.nix
       ./modules/networking-cd.nix
       ./modules/retiolum.nix
@@ -29,10 +29,9 @@
 
   services.cron.enable = false;
 
-  #services.ejabberd-cd = {
-  #  enable = true;
-  #  #virtualHosts = ''"jabber.viljetic.de", "viljetic.de"'';
-  #};
+  services.ejabberd-cd = {
+    enable = true;
+  };
 
   services.journald.extraConfig = ''
     SystemMaxUse=1G
