@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 
-with (import ./lib { inherit pkgs; });
+let
+  lib = import ./lib { inherit pkgs; };
+
+  inherit (lib) majmin;
+in
 
 {
   imports = [
