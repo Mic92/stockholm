@@ -11,6 +11,7 @@ in
 {
   imports = [
     <secrets/hashedPasswords.nix>
+    ./modules/sanitize.nix
     ./modules/exim.nix
     ./modules/retiolum.nix
   ];

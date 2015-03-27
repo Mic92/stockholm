@@ -4,6 +4,7 @@
   imports =
     [
       <secrets/hashedPasswords.nix>
+      ./modules/sanitize.nix
       ./modules/base-cac-CentOS-7-64bit.nix
       ./modules/exim-cd.nix
       ./modules/ejabberd-cd.nix # XXX echtes modul

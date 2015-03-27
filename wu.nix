@@ -8,6 +8,7 @@ in
 
 {
   imports = [
+    ./modules/sanitize.nix
     ./modules/base.nix
     ./modules/retiolum.nix
     ./modules/urxvt.nix
