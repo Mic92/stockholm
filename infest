@@ -72,8 +72,22 @@ infest_centos7_64bit() {
   export SSHPASS
   export RSYNC_RSH
 
+  main="$hostname.nix"
+  target="root@$address"
+
   ./networking-configuration $cac_servername $hostname \
     > modules/networking-$hostname.nix
+
+  echo '(
+    set -xeuf
+    type bzip2 || yum install -y bzip2
+    type rsync || yum install -y rsync
+  )' \
+    | sshpass -e ssh \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        "root@$address" \
+        /bin/sh
 
   rsync_filter "$main" \
     | rsync -f '. -' -zvrlptD --delete-excluded ./ "$target":/etc/nixos/
@@ -83,8 +97,6 @@ infest_centos7_64bit() {
   #
   echo '(
     set -xeuf
-    type bzip2 || yum install -y bzip2
-    type rsync || yum install -y rsync
     groupadd -g 30000 nixbld || :
     for i in `seq 1 10`; do
       useradd -c "foolsgarden Nix build user $i" \
@@ -167,6 +179,7 @@ infest_centos7_64bit() {
     mkdir -p /mnt/etc/nixos
     rsync -zvrlptD --delete-excluded /etc/nixos/ /mnt/etc/nixos/
 
+    ln -s $main /mnt/etc/nixos/configuration.nix
     nixos-install
 
     rsync -va --force /int/ /
@@ -188,6 +201,7 @@ infest_centos7_64bit() {
           nix_basename="$(basename $nix_url .tar.bz2)" \
           nix_sha256="$nix_sha256" \
           nix_find_sha1sum="$nix_find_sha1sum" \
+          main="$main" \
           /bin/sh
 }
 
