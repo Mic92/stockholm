@@ -21,6 +21,7 @@
     htop
     iftop
     iotop
+    iptables
     mutt    # for mv
     nethogs
     rxvt_unicode.terminfo
