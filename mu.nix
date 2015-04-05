@@ -16,6 +16,7 @@ in
     ./modules/retiolum.nix
   ];
 
+  time.timeZone = "Europe/Berlin";
 
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="00:90:f5:da:aa:c3", NAME="en0"
