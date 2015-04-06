@@ -11,7 +11,7 @@ in
     ./modules/sanitize.nix
     ./modules/base.nix
     ./modules/retiolum.nix
-    ./modules/urxvt.nix
+    ./modules/urxvt-tv.nix
     ./modules/iptables.nix
     ./modules/users.nix
     #./modules/tools.nix
