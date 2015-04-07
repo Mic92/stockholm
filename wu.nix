@@ -17,6 +17,7 @@ in
     #./modules/tools.nix
     ./modules/hosts.nix
     ./modules/xserver.nix
+    ./modules/synaptics.nix
     ./modules/exim.nix
     ./modules/nginx.nix
   ];

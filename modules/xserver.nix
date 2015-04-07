@@ -19,17 +19,6 @@
   # services.xserver.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e";
 
-  # TODO this is host specific
-  services.xserver.synaptics = {
-    enable = true;
-    twoFingerScroll = true;
-    accelFactor = "0.035";
-    additionalOptions = ''
-      Option "FingerHigh" "60"
-      Option "FingerLow"  "60"
-    '';
-  };
-
   #services.xserver.multitouch.enable = true;
 
   services.xserver.windowManager.xmonad.extraPackages = hspkgs: with hspkgs; [
