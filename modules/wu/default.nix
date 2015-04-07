@@ -1,25 +1,25 @@
 { config, pkgs, ... }:
 
 let
-  lib = import ./lib { inherit pkgs; };
+  lib = import ../../lib { inherit pkgs; };
 
   inherit (lib) majmin;
 in
 
 {
   imports = [
-    ./modules/sanitize.nix
-    ./modules/base.nix
-    ./modules/retiolum.nix
-    ./modules/urxvt-tv.nix
-    ./modules/iptables.nix
-    ./modules/users.nix
-    #./modules/tools.nix
-    ./modules/hosts.nix
-    ./modules/xserver.nix
-    ./modules/synaptics.nix
-    ./modules/exim.nix
-    ./modules/nginx.nix
+    ./hosts.nix
+    ./iptables.nix
+    ../tv/base.nix
+    ../tv/exim-retiolum.nix
+    ../tv/nginx.nix
+    ../tv/retiolum.nix
+    ../tv/sanitize.nix
+    ../tv/synaptics.nix
+    #../tv/tools.nix
+    ../tv/urxvt.nix
+    ../tv/users.nix
+    ../tv/xserver.nix
   ];
 
   services.udev.extraRules = ''

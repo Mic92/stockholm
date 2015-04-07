@@ -3,7 +3,7 @@
 { config, pkgs, ... }:
 
 let
-  lib = import ./lib { inherit pkgs; };
+  lib = import ../../lib { inherit pkgs; };
 
   inherit (lib) majmin;
 in
@@ -11,9 +11,9 @@ in
 {
   imports = [
     <secrets/hashedPasswords.nix>
-    ./modules/sanitize.nix
-    ./modules/exim.nix
-    ./modules/retiolum.nix
+    ../tv/exim-retiolum.nix
+    ../tv/retiolum.nix
+    ../tv/sanitize.nix
   ];
 
   time.timeZone = "Europe/Berlin";

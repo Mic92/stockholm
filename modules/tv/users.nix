@@ -189,7 +189,7 @@ let
   sudoers =
     let
       inherit (builtins) filter hasAttr;
-      inherit (import ../lib { inherit pkgs; }) concat isSuffixOf removeSuffix setToList;
+      inherit (import ../../lib { inherit pkgs; }) concat isSuffixOf removeSuffix setToList;
 
       hasMaster = { group ? "", ... }:
         isSuffixOf "-sub" group;

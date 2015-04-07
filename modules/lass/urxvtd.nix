@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (import ../lib { inherit pkgs; }) shell-escape;
+  inherit (import ../../lib { inherit pkgs; }) shell-escape;
   inherit (pkgs) writeScript;
 in
 

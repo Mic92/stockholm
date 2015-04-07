@@ -76,7 +76,7 @@ infest_centos7_64bit() {
   target="root@$address"
 
   ./networking-configuration $cac_servername $hostname \
-    > modules/networking-$hostname.nix
+    > modules/$hostname/networking.nix
 
   echo '(
     set -xeuf

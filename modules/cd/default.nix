@@ -4,13 +4,13 @@
   imports =
     [
       <secrets/hashedPasswords.nix>
-      ./modules/sanitize.nix
-      ./modules/base-cac-CentOS-7-64bit.nix
-      ./modules/exim-cd.nix
-      ./modules/ejabberd-cd.nix # XXX echtes modul
-      ./modules/iptables-cd.nix
-      ./modules/networking-cd.nix
-      ./modules/retiolum.nix
+      ./iptables.nix
+      ./networking.nix
+      ../tv/base-cac-CentOS-7-64bit.nix
+      ../tv/ejabberd.nix # XXX echtes modul
+      ../tv/exim-smarthost.nix
+      ../tv/retiolum.nix
+      ../tv/sanitize.nix
     ];
 
   # "Developer 2" plan has two vCPUs.
@@ -54,7 +54,7 @@
 
   services.retiolum = {
     enable = true;
-    hosts = ./hosts;
+    hosts = /etc/nixos/hosts;
     privateKeyFile = "/etc/nixos/secrets/cd.retiolum.rsa_key.priv";
     connectTo = [
       "fastpoke"

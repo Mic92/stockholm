@@ -5,7 +5,7 @@ let
   inherit (lib.strings) concatStringsSep stringAsChars;
   inherit (lib.attrsets) attrValues mapAttrs;
   inherit (lib) makeSearchPath;
-  inherit (import ../lib { inherit pkgs; }) shell-escape;
+  inherit (import ../../lib { inherit pkgs; }) shell-escape;
 
 
   # TODO make these scripts available in an maintenance shell
