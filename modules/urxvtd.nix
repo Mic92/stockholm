@@ -1,5 +1,10 @@
 { config, lib, pkgs, ... }:
 
+let
+  inherit (import ../lib { inherit pkgs; }) shell-escape;
+  inherit (pkgs) writeScript;
+in
+
 with builtins;
 with lib;
 
@@ -21,6 +26,13 @@ with lib;
         default = pkgs.rxvt_unicode;
         description = "urxvt package to use";
       };
+      xresources = mkOption {
+        type = types.string;
+        default = "";
+        description = ''
+          X server resources for urxvt.
+        '';
+      };
     };
   };
 
@@ -33,12 +45,18 @@ with lib;
         description = "urxvt terminal daemon";
         wantedBy = [ "multi-user.target" ];
         restartIfChanged = false;
+        path = [ pkgs.xlibs.xrdb ];
         environment = {
+          DISPLAY = ":0";
           URXVT_PERL_LIB = "${urxvt}/lib/urxvt/perl";
         };
         serviceConfig = {
           Restart = "always";
           User = user;
+          ExecStartPre = writeScript "urxvtd-prestart" ''
+            #!/bin/sh
+            echo ${shell-escape cfg.xresources} | xrdb -merge
+          '';
           ExecStart = "${urxvt}/bin/urxvtd";
         };
       };
