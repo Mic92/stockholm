@@ -33,10 +33,12 @@ with lib;
         description = "urxvt terminal daemon";
         wantedBy = [ "multi-user.target" ];
         restartIfChanged = false;
+        environment = {
+          URXVT_PERL_LIB = "${urxvt}/lib/urxvt/perl";
+        };
         serviceConfig = {
           Restart = "always";
           User = user;
-          Environment = "URXVT_PERL_LIB=${urxvt}/lib/urxvt/perl";
           ExecStart = "${urxvt}/bin/urxvtd";
         };
       };
