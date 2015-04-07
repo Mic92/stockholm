@@ -6,6 +6,7 @@
       <secrets/hashedPasswords.nix>
       ./iptables.nix
       ./networking.nix
+      ../tv/base.nix
       ../tv/base-cac-CentOS-7-64bit.nix
       ../tv/ejabberd.nix # XXX echtes modul
       ../tv/exim-smarthost.nix
@@ -64,9 +65,6 @@
   };
 
   sound.enable = false;
-
-  # TODO base
-  time.timeZone = "UTC";
 
   # TODO replace by ./modules/cd-users.nix
   users.extraGroups = {

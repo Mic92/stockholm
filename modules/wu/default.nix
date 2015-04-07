@@ -22,6 +22,9 @@ in
     ../tv/xserver.nix
   ];
 
+  nix.maxJobs = 8;
+
+
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="00:90:f5:da:aa:c3", NAME="en0"
     SUBSYSTEM=="net", ATTR{address}=="a0:88:b4:1b:ae:6c", NAME="wl0"

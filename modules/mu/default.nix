@@ -11,12 +11,13 @@ in
 {
   imports = [
     <secrets/hashedPasswords.nix>
+    ../tv/base.nix
     ../tv/exim-retiolum.nix
     ../tv/retiolum.nix
     ../tv/sanitize.nix
   ];
 
-  time.timeZone = "Europe/Berlin";
+  nix.maxJobs = 2;
 
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="00:90:f5:da:aa:c3", NAME="en0"
@@ -73,9 +74,6 @@ in
   };
 
   swapDevices =[ ];
-
-  nix.maxJobs = 8;
-  nix.useChroot = true;
 
   nixpkgs.config.firefox.enableAdobeFlash = true;
   nixpkgs.config.chromium.enablePepperFlash = true;
