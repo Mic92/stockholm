@@ -1,17 +1,3 @@
-#! /bin/sh
-set -euf
-
-main() {
-  case "$1" in
-    (deploy)
-      "$@"
-      ;;
-    (*)
-      echo "$0: unknown command: $1" >&2
-      exit 23
-  esac
-}
-
 # deploy : nixos-config x [user@]hostname -> ()
 deploy() {(
   main=$1
@@ -199,6 +185,8 @@ make_parent_dirs() {
   fi
 }
 
-if [ "${noexec-}" != 1 ]; then
-  main "$@"
-fi
+# verbose COMMAND [ARGS...]
+verbose() {
+  echo "$@" >&2
+  "$@"
+}

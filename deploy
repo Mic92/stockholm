@@ -1,0 +1,15 @@
+#! /bin/sh
+#
+# usage: ./deploy CONFIG [[USER@]HOST]
+#
+set -euf
+
+. ./lib/prelude.sh
+
+user=root
+host=$1
+
+config=./$host.nix
+target=${2-$user@$host}
+
+verbose deploy "$config" "$target"
