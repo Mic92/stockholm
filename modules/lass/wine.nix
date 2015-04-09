@@ -5,10 +5,10 @@
     wine
   ];
   users.extraUsers = {
-    elster = {
-      name = "elster";
-      description = "user for running elster-online";
-      home = "/home/elster";
+    wine = {
+      name = "wine";
+      description = "user for running wine";
+      home = "/home/wine";
       useDefaultShell = true;
       extraGroups = [];
       createHome = true;
