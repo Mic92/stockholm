@@ -2,12 +2,12 @@
 
 {
   imports = [
-    ./retiolum.nix
+    ../tv/retiolum.nix
   ];
 
   services.retiolum = {
     enable = true;
-    hosts = ../hosts;
+    hosts = ../../hosts;
     privateKeyFile = "/etc/nixos/secrets/cloudkrebs.retiolum.rsa_key.priv";
     connectTo = [
       "fastpoke"
