@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 
 {
+  environment.systemPackages = with pkgs; [
+    wine
+  ];
   users.extraUsers = {
     elster = {
       name = "elster";
