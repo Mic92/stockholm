@@ -2,7 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
-    wine
+    wineUnstable
   ];
   users.extraUsers = {
     wine = {
