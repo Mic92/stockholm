@@ -13,4 +13,7 @@
       createHome = true;
     };
   };
+  security.sudo.extraConfig = ''
+    lass ALL=(virtual) NOPASSWD: ALL
+  '';
 }
