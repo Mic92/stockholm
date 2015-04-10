@@ -17,6 +17,7 @@
     ../lass/elster.nix
     ../lass/urxvt-lass.nix
     ../lass/steam.nix
+    ../lass/wine.nix
   ];
 
   networking.hostName = "mors";
