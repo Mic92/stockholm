@@ -192,6 +192,7 @@
         "firefox"
         "chromium"
         "google"
+        "virtual"
       ];
     };
   };
