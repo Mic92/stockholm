@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 
-{
+let
+  mainUser = config.users.extraUsers.mainUser;
+
+in {
   environment.systemPackages = with pkgs; [
     dwarf_fortress
   ];
@@ -17,6 +20,6 @@
   };
 
   security.sudo.extraConfig = ''
-    lass ALL=(games) NOPASSWD: ALL
+    ${mainUser.name} ALL=(games) NOPASSWD: ALL
   '';
 }
