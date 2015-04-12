@@ -1,13 +1,16 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
-{
+let
+  mainUser = config.users.extraUsers.mainUser;
+
+in {
   imports = [
     ./urxvtd.nix
   ];
 
   services.urxvtd = {
     enable = true;
-    users = [ "lass" ];
+    users = [ mainUser.name ];
     urxvtPackage = pkgs.rxvt_unicode_with-plugins;
     xresources = ''
       URxvt*scrollBar:                      false
