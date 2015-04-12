@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 
-{
+let
+  mainUser = config.users.extraUsers.mainUser;
+
+in {
   users.extraUsers = {
     elster = {
       name = "elster";
@@ -12,6 +15,6 @@
     };
   };
   security.sudo.extraConfig = ''
-    lass ALL=(elster) NOPASSWD: ALL
+    ${mainUser.name} ALL=(elster) NOPASSWD: ALL
   '';
 }
