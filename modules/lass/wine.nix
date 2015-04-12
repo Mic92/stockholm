@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 
-{
+let
+  mainUser = config.users.extraUsers.mainUser;
+
+in {
   environment.systemPackages = with pkgs; [
     wineUnstable
   ];
@@ -15,6 +18,6 @@
     };
   };
   security.sudo.extraConfig = ''
-    lass ALL=(wine) NOPASSWD: ALL
+    ${mainUser.name} ALL=(wine) NOPASSWD: ALL
   '';
 }
