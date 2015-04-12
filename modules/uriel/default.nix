@@ -5,7 +5,7 @@
       ../lass/desktop-base.nix
       ../lass/retiolum-uriel.nix
       ../lass/xserver-lass.nix
-      ../lass/browsers-lass.nix
+      ../lass/browsers.nix
       ../lass/programs.nix
       ../lass/games.nix
       ../tv/exim-retiolum.nix

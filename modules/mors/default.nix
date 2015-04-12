@@ -8,7 +8,7 @@
     ../lass/xserver-lass.nix
     ../tv/synaptics.nix
     ../lass/bitcoin.nix
-    ../lass/browsers-lass.nix
+    ../lass/browsers.nix
     ../lass/games.nix
     ../tv/exim-retiolum.nix
     ../lass/pass.nix
