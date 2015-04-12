@@ -145,11 +145,7 @@
 
   #TODO move into modules
   users.extraUsers = {
-    root = {
-      hashedPassword = "$6$78Zog6OCAQn6tFCO$jpOPksguWEsOPz7u1r6kVApD0Zb2SqjFV8Gn1JCZevcMtBI.jm0CcojXvW.v23xWDt4wZE4KcxFSNWNU.E9ef.";
-    };
-    #main user
-    lass = {
+    mainUser = {
       uid = 1337;
       name = "lass";
       #isNormalUser = true;
@@ -158,10 +154,13 @@
       home = "/home/lass";
       useDefaultShell = true;
       isSystemUser = false;
-      description = "lassulus";
       extraGroups = [ "wheel" "audio" ];
       hashedPassword = "$6$78Zog6OCAQn6tFCO$jpOPksguWEsOPz7u1r6kVApD0Zb2SqjFV8Gn1JCZevcMtBI.jm0CcojXvW.v23xWDt4wZE4KcxFSNWNU.E9ef.";
     };
+    root = {
+      hashedPassword = "$6$78Zog6OCAQn6tFCO$jpOPksguWEsOPz7u1r6kVApD0Zb2SqjFV8Gn1JCZevcMtBI.jm0CcojXvW.v23xWDt4wZE4KcxFSNWNU.E9ef.";
+    };
+    #main user
     #miefda-mc-dev user
     miefda = {
       uid = 1338;
@@ -188,7 +187,7 @@
   users.extraGroups = {
     loot = {
       members = [
-        "lass"
+        config.users.extraUsers.mainUser.name
         "firefox"
         "chromium"
         "google"

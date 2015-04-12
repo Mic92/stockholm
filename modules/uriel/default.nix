@@ -73,8 +73,7 @@
     root = {
       hashedPassword = "$6$78Zog6OCAQn6tFCO$jpOPksguWEsOPz7u1r6kVApD0Zb2SqjFV8Gn1JCZevcMtBI.jm0CcojXvW.v23xWDt4wZE4KcxFSNWNU.E9ef.";
     };
-    #main user
-    lass = {
+    mainUser = {
       uid = 1337;
       name = "lass";
       #isNormalUser = true;
