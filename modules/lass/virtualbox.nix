@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 
-{
+let
+  mainUser = config.users.extraUsers.mainUser;
+
+in {
   services.virtualboxHost.enable = true;
 
   users.extraUsers = {
@@ -14,6 +17,6 @@
     };
   };
   security.sudo.extraConfig = ''
-    lass ALL=(virtual) NOPASSWD: ALL
+    ${mainUser.name} ALL=(virtual) NOPASSWD: ALL
   '';
 }
