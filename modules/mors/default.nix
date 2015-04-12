@@ -15,11 +15,10 @@
     ../lass/vim.nix
     ../lass/virtualbox.nix
     ../lass/elster.nix
-    ../lass/urxvt-lass.nix
+    ../lass/urxvt.nix
     ../lass/steam.nix
     ../lass/wine.nix
   ];
-
   networking.hostName = "mors";
   networking.wireless.enable = true;
 

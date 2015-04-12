@@ -11,7 +11,7 @@
       ../tv/exim-retiolum.nix
       ../lass/pass.nix
       ../lass/vim.nix
-      ../lass/urxvt-lass.nix
+      ../lass/urxvt.nix
   ];
 
   networking.hostName = "uriel";
