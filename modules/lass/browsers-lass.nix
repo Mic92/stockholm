@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 
-{
+let
+  mainUser = config.users.extraUsers.mainUser;
+
+in {
 
   nixpkgs.config.packageOverrides = pkgs : {
     chromium = pkgs.chromium.override {
@@ -56,10 +59,10 @@
   };
 
   security.sudo.extraConfig = ''
-    lass ALL=(firefox) NOPASSWD: ALL
-    lass ALL=(chromium) NOPASSWD: ALL
-    lass ALL=(facebook) NOPASSWD: ALL
-    lass ALL=(google) NOPASSWD: ALL
-    lass ALL=(flash) NOPASSWD: ALL
+    ${mainUser.name} ALL=(firefox) NOPASSWD: ALL
+    ${mainUser.name} ALL=(chromium) NOPASSWD: ALL
+    ${mainUser.name} ALL=(facebook) NOPASSWD: ALL
+    ${mainUser.name} ALL=(google) NOPASSWD: ALL
+    ${mainUser.name} ALL=(flash) NOPASSWD: ALL
   '';
 }
