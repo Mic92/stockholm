@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../lass/xresources.nix
     ../lass/desktop-base.nix
     ../lass/programs.nix
     ../lass/retiolum-mors.nix
@@ -18,6 +19,7 @@
     ../lass/urxvt.nix
     ../lass/steam.nix
     ../lass/wine.nix
+    ../lass/texlive.nix
   ];
   networking.hostName = "mors";
   networking.wireless.enable = true;
