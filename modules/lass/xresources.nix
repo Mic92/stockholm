@@ -50,14 +50,6 @@ in
       '';
     };
 
-    services.xresources.user = mkOption {
-      type = types.str;
-      default = "nobody";
-      description = ''
-        The user the xresources should be loaded as.
-      '';
-    };
-
     services.xresources.resources = mkOption {
       default = {};
       type = types.attrsOf types.str;
@@ -79,29 +71,10 @@ in
       user = cfg.user;
       xres = concatStringsSep "\n" (attrValues cfg.resources);
 
-      mkService = user: xres: rec {
-        description = "xresources managment script";
-        requires = [ "display-manager.service" ];
-        after = requires;
-        path = [ pkgs.xlibs.xrdb ];
-
-        #TODO: make DISPLAY configurable
-        environment = {
-          DISPLAY = ":0";
-        };
-        serviceConfig = {
-          Type = "oneshot";
-          User = user;
-          RemainAfterExit = "yes";
-          ExecStart = writeScript "${user}-xresources-init" ''
-            #!/bin/sh
-            echo ${shell-escape xres} | xrdb -merge
-          '';
-        };
-      };
-
     in mkIf cfg.enable {
-        systemd.services."${user}-xresources" = mkService user xres;
+        services.xserver.displayManager.sessionCommands = ''
+          echo ${shell-escape xres} | xrdb -merge
+        '';
       };
       
 
