@@ -17,7 +17,6 @@ in
     urxvtPackage = pkgs.rxvt_unicode_with-plugins;
   };
   services.xresources.enable = true;
-  services.xresources.user = mainUser.name;
   services.xresources.resources.urxvt = ''
     URxvt*scrollBar:                      false
     URxvt*urgentOnBell:                   true
