@@ -114,13 +114,13 @@
   #
   users.mutableUsers = false;
   users.extraUsers = {
-    #gitolite = {
-    #  name = "gitolite";
-    #  description = "gitolite git manager";
-    #  home = "/home/gitolite";
-    #  createHome = true;
-    #  useDefaultShell = true;
-    #};
+    gitolite = {
+      name = "gitolite";
+      description = "gitolite git manager";
+      home = "/home/gitolite";
+      createHome = true;
+      useDefaultShell = true;
+    };
     testing = {
       name = "testing";
       description = "user for testing various stuff";
