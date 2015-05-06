@@ -4,30 +4,8 @@
 #prefix with Attribute Name
 #ex: urxvt
 
-#TODO: make users configureable
-#
-#we need something like this:
-#
-#a.u = [1 2];
-#a.x = "test";
-
-#b.u = [1];
-#b.x = "tast";
-
-#    |
-#    v
-
-#1."test\ntast";
-#2."test";
 #
 #
-#users = mkOption {
-#  type = types.str;
-#  default = ;
-#  description = ''
-#    users for this xresources config.
-#  '';
-#};
 with builtins;
 with lib;
 
@@ -68,7 +46,6 @@ in
   config = 
     let
       cfg = config.services.xresources;
-      user = cfg.user;
       xres = concatStringsSep "\n" (attrValues cfg.resources);
 
     in mkIf cfg.enable {
