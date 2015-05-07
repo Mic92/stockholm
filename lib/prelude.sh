@@ -38,7 +38,7 @@ deploy() {(
   git_url=$(nixpkgs_url $main)
   git_rev=$(nixpkgs_rev $main)
 
-  if [ $git_url = '' ] || [ $git_rev = '' ]; then
+  if [ "$git_url" = '' ] || [ "$git_rev" = '' ]; then
     echo "specify nixpkgs.url and nixpkgs.rev in $main !"
     exit 23
   fi
@@ -233,7 +233,7 @@ nixpkgs_url() {
       -I nixos-config="$1" \
       --eval \
       --json \
-      -E '(import <nixos-config> {config={}; pkgs={};}).nixpkgs.url' \
+      -E '(import <nixos-config> {config={}; pkgs={};}).nixpkgs.url' 2> /dev/null \
     | jq -r .
 }
 
@@ -243,7 +243,7 @@ nixpkgs_rev() {
       -I nixos-config="$1" \
       --eval \
       --json \
-      -E '(import <nixos-config> {config={}; pkgs={};}).nixpkgs.rev' \
+      -E '(import <nixos-config> {config={}; pkgs={};}).nixpkgs.rev' 2> /dev/null \
     | jq -r . 2> /dev/null
 }
 
