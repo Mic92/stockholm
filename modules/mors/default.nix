@@ -20,7 +20,7 @@
     ../lass/steam.nix
     ../lass/wine.nix
     ../lass/texlive.nix
-    ../lass/nixpkgs.nix
+    ../common/nixpkgs.nix
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
