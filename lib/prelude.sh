@@ -1,14 +1,56 @@
+# clone_or_update : [user@]hostname x local_dir x git_url x git_rev -> ()
+clone_or_update() {(
+  target=$1
+  nixpkgs_dir=$2
+  git_url=$3
+  git_rev=$4
+
+  echo '
+    set -euf
+
+    if [ ! -d "$nixpkgs_dir" ]; then
+      mkdir -p "$nixpkgs_dir"
+    fi
+
+    cd "$nixpkgs_dir"
+
+    if [ ! -e "$nixpkgs_dir"/.git ]; then
+      git init
+    fi
+
+    if git remote -v | grep -q "^config\>"; then
+      git remote remove config
+    fi
+
+    git remote add config "$git_url"
+    git fetch config
+
+    git checkout "$git_rev"
+  ' | ssh "$target" env nixpkgs_dir="$nixpkgs_dir" git_url="$git_url" git_rev="$git_rev" /bin/sh
+)}
+
 # deploy : nixos-config x [user@]hostname -> ()
 deploy() {(
   main=$1
   target=$2
+  nixpkgs_dir='/var/tmp/nixpkgs'
+
+  git_url=$(nixpkgs_url $main)
+  git_rev=$(nixpkgs_rev $main)
+
+  if [ $git_url = '' ] || [ $git_rev = '' ]; then
+    echo "specify nixpkgs.url and nixpkgs.rev in $main !"
+    exit 23
+  fi
 
   filter=$(rsync_filter "$main")
 
   echo "$filter" \
     | rsync -f '. -' -zvrlptD --delete-excluded ./ "$target":/etc/nixos/
 
-  ssh "$target" nixos-rebuild switch -I nixos-config=/etc/nixos/"$main"
+  clone_or_update "$target" "$nixpkgs_dir" "$git_url" "$git_rev"
+  ssh "$target" nixos-rebuild switch -I nixos-config=/etc/nixos/"$main" -I nixpkgs="$nixpkgs_dir"
+
 )}
 
 # rsync_filter : nixos-config -> rsync-filter
@@ -183,6 +225,26 @@ make_parent_dirs() {
     echo "$1"
     echo "$1" | make_parent_dirs
   fi
+}
+
+# nixpkgs_url : nixos-config -> git_url
+nixpkgs_url() {
+  nix-instantiate \
+      -I nixos-config="$1" \
+      --eval \
+      --json \
+      -E '(import <nixos-config> {config={}; pkgs={};}).nixpkgs.url' \
+    | jq -r .
+}
+
+# nixpkgs_rev : nixos-config -> git_rev
+nixpkgs_rev() {
+  nix-instantiate \
+      -I nixos-config="$1" \
+      --eval \
+      --json \
+      -E '(import <nixos-config> {config={}; pkgs={};}).nixpkgs.rev' \
+    | jq -r . 2> /dev/null
 }
 
 # verbose COMMAND [ARGS...]
