@@ -13,6 +13,11 @@
       ../lass/vim.nix
       ../lass/urxvt.nix
   ];
+  nixpkgs = {
+    url = "https://github.com/Lassulus/nixpkgs";
+    rev = "c83aab381a0d66f2291b428e8cb949a85bb10815";
+  };
+
 
   networking.hostName = "uriel";
   networking.wireless.enable = true;
