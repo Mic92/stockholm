@@ -20,7 +20,13 @@
     ../lass/steam.nix
     ../lass/wine.nix
     ../lass/texlive.nix
+    ../lass/nixpkgs.nix
   ];
+  nixpkgs = {
+    url = "https://github.com/Lassulus/nixpkgs";
+    rev = "b421fc0686232fb2e1ff723d6ae2295345db007b";
+  };
+
   networking.hostName = "mors";
   networking.wireless.enable = true;
 
