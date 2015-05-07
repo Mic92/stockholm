@@ -21,6 +21,7 @@
     ../lass/wine.nix
     ../lass/texlive.nix
     ../common/nixpkgs.nix
+    ../lass/binary-caches.nix
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
