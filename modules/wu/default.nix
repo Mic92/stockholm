@@ -15,6 +15,7 @@ in
     ../tv/nginx.nix
     ../tv/retiolum.nix
     ../tv/sanitize.nix
+    ../tv/smartd.nix
     ../tv/synaptics.nix
     #../tv/tools.nix
     ../tv/urxvt.nix
