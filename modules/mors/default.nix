@@ -23,6 +23,7 @@
     ../common/nixpkgs.nix
     ../lass/binary-caches.nix
     ../lass/ircd.nix
+    ../../secrets/mors-pw.nix
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
@@ -164,11 +165,8 @@
       useDefaultShell = true;
       isSystemUser = false;
       extraGroups = [ "wheel" "audio" ];
-      hashedPassword = "$6$78Zog6OCAQn6tFCO$jpOPksguWEsOPz7u1r6kVApD0Zb2SqjFV8Gn1JCZevcMtBI.jm0CcojXvW.v23xWDt4wZE4KcxFSNWNU.E9ef.";
     };
     root = {
-      hashedPassword = "$6$78Zog6OCAQn6tFCO$jpOPksguWEsOPz7u1r6kVApD0Zb2SqjFV8Gn1JCZevcMtBI.jm0CcojXvW.v23xWDt4wZE4KcxFSNWNU.E9ef.";
-    };
     #main user
     #miefda-mc-dev user
     miefda = {

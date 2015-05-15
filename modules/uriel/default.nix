@@ -12,6 +12,7 @@
       ../lass/pass.nix
       ../lass/vim.nix
       ../lass/urxvt.nix
+    ../../secrets/uriel-pw.nix
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
@@ -76,7 +77,6 @@
 
   users.extraUsers = {
     root = {
-      hashedPassword = "$6$78Zog6OCAQn6tFCO$jpOPksguWEsOPz7u1r6kVApD0Zb2SqjFV8Gn1JCZevcMtBI.jm0CcojXvW.v23xWDt4wZE4KcxFSNWNU.E9ef.";
       openssh.authorizedKeys.keys = [
         config.sshKeys.lass.pub
       ];
@@ -92,7 +92,6 @@
       isSystemUser = false;
       description = "lassulus";
       extraGroups = [ "wheel" "audio" ];
-      hashedPassword = "$6$78Zog6OCAQn6tFCO$jpOPksguWEsOPz7u1r6kVApD0Zb2SqjFV8Gn1JCZevcMtBI.jm0CcojXvW.v23xWDt4wZE4KcxFSNWNU.E9ef.";
       openssh.authorizedKeys.keys = [
         config.sshKeys.lass.pub
       ];
