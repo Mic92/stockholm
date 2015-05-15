@@ -14,15 +14,14 @@ clone_or_update() {(
 
     cd "$nixpkgs_dir"
 
-    if [ ! -e "$nixpkgs_dir"/.git ]; then
-      git init
+    git init -q
+
+    if ! current_url=$(git config remote.src.url); then
+      ${cache-git} remote add "src" "$git_url"
+    elif [ $current_url != $git_url ]; then
+      ${cache-git} remote set-url src ${git_url}
     fi
 
-    if git remote -v | grep -q "^config\>"; then
-      git remote remove config
-    fi
-
-    git remote add config "$git_url"
     git fetch config
 
     git checkout "$git_rev"
