@@ -62,13 +62,13 @@
   security.setuidPrograms = [ "slock" ];
 
   ###SERVICES BEGIN
-  #services.gitolite = {
-  #  enable = true;
-  #  dataDir = "/home/gitolite";
-  #  adminPubkey = ''
-  #    ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAp83zynhIueJJsWlSEykVSBrrgBFKq38+vT8bRfa+csqyjZBl2SQFuCPo+Qbh49mwchpZRshBa9jQEIGqmXxv/PYdfBFQuOFgyUq9ZcTZUXqeynicg/SyOYFW86iiqYralIAkuGPfQ4howLPVyjTZtWeEeeEttom6p6LMY5Aumjz2em0FG0n9rRFY2fBzrdYAgk9C0N6ojCs/Gzknk9SGntA96MDqHJ1HXWFMfmwOLCnxtE5TY30MqSmkrJb7Fsejwjoqoe9Y/mCaR0LpG2cStC1+37GbHJNH0caCMaQCX8qdfgMVbWTVeFWtV6aWOaRgwLrPDYn4cHWQJqTfhtPrNQ== lass@mors
-  #  '';
-  #};
+  services.gitolite = {
+    enable = true;
+    dataDir = "/home/gitolite";
+    adminPubkey = ''
+      ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAp83zynhIueJJsWlSEykVSBrrgBFKq38+vT8bRfa+csqyjZBl2SQFuCPo+Qbh49mwchpZRshBa9jQEIGqmXxv/PYdfBFQuOFgyUq9ZcTZUXqeynicg/SyOYFW86iiqYralIAkuGPfQ4howLPVyjTZtWeEeeEttom6p6LMY5Aumjz2em0FG0n9rRFY2fBzrdYAgk9C0N6ojCs/Gzknk9SGntA96MDqHJ1HXWFMfmwOLCnxtE5TY30MqSmkrJb7Fsejwjoqoe9Y/mCaR0LpG2cStC1+37GbHJNH0caCMaQCX8qdfgMVbWTVeFWtV6aWOaRgwLrPDYn4cHWQJqTfhtPrNQ== lass@mors
+    '';
+  };
 
   services.journald.extraConfig = ''
     SystemMaxUse=1G
@@ -114,13 +114,13 @@
   #
   users.mutableUsers = false;
   users.extraUsers = {
-    gitolite = {
-      name = "gitolite";
-      description = "gitolite git manager";
-      home = "/home/gitolite";
-      createHome = true;
-      useDefaultShell = true;
-    };
+    #gitolite = {
+    #  name = "gitolite";
+    #  description = "gitolite git manager";
+    #  home = "/home/gitolite";
+    #  createHome = true;
+    #  useDefaultShell = true;
+    #};
     testing = {
       name = "testing";
       description = "user for testing various stuff";
