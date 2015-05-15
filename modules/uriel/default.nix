@@ -12,7 +12,9 @@
       ../lass/pass.nix
       ../lass/vim.nix
       ../lass/urxvt.nix
+    ../common/nixpkgs.nix
     ../../secrets/uriel-pw.nix
+    ../lass/sshkeys.nix
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
