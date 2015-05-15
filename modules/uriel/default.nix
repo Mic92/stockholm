@@ -18,7 +18,7 @@
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "c83aab381a0d66f2291b428e8cb949a85bb10815";
+    rev = "eba85883a07a9fc414d7860f8d6fee4d9f09b2ac";
   };
 
 

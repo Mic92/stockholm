@@ -27,7 +27,7 @@
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "617de38d172f840faebf1bef72989f774ec18a00";
+    rev = "eba85883a07a9fc414d7860f8d6fee4d9f09b2ac";
   };
 
   networking.hostName = "mors";
