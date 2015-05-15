@@ -22,10 +22,11 @@
     ../lass/texlive.nix
     ../common/nixpkgs.nix
     ../lass/binary-caches.nix
+    ../lass/ircd.nix
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "c83aab381a0d66f2291b428e8cb949a85bb10815";
+    rev = "617de38d172f840faebf1bef72989f774ec18a00";
   };
 
   networking.hostName = "mors";
@@ -214,11 +215,11 @@
     ];
   };
 
-  services.ircdHybrid = {
-    enable = true;
+  #services.ircdHybrid = {
+  #  enable = true;
 
-    description = "local test server";
-  };
+  #  description = "local test server";
+  #};
 
   #TODO
   #services.urxvtd = {
