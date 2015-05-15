@@ -35,6 +35,7 @@
 
   networking.extraHosts = ''
   '';
+
   nix.maxJobs = 4;
 
   hardware.enableAllFirmware = true;
@@ -153,8 +154,8 @@
     '';
   };
 
-  #TODO move into modules
   users.extraUsers = {
+    #main user
     mainUser = {
       uid = 1337;
       name = "lass";
@@ -165,20 +166,6 @@
       useDefaultShell = true;
       isSystemUser = false;
       extraGroups = [ "wheel" "audio" ];
-    };
-    root = {
-    #main user
-    #miefda-mc-dev user
-    miefda = {
-      uid = 1338;
-      name = "miefda";
-      #isNormalUser = true;
-      group = "users";
-      createHome = true;
-      home = "/home/miefda";
-      useDefaultShell = true;
-      isSystemUser = false;
-      description = "miefda-minecraft-dev";
     };
   };
 

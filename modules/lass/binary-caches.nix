@@ -7,7 +7,7 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFCZSq5oLrokkh3F+MOdK5/nzVIEDvqyvfzLMNWmzsYD root@uriel"
   ];
   nix.binaryCaches = [
-    "ssh://nix@mors"
-    "ssh://nix@uriel"
+    "scp://nix-ssh@mors"
+    "scp://nix-ssh@uriel"
   ];
 }

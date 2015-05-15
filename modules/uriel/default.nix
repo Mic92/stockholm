@@ -1,17 +1,17 @@
-  { config, pkgs, ... }:
+{ config, pkgs, ... }:
 
-  {
-    imports = [
-      ../lass/desktop-base.nix
-      ../lass/retiolum-uriel.nix
-      ../lass/xserver-lass.nix
-      ../lass/browsers.nix
-      ../lass/programs.nix
-      ../lass/games.nix
-      ../tv/exim-retiolum.nix
-      ../lass/pass.nix
-      ../lass/vim.nix
-      ../lass/urxvt.nix
+{
+  imports = [
+    ../lass/desktop-base.nix
+    ../lass/retiolum-uriel.nix
+    ../lass/xserver-lass.nix
+    ../lass/browsers.nix
+    ../lass/programs.nix
+    ../lass/games.nix
+    ../tv/exim-retiolum.nix
+    ../lass/pass.nix
+    ../lass/vim.nix
+    ../lass/urxvt.nix
     ../common/nixpkgs.nix
     ../../secrets/uriel-pw.nix
     ../lass/sshkeys.nix
