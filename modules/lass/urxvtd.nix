@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (import ../../lib { inherit pkgs; }) shell-escape;
-  inherit (pkgs) writeScript;
 in
 
 with builtins;
@@ -26,13 +24,6 @@ with lib;
         default = pkgs.rxvt_unicode;
         description = "urxvt package to use";
       };
-      xresources = mkOption {
-        type = types.string;
-        default = "";
-        description = ''
-          X server resources for urxvt.
-        '';
-      };
     };
   };
 
@@ -53,10 +44,6 @@ with lib;
         serviceConfig = {
           Restart = "always";
           User = user;
-          ExecStartPre = writeScript "urxvtd-prestart" ''
-            #!/bin/sh
-            echo ${shell-escape cfg.xresources} | xrdb -merge
-          '';
           ExecStart = "${urxvt}/bin/urxvtd";
         };
       };
