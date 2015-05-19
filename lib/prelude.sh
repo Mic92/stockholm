@@ -17,9 +17,9 @@ clone_or_update() {(
     git init -q
 
     if ! current_url=$(git config remote.src.url); then
-      ${cache-git} remote add "src" "$git_url"
+      git remote add "src" "$git_url"
     elif [ $current_url != $git_url ]; then
-      ${cache-git} remote set-url src ${git_url}
+      git remote set-url src ${git_url}
     fi
 
     git fetch config
