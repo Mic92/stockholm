@@ -37,7 +37,7 @@ clone_or_update() {(
 deploy() {(
   main=$1
   target=$2
-  nixpkgs_dir='/var/tmp/nixpkgs'
+  nixpkgs_dir=/var/nixpkgs # TODO make configurable
 
   git_url=$(nixpkgs_url $main)
   git_rev=$(nixpkgs_rev $main)
