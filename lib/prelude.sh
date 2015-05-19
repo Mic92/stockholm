@@ -17,12 +17,12 @@ clone_or_update() {(
     git init -q
 
     if ! current_url=$(git config remote.src.url); then
-      git remote add "src" "$git_url"
+      git remote add src "$git_url"
     elif [ $current_url != $git_url ]; then
-      git remote set-url src ${git_url}
+      git remote set-url src "$git_url"
     fi
 
-    git fetch config
+    git fetch src
 
     git checkout "$git_rev"
   ' | ssh "$target" env nixpkgs_dir="$nixpkgs_dir" git_url="$git_url" git_rev="$git_rev" /bin/sh
