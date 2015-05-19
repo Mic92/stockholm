@@ -15,10 +15,11 @@
     ../common/nixpkgs.nix
     ../../secrets/uriel-pw.nix
     ../lass/sshkeys.nix
+    ../lass/bird.nix
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "eba85883a07a9fc414d7860f8d6fee4d9f09b2ac";
+    rev = "b42ecfb8c61e514bf7733b4ab0982d3e7e27dacb";
   };
 
 
