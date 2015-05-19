@@ -1,7 +1,7 @@
 #! /bin/sh
 set -xeuf
 
-noexec=1 . ./run
+. ./lib/prelude.sh
 
 nix_url=https://nixos.org/releases/nix/nix-1.8/nix-1.8-x86_64-linux.tar.bz2
 nix_sha256=52fab207b4ce4d098a12d85357d0353e972c492bab0aa9e08e1600363e76fefb
@@ -72,7 +72,7 @@ infest_centos7_64bit() {
   export SSHPASS
   export RSYNC_RSH
 
-  main="$hostname.nix"
+  main="modules/$hostname/default.nix"
   target="root@$address"
 
   ./networking-configuration $cac_servername $hostname \
