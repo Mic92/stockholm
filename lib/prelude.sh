@@ -25,7 +25,12 @@ clone_or_update() {(
     git fetch src
 
     git checkout "$git_rev"
-  ' | ssh "$target" env nixpkgs_dir="$nixpkgs_dir" git_url="$git_url" git_rev="$git_rev" /bin/sh
+  ' \
+    | ssh "$target" env \
+          nixpkgs_dir="$nixpkgs_dir" \
+          git_rev="$git_rev" \
+          git_url="$git_url" \
+        /bin/sh
 )}
 
 # deploy : nixos-config x [user@]hostname -> ()
