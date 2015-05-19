@@ -55,6 +55,11 @@ let
       group = "tv-sub";
     };
 
+    tief = {
+      uid = 2300702;
+      group = "tv-sub";
+    };
+
     btc-bitcoind = {
       uid = 2301001;
       group = "tv-sub";
