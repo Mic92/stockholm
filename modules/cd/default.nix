@@ -6,6 +6,7 @@
       <secrets/hashedPasswords.nix>
       ./iptables.nix
       ./networking.nix
+      ../common/nixpkgs.nix
       ../tv/base.nix
       ../tv/base-cac-CentOS-7-64bit.nix
       ../tv/ejabberd.nix # XXX echtes modul
@@ -17,8 +18,13 @@
   # "Developer 2" plan has two vCPUs.
   nix.maxJobs = 2;
 
+  nixpkgs = {
+    url = "https://github.com/NixOS/nixpkgs";
+    rev = "4c01e6d91993b6de128795f4fbdd25f6227fb870";
+  };
 
   environment.systemPackages = with pkgs; [
+    git # required for ./deploy, clone_or_update
     htop
     iftop
     iotop
