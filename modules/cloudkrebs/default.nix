@@ -6,7 +6,13 @@
     ../lass/retiolum-cloudkrebs.nix
     ../lass/networking-cloudkrebs.nix
     ../../secrets/cloudkrebs-pw.nix
+    ../lass/sshkeys.nix
   ];
+
+  nixpkgs = {
+    url = "https://github.com/Lassulus/nixpkgs";
+    rev = "b42ecfb8c61e514bf7733b4ab0982d3e7e27dacb";
+  };
 
   nix.maxJobs = 1;
 
@@ -18,10 +24,10 @@
     #main user
     root = {
       openssh.authorizedKeys.keys = [
-        "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAp83zynhIueJJsWlSEykVSBrrgBFKq38+vT8bRfa+csqyjZBl2SQFuCPo+Qbh49mwchpZRshBa9jQEIGqmXxv/PYdfBFQuOFgyUq9ZcTZUXqeynicg/SyOYFW86iiqYralIAkuGPfQ4howLPVyjTZtWeEeeEttom6p6LMY5Aumjz2em0FG0n9rRFY2fBzrdYAgk9C0N6ojCs/Gzknk9SGntA96MDqHJ1HXWFMfmwOLCnxtE5TY30MqSmkrJb7Fsejwjoqoe9Y/mCaR0LpG2cStC1+37GbHJNH0caCMaQCX8qdfgMVbWTVeFWtV6aWOaRgwLrPDYn4cHWQJqTfhtPrNQ== lass@mors"
+        config.sshKeys.lass.pub
       ];
     };
-    lass = {
+    mainUser = {
       uid = 1337;
       name = "lass";
       #isNormalUser = true;
@@ -33,7 +39,7 @@
       description = "lassulus";
       extraGroups = [ "wheel" ];
       openssh.authorizedKeys.keys = [
-        "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAp83zynhIueJJsWlSEykVSBrrgBFKq38+vT8bRfa+csqyjZBl2SQFuCPo+Qbh49mwchpZRshBa9jQEIGqmXxv/PYdfBFQuOFgyUq9ZcTZUXqeynicg/SyOYFW86iiqYralIAkuGPfQ4howLPVyjTZtWeEeeEttom6p6LMY5Aumjz2em0FG0n9rRFY2fBzrdYAgk9C0N6ojCs/Gzknk9SGntA96MDqHJ1HXWFMfmwOLCnxtE5TY30MqSmkrJb7Fsejwjoqoe9Y/mCaR0LpG2cStC1+37GbHJNH0caCMaQCX8qdfgMVbWTVeFWtV6aWOaRgwLrPDYn4cHWQJqTfhtPrNQ== lass@mors"
+        config.sshKeys.lass.pub
       ];
     };
   };
