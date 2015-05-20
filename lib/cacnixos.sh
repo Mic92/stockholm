@@ -1,43 +1,16 @@
-#! /bin/sh
-#
-# usage: with cac ./networking-configuration c838-828 cd
-#
-set -euf
-
-. ./lib/cac.sh
 . ./lib/net.sh
 
-cac_servername=$1
-hostname=$2
-
-# This is somewhat required because cloudatcost requires whitelisting
-# of hosts.  If you whitelist your localhost, then leave this empty.
-# cac_via=
-#
-# cac_key=
-# cac_login=
-# cac_servername=
-
-# hostname=
-
-main() {(
-  server=$(cac_getserver_by_servername "$cac_servername")
-  print_networking_configuraton "$server"
-)}
-
-
-print_networking_configuraton() {
+# cacnixos_networking : cac-server x hostname -> nixos-module
+cacnixos_networking() {(
   server=$1
+  hostname=$2
+
   address=$(echo $server | jq -r .ip)
   gateway=$(echo $server | jq -r .gateway)
   nameserver=8.8.8.8
   netmask=$(echo $server | jq -r .netmask)
   prefix=$(net_netmask_to_prefix $netmask)
 
-  # TODO generate all config and put it into a temp dir, then rsync that
-  #
-  # upload configuration (to /root)
-  #
   printf '{...}:\n'
   printf '{\n'
   printf '  networking.hostName = "%s";\n' $hostname
@@ -52,6 +25,4 @@ print_networking_configuraton() {
   printf '    "%s"\n' $nameserver
   printf '  ];\n'
   printf '}\n'
-}
-
-main "$@"
+)}
