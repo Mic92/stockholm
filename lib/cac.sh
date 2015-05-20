@@ -1,5 +1,21 @@
 . ./lib/url.sh
 
+cac_ssh() {(
+  server=$1
+  shift
+
+  address=$(echo $server | jq -r .ip)
+  target=root@$address
+
+  SSHPASS=$(echo $server | jq -r .rootpass)
+  export SSHPASS
+
+  exec sshpass -e ssh \
+    -o StrictHostKeyChecking=no \
+    -o UserKnownHostsFile=/dev/null \
+    "$target" \
+    "$@"
+)}
 
 cac_getserver_by_servername() {(
   serverlist=$(cac_listservers)
