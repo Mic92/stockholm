@@ -1,8 +1,10 @@
 #! /bin/sh
 #
-# usage: with cac ./generate-networking-configuration c838-828 cd
+# usage: with cac ./networking-configuration c838-828 cd
 #
 set -euf
+
+. ./lib/cac.sh
 
 cac_servername=$1
 hostname=$2
@@ -40,17 +42,6 @@ main() {
   esac
 
   print_networking_configuraton "$config"
-}
-
-
-cac_listservers() {
-  if test -z "${cac_via-}"; then
-    curl -fsS \
-      "https://panel.cloudatcost.com/api/v1/listservers.php?key=$cac_key&login=$cac_login"
-  else
-    ssh -q $cac_via -t curl -fsS \
-      "https://panel.cloudatcost.com/api/v1/listservers.php?key=$cac_key\\&login=$cac_login"
-  fi
 }
 
 
