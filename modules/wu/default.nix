@@ -10,6 +10,7 @@ in
   imports = [
     ./hosts.nix
     ./iptables.nix
+    ../common/nixpkgs.nix
     ../tv/base.nix
     ../tv/exim-retiolum.nix
     ../tv/nginx.nix
@@ -25,6 +26,10 @@ in
 
   nix.maxJobs = 8;
 
+  nixpkgs = {
+    url = "https://github.com/NixOS/nixpkgs";
+    rev = "4c01e6d91993b6de128795f4fbdd25f6227fb870";
+  };
 
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="00:90:f5:da:aa:c3", NAME="en0"
