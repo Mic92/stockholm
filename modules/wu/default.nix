@@ -19,8 +19,8 @@ in
     ../tv/synaptics.nix
     #../tv/tools.nix
     ../tv/urxvt.nix
-    ../tv/users.nix
     ../tv/xserver.nix
+    ../wu/users.nix
   ];
 
   nix.maxJobs = 8;

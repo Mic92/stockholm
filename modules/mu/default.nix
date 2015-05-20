@@ -10,7 +10,7 @@ in
 
 {
   imports = [
-    <secrets/hashedPasswords.nix>
+    <secrets/mu.hashedPasswords.nix>
     ../tv/base.nix
     ../tv/exim-retiolum.nix
     ../tv/retiolum.nix
