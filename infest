@@ -112,9 +112,9 @@ infest_centos7_64bit() {
     #curl https://nixos.org/nix/install | sh
     nix_tar=$nix_basename.tar.bz2
     if ! echo $nix_sha256 $nix_tar | sha256sum -c; then
-      wget -c $nix_url || :
+      curl -O -C - $nix_url || :
       if ! echo $nix_sha256 $nix_tar | sha256sum -c; then
-        wget $nix_url || :
+        curl -O $nix_url || :
         if ! echo $nix_sha256 $nix_tar | sha256sum -c; then
           echo $0: cannot download $nix_url >&2
           exit 5
