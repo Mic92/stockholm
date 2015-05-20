@@ -19,6 +19,17 @@ _cac_get_api_v1() {
     -G "https://panel.cloudatcost.com/api/v1/$1.php"
 }
 
+_cac_post_api_v1() {
+  _cac_exec curl -fsS \
+    $(shift
+      set -- "$@" login="$cac_login" key="$cac_key"
+      for arg; do
+        echo -d $(printf '%s' "$arg" | url_encode)
+      done
+    ) \
+    -X POST "https://panel.cloudatcost.com/api/v1/$1.php"
+}
+
 cac_listservers() {
   _cac_get_api_v1 listservers
 }
