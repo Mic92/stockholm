@@ -8,26 +8,22 @@ _cac_exec() {
   fi
 }
 
+_cac_curl_api_v1() {
+  _cac_exec curl -fsS "$1" "https://panel.cloudatcost.com/api/v1/$2.php" $(
+    shift 2
+    set -- "$@" login="$cac_login" key="$cac_key"
+    for arg; do
+      echo -d $(printf '%s' "$arg" | url_encode)
+    done
+  )
+}
+
 _cac_get_api_v1() {
-  _cac_exec curl -fsS \
-    $(shift
-      set -- "$@" login="$cac_login" key="$cac_key"
-      for arg; do
-        echo -d $(printf '%s' "$arg" | url_encode)
-      done
-    ) \
-    -G "https://panel.cloudatcost.com/api/v1/$1.php"
+  _cac_curl_api_v1 -G "$@"
 }
 
 _cac_post_api_v1() {
-  _cac_exec curl -fsS \
-    $(shift
-      set -- "$@" login="$cac_login" key="$cac_key"
-      for arg; do
-        echo -d $(printf '%s' "$arg" | url_encode)
-      done
-    ) \
-    -X POST "https://panel.cloudatcost.com/api/v1/$1.php"
+  _cac_curl_api_v1 -XPOST "$@"
 }
 
 cac_listservers() {
