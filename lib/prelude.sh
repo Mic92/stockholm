@@ -53,8 +53,10 @@ deploy() {(
     | rsync -f '. -' -zvrlptD --delete-excluded ./ "$target":/etc/nixos/
 
   clone_or_update "$target" "$nixpkgs_dir" "$git_url" "$git_rev"
-  ssh "$target" nixos-rebuild switch -I nixos-config=/etc/nixos/"$main" -I nixpkgs="$nixpkgs_dir"
-
+  ssh "$target" nixos-rebuild switch \
+    -I nixos-config=/etc/nixos/"$main" \
+    -I nixpkgs="$nixpkgs_dir" \
+    -I secrets=/etc/nixos/secrets \
 )}
 
 # rsync_filter : nixos-config -> rsync-filter
@@ -98,6 +100,7 @@ list_module_imports() {
     set -- "./$1"
   fi
   imports=$(nix-instantiate \
+      -I secrets=secrets \
       --strict \
       --json \
       --eval \
