@@ -33,14 +33,6 @@ main() {
   config=$(echo $listservers \
       | jq -r ".data|map(select(.servername == \"$cac_servername\"))[]")
 
-  serverstatus=$(echo $config | jq -r .status)
-  case $serverstatus in
-    'Powered On') : ;;
-    *)
-      echo $0: bad server status: $serverstatus >&2
-      exit 2
-  esac
-
   print_networking_configuraton "$config"
 }
 
