@@ -19,12 +19,9 @@ nix_find_sha1sum=86f8775bd4f0841edd4c816df861cebf509d58c3
 # hostname=
 
 main() {
-  listservers=$(cac_listservers)
+  server=$(cac_getserver_by_servername "$cac_servername")
 
-  config=$(echo $listservers \
-      | jq -r ".[]|select(.servername==\"$cac_servername\")")
-
-  serverstatus=$(echo $config | jq -r .status)
+  serverstatus=$(echo $server | jq -r .status)
   case $serverstatus in
     'Powered On') : ;;
     *)
@@ -32,9 +29,9 @@ main() {
       exit 2
   esac
 
-  template=$(echo $config | jq -r .template)
+  template=$(echo $server | jq -r .template)
   case $template in
-    'CentOS-7-64bit') infest_centos7_64bit "$config";;
+    'CentOS-7-64bit') infest_centos7_64bit "$server";;
     *)
       echo $0: bad template: $template >&2
       exit 3
@@ -43,14 +40,14 @@ main() {
 
 
 infest_centos7_64bit() {
-  config=$1
-  address=$(echo $config | jq -r .ip)
-  gateway=$(echo $config | jq -r .gateway)
+  server=$1
+  address=$(echo $server | jq -r .ip)
+  gateway=$(echo $server | jq -r .gateway)
   nameserver=8.8.8.8
-  netmask=$(echo $config | jq -r .netmask)
+  netmask=$(echo $server | jq -r .netmask)
   prefixLength=$(netmaskToPrefixLengh $netmask)
   RSYNC_RSH='sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
-  SSHPASS=$(echo $config | jq -r .rootpass)
+  SSHPASS=$(echo $server | jq -r .rootpass)
   export SSHPASS
   export RSYNC_RSH
 

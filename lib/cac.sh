@@ -1,5 +1,15 @@
 . ./lib/url.sh
 
+
+cac_getserver_by_servername() {(
+  serverlist=$(cac_listservers)
+  echo $serverlist \
+    | jq \
+        --arg name "$1" \
+        '.[]|select(.servername==$name)'
+)}
+
+
 cac_listservers() {(
   listservers=$(_cac_get_api_v1 listservers)
   status=$(echo "$listservers" | jq -r .status)

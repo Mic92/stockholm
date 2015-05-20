@@ -19,22 +19,18 @@ hostname=$2
 
 # hostname=
 
-main() {
-  listservers=$(cac_listservers)
-
-  config=$(echo $listservers \
-      | jq -r ".[]|select(.servername==\"$cac_servername\")")
-
-  print_networking_configuraton "$config"
-}
+main() {(
+  server=$(cac_getserver_by_servername "$cac_servername")
+  print_networking_configuraton "$server"
+)}
 
 
 print_networking_configuraton() {
-  config=$1
-  address=$(echo $config | jq -r .ip)
-  gateway=$(echo $config | jq -r .gateway)
+  server=$1
+  address=$(echo $server | jq -r .ip)
+  gateway=$(echo $server | jq -r .gateway)
   nameserver=8.8.8.8
-  netmask=$(echo $config | jq -r .netmask)
+  netmask=$(echo $server | jq -r .netmask)
   prefixLength=$(netmaskToPrefixLengh $netmask)
 
   # TODO generate all config and put it into a temp dir, then rsync that
