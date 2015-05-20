@@ -7,6 +7,7 @@
     ./networking.nix
     ../../secrets/cloudkrebs-pw.nix
     ../lass/sshkeys.nix
+    ../lass/base.nix
     ../common/nixpkgs.nix
   ];
 
