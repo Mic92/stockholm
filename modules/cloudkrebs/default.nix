@@ -4,9 +4,10 @@
   imports = [
     ../tv/base-cac-CentOS-7-64bit.nix
     ../lass/retiolum-cloudkrebs.nix
-    ../lass/networking-cloudkrebs.nix
+    ./networking.nix
     ../../secrets/cloudkrebs-pw.nix
     ../lass/sshkeys.nix
+    ../common/nixpkgs.nix
   ];
 
   nixpkgs = {
