@@ -1,31 +1,5 @@
 . ./lib/url.sh
 
-_cac_exec() {
-  if test -z "${cac_via-}"; then
-    (exec "$@")
-  else
-    ssh -q "$cac_via" -t "$@"
-  fi
-}
-
-_cac_curl_api_v1() {
-  _cac_exec curl -fsS "$1" "https://panel.cloudatcost.com/api/v1/$2.php" $(
-    shift 2
-    set -- "$@" login="$cac_login" key="$cac_key"
-    for arg; do
-      echo -d $(printf '%s' "$arg" | url_encode)
-    done
-  )
-}
-
-_cac_get_api_v1() {
-  _cac_curl_api_v1 -G "$@"
-}
-
-_cac_post_api_v1() {
-  _cac_curl_api_v1 -XPOST "$@"
-}
-
 cac_listservers() {
   _cac_get_api_v1 listservers
 }
@@ -69,4 +43,30 @@ cac_cloudpro_delete() {
 
 cac_cloudpro_resources() {
   _cac_get_api_v1 cloudpro/resources
+}
+
+_cac_get_api_v1() {
+  _cac_curl_api_v1 -G "$@"
+}
+
+_cac_post_api_v1() {
+  _cac_curl_api_v1 -XPOST "$@"
+}
+
+_cac_curl_api_v1() {
+  _cac_exec curl -fsS "$1" "https://panel.cloudatcost.com/api/v1/$2.php" $(
+    shift 2
+    set -- "$@" login="$cac_login" key="$cac_key"
+    for arg; do
+      echo -d $(printf '%s' "$arg" | url_encode)
+    done
+  )
+}
+
+_cac_exec() {
+  if test -z "${cac_via-}"; then
+    (exec "$@")
+  else
+    ssh -q "$cac_via" -t "$@"
+  fi
 }
