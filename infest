@@ -43,10 +43,6 @@ main() {
 infest_centos7_64bit() {
   server=$1
   address=$(echo $server | jq -r .ip)
-  gateway=$(echo $server | jq -r .gateway)
-  nameserver=8.8.8.8
-  netmask=$(echo $server | jq -r .netmask)
-  prefixLength=$(netmaskToPrefixLengh $netmask)
   RSYNC_RSH='sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
   SSHPASS=$(echo $server | jq -r .rootpass)
   export SSHPASS
@@ -187,16 +183,5 @@ infest_centos7_64bit() {
           main="$main" \
           /bin/sh
 }
-
-netmaskToPrefixLengh() {
-  binaryNetmask=$(echo $1 | sed 's/^/obase=2;/;s/\./;/g' | bc | tr -d \\n)
-  binaryPrefix=$(echo $binaryNetmask | sed -n 's/^\(1*\)0*$/\1/p')
-  if ! echo $binaryPrefix | grep -q .; then
-    echo $0: bad netmask: $netmask >&2
-    exit 4
-  fi
-  printf %s $binaryPrefix | tr -d 0 | wc -c
-}
-
 
 main "$@"
