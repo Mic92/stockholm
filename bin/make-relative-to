@@ -1,0 +1,6 @@
+#! /bin/sh
+# make-relative-to : lines path |> directory -> lines path
+# Non-matching paths won't get altered.
+set -euf
+
+sed "s:^$(echo "$1/" | bre-escape | sed 's/:/\\:/g')::"

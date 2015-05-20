@@ -1,0 +1,3 @@
+#! /bin/sh
+set -euf
+exec _cac_post_api_v1 renameserver sid="$1" name="$2"

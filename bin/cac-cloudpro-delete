@@ -1,0 +1,3 @@
+#! /bin/sh
+set -euf
+exec _cac_post_api_v1 cloudpro/delete sid="$1"

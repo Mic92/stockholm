@@ -1,0 +1,5 @@
+#! /bin/sh
+set -euf
+
+# default os=26 is CentOS-7-64bit
+exec _cac_post_api_v1 cloudpro/build cpu="$1" ram="$2" storage="$3" os="${4-26}"

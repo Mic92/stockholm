@@ -1,0 +1,150 @@
+#! /bin/sh
+set -euf
+
+server=$1
+hostname=$2
+
+address=$(echo $server | jq -r .ip)
+RSYNC_RSH='sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+SSHPASS=$(echo $server | jq -r .rootpass)
+export SSHPASS
+export RSYNC_RSH
+
+main="modules/$hostname/default.nix"
+target="root@$address"
+
+cacnixos-networking "$server" $hostname \
+  > modules/$hostname/networking.nix
+
+echo '(
+  set -xeuf
+  type bzip2 || yum install -y bzip2
+  type rsync || yum install -y rsync
+)' \
+  | sshpass -e ssh \
+      -o StrictHostKeyChecking=no \
+      -o UserKnownHostsFile=/dev/null \
+      "root@$address" \
+      /bin/sh
+
+make-rsync-filter "$main" \
+  | rsync -f '. -' -zvrlptD --delete-excluded ./ "$target":/etc/nixos/
+
+#
+#
+#
+echo '(
+  set -xeuf
+  groupadd -g 30000 nixbld || :
+  for i in `seq 1 10`; do
+    useradd -c "foolsgarden Nix build user $i" \
+            -d /var/empty \
+            -s /sbin/nologin \
+            -g 30000 \
+            -G 30000 \
+            -l -u $(expr 30000 + $i) \
+            nixbld$i || :
+    rm -f /var/spool/mail/nixbld$i
+  done
+
+  #curl https://nixos.org/nix/install | sh
+  nix_tar=$nix_basename.tar.bz2
+  if ! echo $nix_sha256 $nix_tar | sha256sum -c; then
+    curl -O -C - $nix_url || :
+    if ! echo $nix_sha256 $nix_tar | sha256sum -c; then
+      curl -O $nix_url || :
+      if ! echo $nix_sha256 $nix_tar | sha256sum -c; then
+        echo $0: cannot download $nix_url >&2
+        exit 5
+      fi
+    fi
+  fi
+
+  if ! test -d $nix_basename; then
+    tar jxf $nix_basename.tar.bz2
+  fi
+
+  nix_find=$nix_basename.find.txt
+  if ! echo $nix_find_sha1sum $nix_find | sha1sum -c; then
+    find $nix_basename | sort > $nix_find
+    if ! echo $nix_find_sha1sum $nix_find | sha1sum -c; then
+      echo $0: cannot unpack $nix_basename.tar.bz2 >&2
+      # TODO we could retry
+      exit 6
+    fi
+  fi
+
+  mkdir -p bin
+  PATH=$HOME/bin:$PATH
+  export PATH
+
+  # generate fake sudo because
+  # sudo: sorry, you must have a tty to run sudo
+  {
+    echo "#! /bin/sh"
+    echo "exec env \"\$@\""
+  } > bin/sudo
+  chmod +x bin/sudo
+
+  ./$nix_basename/install
+
+  . /root/.nix-profile/etc/profile.d/nix.sh
+
+  nixpkgs_expr="import <nixpkgs> { system = builtins.currentSystem; }"
+  nixpkgs_path=$(
+    find /nix/store -mindepth 1 -maxdepth 1 -name *-nixpkgs-* -type d
+  )
+
+  for i in nixos-generate-config nixos-install; do
+    nix-env \
+      --arg config "{ nix.package = ($nixpkgs_expr).nix; }" \
+      --arg pkgs "$nixpkgs_expr" \
+      --arg modulesPath "throw \"no modulesPath\"" \
+      -f $nixpkgs_path/nixpkgs/nixos/modules/installer/tools/tools.nix \
+      -iA config.system.build.$i
+  done
+
+  # TODO following fail when aborted in-between
+  if ! test -d /int; then
+    mkdir -p /int
+    mount --bind /int /mnt
+  fi
+  if ! test -d /mnt/boot; then
+    mkdir -p /mnt/boot
+    mount /dev/sda1 /mnt/boot
+  fi
+
+  mkdir -p /mnt/etc/nixos
+  rsync -zvrlptD --delete-excluded /etc/nixos/ /mnt/etc/nixos/
+
+  mkdir -m 0444 -p /mnt/var/empty
+
+  ln -s $main /mnt/etc/nixos/configuration.nix
+  nixos-install \
+    -I secrets=/etc/nixos/secrets
+
+  find / \
+    1> /root/pre-rsync-find.out \
+    2> /root/pre-rsync-find.err
+
+  rsync -va --force /int/ /
+
+  # find / -type f -mtime +1 -exec rm -v {} \; 2>&1 > rm.log
+  #   ^ too aggressive, kills journal which is bad
+  # shutdown -r now
+  # nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+  # nix-channel --remove nixpkgs
+  # nix-channel --update
+
+)' \
+  | sshpass -e ssh \
+      -o StrictHostKeyChecking=no \
+      -o UserKnownHostsFile=/dev/null \
+      "root@$address" \
+      -T /usr/bin/env \
+        nix_url="$nix_url" \
+        nix_basename="$(basename $nix_url .tar.bz2)" \
+        nix_sha256="$nix_sha256" \
+        nix_find_sha1sum="$nix_find_sha1sum" \
+        main="$main" \
+        /bin/sh

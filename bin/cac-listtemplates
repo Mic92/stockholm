@@ -1,0 +1,4 @@
+#! /bin/sh
+set -euf
+
+exec _cac_get_api_v1 listtemplates

@@ -1,0 +1,10 @@
+#! /bin/sh
+# import-statements : lines (path ":" string) |> lines (path ":" relpath)
+set -euf
+sed -n '
+      s@^\([^:]\+:\)\('"$(bre-invert-word import)"'\)*\<import\s\+@\1@
+      t1;d
+  :1; s@^\([^:]\+:\)\(\.*/\S*\)@\1\2\n@
+      t2;d
+  :2; P;D
+'

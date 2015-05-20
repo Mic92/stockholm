@@ -1,0 +1,3 @@
+#! /bin/sh
+set -euf
+exec _cac_curl_api_v1 -XPOST "$@"

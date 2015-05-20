@@ -1,0 +1,18 @@
+#! /bin/sh
+set -euf
+
+formal_type=$1
+
+actual_value=$2
+actual_type=$(echo $actual_value | jq -r type)
+
+if [ "$actual_type" != "$formal_type" ]; then
+  backtrace
+  printf 'error: expected %s, got %s\n' \
+    "$formal_type" \
+    "$actual_type" \
+    >&2
+  exit 1
+fi
+
+echo "$actual_value"

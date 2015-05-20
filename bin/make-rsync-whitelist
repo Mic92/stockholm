@@ -1,0 +1,15 @@
+#! /bin/sh
+# make-rsync-whitelist : lines relpath |> liens rsync-filter
+set -euf
+
+set -- "$(cat)"
+
+# include all files in stdin and their directories
+{
+  echo "$1"
+  echo "$1" | make-parent-dirs | sort | uniq
+} \
+  | sed 's|^|+ /|'
+
+# exclude everything else
+echo '- *'

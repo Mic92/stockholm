@@ -4,7 +4,8 @@
 #
 set -euf
 
-. ./lib/prelude.sh
+PATH="$PWD/bin${PATH+:$PATH}"
+export PATH
 
 user=root
 host=$1
@@ -12,4 +13,4 @@ host=$1
 config=./modules/$host/default.nix
 target=${2-$user@$host}
 
-verbose deploy "$config" "$target"
+exec ssh-deploy "$config" "$target"

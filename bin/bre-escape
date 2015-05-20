@@ -1,0 +1,5 @@
+#! /bin/sh
+# bre-escape : lines string |> lines bre-escaped-string
+set -euf
+
+sed 's:[\.\[\\\*\^\$]:\\&:g'

@@ -1,0 +1,8 @@
+#! /bin/sh
+set -euf
+
+if test -z "${cac_via-}"; then
+  exec "$@"
+else
+  exec ssh -q "$cac_via" -t "$@"
+fi

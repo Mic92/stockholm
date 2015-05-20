@@ -1,0 +1,33 @@
+#! /bin/sh
+# make-rsync-filter : nixos-config -> rsync-filter
+set -euf
+
+main=$1
+
+hosts=$(list-hosts)
+module_imports=$(list-module-imports "$main")
+other_imports=$(
+  echo "$module_imports" \
+    | xargs grep -H . \
+    | import-statements \
+    | slash-path-relpath \
+    | undot-paths \
+    | sort \
+    | uniq \
+    | sed '/\.nix$/!s:$:/default.nix:' \
+    )
+secrets=$(echo "$module_imports" | xargs cat | quoted-strings | filter-secrets)
+
+# TODO collect all other paths from *_imports
+
+abs_deps=$(
+  echo "$hosts"
+  echo "$module_imports"
+  echo "$other_imports"
+  echo "$secrets"
+)
+
+rel_deps=$(echo "$abs_deps" | make-relative-to "$PWD")
+filter=$(echo "$rel_deps" | make-rsync-whitelist)
+
+echo "$filter"

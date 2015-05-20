@@ -1,0 +1,10 @@
+#! /bin/sh
+set -euf
+
+exec _cac_exec curl -fsS "$1" "https://panel.cloudatcost.com/api/v1/$2.php" $(
+  shift 2
+  set -- "$@" login="$cac_login" key="$cac_key"
+  for arg; do
+    echo -d $(printf '%s' "$arg" | urlencode)
+  done
+)

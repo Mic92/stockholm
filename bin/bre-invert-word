@@ -1,0 +1,15 @@
+#! /bin/sh
+# bre-invert-word : string -> BRE
+set -euf
+
+# TODO escape chars in the resulting BRE.
+awk -v input="$1" '
+  BEGIN {
+    split(input,s,"")
+    for (i in s) {
+      c=s[i]
+      printf "\\|%s[^%s]", y, c
+      y = y c
+    }
+  }
+'

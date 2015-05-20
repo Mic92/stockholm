@@ -1,0 +1,17 @@
+#! /bin/sh
+set -euf
+
+server=$1
+shift
+
+address=$(echo $server | jq -r .ip)
+target=root@$address
+
+SSHPASS=$(echo $server | jq -r .rootpass)
+export SSHPASS
+
+exec sshpass -e ssh \
+  -o StrictHostKeyChecking=no \
+  -o UserKnownHostsFile=/dev/null \
+  "$target" \
+  "$@"
