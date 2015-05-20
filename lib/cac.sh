@@ -4,7 +4,7 @@ cac_listservers() {(
   listservers=$(_cac_get_api_v1 listservers)
   status=$(echo "$listservers" | jq -r .status)
   if [ "$status" = ok ]; then
-    echo "$listservers"
+    echo "$listservers" | jq -r .data
   else
     echo "$0: bad listservers status: $status" >&2
     exit 1

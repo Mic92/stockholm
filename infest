@@ -22,7 +22,7 @@ main() {
   listservers=$(cac_listservers)
 
   config=$(echo $listservers \
-      | jq -r ".data|map(select(.servername == \"$cac_servername\"))[]")
+      | jq -r ".[]|select(.servername==\"$cac_servername\")")
 
   serverstatus=$(echo $config | jq -r .status)
   case $serverstatus in
