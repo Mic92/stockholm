@@ -22,14 +22,6 @@ hostname=$2
 main() {
   listservers=$(cac_listservers)
 
-  listserversstatus=$(echo $listservers | jq -r .status)
-  case $listserversstatus in
-    ok) : ;;
-    *)
-      echo $0: bad listservers status: $listserversstatus >&2
-      exit 1
-  esac
-
   config=$(echo $listservers \
       | jq -r ".data|map(select(.servername == \"$cac_servername\"))[]")
 
