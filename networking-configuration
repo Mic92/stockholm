@@ -5,6 +5,7 @@
 set -euf
 
 . ./lib/cac.sh
+. ./lib/net.sh
 
 cac_servername=$1
 hostname=$2
@@ -31,7 +32,7 @@ print_networking_configuraton() {
   gateway=$(echo $server | jq -r .gateway)
   nameserver=8.8.8.8
   netmask=$(echo $server | jq -r .netmask)
-  prefixLength=$(netmaskToPrefixLengh $netmask)
+  prefix=$(net_netmask_to_prefix $netmask)
 
   # TODO generate all config and put it into a temp dir, then rsync that
   #
@@ -43,7 +44,7 @@ print_networking_configuraton() {
   printf '  networking.interfaces.enp2s1.ip4 = [\n'
   printf '    {\n'
   printf '      address = "%s";\n' $address
-  printf '      prefixLength = %d;\n' $prefixLength
+  printf '      prefixLength = %d;\n' $prefix
   printf '    }\n'
   printf '  ];\n'
   printf '  networking.defaultGateway = "%s";\n' $gateway
@@ -52,16 +53,5 @@ print_networking_configuraton() {
   printf '  ];\n'
   printf '}\n'
 }
-
-netmaskToPrefixLengh() {
-  binaryNetmask=$(echo $1 | sed 's/^/obase=2;/;s/\./;/g' | bc | tr -d \\n)
-  binaryPrefix=$(echo $binaryNetmask | sed -n 's/^\(1*\)0*$/\1/p')
-  if ! echo $binaryPrefix | grep -q .; then
-    echo $0: bad netmask: $netmask >&2
-    exit 4
-  fi
-  printf %s $binaryPrefix | tr -d 0 | wc -c
-}
-
 
 main "$@"
