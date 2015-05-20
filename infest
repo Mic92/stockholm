@@ -179,6 +179,8 @@ infest_centos7_64bit() {
     mkdir -p /mnt/etc/nixos
     rsync -zvrlptD --delete-excluded /etc/nixos/ /mnt/etc/nixos/
 
+    mkdir -m 0444 -p /mnt/var/empty
+
     ln -s $main /mnt/etc/nixos/configuration.nix
     nixos-install
 
