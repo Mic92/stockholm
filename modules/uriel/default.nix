@@ -55,9 +55,11 @@
           RW+     =   lass
           R       =   tv
           R       =   makefu
+          option hook.post-receive = irc-announce
 
       repo brain
-          RW+     =   lass
+          RW+     =   uriel
+          R       =   lass
           R       =   tv
           R       =   makefu
           option hook.post-receive = irc-announce
@@ -82,6 +84,10 @@
       repo config
           RW+     =   lass
           RW+     =   uriel
+          option hook.post-receive = irc-announce
+
+      repo teeest
+          RW+     =   lass
           option hook.post-receive = irc-announce
     '';
 
@@ -140,8 +146,10 @@
 
         # CAVEAT beware of real TABs in grep pattern!
         # CAVEAT there will never be more than 42 relevant log entries!
-        log="$(tail -n 42 "$GL_LOGFILE" | grep "^[^ ]*  $GL_TID ")"
-        update_log="$(echo "$log" | grep "^[^ ]*  $GL_TID update")"
+        tab=$(printf '\x09')
+        log="$(tail -n 42 "$GL_LOGFILE" | grep "^[^$tab]*$tab$GL_TID$tab" || :)"
+
+        update_log="$(echo "$log" | grep "^[^$tab]*$tab$GL_TID''${tab}update")"
 
         # (debug output)
         env | sed 's/^/env: /'
