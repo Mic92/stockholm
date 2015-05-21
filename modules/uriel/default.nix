@@ -19,7 +19,7 @@
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "946329e1342acc08d9bed9e7af860f2a5b1f1765";
+    rev = "ffe3f799a2eb565e1755a6a18260ece5cbbd746b";
   };
 
   services.gitolite = {
