@@ -19,7 +19,7 @@
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "b3531eebf625e388d2fa33d56646180236263e74";
+    rev = "946329e1342acc08d9bed9e7af860f2a5b1f1765";
   };
 
   services.gitolite = {
@@ -82,7 +82,7 @@
       repo config
           RW+     =   lass
           RW+     =   uriel
-          R       =   fastpoke
+          option hook.post-receive = irc-announce
     '';
 
     rc = ''
@@ -229,6 +229,26 @@
           | nc "$IRC_SERVER" "$IRC_PORT" | tee -a ircin
       '';
     };
+
+    customFiles = [
+      {
+        filename = ".gitolite/conf/irc-announce.conf";
+        content = ''
+          IRC_NICK="$(hostname)$GL_TID"
+          case "$GL_REPO" in
+            brain|painload|services|load-env|pong|config)
+              IRC_CHANNEL='#retiolum'
+            ;;
+            emse*)
+              IRC_CHANNEL='#emse'
+            ;;
+            *)
+              IRC_CHANNEL='&testing'
+            ;;
+          esac
+        '';
+      }
+    ];
   };
 
 
