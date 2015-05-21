@@ -1,16 +1,16 @@
 #! /bin/sh
 #
-# usage: ./deploy HOST [[USER@]HOST]
+# usage: ./deploy HOST
 #
 set -euf
 
-PATH="$PWD/bin${PATH+:$PATH}"
-export PATH
-
-user=root
 host=$1
 
-config=./modules/$host/default.nix
-target=${2-$user@$host}
+export PATH="$PWD/bin:$PATH"
+#export nixpkgs=/var/nixpkgs
+export nixpkgs_root=$PWD/tmp/nixpkgs
+export config_root=$PWD
+export retiolum_hosts=$PWD/hosts
+export secrets_root=$PWD/secrets
 
-exec ssh-deploy "$config" "$target"
+exec nixos-deploy "$host"

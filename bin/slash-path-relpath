@@ -1,8 +1,0 @@
-#! /bin/sh
-# slash_path_relpath : lines (path ":" relpath) |> lines path
-#
-# Example: "/foo/bar: baz" => "/foo/baz"
-#
-set -euf
-
-sed -n 's@/[^/]\+:@/@p'

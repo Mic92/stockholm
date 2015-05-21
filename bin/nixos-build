@@ -8,9 +8,12 @@ host=$1
 
 #target=root@$host
 
+nixpkgs=$nixpkgs_root/$host
 nixos_config=$config_root/modules/$host
 secrets_nix=$secrets_root/$host/nix
 secrets_rsync=$secrets_root/$host/rsync
+
+nixos-fetch-git "$host"
 
 nix-build \
     -I "$nixpkgs" \

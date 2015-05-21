@@ -5,7 +5,7 @@
 set -euf
 
 host=$1
-system=${2-$(build "$host")}
+system=${2-$(nixos-build "$host")}
 
 target=root@$host
 

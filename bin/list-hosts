@@ -1,7 +1,0 @@
-#! /bin/sh
-# list-hosts : lines tinc-host-file
-set -euf
-
-# Precondition: $PWD/hosts is the correct repository :)
-git -C hosts ls-tree --name-only HEAD \
-  | awk '{print ENVIRON["PWD"]"/hosts/"$$0}'

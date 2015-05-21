@@ -322,7 +322,7 @@ in
 
   services.retiolum = {
     enable = true;
-    hosts = /etc/nixos/hosts;
+    hosts = <retiolum-hosts>;
     connectTo = [
       "gum"
       "pigstarter"

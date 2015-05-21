@@ -4,6 +4,7 @@ set -euf
 host=$1
 attr=$2
 
+nixpkgs=$nixpkgs_root/$host
 nixos_config=$config_root/modules/$host
 secrets_nix=$secrets_root/$host/nix
 secrets_rsync=$secrets_root/$host/rsync
