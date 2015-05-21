@@ -1,0 +1,16 @@
+#! /bin/sh
+set -euf
+
+pid=$$
+while :; do
+  cd /proc/$pid
+  cmdline=$(cat cmdline | sed 's/\0/ /g;s/ $//')
+  ppid=$(grep PPid status | awk '{print$2}')
+  printf '%5d %s\n' $pid "$cmdline"
+  if [ $pid = 1 ]; then
+    break
+  else
+    pid=$ppid
+  fi
+done \
+  | tac
