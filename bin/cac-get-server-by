@@ -7,7 +7,9 @@ cac-listservers \
     --arg v "$2" \
     '
       map(select(.[$k]==$v)) |
-      if (. | length) == 1 then
+      if (. | length) == 0 then
+        null
+      elif (. | length) == 1 then
         .[0]
       else
         .
