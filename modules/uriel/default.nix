@@ -212,7 +212,7 @@
             | privmsg_cat \
             | cat2
 
-          printf '[13%s] %s pushed %s new commit%s to 6%s %s\n' \
+          printf '[\x0313%s\x03] %s pushed %s new commit%s to \x036%s %s\x03\n' \
               "$reponame" \
               "$username" \
               "$commit_count" \
@@ -223,7 +223,7 @@
             | cat2
 
           echo "$git_log" \
-            | sed 's/^/14/;s/ / /' \
+            | sed 's/^/\x0314/;s/ /\x03 /' \
             | privmsg_cat \
             | cat2
 
