@@ -3,7 +3,7 @@
 {
   imports =
     [
-      <secrets/cd.hashedPasswords.nix>
+      <secrets/hashedPasswords.nix>
       ./iptables.nix
       ./networking.nix
       ../common/nixpkgs.nix

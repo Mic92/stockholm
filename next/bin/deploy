@@ -1,0 +1,16 @@
+#! /bin/sh
+#
+# deploy
+#
+set -euf
+
+host=$1
+system=${2-$(build "$host")}
+
+target=root@$host
+
+nix-copy-closure --gzip --to "$target" "$system"
+
+copy-secrets "$host"
+
+ssh ${NIX_SSHOPTS-} "$target" "$system/bin/switch-to-configuration" switch

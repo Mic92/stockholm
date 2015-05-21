@@ -210,7 +210,7 @@ in
 
 {
   imports = [
-    <secrets/wu.hashedPasswords.nix>
+    <secrets/hashedPasswords.nix>
   ];
 
   users.defaultUserShell = "/run/current-system/sw/bin/bash";

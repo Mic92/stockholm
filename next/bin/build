@@ -1,0 +1,22 @@
+#! /bin/sh
+#
+# build : hostname -> system-path
+#
+set -euf
+
+host=$1
+
+#target=root@$host
+
+nixos_config=$config_root/modules/$host
+secrets_nix=$secrets_root/$host/nix
+secrets_rsync=$secrets_root/$host/rsync
+
+nix-build \
+    -I "$nixpkgs" \
+    -I nixos-config="$nixos_config" \
+    -I retiolum-hosts="$retiolum_hosts" \
+    -I secrets="$secrets_nix" \
+    -A system \
+    --no-out-link \
+    '<nixos>'

@@ -1,0 +1,20 @@
+#! /bin/sh
+set -euf
+
+host=$1
+attr=$2
+
+nixos_config=$config_root/modules/$host
+secrets_nix=$secrets_root/$host/nix
+secrets_rsync=$secrets_root/$host/rsync
+
+nix-instantiate \
+    -I "$nixpkgs" \
+    -I nixos-config="$nixos_config" \
+    -I retiolum-hosts="$retiolum_hosts" \
+    -I secrets="$secrets_nix" \
+    -A config."$attr" \
+    '<nixos>' \
+    --eval \
+    --json \
+  | jq -r .

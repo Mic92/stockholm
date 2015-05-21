@@ -221,7 +221,7 @@ in
                 %% file and uncomment this line:
                 %%
                 starttls,
-                {certfile, "/etc/nixos/secrets/ejabberd.cd.retiolum.pem"},
+                {certfile, "/etc/ejabberd/ejabberd.pem"},
 
                 {access, c2s},
                 {shaper, c2s_shaper},
@@ -274,7 +274,7 @@ in
           %%
           %% s2s_certfile: Specify a certificate file.
           %%
-          {s2s_certfile, "/etc/nixos/secrets/ejabberd.cd.retiolum.pem"}.
+          {s2s_certfile, "/etc/ejabberd/ejabberd.pem"}.
 
           %%
           %% domain_certfile: Specify a different certificate for each served hostname.

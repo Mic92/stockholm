@@ -1,0 +1,11 @@
+#! /bin/sh
+export PATH=$HOME/src/config/next/bin:$PATH
+export nixpkgs=/var/nixpkgs
+export config_root=$HOME/src/config
+export retiolum_hosts=$HOME/src/config/hosts
+export secrets_root=$HOME/src/config/secrets
+
+export PS1='\[\e[1;35m\]config>\[\e[m\] '
+
+cd /var/empty
+exec /bin/sh
