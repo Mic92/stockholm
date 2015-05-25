@@ -24,6 +24,7 @@
     ../lass/binary-caches.nix
     ../lass/ircd.nix
     ../../secrets/mors-pw.nix
+    ./repos.nix
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
