@@ -20,7 +20,7 @@
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "ffe3f799a2eb565e1755a6a18260ece5cbbd746b";
+    rev = "0b1dfed50d9ec2222b94d68f84376f66e82d19e3";
   };
 
   networking.hostName = "uriel";

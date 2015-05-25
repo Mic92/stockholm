@@ -28,7 +28,7 @@
   ];
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "eba85883a07a9fc414d7860f8d6fee4d9f09b2ac";
+    rev = "0b1dfed50d9ec2222b94d68f84376f66e82d19e3";
   };
 
   networking.hostName = "mors";
@@ -55,8 +55,6 @@
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
     #kernelModules = [ "kvm-intel" "msr" ];
     kernelModules = [ "msr" ];
-    extraModprobeConfig = ''
-    '';
   };
   fileSystems = {
     "/" = {
@@ -146,7 +144,6 @@
   '';
 
   services.xserver = {
-
     videoDriver = "intel";
     vaapiDrivers = [ pkgs.vaapiIntel ];
     deviceSection = ''
