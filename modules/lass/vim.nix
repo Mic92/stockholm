@@ -1,6 +1,17 @@
 { config, pkgs, ... }:
 
-{
+let
+  customPlugins.mustang2 = pkgs.vimUtils.buildVimPlugin {
+    name = "Mustang2";
+    src = pkgs.fetchFromGitHub {
+      owner = "croaker";
+      repo = "mustang-vim";
+      rev = "6533d7d21bf27cae94d9c2caa575f627f003dfd5";
+      sha256 = "0zlmcrr04j3dkiivrhqi90f618lmnnnpvbz1b9msfs78cmgw9w67";
+    };
+  };
+
+in {
 
   environment.systemPackages = with pkgs; [
     (vim_configurable.customize {
@@ -12,7 +23,7 @@
       syntax on
       " TODO autoload colorscheme file
       set background=dark
-      colorscheme solarized
+      colorscheme mustang
       filetype off
       filetype plugin indent on
 
@@ -81,13 +92,12 @@
       set undofile
     '';
 
-      vimrcConfig.vam.knownPlugins = vimPlugins;
+      vimrcConfig.vam.knownPlugins = vimPlugins // customPlugins;
       vimrcConfig.vam.pluginDictionaries = [
-        { name = "Gundo"; }
-        { name = "commentary"; }
-        { name = "vim-addon-nix"; }
-        { name = "colors-solarized"; }
+        { names = [ "Gundo" "commentary" "vim-addon-nix" ]; }
+        { name = "mustang2"; }
       ];
+
     })
   ];
 }
