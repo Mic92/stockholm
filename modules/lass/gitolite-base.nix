@@ -5,6 +5,7 @@
     mutable = false;
     keys = {
       lass = config.sshKeys.lass.pub;
+      uriel = config.sshKeys.uriel.pub;
     };
     rc = ''
       %RC = (
