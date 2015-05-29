@@ -13,8 +13,8 @@ let
 
 in {
 
-  environment.systemPackages = with pkgs; [
-    (vim_configurable.customize {
+  environment.systemPackages = [
+    (pkgs.vim_configurable.customize {
       name = "vim";
 
     vimrcConfig.customRC = ''
@@ -58,8 +58,6 @@ in {
 
       "Tabwidth
       set ts=2 sts=2 sw=2 et
-      autocmd BufRead *.js,*.json set ts=2 sts=2 sw=2 et
-      autocmd BufRead *.hs set ts=4 sts=4 sw=4 et
 
       " create Backup/tmp/undo dirs
       function! InitBackupDir()
@@ -90,12 +88,24 @@ in {
       set viminfo='20,<1000,s100,h,n~/.vim/tmp/info
       set undodir=$HOME/.vim/undo
       set undofile
+
+      " highlight whitespaces
+      highlight ExtraWhitespace ctermbg=red guibg=red
+      match ExtraWhitespace /\s\+$/
+      autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+      autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+      autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+      autocmd BufWinLeave * call clearmatches()
+
+      "ft specific stuff
+      autocmd BufRead *.js,*.json set ts=2 sts=2 sw=2 et
+      autocmd BufRead *.hs set ts=4 sts=4 sw=4 et
     '';
 
-      vimrcConfig.vam.knownPlugins = vimPlugins // customPlugins;
+      vimrcConfig.vam.knownPlugins = pkgs.vimPlugins // customPlugins;
       vimrcConfig.vam.pluginDictionaries = [
-        { names = [ "Gundo" "commentary" "vim-addon-nix" ]; }
-        { name = "mustang2"; }
+        { names = [ "Gundo" "commentary" "mustang2" ]; }
+        { names = [ "vim-addon-nix" ]; ft_regex = "^nix\$"; }
       ];
 
     })
