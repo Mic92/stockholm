@@ -33,7 +33,7 @@
       1;
     '';
 
-    hooks.repoSpecific = {
+    repoSpecificHooks = {
       irc-announce = ''
         #! /bin/sh
         set -euf
@@ -155,8 +155,8 @@
     };
     customFiles = [
       {
-        filename = ".gitolite/conf/irc-announce.conf";
-        content = ''
+        path = ".gitolite/conf/irc-announce.conf";
+        file = ''
           IRC_NICK="$(hostname)$GL_TID"
           case "$GL_REPO" in
             brain|painload|services|load-env|config)
