@@ -70,6 +70,13 @@
         extraConfig = "option hook.post-receive = irc-announce";
       };
 
+      xmonad-config = {
+        users = {
+          lass = "RW+";
+          uriel = "R";
+        };
+      };
+
     };
   };
 }
