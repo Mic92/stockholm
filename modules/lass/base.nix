@@ -94,10 +94,10 @@
     extraCommands = ''
       iptables -A INPUT -j ACCEPT -m conntrack --ctstate RELATED,ESTABLISHED
       iptables -A INPUT -j ACCEPT -i lo
+      iptables -A INPUT -j ACCEPT -p icmp
 
       #iptables -N Retiolum
       iptables -A INPUT -j Retiolum -i retiolum
-      iptables -A Retiolum -j ACCEPT -p icmp
       iptables -A Retiolum -j ACCEPT -m conntrack --ctstate RELATED,ESTABLISHED
       iptables -A Retiolum -j REJECT -p tcp --reject-with tcp-reset
       iptables -A Retiolum -j REJECT -p udp --reject-with icmp-port-unreachable
