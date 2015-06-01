@@ -24,6 +24,7 @@
   environment.systemPackages = with pkgs; [
     git
     most
+    rxvt_unicode.terminfo
 
   #network
     iptables
