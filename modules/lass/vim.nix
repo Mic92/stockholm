@@ -100,6 +100,9 @@ in {
       "ft specific stuff
       autocmd BufRead *.js,*.json set ts=2 sts=2 sw=2 et
       autocmd BufRead *.hs set ts=4 sts=4 sw=4 et
+
+      "esc timeout
+      set timeoutlen=1000 ttimeoutlen=0
     '';
 
       vimrcConfig.vam.knownPlugins = pkgs.vimPlugins // customPlugins;
