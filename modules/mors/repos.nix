@@ -3,6 +3,8 @@
 {
   imports = [
     ../lass/gitolite-base.nix
+    ../common/krebs-keys.nix
+    ../common/krebs-repos.nix
   ];
 
   services.gitolite = {
@@ -42,20 +44,17 @@
         extraConfig = "option hook.post-receive = irc-announce";
       };
 
-      painload = {
-        users = {
-          lass = "RW+";
-          tv = "R";
-          makefu = "R";
-        };
-        extraConfig = "option hook.post-receive = irc-announce";
-      };
-
       brain = {
         users = {
           lass = "RW+";
-          tv = "R";
-          makefu = "R";
+        };
+        extraConfig = "option hook.post-receive = irc-announce";
+        #hooks.post-receive = irc-announce;
+      };
+
+      painload = {
+        users = {
+          lass = "RW+";
         };
         extraConfig = "option hook.post-receive = irc-announce";
       };
@@ -63,9 +62,6 @@
       services = {
         users = {
           lass = "RW+";
-          tv = "R";
-          makefu = "R";
-          reaktor = "R";
         };
         extraConfig = "option hook.post-receive = irc-announce";
       };
