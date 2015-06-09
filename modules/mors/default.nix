@@ -26,9 +26,10 @@
     ../../secrets/mors-pw.nix
     ./repos.nix
   ];
+
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "0b1dfed50d9ec2222b94d68f84376f66e82d19e3";
+    rev = "b74c8eeb73a75eb61148c190df4733474a99a205";
   };
 
   networking.hostName = "mors";
