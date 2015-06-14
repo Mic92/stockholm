@@ -1,16 +1,16 @@
-{ pkgs, ... }:
+{ lib, ... }:
 
 with builtins;
 
 let
-  inherit (pkgs.lib) stringAsChars;
+  inherit (lib) stringAsChars;
 in
 
 {
 
 
   # "7.4.335" -> "74"
-  majmin = with pkgs.lib; x : concatStrings (take 2 (splitString "." x));
+  majmin = with lib; x : concatStrings (take 2 (splitString "." x));
 
 
   concat = xs :
