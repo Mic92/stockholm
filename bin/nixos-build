@@ -8,6 +8,7 @@ host=$1
 
 #target=root@$host
 
+pubkeys=$config_root/pubkeys
 nixpkgs=$nixpkgs_root/$host
 nixos_config=$config_root/modules/$host
 secrets_nix=$secrets_root/$host/nix
@@ -17,6 +18,7 @@ nixos-fetch-git "$host"
 
 nix-build \
     -I "$nixpkgs" \
+    -I pubkeys="$pubkeys" \
     -I nixos-config="$nixos_config" \
     -I retiolum-hosts="$retiolum_hosts" \
     -I secrets="$secrets_nix" \
