@@ -201,11 +201,28 @@ in
           findutils
           gawk
           git
+          gnugrep
+          gnused
         ])}
 
         dataDir=${escapeShellArg cfg.dataDir}
         mkdir -p "$dataDir"
 
+        # Notice how the presence of hooks symlinks determine whether
+        # we manage a repositry or not.
+
+        # Make sure that no existing repository has hooks.  We can delete
+        # symlinks because we assume we created them.
+        find "$dataDir" -mindepth 2 -maxdepth 2 -name hooks -type l -delete
+        bad_hooks=$(find "$dataDir" -mindepth 2 -maxdepth 2 -name hooks)
+        if echo "$bad_hooks" | grep -q .; then
+          printf "$(printf 'error: unknown hooks:\n%s' \
+            "$(echo "$bad_hooks" | sed 's/^/  /')")" \
+            >&2
+          exit -1
+        fi
+
+        # Initialize repositories.
         ${concatMapStringsSep "\n" (repo:
           let
             hooks = scriptFarm "git-ssh-hooks" (makeHooks repo);
@@ -218,9 +235,19 @@ in
               git init --bare --template=/var/empty "$repodir"
               chown -R git: "$repodir"
             fi
-            ln -snf ${hooks} "$repodir/hooks"
+            ln -s ${hooks} "$repodir/hooks"
           ''
         ) (attrValues cfg.repos)}
+
+        # Warn about repositories that exist but aren't mentioned in the
+        # current configuration (and thus didn't receive a hooks symlink).
+        unknown_repos=$(find "$dataDir" -mindepth 1 -maxdepth 1 \
+          -type d \! -exec test -e '{}/hooks' \; -print)
+        if echo "$unknown_repos" | grep -q .; then
+          printf 'warning: stale repositories:\n%s\n' \
+            "$(echo "$unknown_repos" | sed 's/^/  /')" \
+            >&2
+        fi
       '';
 
       makeHooks = repo: removeAttrs repo.hooks [ "pre-receive" ] // {
