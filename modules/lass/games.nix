@@ -13,7 +13,7 @@ in {
       name = "games";
       description = "user playing games";
       home = "/home/games";
-      extraGroups = [ "audio" "video" ];
+      extraGroups = [ "audio" "video" "input" ];
       createHome = true;
       useDefaultShell = true;
     };
