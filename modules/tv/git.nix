@@ -2,12 +2,12 @@
 
 let
   inherit (builtins)
-    attrNames concatLists filter hasAttr head lessThan removeAttrs tail toJSON
-    typeOf;
+    attrNames attrValues concatLists filter hasAttr head lessThan removeAttrs
+    tail toJSON typeOf;
   inherit (lib)
-    concatStrings concatStringsSep escapeShellArg hasPrefix listToAttrs
-    makeSearchPath mapAttrsToList mkIf mkOption removePrefix singleton
-    sort types unique;
+    concatMapStringsSep concatStringsSep escapeShellArg hasPrefix
+    literalExample makeSearchPath mapAttrsToList mkIf mkOption optionalString
+    removePrefix singleton sort types unique;
   inherit (pkgs) linkFarm writeScript writeText;
 
 
@@ -54,8 +54,6 @@ let
 
   reponames = rules: sort lessThan (unique (map (x: x.repo.name) rules));
 
-  toShellArgs = xs: toString (map escapeShellArg xs);
-
   # TODO makeGitHooks that uses runCommand instead of scriptFarm?
   scriptFarm =
     farm-name: scripts:
@@ -99,7 +97,42 @@ in
       type = types.unspecified;
     };
     repos = mkOption {
-      type = types.unspecified;
+      type = types.attrsOf (types.submodule ({
+        options = {
+          name = mkOption {
+            type = types.str;
+            description = ''
+              Repository name.
+            '';
+          };
+          hooks = mkOption {
+            type = types.attrsOf types.str;
+            description = ''
+              Repository-specific hooks.
+            '';
+          };
+        };
+      }));
+
+      default = {};
+
+      example = literalExample ''
+        {
+          testing = {
+            name = "testing";
+            hooks.post-update = '''
+              #! /bin/sh
+              set -euf
+              echo post-update hook: $* >&2
+            ''';
+          };
+          testing2 = { name = "testing2"; };
+        }
+      '';
+
+      description = ''
+        Repositories.
+      '';
     };
     users = mkOption {
       type = types.unspecified;
@@ -168,28 +201,56 @@ in
           findutils
           gawk
           git
+          gnugrep
+          gnused
         ])}
 
         dataDir=${escapeShellArg cfg.dataDir}
         mkdir -p "$dataDir"
 
-        for reponame in ${toShellArgs (reponames cfg.rules)}; do
-          repodir=$dataDir/$reponame
-          if ! test -d "$repodir"; then
-            mkdir -m 0700 "$repodir"
-            git init --bare --template=/var/empty "$repodir"
-            chown -R git: "$repodir"
-            # branches/
-            # description
-            # hooks/
-            # info/
-          fi
-          ln -snf ${hooks} "$repodir/hooks"
-        done
+        # Notice how the presence of hooks symlinks determine whether
+        # we manage a repositry or not.
+
+        # Make sure that no existing repository has hooks.  We can delete
+        # symlinks because we assume we created them.
+        find "$dataDir" -mindepth 2 -maxdepth 2 -name hooks -type l -delete
+        bad_hooks=$(find "$dataDir" -mindepth 2 -maxdepth 2 -name hooks)
+        if echo "$bad_hooks" | grep -q .; then
+          printf 'error: unknown hooks:\n%s\n' \
+            "$(echo "$bad_hooks" | sed 's/^/  /')" \
+            >&2
+          exit -1
+        fi
+
+        # Initialize repositories.
+        ${concatMapStringsSep "\n" (repo:
+          let
+            hooks = scriptFarm "git-ssh-hooks" (makeHooks repo);
+          in
+          ''
+            reponame=${escapeShellArg repo.name}
+            repodir=$dataDir/$reponame
+            if ! test -d "$repodir"; then
+              mkdir -m 0700 "$repodir"
+              git init --bare --template=/var/empty "$repodir"
+              chown -R git: "$repodir"
+            fi
+            ln -s ${hooks} "$repodir/hooks"
+          ''
+        ) (attrValues cfg.repos)}
+
+        # Warn about repositories that exist but aren't mentioned in the
+        # current configuration (and thus didn't receive a hooks symlink).
+        unknown_repos=$(find "$dataDir" -mindepth 1 -maxdepth 1 \
+          -type d \! -exec test -e '{}/hooks' \; -print)
+        if echo "$unknown_repos" | grep -q .; then
+          printf 'warning: stale repositories:\n%s\n' \
+            "$(echo "$unknown_repos" | sed 's/^/  /')" \
+            >&2
+        fi
       '';
 
-      # TODO repo-specific hooks
-      hooks = scriptFarm "git-ssh-hooks" {
+      makeHooks = repo: removeAttrs repo.hooks [ "pre-receive" ] // {
         pre-receive = ''
           #! /bin/sh
           set -euf
@@ -243,16 +304,10 @@ in
           fi
 
           systemd-cat -p info -t git-ssh echo "$accept_string"
-        '';
-        update = ''
-          #! /bin/sh
-          set -euf
-          echo update hook: $* >&2
-        '';
-        post-update = ''
-          #! /bin/sh
-          set -euf
-          echo post-update hook: $* >&2
+
+          ${optionalString (hasAttr "post-receive" repo.hooks) ''
+            # custom post-receive hook
+            ${repo.hooks.post-receive}''}
         '';
       };
 

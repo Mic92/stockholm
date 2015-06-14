@@ -62,7 +62,18 @@
       # TODO warn about stale repodirs
       repos = addNames {
         testing = {
-          # TODO hooks = {  post-receive = ...
+          hooks = {
+            update = ''
+              #! /bin/sh
+              set -euf
+              echo update hook: $* >&2
+            '';
+            post-update = ''
+              #! /bin/sh
+              set -euf
+              echo post-update hook: $* >&2
+            '';
+          };
         };
       };
 
