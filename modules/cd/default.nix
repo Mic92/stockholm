@@ -96,7 +96,7 @@
 
   services.retiolum = {
     enable = true;
-    hosts = /etc/nixos/hosts;
+    hosts = <retiolum-hosts>;
     privateKeyFile = "/etc/nixos/secrets/cd.retiolum.rsa_key.priv";
     connectTo = [
       "fastpoke"
