@@ -1,12 +1,13 @@
 #! /bin/sh
 #
-# usage: nixos-deploy HOST [TARGET] [SYSTEM]
+# deploy
 #
 set -euf
 
 host=$1
-target=${2-root@$host}
-system=${3-$(nixos-build "$host")}
+system=${2-$(nixos-build "$host")}
+
+target=root@$host
 
 nix-copy-closure --gzip --to "$target" "$system"
 
