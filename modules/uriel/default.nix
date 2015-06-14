@@ -16,12 +16,13 @@
     ../../secrets/uriel-pw.nix
     ../lass/sshkeys.nix
     ../lass/bird.nix
+    ./repos.nix
   ];
+
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "b42ecfb8c61e514bf7733b4ab0982d3e7e27dacb";
+    rev = "b74c8eeb73a75eb61148c190df4733474a99a205";
   };
-
 
   networking.hostName = "uriel";
   networking.wireless.enable = true;
@@ -103,6 +104,7 @@
 
   environment.systemPackages = with pkgs; [
   ];
+
 
   #users.extraGroups = {
   #  loot = {

@@ -12,7 +12,7 @@ in {
       description = "user for running VirtualBox";
       home = "/home/virtual";
       useDefaultShell = true;
-      extraGroups = [ "vboxusers" ];
+      extraGroups = [ "vboxusers" "audio" ];
       createHome = true;
     };
   };

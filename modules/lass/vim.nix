@@ -1,9 +1,20 @@
 { config, pkgs, ... }:
 
-{
+let
+  customPlugins.mustang2 = pkgs.vimUtils.buildVimPlugin {
+    name = "Mustang2";
+    src = pkgs.fetchFromGitHub {
+      owner = "croaker";
+      repo = "mustang-vim";
+      rev = "6533d7d21bf27cae94d9c2caa575f627f003dfd5";
+      sha256 = "0zlmcrr04j3dkiivrhqi90f618lmnnnpvbz1b9msfs78cmgw9w67";
+    };
+  };
 
-  environment.systemPackages = with pkgs; [
-    (vim_configurable.customize {
+in {
+
+  environment.systemPackages = [
+    (pkgs.vim_configurable.customize {
       name = "vim";
 
     vimrcConfig.customRC = ''
@@ -12,7 +23,7 @@
       syntax on
       " TODO autoload colorscheme file
       set background=dark
-      colorscheme solarized
+      colorscheme mustang
       filetype off
       filetype plugin indent on
 
@@ -47,8 +58,6 @@
 
       "Tabwidth
       set ts=2 sts=2 sw=2 et
-      autocmd BufRead *.js,*.json set ts=2 sts=2 sw=2 et
-      autocmd BufRead *.hs set ts=4 sts=4 sw=4 et
 
       " create Backup/tmp/undo dirs
       function! InitBackupDir()
@@ -79,15 +88,29 @@
       set viminfo='20,<1000,s100,h,n~/.vim/tmp/info
       set undodir=$HOME/.vim/undo
       set undofile
+
+      " highlight whitespaces
+      highlight ExtraWhitespace ctermbg=red guibg=red
+      match ExtraWhitespace /\s\+$/
+      autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+      autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+      autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+      autocmd BufWinLeave * call clearmatches()
+
+      "ft specific stuff
+      autocmd BufRead *.js,*.json set ts=2 sts=2 sw=2 et
+      autocmd BufRead *.hs set ts=4 sts=4 sw=4 et
+
+      "esc timeout
+      set timeoutlen=1000 ttimeoutlen=0
     '';
 
-      vimrcConfig.vam.knownPlugins = vimPlugins;
+      vimrcConfig.vam.knownPlugins = pkgs.vimPlugins // customPlugins;
       vimrcConfig.vam.pluginDictionaries = [
-        { name = "Gundo"; }
-        { name = "commentary"; }
-        { name = "vim-addon-nix"; }
-        { name = "colors-solarized"; }
+        { names = [ "Gundo" "commentary" "mustang2" ]; }
+        { names = [ "vim-addon-nix" ]; ft_regex = "^nix\$"; }
       ];
+
     })
   ];
 }

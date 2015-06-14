@@ -24,10 +24,12 @@
     ../lass/binary-caches.nix
     ../lass/ircd.nix
     ../../secrets/mors-pw.nix
+    ./repos.nix
   ];
+
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "eba85883a07a9fc414d7860f8d6fee4d9f09b2ac";
+    rev = "b74c8eeb73a75eb61148c190df4733474a99a205";
   };
 
   networking.hostName = "mors";
@@ -54,8 +56,6 @@
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
     #kernelModules = [ "kvm-intel" "msr" ];
     kernelModules = [ "msr" ];
-    extraModprobeConfig = ''
-    '';
   };
   fileSystems = {
     "/" = {
@@ -145,7 +145,6 @@
   '';
 
   services.xserver = {
-
     videoDriver = "intel";
     vaapiDrivers = [ pkgs.vaapiIntel ];
     deviceSection = ''

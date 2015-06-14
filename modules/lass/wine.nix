@@ -13,7 +13,7 @@ in {
       description = "user for running wine";
       home = "/home/wine";
       useDefaultShell = true;
-      extraGroups = [];
+      extraGroups = [ "audio" ];
       createHome = true;
     };
   };
