@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports =
@@ -11,6 +11,7 @@
       ../tv/base-cac-CentOS-7-64bit.nix
       ../tv/ejabberd.nix # XXX echtes modul
       ../tv/exim-smarthost.nix
+      ../tv/git.nix
       ../tv/retiolum.nix
       ../tv/sanitize.nix
     ];
@@ -43,6 +44,40 @@
     enable = true;
   };
 
+  services.git =
+    let
+      inherit (builtins) readFile;
+      # TODO lib should already include our stuff
+      inherit (import ../../lib { inherit lib; }) addNames git;
+    in
+    rec {
+      enable = true;
+
+      users = addNames {
+        tv = { pubkey = readFile <pubkeys/tv.ssh.pub>; };
+        lass = { pubkey = "xxx"; };
+        makefu = { pubkey = "xxx"; };
+      };
+
+      # TODO warn about stale repodirs
+      repos = addNames {
+        testing = {
+          # TODO hooks = {  post-receive = ...
+        };
+      };
+
+      rules = with git; with users; with repos; [
+        { user = tv;
+          repo = testing;
+          perm = push master [ non-fast-forward create delete merge ];
+        }
+        { user = [ lass makefu ];
+          repo = testing;
+          perm = fetch;
+        }
+      ];
+    };
+
   services.journald.extraConfig = ''
     SystemMaxUse=1G
     RuntimeMaxUse=128M
@@ -61,7 +96,7 @@
 
   services.retiolum = {
     enable = true;
-    hosts = /etc/nixos/hosts;
+    hosts = <retiolum-hosts>;
     privateKeyFile = "/etc/nixos/secrets/cd.retiolum.rsa_key.priv";
     connectTo = [
       "fastpoke"

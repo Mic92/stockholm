@@ -1,16 +1,26 @@
-{ pkgs, ... }:
+{ lib, ... }:
 
 with builtins;
 
 let
-  inherit (pkgs.lib) stringAsChars;
+  inherit (lib) mapAttrs stringAsChars;
 in
 
-{
+rec {
+  git = import ./git.nix {
+    lib = lib // {
+      inherit addNames;
+    };
+  };
+
+  addName = name: set:
+    set // { inherit name; };
+
+  addNames = mapAttrs addName;
 
 
   # "7.4.335" -> "74"
-  majmin = with pkgs.lib; x : concatStrings (take 2 (splitString "." x));
+  majmin = with lib; x : concatStrings (take 2 (splitString "." x));
 
 
   concat = xs :
