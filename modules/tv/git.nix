@@ -1,0 +1,292 @@
+{ config, lib, pkgs, ... }:
+
+let
+  inherit (builtins)
+    attrNames concatLists filter hasAttr head lessThan removeAttrs tail toJSON
+    typeOf;
+  inherit (lib)
+    concatStrings concatStringsSep escapeShellArg hasPrefix listToAttrs
+    makeSearchPath mapAttrsToList mkIf mkOption removePrefix singleton
+    sort types unique;
+  inherit (pkgs) linkFarm writeScript writeText;
+
+
+  ensureList = x:
+    if typeOf x == "list" then x else [x];
+
+  getName = x: x.name;
+
+  makeAuthorizedKey = command-script: user@{ name, pubkey }:
+    # TODO assert name
+    # TODO assert pubkey
+    let
+      options = concatStringsSep "," [
+        ''command="exec ${command-script} ${name}"''
+        "no-agent-forwarding"
+        "no-port-forwarding"
+        "no-pty"
+        "no-X11-forwarding"
+      ];
+    in
+    "${options} ${pubkey}";
+
+  # [case-pattern] -> shell-script
+  # Create a shell script that succeeds (exit 0) when all its arguments
+  # match the case patterns (in the given order).
+  makeAuthorizeScript =
+    let
+      # TODO escape
+      to-pattern = x: concatStringsSep "|" (ensureList x);
+      go = i: ps:
+        if ps == []
+          then "exit 0"
+          else ''
+            case ''$${toString i} in ${to-pattern (head ps)})
+            ${go (i + 1) (tail ps)}
+            esac'';
+    in
+    patterns: ''
+      #! /bin/sh
+      set -euf
+      ${concatStringsSep "\n" (map (go 1) patterns)}
+      exit -1
+    '';
+
+  reponames = rules: sort lessThan (unique (map (x: x.repo.name) rules));
+
+  toShellArgs = xs: toString (map escapeShellArg xs);
+
+  # TODO makeGitHooks that uses runCommand instead of scriptFarm?
+  scriptFarm =
+    farm-name: scripts:
+    let
+      makeScript = script-name: script-string: {
+        name = script-name;
+        path = writeScript "${farm-name}_${script-name}" script-string;
+      };
+    in
+    linkFarm farm-name (mapAttrsToList makeScript scripts);
+
+  writeJSON = name: data: writeText name (toJSON data);
+
+
+  cfg = config.services.git;
+in
+
+# TODO unify logging of shell scripts to user and journal
+# TODO move all scripts to ${etcDir}, so ControlMaster connections
+#       immediately pick up new authenticators
+# TODO when authorized_keys changes, then restart ssh
+#       (or kill already connected users somehow)
+
+{
+  options.services.git = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable Git repository hosting.";
+    };
+    dataDir = mkOption {
+      type = types.str;
+      default = "/var/lib/git";
+      description = "Directory used to store repositories.";
+    };
+    etcDir = mkOption {
+      type = types.str;
+      default = "/etc/git-ssh";
+    };
+    rules = mkOption {
+      type = types.unspecified;
+    };
+    repos = mkOption {
+      type = types.unspecified;
+    };
+    users = mkOption {
+      type = types.unspecified;
+    };
+  };
+
+  config =
+    let
+      command-script = writeScript "git-ssh-command" ''
+        #! /bin/sh
+        set -euf
+
+        PATH=${makeSearchPath "bin" (with pkgs; [
+          coreutils
+          git
+          gnugrep
+          gnused
+          systemd
+        ])}
+
+        abort() {
+          echo "error: $1" >&2
+          systemd-cat -p err -t git-ssh echo "error: $1"
+          exit -1
+        }
+
+        GIT_SSH_USER=$1
+
+        systemd-cat -p info -t git-ssh echo \
+          "authorizing $GIT_SSH_USER $SSH_CONNECTION $SSH_ORIGINAL_COMMAND"
+
+        # References: The Base Definitions volume of
+        # POSIX.1‐2013, Section 3.278, Portable Filename Character Set
+        portable_filename_bre="^[A-Za-z0-9._-]\\+$"
+
+        command=$(echo "$SSH_ORIGINAL_COMMAND" \
+          | sed -n 's/^\([^ ]*\) '"'"'\(.*\)'"'"'/\1/p' \
+          | grep "$portable_filename_bre" \
+          || abort 'cannot read command')
+
+        GIT_SSH_REPO=$(echo "$SSH_ORIGINAL_COMMAND" \
+          | sed -n 's/^\([^ ]*\) '"'"'\(.*\)'"'"'/\2/p' \
+          | grep "$portable_filename_bre" \
+          || abort 'cannot read reponame')
+
+        ${cfg.etcDir}/authorize-command \
+            "$GIT_SSH_USER" "$GIT_SSH_REPO" "$command" \
+          || abort 'access denied'
+
+        repodir=${escapeShellArg cfg.dataDir}/$GIT_SSH_REPO
+
+        systemd-cat -p info -t git-ssh \
+          echo "authorized exec $command $repodir"
+
+        export GIT_SSH_USER
+        export GIT_SSH_REPO
+        exec "$command" "$repodir"
+      '';
+
+      init-script = writeScript "git-ssh-init" ''
+        #! /bin/sh
+        set -euf
+
+        PATH=${makeSearchPath "bin" (with pkgs; [
+          coreutils
+          findutils
+          gawk
+          git
+        ])}
+
+        dataDir=${escapeShellArg cfg.dataDir}
+        mkdir -p "$dataDir"
+
+        for reponame in ${toShellArgs (reponames cfg.rules)}; do
+          repodir=$dataDir/$reponame
+          if ! test -d "$repodir"; then
+            mkdir -m 0700 "$repodir"
+            git init --bare --template=/var/empty "$repodir"
+            chown -R git: "$repodir"
+            # branches/
+            # description
+            # hooks/
+            # info/
+          fi
+          ln -snf ${hooks} "$repodir/hooks"
+        done
+      '';
+
+      # TODO repo-specific hooks
+      hooks = scriptFarm "git-ssh-hooks" {
+        pre-receive = ''
+          #! /bin/sh
+          set -euf
+
+          PATH=${makeSearchPath "bin" (with pkgs; [
+            coreutils # env
+            git
+            systemd
+          ])}
+
+          accept() {
+            #systemd-cat -p info -t git-ssh echo "authorized $1"
+            accept_string="''${accept_string+$accept_string
+          }authorized $1"
+          }
+          reject() {
+            #systemd-cat -p err -t git-ssh echo "denied $1"
+            #echo 'access denied' >&2
+            #exit_code=-1
+            reject_string="''${reject_string+$reject_string
+          }access denied: $1"
+          }
+
+          empty=0000000000000000000000000000000000000000
+
+          accept_string=
+          reject_string=
+          while read oldrev newrev ref; do
+
+            if [ $oldrev = $empty ]; then
+              receive_mode=create
+            elif [ $newrev = $empty ]; then
+              receive_mode=delete
+            elif [ "$(git merge-base $oldrev $newrev)" = $oldrev ]; then
+              receive_mode=fast-forward
+            else
+              receive_mode=non-fast-forward
+            fi
+
+            if ${cfg.etcDir}/authorize-push \
+                "$GIT_SSH_USER" "$GIT_SSH_REPO" "$ref" "$receive_mode"; then
+              accept "$receive_mode $ref"
+            else
+              reject "$receive_mode $ref"
+            fi
+          done
+
+          if [ -n "$reject_string" ]; then
+            systemd-cat -p err -t git-ssh echo "$reject_string"
+            exit -1
+          fi
+
+          systemd-cat -p info -t git-ssh echo "$accept_string"
+        '';
+        update = ''
+          #! /bin/sh
+          set -euf
+          echo update hook: $* >&2
+        '';
+        post-update = ''
+          #! /bin/sh
+          set -euf
+          echo post-update hook: $* >&2
+        '';
+      };
+
+      etc-base =
+        assert (hasPrefix "/etc/" cfg.etcDir);
+        removePrefix "/etc/" cfg.etcDir;
+    in
+    mkIf cfg.enable {
+      system.activationScripts.git-ssh-init = "${init-script}";
+
+      # TODO maybe put all scripts here and then use PATH?
+      environment.etc."${etc-base}".source =
+        scriptFarm "git-ssh-authorizers" {
+          authorize-command = makeAuthorizeScript (map ({ repo, user, perm }: [
+            (map getName (ensureList user))
+            (map getName (ensureList repo))
+            (map getName perm.allow-commands)
+          ]) cfg.rules);
+
+          authorize-push = makeAuthorizeScript (map ({ repo, user, perm }: [
+            (map getName (ensureList user))
+            (map getName (ensureList repo))
+            (ensureList perm.allow-receive-ref)
+            (map getName perm.allow-receive-modes)
+          ]) (filter (x: hasAttr "allow-receive-ref" x.perm) cfg.rules));
+        };
+
+      users.extraUsers = singleton {
+        description = "Git repository hosting user";
+        name = "git";
+        shell = "/bin/sh";
+        openssh.authorizedKeys.keys =
+          mapAttrsToList (_: makeAuthorizedKey command-script) cfg.users;
+        uid = 112606723; # genid git
+      };
+    };
+}

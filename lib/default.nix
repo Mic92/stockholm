@@ -3,10 +3,20 @@
 with builtins;
 
 let
-  inherit (lib) stringAsChars;
+  inherit (lib) mapAttrs stringAsChars;
 in
 
-{
+rec {
+  git = import ./git.nix {
+    lib = lib // {
+      inherit addNames;
+    };
+  };
+
+  addName = name: set:
+    set // { inherit name; };
+
+  addNames = mapAttrs addName;
 
 
   # "7.4.335" -> "74"
