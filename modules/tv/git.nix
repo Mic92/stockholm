@@ -2,12 +2,12 @@
 
 let
   inherit (builtins)
-    attrNames concatLists filter hasAttr head lessThan removeAttrs tail toJSON
-    typeOf;
+    attrNames attrValues concatLists filter hasAttr head lessThan removeAttrs
+    tail toJSON typeOf;
   inherit (lib)
-    concatStrings concatStringsSep escapeShellArg hasPrefix listToAttrs
-    makeSearchPath mapAttrsToList mkIf mkOption removePrefix singleton
-    sort types unique;
+    concatMapStringsSep concatStringsSep escapeShellArg hasPrefix
+    literalExample makeSearchPath mapAttrsToList mkIf mkOption optionalString
+    removePrefix singleton sort types unique;
   inherit (pkgs) linkFarm writeScript writeText;
 
 
@@ -54,8 +54,6 @@ let
 
   reponames = rules: sort lessThan (unique (map (x: x.repo.name) rules));
 
-  toShellArgs = xs: toString (map escapeShellArg xs);
-
   # TODO makeGitHooks that uses runCommand instead of scriptFarm?
   scriptFarm =
     farm-name: scripts:
@@ -99,7 +97,42 @@ in
       type = types.unspecified;
     };
     repos = mkOption {
-      type = types.unspecified;
+      type = types.attrsOf (types.submodule ({
+        options = {
+          name = mkOption {
+            type = types.str;
+            description = ''
+              Repository name.
+            '';
+          };
+          hooks = mkOption {
+            type = types.attrsOf types.str;
+            description = ''
+              Repository-specific hooks.
+            '';
+          };
+        };
+      }));
+
+      default = {};
+
+      example = literalExample ''
+        {
+          testing = {
+            name = "testing";
+            hooks.post-update = '''
+              #! /bin/sh
+              set -euf
+              echo post-update hook: $* >&2
+            ''';
+          };
+          testing2 = { name = "testing2"; };
+        }
+      '';
+
+      description = ''
+        Repositories.
+      '';
     };
     users = mkOption {
       type = types.unspecified;
@@ -173,23 +206,24 @@ in
         dataDir=${escapeShellArg cfg.dataDir}
         mkdir -p "$dataDir"
 
-        for reponame in ${toShellArgs (reponames cfg.rules)}; do
-          repodir=$dataDir/$reponame
-          if ! test -d "$repodir"; then
-            mkdir -m 0700 "$repodir"
-            git init --bare --template=/var/empty "$repodir"
-            chown -R git: "$repodir"
-            # branches/
-            # description
-            # hooks/
-            # info/
-          fi
-          ln -snf ${hooks} "$repodir/hooks"
-        done
+        ${concatMapStringsSep "\n" (repo:
+          let
+            hooks = scriptFarm "git-ssh-hooks" (makeHooks repo);
+          in
+          ''
+            reponame=${escapeShellArg repo.name}
+            repodir=$dataDir/$reponame
+            if ! test -d "$repodir"; then
+              mkdir -m 0700 "$repodir"
+              git init --bare --template=/var/empty "$repodir"
+              chown -R git: "$repodir"
+            fi
+            ln -snf ${hooks} "$repodir/hooks"
+          ''
+        ) (attrValues cfg.repos)}
       '';
 
-      # TODO repo-specific hooks
-      hooks = scriptFarm "git-ssh-hooks" {
+      makeHooks = repo: removeAttrs repo.hooks [ "pre-receive" ] // {
         pre-receive = ''
           #! /bin/sh
           set -euf
@@ -243,16 +277,10 @@ in
           fi
 
           systemd-cat -p info -t git-ssh echo "$accept_string"
-        '';
-        update = ''
-          #! /bin/sh
-          set -euf
-          echo update hook: $* >&2
-        '';
-        post-update = ''
-          #! /bin/sh
-          set -euf
-          echo post-update hook: $* >&2
+
+          ${optionalString (hasAttr "post-receive" repo.hooks) ''
+            # custom post-receive hook
+            ${repo.hooks.post-receive}''}
         '';
       };
 
