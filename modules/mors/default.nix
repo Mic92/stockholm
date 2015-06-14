@@ -30,7 +30,7 @@
 
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "b74c8eeb73a75eb61148c190df4733474a99a205";
+    rev = "45c99e522dcc4ef24cf71dbe38d94a308cb30530";
   };
 
   networking.hostName = "mors";
