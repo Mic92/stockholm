@@ -17,6 +17,7 @@
     ../lass/sshkeys.nix
     ../lass/bird.nix
     ./repos.nix
+    ../lass/chromium-patched.nix
   ];
 
   nixpkgs = {
