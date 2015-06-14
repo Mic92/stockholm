@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports =
@@ -43,6 +43,40 @@
   services.ejabberd-cd = {
     enable = true;
   };
+
+  services.git =
+    let
+      inherit (builtins) readFile;
+      # TODO lib should already include our stuff
+      inherit (import ../../lib { inherit lib; }) addNames git;
+    in
+    rec {
+      enable = true;
+
+      users = addNames {
+        tv = { pubkey = readFile <pubkeys/tv.ssh.pub>; };
+        lass = { pubkey = "xxx"; };
+        makefu = { pubkey = "xxx"; };
+      };
+
+      # TODO warn about stale repodirs
+      repos = addNames {
+        testing = {
+          # TODO hooks = {  post-receive = ...
+        };
+      };
+
+      rules = with git; with users; with repos; [
+        { user = tv;
+          repo = testing;
+          perm = push master [ non-fast-forward create delete merge ];
+        }
+        { user = [ lass makefu ];
+          repo = testing;
+          perm = fetch;
+        }
+      ];
+    };
 
   services.journald.extraConfig = ''
     SystemMaxUse=1G
