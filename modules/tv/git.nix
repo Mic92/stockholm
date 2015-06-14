@@ -216,8 +216,8 @@ in
         find "$dataDir" -mindepth 2 -maxdepth 2 -name hooks -type l -delete
         bad_hooks=$(find "$dataDir" -mindepth 2 -maxdepth 2 -name hooks)
         if echo "$bad_hooks" | grep -q .; then
-          printf "$(printf 'error: unknown hooks:\n%s' \
-            "$(echo "$bad_hooks" | sed 's/^/  /')")" \
+          printf 'error: unknown hooks:\n%s\n' \
+            "$(echo "$bad_hooks" | sed 's/^/  /')" \
             >&2
           exit -1
         fi
