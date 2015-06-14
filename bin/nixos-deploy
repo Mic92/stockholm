@@ -1,16 +1,16 @@
 #! /bin/sh
 #
-# deploy
+# nixos-deploy system_name target
 #
 set -euf
 
-host=$1
-system=${2-$(nixos-build "$host")}
+system_name=$1
+target=$2
 
-target=root@$host
+system=$(nixos-build "$system_name")
 
 nix-copy-closure --gzip --to "$target" "$system"
 
-copy-secrets "$host"
+copy-secrets "$system_name" "$target"
 
 ssh ${NIX_SSHOPTS-} "$target" "$system/bin/switch-to-configuration" switch

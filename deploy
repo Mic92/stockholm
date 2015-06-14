@@ -1,10 +1,11 @@
 #! /bin/sh
 #
-# usage: ./deploy HOST
+# usage: ./deploy system_name [target]
 #
 set -euf
 
-host=$1
+system_name=$1
+target=${2-root@$system_name}
 
 export PATH="$PWD/bin:$PATH"
 #export nixpkgs=/var/nixpkgs
@@ -13,4 +14,4 @@ export config_root=$PWD
 export retiolum_hosts=$PWD/hosts
 export secrets_root=$PWD/secrets
 
-exec nixos-deploy "$host"
+exec nixos-deploy "$system_name" "$target"
