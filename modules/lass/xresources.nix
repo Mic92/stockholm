@@ -12,7 +12,7 @@ with lib;
 
 let
 
-  inherit (import ../../lib { inherit pkgs; }) shell-escape;
+  inherit (import ../../lib { inherit lib; }) shell-escape;
   inherit (pkgs) writeScript;
 
 in
