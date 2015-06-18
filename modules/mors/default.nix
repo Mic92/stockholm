@@ -26,6 +26,7 @@
     ../../secrets/mors-pw.nix
     ./repos.nix
     ../lass/chromium-patched.nix
+    ./git.nix
   ];
 
   nixpkgs = {
