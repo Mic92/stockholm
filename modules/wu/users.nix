@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   inherit (builtins) attrValues;
@@ -194,7 +194,8 @@ let
   sudoers =
     let
       inherit (builtins) filter hasAttr;
-      inherit (import ../../lib { inherit pkgs; }) concat isSuffixOf removeSuffix setToList;
+      inherit (import ../../lib { inherit lib pkgs; })
+        concat isSuffixOf removeSuffix setToList;
 
       hasMaster = { group ? "", ... }:
         isSuffixOf "-sub" group;
