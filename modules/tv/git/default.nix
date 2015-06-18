@@ -2,8 +2,8 @@
 
 let
   inherit (builtins)
-    attrNames attrValues concatLists filter hasAttr head lessThan removeAttrs
-    tail toJSON typeOf;
+    attrNames attrValues concatLists getAttr filter hasAttr head lessThan
+    removeAttrs tail toJSON typeOf;
   inherit (lib)
     concatMapStringsSep concatStringsSep escapeShellArg hasPrefix
     literalExample makeSearchPath mapAttrsToList mkIf mkOption optionalString
@@ -15,6 +15,8 @@ let
     if typeOf x == "list" then x else [x];
 
   getName = x: x.name;
+
+  isPublicRepo = getAttr "public"; # TODO this is also in ./cgit.nix
 
   makeAuthorizedKey = command-script: user@{ name, pubkey }:
     # TODO assert name
@@ -78,11 +80,20 @@ in
 #       (or kill already connected users somehow)
 
 {
+  imports = [
+    ./cgit.nix
+  ];
+
   options.services.git = {
     enable = mkOption {
       type = types.bool;
       default = false;
       description = "Enable Git repository hosting.";
+    };
+    cgit = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable cgit."; # TODO better desc; talk about nginx
     };
     dataDir = mkOption {
       type = types.str;
@@ -99,6 +110,13 @@ in
     repos = mkOption {
       type = types.attrsOf (types.submodule ({
         options = {
+          desc = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Repository description.
+            '';
+          };
           name = mkOption {
             type = types.str;
             description = ''
@@ -110,6 +128,14 @@ in
             description = ''
               Repository-specific hooks.
             '';
+          };
+          public = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Allow everybody to read the repository via HTTP if cgit enabled.
+            '';
+            # TODO allow every configured user to fetch the repository via SSH.
           };
         };
       }));
@@ -230,8 +256,9 @@ in
           ''
             reponame=${escapeShellArg repo.name}
             repodir=$dataDir/$reponame
+            mode=${toString (if isPublicRepo repo then 0711 else 0700)}
             if ! test -d "$repodir"; then
-              mkdir -m 0700 "$repodir"
+              mkdir -m "$mode" "$repodir"
               git init --bare --template=/var/empty "$repodir"
               chown -R git: "$repodir"
             fi
