@@ -138,10 +138,10 @@ let
         # empty_tree=$(git hash-object -t tree /dev/null
         empty_tree=4b825dc6
 
-        id=$(echo $oldrev | cut -b-7)
-        id2=$(echo $newrev | cut -b-7)
-        if [ $oldrev = $empty ]; then id=$empty_tree; fi
-        if [ $newrev = $empty ]; then id2=$empty_tree; fi
+        id=$(echo $newrev | cut -b-7)
+        id2=$(echo $oldrev | cut -b-7)
+        if [ $newrev = $empty ]; then id=$empty_tree; fi
+        if [ $oldrev = $empty ]; then id2=$empty_tree; fi
 
         case $receive_mode in
           create)
