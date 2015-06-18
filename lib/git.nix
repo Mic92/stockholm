@@ -162,7 +162,7 @@ let
         #host=$nick
         #$host $GIT_SSH_REPO $ref $link
         message="''${message+$message
-      }$GIT_SSH_USER $receive_mode pushed $link"
+      }$GIT_SSH_USER $receive_mode $link"
       done
 
       if test -n "''${message-}"; then
