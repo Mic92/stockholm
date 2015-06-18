@@ -59,31 +59,38 @@
         makefu = { pubkey = "xxx"; };
       };
 
-      # TODO warn about stale repodirs
       repos = addNames {
-        testing = {
+        shitment = {
+          desc = "shitment repository";
           hooks = {
-            update = ''
-              #! /bin/sh
-              set -euf
-              echo update hook: $* >&2
-            '';
-            post-update = ''
-              #! /bin/sh
-              set -euf
-              echo post-update hook: $* >&2
-            '';
+            post-receive = git.irc-announce {
+              nick = config.networking.hostName; # TODO make this the default
+              channel = "#retiolum";
+              server = "ire.retiolum";
+            };
           };
+          public = true;
+        };
+        testing = {
+          desc = "testing repository";
+          hooks = {
+            post-receive = git.irc-announce {
+              nick = config.networking.hostName; # TODO make this the default
+              channel = "#repository";
+              server = "ire.retiolum";
+            };
+          };
+          public = true;
         };
       };
 
       rules = with git; with users; with repos; [
         { user = tv;
-          repo = testing;
+          repo = [ testing shitment ];
           perm = push master [ non-fast-forward create delete merge ];
         }
         { user = [ lass makefu ];
-          repo = testing;
+          repo = [ testing shitment ];
           perm = fetch;
         }
       ];

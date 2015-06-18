@@ -63,6 +63,7 @@
           ip4tables -A Retiolum -j ACCEPT -p icmp --icmp-type echo-request
           ip6tables -A Retiolum -j ACCEPT -p ipv6-icmp -m icmp6 --icmpv6-type echo-request
 
+          ipXtables -A Retiolum -j ACCEPT -p tcp --dport http -m conntrack --ctstate NEW
 
           ${when log "ipXtables -A Retiolum -j LOG --log-level info --log-prefix 'REJECT '"}
           ipXtables -A Retiolum -j REJECT -p tcp --reject-with tcp-reset
