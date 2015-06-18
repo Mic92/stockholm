@@ -47,6 +47,7 @@ let
       gawk
       gnused
       netcat
+      nettools
     ])}
 
     IRC_SERVER=$1
