@@ -61,6 +61,7 @@ in
       ${concatMapStringsSep "\n" (repo: ''
         repo.url=${repo.name}
         repo.path=${cfg.dataDir}/${repo.name}
+        ${optionalString (repo.section != null) "repo.section=${repo.section}"}
         ${optionalString (repo.desc != null) "repo.desc=${repo.desc}"}
       '') (filter isPublicRepo (attrValues cfg.repos))}
     '';

@@ -117,6 +117,13 @@ in
               Repository description.
             '';
           };
+          section = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Repository section.
+            '';
+          };
           name = mkOption {
             type = types.str;
             description = ''
