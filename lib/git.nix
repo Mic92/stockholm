@@ -49,10 +49,10 @@ let
       netcat
     ])}
 
-    IRC_SERVER="$1"
-    IRC_PORT="$2"
-    IRC_NICK="$3"
-    IRC_CHANNEL="$4"
+    IRC_SERVER=$1
+    IRC_PORT=$2
+    IRC_NICK=$3$$
+    IRC_CHANNEL=$4
     message=$5
 
     export IRC_CHANNEL # for privmsg_cat
