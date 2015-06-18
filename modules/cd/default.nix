@@ -87,7 +87,7 @@
       rules = with git; with users; with repos; [
         { user = tv;
           repo = [ testing shitment ];
-          perm = push master [ non-fast-forward create delete merge ];
+          perm = push "refs/*" [ non-fast-forward create delete merge ];
         }
         { user = [ lass makefu ];
           repo = [ testing shitment ];
