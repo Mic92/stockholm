@@ -25,7 +25,8 @@ let
 
   users = addNames {
     tv = { pubkey = readFile <pubkeys/tv.ssh.pub>; };
-    lass = { pubkey = "xxx"; };
+    lass = { pubkey = readFile <pubkeys/lass.ssh.pub>; };
+    uriel = { pubkey = readFile <pubkeys/uriel.ssh.pub>; };
     makefu = { pubkey = "xxx"; };
   };
 
@@ -51,7 +52,7 @@ let
           repo = [ repo ];
           perm = push "refs/*" [ non-fast-forward create delete merge ];
         }
-        { user = [ lass makefu ];
+        { user = [ lass makefu uriel ];
           repo = [ repo ];
           perm = fetch;
         }
