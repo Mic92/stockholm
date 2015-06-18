@@ -18,12 +18,12 @@ let
 
   isPublicRepo = getAttr "public"; # TODO this is also in ./cgit.nix
 
-  makeAuthorizedKey = command-script: user@{ name, pubkey }:
+  makeAuthorizedKey = git-ssh-command: user@{ name, pubkey }:
     # TODO assert name
     # TODO assert pubkey
     let
       options = concatStringsSep "," [
-        ''command="exec ${command-script} ${name}"''
+        ''command="exec ${git-ssh-command} ${name}"''
         "no-agent-forwarding"
         "no-port-forwarding"
         "no-pty"
@@ -102,7 +102,7 @@ in
     };
     etcDir = mkOption {
       type = types.str;
-      default = "/etc/git-ssh";
+      default = "/etc/git";
     };
     rules = mkOption {
       type = types.unspecified;
@@ -167,7 +167,7 @@ in
 
   config =
     let
-      command-script = writeScript "git-ssh-command" ''
+      git-ssh-command = writeScript "git-ssh-command" ''
         #! /bin/sh
         set -euf
 
@@ -181,13 +181,13 @@ in
 
         abort() {
           echo "error: $1" >&2
-          systemd-cat -p err -t git-ssh echo "error: $1"
+          systemd-cat -p err -t git echo "error: $1"
           exit -1
         }
 
         GIT_SSH_USER=$1
 
-        systemd-cat -p info -t git-ssh echo \
+        systemd-cat -p info -t git echo \
           "authorizing $GIT_SSH_USER $SSH_CONNECTION $SSH_ORIGINAL_COMMAND"
 
         # References: The Base Definitions volume of
@@ -210,7 +210,7 @@ in
 
         repodir=${escapeShellArg cfg.dataDir}/$GIT_SSH_REPO
 
-        systemd-cat -p info -t git-ssh \
+        systemd-cat -p info -t git \
           echo "authorized exec $command $repodir"
 
         export GIT_SSH_USER
@@ -218,7 +218,7 @@ in
         exec "$command" "$repodir"
       '';
 
-      init-script = writeScript "git-ssh-init" ''
+      init-script = writeScript "git-init" ''
         #! /bin/sh
         set -euf
 
@@ -251,7 +251,7 @@ in
         # Initialize repositories.
         ${concatMapStringsSep "\n" (repo:
           let
-            hooks = scriptFarm "git-ssh-hooks" (makeHooks repo);
+            hooks = scriptFarm "git-hooks" (makeHooks repo);
           in
           ''
             reponame=${escapeShellArg repo.name}
@@ -289,12 +289,12 @@ in
           ])}
 
           accept() {
-            #systemd-cat -p info -t git-ssh echo "authorized $1"
+            #systemd-cat -p info -t git echo "authorized $1"
             accept_string="''${accept_string+$accept_string
           }authorized $1"
           }
           reject() {
-            #systemd-cat -p err -t git-ssh echo "denied $1"
+            #systemd-cat -p err -t git echo "denied $1"
             #echo 'access denied' >&2
             #exit_code=-1
             reject_string="''${reject_string+$reject_string
@@ -326,11 +326,11 @@ in
           done
 
           if [ -n "$reject_string" ]; then
-            systemd-cat -p err -t git-ssh echo "$reject_string"
+            systemd-cat -p err -t git echo "$reject_string"
             exit -1
           fi
 
-          systemd-cat -p info -t git-ssh echo "$accept_string"
+          systemd-cat -p info -t git echo "$accept_string"
 
           ${optionalString (hasAttr "post-receive" repo.hooks) ''
             # custom post-receive hook
@@ -343,7 +343,7 @@ in
         removePrefix "/etc/" cfg.etcDir;
     in
     mkIf cfg.enable {
-      system.activationScripts.git-ssh-init = "${init-script}";
+      system.activationScripts.git-init = "${init-script}";
 
       # TODO maybe put all scripts here and then use PATH?
       environment.etc."${etc-base}".source =
@@ -367,7 +367,7 @@ in
         name = "git";
         shell = "/bin/sh";
         openssh.authorizedKeys.keys =
-          mapAttrsToList (_: makeAuthorizedKey command-script) cfg.users;
+          mapAttrsToList (_: makeAuthorizedKey git-ssh-command) cfg.users;
         uid = 112606723; # genid git
       };
     };
