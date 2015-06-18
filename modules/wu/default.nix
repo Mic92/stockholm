@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  lib = import ../../lib { inherit pkgs; };
+  lib = import ../../lib { lib = pkgs.lib; inherit pkgs; };
 
   inherit (lib) majmin;
 in

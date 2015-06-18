@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 with builtins;
 
@@ -11,6 +11,7 @@ rec {
     lib = lib // {
       inherit addNames;
     };
+    inherit pkgs;
   };
 
   addName = name: set:

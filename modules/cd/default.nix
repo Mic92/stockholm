@@ -48,7 +48,7 @@
     let
       inherit (builtins) readFile;
       # TODO lib should already include our stuff
-      inherit (import ../../lib { inherit lib; }) addNames git;
+      inherit (import ../../lib { inherit lib pkgs; }) addNames git;
     in
     rec {
       enable = true;
