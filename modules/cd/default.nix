@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports =
     [
       <secrets/hashedPasswords.nix>
+      ./git.nix
       ./iptables.nix
       ./networking.nix
       ../common/nixpkgs.nix
@@ -11,7 +12,6 @@
       ../tv/base-cac-CentOS-7-64bit.nix
       ../tv/ejabberd.nix # XXX echtes modul
       ../tv/exim-smarthost.nix
-      ../tv/git
       ../tv/retiolum.nix
       ../tv/sanitize.nix
     ];
@@ -43,58 +43,6 @@
   services.ejabberd-cd = {
     enable = true;
   };
-
-  services.git =
-    let
-      inherit (builtins) readFile;
-      # TODO lib should already include our stuff
-      inherit (import ../../lib { inherit lib pkgs; }) addNames git;
-    in
-    rec {
-      enable = true;
-
-      users = addNames {
-        tv = { pubkey = readFile <pubkeys/tv.ssh.pub>; };
-        lass = { pubkey = "xxx"; };
-        makefu = { pubkey = "xxx"; };
-      };
-
-      repos = addNames {
-        shitment = {
-          desc = "shitment repository";
-          hooks = {
-            post-receive = git.irc-announce {
-              nick = config.networking.hostName; # TODO make this the default
-              channel = "#retiolum";
-              server = "ire.retiolum";
-            };
-          };
-          public = true;
-        };
-        testing = {
-          desc = "testing repository";
-          hooks = {
-            post-receive = git.irc-announce {
-              nick = config.networking.hostName; # TODO make this the default
-              channel = "#retiolum";
-              server = "ire.retiolum";
-            };
-          };
-          public = true;
-        };
-      };
-
-      rules = with git; with users; with repos; [
-        { user = tv;
-          repo = [ testing shitment ];
-          perm = push "refs/*" [ non-fast-forward create delete merge ];
-        }
-        { user = [ lass makefu ];
-          repo = [ testing shitment ];
-          perm = fetch;
-        }
-      ];
-    };
 
   services.journald.extraConfig = ''
     SystemMaxUse=1G
