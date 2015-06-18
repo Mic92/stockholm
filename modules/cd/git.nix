@@ -16,14 +16,11 @@ let
     (public "mime")
     (public "much")
     (public "nixos-infest")
-    (public "nixpkgs")
     (public "painload")
     (public "regfish")
-    (public "repo")
     (public "shitment")
     (public "wai-middleware-time")
     (public "web-routes-wai-custom")
-    (public "wu-configuration-nix")
   ];
 
   users = addNames {
