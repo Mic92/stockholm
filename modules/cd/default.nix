@@ -76,7 +76,7 @@
           hooks = {
             post-receive = git.irc-announce {
               nick = config.networking.hostName; # TODO make this the default
-              channel = "#repository";
+              channel = "#retiolum";
               server = "ire.retiolum";
             };
           };
