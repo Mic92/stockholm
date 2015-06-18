@@ -11,7 +11,7 @@
       ../tv/base-cac-CentOS-7-64bit.nix
       ../tv/ejabberd.nix # XXX echtes modul
       ../tv/exim-smarthost.nix
-      ../tv/git.nix
+      ../tv/git
       ../tv/retiolum.nix
       ../tv/sanitize.nix
     ];
