@@ -24,7 +24,7 @@ let
   ];
 
   users = addNames {
-    tv = { pubkey = readFile <pubkeys/tv.ssh.pub>; };
+    tv = { pubkey = readFile <pubkeys/tv_wu.ssh.pub>; };
     lass = { pubkey = readFile <pubkeys/lass.ssh.pub>; };
     uriel = { pubkey = readFile <pubkeys/uriel.ssh.pub>; };
     makefu = { pubkey = "xxx"; };
