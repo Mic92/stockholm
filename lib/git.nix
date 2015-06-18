@@ -147,7 +147,11 @@ let
         case $receive_mode in
           create)
             #git log --oneline $id2
-            link="http://cd/cgit/$GIT_SSH_REPO/"
+            link="http://cd/cgit/$GIT_SSH_REPO/?h=$h"
+            ;;
+          delete)
+            #git log --oneline $id2
+            link="http://cd/cgit/$GIT_SSH_REPO/ ($h)"
             ;;
           fast-forward|non-fast-forward)
             #git diff --stat $id..$id2
