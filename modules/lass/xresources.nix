@@ -12,7 +12,7 @@ with lib;
 
 let
 
-  inherit (import ../../lib { inherit pkgs; }) shell-escape;
+  inherit (import ../../lib { inherit pkgs; inherit lib; }) shell-escape;
   inherit (pkgs) writeScript;
 
 in
@@ -43,7 +43,7 @@ in
     };
   };
 
-  config = 
+  config =
     let
       cfg = config.services.xresources;
       xres = concatStringsSep "\n" (attrValues cfg.resources);
@@ -53,6 +53,5 @@ in
           echo ${shell-escape xres} | xrdb -merge
         '';
       };
-      
 
 }
