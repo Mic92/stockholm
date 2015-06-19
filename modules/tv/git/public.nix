@@ -4,9 +4,9 @@ let
   inherit (builtins) map readFile;
   inherit (lib) concatMap listToAttrs;
   # TODO lib should already include our stuff
-  inherit (import ../../lib { inherit lib pkgs; }) addNames git;
+  inherit (import ../../../lib { inherit lib pkgs; }) addNames git;
 
-  cd-repos = [
+  public-git-repos = [
     (public "cgserver")
     (public "crude-mail-setup")
     (public "dot-xmonad")
@@ -30,9 +30,9 @@ let
     makefu = { pubkey = "xxx"; };
   };
 
-  repos = listToAttrs (map ({ repo, ... }: { name = repo.name; value = repo; }) cd-repos);
+  repos = listToAttrs (map ({ repo, ... }: { name = repo.name; value = repo; }) public-git-repos);
 
-  rules = concatMap ({ rules, ... }: rules) cd-repos;
+  rules = concatMap ({ rules, ... }: rules) public-git-repos;
 
   public = repo-name:
     rec {
@@ -63,7 +63,7 @@ in
 
 {
   imports = [
-    ../tv/git
+    ./.
   ];
 
   services.git = {

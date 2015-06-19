@@ -8,7 +8,6 @@ in
   imports =
     [
       <secrets/hashedPasswords.nix>
-      ./git.nix
       ./iptables.nix
       ./networking.nix
       ../common/nixpkgs.nix
@@ -16,6 +15,7 @@ in
       ../tv/base-cac-CentOS-7-64bit.nix
       ../tv/ejabberd.nix # XXX echtes modul
       ../tv/exim-smarthost.nix
+      ../tv/git/public.nix
       ../tv/retiolum.nix
       ../tv/sanitize.nix
     ];
