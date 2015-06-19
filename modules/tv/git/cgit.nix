@@ -52,7 +52,7 @@ in
       enable-log-linecount=1
       enable-remote-branches=1
 
-      root-title=repositories at ${config.networking.hostName}
+      root-title=public repositories at ${config.networking.hostName}
       root-desc=keep calm and engage
 
       snapshots=0
