@@ -267,7 +267,7 @@ in
             if ! test -d "$repodir"; then
               mkdir -m "$mode" "$repodir"
               git init --bare --template=/var/empty "$repodir"
-              chown -R git: "$repodir"
+              chown -R git:nogroup "$repodir"
             fi
             ln -s ${hooks} "$repodir/hooks"
           ''
