@@ -119,6 +119,8 @@ let
       server=${escapeShellArg server}
       port=${toString port}
 
+      host=$nick
+
       empty=0000000000000000000000000000000000000000
 
       unset message
@@ -147,19 +149,18 @@ let
         case $receive_mode in
           create)
             #git log --oneline $id2
-            link="http://cd/cgit/$GIT_SSH_REPO/?h=$h"
+            link="http://$host/cgit/$GIT_SSH_REPO/?h=$h"
             ;;
           delete)
             #git log --oneline $id2
-            link="http://cd/cgit/$GIT_SSH_REPO/ ($h)"
+            link="http://$host/cgit/$GIT_SSH_REPO/ ($h)"
             ;;
           fast-forward|non-fast-forward)
             #git diff --stat $id..$id2
-            link="http://cd/cgit/$GIT_SSH_REPO/diff/?h=$h&id=$id&id2=$id2"
+            link="http://$host/cgit/$GIT_SSH_REPO/diff/?h=$h&id=$id&id2=$id2"
             ;;
         esac
 
-        #host=$nick
         #$host $GIT_SSH_REPO $ref $link
         message="''${message+$message
       }$GIT_SSH_USER $receive_mode $link"
