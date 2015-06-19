@@ -5,7 +5,6 @@ let
 in
 
 {
-  # TODO replace by ./modules/cd-users.nix
   users.extraGroups = {
 
     # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
