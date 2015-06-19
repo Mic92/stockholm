@@ -68,7 +68,7 @@ in
   services.retiolum = {
     enable = true;
     hosts = <retiolum-hosts>;
-    privateKeyFile = "/etc/nixos/secrets/cd.retiolum.rsa_key.priv";
+    privateKeyFile = "/etc/tinc/retiolum/rsa_key.priv";
     connectTo = [
       "fastpoke"
       "pigstarter"
