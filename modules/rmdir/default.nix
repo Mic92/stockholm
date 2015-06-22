@@ -8,7 +8,6 @@ in
   imports =
     [
       <secrets/hashedPasswords.nix>
-      ./iptables.nix
       ./networking.nix
       ./users.nix
       ../common/nixpkgs.nix
@@ -18,6 +17,22 @@ in
       ../tv/git/public.nix
       ../tv/retiolum.nix
       ../tv/sanitize.nix
+      {
+        imports = [ ../tv/iptables ];
+        tv.iptables = {
+          enable = true;
+          input-internet-accept-new-tcp = [
+            "ssh"
+            "tinc"
+            "smtp"
+            "xmpp-client"
+            "xmpp-server"
+          ];
+          input-retiolum-accept-new-tcp = [
+            "http"
+          ];
+        };
+      }
     ];
 
   nix.maxJobs = 1;

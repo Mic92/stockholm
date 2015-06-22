@@ -9,7 +9,6 @@ in
 {
   imports = [
     ./hosts.nix
-    ./iptables.nix
     ../common/nixpkgs.nix
     ../tv/base.nix
     ../tv/exim-retiolum.nix
@@ -22,6 +21,18 @@ in
     ../tv/urxvt.nix
     ../tv/xserver.nix
     ../wu/users.nix
+    {
+      imports = [ ../tv/iptables ];
+      tv.iptables = {
+        enable = true;
+        input-internet-accept-new-tcp = [
+          "ssh"
+          "http"
+          "tinc"
+          "smtp"
+        ];
+      };
+    }
   ];
 
   nix.maxJobs = 8;
