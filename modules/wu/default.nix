@@ -18,7 +18,6 @@ in
     ../tv/sanitize.nix
     ../tv/smartd.nix
     ../tv/synaptics.nix
-    #../tv/tools.nix
     ../tv/urxvt.nix
     ../tv/xserver.nix
     ../wu/users.nix
