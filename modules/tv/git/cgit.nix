@@ -6,10 +6,16 @@ let
 
   cfg = config.services.git;
 
+  location = lib.nameValuePair; # TODO this is also in modules/wu/default.nix
+
   isPublicRepo = getAttr "public"; # TODO this is also in ./default.nix
 in
 
 {
+  imports = [
+    ../../tv/nginx
+  ];
+
   config = mkIf cfg.cgit {
 
     users.extraUsers = lib.singleton {
@@ -66,46 +72,26 @@ in
       '') (filter isPublicRepo (attrValues cfg.repos))}
     '';
 
-    # TODO modular nginx configuration
-    services.nginx =
-      let
-        name = config.networking.hostName;
-        qname = "${name}.retiolum";
-      in
-        {
-          enable = true;
-          httpConfig = ''
-            include           ${pkgs.nginx}/conf/mime.types;
-            default_type      application/octet-stream;
-            sendfile          on;
-            keepalive_timeout 65;
-            gzip              on;
-            server {
-              listen 80;
-              server_name ${name} ${qname} localhost;
-              root ${pkgs.cgit}/cgit;
-
-              location /cgit-static {
-                rewrite ^/cgit-static(/.*)$ $1 break;
-                #expires 30d;
-              }
-
-              location /cgit {
-                include             ${pkgs.nginx}/conf/fastcgi_params;
-                fastcgi_param       SCRIPT_FILENAME $document_root/cgit.cgi;
-                #fastcgi_param       PATH_INFO       $uri;
-                fastcgi_split_path_info ^(/cgit/?)(.+)$;
-                fastcgi_param PATH_INFO $fastcgi_path_info;
-                fastcgi_param       QUERY_STRING    $args;
-                fastcgi_param       HTTP_HOST       $server_name;
-                fastcgi_pass        unix:${config.services.fcgiwrap.socketAddress};
-              }
-
-              location / {
-                return 404;
-              }
-            }
-          '';
-        };
+    tv.nginx = {
+      enable = true;
+      retiolum-locations = [
+        (location "/cgit/" ''
+          include             ${pkgs.nginx}/conf/fastcgi_params;
+          fastcgi_param       SCRIPT_FILENAME ${pkgs.cgit}/cgit/cgit.cgi;
+          fastcgi_split_path_info ^(/cgit/?)(.+)$;
+          fastcgi_param       PATH_INFO       $fastcgi_path_info;
+          fastcgi_param       QUERY_STRING    $args;
+          fastcgi_param       HTTP_HOST       $server_name;
+          fastcgi_pass        unix:${config.services.fcgiwrap.socketAddress};
+        '')
+        (location "= /cgit" ''
+          return 301 /cgit/;
+        '')
+        (location "/cgit-static/" ''
+          root ${pkgs.cgit}/cgit;
+          rewrite ^/cgit-static(/.*)$ $1 break;
+        '')
+      ];
+    };
   };
 }

@@ -4,6 +4,8 @@ let
   lib = import ../../lib { lib = pkgs.lib; inherit pkgs; };
 
   inherit (lib) majmin;
+
+  location = pkgs.lib.nameValuePair; # TODO this is also in modules/tv/git/cgit.nix
 in
 
 {
@@ -12,7 +14,6 @@ in
     ../common/nixpkgs.nix
     ../tv/base.nix
     ../tv/exim-retiolum.nix
-    ../tv/nginx.nix
     ../tv/retiolum.nix
     ../tv/sanitize.nix
     ../tv/smartd.nix
@@ -30,6 +31,17 @@ in
           "http"
           "tinc"
           "smtp"
+        ];
+      };
+    }
+    {
+      imports = [ ../tv/nginx ];
+      tv.nginx = {
+        enable = true;
+        retiolum-locations = [
+          (location "~ ^/~(.+?)(/.*)?\$" ''
+            alias /home/$1/public_html$2;
+          '')
         ];
       };
     }
