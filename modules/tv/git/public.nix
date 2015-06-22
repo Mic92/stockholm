@@ -65,8 +65,7 @@ in
   imports = [
     ./.
   ];
-
-  services.git = {
+  tv.git = {
     enable = true;
     inherit repos rules users;
   };

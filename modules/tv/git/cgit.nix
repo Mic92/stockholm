@@ -1,10 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ cfg, config, lib, pkgs, ... }:
 
 let
   inherit (builtins) attrValues filter getAttr;
   inherit (lib) concatMapStringsSep mkIf optionalString;
-
-  cfg = config.services.git;
 
   location = lib.nameValuePair; # TODO this is also in modules/wu/default.nix
 
@@ -12,12 +10,6 @@ let
 in
 
 {
-  imports = [
-    ../../tv/nginx
-  ];
-
-  config = mkIf cfg.cgit {
-
     users.extraUsers = lib.singleton {
       name = "fcgiwrap";
       uid = 2851179180; # genid fcgiwrap
@@ -93,5 +85,4 @@ in
         '')
       ];
     };
-  };
 }
