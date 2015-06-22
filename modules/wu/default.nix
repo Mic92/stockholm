@@ -14,7 +14,6 @@ in
     ../common/nixpkgs.nix
     ../tv/base.nix
     ../tv/exim-retiolum.nix
-    ../tv/retiolum.nix
     ../tv/sanitize.nix
     ../tv/smartd.nix
     ../tv/synaptics.nix
@@ -41,6 +40,17 @@ in
           (location "~ ^/~(.+?)(/.*)?\$" ''
             alias /home/$1/public_html$2;
           '')
+        ];
+      };
+    }
+    {
+      imports = [ ../tv/retiolum ];
+      tv.retiolum = {
+        enable = true;
+        hosts = <retiolum-hosts>;
+        connectTo = [
+          "gum"
+          "pigstarter"
         ];
       };
     }
@@ -341,25 +351,6 @@ in
   #    filterfile /etc/privoxy/easylistgermany.script.filter
   #  '';
   #};
-
-  services.retiolum = {
-    enable = true;
-    hosts = <retiolum-hosts>;
-    connectTo = [
-      "gum"
-      "pigstarter"
-    ];
-  };
-
-  # TODO
-  #services.tinc = {
-  #  enable = true;
-  #  network = "retiolum";
-  #  hosts = /home/tv/krebs/hosts;
-  #  privateKeyFile = /etc/tinc/retiolum/rsa_key.priv;
-  #  connectTo = [ "fastpoke" "pigstarter" "kheurop" ];
-  #};
-
 
   security.rtkit.enable = false;
   services.nscd.enable = false;

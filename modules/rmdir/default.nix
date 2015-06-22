@@ -15,7 +15,6 @@ in
       ../tv/base-cac-CentOS-7-64bit.nix
       ../tv/exim-smarthost.nix
       ../tv/git/public.nix
-      ../tv/retiolum.nix
       ../tv/sanitize.nix
       {
         imports = [ ../tv/iptables ];
@@ -30,6 +29,20 @@ in
           ];
           input-retiolum-accept-new-tcp = [
             "http"
+          ];
+        };
+      }
+      {
+        imports = [ ../tv/retiolum ];
+        tv.retiolum = {
+          enable = true;
+          hosts = <retiolum-hosts>;
+          connectTo = [
+            "cd"
+            "mkdir"
+            "fastpoke"
+            "pigstarter"
+            "ire"
           ];
         };
       }
@@ -72,19 +85,6 @@ in
       { bits = 8192; type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
     ];
     permitRootLogin = "yes";
-  };
-
-  services.retiolum = {
-    enable = true;
-    hosts = <retiolum-hosts>;
-    privateKeyFile = "/etc/tinc/retiolum/rsa_key.priv";
-    connectTo = [
-      "cd"
-      "rmdir"
-      "fastpoke"
-      "pigstarter"
-      "ire"
-    ];
   };
 
   sound.enable = false;

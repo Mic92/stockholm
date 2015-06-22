@@ -16,7 +16,6 @@ in
       ../tv/ejabberd.nix # XXX echtes modul
       ../tv/exim-smarthost.nix
       ../tv/git/public.nix
-      ../tv/retiolum.nix
       ../tv/sanitize.nix
       {
         imports = [ ../tv/iptables ];
@@ -31,6 +30,18 @@ in
           ];
           input-retiolum-accept-new-tcp = [
             "http"
+          ];
+        };
+      }
+      {
+        imports = [ ../tv/retiolum ];
+        tv.retiolum = {
+          enable = true;
+          hosts = <retiolum-hosts>;
+          connectTo = [
+            "fastpoke"
+            "pigstarter"
+            "ire"
           ];
         };
       }
@@ -78,17 +89,6 @@ in
       { bits = 8192; type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
     ];
     permitRootLogin = "yes";
-  };
-
-  services.retiolum = {
-    enable = true;
-    hosts = <retiolum-hosts>;
-    privateKeyFile = "/etc/tinc/retiolum/rsa_key.priv";
-    connectTo = [
-      "fastpoke"
-      "pigstarter"
-      "ire"
-    ];
   };
 
   sound.enable = false;

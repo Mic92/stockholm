@@ -4,9 +4,9 @@
   services.exim =
     # This configuration makes only sense for retiolum-enabled hosts.
     # TODO modular configuration
-    assert config.services.retiolum.enable;
+    assert config.tv.retiolum.enable;
     let
-      # TODO get the hostname from config.services.retiolum.
+      # TODO get the hostname from config.tv.retiolum.
       retiolumHostname = "${config.networking.hostName}.retiolum";
     in
       { enable = true;

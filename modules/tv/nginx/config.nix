@@ -15,10 +15,10 @@ in
 {
   services.nginx =
     let
-      name = config.services.retiolum.name;
+      name = config.tv.retiolum.name;
       qname = "${name}.retiolum";
     in
-    assert config.services.retiolum.enable;
+    assert config.tv.retiolum.enable;
     {
       enable = true;
       httpConfig = ''
