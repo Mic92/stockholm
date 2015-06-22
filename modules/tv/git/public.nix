@@ -27,7 +27,7 @@ let
     tv = { pubkey = readFile <pubkeys/tv_wu.ssh.pub>; };
     lass = { pubkey = readFile <pubkeys/lass.ssh.pub>; };
     uriel = { pubkey = readFile <pubkeys/uriel.ssh.pub>; };
-    makefu = { pubkey = "xxx"; };
+    makefu = { pubkey = readFile <pubkeys/makefu.ssh.pub>; };
   };
 
   repos = listToAttrs (map ({ repo, ... }: { name = repo.name; value = repo; }) public-git-repos);
