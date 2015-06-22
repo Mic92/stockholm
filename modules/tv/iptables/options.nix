@@ -15,7 +15,7 @@ in
     type = with types; listOf str;
     default = [];
     description = ''
-      ip{4,6}tables -A INPUT -j ACCEPT -p tcp --dport $port -m conntrack --ctstate NEW
+      TCP ports, accepting incoming connections from anywhere.
     '';
   };
 
@@ -23,7 +23,7 @@ in
     type = with types; listOf str;
     default = [];
     description = ''
-      ip{4,6}tables -A Retiolum -j ACCEPT -p tcp --dport $port -m conntrack --ctstate NEW
+      TCP ports, accepting incoming connections from Retiolum.
     '';
   };
 }
