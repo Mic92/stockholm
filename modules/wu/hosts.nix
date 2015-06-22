@@ -18,8 +18,5 @@
       127.0.0.1  dev.zalora.co.id www.dev.zalora.co.id bob.dev.zalora.co.id static.dev.zalora.co.id
       127.0.0.1  dev.zalora.co.th www.dev.zalora.co.th bob.dev.zalora.co.th static.dev.zalora.co.th
       127.0.0.1  dev.zalora.com.hk www.dev.zalora.com.hk bob.dev.zalora.com.hk static.dev.zalora.com.hk
-
-      54.93.104.95 eu-dev.hk.zalora.net www.eu-dev.hk.zalora.net bob.eu-dev.hk.zalora.net static.eu-dev.hk.zalora.net
-      54.93.104.95 eu-dev.sg.zalora.net www.eu-dev.sg.zalora.net bob.eu-dev.sg.zalora.net static.eu-dev.sg.zalora.net
     '';
 }
