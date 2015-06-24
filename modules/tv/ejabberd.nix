@@ -9,7 +9,8 @@ let
 
   cfg = config.services.ejabberd-cd;
 
-
+  # XXX this is a placeholder that happens to work the default strings.
+  toErlang = builtins.toJSON;
 
 in
 
@@ -24,6 +25,16 @@ in
       enable = mkOption {
         default = false;
         description = "Whether to enable ejabberd server";
+      };
+
+      certFile = mkOption {
+        # TODO if it's types.path then it gets copied to /nix/store with
+        #      bad unsafe permissions...
+        type = types.string;
+        default = "/etc/ejabberd/ejabberd.pem";
+        description = ''
+          TODO
+        '';
       };
 
       config = mkOption {
@@ -221,7 +232,7 @@ in
                 %% file and uncomment this line:
                 %%
                 starttls,
-                {certfile, "/etc/ejabberd/ejabberd.pem"},
+                {certfile, ${toErlang cfg.certFile}},
 
                 {access, c2s},
                 {shaper, c2s_shaper},
@@ -274,7 +285,7 @@ in
           %%
           %% s2s_certfile: Specify a certificate file.
           %%
-          {s2s_certfile, "/etc/ejabberd/ejabberd.pem"}.
+          {s2s_certfile, ${toErlang cfg.certFile}}.
 
           %%
           %% domain_certfile: Specify a different certificate for each served hostname.
