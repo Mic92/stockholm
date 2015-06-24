@@ -1,0 +1,25 @@
+#! /bin/sh
+# usage: fetchgit REVISION URL WORKTREE
+set -euf
+
+git_rev=$1
+git_url=$2
+worktree=$3
+
+if [ ! -d "$worktree" ]; then
+  mkdir -p "$worktree"
+fi
+
+cd "$worktree"
+
+git init -q
+
+if ! current_url=$(git config remote.src.url); then
+  git remote add src "$git_url"
+elif [ "$current_url" != "$git_url" ]; then
+  git remote set-url src "$git_url"
+fi
+
+git fetch src
+
+git checkout "$git_rev"

@@ -4,6 +4,19 @@ set -xeuf
 serverspec=$1
 systemname=$2
 
+(
+  # Notice NIX_PATH used from host
+  # Notice secrets required to evaluate configuration
+  NIX_PATH=$NIX_PATH:nixos-config=$PWD/modules/$systemname
+  NIX_PATH=$NIX_PATH:secrets=$PWD/secrets/$systemname/nix
+  export NIX_PATH
+
+  rev=$(newbin/nixos-query nixpkgs.rev)
+  url=$(newbin/nixos-query nixpkgs.url)
+
+  newbin/fetchgit "$rev" "$url" tmp/nixpkgs/$systemname
+)
+
 ./cac poll 10s 2>/dev/null &
 pollpid=$!
 trap "kill $pollpid; trap - EXIT" EXIT
