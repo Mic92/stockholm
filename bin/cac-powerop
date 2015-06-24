@@ -1,3 +1,0 @@
-#! /bin/sh
-set -euf
-exec _cac_post_api_v1 powerop sid="$1" action="$2"

@@ -1,0 +1,337 @@
+#! /bin/sh
+set -euf
+
+PATH=$PWD/bin:$PATH
+export PATH
+
+cac_listservers_cache=$PWD/tmp/cac_listservers_cache.json
+
+
+cac() {
+  __cac_cli__command=$1
+  shift
+  __cac_cli__"$__cac_cli__command" "$@"
+}
+
+# WIP
+__cac_cli__help() {(
+  exec sed < "$0" -n '
+    s/^__cac_cli__\([^(]\+\)().*/\1/p
+  '
+)}
+
+# usage: console 
+__cac_cli__console() {(
+  server=$(__cac_cli__getserver "$1")
+  sid=$(echo $server | jq -r .sid)
+  # TODO check reply status == ok
+  _cac_post_api_v1 console sid="$sid" | jq -r .console
+)}
+
+__cac_cli__listservers() {
+  jq -r . $cac_listservers_cache
+}
+
+__cac_cli__update() {(
+  umask 0077
+  servers=$(_cac_listservers)
+  echo $servers > $cac_listservers_cache.tmp
+  mv $cac_listservers_cache.tmp $cac_listservers_cache
+)}
+
+__cac_cli__getserver() {(
+
+  case $1 in
+    *:*)
+      k=${1%%:*}
+      v=${1#*:}
+      ;;
+    *)
+      k=label
+      v=${1#*:}
+      ;;
+  esac
+
+  if result=$(jq \
+      -e \
+      --arg k "$k" \
+      --arg v "$v" \
+      '
+        map(select(.[$k]==$v)) |
+        if (. | length) == 1 then
+          .[0]
+        else
+          null
+        end
+      ' \
+        $cac_listservers_cache); then
+    echo $result | jq -r .
+  else
+    echo "$0 getserver $k:$v => not unique server found" >&2
+    exit 23
+  fi
+)}
+
+__cac_cli__generatenetworking() {(
+  server=$(__cac_cli__getserver "$1")
+
+  hostname=$(echo $server | jq -r .label)
+
+  address=$(echo $server | jq -r .ip)
+  gateway=$(echo $server | jq -r .gateway)
+  nameserver=8.8.8.8
+  netmask=$(echo $server | jq -r .netmask)
+  prefix=$(netmask-to-prefix $netmask)
+
+  #printf '# Generated file: %s generatenetworking %s %s\n' "$0" "$1" "$2"
+  #printf '# on %s\n' "$(date -Is)"
+  #printf '\n'
+  printf '_:\n'
+  printf '\n'
+  printf '{\n'
+  printf '  networking.hostName = "%s";\n' $hostname
+  printf '  networking.interfaces.enp2s1.ip4 = [\n'
+  printf '    {\n'
+  printf '      address = "%s";\n' $address
+  printf '      prefixLength = %d;\n' $prefix
+  printf '    }\n'
+  printf '  ];\n'
+  printf '  networking.defaultGateway = "%s";\n' $gateway
+  printf '  networking.nameservers = [\n'
+  printf '    "%s"\n' $nameserver
+  printf '  ];\n'
+  printf '}\n'
+)}
+
+__cac_cli__powerop() {(
+  server=$(__cac_cli__getserver "$1")
+  action=$2
+
+  sid=$(echo $server | jq -r .sid)
+
+  reply=$(_cac_post_api_v1 powerop sid="$sid" action="$action")
+
+  case $(echo $reply | jq -r .status) in
+    ok)
+      echo $reply | jq -r . >&2
+      __cac_cli__update
+      ;;
+    *)
+      echo bad reply: >&2
+      echo $reply | jq -r . >&2
+      exit 23
+      ;;
+  esac
+)}
+__cac_cli__pushconfig() {(
+  server=$(__cac_cli__getserver "$1")
+
+  prefix=${2-/}
+
+  hostname=$(echo $server | jq -r .label)
+
+  address=$(echo $server | jq -r .ip)
+  target=root@$address
+
+  RSYNC_RSH='sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+  SSHPASS=$(echo $server | jq -r .rootpass)
+  export RSYNC_RSH SSHPASS
+
+  pushgit .                         $prefix/etc/nixos/
+  pushgit hosts                     $prefix/etc/nixos/hosts/
+  pushgit tmp/nixpkgs/$hostname     $prefix/etc/nixos/nixpkgs/
+  pushdir secrets/$hostname/nix     $prefix/etc/nixos/secrets/
+  pushdir secrets/$hostname/rsync   $prefix/
+  echo "_:{imports=[./modules/$hostname];}" \
+    | $RSYNC_RSH "$target" tee "$prefix/etc/nixos/configuration.nix" \
+      > /dev/null
+
+  ## TODO chmod and chown secrets
+)}
+
+__cac_cli__setlabel() {(
+  server=$(__cac_cli__getserver "$1")
+  label=$2
+
+  sid=$(echo $server | jq -r .sid)
+
+  reply=$(_cac_post_api_v1 renameserver sid="$sid" name="$label")
+
+  case $(echo $reply | jq -r .status) in
+    ok)
+      echo $reply | jq -r . >&2
+      __cac_cli__update
+      ;;
+    *)
+      echo bad reply: >&2
+      echo $reply | jq -r . >&2
+      exit 23
+      ;;
+  esac
+)}
+
+__cac_cli__setmode() {(
+  server=$(__cac_cli__getserver "$1")
+  mode=$2
+
+  sid=$(echo $server | jq -r .sid)
+
+  reply=$(_cac_post_api_v1 runmode sid="$sid" mode="$mode")
+
+  case $(echo $reply | jq -r .status) in
+    ok)
+      echo $reply | jq -r . >&2
+      __cac_cli__update
+      ;;
+    *)
+      echo bad reply: >&2
+      echo $reply | jq -r .
+      exit 23
+      ;;
+  esac
+)}
+
+__cac_cli__ssh() {(
+  server=$(__cac_cli__getserver "$1")
+  shift
+
+  address=$(echo $server | jq -r .ip)
+  target=root@$address
+
+  SSHPASS=$(echo $server | jq -r .rootpass)
+  export SSHPASS
+
+  exec sshpass -e ssh \
+    -S none \
+    -o StrictHostKeyChecking=no \
+    -o UserKnownHostsFile=/dev/null \
+    $target \
+    "$@"
+)}
+
+
+# usage: ./cac waitstatus mode:Safe 'Powered On'
+# blocks until server has specfied state
+__cac_cli__waitstatus() {
+  server=$(__cac_cli__getserver "$1")
+  status=$(echo $server | jq -r .status)
+
+  case $status in
+    $2)
+      return
+      ;;
+  esac
+
+  echo "$(date -Is) Waiting for status: $2; current status: $status ..." >&2
+
+  __cac_cli__waitforcacheupdate __cac_cli__waitstatus "$@"
+}
+
+
+# XXX for __cac_cli__waitforcacheupdate and __cac_cli__poll cache means $cac_listservers_cache
+
+# blocks until cache has been updated then executes "$@"
+__cac_cli__waitforcacheupdate() {
+  case $(inotifywait --format %f -q -e moved_to $(dirname $cac_listservers_cache)) in
+    $(basename $cac_listservers_cache)) "$@";;
+    *) __cac_cli__waitforcacheupdate "$@";;
+  esac
+}
+
+# usage: with cac ./cac poll 60s
+# continuously update cache, sleeping at least $1 between updates
+__cac_cli__poll() {
+  __cac_cli__update
+  t=${1-1m}
+  echo "$(date -Is) cache updated; sleeping $t ..." >&2
+  sleep "$t"
+  __cac_cli__poll "$@"
+}
+
+
+_cac_listservers() {(
+  servers=$(_cac_get_api_v1 listservers)
+  status=$(echo $servers | jq -r .status)
+
+  if [ "$status" = ok ]; then
+    echo "$servers" | jq -r .data
+  else
+    echo "cac_listservers: bad listservers status: $status" >&2
+    exit 1
+  fi
+)}
+
+
+
+
+# rsyncfiles : lines filename |> local-dir x remote-dir -> ? |> ?
+rsyncfiles() {(
+  set -x
+  rsync \
+    --rsync-path="mkdir -p \"$2\" && rsync" \
+    -vzrlptD \
+    --files-from=- \
+    "$1"/ \
+    "$target:$2"
+)}
+
+
+# gitfiles : git-work-tree -> lines filename
+gitfiles() {
+  git -C "$1" archive --format=tar HEAD | tar t | sed '/\/$/d'
+}
+
+# pushgit : git-work-tree x remote-dir -> ?
+pushgit() {
+  gitfiles "$1" | rsyncfiles "$1" "$2"
+}
+
+# dirfiles : local-dir -> lines filename
+dirfiles() {(
+  cd "$1"
+  find . -type f | sed 's/^\.\///'
+)}
+
+# pushgit : local-dir x remote-dir -> ?
+pushdir() {
+  dirfiles "$1" | rsyncfiles "$1" "$2"
+}
+
+
+
+
+
+
+_cac_get_api_v1() {
+  _cac_curl_api_v1 -G "$@"
+}
+
+_cac_post_api_v1() {
+  _cac_curl_api_v1 -XPOST "$@"
+}
+
+_cac_curl_api_v1() {
+  _cac_exec curl -sS "$1" "https://panel.cloudatcost.com/api/v1/$2.php" $(
+    shift 2
+    set -- "$@" login="$cac_login" key="$cac_key"
+    for arg; do
+      echo -d $(printf '%s' "$arg" | urlencode)
+    done
+  )
+}
+
+_cac_exec() {
+  if test -z "${cac_via-}"; then
+    env -- "$@"
+  else
+    ssh -q "$cac_via" -t "$@"
+  fi
+}
+
+
+
+
+
+case ${run-true} in
+  true) cac "$@";;
+esac
