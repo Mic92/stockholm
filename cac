@@ -137,11 +137,11 @@ __cac_cli__pushconfig() {(
   SSHPASS=$(echo $server | jq -r .rootpass)
   export RSYNC_RSH SSHPASS
 
-  pushgit .                         $prefix/etc/nixos/
-  pushgit hosts                     $prefix/etc/nixos/hosts/
-  pushgit tmp/nixpkgs/$hostname     $prefix/etc/nixos/nixpkgs/
-  pushdir secrets/$hostname/nix     $prefix/etc/nixos/secrets/
-  pushdir secrets/$hostname/rsync   $prefix/
+  pushgit .                         $target:$prefix/etc/nixos/
+  pushgit hosts                     $target:$prefix/etc/nixos/hosts/
+  pushgit tmp/nixpkgs/$hostname     $target:$prefix/etc/nixos/nixpkgs/
+  pushdir secrets/$hostname/nix     $target:$prefix/etc/nixos/secrets/
+  pushdir secrets/$hostname/rsync   $target:$prefix/
   echo "_:{imports=[./modules/$hostname];}" \
     | $RSYNC_RSH "$target" tee "$prefix/etc/nixos/configuration.nix" \
       > /dev/null
@@ -264,7 +264,7 @@ _cac_listservers() {(
 
 
 
-# rsyncfiles : lines filename |> local-dir x remote-dir -> ? |> ?
+# rsyncfiles : lines filename |> local-dir x rsync-target -> ? |> ?
 rsyncfiles() {(
   set -x
   rsync \
@@ -272,7 +272,7 @@ rsyncfiles() {(
     -vzrlptD \
     --files-from=- \
     "$1"/ \
-    "$target:$2"
+    "$2"
 )}
 
 
@@ -281,7 +281,7 @@ gitfiles() {
   git -C "$1" archive --format=tar HEAD | tar t | sed '/\/$/d'
 }
 
-# pushgit : git-work-tree x remote-dir -> ?
+# pushgit : git-work-tree x rsync-target -> ?
 pushgit() {
   gitfiles "$1" | rsyncfiles "$1" "$2"
 }
@@ -292,7 +292,7 @@ dirfiles() {(
   find . -type f | sed 's/^\.\///'
 )}
 
-# pushgit : local-dir x remote-dir -> ?
+# pushdir : local-dir x rsync-target -> ?
 pushdir() {
   dirfiles "$1" | rsyncfiles "$1" "$2"
 }
