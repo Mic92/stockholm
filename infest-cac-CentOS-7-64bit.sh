@@ -5,16 +5,19 @@ serverspec=$1
 systemname=$2
 
 (
+  PATH=$PWD/bin:$PATH
+  export PATH
+
   # Notice NIX_PATH used from host
   # Notice secrets required to evaluate configuration
   NIX_PATH=$NIX_PATH:nixos-config=$PWD/modules/$systemname
   NIX_PATH=$NIX_PATH:secrets=$PWD/secrets/$systemname/nix
   export NIX_PATH
 
-  rev=$(newbin/nixos-query nixpkgs.rev)
-  url=$(newbin/nixos-query nixpkgs.url)
+  rev=$(new-nixos-query nixpkgs.rev)
+  url=$(new-nixos-query nixpkgs.url)
 
-  newbin/fetchgit "$rev" "$url" tmp/nixpkgs/$systemname
+  fetchgit "$rev" "$url" tmp/nixpkgs/$systemname
 )
 
 ./cac poll 10s 2>/dev/null &

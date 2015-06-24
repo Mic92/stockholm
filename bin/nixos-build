@@ -14,7 +14,18 @@ nixos_config=$config_root/modules/$host
 secrets_nix=$secrets_root/$host/nix
 secrets_rsync=$secrets_root/$host/rsync
 
-nixos-fetch-git "$host"
+(
+  # Notice NIX_PATH used from host
+  # Notice secrets required to evaluate configuration
+  NIX_PATH=$NIX_PATH:nixos-config=$nixos_config
+  NIX_PATH=$NIX_PATH:secrets=$secrets_nix
+  export NIX_PATH
+
+  rev=$(new-nixos-query nixpkgs.rev)
+  url=$(new-nixos-query nixpkgs.url)
+
+  fetchgit "$rev" "$url" tmp/nixpkgs/$host
+)
 
 nix-build \
     -I "$nixpkgs" \
