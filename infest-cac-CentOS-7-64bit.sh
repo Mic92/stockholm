@@ -14,8 +14,8 @@ systemname=$2
   NIX_PATH=$NIX_PATH:secrets=$PWD/secrets/$systemname/nix
   export NIX_PATH
 
-  rev=$(new-nixos-query nixpkgs.rev)
-  url=$(new-nixos-query nixpkgs.url)
+  rev=$(nixos-query nixpkgs.rev)
+  url=$(nixos-query nixpkgs.url)
 
   fetchgit "$rev" "$url" tmp/nixpkgs/$systemname
 )
