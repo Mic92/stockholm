@@ -1,25 +1,68 @@
 #! /bin/sh
-# usage: fetchgit REVISION URL WORKTREE
+#
+# usage: fetchgit git_rev git_url out_link
+#
+# Clone the specified Git repository and make it available as out_link.
+#
 set -euf
 
 git_rev=$1
 git_url=$2
-worktree=$3
+out_link=$3
 
-if [ ! -d "$worktree" ]; then
-  mkdir -p "$worktree"
+# Put all bases in the same place as out_link.
+# Notice how out_link must not clash with cache_dir and work_dir.
+cache_base=$(dirname "$out_link")
+work_base=$(dirname "$out_link")
+
+# cache_dir points to a (maybe non-existent) directory, where a shared cache of
+# the repository should be maintained.  The shared cache is used to create
+# multiple working trees of the repository.
+cache_dir=$cache_base/$(echo "$git_url" | urlencode)
+
+# work_dir points to a (maybe non-existent) directory, where a specific
+# revision of the repository is checked out.
+work_dir=$work_base/$(echo "$git_rev")
+
+cache_git() {
+  git --git-dir="$cache_dir" "$@"
+}
+
+work_git() {
+  git -C "$work_dir" "$@"
+}
+
+is_up_to_date() {
+  test -d "$cache_dir" &&
+  test -d "$work_dir" &&
+  test "$(work_git rev-parse HEAD)" = "$git_rev"
+}
+
+if ! is_up_to_date; then
+  if ! test -d "$cache_dir"; then
+    mkdir -p "$cache_dir"
+    cache_git init --bare
+  fi
+  if ! cache_git_url=$(cache_git config remote.origin.url); then
+    cache_git remote add origin "$git_url"
+  elif test "$cache_git_url" != "$git_url"; then
+    cache_git remote set-url origin "$git_url"
+  fi
+  cache_git fetch origin
+  if ! test -d "$work_dir"; then
+    git clone -n --shared "$cache_dir" "$work_dir"
+  fi
+  work_git checkout "$git_rev" -- "$(readlink -f "$work_dir")"
+  work_git checkout -b master "$git_rev"
+  work_git submodule init
+  work_git submodule update
 fi
+work_git clean -dxf
 
-cd "$worktree"
-
-git init -q
-
-if ! current_url=$(git config remote.src.url); then
-  git remote add src "$git_url"
-elif [ "$current_url" != "$git_url" ]; then
-  git remote set-url src "$git_url"
+# Relative links are nicer, and actually we know that work_dir and out_link are
+# the same.  But, for robustness, check anyway.. :)
+if test "$(dirname "$work_dir")" = "$(dirname "$out_link")"; then
+  ln -snf "$(basename "$work_dir")" "$out_link"
+else
+  ln -snf "$work_dir" "$out_link"
 fi
-
-git fetch src
-
-git checkout "$git_rev"
