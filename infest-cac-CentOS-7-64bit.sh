@@ -14,10 +14,12 @@ systemname=$2
   NIX_PATH=$NIX_PATH:secrets=$PWD/secrets/$systemname/nix
   export NIX_PATH
 
-  rev=$(nixos-query nixpkgs.rev)
-  url=$(nixos-query nixpkgs.url)
+  case $(nixos-query nixpkgs.dirty) in true)
+    echo "$0: cannot use nixpkgs.dirty" >&2 # b/c ./cac pushconfig
+    exit -1
+  esac
 
-  fetchgit "$rev" "$url" tmp/nixpkgs/$systemname
+  fetchgit nixpkgs tmp/nixpkgs/$systemname
 )
 
 ./cac poll 10s 2>/dev/null &

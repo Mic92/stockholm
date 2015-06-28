@@ -1,14 +1,27 @@
 #! /bin/sh
 #
-# usage: fetchgit git_rev git_url out_link
+# usage: fetchgit repo_name out_link
 #
-# Clone the specified Git repository and make it available as out_link.
+# Make the specified repository available as out_link.
 #
 set -euf
 
-git_rev=$1
-git_url=$2
-out_link=$3
+repo_name=$1
+out_link=$2
+
+if test "$repo_name" != nixpkgs; then
+  echo "fetchgit: cannot fetch $repo_name, yet" >&2
+  exit -1
+fi
+
+git_rev=$(nixos-query nixpkgs.rev)
+git_url=$(nixos-query nixpkgs.url)
+dirty=$(nixos-query nixpkgs.dirty)
+
+case $dirty in true)
+  ln -snf "$git_url" "$out_link"
+  exit
+esac
 
 # Put all bases in the same place as out_link.
 # Notice how out_link must not clash with cache_dir and work_dir.
@@ -39,7 +52,8 @@ is_up_to_date() {
   test "$(work_git rev-parse --verify HEAD)" = "$git_rev"
 }
 
-# Notice how the remote name "origin" has been chosen arbitrarily.
+# Notice how the remote name "origin" has been chosen arbitrarily, but must be
+# kept in sync with the default value of nixpkgs.rev.
 if ! is_up_to_date; then
   if ! test -d "$cache_dir"; then
     mkdir -p "$cache_dir"
