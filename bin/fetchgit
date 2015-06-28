@@ -20,6 +20,7 @@ dirty=$(nixos-query nixpkgs.dirty)
 
 case $dirty in true)
   ln -snf "$git_url" "$out_link"
+  echo "fetchgit: using $git_url as it is" >&2
   exit
 esac
 
@@ -83,3 +84,5 @@ if test "$(dirname "$work_dir")" = "$(dirname "$out_link")"; then
 else
   ln -snf "$work_dir" "$out_link"
 fi
+
+echo "fetchgit: using $git_url $(work_git log --oneline -n1)" >&2
