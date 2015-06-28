@@ -16,6 +16,7 @@ let
     (public "mime")
     (public "much")
     (public "nixos-infest")
+    (public "nixpkgs")
     (public "painload")
     (public "regfish")
     (public "shitment")
