@@ -22,7 +22,7 @@ cache_dir=$cache_base/$(echo "$git_url" | urlencode)
 
 # work_dir points to a (maybe non-existent) directory, where a specific
 # revision of the repository is checked out.
-work_dir=$work_base/$(echo "$git_rev")
+work_dir=$work_base/$(echo "$git_rev" | urlencode)
 
 cache_git() {
   git --git-dir="$cache_dir" "$@"
@@ -35,7 +35,7 @@ work_git() {
 is_up_to_date() {
   test -d "$cache_dir" &&
   test -d "$work_dir" &&
-  test "$(work_git rev-parse HEAD)" = "$git_rev"
+  test "$(work_git rev-parse HEAD)" = "$(cache_git rev-parse "$git_rev")"
 }
 
 if ! is_up_to_date; then
@@ -52,8 +52,9 @@ if ! is_up_to_date; then
   if ! test -d "$work_dir"; then
     git clone -n --shared "$cache_dir" "$work_dir"
   fi
-  work_git checkout "$git_rev" -- "$(readlink -f "$work_dir")"
-  work_git checkout -b master "$git_rev"
+  commit_name=$(cache_git rev-parse "$git_rev")
+  work_git checkout "$commit_name" -- "$(readlink -f "$work_dir")"
+  work_git checkout -q "$commit_name"
   work_git submodule init
   work_git submodule update
 fi
