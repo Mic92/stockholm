@@ -38,6 +38,7 @@ is_up_to_date() {
   test "$(work_git rev-parse HEAD)" = "$(cache_git rev-parse "$git_rev")"
 }
 
+# Notice how the remote name "origin" has been chosen arbitrarily.
 if ! is_up_to_date; then
   if ! test -d "$cache_dir"; then
     mkdir -p "$cache_dir"
