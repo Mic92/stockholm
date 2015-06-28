@@ -35,8 +35,8 @@ work_git() {
 is_up_to_date() {
   test -d "$cache_dir" &&
   test -d "$work_dir" &&
-  test "$(cache_git rev-parse "$git_rev")" = "$git_rev" &&
-  test "$(work_git rev-parse HEAD)" = "$git_rev"
+  test "$(cache_git rev-parse --verify "$git_rev")" = "$git_rev" &&
+  test "$(work_git rev-parse --verify HEAD)" = "$git_rev"
 }
 
 # Notice how the remote name "origin" has been chosen arbitrarily.
@@ -54,7 +54,7 @@ if ! is_up_to_date; then
   if ! test -d "$work_dir"; then
     git clone -n --shared "$cache_dir" "$work_dir"
   fi
-  commit_name=$(cache_git rev-parse "$git_rev")
+  commit_name=$(cache_git rev-parse --verify "$git_rev")
   work_git checkout "$commit_name" -- "$(readlink -f "$work_dir")"
   work_git checkout -q "$commit_name"
   work_git submodule init
