@@ -35,7 +35,8 @@ work_git() {
 is_up_to_date() {
   test -d "$cache_dir" &&
   test -d "$work_dir" &&
-  test "$(work_git rev-parse HEAD)" = "$(cache_git rev-parse "$git_rev")"
+  test "$(cache_git rev-parse "$git_rev")" = "$git_rev" &&
+  test "$(work_git rev-parse HEAD)" = "$git_rev"
 }
 
 # Notice how the remote name "origin" has been chosen arbitrarily.
