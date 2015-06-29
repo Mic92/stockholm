@@ -21,7 +21,7 @@ secrets_rsync=$secrets_root/$host/rsync
   NIX_PATH=$NIX_PATH:secrets=$secrets_nix
   export NIX_PATH
 
-  fetchgit nixpkgs tmp/nixpkgs/$host
+  prefetch nixpkgs tmp/nixpkgs/$host
 )
 
 nix-build \

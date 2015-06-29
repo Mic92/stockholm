@@ -1,6 +1,6 @@
 #! /bin/sh
 #
-# usage: fetchgit repo_name out_link
+# usage: prefetch repo_name out_link
 #
 # Make the specified repository available as out_link.
 #
@@ -10,7 +10,7 @@ repo_name=$1
 out_link=$2
 
 if test "$repo_name" != nixpkgs; then
-  echo "fetchgit: cannot fetch $repo_name, yet" >&2
+  echo "prefetch: cannot fetch $repo_name, yet" >&2
   exit -1
 fi
 
@@ -20,7 +20,7 @@ dirty=$(nixos-query nixpkgs.dirty)
 
 case $dirty in true)
   ln -snf "$git_url" "$out_link"
-  echo "fetchgit: using $git_url as it is" >&2
+  echo "prefetch: using $git_url as it is" >&2
   exit
 esac
 
@@ -85,4 +85,4 @@ else
   ln -snf "$work_dir" "$out_link"
 fi
 
-echo "fetchgit: using $git_url $(work_git log --oneline -n1)" >&2
+echo "prefetch: using $git_url $(work_git log --oneline -n1)" >&2

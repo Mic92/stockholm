@@ -19,7 +19,7 @@ systemname=$2
     exit -1
   esac
 
-  fetchgit nixpkgs tmp/nixpkgs/$systemname
+  prefetch nixpkgs tmp/nixpkgs/$systemname
 )
 
 ./cac poll 10s 2>/dev/null &
