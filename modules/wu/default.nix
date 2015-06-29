@@ -56,7 +56,12 @@ in
     }
   ];
 
-  nix.maxJobs = 8;
+  nix = {
+    buildCores = 4;
+    maxJobs = 4;
+    daemonIONiceLevel = 1;
+    daemonNiceLevel = 1;
+  };
 
   nixpkgs = {
     url = "https://github.com/NixOS/nixpkgs";
