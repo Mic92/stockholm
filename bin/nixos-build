@@ -1,19 +1,19 @@
 #! /bin/sh
 #
-# build : hostname -> system-path
+# nixos-build system_name -> system_path
 #
 set -euf
 
-host=$1
+system_name=$1
 
-NIXOS_CONFIG=$config_root/modules/$host
+NIXOS_CONFIG=$config_root/modules/$system_name
 export NIXOS_CONFIG
 
 # Notice how host's NIX_PATH is used to prefetch nixpkgs.
-prefetch nixpkgs "$nixpkgs_root/$host"
+prefetch nixpkgs "$nixpkgs_root/$system_name"
 
-NIX_PATH=$nixpkgs_root/$host
-NIX_PATH=$NIX_PATH:secrets=$secrets_root/$host/nix
+NIX_PATH=$nixpkgs_root/$system_name
+NIX_PATH=$NIX_PATH:secrets=$secrets_root/$system_name/nix
 NIX_PATH=$NIX_PATH:pubkeys=$config_root/pubkeys
 NIX_PATH=$NIX_PATH:retiolum-hosts=$retiolum_hosts
 export NIX_PATH
