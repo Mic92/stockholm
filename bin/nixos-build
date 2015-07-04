@@ -14,15 +14,9 @@ nixos_config=$config_root/modules/$host
 secrets_nix=$secrets_root/$host/nix
 secrets_rsync=$secrets_root/$host/rsync
 
-(
-  # Notice NIX_PATH used from host
-  # Notice secrets required to evaluate configuration
-  NIX_PATH=$NIX_PATH:nixos-config=$nixos_config
-  NIX_PATH=$NIX_PATH:secrets=$secrets_nix
-  export NIX_PATH
-
+# Notice how host's NIX_PATH is used to prefetch nixpkgs.
+NIXOS_CONFIG=$nixos_config \
   prefetch nixpkgs tmp/nixpkgs/$host
-)
 
 nix-build \
     -I "$nixpkgs" \

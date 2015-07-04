@@ -211,7 +211,7 @@ in
 
 {
   imports = [
-    <secrets/hashedPasswords.nix>
+    { users.extraUsers = import <secrets/extraUsers.nix>; }
   ];
 
   users.defaultUserShell = "/run/current-system/sw/bin/bash";

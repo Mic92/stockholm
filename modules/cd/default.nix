@@ -7,7 +7,7 @@ in
 {
   imports =
     [
-      <secrets/hashedPasswords.nix>
+      { users.extraUsers = import <secrets/extraUsers.nix>; }
       ./networking.nix
       ./users.nix
       ../common/nixpkgs.nix
