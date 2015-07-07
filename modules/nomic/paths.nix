@@ -3,7 +3,7 @@
   modules.file.url = ../../modules;
   nixpkgs.git = {
     url = https://github.com/NixOS/nixpkgs;
-    rev = "e1af50c4c4c0332136283e9231f0a32ac11f2b90";
+    rev = "4e5e441";
     cache = ../../tmp/git-cache;
   };
   pubkeys.file.url = ../../pubkeys;
