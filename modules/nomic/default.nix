@@ -9,6 +9,7 @@ in
     ./hardware-configuration.nix
     ./users.nix
     ../tv/base.nix
+    ../tv/environment.nix
     ../tv/exim-retiolum.nix
     ../tv/git/public.nix
     ../tv/sanitize.nix
