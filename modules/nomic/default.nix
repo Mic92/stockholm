@@ -56,6 +56,8 @@ in
     "net.ipv6.conf.default.use_tempaddr" = 2;
   };
 
+  boot.tmpOnTmpfs = true;
+
   environment.systemPackages = with pkgs; [
     (writeScriptBin "play" ''
       #! /bin/sh
