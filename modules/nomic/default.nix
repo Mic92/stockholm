@@ -62,7 +62,7 @@ in
     (writeScriptBin "play" ''
       #! /bin/sh
       set -euf
-      mpv() { ${mpv}/bin/mpv "$@"; }
+      mpv() { exec ${mpv}/bin/mpv "$@"; }
       case $1 in
         deepmix)      mpv http://deepmix.ru/deepmix128.pls;;
         groovesalad)  mpv http://somafm.com/play/groovesalad;;
