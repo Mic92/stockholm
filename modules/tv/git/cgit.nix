@@ -14,7 +14,7 @@ in
     name = "fcgiwrap";
     uid = 2851179180; # genid fcgiwrap
     group = "fcgiwrap";
-    home = "/var/empty";
+    home = toString (pkgs.runCommand "empty" {} "mkdir -p $out");
   };
 
   users.extraGroups = lib.singleton {

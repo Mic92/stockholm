@@ -3,6 +3,6 @@
 {
   nixpkgs.config.packageOverrides = pkgs:
     {
-      nano = /var/empty;
+      nano = pkgs.runCommand "empty" {} "mkdir -p $out";
     };
 }
