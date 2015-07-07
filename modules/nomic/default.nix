@@ -81,6 +81,13 @@ in
     wireless.enable = true;
   };
 
+  services.logind.extraConfig = ''
+    HandleHibernateKey=ignore
+    HandleLidSwitch=ignore
+    HandlePowerKey=ignore
+    HandleSuspendKey=ignore
+  '';
+
   services.openssh = {
     enable = true;
     hostKeys = [
