@@ -7,11 +7,9 @@ set -euf
 system_name=$1
 target=${2-root@$system_name}
 
-export PATH="$PWD/bin:$PATH"
-#export nixpkgs=/var/nixpkgs
-export nixpkgs_root=$PWD/tmp/nixpkgs
-export config_root=$PWD
-export retiolum_hosts=$PWD/hosts
-export secrets_root=$PWD/secrets
-
-exec nixos-deploy "$system_name" "$target"
+nix-instantiate \
+    --argstr system-name "$system_name" \
+    --argstr deploy-target "$target" \
+    --eval --json . \
+  | jq -r .  \
+  | sh

@@ -10,7 +10,6 @@ in
       { users.extraUsers = import <secrets/extraUsers.nix>; }
       ./networking.nix
       ./users.nix
-      ../common/nixpkgs.nix
       ../tv/base.nix
       ../tv/base-cac-CentOS-7-64bit.nix
       ../tv/exim-smarthost.nix
@@ -48,11 +47,6 @@ in
     ];
 
   nix.maxJobs = 1;
-
-  nixpkgs = {
-    url = "https://github.com/NixOS/nixpkgs";
-    rev = "4c01e6d91993b6de128795f4fbdd25f6227fb870";
-  };
 
   environment.systemPackages = with pkgs; [
     git # required for ./deploy, clone_or_update
