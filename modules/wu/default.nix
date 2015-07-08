@@ -325,13 +325,11 @@ in
   #};
 
   security.rtkit.enable = false;
+
+  services.cron.enable = false;
   services.nscd.enable = false;
   services.ntp.enable = false;
   #services.dbus.enable = true; # rqd4 wpa_supplicant
-
-  # vixiecron sucks
-  services.cron.enable = false;
-  services.fcron.enable = true;
 
   services.logind.extraConfig = ''
     HandleHibernateKey=ignore
