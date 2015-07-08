@@ -19,7 +19,10 @@ let
     (public "nixpkgs")
     (public "painload")
     (public "regfish")
-    (public "shitment")
+    (public' {
+      name = "shitment";
+      desc = "turn all the computers into one computer!";
+    })
     (public "wai-middleware-time")
     (public "web-routes-wai-custom")
   ];
@@ -34,6 +37,12 @@ let
   repos = listToAttrs (map ({ repo, ... }: { name = repo.name; value = repo; }) public-git-repos);
 
   rules = concatMap ({ rules, ... }: rules) public-git-repos;
+
+  public' = { name, desc }:
+    let
+      x = public name;
+    in
+    x // { repo = x.repo // { inherit desc; }; };
 
   public = repo-name:
     rec {
