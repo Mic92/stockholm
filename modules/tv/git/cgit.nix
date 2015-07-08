@@ -39,7 +39,7 @@ in
 
     virtual-root=/cgit
 
-    # TODO make this nicer
+    # TODO make this nicer (and/or somewhere else)
     cache-root=/tmp/cgit
 
     cache-size=1000
@@ -62,6 +62,11 @@ in
       ${optionalString (repo.section != null) "repo.section=${repo.section}"}
       ${optionalString (repo.desc != null) "repo.desc=${repo.desc}"}
     '') (filter isPublicRepo (attrValues cfg.repos))}
+  '';
+
+  system.activationScripts.cgit = ''
+    mkdir -m 0700 -p /tmp/cgit
+    chown fcgiwrap: /tmp/cgit
   '';
 
   tv.nginx = {
