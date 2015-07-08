@@ -7,6 +7,16 @@ let
 in
 
 {
+  imports = [
+    {
+      imports = [ ../tv/users ];
+      tv.users.tv.packages = with pkgs; [
+        ascii
+        mpv
+      ];
+    }
+  ];
+
   environment.systemPackages = with pkgs; [
     vim
   ];
