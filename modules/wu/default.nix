@@ -17,6 +17,13 @@ in
     ../tv/xserver.nix
     ../wu/users.nix
     {
+      imports = [ ../tv/identity ];
+      tv.identity = {
+        enable = true;
+        self = config.tv.identity.hosts.wu;
+      };
+    }
+    {
       imports = [ ../tv/iptables ];
       tv.iptables = {
         enable = true;

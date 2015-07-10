@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
   inherit (builtins) readFile;
@@ -16,6 +16,13 @@ in
       ../tv/exim-smarthost.nix
       ../tv/git/public.nix
       ../tv/sanitize.nix
+      {
+        imports = [ ../tv/identity ];
+        tv.identity = {
+          enable = true;
+          self = config.tv.identity.hosts.cd;
+        };
+      }
       {
         imports = [ ../tv/iptables ];
         tv.iptables = {

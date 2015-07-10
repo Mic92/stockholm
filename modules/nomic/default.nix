@@ -15,6 +15,13 @@ in
     ../tv/sanitize.nix
     ../tv/smartd.nix
     {
+      imports = [ ../tv/identity ];
+      tv.identity = {
+        enable = true;
+        self = config.tv.identity.hosts.nomic;
+      };
+    }
+    {
       imports = [ ../tv/iptables ];
       tv.iptables = {
         enable = true;
