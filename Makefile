@@ -1,4 +1,4 @@
-all: deploy
+all:;@exit 23
 
 tv-cluster := cd mkdir nomic rmdir wu
 deploy-cd:; ./deploy cd
