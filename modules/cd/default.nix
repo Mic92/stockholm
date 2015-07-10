@@ -12,6 +12,7 @@ in
       ./users.nix
       ../tv/base.nix
       ../tv/base-cac-CentOS-7-64bit.nix
+      ../tv/config/consul-server.nix
       ../tv/ejabberd.nix # XXX echtes modul
       ../tv/exim-smarthost.nix
       ../tv/git/public.nix

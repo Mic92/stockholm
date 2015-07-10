@@ -8,6 +8,7 @@ in
   imports = [
     ./hosts.nix
     ../tv/base.nix
+    ../tv/config/consul-client.nix
     ../tv/exim-retiolum.nix
     ../tv/environment.nix
     ../tv/sanitize.nix
