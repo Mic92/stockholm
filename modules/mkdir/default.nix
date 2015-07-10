@@ -60,16 +60,10 @@ in
     tcpdump
   ];
 
-  security.rtkit.enable = false;
-
-  services.cron.enable = false;
-
   services.journald.extraConfig = ''
     SystemMaxUse=1G
     RuntimeMaxUse=128M
   '';
-
-  services.ntp.enable = false;
 
   services.openssh = {
     enable = true;

@@ -238,16 +238,7 @@ in
     ];
   };
 
-  security.rtkit.enable = false;
-  services.nscd.enable = false;
-  services.ntp.enable = false;
   #services.dbus.enable = true; # rqd4 wpa_supplicant
-
-  services.sshd.enable = true;
-
-  # vixiecron sucks
-  services.cron.enable = false;
-  services.fcron.enable = true;
 
   fonts.fonts = [
     pkgs.xlibs.fontschumachermisc

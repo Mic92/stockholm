@@ -324,11 +324,6 @@ in
   #  '';
   #};
 
-  security.rtkit.enable = false;
-
-  services.cron.enable = false;
-  services.nscd.enable = false;
-  services.ntp.enable = false;
   #services.dbus.enable = true; # rqd4 wpa_supplicant
 
   services.logind.extraConfig = ''
