@@ -8,8 +8,6 @@
 with builtins;
 with lib;
 let
-  service-name = "consul";
-
   cfg = config.tv.consul;
 
   out = {
