@@ -121,7 +121,6 @@ in
       ExecStart = "${tinc}/sbin/tincd -c ${confDir} -d 0 -U ${user} -D";
       SyslogIdentifier = "retiolum-tincd";
     };
-    restartIfChanged = true;
   };
 
   users.extraUsers = singleton {
