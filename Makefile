@@ -17,6 +17,8 @@ deploy:;@
 		src=$$2
 		rsync \
 			--exclude .git \
+			--exclude .graveyard \
+			--exclude old \
 			--rsync-path="mkdir -p \"$$dst\" && rsync" \
 			--usermap=\*:0 \
 			--groupmap=\*:0 \
