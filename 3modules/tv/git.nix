@@ -1,4 +1,10 @@
-arg@{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
+
+# TODO unify logging of shell scripts to user and journal
+# TODO move all scripts to ${etcDir}, so ControlMaster connections
+#       immediately pick up new authenticators
+# TODO when authorized_keys changes, then restart ssh
+#       (or kill already connected users somehow)
 
 with builtins;
 with lib;
@@ -11,7 +17,8 @@ let
     ];
     options.tv.git = api;
     config = mkIf cfg.enable (mkMerge [
-      imp
+      (mkIf cfg.cgit cgit-imp)
+      git-imp
     ]);
   };
 
@@ -103,7 +110,7 @@ let
     };
   };
 
-  imp = {
+  git-imp = {
     system.activationScripts.git-init = "${init-script}";
     
     # TODO maybe put all scripts here and then use PATH?
@@ -131,6 +138,97 @@ let
         mapAttrsToList (_: makeAuthorizedKey git-ssh-command) cfg.users;
       uid = 112606723; # genid git
     };
+  };
+
+  cgit-imp = {
+    users.extraUsers = lib.singleton {
+      inherit (fcgitwrap-user) group name uid;
+      home = toString (pkgs.runCommand "empty" {} "mkdir -p $out");
+    };
+
+    users.extraGroups = lib.singleton {
+      inherit (fcgitwrap-group) gid name;
+    };
+
+    services.fcgiwrap = {
+      enable = true;
+      user = fcgitwrap-user.name;
+      group = fcgitwrap-user.group;
+      # socketAddress = "/run/fcgiwrap.sock" (default)
+      # socketType = "unix" (default)
+    };
+
+    environment.etc."cgitrc".text = ''
+      css=/cgit-static/cgit.css
+      logo=/cgit-static/cgit.png
+
+      # if you do not want that webcrawler (like google) index your site
+      robots=noindex, nofollow
+
+      virtual-root=/cgit
+
+      # TODO make this nicer (and/or somewhere else)
+      cache-root=/tmp/cgit
+
+      cache-size=1000
+      enable-commit-graph=1
+      enable-index-links=1
+      enable-index-owner=0
+      enable-log-filecount=1
+      enable-log-linecount=1
+      enable-remote-branches=1
+
+      root-title=public repositories at ${config.networking.hostName}
+      root-desc=keep calm and engage
+
+      snapshots=0
+      max-stats=year
+
+      ${concatMapStringsSep "\n" (repo: ''
+        repo.url=${repo.name}
+        repo.path=${cfg.dataDir}/${repo.name}
+        ${optionalString (repo.section != null) "repo.section=${repo.section}"}
+        ${optionalString (repo.desc != null) "repo.desc=${repo.desc}"}
+      '') (filter isPublicRepo (attrValues cfg.repos))}
+    '';
+
+    system.activationScripts.cgit = ''
+      mkdir -m 0700 -p /tmp/cgit
+      chown ${toString fcgitwrap-user.uid}:${toString fcgitwrap-group.gid} /tmp/cgit
+    '';
+
+    tv.nginx = {
+      enable = true;
+      retiolum-locations = [
+        (nameValuePair "/cgit/" ''
+          include             ${pkgs.nginx}/conf/fastcgi_params;
+          fastcgi_param       SCRIPT_FILENAME ${pkgs.cgit}/cgit/cgit.cgi;
+          fastcgi_split_path_info ^(/cgit/?)(.+)$;
+          fastcgi_param       PATH_INFO       $fastcgi_path_info;
+          fastcgi_param       QUERY_STRING    $args;
+          fastcgi_param       HTTP_HOST       $server_name;
+          fastcgi_pass        unix:${config.services.fcgiwrap.socketAddress};
+        '')
+        (nameValuePair "= /cgit" ''
+          return 301 /cgit/;
+        '')
+        (nameValuePair "/cgit-static/" ''
+          root ${pkgs.cgit}/cgit;
+          rewrite ^/cgit-static(/.*)$ $1 break;
+        '')
+      ];
+    };
+  };
+
+  fcgitwrap-user = {
+    name = "fcgiwrap";
+    uid = 2851179180; # genid fcgiwrap
+    group = "fcgiwrap";
+  };
+
+  fcgitwrap-group = {
+    name = "fcgiwrap";
+    gid = 2851179180; # genid fcgiwrap
   };
 
 
@@ -368,39 +466,3 @@ let
 
 in
 out
-
-
-
-
-
-
-
-
-
-
-
-#let
-#  inherit (lib) mkIf mkMerge;
-#
-#  cfg = config.tv.git;
-#  arg' = arg // { inherit cfg; };
-#in
-#
-## TODO unify logging of shell scripts to user and journal
-## TODO move all scripts to ${etcDir}, so ControlMaster connections
-##       immediately pick up new authenticators
-## TODO when authorized_keys changes, then restart ssh
-##       (or kill already connected users somehow)
-#
-#{
-#  imports = [
-#    ../../3modules/tv/nginx.nix
-#  ];
-#
-#  options.tv.git = import ./options.nix arg';
-#
-#  config = mkIf cfg.enable (mkMerge [
-#    (import ./config.nix arg')
-#    (mkIf cfg.cgit (import ./cgit.nix arg'))
-#  ]);
-#}
