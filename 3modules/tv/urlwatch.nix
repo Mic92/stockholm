@@ -10,6 +10,12 @@ with lib;
 let
   cfg = config.tv.urlwatch;
 
+  # TODO assert sendmail's existence
+  out = {
+    options.tv.urlwatch = api;
+    config = mkIf cfg.enable imp;
+  };
+
   api = {
     enable = mkEnableOption "tv.urlwatch";
 
@@ -57,7 +63,7 @@ let
 
   urlsFile = toFile "urls" (concatStringsSep "\n" cfg.urls);
 
-  impl = {
+  imp = {
     systemd.timers.urlwatch = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
@@ -131,18 +137,4 @@ let
   };
 
 in
-
-{
-  # TODO
-  #imports = [
-  #  ./exim
-  #];
-  #config = mkIf cfg.enable
-  #  (if config.tv.exim.enable
-  #    then impl
-  #    else throw "tv.exim must be enabled when enabling tv.urlwatch");
-
-  options.tv.urlwatch = api;
-  
-  config = impl;
-}
+out
