@@ -39,9 +39,6 @@ let
       type = types.str;
       default = "/etc/git";
     };
-    rules = mkOption {
-      type = types.unspecified;
-    };
     repos = mkOption {
       type = types.attrsOf (types.submodule ({
         options = {
@@ -101,6 +98,25 @@ let
       description = ''
         Repositories.
       '';
+    };
+    root-desc = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Text printed below the heading on the repository index page.
+        Default value: "a fast webinterface for the git dscm".
+      '';
+    };
+    root-title = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Text printed as heading on the repository index page.
+        Default value: "Git Repository Browser".
+      '';
+    };
+    rules = mkOption {
+      type = types.unspecified;
     };
     users = mkOption {
       type = types.unspecified;
@@ -175,8 +191,8 @@ let
       enable-log-linecount=1
       enable-remote-branches=1
 
-      root-title=public repositories at ${config.networking.hostName}
-      root-desc=keep calm and engage
+      ${optionalString (cfg.root-title != null) "root-title=${cfg.root-title}"}
+      ${optionalString (cfg.root-desc != null) "root-desc=${cfg.root-desc}"}
 
       snapshots=0
       max-stats=year
