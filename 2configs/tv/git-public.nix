@@ -79,5 +79,7 @@ in
   tv.git = {
     enable = true;
     inherit repos rules users;
+    root-title = "public repositories at ${config.networking.hostName}";
+    root-desc = "keep calm and engage";
   };
 }
