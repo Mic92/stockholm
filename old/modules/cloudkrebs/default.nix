@@ -3,7 +3,7 @@
 {
   imports = [
     ../tv/base-cac-CentOS-7-64bit.nix
-    ../lass/retiolum-cloudkrebs.nix
+    ./retiolum.nix
     ./networking.nix
     ../../secrets/cloudkrebs-pw.nix
     ../lass/sshkeys.nix
@@ -18,8 +18,10 @@
 
   nix.maxJobs = 1;
 
-  #activationScripts
-  #split up and move into base
+  #tmpfiles Unknown group 'lock' workaround:
+  users.extraGroups = {
+    lock.gid = 10001;
+  };
 
   #TODO move into modules
   users.extraUsers = {

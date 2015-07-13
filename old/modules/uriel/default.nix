@@ -3,8 +3,7 @@
 {
   imports = [
     ../lass/desktop-base.nix
-    ../lass/retiolum-uriel.nix
-    ../lass/xserver-lass.nix
+    ./retiolum.nix
     ../lass/browsers.nix
     ../lass/programs.nix
     ../lass/games.nix
@@ -18,11 +17,12 @@
     ../lass/bird.nix
     ./repos.nix
     ../lass/chromium-patched.nix
+    ./git.nix
   ];
 
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "45c99e522dcc4ef24cf71dbe38d94a308cb30530";
+    rev = "7ef800430789252dac47f0b67e75a6b9bb616397";
   };
 
   networking.hostName = "uriel";
@@ -105,6 +105,10 @@
 
   environment.systemPackages = with pkgs; [
   ];
+
+  #for google hangout
+
+  users.extraUsers.google.extraGroups = [ "audio" "video" ];
 
 
   #users.extraGroups = {

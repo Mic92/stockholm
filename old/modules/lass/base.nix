@@ -3,6 +3,7 @@
 {
   imports = [
     ./sshkeys.nix
+    ./iptables
   ];
 
   nix.useChroot = true;
@@ -65,6 +66,10 @@
     '';
   };
 
+  security.setuidPrograms = [
+    "sendmail"
+  ];
+
   services.gitolite = {
     enable = true;
     dataDir = "/home/gitolite";
@@ -84,27 +89,41 @@
     RuntimeMaxUse=128M
   '';
 
-  networking.firewall = {
+  lass.iptables = {
     enable = true;
-
-    allowedTCPPorts = [
-      22
-    ];
-
-    extraCommands = ''
-      iptables -A INPUT -j ACCEPT -m conntrack --ctstate RELATED,ESTABLISHED
-      iptables -A INPUT -j ACCEPT -i lo
-      iptables -A INPUT -j ACCEPT -p icmp
-
-      #iptables -N Retiolum
-      iptables -A INPUT -j Retiolum -i retiolum
-      iptables -A Retiolum -j ACCEPT -m conntrack --ctstate RELATED,ESTABLISHED
-      iptables -A Retiolum -j REJECT -p tcp --reject-with tcp-reset
-      iptables -A Retiolum -j REJECT -p udp --reject-with icmp-port-unreachable
-      iptables -A Retiolum -j REJECT        --reject-with icmp-proto-unreachable
-      iptables -A Retiolum -j REJECT
-    '';
-
-    extraStopCommands = "iptables -F";
+    tables = {
+      filter.INPUT.policy = "DROP";
+      filter.FORWARD.policy = "DROP";
+      filter.INPUT.rules = [
+        { predicate = "-i lo"; target = "ACCEPT"; }
+        { predicate = "-m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; }
+        { predicate = "-p icmp"; target = "ACCEPT"; }
+        { predicate = "-p tcp --dport 22"; target = "ACCEPT"; }
+      ];
+    };
   };
+
+  #Networking.firewall = {
+  #  enable = true;
+
+  #  allowedTCPPorts = [
+  #    22
+  #  ];
+
+  #  extraCommands = ''
+  #    iptables -A INPUT -j ACCEPT -m conntrack --ctstate RELATED,ESTABLISHED
+  #    iptables -A INPUT -j ACCEPT -i lo
+  #    #http://serverfault.com/questions/84963/why-not-block-icmp
+  #    iptables -A INPUT -j ACCEPT -p icmp
+
+  #    #TODO: fix Retiolum firewall
+  #    #iptables -N RETIOLUM
+  #    #iptables -A INPUT -j RETIOLUM -i retiolum
+  #    #iptables -A RETIOLUM -j ACCEPT -m conntrack --ctstate RELATED,ESTABLISHED
+  #    #iptables -A RETIOLUM -j REJECT -p tcp --reject-with tcp-reset
+  #    #iptables -A RETIOLUM -j REJECT -p udp --reject-with icmp-port-unreachable
+  #    #iptables -A RETIOLUM -j REJECT        --reject-with icmp-proto-unreachable
+  #    #iptables -A RETIOLUM -j REJECT
+  #  '';
+  #};
 }

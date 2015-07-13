@@ -35,6 +35,15 @@
         extraConfig = "option hook.post-receive = irc-announce";
       };
 
+      emse-drywall = {
+        users = {
+          lass = "RW+";
+          uriel = "R";
+          tv = "R";
+        };
+        extraConfig = "option hook.post-receive = irc-announce";
+      };
+
       emse-hsdb = {
         users = {
           lass = "RW+";

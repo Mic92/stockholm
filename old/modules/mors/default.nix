@@ -5,8 +5,7 @@
     ../lass/xresources.nix
     ../lass/desktop-base.nix
     ../lass/programs.nix
-    ../lass/retiolum-mors.nix
-    ../lass/xserver-lass.nix
+    ./retiolum.nix
     ../tv/synaptics.nix
     ../lass/bitcoin.nix
     ../lass/browsers.nix
@@ -31,7 +30,7 @@
 
   nixpkgs = {
     url = "https://github.com/Lassulus/nixpkgs";
-    rev = "45c99e522dcc4ef24cf71dbe38d94a308cb30530";
+    rev = "7ef800430789252dac47f0b67e75a6b9bb616397";
   };
 
   networking.hostName = "mors";
@@ -110,6 +109,7 @@
     SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:0c:a7:63", NAME="et0"
   '';
 
+  #TODO activationScripts seem broken, fix them!
   #activationScripts
   #split up and move into base
   system.activationScripts.powertopTunables = ''
@@ -141,10 +141,18 @@
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1c.1/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1c.4/power/control'
   '';
-  system.activationScripts.trackpoint = ''
-    echo 0 > '/sys/devices/platform/i8042/serio1/serio2/speed'
-    echo 220 > '/sys/devices/platform/i8042/serio1/serio2/sensitivity'
-  '';
+
+  hardware.trackpoint = {
+    enable = true;
+    sensitivity = 220;
+    speed = 0;
+    emulateWheel = true;
+  };
+
+  #system.activationScripts.trackpoint = ''
+  #  echo 0 > '/sys/devices/platform/i8042/serio1/serio2/speed'
+  #  echo 220 > '/sys/devices/platform/i8042/serio1/serio2/sensitivity'
+  #'';
 
   services.xserver = {
     videoDriver = "intel";
@@ -201,6 +209,9 @@
     ];
   };
 
+  services.mongodb = {
+    enable = true;
+  };
   #services.ircdHybrid = {
   #  enable = true;
 

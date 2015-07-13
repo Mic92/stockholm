@@ -2,13 +2,13 @@
 
 {
   imports = [
-    ../tv/retiolum.nix
+    ../tv/retiolum
   ];
 
-  services.retiolum = {
+  tv.retiolum = {
     enable = true;
-    hosts = ../../hosts;
-    privateKeyFile = "/etc/nixos/secrets/uriel.retiolum.rsa_key.priv";
+    hosts = <retiolum-hosts>;
+    privateKeyFile = "/etc/nixos/secrets/mors.retiolum.rsa_key.priv";
     connectTo = [
       "fastpoke"
       "gum"

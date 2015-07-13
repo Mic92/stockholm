@@ -20,7 +20,7 @@
         #ssl_dh_params = "etc/dh.pem";
         #ssld_count = 1;
 
-        #default_max_clients = 1024;
+        default_max_clients = 10000;
         #nicklen = 30;
       };
 
@@ -40,21 +40,26 @@
         sslport = 9999;
       };
 
+      class "users" {
+        ping_time = 2 minutes;
+        number_per_ident = 200;
+        number_per_ip = 200;
+        number_per_ip_global = 500;
+        cidr_ipv4_bitlen = 24;
+        cidr_ipv6_bitlen = 64;
+        number_per_cidr = 9000;
+        max_number = 10000;
+        sendq = 400 kbytes;
+      };
+
+      exempt {
+        ip = "127.0.0.1";
+      };
+
       auth {
         user = "*@*";
         class = "users";
-      };
-
-      class "users" {
-        ping_time = 2 minutes;
-        number_per_ident = 10;
-        number_per_ip = 10;
-        number_per_ip_global = 50;
-        cidr_ipv4_bitlen = 24;
-        cidr_ipv6_bitlen = 64;
-        number_per_cidr = 200;
-        max_number = 3000;
-        sendq = 400 kbytes;
+        flags = exceed_limit;
       };
 
       channel {

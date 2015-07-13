@@ -2,10 +2,10 @@
 
 {
   imports = [
-    ../tv/retiolum.nix
+    ../tv/retiolum
   ];
 
-  services.retiolum = {
+  tv.retiolum = {
     enable = true;
     hosts = ../../hosts;
     privateKeyFile = "/etc/nixos/secrets/cloudkrebs.retiolum.rsa_key.priv";
