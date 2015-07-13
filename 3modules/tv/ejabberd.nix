@@ -11,10 +11,7 @@ let
   };
 
   api = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-    };
+    enable = mkEnableOption "tv.ejabberd";
 
     certFile = mkOption {
       type = types.str;

@@ -11,10 +11,7 @@ let
   };
 
   api = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-    };
+    enable = mkEnableOption "tv.iptables";
 
     input-internet-accept-new-tcp = mkOption {
       type = with types; listOf str;

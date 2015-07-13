@@ -21,12 +21,8 @@ let
   };
 
   api = {
-    # TODO inherit (lib) api.options.enable; oder so
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "enable tv.consul";
-    };
+    enable = mkEnableOption "tv.consul";
+
     dc = mkOption {
       type = types.unspecified;
     };

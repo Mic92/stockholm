@@ -1,9 +1,7 @@
 { lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.tv.identity;
 
   out = {
@@ -12,10 +10,8 @@ let
   };
 
   api = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-    };
+    enable = mkEnableOption "tv.identity";
+
     self = mkOption {
       type = types.unspecified;
     };

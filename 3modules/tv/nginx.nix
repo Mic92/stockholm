@@ -11,11 +11,7 @@ let
   };
 
   api = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable nginx.";
-    };
+    enable = mkEnableOption "tv.nginx";
 
     retiolum-locations = mkOption {
       type = with types; listOf (attrsOf str);

@@ -11,11 +11,7 @@ let
   };
 
   api = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable tinc daemon for Retiolum.";
-    };
+    enable = mkEnableOption "tv.retiolum";
 
     name = mkOption {
       type = types.str;

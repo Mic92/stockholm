@@ -7,25 +7,17 @@
 
 with builtins;
 with lib;
-
 let
   cfg = config.tv.urlwatch;
 
   api = {
+    enable = mkEnableOption "tv.urlwatch";
+
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/urlwatch";
       description = ''
         Directory where the urlwatch service should store its state.
-      '';
-    };
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to enable the urlwatch service.
-        If enabled, then create a timer that calls urlwatch and sends mails
-        whenever something has changed or an error occurs.
       '';
     };
     from = mkOption {

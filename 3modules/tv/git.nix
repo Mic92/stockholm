@@ -23,11 +23,8 @@ let
   };
 
   api = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable Git repository hosting.";
-    };
+    enable = mkEnableOption "tv.git";
+
     cgit = mkOption {
       type = types.bool;
       default = true;
