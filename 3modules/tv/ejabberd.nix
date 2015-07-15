@@ -35,10 +35,9 @@ let
         PermissionsStartOnly = "true";
         SyslogIdentifier = "ejabberd";
         User = user.name;
-        PrivateTmp = "true";
         ExecStartPre = pkgs.writeScript "ejabberd-start" ''
           #! /bin/sh
-          install -o ${user.name} -m 0400 ${cfg.certFile} /tmp/certfile.pem
+          install -o ${user.name} -m 0400 ${cfg.certFile} /etc/ejabberd/ejabberd.pem
         '';
         ExecStart = pkgs.writeScript "ejabberd-service" ''
           #! /bin/sh
@@ -78,7 +77,7 @@ let
      [
       {5222, ejabberd_c2s, [
           starttls,
-          {certfile, "/tmp/certfile.pem"},
+          {certfile, "/etc/ejabberd/ejabberd.pem"},
           {access, c2s},
           {shaper, c2s_shaper},
           {max_stanza_size, 65536}
@@ -95,7 +94,7 @@ let
           ]}
      ]}.
     {s2s_use_starttls, required}.
-    {s2s_certfile, "/tmp/certfile.pem"}.
+    {s2s_certfile, "/etc/ejabberd/ejabberd.pem"}.
     {auth_method, internal}.
     {shaper, normal, {maxrate, 1000}}.
     {shaper, fast, {maxrate, 50000}}.
