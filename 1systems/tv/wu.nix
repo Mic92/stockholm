@@ -463,7 +463,7 @@ with lib;
     192.168.1.12 uriel.gg23
     192.168.1.23 raspi.gg23 raspi
     192.168.1.37 wu.gg23
-    192.168.1.110 nomic.gg23
+    192.168.1.111 nomic.gg23
     192.168.1.124 schnabeldrucker.gg23 schnabeldrucker
   '';
 
