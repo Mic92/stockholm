@@ -33,6 +33,7 @@ with lib;
         ntp # ntpate
 
         # tv
+        bc
         bind # dig
         file
         gitAndTools.qgit
@@ -59,7 +60,6 @@ with lib;
         #ack
         #apache-httpd
         #ascii
-        #bc
         #emacs
         #es
         #esniper
