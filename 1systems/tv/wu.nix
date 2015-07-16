@@ -26,6 +26,7 @@ with lib;
         # shitment
         git
         gnumake
+        parallel
 
         # root
         cryptsetup
@@ -85,7 +86,6 @@ with lib;
         #nix-prefetch-scripts #cvs bug
         #openssl
         #openswan
-        #parallel
         #parted
         #perl
         #powertop
