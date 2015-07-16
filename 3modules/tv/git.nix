@@ -212,7 +212,7 @@ let
 
     tv.nginx = {
       enable = true;
-      retiolum-locations = [
+      servers.default.locations = [
         (nameValuePair "/cgit/" ''
           include             ${pkgs.nginx}/conf/fastcgi_params;
           fastcgi_param       SCRIPT_FILENAME ${pkgs.cgit}/cgit/cgit.cgi;

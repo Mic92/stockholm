@@ -32,7 +32,7 @@ with lib;
       imports = [ ../../3modules/tv/nginx.nix ];
       tv.nginx = {
         enable = true;
-        retiolum-locations = [
+        servers.default.locations = [
           (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
             alias /home/$1/public_html$2;
           '')
