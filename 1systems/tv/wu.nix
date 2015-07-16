@@ -10,6 +10,7 @@ with lib;
     ../../2configs/tv/exim-retiolum.nix
     ../../2configs/tv/git-public.nix
     # TODO git-private.nix
+    ../../2configs/tv/mail-client.nix
     ../../2configs/tv/xserver.nix
     ../../2configs/tv/synaptics.nix # TODO w110er if xserver is enabled
     {
