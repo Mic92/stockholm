@@ -60,8 +60,8 @@ in
 
       nix.useChroot = true;
     }
-
     {
+      # oldvim
       environment.systemPackages = with pkgs; [
         vim
       ];
@@ -77,6 +77,9 @@ in
       environment.extraInit = ''
         EDITOR=vim
       '';
+
+      environment.variables.VIM = "/etc/vim";
+    }
 
       environment.shellAliases = {
         # alias cal='cal -m3'
@@ -97,8 +100,6 @@ in
         # alias view='vim -R'
         dmesg = "dmesg -L --reltime";
       };
-
-      environment.variables.VIM = "/etc/vim";
 
       programs.bash = {
         interactiveShellInit = ''
