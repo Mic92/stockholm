@@ -21,6 +21,103 @@ with lib;
       };
     }
     {
+      environment.systemPackages = with pkgs; [
+
+        # shitment
+        git
+        gnumake
+
+        # root
+        cryptsetup
+        ntp # ntpate
+
+        # tv
+        bind # dig
+        file
+        gitAndTools.qgit
+        gnupg21
+        haskellPackages.hledger
+        htop
+        jq
+        manpages
+        mkpasswd
+        mpv
+        netcat
+        nix-repl
+        nmap
+        p7zip
+        pavucontrol
+        posix_man_pages
+        qrencode
+        sxiv
+        texLive
+        tmux
+        weechat
+        zathura
+
+        #ack
+        #apache-httpd
+        #ascii
+        #bc
+        #emacs
+        #es
+        #esniper
+        #gcc
+        #gptfdisk
+        #graphviz
+        #haskellPackages.cabal2nix
+        #haskellPackages.ghc
+        #haskellPackages.shake
+        #hdparm
+        #i7z
+        #iftop
+        #imagemagick
+        #inotifyTools
+        #iodine
+        #iotop
+        #lshw
+        #lsof
+        #minicom
+        #mtools
+        #ncmpc
+        #neovim
+        #nethogs
+        #nix-prefetch-scripts #cvs bug
+        #openssl
+        #openswan
+        #parallel
+        #parted
+        #perl
+        #powertop
+        #ppp
+        #proot
+        #pythonPackages.arandr
+        #pythonPackages.urlwatch
+        #pythonPackages.youtube-dl
+        #racket
+        #rxvt_unicode-with-plugins
+        #scrot
+        #sec
+        #silver-searcher
+        #sloccount
+        #smartmontools
+        #socat
+        #sshpass
+        #strongswan
+        #sysdig
+        #sysstat
+        #tcpdump
+        #tlsdate
+        #unetbootin
+        #utillinuxCurses
+        #wvdial
+        #xdotool
+        #xkill
+        #xl2tpd
+        #xsel
+      ];
+    }
+    {
       imports = [ ../../3modules/tv/iptables.nix ];
       tv.iptables = {
         enable = true;
