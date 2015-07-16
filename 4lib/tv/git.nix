@@ -120,6 +120,7 @@ let
       port=${toString port}
 
       host=$nick
+      cgit_endpoint=http://cgit.$host
 
       empty=0000000000000000000000000000000000000000
 
@@ -149,15 +150,15 @@ let
         case $receive_mode in
           create)
             #git log --oneline $id2
-            link="http://$host/cgit/$GIT_SSH_REPO/?h=$h"
+            link="$cgit_endpoint/$GIT_SSH_REPO/?h=$h"
             ;;
           delete)
             #git log --oneline $id2
-            link="http://$host/cgit/$GIT_SSH_REPO/ ($h)"
+            link="$cgit_endpoint/$GIT_SSH_REPO/ ($h)"
             ;;
           fast-forward|non-fast-forward)
             #git diff --stat $id..$id2
-            link="http://$host/cgit/$GIT_SSH_REPO/diff/?h=$h&id=$id&id2=$id2"
+            link="$cgit_endpoint/$GIT_SSH_REPO/diff/?h=$h&id=$id&id2=$id2"
             ;;
         esac
 

@@ -172,13 +172,13 @@ let
     };
 
     environment.etc."cgitrc".text = ''
-      css=/cgit-static/cgit.css
-      logo=/cgit-static/cgit.png
+      css=/static/cgit.css
+      logo=/static/cgit.png
 
       # if you do not want that webcrawler (like google) index your site
       robots=noindex, nofollow
 
-      virtual-root=/cgit
+      virtual-root=/
 
       # TODO make this nicer (and/or somewhere else)
       cache-root=/tmp/cgit
@@ -212,24 +212,26 @@ let
 
     tv.nginx = {
       enable = true;
-      servers.default.locations = [
-        (nameValuePair "/cgit/" ''
-          include             ${pkgs.nginx}/conf/fastcgi_params;
-          fastcgi_param       SCRIPT_FILENAME ${pkgs.cgit}/cgit/cgit.cgi;
-          fastcgi_split_path_info ^(/cgit/?)(.+)$;
-          fastcgi_param       PATH_INFO       $fastcgi_path_info;
-          fastcgi_param       QUERY_STRING    $args;
-          fastcgi_param       HTTP_HOST       $server_name;
-          fastcgi_pass        unix:${config.services.fcgiwrap.socketAddress};
-        '')
-        (nameValuePair "= /cgit" ''
-          return 301 /cgit/;
-        '')
-        (nameValuePair "/cgit-static/" ''
-          root ${pkgs.cgit}/cgit;
-          rewrite ^/cgit-static(/.*)$ $1 break;
-        '')
-      ];
+      servers.cgit = {
+        server-names = [
+          "cgit.${config.networking.hostName}"
+          "cgit.${config.networking.hostName}.retiolum"
+        ];
+        locations = [
+          (nameValuePair "/" ''
+            include             ${pkgs.nginx}/conf/fastcgi_params;
+            fastcgi_param       SCRIPT_FILENAME ${pkgs.cgit}/cgit/cgit.cgi;
+            fastcgi_param       PATH_INFO       $uri;
+            fastcgi_param       QUERY_STRING    $args;
+            fastcgi_param       HTTP_HOST       $server_name;
+            fastcgi_pass        unix:${config.services.fcgiwrap.socketAddress};
+          '')
+          (nameValuePair "/static/" ''
+            root ${pkgs.cgit}/cgit;
+            rewrite ^/static(/.*)$ $1 break;
+          '')
+        ];
+      };
     };
   };
 
