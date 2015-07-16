@@ -1,7 +1,7 @@
 ifndef system
 $(error unbound variable: system)
 else
-include 0make/tv/$(system).makefile
+include 0make/$(LOGNAME)/$(system).makefile
 .ONESHELL:
 .SHELLFLAGS := -eufc
 .PHONY: deploy
@@ -63,7 +63,7 @@ deploy:;@
 		prefetch /root/src/nixpkgs "$$nixpkgs_url" "$$nixpkgs_rev"
 
 		echo build system...
-		NIXOS_CONFIG=/root/src/shitment/1systems/tv/$$system_name.nix \
+		NIXOS_CONFIG=/root/src/shitment/1systems/$(LOGNAME)/$$system_name.nix \
 		NIX_PATH=src \
 			nix-build -Q -A system '<nixpkgs/nixos>'
 
