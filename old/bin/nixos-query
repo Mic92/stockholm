@@ -1,4 +1,0 @@
-#! /bin/sh
-set -euf
-result=$(nix-instantiate -A config."$1" --eval --json '<nixos>')
-echo $result | jq -r .
