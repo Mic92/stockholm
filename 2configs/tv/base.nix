@@ -80,6 +80,10 @@ in
 
       environment.variables.VIM = "/etc/vim";
     }
+    {
+      environment.systemPackages = with pkgs; [
+        rxvt_unicode.terminfo
+      ];
 
       environment.shellAliases = {
         # alias cal='cal -m3'
