@@ -12,6 +12,7 @@
   ##TODO: make steam module
   hardware.opengl.driSupport32Bit = true;
 
+  nixpkgs.config.steam.java = true;
   environment.systemPackages = with pkgs; [
     steam
   ];
