@@ -24,6 +24,12 @@
         ];
       };
     }
+    {
+      imports = [ ../../3modules/tv/identity.nix ];
+      tv.identity = {
+        enable = true;
+      };
+    }
   ];
 
   networking.hostName = "uriel";
