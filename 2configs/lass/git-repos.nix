@@ -121,10 +121,20 @@ in
 {
   imports = [
     ../../3modules/tv/git.nix
+    ../../3modules/lass/iptables.nix
   ];
 
   tv.git = {
     enable = true;
     inherit repos rules users;
   };
+
+  lass.iptables = {
+    tables = {
+      filter.INPUT.rules = [
+        { predicate = "-i retiolum -p tcp --dport 80"; target = "ACCEPT"; }
+      ];
+    };
+  };
+
 }
