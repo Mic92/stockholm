@@ -124,7 +124,7 @@ let
 
       buildRule = tn: cn: rule:
         #target validation test:
-        assert (elemIsIn rule.target ([ "ACCEPT" "REJECT" "DROP" "QUEUE" "LOG" "RETURN" ] ++ ts."${tn}"."${cn}"));
+        assert (elemIsIn rule.target ([ "ACCEPT" "REJECT" "DROP" "QUEUE" "LOG" "RETURN" ] ++ (attrNames ts."${tn}")));
 
         #predicate validation test:
         #maybe use iptables-test
