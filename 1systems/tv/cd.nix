@@ -41,6 +41,14 @@ with lib;
       };
     }
     {
+      imports = [
+        ../../3modules/tv/iptables.nix
+        ../../3modules/tv/nginx.nix
+      ];
+      tv.iptables.input-internet-accept-new-tcp = singleton "http";
+      tv.nginx.servers.cgit.server-names = singleton "cgit.cd.viljetic.de";
+    }
+    {
       imports = [ ../../3modules/tv/retiolum.nix ];
       tv.retiolum = {
         enable = true;
