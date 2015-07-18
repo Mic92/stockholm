@@ -19,6 +19,7 @@ let
     (public "nixos-infest")
     (public "nixpkgs")
     (public "painload")
+    (public "quipper")
     (public "regfish")
     (public' {
       name = "shitment";
@@ -26,6 +27,7 @@ let
     })
     (public "wai-middleware-time")
     (public "web-routes-wai-custom")
+    (public "xintmap")
   ];
 
   users = addNames {
