@@ -2,7 +2,28 @@ arg@{ config, lib, pkgs, ... }:
 
 let
   inherit (pkgs) writeScript writeText;
-  inherit (lib) concatMapStringsSep concatStringsSep attrNames unique fold any attrValues catAttrs filter flatten length hasAttr mkEnableOption mkOption mkIf types;
+
+  inherit (lib)
+    concatMapStringsSep
+    concatStringsSep
+    attrNames
+    unique
+    fold
+    any
+    attrValues
+    catAttrs
+    filter
+    flatten
+    length
+    hasAttr
+    mkEnableOption
+    mkOption
+    mkIf
+    types
+    sort;
+
+  elemIsIn = a: as:
+    any (x: x == a) as;
 
   cfg = config.lass.iptables;
 
