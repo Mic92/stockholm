@@ -49,6 +49,20 @@ with lib;
       tv.nginx.servers.cgit.server-names = singleton "cgit.cd.viljetic.de";
     }
     {
+      # TODO make public_html also available to cd, cd.retiolum (AKA default)
+      imports = [
+        ../../3modules/tv/iptables.nix
+        ../../3modules/tv/nginx.nix
+      ];
+      tv.iptables.input-internet-accept-new-tcp = singleton "http";
+      tv.nginx.servers.public_html = {
+        server-names = singleton "cd.viljetic.de";
+        locations = singleton (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
+          alias /home/$1/public_html$2;
+        '');
+      };
+    }
+    {
       imports = [ ../../3modules/tv/retiolum.nix ];
       tv.retiolum = {
         enable = true;
