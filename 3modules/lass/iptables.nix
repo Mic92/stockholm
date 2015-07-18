@@ -114,20 +114,18 @@ let
             ""
           else
             concatMapStringsSep "\n" (rule: "\n-A ${cn} ${rule}") ([]
-              ++ map buildRule ts."${tn}"."${cn}".rules
+              ++ map (buildRule tn cn) ts."${tn}"."${cn}".rules
             )
         else
           ""
         ;
 
 
-      buildRule = rule:
-        #TODO implement rule validation-test here
-        #
-        #target:
-        #target needs to be an existing chain (in the same table) or ACCEPT, REJECT, DROP, LOG, QUEUE, RETURN
+      buildRule = tn: cn: rule:
+        #target validation test:
+        assert (elemIsIn rule.target ([ "ACCEPT" "REJECT" "DROP" "QUEUE" "LOG" "RETURN" ] ++ ts."${tn}"."${cn}"));
 
-        #predicate:
+        #predicate validation test:
         #maybe use iptables-test
         #TODO: howto exit with evaluation error by shellscript?
           #apperantly not possible from nix because evalatution wouldn't be deterministic.
