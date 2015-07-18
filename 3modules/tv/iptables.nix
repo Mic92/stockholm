@@ -76,7 +76,7 @@ let
           "-m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT"
           "-i lo -j ACCEPT"
         ]
-        ++ map accept-new-tcp cfg.input-internet-accept-new-tcp
+        ++ map accept-new-tcp (unique cfg.input-internet-accept-new-tcp)
         ++ ["-i retiolum -j Retiolum"]
       )}
       ${concatMapStringsSep "\n" (rule: "-A Retiolum ${rule}") ([]
@@ -88,7 +88,7 @@ let
             "-p ipv6-icmp -m icmp6 --icmpv6-type echo-request -j ACCEPT"
           ];
         }."ip${toString iptables-version}tables"
-        ++ map accept-new-tcp cfg.input-retiolum-accept-new-tcp
+        ++ map accept-new-tcp (unique cfg.input-retiolum-accept-new-tcp)
         ++ {
           ip4tables = [
             "-p tcp -j REJECT --reject-with tcp-reset"
