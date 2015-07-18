@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 
+with builtins;
 with lib;
 
 let
@@ -115,6 +116,8 @@ in
           shopt -s histappend histreedit histverify
           shopt -s no_empty_cmd_completion
           complete -d cd
+
+          ${readFile ./bash_completion.sh}
 
           # TODO source bridge
         '';
