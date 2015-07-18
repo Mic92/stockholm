@@ -99,26 +99,27 @@ let
   #todo: differentiate by iptables-version
   buildTables = v: ts:
     let
-      sortedTable = sort (a: b: a.precedence < b.precedence) ts;
 
       declareChain = t: cn:
         #TODO: find out what to do whit these count numbers
         ":${cn} ${t."${cn}".policy} [0:0]";
 
       buildChain = tn: cn:
-      #"${concatStringsSep " " ((attrNames t."${cn}") ++ [cn])}";
+        let
+          sortedRules = sort (a: b: a.precedence < b.precedence) ts."${tn}"."${cn}".rules;
 
-      #TODO: double check should be unneccessary, refactor!
-        if (hasAttr "rules" ts."${tn}"."${cn}") then
-          if (ts."${tn}"."${cn}".rules == null) then
-            ""
+        in
+          #TODO: double check should be unneccessary, refactor!
+          if (hasAttr "rules" ts."${tn}"."${cn}") then
+            if (ts."${tn}"."${cn}".rules == null) then
+              ""
+            else
+              concatMapStringsSep "\n" (rule: "\n-A ${cn} ${rule}") ([]
+                ++ map (buildRule tn cn) sortedRules
+              )
           else
-            concatMapStringsSep "\n" (rule: "\n-A ${cn} ${rule}") ([]
-              ++ map (buildRule tn cn) ts."${tn}"."${cn}".rules
-            )
-        else
-          ""
-        ;
+            ""
+          ;
 
 
       buildRule = tn: cn: rule:
@@ -143,7 +144,7 @@ let
         "\nCOMMIT";
     in
       concatStringsSep "\n" ([]
-        ++ map buildTable (attrNames sortedTable)
+        ++ map buildTable (attrNames ts)
       );
 
 #=====
