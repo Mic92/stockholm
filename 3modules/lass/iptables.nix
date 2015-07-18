@@ -95,10 +95,12 @@ let
     };
   };
 
-  #buildTable :: iptablesAttrSet` -> str
+  #buildTable :: iptablesVersion -> iptablesAttrSet` -> str
   #todo: differentiate by iptables-version
-  buildTables = iptv: ts:
+  buildTables = v: ts:
     let
+      sortedTable = sort (a: b: a.precedence < b.precedence) ts;
+
       declareChain = t: cn:
         #TODO: find out what to do whit these count numbers
         ":${cn} ${t."${cn}".policy} [0:0]";
@@ -106,7 +108,6 @@ let
       buildChain = tn: cn:
       #"${concatStringsSep " " ((attrNames t."${cn}") ++ [cn])}";
 
-      #TODO: sort by precedence
       #TODO: double check should be unneccessary, refactor!
         if (hasAttr "rules" ts."${tn}"."${cn}") then
           if (ts."${tn}"."${cn}".rules == null) then
@@ -144,7 +145,7 @@ let
         "\nCOMMIT";
     in
       concatStringsSep "\n" ([]
-        ++ map buildTable (attrNames ts)
+        ++ map buildTable (attrNames sortedTable)
       );
 
 #=====
