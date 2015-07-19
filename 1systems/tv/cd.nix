@@ -15,6 +15,13 @@ in
     ../../2configs/tv/exim-smarthost.nix
     ../../2configs/tv/git-public.nix
     {
+      imports = [ ../../2configs/tv/charybdis.nix ];
+      tv.charybdis = {
+        enable = true;
+        sslCert = ../../Zcerts/charybdis_cd.crt.pem;
+      };
+    }
+    {
       imports = [ ../../3modules/tv/ejabberd.nix ];
       tv.ejabberd = {
         enable = true;

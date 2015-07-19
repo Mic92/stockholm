@@ -55,7 +55,7 @@ let
           post-receive = git.irc-announce {
             nick = config.networking.hostName; # TODO make this the default
             channel = "#retiolum";
-            server = "ire.retiolum";
+            server = "cd.retiolum";
           };
         };
         public = true;
