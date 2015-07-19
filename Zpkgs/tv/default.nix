@@ -2,6 +2,7 @@
 
 pkgs //
 {
+  charybdis = pkgs.callPackage ./charybdis {};
   dic = pkgs.callPackage ./dic.nix {};
   genid = pkgs.callPackage ./genid.nix {};
   github-hosts-sync = pkgs.callPackage ./github-hosts-sync.nix {};
