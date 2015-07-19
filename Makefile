@@ -1,9 +1,22 @@
-ifndef system
-$(error unbound variable: system)
-else
-include 0make/$(LOGNAME)/$(system).makefile
+#
+# usage:
+#		make system=foo
+#		make systems='foo bar'
+#
+
 .ONESHELL:
 .SHELLFLAGS := -eufc
+
+ifdef systems
+$(systems):
+	parallel \
+		--line-buffer \
+		-j0 \
+		--no-notice \
+		--tagstring {} \
+		-q make systems= system={} ::: $(systems)
+else ifdef system
+include 0make/$(LOGNAME)/$(system).makefile
 .PHONY: deploy
 deploy:;@
 	system_name=$(system)
@@ -69,4 +82,6 @@ deploy:;@
 
 		result/bin/switch-to-configuration switch
 	EOF
+else
+$(error unbound variable: system[s])
 endif
