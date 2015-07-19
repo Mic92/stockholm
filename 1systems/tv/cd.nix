@@ -2,6 +2,10 @@
 
 with lib;
 
+let
+  Zpkgs = import ../../Zpkgs/tv { inherit pkgs; };
+in
+
 {
   imports = [
     ../../2configs/tv/CAC-Developer-2.nix
@@ -65,6 +69,15 @@ with lib;
         server-names = singleton "cd.viljetic.de";
         locations = singleton (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
           alias /home/$1/public_html$2;
+        '');
+      };
+    }
+    {
+      tv.nginx.servers.viljetic = {
+        server-names = singleton "viljetic.de";
+        # TODO directly set root (instead via location)
+        locations = singleton (nameValuePair "/" ''
+          root ${Zpkgs.viljetic-pages};
         '');
       };
     }
