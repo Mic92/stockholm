@@ -31,6 +31,7 @@ in
         git
         gnumake
         parallel
+        Zpkgs.genid
 
         # root
         cryptsetup
