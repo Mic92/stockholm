@@ -18,6 +18,12 @@ with lib;
       };
     }
     {
+      imports = [ ../../3modules/tv/github-hosts-sync.nix ];
+      tv.github-hosts-sync.enable = true;
+      tv.iptables.input-internet-accept-new-tcp =
+        singleton config.tv.github-hosts-sync.port;
+    }
+    {
       imports = [ ../../3modules/tv/identity.nix ];
       tv.identity = {
         enable = true;
