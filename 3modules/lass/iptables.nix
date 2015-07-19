@@ -2,7 +2,28 @@ arg@{ config, lib, pkgs, ... }:
 
 let
   inherit (pkgs) writeScript writeText;
-  inherit (lib) concatMapStringsSep concatStringsSep attrNames unique fold any attrValues catAttrs filter flatten length hasAttr mkEnableOption mkOption mkIf types;
+
+  inherit (lib)
+    concatMapStringsSep
+    concatStringsSep
+    attrNames
+    unique
+    fold
+    any
+    attrValues
+    catAttrs
+    filter
+    flatten
+    length
+    hasAttr
+    mkEnableOption
+    mkOption
+    mkIf
+    types
+    sort;
+
+  elemIsIn = a: as:
+    any (x: x == a) as;
 
   cfg = config.lass.iptables;
 
@@ -74,38 +95,38 @@ let
     };
   };
 
-  #buildTable :: iptablesAttrSet` -> str
+  #buildTable :: iptablesVersion -> iptablesAttrSet` -> str
   #todo: differentiate by iptables-version
-  buildTables = iptv: ts:
+  buildTables = v: ts:
     let
+
       declareChain = t: cn:
         #TODO: find out what to do whit these count numbers
         ":${cn} ${t."${cn}".policy} [0:0]";
 
       buildChain = tn: cn:
-      #"${concatStringsSep " " ((attrNames t."${cn}") ++ [cn])}";
+        let
+          sortedRules = sort (a: b: a.precedence < b.precedence) ts."${tn}"."${cn}".rules;
 
-      #TODO: sort by precedence
-      #TODO: double check should be unneccessary, refactor!
-        if (hasAttr "rules" ts."${tn}"."${cn}") then
-          if (ts."${tn}"."${cn}".rules == null) then
-            ""
+        in
+          #TODO: double check should be unneccessary, refactor!
+          if (hasAttr "rules" ts."${tn}"."${cn}") then
+            if (ts."${tn}"."${cn}".rules == null) then
+              ""
+            else
+              concatMapStringsSep "\n" (rule: "\n-A ${cn} ${rule}") ([]
+                ++ map (buildRule tn cn) sortedRules
+              )
           else
-            concatMapStringsSep "\n" (rule: "\n-A ${cn} ${rule}") ([]
-              ++ map buildRule ts."${tn}"."${cn}".rules
-            )
-        else
-          ""
-        ;
+            ""
+          ;
 
 
-      buildRule = rule:
-        #TODO implement rule validation-test here
-        #
-        #target:
-        #target needs to be an existing chain (in the same table) or ACCEPT, REJECT, DROP, LOG, QUEUE, RETURN
+      buildRule = tn: cn: rule:
+        #target validation test:
+        assert (elemIsIn rule.target ([ "ACCEPT" "REJECT" "DROP" "QUEUE" "LOG" "RETURN" ] ++ (attrNames ts."${tn}")));
 
-        #predicate:
+        #predicate validation test:
         #maybe use iptables-test
         #TODO: howto exit with evaluation error by shellscript?
           #apperantly not possible from nix because evalatution wouldn't be deterministic.

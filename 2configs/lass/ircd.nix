@@ -83,6 +83,10 @@
         channel_target_change = yes;
         disable_local_channels = no;
       };
+      general {
+        #maybe we want ident someday?
+        disable_auth = yes;
+      };
     '';
   };
 }
