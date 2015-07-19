@@ -2,6 +2,10 @@
 
 with lib;
 
+let
+  Zpkgs = import ../../Zpkgs/tv { inherit pkgs; };
+in
+
 {
   imports = [
     ../../2configs/tv/w110er.nix
@@ -56,6 +60,7 @@ with lib;
         tmux
         weechat
         zathura
+        Zpkgs.dic
 
         #ack
         #apache-httpd
