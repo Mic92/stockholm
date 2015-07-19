@@ -5,19 +5,21 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/atheme/charybdis.git";
-    rev = "43a9b61c427cd0f3fa2c192890b8a48d9ea6fb7f";
-    sha256 = "ae2c8a72e6a29c901f9b51759b542ee12c4ec918050a2d9d65e5635077a0fcef";
+    rev = "61815bf9324e872f51255e09fe37a8c595f94a60";
+    sha256 = "0zsd6xk2cnspc1cvryy2296p3ix4hwjd9k24wmgbh5wzks0wahwy";
   };
 
   patches = [
-     ./remove-setenv.patch
+    ./remove-setenv.patch
   ];
 
   configureFlags = [
     "--enable-epoll"
     "--enable-ipv6"
     "--enable-openssl=${openssl}"
+    "--enable-small-net"
     "--with-program-prefix=charybdis-"
+    "--sysconfdir=/tmp"
   ];
 
   buildInputs = [ bison flex openssl ];
@@ -29,6 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.lassulus ];
     platforms   = stdenv.lib.platforms.linux;
   };
-
-
 }
