@@ -1,0 +1,11 @@
+diff -rN -u old-lentil/src/Lentil/Parse/Syntaxes.hs new-lentil/src/Lentil/Parse/Syntaxes.hs
+--- old-lentil/src/Lentil/Parse/Syntaxes.hs	2015-07-20 23:15:38.600539779 +0200
++++ new-lentil/src/Lentil/Parse/Syntaxes.hs	2015-07-20 23:15:38.600539779 +0200
+@@ -30,6 +30,7 @@
+               | ext `elem` [".pas", ".pp", ".inc"] = Just pascal
+               | ext `elem` [".py"]                 = Just python
+               | ext `elem` [".rb"]                 = Just ruby
++              | ext `elem` [".nix"]                = Just perl -- Nix
+               | ext `elem` [".pl", ".pm", ".t"]    = Just perl
+               | ext `elem` [".sh"]                 = Just perl -- shell
+               | ext `elem` [".txt"]                = Just text
