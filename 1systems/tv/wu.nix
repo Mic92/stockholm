@@ -32,6 +32,7 @@ in
         gnumake
         parallel
         Zpkgs.genid
+        Zpkgs.lentil
 
         # root
         cryptsetup
