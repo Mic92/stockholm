@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 
+with builtins;
 {
   imports = [
     ../../2configs/lass/desktop-base.nix
@@ -28,6 +29,15 @@
       imports = [ ../../3modules/tv/identity.nix ];
       tv.identity = {
         enable = true;
+      };
+    }
+    {
+      users.extraUsers = {
+        root = {
+          openssh.authorizedKeys.keys = map readFile [
+            ../../Zpubkeys/uriel.ssh.pub
+          ];
+        };
       };
     }
   ];
@@ -85,29 +95,6 @@
       Option "FingerHigh" "60"
       Option "FingerLow"  "60"
     '';
-  };
-
-  users.extraUsers = {
-    root = {
-      openssh.authorizedKeys.keys = [
-        config.sshKeys.lass.pub
-      ];
-    };
-    mainUser = {
-      uid = 1337;
-      name = "lass";
-      #isNormalUser = true;
-      group = "users";
-      createHome = true;
-      home = "/home/lass";
-      useDefaultShell = true;
-      isSystemUser = false;
-      description = "lassulus";
-      extraGroups = [ "wheel" "audio" ];
-      openssh.authorizedKeys.keys = [
-        config.sshKeys.lass.pub
-      ];
-    };
   };
 
   environment.systemPackages = with pkgs; [

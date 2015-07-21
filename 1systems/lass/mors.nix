@@ -168,21 +168,6 @@
     '';
   };
 
-  users.extraUsers = {
-    #main user
-    mainUser = {
-      uid = 1337;
-      name = "lass";
-      #isNormalUser = true;
-      group = "users";
-      createHome = true;
-      home = "/home/lass";
-      useDefaultShell = true;
-      isSystemUser = false;
-      extraGroups = [ "wheel" "audio" ];
-    };
-  };
-
   environment.systemPackages = with pkgs; [
   ];
 

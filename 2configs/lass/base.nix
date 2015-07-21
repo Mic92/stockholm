@@ -3,14 +3,36 @@
 with lib;
 {
   imports = [
-    ./sshkeys.nix
     ../../3modules/lass/iptables.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
                  (import /root/src/secrets/hashedPasswords.nix);
     }
-
+    {
+      users.extraUsers = {
+        root = {
+          openssh.authorizedKeys.keys = map readFile [
+            ../../Zpubkeys/lass.ssh.pub
+          ];
+        };
+        mainUser = {
+          name = "lass";
+          uid = 1337;
+          home = "/home/lass";
+          group = "users";
+          createHome = true;
+          useDefaultShell = true;
+          extraGroups = [
+            "audio"
+            "wheel"
+          ];
+          openssh.authorizedKeys.keys = map readFile [
+            ../../Zpubkeys/lass.ssh.pub
+          ];
+        };
+      };
+    }
   ];
 
   nix.useChroot = true;
