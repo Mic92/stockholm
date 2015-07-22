@@ -39,9 +39,6 @@ builtins // lib // rec {
       in
         xsn >= sn && substring (xsn - sn) sn xs == s ;
 
-  removeSuffix =
-    s : xs : substring 0 (stringLength xs - stringLength s) xs;
-
   # setMap :: (String -> a -> b) -> Set String a -> [b]
   #setMap = f: xs: map (k : f k (getAttr k xs)) (attrNames xs);
 
@@ -73,9 +70,6 @@ builtins // lib // rec {
         nets = mkOption {
           type = attrsOf net;
           apply = x: assert hasAttr "retiolum" x; x;
-        };
-        search = mkOption {
-          type = hostname;
         };
       };
     };

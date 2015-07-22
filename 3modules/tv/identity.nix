@@ -16,14 +16,18 @@ let
       type = types.host;
     };
 
-    others = mkOption {
-      type = types.host;
-      default = filterAttrs (name: _host: name != cfg.self.name) cfg.hosts;
-    };
+    #others = mkOption {
+    #  type = types.host;
+    #  default = filterAttrs (name: _host: name != cfg.self.name) cfg.hosts;
+    #};
 
     hosts = mkOption {
       type = with types; attrsOf host;
       apply = mapAttrs (name: value: value // { inherit name; });
+    };
+
+    search = mkOption {
+      type = types.hostname;
     };
   };
 
@@ -36,7 +40,7 @@ let
             let
               aliases = toString (unique (longs ++ shorts));
               longs = (splitByProvider net.aliases).hosts;
-              shorts = map (removeSuffix ".${cfg.self.search}") longs;
+              shorts = map (removeSuffix ".${cfg.search}") longs;
             in
             map (addr: "${addr} ${aliases}") net.addrs
           ) host.nets

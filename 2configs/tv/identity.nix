@@ -4,6 +4,7 @@
   imports = [ ../../3modules/tv/identity.nix ];
   tv.identity = {
     enable = true;
+    search = "retiolum";
     hosts = {
       cd = {
         cores = 2;
@@ -27,7 +28,6 @@
             ];
           };
         };
-        search = "retiolum";
       };
       mkdir = {
         cores = 1;
@@ -41,7 +41,6 @@
             ];
           };
         };
-        search = "retiolum";
       };
       nomic = {
         cores = 2;
@@ -55,7 +54,6 @@
             ];
           };
         };
-        search = "retiolum";
       };
       rmdir = {
         cores = 1;
@@ -70,7 +68,6 @@
             ];
           };
         };
-        search = "retiolum";
       };
       wu = {
         cores = 4;
@@ -84,7 +81,6 @@
             ];
           };
         };
-        search = "retiolum";
       };
     };
   };
