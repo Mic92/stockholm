@@ -92,6 +92,9 @@ builtins // lib // rec {
           # TODO nonEmptyListOf hostname
           type = listOf hostname;
         };
+        tinc-key = mkOption {
+          type = str;
+        };
       };
     });
 
