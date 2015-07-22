@@ -11,11 +11,8 @@ with lib;
     ../../2configs/tv/exim-smarthost.nix
     ../../2configs/tv/git-public.nix
     {
-      imports = [ ../../3modules/tv/identity.nix ];
-      tv.identity = {
-        enable = true;
-        self = config.tv.identity.hosts.mkdir;
-      };
+      imports = [ ../../2configs/tv/identity.nix ];
+      tv.identity.self = config.tv.identity.hosts.mkdir;
     }
     {
       imports = [ ../../3modules/tv/iptables.nix ];

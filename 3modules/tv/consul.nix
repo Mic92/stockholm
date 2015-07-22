@@ -5,8 +5,7 @@
 # TODO consul-bootstrap HOST  that actually does is
 # TODO tools to inspect state of a cluster in outage state
 
-with builtins;
-with lib;
+with import ../../4lib/tv { inherit lib pkgs; };
 let
   cfg = config.tv.consul;
 
@@ -24,10 +23,10 @@ let
     enable = mkEnableOption "tv.consul";
 
     dc = mkOption {
-      type = types.unspecified;
+      type = types.label;
     };
     hosts = mkOption {
-      type = with types; listOf unspecified;
+      type = with types; listOf host;
     };
     encrypt-file = mkOption {
       type = types.str; # TODO path (but not just into store)
@@ -38,7 +37,7 @@ let
       default = "/var/lib/consul";
     };
     self = mkOption {
-      type = types.unspecified;
+      type = types.host;
     };
     server = mkOption {
       type = types.bool;
@@ -56,9 +55,11 @@ let
     log_level = "INFO";
     #node_name =
     server = cfg.server;
-    bind_addr = cfg.self.addr; # TODO cfg.addr
     enable_syslog = true;
-    retry_join = map (getAttr "addr") (filter (host: host.fqdn != cfg.self.fqdn) cfg.hosts);
+    retry_join =
+      # TODO allow consul in other nets than retiolum [maybe]
+      concatMap (host: host.nets.retiolum.addrs)
+                (filter (host: host.name != cfg.self.name) cfg.hosts);
     leave_on_terminate = true;
   } // optionalAttrs cfg.server {
     bootstrap_expect = length cfg.hosts;

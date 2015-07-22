@@ -35,11 +35,8 @@ in
         singleton config.tv.github-hosts-sync.port;
     }
     {
-      imports = [ ../../3modules/tv/identity.nix ];
-      tv.identity = {
-        enable = true;
-        self = config.tv.identity.hosts.cd;
-      };
+      imports = [ ../../2configs/tv/identity.nix ];
+      tv.identity.self = config.tv.identity.hosts.cd;
     }
     {
       imports = [ ../../3modules/tv/iptables.nix ];

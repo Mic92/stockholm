@@ -1,12 +1,10 @@
 { lib, pkgs, ... }:
 
 with builtins;
+with lib;
 
-let
-  inherit (lib) mapAttrs stringAsChars;
-in
+builtins // lib // rec {
 
-rec {
   git = import ./git.nix {
     lib = lib // {
       inherit addNames;
@@ -58,5 +56,63 @@ rec {
       if isSafeChar c then c
       else if c == "\n" then "'\n'"
       else "\\${c}");
+
+  types = lib.types // (with lib.types; rec {
+
+    host = submodule {
+      options = {
+        name = mkOption {
+          type = label;
+        };
+        dc = mkOption {
+          type = label;
+        };
+        cores = mkOption {
+          type = positive;
+        };
+        nets = mkOption {
+          type = attrsOf net;
+          apply = x: assert hasAttr "retiolum" x; x;
+        };
+        search = mkOption {
+          type = hostname;
+        };
+      };
+    };
+
+    net = submodule ({ config, ... }: {
+      options = {
+        addrs = mkOption {
+          type = listOf addr;
+          apply = _: config.addrs4 ++ config.addrs6;
+        };
+        addrs4 = mkOption {
+          type = listOf addr4;
+          default = [];
+        };
+        addrs6 = mkOption {
+          type = listOf addr6;
+          default = [];
+        };
+        aliases = mkOption {
+          # TODO nonEmptyListOf hostname
+          type = listOf hostname;
+        };
+      };
+    });
+
+    positive = mkOptionType {
+      name = "positive integer";
+      check = x: isInt x && x > 0;
+      merge = mergeOneOption;
+    };
+
+    # TODO
+    addr = str;
+    addr4 = str;
+    addr6 = str;
+    hostname = str;
+    label = str;
+  });
 
 }
