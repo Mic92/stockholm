@@ -9,7 +9,7 @@
       cd = {
         cores = 2;
         dc = "tv"; #dc = "cac";
-        nets = {
+        nets = rec {
           internet = {
             addrs4 = ["162.219.7.216"];
             aliases = [
@@ -20,13 +20,14 @@
             ];
           };
           retiolum = {
+            via = internet;
             addrs4 = ["10.243.113.222"];
             addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af3"];
             aliases = [
               "cd.retiolum"
               "cgit.cd.retiolum"
             ];
-            tinc-key = ''
+            tinc.pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
               MIICCgKCAgEAvmCBVNKT/Su4v9nl/Nm3STPo5QxWPg7xEkzIs3Oh39BS8+r6/7UQ
               rebib7mczb+ebZd+Rg2yFoGrWO8cmM0VcLy5bYRMK7in8XroLEjWecNNM4TRfNR4
@@ -47,15 +48,19 @@
       mkdir = {
         cores = 1;
         dc = "tv"; #dc = "cac";
-        nets = {
+        nets = rec {
+          internet = {
+            addrs4 = ["162.248.167.241"];
+          };
           retiolum = {
+            via = internet;
             addrs4 = ["10.243.113.223"];
             addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af4"];
             aliases = [
               "mkdir.retiolum"
               "cgit.mkdir.retiolum"
             ];
-            tinc-key = ''
+            tinc.pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
               MIIBCgKCAQEAuyfM+3od75zOYXqnqRMAt+yp/4z/vC3vSWdjUvEmCuM23c5BOBw+
               dKqbWoSPTzOuaQ0szdL7a6YxT+poSUXd/i3pPz59KgCl192rd1pZoJKgvoluITev
@@ -71,7 +76,7 @@
       nomic = {
         cores = 2;
         dc = "tv"; #dc = "gg23";
-        nets = {
+        nets = rec {
           retiolum = {
             addrs4 = ["10.243.0.110"];
             addrs6 = ["42:02d5:733f:d6da:c0f5:2bb7:2b18:09ec"];
@@ -79,7 +84,7 @@
               "nomic.retiolum"
               "cgit.nomic.retiolum"
             ];
-            tinc-key = ''
+            tinc.pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
               MIIBCgKCAQEAwb8Yk/YRc17g2J9n960p6j4W/l559OPyuMPdGJ4DmCm3WNQtxoa+
               qTFUiDiI85BcmfqnSeddLG8zTC2XnSlIvCRMJ9oKzppFM4PX4OTAaJZVE5WyCQhw
@@ -95,15 +100,19 @@
       rmdir = {
         cores = 1;
         dc = "tv"; #dc = "cac";
-        nets = {
+        nets = rec {
+          internet = {
+            addrs4 = ["167.88.44.94"];
+          };
           retiolum = {
+            via = internet;
             addrs4 = ["10.243.113.224"];
             addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af5"];
             aliases = [
               "rmdir.retiolum"
               "cgit.rmdir.retiolum"
             ];
-            tinc-key = ''
+            tinc.pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
               MIIBCgKCAQEA+twy4obSbJdmZLfBoe9YYeyoDnXkO/WPa2D6Eh6jXrWk5fbhBjRf
               i3EAQfLiXXFJX3E8V8YvJyazXklI19jJtCLDiu/F5kgJJfyAkWHH+a/hcg7qllDM
@@ -127,7 +136,7 @@
             aliases = [
               "wu.retiolum"
             ];
-            tinc-key = ''
+            tinc.pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
               MIIBCgKCAQEArDvU0cuBsVqTjCX2TlWL4XHSy4qSjUhjrDvUPZSKTVN7x6OENCUn
               M27g9H7j4/Jw/8IHoJLiKnXHavOoc9UJM+P9Fla/4TTVADr69UDSnLgH+wGiHcEg

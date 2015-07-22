@@ -76,6 +76,10 @@ builtins // lib // rec {
 
     net = submodule ({ config, ... }: {
       options = {
+        via = mkOption {
+          type = nullOr net;
+          default = null;
+        };
         addrs = mkOption {
           type = listOf addr;
           apply = _: config.addrs4 ++ config.addrs6;
@@ -92,8 +96,23 @@ builtins // lib // rec {
           # TODO nonEmptyListOf hostname
           type = listOf hostname;
         };
-        tinc-key = mkOption {
-          type = str;
+        tinc = mkOption {
+          type = submodule {
+            options = {
+              config = mkOption {
+                type = str;
+                apply = _: ''
+                  ${optionalString (config.via != null)
+                    (concatMapStringsSep "\n" (a: "Address = ${a}") config.via.addrs)}
+                  ${concatMapStringsSep "\n" (a: "Subnet = ${a}") config.addrs}
+                  ${config.tinc.pubkey}
+                '';
+              };
+              pubkey = mkOption {
+                type = str;
+              };
+            };
+          };
         };
       };
     });

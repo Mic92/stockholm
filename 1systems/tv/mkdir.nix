@@ -46,7 +46,7 @@ with lib;
   networking.hostName = "mkdir";
   networking.interfaces.enp2s1.ip4 = [
     {
-      address = "162.248.167.241";
+      address = "162.248.167.241"; # TODO
       prefixLength = 24;
     }
   ];
