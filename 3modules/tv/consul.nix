@@ -88,7 +88,7 @@ let
         ExecStartPre = pkgs.writeScript "consul-init" ''
           #! /bin/sh
           mkdir -p ${cfg.data-dir}
-          chown consul: ${cfg.data-dir}
+          chown ${user.name}: ${cfg.data-dir}
           install -o ${user.name} -m 0400 ${cfg.encrypt-file} /tmp/encrypt.json
         '';
         ExecStart = pkgs.writeScript "consul-service" ''
@@ -111,7 +111,7 @@ let
 
   user = {
     name = "consul";
-    uid = 2983239726; # genid consul
+    uid = 2999951406; # genid consul
   };
 
 in

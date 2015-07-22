@@ -46,7 +46,6 @@ let
       description = ''
         The tinc network name.
         It is used to generate long host entries,
-        derive the name of the user account under which tincd runs,
         and name the TUN device.
       '';
     };
@@ -106,20 +105,22 @@ let
         #      and the private key.
         ExecStartPre = pkgs.writeScript "retiolum-init" ''
           #! /bin/sh
-          install -o ${user} -m 0400 ${cfg.privateKeyFile} /tmp/retiolum-rsa_key.priv
+          install -o ${user.name} -m 0400 ${cfg.privateKeyFile} /tmp/retiolum-rsa_key.priv
         '';
-        ExecStart = "${tinc}/sbin/tincd -c ${confDir} -d 0 -U ${user} -D";
+        ExecStart = "${tinc}/sbin/tincd -c ${confDir} -d 0 -U ${user.name} -D";
         SyslogIdentifier = "retiolum";
       };
     };
 
-    # TODO user.name = "retiolum"
     users.extraUsers = singleton {
-      name = user;
-      uid = 2961822815; # bin/genid retiolum-tinc
+      inherit (user) name uid;
     };
   };
 
+  user = {
+    name = "retiolum";
+    uid = 301281149; # genid retiolum
+  };
 
   tinc = cfg.tincPackage;
   hostsType = builtins.typeOf cfg.hosts;
@@ -217,21 +218,5 @@ let
 
     chmod +x $out/tinc-up
   '';
-
-
-  user = cfg.network + "-tinc";
-
 in
 out
-
-
-
-#let
-#  cfg = config.tv.retiolum;
-#  arg' = arg // { inherit cfg; };
-#in
-#
-#{
-#  options.tv.retiolum = import ./options.nix arg';
-#  config = lib.mkIf cfg.enable (import ./config.nix arg');
-#}

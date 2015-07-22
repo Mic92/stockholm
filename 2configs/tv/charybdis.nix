@@ -74,7 +74,7 @@ let
 
   user = {
     name = "charybdis";
-    uid = 3731512864; # genid charybdis
+    uid = 3748224544; # genid charybdis
   };
 
   configFile = toFile "charybdis-ircd.conf" ''

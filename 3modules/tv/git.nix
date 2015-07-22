@@ -149,7 +149,7 @@ let
       shell = "/bin/sh";
       openssh.authorizedKeys.keys =
         mapAttrsToList (_: makeAuthorizedKey git-ssh-command) cfg.users;
-      uid = 112606723; # genid git
+      uid = 129318403; # genid git
     };
   };
 
@@ -237,13 +237,13 @@ let
 
   fcgitwrap-user = {
     name = "fcgiwrap";
-    uid = 2851179180; # genid fcgiwrap
+    uid = 2867890860; # genid fcgiwrap
     group = "fcgiwrap";
   };
 
   fcgitwrap-group = {
-    name = "fcgiwrap";
-    gid = 2851179180; # genid fcgiwrap
+    name = fcgitwrap-user.name;
+    gid = fcgitwrap-user.uid;
   };
 
 

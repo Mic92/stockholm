@@ -55,8 +55,7 @@ let
 
   user = {
     name = "ejabberd";
-    uid = 405222; 
-    # TODO uid = 3483034447; # genid ejabberd
+    uid = 3499746127; # genid ejabberd
   };
 
   my-ejabberdctl = pkgs.writeScriptBin "ejabberdctl" ''
