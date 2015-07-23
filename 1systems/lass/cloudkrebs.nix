@@ -7,6 +7,10 @@
     ../../2configs/lass/base.nix
     ../../2configs/lass/retiolum.nix
     ../../2configs/lass/fastpoke-pages.nix
+    ../../2configs/lass/identity.nix
+    {
+      tv.identity.self = config.tv.identity.hosts.cloudkrebs;
+    }
     {
       networking.interfaces.enp2s1.ip4 = [
         {
