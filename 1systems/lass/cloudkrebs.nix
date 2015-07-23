@@ -6,6 +6,7 @@
     ../../2configs/tv/CAC-CentOS-7-64bit.nix
     ../../2configs/lass/base.nix
     ../../2configs/lass/retiolum.nix
+    ../../2configs/lass/fastpoke-pages.nix
     {
       networking.interfaces.enp2s1.ip4 = [
         {
