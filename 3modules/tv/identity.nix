@@ -55,6 +55,12 @@ let
     retiolum = "hosts";
     de.viljetic = "regfish";
     de.krebsco = "ovh";
+    de.habsys = "hosts";
+    de.pixelpocket = "hosts";
+    de.karlaskop = "hosts";
+    de.ubikmedia = "hosts";
+    de.apanowicz = "hosts";
+    de.aidsballs = "hosts";
   };
 
   # splitByProvider : [alias] -> set providername [alias]
