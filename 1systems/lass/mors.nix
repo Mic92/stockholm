@@ -20,19 +20,7 @@
     ../../2configs/lass/chromium-patched.nix
     ../../2configs/lass/git-repos.nix
     ../../2configs/tv/synaptics.nix
-    ../../2configs/tv/exim-retiolum.nix
-    {
-      imports = [ ../../3modules/tv/retiolum.nix ];
-      tv.retiolum = {
-        enable = true;
-        hosts = ../../Zhosts;
-        connectTo = [
-          "fastpoke"
-          "gum"
-          "pigstarter"
-        ];
-      };
-    }
+    ../../2configs/lass/retiolum.nix
     {
       imports = [ ../../3modules/tv/identity.nix ];
       tv.identity = {

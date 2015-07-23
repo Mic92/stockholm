@@ -5,6 +5,7 @@
     ../../2configs/tv/CAC-Developer-2.nix
     ../../2configs/tv/CAC-CentOS-7-64bit.nix
     ../../2configs/lass/base.nix
+    ../../2configs/lass/retiolum.nix
     {
       networking.interfaces.enp2s1.ip4 = [
         {
@@ -17,18 +18,6 @@
         "8.8.8.8"
       ];
 
-    }
-    {
-      imports = [ ../../3modules/tv/retiolum.nix ];
-      tv.retiolum = {
-        enable = true;
-        hosts = ../../Zhosts;
-        connectTo = [
-          "fastpoke"
-          "gum"
-          "pigstarter"
-        ];
-      };
     }
     {
       imports = [ ../../3modules/tv/identity.nix ];
