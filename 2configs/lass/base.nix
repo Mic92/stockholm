@@ -125,10 +125,10 @@ with lib;
       filter.INPUT.policy = "DROP";
       filter.FORWARD.policy = "DROP";
       filter.INPUT.rules = [
-        { predicate = "-i lo"; target = "ACCEPT"; }
-        { predicate = "-m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; }
-        { predicate = "-p icmp"; target = "ACCEPT"; }
-        { predicate = "-p tcp --dport 22"; target = "ACCEPT"; }
+        { predicate = "-m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; precedence = 10001; }
+        { predicate = "-p icmp"; target = "ACCEPT"; precedence = 10000; }
+        { predicate = "-i lo"; target = "ACCEPT"; precedence = 9999; }
+        { predicate = "-p tcp --dport 22"; target = "ACCEPT"; precedence = 9998; }
       ];
     };
   };
