@@ -97,22 +97,22 @@ builtins // lib // rec {
           type = listOf hostname;
         };
         tinc = mkOption {
-          type = submodule {
+          type = let net-config = config; in submodule ({ config, ... }: {
             options = {
               config = mkOption {
                 type = str;
                 apply = _: ''
-                  ${optionalString (config.via != null)
-                    (concatMapStringsSep "\n" (a: "Address = ${a}") config.via.addrs)}
-                  ${concatMapStringsSep "\n" (a: "Subnet = ${a}") config.addrs}
-                  ${config.tinc.pubkey}
+                  ${optionalString (net-config.via != null)
+                    (concatMapStringsSep "\n" (a: "Address = ${a}") net-config.via.addrs)}
+                  ${concatMapStringsSep "\n" (a: "Subnet = ${a}") net-config.addrs}
+                  ${config.pubkey}
                 '';
               };
               pubkey = mkOption {
                 type = str;
               };
             };
-          };
+          });
         };
       };
     });
