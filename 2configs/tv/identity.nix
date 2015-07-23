@@ -51,6 +51,9 @@
         nets = rec {
           internet = {
             addrs4 = ["162.248.167.241"];
+            aliases = [
+              "mkdir.internet"
+            ];
           };
           retiolum = {
             via = internet;
@@ -103,6 +106,9 @@
         nets = rec {
           internet = {
             addrs4 = ["167.88.44.94"];
+            aliases = [
+              "rmdir.internet"
+            ];
           };
           retiolum = {
             via = internet;
