@@ -18,11 +18,8 @@ in
     ../../2configs/tv/xserver.nix
     ../../2configs/tv/synaptics.nix # TODO w110er if xserver is enabled
     {
-      imports = [ ../../3modules/tv/identity.nix ];
-      tv.identity = {
-        enable = true;
-        self = config.tv.identity.hosts.wu;
-      };
+      imports = [ ../../2configs/tv/identity.nix ];
+      tv.identity.self = config.tv.identity.hosts.wu;
     }
     {
       environment.systemPackages = with pkgs; [

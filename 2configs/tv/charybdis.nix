@@ -74,7 +74,7 @@ let
 
   user = {
     name = "charybdis";
-    uid = 3731512864; # genid charybdis
+    uid = 3748224544; # genid charybdis
   };
 
   configFile = toFile "charybdis-ircd.conf" ''
@@ -123,7 +123,7 @@ let
     #loadmodule "extensions/ip_cloaking.so";
     
     serverinfo {
-      name = ${toJSON config.tv.identity.self.fqdn};
+      name = ${toJSON (head config.tv.identity.self.nets.retiolum.aliases)};
       sid = "4z3";
       description = "miep!";
       network_name = "irc.retiolum";
@@ -133,9 +133,9 @@ let
       /* On multi-homed hosts you may need the following. These define
        * the addresses we connect from to other servers. */
       /* for IPv4 */
-      vhost = ${toJSON config.tv.identity.self.addr};
+      vhost = ${concatMapStringsSep ", " toJSON config.tv.identity.self.nets.retiolum.addrs4};
       /* for IPv6 */
-      vhost6 = ${toJSON config.tv.identity.self.addr6};
+      vhost6 = ${concatMapStringsSep ", " toJSON config.tv.identity.self.nets.retiolum.addrs6};
       
       /* ssl_private_key: our ssl private key */
       ssl_private_key = "/tmp/ssl.key";
@@ -238,12 +238,10 @@ let
       /* If you want to listen on a specific IP only, specify host.
        * host definitions apply only to the following port line.
        */
-      host = ${toJSON config.tv.identity.self.addr};
-      port = 6667;
-      sslport = 6697;
-    
-      /* Listen on IPv6 (if you used host= above). */
-      host = ${toJSON config.tv.identity.self.addr6};
+      # XXX This is stupid because only one host is allowed[?]
+      #host = ''${concatMapStringsSep ", " toJSON (
+      #  config.tv.identity.self.nets.retiolum.addrs
+      #)};
       port = 6667;
       sslport = 6697;
     };

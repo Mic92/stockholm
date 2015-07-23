@@ -75,7 +75,7 @@ let
 
   user = {
     name = "github-hosts-sync";
-    uid = 3203842966; # genid github-hosts-sync
+    uid = 3220554646; # genid github-hosts-sync
   };
 
   Zpkgs = import ../../Zpkgs/tv { inherit pkgs; };

@@ -28,7 +28,7 @@ let
     };
     from = mkOption {
       type = types.str;
-      default = "${cfg.user}@${config.networking.hostName}.retiolum";
+      default = "${user.name}@${config.networking.hostName}.retiolum";
       description = ''
         Content of the From: header of the generated mails.
       '';
@@ -53,11 +53,6 @@ let
       example = [
         https://nixos.org/channels/nixos-unstable/git-revision
       ];
-    };
-    user = mkOption {
-      type = types.str;
-      default = "urlwatch";
-      description = "User under which urlwatch runs.";
     };
   };
 
@@ -84,7 +79,7 @@ let
         SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
       };
       serviceConfig = {
-        User = cfg.user;
+        User = user.name;
         PermissionsStartOnly = "true";
         PrivateTmp = "true";
         Type = "oneshot";
@@ -94,11 +89,10 @@ let
             set -euf
 
             dataDir=$HOME
-            user=${escapeShellArg cfg.user}
 
             if ! test -e "$dataDir"; then
               mkdir -m 0700 -p "$dataDir"
-              chown "$user": "$dataDir"
+              chown ${user.name}: "$dataDir"
             fi
           '';
         ExecStart = pkgs.writeScript "urlwatch" ''
@@ -108,7 +102,6 @@ let
           from=${escapeShellArg cfg.from}
           mailto=${escapeShellArg cfg.mailto}
           urlsFile=${escapeShellArg urlsFile}
-          user=${escapeShellArg cfg.user}
 
           cd /tmp
 
@@ -130,11 +123,14 @@ let
         '';
       };
     };
-    users.extraUsers = optionals (cfg.user == "urlwatch") (singleton {
-      name = "urlwatch";
-      uid = 3450919516; # bin/genid urlwatch
-    });
+    users.extraUsers = singleton {
+      inherit (user) name uid;
+    };
   };
 
+  user = {
+    name = "urlwatch";
+    uid = 3467631196; # genid urlwatch
+  };
 in
 out

@@ -2,6 +2,7 @@
 # usage:
 #		make system=foo
 #		make systems='foo bar'
+#		make eval system=foo get=config.networking.extraHosts
 #
 
 .ONESHELL:
@@ -82,6 +83,20 @@ deploy:;@
 
 		result/bin/switch-to-configuration switch
 	EOF
+
+.PHONY: eval
+eval:
+	@nix-instantiate \
+		--json \
+		--eval \
+		--strict \
+		-A "$$get" \
+		-E '
+			import <nixpkgs/nixos/lib/eval-config.nix> {
+				system = builtins.currentSystem;
+				modules = [ ./1systems/$(LOGNAME)/$(system).nix ];
+			}
+		' | jq -r .
 else
 $(error unbound variable: system[s])
 endif
