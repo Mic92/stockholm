@@ -22,8 +22,8 @@ let
     (public "quipper")
     (public "regfish")
     (public' {
-      name = "shitment";
-      desc = "turn all the computers into one computer!";
+      name = "stockholm";
+      desc = "take all the computers hostage, they'll love you!";
     })
     (public "wai-middleware-time")
     (public "web-routes-wai-custom")
