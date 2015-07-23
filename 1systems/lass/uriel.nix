@@ -7,7 +7,6 @@ with builtins;
     ../../2configs/lass/browsers.nix
     ../../2configs/lass/games.nix
     ../../2configs/lass/pass.nix
-    ../../2configs/lass/vim.nix
     ../../2configs/lass/urxvt.nix
     ../../2configs/lass/bird.nix
     ../../2configs/lass/git-repos.nix

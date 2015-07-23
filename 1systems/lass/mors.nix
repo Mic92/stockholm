@@ -8,7 +8,6 @@
     ../../2configs/lass/browsers.nix
     ../../2configs/lass/games.nix
     ../../2configs/lass/pass.nix
-    ../../2configs/lass/vim.nix
     ../../2configs/lass/virtualbox.nix
     ../../2configs/lass/elster.nix
     ../../2configs/lass/urxvt.nix
