@@ -10,6 +10,7 @@ in
 
 {
   krebs.enable = true;
+  krebs.search-domain = "retiolum";
 
   imports = [
     {
