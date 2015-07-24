@@ -84,7 +84,6 @@ in
     }
   ];
 
-  networking.hostName = "cd";
   networking.interfaces.enp2s1.ip4 = [
     {
       address = "162.219.7.216";

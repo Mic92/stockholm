@@ -422,8 +422,6 @@ in
   hardware.opengl.driSupport32Bit = true;
   hardware.pulseaudio.enable = true;
 
-  networking.hostName = "wu";
-
   environment.systemPackages = with pkgs; [
     xlibs.fontschumachermisc
     slock

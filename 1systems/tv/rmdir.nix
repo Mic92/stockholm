@@ -39,7 +39,6 @@ with lib;
     }
   ];
 
-  networking.hostName = "rmdir";
   networking.interfaces.enp2s1.ip4 = [
     {
       address = "167.88.44.94";

@@ -12,6 +12,8 @@ in
   krebs.enable = true;
   krebs.search-domain = "retiolum";
 
+  networking.hostName = config.krebs.build.host.name;
+
   imports = [
     {
       users.extraUsers =

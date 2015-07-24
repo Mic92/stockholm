@@ -97,6 +97,4 @@ with lib;
     rxvt_unicode.terminfo
     tmux
   ];
-
-  networking.hostName = "nomic";
 }
