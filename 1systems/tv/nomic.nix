@@ -11,7 +11,7 @@ with lib;
     ../../2configs/tv/git.nix
     {
       imports = [ ../../2configs/tv/identity.nix ];
-      tv.identity.self = config.tv.identity.hosts.nomic;
+      tv.identity.self = config.krebs.hosts.nomic;
     }
     {
       tv.iptables = {

@@ -9,7 +9,7 @@
 
     server = true;
 
-    hosts = with config.tv.identity.hosts; [
+    hosts = with config.krebs.hosts; [
       # TODO get this list automatically from each host where tv.consul.enable is true
       cd
       mkdir

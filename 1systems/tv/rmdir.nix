@@ -12,7 +12,7 @@ with lib;
     ../../2configs/tv/git.nix
     {
       imports = [ ../../2configs/tv/identity.nix ];
-      tv.identity.self = config.tv.identity.hosts.rmdir;
+      tv.identity.self = config.krebs.hosts.rmdir;
     }
     {
       tv.iptables = {
