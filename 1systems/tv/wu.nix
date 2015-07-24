@@ -134,8 +134,8 @@ in
       };
     }
     {
-      imports = [ ../../3modules/tv/nginx.nix ];
-      tv.nginx = {
+      imports = [ ../../3modules/krebs/nginx.nix ];
+      krebs.nginx = {
         enable = true;
         servers.default.locations = [
           (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''

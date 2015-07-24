@@ -12,8 +12,9 @@ let
   cfg = config.tv.git;
 
   out = {
+    # TODO don't import krebs.nginx here
     imports = [
-      ../../3modules/tv/nginx.nix
+      ../../3modules/krebs/nginx.nix
     ];
     options.tv.git = api;
     config = mkIf cfg.enable (mkMerge [
@@ -210,7 +211,7 @@ let
       chown ${toString fcgitwrap-user.uid}:${toString fcgitwrap-group.gid} /tmp/cgit
     '';
 
-    tv.nginx = {
+    krebs.nginx = {
       enable = true;
       servers.cgit = {
         server-names = [
