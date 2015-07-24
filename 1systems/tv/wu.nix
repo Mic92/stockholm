@@ -12,8 +12,7 @@ in
     ../../2configs/tv/base.nix
     ../../2configs/tv/consul-client.nix
     ../../2configs/tv/exim-retiolum.nix
-    ../../2configs/tv/git-public.nix
-    # TODO git-private.nix
+    ../../2configs/tv/git.nix
     ../../2configs/tv/mail-client.nix
     ../../2configs/tv/xserver.nix
     ../../2configs/tv/synaptics.nix # TODO w110er if xserver is enabled
@@ -24,7 +23,7 @@ in
     {
       environment.systemPackages = with pkgs; [
 
-        # shitment
+        # stockholm
         git
         gnumake
         parallel
@@ -122,7 +121,6 @@ in
       ];
     }
     {
-      imports = [ ../../3modules/tv/iptables.nix ];
       tv.iptables = {
         enable = true;
         input-internet-accept-new-tcp = [
@@ -134,7 +132,6 @@ in
       };
     }
     {
-      imports = [ ../../3modules/krebs/nginx.nix ];
       krebs.nginx = {
         enable = true;
         servers.default.locations = [
@@ -145,10 +142,8 @@ in
       };
     }
     {
-      imports = [ ../../3modules/tv/retiolum.nix ];
-      tv.retiolum = {
+      krebs.retiolum = {
         enable = true;
-        hosts = ../../Zhosts;
         connectTo = [
           "gum"
           "pigstarter"
@@ -156,7 +151,6 @@ in
       };
     }
     {
-      imports = [ ../../3modules/krebs/urlwatch.nix ];
       krebs.urlwatch = {
         enable = true;
         mailto = "tv@wu.retiolum"; # TODO

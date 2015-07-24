@@ -8,13 +8,12 @@ with lib;
     ../../2configs/tv/base.nix
     ../../2configs/tv/consul-server.nix
     ../../2configs/tv/exim-retiolum.nix
-    ../../2configs/tv/git-public.nix
+    ../../2configs/tv/git.nix
     {
       imports = [ ../../2configs/tv/identity.nix ];
       tv.identity.self = config.tv.identity.hosts.nomic;
     }
     {
-      imports = [ ../../3modules/tv/iptables.nix ];
       tv.iptables = {
         enable = true;
         input-internet-accept-new-tcp = [
@@ -26,7 +25,6 @@ with lib;
       };
     }
     {
-      imports = [ ../../3modules/krebs/nginx.nix ];
       krebs.nginx = {
         enable = true;
         servers.default.locations = [
@@ -37,10 +35,8 @@ with lib;
       };
     }
     {
-      imports = [ ../../3modules/tv/retiolum.nix ];
-      tv.retiolum = {
+      krebs.retiolum = {
         enable = true;
-        hosts = ../../Zhosts;
         connectTo = [
           "gum"
           "pigstarter"

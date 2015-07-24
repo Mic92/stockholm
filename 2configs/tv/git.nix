@@ -1,18 +1,22 @@
 { config, lib, pkgs, ... }:
+
 with import ../../4lib/tv { inherit lib pkgs; };
 let
 
   out = {
-    imports = [ ../../3modules/krebs/git.nix ];
     krebs.git = {
       enable = true;
       root-title = "public repositories at ${config.tv.identity.self.name}";
       root-desc = "keep calm and engage";
-      inherit repos rules users;
+      inherit repos rules;
     };
   };
 
-  repos = public-repos;
+  repos = mapAttrs (_: s: removeAttrs s ["collaborators"]) (
+    public-repos //
+    optionalAttrs config.tv.identity.self.secure restricted-repos
+  );
+
   rules = concatMap make-rules (attrValues repos);
 
   public-repos = mapAttrs make-public-repo {
@@ -37,13 +41,14 @@ let
     xintmap = {};
   };
 
-  # TODO move users to separate module
-  users = mapAttrs make-user {
-    tv = ../../Zpubkeys/tv_wu.ssh.pub;
-    lass = ../../Zpubkeys/lass.ssh.pub;
-    uriel = ../../Zpubkeys/uriel.ssh.pub;
-    makefu = ../../Zpubkeys/makefu.ssh.pub;
-  };
+  restricted-repos = mapAttrs make-restricted-repo (
+    {
+      brain = {
+        collaborators = with config.krebs.users; [ lass makefu ];
+      };
+    } //
+    import /root/src/secrets/repos.nix { inherit config lib pkgs; }
+  );
 
   make-public-repo = name: { desc ? null, ... }: {
     inherit name desc;
@@ -58,8 +63,14 @@ let
     };
   };
 
+  make-restricted-repo = name: { desc ? null, ... }: {
+    inherit name desc;
+    public = false;
+    hooks = {}; # TODO default
+  };
+
   make-rules =
-    with git // users;
+    with git // config.krebs.users;
     repo:
       singleton {
         user = tv;
@@ -70,11 +81,11 @@ let
         user = [ lass makefu uriel ];
         repo = [ repo ];
         perm = fetch;
+      } ++
+      optional (length (repo.collaborators or []) > 0) {
+        user = repo.collaborators;
+        repo = [ repo ];
+        perm = fetch;
       };
-
-  make-user = name: pubkey-file: {
-    inherit name;
-    pubkey = readFile pubkey-file;
-  };
 
 in out

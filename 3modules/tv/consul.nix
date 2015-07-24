@@ -10,7 +10,6 @@ let
   cfg = config.tv.consul;
 
   out = {
-    imports = [ ../../3modules/tv/iptables.nix ];
     options.tv.consul = api;
     config = mkIf cfg.enable (mkMerge [
       imp

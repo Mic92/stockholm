@@ -1,7 +1,6 @@
 { config, ... }:
 
 {
-  imports = [ ../../3modules/tv/identity.nix ];
   tv.identity = {
     enable = true;
     search = "retiolum";
@@ -99,6 +98,7 @@
             '';
           };
         };
+        secure = true;
       };
       rmdir = {
         cores = 1;
@@ -154,6 +154,7 @@
             '';
           };
         };
+        secure = true;
       };
     };
   };
