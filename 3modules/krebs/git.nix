@@ -29,7 +29,15 @@ let
     cgit = mkOption {
       type = types.bool;
       default = true;
-      description = "Enable cgit."; # TODO better desc; talk about nginx
+      description = ''
+          Enable cgit.
+          Cgit is an attempt to create a fast web interface for the git version
+          control system, using a built in cache to decrease pressure on the 
+          git server.
+          cgit in this module is being served via fastcgi nginx.This module
+          deploys a http://cgit.<hostname> nginx configuration and enables nginx
+          if not yet enabled.
+          '';
     };
     dataDir = mkOption {
       type = types.str;
