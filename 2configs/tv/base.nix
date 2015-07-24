@@ -9,6 +9,8 @@ let
 in
 
 {
+  krebs.enable = true;
+
   imports = [
     {
       users.extraUsers =
