@@ -20,6 +20,15 @@ types // rec {
         type = attrsOf net;
         apply = x: assert hasAttr "retiolum" x; x;
       };
+      secure = mkOption {
+        type = bool;
+        default = false;
+        description = ''
+          If true, then the host is capable of keeping secret information.
+
+          TODO define minimum requirements for secure hosts
+        '';
+      };
     };
   };
 
