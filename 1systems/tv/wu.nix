@@ -168,7 +168,7 @@ in
           # then we have to update the package
 
           # ref src/nixpkgs/pkgs/tools/admin/sec/default.nix
-          http://simple-evcorr.sourceforge.net/
+          https://api.github.com/repos/simple-evcorr/sec/tags
 
           # ref src/nixpkgs/pkgs/tools/networking/urlwatch/default.nix
           https://thp.io/2008/urlwatch/
