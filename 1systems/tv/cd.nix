@@ -86,8 +86,8 @@ in
       };
     }
     {
-      imports = [ ../../3modules/tv/retiolum.nix ];
-      tv.retiolum = {
+      imports = [ ../../3modules/krebs/retiolum.nix ];
+      krebs.retiolum = {
         enable = true;
         hosts = ../../Zhosts;
         connectTo = [
