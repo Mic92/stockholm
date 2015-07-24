@@ -308,6 +308,9 @@ let
       };
     };
     users = addNames {
+      mv = {
+        pubkey = readFile ../../Zpubkeys/mv_vod.ssh.pub;
+      };
       tv = {
         pubkey = readFile ../../Zpubkeys/tv_wu.ssh.pub;
       };
