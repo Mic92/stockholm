@@ -66,7 +66,7 @@ with lib;
   };
 
   environment.shellAliases = {
-    lsl = "ls -latr";
+    lsl = "ls -lAtr";
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
