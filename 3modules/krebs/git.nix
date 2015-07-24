@@ -6,8 +6,7 @@
 # TODO when authorized_keys changes, then restart ssh
 #       (or kill already connected users somehow)
 
-with builtins;
-with lib;
+with import ../../4lib/krebs { inherit lib; };
 let
   cfg = config.krebs.git;
 
@@ -119,9 +118,6 @@ let
     rules = mkOption {
       type = types.unspecified;
     };
-    users = mkOption {
-      type = types.unspecified;
-    };
   };
 
   git-imp = {
@@ -149,7 +145,8 @@ let
       name = "git";
       shell = "/bin/sh";
       openssh.authorizedKeys.keys =
-        mapAttrsToList (_: makeAuthorizedKey git-ssh-command) cfg.users;
+        mapAttrsToList (_: makeAuthorizedKey git-ssh-command)
+          config.krebs.users;
       uid = 129318403; # genid git
     };
   };
@@ -255,7 +252,7 @@ let
 
   isPublicRepo = getAttr "public"; # TODO this is also in ./cgit.nix
 
-  makeAuthorizedKey = git-ssh-command: user@{ name, pubkey }:
+  makeAuthorizedKey = git-ssh-command: user@{ name, pubkey, ... }:
     # TODO assert name
     # TODO assert pubkey
     let

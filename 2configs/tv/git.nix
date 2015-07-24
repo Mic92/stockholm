@@ -1,4 +1,5 @@
 { config, lib, pkgs, ... }:
+
 with import ../../4lib/tv { inherit lib pkgs; };
 let
 
@@ -7,7 +8,7 @@ let
       enable = true;
       root-title = "public repositories at ${config.tv.identity.self.name}";
       root-desc = "keep calm and engage";
-      inherit repos rules users;
+      inherit repos rules;
     };
   };
 
@@ -43,19 +44,11 @@ let
   restricted-repos = mapAttrs make-restricted-repo (
     {
       brain = {
-        collaborators = with users; [ lass makefu ];
+        collaborators = with config.krebs.users; [ lass makefu ];
       };
     } //
-    import /root/src/secrets/repos.nix { inherit config lib pkgs users; }
+    import /root/src/secrets/repos.nix { inherit config lib pkgs; }
   );
-
-  # TODO move users to separate module
-  users = mapAttrs make-user {
-    tv = ../../Zpubkeys/tv_wu.ssh.pub;
-    lass = ../../Zpubkeys/lass.ssh.pub;
-    uriel = ../../Zpubkeys/uriel.ssh.pub;
-    makefu = ../../Zpubkeys/makefu.ssh.pub;
-  };
 
   make-public-repo = name: { desc ? null, ... }: {
     inherit name desc;
@@ -77,7 +70,7 @@ let
   };
 
   make-rules =
-    with git // users;
+    with git // config.krebs.users;
     repo:
       singleton {
         user = tv;
@@ -94,10 +87,5 @@ let
         repo = [ repo ];
         perm = fetch;
       };
-
-  make-user = name: pubkey-file: {
-    inherit name;
-    pubkey = readFile pubkey-file;
-  };
 
 in out

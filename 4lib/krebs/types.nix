@@ -81,6 +81,17 @@ types // rec {
     merge = mergeOneOption;
   };
 
+  user = submodule {
+    options = {
+      name = mkOption {
+        type = str; # TODO
+      };
+      pubkey = mkOption {
+        type = str;
+      };
+    };
+  };
+
   # TODO
   addr = str;
   addr4 = str;

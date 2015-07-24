@@ -15,15 +15,8 @@ krebs // rec {
     inherit pkgs;
   };
 
-  addName = name: set:
-    set // { inherit name; };
-
-  addNames = mapAttrs addName;
-
-
   # "7.4.335" -> "74"
   majmin = with lib; x : concatStrings (take 2 (splitString "." x));
-
 
   concat = xs :
     if xs == []
