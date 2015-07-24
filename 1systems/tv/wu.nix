@@ -134,8 +134,8 @@ in
       };
     }
     {
-      imports = [ ../../3modules/tv/nginx.nix ];
-      tv.nginx = {
+      imports = [ ../../3modules/krebs/nginx.nix ];
+      krebs.nginx = {
         enable = true;
         servers.default.locations = [
           (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
@@ -156,8 +156,8 @@ in
       };
     }
     {
-      imports = [ ../../3modules/tv/urlwatch.nix ];
-      tv.urlwatch = {
+      imports = [ ../../3modules/krebs/urlwatch.nix ];
+      krebs.urlwatch = {
         enable = true;
         mailto = "tv@wu.retiolum"; # TODO
         onCalendar = "*-*-* 05:00:00";

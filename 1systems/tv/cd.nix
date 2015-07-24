@@ -29,10 +29,10 @@ in
       };
     }
     {
-      imports = [ ../../3modules/tv/github-hosts-sync.nix ];
-      tv.github-hosts-sync.enable = true;
+      imports = [ ../../3modules/krebs/github-hosts-sync.nix ];
+      krebs.github-hosts-sync.enable = true;
       tv.iptables.input-internet-accept-new-tcp =
-        singleton config.tv.github-hosts-sync.port;
+        singleton config.krebs.github-hosts-sync.port;
     }
     {
       imports = [ ../../2configs/tv/identity.nix ];
@@ -57,19 +57,19 @@ in
     {
       imports = [
         ../../3modules/tv/iptables.nix
-        ../../3modules/tv/nginx.nix
+        ../../3modules/krebs/nginx.nix
       ];
       tv.iptables.input-internet-accept-new-tcp = singleton "http";
-      tv.nginx.servers.cgit.server-names = singleton "cgit.cd.viljetic.de";
+      krebs.nginx.servers.cgit.server-names = singleton "cgit.cd.viljetic.de";
     }
     {
       # TODO make public_html also available to cd, cd.retiolum (AKA default)
       imports = [
         ../../3modules/tv/iptables.nix
-        ../../3modules/tv/nginx.nix
+        ../../3modules/krebs/nginx.nix
       ];
       tv.iptables.input-internet-accept-new-tcp = singleton "http";
-      tv.nginx.servers.public_html = {
+      krebs.nginx.servers.public_html = {
         server-names = singleton "cd.viljetic.de";
         locations = singleton (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
           alias /home/$1/public_html$2;
@@ -77,7 +77,7 @@ in
       };
     }
     {
-      tv.nginx.servers.viljetic = {
+      krebs.nginx.servers.viljetic = {
         server-names = singleton "viljetic.de";
         # TODO directly set root (instead via location)
         locations = singleton (nameValuePair "/" ''

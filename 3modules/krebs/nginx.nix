@@ -3,21 +3,22 @@
 with builtins;
 with lib;
 let
-  cfg = config.tv.nginx;
+  cfg = config.krebs.nginx;
 
   out = {
-    options.tv.nginx = api;
+    options.krebs.nginx = api;
     config = mkIf cfg.enable imp;
   };
 
   api = {
-    enable = mkEnableOption "tv.nginx";
+    enable = mkEnableOption "krebs.nginx";
 
     servers = mkOption {
       type = with types; attrsOf optionSet;
       options = singleton {
         server-names = mkOption {
           type = with types; listOf str;
+          # TODO use identity
           default = [
             "${config.networking.hostName}"
             "${config.networking.hostName}.retiolum"
