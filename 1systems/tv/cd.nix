@@ -120,8 +120,8 @@ in
       home = "/home/mv";
       createHome = true;
       useDefaultShell = true;
-      openssh.authorizedKeys.keys = map readFile [
-        ../../Zpubkeys/mv_vod.ssh.pub
+      openssh.authorizedKeys.keys = [
+        config.krebs.users.mv.pubkey
       ];
     };
   };

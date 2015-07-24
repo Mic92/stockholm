@@ -24,8 +24,8 @@ in
     {
       users.extraUsers = {
         root = {
-          openssh.authorizedKeys.keys = map readFile [
-            ../../Zpubkeys/tv_wu.ssh.pub
+          openssh.authorizedKeys.keys = [
+            config.krebs.users.tv.pubkey
           ];
         };
         tv = {
@@ -39,8 +39,8 @@ in
             "video"
             "wheel"
           ];
-          openssh.authorizedKeys.keys = map readFile [
-            ../../Zpubkeys/tv_wu.ssh.pub
+          openssh.authorizedKeys.keys = [
+            config.krebs.users.tv.pubkey
           ];
         };
       };
