@@ -13,7 +13,7 @@ in
     ../../2configs/tv/base.nix
     ../../2configs/tv/consul-server.nix
     ../../2configs/tv/exim-smarthost.nix
-    ../../2configs/tv/git-public.nix
+    ../../2configs/tv/git.nix
     {
       imports = [ ../../2configs/tv/charybdis.nix ];
       tv.charybdis = {

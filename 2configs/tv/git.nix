@@ -11,7 +11,11 @@ let
     };
   };
 
-  repos = public-repos;
+  repos = mapAttrs (_: s: removeAttrs s ["collaborators"]) (
+    public-repos //
+    optionalAttrs config.tv.identity.self.secure restricted-repos
+  );
+
   rules = concatMap make-rules (attrValues repos);
 
   public-repos = mapAttrs make-public-repo {
@@ -36,6 +40,15 @@ let
     xintmap = {};
   };
 
+  restricted-repos = mapAttrs make-restricted-repo (
+    {
+      brain = {
+        collaborators = with users; [ lass makefu ];
+      };
+    } //
+    import /root/src/secrets/repos.nix { inherit config lib pkgs users; }
+  );
+
   # TODO move users to separate module
   users = mapAttrs make-user {
     tv = ../../Zpubkeys/tv_wu.ssh.pub;
@@ -57,6 +70,12 @@ let
     };
   };
 
+  make-restricted-repo = name: { desc ? null, ... }: {
+    inherit name desc;
+    public = false;
+    hooks = {}; # TODO default
+  };
+
   make-rules =
     with git // users;
     repo:
@@ -67,6 +86,11 @@ let
       } ++
       optional repo.public {
         user = [ lass makefu uriel ];
+        repo = [ repo ];
+        perm = fetch;
+      } ++
+      optional (length (repo.collaborators or []) > 0) {
+        user = repo.collaborators;
         repo = [ repo ];
         perm = fetch;
       };
