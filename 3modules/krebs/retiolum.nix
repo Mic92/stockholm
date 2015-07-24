@@ -76,7 +76,11 @@ let
       #      bad unsafe permissions...
       type = types.str;
       default = "/root/src/secrets/retiolum.rsa_key.priv";
-      description = "Generate file with <literal>tincd -K</literal>.";
+      description = ''
+          Generate file with <literal>tincd -K</literal>.
+          This file must exist on the local system. The default points to 
+          <secrets/retiolum.rsa_key.priv>.
+        '';
     };
 
     connectTo = mkOption {
