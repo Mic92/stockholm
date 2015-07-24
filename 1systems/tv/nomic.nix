@@ -40,7 +40,6 @@ with lib;
       imports = [ ../../3modules/krebs/retiolum.nix ];
       krebs.retiolum = {
         enable = true;
-        hosts = ../../Zhosts;
         connectTo = [
           "gum"
           "pigstarter"
