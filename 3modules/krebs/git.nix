@@ -9,14 +9,14 @@
 with builtins;
 with lib;
 let
-  cfg = config.tv.git;
+  cfg = config.krebs.git;
 
   out = {
     # TODO don't import krebs.nginx here
     imports = [
       ../../3modules/krebs/nginx.nix
     ];
-    options.tv.git = api;
+    options.krebs.git = api;
     config = mkIf cfg.enable (mkMerge [
       (mkIf cfg.cgit cgit-imp)
       git-imp
@@ -24,7 +24,7 @@ let
   };
 
   api = {
-    enable = mkEnableOption "tv.git";
+    enable = mkEnableOption "krebs.git";
 
     cgit = mkOption {
       type = types.bool;
