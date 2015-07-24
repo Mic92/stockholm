@@ -9,7 +9,10 @@
         [ # Include the results of the hardware scan.
         <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
         ../../2configs/makefu/base.nix
+        ../../3modules/krebs/retiolum.nix
+        ../../2configs/makefu/cgit-retiolum.nix
         ];
+    krebs.enable = true;
     boot.loader.grub.enable = true;
     boot.loader.grub.version = 2;
     boot.loader.grub.device = "/dev/vda";
@@ -20,19 +23,32 @@
     hardware.enableAllFirmware = true;
     hardware.cpu.amd.updateMicrocode = true;
 
+    # networking.firewall is enabled by default
+    networking.firewall.allowedTCPPorts = [ 80 ];
+
     fileSystems."/" =
     { device = "/dev/disk/by-label/nixos";
         fsType = "ext4";
     };
+        krebs.retiolum = {
+            enable = true;
+            hosts = ../../Zhosts;
+            connectTo = [
+                "gum"
+                "pigstarter"
+                "fastpoke"
+            ];
+        };
 
     nix.maxJobs = 1;
     networking.hostName = "pnp"; # Define your hostname.
 
 # $ nix-env -qaP | grep wget
-    environment.systemPackages = with pkgs; [
+        environment.systemPackages = with pkgs; [
         wget
         git
         gnumake
-    ];
+        jq
+        ];
 
 }
