@@ -98,6 +98,7 @@
             '';
           };
         };
+        secure = true;
       };
       rmdir = {
         cores = 1;
@@ -153,6 +154,7 @@
             '';
           };
         };
+        secure = true;
       };
     };
   };
