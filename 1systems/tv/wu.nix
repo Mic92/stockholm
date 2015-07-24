@@ -18,7 +18,7 @@ in
     ../../2configs/tv/synaptics.nix # TODO w110er if xserver is enabled
     {
       imports = [ ../../2configs/tv/identity.nix ];
-      tv.identity.self = config.tv.identity.hosts.wu;
+      tv.identity.self = config.krebs.hosts.wu;
     }
     {
       environment.systemPackages = with pkgs; [

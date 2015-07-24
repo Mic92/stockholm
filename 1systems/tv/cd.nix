@@ -34,7 +34,7 @@ in
     }
     {
       imports = [ ../../2configs/tv/identity.nix ];
-      tv.identity.self = config.tv.identity.hosts.cd;
+      tv.identity.self = config.krebs.hosts.cd;
     }
     {
       tv.iptables = {

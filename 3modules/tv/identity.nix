@@ -21,11 +21,6 @@ let
     #  default = filterAttrs (name: _host: name != cfg.self.name) cfg.hosts;
     #};
 
-    hosts = mkOption {
-      type = with types; attrsOf host;
-      apply = mapAttrs (name: value: value // { inherit name; });
-    };
-
     search = mkOption {
       type = types.hostname;
     };
@@ -44,7 +39,7 @@ let
             in
             map (addr: "${addr} ${aliases}") net.addrs
           ) host.nets
-        ) cfg.hosts
+        ) config.krebs.hosts
       ));
   };
 
