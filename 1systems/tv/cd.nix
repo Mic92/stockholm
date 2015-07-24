@@ -29,10 +29,10 @@ in
       };
     }
     {
-      imports = [ ../../3modules/tv/github-hosts-sync.nix ];
-      tv.github-hosts-sync.enable = true;
+      imports = [ ../../3modules/krebs/github-hosts-sync.nix ];
+      krebs.github-hosts-sync.enable = true;
       tv.iptables.input-internet-accept-new-tcp =
-        singleton config.tv.github-hosts-sync.port;
+        singleton config.krebs.github-hosts-sync.port;
     }
     {
       imports = [ ../../2configs/tv/identity.nix ];
