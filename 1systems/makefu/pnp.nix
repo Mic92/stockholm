@@ -9,7 +9,6 @@
     [ # Include the results of the hardware scan.
       <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
       ../../2configs/makefu/base.nix
-      ../../3modules/krebs/retiolum.nix
       ../../2configs/makefu/cgit-retiolum.nix
     ];
   krebs.enable = true;
@@ -40,7 +39,7 @@
     ];
   };
 
-  nix.maxJobs = 1;
+  nix.maxJobs = 2;
   networking.hostName = "pnp"; # Define your hostname.
 
 # $ nix-env -qaP | grep wget
