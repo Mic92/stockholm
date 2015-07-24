@@ -66,7 +66,6 @@ let
   make-restricted-repo = name: { desc ? null, ... }: {
     inherit name desc;
     public = false;
-    hooks = {}; # TODO default
   };
 
   make-rules =

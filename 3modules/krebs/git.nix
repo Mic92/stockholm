@@ -72,6 +72,7 @@ let
           };
           hooks = mkOption {
             type = types.attrsOf types.str;
+            default = {};
             description = ''
               Repository-specific hooks.
             '';
