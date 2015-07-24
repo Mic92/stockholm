@@ -8,4 +8,5 @@ pkgs //
 {
   github-hosts-sync = callPackage ./github-hosts-sync.nix {};
   github-known_hosts = callPackage ./github-known_hosts.nix {};
+  hashPassword = callPackage ./hashPassword.nix {};
 }
