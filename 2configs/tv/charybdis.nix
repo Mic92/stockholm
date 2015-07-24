@@ -170,7 +170,7 @@ let
     admin {
       name = "tv";
       description = "peer";
-      email = "tv@wu.retiolum";
+      mail = "${config.krebs.users.tv.mail}";
     };
 
     log {

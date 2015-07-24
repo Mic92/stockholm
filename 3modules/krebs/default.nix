@@ -309,9 +309,11 @@ let
     };
     users = addNames {
       mv = {
+        mail = "mv@cd.retiolum";
         pubkey = readFile ../../Zpubkeys/mv_vod.ssh.pub;
       };
       tv = {
+        mail = "tv@wu.retiolum";
         pubkey = readFile ../../Zpubkeys/tv_wu.ssh.pub;
       };
     };

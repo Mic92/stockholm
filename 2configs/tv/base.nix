@@ -47,7 +47,7 @@ in
     }
     {
       security.sudo.extraConfig = ''
-        Defaults mailto="tv@wu.retiolum"
+        Defaults mailto="${config.krebs.users.tv.mail}"
       '';
       time.timeZone = "Europe/Berlin";
     }

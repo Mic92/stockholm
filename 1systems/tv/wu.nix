@@ -152,7 +152,7 @@ in
     {
       krebs.urlwatch = {
         enable = true;
-        mailto = "tv@wu.retiolum"; # TODO
+        mailto = config.krebs.users.tv.mail;
         onCalendar = "*-*-* 05:00:00";
         urls = [
           ## nixpkgs maintenance
