@@ -28,6 +28,7 @@ in
         gnumake
         parallel
         Zpkgs.genid
+        Zpkgs.hashPassword
         Zpkgs.lentil
 
         # root

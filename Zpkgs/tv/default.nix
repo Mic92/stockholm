@@ -2,10 +2,10 @@
 
 let
   inherit (pkgs) callPackage;
+  krebs = import ../../Zpkgs/krebs { inherit pkgs; };
 in
 
-pkgs //
-{
+krebs // {
   charybdis = callPackage ./charybdis {};
   dic = callPackage ./dic.nix {};
   genid = callPackage ./genid.nix {};
