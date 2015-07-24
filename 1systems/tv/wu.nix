@@ -156,8 +156,8 @@ in
       };
     }
     {
-      imports = [ ../../3modules/tv/urlwatch.nix ];
-      tv.urlwatch = {
+      imports = [ ../../3modules/krebs/urlwatch.nix ];
+      krebs.urlwatch = {
         enable = true;
         mailto = "tv@wu.retiolum"; # TODO
         onCalendar = "*-*-* 05:00:00";
