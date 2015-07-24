@@ -3,6 +3,8 @@
 with lib;
 
 {
+  krebs.build.host = config.krebs.hosts.mkdir;
+
   imports = [
     ../../2configs/tv/CAC-Developer-1.nix
     ../../2configs/tv/CAC-CentOS-7-64bit.nix
@@ -10,10 +12,6 @@ with lib;
     ../../2configs/tv/consul-server.nix
     ../../2configs/tv/exim-smarthost.nix
     ../../2configs/tv/git.nix
-    {
-      imports = [ ../../2configs/tv/identity.nix ];
-      tv.identity.self = config.krebs.hosts.mkdir;
-    }
     {
       tv.iptables = {
         enable = true;

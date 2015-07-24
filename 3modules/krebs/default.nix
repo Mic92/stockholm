@@ -19,6 +19,21 @@ let
   api = {
     enable = mkEnableOption "krebs";
 
+    build = mkOption {
+      type = types.submodule {
+        options = {
+          host = mkOption {
+            type = types.host;
+          };
+          user = mkOption {
+            type = types.user;
+          };
+        };
+      };
+      # Define defaul value, so unset values of the submodule get reported.
+      default = {};
+    };
+
     hosts = mkOption {
       type = with types; attrsOf host;
     };
@@ -26,12 +41,69 @@ let
     users = mkOption {
       type = with types; attrsOf user;
     };
+
+    # XXX is there a better place to define search-domain?
+    # TODO search-domains :: listOf hostname
+    search-domain = mkOption {
+      type = types.hostname;
+      default = "";
+      example = "retiolum";
+    };
   };
 
   imp = mkMerge [
     { krebs = lass-imp; }
     { krebs = makefu-imp; }
     { krebs = tv-imp; }
+    {
+      # XXX This overlaps with krebs.retiolum
+      networking.extraHosts =
+        let
+          # TODO move domain name providers to a dedicated module
+          # providers : tree label providername
+          providers = {
+            internet = "hosts";
+            retiolum = "hosts";
+            de.viljetic = "regfish";
+            de.krebsco = "ovh";
+          };
+
+          # splitByProvider : [alias] -> set providername [alias]
+          splitByProvider = foldl (acc: alias: insert (providerOf alias) alias acc) {};
+
+          # providerOf : alias -> providername
+          providerOf = alias:
+            tree-get (splitString "." alias) providers;
+
+          # insert : k -> v -> set k [v] -> set k [v]
+          insert = name: value: set:
+            set // { ${name} = set.${name} or [] ++ [value]; };
+
+          # tree k v = set k (either v (tree k v))
+
+          # tree-get : [k] -> tree k v -> v
+          tree-get = path: x:
+            let
+              y = x.${last path};
+            in
+            if typeOf y != "set"
+              then y
+              else tree-get (init path) y;
+        in
+        concatStringsSep "\n" (flatten (
+          # TODO deepMap ["hosts" "nets"] (hostname: host: netname: net:
+          mapAttrsToList (hostname: host:
+            mapAttrsToList (netname: net:
+              let
+                aliases = toString (unique (longs ++ shorts));
+                longs = (splitByProvider net.aliases).hosts;
+                shorts = map (removeSuffix ".${cfg.search-domain}") longs;
+              in
+              map (addr: "${addr} ${aliases}") net.addrs
+            ) host.nets
+          ) config.krebs.hosts
+        ));
+    }
   ];
 
   lass-imp = {

@@ -7,6 +7,8 @@ let
 in
 
 {
+  krebs.build.host = config.krebs.hosts.wu;
+
   imports = [
     ../../2configs/tv/w110er.nix
     ../../2configs/tv/base.nix
@@ -16,10 +18,6 @@ in
     ../../2configs/tv/mail-client.nix
     ../../2configs/tv/xserver.nix
     ../../2configs/tv/synaptics.nix # TODO w110er if xserver is enabled
-    {
-      imports = [ ../../2configs/tv/identity.nix ];
-      tv.identity.self = config.krebs.hosts.wu;
-    }
     {
       environment.systemPackages = with pkgs; [
 

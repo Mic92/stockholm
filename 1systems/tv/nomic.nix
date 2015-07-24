@@ -3,16 +3,14 @@
 with lib;
 
 {
+  krebs.build.host = config.krebs.hosts.nomic;
+
   imports = [
     ../../2configs/tv/AO753.nix
     ../../2configs/tv/base.nix
     ../../2configs/tv/consul-server.nix
     ../../2configs/tv/exim-retiolum.nix
     ../../2configs/tv/git.nix
-    {
-      imports = [ ../../2configs/tv/identity.nix ];
-      tv.identity.self = config.krebs.hosts.nomic;
-    }
     {
       tv.iptables = {
         enable = true;

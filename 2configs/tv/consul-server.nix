@@ -4,7 +4,7 @@
   tv.consul = rec {
     enable = true;
 
-    inherit (config.tv.identity) self;
+    self = config.krebs.build.host;
     inherit (self) dc;
 
     server = true;

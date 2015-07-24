@@ -7,6 +7,8 @@ let
 in
 
 {
+  krebs.build.host = config.krebs.hosts.cd;
+
   imports = [
     ../../2configs/tv/CAC-Developer-2.nix
     ../../2configs/tv/CAC-CentOS-7-64bit.nix
@@ -31,10 +33,6 @@ in
       krebs.github-hosts-sync.enable = true;
       tv.iptables.input-internet-accept-new-tcp =
         singleton config.krebs.github-hosts-sync.port;
-    }
-    {
-      imports = [ ../../2configs/tv/identity.nix ];
-      tv.identity.self = config.krebs.hosts.cd;
     }
     {
       tv.iptables = {
