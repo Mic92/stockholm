@@ -14,10 +14,12 @@ let
     ];
     options.krebs = api;
     config = mkIf cfg.enable (mkMerge [
-      imp
       { krebs.hosts = lass-hosts; }
       { krebs.hosts = makefu-hosts; }
       { krebs.hosts = tv-hosts; }
+      { krebs.users = lass-users; }
+      { krebs.users = makefu-users; }
+      { krebs.users = tv-users; }
     ]);
   };
 
@@ -33,27 +35,23 @@ let
     };
   };
 
-  imp = {
-    krebs.users = addNames {
-      lass = {
-        pubkey = readFile ../../Zpubkeys/lass.ssh.pub;
-      };
-      makefu = {
-        pubkey = readFile ../../Zpubkeys/makefu.ssh.pub;
-      };
-      tv = {
-        pubkey = readFile ../../Zpubkeys/tv_wu.ssh.pub;
-      };
-      uriel = {
-        pubkey = readFile ../../Zpubkeys/uriel.ssh.pub;
-      };
+  lass-hosts = addNames {
+  };
+  lass-users = addNames {
+    lass = {
+      pubkey = readFile ../../Zpubkeys/lass.ssh.pub;
+    };
+    uriel = {
+      pubkey = readFile ../../Zpubkeys/uriel.ssh.pub;
     };
   };
 
-  lass-hosts = addNames {
-  };
-
   makefu-hosts = addNames {
+  };
+  makefu-users = addNames {
+    makefu = {
+      pubkey = readFile ../../Zpubkeys/makefu.ssh.pub;
+    };
   };
 
   tv-hosts = addNames {
@@ -207,6 +205,11 @@ let
         };
       };
       secure = true;
+    };
+  };
+  tv-users = addNames {
+    tv = {
+      pubkey = readFile ../../Zpubkeys/tv_wu.ssh.pub;
     };
   };
 
