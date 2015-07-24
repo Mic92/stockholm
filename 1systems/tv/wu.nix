@@ -24,7 +24,7 @@ in
     {
       environment.systemPackages = with pkgs; [
 
-        # shitment
+        # stockholm
         git
         gnumake
         parallel
@@ -122,7 +122,6 @@ in
       ];
     }
     {
-      imports = [ ../../3modules/tv/iptables.nix ];
       tv.iptables = {
         enable = true;
         input-internet-accept-new-tcp = [
@@ -134,7 +133,6 @@ in
       };
     }
     {
-      imports = [ ../../3modules/krebs/nginx.nix ];
       krebs.nginx = {
         enable = true;
         servers.default.locations = [
@@ -145,7 +143,6 @@ in
       };
     }
     {
-      imports = [ ../../3modules/krebs/retiolum.nix ];
       krebs.retiolum = {
         enable = true;
         connectTo = [
@@ -155,7 +152,6 @@ in
       };
     }
     {
-      imports = [ ../../3modules/krebs/urlwatch.nix ];
       krebs.urlwatch = {
         enable = true;
         mailto = "tv@wu.retiolum"; # TODO

@@ -22,14 +22,12 @@ in
       };
     }
     {
-      imports = [ ../../3modules/tv/ejabberd.nix ];
       tv.ejabberd = {
         enable = true;
         hosts = [ "jabber.viljetic.de" ];
       };
     }
     {
-      imports = [ ../../3modules/krebs/github-hosts-sync.nix ];
       krebs.github-hosts-sync.enable = true;
       tv.iptables.input-internet-accept-new-tcp =
         singleton config.krebs.github-hosts-sync.port;
@@ -39,7 +37,6 @@ in
       tv.identity.self = config.tv.identity.hosts.cd;
     }
     {
-      imports = [ ../../3modules/tv/iptables.nix ];
       tv.iptables = {
         enable = true;
         input-internet-accept-new-tcp = [
@@ -55,19 +52,11 @@ in
       };
     }
     {
-      imports = [
-        ../../3modules/tv/iptables.nix
-        ../../3modules/krebs/nginx.nix
-      ];
       tv.iptables.input-internet-accept-new-tcp = singleton "http";
       krebs.nginx.servers.cgit.server-names = singleton "cgit.cd.viljetic.de";
     }
     {
       # TODO make public_html also available to cd, cd.retiolum (AKA default)
-      imports = [
-        ../../3modules/tv/iptables.nix
-        ../../3modules/krebs/nginx.nix
-      ];
       tv.iptables.input-internet-accept-new-tcp = singleton "http";
       krebs.nginx.servers.public_html = {
         server-names = singleton "cd.viljetic.de";
@@ -86,7 +75,6 @@ in
       };
     }
     {
-      imports = [ ../../3modules/krebs/retiolum.nix ];
       krebs.retiolum = {
         enable = true;
         connectTo = [

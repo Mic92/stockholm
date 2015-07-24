@@ -1,7 +1,6 @@
 { config, ... }:
 
 {
-  imports = [ ../../3modules/tv/consul.nix ];
   tv.consul = rec {
     enable = true;
 

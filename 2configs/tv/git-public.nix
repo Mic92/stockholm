@@ -3,7 +3,6 @@ with import ../../4lib/tv { inherit lib pkgs; };
 let
 
   out = {
-    imports = [ ../../3modules/krebs/git.nix ];
     krebs.git = {
       enable = true;
       root-title = "public repositories at ${config.tv.identity.self.name}";

@@ -15,7 +15,6 @@ with lib;
       tv.identity.self = config.tv.identity.hosts.mkdir;
     }
     {
-      imports = [ ../../3modules/tv/iptables.nix ];
       tv.iptables = {
         enable = true;
         input-internet-accept-new-tcp = [
@@ -29,7 +28,6 @@ with lib;
       };
     }
     {
-      imports = [ ../../3modules/krebs/retiolum.nix ];
       krebs.retiolum = {
         enable = true;
         connectTo = [
