@@ -68,27 +68,12 @@ let
             de.krebsco = "ovh";
           };
 
-          # splitByProvider : [alias] -> set providername [alias]
-          splitByProvider = foldl (acc: alias: insert (providerOf alias) alias acc) {};
+          # splitByProvider : [alias] -> listset providername alias
+          splitByProvider = foldl (acc: alias: listset-insert (providerOf alias) alias acc) {};
 
           # providerOf : alias -> providername
           providerOf = alias:
             tree-get (splitString "." alias) providers;
-
-          # insert : k -> v -> set k [v] -> set k [v]
-          insert = name: value: set:
-            set // { ${name} = set.${name} or [] ++ [value]; };
-
-          # tree k v = set k (either v (tree k v))
-
-          # tree-get : [k] -> tree k v -> v
-          tree-get = path: x:
-            let
-              y = x.${last path};
-            in
-            if typeOf y != "set"
-              then y
-              else tree-get (init path) y;
         in
         concatStringsSep "\n" (flatten (
           # TODO deepMap ["hosts" "nets"] (hostname: host: netname: net:
