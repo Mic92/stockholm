@@ -2,19 +2,19 @@
 
 let
 
-	eval = import <nixpkgs/nixos/lib/eval-config.nix> {
+  eval = import <nixpkgs/nixos/lib/eval-config.nix> {
     system = builtins.currentSystem;
-		modules = [
+    modules = [
       (./1systems + "/${user-name}/${system-name}.nix")
-			(./3modules/krebs)
-			(./3modules + "/${user-name}")
-		];
-	};
+      (./3modules/krebs)
+      (./3modules + "/${user-name}")
+    ];
+  };
 
 in
 
 {
-	inherit (eval) config options;
+  inherit (eval) config options;
 
-	system = eval.config.system.build.toplevel;
+  system = eval.config.system.build.toplevel;
 }
