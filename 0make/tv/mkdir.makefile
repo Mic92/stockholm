@@ -1,4 +1,4 @@
 deploy_host := root@mkdir
 nixpkgs_url := https://github.com/NixOS/nixpkgs
-nixpkgs_rev := 4c01e6d91993b6de128795f4fbdd25f6227fb870
+nixpkgs_rev := 9d5508d85c33b8fb22d79dde6176792eac2c2696
 secrets_dir := /home/tv/secrets/mkdir
