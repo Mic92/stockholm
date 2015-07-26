@@ -35,6 +35,19 @@ in
           exec ${pkgs.firefoxWrapper}/bin/firefox $(printf " %q" "$@")
           EOF
         '')
+        (pkgs.writeScriptBin "im" ''
+          #! ${pkgs.bash}/bin/bash
+          export PATH=${makeSearchPath "bin" (with pkgs; [
+            tmux
+            gnugrep
+            weechat
+          ])}
+          if tmux list-sessions -F\#S | grep -q '^im''$'; then
+            exec tmux attach -t im
+          else
+            exec tmux new -s im weechat
+          fi
+        '')
 
         # root
         cryptsetup
@@ -62,7 +75,6 @@ in
         sxiv
         texLive
         tmux
-        weechat
         zathura
         Zpkgs.dic
 
