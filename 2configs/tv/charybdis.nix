@@ -123,7 +123,7 @@ let
     #loadmodule "extensions/ip_cloaking.so";
     
     serverinfo {
-      name = ${toJSON (head config.tv.identity.self.nets.retiolum.aliases)};
+      name = ${toJSON (head config.krebs.build.host.nets.retiolum.aliases)};
       sid = "4z3";
       description = "miep!";
       network_name = "irc.retiolum";
@@ -133,9 +133,9 @@ let
       /* On multi-homed hosts you may need the following. These define
        * the addresses we connect from to other servers. */
       /* for IPv4 */
-      vhost = ${concatMapStringsSep ", " toJSON config.tv.identity.self.nets.retiolum.addrs4};
+      vhost = ${concatMapStringsSep ", " toJSON config.krebs.build.host.nets.retiolum.addrs4};
       /* for IPv6 */
-      vhost6 = ${concatMapStringsSep ", " toJSON config.tv.identity.self.nets.retiolum.addrs6};
+      vhost6 = ${concatMapStringsSep ", " toJSON config.krebs.build.host.nets.retiolum.addrs6};
       
       /* ssl_private_key: our ssl private key */
       ssl_private_key = "/tmp/ssl.key";
@@ -170,7 +170,7 @@ let
     admin {
       name = "tv";
       description = "peer";
-      email = "tv@wu.retiolum";
+      mail = "${config.krebs.users.tv.mail}";
     };
 
     log {
@@ -240,7 +240,7 @@ let
        */
       # XXX This is stupid because only one host is allowed[?]
       #host = ''${concatMapStringsSep ", " toJSON (
-      #  config.tv.identity.self.nets.retiolum.addrs
+      #  config.krebs.build.host.nets.retiolum.addrs
       #)};
       port = 6667;
       sslport = 6697;

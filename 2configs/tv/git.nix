@@ -6,7 +6,7 @@ let
   out = {
     krebs.git = {
       enable = true;
-      root-title = "public repositories at ${config.tv.identity.self.name}";
+      root-title = "public repositories at ${config.krebs.build.host.name}";
       root-desc = "keep calm and engage";
       inherit repos rules;
     };
@@ -14,7 +14,7 @@ let
 
   repos = mapAttrs (_: s: removeAttrs s ["collaborators"]) (
     public-repos //
-    optionalAttrs config.tv.identity.self.secure restricted-repos
+    optionalAttrs config.krebs.build.host.secure restricted-repos
   );
 
   rules = concatMap make-rules (attrValues repos);
@@ -55,8 +55,8 @@ let
     public = true;
     hooks = {
       post-receive = git.irc-announce {
-        # TODO make nick = config.tv.identity.self.name the default
-        nick = config.tv.identity.self.name;
+        # TODO make nick = config.krebs.build.host.name the default
+        nick = config.krebs.build.host.name;
         channel = "#retiolum";
         server = "cd.retiolum";
       };
@@ -66,7 +66,6 @@ let
   make-restricted-repo = name: { desc ? null, ... }: {
     inherit name desc;
     public = false;
-    hooks = {}; # TODO default
   };
 
   make-rules =

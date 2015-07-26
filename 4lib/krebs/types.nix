@@ -83,6 +83,9 @@ types // rec {
 
   user = submodule {
     options = {
+      mail = mkOption {
+        type = str; # TODO retiolum mail address
+      };
       name = mkOption {
         type = str; # TODO
       };
