@@ -3,6 +3,10 @@
 with lib;
 {
   imports = [ ];
+  krebs.enable = true;
+  krebs.search-domain = "retiolum";
+
+  networking.hostName = config.krebs.build.host.name;
   users.extraUsers = {
     root = {
         openssh.authorizedKeys.keys = [ config.krebs.users.makefu.pubkey ];
@@ -37,6 +41,7 @@ with lib;
   environment.systemPackages = with pkgs; [
       git
       vim
+      gnumake
       rxvt_unicode.terminfo
   ];
 
