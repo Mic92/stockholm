@@ -34,6 +34,14 @@ let
       default = {};
     };
 
+    dns = {
+      providers = mkOption {
+        # TODO with types; tree dns.label dns.provider, so we can merge.
+        # Currently providers can only be merged if aliases occur just once.
+        type = with types; attrsOf unspecified;
+      };
+    };
+
     hosts = mkOption {
       type = with types; attrsOf host;
     };
@@ -56,38 +64,26 @@ let
     { krebs = makefu-imp; }
     { krebs = tv-imp; }
     {
+      krebs.dns.providers = {
+        de.krebsco = "ovh";
+        internet = "hosts";
+        retiolum = "hosts";
+      };
+
       # XXX This overlaps with krebs.retiolum
-      networking.extraHosts =
-        let
-          # TODO move domain name providers to a dedicated module
-          # providers : tree label providername
-          providers = {
-            internet = "hosts";
-            retiolum = "hosts";
-            de.viljetic = "regfish";
-            de.krebsco = "ovh";
-          };
-
-          # splitByProvider : [alias] -> listset providername alias
-          splitByProvider = foldl (acc: alias: listset-insert (providerOf alias) alias acc) {};
-
-          # providerOf : alias -> providername
-          providerOf = alias:
-            tree-get (splitString "." alias) providers;
-        in
-        concatStringsSep "\n" (flatten (
-          # TODO deepMap ["hosts" "nets"] (hostname: host: netname: net:
-          mapAttrsToList (hostname: host:
-            mapAttrsToList (netname: net:
-              let
-                aliases = toString (unique (longs ++ shorts));
-                longs = (splitByProvider net.aliases).hosts;
-                shorts = map (removeSuffix ".${cfg.search-domain}") longs;
-              in
-              map (addr: "${addr} ${aliases}") net.addrs
-            ) host.nets
-          ) config.krebs.hosts
-        ));
+      networking.extraHosts = concatStringsSep "\n" (flatten (
+        mapAttrsToList (hostname: host:
+          mapAttrsToList (netname: net:
+            let
+              aliases = toString (unique (longs ++ shorts));
+              providers = dns.split-by-provider net.aliases cfg.dns.providers;
+              longs = providers.hosts;
+              shorts = map (removeSuffix ".${cfg.search-domain}") longs;
+            in
+            map (addr: "${addr} ${aliases}") net.addrs
+          ) host.nets
+        ) cfg.hosts
+      ));
     }
   ];
 
@@ -139,6 +135,9 @@ let
   };
 
   tv-imp = {
+    dns.providers = {
+      de.viljetic = "regfish";
+    };
     hosts = addNames {
       cd = {
         cores = 2;
