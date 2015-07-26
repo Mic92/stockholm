@@ -9,37 +9,12 @@ with krebs;
 krebs // rec {
 
   git = import ./git.nix {
-    lib = lib // {
-      inherit addNames;
-    };
+    lib = krebs;
     inherit pkgs;
   };
 
   # "7.4.335" -> "74"
   majmin = with lib; x : concatStrings (take 2 (splitString "." x));
-
-  concat = xs :
-    if xs == []
-      then ""
-      else head xs + concat (tail xs)
-    ;
-
-  flip = f : x : y : f y x;
-
-  # isSuffixOf :: String -> String -> Bool
-  isSuffixOf =
-    s : xs :
-      let
-        sn = stringLength s;
-        xsn = stringLength xs;
-      in
-        xsn >= sn && substring (xsn - sn) sn xs == s ;
-
-  # setMap :: (String -> a -> b) -> Set String a -> [b]
-  #setMap = f: xs: map (k : f k (getAttr k xs)) (attrNames xs);
-
-  # setToList :: Set k a -> [a]
-  #setToList = setMap (_: v: v);
 
   shell-escape =
     let
