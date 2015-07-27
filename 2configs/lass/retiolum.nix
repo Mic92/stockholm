@@ -3,7 +3,6 @@
 {
   imports = [
     ../../3modules/lass/iptables.nix
-    ../../3modules/tv/retiolum.nix
     ../../2configs/tv/exim-retiolum.nix
   ];
 
@@ -17,7 +16,7 @@
     };
   };
 
-  tv.retiolum = {
+  krebs.retiolum = {
     enable = true;
     hosts = ../../Zhosts;
     connectTo = [
