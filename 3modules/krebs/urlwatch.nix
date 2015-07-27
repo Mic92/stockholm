@@ -35,20 +35,22 @@ let
     };
     mailto = mkOption {
       type = types.str;
+      default = config.krebs.build.user.mail;
       description = ''
         Content of the To: header of the generated mails. [AKA recipient :)]
       '';
     };
     onCalendar = mkOption {
       type = types.str;
+      default = "04:23";
       description = ''
         Run urlwatch at this interval.
         The format is described in systemd.time(7), CALENDAR EVENTS.
       '';
-      example = "04:23";
     };
     urls = mkOption {
       type = with types; listOf str;
+      default = [];
       description = "URL to watch.";
       example = [
         https://nixos.org/channels/nixos-unstable/git-revision
