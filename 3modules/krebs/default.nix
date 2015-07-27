@@ -151,8 +151,7 @@ let
     # TODO search-domains :: listOf hostname
     search-domain = mkOption {
       type = types.hostname;
-      default = "";
-      example = "retiolum";
+      default = "retiolum";
     };
   };
 
