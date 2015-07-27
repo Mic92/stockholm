@@ -30,7 +30,6 @@ in {
     "karlaskop.de"
     "ubikmedia.de"
     "apanowicz.de"
-    "aidsballs.de"
   ];
 
   lass.iptables = {
@@ -84,11 +83,6 @@ in {
 
     };
   };
-
-  networking.extraHosts = ''
-    10.243.206.102 habsys.de karlaskop.de pixelpocket.de ubikmedia.de apanowicz.de
-    10.243.206.102 aidsballs.de
-  '';
 
   #services.postgresql = {
   #  enable = true;
