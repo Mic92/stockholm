@@ -9,6 +9,11 @@ let
 in
 
 {
+  krebs.enable = true;
+  krebs.search-domain = "retiolum";
+
+  networking.hostName = config.krebs.build.host.name;
+
   imports = [
     {
       users.extraUsers =
@@ -22,8 +27,8 @@ in
     {
       users.extraUsers = {
         root = {
-          openssh.authorizedKeys.keys = map readFile [
-            ../../Zpubkeys/tv_wu.ssh.pub
+          openssh.authorizedKeys.keys = [
+            config.krebs.users.tv.pubkey
           ];
         };
         tv = {
@@ -37,15 +42,15 @@ in
             "video"
             "wheel"
           ];
-          openssh.authorizedKeys.keys = map readFile [
-            ../../Zpubkeys/tv_wu.ssh.pub
+          openssh.authorizedKeys.keys = [
+            config.krebs.users.tv.pubkey
           ];
         };
       };
     }
     {
       security.sudo.extraConfig = ''
-        Defaults mailto="tv@wu.retiolum"
+        Defaults mailto="${config.krebs.users.tv.mail}"
       '';
       time.timeZone = "Europe/Berlin";
     }

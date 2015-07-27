@@ -8,7 +8,7 @@
         device = "DEVICESCAN";
         options = toString [
           "-a"
-          "-m tv@wu.retiolum"
+          "-m ${config.krebs.users.tv.mail}"
           "-s (O/../.././09|S/../.././04|L/../../6/05)"
         ];
       }

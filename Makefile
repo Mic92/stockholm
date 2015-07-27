@@ -41,13 +41,14 @@ deploy:;@
 			"$$src/" "$$deploy_host:$$dst"
 	)}
 
-	prepush /root/src/shitment "$$PWD"
+	prepush /root/src/stockholm "$$PWD"
 	prepush /root/src/secrets "$$secrets_dir"
 
 	ssh -S none "$$deploy_host" -T env \
 			nixpkgs_url="$$nixpkgs_url" \
 			nixpkgs_rev="$$nixpkgs_rev" \
 			system_name="$$system_name" \
+			user_name="$$LOGNAME" \
 		sh -euf \
 	<<-\EOF
 		prefetch(){(
@@ -77,26 +78,30 @@ deploy:;@
 		prefetch /root/src/nixpkgs "$$nixpkgs_url" "$$nixpkgs_rev"
 
 		echo build system...
-		NIXOS_CONFIG=/root/src/shitment/1systems/$(LOGNAME)/$$system_name.nix \
-		NIX_PATH=src \
-			nix-build -Q -A system '<nixpkgs/nixos>'
+		NIX_PATH=/root/src \
+		nix-build \
+			-Q \
+			-A system \
+			'<stockholm>' \
+			--argstr user-name "$$user_name" \
+			--argstr system-name "$$system_name"
 
 		result/bin/switch-to-configuration switch
 	EOF
 
 .PHONY: eval
 eval:
-	@nix-instantiate \
+	@
+	NIX_PATH=stockholm=$$PWD:$$NIX_PATH \
+	nix-instantiate \
 		--json \
 		--eval \
 		--strict \
 		-A "$$get" \
-		-E '
-			import <nixpkgs/nixos/lib/eval-config.nix> {
-				system = builtins.currentSystem;
-				modules = [ ./1systems/$(LOGNAME)/$(system).nix ];
-			}
-		' | jq -r .
+		'<stockholm>' \
+		--argstr user-name "$$LOGNAME" \
+		--argstr system-name "$$system" \
+		| jq -r .
 else
 $(error unbound variable: system[s])
 endif

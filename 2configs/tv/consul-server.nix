@@ -1,16 +1,15 @@
 { config, ... }:
 
 {
-  imports = [ ../../3modules/tv/consul.nix ];
   tv.consul = rec {
     enable = true;
 
-    inherit (config.tv.identity) self;
+    self = config.krebs.build.host;
     inherit (self) dc;
 
     server = true;
 
-    hosts = with config.tv.identity.hosts; [
+    hosts = with config.krebs.hosts; [
       # TODO get this list automatically from each host where tv.consul.enable is true
       cd
       mkdir

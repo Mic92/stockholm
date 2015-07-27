@@ -3,19 +3,16 @@
 with lib;
 
 {
+  krebs.build.host = config.krebs.hosts.rmdir;
+
   imports = [
     ../../2configs/tv/CAC-Developer-1.nix
     ../../2configs/tv/CAC-CentOS-7-64bit.nix
     ../../2configs/tv/base.nix
     ../../2configs/tv/consul-server.nix
     ../../2configs/tv/exim-smarthost.nix
-    ../../2configs/tv/git-public.nix
+    ../../2configs/tv/git.nix
     {
-      imports = [ ../../2configs/tv/identity.nix ];
-      tv.identity.self = config.tv.identity.hosts.rmdir;
-    }
-    {
-      imports = [ ../../3modules/tv/iptables.nix ];
       tv.iptables = {
         enable = true;
         input-internet-accept-new-tcp = [
@@ -29,10 +26,8 @@ with lib;
       };
     }
     {
-      imports = [ ../../3modules/tv/retiolum.nix ];
-      tv.retiolum = {
+      krebs.retiolum = {
         enable = true;
-        hosts = ../../Zhosts;
         connectTo = [
           "cd"
           "mkdir"
@@ -44,7 +39,6 @@ with lib;
     }
   ];
 
-  networking.hostName = "rmdir";
   networking.interfaces.enp2s1.ip4 = [
     {
       address = "167.88.44.94";

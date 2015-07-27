@@ -3,15 +3,15 @@
 with builtins;
 with lib;
 let
-  cfg = config.tv.retiolum;
+  cfg = config.krebs.retiolum;
 
   out = {
-    options.tv.retiolum = api;
+    options.krebs.retiolum = api;
     config = mkIf cfg.enable imp;
   };
 
   api = {
-    enable = mkEnableOption "tv.retiolum";
+    enable = mkEnableOption "krebs.retiolum";
 
     name = mkOption {
       type = types.str;
@@ -57,9 +57,9 @@ let
     };
 
     hosts = mkOption {
-      default = null;
+      type = with types; either package path;
+      default = ../../Zhosts;
       description = ''
-        Hosts package or path to use.
         If a path is given, then it will be used to generate an ad-hoc package.
       '';
     };
@@ -76,13 +76,21 @@ let
       #      bad unsafe permissions...
       type = types.str;
       default = "/root/src/secrets/retiolum.rsa_key.priv";
-      description = "Generate file with <literal>tincd -K</literal>.";
+      description = ''
+          Generate file with <literal>tincd -K</literal>.
+          This file must exist on the local system. The default points to 
+          <secrets/retiolum.rsa_key.priv>.
+        '';
     };
 
     connectTo = mkOption {
       type = types.listOf types.str;
-      default = [ "fastpoke" "pigstarter" "kheurop" ];
-      description = "TODO describe me";
+      default = [ "fastpoke" "pigstarter" "gum" ];
+      description = ''
+        The list of hosts in the network which the client will try to connect
+        to.  These hosts should have an 'Address' configured which points to a
+        routeable IPv4 or IPv6 address.
+      '';
     };
 
   };
@@ -123,24 +131,20 @@ let
   };
 
   tinc = cfg.tincPackage;
-  hostsType = builtins.typeOf cfg.hosts;
-  hosts =
-    if hostsType == "package" then
-      # use package as is
-      cfg.hosts
-    else if hostsType == "path" then
-      # use path to generate a package
-      pkgs.stdenv.mkDerivation {
-        name = "custom-retiolum-hosts";
-        src = cfg.hosts;
-        installPhase = ''
-          mkdir $out
-          find . -name .git -prune -o -type f -print0 | xargs -0 cp --target-directory $out
-        '';
-      }
-    else
-      abort "The option `services.retiolum.hosts' must be set to a package or a path"
-    ;
+
+  hosts = getAttr (typeOf cfg.hosts) {
+    package = cfg.hosts;
+    path = pkgs.stdenv.mkDerivation {
+      name = "custom-retiolum-hosts";
+      src = cfg.hosts;
+      installPhase = ''
+        mkdir $out
+        find . -name .git -prune -o -type f -print0 \
+          | xargs -0 cp --target-directory $out
+      '';
+    };
+  };
+
   iproute = cfg.iproutePackage;
 
   retiolumExtraHosts = import (pkgs.runCommand "retiolum-etc-hosts"
@@ -218,5 +222,5 @@ let
 
     chmod +x $out/tinc-up
   '';
-in
-out
+
+in out

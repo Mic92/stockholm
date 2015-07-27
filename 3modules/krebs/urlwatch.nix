@@ -8,16 +8,16 @@
 with builtins;
 with lib;
 let
-  cfg = config.tv.urlwatch;
+  cfg = config.krebs.urlwatch;
 
   # TODO assert sendmail's existence
   out = {
-    options.tv.urlwatch = api;
+    options.krebs.urlwatch = api;
     config = mkIf cfg.enable imp;
   };
 
   api = {
-    enable = mkEnableOption "tv.urlwatch";
+    enable = mkEnableOption "krebs.urlwatch";
 
     dataDir = mkOption {
       type = types.str;

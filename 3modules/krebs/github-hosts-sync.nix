@@ -3,15 +3,15 @@
 with builtins;
 with lib;
 let
-  cfg = config.tv.github-hosts-sync;
+  cfg = config.krebs.github-hosts-sync;
 
   out = {
-    options.tv.github-hosts-sync = api;
+    options.krebs.github-hosts-sync = api;
     config = mkIf cfg.enable imp;
   };
 
   api = {
-    enable = mkEnableOption "tv.github-hosts-sync";
+    enable = mkEnableOption "krebs.github-hosts-sync";
     port = mkOption {
       type = types.int; # TODO port type
       default = 1028;
@@ -78,6 +78,6 @@ let
     uid = 3220554646; # genid github-hosts-sync
   };
 
-  Zpkgs = import ../../Zpkgs/tv { inherit pkgs; };
+  Zpkgs = import ../../Zpkgs/krebs { inherit pkgs; };
 in
 out

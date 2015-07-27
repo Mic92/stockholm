@@ -1,11 +1,145 @@
-{ config, ... }:
+{ config, lib, ... }:
 
-{
-  imports = [ ../../3modules/tv/identity.nix ];
-  tv.identity = {
-    enable = true;
-    search = "retiolum";
-    hosts = {
+with import ../../4lib/krebs { inherit lib; };
+let
+  cfg = config.krebs;
+
+  out = {
+    imports = [
+      ./github-hosts-sync.nix
+      ./git.nix
+      ./nginx.nix
+      ./retiolum.nix
+      ./urlwatch.nix
+    ];
+    options.krebs = api;
+    config = mkIf cfg.enable imp;
+  };
+
+  api = {
+    enable = mkEnableOption "krebs";
+
+    build = mkOption {
+      type = types.submodule {
+        options = {
+          host = mkOption {
+            type = types.host;
+          };
+          user = mkOption {
+            type = types.user;
+          };
+        };
+      };
+      # Define defaul value, so unset values of the submodule get reported.
+      default = {};
+    };
+
+    hosts = mkOption {
+      type = with types; attrsOf host;
+    };
+
+    users = mkOption {
+      type = with types; attrsOf user;
+    };
+
+    # XXX is there a better place to define search-domain?
+    # TODO search-domains :: listOf hostname
+    search-domain = mkOption {
+      type = types.hostname;
+      default = "";
+      example = "retiolum";
+    };
+  };
+
+  imp = mkMerge [
+    { krebs = lass-imp; }
+    { krebs = makefu-imp; }
+    { krebs = tv-imp; }
+    {
+      # XXX This overlaps with krebs.retiolum
+      networking.extraHosts =
+        let
+          # TODO move domain name providers to a dedicated module
+          # providers : tree label providername
+          providers = {
+            internet = "hosts";
+            retiolum = "hosts";
+            de.viljetic = "regfish";
+            de.krebsco = "ovh";
+          };
+
+          # splitByProvider : [alias] -> listset providername alias
+          splitByProvider = foldl (acc: alias: listset-insert (providerOf alias) alias acc) {};
+
+          # providerOf : alias -> providername
+          providerOf = alias:
+            tree-get (splitString "." alias) providers;
+        in
+        concatStringsSep "\n" (flatten (
+          # TODO deepMap ["hosts" "nets"] (hostname: host: netname: net:
+          mapAttrsToList (hostname: host:
+            mapAttrsToList (netname: net:
+              let
+                aliases = toString (unique (longs ++ shorts));
+                longs = (splitByProvider net.aliases).hosts;
+                shorts = map (removeSuffix ".${cfg.search-domain}") longs;
+              in
+              map (addr: "${addr} ${aliases}") net.addrs
+            ) host.nets
+          ) config.krebs.hosts
+        ));
+    }
+  ];
+
+  lass-imp = {
+    hosts = addNames {
+    };
+    users = addNames {
+      lass = {
+        pubkey = readFile ../../Zpubkeys/lass.ssh.pub;
+      };
+      uriel = {
+        pubkey = readFile ../../Zpubkeys/uriel.ssh.pub;
+      };
+    };
+  };
+
+  makefu-imp = { 
+    hosts = addNames {
+      pnp = {
+        cores = 1;
+        dc = "makefu"; #vm on 'omo'
+        nets = {
+          retiolum = {
+            addrs4 = ["10.243.0.210"];
+            addrs6 = ["42:f9f1:0000:0000:0000:0000:0000:0001"];
+            aliases = [
+              "pnp.retiolum"
+              "cgit.pnp.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEAugkgEK4iy2C5+VZHwhjj/q3IOhhazE3TYHuipz37KxHWX8ZbjH+g
+              Ewtm79dVysujAOX8ZqV8nD8JgDAvkIZDp8FCIK0/rgckhpTsy1HVlHxa7ECrOS8V
+              pGz4xOxgcPFRbv5H2coHtbnfQc4GdA5fcNedQ3BP3T2Tn7n/dbbVs30bOP5V0EMR
+              SqZwNmtqaDQxOvjpPg9EoHvAYTevrpbbIst9UzCyvmNli9R+SsiDrzEPgB7zOc4T
+              TG12MT+XQr6JUu4jPpzdhb6H/36V6ADCIkBjzWh0iSfWGiFDQFinD+YSWbA1NOTr
+              Qtd1I3Ov+He7uc2Z719mb0Og2kCGnCnPIwIDAQAB
+              -----END RSA PUBLIC KEY-----
+              '';
+          };
+        };
+      };
+    };
+    users = addNames {
+      makefu = {
+        pubkey = readFile ../../Zpubkeys/makefu_arch.ssh.pub;
+      };
+    };
+  };
+
+  tv-imp = {
+    hosts = addNames {
       cd = {
         cores = 2;
         dc = "tv"; #dc = "cac";
@@ -99,6 +233,7 @@
             '';
           };
         };
+        secure = true;
       };
       rmdir = {
         cores = 1;
@@ -154,7 +289,20 @@
             '';
           };
         };
+        secure = true;
+      };
+    };
+    users = addNames {
+      mv = {
+        mail = "mv@cd.retiolum";
+        pubkey = readFile ../../Zpubkeys/mv_vod.ssh.pub;
+      };
+      tv = {
+        mail = "tv@wu.retiolum";
+        pubkey = readFile ../../Zpubkeys/tv_wu.ssh.pub;
       };
     };
   };
-}
+
+in
+out

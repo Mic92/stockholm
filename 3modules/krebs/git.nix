@@ -6,16 +6,16 @@
 # TODO when authorized_keys changes, then restart ssh
 #       (or kill already connected users somehow)
 
-with builtins;
-with lib;
+with import ../../4lib/krebs { inherit lib; };
 let
-  cfg = config.tv.git;
+  cfg = config.krebs.git;
 
   out = {
+    # TODO don't import krebs.nginx here
     imports = [
-      ../../3modules/tv/nginx.nix
+      ../../3modules/krebs/nginx.nix
     ];
-    options.tv.git = api;
+    options.krebs.git = api;
     config = mkIf cfg.enable (mkMerge [
       (mkIf cfg.cgit cgit-imp)
       git-imp
@@ -23,12 +23,20 @@ let
   };
 
   api = {
-    enable = mkEnableOption "tv.git";
+    enable = mkEnableOption "krebs.git";
 
     cgit = mkOption {
       type = types.bool;
       default = true;
-      description = "Enable cgit."; # TODO better desc; talk about nginx
+      description = ''
+          Enable cgit.
+          Cgit is an attempt to create a fast web interface for the git version
+          control system, using a built in cache to decrease pressure on the 
+          git server.
+          cgit in this module is being served via fastcgi nginx.This module
+          deploys a http://cgit.<hostname> nginx configuration and enables nginx
+          if not yet enabled.
+          '';
     };
     dataDir = mkOption {
       type = types.str;
@@ -64,6 +72,7 @@ let
           };
           hooks = mkOption {
             type = types.attrsOf types.str;
+            default = {};
             description = ''
               Repository-specific hooks.
             '';
@@ -118,9 +127,6 @@ let
     rules = mkOption {
       type = types.unspecified;
     };
-    users = mkOption {
-      type = types.unspecified;
-    };
   };
 
   git-imp = {
@@ -148,7 +154,8 @@ let
       name = "git";
       shell = "/bin/sh";
       openssh.authorizedKeys.keys =
-        mapAttrsToList (_: makeAuthorizedKey git-ssh-command) cfg.users;
+        mapAttrsToList (_: makeAuthorizedKey git-ssh-command)
+          config.krebs.users;
       uid = 129318403; # genid git
     };
   };
@@ -210,7 +217,7 @@ let
       chown ${toString fcgitwrap-user.uid}:${toString fcgitwrap-group.gid} /tmp/cgit
     '';
 
-    tv.nginx = {
+    krebs.nginx = {
       enable = true;
       servers.cgit = {
         server-names = [
@@ -254,7 +261,7 @@ let
 
   isPublicRepo = getAttr "public"; # TODO this is also in ./cgit.nix
 
-  makeAuthorizedKey = git-ssh-command: user@{ name, pubkey }:
+  makeAuthorizedKey = git-ssh-command: user@{ name, pubkey, ... }:
     # TODO assert name
     # TODO assert pubkey
     let
