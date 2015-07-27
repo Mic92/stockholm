@@ -186,4 +186,12 @@
   services.mongodb = {
     enable = true;
   };
+
+  lass.iptables = {
+    tables = {
+      filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; precedence = 9001; }
+      ];
+    };
+  };
 }
