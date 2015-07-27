@@ -93,6 +93,10 @@ types // rec {
       pubkey = mkOption {
         type = str;
       };
+      pubkeys = mkOption {
+        type = attrsOf str;
+        default = {};
+      };
     };
   };
 
