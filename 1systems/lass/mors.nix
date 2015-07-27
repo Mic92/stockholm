@@ -17,7 +17,7 @@
     ../../2configs/lass/binary-caches.nix
     ../../2configs/lass/ircd.nix
     ../../2configs/lass/chromium-patched.nix
-    ../../2configs/lass/git-repos.nix
+    ../../2configs/lass/new-repos.nix
     ../../2configs/tv/synaptics.nix
     ../../2configs/lass/retiolum.nix
   ];

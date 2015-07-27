@@ -7,6 +7,7 @@
     ../../2configs/lass/base.nix
     ../../2configs/lass/retiolum.nix
     ../../2configs/lass/fastpoke-pages.nix
+    ../../2configs/lass/new-repos.nix
     {
       networking.interfaces.enp2s1.ip4 = [
         {

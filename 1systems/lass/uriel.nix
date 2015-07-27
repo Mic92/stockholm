@@ -9,7 +9,7 @@ with builtins;
     ../../2configs/lass/pass.nix
     ../../2configs/lass/urxvt.nix
     ../../2configs/lass/bird.nix
-    ../../2configs/lass/git-repos.nix
+    ../../2configs/lass/new-repos.nix
     ../../2configs/lass/chromium-patched.nix
     ../../2configs/lass/retiolum.nix
     {
