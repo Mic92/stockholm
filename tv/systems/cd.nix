@@ -3,21 +3,21 @@
 with lib;
 
 let
-  Zpkgs = import ../../Zpkgs/tv { inherit pkgs; };
+  tvpkgs = import ../pkgs { inherit pkgs; };
 in
 
 {
   krebs.build.host = config.krebs.hosts.cd;
 
   imports = [
-    ../../2configs/tv/CAC-Developer-2.nix
-    ../../2configs/tv/CAC-CentOS-7-64bit.nix
-    ../../2configs/tv/base.nix
-    ../../2configs/tv/consul-server.nix
-    ../../2configs/tv/exim-smarthost.nix
-    ../../2configs/tv/git.nix
+    ../configs/CAC-Developer-2.nix
+    ../configs/CAC-CentOS-7-64bit.nix
+    ../configs/base.nix
+    ../configs/consul-server.nix
+    ../configs/exim-smarthost.nix
+    ../configs/git.nix
     {
-      imports = [ ../../2configs/tv/charybdis.nix ];
+      imports = [ ../configs/charybdis.nix ];
       tv.charybdis = {
         enable = true;
         sslCert = ../../Zcerts/charybdis_cd.crt.pem;
@@ -68,7 +68,7 @@ in
         server-names = singleton "viljetic.de";
         # TODO directly set root (instead via location)
         locations = singleton (nameValuePair "/" ''
-          root ${Zpkgs.viljetic-pages};
+          root ${tvpkgs.viljetic-pages};
         '');
       };
     }

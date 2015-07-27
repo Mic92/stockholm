@@ -5,7 +5,7 @@ index 03dd907..3698e85 100644
 @@ -82,7 +82,6 @@ start_bandb(void)
  	const char *suffix = "";
  #endif
- 
+
 -	rb_setenv("BANDB_DBPATH", PKGLOCALSTATEDIR "/ban.db", 1);
  	if(bandb_path == NULL)
  	{

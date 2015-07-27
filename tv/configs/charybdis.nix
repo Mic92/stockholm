@@ -1,5 +1,9 @@
 { config, lib, pkgs, ... }:
 
+let
+  tvpkgs = import ../pkgs { inherit pkgs; };
+in
+
 with builtins;
 with lib;
 let
@@ -59,7 +63,7 @@ let
         ExecStart = pkgs.writeScript "charybdis-service" ''
           #! /bin/sh
           set -euf
-          exec ${Zpkgs.charybdis}/bin/charybdis-ircd \
+          exec ${tvpkgs.charybdis}/bin/charybdis-ircd \
             -foreground \
             -logfile /dev/stderr \
             -configfile ${configFile}
@@ -88,7 +92,7 @@ let
      *
      * See reference.conf for more information.
      */
-    
+
     /* Extensions */
     #loadmodule "extensions/chm_operonly_compat.so";
     #loadmodule "extensions/chm_quietunreg_compat.so";
@@ -111,17 +115,17 @@ let
     #loadmodule "extensions/sno_globaloper.so";
     #loadmodule "extensions/sno_whois.so";
     loadmodule "extensions/override.so";
-    
+
     /*
      * IP cloaking extensions: use ip_cloaking_4.0
      * if you're linking 3.2 and later, otherwise use
      * ip_cloaking.so, for compatibility with older 3.x
      * releases.
      */
-    
+
     #loadmodule "extensions/ip_cloaking_4.0.so";
     #loadmodule "extensions/ip_cloaking.so";
-    
+
     serverinfo {
       name = ${toJSON (head config.krebs.build.host.nets.retiolum.aliases)};
       sid = "4z3";
@@ -129,23 +133,23 @@ let
       network_name = "irc.retiolum";
       #network_desc = "Retiolum IRC Network";
       hub = yes;
-    
+
       /* On multi-homed hosts you may need the following. These define
        * the addresses we connect from to other servers. */
       /* for IPv4 */
       vhost = ${concatMapStringsSep ", " toJSON config.krebs.build.host.nets.retiolum.addrs4};
       /* for IPv6 */
       vhost6 = ${concatMapStringsSep ", " toJSON config.krebs.build.host.nets.retiolum.addrs6};
-      
+
       /* ssl_private_key: our ssl private key */
       ssl_private_key = "/tmp/ssl.key";
-    
+
       /* ssl_cert: certificate for our ssl server */
       ssl_cert = ${toJSON cfg.sslCert};
-    
+
       /* ssl_dh_params: DH parameters, generate with openssl dhparam -out dh.pem 1024 */
       ssl_dh_params = "/tmp/dh.pem";
-    
+
       /* ssld_count: number of ssld processes you want to start, if you
        * have a really busy server, using N-1 where N is the number of
        * cpu/cpu cores you have might be useful. A number greater than one
@@ -153,20 +157,20 @@ let
        * two file descriptors per SSL connection.
        */
       ssld_count = 1;
-    
+
       /* default max clients: the default maximum number of clients
        * allowed to connect.  This can be changed once ircd has started by
        * issuing:
        *   /quote set maxclients <limit>
        */
       default_max_clients = 1024;
-    
+
       /* nicklen: enforced nickname length (for this server only; must not
        * be longer than the maximum length set while building).
        */
       nicklen = 30;
     };
-    
+
     admin {
       name = "tv";
       description = "peer";
@@ -184,11 +188,11 @@ let
       fname_operspylog = "/dev/stderr";
       fname_ioerrorlog = "/dev/stderr";
     };
-    
+
     /* class {} blocks MUST be specified before anything that uses them.  That
      * means they must be defined before auth {} and before connect {}.
      */
-    
+
     class "krebs" {
       ping_time = 2 minutes;
       number_per_ident = 10;
@@ -200,7 +204,7 @@ let
       max_number = 3000;
       sendq = 1 megabyte;
     };
-    
+
     class "users" {
       ping_time = 2 minutes;
       number_per_ident = 10;
@@ -212,21 +216,21 @@ let
       max_number = 3000;
       sendq = 400 kbytes;
     };
-    
+
     class "opers" {
       ping_time = 5 minutes;
       number_per_ip = 10;
       max_number = 1000;
       sendq = 1 megabyte;
     };
-    
+
     class "server" {
       ping_time = 5 minutes;
       connectfreq = 5 minutes;
       max_number = 1;
       sendq = 4 megabytes;
     };
-    
+
     listen {
       /* defer_accept: wait for clients to send IRC handshake data before
        * accepting them.  if you intend to use software which depends on the
@@ -234,7 +238,7 @@ let
        * otherwise, you probably want to leave it on.
        */
       defer_accept = yes;
-    
+
       /* If you want to listen on a specific IP only, specify host.
        * host definitions apply only to the following port line.
        */
@@ -245,7 +249,7 @@ let
       port = 6667;
       sslport = 6697;
     };
-    
+
     /* auth {}: allow users to connect to the ircd (OLD I:)
      * auth {} blocks MUST be specified in order of precedence.  The first one
      * that matches a user will be used.  So place spoofs first, then specials,
@@ -260,21 +264,21 @@ let
        */
       user = "*@10.243.0.0/12";
       user = "*@42::/16";
-    
+
       /* password: an optional password that is required to use this block.
        * By default this is not encrypted, specify the flag "encrypted" in
        * flags = ...; below if it is.
        */
       #password = "letmein";
-      
+
       /* spoof: fake the users user@host to be be this.  You may either
        * specify a host or a user@host to spoof to.  This is free-form,
        * just do everyone a favour and dont abuse it. (OLD I: = flag)
        */
       #spoof = "I.still.hate.packets";
-    
+
       /* Possible flags in auth:
-       * 
+       *
        * encrypted                  | password is encrypted with mkpasswd
        * spoof_notice               | give a notice when spoofing hosts
        * exceed_limit (old > flag)  | allow user to exceed class user limits
@@ -293,88 +297,88 @@ let
        * need_sasl                  | require SASL id for user in this class
        */
       flags = kline_exempt, exceed_limit, flood_exempt;
-      
+
       /* class: the class the user is placed in */
       class = "krebs";
     };
-    
+
     auth {
       user = "*@*";
       class = "users";
     };
-    
+
     /* privset {} blocks MUST be specified before anything that uses them.  That
      * means they must be defined before operator {}.
      */
     privset "local_op" {
       privs = oper:local_kill, oper:operwall;
     };
-    
+
     privset "server_bot" {
       extends = "local_op";
       privs = oper:kline, oper:remoteban, snomask:nick_changes;
     };
-    
+
     privset "global_op" {
       extends = "local_op";
       privs = oper:global_kill, oper:routing, oper:kline, oper:unkline, oper:xline,
         oper:resv, oper:mass_notice, oper:remoteban;
     };
-    
+
     privset "admin" {
       extends = "global_op";
       privs = oper:admin, oper:die, oper:rehash, oper:spy, oper:override;
     };
-    
+
     privset "aids" {
       privs = oper:override, oper:rehash;
     };
-    
+
     operator "aids" {
       user = "*@10.243.*";
       privset = "aids";
       flags = ~encrypted;
       password = "balls";
     };
-    
+
     operator "god" {
       /* name: the name of the oper must go above */
-    
+
       /* user: the user@host required for this operator.  CIDR *is*
        * supported now. auth{} spoofs work here, other spoofs do not.
        * multiple user="" lines are supported.
        */
       user = "*god@127.0.0.1";
-    
+
       /* password: the password required to oper.  Unless ~encrypted is
-       * contained in flags = ...; this will need to be encrypted using 
+       * contained in flags = ...; this will need to be encrypted using
        * mkpasswd, MD5 is supported
        */
       password = "5";
-    
+
       /* rsa key: the public key for this oper when using Challenge.
-       * A password should not be defined when this is used, see 
+       * A password should not be defined when this is used, see
        * doc/challenge.txt for more information.
        */
       #rsa_public_key_file = "/usr/local/ircd/etc/oper.pub";
-    
+
       /* umodes: the specific umodes this oper gets when they oper.
        * If this is specified an oper will not be given oper_umodes
        * These are described above oper_only_umodes in general {};
        */
       #umodes = locops, servnotice, operwall, wallop;
-    
+
       /* fingerprint: if specified, the oper's client certificate
        * fingerprint will be checked against the specified fingerprint
        * below.
        */
       #fingerprint = "c77106576abf7f9f90cca0f63874a60f2e40a64b";
-    
+
       /* snomask: specific server notice mask on oper up.
        * If this is specified an oper will not be given oper_snomask.
        */
       snomask = "+Zbfkrsuy";
-    
+
       /* flags: misc options for the operator.  You may prefix an option
        * with ~ to disable it, e.g. ~encrypted.
        *
@@ -386,30 +390,30 @@ let
        * need_ssl:     must be using SSL/TLS to oper up
        */
       flags = encrypted;
-    
+
       /* privset: privileges set to grant */
       privset = "admin";
     };
-    
+
     service {
       name = "services.int";
     };
-    
+
     cluster {
       name = "*";
       flags = kline, tkline, unkline, xline, txline, unxline, resv, tresv, unresv;
     };
-    
+
     shared {
       oper = "*@*", "*";
       flags = all, rehash;
     };
-    
+
     /* exempt {}: IPs that are exempt from Dlines and rejectcache. (OLD d:) */
     exempt {
       ip = "127.0.0.1";
     };
-    
+
     channel {
       use_invex = yes;
       use_except = yes;
@@ -431,14 +435,14 @@ let
       channel_target_change = yes;
       disable_local_channels = no;
     };
-    
+
     serverhide {
       flatten_links = yes;
       links_delay = 5 minutes;
       hidden = no;
       disable_hidden = no;
     };
-    
+
     /* These are the blacklist settings.
      * You can have multiple combinations of host and rejection reasons.
      * They are used in pairs of one host/rejection reason.
@@ -471,7 +475,7 @@ let
       host = "rbl.efnetrbl.org";
       type = ipv4;
       reject_reason = "''${nick}, your IP (''${ip}) is listed in EFnet's RBL. For assistance, see http://efnetrbl.org/?i=''${ip}";
-    
+
     #	host = "ircbl.ahbl.org";
     #	type = ipv4;
     #	reject_reason = "''${nick}, your IP (''${ip}) is listed in ''${dnsbl-host} for having an open proxy. In order to protect ''${network-name} from abuse, we are not allowing connections with open proxies to connect.";
@@ -485,43 +489,43 @@ let
     #	type = ipv4, ipv6;
     #	reject_reason = "''${nick}, your IP (''${ip}) is listed in ''${dnsbl-host} for some reason. In order to protect ''${network-name} from abuse, we are not allowing connections listed in ''${dnsbl-host} to connect";
     };
-    
+
     alias "NickServ" {
       target = "NickServ";
     };
-    
+
     alias "ChanServ" {
       target = "ChanServ";
     };
-    
+
     alias "OperServ" {
       target = "OperServ";
     };
-    
+
     alias "MemoServ" {
       target = "MemoServ";
     };
-    
+
     alias "NS" {
       target = "NickServ";
     };
-    
+
     alias "CS" {
       target = "ChanServ";
     };
-    
+
     alias "OS" {
       target = "OperServ";
     };
-    
+
     alias "MS" {
       target = "MemoServ";
     };
-    
+
     general {
       hide_error_messages = opers;
       hide_spoof_ips = yes;
-    
+
       /*
        * default_umodes: umodes to enable on connect.
        * If you have enabled the new ip_cloaking_4.0 module, and you want
@@ -533,7 +537,7 @@ let
        *	default_umodes = "+ih";
        */
       default_umodes = "+i";
-    
+
       default_operstring = "is an IRC Operator";
       default_adminstring = "is a Server Administrator";
       servicestring = "is a Network Service";
@@ -587,17 +591,15 @@ let
       max_ratelimit_tokens = 30;
       away_interval = 30;
     };
-    
+
     modules {
       path = "modules";
       path = "modules/autoload";
     };
-    
+
     exempt {
       ip = "10.243.0.0/16";
     };
   '';
-  
-  Zpkgs = import ../../Zpkgs/tv { inherit pkgs; };
 in
 out

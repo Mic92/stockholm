@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with import ../../4lib/tv { inherit lib pkgs; };
+with import ../lib { inherit lib pkgs; };
 let
 
   out = {

@@ -3,22 +3,22 @@
 with lib;
 
 let
-  Zpkgs = import ../../Zpkgs/tv { inherit pkgs; };
+  tvpkgs = import ../pkgs { inherit pkgs; };
 in
 
 {
   krebs.build.host = config.krebs.hosts.wu;
 
   imports = [
-    ../../2configs/tv/w110er.nix
-    ../../2configs/tv/base.nix
-    ../../2configs/tv/consul-client.nix
-    ../../2configs/tv/exim-retiolum.nix
-    ../../2configs/tv/git.nix
-    ../../2configs/tv/mail-client.nix
-    ../../2configs/tv/xserver.nix
-    ../../2configs/tv/synaptics.nix # TODO w110er if xserver is enabled
-    ../../2configs/tv/urlwatch.nix
+    ../configs/w110er.nix
+    ../configs/base.nix
+    ../configs/consul-client.nix
+    ../configs/exim-retiolum.nix
+    ../configs/git.nix
+    ../configs/mail-client.nix
+    ../configs/xserver.nix
+    ../configs/synaptics.nix # TODO w110er if xserver is enabled
+    ../configs/urlwatch.nix
     {
       environment.systemPackages = with pkgs; [
 
@@ -26,9 +26,9 @@ in
         git
         gnumake
         parallel
-        Zpkgs.genid
-        Zpkgs.hashPassword
-        Zpkgs.lentil
+        tvpkgs.genid
+        tvpkgs.hashPassword
+        tvpkgs.lentil
         (pkgs.writeScriptBin "ff" ''
           #! ${pkgs.bash}/bin/bash
           exec sudo -u ff -i <<EOF
@@ -75,8 +75,8 @@ in
         sxiv
         texLive
         tmux
+        tvpkgs.dic
         zathura
-        Zpkgs.dic
 
         #ack
         #apache-httpd
