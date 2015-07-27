@@ -22,6 +22,24 @@ let
     build = mkOption {
       type = types.submodule {
         options = {
+          deploy = mkOption {
+            type = with types; nullOr str;
+            default = null;
+          };
+          deps = mkOption {
+            type = with types; attrsOf (submodule {
+              options = {
+                url = mkOption {
+                  type = either str path;
+                };
+                rev = mkOption {
+                  type = nullOr str;
+                  default = null;
+                };
+              };
+            });
+            default = {};
+          };
           host = mkOption {
             type = types.host;
           };
