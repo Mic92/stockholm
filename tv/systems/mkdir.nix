@@ -4,6 +4,22 @@ with lib;
 
 {
   krebs.build.host = config.krebs.hosts.mkdir;
+  krebs.build.user = config.krebs.users.tv;
+
+  krebs.build.target = "root@mkdir.internet";
+
+  krebs.build.deps = {
+    nixpkgs = {
+      url = https://github.com/NixOS/nixpkgs;
+      rev = "9d5508d85c33b8fb22d79dde6176792eac2c2696";
+    };
+    secrets = {
+      url = "/home/tv/secrets/${config.krebs.build.host.name}";
+    };
+    stockholm = {
+      url = toString ../..;
+    };
+  };
 
   imports = [
     ../configs/CAC-Developer-1.nix
