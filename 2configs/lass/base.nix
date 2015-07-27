@@ -36,6 +36,11 @@ with lib;
     }
   ];
 
+  krebs = {
+    enable = true;
+    search-domain = "retiolum";
+  };
+
   nix.useChroot = true;
 
   users.mutableUsers = false;

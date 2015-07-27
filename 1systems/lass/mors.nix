@@ -22,7 +22,6 @@
     ../../2configs/lass/retiolum.nix
   ];
 
-  krebs.enable = true;
   krebs.build.host = config.krebs.hosts.mors;
 
   networking.hostName = "mors";
