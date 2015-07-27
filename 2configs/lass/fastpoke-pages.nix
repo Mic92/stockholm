@@ -5,7 +5,7 @@ with lib;
 let
   createStaticPage = domain:
     {
-      tv.nginx.servers."${domain}" = {
+      krebs.nginx.servers."${domain}" = {
         server-names = [
           "${domain}"
           "www.${domain}"
@@ -23,7 +23,6 @@ let
 
 in {
   imports = [
-    ../../3modules/tv/nginx.nix
     ../../3modules/lass/iptables.nix
   ] ++ map createStaticPage [
     "habsys.de"
@@ -43,7 +42,7 @@ in {
   };
 
 
-  tv.nginx = {
+  krebs.nginx = {
     enable = true;
     servers = {
 
