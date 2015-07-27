@@ -20,13 +20,10 @@
     ../../2configs/lass/git-repos.nix
     ../../2configs/tv/synaptics.nix
     ../../2configs/lass/retiolum.nix
-    {
-      imports = [ ../../3modules/tv/identity.nix ];
-      tv.identity = {
-        enable = true;
-      };
-    }
   ];
+
+  krebs.enable = true;
+  krebs.build.host = config.krebs.hosts.mors;
 
   networking.hostName = "mors";
   networking.wireless.enable = true;

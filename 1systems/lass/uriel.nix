@@ -13,12 +13,6 @@ with builtins;
     ../../2configs/lass/chromium-patched.nix
     ../../2configs/lass/retiolum.nix
     {
-      imports = [ ../../3modules/tv/identity.nix ];
-      tv.identity = {
-        enable = true;
-      };
-    }
-    {
       users.extraUsers = {
         root = {
           openssh.authorizedKeys.keys = map readFile [
@@ -29,7 +23,10 @@ with builtins;
     }
   ];
 
+  krebs.enable = true;
+  krebs.build.host = config.krebs.hosts.uriel;
   networking.hostName = "uriel";
+
   networking.wireless.enable = true;
   nix.maxJobs = 2;
 
