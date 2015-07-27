@@ -20,9 +20,9 @@ let
     enable = mkEnableOption "krebs";
 
     build = mkOption {
-      type = types.submodule {
+      type = types.submodule ({ config, ... }: {
         options = {
-          deploy = mkOption {
+          target = mkOption {
             type = with types; nullOr str;
             default = null;
           };
@@ -30,7 +30,7 @@ let
             type = with types; attrsOf (submodule {
               options = {
                 url = mkOption {
-                  type = either str path;
+                  type = str;
                 };
                 rev = mkOption {
                   type = nullOr str;
@@ -40,6 +40,85 @@ let
             });
             default = {};
           };
+          script = mkOption {
+            type = types.str;
+            default = ''
+              #! /bin/sh
+              set -efux
+
+              target=${escapeShellArg cfg.build.target}
+
+              push(){(
+                src=$1/
+                dst=$target:$2
+                rsync \
+                  --exclude .git \
+                  --exclude .graveyard \
+                  --exclude old \
+                  --rsync-path="mkdir -p \"$dst\" && rsync" \
+                  --usermap=\*:0 \
+                  --groupmap=\*:0 \
+                  --delete-excluded \
+                  -vrLptgoD \
+                  "$src" "$dst"
+              )}
+
+              ${concatStrings (mapAttrsToList (name: { url, rev, ... }:
+                optionalString (rev == null) ''
+                  push ${toString (map escapeShellArg [
+                    "${url}"
+                    "/root/src/${name}"
+                  ])}
+                '') config.deps)}
+
+              exec ssh -S none "$target" /bin/sh <<\EOF
+              set -efux
+              fetch(){(
+                url=$1
+                rev=$2
+                dst=$3
+                mkdir -p "$dst"
+                cd "$dst"
+                if ! test -e .git; then
+                  git init
+                fi
+                if ! cur_url=$(git config remote.origin.url 2>/dev/null); then
+                  git remote add origin "$url"
+                elif test "$cur_url" != "$url"; then
+                  git remote set-url origin "$url"
+                fi
+                if test "$(git rev-parse --verify HEAD 2>/dev/null)" != "$rev"; then
+                  git fetch origin
+                  git checkout "$rev" -- .
+                  git checkout -q "$rev"
+                  git submodule init
+                  git submodule update
+                fi
+                git clean -dxf
+              )}
+
+              ${concatStrings (mapAttrsToList (name: { url, rev, ... }:
+                optionalString (rev != null) ''
+                  fetch ${toString (map escapeShellArg [
+                    url
+                    rev
+                    "/root/src/${name}"
+                  ])}
+                '') config.deps)}
+
+              echo build system...
+              NIX_PATH=/root/src \
+              nix-build \
+                -Q \
+                -A system \
+                '<stockholm>' \
+                --argstr user-name ${escapeShellArg cfg.build.user.name} \
+                --argstr system-name ${escapeShellArg cfg.build.host.name}
+
+              exec result/bin/switch-to-configuration switch
+              EOF
+            '';
+          };
           host = mkOption {
             type = types.host;
           };
@@ -47,7 +126,7 @@ let
             type = types.user;
           };
         };
-      };
+      });
       # Define defaul value, so unset values of the submodule get reported.
       default = {};
     };
