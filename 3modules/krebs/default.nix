@@ -107,15 +107,18 @@ let
                 '') config.deps)}
 
               echo build system...
+              profile=/nix/var/nix/profiles/system
               NIX_PATH=/root/src \
-              nix-build \
+              nix-env \
                 -Q \
+                -p "$profile" \
+                -f '<stockholm>' \
+                --set \
                 -A system \
-                '<stockholm>' \
                 --argstr user-name ${escapeShellArg cfg.build.user.name} \
                 --argstr system-name ${escapeShellArg cfg.build.host.name}
 
-              exec result/bin/switch-to-configuration switch
+              exec "$profile"/bin/switch-to-configuration switch
               EOF
             '';
           };
