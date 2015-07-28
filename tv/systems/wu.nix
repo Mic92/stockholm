@@ -3,22 +3,38 @@
 with lib;
 
 let
-  Zpkgs = import ../../Zpkgs/tv { inherit pkgs; };
+  tvpkgs = import ../pkgs { inherit pkgs; };
 in
 
 {
   krebs.build.host = config.krebs.hosts.wu;
+  krebs.build.user = config.krebs.users.tv;
+
+  krebs.build.target = "root@wu";
+
+  krebs.build.deps = {
+    nixpkgs = {
+      url = https://github.com/NixOS/nixpkgs;
+      rev = "9d5508d85c33b8fb22d79dde6176792eac2c2696";
+    };
+    secrets = {
+      url = "/home/tv/secrets/${config.krebs.build.host.name}";
+    };
+    stockholm = {
+      url = toString ../..;
+    };
+  };
 
   imports = [
-    ../../2configs/tv/w110er.nix
-    ../../2configs/tv/base.nix
-    ../../2configs/tv/consul-client.nix
-    ../../2configs/tv/exim-retiolum.nix
-    ../../2configs/tv/git.nix
-    ../../2configs/tv/mail-client.nix
-    ../../2configs/tv/xserver.nix
-    ../../2configs/tv/synaptics.nix # TODO w110er if xserver is enabled
-    ../../2configs/tv/urlwatch.nix
+    ../configs/w110er.nix
+    ../configs/base.nix
+    ../configs/consul-client.nix
+    ../configs/exim-retiolum.nix
+    ../configs/git.nix
+    ../configs/mail-client.nix
+    ../configs/xserver.nix
+    ../configs/synaptics.nix # TODO w110er if xserver is enabled
+    ../configs/urlwatch.nix
     {
       environment.systemPackages = with pkgs; [
 
@@ -26,9 +42,28 @@ in
         git
         gnumake
         parallel
-        Zpkgs.genid
-        Zpkgs.hashPassword
-        Zpkgs.lentil
+        tvpkgs.genid
+        tvpkgs.hashPassword
+        tvpkgs.lentil
+        (pkgs.writeScriptBin "ff" ''
+          #! ${pkgs.bash}/bin/bash
+          exec sudo -u ff -i <<EOF
+          exec ${pkgs.firefoxWrapper}/bin/firefox $(printf " %q" "$@")
+          EOF
+        '')
+        (pkgs.writeScriptBin "im" ''
+          #! ${pkgs.bash}/bin/bash
+          export PATH=${makeSearchPath "bin" (with pkgs; [
+            tmux
+            gnugrep
+            weechat
+          ])}
+          if tmux list-sessions -F\#S | grep -q '^im''$'; then
+            exec tmux attach -t im
+          else
+            exec tmux new -s im weechat
+          fi
+        '')
 
         # root
         cryptsetup
@@ -56,9 +91,8 @@ in
         sxiv
         texLive
         tmux
-        weechat
+        tvpkgs.dic
         zathura
-        Zpkgs.dic
 
         #ack
         #apache-httpd
@@ -151,19 +185,21 @@ in
     }
     {
       users.extraGroups = {
-        tv-sub.gid = 1337;
+        tv.gid = 1337;
+        slaves.gid = 3799582008; # genid slaves
       };
 
       users.extraUsers =
-        mapAttrs (name: user: user // {
+        mapAttrs (name: user@{ extraGroups ? [], ... }: user // {
           inherit name;
           home = "/home/${name}";
           createHome = true;
           useDefaultShell = true;
+          group = "tv";
+          extraGroups = ["slaves"] ++ extraGroups;
         }) {
           ff = {
             uid = 13378001;
-            group = "tv-sub";
             extraGroups = [
               "audio"
               "video"
@@ -172,17 +208,6 @@ in
 
           cr = {
             uid = 13378002;
-            group = "tv-sub";
-            extraGroups = [
-              "audio"
-              "video"
-              "bumblebee"
-            ];
-          };
-
-          vimb = {
-            uid = 13378003;
-            group = "tv-sub";
             extraGroups = [
               "audio"
               "video"
@@ -192,47 +217,38 @@ in
 
           fa = {
             uid = 2300001;
-            group = "tv-sub";
           };
 
           rl = {
             uid = 2300002;
-            group = "tv-sub";
           };
 
           tief = {
             uid = 2300702;
-            group = "tv-sub";
           };
 
           btc-bitcoind = {
             uid = 2301001;
-            group = "tv-sub";
           };
 
           btc-electrum = {
             uid = 2301002;
-            group = "tv-sub";
           };
 
           ltc-litecoind = {
             uid = 2301101;
-            group = "tv-sub";
           };
 
           eth = {
             uid = 2302001;
-            group = "tv-sub";
           };
 
           emse-hsdb = {
             uid = 4200101;
-            group = "tv-sub";
           };
 
           wine = {
             uid = 13370400;
-            group = "tv-sub";
             extraGroups = [
               "audio"
               "video"
@@ -240,36 +256,17 @@ in
             ];
           };
 
-          # dwarffortress
           df = {
             uid = 13370401;
-            group = "tv-sub";
             extraGroups = [
               "audio"
               "video"
               "bumblebee"
             ];
-          };
-
-          # XXX visudo: Warning: Runas_Alias `FTL' referenced but not defined
-          FTL = {
-            uid = 13370402;
-            #group = "tv-sub";
-            extraGroups = [
-              "audio"
-              "video"
-              "bumblebee"
-            ];
-          };
-
-          freeciv = {
-            uid = 13370403;
-            group = "tv-sub";
           };
 
           xr = {
             uid = 13370061;
-            group = "tv-sub";
             extraGroups = [
               "audio"
               "video"
@@ -278,26 +275,14 @@ in
 
           "23" = {
             uid = 13370023;
-            group = "tv-sub";
           };
 
           electrum = {
             uid = 13370102;
-            group = "tv-sub";
-          };
-
-          Reaktor = {
-            uid = 4230010;
-            group = "tv-sub";
-          };
-
-          gitolite = {
-            uid = 7700;
           };
 
           skype = {
             uid = 6660001;
-            group = "tv-sub";
             extraGroups = [
               "audio"
             ];
@@ -305,12 +290,10 @@ in
 
           onion = {
             uid = 6660010;
-            group = "tv-sub";
           };
 
           zalora = {
             uid = 1000301;
-            group = "tv-sub";
             extraGroups = [
               "audio"
               # TODO remove vboxusers when hardening is active
@@ -322,17 +305,12 @@ in
 
       security.sudo.extraConfig =
         let
-          inherit (import ../../4lib/tv { inherit lib pkgs; })
-            isSuffixOf;
-
-          hasMaster = { group ? "", ... }:
-            isSuffixOf "-sub" group;
-
-          masterOf = user : removeSuffix "-sub" user.group;
+          isSlave = u: elem "slaves" u.extraGroups;
+          masterOf = u: u.group;
+          slaves = filterAttrs (_: isSlave) config.users.extraUsers;
+          toSudoers = u: "${masterOf u} ALL=(${u.name}) NOPASSWD: ALL";
         in
-        concatStringsSep "\n"
-          (map (u: "${masterOf u} ALL=(${u.name}) NOPASSWD: ALL")
-               (filter hasMaster (attrValues config.users.extraUsers)));
+        concatMapStringsSep "\n" toSudoers (attrValues slaves);
     }
   ];
 
@@ -363,7 +341,6 @@ in
     };
   };
 
-  nixpkgs.config.firefox.enableAdobeFlash = true;
   nixpkgs.config.chromium.enablePepperFlash = true;
 
   nixpkgs.config.allowUnfree = true;

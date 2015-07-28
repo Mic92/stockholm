@@ -11,7 +11,8 @@
       ../../2configs/makefu/base.nix
       ../../2configs/makefu/cgit-retiolum.nix
     ];
-  krebs.enable = true;
+  krebs.build.host = config.krebs.hosts.pnp;
+
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/vda";
@@ -39,14 +40,8 @@
     ];
   };
 
-  nix.maxJobs = 2;
-  networking.hostName = "pnp"; # Define your hostname.
-
 # $ nix-env -qaP | grep wget
     environment.systemPackages = with pkgs; [
-      wget
-      git
-      gnumake
       jq
     ];
 }

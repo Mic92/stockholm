@@ -1,6 +1,6 @@
 { pkgs, ... }:
 
-with import ../../Zpkgs/tv { inherit pkgs; };
+with import ../pkgs { inherit pkgs; };
 
 {
   environment.systemPackages = [

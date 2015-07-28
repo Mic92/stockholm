@@ -55,7 +55,7 @@ types // rec {
         type = listOf hostname;
       };
       tinc = mkOption {
-        type = let net-config = config; in submodule ({ config, ... }: {
+        type = let net-config = config; in nullOr (submodule ({ config, ... }: {
           options = {
             config = mkOption {
               type = str;
@@ -70,7 +70,8 @@ types // rec {
               type = str;
             };
           };
-        });
+        }));
+        default = null;
       };
     };
   });

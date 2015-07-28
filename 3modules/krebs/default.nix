@@ -20,7 +20,7 @@ let
     enable = mkEnableOption "krebs";
 
     build = mkOption {
-      type = types.submodule {
+      type = types.submodule ({ config, ... }: {
         options = {
           target = mkOption {
             type = with types; nullOr str;
@@ -129,9 +129,17 @@ let
             type = types.user;
           };
         };
-      };
+      });
       # Define defaul value, so unset values of the submodule get reported.
       default = {};
+    };
+
+    dns = {
+      providers = mkOption {
+        # TODO with types; tree dns.label dns.provider, so we can merge.
+        # Currently providers can only be merged if aliases occur just once.
+        type = with types; attrsOf unspecified;
+      };
     };
 
     hosts = mkOption {
@@ -156,43 +164,31 @@ let
     { krebs = makefu-imp; }
     { krebs = tv-imp; }
     {
+      krebs.dns.providers = {
+        de.krebsco = "ovh";
+        internet = "hosts";
+        retiolum = "hosts";
+        de.habsys = "hosts";
+        de.pixelpocket = "hosts";
+        de.karlaskop = "hosts";
+        de.ubikmedia = "hosts";
+        de.apanowicz = "hosts";
+      };
+
       # XXX This overlaps with krebs.retiolum
-      networking.extraHosts =
-        let
-          # TODO move domain name providers to a dedicated module
-          # providers : tree label providername
-          providers = {
-            internet = "hosts";
-            retiolum = "hosts";
-            de.viljetic = "regfish";
-            de.krebsco = "ovh";
-            de.habsys = "hosts";
-            de.pixelpocket = "hosts";
-            de.karlaskop = "hosts";
-            de.ubikmedia = "hosts";
-            de.apanowicz = "hosts";
-          };
-
-          # splitByProvider : [alias] -> listset providername alias
-          splitByProvider = foldl (acc: alias: listset-insert (providerOf alias) alias acc) {};
-
-          # providerOf : alias -> providername
-          providerOf = alias:
-            tree-get (splitString "." alias) providers;
-        in
-        concatStringsSep "\n" (flatten (
-          # TODO deepMap ["hosts" "nets"] (hostname: host: netname: net:
-          mapAttrsToList (hostname: host:
-            mapAttrsToList (netname: net:
-              let
-                aliases = toString (unique (longs ++ shorts));
-                longs = (splitByProvider net.aliases).hosts;
-                shorts = map (removeSuffix ".${cfg.search-domain}") longs;
-              in
-              map (addr: "${addr} ${aliases}") net.addrs
-            ) host.nets
-          ) config.krebs.hosts
-        ));
+      networking.extraHosts = concatStringsSep "\n" (flatten (
+        mapAttrsToList (hostname: host:
+          mapAttrsToList (netname: net:
+            let
+              aliases = toString (unique (longs ++ shorts));
+              providers = dns.split-by-provider net.aliases cfg.dns.providers;
+              longs = providers.hosts;
+              shorts = map (removeSuffix ".${cfg.search-domain}") longs;
+            in
+            map (addr: "${addr} ${aliases}") net.addrs
+          ) host.nets
+        ) cfg.hosts
+      ));
     }
   ];
 
@@ -330,6 +326,9 @@ let
   };
 
   tv-imp = {
+    dns.providers = {
+      de.viljetic = "regfish";
+    };
     hosts = addNames {
       cd = {
         cores = 2;

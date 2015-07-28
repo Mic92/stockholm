@@ -4,13 +4,29 @@ with lib;
 
 {
   krebs.build.host = config.krebs.hosts.nomic;
+  krebs.build.user = config.krebs.users.tv;
+
+  krebs.build.target = "root@nomic.gg23";
+
+  krebs.build.deps = {
+    nixpkgs = {
+      url = https://github.com/NixOS/nixpkgs;
+      rev = "9d5508d85c33b8fb22d79dde6176792eac2c2696";
+    };
+    secrets = {
+      url = "/home/tv/secrets/${config.krebs.build.host.name}";
+    };
+    stockholm = {
+      url = toString ../..;
+    };
+  };
 
   imports = [
-    ../../2configs/tv/AO753.nix
-    ../../2configs/tv/base.nix
-    ../../2configs/tv/consul-server.nix
-    ../../2configs/tv/exim-retiolum.nix
-    ../../2configs/tv/git.nix
+    ../configs/AO753.nix
+    ../configs/base.nix
+    ../configs/consul-server.nix
+    ../configs/exim-retiolum.nix
+    ../configs/git.nix
     {
       tv.iptables = {
         enable = true;

@@ -4,7 +4,7 @@ diff -rN -u old-lentil/src/Lentil/File.hs new-lentil/src/Lentil/File.hs
 @@ -13,10 +13,13 @@
  import Lentil.Types
  import Lentil.Parse.Run
- 
+
 +import System.Directory
  import System.FilePath
  import System.FilePath.Find
@@ -12,12 +12,12 @@ diff -rN -u old-lentil/src/Lentil/File.hs new-lentil/src/Lentil/File.hs
  import Data.Monoid
  import Control.Applicative
 +import Control.Exception.Base
- 
+
  import qualified Data.List as L
- 
+
 @@ -36,7 +39,12 @@
  --------------
- 
+
  findIssues :: [FilePath] -> [FilePath] -> IO [Issue]
 -findIssues is xs = find always (findClause is xs) "." >>= issueFinder
 +findIssues is xs =
@@ -26,7 +26,7 @@ diff -rN -u old-lentil/src/Lentil/File.hs new-lentil/src/Lentil/File.hs
 +  mapM (\i -> find always (findClause [i] xs) i) >>=
 +  return . concat >>=
 +  issueFinder
- 
+
  -- fp to include, fp to exclude, clause
  findClause :: [FilePath] -> [FilePath] -> FindClause Bool
 @@ -47,6 +55,6 @@
@@ -36,4 +36,4 @@ diff -rN -u old-lentil/src/Lentil/File.hs new-lentil/src/Lentil/File.hs
 -          fp2fc f = Any . L.isPrefixOf (combine "." f) <$> filePath
 +          fp2fc f = Any . L.isPrefixOf f <$> filePath
            -- TODO: combine funziona su windows? [feature:intermediate]
- 
+

@@ -4,14 +4,30 @@ with lib;
 
 {
   krebs.build.host = config.krebs.hosts.rmdir;
+  krebs.build.user = config.krebs.users.tv;
+
+  krebs.build.target = "root@rmdir.internet";
+
+  krebs.build.deps = {
+    nixpkgs = {
+      url = https://github.com/NixOS/nixpkgs;
+      rev = "4c01e6d91993b6de128795f4fbdd25f6227fb870";
+    };
+    secrets = {
+      url = "/home/tv/secrets/${config.krebs.build.host.name}";
+    };
+    stockholm = {
+      url = toString ../..;
+    };
+  };
 
   imports = [
-    ../../2configs/tv/CAC-Developer-1.nix
-    ../../2configs/tv/CAC-CentOS-7-64bit.nix
-    ../../2configs/tv/base.nix
-    ../../2configs/tv/consul-server.nix
-    ../../2configs/tv/exim-smarthost.nix
-    ../../2configs/tv/git.nix
+    ../configs/CAC-Developer-1.nix
+    ../configs/CAC-CentOS-7-64bit.nix
+    ../configs/base.nix
+    ../configs/consul-server.nix
+    ../configs/exim-smarthost.nix
+    ../configs/git.nix
     {
       tv.iptables = {
         enable = true;
