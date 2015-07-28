@@ -23,8 +23,23 @@ with builtins;
     }
   ];
 
-  krebs.enable = true;
-  krebs.build.host = config.krebs.hosts.uriel;
+  krebs.build = {
+    target = "root@uriel";
+    host = config.krebs.hosts.uriel;
+    deps = {
+      nixpkgs = {
+        url = https://github.com/Lassulus/nixpkgs;
+        rev = "961fcbabd7643171ea74bd550fee1ce5c13c2e90";
+      };
+      secrets = {
+        url = "/home/lass/secrets/${config.krebs.build.host.name}";
+      };
+      stockholm = {
+        url = toString ../..;
+      };
+    };
+  };
+
   networking.hostName = "uriel";
 
   networking.wireless.enable = true;

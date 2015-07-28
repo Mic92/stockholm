@@ -18,11 +18,26 @@
     ../../2configs/lass/ircd.nix
     ../../2configs/lass/chromium-patched.nix
     ../../2configs/lass/new-repos.nix
-    ../../2configs/tv/synaptics.nix
+    #../../2configs/tv/synaptics.nix
     ../../2configs/lass/retiolum.nix
   ];
 
-  krebs.build.host = config.krebs.hosts.mors;
+  krebs.build = {
+    target = "root@mors";
+    host = config.krebs.hosts.mors;
+    deps = {
+      nixpkgs = {
+        url = https://github.com/Lassulus/nixpkgs;
+        rev = "1879a011925c561f0a7fd4043da0768bbff41d0b";
+      };
+      secrets = {
+        url = "/home/lass/secrets/${config.krebs.build.host.name}";
+      };
+      stockholm = {
+        url = toString ../..;
+      };
+    };
+  };
 
   networking.hostName = "mors";
   networking.wireless.enable = true;
