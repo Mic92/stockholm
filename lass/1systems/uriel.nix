@@ -24,6 +24,7 @@ with builtins;
   ];
 
   krebs.build = {
+    user = config.krebs.users.lass;
     target = "root@uriel";
     host = config.krebs.hosts.uriel;
     deps = {

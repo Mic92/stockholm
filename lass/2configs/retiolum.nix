@@ -2,8 +2,8 @@
 
 {
   imports = [
-    ../../3modules/lass/iptables.nix
-    ../../tv/configs/exim-retiolum.nix
+    ../3modules/iptables.nix
+    ../../tv/2configs/exim-retiolum.nix
   ];
 
   lass.iptables = {

@@ -24,6 +24,7 @@
   ];
 
   krebs.build = {
+    user = config.krebs.users.lass;
     target = "root@cloudkrebs";
     host = config.krebs.hosts.cloudkrebs;
     deps = {

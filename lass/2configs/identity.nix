@@ -1,7 +1,9 @@
 { config, ... }:
 
 {
-  imports = [ ../../3modules/tv/identity.nix ];
+  imports = [
+    ../../tv/3modules/identity.nix
+  ];
   tv.identity = {
     enable = true;
     search = "retiolum";

@@ -2,27 +2,28 @@
 
 {
   imports = [
-    ../../2configs/lass/desktop-base.nix
-    ../../2configs/lass/programs.nix
-    ../../2configs/lass/bitcoin.nix
-    ../../2configs/lass/browsers.nix
-    ../../2configs/lass/games.nix
-    ../../2configs/lass/pass.nix
-    ../../2configs/lass/virtualbox.nix
-    ../../2configs/lass/elster.nix
-    ../../2configs/lass/urxvt.nix
-    ../../2configs/lass/steam.nix
-    ../../2configs/lass/wine.nix
-    ../../2configs/lass/texlive.nix
-    ../../2configs/lass/binary-caches.nix
-    ../../2configs/lass/ircd.nix
-    ../../2configs/lass/chromium-patched.nix
-    ../../2configs/lass/new-repos.nix
+    ../2configs/desktop-base.nix
+    ../2configs/programs.nix
+    ../2configs/bitcoin.nix
+    ../2configs/browsers.nix
+    ../2configs/games.nix
+    ../2configs/pass.nix
+    ../2configs/virtualbox.nix
+    ../2configs/elster.nix
+    ../2configs/urxvt.nix
+    ../2configs/steam.nix
+    ../2configs/wine.nix
+    ../2configs/texlive.nix
+    ../2configs/binary-caches.nix
+    ../2configs/ircd.nix
+    ../2configs/chromium-patched.nix
+    ../2configs/new-repos.nix
     #../../2configs/tv/synaptics.nix
-    ../../2configs/lass/retiolum.nix
+    ../2configs/retiolum.nix
   ];
 
   krebs.build = {
+    user = config.krebs.users.lass;
     target = "root@mors";
     host = config.krebs.hosts.mors;
     deps = {

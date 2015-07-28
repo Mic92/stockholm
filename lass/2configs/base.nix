@@ -3,8 +3,8 @@
 with lib;
 {
   imports = [
-    ../../3modules/lass/iptables.nix
-    ../../2configs/lass/vim.nix
+    ../3modules/iptables.nix
+    ../2configs/vim.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
