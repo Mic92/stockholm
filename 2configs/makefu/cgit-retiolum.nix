@@ -1,4 +1,5 @@
 { config, lib, pkgs, ... }:
+# TODO: remove tv lib :)
 with import ../../4lib/tv { inherit lib pkgs; };
 let
 
@@ -7,23 +8,31 @@ let
     krebs.git = {
       enable = true;
       root-title = "public repositories ";
-      root-desc = "keep calm and enrage";
-      inherit repos rules ;
+      root-desc = "keep on krebsing";
+      inherit repos rules;
     };
   };
+  repos = priv-repos // krebs-repos ;
+  rules = concatMap krebs-rules (attrValues krebs-repos) ++ concatMap priv-rules (attrValues priv-repos);
 
-  repos = public-repos;
-  rules = concatMap make-rules (attrValues repos);
-
-  public-repos = mapAttrs make-public-repo {
+  krebs-repos = mapAttrs make-krebs-repo {
     stockholm = {
       desc = "take all the computers hostage, they'll love you!";
     };
   };
 
-  # TODO move users to separate module
+  priv-repos = mapAttrs make-priv-repo {
+    autosync = { };
+  };
 
-  make-public-repo = name: { desc ? null, ... }: {
+
+  # TODO move users to separate module
+  make-priv-repo = name: { desc ? null, ... }: {
+    inherit name desc;
+    public = false;
+  };
+
+  make-krebs-repo = with git; name: { desc ? null, ... }: {
     inherit name desc;
     public = true;
     hooks = {
@@ -35,18 +44,27 @@ let
     };
   };
 
-  make-rules =
-    with git // config.krebs.users;
-    repo:
+  set-owners = with git; repo: user:
       singleton {
-        user = makefu;
+        inherit user;
         repo = [ repo ];
         perm = push "refs/*" [ non-fast-forward create delete merge ];
-      } ++
+      };
+
+  set-ro-access = with git; repo: user:
       optional repo.public {
-        user = [ lass tv uriel ];
+        inherit user;
         repo = [ repo ];
         perm = fetch;
       };
+
+  # TODO: get the list of all krebsministers
+  krebsminister = with config.krebs.users; [ lass tv uriel ];
+
+  priv-rules = with config.krebs.users; repo:
+    set-owners repo [ makefu ];
+
+  krebs-rules = with config.krebs.users; repo:
+    set-owners repo [ makefu ] ++ set-ro-access repo krebsminister ;
 
 in out
