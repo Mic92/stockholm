@@ -4,10 +4,10 @@ let
 
   eval = import <nixpkgs/nixos/lib/eval-config.nix> {
     system = builtins.currentSystem;
-    modules = [
-      (./1systems + "/${user-name}/${system-name}.nix")
-      (./3modules/krebs)
-      (./3modules + "/${user-name}")
+    modules = map (p: ./. + "/${p}") [
+      "${user-name}/systems/${system-name}.nix"
+      "${user-name}/modules"
+      "3modules/krebs"
     ];
   };
 
