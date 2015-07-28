@@ -197,7 +197,7 @@ let
     };
   };
 
-  makefu-imp = { 
+  makefu-imp = {
     hosts = addNames {
       pnp = {
         cores = 1;
@@ -226,6 +226,7 @@ let
     };
     users = addNames {
       makefu = {
+        mail = "root@euer.krebsco.de";
         pubkey = readFile ../../Zpubkeys/makefu_arch.ssh.pub;
       };
     };
