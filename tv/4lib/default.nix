@@ -1,11 +1,16 @@
 { lib, pkgs, ... }:
 
-with lib;
+let
+  krebs = import ../../4lib/krebs { inherit lib; };
+in
 
-lib // rec {
+with krebs;
+
+krebs // rec {
 
   git = import ./git.nix {
-    inherit lib pkgs;
+    lib = krebs;
+    inherit pkgs;
   };
 
   # "7.4.335" -> "74"
