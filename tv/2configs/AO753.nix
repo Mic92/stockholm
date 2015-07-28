@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../configs/smartd.nix
+    ../2configs/smartd.nix
   ];
 
   boot.loader.grub = {

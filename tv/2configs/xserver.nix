@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../configs/urxvt.nix # TODO via xserver
+    ../2configs/urxvt.nix # TODO via xserver
   ];
 
   services.xserver.enable = true;

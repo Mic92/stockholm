@@ -3,7 +3,7 @@
 with lib;
 
 let
-  tvpkgs = import ../pkgs { inherit pkgs; };
+  tvpkgs = import ../5pkgs { inherit pkgs; };
 in
 
 {
@@ -26,14 +26,14 @@ in
   };
 
   imports = [
-    ../configs/CAC-Developer-2.nix
-    ../configs/CAC-CentOS-7-64bit.nix
-    ../configs/base.nix
-    ../configs/consul-server.nix
-    ../configs/exim-smarthost.nix
-    ../configs/git.nix
+    ../2configs/CAC-Developer-2.nix
+    ../2configs/CAC-CentOS-7-64bit.nix
+    ../2configs/base.nix
+    ../2configs/consul-server.nix
+    ../2configs/exim-smarthost.nix
+    ../2configs/git.nix
     {
-      imports = [ ../configs/charybdis.nix ];
+      imports = [ ../2configs/charybdis.nix ];
       tv.charybdis = {
         enable = true;
         sslCert = ../../Zcerts/charybdis_cd.crt.pem;
