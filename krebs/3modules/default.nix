@@ -1,6 +1,6 @@
 { config, lib, ... }:
 
-with import ../../4lib/krebs { inherit lib; };
+with import ../4lib { inherit lib; };
 let
   cfg = config.krebs;
 
@@ -167,11 +167,6 @@ let
         de.krebsco = "ovh";
         internet = "hosts";
         retiolum = "hosts";
-        de.habsys = "hosts";
-        de.pixelpocket = "hosts";
-        de.karlaskop = "hosts";
-        de.ubikmedia = "hosts";
-        de.apanowicz = "hosts";
       };
 
       # XXX This overlaps with krebs.retiolum
@@ -210,11 +205,6 @@ let
             aliases = [
               "cloudkrebs.retiolum"
               "cgit.cloudkrebs.retiolum"
-              "habsys.de"
-              "pixelpocket.de"
-              "karlaskop.de"
-              "ubikmedia.de"
-              "apanowicz.de"
             ];
             tinc.pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----

@@ -61,9 +61,9 @@ let
             ${cfg.ssh-identity-file} \
             "$ssh_identity_file_target"
 
-          ln -snf ${Zpkgs.github-known_hosts} ${cfg.dataDir}/.ssh/known_hosts
+          ln -snf ${kpkgs.github-known_hosts} ${cfg.dataDir}/.ssh/known_hosts
         '';
-        ExecStart = "${Zpkgs.github-hosts-sync}/bin/github-hosts-sync";
+        ExecStart = "${kpkgs.github-hosts-sync}/bin/github-hosts-sync";
       };
     };
 
@@ -78,6 +78,6 @@ let
     uid = 3220554646; # genid github-hosts-sync
   };
 
-  Zpkgs = import ../../Zpkgs/krebs { inherit pkgs; };
+  kpkgs = import ../../krebs/5pkgs { inherit pkgs; };
 in
 out

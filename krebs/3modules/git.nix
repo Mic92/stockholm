@@ -6,15 +6,11 @@
 # TODO when authorized_keys changes, then restart ssh
 #       (or kill already connected users somehow)
 
-with import ../../4lib/krebs { inherit lib; };
+with import ../4lib { inherit lib; };
 let
   cfg = config.krebs.git;
 
   out = {
-    # TODO don't import krebs.nginx here
-    imports = [
-      ../../3modules/krebs/nginx.nix
-    ];
     options.krebs.git = api;
     config = mkIf cfg.enable (mkMerge [
       (mkIf cfg.cgit cgit-imp)
