@@ -3,15 +3,15 @@
 with lib;
 
 {
-  krebs.build.host = config.krebs.hosts.rmdir;
+  krebs.build.host = config.krebs.hosts.mkdir;
   krebs.build.user = config.krebs.users.tv;
 
-  krebs.build.target = "root@rmdir.internet";
+  krebs.build.target = "root@mkdir.internet";
 
   krebs.build.deps = {
     nixpkgs = {
       url = https://github.com/NixOS/nixpkgs;
-      rev = "4c01e6d91993b6de128795f4fbdd25f6227fb870";
+      rev = "9d5508d85c33b8fb22d79dde6176792eac2c2696";
     };
     secrets = {
       url = "/home/tv/secrets/${config.krebs.build.host.name}";
@@ -22,12 +22,12 @@ with lib;
   };
 
   imports = [
-    ../configs/CAC-Developer-1.nix
-    ../configs/CAC-CentOS-7-64bit.nix
-    ../configs/base.nix
-    ../configs/consul-server.nix
-    ../configs/exim-smarthost.nix
-    ../configs/git.nix
+    ../2configs/CAC-Developer-1.nix
+    ../2configs/CAC-CentOS-7-64bit.nix
+    ../2configs/base.nix
+    ../2configs/consul-server.nix
+    ../2configs/exim-smarthost.nix
+    ../2configs/git.nix
     {
       tv.iptables = {
         enable = true;
@@ -46,7 +46,6 @@ with lib;
         enable = true;
         connectTo = [
           "cd"
-          "mkdir"
           "fastpoke"
           "pigstarter"
           "ire"
@@ -57,11 +56,11 @@ with lib;
 
   networking.interfaces.enp2s1.ip4 = [
     {
-      address = "167.88.44.94";
+      address = "162.248.167.241"; # TODO
       prefixLength = 24;
     }
   ];
-  networking.defaultGateway = "167.88.44.1";
+  networking.defaultGateway = "162.248.167.1";
   networking.nameservers = [
     "8.8.8.8"
   ];

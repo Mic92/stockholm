@@ -22,11 +22,11 @@ with lib;
   };
 
   imports = [
-    ../configs/AO753.nix
-    ../configs/base.nix
-    ../configs/consul-server.nix
-    ../configs/exim-retiolum.nix
-    ../configs/git.nix
+    ../2configs/AO753.nix
+    ../2configs/base.nix
+    ../2configs/consul-server.nix
+    ../2configs/exim-retiolum.nix
+    ../2configs/git.nix
     {
       tv.iptables = {
         enable = true;
