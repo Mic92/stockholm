@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  tvpkgs = import ../pkgs { inherit pkgs; };
+  tvpkgs = import ../5pkgs { inherit pkgs; };
 in
 
 with builtins;

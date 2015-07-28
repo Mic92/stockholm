@@ -3,7 +3,7 @@
 with lib;
 
 let
-  tvpkgs = import ../pkgs { inherit pkgs; };
+  tvpkgs = import ../5pkgs { inherit pkgs; };
 in
 
 {
@@ -26,15 +26,15 @@ in
   };
 
   imports = [
-    ../configs/w110er.nix
-    ../configs/base.nix
-    ../configs/consul-client.nix
-    ../configs/exim-retiolum.nix
-    ../configs/git.nix
-    ../configs/mail-client.nix
-    ../configs/xserver.nix
-    ../configs/synaptics.nix # TODO w110er if xserver is enabled
-    ../configs/urlwatch.nix
+    ../2configs/w110er.nix
+    ../2configs/base.nix
+    ../2configs/consul-client.nix
+    ../2configs/exim-retiolum.nix
+    ../2configs/git.nix
+    ../2configs/mail-client.nix
+    ../2configs/xserver.nix
+    ../2configs/synaptics.nix # TODO w110er if xserver is enabled
+    ../2configs/urlwatch.nix
     {
       environment.systemPackages = with pkgs; [
 
