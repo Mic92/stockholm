@@ -23,7 +23,7 @@ let
 
 in {
   imports = [
-    ../../3modules/lass/iptables.nix
+    ../3modules/iptables.nix
   ] ++ map createStaticPage [
     "habsys.de"
     "pixelpocket.de"
