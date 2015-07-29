@@ -12,7 +12,7 @@ with lib;
 
 let
 
-  inherit (import ../../4lib/tv { inherit pkgs lib; }) shell-escape;
+  inherit (import ../../tv/4lib { inherit pkgs lib; }) shell-escape;
   inherit (pkgs) writeScript;
 
 in

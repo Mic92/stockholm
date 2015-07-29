@@ -7,7 +7,7 @@ let
     modules = map (p: ./. + "/${p}") [
       "${user-name}/1systems/${system-name}.nix"
       "${user-name}/3modules"
-      "3modules/krebs"
+      "krebs/3modules"
     ];
   };
 

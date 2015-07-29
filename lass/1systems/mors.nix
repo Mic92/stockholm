@@ -2,44 +2,43 @@
 
 {
   imports = [
-    ../../2configs/lass/desktop-base.nix
-    ../../2configs/lass/programs.nix
-    ../../2configs/lass/bitcoin.nix
-    ../../2configs/lass/browsers.nix
-    ../../2configs/lass/games.nix
-    ../../2configs/lass/pass.nix
-    ../../2configs/lass/vim.nix
-    ../../2configs/lass/virtualbox.nix
-    ../../2configs/lass/elster.nix
-    ../../2configs/lass/urxvt.nix
-    ../../2configs/lass/steam.nix
-    ../../2configs/lass/wine.nix
-    ../../2configs/lass/texlive.nix
-    ../../2configs/lass/binary-caches.nix
-    ../../2configs/lass/ircd.nix
-    ../../2configs/lass/chromium-patched.nix
-    ../../2configs/lass/git-repos.nix
-    ../../2configs/tv/synaptics.nix
-    ../../2configs/tv/exim-retiolum.nix
-    {
-      imports = [ ../../3modules/tv/retiolum.nix ];
-      tv.retiolum = {
-        enable = true;
-        hosts = ../../Zhosts;
-        connectTo = [
-          "fastpoke"
-          "gum"
-          "pigstarter"
-        ];
-      };
-    }
-    {
-      imports = [ ../../3modules/tv/identity.nix ];
-      tv.identity = {
-        enable = true;
-      };
-    }
+    ../2configs/desktop-base.nix
+    ../2configs/programs.nix
+    ../2configs/bitcoin.nix
+    ../2configs/browsers.nix
+    ../2configs/games.nix
+    ../2configs/pass.nix
+    ../2configs/virtualbox.nix
+    ../2configs/elster.nix
+    ../2configs/urxvt.nix
+    ../2configs/steam.nix
+    ../2configs/wine.nix
+    ../2configs/texlive.nix
+    ../2configs/binary-caches.nix
+    ../2configs/ircd.nix
+    ../2configs/chromium-patched.nix
+    ../2configs/new-repos.nix
+    #../../2configs/tv/synaptics.nix
+    ../2configs/retiolum.nix
   ];
+
+  krebs.build = {
+    user = config.krebs.users.lass;
+    target = "root@mors";
+    host = config.krebs.hosts.mors;
+    deps = {
+      nixpkgs = {
+        url = https://github.com/Lassulus/nixpkgs;
+        rev = "1879a011925c561f0a7fd4043da0768bbff41d0b";
+      };
+      secrets = {
+        url = "/home/lass/secrets/${config.krebs.build.host.name}";
+      };
+      stockholm = {
+        url = toString ../..;
+      };
+    };
+  };
 
   networking.hostName = "mors";
   networking.wireless.enable = true;
@@ -168,21 +167,6 @@
     '';
   };
 
-  users.extraUsers = {
-    #main user
-    mainUser = {
-      uid = 1337;
-      name = "lass";
-      #isNormalUser = true;
-      group = "users";
-      createHome = true;
-      home = "/home/lass";
-      useDefaultShell = true;
-      isSystemUser = false;
-      extraGroups = [ "wheel" "audio" ];
-    };
-  };
-
   environment.systemPackages = with pkgs; [
   ];
 
@@ -216,5 +200,13 @@
 
   services.mongodb = {
     enable = true;
+  };
+
+  lass.iptables = {
+    tables = {
+      filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; precedence = 9001; }
+      ];
+    };
   };
 }

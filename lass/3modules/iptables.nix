@@ -106,7 +106,7 @@ let
 
       buildChain = tn: cn:
         let
-          sortedRules = sort (a: b: a.precedence < b.precedence) ts."${tn}"."${cn}".rules;
+          sortedRules = sort (a: b: a.precedence > b.precedence) ts."${tn}"."${cn}".rules;
 
         in
           #TODO: double check should be unneccessary, refactor!

@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 
 let
-  krebs = import ../../4lib/krebs { inherit lib; };
+  krebs = import ../../krebs/4lib { inherit lib; };
 in
 
 with krebs;

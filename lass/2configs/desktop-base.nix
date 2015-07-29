@@ -55,11 +55,9 @@ in {
     displayManager.auto.enable = true;
     displayManager.auto.user = mainUser.name;
 
-    layout = "us,de";
+    layout = "us";
     xkbModel = "evdev";
-    xkbVariant = "altgr-intl,nodeadkeys";
-    xkbOptions = "grp:caps_toggle";
-
+    xkbVariant = "altgr-intl";
   };
 
 }

@@ -7,8 +7,8 @@ in
 
 {
   imports = [
-    ../../3modules/lass/urxvtd.nix
-    ../../3modules/lass/xresources.nix
+    ../3modules/urxvtd.nix
+    ../3modules/xresources.nix
   ];
 
   services.urxvtd = {

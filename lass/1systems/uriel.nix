@@ -1,38 +1,48 @@
 { config, pkgs, ... }:
 
+with builtins;
 {
   imports = [
     ../../2configs/lass/desktop-base.nix
     ../../2configs/lass/browsers.nix
     ../../2configs/lass/games.nix
     ../../2configs/lass/pass.nix
-    ../../2configs/lass/vim.nix
     ../../2configs/lass/urxvt.nix
     ../../2configs/lass/bird.nix
-    ../../2configs/lass/git-repos.nix
+    ../../2configs/lass/new-repos.nix
     ../../2configs/lass/chromium-patched.nix
-    ../../2configs/tv/exim-retiolum.nix
+    ../../2configs/lass/retiolum.nix
     {
-      imports = [ ../../3modules/tv/retiolum.nix ];
-      tv.retiolum = {
-        enable = true;
-        hosts = ../../Zhosts;
-        connectTo = [
-          "fastpoke"
-          "gum"
-          "pigstarter"
-        ];
-      };
-    }
-    {
-      imports = [ ../../3modules/tv/identity.nix ];
-      tv.identity = {
-        enable = true;
+      users.extraUsers = {
+        root = {
+          openssh.authorizedKeys.keys = map readFile [
+            ../../Zpubkeys/uriel.ssh.pub
+          ];
+        };
       };
     }
   ];
 
+  krebs.build = {
+    user = config.krebs.users.lass;
+    target = "root@uriel";
+    host = config.krebs.hosts.uriel;
+    deps = {
+      nixpkgs = {
+        url = https://github.com/Lassulus/nixpkgs;
+        rev = "961fcbabd7643171ea74bd550fee1ce5c13c2e90";
+      };
+      secrets = {
+        url = "/home/lass/secrets/${config.krebs.build.host.name}";
+      };
+      stockholm = {
+        url = toString ../..;
+      };
+    };
+  };
+
   networking.hostName = "uriel";
+
   networking.wireless.enable = true;
   nix.maxJobs = 2;
 
@@ -85,29 +95,6 @@
       Option "FingerHigh" "60"
       Option "FingerLow"  "60"
     '';
-  };
-
-  users.extraUsers = {
-    root = {
-      openssh.authorizedKeys.keys = [
-        config.sshKeys.lass.pub
-      ];
-    };
-    mainUser = {
-      uid = 1337;
-      name = "lass";
-      #isNormalUser = true;
-      group = "users";
-      createHome = true;
-      home = "/home/lass";
-      useDefaultShell = true;
-      isSystemUser = false;
-      description = "lassulus";
-      extraGroups = [ "wheel" "audio" ];
-      openssh.authorizedKeys.keys = [
-        config.sshKeys.lass.pub
-      ];
-    };
   };
 
   environment.systemPackages = with pkgs; [
