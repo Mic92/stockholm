@@ -1,17 +1,8 @@
 { config, lib, pkgs, ... }:
 # TODO: remove tv lib :)
-with import ../../4lib/tv { inherit lib pkgs; };
+with import ../../tv/4lib { inherit lib pkgs; };
 let
 
-  out = {
-    imports = [ ../../3modules/krebs/git.nix ];
-    krebs.git = {
-      enable = true;
-      root-title = "public repositories ";
-      root-desc = "keep on krebsing";
-      inherit repos rules;
-    };
-  };
   repos = priv-repos // krebs-repos ;
   rules = concatMap krebs-rules (attrValues krebs-repos) ++ concatMap priv-rules (attrValues priv-repos);
 
@@ -39,12 +30,13 @@ let
       post-receive = git.irc-announce {
         nick = config.networking.hostName;
         channel = "#retiolum";
+        # TODO remove the hardcoded hostname
         server = "cd.retiolum";
       };
     };
   };
 
-  set-owners = with git; repo: user:
+  set-owners = with git;repo: user:
       singleton {
         inherit user;
         repo = [ repo ];
@@ -61,10 +53,27 @@ let
   # TODO: get the list of all krebsministers
   krebsminister = with config.krebs.users; [ lass tv uriel ];
 
-  priv-rules = with config.krebs.users; repo:
-    set-owners repo [ makefu ];
+  #all-makefu =  with config.krebs.users; [ makefu ];
 
-  krebs-rules = with config.krebs.users; repo:
-    set-owners repo [ makefu ] ++ set-ro-access repo krebsminister ;
 
-in out
+  all-makefu = with config.krebs.users; [ makefu makefu-omo ];
+
+  priv-rules = repo: set-owners repo all-makefu;
+
+  krebs-rules = repo:
+    set-owners repo all-makefu ++ set-ro-access repo krebsminister;
+
+in {
+  imports = [{
+    krebs.users.makefu-omo = {
+        name = "makefu-omo" ;
+        pubkey= with builtins; readFile ../../Zpubkeys/makefu_omo.ssh.pub;
+    };
+  }];
+  krebs.git = {
+    enable = true;
+    root-title = "public repositories";
+    root-desc = "keep on krebsing";
+    inherit repos rules;
+  };
+}
