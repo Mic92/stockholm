@@ -90,7 +90,7 @@ in
         rxvt_unicode.terminfo
       ];
 
-      environment.shellAliases = {
+      environment.shellAliases = mkForce {
         # alias cal='cal -m3'
         gp = "${pkgs.pari}/bin/gp -q";
         df = "df -h";
