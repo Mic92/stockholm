@@ -44,6 +44,11 @@
   networking.wireless.enable = true;
 
   networking.extraHosts = ''
+    10.243.206.102 habsys.de
+    10.243.206.102 pixelpocket.de
+    10.243.206.102 karlaskop.de
+    10.243.206.102 ubikmedia.de
+    10.243.206.102 apanowicz.de
   '';
 
   nix.maxJobs = 4;
