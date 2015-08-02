@@ -11,9 +11,9 @@
       ../2configs/base.nix
       ../2configs/cgit-retiolum.nix
     ];
-  krebs.build.host = config.krebs.hosts.pnp;
+  krebs.build.host = config.krebs.hosts.repunit;
   krebs.build.user = config.krebs.users.makefu;
-  krebs.build.target = "root@pnp";
+  krebs.build.target = "root@repunit";
 
   krebs.build.deps = {
     nixpkgs = {
@@ -40,7 +40,6 @@
 
 # networking.firewall is enabled by default
   networking.firewall.allowedTCPPorts = [ 80 ];
-  networking.firewall.rejectPackets = true;
   networking.firewall.allowPing = true;
 
   fileSystems."/" =
