@@ -55,7 +55,7 @@ let
                   --exclude .git \
                   --exclude .graveyard \
                   --exclude old \
-                  --rsync-path="mkdir -p \"$dst\" && rsync" \
+                  --rsync-path="mkdir -p \"$2\" && rsync" \
                   --usermap=\*:0 \
                   --groupmap=\*:0 \
                   --delete-excluded \
