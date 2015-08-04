@@ -2,12 +2,12 @@
 
 {
   imports = [
-    ../../2configs/tv/CAC-Developer-2.nix
-    ../../2configs/tv/CAC-CentOS-7-64bit.nix
-    ../../2configs/lass/base.nix
-    ../../2configs/lass/retiolum.nix
-    ../../2configs/lass/fastpoke-pages.nix
-    ../../2configs/lass/new-repos.nix
+    ../../tv/2configs/CAC-Developer-2.nix
+    ../../tv/2configs/CAC-CentOS-7-64bit.nix
+    ../2configs/base.nix
+    ../2configs/retiolum.nix
+    ../2configs/fastpoke-pages.nix
+    ../2configs/new-repos.nix
     {
       networking.interfaces.enp2s1.ip4 = [
         {

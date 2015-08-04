@@ -19,11 +19,18 @@ let
       #networking.extraHosts = ''
       #  10.243.206.102 ${domain}
       #'';
+      users.extraUsers = {
+        "${domain}" = {
+          name = "${domain}";
+          home = "/var/lib/http/${domain}";
+          createHome = true;
+        };
+      };
     };
 
 in {
   imports = [
-    ../../3modules/lass/iptables.nix
+    ../3modules/iptables.nix
   ] ++ map createStaticPage [
     "habsys.de"
     "pixelpocket.de"
@@ -44,7 +51,6 @@ in {
   krebs.nginx = {
     enable = true;
     servers = {
-
       #"habsys.de" = {
       #  server-names = [
       #    "habsys.de"
@@ -84,9 +90,9 @@ in {
     };
   };
 
-  #services.postgresql = {
-  #  enable = true;
-  #};
+  services.postgresql = {
+    enable = true;
+  };
 
   #config.services.vsftpd = {
   #  enable = true;
