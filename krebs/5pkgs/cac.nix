@@ -29,7 +29,7 @@ stdenv.mkDerivation {
       mkdir -p $out/bin
 
       sed \
-        's,^\(  true) \)\(cac "$@";;\)$,\1 PATH=${path} \2,' \
+        's,^\(  true) \)\(cac "$@";;\)$,\1 PATH=${path}${PATH+:$PATH} \2,' \
         < ./cac \
         > $out/bin/cac
 
