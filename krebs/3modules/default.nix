@@ -311,7 +311,7 @@ let
         dc = "makefu"; #x200
         nets = {
           retiolum = {
-            addrs4 = ["10.243.0.211"];
+            addrs4 = ["10.243.0.212"];
             addrs6 = ["42:f9f1:0000:0000:0000:0000:0000:0002"];
             aliases = [
               "tsp.retiolum"
