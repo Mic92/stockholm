@@ -91,6 +91,7 @@ in
         sxiv
         texLive
         tmux
+        tvpkgs.cac
         tvpkgs.dic
         zathura
 
