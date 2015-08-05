@@ -5,8 +5,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = http://cgit.cd.retiolum/cac;
-    rev = "07ef31c50613634e88a31233d1fcd2ec3e52bfe8";
-    sha256 = "4e94709a3f580a53983ca418fa0b470817ac917aa1b2d095f2420afd36ea9158";
+    rev = "0fc9cbeba4060380f698f51bb74081e2fcefadf3";
+    sha256 = "9759c78aa9aa04ab82486d0f24264bff1081513bc07cac0f8b3c0bdf52260fb3";
   };
 
   phases = [
