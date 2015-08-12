@@ -307,7 +307,7 @@ let
         };
       };
       tsp = {
-        cores = 4;
+        cores = 2;
         dc = "makefu"; #x200
         nets = {
           retiolum = {
