@@ -6,6 +6,7 @@ let
 
   out = {
     imports = [
+      ./exim-retiolum.nix
       ./github-hosts-sync.nix
       ./git.nix
       ./nginx.nix
@@ -55,7 +56,7 @@ let
                   --exclude .git \
                   --exclude .graveyard \
                   --exclude old \
-                  --rsync-path="mkdir -p \"$dst\" && rsync" \
+                  --rsync-path="mkdir -p \"$2\" && rsync" \
                   --usermap=\*:0 \
                   --groupmap=\*:0 \
                   --delete-excluded \
@@ -164,7 +165,7 @@ let
     { krebs = tv-imp; }
     {
       krebs.dns.providers = {
-        de.krebsco = "ovh";
+        de.krebsco = "zones";
         internet = "hosts";
         retiolum = "hosts";
       };
@@ -183,7 +184,42 @@ let
           ) host.nets
         ) cfg.hosts
       ));
-    }
+
+      # krebs.hosts.bob = rec {
+      #   addrs4 = "10.0.0.1";
+      #   extraZones = {
+      #     # extraZones
+      #     "krebsco.de" = ''
+      #     krebsco.de.       IN MX 10 mx1
+      #     mx1               IN A     ${addrs4}
+      #     '';
+      #     "dickbutt.de" = ''
+      #     dickbutt.de.       IN NS    ns
+      #     ns                IN A     ${addrs4}
+      #     ''
+      #   }
+      # }
+      # krebs.hosts.khan = rec {
+      #   addrs4 = "10.0.0.2";
+      #   extraZones = {
+      #      "krebsco.de" = ''
+      #      khan.krebsco.de     IN A   ${addrs4}
+      #   };
+      # }
+      #
+      #  =>
+      #  "zone/krebsco.de".text = ''
+      #    krebsco.de.         IN MX 10 mx1
+      #    mx1                 IN A     10.0.0.1
+      #    khan.krebsco.de     IN A     10.0.0.2
+      #  '';
+
+
+      environment.etc = mapAttrs'
+                        (name: value:
+                          nameValuePair (("zones/" + name)) ({ text=value;}))
+                        cfg.hosts.pigstarter.extraZones;
+      }
   ];
 
   lass-imp = {
@@ -306,10 +342,106 @@ let
           };
         };
       };
+      tsp = {
+        cores = 2;
+        dc = "makefu"; #x200
+        nets = {
+          retiolum = {
+            addrs4 = ["10.243.0.212"];
+            addrs6 = ["42:f9f1:0000:0000:0000:0000:0000:0002"];
+            aliases = [
+              "tsp.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIICCgKCAgEAwW+RjRcp3uarkfXZ+FcCYY2GFcfI595GDpLRuiS/YQAB3JZEirHi
+              HFhDJN80fZ9qHqtq9Af462xSx+cIb282TxAqCM1Z9buipOcYTYo0m8xIqkT10dB3
+              mR87B+Ed1H6G3J6isdwEb9ZMegyGIIeyR53FJQYMZXjxdJbAmGMDKqjZSk1D5mo+
+              n5Vx3lGzTuDy84VyphfO2ypG48RHCxHUAx4Yt3o84LKoiy/y5E66jaowCOjZ6SqG
+              R0cymuhoBhMIk2xAXk0Qn7MZ1AOm9N7Wru7FXyoLc7B3+Gb0/8jXOJciysTG7+Gr
+              Txza6fJvq2FaH8iBnfezSELmicIYhc8Ynlq4xElcHhQEmRTQavVe/LDhJ0i6xJSi
+              aOu0njnK+9xK+MyDkB7n8dO1Iwnn7aG4n3CjVBB4BDO08lrovD3zdpDX0xhWgPRo
+              ReOJ3heRO/HsVpzxKlqraKWoHuOXXcREfU9cj3F6CRd0ECOhqtFMEr6TnuSc8GaE
+              KCKxY1oN45NbEFOCv2XKd2wEZFH37LFO6xxzSRr1DbVuKRYIPjtOiFKpwN1TIT8v
+              XGzTT4TJpBGnq0jfhFwhVjfCjLuGj29MCkvg0nqObQ07qYrjdQI4W1GnGOuyXkvQ
+              teyxjUXYbp0doTGxKvQaTWp+JapeEaJPN2MDOhrRFjPrzgo3aW9+97UCAwEAAQ==
+              -----END RSA PUBLIC KEY-----
+              '';
+          };
+        };
+      };
+      pornocauster = {
+        cores = 2;
+        dc = "makefu"; #x220
+        nets = {
+          retiolum = {
+            addrs4 = ["10.243.0.91"];
+            addrs6 = ["42:0b2c:d90e:e717:03dc:9ac1:7c30:a4db"];
+            aliases = [
+              "pornocauster.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIICCgKCAgEAwW+RjRcp3uarkfXZ+FcCYY2GFcfI595GDpLRuiS/YQAB3JZEirHi
+              HFhDJN80fZ9qHqtq9Af462xSx+cIb282TxAqCM1Z9buipOcYTYo0m8xIqkT10dB3
+              mR87B+Ed1H6G3J6isdwEb9ZMegyGIIeyR53FJQYMZXjxdJbAmGMDKqjZSk1D5mo+
+              n5Vx3lGzTuDy84VyphfO2ypG48RHCxHUAx4Yt3o84LKoiy/y5E66jaowCOjZ6SqG
+              R0cymuhoBhMIk2xAXk0Qn7MZ1AOm9N7Wru7FXyoLc7B3+Gb0/8jXOJciysTG7+Gr
+              Txza6fJvq2FaH8iBnfezSELmicIYhc8Ynlq4xElcHhQEmRTQavVe/LDhJ0i6xJSi
+              aOu0njnK+9xK+MyDkB7n8dO1Iwnn7aG4n3CjVBB4BDO08lrovD3zdpDX0xhWgPRo
+              ReOJ3heRO/HsVpzxKlqraKWoHuOXXcREfU9cj3F6CRd0ECOhqtFMEr6TnuSc8GaE
+              KCKxY1oN45NbEFOCv2XKd2wEZFH37LFO6xxzSRr1DbVuKRYIPjtOiFKpwN1TIT8v
+              XGzTT4TJpBGnq0jfhFwhVjfCjLuGj29MCkvg0nqObQ07qYrjdQI4W1GnGOuyXkvQ
+              teyxjUXYbp0doTGxKvQaTWp+JapeEaJPN2MDOhrRFjPrzgo3aW9+97UCAwEAAQ==
+              -----END RSA PUBLIC KEY-----
+              '';
+          };
+        };
+      };
+      pigstarter = rec {
+        cores = 1;
+        dc = "frontrange"; #vps
+
+        extraZones = {
+          "de.krebsco" = ''
+            pigstarter.krebsco.de       IN A ${elemAt nets.internet.addrs4 0}
+            krebsco.de.                 IN NS io
+            io                          IN A ${elemAt nets.internet.addrs4 0}
+            krebsco.de.                 IN MX 10 mx42
+            mx42                        IN A ${elemAt nets.internet.addrs4 0}
+            '';
+        };
+        nets = {
+          internet = {
+            addrs4 = ["192.40.56.122"];
+            addrs6 = ["2604:2880::841f:72c"];
+            aliases = [
+              "pigstarter.internet"
+            ];
+          };
+          retiolum = {
+            addrs4 = ["10.243.0.153"];
+            addrs6 = ["42:9143:b4c0:f981:6030:7aa2:8bc5:4110"];
+            aliases = [
+              "pigstarter.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEA/efJuJRLUIZROe3QE8WYTD/zyNGRh9I2/yw+5It9HSNVDMIOV1FZ
+              9PaspsC+YQSBUQRN8SJ95G4RM6TIn/+ei7LiUYsf1Ik+uEOpP5EPthXqvdJEeswv
+              3QFwbpBeOMNdvmGvQLeR1uJKVyf39iep1wWGOSO1sLtUA+skUuN38QKc1BPASzFG
+              4ATM6rd2Tkt8+9hCeoePJdLr3pXat9BBuQIxImgx7m5EP02SH1ndb2wttQeAi9cE
+              DdJadpzOcEgFatzXP3SoKVV9loRHz5HhV4WtAqBIkDvgjj2j+NnXolAUY25Ix+kv
+              sfqfIw5aNLoIX4kDhuDEVBIyoc7/ofSbkQIDAQAB
+              -----END RSA PUBLIC KEY-----
+              '';
+          };
+        };
+      };
     };
     users = addNames {
       makefu = {
-        mail = "root@euer.krebsco.de";
+        mail = "root@tsp.retiolum";
         pubkey = readFile ../../Zpubkeys/makefu_arch.ssh.pub;
       };
     };
@@ -323,6 +455,13 @@ let
       cd = {
         cores = 2;
         dc = "tv"; #dc = "cac";
+        extraZones = {
+          "de.krebsco" = ''
+            mx23          IN A ${elemAt nets.internet.addrs4 0}
+            cd            IN A ${elemAt nets.internet.addrs4 0}
+            krebsco.de.   IN MX 5 mx23
+          '';
+        };
         nets = rec {
           internet = {
             addrs4 = ["162.219.7.216"];

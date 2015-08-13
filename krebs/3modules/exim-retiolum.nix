@@ -1,15 +1,27 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-{
-  services.exim =
-    # This configuration makes only sense for retiolum-enabled hosts.
-    # TODO modular configuration
-    assert config.krebs.retiolum.enable;
-    let
-      # TODO get the hostname from config.krebs.retiolum.
-      retiolumHostname = "${config.networking.hostName}.retiolum";
-    in
-      { enable = true;
+with builtins;
+with lib;
+let
+  cfg = config.krebs.exim-retiolum;
+
+  out = {
+    options.krebs.exim-retiolum = api;
+    config =
+      mkIf cfg.enable imp;
+  };
+
+  api = {
+    enable = mkEnableOption "krebs.exim-retiolum";
+  };
+
+  imp = {
+    services.exim =
+      # This configuration makes only sense for retiolum-enabled hosts.
+      # TODO modular configuration
+      assert config.krebs.retiolum.enable;
+      {
+        enable = true;
         config = ''
           primary_hostname = ${retiolumHostname}
           domainlist local_domains    = @ : localhost
@@ -123,4 +135,9 @@
           begin authenticators
         '';
       };
-}
+  };
+
+  # TODO get the hostname from somewhere else.
+  retiolumHostname = "${config.networking.hostName}.retiolum";
+in
+out

@@ -20,6 +20,13 @@ types // rec {
         type = attrsOf net;
         apply = x: assert hasAttr "retiolum" x; x;
       };
+
+      extraZones = mkOption {
+        default = {};
+        # TODO: string is either MX, NS, A or AAAA
+        type = with types; attrsOf string;
+      };
+
       secure = mkOption {
         type = bool;
         default = false;

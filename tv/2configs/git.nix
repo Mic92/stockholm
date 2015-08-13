@@ -20,6 +20,9 @@ let
   rules = concatMap make-rules (attrValues repos);
 
   public-repos = mapAttrs make-public-repo {
+    cac = {
+      desc = "CloudAtCost command line interface";
+    };
     cgserver = {};
     crude-mail-setup = {};
     dot-xmonad = {};

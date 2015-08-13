@@ -6,6 +6,7 @@ in
 
 pkgs //
 {
+  cac = callPackage ./cac.nix {};
   dic = callPackage ./dic.nix {};
   genid = callPackage ./genid.nix {};
   github-hosts-sync = callPackage ./github-hosts-sync.nix {};

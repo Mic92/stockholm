@@ -25,7 +25,7 @@ deploy:;@
 eval:
 	@
 ifeq ($(filter),json)
-	extraArgs=--json
+	extraArgs='--json --strict'
 	filter() { jq -r .; }
 else
 	filter() { cat; }
@@ -33,8 +33,6 @@ endif
 	NIX_PATH=stockholm=$$PWD:$$NIX_PATH \
 	nix-instantiate \
 		$${extraArgs-} \
-		$${json+--json} \
-		$${json+--strict} \
 		--eval \
 		-A "$$get" \
 		'<stockholm>' \

@@ -25,7 +25,6 @@ with lib;
     ../2configs/AO753.nix
     ../2configs/base.nix
     ../2configs/consul-server.nix
-    ../2configs/exim-retiolum.nix
     ../2configs/git.nix
     {
       tv.iptables = {
@@ -37,6 +36,9 @@ with lib;
           "smtp"
         ];
       };
+    }
+    {
+      krebs.exim-retiolum = true;
     }
     {
       krebs.nginx = {
