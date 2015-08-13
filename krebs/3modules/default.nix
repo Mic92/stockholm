@@ -184,7 +184,42 @@ let
           ) host.nets
         ) cfg.hosts
       ));
-    }
+
+      # krebs.hosts.bob = rec {
+      #   addrs4 = "10.0.0.1";
+      #   extraZones = {
+      #     # extraZones
+      #     "krebsco.de" = ''
+      #     krebsco.de.       IN MX 10 mx1
+      #     mx1               IN A     ${addrs4}
+      #     '';
+      #     "dickbutt.de" = ''
+      #     dickbutt.de.       IN NS    ns
+      #     ns                IN A     ${addrs4}
+      #     ''
+      #   }
+      # }
+      # krebs.hosts.khan = rec {
+      #   addrs4 = "10.0.0.2";
+      #   extraZones = {
+      #      "krebsco.de" = ''
+      #      khan.krebsco.de     IN A   ${addrs4}
+      #   };
+      # }
+      #
+      #  =>
+      #  "zone/krebsco.de".text = ''
+      #    krebsco.de.         IN MX 10 mx1
+      #    mx1                 IN A     10.0.0.1
+      #    khan.krebsco.de     IN A     10.0.0.2
+      #  '';
+
+
+      environment.etc = mapAttrs'
+                        (name: value:
+                          nameValuePair (("zones/" + name)) ({ text=value;}))
+                        cfg.hosts.pigstarter.extraZones;
+      }
   ];
 
   lass-imp = {
@@ -363,22 +398,25 @@ let
           };
         };
       };
-      pigstarter = {
+      pigstarter = rec {
         cores = 1;
         dc = "frontrange"; #vps
+
+        extraZones = {
+          "de.krebsco" = ''
+            pigstarter.krebsco.de       IN A ${elemAt nets.internet.addrs4 0}
+            krebsco.de.                 IN NS io
+            io                          IN A ${elemAt nets.internet.addrs4 0}
+            krebsco.de.                 IN MX 10 mx42
+            mx42                        IN A ${elemAt nets.internet.addrs4 0}
+            '';
+        };
         nets = {
           internet = {
             addrs4 = ["192.40.56.122"];
             addrs6 = ["2604:2880::841f:72c"];
             aliases = [
               "pigstarter.internet"
-            ];
-            zones = [
-              { "pigstarter.krebsco.de" = "A";}
-              { "io.krebsco.de" = "NS";}
-              { "io.krebsco.de" = "A";}
-              { "mx42.krebsco.de" = "MX";}
-              { "mx42.krebsco.de" = "A";}
             ];
           };
           retiolum = {
