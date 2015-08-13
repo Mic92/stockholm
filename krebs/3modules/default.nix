@@ -164,7 +164,7 @@ let
     { krebs = tv-imp; }
     {
       krebs.dns.providers = {
-        de.krebsco = "ovh";
+        de.krebsco = "zones";
         internet = "hosts";
         retiolum = "hosts";
       };
@@ -329,6 +329,43 @@ let
               KCKxY1oN45NbEFOCv2XKd2wEZFH37LFO6xxzSRr1DbVuKRYIPjtOiFKpwN1TIT8v
               XGzTT4TJpBGnq0jfhFwhVjfCjLuGj29MCkvg0nqObQ07qYrjdQI4W1GnGOuyXkvQ
               teyxjUXYbp0doTGxKvQaTWp+JapeEaJPN2MDOhrRFjPrzgo3aW9+97UCAwEAAQ==
+              -----END RSA PUBLIC KEY-----
+              '';
+          };
+        };
+      };
+      pigstarter = {
+        cores = 1;
+        dc = "makefu"; #x200
+        nets = {
+          internet = {
+            addrs4 = ["192.40.56.122"];
+            addrs6 = ["2604:2880::841f:72c"];
+            aliases = [
+              "pigstarter.internet"
+            ];
+            zones = [
+              { "pigstarter.krebsco.de" = "A";}
+              { "io.krebsco.de" = "NS";}
+              { "io.krebsco.de" = "A";}
+              { "mx42.krebsco.de" = "MX";}
+              { "mx42.krebsco.de" = "A";}
+            ];
+          };
+          retiolum = {
+            addrs4 = ["10.243.0.153"];
+            addrs6 = ["42:9143:b4c0:f981:6030:7aa2:8bc5:4110"];
+            aliases = [
+              "pigstarter.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEA/efJuJRLUIZROe3QE8WYTD/zyNGRh9I2/yw+5It9HSNVDMIOV1FZ
+              9PaspsC+YQSBUQRN8SJ95G4RM6TIn/+ei7LiUYsf1Ik+uEOpP5EPthXqvdJEeswv
+              3QFwbpBeOMNdvmGvQLeR1uJKVyf39iep1wWGOSO1sLtUA+skUuN38QKc1BPASzFG
+              4ATM6rd2Tkt8+9hCeoePJdLr3pXat9BBuQIxImgx7m5EP02SH1ndb2wttQeAi9cE
+              DdJadpzOcEgFatzXP3SoKVV9loRHz5HhV4WtAqBIkDvgjj2j+NnXolAUY25Ix+kv
+              sfqfIw5aNLoIX4kDhuDEVBIyoc7/ofSbkQIDAQAB
               -----END RSA PUBLIC KEY-----
               '';
           };
