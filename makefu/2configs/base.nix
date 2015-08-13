@@ -2,11 +2,18 @@
 
 with lib;
 {
-  imports = [ ];
+  imports = [
+    {
+      users.extraUsers =
+        mapAttrs (_: h: { hashedPassword = h; })
+                 (import /root/src/secrets/hashedPasswords.nix);
+    }
+    ./vim.nix
+  ];
   krebs.enable = true;
   krebs.search-domain = "retiolum";
 
-  networking.hostName = config.krebs.build.host.name;
+
   users.extraUsers = {
     root = {
         openssh.authorizedKeys.keys = [ config.krebs.users.makefu.pubkey ];
@@ -24,12 +31,29 @@ with lib;
     };
   };
 
+  networking.hostName = config.krebs.build.host.name;
+  nix.maxJobs = config.krebs.build.host.cores + 1;
+  #nix.maxJobs = 1;
+
+  krebs.build.deps = {
+    secrets = {
+      url = "/home/makefu/secrets/${config.krebs.build.host.name}";
+    };
+    stockholm = {
+      url = toString ../..;
+    };
+  };
+
   services.openssh.enable = true;
   nix.useChroot = true;
 
-  users.mutableUsers = true;
+  users.mutableUsers = false;
 
   boot.tmpOnTmpfs = true;
+
+  networking.firewall.rejectPackets = true;
+  networking.firewall.allowPing = true;
+
   systemd.tmpfiles.rules = [
     "d /tmp 1777 root root - -"
   ];
