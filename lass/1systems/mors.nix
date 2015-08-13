@@ -29,7 +29,7 @@
     deps = {
       nixpkgs = {
         url = https://github.com/Lassulus/nixpkgs;
-        rev = "1879a011925c561f0a7fd4043da0768bbff41d0b";
+        rev = "961fd7b7a0f88dde7dac2f7a4c05ee4e1a25381d";
       };
       secrets = {
         url = "/home/lass/secrets/${config.krebs.build.host.name}";
