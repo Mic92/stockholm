@@ -29,7 +29,6 @@ in
     ../2configs/w110er.nix
     ../2configs/base.nix
     ../2configs/consul-client.nix
-    ../2configs/exim-retiolum.nix
     ../2configs/git.nix
     ../2configs/mail-client.nix
     ../2configs/xserver.nix
@@ -164,6 +163,9 @@ in
           "smtp"
         ];
       };
+    }
+    {
+      krebs.exim-retiolum = true;
     }
     {
       krebs.nginx = {
