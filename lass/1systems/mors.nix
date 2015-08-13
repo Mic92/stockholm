@@ -20,6 +20,7 @@
     ../2configs/new-repos.nix
     #../../2configs/tv/synaptics.nix
     ../2configs/retiolum.nix
+    ../2configs/wordpress.nix
   ];
 
   krebs.build = {
