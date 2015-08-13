@@ -10,8 +10,9 @@ let
     config =
       # This configuration makes only sense for retiolum-enabled hosts.
       # TODO modular configuration
-      assert config.krebs.retiolum.enable;
-      mkIf cfg.enable imp;
+      mkIf cfg.enable (
+        #assert config.krebs.retiolum.enable;
+        imp);
   };
 
   api = {
