@@ -90,9 +90,9 @@ in {
     };
   };
 
-  services.postgresql = {
-    enable = true;
-  };
+  #services.postgresql = {
+  #  enable = true;
+  #};
 
   #config.services.vsftpd = {
   #  enable = true;
