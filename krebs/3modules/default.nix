@@ -6,6 +6,7 @@ let
 
   out = {
     imports = [
+      ./exim-retiolum.nix
       ./github-hosts-sync.nix
       ./git.nix
       ./nginx.nix
