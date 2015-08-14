@@ -74,7 +74,7 @@ in
           { from = "spam@krebsco.de";
             to = pkgs.lib.concatStringsSep "," [
               tv.mail
-              lass.mail
+              "lass@mors.retiolum"
               makefu.mail
             ];
           }
