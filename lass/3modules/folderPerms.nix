@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
 
+#TODO: implement recursive mode maybe?
+# enable different mods for files and folders
+
 let
   inherit (pkgs)
     writeScript
@@ -45,10 +48,6 @@ let
             '';
             default = null;
           };
-          recursive = mkOption {
-            type = bool;
-            default = false;
-          };
         };
       }));
     };
@@ -85,23 +84,21 @@ let
     ];
 
   buildPermission = perm:
+    #TODO: create folder maybe
+    #TODO: check if permission is valid
     if (perm.permission == null) then
       ""
     else
-      if perm.recursive then
-        "chmod -R ${perm.permission} ${perm.path}"
-      else
-        "chmod ${perm.permission} ${perm.path}"
+      "chmod ${perm.permission} ${perm.path}"
   ;
 
   buildOwner = perm:
+    #TODO: create folder maybe
+    #TODO: check if owner/group valid
     if (perm.owner == null) then
       ""
     else
-      if perm.recursive then
-        "chown -R ${perm.owner} ${perm.path}"
-      else
-        "chown ${perm.owner} ${perm.path}"
+      "chown ${perm.owner} ${perm.path}"
   ;
 
 in out
