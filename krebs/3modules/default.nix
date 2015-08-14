@@ -310,9 +310,11 @@ let
     users = addNames {
       lass = {
         pubkey = readFile ../../Zpubkeys/lass.ssh.pub;
+        mail = "lass@mors.retiolum";
       };
       uriel = {
         pubkey = readFile ../../Zpubkeys/uriel.ssh.pub;
+        mail = "uriel@mors.retiolum";
       };
     };
   };
