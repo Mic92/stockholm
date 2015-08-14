@@ -20,8 +20,8 @@ let
       #  10.243.206.102 ${domain}
       #'';
       users.extraUsers = {
-        "${domain}" = {
-          name = "${domain}";
+        ${domain} = {
+          name = domain;
           home = "/var/lib/http/${domain}";
           createHome = true;
         };
@@ -90,9 +90,9 @@ in {
     };
   };
 
-  services.postgresql = {
-    enable = true;
-  };
+  #services.postgresql = {
+  #  enable = true;
+  #};
 
   #config.services.vsftpd = {
   #  enable = true;

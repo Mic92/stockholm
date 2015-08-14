@@ -165,7 +165,7 @@ in
       };
     }
     {
-      krebs.exim-retiolum = true;
+      krebs.exim-retiolum.enable = true;
     }
     {
       krebs.nginx = {

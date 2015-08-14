@@ -3,15 +3,15 @@
 with builtins;
 {
   imports = [
-    ../../2configs/lass/desktop-base.nix
-    ../../2configs/lass/browsers.nix
-    ../../2configs/lass/games.nix
-    ../../2configs/lass/pass.nix
-    ../../2configs/lass/urxvt.nix
-    ../../2configs/lass/bird.nix
-    ../../2configs/lass/new-repos.nix
-    ../../2configs/lass/chromium-patched.nix
-    ../../2configs/lass/retiolum.nix
+    ../2configs/desktop-base.nix
+    ../2configs/browsers.nix
+    ../2configs/games.nix
+    ../2configs/pass.nix
+    ../2configs/urxvt.nix
+    ../2configs/bird.nix
+    ../2configs/new-repos.nix
+    ../2configs/chromium-patched.nix
+    ../2configs/retiolum.nix
     {
       users.extraUsers = {
         root = {
