@@ -167,12 +167,13 @@ let
         # TODO: configure the default somewhere else,
         # maybe use krebs.dns.providers
       default = {
+
+        # github.io -> 192.30.252.154
         "krebsco.de" = ''
           $TTL 86400
           @ IN SOA dns19.ovh.net. tech.ovh.net. (2015052000 86400 3600 3600000 86400)
                                 IN NS     ns19.ovh.net.
                                 IN NS     dns19.ovh.net.
-          # github.io
                                 IN A      192.30.252.154
                                 IN A      192.30.252.153
         '';
