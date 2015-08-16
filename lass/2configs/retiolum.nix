@@ -3,7 +3,6 @@
 {
   imports = [
     ../3modules/iptables.nix
-    ../../tv/2configs/exim-retiolum.nix
   ];
 
   lass.iptables = {

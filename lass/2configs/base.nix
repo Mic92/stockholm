@@ -58,8 +58,6 @@ with lib;
   '';
 
   environment.systemPackages = with pkgs; [
-    nmap
-
     git
     most
     rxvt_unicode.terminfo
