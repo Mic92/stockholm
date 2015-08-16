@@ -158,6 +158,26 @@ let
       type = types.hostname;
       default = "retiolum";
     };
+    zone-head-config  = mkOption {
+      type = with types; attrsOf str;
+      description = ''
+        The zone configuration head which is being used to create the
+        zone files. The string for each key is pre-pended to the zone file.
+        '';
+        # TODO: configure the default somewhere else,
+        # maybe use krebs.dns.providers
+      default = {
+        "krebsco.de" = ''
+          $TTL 86400
+          @ IN SOA dns19.ovh.net. tech.ovh.net. (2015052000 86400 3600 3600000 86400)
+                                IN NS     ns19.ovh.net.
+                                IN NS     dns19.ovh.net.
+          # github.io
+                                IN A      192.30.252.154
+                                IN A      192.30.252.153
+        '';
+        };
+    };
   };
 
   imp = mkMerge [
@@ -181,46 +201,18 @@ let
               longs = providers.hosts;
               shorts = map (removeSuffix ".${cfg.search-domain}") longs;
             in
-            map (addr: "${addr} ${aliases}") net.addrs
+              map (addr: "${addr} ${aliases}") net.addrs
           ) host.nets
         ) cfg.hosts
       ));
 
-      # krebs.hosts.bob = rec {
-      #   addrs4 = "10.0.0.1";
-      #   extraZones = {
-      #     # extraZones
-      #     "krebsco.de" = ''
-      #     krebsco.de.       IN MX 10 mx1
-      #     mx1               IN A     ${addrs4}
-      #     '';
-      #     "dickbutt.de" = ''
-      #     dickbutt.de.       IN NS    ns
-      #     ns                IN A     ${addrs4}
-      #     ''
-      #   }
-      # }
-      # krebs.hosts.khan = rec {
-      #   addrs4 = "10.0.0.2";
-      #   extraZones = {
-      #      "krebsco.de" = ''
-      #      khan.krebsco.de     IN A   ${addrs4}
-      #   };
-      # }
-      #
-      #  =>
-      #  "zone/krebsco.de".text = ''
-      #    krebsco.de.         IN MX 10 mx1
-      #    mx1                 IN A     10.0.0.1
-      #    khan.krebsco.de     IN A     10.0.0.2
-      #  '';
-
-
-      environment.etc = mapAttrs'
-                        (name: value:
-                          nameValuePair (("zones/" + name)) ({ text=value;}))
-                        cfg.hosts.pigstarter.extraZones;
-      }
+      # Implements environment.etc."zones/<zone-name>"
+      environment.etc = let
+        all-zones = foldAttrs (sum: current: sum + "\n" +current ) ""
+          ([cfg.zone-head-config] ++ combined-hosts) ;
+        combined-hosts = (mapAttrsToList (name: value: value.extraZones)  cfg.hosts );
+      in lib.mapAttrs' (name: value: nameValuePair (("zones/" + name)) ({ text=value; })) all-zones;
+    }
   ];
 
   lass-imp = {
@@ -346,7 +338,7 @@ let
         };
       };
       tsp = {
-        cores = 2;
+        cores = 1;
         dc = "makefu"; #x200
         nets = {
           retiolum = {
@@ -401,18 +393,57 @@ let
           };
         };
       };
+      flap = rec {
+        cores = 1;
+        dc = "cac"; #vps
+
+        extraZones = {
+          "krebsco.de" = ''
+            mediengewitter    IN A      ${elemAt nets.internet.addrs4 0}
+            flap              IN A      ${elemAt nets.internet.addrs4 0}'';
+        };
+        nets = {
+          internet = {
+            addrs4 = ["162.248.11.162"];
+            aliases = [
+              "flap.internet"
+            ];
+          };
+          retiolum = {
+            addrs4 = ["10.243.211.172"];
+            addrs6 = ["42:472a:3d01:bbe4:4425:567e:592b:065d"];
+            aliases = [
+              "flap.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEAwtLD+sgTQGO+eh2Ipq2r54J1I0byvfkaTBeBwhtUmWst+lUQUoGy
+              2fGReRYsb4ThDLeyK439jZuQBeXSc5r2g0IHBJCSWj3pVxc1HRTa8LASY7QuprQM
+              8rSQa2XUtx/KpfM2eVX0yIvLuPTxBoOf/AwklIf+NmL7WCfN7sfZssoakD5a1LGn
+              3EtZ2M/4GyoXJy34+B8v7LugeClnW3WDqUBZnNfUnsNWvoldMucxsl4fAhvEehrL
+              hGgQMjHFOdKaLyatZOx6Pq4jAna+kiJoq3mVDsB4rcjLuz8XkAUZmVpe5fXAG4hr
+              Ig8l/SI6ilu0zCWNSJ/v3wUzksm0P9AJkwIDAQAB
+              -----END RSA PUBLIC KEY-----
+              '';
+          };
+        };
+      };
       pigstarter = rec {
         cores = 1;
         dc = "frontrange"; #vps
 
         extraZones = {
-          "de.krebsco" = ''
-            pigstarter.krebsco.de       IN A ${elemAt nets.internet.addrs4 0}
-            krebsco.de.                 IN NS io
-            io                          IN A ${elemAt nets.internet.addrs4 0}
-            krebsco.de.                 IN MX 10 mx42
-            mx42                        IN A ${elemAt nets.internet.addrs4 0}
-            '';
+          "krebsco.de" = ''
+                              IN MX 10  mx42
+            euer              IN MX 1   aspmx.l.google.com.
+            io                IN NS     pigstarter.krebsco.de.
+            pigstarter        IN A      ${elemAt nets.internet.addrs4 0}
+            conf              IN A      ${elemAt nets.internet.addrs4 0}
+            gold              IN A      ${elemAt nets.internet.addrs4 0}
+            graph             IN A      ${elemAt nets.internet.addrs4 0}
+            tinc              IN A      ${elemAt nets.internet.addrs4 0}
+            boot              IN A      ${elemAt nets.internet.addrs4 0}
+            mx42              IN A      ${elemAt nets.internet.addrs4 0}'';
         };
         nets = {
           internet = {
@@ -441,6 +472,42 @@ let
           };
         };
       };
+      gum = rec {
+        cores = 1;
+        dc = "online.net"; #root-server
+
+        extraZones = {
+          "krebsco.de" = ''
+            omo               IN A      ${elemAt nets.internet.addrs4 0}
+            gum               IN A      ${elemAt nets.internet.addrs4 0}
+            paste             IN A      ${elemAt nets.internet.addrs4 0}'';
+        };
+        nets = {
+          internet = {
+            addrs4 = ["195.154.108.70"];
+            aliases = [
+              "gum.internet"
+            ];
+          };
+          retiolum = {
+            addrs4 = ["10.243.0.211"];
+            addrs6 = ["42:f9f0:0000:0000:0000:0000:0000:70d2"];
+            aliases = [
+              "gum.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEAvgvzx3rT/3zLuCkzXk1ZkYBkG4lltxrLOLNivohw2XAzrYDIw/ZY
+              BTDDcD424EkNOF6g/3tIRWqvVGZ1u12WQ9A/R+2F7i1SsaE4nTxdNlQ5rjy80gO3
+              i1ZubMkTGwd1OYjJytYdcMTwM9V9/8QYFiiWqh77Xxu/FhY6PcQqwHxM7SMyZCJ7
+              09gtZuR16ngKnKfo2tw6C3hHQtWCfORVbWQq5cmGzCb4sdIKow5BxUC855MulNsS
+              u5l+G8wX+UbDI85VSDAtOP4QaSFzLL+U0aaDAmq0NO1QiODJoCo0iPhULZQTFZUa
+              OMDYHHfqzluEI7n8ENI4WwchDXH+MstsgwIDAQAB
+              -----END RSA PUBLIC KEY-----
+              '';
+          };
+        };
+      };
     };
     users = addNames {
       makefu = {
@@ -455,15 +522,14 @@ let
       de.viljetic = "regfish";
     };
     hosts = addNames {
-      cd = {
+      cd = rec {
         cores = 2;
         dc = "tv"; #dc = "cac";
         extraZones = {
-          "de.krebsco" = ''
+          "krebsco.de" = ''
             mx23          IN A ${elemAt nets.internet.addrs4 0}
             cd            IN A ${elemAt nets.internet.addrs4 0}
-            krebsco.de.   IN MX 5 mx23
-          '';
+            krebsco.de.   IN MX 5 mx23'';
         };
         nets = rec {
           internet = {
