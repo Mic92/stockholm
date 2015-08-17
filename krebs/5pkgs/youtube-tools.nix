@@ -5,8 +5,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = https://github.com/Lassulus/the_playlist;
-    rev = "323a66775168b6addb3acddaee0a8ff227ea4bd4";
-    sha256 = "1y1fs2p3xj2yrqpw0h5kd0f3c5p1y70xk1hjnw99sr33r67s9c35";
+    rev = "9218b163f2d8bc965b853ed9fc9e13d15a703456";
+    sha256 = "ae5db4be652d015a518e57e4ed2de34b9127e77d9272af3049832bb134e96e4d";
   };
 
   phases = [
