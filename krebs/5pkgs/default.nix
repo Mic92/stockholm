@@ -13,4 +13,5 @@ pkgs //
   github-known_hosts = callPackage ./github-known_hosts.nix {};
   hashPassword = callPackage ./hashPassword.nix {};
   posix-array = callPackage ./posix-array.nix {};
+  youtube-tools = callPackage ./youtube-tools.nix {};
 }
