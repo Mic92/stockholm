@@ -39,6 +39,7 @@ with lib;
   krebs = {
     enable = true;
     search-domain = "retiolum";
+    exim-retiolum.enable = true;
   };
 
   nix.useChroot = true;
