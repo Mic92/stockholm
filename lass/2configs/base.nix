@@ -134,6 +134,7 @@ with lib;
         { predicate = "-p icmp"; target = "ACCEPT"; precedence = 10000; }
         { predicate = "-i lo"; target = "ACCEPT"; precedence = 9999; }
         { predicate = "-p tcp --dport 22"; target = "ACCEPT"; precedence = 9998; }
+        { predicate = "-i retiolum"; target = "REJECT"; precedence = -10000; }
       ];
     };
   };
