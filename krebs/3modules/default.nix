@@ -272,6 +272,7 @@ let
             '';
           };
         };
+        secure = true;
       };
       mors = {
         cores = 2;
