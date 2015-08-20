@@ -11,6 +11,8 @@
       # 2014-07-29 when one of the following urls change
       # then we have to update the package
 
+      http://www.exim.org/
+
       # ref src/nixpkgs/pkgs/tools/admin/sec/default.nix
       https://api.github.com/repos/simple-evcorr/sec/tags
 
