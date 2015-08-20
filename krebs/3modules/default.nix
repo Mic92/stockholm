@@ -308,7 +308,7 @@ let
       };
       uriel = {
         pubkey = readFile ../../Zpubkeys/uriel.ssh.pub;
-        mail = "uriel@mors.retiolum";
+        mail = "lass@uriel.retiolum";
       };
     };
   };
