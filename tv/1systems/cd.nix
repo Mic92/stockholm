@@ -14,8 +14,8 @@ in
 
   krebs.build.deps = {
     nixpkgs = {
-      url = https://github.com/NixOS/nixpkgs;
-      rev = "4c01e6d91993b6de128795f4fbdd25f6227fb870";
+      url = https://github.com/4z3/nixpkgs;
+      rev = "03130ec91356cd250b80f144022ee2f4d665ca36"; # 1357692
     };
     secrets = {
       url = "/home/tv/secrets/${config.krebs.build.host.name}";
