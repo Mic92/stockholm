@@ -1,4 +1,5 @@
 Address= 195.154.108.70
+Port = 53
 Subnet = 10.243.0.211
 Subnet = 42:f9f0:0000:0000:0000:0000:0000:70d2
 Aliases = paste
