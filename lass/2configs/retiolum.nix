@@ -22,6 +22,8 @@
       "fastpoke"
       "cloudkrebs"
       "pigstarter"
+      "gum"
+      "flap"
     ];
   };
 }
