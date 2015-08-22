@@ -46,6 +46,9 @@ with lib;
 
   users.mutableUsers = false;
 
+  #why is this on in the first place?
+  services.ntp.enable = false;
+
   boot.tmpOnTmpfs = true;
   # see tmpfiles.d(5)
   systemd.tmpfiles.rules = [
