@@ -15,12 +15,13 @@
     ../2configs/wine.nix
     ../2configs/texlive.nix
     ../2configs/binary-caches.nix
-    ../2configs/ircd.nix
+    #../2configs/ircd.nix
     ../2configs/chromium-patched.nix
     ../2configs/new-repos.nix
     #../../2configs/tv/synaptics.nix
     ../2configs/retiolum.nix
     ../2configs/wordpress.nix
+    ../2configs/bitlbee.nix
   ];
 
   krebs.build = {
