@@ -47,7 +47,8 @@ types // rec {
       };
       addrs = mkOption {
         type = listOf addr;
-        apply = _: config.addrs4 ++ config.addrs6;
+        default = config.addrs4 ++ config.addrs6;
+        # TODO only default addrs make sense
       };
       addrs4 = mkOption {
         type = listOf addr4;
