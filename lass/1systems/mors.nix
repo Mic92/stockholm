@@ -29,10 +29,6 @@
     target = "root@mors";
     host = config.krebs.hosts.mors;
     deps = {
-      nixpkgs = {
-        url = https://github.com/Lassulus/nixpkgs;
-        rev = "961fcbabd7643171ea74bd550fee1ce5c13c2e90";
-      };
       secrets = {
         url = "/home/lass/secrets/${config.krebs.build.host.name}";
       };

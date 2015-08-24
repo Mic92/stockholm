@@ -40,6 +40,10 @@ with lib;
     enable = true;
     search-domain = "retiolum";
     exim-retiolum.enable = true;
+    build.deps.nixpkgs = {
+      url = https://github.com/Lassulus/nixpkgs;
+      rev = "58a82ff50b8605b88a8f66481d8c85bf8ab53be3";
+    };
   };
 
   nix.useChroot = true;
