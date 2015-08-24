@@ -8,14 +8,14 @@ let
       enable = true;
       root-title = "public repositories at ${config.krebs.build.host.name}";
       root-desc = "keep calm and engage";
-      inherit repos rules;
+      repos = mapAttrs (_: s: removeAttrs s ["collaborators"]) repos;
+      rules = rules;
     };
   };
 
-  repos = mapAttrs (_: s: removeAttrs s ["collaborators"]) (
+  repos =
     public-repos //
-    optionalAttrs config.krebs.build.host.secure restricted-repos
-  );
+    optionalAttrs config.krebs.build.host.secure restricted-repos;
 
   rules = concatMap make-rules (attrValues repos);
 
@@ -66,8 +66,8 @@ let
     };
   };
 
-  make-restricted-repo = name: { desc ? null, ... }: {
-    inherit name desc;
+  make-restricted-repo = name: { collaborators ? [], desc ? null, ... }: {
+    inherit name collaborators desc;
     public = false;
   };
 
