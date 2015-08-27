@@ -92,6 +92,7 @@ in
         tmux
         tvpkgs.cac
         tvpkgs.dic
+        tvpkgs.nq
         zathura
 
         #ack
