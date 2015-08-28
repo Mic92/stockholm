@@ -7,15 +7,18 @@ let
 in
 
 rec {
-  cac = callPackage ./cac.nix {};
-  dic = callPackage ./dic.nix {};
-  genid = callPackage ./genid.nix {};
-  github-hosts-sync = callPackage ./github-hosts-sync.nix {};
-  github-known_hosts = callPackage ./github-known_hosts.nix {};
-  hashPassword = callPackage ./hashPassword.nix {};
-  nq = callPackage ./nq.nix {};
-  posix-array = callPackage ./posix-array.nix {};
-  youtube-tools = callPackage ./youtube-tools.nix {};
+  cac = callPackage ./cac {};
+  charybdis = callPackage ./charybdis {};
+  dic = callPackage ./dic {};
+  genid = callPackage ./genid {};
+  github-hosts-sync = callPackage ./github-hosts-sync {};
+  github-known_hosts = callPackage ./github-known_hosts {};
+  hashPassword = callPackage ./hashPassword {};
+  lentil = callPackage ./lentil {};
+  much = callPackage ./much {};
+  nq = callPackage ./nq {};
+  posix-array = callPackage ./posix-array {};
+  youtube-tools = callPackage ./youtube-tools {};
 
   execve = name: { filename, argv, envp ? {}, destination ? "" }:
     writeC name { inherit destination; } ''
