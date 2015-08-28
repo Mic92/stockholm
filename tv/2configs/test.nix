@@ -6,12 +6,20 @@ let
   tvpkgs = import ../5pkgs { inherit lib pkgs; };
 
   out = {
+    environment.systemPackages = [
+      su-test
+    ];
     security.sudo.extraConfig = ''
       tv ALL=(test) NOPASSWD: ALL
     '';
     users.extraUsers.test = {
       shell = "${test-shell}";
     };
+  };
+
+  su-test = tvpkgs.execveBin "su-test" rec {
+    filename = "/var/setuid-wrappers/sudo";
+    argv = ["sudo" "-u" "test" "-i"];
   };
 
   test-shell = tvpkgs.execve "test-shell" rec {
