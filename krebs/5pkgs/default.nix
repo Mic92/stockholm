@@ -6,7 +6,6 @@ let
   inherit (pkgs) callPackage;
 in
 
-pkgs //
 rec {
   cac = callPackage ./cac.nix {};
   dic = callPackage ./dic.nix {};
