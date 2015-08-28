@@ -2,10 +2,6 @@
 
 with lib;
 
-let
-  tvpkgs = import ../5pkgs { inherit lib pkgs; };
-in
-
 {
   krebs.build.host = config.krebs.hosts.wu;
   krebs.build.user = config.krebs.users.tv;
@@ -39,12 +35,12 @@ in
       environment.systemPackages = with pkgs; [
 
         # stockholm
+        genid
         git
         gnumake
+        hashPassword
+        lentil
         parallel
-        tvpkgs.genid
-        tvpkgs.hashPassword
-        tvpkgs.lentil
         (pkgs.writeScriptBin "ff" ''
           #! ${pkgs.bash}/bin/bash
           exec sudo -u ff -i <<EOF
@@ -72,6 +68,8 @@ in
         # tv
         bc
         bind # dig
+        cac
+        dic
         file
         gitAndTools.qgit
         gnupg21
@@ -84,6 +82,7 @@ in
         netcat
         nix-repl
         nmap
+        nq
         p7zip
         pavucontrol
         posix_man_pages
@@ -91,9 +90,6 @@ in
         sxiv
         texLive
         tmux
-        tvpkgs.cac
-        tvpkgs.dic
-        tvpkgs.nq
         zathura
 
         #ack

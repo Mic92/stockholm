@@ -2,10 +2,6 @@
 
 with lib;
 
-let
-  tvpkgs = import ../5pkgs { inherit lib pkgs; };
-in
-
 {
   krebs.build.host = config.krebs.hosts.cd;
   krebs.build.user = config.krebs.users.tv;
@@ -136,7 +132,7 @@ in
         server-names = singleton "viljetic.de";
         # TODO directly set root (instead via location)
         locations = singleton (nameValuePair "/" ''
-          root ${tvpkgs.viljetic-pages};
+          root ${pkgs.viljetic-pages};
         '');
       };
     }

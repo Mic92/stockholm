@@ -3,8 +3,6 @@
 with import ../4lib { inherit lib pkgs; };
 
 let
-  tvpkgs = import ../5pkgs { inherit lib pkgs; };
-
   out = {
     environment.systemPackages = [
       su-test
@@ -17,12 +15,12 @@ let
     };
   };
 
-  su-test = tvpkgs.execveBin "su-test" rec {
+  su-test = pkgs.execveBin "su-test" rec {
     filename = "/var/setuid-wrappers/sudo";
     argv = ["sudo" "-u" "test" "-i"];
   };
 
-  test-shell = tvpkgs.execve "test-shell" rec {
+  test-shell = pkgs.execve "test-shell" rec {
     filename = "${pkgs.bash}/bin/bash";
     argv = ["sh" "--noprofile" "-l"];
     envp.ENV = pkgs.writeText "test-env" ''

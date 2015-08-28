@@ -1,7 +1,6 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 
-with import ../5pkgs { inherit lib pkgs; };
-
+with pkgs;
 {
   environment.systemPackages = [
     much
