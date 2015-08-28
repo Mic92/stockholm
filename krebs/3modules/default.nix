@@ -513,7 +513,7 @@ let
     };
     users = addNames {
       makefu = {
-        mail = "makefu@tsp.retiolum";
+        mail = "makefu@pornocauster.retiolum";
         pubkey = readFile ../../Zpubkeys/makefu_arch.ssh.pub;
       };
     };
