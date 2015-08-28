@@ -78,6 +78,6 @@ let
     uid = 3220554646; # genid github-hosts-sync
   };
 
-  kpkgs = import ../../krebs/5pkgs { inherit pkgs; };
+  kpkgs = import ../../krebs/5pkgs { inherit lib pkgs; };
 in
 out

@@ -3,7 +3,7 @@
 with lib;
 
 let
-  tvpkgs = import ../5pkgs { inherit pkgs; };
+  tvpkgs = import ../5pkgs { inherit lib pkgs; };
 in
 
 {
