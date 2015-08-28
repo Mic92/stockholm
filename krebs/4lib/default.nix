@@ -14,5 +14,6 @@ builtins // lib // rec {
 
   dns = import ./dns.nix { inherit lib; };
   listset = import ./listset.nix { inherit lib; };
+  shell = import ./shell.nix { inherit lib; };
   tree = import ./tree.nix { inherit lib; };
 }
