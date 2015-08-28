@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   inherit (pkgs) callPackage;
@@ -14,4 +14,15 @@ pkgs //
   hashPassword = callPackage ./hashPassword.nix {};
   nq = callPackage ./nq.nix {};
   posix-array = callPackage ./posix-array.nix {};
+
+  writeC = name: {}: src: pkgs.runCommand name {} ''
+    PATH=${lib.makeSearchPath "bin" (with pkgs; [
+      binutils
+      coreutils
+      gcc
+    ])}
+    in=${pkgs.writeText "${name}.c" src}
+    gcc -O -Wall -o $out $in
+    strip --strip-unneeded $out
+  '';
 }

@@ -1,8 +1,8 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   inherit (pkgs) callPackage;
-  kpkgs = import ../../krebs/5pkgs { inherit pkgs; };
+  kpkgs = import ../../krebs/5pkgs { inherit lib pkgs; };
 in
 
 kpkgs // {

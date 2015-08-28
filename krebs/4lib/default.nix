@@ -16,4 +16,10 @@ builtins // lib // rec {
   listset = import ./listset.nix { inherit lib; };
   shell = import ./shell.nix { inherit lib; };
   tree = import ./tree.nix { inherit lib; };
+
+  toC = x: {
+    list = "{ ${concatStringsSep ", " (map toC x)} }";
+    null = "NULL";
+    string = toJSON x; # close enough
+  }.${typeOf x};
 }
