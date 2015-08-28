@@ -18,8 +18,8 @@ rec {
   posix-array = callPackage ./posix-array.nix {};
   youtube-tools = callPackage ./youtube-tools.nix {};
 
-  execve = name: { filename, argv, envp }:
-    writeC name {} ''
+  execve = name: { filename, argv, envp ? {}, destination ? "" }:
+    writeC name { inherit destination; } ''
       #include <unistd.h>
       int main () {
         const char *filename = ${toC filename};
@@ -32,14 +32,18 @@ rec {
       }
     '';
 
-  writeC = name: {}: src: pkgs.runCommand name {} ''
+  execveBin = name: cfg: execve name (cfg // { destination = "/bin/${name}"; });
+
+  writeC = name: { destination ? "" }: src: pkgs.runCommand name {} ''
     PATH=${lib.makeSearchPath "bin" (with pkgs; [
       binutils
       coreutils
       gcc
     ])}
-    in=${pkgs.writeText "${name}.c" src}
-    gcc -O -Wall -o $out $in
-    strip --strip-unneeded $out
+    src=${pkgs.writeText "${name}.c" src}
+    exe=$out${destination}
+    mkdir -p "$(dirname "$exe")"
+    gcc -O -Wall -o "$exe" $src
+    strip --strip-unneeded "$exe"
   '';
 }
