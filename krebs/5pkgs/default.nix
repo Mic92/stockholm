@@ -16,6 +16,7 @@ rec {
   hashPassword = callPackage ./hashPassword.nix {};
   nq = callPackage ./nq.nix {};
   posix-array = callPackage ./posix-array.nix {};
+  youtube-tools = callPackage ./youtube-tools.nix {};
 
   execve = name: { filename, argv, envp }:
     writeC name {} ''
