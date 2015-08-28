@@ -31,7 +31,7 @@ with lib;
       imports = [ ../2configs/charybdis.nix ];
       tv.charybdis = {
         enable = true;
-        sslCert = ../../Zcerts/charybdis_cd.crt.pem;
+        sslCert = ../Zcerts/charybdis_cd.crt.pem;
       };
     }
     {
