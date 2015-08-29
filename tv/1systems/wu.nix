@@ -86,6 +86,7 @@ with lib;
         p7zip
         pavucontrol
         posix_man_pages
+        pssh
         qrencode
         sxiv
         texLive
