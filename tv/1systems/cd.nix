@@ -167,6 +167,7 @@ with lib;
     iptables
     mutt    # for mv
     nethogs
+    ntp     # ntpate
     rxvt_unicode.terminfo
     tcpdump
   ];
