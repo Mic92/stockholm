@@ -18,6 +18,7 @@ rec {
   much = callPackage ./much {};
   nq = callPackage ./nq {};
   posix-array = callPackage ./posix-array {};
+  pssh = callPackage ./pssh {};
   youtube-tools = callPackage ./youtube-tools {};
 
   execve = name: { filename, argv, envp ? {}, destination ? "" }:
