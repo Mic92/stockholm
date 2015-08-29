@@ -25,7 +25,7 @@ with lib;
     ../2configs/CAC-Developer-2.nix
     ../2configs/CAC-CentOS-7-64bit.nix
     ../2configs/base.nix
-    ../2configs/consul-server.nix
+    #../2configs/consul-server.nix
     ../2configs/git.nix
     {
       imports = [ ../2configs/charybdis.nix ];

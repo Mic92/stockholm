@@ -24,7 +24,7 @@ with lib;
   imports = [
     ../2configs/AO753.nix
     ../2configs/base.nix
-    ../2configs/consul-server.nix
+    #../2configs/consul-server.nix
     ../2configs/git.nix
     {
       tv.iptables = {
