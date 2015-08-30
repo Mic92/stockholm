@@ -590,6 +590,7 @@ let
       throttle_count = 4;
       max_ratelimit_tokens = 30;
       away_interval = 30;
+      disable_auth = yes;
     };
 
     modules {
