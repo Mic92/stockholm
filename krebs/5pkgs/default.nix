@@ -19,6 +19,7 @@ rec {
   nq = callPackage ./nq {};
   posix-array = callPackage ./posix-array {};
   pssh = callPackage ./pssh {};
+  Reaktor = callPackage ./Reaktor {};
   youtube-tools = callPackage ./youtube-tools {};
 
   execve = name: { filename, argv, envp ? {}, destination ? "" }:

@@ -11,6 +11,7 @@ let
       ./github-hosts-sync.nix
       ./git.nix
       ./nginx.nix
+      ./Reaktor.nix
       ./retiolum.nix
       ./urlwatch.nix
     ];
