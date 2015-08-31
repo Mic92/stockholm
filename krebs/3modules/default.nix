@@ -440,6 +440,7 @@ let
                               IN MX 10  mx42
             euer              IN MX 1   aspmx.l.google.com.
             io                IN NS     pigstarter.krebsco.de.
+            euer              IN A      ${elemAt nets.internet.addrs4 0}
             pigstarter        IN A      ${elemAt nets.internet.addrs4 0}
             conf              IN A      ${elemAt nets.internet.addrs4 0}
             gold              IN A      ${elemAt nets.internet.addrs4 0}
