@@ -272,6 +272,7 @@ let
             '';
           };
         };
+        secure = true;
       };
       mors = {
         cores = 2;
@@ -302,12 +303,12 @@ let
     };
     users = addNames {
       lass = {
-        pubkey = readFile ../../Zpubkeys/lass.ssh.pub;
+        pubkey = readFile ../Zpubkeys/lass.ssh.pub;
         mail = "lass@mors.retiolum";
       };
       uriel = {
-        pubkey = readFile ../../Zpubkeys/uriel.ssh.pub;
-        mail = "uriel@mors.retiolum";
+        pubkey = readFile ../Zpubkeys/uriel.ssh.pub;
+        mail = "lass@uriel.retiolum";
       };
     };
   };
@@ -513,7 +514,7 @@ let
     users = addNames {
       makefu = {
         mail = "makefu@pornocauster.retiolum";
-        pubkey = readFile ../../Zpubkeys/makefu_arch.ssh.pub;
+        pubkey = readFile ../Zpubkeys/makefu_arch.ssh.pub;
       };
     };
   };
@@ -684,11 +685,11 @@ let
     users = addNames {
       mv = {
         mail = "mv@cd.retiolum";
-        pubkey = readFile ../../Zpubkeys/mv_vod.ssh.pub;
+        pubkey = readFile ../Zpubkeys/mv_vod.ssh.pub;
       };
       tv = {
         mail = "tv@wu.retiolum";
-        pubkey = readFile ../../Zpubkeys/tv_wu.ssh.pub;
+        pubkey = readFile ../Zpubkeys/tv_wu.ssh.pub;
       };
     };
   };

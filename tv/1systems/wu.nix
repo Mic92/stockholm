@@ -2,10 +2,6 @@
 
 with lib;
 
-let
-  tvpkgs = import ../5pkgs { inherit pkgs; };
-in
-
 {
   krebs.build.host = config.krebs.hosts.wu;
   krebs.build.user = config.krebs.users.tv;
@@ -28,22 +24,23 @@ in
   imports = [
     ../2configs/w110er.nix
     ../2configs/base.nix
-    ../2configs/consul-client.nix
+    #../2configs/consul-client.nix
     ../2configs/git.nix
     ../2configs/mail-client.nix
     ../2configs/xserver.nix
     ../2configs/synaptics.nix # TODO w110er if xserver is enabled
+    ../2configs/test.nix
     ../2configs/urlwatch.nix
     {
       environment.systemPackages = with pkgs; [
 
         # stockholm
+        genid
         git
         gnumake
+        hashPassword
+        lentil
         parallel
-        tvpkgs.genid
-        tvpkgs.hashPassword
-        tvpkgs.lentil
         (pkgs.writeScriptBin "ff" ''
           #! ${pkgs.bash}/bin/bash
           exec sudo -u ff -i <<EOF
@@ -71,6 +68,8 @@ in
         # tv
         bc
         bind # dig
+        cac
+        dic
         file
         gitAndTools.qgit
         gnupg21
@@ -83,15 +82,15 @@ in
         netcat
         nix-repl
         nmap
+        nq
         p7zip
         pavucontrol
         posix_man_pages
+        pssh
         qrencode
         sxiv
         texLive
         tmux
-        tvpkgs.cac
-        tvpkgs.dic
         zathura
 
         #ack

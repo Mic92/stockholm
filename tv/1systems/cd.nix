@@ -2,10 +2,6 @@
 
 with lib;
 
-let
-  tvpkgs = import ../5pkgs { inherit pkgs; };
-in
-
 {
   krebs.build.host = config.krebs.hosts.cd;
   krebs.build.user = config.krebs.users.tv;
@@ -29,13 +25,13 @@ in
     ../2configs/CAC-Developer-2.nix
     ../2configs/CAC-CentOS-7-64bit.nix
     ../2configs/base.nix
-    ../2configs/consul-server.nix
+    #../2configs/consul-server.nix
     ../2configs/git.nix
     {
       imports = [ ../2configs/charybdis.nix ];
       tv.charybdis = {
         enable = true;
-        sslCert = ../../Zcerts/charybdis_cd.crt.pem;
+        sslCert = ../Zcerts/charybdis_cd.crt.pem;
       };
     }
     {
@@ -136,7 +132,7 @@ in
         server-names = singleton "viljetic.de";
         # TODO directly set root (instead via location)
         locations = singleton (nameValuePair "/" ''
-          root ${tvpkgs.viljetic-pages};
+          root ${pkgs.viljetic-pages};
         '');
       };
     }
@@ -171,6 +167,7 @@ in
     iptables
     mutt    # for mv
     nethogs
+    ntp     # ntpate
     rxvt_unicode.terminfo
     tcpdump
   ];

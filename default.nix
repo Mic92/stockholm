@@ -8,6 +8,12 @@ let
       "${user-name}/1systems/${system-name}.nix"
       "${user-name}/3modules"
       "krebs/3modules"
+    ] ++ [
+      ({ lib, pkgs, ... }: {
+       _module.args.pkgs =
+         (import ./krebs/5pkgs { inherit lib pkgs; }) //
+         (import (./. + "/${user-name}/5pkgs") { inherit lib pkgs; });
+      })
     ];
   };
 

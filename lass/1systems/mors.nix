@@ -15,12 +15,13 @@
     ../2configs/wine.nix
     ../2configs/texlive.nix
     ../2configs/binary-caches.nix
-    ../2configs/ircd.nix
+    #../2configs/ircd.nix
     ../2configs/chromium-patched.nix
     ../2configs/new-repos.nix
     #../../2configs/tv/synaptics.nix
     ../2configs/retiolum.nix
     ../2configs/wordpress.nix
+    ../2configs/bitlbee.nix
   ];
 
   krebs.build = {
@@ -28,10 +29,6 @@
     target = "root@mors";
     host = config.krebs.hosts.mors;
     deps = {
-      nixpkgs = {
-        url = https://github.com/Lassulus/nixpkgs;
-        rev = "961fd7b7a0f88dde7dac2f7a4c05ee4e1a25381d";
-      };
       secrets = {
         url = "/home/lass/secrets/${config.krebs.build.host.name}";
       };
@@ -128,7 +125,7 @@
     #VM writeback timeout
     echo '1500' > '/proc/sys/vm/dirty_writeback_centisecs'
     #Autosuspend for USB device Broadcom Bluetooth Device [Broadcom Corp]
-    echo 'auto' > '/sys/bus/usb/devices/1-1.4/power/control'
+    #echo 'auto' > '/sys/bus/usb/devices/1-1.4/power/control'
     #Autosuspend for USB device Biometric Coprocessor
     echo 'auto' > '/sys/bus/usb/devices/1-1.3/power/control'
 
