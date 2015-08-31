@@ -1,15 +1,15 @@
-{ lib, pkgs,buildPythonPackage,fetchurl, ... }:
+{ lib, pkgs,python3Packages,fetchurl, ... }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   name = "Reaktor-${version}";
-  version = "0.3.5";
+  version = "0.4.0";
   propagatedBuildInputs = with pkgs;[
-    pythonPackages.docopt
-    pythonPackages.requests
+    python3Packages.docopt
+    python3Packages.requests
   ];
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/R/Reaktor/Reaktor-${version}.tar.gz";
-    sha256 = "1bi92hbm5f4z87biklh8lpjrmfhrdrj7x2hr64lkxpcabgs8kgyh";
+    sha256 = "0izwpq6smp86964hiddnk2bbx8g27nrzfbvdp790bjmnw6gk64nb";
   };
   meta = {
     homepage = http://krebsco.de/;
