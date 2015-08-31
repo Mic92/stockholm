@@ -12,9 +12,17 @@ let
     isString
     optionalString
     concatStrings
+    escapeShellArg
   ;
 
-  ReaktorConfig = mkIf ( isString cfg.extraConfig )  pkgs.writeText "config.py" cfg.extraConfig;
+  ReaktorConfig = pkgs.writeText "config.py" ''
+      ${if (isString cfg.overrideConfig ) then ''
+      # Overriden Config
+      ${cfg.overrideConfig}
+      '' else ""}
+      ## Extra Config
+      ${cfg.extraConfig}
+    '';
   cfg = config.krebs.Reaktor;
 
   out = {
@@ -40,12 +48,19 @@ let
     };
 
 
-    extraConfig = mkOption {
+    overrideConfig = mkOption {
       default = null;
       type = types.nullOr types.str;
       description = ''
         configuration to be used instead of default ones.
         Reaktor default cfg can be retrieved via `reaktor get-config`
+      '';
+    };
+    extraConfig = mkOption {
+      default = "";
+      type = types.str;
+      description = ''
+        configuration appended to the default or overridden configuration
       '';
     };
 
@@ -60,7 +75,6 @@ let
   imp = {
     # for reaktor get-config
     environment.systemPackages = [ cfg.ReaktorPkg ];
-
     users.extraUsers = singleton {
       name = "Reaktor";
       # uid = config.ids.uids.Reaktor;
@@ -84,12 +98,26 @@ let
       description = "Reaktor IRC Bot";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.User = "Reaktor";
       environment = {
         GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-        IRC_NICKNAME = cfg.nickname;
+        REAKTOR_NICKNAME = cfg.nickname;
         };
-      serviceConfig.ExecStart = "${cfg.ReaktorPkg}/bin/reaktor run ${if (isString cfg.extraConfig) then cfg.ReaktorConfig else ""}";
+      serviceConfig= {
+        ExecStartPre = pkgs.writeScript "Reaktor-init" ''
+          #! /bin/sh
+          ${if (isString cfg.overrideConfig) then
+            ''cp ${ReaktorConfig} /tmp/config.py''
+          else
+            ''(${cfg.ReaktorPkg}/bin/reaktor get-config;cat "${ReaktorConfig}" ) > /tmp/config.py''
+          }
+        '';
+        ExecStart = "${cfg.ReaktorPkg}/bin/reaktor run /tmp/config.py";
+        PrivateTmp = "true";
+        User = "Reaktor";
+        Restart = "on-abort";
+        #StartLimitInterval = "5m";
+        #StartLimitBurst = "1";
+        };
     };
   };
 
