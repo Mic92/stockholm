@@ -14,6 +14,7 @@ rec {
   github-hosts-sync = callPackage ./github-hosts-sync {};
   github-known_hosts = callPackage ./github-known_hosts {};
   hashPassword = callPackage ./hashPassword {};
+  krebszones = callPackage ./krebszones {};
   lentil = callPackage ./lentil {};
   much = callPackage ./much {};
   nq = callPackage ./nq {};
