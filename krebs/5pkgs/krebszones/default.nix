@@ -1,7 +1,7 @@
 { lib, pkgs,python3Packages,fetchurl, ... }:
 
 python3Packages.buildPythonPackage rec {
-  name = "krebs-zones";
+  name = "krebszones-${version}";
   version = "0.4.2";
   propagatedBuildInputs = with pkgs;[
     python3Packages.d2to1 # for setup to work
