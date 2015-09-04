@@ -58,7 +58,7 @@ let
     };
     extraConfig = mkOption {
       default = "";
-      type = types.str;
+      type = types.string;
       description = ''
         configuration appended to the default or overridden configuration
       '';
