@@ -115,8 +115,8 @@ let
         PrivateTmp = "true";
         User = "Reaktor";
         Restart = "on-abort";
-        #StartLimitInterval = "5m";
-        #StartLimitBurst = "1";
+        StartLimitInterval = "1m";
+        StartLimitBurst = "1";
         };
     };
   };
