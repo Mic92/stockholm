@@ -40,7 +40,7 @@ let
 
     nickname = mkOption {
       default = config.krebs.build.host.name + "|r";
-      type = types.str;
+      type = types.string;
       description = ''
         The nick name of the irc bot.
         Defaults to {hostname}|r
@@ -68,6 +68,12 @@ let
       default = kpkgs.Reaktor;
       description = ''
         the Reaktor pkg to use.
+      '';
+    };
+    debug = mkOption {
+      default = false;
+      description = ''
+        Reaktor debug output
       '';
     };
   };
@@ -101,6 +107,7 @@ let
       environment = {
         GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
         REAKTOR_NICKNAME = cfg.nickname;
+        REAKTOR_DEBUG = (if cfg.debug  then "True" else "False");
         };
       serviceConfig= {
         ExecStartPre = pkgs.writeScript "Reaktor-init" ''
