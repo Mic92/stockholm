@@ -14,7 +14,7 @@ with lib;
       users.extraUsers = {
         root = {
           openssh.authorizedKeys.keys = map readFile [
-            ../../Zpubkeys/lass.ssh.pub
+            ../../krebs/Zpubkeys/lass.ssh.pub
           ];
         };
         mainUser = {
@@ -29,7 +29,7 @@ with lib;
             "wheel"
           ];
           openssh.authorizedKeys.keys = map readFile [
-            ../../Zpubkeys/lass.ssh.pub
+            ../../krebs/Zpubkeys/lass.ssh.pub
           ];
         };
       };

@@ -16,7 +16,7 @@ with builtins;
       users.extraUsers = {
         root = {
           openssh.authorizedKeys.keys = map readFile [
-            ../../Zpubkeys/uriel.ssh.pub
+            ../../krebs/Zpubkeys/uriel.ssh.pub
           ];
         };
       };
