@@ -16,15 +16,14 @@
   environment.systemPackages = with pkgs; [
     steam
   ];
-  networking.firewall = {
-    allowedUDPPorts = [
-      27031
-      27036
-    ];
-    allowedTCPPorts = [
-      27036
-      27037
-    ];
+  lass.iptables = {
+    tables = {
+      filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 27031"; target = "ACCEPT"; }
+        { predicate = "-p tcp --dport 27036"; target = "ACCEPT"; }
+        { predicate = "-p udp --dport 27031"; target = "ACCEPT"; }
+        { predicate = "-p udp --dport 27036"; target = "ACCEPT"; }
+      ];
+    };
   };
-
 }
