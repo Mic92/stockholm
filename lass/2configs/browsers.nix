@@ -26,7 +26,16 @@ let
       ];
     };
 
+  #TODO: abstract this
+
 in {
+
+  environment.systemPackages = [
+    (simpleScript "browser-select" ''
+      BROWSER=$(echo -e "ff\ncr\nfb\ngm\nflash" | dmenu)
+      $BROWSER $@
+    '')
+  ];
 
   imports = [
     ../3modules/per-user.nix
