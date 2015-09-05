@@ -4,7 +4,7 @@ with builtins;
 with lib;
 
 let
-  github-pubkey = removeSuffix "\n" (readFile ../../Zpubkeys/github.ssh.pub);
+  github-pubkey = removeSuffix "\n" (readFile ./github.ssh.pub);
 in
 
 toFile "github-known_hosts"

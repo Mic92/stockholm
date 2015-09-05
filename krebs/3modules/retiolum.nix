@@ -58,7 +58,7 @@ let
 
     hosts = mkOption {
       type = with types; either package path;
-      default = ../../Zhosts;
+      default = ../Zhosts;
       description = ''
         If a path is given, then it will be used to generate an ad-hoc package.
       '';

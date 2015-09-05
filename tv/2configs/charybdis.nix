@@ -1,9 +1,5 @@
 { config, lib, pkgs, ... }:
 
-let
-  tvpkgs = import ../5pkgs { inherit pkgs; };
-in
-
 with builtins;
 with lib;
 let
@@ -63,7 +59,7 @@ let
         ExecStart = pkgs.writeScript "charybdis-service" ''
           #! /bin/sh
           set -euf
-          exec ${tvpkgs.charybdis}/bin/charybdis-ircd \
+          exec ${pkgs.charybdis}/bin/charybdis-ircd \
             -foreground \
             -logfile /dev/stderr \
             -configfile ${configFile}

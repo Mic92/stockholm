@@ -11,6 +11,7 @@ let
       ./github-hosts-sync.nix
       ./git.nix
       ./nginx.nix
+      ./Reaktor.nix
       ./retiolum.nix
       ./urlwatch.nix
     ];
@@ -332,11 +333,11 @@ let
     };
     users = addNames {
       lass = {
-        pubkey = readFile ../../Zpubkeys/lass.ssh.pub;
+        pubkey = readFile ../Zpubkeys/lass.ssh.pub;
         mail = "lass@mors.retiolum";
       };
       uriel = {
-        pubkey = readFile ../../Zpubkeys/uriel.ssh.pub;
+        pubkey = readFile ../Zpubkeys/uriel.ssh.pub;
         mail = "lass@uriel.retiolum";
       };
     };
@@ -468,6 +469,7 @@ let
                               IN MX 10  mx42
             euer              IN MX 1   aspmx.l.google.com.
             io                IN NS     pigstarter.krebsco.de.
+            euer              IN A      ${elemAt nets.internet.addrs4 0}
             pigstarter        IN A      ${elemAt nets.internet.addrs4 0}
             conf              IN A      ${elemAt nets.internet.addrs4 0}
             gold              IN A      ${elemAt nets.internet.addrs4 0}
@@ -543,7 +545,7 @@ let
     users = addNames {
       makefu = {
         mail = "makefu@pornocauster.retiolum";
-        pubkey = readFile ../../Zpubkeys/makefu_arch.ssh.pub;
+        pubkey = readFile ../Zpubkeys/makefu_arch.ssh.pub;
       };
     };
   };
@@ -714,11 +716,11 @@ let
     users = addNames {
       mv = {
         mail = "mv@cd.retiolum";
-        pubkey = readFile ../../Zpubkeys/mv_vod.ssh.pub;
+        pubkey = readFile ../Zpubkeys/mv_vod.ssh.pub;
       };
       tv = {
         mail = "tv@wu.retiolum";
-        pubkey = readFile ../../Zpubkeys/tv_wu.ssh.pub;
+        pubkey = readFile ../Zpubkeys/tv_wu.ssh.pub;
       };
     };
   };

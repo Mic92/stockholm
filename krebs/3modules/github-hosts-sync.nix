@@ -61,9 +61,9 @@ let
             ${cfg.ssh-identity-file} \
             "$ssh_identity_file_target"
 
-          ln -snf ${kpkgs.github-known_hosts} ${cfg.dataDir}/.ssh/known_hosts
+          ln -snf ${pkgs.github-known_hosts} ${cfg.dataDir}/.ssh/known_hosts
         '';
-        ExecStart = "${kpkgs.github-hosts-sync}/bin/github-hosts-sync";
+        ExecStart = "${pkgs.github-hosts-sync}/bin/github-hosts-sync";
       };
     };
 
@@ -77,7 +77,5 @@ let
     name = "github-hosts-sync";
     uid = 3220554646; # genid github-hosts-sync
   };
-
-  kpkgs = import ../../krebs/5pkgs { inherit pkgs; };
 in
 out

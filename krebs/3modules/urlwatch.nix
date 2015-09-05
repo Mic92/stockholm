@@ -78,7 +78,7 @@ let
         HOME = cfg.dataDir;
         LC_ALL = "en_US.UTF-8";
         LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
-        SSL_CERT_FILE = "${pkgs.cacert}/etc/ca-bundle.crt";
+        SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
       };
       serviceConfig = {
         User = user.name;
