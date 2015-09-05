@@ -216,6 +216,37 @@ let
 
   lass-imp = {
     hosts = addNames {
+      echelon = {
+        cores = 4;
+        dc = "lass"; #dc = "cac";
+        nets = rec {
+          internet = {
+            addrs4 = ["162.248.167.198"];
+            aliases = [
+              "echelon.internet"
+            ];
+          };
+          retiolum = {
+            via = internet;
+            addrs4 = ["10.243.206.103"];
+            addrs6 = ["42:941e:2816:35f4:5c5e:206b:3f0b:f763"];
+            aliases = [
+              "echelon.retiolum"
+              "cgit.echelon.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEA92ybhDahtGybpAkUNlG5Elxw05MVY4Pg7yK0dQugB4nVq+pnmi78
+              DOMeIciecMHmJM8n9UlUU0eWZVCgHeVd23d6J0hTHCv24p24uHEGGy7XlO/dPJ6A
+              IjROYU0l8c03pipdJ3cDBx6riArSglwmZJ7xH/Iw0BUhRZrPqbtijY7EcG2wc+8K
+              N9N9mBofVMl4EcBiDR/eecK+ro8OkeOmYPtYgFJLvxTYXiPIhOxMAlkOY2fpin/t
+              cgFLUFuN4ag751XjjcNpVovVq95vdg+VhKrrNVWZjJt03owW81BzoryY6CD2kIPq
+              UxK89zEdeYOUT7AxaT/5V5v41IvGFZxCzwIDAQAB
+              -----END RSA PUBLIC KEY-----
+            '';
+          };
+        };
+      };
       cloudkrebs = {
         cores = 1;
         dc = "lass"; #dc = "cac";
