@@ -58,8 +58,6 @@ let
                   --exclude .graveyard \
                   --exclude old \
                   --rsync-path="mkdir -p \"$2\" && rsync" \
-                  --usermap=\*:0 \
-                  --groupmap=\*:0 \
                   --delete-excluded \
                   -vrLptgoD \
                   "$src" "$dst"
