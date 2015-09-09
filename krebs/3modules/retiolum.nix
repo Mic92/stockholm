@@ -105,7 +105,7 @@ let
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ tinc iproute ];
-      serviceConfig = {
+      serviceConfig = rec {
         PermissionsStartOnly = "true";
         PrivateTmp = "true";
         Restart = "always";
@@ -115,7 +115,7 @@ let
           #! /bin/sh
           install -o ${user.name} -m 0400 ${cfg.privateKeyFile} /tmp/retiolum-rsa_key.priv
         '';
-        ExecStart = "${tinc}/sbin/tincd -c ${confDir} -d 0 -U ${user.name} -D";
+        ExecStart = "${tinc}/sbin/tincd -c ${confDir} -d 0 -U ${user.name} -D --pidfile=/var/run/tinc.${SyslogIdentifier}.pid";
         SyslogIdentifier = "retiolum";
       };
     };
