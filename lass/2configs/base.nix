@@ -147,4 +147,8 @@ with lib;
     };
   };
 
+  networking.dhcpcd.extraConfig = ''
+    noipv4ll
+  '';
+
 }
