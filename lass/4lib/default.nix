@@ -17,4 +17,8 @@ krebs // rec {
         ln -s ${pkgs.writeScript name content} $out/bin/${name}
       '';
     };
+
+  getDefaultGateway = ip:
+    concatStringsSep "." (take 3 (splitString "." ip) ++ ["1"]);
+
 }
