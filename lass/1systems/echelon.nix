@@ -40,6 +40,6 @@ in {
     };
   };
 
-  networking.hostName = "cloudkrebs";
+  networking.hostName = "echelon";
 
 }
