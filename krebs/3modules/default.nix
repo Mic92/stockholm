@@ -328,7 +328,7 @@ let
         dc = "lass"; #dc = "cac";
         nets = rec {
           internet = {
-            addrs4 = ["162.248.167.198"];
+            addrs4 = ["162.248.8.61"];
             aliases = [
               "echelon.internet"
             ];
