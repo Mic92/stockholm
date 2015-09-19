@@ -5,6 +5,7 @@ with lib;
   imports = [
     ../3modules/iptables.nix
     ../2configs/vim.nix
+    ../2configs/zsh.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
