@@ -54,6 +54,7 @@ with lib;
 
   #why is this on in the first place?
   services.ntp.enable = false;
+  services.nscd.enable = false;
 
   boot.tmpOnTmpfs = true;
   # see tmpfiles.d(5)
