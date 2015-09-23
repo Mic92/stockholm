@@ -103,23 +103,21 @@
 
       case $UID in
         0)
-          username='%F{red}root%f'
+          username='%F{red}root%f '
           ;;
         1337)
           username=""
           ;;
         *)
-          username='%F{blue}%n%f'
+          username='%F{blue}%n%f '
           ;;
       esac
 
       if test -n "$SSH_CLIENT"; then
         PROMPT="$error$username@%F{magenta}%M%f %~ "
       else
-        PROMPT="$error$username %~ "
+        PROMPT="$error$username%~ "
       fi
-
-
     '';
   };
   users.defaultUserShell = "/run/current-system/sw/bin/zsh";
