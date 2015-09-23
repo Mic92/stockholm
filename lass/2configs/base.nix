@@ -5,6 +5,7 @@ with lib;
   imports = [
     ../3modules/iptables.nix
     ../2configs/vim.nix
+    ../2configs/zsh.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
@@ -14,7 +15,7 @@ with lib;
       users.extraUsers = {
         root = {
           openssh.authorizedKeys.keys = map readFile [
-            ../../Zpubkeys/lass.ssh.pub
+            ../../krebs/Zpubkeys/lass.ssh.pub
           ];
         };
         mainUser = {
@@ -29,7 +30,7 @@ with lib;
             "wheel"
           ];
           openssh.authorizedKeys.keys = map readFile [
-            ../../Zpubkeys/lass.ssh.pub
+            ../../krebs/Zpubkeys/lass.ssh.pub
           ];
         };
       };
@@ -42,7 +43,7 @@ with lib;
     exim-retiolum.enable = true;
     build.deps.nixpkgs = {
       url = https://github.com/Lassulus/nixpkgs;
-      rev = "58a82ff50b8605b88a8f66481d8c85bf8ab53be3";
+      rev = "e74d0e7ff83c16846a81e1173543f180ad565076";
     };
   };
 
@@ -146,5 +147,9 @@ with lib;
       ];
     };
   };
+
+  networking.dhcpcd.extraConfig = ''
+    noipv4ll
+  '';
 
 }

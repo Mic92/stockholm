@@ -59,8 +59,6 @@ let
                   --exclude .graveyard \
                   --exclude old \
                   --rsync-path="mkdir -p \"$2\" && rsync" \
-                  --usermap=\*:0 \
-                  --groupmap=\*:0 \
                   --delete-excluded \
                   -vrLptgoD \
                   "$src" "$dst"
@@ -123,6 +121,112 @@ let
 
               exec "$profile"/bin/switch-to-configuration switch
               EOF
+
+            '';
+          };
+          infest = mkOption {
+            type = types.str;
+            default = ''
+              #! /bin/sh
+              set -efux
+
+              target=${escapeShellArg cfg.build.target}
+
+              push(){(
+                src=$1/
+                dst=$target:/mnt$2
+                rsync \
+                  --exclude .git \
+                  --exclude .graveyard \
+                  --exclude old \
+                  --rsync-path="mkdir -p \"/mnt$2\" && rsync" \
+                  --delete-excluded \
+                  -vrLptgoD \
+                  "$src" "$dst"
+              )}
+
+              cat krebs/4lib/infest/1prepare | ssh "$target"
+              cat krebs/4lib/infest/2install-nix | ssh "$target"
+
+              ${concatStrings (mapAttrsToList (name: { url, rev, ... }:
+                optionalString (rev == null) ''
+                  push ${toString (map escapeShellArg [
+                    "${url}"
+                    "/root/src/${name}"
+                  ])}
+                '') config.deps)}
+
+              ssh -S none "$target" /bin/sh <<\EOF
+              set -efux
+
+              fetch(){(
+                url=$1
+                rev=$2
+                dst=$3
+                mkdir -p "$dst"
+                cd "$dst"
+                if ! test -e .git; then
+                  git init
+                fi
+                if ! cur_url=$(git config remote.origin.url 2>/dev/null); then
+                  git remote add origin "$url"
+                elif test "$cur_url" != "$url"; then
+                  git remote set-url origin "$url"
+                fi
+                if test "$(git rev-parse --verify HEAD 2>/dev/null)" != "$rev"; then
+                  git fetch origin
+                  git checkout "$rev" -- .
+                  git checkout -q "$rev"
+                  git submodule init
+                  git submodule update
+                fi
+                git clean -dxf
+              )}
+
+              ${concatStrings (mapAttrsToList (name: { url, rev, ... }:
+                optionalString (rev != null) ''
+                  fetch ${toString (map escapeShellArg [
+                    url
+                    rev
+                    "/mnt/root/src/${name}"
+                  ])}
+                '') config.deps)}
+
+              export PATH=/root/.nix-profile/bin:/root/.nix-profile/sbin:$PATH
+
+              sed < "$(type -p nixos-install)" > nixos-install '
+                /^echo "building the system configuration..."/,/--set -A system/{
+                  s/.*/# &/
+                  s@.*--set -A system.*@&\n${concatStringsSep " " [
+                    "NIX_PATH=/mnt/root/src/"
+                    "nix-env"
+                    "-Q"
+                    "-p /nix/var/nix/profiles/system"
+                    "-f \"<stockholm>\""
+                    "--set"
+                    "-A system"
+                    "--argstr user-name ${escapeShellArg cfg.build.user.name}"
+                    "--argstr system-name ${escapeShellArg cfg.build.host.name}"
+                  ]}@
+                }
+              '
+
+              sed -i 's/^nixpkgs=.*$/#&/' nixos-install
+
+
+              chmod +x nixos-install
+
+              echo {} > /root/dummy.nix
+
+              echo build system...
+              profile=/nix/var/nix/profiles/system
+              NIXOS_CONFIG=/root/dummy.nix \
+              ./nixos-install -I /root/src/
+              #nl -bp nixos-install
+
+              EOF
+
+              cat krebs/4lib/infest/4finalize | ssh "$target"
             '';
           };
           host = mkOption {
@@ -219,6 +323,37 @@ let
 
   lass-imp = {
     hosts = addNames {
+      echelon = {
+        cores = 4;
+        dc = "lass"; #dc = "cac";
+        nets = rec {
+          internet = {
+            addrs4 = ["162.248.8.63"];
+            aliases = [
+              "echelon.internet"
+            ];
+          };
+          retiolum = {
+            via = internet;
+            addrs4 = ["10.243.206.103"];
+            addrs6 = ["42:941e:2816:35f4:5c5e:206b:3f0b:f763"];
+            aliases = [
+              "echelon.retiolum"
+              "cgit.echelon.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEA92ybhDahtGybpAkUNlG5Elxw05MVY4Pg7yK0dQugB4nVq+pnmi78
+              DOMeIciecMHmJM8n9UlUU0eWZVCgHeVd23d6J0hTHCv24p24uHEGGy7XlO/dPJ6A
+              IjROYU0l8c03pipdJ3cDBx6riArSglwmZJ7xH/Iw0BUhRZrPqbtijY7EcG2wc+8K
+              N9N9mBofVMl4EcBiDR/eecK+ro8OkeOmYPtYgFJLvxTYXiPIhOxMAlkOY2fpin/t
+              cgFLUFuN4ag751XjjcNpVovVq95vdg+VhKrrNVWZjJt03owW81BzoryY6CD2kIPq
+              UxK89zEdeYOUT7AxaT/5V5v41IvGFZxCzwIDAQAB
+              -----END RSA PUBLIC KEY-----
+            '';
+          };
+        };
+      };
       cloudkrebs = {
         cores = 1;
         dc = "lass"; #dc = "cac";
@@ -677,6 +812,31 @@ let
               KpSWfR+obqDl38Q7LuFi6dH9ruyvqK+4syddrBwjPXrcNxcGL9QbDn7+foRNiWw4
               4CE5z25oGG2iWMShI7fe3ji/fMUAl7DSOOrHVVG9eMtpzy+uI8veOHrdTax4oKik
               AFGCrMIov3F0GIeu3nDlrTIZPZDTodbFKQIDAQAB
+              -----END RSA PUBLIC KEY-----
+            '';
+          };
+        };
+        secure = true;
+      };
+      xu = {
+        cores = 4;
+        # TODO xu is mobile, so dc means "home data center"
+        dc = "tv"; #dc = "gg23";
+        nets = {
+          retiolum = {
+            addrs4 = ["10.243.13.38"];
+            addrs6 = ["42:0:0:0:0:0:0:1338"];
+            aliases = [
+              "xu.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEAl3l7IWbfbkVgaJFM3s9g2UCh2rmqoTba16Of7NNWMj05L/hIkUsQ
+              uc43/QzidWh/4gEaq5MQ7JpLyzVBQYRJkNlPRF/Z07KdLBskAZCjDYdYue9BrziX
+              8s2Irs2+FNbCK2LqtrPhbcXQJvixsk6vjl2OBpWTDUcDEsk+D1YQilxdtyUzCUkw
+              mmRo/mzNsLZsYlSgZ6El/ZLkRdtexAzGxJ0DrukpDR0uqXXkp7jUaxRCZ+Cwanvj
+              4I1Hu5aHzWB7KJ1SIvpX3a4f+mun1gh3TPqWP5PUqJok1PSuScz6P2UGaLZZyH63
+              4o+9nGJPuzb9bpMVRaVGtKXd39jwY7mbqwIDAQAB
               -----END RSA PUBLIC KEY-----
             '';
           };

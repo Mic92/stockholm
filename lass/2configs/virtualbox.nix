@@ -4,7 +4,6 @@ let
   mainUser = config.users.extraUsers.mainUser;
 
 in {
-  virtualisation.virtualbox.host.enable = true;
 
   users.extraUsers = {
     virtual = {

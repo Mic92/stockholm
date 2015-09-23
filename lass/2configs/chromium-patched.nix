@@ -37,12 +37,12 @@ let
 in {
   environment.etc."chromium/policies/managed/master.json".source = pkgs.lib.mkForce masterPolicy;
 
-  environment.systemPackages = [
-    #pkgs.chromium
-    (pkgs.lib.overrideDerivation pkgs.chromium (attrs: {
-      buildCommand = attrs.buildCommand + ''
-        touch $out/TEST123
-      '';
-    }))
-  ];
+  #environment.systemPackages = [
+  #  #pkgs.chromium
+  #  (pkgs.lib.overrideDerivation pkgs.chromium (attrs: {
+  #    buildCommand = attrs.buildCommand + ''
+  #      touch $out/TEST123
+  #    '';
+  #  }))
+  #];
 }

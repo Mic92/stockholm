@@ -21,6 +21,10 @@ else ifdef system
 deploy:;@
 	make eval system=$(system) get=config.krebs.build.script filter=json | sh
 
+.PHONY: infest
+infest:;@
+	make eval system=$(system) get=config.krebs.build.infest filter=json | sh
+
 .PHONY: eval
 eval:
 	@

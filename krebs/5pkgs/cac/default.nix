@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, coreutils, curl, gnused, jq, ncurses, sshpass, ... }:
+{ stdenv, fetchgit, coreutils, curl, gnused, inotifyTools, jq, ncurses, sshpass, ... }:
 
 stdenv.mkDerivation {
   name = "cac";
@@ -20,6 +20,7 @@ stdenv.mkDerivation {
         coreutils
         curl
         gnused
+        inotifyTools
         jq
         ncurses
         sshpass

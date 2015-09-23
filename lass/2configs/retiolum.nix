@@ -17,7 +17,7 @@
 
   krebs.retiolum = {
     enable = true;
-    hosts = ../../Zhosts;
+    hosts = ../../krebs/Zhosts;
     connectTo = [
       "fastpoke"
       "cloudkrebs"

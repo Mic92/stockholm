@@ -58,6 +58,7 @@ in {
     layout = "us";
     xkbModel = "evdev";
     xkbVariant = "altgr-intl";
+    xkbOptions = "caps:backspace";
   };
 
 }

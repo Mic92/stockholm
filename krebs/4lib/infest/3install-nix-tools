@@ -1,0 +1,9 @@
+#! /bin/sh
+set -efu
+
+install-nix-tools() {(
+
+
+)}
+
+install-nix-tools "$@"
