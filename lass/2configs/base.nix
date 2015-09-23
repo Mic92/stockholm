@@ -6,6 +6,7 @@ with lib;
     ../3modules/iptables.nix
     ../2configs/vim.nix
     ../2configs/zsh.nix
+    ../2configs/mc.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
