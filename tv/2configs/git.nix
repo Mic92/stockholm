@@ -26,6 +26,7 @@ let
     cgserver = {};
     crude-mail-setup = {};
     dot-xmonad = {};
+    get = {};
     hack = {};
     load-env = {};
     make-snapshot = {};

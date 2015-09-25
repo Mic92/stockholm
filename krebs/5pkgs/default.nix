@@ -11,6 +11,7 @@ rec {
   charybdis = callPackage ./charybdis {};
   dic = callPackage ./dic {};
   genid = callPackage ./genid {};
+  get = callPackage ./get {};
   github-hosts-sync = callPackage ./github-hosts-sync {};
   github-known_hosts = callPackage ./github-known_hosts {};
   hashPassword = callPackage ./hashPassword {};
