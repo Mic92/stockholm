@@ -331,6 +331,7 @@ with lib;
     };
     "/home" = {
       device = "/dev/mapper/home";
+      fsType = "btrfs";
       options = "defaults,noatime,ssd,compress=lzo";
     };
     "/boot" = {
