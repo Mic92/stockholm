@@ -216,7 +216,6 @@ with lib;
             extraGroups = [
               "audio"
               "video"
-              "bumblebee"
             ];
           };
 
@@ -257,7 +256,6 @@ with lib;
             extraGroups = [
               "audio"
               "video"
-              "bumblebee"
             ];
           };
 
@@ -266,7 +264,6 @@ with lib;
             extraGroups = [
               "audio"
               "video"
-              "bumblebee"
             ];
           };
 
