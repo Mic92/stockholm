@@ -71,6 +71,7 @@ with lib;
         cac
         dic
         file
+        get
         gitAndTools.qgit
         gnupg21
         haskellPackages.hledger
