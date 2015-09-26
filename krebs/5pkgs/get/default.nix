@@ -1,12 +1,12 @@
 { coreutils, gnugrep, gnused, fetchgit, jq, nix, stdenv, ... }:
 
 stdenv.mkDerivation {
-  name = "get-1";
+  name = "get-1.1.0";
 
   src = fetchgit {
     url = http://cgit.cd.retiolum/get;
-    rev = "a39d54aa2e28d8b15a5879024f64f3f41dee9f3b";
-    sha256 = "776836e7c5764e547fa46c7d0e14b9a9ccc26c43af288c51096f4073f17b7f32";
+    rev = "e75084e39f0402107bb520b5c9d5434a9d7f5d64";
+    sha256 = "5bafc9fa68cdb8ab76437a00354cbe4af4020cbbbbce848c325cae55863d9477";
   };
 
   phases = [
