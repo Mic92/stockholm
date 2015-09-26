@@ -114,6 +114,7 @@ with lib;
           exit 23
       esac
     '')
+    gnupg
     ntp # ntpate
     rxvt_unicode.terminfo
     tmux
