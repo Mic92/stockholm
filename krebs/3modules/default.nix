@@ -6,6 +6,7 @@ let
 
   out = {
     imports = [
+      ./build
       ./exim-retiolum.nix
       ./exim-smarthost.nix
       ./github-hosts-sync.nix
@@ -21,225 +22,6 @@ let
 
   api = {
     enable = mkEnableOption "krebs";
-
-    build = mkOption {
-      type = types.submodule ({ config, ... }: {
-        options = {
-          target = mkOption {
-            type = with types; nullOr str;
-            default = null;
-          };
-          deps = mkOption {
-            type = with types; attrsOf (submodule {
-              options = {
-                url = mkOption {
-                  type = str;
-                };
-                rev = mkOption {
-                  type = nullOr str;
-                  default = null;
-                };
-              };
-            });
-            default = {};
-          };
-          script = mkOption {
-            type = types.str;
-            default = ''
-              #! /bin/sh
-              set -efux
-
-              target=${escapeShellArg cfg.build.target}
-
-              push(){(
-                src=$1/
-                dst=$target:$2
-                rsync \
-                  --exclude .git \
-                  --exclude .graveyard \
-                  --exclude old \
-                  --rsync-path="mkdir -p \"$2\" && rsync" \
-                  --delete-excluded \
-                  -vrLptgoD \
-                  "$src" "$dst"
-              )}
-
-              ${concatStrings (mapAttrsToList (name: { url, rev, ... }:
-                optionalString (rev == null) ''
-                  push ${toString (map escapeShellArg [
-                    "${url}"
-                    "/root/src/${name}"
-                  ])}
-                '') config.deps)}
-
-              exec ssh -S none "$target" /bin/sh <<\EOF
-              set -efux
-              fetch(){(
-                url=$1
-                rev=$2
-                dst=$3
-                mkdir -p "$dst"
-                cd "$dst"
-                if ! test -e .git; then
-                  git init
-                fi
-                if ! cur_url=$(git config remote.origin.url 2>/dev/null); then
-                  git remote add origin "$url"
-                elif test "$cur_url" != "$url"; then
-                  git remote set-url origin "$url"
-                fi
-                if test "$(git rev-parse --verify HEAD 2>/dev/null)" != "$rev"; then
-                  git fetch origin
-                  git checkout "$rev" -- .
-                  git checkout -q "$rev"
-                  git submodule init
-                  git submodule update
-                fi
-                git clean -dxf
-              )}
-
-              ${concatStrings (mapAttrsToList (name: { url, rev, ... }:
-                optionalString (rev != null) ''
-                  fetch ${toString (map escapeShellArg [
-                    url
-                    rev
-                    "/root/src/${name}"
-                  ])}
-                '') config.deps)}
-
-              echo build system...
-              profile=/nix/var/nix/profiles/system
-              NIX_PATH=/root/src \
-              nix-env \
-                -Q \
-                -p "$profile" \
-                -f '<stockholm>' \
-                --set \
-                -A system \
-                --argstr user-name ${escapeShellArg cfg.build.user.name} \
-                --argstr system-name ${escapeShellArg cfg.build.host.name}
-
-              exec "$profile"/bin/switch-to-configuration switch
-              EOF
-
-            '';
-          };
-          infest = mkOption {
-            type = types.str;
-            default = ''
-              #! /bin/sh
-              set -efux
-
-              target=${escapeShellArg cfg.build.target}
-
-              push(){(
-                src=$1/
-                dst=$target:/mnt$2
-                rsync \
-                  --exclude .git \
-                  --exclude .graveyard \
-                  --exclude old \
-                  --rsync-path="mkdir -p \"/mnt$2\" && rsync" \
-                  --delete-excluded \
-                  -vrLptgoD \
-                  "$src" "$dst"
-              )}
-
-              cat krebs/4lib/infest/1prepare | ssh "$target"
-              cat krebs/4lib/infest/2install-nix | ssh "$target"
-
-              ${concatStrings (mapAttrsToList (name: { url, rev, ... }:
-                optionalString (rev == null) ''
-                  push ${toString (map escapeShellArg [
-                    "${url}"
-                    "/root/src/${name}"
-                  ])}
-                '') config.deps)}
-
-              ssh -S none "$target" /bin/sh <<\EOF
-              set -efux
-
-              fetch(){(
-                url=$1
-                rev=$2
-                dst=$3
-                mkdir -p "$dst"
-                cd "$dst"
-                if ! test -e .git; then
-                  git init
-                fi
-                if ! cur_url=$(git config remote.origin.url 2>/dev/null); then
-                  git remote add origin "$url"
-                elif test "$cur_url" != "$url"; then
-                  git remote set-url origin "$url"
-                fi
-                if test "$(git rev-parse --verify HEAD 2>/dev/null)" != "$rev"; then
-                  git fetch origin
-                  git checkout "$rev" -- .
-                  git checkout -q "$rev"
-                  git submodule init
-                  git submodule update
-                fi
-                git clean -dxf
-              )}
-
-              ${concatStrings (mapAttrsToList (name: { url, rev, ... }:
-                optionalString (rev != null) ''
-                  fetch ${toString (map escapeShellArg [
-                    url
-                    rev
-                    "/mnt/root/src/${name}"
-                  ])}
-                '') config.deps)}
-
-              export PATH=/root/.nix-profile/bin:/root/.nix-profile/sbin:$PATH
-
-              sed < "$(type -p nixos-install)" > nixos-install '
-                /^echo "building the system configuration..."/,/--set -A system/{
-                  s/.*/# &/
-                  s@.*--set -A system.*@&\n${concatStringsSep " " [
-                    "NIX_PATH=/mnt/root/src/"
-                    "nix-env"
-                    "-Q"
-                    "-p /nix/var/nix/profiles/system"
-                    "-f \"<stockholm>\""
-                    "--set"
-                    "-A system"
-                    "--argstr user-name ${escapeShellArg cfg.build.user.name}"
-                    "--argstr system-name ${escapeShellArg cfg.build.host.name}"
-                  ]}@
-                }
-              '
-
-              sed -i 's/^nixpkgs=.*$/#&/' nixos-install
-
-
-              chmod +x nixos-install
-
-              echo {} > /root/dummy.nix
-
-              echo build system...
-              profile=/nix/var/nix/profiles/system
-              NIXOS_CONFIG=/root/dummy.nix \
-              ./nixos-install -I /root/src/
-              #nl -bp nixos-install
-
-              EOF
-
-              cat krebs/4lib/infest/4finalize | ssh "$target"
-            '';
-          };
-          host = mkOption {
-            type = types.host;
-          };
-          user = mkOption {
-            type = types.user;
-          };
-        };
-      });
-      # Define defaul value, so unset values of the submodule get reported.
-      default = {};
-    };
 
     dns = {
       providers = mkOption {
@@ -706,12 +488,13 @@ let
           };
         };
       };
-      mkdir = {
+      mkdir = rec {
         cores = 1;
         dc = "tv"; #dc = "cac";
+        infest.addr = head nets.internet.addrs4;
         nets = rec {
           internet = {
-            addrs4 = ["162.248.167.241"];
+            addrs4 = ["104.233.84.102"];
             aliases = [
               "mkdir.internet"
             ];
@@ -762,12 +545,13 @@ let
         };
         secure = true;
       };
-      rmdir = {
+      rmdir = rec {
         cores = 1;
         dc = "tv"; #dc = "cac";
+        infest.addr = head nets.internet.addrs4;
         nets = rec {
           internet = {
-            addrs4 = ["167.88.44.94"];
+            addrs4 = ["104.233.84.70"];
             aliases = [
               "rmdir.internet"
             ];

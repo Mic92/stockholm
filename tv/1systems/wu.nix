@@ -8,16 +8,18 @@ with lib;
 
   krebs.build.target = "root@wu";
 
-  krebs.build.deps = {
-    nixpkgs = {
-      url = https://github.com/4z3/nixpkgs;
-      rev = "03130ec91356cd250b80f144022ee2f4d665ca36"; # 1357692
+  krebs.build.source = {
+    git.nixpkgs = {
+      url = https://github.com/NixOS/nixpkgs;
+      rev = "bd84ebaa1e0359f41350e053ed24592b169b5714";
     };
-    secrets = {
-      url = "/home/tv/secrets/${config.krebs.build.host.name}";
+    dir.secrets = {
+      host = config.krebs.hosts.wu;
+      path = "/home/tv/secrets/wu";
     };
-    stockholm = {
-      url = toString ../..;
+    dir.stockholm = {
+      host = config.krebs.hosts.wu;
+      path = "/home/tv/stockholm";
     };
   };
 

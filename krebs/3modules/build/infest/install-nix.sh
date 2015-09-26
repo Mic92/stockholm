@@ -2,9 +2,9 @@
 set -efu
 
 nix_url=https://nixos.org/releases/nix/nix-1.10/nix-1.10-x86_64-linux.tar.bz2
-nix_sha256="504f7a3a85fceffb8766ae5e1005de9e02e489742f5a63cc3e7552120b138bf4"
+nix_sha256=504f7a3a85fceffb8766ae5e1005de9e02e489742f5a63cc3e7552120b138bf4
 
-install-nix() {(
+install_nix() {(
 
   # install nix on host (cf. https://nixos.org/nix/install)
   if ! test -e /root/.nix-profile/etc/profile.d/nix.sh; then
@@ -23,7 +23,7 @@ install-nix() {(
     $nix_src_dir/install
   fi
 
-  #TODO: make this general or move to 1prepare
+  #TODO: make this general or move to prepare
   if ! mount | grep -Fq '/dev/mapper/centos-root on /mnt/nix type xfs'; then
     mkdir -p /mnt/nix
     mount --bind /nix /mnt/nix
@@ -54,4 +54,4 @@ install-nix() {(
   fi
 )}
 
-install-nix "$@"
+install_nix "$@"
