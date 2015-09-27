@@ -529,7 +529,7 @@ let
         infest.addr = head nets.internet.addrs4;
         nets = rec {
           internet = {
-            addrs4 = ["104.233.84.102"];
+            addrs4 = ["104.233.84.173"];
             aliases = [
               "mkdir.internet"
             ];
