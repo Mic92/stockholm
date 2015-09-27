@@ -319,8 +319,8 @@ let
 
         extraZones = {
           "krebsco.de" = ''
-            mediengewitter    IN A      ${elemAt nets.internet.addrs4 0}
-            flap              IN A      ${elemAt nets.internet.addrs4 0}'';
+            mediengewitter    IN A      ${head nets.internet.addrs4}
+            flap              IN A      ${head nets.internet.addrs4}'';
         };
         nets = {
           internet = {
@@ -357,13 +357,13 @@ let
                               IN MX 10  mx42
             euer              IN MX 1   aspmx.l.google.com.
             io                IN NS     pigstarter.krebsco.de.
-            pigstarter        IN A      ${elemAt nets.internet.addrs4 0}
-            conf              IN A      ${elemAt nets.internet.addrs4 0}
-            gold              IN A      ${elemAt nets.internet.addrs4 0}
-            graph             IN A      ${elemAt nets.internet.addrs4 0}
-            tinc              IN A      ${elemAt nets.internet.addrs4 0}
-            boot              IN A      ${elemAt nets.internet.addrs4 0}
-            mx42              IN A      ${elemAt nets.internet.addrs4 0}'';
+            pigstarter        IN A      ${head nets.internet.addrs4}
+            conf              IN A      ${head nets.internet.addrs4}
+            gold              IN A      ${head nets.internet.addrs4}
+            graph             IN A      ${head nets.internet.addrs4}
+            tinc              IN A      ${head nets.internet.addrs4}
+            boot              IN A      ${head nets.internet.addrs4}
+            mx42              IN A      ${head nets.internet.addrs4}'';
         };
         nets = {
           internet = {
@@ -397,7 +397,7 @@ let
         dc = "makefu"; #dc = "cac";
         extraZones = {
           "krebsco.de" = ''
-            wry            IN A ${elemAt nets.internet.addrs4 0}
+            wry            IN A ${head nets.internet.addrs4}
             '';
         };
         nets = rec {
@@ -409,11 +409,10 @@ let
           };
           retiolum = {
             via = internet;
-            addrs4 = [""];
-            addrs6 = [""];
+            addrs4 = ["10.243.29.169"];
+            addrs6 = ["42:6e1e:cc8a:7cef:827:f938:8c64:baad"];
             aliases = [
               "wry.retiolum"
-              "cgit.cd.retiolum"
             ];
             tinc.pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
@@ -439,10 +438,10 @@ let
 
         extraZones = {
           "krebsco.de" = ''
-            omo               IN A      ${elemAt nets.internet.addrs4 0}
-            euer              IN A      ${elemAt nets.internet.addrs4 0}
-            gum               IN A      ${elemAt nets.internet.addrs4 0}
-            paste             IN A      ${elemAt nets.internet.addrs4 0}'';
+            omo               IN A      ${head nets.internet.addrs4}
+            euer              IN A      ${head nets.internet.addrs4}
+            gum               IN A      ${head nets.internet.addrs4}
+            paste             IN A      ${head nets.internet.addrs4}'';
         };
         nets = {
           internet = {
