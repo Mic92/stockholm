@@ -103,6 +103,32 @@ let
           ([cfg.zone-head-config] ++ combined-hosts) ;
         combined-hosts = (mapAttrsToList (name: value: value.extraZones)  cfg.hosts );
       in lib.mapAttrs' (name: value: nameValuePair (("zones/" + name)) ({ text=value; })) all-zones;
+
+      programs.ssh.knownHosts =
+        mapAttrs
+          (name: host: {
+            hostNames =
+              concatLists
+                (mapAttrsToList
+                  (net-name: net:
+                    let
+                      aliases = shorts ++ longs;
+                      longs = net.aliases;
+                      shorts =
+                        map (removeSuffix ".${cfg.search-domain}")
+                            (filter (hasSuffix ".${cfg.search-domain}")
+                                    longs);
+                      add-port = a:
+                        if net.ssh.port != null
+                          then "[${a}]:${toString net.ssh.port}"
+                          else a;
+                    in
+                    aliases ++ map add-port net.addrs)
+                  host.nets);
+
+            publicKey = host.ssh.pubkey;
+          })
+          (filterAttrs (_: host: host.ssh.pubkey != null) cfg.hosts);
     }
   ];
 
@@ -464,6 +490,7 @@ let
               "cgit.cd.viljetic.de"
               "cd.krebsco.de"
             ];
+            ssh.port = 11423;
           };
           retiolum = {
             via = internet;
@@ -490,6 +517,7 @@ let
             '';
           };
         };
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOd/HqZIO9Trn3eycl23GZAz21HQCISaVNfNyaLSQvJ6";
       };
       mkdir = rec {
         cores = 1;
@@ -522,6 +550,8 @@ let
             '';
           };
         };
+        ssh.privkey = <secrets/ssh.id_ed25519>;
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICuShEqU0Cdm7KCaMD5x1D6mgj+cr7qoqbzFJDKoBbbw";
       };
       nomic = {
         cores = 2;
@@ -547,6 +577,7 @@ let
           };
         };
         secure = true;
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILn7C3LxAs9kUynENdRNgQs4qjrhNDfXzlHTpVJt6e09";
       };
       rmdir = rec {
         cores = 1;
@@ -579,6 +610,7 @@ let
             '';
           };
         };
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFGniQyABsMNSFTKAxJgxZlLrWfexUt+vhZ3p2hpBl4J";
       };
       wu = {
         cores = 4;
@@ -604,6 +636,7 @@ let
           };
         };
         secure = true;
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcJvu8JDVzObLUtlAQg9qVugthKSfitwCljuJ5liyHa";
       };
       xu = {
         cores = 4;
@@ -629,6 +662,7 @@ let
           };
         };
         secure = true;
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID554niVFWomJjuSuQoiCdMUYrCFPpPzQuaoXXYYDxlw";
       };
     };
     users = addNames {

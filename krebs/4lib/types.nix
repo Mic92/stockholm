@@ -1,11 +1,12 @@
 { lib, ... }:
 
+with builtins;
 with lib;
 with types;
 
 types // rec {
 
-  host = submodule {
+  host = submodule ({ config, ... }: {
     options = {
       name = mkOption {
         type = label;
@@ -46,8 +47,25 @@ types // rec {
           TODO define minimum requirements for secure hosts
         '';
       };
+
+      ssh.pubkey = mkOption {
+        type = nullOr str;
+        default = null;
+        apply = x:
+          if x != null
+            then x
+            else trace "The option `krebs.hosts.${config.name}.ssh.pubkey' is unused." null;
+      };
+      ssh.privkey = mkOption {
+        type = either path str;
+        apply = x: {
+          path = toString x;
+          string = x;
+        }.${typeOf x};
+      };
+
     };
-  };
+  });
 
   net = submodule ({ config, ... }: {
     options = {
@@ -71,6 +89,18 @@ types // rec {
       aliases = mkOption {
         # TODO nonEmptyListOf hostname
         type = listOf hostname;
+        default = [];
+      };
+      ssh = mkOption {
+        type = submodule {
+          options = {
+            port = mkOption {
+              type = nullOr int;
+              default = null;
+            };
+          };
+        };
+        default = {};
       };
       tinc = mkOption {
         type = let net-config = config; in nullOr (submodule ({ config, ... }: {
