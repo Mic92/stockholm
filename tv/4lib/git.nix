@@ -178,10 +178,7 @@ let
               $id2..$id
 
           git diff --stat $id2..$id \
-            | sed '
-                  $!s/+/'$(green '&')'/g
-                  $!s/-/'$(red   '&')'/g
-                '
+            | sed '$!s/\(+*\)\(-*\)$/'$(green '\1')$(red '\2')'/'
         )
 
       done
