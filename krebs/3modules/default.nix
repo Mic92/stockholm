@@ -553,6 +553,33 @@ let
         ssh.privkey = <secrets/ssh.id_ed25519>;
         ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICuShEqU0Cdm7KCaMD5x1D6mgj+cr7qoqbzFJDKoBbbw";
       };
+      ire = {
+        nets = {
+          internet = {
+            addrs4 = ["198.147.22.115"];
+            ssh.port = 11423;
+          };
+          retiolum = {
+            addrs4 = ["10.243.231.66"];
+            addrs6 = ["42:b912:0f42:a82d:0d27:8610:e89b:490c"];
+            aliases = [
+              "ire.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEAwofjmP/XBf5pwsJlWklkSzI+Bo0I0B9ONc7/j+zpbmMRkwbWk4X7
+              rVLt1cWvTY15ujg2u8l0o6OgEbIkc6rslkD603fv1sEAd0KOv7iKLgRpE9qfSvAt
+              6YpiSv+mxEMTpH0g36OmBfOJ10uT+iHDB/FfxmgGJx//jdJADzLjjWC6ID+iGkGU
+              1Sf+yHXF7HRmQ29Yak8LYVCJpGC5bQfWIMSL5lujLq4NchY2d+NZDkuvh42Ayr0K
+              LPflnPBQ3XnKHKtSsnFR2vaP6q+d3Opsq/kzBnAkjL26jEuFK1v7P/HhNhJoPzwu
+              nKKWj/W/k448ce374k5ycjvKm0c6baAC/wIDAQAB
+              -----END RSA PUBLIC KEY-----
+            '';
+            ssh.port = 11423;
+          };
+        };
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBaMjBJ/BfYlHjyn5CO0xzFNaQ0LPvMP3W9UlOs1OxGY";
+      };
       nomic = {
         cores = 2;
         dc = "tv"; #dc = "gg23";
