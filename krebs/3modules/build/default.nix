@@ -67,12 +67,16 @@ let
           src=$(type -p nixos-install)
           cat_src() {
             sed < "$src" "$(
-              sed < "$src" -n '
-                  /^if ! test -e "\$mountPoint\/\$NIXOS_CONFIG/,/^fi$/=
-                  /^nixpkgs=/=
-                  /^NIX_PATH=/,/^$/{/./=}
-                ' \
-                | sed 's:$:s/^/#krebs#/:'
+              { sed < "$src" -n '
+                    /^if ! test -e "\$mountPoint\/\$NIXOS_CONFIG/,/^fi$/=
+                    /^nixpkgs=/=
+                    /^NIX_PATH=/,/^$/{/./=}
+
+                    # Disable: Copy the NixOS/Nixpkgs sources to the target as
+                    # the initial contents of the NixOS channel.
+                    /^srcs=/,/^ln -sfn /=
+                  '
+              } | sed 's:$:s/^/#krebs#/:'
             )"
           }
 
