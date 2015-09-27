@@ -167,8 +167,18 @@ let
 
         message=''${message+$message
       }$(
-          git log --format='%h %ar: %s ' $id2..$id
-          git diff --stat $id2..$id
+          green()  { printf '\x0303,99%s\x0F' "$1"; }
+          red()    { printf '\x0304,99%s\x0F' "$1"; }
+          orange() { printf '\x0307,99%s\x0F' "$1"; }
+          gray()   { printf '\x0314,99%s\x0F' "$1"; }
+
+          git log --format="$(orange %h) %s $(gray '(%ar)')" $id2..$id
+
+          git diff --stat $id2..$id \
+            | sed '
+                  $!s/+/'$(green '&')'/g
+                  $!s/-/'$(red   '&')'/g
+                '
         )
 
       done
