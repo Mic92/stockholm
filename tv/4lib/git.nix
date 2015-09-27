@@ -120,6 +120,12 @@ let
       pink()   { printf '\x0313,99%s\x0F' "$1"; }
       gray()   { printf '\x0314,99%s\x0F' "$1"; }
 
+      unset message
+      add_message() {
+        message="''${message+$message
+      }$*"
+      }
+
       nick=${escapeShellArg nick}
       channel=${escapeShellArg channel}
       server=${escapeShellArg server}
@@ -130,7 +136,6 @@ let
 
       empty=0000000000000000000000000000000000000000
 
-      unset message
       while read oldrev newrev ref; do
 
         if [ $oldrev = $empty ]; then
@@ -168,11 +173,9 @@ let
         esac
 
         #$host $GIT_SSH_REPO $ref $link
-        message="''${message+$message
-      }$(pink push) $link $(gray "($receive_mode)")"
+        add_message $(pink push) $link $(gray "($receive_mode)")
 
-        message=''${message+$message
-      }$(
+        add_message "$(
           git log \
               --format="$(orange %h) %s $(gray '(%ar)')" \
               --reverse \
@@ -180,7 +183,7 @@ let
 
           git diff --stat $id2..$id \
             | sed '$!s/\(+*\)\(-*\)$/'$(green '\1')$(red '\2')'/'
-        )
+        )"
 
       done
 
