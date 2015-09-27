@@ -174,6 +174,11 @@ let
             options = {
               host = mkOption {
                 type = types.host;
+                description = ''
+                define the host where the directory is stored on.
+                XXX: currently it is just used to check if rsync is working,
+                     becomes part of url
+                '';
               };
               path = mkOption {
                 type = types.str;
