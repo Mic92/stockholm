@@ -2,22 +2,37 @@
 
 with lib;
 
+let
+  # TODO merge with lass
+  getDefaultGateway = ip:
+    concatStringsSep "." (take 3 (splitString "." ip) ++ ["1"]);
+
+
+  primary-addr4 =
+    builtins.elemAt config.krebs.build.host.nets.internet.addrs4 0;
+
+  #secondary-addr4 =
+  #  builtins.elemAt config.krebs.build.host.nets.internet.addrs4 1;
+in
+
 {
   krebs.build.host = config.krebs.hosts.mkdir;
   krebs.build.user = config.krebs.users.tv;
 
-  krebs.build.target = "root@mkdir.internet";
+  krebs.build.target = "root@${primary-addr4}";
 
-  krebs.build.deps = {
-    nixpkgs = {
+  krebs.build.source = {
+    git.nixpkgs = {
       url = https://github.com/NixOS/nixpkgs;
-      rev = "9d5508d85c33b8fb22d79dde6176792eac2c2696";
+      rev = "68bd8e4a9dc247726ae89cc8739574261718e328";
     };
-    secrets = {
-      url = "/home/tv/secrets/${config.krebs.build.host.name}";
+    dir.secrets = {
+      host = config.krebs.hosts.wu;
+      path = "/home/tv/secrets/mkdir";
     };
-    stockholm = {
-      url = toString ../..;
+    dir.stockholm = {
+      host = config.krebs.hosts.wu;
+      path = "/home/tv/stockholm";
     };
   };
 
@@ -56,11 +71,18 @@ with lib;
 
   networking.interfaces.enp2s1.ip4 = [
     {
-      address = "162.248.167.241"; # TODO
+      address = primary-addr4;
       prefixLength = 24;
     }
+    #{
+    #  address = secondary-addr4;
+    #  prefixLength = 24;
+    #}
   ];
-  networking.defaultGateway = "162.248.167.1";
+
+  # TODO define gateway in krebs/3modules/default.nix
+  networking.defaultGateway = getDefaultGateway primary-addr4;
+
   networking.nameservers = [
     "8.8.8.8"
   ];

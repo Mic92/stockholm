@@ -22,7 +22,7 @@ let
     };
     ssh-identity-file = mkOption {
       type = types.str; # TODO must be named *.ssh.{id_rsa,id_ed25519}
-      default = "/root/src/secrets/github-hosts-sync.ssh.id_rsa";
+      default = toString <secrets/github-hosts-sync.ssh.id_rsa>;
     };
   };
 

@@ -6,6 +6,7 @@ with lib;
     ../3modules/iptables.nix
     ../2configs/vim.nix
     ../2configs/zsh.nix
+    ../2configs/mc.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
@@ -53,6 +54,7 @@ with lib;
 
   #why is this on in the first place?
   services.ntp.enable = false;
+  services.nscd.enable = false;
 
   boot.tmpOnTmpfs = true;
   # see tmpfiles.d(5)

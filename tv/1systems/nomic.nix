@@ -8,16 +8,18 @@ with lib;
 
   krebs.build.target = "root@nomic.gg23";
 
-  krebs.build.deps = {
-    nixpkgs = {
+  krebs.build.source = {
+    git.nixpkgs = {
       url = https://github.com/4z3/nixpkgs;
       rev = "03130ec91356cd250b80f144022ee2f4d665ca36"; # 1357692
     };
-    secrets = {
-      url = "/home/tv/secrets/${config.krebs.build.host.name}";
+    dir.secrets = {
+      host = config.krebs.hosts.wu;
+      path = "/home/tv/secrets/nomic";
     };
-    stockholm = {
-      url = toString ../..;
+    dir.stockholm = {
+      host = config.krebs.hosts.wu;
+      path = "/home/tv/stockholm";
     };
   };
 
@@ -112,6 +114,7 @@ with lib;
           exit 23
       esac
     '')
+    gnupg
     ntp # ntpate
     rxvt_unicode.terminfo
     tmux
