@@ -521,6 +521,7 @@ let
             '';
           };
         };
+        ssh.privkey.path = <secrets/ssh.id_ed25519>;
         ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOd/HqZIO9Trn3eycl23GZAz21HQCISaVNfNyaLSQvJ6";
       };
       mkdir = rec {
@@ -641,7 +642,8 @@ let
             '';
           };
         };
-        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFGniQyABsMNSFTKAxJgxZlLrWfexUt+vhZ3p2hpBl4J";
+        ssh.privkey.path = <secrets/ssh.id_ed25519>;
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICLuhLRmt8M5s2Edwwl9XY0KAAivzmPCEweesH5/KhR4";
       };
       wu = {
         cores = 4;
