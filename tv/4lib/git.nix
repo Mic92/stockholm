@@ -114,6 +114,12 @@ let
         gnused
       ])}
 
+      green()  { printf '\x0303,99%s\x0F' "$1"; }
+      red()    { printf '\x0304,99%s\x0F' "$1"; }
+      orange() { printf '\x0307,99%s\x0F' "$1"; }
+      pink()   { printf '\x0313,99%s\x0F' "$1"; }
+      gray()   { printf '\x0314,99%s\x0F' "$1"; }
+
       nick=${escapeShellArg nick}
       channel=${escapeShellArg channel}
       server=${escapeShellArg server}
@@ -163,15 +169,10 @@ let
 
         #$host $GIT_SSH_REPO $ref $link
         message="''${message+$message
-      }$GIT_SSH_USER $receive_mode $link"
+      }$(pink push) $link $(gray "($receive_mode)")"
 
         message=''${message+$message
       }$(
-          green()  { printf '\x0303,99%s\x0F' "$1"; }
-          red()    { printf '\x0304,99%s\x0F' "$1"; }
-          orange() { printf '\x0307,99%s\x0F' "$1"; }
-          gray()   { printf '\x0314,99%s\x0F' "$1"; }
-
           git log \
               --format="$(orange %h) %s $(gray '(%ar)')" \
               --reverse \
