@@ -33,7 +33,6 @@ let
       default =
         let
           inherit (config.krebs.build) host;
-          inherit (host.ssh) privkey;
         in
         ''
           #! /bin/sh
@@ -41,7 +40,7 @@ let
 
           hostname=${host.name}
           secrets_dir=${config.krebs.build.source.dir.secrets.path}
-          key_type=${privkey.type}
+          key_type=ed25519
           key_file=$secrets_dir/ssh.id_$key_type
           key_comment=$hostname
 
@@ -49,8 +48,6 @@ let
             echo "Warning: privkey already exists: $key_file" >&2
           else
             ssh-keygen \
-                ${optionalString (privkey.bits != null)
-                  "-b ${toString privkey.bits}"} \
                 -C "$key_comment" \
                 -t "$key_type" \
                 -f "$key_file" \
@@ -62,7 +59,6 @@ let
 
           cat<<EOF
           # put following into config.krebs.hosts.$hostname:
-          ssh.privkey = <secrets/ssh.id_$key_type>;
           ssh.pubkey = $(echo $pubkey | jq -R .);
           EOF
         '';
