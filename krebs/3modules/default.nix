@@ -84,13 +84,16 @@ let
         mapAttrsToList (hostname: host:
           mapAttrsToList (netname: net:
             let
-              aliases = toString (unique (longs ++ shorts));
+              aliases = longs ++ shorts;
               providers = dns.split-by-provider net.aliases cfg.dns.providers;
               longs = providers.hosts;
-              shorts = map (removeSuffix ".${cfg.search-domain}") longs;
+              shorts =
+                map (removeSuffix ".${cfg.search-domain}")
+                    (filter (hasSuffix ".${cfg.search-domain}")
+                            longs);
             in
-              map (addr: "${addr} ${aliases}") net.addrs
-          ) host.nets
+              map (addr: "${addr} ${toString aliases}") net.addrs
+          ) (filterAttrs (name: host: host.aliases != []) host.nets)
         ) cfg.hosts
       ));
 
