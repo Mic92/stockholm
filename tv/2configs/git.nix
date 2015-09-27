@@ -26,6 +26,7 @@ let
     cgserver = {};
     crude-mail-setup = {};
     dot-xmonad = {};
+    get = {};
     hack = {};
     load-env = {};
     make-snapshot = {};
@@ -50,7 +51,8 @@ let
         collaborators = with config.krebs.users; [ lass makefu ];
       };
     } //
-    import /root/src/secrets/repos.nix { inherit config lib pkgs; }
+    # TODO don't put secrets/repos.nix into the store
+    import <secrets/repos.nix> { inherit config lib pkgs; }
   );
 
   make-public-repo = name: { desc ? null, ... }: {

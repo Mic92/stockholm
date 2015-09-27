@@ -15,9 +15,10 @@ in
 
   imports = [
     {
+      # TODO never put hashedPassword into the store
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
-                 (import /root/src/secrets/hashedPasswords.nix);
+                 (import <secrets/hashedPasswords.nix>);
     }
     {
       users.defaultUserShell = "/run/current-system/sw/bin/bash";

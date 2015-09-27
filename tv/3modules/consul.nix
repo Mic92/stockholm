@@ -29,7 +29,7 @@ let
     };
     encrypt-file = mkOption {
       type = types.str; # TODO path (but not just into store)
-      default = "/root/src/secrets/consul-encrypt.json";
+      default = toString <secrets/consul-encrypt.json>;
     };
     data-dir = mkOption {
       type = types.str; # TODO path (but not just into store)

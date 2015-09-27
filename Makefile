@@ -2,7 +2,7 @@
 # usage:
 #		make system=foo
 #		make systems='foo bar'
-#		make eval system=foo get=config.networking.extraHosts [filter=json]
+#		make eval get=tv.wu.config.time.timeZone [filter=json]
 #
 
 .ONESHELL:
@@ -10,20 +10,19 @@
 
 ifdef systems
 $(systems):
+	@
 	parallel \
 		--line-buffer \
 		-j0 \
 		--no-notice \
 		--tagstring {} \
-		-q make systems= system={} ::: $(systems)
+		-q make -s systems= system={} ::: $(systems)
 else ifdef system
-.PHONY: deploy
-deploy:;@
-	make eval system=$(system) get=config.krebs.build.script filter=json | sh
-
-.PHONY: infest
-infest:;@
-	make eval system=$(system) get=config.krebs.build.infest filter=json | sh
+.PHONY: deploy infest
+deploy infest:;@
+	export get=$$LOGNAME.${system}.config.krebs.build.scripts.$@
+	export filter=json
+	make -s eval | sh
 
 .PHONY: eval
 eval:
@@ -41,7 +40,7 @@ endif
 		-A "$$get" \
 		'<stockholm>' \
 		--argstr user-name "$$LOGNAME" \
-		--argstr system-name "$$system" \
+		--argstr host-name "$$HOSTNAME" \
 		| filter
 else
 $(error unbound variable: system[s])

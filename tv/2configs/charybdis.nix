@@ -21,7 +21,7 @@ let
     };
     dhParams = mkOption {
       type = types.str;
-      default = "/root/src/secrets/charybdis.dh.pem";
+      default = toString <secrets/charybdis.dh.pem>;
     };
     motd = mkOption {
       type = types.str;
@@ -32,7 +32,7 @@ let
     };
     sslKey = mkOption {
       type = types.str;
-      default = "/root/src/secrets/charybdis.key.pem";
+      default = toString <secrets/charybdis.key.pem>;
     };
   };
 

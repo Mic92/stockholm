@@ -1,12 +1,12 @@
 { stdenv, fetchgit, coreutils, curl, gnused, inotifyTools, jq, ncurses, sshpass, ... }:
 
 stdenv.mkDerivation {
-  name = "cac";
+  name = "cac-1.0.0";
 
   src = fetchgit {
     url = http://cgit.cd.retiolum/cac;
-    rev = "f4589158572ab35969b9bccf801ea07e115705e1";
-    sha256 = "9d761cd1d7ff68507392cbfd6c3f6000ddff9cc540293da2b3c4ee902321fb27";
+    rev = "14de1d3c78385e3f8b6d694f5d799eb1b613159e";
+    sha256 = "9b2a3d47345d6f8f27d9764c4f2f2acff17d3dde145dd0e674e4183e9312fec3";
   };
 
   phases = [

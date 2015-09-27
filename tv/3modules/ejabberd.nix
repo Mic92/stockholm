@@ -15,7 +15,7 @@ let
 
     certFile = mkOption {
       type = types.str;
-      default = "/root/src/secrets/ejabberd.pem";
+      default = toString <secrets/ejabberd.pem>;
     };
 
     hosts = mkOption {
