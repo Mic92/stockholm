@@ -44,7 +44,7 @@ with lib;
     exim-retiolum.enable = true;
     build.deps.nixpkgs = {
       url = https://github.com/Lassulus/nixpkgs;
-      rev = "e74d0e7ff83c16846a81e1173543f180ad565076";
+      rev = "68bd8e4a9dc247726ae89cc8739574261718e328";
     };
   };
 
