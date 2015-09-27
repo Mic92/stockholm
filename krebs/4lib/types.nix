@@ -27,6 +27,16 @@ types // rec {
         type = with types; attrsOf string;
       };
 
+      infest = {
+        addr = mkOption {
+          type = str;
+        };
+        port = mkOption {
+          type = int;
+          default = 22;
+        };
+      };
+
       secure = mkOption {
         type = bool;
         default = false;

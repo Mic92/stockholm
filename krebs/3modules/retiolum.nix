@@ -75,7 +75,7 @@ let
       # TODO if it's types.path then it gets copied to /nix/store with
       #      bad unsafe permissions...
       type = types.str;
-      default = "/root/src/secrets/retiolum.rsa_key.priv";
+      default = toString <secrets/retiolum.rsa_key.priv>;
       description = ''
           Generate file with <literal>tincd -K</literal>.
           This file must exist on the local system. The default points to 

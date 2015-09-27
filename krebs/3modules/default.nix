@@ -6,6 +6,7 @@ let
 
   out = {
     imports = [
+      ./build
       ./exim-retiolum.nix
       ./exim-smarthost.nix
       ./github-hosts-sync.nix
@@ -21,225 +22,6 @@ let
 
   api = {
     enable = mkEnableOption "krebs";
-
-    build = mkOption {
-      type = types.submodule ({ config, ... }: {
-        options = {
-          target = mkOption {
-            type = with types; nullOr str;
-            default = null;
-          };
-          deps = mkOption {
-            type = with types; attrsOf (submodule {
-              options = {
-                url = mkOption {
-                  type = str;
-                };
-                rev = mkOption {
-                  type = nullOr str;
-                  default = null;
-                };
-              };
-            });
-            default = {};
-          };
-          script = mkOption {
-            type = types.str;
-            default = ''
-              #! /bin/sh
-              set -efux
-
-              target=${escapeShellArg cfg.build.target}
-
-              push(){(
-                src=$1/
-                dst=$target:$2
-                rsync \
-                  --exclude .git \
-                  --exclude .graveyard \
-                  --exclude old \
-                  --rsync-path="mkdir -p \"$2\" && rsync" \
-                  --delete-excluded \
-                  -vrLptgoD \
-                  "$src" "$dst"
-              )}
-
-              ${concatStrings (mapAttrsToList (name: { url, rev, ... }:
-                optionalString (rev == null) ''
-                  push ${toString (map escapeShellArg [
-                    "${url}"
-                    "/root/src/${name}"
-                  ])}
-                '') config.deps)}
-
-              exec ssh -S none "$target" /bin/sh <<\EOF
-              set -efux
-              fetch(){(
-                url=$1
-                rev=$2
-                dst=$3
-                mkdir -p "$dst"
-                cd "$dst"
-                if ! test -e .git; then
-                  git init
-                fi
-                if ! cur_url=$(git config remote.origin.url 2>/dev/null); then
-                  git remote add origin "$url"
-                elif test "$cur_url" != "$url"; then
-                  git remote set-url origin "$url"
-                fi
-                if test "$(git rev-parse --verify HEAD 2>/dev/null)" != "$rev"; then
-                  git fetch origin
-                  git checkout "$rev" -- .
-                  git checkout -q "$rev"
-                  git submodule init
-                  git submodule update
-                fi
-                git clean -dxf
-              )}
-
-              ${concatStrings (mapAttrsToList (name: { url, rev, ... }:
-                optionalString (rev != null) ''
-                  fetch ${toString (map escapeShellArg [
-                    url
-                    rev
-                    "/root/src/${name}"
-                  ])}
-                '') config.deps)}
-
-              echo build system...
-              profile=/nix/var/nix/profiles/system
-              NIX_PATH=/root/src \
-              nix-env \
-                -Q \
-                -p "$profile" \
-                -f '<stockholm>' \
-                --set \
-                -A system \
-                --argstr user-name ${escapeShellArg cfg.build.user.name} \
-                --argstr system-name ${escapeShellArg cfg.build.host.name}
-
-              exec "$profile"/bin/switch-to-configuration switch
-              EOF
-
-            '';
-          };
-          infest = mkOption {
-            type = types.str;
-            default = ''
-              #! /bin/sh
-              set -efux
-
-              target=${escapeShellArg cfg.build.target}
-
-              push(){(
-                src=$1/
-                dst=$target:/mnt$2
-                rsync \
-                  --exclude .git \
-                  --exclude .graveyard \
-                  --exclude old \
-                  --rsync-path="mkdir -p \"/mnt$2\" && rsync" \
-                  --delete-excluded \
-                  -vrLptgoD \
-                  "$src" "$dst"
-              )}
-
-              cat krebs/4lib/infest/1prepare | ssh "$target"
-              cat krebs/4lib/infest/2install-nix | ssh "$target"
-
-              ${concatStrings (mapAttrsToList (name: { url, rev, ... }:
-                optionalString (rev == null) ''
-                  push ${toString (map escapeShellArg [
-                    "${url}"
-                    "/root/src/${name}"
-                  ])}
-                '') config.deps)}
-
-              ssh -S none "$target" /bin/sh <<\EOF
-              set -efux
-
-              fetch(){(
-                url=$1
-                rev=$2
-                dst=$3
-                mkdir -p "$dst"
-                cd "$dst"
-                if ! test -e .git; then
-                  git init
-                fi
-                if ! cur_url=$(git config remote.origin.url 2>/dev/null); then
-                  git remote add origin "$url"
-                elif test "$cur_url" != "$url"; then
-                  git remote set-url origin "$url"
-                fi
-                if test "$(git rev-parse --verify HEAD 2>/dev/null)" != "$rev"; then
-                  git fetch origin
-                  git checkout "$rev" -- .
-                  git checkout -q "$rev"
-                  git submodule init
-                  git submodule update
-                fi
-                git clean -dxf
-              )}
-
-              ${concatStrings (mapAttrsToList (name: { url, rev, ... }:
-                optionalString (rev != null) ''
-                  fetch ${toString (map escapeShellArg [
-                    url
-                    rev
-                    "/mnt/root/src/${name}"
-                  ])}
-                '') config.deps)}
-
-              export PATH=/root/.nix-profile/bin:/root/.nix-profile/sbin:$PATH
-
-              sed < "$(type -p nixos-install)" > nixos-install '
-                /^echo "building the system configuration..."/,/--set -A system/{
-                  s/.*/# &/
-                  s@.*--set -A system.*@&\n${concatStringsSep " " [
-                    "NIX_PATH=/mnt/root/src/"
-                    "nix-env"
-                    "-Q"
-                    "-p /nix/var/nix/profiles/system"
-                    "-f \"<stockholm>\""
-                    "--set"
-                    "-A system"
-                    "--argstr user-name ${escapeShellArg cfg.build.user.name}"
-                    "--argstr system-name ${escapeShellArg cfg.build.host.name}"
-                  ]}@
-                }
-              '
-
-              sed -i 's/^nixpkgs=.*$/#&/' nixos-install
-
-
-              chmod +x nixos-install
-
-              echo {} > /root/dummy.nix
-
-              echo build system...
-              profile=/nix/var/nix/profiles/system
-              NIXOS_CONFIG=/root/dummy.nix \
-              ./nixos-install -I /root/src/
-              #nl -bp nixos-install
-
-              EOF
-
-              cat krebs/4lib/infest/4finalize | ssh "$target"
-            '';
-          };
-          host = mkOption {
-            type = types.host;
-          };
-          user = mkOption {
-            type = types.user;
-          };
-        };
-      });
-      # Define defaul value, so unset values of the submodule get reported.
-      default = {};
-    };
 
     dns = {
       providers = mkOption {
@@ -537,8 +319,8 @@ let
 
         extraZones = {
           "krebsco.de" = ''
-            mediengewitter    IN A      ${elemAt nets.internet.addrs4 0}
-            flap              IN A      ${elemAt nets.internet.addrs4 0}'';
+            mediengewitter    IN A      ${head nets.internet.addrs4}
+            flap              IN A      ${head nets.internet.addrs4}'';
         };
         nets = {
           internet = {
@@ -575,14 +357,13 @@ let
                               IN MX 10  mx42
             euer              IN MX 1   aspmx.l.google.com.
             io                IN NS     pigstarter.krebsco.de.
-            euer              IN A      ${elemAt nets.internet.addrs4 0}
-            pigstarter        IN A      ${elemAt nets.internet.addrs4 0}
-            conf              IN A      ${elemAt nets.internet.addrs4 0}
-            gold              IN A      ${elemAt nets.internet.addrs4 0}
-            graph             IN A      ${elemAt nets.internet.addrs4 0}
-            tinc              IN A      ${elemAt nets.internet.addrs4 0}
-            boot              IN A      ${elemAt nets.internet.addrs4 0}
-            mx42              IN A      ${elemAt nets.internet.addrs4 0}'';
+            pigstarter        IN A      ${head nets.internet.addrs4}
+            conf              IN A      ${head nets.internet.addrs4}
+            gold              IN A      ${head nets.internet.addrs4}
+            graph             IN A      ${head nets.internet.addrs4}
+            tinc              IN A      ${head nets.internet.addrs4}
+            boot              IN A      ${head nets.internet.addrs4}
+            mx42              IN A      ${head nets.internet.addrs4}'';
         };
         nets = {
           internet = {
@@ -611,15 +392,56 @@ let
           };
         };
       };
+      wry = rec {
+        cores = 1;
+        dc = "makefu"; #dc = "cac";
+        extraZones = {
+          "krebsco.de" = ''
+            wry            IN A ${head nets.internet.addrs4}
+            '';
+        };
+        nets = rec {
+          internet = {
+            addrs4 = ["162.219.7.216"];
+            aliases = [
+              "wry.internet"
+            ];
+          };
+          retiolum = {
+            via = internet;
+            addrs4 = ["10.243.29.169"];
+            addrs6 = ["42:6e1e:cc8a:7cef:827:f938:8c64:baad"];
+            aliases = [
+              "wry.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIICCgKCAgEAvmCBVNKT/Su4v9nl/Nm3STPo5QxWPg7xEkzIs3Oh39BS8+r6/7UQ
+              rebib7mczb+ebZd+Rg2yFoGrWO8cmM0VcLy5bYRMK7in8XroLEjWecNNM4TRfNR4
+              e53+LhcPdkxo0A3/D+yiut+A2Mkqe+4VXDm/JhAiAYkZTn7jUtj00Atrc7CWW1gN
+              sP3jIgv4+CGftdSYOB4dm699B7OD9XDLci2kOaFqFl4cjDYUok03G0AduUlRx10v
+              CKbKOTIdm8C36A902/3ms+Hyzkruu+VagGIZuPSwqXHJPCu7Ju+jarKQstMmpQi0
+              PubweWDL0o/Dfz2qT3DuL4xDecIvGE6kv3m41hHJYiK+2/azTSehyPFbsVbL7w0V
+              LgKN3usnZNcpTsBWxRGT7nMFSnX2FLDu7d9OfCuaXYxHVFLZaNrpccOq8NF/7Hbk
+              DDW81W7CvLyJDlp0WLnAawSOGTUTPoYv/2wAapJ89i8QGCueGvEc6o2EcnBVMFEW
+              ejWTQzyD816f4RsplnrRqLVlIMbr9Q/n5TvlgjjhX7IMEfMy4+7qLGRQkNbFzgwK
+              jxNG2fFSCjOEQitm0gAtx7QRIyvYr6c7/xiHz4AwxYzBmvQsL/OK57NO4+Krwgj5
+              Vk8TQ2jGO7J4bB38zaxK+Lrtfl8i1AK1171JqFMhOc34JSJ7T4LWDMECAwEAAQ==
+              -----END RSA PUBLIC KEY-----
+            '';
+          };
+        };
+      };
       gum = rec {
         cores = 1;
         dc = "online.net"; #root-server
 
         extraZones = {
           "krebsco.de" = ''
-            omo               IN A      ${elemAt nets.internet.addrs4 0}
-            gum               IN A      ${elemAt nets.internet.addrs4 0}
-            paste             IN A      ${elemAt nets.internet.addrs4 0}'';
+            omo               IN A      ${head nets.internet.addrs4}
+            euer              IN A      ${head nets.internet.addrs4}
+            gum               IN A      ${head nets.internet.addrs4}
+            paste             IN A      ${head nets.internet.addrs4}'';
         };
         nets = {
           internet = {
@@ -706,12 +528,13 @@ let
           };
         };
       };
-      mkdir = {
+      mkdir = rec {
         cores = 1;
         dc = "tv"; #dc = "cac";
+        infest.addr = head nets.internet.addrs4;
         nets = rec {
           internet = {
-            addrs4 = ["162.248.167.241"];
+            addrs4 = ["104.233.84.102"];
             aliases = [
               "mkdir.internet"
             ];
@@ -762,12 +585,13 @@ let
         };
         secure = true;
       };
-      rmdir = {
+      rmdir = rec {
         cores = 1;
         dc = "tv"; #dc = "cac";
+        infest.addr = head nets.internet.addrs4;
         nets = rec {
           internet = {
-            addrs4 = ["167.88.44.94"];
+            addrs4 = ["104.233.84.70"];
             aliases = [
               "rmdir.internet"
             ];

@@ -7,7 +7,7 @@ set -eux
   umount /mnt || [ $? -eq 32 ]
   umount /boot || [ $? -eq 32 ]
 
-  PATH=$(for i in /nix/store/*coreutils*/bin; do :; done; echo $i)
+  PATH=$(set +f; for i in /nix/store/*coreutils*/bin; do :; done; echo $i)
   export PATH
 
   mkdir /oldshit
