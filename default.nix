@@ -11,7 +11,8 @@ let
   out =
     (lib.mapAttrs (k: v: mk-namespace (./. + "/${k}"))
       (lib.filterAttrs
-        (k: v: !lib.hasPrefix "." k && v == "directory")
+        (k: v: !lib.hasPrefix "." k && v == "directory" &&
+          builtins.pathExists (./. + "/${k}/1systems"))
         (builtins.readDir ./.)));
 
   eval = path: import <nixpkgs/nixos/lib/eval-config.nix> {
