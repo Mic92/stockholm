@@ -167,8 +167,8 @@ let
 
         message=''${message+$message
       }$(
-          git log --format='%h %ar: %s ' $id..$id2
-          git diff --stat $id..$id2
+          git log --format='%h %ar: %s ' $id2..$id
+          git diff --stat $id2..$id
         )
 
       done
