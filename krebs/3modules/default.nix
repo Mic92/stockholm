@@ -104,7 +104,11 @@ let
         combined-hosts = (mapAttrsToList (name: value: value.extraZones)  cfg.hosts );
       in lib.mapAttrs' (name: value: nameValuePair (("zones/" + name)) ({ text=value; })) all-zones;
 
-      programs.ssh.knownHosts =
+      services.openssh.hostKeys =
+        let inherit (config.krebs.build.host.ssh) privkey; in
+        mkIf (privkey != null) (mkForce [privkey]);
+
+      services.openssh.knownHosts =
         mapAttrs
           (name: host: {
             hostNames =
@@ -550,7 +554,7 @@ let
             '';
           };
         };
-        ssh.privkey = <secrets/ssh.id_ed25519>;
+        ssh.privkey.path = <secrets/ssh.id_ed25519>;
         ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICuShEqU0Cdm7KCaMD5x1D6mgj+cr7qoqbzFJDKoBbbw";
       };
       ire = {

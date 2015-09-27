@@ -57,13 +57,27 @@ types // rec {
             else trace "The option `krebs.hosts.${config.name}.ssh.pubkey' is unused." null;
       };
       ssh.privkey = mkOption {
-        type = either path str;
-        apply = x: {
-          path = toString x;
-          string = x;
-        }.${typeOf x};
+        type = nullOr (submodule {
+          options = {
+            bits = mkOption {
+              type = nullOr (enum ["4096"]);
+              default = null;
+            };
+            path = mkOption {
+              type = either path str;
+              apply = x: {
+                path = toString x;
+                string = x;
+              }.${typeOf x};
+            };
+            type = mkOption {
+              type = enum ["rsa" "ed25519"];
+              default = "ed25519";
+            };
+          };
+        });
+        default = null;
       };
-
     };
   });
 
