@@ -157,7 +157,6 @@ let
             link="$cgit_endpoint/$GIT_SSH_REPO/ ($h)"
             ;;
           fast-forward|non-fast-forward)
-            #git diff --stat $id..$id2
             link="$cgit_endpoint/$GIT_SSH_REPO/diff/?h=$h&id=$id&id2=$id2"
             ;;
         esac
@@ -165,6 +164,13 @@ let
         #$host $GIT_SSH_REPO $ref $link
         message="''${message+$message
       }$GIT_SSH_USER $receive_mode $link"
+
+        message=''${message+$message
+      }$(
+          git log --format='%h %ar: %s ' $id..$id2
+          git diff --stat $id..$id2
+        )
+
       done
 
       if test -n "''${message-}"; then
