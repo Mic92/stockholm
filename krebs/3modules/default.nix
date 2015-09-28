@@ -84,13 +84,16 @@ let
         mapAttrsToList (hostname: host:
           mapAttrsToList (netname: net:
             let
-              aliases = toString (unique (longs ++ shorts));
+              aliases = longs ++ shorts;
               providers = dns.split-by-provider net.aliases cfg.dns.providers;
               longs = providers.hosts;
-              shorts = map (removeSuffix ".${cfg.search-domain}") longs;
+              shorts =
+                map (removeSuffix ".${cfg.search-domain}")
+                    (filter (hasSuffix ".${cfg.search-domain}")
+                            longs);
             in
-              map (addr: "${addr} ${aliases}") net.addrs
-          ) host.nets
+              map (addr: "${addr} ${toString aliases}") net.addrs
+          ) (filterAttrs (name: host: host.aliases != []) host.nets)
         ) cfg.hosts
       ));
 
@@ -100,6 +103,36 @@ let
           ([cfg.zone-head-config] ++ combined-hosts) ;
         combined-hosts = (mapAttrsToList (name: value: value.extraZones)  cfg.hosts );
       in lib.mapAttrs' (name: value: nameValuePair (("zones/" + name)) ({ text=value; })) all-zones;
+
+      services.openssh.hostKeys =
+        let inherit (config.krebs.build.host.ssh) privkey; in
+        mkIf (privkey != null) (mkForce [privkey]);
+
+      services.openssh.knownHosts =
+        mapAttrs
+          (name: host: {
+            hostNames =
+              concatLists
+                (mapAttrsToList
+                  (net-name: net:
+                    let
+                      aliases = shorts ++ longs;
+                      longs = net.aliases;
+                      shorts =
+                        map (removeSuffix ".${cfg.search-domain}")
+                            (filter (hasSuffix ".${cfg.search-domain}")
+                                    longs);
+                      add-port = a:
+                        if net.ssh.port != null
+                          then "[${a}]:${toString net.ssh.port}"
+                          else a;
+                    in
+                    aliases ++ map add-port net.addrs)
+                  host.nets);
+
+            publicKey = host.ssh.pubkey;
+          })
+          (filterAttrs (_: host: host.ssh.pubkey != null) cfg.hosts);
     }
   ];
 
@@ -501,6 +534,7 @@ let
               "cgit.cd.viljetic.de"
               "cd.krebsco.de"
             ];
+            ssh.port = 11423;
           };
           retiolum = {
             via = internet;
@@ -527,6 +561,8 @@ let
             '';
           };
         };
+        ssh.privkey.path = <secrets/ssh.id_ed25519>;
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOd/HqZIO9Trn3eycl23GZAz21HQCISaVNfNyaLSQvJ6";
       };
       mkdir = rec {
         cores = 1;
@@ -534,7 +570,7 @@ let
         infest.addr = head nets.internet.addrs4;
         nets = rec {
           internet = {
-            addrs4 = ["104.233.84.102"];
+            addrs4 = ["104.233.84.173"];
             aliases = [
               "mkdir.internet"
             ];
@@ -559,6 +595,35 @@ let
             '';
           };
         };
+        ssh.privkey.path = <secrets/ssh.id_ed25519>;
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICuShEqU0Cdm7KCaMD5x1D6mgj+cr7qoqbzFJDKoBbbw";
+      };
+      ire = {
+        nets = {
+          internet = {
+            addrs4 = ["198.147.22.115"];
+            ssh.port = 11423;
+          };
+          retiolum = {
+            addrs4 = ["10.243.231.66"];
+            addrs6 = ["42:b912:0f42:a82d:0d27:8610:e89b:490c"];
+            aliases = [
+              "ire.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEAwofjmP/XBf5pwsJlWklkSzI+Bo0I0B9ONc7/j+zpbmMRkwbWk4X7
+              rVLt1cWvTY15ujg2u8l0o6OgEbIkc6rslkD603fv1sEAd0KOv7iKLgRpE9qfSvAt
+              6YpiSv+mxEMTpH0g36OmBfOJ10uT+iHDB/FfxmgGJx//jdJADzLjjWC6ID+iGkGU
+              1Sf+yHXF7HRmQ29Yak8LYVCJpGC5bQfWIMSL5lujLq4NchY2d+NZDkuvh42Ayr0K
+              LPflnPBQ3XnKHKtSsnFR2vaP6q+d3Opsq/kzBnAkjL26jEuFK1v7P/HhNhJoPzwu
+              nKKWj/W/k448ce374k5ycjvKm0c6baAC/wIDAQAB
+              -----END RSA PUBLIC KEY-----
+            '';
+            ssh.port = 11423;
+          };
+        };
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBaMjBJ/BfYlHjyn5CO0xzFNaQ0LPvMP3W9UlOs1OxGY";
       };
       nomic = {
         cores = 2;
@@ -584,6 +649,7 @@ let
           };
         };
         secure = true;
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILn7C3LxAs9kUynENdRNgQs4qjrhNDfXzlHTpVJt6e09";
       };
       rmdir = rec {
         cores = 1;
@@ -616,6 +682,8 @@ let
             '';
           };
         };
+        ssh.privkey.path = <secrets/ssh.id_ed25519>;
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICLuhLRmt8M5s2Edwwl9XY0KAAivzmPCEweesH5/KhR4";
       };
       wu = {
         cores = 4;
@@ -641,6 +709,7 @@ let
           };
         };
         secure = true;
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcJvu8JDVzObLUtlAQg9qVugthKSfitwCljuJ5liyHa";
       };
       xu = {
         cores = 4;
@@ -666,6 +735,7 @@ let
           };
         };
         secure = true;
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID554niVFWomJjuSuQoiCdMUYrCFPpPzQuaoXXYYDxlw";
       };
     };
     users = addNames {

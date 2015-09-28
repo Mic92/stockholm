@@ -28,6 +28,42 @@ let
       type = types.user;
     };
 
+    options.krebs.build.scripts.init = lib.mkOption {
+      type = lib.types.str;
+      default =
+        let
+          inherit (config.krebs.build) host;
+        in
+        ''
+          #! /bin/sh
+          set -efu
+
+          hostname=${host.name}
+          secrets_dir=${config.krebs.build.source.dir.secrets.path}
+          key_type=ed25519
+          key_file=$secrets_dir/ssh.id_$key_type
+          key_comment=$hostname
+
+          if test -e "$key_file"; then
+            echo "Warning: privkey already exists: $key_file" >&2
+          else
+            ssh-keygen \
+                -C "$key_comment" \
+                -t "$key_type" \
+                -f "$key_file" \
+                -N ""
+            rm "$key_file.pub"
+          fi
+
+          pubkey=$(ssh-keygen -y -f "$key_file")
+
+          cat<<EOF
+          # put following into config.krebs.hosts.$hostname:
+          ssh.pubkey = $(echo $pubkey | jq -R .);
+          EOF
+        '';
+    };
+
     options.krebs.build.scripts.deploy = lib.mkOption {
       type = lib.types.str;
       default = ''
@@ -67,12 +103,16 @@ let
           src=$(type -p nixos-install)
           cat_src() {
             sed < "$src" "$(
-              sed < "$src" -n '
-                  /^if ! test -e "\$mountPoint\/\$NIXOS_CONFIG/,/^fi$/=
-                  /^nixpkgs=/=
-                  /^NIX_PATH=/,/^$/{/./=}
-                ' \
-                | sed 's:$:s/^/#krebs#/:'
+              { sed < "$src" -n '
+                    /^if ! test -e "\$mountPoint\/\$NIXOS_CONFIG/,/^fi$/=
+                    /^nixpkgs=/=
+                    /^NIX_PATH=/,/^$/{/./=}
+
+                    # Disable: Copy the NixOS/Nixpkgs sources to the target as
+                    # the initial contents of the NixOS channel.
+                    /^srcs=/,/^ln -sfn /=
+                  '
+              } | sed 's:$:s/^/#krebs#/:'
             )"
           }
 

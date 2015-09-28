@@ -157,7 +157,6 @@ let
             link="$cgit_endpoint/$GIT_SSH_REPO/ ($h)"
             ;;
           fast-forward|non-fast-forward)
-            #git diff --stat $id..$id2
             link="$cgit_endpoint/$GIT_SSH_REPO/diff/?h=$h&id=$id&id2=$id2"
             ;;
         esac
@@ -165,6 +164,26 @@ let
         #$host $GIT_SSH_REPO $ref $link
         message="''${message+$message
       }$GIT_SSH_USER $receive_mode $link"
+
+        message=''${message+$message
+      }$(
+          green()  { printf '\x0303,99%s\x0F' "$1"; }
+          red()    { printf '\x0304,99%s\x0F' "$1"; }
+          orange() { printf '\x0307,99%s\x0F' "$1"; }
+          gray()   { printf '\x0314,99%s\x0F' "$1"; }
+
+          git log \
+              --format="$(orange %h) %s $(gray '(%ar)')" \
+              --reverse \
+              $id2..$id
+
+          git diff --stat $id2..$id \
+            | sed '
+                  $!s/+/'$(green '&')'/g
+                  $!s/-/'$(red   '&')'/g
+                '
+        )
+
       done
 
       if test -n "''${message-}"; then
