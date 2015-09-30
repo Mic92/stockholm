@@ -6,7 +6,7 @@ let
 
   out = {
     imports = [
-      ./build
+      ./build.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
       ./github-hosts-sync.nix
