@@ -174,6 +174,7 @@
 
   environment.systemPackages = with pkgs; [
     cac
+    get
   ];
 
   #TODO: fix this shit
