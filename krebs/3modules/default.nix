@@ -169,6 +169,36 @@ let
           };
         };
       };
+      fastpoke = {
+        dc = "lass"; #dc = "cac";
+        nets = rec {
+          internet = {
+            addrs4 = ["193.22.164.36"];
+            aliases = [
+              "fastpoke.internet"
+            ];
+          };
+          retiolum = {
+            via = internet;
+            addrs4 = ["10.243.253.152"];
+            addrs6 = ["42:422a:194f:ff3b:e196:2f82:5cf5:bc00"];
+            aliases = [
+              "fastpoke.retiolum"
+              "cgit.fastpoke.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEAs4p5xsQYx06v+OkUbc09K6voFAbkvO66QdFoM71E10XyCeLP6iuq
+              DaIOFN4GrPR36pgyjqtJ+62G9uR+WsB/y14eio1p1ivDWgcpt5soOZAH5zVRRD9O
+              FBDlgVNwIJ6stMHy6OenEKWsfEiZRN3XstnqAqyykzjddglth1tJntn6kbZehzNQ
+              ezfIyN4XgaX2fhSu+UnAyLcV8wWnF9cMABjz7eKcSmRJgtG4ZiuDkbgiiEew7+pB
+              EPqOVQ80lJvzQKgO4PmVoAjD9A+AHnmLJNPDQQi8nIVilGCT60IX+XT1rt85Zpdy
+              rEaeriw/qsVJnberAhDAdQYYuM1ai2H5swIDAQAB
+              -----END RSA PUBLIC KEY-----
+            '';
+          };
+        };
+      };
       cloudkrebs = {
         cores = 1;
         dc = "lass"; #dc = "cac";
