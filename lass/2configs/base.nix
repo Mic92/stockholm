@@ -75,6 +75,8 @@ with lib;
     most
     rxvt_unicode.terminfo
 
+    get
+
   #network
     iptables
   ];
