@@ -12,14 +12,19 @@ let
   user-pkgs-path = ./. + "/${current-user-name}/5pkgs";
 
   out =
-    (lib.mapAttrs
-      (k: v:
-        if builtins.pathExists (./. + "/${k}/1systems")
-          then mk-namespace (./. + "/${k}")
-          else import (./. + "/${k}"))
-      (lib.filterAttrs
-        (k: v: !lib.hasPrefix "." k && v == "directory")
-        (builtins.readDir ./.)));
+    lib.mapAttrs (_: builtins.getAttr "main")
+      (lib.filterAttrs (_: builtins.hasAttr "main")
+        (lib.mapAttrs
+          (k: v:
+            if lib.hasPrefix "." k || v != "directory" then
+              {}
+            else if builtins.pathExists (./. + "/${k}/default.nix") then
+              { main = import (./. + "/${k}"); }
+            else if builtins.pathExists (./. + "/${k}/1systems") then
+              { main = mk-namespace (./. + "/${k}"); }
+            else
+              {})
+          (builtins.readDir ./.)));
 
   eval = path: import <nixpkgs/nixos/lib/eval-config.nix> {
     system = builtins.currentSystem;
