@@ -74,8 +74,8 @@ in {
       pulseSupport = true;
       enablePepperFlash = true;
     };
-    chromium = pkgs.chromium.override {
-      pulseSupport = true;
-    };
+    #chromium = pkgs.chromium.override {
+    #  pulseSupport = true;
+    #};
   };
 }
