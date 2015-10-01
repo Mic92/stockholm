@@ -22,18 +22,20 @@
     ../2configs/retiolum.nix
     ../2configs/wordpress.nix
     ../2configs/bitlbee.nix
+    ../2configs/firefoxPatched.nix
   ];
 
   krebs.build = {
     user = config.krebs.users.lass;
-    target = "root@mors";
     host = config.krebs.hosts.mors;
-    deps = {
-      secrets = {
-        url = "/home/lass/secrets/${config.krebs.build.host.name}";
+    source = {
+      dir.secrets = {
+        host = config.krebs.hosts.mors;
+        path = "/home/lass/secrets/${config.krebs.build.host.name}";
       };
-      stockholm = {
-        url = toString ../..;
+      dir.stockholm = {
+        host = config.krebs.hosts.mors;
+        path = "/home/lass/dev/stockholm";
       };
     };
   };
@@ -172,6 +174,7 @@
 
   environment.systemPackages = with pkgs; [
     cac
+    get
   ];
 
   #TODO: fix this shit

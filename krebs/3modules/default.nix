@@ -6,7 +6,7 @@ let
 
   out = {
     imports = [
-      ./build
+      ./build.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
       ./github-hosts-sync.nix
@@ -143,7 +143,7 @@ let
         dc = "lass"; #dc = "cac";
         nets = rec {
           internet = {
-            addrs4 = ["162.248.8.63"];
+            addrs4 = ["104.233.84.57"];
             aliases = [
               "echelon.internet"
             ];
@@ -158,12 +158,42 @@ let
             ];
             tinc.pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
-              MIIBCgKCAQEA92ybhDahtGybpAkUNlG5Elxw05MVY4Pg7yK0dQugB4nVq+pnmi78
-              DOMeIciecMHmJM8n9UlUU0eWZVCgHeVd23d6J0hTHCv24p24uHEGGy7XlO/dPJ6A
-              IjROYU0l8c03pipdJ3cDBx6riArSglwmZJ7xH/Iw0BUhRZrPqbtijY7EcG2wc+8K
-              N9N9mBofVMl4EcBiDR/eecK+ro8OkeOmYPtYgFJLvxTYXiPIhOxMAlkOY2fpin/t
-              cgFLUFuN4ag751XjjcNpVovVq95vdg+VhKrrNVWZjJt03owW81BzoryY6CD2kIPq
-              UxK89zEdeYOUT7AxaT/5V5v41IvGFZxCzwIDAQAB
+              MIIBCgKCAQEAuscWOYdHu0bpWacvwTNd6bcmrAQ0YFxJWHZF8kPZr+bMKIhnXLkJ
+              oJheENIM6CA9lQQQFUxh2P2pxZavW5rgVlJxIKeiB+MB4v6ZO60LmZgpCsWGD/dX
+              MipM2tLtQxYhvLJIJxEBWn3rxIgeEnCtZsH1KLWyLczb+QpvTjMJ4TNh1nEBPE/f
+              4LUH1JHaGhcaHl2dLemR9wnnDIjmSj0ENJp2al+hWnIggcA/Zp0e4b86Oqbbs5wA
+              n++n5j971cTrBdA89nJDYOEtepisglScVRbgLqJG81lDA+n24RWFynn+U3oD/L8p
+              do+kxlwZUEDRbPU4AO5L+UeIbimsuIfXiQIDAQAB
+              -----END RSA PUBLIC KEY-----
+            '';
+          };
+        };
+      };
+      fastpoke = {
+        dc = "lass"; #dc = "cac";
+        nets = rec {
+          internet = {
+            addrs4 = ["193.22.164.36"];
+            aliases = [
+              "fastpoke.internet"
+            ];
+          };
+          retiolum = {
+            via = internet;
+            addrs4 = ["10.243.253.152"];
+            addrs6 = ["42:422a:194f:ff3b:e196:2f82:5cf5:bc00"];
+            aliases = [
+              "fastpoke.retiolum"
+              "cgit.fastpoke.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEAs4p5xsQYx06v+OkUbc09K6voFAbkvO66QdFoM71E10XyCeLP6iuq
+              DaIOFN4GrPR36pgyjqtJ+62G9uR+WsB/y14eio1p1ivDWgcpt5soOZAH5zVRRD9O
+              FBDlgVNwIJ6stMHy6OenEKWsfEiZRN3XstnqAqyykzjddglth1tJntn6kbZehzNQ
+              ezfIyN4XgaX2fhSu+UnAyLcV8wWnF9cMABjz7eKcSmRJgtG4ZiuDkbgiiEew7+pB
+              EPqOVQ80lJvzQKgO4PmVoAjD9A+AHnmLJNPDQQi8nIVilGCT60IX+XT1rt85Zpdy
+              rEaeriw/qsVJnberAhDAdQYYuM1ai2H5swIDAQAB
               -----END RSA PUBLIC KEY-----
             '';
           };
@@ -568,10 +598,9 @@ let
       mkdir = rec {
         cores = 1;
         dc = "tv"; #dc = "cac";
-        infest.addr = head nets.internet.addrs4;
         nets = rec {
           internet = {
-            addrs4 = ["104.233.84.173"];
+            addrs4 = ["104.233.84.215"];
             aliases = [
               "mkdir.internet"
             ];
@@ -655,7 +684,6 @@ let
       rmdir = rec {
         cores = 1;
         dc = "tv"; #dc = "cac";
-        infest.addr = head nets.internet.addrs4;
         nets = rec {
           internet = {
             addrs4 = ["104.233.84.70"];

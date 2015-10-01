@@ -42,9 +42,11 @@ with lib;
     enable = true;
     search-domain = "retiolum";
     exim-retiolum.enable = true;
-    build.deps.nixpkgs = {
-      url = https://github.com/Lassulus/nixpkgs;
-      rev = "e74d0e7ff83c16846a81e1173543f180ad565076";
+    build.source = {
+      git.nixpkgs = {
+        url = https://github.com/Lassulus/nixpkgs;
+        rev = "68bd8e4a9dc247726ae89cc8739574261718e328";
+      };
     };
   };
 

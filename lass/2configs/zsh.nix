@@ -57,7 +57,7 @@
       #exports
       export EDITOR='vim'
       export MANPAGER='most'
-      export PAGER='vim -'
+      export PAGER='vim -R -'
       # export MANPAGER='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | vim -R -c "set ft=man nonu nomod nolist" -'
 
       #beautiful colors
@@ -103,23 +103,21 @@
 
       case $UID in
         0)
-          username='%F{red}root%f'
+          username='%F{red}root%f '
           ;;
         1337)
           username=""
           ;;
         *)
-          username='%F{blue}%n%f'
+          username='%F{blue}%n%f '
           ;;
       esac
 
       if test -n "$SSH_CLIENT"; then
         PROMPT="$error$username@%F{magenta}%M%f %~ "
       else
-        PROMPT="$error$username %~ "
+        PROMPT="$error$username%~ "
       fi
-
-
     '';
   };
   users.defaultUserShell = "/run/current-system/sw/bin/zsh";

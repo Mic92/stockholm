@@ -7,7 +7,6 @@
     gnupg1compat
     htop
     i3lock
-    mc
     mosh
     mpv
     pass

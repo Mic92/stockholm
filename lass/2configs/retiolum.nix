@@ -21,6 +21,7 @@
     connectTo = [
       "fastpoke"
       "cloudkrebs"
+      "echelon"
       "pigstarter"
       "gum"
       "flap"
