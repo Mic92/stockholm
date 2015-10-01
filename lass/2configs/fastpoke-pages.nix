@@ -29,8 +29,7 @@ let
     };
 
 in {
-  imports = [
-  ] ++ map createStaticPage [
+  imports = map createStaticPage [
     "habsys.de"
     "pixelpocket.de"
     "karlaskop.de"
