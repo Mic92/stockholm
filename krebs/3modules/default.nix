@@ -11,6 +11,7 @@ let
       ./exim-smarthost.nix
       ./github-hosts-sync.nix
       ./git.nix
+      ./iptables.nix
       ./nginx.nix
       ./Reaktor.nix
       ./retiolum.nix

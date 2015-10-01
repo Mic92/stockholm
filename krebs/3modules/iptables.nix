@@ -3,6 +3,10 @@ arg@{ config, lib, pkgs, ... }:
 let
   inherit (pkgs) writeScript writeText;
 
+  inherit (builtins)
+    elem
+  ;
+
   inherit (lib)
     concatMapStringsSep
     concatStringsSep
@@ -20,15 +24,13 @@ let
     mkOption
     mkIf
     types
-    sort;
+    sort
+  ;
 
-  elemIsIn = a: as:
-    any (x: x == a) as;
-
-  cfg = config.lass.iptables;
+  cfg = config.krebs.iptables;
 
   out = {
-    options.lass.iptables = api;
+    options.krebs.iptables = api;
     config = mkIf cfg.enable imp;
   };
 
@@ -74,8 +76,8 @@ let
   imp = {
     networking.firewall.enable = false;
 
-    systemd.services.lass-iptables = {
-      description = "lass-iptables";
+    systemd.services.krebs-iptables = {
+      description = "krebs-iptables";
       wantedBy = [ "network-pre.target" ];
       before = [ "network-pre.target" ];
       after = [ "systemd-modules-load.service" ];
@@ -90,7 +92,7 @@ let
         Type = "simple";
         RemainAfterExit = true;
         Restart = "always";
-        ExecStart = "@${startScript} lass-iptables_start";
+        ExecStart = "@${startScript} krebs-iptables_start";
       };
     };
   };
@@ -110,13 +112,10 @@ let
 
         in
           #TODO: double check should be unneccessary, refactor!
-          if (hasAttr "rules" ts."${tn}"."${cn}") then
-            if (ts."${tn}"."${cn}".rules == null) then
-              ""
-            else
-              concatMapStringsSep "\n" (rule: "\n-A ${cn} ${rule}") ([]
-                ++ map (buildRule tn cn) sortedRules
-              )
+          if ts.${tn}.${cn}.rules or null != null then
+            concatMapStringsSep "\n" (rule: "\n-A ${cn} ${rule}") ([]
+              ++ map (buildRule tn cn) sortedRules
+            )
           else
             ""
           ;
@@ -124,7 +123,7 @@ let
 
       buildRule = tn: cn: rule:
         #target validation test:
-        assert (elemIsIn rule.target ([ "ACCEPT" "REJECT" "DROP" "QUEUE" "LOG" "RETURN" ] ++ (attrNames ts."${tn}")));
+        assert (elem rule.target ([ "ACCEPT" "REJECT" "DROP" "QUEUE" "LOG" "RETURN" ] ++ (attrNames ts."${tn}")));
 
         #predicate validation test:
         #maybe use iptables-test
@@ -171,11 +170,11 @@ let
       tables = tables-defaults // cfg.tables;
 
     in
-      writeText "lass-iptables-rules${toString iptables-version}" ''
+      writeText "krebs-iptables-rules${toString iptables-version}" ''
         ${buildTables iptables-version tables}
       '';
 
-  startScript = writeScript "lass-iptables_start" ''
+  startScript = writeScript "krebs-iptables_start" ''
     #! /bin/sh
     set -euf
     iptables-restore < ${rules4 4}
