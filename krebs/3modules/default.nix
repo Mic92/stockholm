@@ -527,7 +527,6 @@ let
       mkdir = rec {
         cores = 1;
         dc = "tv"; #dc = "cac";
-        infest.addr = head nets.internet.addrs4;
         nets = rec {
           internet = {
             addrs4 = ["104.233.84.215"];
@@ -614,7 +613,6 @@ let
       rmdir = rec {
         cores = 1;
         dc = "tv"; #dc = "cac";
-        infest.addr = head nets.internet.addrs4;
         nets = rec {
           internet = {
             addrs4 = ["104.233.84.70"];
