@@ -58,7 +58,7 @@ let
   make-public-repo = name: { desc ? null, ... }: {
     inherit name desc;
     public = true;
-    hooks = {
+    hooks = optionalAttrs (config.krebs.build.host.name == "cd") {
       post-receive = git.irc-announce {
         # TODO make nick = config.krebs.build.host.name the default
         nick = config.krebs.build.host.name;
