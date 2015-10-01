@@ -428,6 +428,7 @@ let
       wry = rec {
         cores = 1;
         dc = "makefu"; #dc = "cac";
+        infest.addr = "${head nets.internet.addrs4}";
         extraZones = {
           "krebsco.de" = ''
             wry            IN A ${head nets.internet.addrs4}
@@ -435,7 +436,7 @@ let
         };
         nets = rec {
           internet = {
-            addrs4 = ["162.219.7.216"];
+            addrs4 = ["104.233.87.86"];
             aliases = [
               "wry.internet"
             ];
