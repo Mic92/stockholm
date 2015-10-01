@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 
 let
-  inherit (lib) addNames escapeShellArg makeSearchPath;
+  inherit (lib) addNames escapeShellArg makeSearchPath optionalString;
 
   commands = addNames {
     git-receive-pack = {};
@@ -104,7 +104,7 @@ let
 
   hooks = {
     # TODO make this a package?
-    irc-announce = { nick, channel, server, port ? 6667 }: ''
+    irc-announce = { nick, channel, server, port ? 6667, verbose ? false }: ''
       #! /bin/sh
       set -euf
 
@@ -150,7 +150,7 @@ let
 
         h=$(echo $ref | sed 's:^refs/heads/::')
 
-        # empty_tree=$(git hash-object -t tree /dev/null
+        # empty_tree=$(git hash-object -t tree /dev/null)
         empty_tree=4b825dc6
 
         id=$(echo $newrev | cut -b-7)
@@ -160,11 +160,9 @@ let
 
         case $receive_mode in
           create)
-            #git log --oneline $id2
             link="$cgit_endpoint/$GIT_SSH_REPO/?h=$h"
             ;;
           delete)
-            #git log --oneline $id2
             link="$cgit_endpoint/$GIT_SSH_REPO/ ($h)"
             ;;
           fast-forward|non-fast-forward)
@@ -175,15 +173,17 @@ let
         #$host $GIT_SSH_REPO $ref $link
         add_message $(pink push) $link $(gray "($receive_mode)")
 
-        add_message "$(
-          git log \
-              --format="$(orange %h) %s $(gray '(%ar)')" \
-              --reverse \
-              $id2..$id
+        ${optionalString verbose ''
+          add_message "$(
+            git log \
+                --format="$(orange %h) %s $(gray '(%ar)')" \
+                --reverse \
+                $id2..$id
 
-          git diff --stat $id2..$id \
-            | sed '$!s/\(+*\)\(-*\)$/'$(green '\1')$(red '\2')'/'
-        )"
+            git diff --stat $id2..$id \
+              | sed '$!s/\(+*\)\(-*\)$/'$(green '\1')$(red '\2')'/'
+          )"
+        ''}
 
       done
 

@@ -58,12 +58,13 @@ let
   make-public-repo = name: { desc ? null, ... }: {
     inherit name desc;
     public = true;
-    hooks = optionalAttrs (config.krebs.build.host.name == "cd") {
+    hooks = {
       post-receive = git.irc-announce {
         # TODO make nick = config.krebs.build.host.name the default
         nick = config.krebs.build.host.name;
         channel = "#retiolum";
         server = "cd.retiolum";
+        verbose = config.krebs.build.host.name == "cd";
       };
     };
   };
