@@ -71,7 +71,7 @@ in {
 
   nixpkgs.config.packageOverrides = pkgs : {
     flash = pkgs.chromium.override {
-      pulseSupport = true;
+    #  pulseSupport = true;
       enablePepperFlash = true;
     };
     #chromium = pkgs.chromium.override {
