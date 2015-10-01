@@ -1,7 +1,8 @@
 #
 # usage:
-#		make system=foo
-#		make systems='foo bar'
+#		make infest system=foo [target=bar]
+#		make [deploy] system=foo [target=bar]
+#		make [deploy] systems='foo bar'
 #		make eval get=tv.wu.config.time.timeZone [filter=json]
 #
 
@@ -11,6 +12,7 @@
 ifdef systems
 $(systems):
 	@
+	unset target
 	parallel \
 		--line-buffer \
 		-j0 \
@@ -20,7 +22,7 @@ $(systems):
 else ifdef system
 .PHONY: deploy infest
 deploy infest:;@
-	export get=$$LOGNAME.${system}.config.krebs.build.scripts.$@
+	export get=krebs.$@
 	export filter=json
 	make -s eval | sh
 
@@ -39,8 +41,11 @@ endif
 		--eval \
 		-A "$$get" \
 		'<stockholm>' \
-		--argstr user-name "$$LOGNAME" \
-		--argstr host-name "$$HOSTNAME" \
+		--argstr current-date "$$(date -Is)" \
+		--argstr current-host-name "$$HOSTNAME" \
+		--argstr current-user-name "$$LOGNAME" \
+		$${system+--argstr system "$$system"} \
+		$${target+--argstr target "$$target"} \
 		| filter
 else
 $(error unbound variable: system[s])

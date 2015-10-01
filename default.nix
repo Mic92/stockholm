@@ -1,36 +1,34 @@
-{ user-name, host-name }:
+{ current-date
+, current-host-name
+, current-user-name
+}:
 
 let
   lib = import <nixpkgs/lib>;
 
   krebs-modules-path = ./krebs/3modules;
   krebs-pkgs-path = ./krebs/5pkgs;
-  user-modules-path = ./. + "/${user-name}/3modules";
-  user-pkgs-path = ./. + "/${user-name}/5pkgs";
+  user-modules-path = ./. + "/${current-user-name}/3modules";
+  user-pkgs-path = ./. + "/${current-user-name}/5pkgs";
 
   out =
-    (lib.mapAttrs (k: v: mk-namespace (./. + "/${k}"))
-      (lib.filterAttrs
-        (k: v: !lib.hasPrefix "." k && v == "directory" &&
-          builtins.pathExists (./. + "/${k}/1systems"))
-        (builtins.readDir ./.)));
+    lib.mapAttrs (_: builtins.getAttr "main")
+      (lib.filterAttrs (_: builtins.hasAttr "main")
+        (lib.mapAttrs
+          (k: v:
+            if lib.hasPrefix "." k || v != "directory" then
+              {}
+            else if builtins.pathExists (./. + "/${k}/default.nix") then
+              { main = import (./. + "/${k}"); }
+            else if builtins.pathExists (./. + "/${k}/1systems") then
+              { main = mk-namespace (./. + "/${k}"); }
+            else
+              {})
+          (builtins.readDir ./.)));
 
   eval = path: import <nixpkgs/nixos/lib/eval-config.nix> {
     system = builtins.currentSystem;
     modules = [
-      ({ config, ... }:
-        with import ./krebs/4lib { inherit lib; };
-        {
-          options.krebs.exec.host = mkOption {
-            type = types.host;
-            default = config.krebs.hosts.${host-name};
-          };
-          options.krebs.exec.user = mkOption {
-            type = types.user;
-            default = config.krebs.users.${user-name};
-          };
-        }
-      )
       path
       krebs-modules-path
       user-modules-path

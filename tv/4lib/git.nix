@@ -114,6 +114,18 @@ let
         gnused
       ])}
 
+      green()  { printf '\x0303,99%s\x0F' "$1"; }
+      red()    { printf '\x0304,99%s\x0F' "$1"; }
+      orange() { printf '\x0307,99%s\x0F' "$1"; }
+      pink()   { printf '\x0313,99%s\x0F' "$1"; }
+      gray()   { printf '\x0314,99%s\x0F' "$1"; }
+
+      unset message
+      add_message() {
+        message="''${message+$message
+      }$*"
+      }
+
       nick=${escapeShellArg nick}
       channel=${escapeShellArg channel}
       server=${escapeShellArg server}
@@ -124,7 +136,6 @@ let
 
       empty=0000000000000000000000000000000000000000
 
-      unset message
       while read oldrev newrev ref; do
 
         if [ $oldrev = $empty ]; then
@@ -162,27 +173,17 @@ let
         esac
 
         #$host $GIT_SSH_REPO $ref $link
-        message="''${message+$message
-      }$GIT_SSH_USER $receive_mode $link"
+        add_message $(pink push) $link $(gray "($receive_mode)")
 
-        message=''${message+$message
-      }$(
-          green()  { printf '\x0303,99%s\x0F' "$1"; }
-          red()    { printf '\x0304,99%s\x0F' "$1"; }
-          orange() { printf '\x0307,99%s\x0F' "$1"; }
-          gray()   { printf '\x0314,99%s\x0F' "$1"; }
-
+        add_message "$(
           git log \
               --format="$(orange %h) %s $(gray '(%ar)')" \
               --reverse \
               $id2..$id
 
           git diff --stat $id2..$id \
-            | sed '
-                  $!s/+/'$(green '&')'/g
-                  $!s/-/'$(red   '&')'/g
-                '
-        )
+            | sed '$!s/\(+*\)\(-*\)$/'$(green '\1')$(red '\2')'/'
+        )"
 
       done
 
