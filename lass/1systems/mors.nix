@@ -22,6 +22,7 @@
     ../2configs/retiolum.nix
     ../2configs/wordpress.nix
     ../2configs/bitlbee.nix
+    ../2configs/firefoxPatched.nix
   ];
 
   krebs.build = {

@@ -61,4 +61,8 @@ in {
     xkbOptions = "caps:backspace";
   };
 
+  services.logind.extraConfig = ''
+    HandleLidSwitch=ignore
+  '';
+
 }
