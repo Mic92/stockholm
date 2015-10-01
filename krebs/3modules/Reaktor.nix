@@ -2,7 +2,6 @@
 
 
 let
-  kpkgs = import ../5pkgs { inherit pkgs; inherit lib; };
 
   inherit (lib)
     mkIf
@@ -63,13 +62,20 @@ let
         configuration appended to the default or overridden configuration
       '';
     };
-
-    ReaktorPkg = mkOption {
-      default = kpkgs.Reaktor;
+    extraEnviron = mkOption {
+      default = {};
+      type = types.attrsOf types.str;
       description = ''
-        the Reaktor pkg to use.
+        Environment to be provided to the service, can be:
+          REAKTOR_HOST
+          REAKTOR_PORT
+          REAKTOR_STATEDIR
+          REAKTOR_CHANNELS
+
+          debug and nickname can be set separately via the Reaktor api
       '';
     };
+
     debug = mkOption {
       default = false;
       description = ''
@@ -80,7 +86,6 @@ let
 
   imp = {
     # for reaktor get-config
-    environment.systemPackages = [ cfg.ReaktorPkg ];
     users.extraUsers = singleton {
       name = "Reaktor";
       # uid = config.ids.uids.Reaktor;
@@ -98,7 +103,7 @@ let
     systemd.services.Reaktor = {
       path = with pkgs; [
         utillinux #flock for tell_on-join
-        # git # for nag
+        git # for nag
         python # for caps
         ];
       description = "Reaktor IRC Bot";
@@ -108,17 +113,17 @@ let
         GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
         REAKTOR_NICKNAME = cfg.nickname;
         REAKTOR_DEBUG = (if cfg.debug  then "True" else "False");
-        };
+        } // cfg.extraEnviron;
       serviceConfig= {
         ExecStartPre = pkgs.writeScript "Reaktor-init" ''
           #! /bin/sh
           ${if (isString cfg.overrideConfig) then
             ''cp ${ReaktorConfig} /tmp/config.py''
           else
-            ''(${cfg.ReaktorPkg}/bin/reaktor get-config;cat "${ReaktorConfig}" ) > /tmp/config.py''
+            ''(${pkgs.Reaktor}/bin/reaktor get-config;cat "${ReaktorConfig}" ) > /tmp/config.py''
           }
         '';
-        ExecStart = "${cfg.ReaktorPkg}/bin/reaktor run /tmp/config.py";
+        ExecStart = "${pkgs.Reaktor}/bin/reaktor run /tmp/config.py";
         PrivateTmp = "true";
         User = "Reaktor";
         Restart = "on-abort";
