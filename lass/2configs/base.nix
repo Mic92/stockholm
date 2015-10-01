@@ -9,7 +9,7 @@ with lib;
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
-                 (import /root/src/secrets/hashedPasswords.nix);
+                 (import /root/secrets/hashedPasswords.nix);
     }
     {
       users.extraUsers = {
