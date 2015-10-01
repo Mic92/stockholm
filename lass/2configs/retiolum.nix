@@ -1,11 +1,8 @@
 { ... }:
 
 {
-  imports = [
-    ../3modules/iptables.nix
-  ];
 
-  lass.iptables = {
+  krebs.iptables = {
     tables = {
       filter.INPUT.rules = [
         { predicate = "-p tcp --dport smtp"; target = "ACCEPT"; }

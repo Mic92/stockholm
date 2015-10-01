@@ -195,21 +195,11 @@
     };
   };
 
-  networking.firewall = {
-    allowPing = true;
-    allowedTCPPorts = [
-      8000
-    ];
-    allowedUDPPorts = [
-      67
-    ];
-  };
-
   services.mongodb = {
     enable = true;
   };
 
-  lass.iptables = {
+  krebs.iptables = {
     tables = {
       filter.INPUT.rules = [
         { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; precedence = 9001; }

@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ../3modules/iptables.nix
     ../3modules/folderPerms.nix
   ];
 
@@ -47,7 +46,7 @@
     };
   };
 
-  lass.iptables = {
+  krebs.iptables = {
     enable = true;
     tables.filter.INPUT.rules = [
       { predicate = "-p tcp --dport 9091"; target = "ACCEPT"; }

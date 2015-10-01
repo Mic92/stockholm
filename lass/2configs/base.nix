@@ -3,7 +3,6 @@
 with lib;
 {
   imports = [
-    ../3modules/iptables.nix
     ../2configs/vim.nix
     ../2configs/zsh.nix
     ../2configs/mc.nix
@@ -137,7 +136,7 @@ with lib;
     RuntimeMaxUse=128M
   '';
 
-  lass.iptables = {
+  krebs.iptables = {
     enable = true;
     tables = {
       filter.INPUT.policy = "DROP";

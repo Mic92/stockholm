@@ -8,10 +8,10 @@
 
     config = {
       imports = [
-        ../3modules/iptables.nix
+        ../../krebs/3modules/iptables.nix
       ];
 
-      lass.iptables = {
+      krebs.iptables = {
         enable = true;
         tables = {
           filter.INPUT.policy = "DROP";

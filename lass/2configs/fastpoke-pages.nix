@@ -30,7 +30,6 @@ let
 
 in {
   imports = [
-    ../3modules/iptables.nix
   ] ++ map createStaticPage [
     "habsys.de"
     "pixelpocket.de"
@@ -39,7 +38,7 @@ in {
     "apanowicz.de"
   ];
 
-  lass.iptables = {
+  krebs.iptables = {
     tables = {
       filter.INPUT.rules = [
         { predicate = "-p tcp --dport http"; target = "ACCEPT"; }

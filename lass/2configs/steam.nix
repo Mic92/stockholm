@@ -16,7 +16,9 @@
   environment.systemPackages = with pkgs; [
     steam
   ];
-  lass.iptables = {
+
+  #ports for inhome streaming
+  krebs.iptables = {
     tables = {
       filter.INPUT.rules = [
         { predicate = "-p tcp --dport 27031"; target = "ACCEPT"; }
