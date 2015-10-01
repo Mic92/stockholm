@@ -70,7 +70,12 @@ with lib;
   '';
 
   environment.systemPackages = with pkgs; [
+  #stockholm
     git
+    jq
+    parallel
+
+  #style
     most
     rxvt_unicode.terminfo
 
