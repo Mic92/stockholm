@@ -27,12 +27,14 @@ with builtins;
     user = config.krebs.users.lass;
     target = "root@uriel";
     host = config.krebs.hosts.uriel;
-    deps = {
-      secrets = {
-        url = "/home/lass/secrets/${config.krebs.build.host.name}";
+    source = {
+      dir.secrets = {
+        host = config.krebs.hosts.mors;
+        path = "/home/lass/secrets/${config.krebs.build.host.name}";
       };
-      stockholm = {
-        url = toString ../..;
+      dir.stockholm = {
+        host = config.krebs.hosts.mors;
+        path = "/home/lass/dev/stockholm";
       };
     };
   };
