@@ -11,7 +11,21 @@ let
   user-modules-path = ./. + "/${current-user-name}/3modules";
   user-pkgs-path = ./. + "/${current-user-name}/5pkgs";
 
+  # XXX This is only used interactively, e.g. using get.
+  pkgs =
+    let
+      pkgs = import <nixpkgs> {};
+      args = {
+        inherit pkgs;
+        lib = pkgs.lib;
+      };
+    in
+    pkgs //
+    import krebs-pkgs-path args //
+    import user-pkgs-path args;
+
   out =
+    { inherit pkgs; } //
     lib.mapAttrs (_: builtins.getAttr "main")
       (lib.filterAttrs (_: builtins.hasAttr "main")
         (lib.mapAttrs
