@@ -34,6 +34,8 @@ in {
     haskellPackages.yeganesh
     dmenu2
     xlibs.fontschumachermisc
+
+    sxiv
   ];
 
   fonts.fonts = [
