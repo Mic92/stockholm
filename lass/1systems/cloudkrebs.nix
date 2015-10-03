@@ -1,6 +1,12 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-{
+let
+  inherit (import ../4lib { inherit pkgs lib; }) getDefaultGateway;
+  inherit (lib) head;
+
+  ip = (head config.krebs.build.host.nets.internet.addrs4);
+  r_ip = (head config.krebs.build.host.nets.retiolum.addrs4);
+in {
   imports = [
     ../../tv/2configs/CAC-Developer-2.nix
     ../../tv/2configs/CAC-CentOS-7-64bit.nix
@@ -11,11 +17,11 @@
     {
       networking.interfaces.enp2s1.ip4 = [
         {
-          address = "104.167.113.104";
+          address = ip;
           prefixLength = 24;
         }
       ];
-      networking.defaultGateway = "104.167.113.1";
+      networking.defaultGateway = getDefaultGateway ip;
       networking.nameservers = [
         "8.8.8.8"
       ];
