@@ -174,7 +174,9 @@
 
   environment.systemPackages = with pkgs; [
     cac
+    sshpass
     get
+    genid
   ];
 
   #TODO: fix this shit
