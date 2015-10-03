@@ -23,7 +23,7 @@
     ../2configs/wordpress.nix
     ../2configs/bitlbee.nix
     ../2configs/firefoxPatched.nix
-    ../2configs/wallpaper.nix
+    ../2configs/realwallpaper.nix
   ];
 
   krebs.build = {

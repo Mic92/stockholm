@@ -14,7 +14,7 @@ in {
     ../2configs/retiolum.nix
     ../2configs/fastpoke-pages.nix
     ../2configs/new-repos.nix
-    ../2configs/privoxy-retiolum.nix
+    ../2configs/realwallpaper.nix
     {
       networking.interfaces.enp2s1.ip4 = [
         {
