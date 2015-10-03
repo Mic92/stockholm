@@ -12,6 +12,8 @@ with builtins;
     ../2configs/new-repos.nix
     ../2configs/chromium-patched.nix
     ../2configs/retiolum.nix
+    ../2configs/bitlbee.nix
+    ../2configs/weechat.nix
     {
       users.extraUsers = {
         root = {
