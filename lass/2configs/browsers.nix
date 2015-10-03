@@ -6,14 +6,12 @@ let
   mainUser = config.users.extraUsers.mainUser;
   createChromiumUser = name: extraGroups: packages:
     {
-      users.extraUsers = {
-        ${name} = {
-          inherit name;
-          inherit extraGroups;
-          home = "/home/${name}";
-          useDefaultShell = true;
-          createHome = true;
-        };
+      users.extraUsers.${name} = {
+        inherit name;
+        inherit extraGroups;
+        home = "/home/${name}";
+        useDefaultShell = true;
+        createHome = true;
       };
       lass.per-user.${name}.packages = packages;
       security.sudo.extraConfig = ''
@@ -28,14 +26,12 @@ let
 
   createFirefoxUser = name: extraGroups: packages:
     {
-      users.extraUsers = {
-        ${name} = {
-          inherit name;
-          inherit extraGroups;
-          home = "/home/${name}";
-          useDefaultShell = true;
-          createHome = true;
-        };
+      users.extraUsers.${name} = {
+        inherit name;
+        inherit extraGroups;
+        home = "/home/${name}";
+        useDefaultShell = true;
+        createHome = true;
       };
       lass.per-user.${name}.packages = packages;
       security.sudo.extraConfig = ''
