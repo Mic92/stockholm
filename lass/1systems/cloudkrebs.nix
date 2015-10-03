@@ -40,4 +40,8 @@
 
   networking.hostName = "cloudkrebs";
 
+  environment.systemPackages = [
+    pkgs.dic
+  ];
+
 }
