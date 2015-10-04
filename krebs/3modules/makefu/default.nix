@@ -169,6 +169,7 @@ with import ../../4lib { inherit lib; };
       extraZones = {
         "krebsco.de" = ''
           wry            IN A ${head nets.internet.addrs4}
+          graphs         IN A ${head nets.internet.addrs4}
           '';
       };
       nets = rec {
@@ -183,6 +184,7 @@ with import ../../4lib { inherit lib; };
           addrs4 = ["10.243.29.169"];
           addrs6 = ["42:6e1e:cc8a:7cef:827:f938:8c64:baad"];
           aliases = [
+            "graphs.wry.retiolum"
             "wry.retiolum"
           ];
           tinc.pubkey = ''

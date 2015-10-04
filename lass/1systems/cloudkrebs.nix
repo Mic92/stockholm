@@ -13,7 +13,7 @@ in {
     ../2configs/base.nix
     ../2configs/retiolum.nix
     ../2configs/fastpoke-pages.nix
-    ../2configs/new-repos.nix
+    ../2configs/git.nix
     ../2configs/realwallpaper.nix
     {
       networking.interfaces.enp2s1.ip4 = [

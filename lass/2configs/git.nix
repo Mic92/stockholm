@@ -12,6 +12,10 @@ let
       repos = mapAttrs (_: s: removeAttrs s ["collaborators"]) repos;
       rules = rules;
     };
+
+    krebs.iptables.tables.filter.INPUT.rules = [
+      { predicate = "-i retiolum -p tcp --dport 80"; target = "ACCEPT"; }
+    ];
   };
 
   repos =
