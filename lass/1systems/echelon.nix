@@ -11,7 +11,8 @@ in {
     ../../tv/2configs/CAC-CentOS-7-64bit.nix
     ../2configs/base.nix
     ../2configs/retiolum.nix
-    ../2configs/realwallpaper.nix
+    ../2configs/realwallpaper-server.nix
+    ../2configs/privoxy-retiolum.nix
     {
       networking.interfaces.enp2s1.ip4 = [
         {
