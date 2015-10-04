@@ -85,6 +85,7 @@
         #  s:^nix-env:chroot $mountPoint '"$nix_env"':
         #' nixos-install
 
+        unset SSL_CERT_FILE
         ./nixos-install
 
         ${builtins.readFile ./4lib/infest/finalize.sh}
