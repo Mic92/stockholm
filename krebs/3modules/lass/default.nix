@@ -9,7 +9,7 @@ with import ../../4lib { inherit lib; };
       dc = "lass"; #dc = "cac";
       nets = rec {
         internet = {
-          addrs4 = ["162.248.162.105"];
+          addrs4 = ["162.244.30.241"];
           aliases = [
             "echelon.internet"
           ];
