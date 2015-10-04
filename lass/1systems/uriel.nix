@@ -9,7 +9,7 @@ with builtins;
     ../2configs/pass.nix
     ../2configs/urxvt.nix
     ../2configs/bird.nix
-    ../2configs/new-repos.nix
+    ../2configs/git.nix
     ../2configs/chromium-patched.nix
     ../2configs/retiolum.nix
     ../2configs/bitlbee.nix
