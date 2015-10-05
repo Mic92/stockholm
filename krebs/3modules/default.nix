@@ -105,6 +105,33 @@ let
         combined-hosts = (mapAttrsToList (name: value: value.extraZones)  cfg.hosts );
       in lib.mapAttrs' (name: value: nameValuePair (("zones/" + name)) ({ text=value; })) all-zones;
 
+      krebs.exim-smarthost.internet-aliases = let
+        format = from: to:
+          # TODO assert is-retiolum-mail-address to;
+          { inherit from;
+            to = if typeOf to == "list"
+                   then concatMapStringsSep "," (getAttr "mail") to
+                   else to.mail; };
+      in mapAttrsToList format (with config.krebs.users; let
+        spam-ml = [
+          lass
+          makefu
+          tv
+        ];
+      in {
+        "postmaster@krebsco.de" = spam-ml; # RFC 822
+        "lass@krebsco.de" = lass;
+        "makefu@krebsco.de" = makefu;
+        "spam@krebsco.de" = spam-ml;
+        "tv@krebsco.de" = tv;
+        # XXX These are no internet aliases
+        # XXX exim-retiolum hosts should be able to relay to retiolum addresses
+        "lass@retiolum" = lass;
+        "makefu@retiolum" = makefu;
+        "spam@retiolum" = spam-ml;
+        "tv@retiolum" = tv;
+      });
+
       services.openssh.hostKeys =
         let inherit (config.krebs.build.host.ssh) privkey; in
         mkIf (privkey != null) (mkForce [privkey]);

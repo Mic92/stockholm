@@ -146,7 +146,7 @@ with import ../../4lib { inherit lib; };
       dc = "tv"; #dc = "cac";
       nets = rec {
         internet = {
-          addrs4 = ["104.233.84.70"];
+          addrs4 = ["167.88.34.182"];
           aliases = [
             "rmdir.internet"
           ];
