@@ -120,7 +120,10 @@ let
         ];
       in {
         "postmaster@krebsco.de" = spam-ml; # RFC 822
+        "lass@krebsco.de" = lass;
+        "makefu@krebsco.de" = makefu;
         "spam@krebsco.de" = spam-ml;
+        "tv@krebsco.de" = tv;
         # XXX These are no internet aliases
         # XXX exim-retiolum hosts should be able to relay to retiolum addresses
         "lass@retiolum" = lass;
