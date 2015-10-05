@@ -8,12 +8,10 @@ let
     mkIf
   ;
 
-  lpkgs = import ../5pkgs { inherit pkgs; };
-
-  cfg = config.lass.realwallpaper;
+  cfg = config.krebs.realwallpaper;
 
   out = {
-    options.lass.realwallpaper = api;
+    options.krebs.realwallpaper = api;
     config = mkIf cfg.enable imp;
   };
 
@@ -85,7 +83,7 @@ let
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${lpkgs.realwallpaper}/realwallpaper.sh";
+        ExecStart = "${pkgs.realwallpaper}/realwallpaper.sh";
         User = "realwallpaper";
       };
     };
