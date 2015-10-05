@@ -119,6 +119,7 @@ let
           tv
         ];
       in {
+        "postmaster@krebsco.de" = spam-ml; # RFC 822
         "spam@krebsco.de" = spam-ml;
       });
 

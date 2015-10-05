@@ -23,9 +23,6 @@
 
       # TODO killme (wo wird die benutzt?)
       { from = "tv@cd.retiolum"; to = tv.mail; }
-
-      # TODO lists@smtp.retiolum [consul]
-      { from = "postmaster@krebsco.de"; to = tv.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }
