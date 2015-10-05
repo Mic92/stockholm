@@ -26,14 +26,6 @@
 
       # TODO lists@smtp.retiolum [consul]
       { from = "postmaster@krebsco.de"; to = tv.mail; }
-
-      { from = "spam@krebsco.de";
-        to = pkgs.lib.concatStringsSep "," [
-          tv.mail
-          "lass@mors.retiolum"
-          makefu.mail
-        ];
-      }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }
