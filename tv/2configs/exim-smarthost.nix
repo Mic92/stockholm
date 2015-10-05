@@ -12,17 +12,10 @@
       "10.243.13.37"
     ];
     internet-aliases = with config.krebs.users; [
-      { from = "tomislav@viljetic.de"; to = tv.mail; }
-
-      # (mindestens) lisp-stammtisch und elli haben die:
-      { from = "tv@viljetic.de"; to = tv.mail; }
-
-      { from = "tv@destroy.dyn.shackspace.de"; to = tv.mail; }
-
       { from = "mirko@viljetic.de"; to = mv.mail; }
-
-      # TODO killme (wo wird die benutzt?)
-      { from = "tv@cd.retiolum"; to = tv.mail; }
+      { from = "tomislav@viljetic.de"; to = tv.mail; }
+      { from = "tv@destroy.dyn.shackspace.de"; to = tv.mail; }
+      { from = "tv@viljetic.de"; to = tv.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }
