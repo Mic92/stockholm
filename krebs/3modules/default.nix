@@ -121,6 +121,12 @@ let
       in {
         "postmaster@krebsco.de" = spam-ml; # RFC 822
         "spam@krebsco.de" = spam-ml;
+        # XXX These are no internet aliases
+        # XXX exim-retiolum hosts should be able to relay to retiolum addresses
+        "lass@retiolum" = lass;
+        "makefu@retiolum" = makefu;
+        "spam@retiolum" = spam-ml;
+        "tv@retiolum" = tv;
       });
 
       services.openssh.hostKeys =
