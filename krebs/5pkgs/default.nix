@@ -23,6 +23,7 @@ rec {
   posix-array = callPackage ./posix-array {};
   pssh = callPackage ./pssh {};
   Reaktor = callPackage ./Reaktor {};
+  realwallpaper = callPackage ./realwallpaper.nix {};
   youtube-tools = callPackage ./youtube-tools {};
 
   execve = name: { filename, argv, envp ? {}, destination ? "" }:
