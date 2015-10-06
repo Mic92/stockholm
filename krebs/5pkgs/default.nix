@@ -22,6 +22,7 @@ rec {
   nq = callPackage ./nq {};
   posix-array = callPackage ./posix-array {};
   pssh = callPackage ./pssh {};
+  passwdqc-utils = callPackage ./passwdqc-utils {};
   Reaktor = callPackage ./Reaktor {};
   realwallpaper = callPackage ./realwallpaper.nix {};
   youtube-tools = callPackage ./youtube-tools {};
