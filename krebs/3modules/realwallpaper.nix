@@ -55,13 +55,13 @@ let
   imp = {
     systemd.timers.realwallpaper = {
       description = "real wallpaper generator timer";
+      wantedBy = [ "timers.target" ];
 
       timerConfig = cfg.timerConfig;
     };
 
     systemd.services.realwallpaper = {
       description = "real wallpaper generator";
-      wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
       path = with pkgs; [
