@@ -28,14 +28,14 @@ in {
   environment.systemPackages = with pkgs; [
 
     powertop
+    sxiv
+    much
 
   #window manager stuff
     haskellPackages.xmobar
     haskellPackages.yeganesh
     dmenu2
     xlibs.fontschumachermisc
-
-    sxiv
   ];
 
   fonts.fonts = [

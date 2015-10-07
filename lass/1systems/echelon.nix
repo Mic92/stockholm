@@ -13,6 +13,7 @@ in {
     ../2configs/retiolum.nix
     ../2configs/realwallpaper-server.nix
     ../2configs/privoxy-retiolum.nix
+    ../2configs/git.nix
     {
       networking.interfaces.enp2s1.ip4 = [
         {

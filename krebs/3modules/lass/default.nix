@@ -34,9 +34,11 @@ with import ../../4lib { inherit lib; };
           '';
         };
       };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL21QDOEFdODFh6WAfNp6odrXo15pEsDQuGJfMu/cKzK";
     };
     fastpoke = {
-      dc = "lass"; #dc = "cac";
+      dc = "lass";
       nets = rec {
         internet = {
           addrs4 = ["193.22.164.36"];
@@ -95,6 +97,8 @@ with import ../../4lib { inherit lib; };
           '';
         };
       };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN7oYx7Lbkc0wPYNp92LQF93DCtxsGzOkVD91FJQzVZl";
     };
     uriel = {
       cores = 1;
@@ -119,6 +123,8 @@ with import ../../4lib { inherit lib; };
           '';
         };
       };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBryIo/Waw8SWvlQ0+5I+Bd/dJgcMd6iPXtELS6gQXoc";
       secure = true;
     };
     mors = {
@@ -145,6 +151,8 @@ with import ../../4lib { inherit lib; };
         };
       };
       secure = true;
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINAMPlIG+6u75GJ3kvsPF6OoIZsU+u8ZQ+rdviv5fNMD";
     };
 
   };
