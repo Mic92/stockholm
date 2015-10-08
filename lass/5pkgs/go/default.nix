@@ -44,8 +44,6 @@ in nodePackages.buildNodePackage {
   installPhase = ''
     mkdir -p $out/bin
 
-    find ${node_env}
-
     cp index.js $out/
     cat > $out/go << EOF
       ${nodejs}/bin/node $out/index.js
