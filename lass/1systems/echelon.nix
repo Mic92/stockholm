@@ -14,6 +14,9 @@ in {
     ../2configs/realwallpaper-server.nix
     ../2configs/privoxy-retiolum.nix
     ../2configs/git.nix
+    ../2configs/redis.nix
+    ../2configs/go.nix
+    ../2configs/ircd.nix
     {
       networking.interfaces.enp2s1.ip4 = [
         {
