@@ -31,6 +31,7 @@ let
     };
     wai-middleware-time = {};
     web-routes-wai-custom = {};
+    go = {};
   };
 
   restricted-repos = mapAttrs make-restricted-repo (
