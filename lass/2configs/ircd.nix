@@ -5,8 +5,8 @@
     enable = true;
     config = ''
       serverinfo {
-        name = "ire.irc.retiolum";
-        sid = "4z3";
+        name = "${config.krebs.build.host.name}.irc.retiolum";
+        sid = "1as";
         description = "miep!";
         network_name = "irc.retiolum";
         network_desc = "Retiolum IRC Network";
