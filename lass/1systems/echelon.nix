@@ -44,6 +44,6 @@ in {
     };
   };
 
-  networking.hostName = "echelon";
+  networking.hostName = config.krebs.build.host.name;
 
 }
