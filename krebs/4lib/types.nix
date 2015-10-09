@@ -147,6 +147,13 @@ types // rec {
     merge = mergeOneOption;
   };
 
+  suffixed-str = suffs:
+    mkOptionType {
+      name = "string suffixed by ${concatStringsSep ", " suffs}";
+      check = x: isString x && any (flip hasSuffix x) suffs;
+      merge = mergeOneOption;
+    };
+
   user = submodule {
     options = {
       mail = mkOption {
