@@ -36,8 +36,6 @@ in nodePackages.buildNodePackage {
 
   buildInputs = [
     nodejs
-    nodePackages.redis
-    np.formidable
     makeWrapper
   ];
 
