@@ -60,8 +60,6 @@ let
             -m 0400 \
             ${cfg.ssh-identity-file} \
             "$ssh_identity_file_target"
-
-          ln -snf ${pkgs.github-known_hosts} ${cfg.dataDir}/.ssh/known_hosts
         '';
         ExecStart = "${pkgs.github-hosts-sync}/bin/github-hosts-sync";
       };
