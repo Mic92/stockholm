@@ -31,6 +31,7 @@ let
     };
     wai-middleware-time = {};
     web-routes-wai-custom = {};
+    go = {};
   };
 
   restricted-repos = mapAttrs make-restricted-repo (
@@ -51,7 +52,7 @@ let
         nick = config.krebs.build.host.name;
         channel = "#retiolum";
         server = "cd.retiolum";
-        verbose = config.krebs.build.host.name == "cloudkrebs";
+        verbose = config.krebs.build.host.name == "echelon";
       };
     };
   };

@@ -14,6 +14,7 @@ let
       ./iptables.nix
       ./nginx.nix
       ./Reaktor.nix
+      ./realwallpaper.nix
       ./retiolum.nix
       ./urlwatch.nix
     ];
