@@ -30,6 +30,7 @@ with lib;
     #../2configs/consul-server.nix
     ../2configs/exim-smarthost.nix
     ../2configs/git.nix
+    ../2configs/urlwatch.nix
     {
       imports = [ ../2configs/charybdis.nix ];
       tv.charybdis = {
