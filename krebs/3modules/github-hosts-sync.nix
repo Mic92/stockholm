@@ -41,13 +41,9 @@ let
         ExecStartPre = pkgs.writeScript "github-hosts-sync-init" ''
           #! /bin/sh
           set -euf
-
-          mkdir -p ${cfg.dataDir}
-          chown ${user.name}: ${cfg.dataDir}
-
-          install \
-            -o ${user.name} \
-            -m 0400 \
+          install -m 0711 -o ${user.name} -d ${cfg.dataDir}
+          install -m 0700 -o ${user.name} -d ${cfg.dataDir}/.ssh
+          install -m 0400 -o ${user.name} \
             ${cfg.ssh-identity-file} \
             ${cfg.dataDir}/.ssh/${fileExtension cfg.ssh-identity-file}
         '';
