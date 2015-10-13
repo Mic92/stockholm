@@ -48,6 +48,9 @@
       #http://hackage.haskell.org/package/transformers
       #http://hackage.haskell.org/package/web-routes-wai
       #http://hackage.haskell.org/package/web-page
+
+      # ref <stockholm/krebs/3modules>, services.openssh.knownHosts.github*
+      https://help.github.com/articles/what-ip-addresses-does-github-use-that-i-should-whitelist/
     ];
   };
 }

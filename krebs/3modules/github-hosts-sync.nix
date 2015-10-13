@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with builtins;
-with lib;
+with import ../4lib { inherit lib; };
 let
   cfg = config.krebs.github-hosts-sync;
 
@@ -21,7 +21,7 @@ let
       default = "/var/lib/github-hosts-sync";
     };
     ssh-identity-file = mkOption {
-      type = types.str; # TODO must be named *.ssh.{id_rsa,id_ed25519}
+      type = types.suffixed-str [".ssh.id_ed25519" ".ssh.id_rsa"];
       default = toString <secrets/github-hosts-sync.ssh.id_rsa>;
     };
   };
@@ -41,27 +41,11 @@ let
         ExecStartPre = pkgs.writeScript "github-hosts-sync-init" ''
           #! /bin/sh
           set -euf
-
-          ssh_identity_file_target=$(
-            case ${cfg.ssh-identity-file} in
-              *.ssh.id_rsa|*.ssh.id_ed25519) echo ${cfg.dataDir}/.ssh/id_rsa;;
-              *.ssh.id_ed25519) echo ${cfg.dataDir}/.ssh/id_ed25519;;
-              *)
-                echo "bad identity file name: ${cfg.ssh-identity-file}" >&2
-                exit 1
-            esac
-          )
-
-          mkdir -p ${cfg.dataDir}
-          chown ${user.name}: ${cfg.dataDir}
-
-          install \
-            -o ${user.name} \
-            -m 0400 \
+          install -m 0711 -o ${user.name} -d ${cfg.dataDir}
+          install -m 0700 -o ${user.name} -d ${cfg.dataDir}/.ssh
+          install -m 0400 -o ${user.name} \
             ${cfg.ssh-identity-file} \
-            "$ssh_identity_file_target"
-
-          ln -snf ${pkgs.github-known_hosts} ${cfg.dataDir}/.ssh/known_hosts
+            ${cfg.dataDir}/.ssh/${fileExtension cfg.ssh-identity-file}
         '';
         ExecStart = "${pkgs.github-hosts-sync}/bin/github-hosts-sync";
       };
@@ -77,5 +61,8 @@ let
     name = "github-hosts-sync";
     uid = 3220554646; # genid github-hosts-sync
   };
-in
-out
+
+  # TODO move to lib?
+  fileExtension = s: last (splitString "." s);
+
+in out

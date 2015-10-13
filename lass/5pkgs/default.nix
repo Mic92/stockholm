@@ -13,4 +13,5 @@ rec {
     ublock = callPackage ./firefoxPlugins/ublock.nix {};
     vimperator = callPackage ./firefoxPlugins/vimperator.nix {};
   };
+  go = callPackage ./go/default.nix {};
 }
