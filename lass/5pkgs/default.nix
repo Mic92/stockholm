@@ -14,4 +14,5 @@ rec {
     vimperator = callPackage ./firefoxPlugins/vimperator.nix {};
   };
   go = callPackage ./go/default.nix {};
+  newsbot-js = callPackage ./newsbot-js/default.nix {};
 }
