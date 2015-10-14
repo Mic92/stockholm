@@ -1,5 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
+with lib;
 {
   imports = [
     ../3modules/go.nix
@@ -10,7 +11,19 @@
   lass.go = {
     enable = true;
   };
-  krebs.iptables.tables.filter.INPUT.rules = [
-    { predicate = "-i retiolum -p tcp --dport 1337"; target = "ACCEPT"; }
-  ];
+  krebs.nginx = {
+    enable = true;
+    servers.go = {
+      locations = [
+        (nameValuePair "/" ''
+          proxy_set_header Host go;
+          proxy_pass http://localhost:1337;
+        '')
+      ];
+      server-names = [
+        "go"
+        "go.retiolum"
+      ];
+    };
+  };
 }
