@@ -5,6 +5,8 @@ with lib;
 
 builtins // lib // rec {
 
+  eq = x: y: x == y;
+
   addName = name: set:
     set // { inherit name; };
 
