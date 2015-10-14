@@ -24,4 +24,8 @@ builtins // lib // rec {
     null = "NULL";
     string = toJSON x; # close enough
   }.${typeOf x};
+
+  subdirsOf = path:
+    mapAttrs (name: _: path + "/${name}")
+             (filterAttrs (_: eq "directory") (readDir path));
 }
