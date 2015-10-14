@@ -11,20 +11,23 @@ let
   node_env = buildEnv {
     name = "node_env";
     paths = [
-      np.redis
-      np."formidable"
+      np.feedparser
+      np.form-data
+      np.irc
+      np.request
+      np.shell-quote
     ];
     pathsToLink = [ "/lib" ];
     ignoreCollisions = true;
   };
 
 in nodePackages.buildNodePackage {
-  name = "go";
+  name = "newsbot-js";
 
   src = fetchgit {
-    url = "http://cgit.echelon/go/";
-    rev = "05d02740e0adbb36cc461323647f0c1e7f493156";
-    sha256 = "6015c9a93317375ae8099c7ab982df0aa93a59ec2b48972e253887bb6ca0004f";
+    url = "http://cgit.echelon/newsbot-js/";
+    rev = "cd32ef7b39819f53c7125b22c594202724cc8754";
+    sha256 = "425e800f7638a5679ed8a049614a7533f3c8dd09659061885240dc93952ff0ae";
   };
 
   phases = [
@@ -42,16 +45,16 @@ in nodePackages.buildNodePackage {
   installPhase = ''
     mkdir -p $out/bin
 
-    cp index.js $out/
-    cat > $out/go << EOF
-      ${nodejs}/bin/node $out/index.js
+    cp newsbot.js $out/
+    cat > $out/newsbot << EOF
+      ${nodejs}/bin/node $out/newsbot.js
     EOF
-    chmod +x $out/go
+    chmod +x $out/newsbot
 
-    wrapProgram $out/go \
+    wrapProgram $out/newsbot \
       --prefix NODE_PATH : ${node_env}/lib/node_modules
 
-     ln -s $out/go /$out/bin/go
+     ln -s $out/newsbot /$out/bin/newsbot
   '';
 
 }

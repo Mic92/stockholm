@@ -32,6 +32,7 @@ let
     wai-middleware-time = {};
     web-routes-wai-custom = {};
     go = {};
+    newsbot-js = {};
   };
 
   restricted-repos = mapAttrs make-restricted-repo (

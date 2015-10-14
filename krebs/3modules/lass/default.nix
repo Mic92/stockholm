@@ -21,6 +21,7 @@ with import ../../4lib { inherit lib; };
           aliases = [
             "echelon.retiolum"
             "cgit.echelon.retiolum"
+            "go.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
