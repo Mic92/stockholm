@@ -2,7 +2,12 @@
 
 with import ../4lib { inherit lib; };
 
-mapAttrs (_: flip pkgs.callPackage {}) (subdirsOf ./.) // rec {
+let
+  subdirs = mapAttrs (_: flip pkgs.callPackage {}) (subdirsOf ./.);
+  pkgs' = pkgs // subdirs;
+in
+
+subdirs // rec {
 
   execve = name: { filename, argv, envp ? {}, destination ? "" }:
     writeC name { inherit destination; } ''
