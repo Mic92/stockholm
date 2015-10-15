@@ -179,6 +179,7 @@
     sshpass
     get
     genid
+    teamspeak_client
   ];
 
   #TODO: fix this shit

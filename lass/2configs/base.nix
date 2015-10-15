@@ -44,7 +44,7 @@ with lib;
     build.source = {
       git.nixpkgs = {
         url = https://github.com/Lassulus/nixpkgs;
-        rev = "e916273209560b302ab231606babf5ce1c481f08";
+        rev = "b9270a2e8ac3d2cf4c95075a9529528aa1d859da";
       };
     };
   };
