@@ -8,8 +8,9 @@ in {
     ../3modules/bitlbee.nix
   ];
 
-  config.lass.bitlbee = {
+  lass.bitlbee = {
     enable = true;
     bitlbeePkg = lpkgs.bitlbee;
+    portNumber = 6666;
   };
 }
