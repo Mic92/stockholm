@@ -9,6 +9,10 @@ in
 
 subdirs // rec {
 
+  push = pkgs'.callPackage ./push {
+    inherit (subdirs) get jq;
+  };
+
   execve = name: { filename, argv, envp ? {}, destination ? "" }:
     writeC name { inherit destination; } ''
       #include <unistd.h>

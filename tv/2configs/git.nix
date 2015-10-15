@@ -35,6 +35,7 @@ let
     nixos-infest = {};
     nixpkgs = {};
     painload = {};
+    push = {};
     quipper = {};
     regfish = {};
     stockholm = {
