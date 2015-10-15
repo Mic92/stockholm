@@ -32,7 +32,6 @@ with lib;
     ../2configs/xserver.nix
     ../2configs/synaptics.nix # TODO w110er if xserver is enabled
     ../2configs/test.nix
-    ../2configs/urlwatch.nix
     {
       environment.systemPackages = with pkgs; [
 
