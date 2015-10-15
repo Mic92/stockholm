@@ -210,4 +210,9 @@
       ];
     };
   };
+  #touchpad config
+  services.xserver.synaptics = {
+    enable = true;
+    tapButtons = false;
+  };
 }
