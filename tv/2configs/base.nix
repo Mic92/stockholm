@@ -79,11 +79,7 @@ in
       environment.etc."vim/vim${majmin pkgs.vim.version}".source =
           "${pkgs.vim}/share/vim/vim${majmin pkgs.vim.version}";
 
-      # multiple-definition-problem when defining environment.variables.EDITOR
-      environment.extraInit = ''
-        EDITOR=vim
-      '';
-
+      environment.variables.EDITOR = mkForce "vim";
       environment.variables.VIM = "/etc/vim";
     }
     {

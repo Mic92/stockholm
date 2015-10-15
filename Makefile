@@ -35,11 +35,11 @@ ifeq ($(filter),json)
 else
 	filter() { cat; }
 endif
-	NIX_PATH=stockholm=$$PWD:$$NIX_PATH \
 	nix-instantiate \
 		$${extraArgs-} \
 		--eval \
 		-A "$$get" \
+		-I stockholm="$$PWD" \
 		'<stockholm>' \
 		--argstr current-date "$$(date -Is)" \
 		--argstr current-host-name "$$HOSTNAME" \
