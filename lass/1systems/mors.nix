@@ -23,7 +23,6 @@
     ../2configs/wordpress.nix
     ../2configs/bitlbee.nix
     ../2configs/firefoxPatched.nix
-    ../2configs/realwallpaper.nix
     ../2configs/skype.nix
   ];
 
