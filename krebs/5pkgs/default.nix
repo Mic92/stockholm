@@ -3,28 +3,15 @@
 with import ../4lib { inherit lib; };
 
 let
-  inherit (pkgs) callPackage;
+  subdirs = mapAttrs (_: flip pkgs.callPackage {}) (subdirsOf ./.);
+  pkgs' = pkgs // subdirs;
 in
 
-rec {
-  cac = callPackage ./cac {};
-  charybdis = callPackage ./charybdis {};
-  dic = callPackage ./dic {};
-  genid = callPackage ./genid {};
-  get = callPackage ./get {};
-  github-hosts-sync = callPackage ./github-hosts-sync {};
-  hashPassword = callPackage ./hashPassword {};
-  jq = callPackage ./jq {};
-  krebszones = callPackage ./krebszones {};
-  lentil = callPackage ./lentil {};
-  much = callPackage ./much {};
-  nq = callPackage ./nq {};
-  posix-array = callPackage ./posix-array {};
-  pssh = callPackage ./pssh {};
-  passwdqc-utils = callPackage ./passwdqc-utils {};
-  Reaktor = callPackage ./Reaktor {};
-  realwallpaper = callPackage ./realwallpaper.nix {};
-  youtube-tools = callPackage ./youtube-tools {};
+subdirs // rec {
+
+  push = pkgs'.callPackage ./push {
+    inherit (subdirs) get jq;
+  };
 
   execve = name: { filename, argv, envp ? {}, destination ? "" }:
     writeC name { inherit destination; } ''

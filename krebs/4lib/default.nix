@@ -5,6 +5,8 @@ with lib;
 
 builtins // lib // rec {
 
+  eq = x: y: x == y;
+
   addName = name: set:
     set // { inherit name; };
 
@@ -22,4 +24,8 @@ builtins // lib // rec {
     null = "NULL";
     string = toJSON x; # close enough
   }.${typeOf x};
+
+  subdirsOf = path:
+    mapAttrs (name: _: path + "/${name}")
+             (filterAttrs (_: eq "directory") (readDir path));
 }

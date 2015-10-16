@@ -89,6 +89,7 @@ with lib;
         pavucontrol
         posix_man_pages
         pssh
+        push
         qrencode
         sxiv
         texLive
