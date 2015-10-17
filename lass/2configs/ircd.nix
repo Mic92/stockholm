@@ -46,24 +46,28 @@
 
       class "users" {
         ping_time = 2 minutes;
-        number_per_ident = 200;
-        number_per_ip = 200;
-        number_per_ip_global = 500;
+        number_per_ident = 10;
+        number_per_ip = 2048;
+        number_per_ip_global = 4096;
         cidr_ipv4_bitlen = 24;
         cidr_ipv6_bitlen = 64;
-        number_per_cidr = 9000;
-        max_number = 10000;
-        sendq = 400 kbytes;
+        number_per_cidr = 65536;
+        max_number = 3000;
+        sendq = 1 megabyte;
       };
 
       exempt {
         ip = "127.0.0.1";
       };
 
+      exempt {
+        ip = "10.243.0.0/16";
+      };
+
       auth {
         user = "*@*";
         class = "users";
-        flags = exceed_limit;
+        flags = kline_exempt, exceed_limit, flood_exempt;
       };
 
       channel {

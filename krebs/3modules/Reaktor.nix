@@ -126,9 +126,8 @@ let
         ExecStart = "${pkgs.Reaktor}/bin/reaktor run /tmp/config.py";
         PrivateTmp = "true";
         User = "Reaktor";
-        Restart = "on-abort";
-        StartLimitInterval = "1m";
-        StartLimitBurst = "1";
+        Restart = "always";
+        RestartSec= "30" ;
         };
     };
   };

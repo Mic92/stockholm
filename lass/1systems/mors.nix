@@ -23,7 +23,6 @@
     ../2configs/wordpress.nix
     ../2configs/bitlbee.nix
     ../2configs/firefoxPatched.nix
-    ../2configs/realwallpaper.nix
     ../2configs/skype.nix
   ];
 
@@ -179,6 +178,7 @@
     sshpass
     get
     genid
+    teamspeak_client
   ];
 
   #TODO: fix this shit
@@ -209,5 +209,10 @@
         { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; precedence = 9001; }
       ];
     };
+  };
+  #touchpad config
+  services.xserver.synaptics = {
+    enable = true;
+    tapButtons = false;
   };
 }

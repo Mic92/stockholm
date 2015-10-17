@@ -17,6 +17,7 @@ in {
     ../2configs/redis.nix
     ../2configs/go.nix
     ../2configs/ircd.nix
+    ../2configs/newsbot-js.nix
     {
       networking.interfaces.enp2s1.ip4 = [
         {
