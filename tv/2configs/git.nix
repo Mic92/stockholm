@@ -20,6 +20,7 @@ let
   rules = concatMap make-rules (attrValues repos);
 
   public-repos = mapAttrs make-public-repo {
+    blessings = {};
     cac = {
       desc = "CloudAtCost command line interface";
     };
@@ -38,6 +39,7 @@ let
     push = {};
     quipper = {};
     regfish = {};
+    scanner = {};
     stockholm = {
       desc = "take all the computers hostage, they'll love you!";
     };
