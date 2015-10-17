@@ -4,7 +4,7 @@ let
   inherit (import ../4lib { inherit pkgs lib; }) getDefaultGateway;
   inherit (lib) head;
 
-  ip = (head config.krebs.hosts.echelon.nets.internet.addrs4);
+  ip = (head config.krebs.build.host.nets.internet.addrs4);
 in {
   imports = [
     ../2configs/os-templates/CAC-CentOS-7-64bit.nix
