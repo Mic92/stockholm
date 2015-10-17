@@ -19,14 +19,7 @@ install_nix() {(
     )
     nix_src_dir=$(basename $nix_url .tar.bz2)
     tar jxf $nix_src_dir.tar.bz2
-    mkdir -v -m 0755 -p /nix
     $nix_src_dir/install
-  fi
-
-  #TODO: make this general or move to prepare
-  if ! mount | grep -Fq '/dev/mapper/centos-root on /mnt/nix type xfs'; then
-    mkdir -p /mnt/nix
-    mount --bind /nix /mnt/nix
   fi
 
   . /root/.nix-profile/etc/profile.d/nix.sh

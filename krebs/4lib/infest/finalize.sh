@@ -1,21 +1,30 @@
 #! /bin/sh
 set -eux
 {
-  umount /mnt/nix || [ $? -eq 32 ]
-  umount /mnt/boot || [ $? -eq 32 ]
-  umount /mnt/root || [ $? -eq 32 ]
-  umount /mnt || [ $? -eq 32 ]
-  umount /boot || [ $? -eq 32 ]
+  umount /mnt/nix
+  umount /mnt/root
+  umount /boot || :
+  umount /mnt/boot
+  umount /mnt
 
-  PATH=$(set +f; for i in /nix/store/*coreutils*/bin; do :; done; echo $i)
+  coreutils_path=$(set +f; for i in /nix/store/*coreutils*/bin; do :; done; echo $i)
+  sed_path=$(set +f; for i in /nix/store/*gnused*/bin; do :; done; echo $i)
+  PATH="$coreutils_path:$sed_path"
+
   export PATH
 
   mkdir /oldshit
+
+  #fix bug where grub install cant find the /nix/store because its under a bind mount
+  if test -e /boot/grub/grub.cfg; then
+    sed -i 's,//store,/nix/store,g' /boot/grub/grub.cfg
+  fi;
 
   mv /bin /oldshit/
   mv /newshit/bin /
 
   # TODO ensure /boot is empty
+  # skip boot
   rmdir /newshit/boot
 
   # skip /dev
