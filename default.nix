@@ -24,7 +24,7 @@ let
   };
 
   out =
-    { inherit (eval {}) pkgs; } //
+    { inherit (eval {}) config options pkgs; } //
     lib.mapAttrs
       (name: _:
         if builtins.pathExists (./. + "/${name}/default.nix")
