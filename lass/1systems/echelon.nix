@@ -7,8 +7,7 @@ let
   ip = (head config.krebs.hosts.echelon.nets.internet.addrs4);
 in {
   imports = [
-    ../../tv/2configs/CAC-Developer-2.nix
-    ../../tv/2configs/CAC-CentOS-7-64bit.nix
+    ../2configs/os-templates/CAC-CentOS-7-64bit.nix
     ../2configs/base.nix
     ../2configs/retiolum.nix
     ../2configs/realwallpaper-server.nix
@@ -30,6 +29,10 @@ in {
         "8.8.8.8"
       ];
 
+    }
+    {
+      nix.maxJobs = 1;
+      sound.enable = false;
     }
   ];
 
