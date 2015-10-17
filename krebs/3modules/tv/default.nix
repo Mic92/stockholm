@@ -13,11 +13,11 @@ with import ../../4lib { inherit lib; };
       extraZones = {
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
         "krebsco.de" = ''
-          krebsco.de.   IN MX 5 mx23
-          mx23          IN A ${elemAt nets.internet.addrs4 0}
-          cd            IN A ${elemAt nets.internet.addrs4 0}
-          cgit          IN A ${elemAt nets.internet.addrs4 0}
-          cgit.cd       IN A ${elemAt nets.internet.addrs4 0}
+          krebsco.de. 60 IN MX 5 mx23
+          mx23        60 IN A ${elemAt nets.internet.addrs4 0}
+          cd          60 IN A ${elemAt nets.internet.addrs4 0}
+          cgit        60 IN A ${elemAt nets.internet.addrs4 0}
+          cgit.cd     60 IN A ${elemAt nets.internet.addrs4 0}
         '';
       };
       nets = rec {
@@ -97,7 +97,7 @@ with import ../../4lib { inherit lib; };
       extraZones = {
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
         "krebsco.de" = ''
-          ire           IN A ${elemAt nets.internet.addrs4 0}
+          ire 60 IN A ${elemAt nets.internet.addrs4 0}
         '';
       };
       nets = {
