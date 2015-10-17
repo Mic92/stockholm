@@ -21,9 +21,10 @@ with import ../../4lib { inherit lib; };
           addrs4 = ["162.219.7.216"];
           aliases = [
             "cd.internet"
+            "cd.krebsco.de"
+            "cgit.cd.krebsco.de"
             "cd.viljetic.de"
             "cgit.cd.viljetic.de"
-            "cd.krebsco.de"
           ];
           ssh.port = 11423;
         };
