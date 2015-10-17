@@ -19,8 +19,7 @@ let
 
   rules = concatMap make-rules (attrValues repos);
 
-  public-repos = mapAttrs make-public-repo {
-    blessings = {};
+  public-repos = mapAttrs make-public-repo ({
     cac = {
       desc = "CloudAtCost command line interface";
     };
@@ -31,22 +30,24 @@ let
     hack = {};
     load-env = {};
     make-snapshot = {};
-    mime = {};
     much = {};
     nixos-infest = {};
     nixpkgs = {};
     painload = {};
     push = {};
-    quipper = {};
     regfish = {};
-    scanner = {};
     stockholm = {
       desc = "take all the computers hostage, they'll love you!";
     };
+  } // mapAttrs (_: repo: repo // { section = "Haskell libraries"; }) {
+    blessings = {};
+    mime = {};
+    quipper = {};
+    scanner = {};
     wai-middleware-time = {};
     web-routes-wai-custom = {};
     xintmap = {};
-  };
+  });
 
   restricted-repos = mapAttrs make-restricted-repo (
     {
@@ -58,8 +59,8 @@ let
     import <secrets/repos.nix> { inherit config lib pkgs; }
   );
 
-  make-public-repo = name: { desc ? null, ... }: {
-    inherit name desc;
+  make-public-repo = name: { desc ? null, section ? null, ... }: {
+    inherit name desc section;
     public = true;
     hooks = {
       post-receive = git.irc-announce {
