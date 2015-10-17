@@ -30,6 +30,7 @@ in {
     powertop
     sxiv
     much
+    push
 
   #window manager stuff
     haskellPackages.xmobar
