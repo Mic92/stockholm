@@ -5,7 +5,6 @@ let
   inherit (lib) head;
 
   ip = (head config.krebs.build.host.nets.internet.addrs4);
-  r_ip = (head config.krebs.build.host.nets.retiolum.addrs4);
 in {
   imports = [
     ../../tv/2configs/CAC-Developer-2.nix
