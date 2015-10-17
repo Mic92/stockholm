@@ -7,6 +7,8 @@ assert current-user-name != "";
 
 let
   lib = import <nixpkgs/lib>;
+  klib = import ./krebs/4lib { inherit lib; };
+in with klib; let
 
   nspath = ns: p: ./. + "/${ns}/${p}";
   kpath = nspath "krebs";
@@ -66,13 +68,5 @@ let
                 else Nothing;
           }.${v} or Nothing)
           (builtins.readDir path)));
-
-  # TODO move to lib
-  Just = x: { type = "maybe"; value = x; };
-  Nothing = { type = "maybe"; };
-  isMaybe = x: builtins.typeOf x == "set" && x.type or false == "maybe";
-  isJust = x: isMaybe x && builtins.hasAttr "value" x;
-  fromJust = x: assert isJust x; x.value;
-  catMaybes = xs: map fromJust (builtins.filter isJust xs);
 
 in out
