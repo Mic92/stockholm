@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonPackage rec {
   name = "krebszones-${version}";
-  version = "0.4.3";
+  version = "0.4.4";
   propagatedBuildInputs = with pkgs.python3Packages;[
     d2to1 # for setup to work
     ovh
@@ -10,7 +10,7 @@ python3Packages.buildPythonPackage rec {
   ];
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/k/krebszones/krebszones-${version}.tar.gz";
-    sha256 = "1i6aqy27bikypc4mq7ymfnvf42rr5sxiy6l7gnyk6ifhlp1jq8z5";
+    sha256 = "1bzfc2b9468769j1yj93j12zdlccqbjiqfhql2larximh491sg4d";
   };
   meta = {
     homepage = http://krebsco.de/;
