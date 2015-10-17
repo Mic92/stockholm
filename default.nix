@@ -1,69 +1,55 @@
-{ current-date
-, current-host-name
-, current-user-name
+{ current-date ? abort "current-date not defined"
+, current-host-name ? abort "current-host-name not defined"
+, current-user-name ? builtins.getEnv "LOGNAME"
 }:
+
+assert current-user-name != "";
 
 let
   lib = import <nixpkgs/lib>;
+  klib = import ./krebs/4lib { inherit lib; };
+in with klib; let
 
-  krebs-modules-path = ./krebs/3modules;
-  krebs-pkgs-path = ./krebs/5pkgs;
-  user-modules-path = ./. + "/${current-user-name}/3modules";
-  user-pkgs-path = ./. + "/${current-user-name}/5pkgs";
+  nspath = ns: p: ./. + "/${ns}/${p}";
+  kpath = nspath "krebs";
+  upath = nspath current-user-name;
 
-  # XXX This is only used interactively, e.g. using get.
-  pkgs =
-    let
-      pkgs = import <nixpkgs> {};
-      args = {
-        inherit pkgs;
-        lib = pkgs.lib;
-      };
-    in
-    pkgs //
-    import krebs-pkgs-path args //
-    import user-pkgs-path args;
+  stockholm = {
+    imports = map (f: f "3modules") [ kpath upath ];
+
+    nixpkgs.config.packageOverrides = pkgs:
+      let
+        kpkgs = import (kpath "5pkgs") { inherit pkgs; };
+        upkgs = import (upath "5pkgs") { pkgs = pkgs // kpkgs; };
+      in
+      kpkgs // upkgs;
+  };
 
   out =
-    { inherit pkgs; } //
-    lib.mapAttrs (_: builtins.getAttr "main")
-      (lib.filterAttrs (_: builtins.hasAttr "main")
-        (lib.mapAttrs
-          (k: v:
-            if lib.hasPrefix "." k || v != "directory" then
-              {}
-            else if builtins.pathExists (./. + "/${k}/default.nix") then
-              { main = import (./. + "/${k}"); }
-            else if builtins.pathExists (./. + "/${k}/1systems") then
-              { main = mk-namespace (./. + "/${k}"); }
-            else
-              {})
-          (builtins.readDir ./.)));
+    { inherit (eval {}) config options pkgs; } //
+    lib.mapAttrs
+      (name: _:
+        if builtins.pathExists (nspath name "default.nix")
+          then import (nspath name "default.nix")
+          else import-1systems (nspath name "1systems"))
+      (lib.filterAttrs
+        (n: t: !lib.hasPrefix "." n && t == "directory")
+        (builtins.readDir ./.));
 
   eval = path: import <nixpkgs/nixos/lib/eval-config.nix> {
-    system = builtins.currentSystem;
     modules = [
+      stockholm
       path
-      krebs-modules-path
-      user-modules-path
-    ] ++ [
-      ({ config, lib, pkgs, ... }@args: {
-       _module.args.pkgs =
-         (import krebs-pkgs-path args) //
-         (import user-pkgs-path args);
-      })
     ];
   };
 
-  mk-namespace = path: mapNixDir mk-system (path + "/1systems");
+  import-1systems = path: lib.mapAttrs (_: mk-system) (nixDir path);
 
   mk-system = path: rec {
     inherit (eval path) config options;
     system = config.system.build.toplevel;
     fetch = import ./krebs/0tools/fetch.nix { inherit config lib; };
   };
-
-  mapNixDir = f: path: lib.mapAttrs (_: f) (nixDir path);
 
   nixDir = path:
     builtins.listToAttrs
@@ -82,13 +68,5 @@ let
                 else Nothing;
           }.${v} or Nothing)
           (builtins.readDir path)));
-
-  # TODO move to lib
-  Just = x: { type = "maybe"; value = x; };
-  Nothing = { type = "maybe"; };
-  isMaybe = x: builtins.typeOf x == "set" && x.type or false == "maybe";
-  isJust = x: isMaybe x && builtins.hasAttr "value" x;
-  fromJust = x: assert isJust x; x.value;
-  catMaybes = xs: map fromJust (builtins.filter isJust xs);
 
 in out

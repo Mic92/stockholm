@@ -1,6 +1,6 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 
-with import ../4lib { inherit lib; };
+with import ../4lib { inherit (pkgs) lib; };
 
 let
   subdirs = mapAttrs (_: flip pkgs.callPackage {}) (subdirsOf ./.);
@@ -8,6 +8,20 @@ let
 in
 
 subdirs // rec {
+
+  haskellPackages = pkgs.haskellPackages.override {
+    overrides = self: super:
+      mapAttrs (name: path: self.callPackage path {})
+        (mapAttrs'
+          (name: type:
+            if hasSuffix ".nix" name
+              then {
+                name = removeSuffix ".nix" name;
+                value = ./haskell-overrides + "/${name}";
+              }
+              else null)
+          (builtins.readDir ./haskell-overrides));
+  };
 
   push = pkgs'.callPackage ./push {
     inherit (subdirs) get jq;
@@ -30,7 +44,7 @@ subdirs // rec {
   execveBin = name: cfg: execve name (cfg // { destination = "/bin/${name}"; });
 
   writeC = name: { destination ? "" }: src: pkgs.runCommand name {} ''
-    PATH=${lib.makeSearchPath "bin" (with pkgs; [
+    PATH=${makeSearchPath "bin" (with pkgs; [
       binutils
       coreutils
       gcc
