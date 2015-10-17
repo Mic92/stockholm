@@ -1,9 +1,25 @@
 { pkgs, ... }:
 
 let
-   hspkgs = pkgs.haskellngPackages.override {
-     overrides = self: super: {
-       email-header = self.callPackage (
+  hspkgs = pkgs.haskellngPackages.override {
+    overrides = self: super: {
+      blessings = self.callPackage (
+{ mkDerivation, base, fetchgit, stdenv }:
+mkDerivation {
+  pname = "blessings";
+  version = "1.0.0";
+  src = fetchgit {
+    url = http://cgit.cd.retiolum/blessings;
+    rev = "25a510dcb38ea9158e9969d56eb66cb1b860ab5f";
+    sha256 = "b962153e80e51519b52220199d8350b54154833e4bc25a792ecc58898fef3fb2";
+  };
+  libraryHaskellDepends = [ base ];
+  doHaddock = false;
+  # WTFPL is the true license, which is unknown to cabal.
+  license = stdenv.lib.licenses.wtfpl;
+}
+) {};
+      email-header = self.callPackage (
 { mkDerivation, attoparsec, base, base64-bytestring, bytestring
 , case-insensitive, containers, exceptions, fetchgit, QuickCheck
 , stdenv, tasty, tasty-quickcheck, text, text-icu, time
@@ -30,34 +46,48 @@ mkDerivation {
   license = stdenv.lib.licenses.bsd3;
 }
 ) {};
+      scanner = self.callPackage (
+{ mkDerivation, base, fetchgit, stdenv }:
+mkDerivation {
+  pname = "scanner";
+  version = "1.0.0";
+  src = fetchgit {
+    url = http://cgit.cd.retiolum/scanner;
+    rev = "7f091a3bc152ad3974a1873b460fa1759bf8dcad";
+    sha256 = "7d123c227777932039d26fc832b8d32a90f04c0bd6b7e8bcff0a6f49a54e0054";
+  };
+  libraryHaskellDepends = [ base ];
+  license = stdenv.lib.licenses.wtfpl;
+}
+) {};
     };
   };
 in
 
 hspkgs.callPackage (
 { mkDerivation, aeson, attoparsec, base, base64-bytestring
-, blaze-builder, bytestring, case-insensitive, containers, deepseq
+, blaze-builder, blessings, bytestring, case-insensitive, containers, deepseq
 , directory, docopt, email-header, fetchgit, filepath
 , friendly-time, hyphenation, linebreak, old-locale, process
-, random, rosezipper, safe, split, stdenv, terminal-size, text
+, random, rosezipper, safe, scanner, split, stdenv, terminal-size, text
 , time, transformers, transformers-compat, unix, vector
 }:
 mkDerivation {
   pname = "much";
-  version = "0.0.0.0";
+  version = "1.0.0";
   src = fetchgit {
-    url = "http://cgit.nomic/much";
-    sha256 = "f0bcc34456cb876d3439694d1e16db414a540e13f476fa3ff1ad70d1d3caccb2";
-    rev = "bfd854e05207a073eaa983c49f27c37555ccfce5";
+    url = "http://cgit.cd.retiolum/much";
+    rev = "045dc986b4de225a927175f81c8ccfdab450202c";
+    sha256 = "cec175e3dc32ef93029ee5285f6c4042ce11d637945bc8cec02cb6699d06cc13";
   };
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    aeson attoparsec base base64-bytestring blaze-builder bytestring
-    case-insensitive containers deepseq directory docopt email-header
-    filepath friendly-time hyphenation linebreak old-locale process
-    random rosezipper safe split terminal-size text time transformers
-    transformers-compat unix vector
+    aeson attoparsec base base64-bytestring blaze-builder blessings bytestring
+    case-insensitive containers deepseq directory docopt email-header filepath
+    friendly-time hyphenation linebreak old-locale process random rosezipper
+    safe scanner split terminal-size text time transformers transformers-compat
+    unix vector
   ];
   license = stdenv.lib.licenses.mit;
 }
