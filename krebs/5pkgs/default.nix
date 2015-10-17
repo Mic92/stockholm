@@ -44,7 +44,7 @@ subdirs // rec {
   execveBin = name: cfg: execve name (cfg // { destination = "/bin/${name}"; });
 
   writeC = name: { destination ? "" }: src: pkgs.runCommand name {} ''
-    PATH=${lib.makeSearchPath "bin" (with pkgs; [
+    PATH=${makeSearchPath "bin" (with pkgs; [
       binutils
       coreutils
       gcc
