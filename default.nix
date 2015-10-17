@@ -1,7 +1,9 @@
-{ current-date
-, current-host-name
-, current-user-name
+{ current-date ? abort "current-date not defined"
+, current-host-name ? abort "current-host-name not defined"
+, current-user-name ? builtins.getEnv "LOGNAME"
 }:
+
+assert current-user-name != "";
 
 let
   lib = import <nixpkgs/lib>;
