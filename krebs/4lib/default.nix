@@ -3,7 +3,14 @@
 with builtins;
 with lib;
 
-builtins // lib // rec {
+let
+  maybe = import ./maybe.nix { inherit lib; };
+in
+
+builtins //
+lib //
+maybe //
+rec {
 
   eq = x: y: x == y;
 
