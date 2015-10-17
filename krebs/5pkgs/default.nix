@@ -9,6 +9,20 @@ in
 
 subdirs // rec {
 
+  haskellPackages = pkgs.haskellPackages.override {
+    overrides = self: super:
+      mapAttrs (name: path: self.callPackage path {})
+        (mapAttrs'
+          (name: type:
+            if hasSuffix ".nix" name
+              then {
+                name = removeSuffix ".nix" name;
+                value = ./haskell-overrides + "/${name}";
+              }
+              else null)
+          (builtins.readDir ./haskell-overrides));
+  };
+
   push = pkgs'.callPackage ./push {
     inherit (subdirs) get jq;
   };
