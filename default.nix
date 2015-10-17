@@ -6,26 +6,23 @@
 let
   lib = import <nixpkgs/lib>;
 
-  krebs-modules-path = ./krebs/3modules;
-  krebs-pkgs-path = ./krebs/5pkgs;
-  user-modules-path = ./. + "/${current-user-name}/3modules";
-  user-pkgs-path = ./. + "/${current-user-name}/5pkgs";
+  nspath = ns: p: ./. + "/${ns}/${p}";
+  kpath = nspath "krebs";
+  upath = nspath current-user-name;
 
-  # XXX This is only used interactively, e.g. using get.
-  pkgs =
-    let
-      pkgs = import <nixpkgs> {};
-      args = {
-        inherit pkgs;
-        lib = pkgs.lib;
-      };
-    in
-    pkgs //
-    import krebs-pkgs-path args //
-    import user-pkgs-path args;
+  stockholm = {
+    imports = map (f: f "3modules") [ kpath upath ];
+
+    nixpkgs.config.packageOverrides = pkgs:
+      let
+        kpkgs = import (kpath "5pkgs") { inherit pkgs; };
+        upkgs = import (upath "5pkgs") { pkgs = pkgs // kpkgs; };
+      in
+      kpkgs // upkgs;
+  };
 
   out =
-    { inherit pkgs; } //
+    { inherit (eval {}) pkgs; } //
     lib.mapAttrs (_: builtins.getAttr "main")
       (lib.filterAttrs (_: builtins.hasAttr "main")
         (lib.mapAttrs
@@ -43,15 +40,8 @@ let
   eval = path: import <nixpkgs/nixos/lib/eval-config.nix> {
     system = builtins.currentSystem;
     modules = [
+      stockholm
       path
-      krebs-modules-path
-      user-modules-path
-    ] ++ [
-      ({ config, lib, pkgs, ... }@args: {
-       _module.args.pkgs =
-         (import krebs-pkgs-path args) //
-         (import user-pkgs-path args);
-      })
     ];
   };
 
