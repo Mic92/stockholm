@@ -27,9 +27,9 @@ let
     { inherit (eval {}) config options pkgs; } //
     lib.mapAttrs
       (name: _:
-        if builtins.pathExists (./. + "/${name}/default.nix")
-          then import (./. + "/${name}")
-          else import-1systems (./. + "/${name}/1systems"))
+        if builtins.pathExists (nspath name "default.nix")
+          then import (nspath name "default.nix")
+          else import-1systems (nspath name "1systems"))
       (lib.filterAttrs
         (n: t: !lib.hasPrefix "." n && t == "directory")
         (builtins.readDir ./.));
