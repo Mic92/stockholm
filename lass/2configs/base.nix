@@ -6,6 +6,7 @@ with lib;
     ../2configs/vim.nix
     ../2configs/zsh.nix
     ../2configs/mc.nix
+    ../2configs/retiolum.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
