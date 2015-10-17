@@ -23,37 +23,29 @@ let
 
   out =
     { inherit (eval {}) pkgs; } //
-    lib.mapAttrs (_: builtins.getAttr "main")
-      (lib.filterAttrs (_: builtins.hasAttr "main")
-        (lib.mapAttrs
-          (k: v:
-            if lib.hasPrefix "." k || v != "directory" then
-              {}
-            else if builtins.pathExists (./. + "/${k}/default.nix") then
-              { main = import (./. + "/${k}"); }
-            else if builtins.pathExists (./. + "/${k}/1systems") then
-              { main = mk-namespace (./. + "/${k}"); }
-            else
-              {})
-          (builtins.readDir ./.)));
+    lib.mapAttrs
+      (name: _:
+        if builtins.pathExists (./. + "/${name}/default.nix")
+          then import (./. + "/${name}")
+          else import-1systems (./. + "/${name}/1systems"))
+      (lib.filterAttrs
+        (n: t: !lib.hasPrefix "." n && t == "directory")
+        (builtins.readDir ./.));
 
   eval = path: import <nixpkgs/nixos/lib/eval-config.nix> {
-    system = builtins.currentSystem;
     modules = [
       stockholm
       path
     ];
   };
 
-  mk-namespace = path: mapNixDir mk-system (path + "/1systems");
+  import-1systems = path: lib.mapAttrs (_: mk-system) (nixDir path);
 
   mk-system = path: rec {
     inherit (eval path) config options;
     system = config.system.build.toplevel;
     fetch = import ./krebs/0tools/fetch.nix { inherit config lib; };
   };
-
-  mapNixDir = f: path: lib.mapAttrs (_: f) (nixDir path);
 
   nixDir = path:
     builtins.listToAttrs
