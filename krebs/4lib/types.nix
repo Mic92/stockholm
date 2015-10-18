@@ -19,7 +19,6 @@ types // rec {
       };
       nets = mkOption {
         type = attrsOf net;
-        apply = x: assert hasAttr "retiolum" x; x;
       };
 
       extraZones = mkOption {
