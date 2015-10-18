@@ -66,7 +66,10 @@ with lib;
     }
     {
       tv.iptables.input-internet-accept-new-tcp = singleton "http";
-      krebs.nginx.servers.cgit.server-names = singleton "cgit.cd.viljetic.de";
+      krebs.nginx.servers.cgit.server-names = [
+        "cgit.cd.krebsco.de"
+        "cgit.cd.viljetic.de"
+      ];
     }
     {
       # TODO make public_html also available to cd, cd.retiolum (AKA default)

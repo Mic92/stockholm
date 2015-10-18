@@ -11,19 +11,24 @@ with import ../../4lib { inherit lib; };
       cores = 2;
       dc = "tv"; #dc = "cac";
       extraZones = {
+        # TODO generate krebsco.de zone from nets and don't use extraZones at all
         "krebsco.de" = ''
-          mx23          IN A ${elemAt nets.internet.addrs4 0}
-          cd            IN A ${elemAt nets.internet.addrs4 0}
-          krebsco.de.   IN MX 5 mx23'';
+          krebsco.de. 60 IN MX 5 mx23
+          mx23        60 IN A ${elemAt nets.internet.addrs4 0}
+          cd          60 IN A ${elemAt nets.internet.addrs4 0}
+          cgit        60 IN A ${elemAt nets.internet.addrs4 0}
+          cgit.cd     60 IN A ${elemAt nets.internet.addrs4 0}
+        '';
       };
       nets = rec {
         internet = {
           addrs4 = ["162.219.7.216"];
           aliases = [
             "cd.internet"
+            "cd.krebsco.de"
+            "cgit.cd.krebsco.de"
             "cd.viljetic.de"
             "cgit.cd.viljetic.de"
-            "cd.krebsco.de"
           ];
           ssh.port = 11423;
         };
@@ -88,10 +93,20 @@ with import ../../4lib { inherit lib; };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICuShEqU0Cdm7KCaMD5x1D6mgj+cr7qoqbzFJDKoBbbw";
     };
-    ire = {
+    ire = rec {
+      extraZones = {
+        # TODO generate krebsco.de zone from nets and don't use extraZones at all
+        "krebsco.de" = ''
+          ire 60 IN A ${elemAt nets.internet.addrs4 0}
+        '';
+      };
       nets = {
         internet = {
           addrs4 = ["198.147.22.115"];
+          aliases = [
+            "ire.internet"
+            "ire.krebsco.de"
+          ];
           ssh.port = 11423;
         };
         retiolum = {

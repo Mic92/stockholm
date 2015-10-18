@@ -129,12 +129,9 @@ with import ../../4lib { inherit lib; };
           euer              IN MX 1   aspmx.l.google.com.
           io                IN NS     pigstarter.krebsco.de.
           pigstarter        IN A      ${head nets.internet.addrs4}
-          conf              IN A      ${head nets.internet.addrs4}
           gold              IN A      ${head nets.internet.addrs4}
-          graph             IN A      ${head nets.internet.addrs4}
           tinc              IN A      ${head nets.internet.addrs4}
-          boot              IN A      ${head nets.internet.addrs4}
-          mx42              IN A      ${head nets.internet.addrs4}'';
+          boot              IN A      ${head nets.internet.addrs4}'';
       };
       nets = {
         internet = {
