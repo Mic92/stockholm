@@ -104,7 +104,11 @@ with import ../../4lib { inherit lib; };
     uriel = {
       cores = 1;
       dc = "lass";
-      nets = rec {
+      nets = {
+        gg23 = {
+          addrs4 = ["10.23.1.12"];
+          aliases = ["uriel.gg23"];
+        };
         retiolum = {
           addrs4 = ["10.243.81.176"];
           addrs6 = ["42:dc25:60cf:94ef:759b:d2b6:98a9:2e56"];
@@ -131,7 +135,11 @@ with import ../../4lib { inherit lib; };
     mors = {
       cores = 2;
       dc = "lass";
-      nets = rec {
+      nets = {
+        gg23 = {
+          addrs4 = ["10.23.1.11"];
+          aliases = ["mors.gg23"];
+        };
         retiolum = {
           addrs4 = ["10.243.0.2"];
           addrs6 = ["42:0:0:0:0:0:0:dea7"];
@@ -154,6 +162,22 @@ with import ../../4lib { inherit lib; };
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINAMPlIG+6u75GJ3kvsPF6OoIZsU+u8ZQ+rdviv5fNMD";
+    };
+    schnabel-ap = {
+      nets = {
+        gg23 = {
+          addrs4 = ["10.23.1.20"];
+          aliases = ["schnabel-ap.gg23"];
+        };
+      };
+    };
+    Reichsfunk-ap = {
+      nets = {
+        gg23 = {
+          addrs4 = ["10.23.1.10"];
+          aliases = ["Reichsfunk-ap.gg23"];
+        };
+      };
     };
 
   };
