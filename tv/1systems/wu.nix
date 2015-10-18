@@ -383,16 +383,6 @@ with lib;
 
   virtualisation.libvirtd.enable = true;
 
-  networking.extraHosts = ''
-    192.168.1.1 wrt.gg23 wrt
-    192.168.1.11 mors.gg23
-    192.168.1.12 uriel.gg23
-    192.168.1.23 raspi.gg23 raspi
-    192.168.1.37 wu.gg23
-    192.168.1.111 nomic.gg23
-    192.168.1.124 schnabeldrucker.gg23 schnabeldrucker
-  '';
-
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="00:90:f5:da:aa:c3", NAME="en0"
     SUBSYSTEM=="net", ATTR{address}=="a0:88:b4:1b:ae:6c", NAME="wl0"

@@ -134,6 +134,10 @@ with import ../../4lib { inherit lib; };
       cores = 2;
       dc = "tv"; #dc = "gg23";
       nets = rec {
+        gg23 = {
+          addrs4 = ["10.23.1.110"];
+          aliases = ["nomic.gg23"];
+        };
         retiolum = {
           addrs4 = ["10.243.0.110"];
           addrs6 = ["42:02d5:733f:d6da:c0f5:2bb7:2b18:09ec"];
@@ -155,6 +159,14 @@ with import ../../4lib { inherit lib; };
       };
       secure = true;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILn7C3LxAs9kUynENdRNgQs4qjrhNDfXzlHTpVJt6e09";
+    };
+    ok = {
+      nets = {
+        gg23 = {
+          addrs4 = ["10.23.1.1"];
+          aliases = ["ok.gg23"];
+        };
+      };
     };
     rmdir = rec {
       cores = 1;
@@ -189,11 +201,31 @@ with import ../../4lib { inherit lib; };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICLuhLRmt8M5s2Edwwl9XY0KAAivzmPCEweesH5/KhR4";
     };
+    schnabeldrucker = {
+      nets = {
+        gg23 = {
+          addrs4 = ["10.23.1.21"];
+          aliases = ["schnabeldrucker.gg23"];
+        };
+      };
+    };
+    schnabelscanner = {
+      nets = {
+        gg23 = {
+          addrs4 = ["10.23.1.22"];
+          aliases = ["schnabelscanner.gg23"];
+        };
+      };
+    };
     wu = {
       cores = 4;
       # TODO wu is mobile, so dc means "home data center"
       dc = "tv"; #dc = "gg23";
       nets = {
+        gg23 = {
+          addrs4 = ["10.23.1.37"];
+          aliases = ["wu.gg23"];
+        };
         retiolum = {
           addrs4 = ["10.243.13.37"];
           addrs6 = ["42:0:0:0:0:0:0:1337"];
@@ -220,6 +252,10 @@ with import ../../4lib { inherit lib; };
       # TODO xu is mobile, so dc means "home data center"
       dc = "tv"; #dc = "gg23";
       nets = {
+        gg23 = {
+          addrs4 = ["10.23.1.38"];
+          aliases = ["xu.gg23"];
+        };
         retiolum = {
           addrs4 = ["10.243.13.38"];
           addrs6 = ["42:0:0:0:0:0:0:1338"];
