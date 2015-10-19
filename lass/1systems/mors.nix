@@ -187,9 +187,16 @@
       ];
     };
   };
+
   #touchpad config
   services.xserver.synaptics = {
     enable = true;
+    accelFactor = "0.035";
+    additionalOptions = ''
+      Option "FingerHigh" "60"
+      Option "FingerLow"  "60"
+    '';
     tapButtons = false;
+    twoFingerScroll = true;
   };
 }
