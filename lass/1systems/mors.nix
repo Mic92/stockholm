@@ -24,22 +24,8 @@
     ../2configs/skype.nix
   ];
 
-  krebs.build = {
-    user = config.krebs.users.lass;
-    host = config.krebs.hosts.mors;
-    source = {
-      dir.secrets = {
-        host = config.krebs.hosts.mors;
-        path = "/home/lass/secrets/${config.krebs.build.host.name}";
-      };
-      dir.stockholm = {
-        host = config.krebs.hosts.mors;
-        path = "/home/lass/dev/stockholm";
-      };
-    };
-  };
+  krebs.build.host = config.krebs.hosts.mors;
 
-  networking.hostName = "mors";
   networking.wireless.enable = true;
 
   networking.extraHosts = ''
@@ -49,8 +35,6 @@
     10.243.206.102 ubikmedia.de
     10.243.206.102 apanowicz.de
   '';
-
-  nix.maxJobs = 4;
 
   hardware.enableAllFirmware = true;
   nixpkgs.config.allowUnfree = true;

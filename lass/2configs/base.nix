@@ -38,14 +38,28 @@ with lib;
     }
   ];
 
+  networking.hostName = config.krebs.build.host.name;
+  nix.maxJobs = config.krebs.build.host.cores;
+
   krebs = {
     enable = true;
     search-domain = "retiolum";
     exim-retiolum.enable = true;
-    build.source = {
-      git.nixpkgs = {
-        url = https://github.com/Lassulus/nixpkgs;
-        rev = "b9270a2e8ac3d2cf4c95075a9529528aa1d859da";
+    build = {
+      user = config.krebs.users.lass;
+      source = {
+        git.nixpkgs = {
+          url = https://github.com/Lassulus/nixpkgs;
+          rev = "b9270a2e8ac3d2cf4c95075a9529528aa1d859da";
+        };
+        dir.secrets = {
+          host = config.krebs.hosts.mors;
+          path = "/home/lass/secrets/${config.krebs.build.host.name}";
+        };
+        dir.stockholm = {
+          host = config.krebs.hosts.mors;
+          path = "/home/lass/stockholm";
+        };
       };
     };
   };

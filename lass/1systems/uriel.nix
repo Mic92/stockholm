@@ -24,26 +24,9 @@ with builtins;
     }
   ];
 
-  krebs.build = {
-    user = config.krebs.users.lass;
-    target = "root@uriel";
-    host = config.krebs.hosts.uriel;
-    source = {
-      dir.secrets = {
-        host = config.krebs.hosts.mors;
-        path = "/home/lass/secrets/${config.krebs.build.host.name}";
-      };
-      dir.stockholm = {
-        host = config.krebs.hosts.mors;
-        path = "/home/lass/dev/stockholm";
-      };
-    };
-  };
-
-  networking.hostName = "uriel";
+  krebs.build.host = config.krebs.hosts.uriel;
 
   networking.wireless.enable = true;
-  nix.maxJobs = 2;
 
   hardware.enableAllFirmware = true;
   nixpkgs.config.allowUnfree = true;
