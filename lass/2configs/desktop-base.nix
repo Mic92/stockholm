@@ -5,6 +5,7 @@ let
 in {
   imports = [
     ./base.nix
+    ./urxvt.nix
   ];
 
   time.timeZone = "Europe/Berlin";

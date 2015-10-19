@@ -7,7 +7,6 @@ with builtins;
     ../2configs/browsers.nix
     ../2configs/games.nix
     ../2configs/pass.nix
-    ../2configs/urxvt.nix
     ../2configs/bird.nix
     ../2configs/git.nix
     ../2configs/chromium-patched.nix
