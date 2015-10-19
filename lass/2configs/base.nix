@@ -137,12 +137,6 @@ with lib;
     "sendmail"
   ];
 
-  #services.gitolite = {
-  #  enable = true;
-  #  dataDir = "/home/gitolite";
-  #  adminPubkey = config.sshKeys.lass.pub;
-  #};
-
   services.openssh = {
     enable = true;
     hostKeys = [
