@@ -141,11 +141,6 @@
     emulateWheel = true;
   };
 
-  #system.activationScripts.trackpoint = ''
-  #  echo 0 > '/sys/devices/platform/i8042/serio1/serio2/speed'
-  #  echo 220 > '/sys/devices/platform/i8042/serio1/serio2/sensitivity'
-  #'';
-
   services.xserver = {
     videoDriver = "intel";
     vaapiDrivers = [ pkgs.vaapiIntel ];

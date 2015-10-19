@@ -47,8 +47,6 @@ with builtins;
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
     #kernelModules = [ "kvm-intel" "msr" ];
     kernelModules = [ "msr" ];
-    extraModprobeConfig = ''
-    '';
   };
   fileSystems = {
     "/" = {
@@ -75,10 +73,6 @@ with builtins;
       Option "FingerLow"  "60"
     '';
   };
-
-  environment.systemPackages = with pkgs; [
-  ];
-
   #for google hangout
 
   users.extraUsers.google.extraGroups = [ "audio" "video" ];
