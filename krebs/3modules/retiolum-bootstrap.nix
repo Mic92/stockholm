@@ -32,9 +32,7 @@ let
   };
 
   imp = {
-    # TODO: assert krebs nginx
-
-    krebs.nginx.servers = {
+    krebs.nginx.servers = assert config.krebs.nginx.enable; {
       retiolum-boot-redir = {
         server-names = singleton cfg.hostname;
         extraConfig = ''
