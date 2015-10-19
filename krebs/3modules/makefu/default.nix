@@ -130,7 +130,6 @@ with import ../../4lib { inherit lib; };
           io                IN NS     pigstarter.krebsco.de.
           pigstarter        IN A      ${head nets.internet.addrs4}
           gold              IN A      ${head nets.internet.addrs4}
-          tinc              IN A      ${head nets.internet.addrs4}
           boot              IN A      ${head nets.internet.addrs4}'';
       };
       nets = {
@@ -167,6 +166,7 @@ with import ../../4lib { inherit lib; };
         "krebsco.de" = ''
           wry            IN A ${head nets.internet.addrs4}
           graphs         IN A ${head nets.internet.addrs4}
+          tinc           IN A ${head nets.internet.addrs4}
           '';
       };
       nets = rec {
