@@ -24,8 +24,16 @@ let
             "${config.networking.hostName}.retiolum"
           ];
         };
+        port = mkOption {
+          type = with types; int;
+          default = 80;
+        };
         locations = mkOption {
           type = with types; listOf (attrsOf str);
+        };
+        extraConfig = mkOption {
+          type = with types; str;
+          default = "";
         };
       };
       default = {};
@@ -60,10 +68,11 @@ let
     }
   '';
 
-  to-server = { server-names, locations, ... }: ''
+  to-server = { server-names, port, locations, extraConfig, ... }: ''
     server {
-      listen 80;
+      listen ${toString port};
       server_name ${toString server-names};
+      ${extraConfig}
       ${indent (concatStrings (map to-location locations))}
     }
   '';
