@@ -25,16 +25,18 @@ in with klib; let
       kpkgs // upkgs;
   };
 
-  out =
-    { inherit (eval {}) config options pkgs; } //
-    lib.mapAttrs
-      (name: _:
-        if builtins.pathExists (nspath name "default.nix")
-          then import (nspath name "default.nix")
-          else import-1systems (nspath name "1systems"))
-      (lib.filterAttrs
-        (n: t: !lib.hasPrefix "." n && t == "directory")
-        (builtins.readDir ./.));
+  out = {
+    inherit (eval {}) config options pkgs;
+    krebs = import ./krebs;
+    users = lib.mapAttrs
+              (name: _:
+                if builtins.pathExists (nspath name "default.nix")
+                  then import (nspath name "default.nix")
+                  else import-1systems (nspath name "1systems"))
+              (lib.filterAttrs
+                (n: t: !lib.hasPrefix "." n && t == "directory" && n != "krebs")
+                (builtins.readDir ./.));
+  };
 
   eval = path: import <nixpkgs/nixos/lib/eval-config.nix> {
     modules = [

@@ -132,7 +132,7 @@
     stockholm = import ../. current;
 
     get-config = system:
-      stockholm.${current-user-name}.${system}.config
+      stockholm.users.${current-user-name}.${system}.config
         or (abort "unknown system: ${system}");
 
     doc = s:
@@ -181,6 +181,7 @@
           --profile ${lib.shell.escape config.krebs.build.profile} \
           --set \
           -A ${lib.escapeShellArg (lib.concatStringsSep "." [
+                "users"
                 config.krebs.build.user.name
                 config.krebs.build.host.name
                 "system"
