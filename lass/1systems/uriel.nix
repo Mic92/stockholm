@@ -3,7 +3,7 @@
 with builtins;
 {
   imports = [
-    ../2configs/desktop-base.nix
+    ../2configs/baseX.nix
     ../2configs/browsers.nix
     ../2configs/games.nix
     ../2configs/pass.nix

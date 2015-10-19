@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../2configs/desktop-base.nix
+    ../2configs/baseX.nix
     ../2configs/programs.nix
     ../2configs/bitcoin.nix
     ../2configs/browsers.nix
