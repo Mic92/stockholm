@@ -73,7 +73,4 @@ with builtins;
       Option "FingerLow"  "60"
     '';
   };
-  #for google hangout
-
-  users.extraUsers.google.extraGroups = [ "audio" "video" ];
 }
