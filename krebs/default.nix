@@ -48,14 +48,14 @@ let out = {
       #  eval "$RSYNC_RSH \"\$@\""
       #}
 
-      ${lib.rootssh target ''
+      ${rootssh target ''
         ${builtins.readFile ./4lib/infest/prepare.sh}
         ${builtins.readFile ./4lib/infest/install-nix.sh}
       ''}
 
-      (${lib.populate args})
+      (${populate args})
 
-      ${lib.rootssh target ''
+      ${rootssh target ''
         export PATH; PATH=/root/.nix-profile/bin:$PATH
 
         src=$(type -p nixos-install)
@@ -79,7 +79,7 @@ let out = {
 
         {
           cat_src | sed -n "1,$i{p}"
-          cat ${lib.doc (install args)}
+          cat ${doc (install args)}
           cat_src | sed -n "$i,\''${$i!p}"
         } > nixos-install
         chmod +x nixos-install
