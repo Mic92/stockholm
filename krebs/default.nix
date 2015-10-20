@@ -129,11 +129,15 @@
 
   lib = import ./4lib { lib = import <nixpkgs/lib>; } // rec {
 
-    stockholm = import ../. current;
+    stockholm-path = ../.;
+
+    stockholm = import stockholm-path current;
+
+    nspath = ns: p: stockholm-path + "/${ns}/${p}";
 
     get-config = system:
       stockholm.users.${current-user-name}.${system}.config
-        or (abort "unknown system: ${system}");
+        or (abort "unknown system: ${system}, user: ${current-user-name}");
 
     doc = s:
       let b = "EOF${builtins.hashString "sha256" s}"; in
@@ -160,8 +164,7 @@
           inherit current-user-name;
         };
 
-        config = stockholm.${current-user-name}.${system}.config
-          or (abort "unknown system: ${system}");
+        config = get-config system;
 
         nix-path =
           lib.concatStringsSep ":"
@@ -209,8 +212,7 @@
           inherit current-user-name;
         };
 
-        config = stockholm.${current-user-name}.${system}.config
-            or (abort "unknown system: ${system}");
+        config = get-config system;
 
         current-host = config.krebs.hosts.${current-host-name};
         current-user = config.krebs.users.${current-user-name};
