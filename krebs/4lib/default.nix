@@ -3,13 +3,8 @@
 with builtins;
 with lib;
 
-let
-  maybe = import ./maybe.nix { inherit lib; };
-in
-
 builtins //
 lib //
-maybe //
 rec {
 
   eq = x: y: x == y;

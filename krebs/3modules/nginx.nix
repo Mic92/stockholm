@@ -24,8 +24,20 @@ let
             "${config.networking.hostName}.retiolum"
           ];
         };
+        listen = mkOption {
+          type = with types; either str (listOf str);
+          default = "80";
+          apply = x:
+            if typeOf x != "list"
+              then [x]
+              else x;
+        };
         locations = mkOption {
           type = with types; listOf (attrsOf str);
+        };
+        extraConfig = mkOption {
+          type = with types; str;
+          default = "";
         };
       };
       default = {};
@@ -60,10 +72,11 @@ let
     }
   '';
 
-  to-server = { server-names, locations, ... }: ''
+  to-server = { server-names, listen, locations, extraConfig, ... }: ''
     server {
-      listen 80;
+      ${concatMapStringsSep "\n" (x: "listen ${x};") listen}
       server_name ${toString server-names};
+      ${extraConfig}
       ${indent (concatStrings (map to-location locations))}
     }
   '';

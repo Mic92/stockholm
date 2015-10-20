@@ -3,7 +3,7 @@
 #		make infest system=foo [target=bar]
 #		make [deploy] system=foo [target=bar]
 #		make [deploy] systems='foo bar'
-#		make eval get=tv.wu.config.time.timeZone [filter=json]
+#		make eval get=users.tv.wu.config.time.timeZone [filter=json]
 #
 
 .ONESHELL:

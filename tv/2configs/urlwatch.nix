@@ -29,10 +29,6 @@
       # 2014-09-24 ref https://github.com/4z3/xintmap
       http://www.mathstat.dal.ca/~selinger/quipper/
 
-      # 2014-12-12 remove nixopsUnstable when nixops get's bumped to 1.3
-      # ref https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/package-management/nixops/unstable.nix
-      http://nixos.org/releases/nixops/
-
       ## other
 
       https://nixos.org/channels/nixos-unstable/git-revision
