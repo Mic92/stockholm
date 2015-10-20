@@ -25,8 +25,12 @@ let
           ];
         };
         listen = mkOption {
-          type = with types; str;
+          type = with types; either str (listOf str);
           default = "80";
+          apply = x:
+            if typeOf x != "list"
+              then [x]
+              else x;
         };
         locations = mkOption {
           type = with types; listOf (attrsOf str);
@@ -70,7 +74,7 @@ let
 
   to-server = { server-names, listen, locations, extraConfig, ... }: ''
     server {
-      listen ${listen};
+      ${concatMapStringsSep "\n" (x: "listen ${x};") listen}
       server_name ${toString server-names};
       ${extraConfig}
       ${indent (concatStrings (map to-location locations))}
