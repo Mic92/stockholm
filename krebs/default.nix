@@ -221,11 +221,15 @@ let out = {
               ${config.path}/ \
               root@${target}:${config.target-path}
           '';
-          url = "file://${config.host.name}${config.path}";
+          current-url = "${current-user-name}@${current-host.name}";
+          source-url = "file://${config.host.name}${config.path}";
+          target-url = "root@${target}:${config.target-path}";
         in
         #if can-link then link-method else
         if can-push then push-method else
-        throw "cannot source ${url}";
+        throw
+          # /!\ revise this message when using more than just push-method
+          "No way to push ${source-url} from ${current-url} to ${target-url}";
 
       methods.git = config:
         rootssh target ''
