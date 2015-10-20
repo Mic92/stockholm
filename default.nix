@@ -19,7 +19,7 @@
 , current-user-name ? builtins.getEnv "LOGNAME"
 }@current:
 
-let out = {
+let stockholm = {
     # The generated scripts to deploy (or infest) systems can be found in the
     # `krebs` attribute.  There's also an init script, but it's in its early
     # stages, not well integrated and mostly useless at the moment. :)
@@ -47,7 +47,7 @@ let out = {
     inherit (eval {}) pkgs;
   };
 
-  krebs = import ./krebs (current // { stockholm = out; });
+  krebs = import ./krebs (current // { inherit stockholm; });
   inherit (krebs) lib;
 
   # Path resolvers for common and individual files.
@@ -109,4 +109,4 @@ let out = {
     system = config.system.build.toplevel;
   };
 
-in out
+in stockholm
