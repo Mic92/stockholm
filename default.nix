@@ -47,7 +47,7 @@ let out = {
     inherit (eval {}) pkgs;
   };
 
-  krebs = import ./krebs current;
+  krebs = import ./krebs (current // { stockholm = out; });
   inherit (krebs) lib;
 
   # Path resolvers for common and individual files.
