@@ -42,7 +42,7 @@ let out = {
     inherit users;
 
     # Additionally, output lib and pkgs for easy access from the shell.
-    # Notice how we're evaluating just the stockholm module to obtain pkgs.
+    # Notice how we're evaluating just the base module to obtain pkgs.
     inherit lib;
     inherit (eval {}) pkgs;
   };
@@ -55,10 +55,10 @@ let out = {
   kpath = lib.nspath "krebs";
   upath = lib.nspath current-user-name;
 
-  # This is the base stockholm NixOS module.  It's purpose is to provide a
-  # modules and packages, both common ones, found in krebs/ as well as the
-  # current user's, found in the user's namespace.
-  stockholm = {
+  # This is the base module.  Its purpose is to provide modules and
+  # packages, both common ones, found in krebs/ as well as the current user's,
+  # found in the user's namespace.
+  base-module = {
     imports = map (f: f "3modules") [ kpath upath ];
 
     nixpkgs.config.packageOverrides = pkgs:
@@ -71,13 +71,15 @@ let out = {
       kpkgs // upkgs;
   };
 
-  # The above stockholm module is used together with a NixOS configuration to
-  # produce a system.  Stockholm really just provides additional packages and
-  # modules that don't fit upstream for one reason or another.
+  # The above base module is used together with a NixOS configuration to
+  # produce a system.  Notice how stockholm really just provides additional
+  # packages and modules on top of NixOS.  Some of this stuff might become
+  # useful to a broader audience, at which point it should probably be merged
+  # and pull-requested for inclusion into NixOS/nixpkgs.
   # TODO provide krebs lib, so modules don't have to import it awkwardly
   eval = config: import <nixpkgs/nixos/lib/eval-config.nix> {
     modules = [
-      stockholm
+      base-module
       config
     ];
   };
