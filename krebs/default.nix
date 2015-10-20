@@ -8,8 +8,8 @@ let out = {
     inherit deploy;
     inherit infest;
     inherit init;
-    inherit populate;
     inherit lib;
+    inherit nixos-install;
   };
 
   deploy =
@@ -24,7 +24,7 @@ let out = {
       set -efu
       (${populate args})
       ${rootssh target ''
-        ${install args}
+        ${nix-install args}
         ${config.krebs.build.profile}/bin/switch-to-configuration switch
       ''}
       echo OK
@@ -40,63 +40,14 @@ let out = {
       # krebs.infest
       set -efu
 
-      # XXX type -p is non-standard
-      #export RSYNC_RSH; RSYNC_RSH="$(type -p ssh) \
-      #  -o 'HostName $ {target.host.infest.addr}' \
-      #  -o 'Port $ {toString target.host.infest.port}' \
-      #"
-      #ssh() {
-      #  eval "$RSYNC_RSH \"\$@\""
-      #}
-
       ${rootssh target ''
         ${builtins.readFile ./4lib/infest/prepare.sh}
         ${builtins.readFile ./4lib/infest/install-nix.sh}
       ''}
 
-      (${populate args})
+      (${nixos-install args})
 
       ${rootssh target ''
-        export PATH; PATH=/root/.nix-profile/bin:$PATH
-
-        src=$(type -p nixos-install)
-        cat_src() {
-          sed < "$src" "$(
-            { sed < "$src" -n '
-                  /^if ! test -e "\$mountPoint\/\$NIXOS_CONFIG/,/^fi$/=
-                  /^nixpkgs=/=
-                  /^NIX_PATH=/,/^$/{/./=}
-
-                  # Disable: Copy the NixOS/Nixpkgs sources to the target as
-                  # the initial contents of the NixOS channel.
-                  /^srcs=/,/^ln -sfn /=
-                '
-            } | sed 's:$:s/^/#krebs#/:'
-          )"
-        }
-
-        # Location to insert install
-        i=$(sed -n '/^echo "building the system configuration/=' "$src")
-
-        {
-          cat_src | sed -n "1,$i{p}"
-          cat ${doc (install args)}
-          cat_src | sed -n "$i,\''${$i!p}"
-        } > nixos-install
-        chmod +x nixos-install
-
-        ## Wrap inserted install into chroot.
-        #nix_env=$(cat_src | sed -n '
-        #  s:.*\(/nix/store/[a-z0-9]*-nix-[0-9.]\+/bin/nix-env\).*:\1:p;T;q
-        #')
-        #echo nix-env is $nix_env
-        #sed -i '
-        #  s:^nix-env:chroot $mountPoint '"$nix_env"':
-        #' nixos-install
-
-        unset SSL_CERT_FILE
-        ./nixos-install
-
         ${builtins.readFile ./4lib/infest/finalize.sh}
       ''}
     '';
@@ -136,6 +87,50 @@ let out = {
       EOF
     '';
 
+  nixos-install =
+    { system ? current-host-name
+    , target ? system
+    }@args: let
+    in ''
+      #! /bin/sh
+      # ${current-date} ${current-user-name}@${current-host-name}
+      # krebs.nixos-install
+      (${populate args})
+
+      ${rootssh target ''
+        export PATH; PATH=/root/.nix-profile/bin:$PATH
+
+        src=$(type -p nixos-install)
+        cat_src() {
+          sed < "$src" "$(
+            { sed < "$src" -n '
+                  /^if ! test -e "\$mountPoint\/\$NIXOS_CONFIG/,/^fi$/=
+                  /^nixpkgs=/=
+                  /^NIX_PATH=/,/^$/{/./=}
+
+                  # Disable: Copy the NixOS/Nixpkgs sources to the target as
+                  # the initial contents of the NixOS channel.
+                  /^srcs=/,/^ln -sfn /=
+                '
+            } | sed 's:$:s/^/#krebs#/:'
+          )"
+        }
+
+        # Location to insert `nix-install`
+        i=$(sed -n '/^echo "building the system configuration/=' "$src")
+
+        {
+          cat_src | sed -n "1,$i{p}"
+          cat ${doc (nix-install args)}
+          cat_src | sed -n "$i,\''${$i!p}"
+        } > nixos-install
+        chmod +x nixos-install
+
+        unset SSL_CERT_FILE
+        ./nixos-install
+      ''}
+    '';
+
   lib = import ./4lib { lib = import <nixpkgs/lib>; } // rec {
     stockholm-path = ../.;
     nspath = ns: p: stockholm-path + "/${ns}/${p}";
@@ -153,7 +148,7 @@ let out = {
     stockholm.users.${current-user-name}.${system}.config
       or (abort "unknown system: ${system}, user: ${current-user-name}");
 
-  install =
+  nix-install =
     { system ? current-host-name
     , target ? system
     }:
