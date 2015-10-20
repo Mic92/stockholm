@@ -199,4 +199,7 @@
     tapButtons = false;
     twoFingerScroll = true;
   };
+
+  #for google hangout
+  users.extraUsers.gm.extraGroups = [ "audio" "video" ];
 }
