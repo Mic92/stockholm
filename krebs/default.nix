@@ -216,16 +216,13 @@ let out = {
               --delete-excluded \
               -vrLptgoD \
               ${config.path}/ \
-              ${target-url}
+              root@${target}:${config.target-path}
           '';
-          current-url = "${current-user-name}@${current-host.name}";
-          source-url = "file://${config.host.name}${config.path}";
-          target-url = "root@${target}:${config.target-path}";
         in
         if can-push then push-method else
-        throw
-          # /!\ revise this message when using more than just push-method
-          "No way to push ${source-url} from ${current-url} to ${target-url}";
+        let dir = "file://${config.host.name}${config.path}"; in
+        # /!\ revise this message when using more than just push-method
+        throw "No way to push ${dir} from ${current-host.name} to ${target}";
 
       methods.git = config:
         rootssh target ''
