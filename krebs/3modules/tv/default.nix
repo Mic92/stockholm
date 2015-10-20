@@ -1,6 +1,6 @@
 { lib, ... }:
 
-with import ../../4lib { inherit lib; };
+with lib;
 
 {
   dns.providers = {
