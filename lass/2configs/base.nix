@@ -96,6 +96,9 @@ with lib;
 
   #network
     iptables
+
+  #stuff for dl
+    aria2
   ];
 
   programs.bash = {
