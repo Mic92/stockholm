@@ -8,6 +8,7 @@ let out = {
     inherit deploy;
     inherit infest;
     inherit init;
+    inherit populate;
     inherit lib;
   };
 
