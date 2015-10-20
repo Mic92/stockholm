@@ -1,6 +1,7 @@
 { current-date
 , current-host-name
 , current-user-name
+, lib
 , stockholm
 }:
 
@@ -8,7 +9,6 @@ let out = {
     inherit deploy;
     inherit infest;
     inherit init;
-    inherit lib;
     inherit nixos-install;
   };
 
@@ -130,11 +130,6 @@ let out = {
         ./nixos-install
       ''}
     '';
-
-  lib = import ./4lib { lib = import <nixpkgs/lib>; } // rec {
-    stockholm-path = ../.;
-    nspath = ns: p: stockholm-path + "/${ns}/${p}";
-  };
 
   doc = s:
     let b = "EOF${builtins.hashString "sha256" s}"; in

@@ -1,20 +1,14 @@
 { lib, pkgs, ... }:
 
-let
-  krebs = import ../../krebs/4lib { inherit lib; };
-in
-
-with krebs;
-
-krebs // rec {
+lib // rec {
 
   git = import ./git.nix {
-    lib = krebs;
-    inherit pkgs;
+    inherit lib pkgs;
   };
 
   # "7.4.335" -> "74"
   majmin = with lib; x : concatStrings (take 2 (splitString "." x));
 
-  shell-escape = krebs.shell.escape;
+  # TODO deprecate shell-escape for lass
+  shell-escape = lib.shell.escape;
 }
