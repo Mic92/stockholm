@@ -3,6 +3,7 @@
 , current-user-name
 , lib
 , stockholm
+, StrictHostKeyChecking ? "yes"
 }:
 
 let out = {
@@ -260,7 +261,10 @@ let out = {
     in out;
 
   rootssh = target: script:
-    "ssh root@${target} -T ${doc ''
+    let
+      flags = "-o StrictHostKeyChecking=${StrictHostKeyChecking}";
+    in
+    "ssh ${flags} root@${target} -T ${doc ''
       set -efu
       ${script}
     ''}";

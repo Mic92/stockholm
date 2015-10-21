@@ -17,7 +17,8 @@
 { current-date ? abort "current-date not defined"
 , current-host-name ? abort "current-host-name not defined"
 , current-user-name ? builtins.getEnv "LOGNAME"
-}@current:
+, StrictHostKeyChecking ? "yes"
+}@args:
 
 let stockholm = {
     # The generated scripts to deploy (or infest) systems can be found in the
@@ -47,7 +48,7 @@ let stockholm = {
     inherit pkgs;
   };
 
-  krebs = import ./krebs (current // { inherit lib stockholm; });
+  krebs = import ./krebs (args // { inherit lib stockholm; });
 
   lib =
     let
