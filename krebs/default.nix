@@ -130,16 +130,24 @@ let out = {
         nix_env=$(cat_src | sed -n '
           s:.*\(/nix/store/[a-z0-9]*-nix-[0-9.]\+/bin/nix-env\).*:\1:p;T;q
         ')
-        coreutils=$(find /mnt/nix/store \
-            -mindepth 1 -maxdepth 1 -type d -name '*-coreutils-*' \
-          | head -n 1 | sed s:^/mnt::)
-        echo nix-env is $nix_env
+        echo "nix-env is $nix_env" >&2
+        getchrootpath() {(
+          name=$1
+          path=$(find /mnt/nix/store \
+              -mindepth 1 -maxdepth 1 -type d -name '*-'"$name"'-*' \
+            | head -n 1 | sed s:^/mnt::)
+          echo "$name is $path" >&2
+          echo "$path"
+        )}
+        cacert=$(getchrootpath cacert)
+        coreutils=$(getchrootpath coreutils)
+        env="$coreutils/bin/env \
+            SSL_CERT_FILE=$cacert/etc/ssl/certs/ca-bundle.crt"
         sed -i '
-          s:^NIX_PATH=:chroot $mountPoint '"$coreutils"'/bin/env &:
+          s:^NIX_PATH=:chroot $mountPoint '"$env"' &:
           s:^nix-env:'"$nix_env"':
         ' nixos-install
 
-        unset SSL_CERT_FILE
         ./nixos-install
       ''}
     '';
