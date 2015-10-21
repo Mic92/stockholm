@@ -9,6 +9,7 @@ let
     "test-centos7"
   ] (name: {
     inherit name;
+    cores = 1;
     nets = {
       retiolum = {
         addrs4 = ["10.243.111.111"];
