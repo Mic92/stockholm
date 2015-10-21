@@ -132,16 +132,20 @@ let out = {
           s:.*\(/nix/store/[a-z0-9]*-nix-[0-9.]\+/bin/nix-env\).*:\1:p;T;q
         ')
         echo "nix-env is $nix_env" >&2
-        getchrootpath() {(
+        findpkg() {(
           name=$1
-          path=$(find /mnt/nix/store \
+          path=$(find /nix/store \
               -mindepth 1 -maxdepth 1 -type d -name '*-'"$name"'-*' \
             | head -n 1 | sed s:^/mnt::)
-          echo "$name is $path" >&2
-          echo "$path"
+          if echo "$path" | grep .; then
+            echo "$name is $path" >&2
+          else
+            echo "Error: package not found: $name" >&2
+            exit 1
+          fi
         )}
-        cacert=$(getchrootpath cacert)
-        coreutils=$(getchrootpath coreutils)
+        cacert=$(findpkg cacert)
+        coreutils=$(findpkg coreutils)
         env="$coreutils/bin/env \
             SSL_CERT_FILE=$cacert/etc/ssl/certs/ca-bundle.crt"
         sed -i '
