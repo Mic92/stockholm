@@ -146,8 +146,8 @@ let out = {
         )}
         cacert=$(findpkg cacert)
         coreutils=$(findpkg coreutils)
-        env="$coreutils/bin/env \
-            SSL_CERT_FILE=$cacert/etc/ssl/certs/ca-bundle.crt"
+        cp "$cacert"/etc/ssl/certs/ca-bundle.crt /mnt/root/SSL_CERT_FILE
+        env="$coreutils/bin/env SSL_CERT_FILE=/root/SSL_CERT_FILE"
         sed -i '
           s:^NIX_PATH=:chroot $mountPoint '"$env"' &:
           s:^nix-env:'"$nix_env"':
