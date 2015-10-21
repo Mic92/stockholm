@@ -126,6 +126,16 @@ let out = {
         } > nixos-install
         chmod +x nixos-install
 
+        # Wrap inserted nix-install into chroot.
+        nix_env=$(cat_src | sed -n '
+          s:.*\(/nix/store/[a-z0-9]*-nix-[0-9.]\+/bin/nix-env\).*:\1:p;T;q
+        ')
+        echo nix-env is $nix_env
+        sed -i '
+          s:^NIX_PATH=:chroot $mountPoint /usr/bin/env &:
+          s:^nix-env:'"$nix_env"':
+        ' nixos-install
+
         unset SSL_CERT_FILE
         ./nixos-install
       ''}
