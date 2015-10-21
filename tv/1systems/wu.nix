@@ -10,8 +10,11 @@ with lib;
 
   krebs.build.source = {
     git.nixpkgs = {
-      url = https://github.com/NixOS/nixpkgs;
-      rev = "e916273209560b302ab231606babf5ce1c481f08";
+      #url = https://github.com/NixOS/nixpkgs;
+      #rev = "f77bf46c1e705934a00c52d90cc62a76fbb1f6b5";
+      # Revert "rxvt_unicode: add patch to fix Shift+PgUp/PgDown bug"
+      url = https://github.com/4z3/nixpkgs;
+      rev = "9048637";
     };
     dir.secrets = {
       host = config.krebs.hosts.wu;
