@@ -36,7 +36,7 @@ let
           type = with types; listOf (attrsOf str);
         };
         extraConfig = mkOption {
-          type = with types; str;
+          type = with types; string;
           default = "";
         };
       };
