@@ -65,7 +65,7 @@ with lib;
       dc = "tv"; #dc = "cac";
       nets = rec {
         internet = {
-          addrs4 = ["104.233.84.215"];
+          addrs4 = ["104.167.114.142"];
           aliases = [
             "mkdir.internet"
           ];
