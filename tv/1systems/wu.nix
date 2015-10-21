@@ -40,7 +40,6 @@ with lib;
 
         # stockholm
         genid
-        git
         gnumake
         hashPassword
         lentil
