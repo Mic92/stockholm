@@ -163,10 +163,11 @@ with lib;
       dc = "makefu"; #dc = "cac";
       extraZones = {
         "krebsco.de" = ''
-          wry            IN A ${head nets.internet.addrs4}
-          io             IN NS     wry.krebsco.de.
-          graphs         IN A ${head nets.internet.addrs4}
-          tinc           IN A ${head nets.internet.addrs4}
+          wry            IN A  ${head nets.internet.addrs4}
+          io             IN NS wry.krebsco.de.
+          graphs         IN A  ${head nets.internet.addrs4}
+          paste       60 IN A  ${head nets.internet.addrs4}
+          tinc           IN A  ${head nets.internet.addrs4}
           '';
       };
       nets = rec {
@@ -174,6 +175,7 @@ with lib;
           addrs4 = ["104.233.87.86"];
           aliases = [
             "wry.internet"
+            "paste.internet"
           ];
         };
         retiolum = {
@@ -182,6 +184,8 @@ with lib;
           addrs6 = ["42:6e1e:cc8a:7cef:827:f938:8c64:baad"];
           aliases = [
             "graphs.wry.retiolum"
+            "paste.wry.retiolum"
+            "paste.retiolum"
             "wry.retiolum"
           ];
           tinc.pubkey = ''
@@ -210,8 +214,7 @@ with lib;
         "krebsco.de" = ''
           omo               IN A      ${head nets.internet.addrs4}
           euer              IN A      ${head nets.internet.addrs4}
-          gum               IN A      ${head nets.internet.addrs4}
-          paste             IN A      ${head nets.internet.addrs4}'';
+          gum               IN A      ${head nets.internet.addrs4} '';
       };
       nets = {
         internet = {

@@ -16,6 +16,14 @@ let
         description = "hostname which serves tinc boot";
         default = "tinc.krebsco.de" ;
     };
+    listen = mkOption {
+        type = with types; listOf str;
+        description = ''Addresses to listen on (nginx-syntax).
+        ssl will be configured, http will be redirected to ssl.
+        Make sure to have at least 1 ssl port configured.
+        '';
+        default = [ "80" "443 ssl" ] ;
+    };
     ssl_certificate_key = mkOption {
         type = types.str;
         description = "Certificate key to use for ssl";
@@ -33,19 +41,17 @@ let
 
   imp = {
     krebs.nginx.servers = assert config.krebs.nginx.enable; {
-      retiolum-boot-redir = {
-        server-names = singleton cfg.hostname;
-        extraConfig = ''
-          return 301 https://$server_name$request_uri;
-        '';
-        locations = [];
-      };
       retiolum-boot-ssl = {
         server-names = singleton cfg.hostname;
-        listen = "443 ssl";
+        listen = cfg.listen;
         extraConfig = ''
           ssl_certificate ${cfg.ssl_certificate};
           ssl_certificate_key ${cfg.ssl_certificate_key};
+
+          if ($scheme = http){
+            return 301 https://$server_name$request_uri;
+          }
+
           root ${pkgs.retiolum-bootstrap};
           try_files $uri $uri/retiolum.sh;
         '';
