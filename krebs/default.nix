@@ -130,9 +130,12 @@ let out = {
         nix_env=$(cat_src | sed -n '
           s:.*\(/nix/store/[a-z0-9]*-nix-[0-9.]\+/bin/nix-env\).*:\1:p;T;q
         ')
+        coreutils=$(find /mnt/nix/store \
+            -mindepth 1 -maxdepth 1 -type d -name '*-coreutils-*' \
+          | head -n 1 | sed s:^/mnt::)
         echo nix-env is $nix_env
         sed -i '
-          s:^NIX_PATH=:chroot $mountPoint /usr/bin/env &:
+          s:^NIX_PATH=:chroot $mountPoint '"$coreutils"'/bin/env &:
           s:^nix-env:'"$nix_env"':
         ' nixos-install
 
