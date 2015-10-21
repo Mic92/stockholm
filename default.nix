@@ -44,7 +44,7 @@ let stockholm = {
     # Additionally, output lib and pkgs for easy access from the shell.
     # Notice how we're evaluating just the base module to obtain pkgs.
     inherit lib;
-    inherit (eval {}) pkgs;
+    inherit pkgs;
   };
 
   krebs = import ./krebs (current // { inherit lib stockholm; });
@@ -61,6 +61,8 @@ let stockholm = {
       stockholm-path = ./.;
       nspath = ns: p: stockholm-path + "/${ns}/${p}";
     };
+
+  inherit (eval {}) pkgs;
 
   # Path resolvers for common and individual files.
   # Example: `upath "3modules"` produces the current user's 3modules directory
