@@ -33,6 +33,20 @@ in {
     {
       sound.enable = false;
     }
+    {
+      imports = [
+        ../3modules/dnsmasq.nix
+      ];
+      lass.dnsmasq = {
+        enable = true;
+        config = ''
+          interface=retiolum
+        '';
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-i retiolum -p udp --dport 53"; target = "ACCEPT"; }
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.echelon;
