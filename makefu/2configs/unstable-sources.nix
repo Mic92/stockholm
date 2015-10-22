@@ -3,9 +3,8 @@
 {
   krebs.build.source = {
     git.nixpkgs = {
-      #url = https://github.com/NixOS/nixpkgs;
       url = https://github.com/makefu/nixpkgs;
-      rev = "78340b042463fd35caa587b0db2e400e5666dbe1"; # nixos-15.09 + cherry-picked iodine
+      rev = "984d33884d63d404ff2da76920b8bc8b15471552";
     };
 
     dir.secrets = {
