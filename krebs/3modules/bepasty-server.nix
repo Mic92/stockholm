@@ -10,7 +10,10 @@ let
 
   out = {
     options.krebs.bepasty = api;
-    config = mkIf cfg.enable (mkMerge [(mkIf cfg.serveNginx nginx-imp) imp ]) ;
+    config = mkIf cfg.enable (mkMerge [
+      (mkIf cfg.serveNginx nginx-imp)
+      imp
+    ]);
   };
 
   api = {
@@ -25,7 +28,7 @@ let
           type = with types; attrsOf unspecified;
           description = ''
             additional nginx configuration. see krebs.nginx for all options
-          '' ;
+          '';
         };
 
         secretKey = mkOption {
@@ -52,7 +55,7 @@ let
           description = ''
             Defaults to the new users home dir which defaults to
             /var/lib/bepasty-server/data
-            '';
+          '';
           default = "${config.users.extraUsers.bepasty.home}/data";
         };
 
@@ -65,14 +68,14 @@ let
               'myadminsecret': 'admin,list,create,read,delete',
             }
             MAX_ALLOWED_FILE_SIZE = 5 * 1000 * 1000
-            '';
+          '';
         };
 
         defaultPermissions = mkOption {
           # TODO: listOf str
           type = types.str;
           description = ''
-          default permissions for all unauthenticated users.
+            default permissions for all unauthenticated users.
           '';
           example = "read,create,delete";
           default = "read";
@@ -88,42 +91,42 @@ let
     # Configures systemd services for each configured server
     # environment.systemPackages = [ bepasty gunicorn gevent ];
     systemd.services = mapAttrs' (name: server:
-      nameValuePair ("bepasty-server-${name}")
-        ({
-          description = "Bepasty Server ${name}";
-          wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
-          restartIfChanged = true;
-          environment = {
-            BEPASTY_CONFIG = "${server.workDir}/bepasty-${name}.conf";
-            PYTHONPATH= "${bepasty}/lib/${python.libPrefix}/site-packages:${gevent}/lib/${python.libPrefix}/site-packages";
-          };
-          serviceConfig = {
-            Type = "simple";
-            PrivateTmp = true;
+      nameValuePair "bepasty-server-${name}" {
+        description = "Bepasty Server ${name}";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        restartIfChanged = true;
+        environment = {
+          BEPASTY_CONFIG = "${server.workDir}/bepasty-${name}.conf";
+          PYTHONPATH= "${bepasty}/lib/${python.libPrefix}/site-packages:${gevent}/lib/${python.libPrefix}/site-packages";
+        };
 
-            ExecStartPre = assert server.secretKey != ""; pkgs.writeScript "bepasty-server.${name}-init" ''
-              #!/bin/sh
-              mkdir -p "${server.dataDir}" "${server.workDir}"
-              chown bepasty:bepasty "${server.workDir}" "${server.dataDir}"
-              cat > "${server.workDir}/bepasty-${name}.conf" <<EOF
-              SITENAME="${name}"
-              STORAGE_FILESYSTEM_DIRECTORY="${server.dataDir}"
-              SECRET_KEY="${server.secretKey}"
-              DEFAULT_PERMISSIONS="${server.defaultPermissions}"
-              ${server.extraConfig}
-              EOF
-            '';
-            ExecStart = ''${gunicorn}/bin/gunicorn bepasty.wsgi --name ${name} \
-              -u bepasty \
-              -g bepasty \
-              --workers 3 --log-level=info \
-              --bind=unix:${server.workDir}/gunicorn-${name}.sock \
-              --pid ${server.workDir}/gunicorn-${name}.pid \
-              -k gevent
-            '';
-          };
-        })
+        serviceConfig = {
+          Type = "simple";
+          PrivateTmp = true;
+
+          ExecStartPre = assert server.secretKey != ""; pkgs.writeScript "bepasty-server.${name}-init" ''
+            #!/bin/sh
+            mkdir -p "${server.dataDir}" "${server.workDir}"
+            chown bepasty:bepasty "${server.workDir}" "${server.dataDir}"
+            cat > "${server.workDir}/bepasty-${name}.conf" <<EOF
+            SITENAME="${name}"
+            STORAGE_FILESYSTEM_DIRECTORY="${server.dataDir}"
+            SECRET_KEY="${server.secretKey}"
+            DEFAULT_PERMISSIONS="${server.defaultPermissions}"
+            ${server.extraConfig}
+            EOF
+          '';
+          ExecStart = ''${gunicorn}/bin/gunicorn bepasty.wsgi --name ${name} \
+            -u bepasty \
+            -g bepasty \
+            --workers 3 --log-level=info \
+            --bind=unix:${server.workDir}/gunicorn-${name}.sock \
+            --pid ${server.workDir}/gunicorn-${name}.pid \
+            -k gevent
+          '';
+        };
+      }
     ) cfg.servers;
 
     users.extraUsers.bepasty = {
@@ -137,8 +140,8 @@ let
   };
 
   nginx-imp = {
-    assertions = [ { assertion = config.krebs.nginx.enable;
-                      message = "krebs.nginx.enable must be true"; }];
+    assertions = [{ assertion = config.krebs.nginx.enable;
+                     message = "krebs.nginx.enable must be true"; }];
 
     krebs.nginx.servers = mapAttrs' (name: server:
       nameValuePair("bepasty-server-${name}")
@@ -147,18 +150,15 @@ let
           client_max_body_size 32M;
           '';
         locations = [
-          (nameValuePair ("/")
-          (''
+          (nameValuePair "/" ''
             proxy_set_header Host $http_host;
             proxy_pass http://unix:${server.workDir}/gunicorn-${name}.sock;
-          ''))
-          (nameValuePair ("/static/")
-          (''
+           '')
+          (nameValuePair "/static/" ''
             alias ${bepasty}/lib/${python.libPrefix}/site-packages/bepasty/static/;
-          ''))
+          '')
           ];
-      }])
-    ) cfg.servers ;
+      }])) cfg.servers ;
   };
 in
 out

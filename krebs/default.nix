@@ -3,6 +3,7 @@
 , current-user-name
 , lib
 , stockholm
+, StrictHostKeyChecking ? "yes"
 }:
 
 let out = {
@@ -131,18 +132,22 @@ let out = {
           s:.*\(/nix/store/[a-z0-9]*-nix-[0-9.]\+/bin/nix-env\).*:\1:p;T;q
         ')
         echo "nix-env is $nix_env" >&2
-        getchrootpath() {(
+        findpkg() {(
           name=$1
-          path=$(find /mnt/nix/store \
+          path=$(find /nix/store \
               -mindepth 1 -maxdepth 1 -type d -name '*-'"$name"'-*' \
             | head -n 1 | sed s:^/mnt::)
-          echo "$name is $path" >&2
-          echo "$path"
+          if echo "$path" | grep .; then
+            echo "$name is $path" >&2
+          else
+            echo "Error: package not found: $name" >&2
+            exit 1
+          fi
         )}
-        cacert=$(getchrootpath cacert)
-        coreutils=$(getchrootpath coreutils)
-        env="$coreutils/bin/env \
-            SSL_CERT_FILE=$cacert/etc/ssl/certs/ca-bundle.crt"
+        cacert=$(findpkg cacert)
+        coreutils=$(findpkg coreutils)
+        cp "$cacert"/etc/ssl/certs/ca-bundle.crt /mnt/root/SSL_CERT_FILE
+        env="$coreutils/bin/env SSL_CERT_FILE=/root/SSL_CERT_FILE"
         sed -i '
           s:^NIX_PATH=:chroot $mountPoint '"$env"' &:
           s:^nix-env:'"$nix_env"':
@@ -260,7 +265,10 @@ let out = {
     in out;
 
   rootssh = target: script:
-    "ssh root@${target} -T ${doc ''
+    let
+      flags = "-o StrictHostKeyChecking=${StrictHostKeyChecking}";
+    in
+    "ssh ${flags} root@${target} -T ${doc ''
       set -efu
       ${script}
     ''}";

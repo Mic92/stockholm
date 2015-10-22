@@ -17,7 +17,8 @@
 { current-date ? abort "current-date not defined"
 , current-host-name ? abort "current-host-name not defined"
 , current-user-name ? builtins.getEnv "LOGNAME"
-}@current:
+, StrictHostKeyChecking ? "yes"
+}@args:
 
 let stockholm = {
     # The generated scripts to deploy (or infest) systems can be found in the
@@ -44,10 +45,10 @@ let stockholm = {
     # Additionally, output lib and pkgs for easy access from the shell.
     # Notice how we're evaluating just the base module to obtain pkgs.
     inherit lib;
-    inherit (eval {}) pkgs;
+    inherit pkgs;
   };
 
-  krebs = import ./krebs (current // { inherit lib stockholm; });
+  krebs = import ./krebs (args // { inherit lib stockholm; });
 
   lib =
     let
@@ -61,6 +62,8 @@ let stockholm = {
       stockholm-path = ./.;
       nspath = ns: p: stockholm-path + "/${ns}/${p}";
     };
+
+  inherit (eval {}) pkgs;
 
   # Path resolvers for common and individual files.
   # Example: `upath "3modules"` produces the current user's 3modules directory

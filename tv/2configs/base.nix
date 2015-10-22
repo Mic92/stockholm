@@ -15,6 +15,12 @@ in
 
   imports = [
     {
+      # stockholm dependencies
+      environment.systemPackages = with pkgs; [
+        git
+      ];
+    }
+    {
       # TODO never put hashedPassword into the store
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })

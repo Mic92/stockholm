@@ -64,27 +64,24 @@ with lib;
   ];
 
   boot.initrd.luks = {
-    cryptoModules = [ "aes" "sha1" "xts" ];
+    cryptoModules = [ "aes" "sha512" "xts" ];
     devices = [
-      {
-        name = "luks1";
-        device = "/dev/disk/by-uuid/cac73902-1023-4906-8e95-3a8b245337d4";
-      }
+      { name = "luks1"; device = "/dev/sda2"; }
     ];
   };
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/de4780fc-0473-4708-81df-299b7383274c";
+    { device = "/dev/mapper/nomic1-root";
       fsType = "btrfs";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/be3a1d80-3157-4d7c-86cc-ef01b64eff5e";
+    { device = "/dev/sda1";
       fsType = "ext4";
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/9db9c8ff-51da-4cbd-9f0a-0cd3333bbaff";
+    { device = "/dev/mapper/nomic1-home";
       fsType = "btrfs";
     };
 
