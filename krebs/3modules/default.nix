@@ -6,6 +6,7 @@ let
 
   out = {
     imports = [
+      ./bepasty-server.nix
       ./build.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
