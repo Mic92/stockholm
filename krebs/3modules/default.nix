@@ -18,6 +18,7 @@ let
       ./retiolum-bootstrap.nix
       ./realwallpaper.nix
       ./retiolum.nix
+      ./tinc_graphs.nix
       ./urlwatch.nix
     ];
     options.krebs = api;

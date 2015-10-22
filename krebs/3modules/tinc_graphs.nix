@@ -2,12 +2,12 @@
 
 with lib;
 let
-  cfg = config.makefu.tinc_graphs;
+  cfg = config.krebs.tinc_graphs;
   internal_dir = "${cfg.workingDir}/internal";
   external_dir = "${cfg.workingDir}/external";
 
   out = {
-    options.makefu.tinc_graphs = api;
+    options.krebs.tinc_graphs = api;
     config = mkIf cfg.enable imp ;
   };
 
