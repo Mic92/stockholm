@@ -105,10 +105,14 @@ let
 
       # Implements environment.etc."zones/<zone-name>"
       environment.etc = let
+        stripEmptyLines = s: concatStringsSep "\n"
+          (remove "\n" (remove "" (splitString "\n" s)));
         all-zones = foldAttrs (sum: current: sum + "\n" +current ) ""
-          ([cfg.zone-head-config] ++ combined-hosts) ;
+          ([cfg.zone-head-config] ++ combined-hosts);
         combined-hosts = (mapAttrsToList (name: value: value.extraZones)  cfg.hosts );
-      in lib.mapAttrs' (name: value: nameValuePair (("zones/" + name)) ({ text=value; })) all-zones;
+      in lib.mapAttrs' (name: value: nameValuePair
+        ("zones/" + name)
+        { text=(stripEmptyLines value); }) all-zones;
 
       krebs.exim-smarthost.internet-aliases = let
         format = from: to:
