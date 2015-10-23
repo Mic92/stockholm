@@ -17,7 +17,8 @@
 { current-date ? abort "current-date not defined"
 , current-host-name ? abort "current-host-name not defined"
 , current-user-name ? builtins.getEnv "LOGNAME"
-}@current:
+, StrictHostKeyChecking ? "yes"
+}@args:
 
 let stockholm = {
     # The generated scripts to deploy (or infest) systems can be found in the
@@ -44,11 +45,25 @@ let stockholm = {
     # Additionally, output lib and pkgs for easy access from the shell.
     # Notice how we're evaluating just the base module to obtain pkgs.
     inherit lib;
-    inherit (eval {}) pkgs;
+    inherit pkgs;
   };
 
-  krebs = import ./krebs (current // { inherit stockholm; });
-  inherit (krebs) lib;
+  krebs = import ./krebs (args // { inherit lib stockholm; });
+
+  lib =
+    let
+      lib = import <nixpkgs/lib>;
+      klib = import ./krebs/4lib { inherit lib; };
+      #ulib = import (./. + "/${current-user-name}/4lib") { lib = lib // klib; };
+      ulib = {}; # TODO
+    in
+    builtins // lib // klib // ulib // rec {
+      # TODO move this stuff
+      stockholm-path = ./.;
+      nspath = ns: p: stockholm-path + "/${ns}/${p}";
+    };
+
+  inherit (eval {}) pkgs;
 
   # Path resolvers for common and individual files.
   # Example: `upath "3modules"` produces the current user's 3modules directory
@@ -65,8 +80,8 @@ let stockholm = {
       let
         # Notice the ordering.  Krebs packages can only depend on Nixpkgs,
         # whereas user packages additionally can depend on krebs packages.
-        kpkgs = import (kpath "5pkgs") { inherit pkgs; };
-        upkgs = import (upath "5pkgs") { pkgs = pkgs // kpkgs; };
+        kpkgs = import (kpath "5pkgs") { inherit lib pkgs; };
+        upkgs = import (upath "5pkgs") { inherit lib; pkgs = pkgs // kpkgs; };
       in
       kpkgs // upkgs;
   };
@@ -76,8 +91,10 @@ let stockholm = {
   # packages and modules on top of NixOS.  Some of this stuff might become
   # useful to a broader audience, at which point it should probably be merged
   # and pull-requested for inclusion into NixOS/nixpkgs.
-  # TODO provide krebs lib, so modules don't have to import it awkwardly
   eval = config: import <nixpkgs/nixos/lib/eval-config.nix> {
+    specialArgs = {
+      inherit lib;
+    };
     modules = [
       base-module
       config

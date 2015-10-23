@@ -4,17 +4,13 @@ let
   inherit (import ../4lib { inherit pkgs lib; }) getDefaultGateway;
   inherit (lib) head;
 
-  ip = (head config.krebs.build.host.nets.internet.addrs4);
+  ip = "168.235.148.52";
 in {
   imports = [
-    ../2configs/os-templates/CAC-CentOS-7-64bit.nix
     ../2configs/base.nix
-    ../2configs/retiolum.nix
-    ../2configs/fastpoke-pages.nix
-    ../2configs/git.nix
-    ../2configs/realwallpaper.nix
+    ../2configs/os-templates/CAC-CentOS-6.5-64bit.nix
     {
-      networking.interfaces.enp2s1.ip4 = [
+      networking.interfaces.enp11s0.ip4 = [
         {
           address = ip;
           prefixLength = 24;
@@ -24,12 +20,11 @@ in {
       networking.nameservers = [
         "8.8.8.8"
       ];
-
     }
     {
       sound.enable = false;
     }
   ];
 
-  krebs.build.host = config.krebs.hosts.cloudkrebs;
+  krebs.build.host = config.krebs.hosts.test-centos6;
 }

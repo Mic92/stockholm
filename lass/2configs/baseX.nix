@@ -5,6 +5,7 @@ let
 in {
   imports = [
     ./base.nix
+    ./urxvt.nix
   ];
 
   time.timeZone = "Europe/Berlin";
@@ -30,6 +31,7 @@ in {
     powertop
     sxiv
     much
+    push
 
   #window manager stuff
     haskellPackages.xmobar

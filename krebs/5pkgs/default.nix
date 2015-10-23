@@ -1,7 +1,6 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
-with import ../4lib { inherit (pkgs) lib; };
-
+with lib;
 let
   subdirs = mapAttrs (_: flip pkgs.callPackage {}) (subdirsOf ./.);
   pkgs' = pkgs // subdirs;

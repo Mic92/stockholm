@@ -18,6 +18,13 @@ prepare() {(
         esac
         ;;
     esac
+  elif test -e /etc/centos-release; then
+    case $(cat /etc/centos-release) in
+      'CentOS release 6.5 (Final)')
+        prepare_centos "$@"
+        exit
+        ;;
+    esac
   fi
   echo "$0 prepare: unknown OS" >&2
   exit -1

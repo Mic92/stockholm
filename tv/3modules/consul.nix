@@ -5,7 +5,7 @@
 # TODO consul-bootstrap HOST  that actually does is
 # TODO tools to inspect state of a cluster in outage state
 
-with import ../4lib { inherit lib pkgs; };
+with lib;
 let
   cfg = config.tv.consul;
 

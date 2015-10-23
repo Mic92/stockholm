@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../2configs/desktop-base.nix
+    ../2configs/baseX.nix
     ../2configs/programs.nix
     ../2configs/bitcoin.nix
     ../2configs/browsers.nix
@@ -10,7 +10,6 @@
     ../2configs/pass.nix
     ../2configs/virtualbox.nix
     ../2configs/elster.nix
-    ../2configs/urxvt.nix
     ../2configs/steam.nix
     ../2configs/wine.nix
     ../2configs/texlive.nix
@@ -18,7 +17,6 @@
     #../2configs/ircd.nix
     ../2configs/chromium-patched.nix
     ../2configs/git.nix
-    #../../2configs/tv/synaptics.nix
     ../2configs/retiolum.nix
     ../2configs/wordpress.nix
     ../2configs/bitlbee.nix
@@ -26,22 +24,8 @@
     ../2configs/skype.nix
   ];
 
-  krebs.build = {
-    user = config.krebs.users.lass;
-    host = config.krebs.hosts.mors;
-    source = {
-      dir.secrets = {
-        host = config.krebs.hosts.mors;
-        path = "/home/lass/secrets/${config.krebs.build.host.name}";
-      };
-      dir.stockholm = {
-        host = config.krebs.hosts.mors;
-        path = "/home/lass/dev/stockholm";
-      };
-    };
-  };
+  krebs.build.host = config.krebs.hosts.mors;
 
-  networking.hostName = "mors";
   networking.wireless.enable = true;
 
   networking.extraHosts = ''
@@ -51,8 +35,6 @@
     10.243.206.102 ubikmedia.de
     10.243.206.102 apanowicz.de
   '';
-
-  nix.maxJobs = 4;
 
   hardware.enableAllFirmware = true;
   nixpkgs.config.allowUnfree = true;
@@ -159,11 +141,6 @@
     emulateWheel = true;
   };
 
-  #system.activationScripts.trackpoint = ''
-  #  echo 0 > '/sys/devices/platform/i8042/serio1/serio2/speed'
-  #  echo 220 > '/sys/devices/platform/i8042/serio1/serio2/sensitivity'
-  #'';
-
   services.xserver = {
     videoDriver = "intel";
     vaapiDrivers = [ pkgs.vaapiIntel ];
@@ -210,9 +187,19 @@
       ];
     };
   };
+
   #touchpad config
   services.xserver.synaptics = {
     enable = true;
+    accelFactor = "0.035";
+    additionalOptions = ''
+      Option "FingerHigh" "60"
+      Option "FingerLow"  "60"
+    '';
     tapButtons = false;
+    twoFingerScroll = true;
   };
+
+  #for google hangout
+  users.extraUsers.gm.extraGroups = [ "audio" "video" ];
 }

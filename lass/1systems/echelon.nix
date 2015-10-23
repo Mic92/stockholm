@@ -31,26 +31,23 @@ in {
 
     }
     {
-      nix.maxJobs = 1;
       sound.enable = false;
+    }
+    {
+      imports = [
+        ../3modules/dnsmasq.nix
+      ];
+      lass.dnsmasq = {
+        enable = true;
+        config = ''
+          interface=retiolum
+        '';
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-i retiolum -p udp --dport 53"; target = "ACCEPT"; }
+      ];
     }
   ];
 
-  krebs.build = {
-    user = config.krebs.users.lass;
-    host = config.krebs.hosts.echelon;
-    source = {
-      dir.secrets = {
-        host = config.krebs.hosts.mors;
-        path = "/home/lass/secrets/${config.krebs.build.host.name}";
-      };
-      dir.stockholm = {
-        host = config.krebs.hosts.mors;
-        path = "/home/lass/dev/stockholm";
-      };
-    };
-  };
-
-  networking.hostName = config.krebs.build.host.name;
-
+  krebs.build.host = config.krebs.hosts.echelon;
 }

@@ -3,11 +3,10 @@
 with builtins;
 {
   imports = [
-    ../2configs/desktop-base.nix
+    ../2configs/baseX.nix
     ../2configs/browsers.nix
     ../2configs/games.nix
     ../2configs/pass.nix
-    ../2configs/urxvt.nix
     ../2configs/bird.nix
     ../2configs/git.nix
     ../2configs/chromium-patched.nix
@@ -25,26 +24,9 @@ with builtins;
     }
   ];
 
-  krebs.build = {
-    user = config.krebs.users.lass;
-    target = "root@uriel";
-    host = config.krebs.hosts.uriel;
-    source = {
-      dir.secrets = {
-        host = config.krebs.hosts.mors;
-        path = "/home/lass/secrets/${config.krebs.build.host.name}";
-      };
-      dir.stockholm = {
-        host = config.krebs.hosts.mors;
-        path = "/home/lass/dev/stockholm";
-      };
-    };
-  };
-
-  networking.hostName = "uriel";
+  krebs.build.host = config.krebs.hosts.uriel;
 
   networking.wireless.enable = true;
-  nix.maxJobs = 2;
 
   hardware.enableAllFirmware = true;
   nixpkgs.config.allowUnfree = true;
@@ -65,8 +47,6 @@ with builtins;
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
     #kernelModules = [ "kvm-intel" "msr" ];
     kernelModules = [ "msr" ];
-    extraModprobeConfig = ''
-    '';
   };
   fileSystems = {
     "/" = {
@@ -93,11 +73,4 @@ with builtins;
       Option "FingerLow"  "60"
     '';
   };
-
-  environment.systemPackages = with pkgs; [
-  ];
-
-  #for google hangout
-
-  users.extraUsers.google.extraGroups = [ "audio" "video" ];
 }
