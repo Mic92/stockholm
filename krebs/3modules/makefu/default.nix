@@ -91,7 +91,8 @@ with import ../../4lib { inherit lib; };
       extraZones = {
         "krebsco.de" = ''
           mediengewitter    IN A      ${head nets.internet.addrs4}
-          flap              IN A      ${head nets.internet.addrs4}'';
+          flap              IN A      ${head nets.internet.addrs4}
+        '';
       };
       nets = {
         internet = {
@@ -125,11 +126,11 @@ with import ../../4lib { inherit lib; };
 
       extraZones = {
         "krebsco.de" = ''
-                            IN MX 10  mx42
           euer              IN MX 1   aspmx.l.google.com.
           pigstarter        IN A      ${head nets.internet.addrs4}
           gold              IN A      ${head nets.internet.addrs4}
-          boot              IN A      ${head nets.internet.addrs4}'';
+          boot              IN A      ${head nets.internet.addrs4}
+        '';
       };
       nets = {
         internet = {
@@ -168,7 +169,7 @@ with import ../../4lib { inherit lib; };
           graphs         IN A  ${head nets.internet.addrs4}
           paste       60 IN A  ${head nets.internet.addrs4}
           tinc           IN A  ${head nets.internet.addrs4}
-          '';
+        '';
       };
       nets = rec {
         internet = {
@@ -214,7 +215,8 @@ with import ../../4lib { inherit lib; };
         "krebsco.de" = ''
           omo               IN A      ${head nets.internet.addrs4}
           euer              IN A      ${head nets.internet.addrs4}
-          gum               IN A      ${head nets.internet.addrs4} '';
+          gum               IN A      ${head nets.internet.addrs4}
+        '';
       };
       nets = {
         internet = {
