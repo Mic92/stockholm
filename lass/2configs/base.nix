@@ -50,7 +50,7 @@ with lib;
       source = {
         git.nixpkgs = {
           url = https://github.com/Lassulus/nixpkgs;
-          rev = "33bdc011f5360288cd10b9fda90da2950442b2ab";
+          rev = "0da65a5324b1e25d323f982bb0ef2c7fcab9f057";
         };
         dir.secrets = {
           host = config.krebs.hosts.mors;
