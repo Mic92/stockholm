@@ -80,7 +80,7 @@ let
     export DISPLAY; DISPLAY=:${toString config.services.xserver.display}
     export PATH; PATH=${makeSearchPath "bin" [
       pkgs.rxvt_unicode
-    ]}
+    ]}:/var/setuid-wrappers
     settle() {(
       # Use PATH for a clean journal
       command=''${1##*/}
