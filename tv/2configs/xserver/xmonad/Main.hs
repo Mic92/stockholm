@@ -38,7 +38,7 @@ myTerm :: String
 myTerm = "urxvtc"
 
 myRootTerm :: String
-myRootTerm = "XENVIRONMENT=\"$HOME/.Xdefaults/root-urxvt\" urxvtc -e su -"
+myRootTerm = "urxvtc -name root-urxvt -e su -"
 
 -- TODO execRootTerm = exec (shlex "urxvtc -e su -")
 --    [ ("XENVIRONMENT", HOME ++ "/.Xdefaults/root-urxvt") ]
