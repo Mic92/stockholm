@@ -29,8 +29,7 @@ with lib;
     #../2configs/consul-client.nix
     ../2configs/git.nix
     ../2configs/mail-client.nix
-    ../2configs/xserver.nix
-    ../2configs/synaptics.nix # TODO w110er if xserver is enabled
+    ../2configs/xserver
     ../2configs/test.nix
     {
       environment.systemPackages = with pkgs; [
@@ -41,12 +40,6 @@ with lib;
         hashPassword
         lentil
         parallel
-        (pkgs.writeScriptBin "ff" ''
-          #! ${pkgs.bash}/bin/bash
-          exec sudo -u ff -i <<EOF
-          exec ${pkgs.firefoxWrapper}/bin/firefox $(printf " %q" "$@")
-          EOF
-        '')
         (pkgs.writeScriptBin "im" ''
           #! ${pkgs.bash}/bin/bash
           export PATH=${makeSearchPath "bin" (with pkgs; [
@@ -70,6 +63,7 @@ with lib;
         bind # dig
         cac
         dic
+        ff
         file
         get
         gitAndTools.qgit
