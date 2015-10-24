@@ -203,11 +203,7 @@ pkgs.writeText "Xresources" ''
   ! ref https://github.com/muennich/urxvt-perls
   URxvt*perl-ext: default,url-select
   URxvt*keysym.M-u: perl:url-select:select_next
-  !URxvt*url-select.launcher: /home/tv/free/firefox -new-tab
-  ! 2014-05-12 nix:
-  !URxvt.url-select.launcher:  /home/tv/bin/ff -new-tab 
-  ! 2015-07-26 stockholm:
-  URxvt*url-select.launcher: ff -new-tab 
+  URxvt*url-select.launcher: ${pkgs.ff}/bin/ff -new-tab
   URxvt*url-select.underline: true
   URxvt*colorUL: #4682B4
   URxvt.perl-lib: ${pkgs.urxvt_perls}/lib/urxvt/perl
