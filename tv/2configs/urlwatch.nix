@@ -47,6 +47,10 @@
 
       # ref <stockholm/krebs/3modules>, services.openssh.knownHosts.github*
       https://help.github.com/articles/what-ip-addresses-does-github-use-that-i-should-whitelist/
+
+      # <stockholm/tv/2configs/xserver/xserver.conf.nix>
+      # is derived from `configFile` in:
+      https://raw.githubusercontent.com/NixOS/nixpkgs/master/nixos/modules/services/x11/xserver.nix
     ];
   };
 }

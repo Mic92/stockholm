@@ -29,8 +29,7 @@ with lib;
     #../2configs/consul-client.nix
     ../2configs/git.nix
     ../2configs/mail-client.nix
-    ../2configs/xserver.nix
-    ../2configs/synaptics.nix # TODO w110er if xserver is enabled
+    ../2configs/xserver
     ../2configs/test.nix
     {
       environment.systemPackages = with pkgs; [

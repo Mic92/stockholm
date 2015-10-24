@@ -1,1 +1,0 @@
-import ./xmonad-tv.nix

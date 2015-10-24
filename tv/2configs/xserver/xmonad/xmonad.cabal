@@ -10,7 +10,6 @@ Executable xmonad
     base,
     containers,
     filepath,
-    scanner,
     X11,
     X11-xshape,
     xmonad,
