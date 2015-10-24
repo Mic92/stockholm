@@ -21,6 +21,7 @@ let
     bdt_pressemitteilungen|http://bundestag.de/service/rss/Bundestag_Presse.rss|#news #bundestag
     bdt_wd|http://bundestag.de/service/rss/Bundestag_WD.rss|#news #bundestag
     bitcoinpakistan|https://bitcoinspakistan.com/feed/|#news #financial
+    c|http://www.tempolimit-lichtgeschwindigkeit.de/news.xml|#news
     cancer|http://feeds.feedburner.com/ncinewsreleases?format=xml|#news
     carta|http://feeds2.feedburner.com/carta-standard-rss|#news
     catholic_news|http://feeds.feedburner.com/catholicnewsagency/dailynews|#news
