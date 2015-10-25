@@ -73,9 +73,7 @@ let
   };
 
   xmonad-pkg = pkgs.haskellPackages.callPackage xmonad-src {};
-  xmonad-src = pkgs.runCommand "xmonad-package" {} ''
-    ${pkgs.cabal2nix}/bin/cabal2nix ${./xmonad} > $out
-  '';
+  xmonad-src = pkgs.writeNixFromCabal "xmonad.nix" ./xmonad;
 
   xmonad-environment = {
     DISPLAY = ":${toString config.services.xserver.display}";
