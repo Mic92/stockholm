@@ -8,6 +8,7 @@ let
     imports = [
       ./bepasty-server.nix
       ./build.nix
+      ./current.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
       ./github-hosts-sync.nix
