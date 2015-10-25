@@ -1,11 +1,14 @@
 {-# LANGUAGE DeriveDataTypeable #-} -- for XS
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 
 module Main where
 
+import Control.Exception
+import Text.Read (readEither)
 import XMonad
-import System.Environment (getArgs)
+import System.Environment (getArgs, getEnv)
 import XMonad.Prompt (defaultXPConfig)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
@@ -51,6 +54,7 @@ main = getArgs >>= \case
 
 mainNoArgs :: IO ()
 mainNoArgs = do
+    workspaces0 <- getWorkspaces0
     xmonad
         -- $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "magenta", "-fg", "magenta", "-h", "2"], duration = 500000 }
         --                   urgencyConfig { remindWhen = Every 1 }
@@ -61,16 +65,7 @@ mainNoArgs = do
             { terminal          = myTerm
             , modMask           = mod4Mask
             , keys              = myKeys
-            , workspaces        =
-                [ "Dashboard" -- we start here
-                , "23"
-                , "cr"
-                , "ff"
-                , "hack"
-                , "im"
-                , "mail"
-                , "zalora", "zjournal", "zskype"
-                ]
+            , workspaces        = workspaces0
             , layoutHook        = smartBorders $ myLayout
             -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
             --, handleEventHook   = handleTimerEvent
@@ -84,6 +79,22 @@ mainNoArgs = do
     myLayout =
         (onWorkspace "im" $ reflectVert $ Mirror $ Tall 1 (3/100) (12/13))
         (FixedColumn 1 20 80 10 ||| Full)
+
+
+getWorkspaces0 :: IO [String]
+getWorkspaces0 =
+    try (getEnv "XMONAD_WORKSPACES0_FILE") >>= \case
+      Left e -> warn (displaySomeException e)
+      Right p -> try (readFile p) >>= \case
+        Left e -> warn (displaySomeException e)
+        Right x -> case readEither x of
+          Left e -> warn e
+          Right y -> return y
+  where
+    warn msg = putStrLn ("getWorkspaces0: " ++ msg) >> return []
+
+displaySomeException :: SomeException -> String
+displaySomeException = displayException
 
 
 spawnTermAt :: String -> X ()

@@ -78,6 +78,19 @@ let
   xmonad-environment = {
     DISPLAY = ":${toString config.services.xserver.display}";
     XMONAD_STATE = "/tmp/xmonad.state";
+
+    # XXX JSON is close enough :)
+    XMONAD_WORKSPACES0_FILE = pkgs.writeText "xmonad.workspaces0" (toJSON [
+      "Dashboard" # we start here
+      "23"
+      "cr"
+      "ff"
+      "hack"
+      "im"
+      "mail"
+      "stockholm"
+      "za" "zj" "zs"
+    ]);
   };
 
   xmonad-start = pkgs.writeScriptBin "xmonad" ''
