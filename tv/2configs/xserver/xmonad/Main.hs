@@ -1,9 +1,11 @@
 {-# LANGUAGE DeriveDataTypeable #-} -- for XS
+{-# LANGUAGE LambdaCase #-}
 
 
 module Main where
 
 import XMonad
+import System.Environment (getArgs)
 import XMonad.Prompt (defaultXPConfig)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
@@ -30,6 +32,7 @@ import XMonad.Layout.PerWorkspace (onWorkspace)
 import Util.Pager
 import Util.Rhombus
 import Util.Debunk
+import Util.Shutdown
 
 
 --data MyState = MyState deriving Typeable
@@ -48,11 +51,12 @@ myFont :: String
 myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
 
 main :: IO ()
-main = do
-    -- TODO exec (shlex "xrdb -merge" ++ [HOME ++ "/.Xresources"])
-    -- TODO exec (shlex "xsetroot -solid '#1c1c1c'")
-    --spawn "xrdb -merge \"$HOME/.Xresources\""
-    --spawn "xsetroot -solid '#1c1c1c'"
+main = getArgs >>= \case
+    ["--shutdown"] -> sendShutdownEvent
+    _ -> mainNoArgs
+
+mainNoArgs :: IO ()
+mainNoArgs = do
     xmonad
         -- $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "magenta", "-fg", "magenta", "-h", "2"], duration = 500000 }
         --                   urgencyConfig { remindWhen = Every 1 }
@@ -80,6 +84,7 @@ main = do
             , startupHook       = spawn "echo emit XMonadStartup"
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
+            , handleEventHook = handleShutdownEvent
             }
   where
     myLayout =
@@ -118,8 +123,7 @@ spawnTermAt _    = spawn myTerm
 
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf = Map.fromList $
-    [ ((_4C , xK_Delete ), spawn "make -C $HOME/.xmonad reload")
-    , ((_4  , xK_Escape ), spawn "/var/setuid-wrappers/slock")
+    [ ((_4  , xK_Escape ), spawn "/var/setuid-wrappers/slock")
     , ((_4S , xK_c      ), kill)
 
     , ((_4  , xK_x      ), chooseAction spawnTermAt)
