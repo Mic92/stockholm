@@ -44,11 +44,14 @@ let
     systemd.services.display-manager = mkForce {};
 
     services.xserver.enable = true;
+
     systemd.services.xmonad = {
       wantedBy = [ "multi-user.target" ];
       requires = [ "xserver.service" ];
+      environment = xmonad-environment;
       serviceConfig = {
-        ExecStart = "${xmonad}/bin/xmonad";
+        ExecStart = "${xmonad-start}/bin/xmonad";
+        ExecStop = "${xmonad-stop}/bin/xmonad-stop";
         User = user.name;
         WorkingDirectory = user.home;
       };
@@ -69,15 +72,30 @@ let
     };
   };
 
-  xmonad = let
-    pkg = pkgs.haskellPackages.callPackage src {};
-    src = pkgs.runCommand "xmonad-package" {} ''
-      ${pkgs.cabal2nix}/bin/cabal2nix ${./xmonad} > $out
-    '';
-  in pkgs.writeScriptBin "xmonad" ''
-    #! /bin/sh
+  xmonad-pkg = pkgs.haskellPackages.callPackage xmonad-src {};
+  xmonad-src = pkgs.writeNixFromCabal "xmonad.nix" ./xmonad;
+
+  xmonad-environment = {
+    DISPLAY = ":${toString config.services.xserver.display}";
+    XMONAD_STATE = "/tmp/xmonad.state";
+
+    # XXX JSON is close enough :)
+    XMONAD_WORKSPACES0_FILE = pkgs.writeText "xmonad.workspaces0" (toJSON [
+      "Dashboard" # we start here
+      "23"
+      "cr"
+      "ff"
+      "hack"
+      "im"
+      "mail"
+      "stockholm"
+      "za" "zj" "zs"
+    ]);
+  };
+
+  xmonad-start = pkgs.writeScriptBin "xmonad" ''
+    #! ${pkgs.bash}/bin/bash
     set -efu
-    export DISPLAY; DISPLAY=:${toString config.services.xserver.display}
     export PATH; PATH=${makeSearchPath "bin" [
       pkgs.rxvt_unicode
     ]}:/var/setuid-wrappers
@@ -93,7 +111,17 @@ let
     settle ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
     settle ${pkgs.xorg.xrdb}/bin/xrdb -merge ${import ./Xresources.nix args}
     settle ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c'
-    exec ${pkg}/bin/xmonad
+    if test -e "$XMONAD_STATE"; then
+      IFS=''$'\n'
+      exec ${xmonad-pkg}/bin/xmonad --resume $(< "$XMONAD_STATE")
+    else
+      exec ${xmonad-pkg}/bin/xmonad
+    fi
+  '';
+
+  xmonad-stop = pkgs.writeScriptBin "xmonad-stop" ''
+    #! /bin/sh
+    exec ${xmonad-pkg}/bin/xmonad --shutdown
   '';
 
   xserver-environment = {
@@ -103,7 +131,7 @@ let
       [ "${pkgs.xorg.libX11}/lib" "${pkgs.xorg.libXext}/lib" ]
       ++ concatLists (catAttrs "libPath" config.services.xserver.drivers));
   };
-      
+
   xserver = pkgs.writeScriptBin "xserver" ''
     #! /bin/sh
     set -efu
