@@ -29,13 +29,11 @@ with lib;
       rev = "e916273209560b302ab231606babf5ce1c481f08";
     };
     dir.secrets = {
-      # TODO use current-host-name to determine secrets host
-      host = config.krebs.hosts.wu;
+      host = config.krebs.current.host;
       path = "${getEnv "HOME"}/secrets/krebs/wolf";
     };
     dir.stockholm = {
-      # TODO use current-host-name to determine stockholm host
-      host = config.krebs.hosts.wu;
+      host = config.krebs.current.host;
       path = "${getEnv "HOME"}/stockholm";
     };
   };
