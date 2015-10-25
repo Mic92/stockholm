@@ -54,4 +54,8 @@ subdirs // rec {
     gcc -O -Wall -o "$exe" $src
     strip --strip-unneeded "$exe"
   '';
+
+  writeNixFromCabal = name: path: pkgs.runCommand name {} ''
+    ${pkgs.cabal2nix}/bin/cabal2nix ${path} > $out
+  '';
 }

@@ -31,8 +31,12 @@ let stockholm = {
   kpath = lib.nspath "krebs";
   upath = lib.nspath current-user-name;
 
-  base-module = {
+  base-module = { config, ... }: {
     imports = map (f: f "3modules") [ kpath upath ];
+
+    krebs.current.enable = true;
+    krebs.current.host = config.krebs.hosts.${current-host-name};
+    krebs.current.user = config.krebs.users.${current-user-name};
 
     nixpkgs.config.packageOverrides = pkgs:
       let

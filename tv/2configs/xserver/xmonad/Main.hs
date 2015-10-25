@@ -1,9 +1,14 @@
 {-# LANGUAGE DeriveDataTypeable #-} -- for XS
+{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 
 module Main where
 
+import Control.Exception
+import Text.Read (readEither)
 import XMonad
+import System.Environment (getArgs, getEnv)
 import XMonad.Prompt (defaultXPConfig)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
@@ -30,9 +35,8 @@ import XMonad.Layout.PerWorkspace (onWorkspace)
 import Util.Pager
 import Util.Rhombus
 import Util.Debunk
+import Util.Shutdown
 
-
---data MyState = MyState deriving Typeable
 
 myTerm :: String
 myTerm = "urxvtc"
@@ -40,19 +44,17 @@ myTerm = "urxvtc"
 myRootTerm :: String
 myRootTerm = "urxvtc -name root-urxvt -e su -"
 
--- TODO execRootTerm = exec (shlex "urxvtc -e su -")
---    [ ("XENVIRONMENT", HOME ++ "/.Xdefaults/root-urxvt") ]
-
-
 myFont :: String
 myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
 
 main :: IO ()
-main = do
-    -- TODO exec (shlex "xrdb -merge" ++ [HOME ++ "/.Xresources"])
-    -- TODO exec (shlex "xsetroot -solid '#1c1c1c'")
-    --spawn "xrdb -merge \"$HOME/.Xresources\""
-    --spawn "xsetroot -solid '#1c1c1c'"
+main = getArgs >>= \case
+    ["--shutdown"] -> sendShutdownEvent
+    _ -> mainNoArgs
+
+mainNoArgs :: IO ()
+mainNoArgs = do
+    workspaces0 <- getWorkspaces0
     xmonad
         -- $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "magenta", "-fg", "magenta", "-h", "2"], duration = 500000 }
         --                   urgencyConfig { remindWhen = Every 1 }
@@ -63,16 +65,7 @@ main = do
             { terminal          = myTerm
             , modMask           = mod4Mask
             , keys              = myKeys
-            , workspaces        =
-                [ "Dashboard" -- we start here
-                , "23"
-                , "cr"
-                , "ff"
-                , "hack"
-                , "im"
-                , "mail"
-                , "zalora", "zjournal", "zskype"
-                ]
+            , workspaces        = workspaces0
             , layoutHook        = smartBorders $ myLayout
             -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
             --, handleEventHook   = handleTimerEvent
@@ -80,11 +73,28 @@ main = do
             , startupHook       = spawn "echo emit XMonadStartup"
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
+            , handleEventHook = handleShutdownEvent
             }
   where
     myLayout =
         (onWorkspace "im" $ reflectVert $ Mirror $ Tall 1 (3/100) (12/13))
         (FixedColumn 1 20 80 10 ||| Full)
+
+
+getWorkspaces0 :: IO [String]
+getWorkspaces0 =
+    try (getEnv "XMONAD_WORKSPACES0_FILE") >>= \case
+      Left e -> warn (displaySomeException e)
+      Right p -> try (readFile p) >>= \case
+        Left e -> warn (displaySomeException e)
+        Right x -> case readEither x of
+          Left e -> warn e
+          Right y -> return y
+  where
+    warn msg = putStrLn ("getWorkspaces0: " ++ msg) >> return []
+
+displaySomeException :: SomeException -> String
+displaySomeException = displayException
 
 
 spawnTermAt :: String -> X ()
@@ -93,33 +103,9 @@ spawnTermAt :: String -> X ()
 spawnTermAt _    = spawn myTerm
 
 
-
---jojo w = withDisplay $ \d -> liftIO $ do
---    wa <- getWindowAttributes d w
---    printToErrors (wa_width wa, wa_height wa, wa_x wa, wa_y wa)
-
-    --sh <- getWMNormalHints d w
-    --bw <- fmap (fi . wa_border_width) $ getWindowAttributes d w
-    --return $ applySizeHints bw sh
-
-
---data WindowDetails = WindowDetails
---    { wd_name :: Maybe String
---    , wd_rect :: Rectangle
---    } deriving (Show)
-
--- urxvtc
---  -title sets {,_NET_}WM_NAME but not WM_CLASS and {,_NET_}WM_ICON_NAME       res: title
---  -name sets all                                                              res: 
---mySpawn cmd = do
---    p <- xfork $ executeFile "/run/current-system/sw/bin/urxvtc" False [] Nothing
---    liftIO $ printToErrors $ (cmd, p)
-
-
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf = Map.fromList $
-    [ ((_4C , xK_Delete ), spawn "make -C $HOME/.xmonad reload")
-    , ((_4  , xK_Escape ), spawn "/var/setuid-wrappers/slock")
+    [ ((_4  , xK_Escape ), spawn "/var/setuid-wrappers/slock")
     , ((_4S , xK_c      ), kill)
 
     , ((_4  , xK_x      ), chooseAction spawnTermAt)
@@ -273,5 +259,3 @@ wGSConfig = defaultGSConfig
 allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
 allWorkspaceNames ws =
     return $ map W.tag (W.hidden ws) ++ [W.tag $ W.workspace $ W.current ws]
-
--- vim:set fdm=marker:

@@ -30,7 +30,6 @@ with lib;
     ../2configs/git.nix
     ../2configs/mail-client.nix
     ../2configs/xserver
-    ../2configs/test.nix
     {
       environment.systemPackages = with pkgs; [
 
