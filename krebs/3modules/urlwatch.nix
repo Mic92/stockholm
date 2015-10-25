@@ -56,6 +56,13 @@ let
         https://nixos.org/channels/nixos-unstable/git-revision
       ];
     };
+    verbose = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        verbose output of urlwatch
+      '';
+    };
   };
 
   urlsFile = toFile "urls" (concatStringsSep "\n" cfg.urls);
@@ -106,7 +113,7 @@ let
 
           cd /tmp
 
-          urlwatch -e --urls="$urlsFile" > changes 2>&1 || :
+          urlwatch -e ${optionalString cfg.verbose "-v"} --urls="$urlsFile" > changes || :
 
           if test -s changes; then
             date=$(date -R)
