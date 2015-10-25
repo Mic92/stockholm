@@ -1,9 +1,6 @@
 { pkgs, ... }:
 
-let
-  inherit (pkgs) callPackage;
-in
-
 {
-  viljetic-pages = callPackage ./viljetic-pages {};
+  ff = pkgs.callPackage ./ff {};
+  viljetic-pages = pkgs.callPackage ./viljetic-pages {};
 }
