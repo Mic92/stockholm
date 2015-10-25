@@ -35,17 +35,11 @@ import Util.Debunk
 import Util.Shutdown
 
 
---data MyState = MyState deriving Typeable
-
 myTerm :: String
 myTerm = "urxvtc"
 
 myRootTerm :: String
 myRootTerm = "urxvtc -name root-urxvt -e su -"
-
--- TODO execRootTerm = exec (shlex "urxvtc -e su -")
---    [ ("XENVIRONMENT", HOME ++ "/.Xdefaults/root-urxvt") ]
-
 
 myFont :: String
 myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
@@ -96,29 +90,6 @@ spawnTermAt :: String -> X ()
 --spawnTermAt _ = floatNext True >> spawn myTerm
 --spawnTermAt "ff" = floatNext True >> spawn myTerm
 spawnTermAt _    = spawn myTerm
-
-
-
---jojo w = withDisplay $ \d -> liftIO $ do
---    wa <- getWindowAttributes d w
---    printToErrors (wa_width wa, wa_height wa, wa_x wa, wa_y wa)
-
-    --sh <- getWMNormalHints d w
-    --bw <- fmap (fi . wa_border_width) $ getWindowAttributes d w
-    --return $ applySizeHints bw sh
-
-
---data WindowDetails = WindowDetails
---    { wd_name :: Maybe String
---    , wd_rect :: Rectangle
---    } deriving (Show)
-
--- urxvtc
---  -title sets {,_NET_}WM_NAME but not WM_CLASS and {,_NET_}WM_ICON_NAME       res: title
---  -name sets all                                                              res: 
---mySpawn cmd = do
---    p <- xfork $ executeFile "/run/current-system/sw/bin/urxvtc" False [] Nothing
---    liftIO $ printToErrors $ (cmd, p)
 
 
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
@@ -277,5 +248,3 @@ wGSConfig = defaultGSConfig
 allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
 allWorkspaceNames ws =
     return $ map W.tag (W.hidden ws) ++ [W.tag $ W.workspace $ W.current ws]
-
--- vim:set fdm=marker:
