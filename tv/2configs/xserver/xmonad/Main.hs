@@ -8,7 +8,8 @@ module Main where
 import Control.Exception
 import Text.Read (readEither)
 import XMonad
-import System.Environment (getArgs, getEnv)
+import System.Environment (getArgs, getEnv, getEnvironment)
+import System.Posix.Process (executeFile)
 import XMonad.Prompt (defaultXPConfig)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
@@ -100,8 +101,11 @@ displaySomeException = displayException
 spawnTermAt :: String -> X ()
 --spawnTermAt _ = floatNext True >> spawn myTerm
 --spawnTermAt "ff" = floatNext True >> spawn myTerm
-spawnTermAt _    = spawn myTerm
-
+--spawnTermAt _    = spawn myTerm
+spawnTermAt ws = do
+    env <- liftIO getEnvironment
+    let env' = ("XMONAD_SPAWN_WORKSPACE", ws) : env
+    xfork (executeFile "urxvtc" True [] (Just env')) >> return ()
 
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf = Map.fromList $
