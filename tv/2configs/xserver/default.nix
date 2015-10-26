@@ -70,6 +70,14 @@ let
         ExecStart = "${xserver}/bin/xserver";
       };
     };
+
+    programs.bash.interactiveShellInit = ''
+      case ''${XMONAD_SPAWN_WORKSPACE-} in
+        za|zh|zj|zs)
+          exec sudo -u zalora -i
+        ;;
+      esac
+    '';
   };
 
   xmonad-pkg = pkgs.haskellPackages.callPackage xmonad-src {};
