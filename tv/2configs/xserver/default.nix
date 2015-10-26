@@ -89,7 +89,7 @@ let
       "im"
       "mail"
       "stockholm"
-      "za" "zj" "zs"
+      "za" "zh" "zj" "zs"
     ]);
   };
 
