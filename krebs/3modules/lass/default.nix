@@ -1,8 +1,36 @@
 { lib, ... }:
 
-with import ../../4lib { inherit lib; };
+with lib;
 
-{
+let
+  testHosts = lib.genAttrs [
+    "test-arch"
+    "test-centos6"
+    "test-centos7"
+  ] (name: {
+    inherit name;
+    cores = 1;
+    nets = {
+      retiolum = {
+        addrs4 = ["10.243.111.111"];
+        addrs6 = ["42:0:0:0:0:0:0:7357"];
+        aliases = [
+          "test.retiolum"
+        ];
+        tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIIBCgKCAQEAy41YKF/wpHLnN370MSdnAo63QUW30aw+6O79cnaJyxoL6ZQkk4Nd
+          mrX2tBIfb2hhhgm4Jecy33WVymoEL7EiRZ6gshJaYwte51Jnrac6IFQyiRGMqHY5
+          TG/6IzzTOkeQrT1fw3Yfh0NRfqLBZLr0nAFoqgzIVRxvy+QO1gCU2UDKkQ/y5df1
+          K+YsMipxU08dsOkPkmLdC/+vDaZiEdYljIS3Omd+ED5JmLM3MSs/ZPQ8xjkjEAy8
+          QqD9/67bDoeXyg1ZxED2n0+aRKtU/CK/66Li//yev6yv38OQSEM4t/V0dr9sjLcY
+          VIdkxKf96F9r3vcDf/9xw2HrqVoy+D5XYQIDAQAB
+          -----END RSA PUBLIC KEY-----
+        '';
+      };
+    };
+  });
+in {
   hosts = addNames {
     echelon = {
       cores = 4;
@@ -104,7 +132,11 @@ with import ../../4lib { inherit lib; };
     uriel = {
       cores = 1;
       dc = "lass";
-      nets = rec {
+      nets = {
+        gg23 = {
+          addrs4 = ["10.23.1.12"];
+          aliases = ["uriel.gg23"];
+        };
         retiolum = {
           addrs4 = ["10.243.81.176"];
           addrs6 = ["42:dc25:60cf:94ef:759b:d2b6:98a9:2e56"];
@@ -131,7 +163,11 @@ with import ../../4lib { inherit lib; };
     mors = {
       cores = 2;
       dc = "lass";
-      nets = rec {
+      nets = {
+        gg23 = {
+          addrs4 = ["10.23.1.11"];
+          aliases = ["mors.gg23"];
+        };
         retiolum = {
           addrs4 = ["10.243.0.2"];
           addrs6 = ["42:0:0:0:0:0:0:dea7"];
@@ -155,8 +191,24 @@ with import ../../4lib { inherit lib; };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINAMPlIG+6u75GJ3kvsPF6OoIZsU+u8ZQ+rdviv5fNMD";
     };
+    schnabel-ap = {
+      nets = {
+        gg23 = {
+          addrs4 = ["10.23.1.20"];
+          aliases = ["schnabel-ap.gg23"];
+        };
+      };
+    };
+    Reichsfunk-ap = {
+      nets = {
+        gg23 = {
+          addrs4 = ["10.23.1.10"];
+          aliases = ["Reichsfunk-ap.gg23"];
+        };
+      };
+    };
 
-  };
+  } // testHosts;
   users = addNames {
     lass = {
       pubkey = readFile ../../Zpubkeys/lass.ssh.pub;

@@ -3,8 +3,8 @@ set -eux
 {
   umount /mnt/nix
   umount /mnt/root
-  umount /boot || :
   umount /mnt/boot
+  umount /boot || :
   umount /mnt
 
   coreutils_path=$(set +f; for i in /nix/store/*coreutils*/bin; do :; done; echo $i)

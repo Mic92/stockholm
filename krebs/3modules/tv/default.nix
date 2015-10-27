@@ -1,6 +1,6 @@
 { lib, ... }:
 
-with import ../../4lib { inherit lib; };
+with lib;
 
 {
   dns.providers = {
@@ -65,7 +65,7 @@ with import ../../4lib { inherit lib; };
       dc = "tv"; #dc = "cac";
       nets = rec {
         internet = {
-          addrs4 = ["104.233.84.215"];
+          addrs4 = ["104.167.114.142"];
           aliases = [
             "mkdir.internet"
           ];
@@ -231,6 +231,7 @@ with import ../../4lib { inherit lib; };
           addrs6 = ["42:0:0:0:0:0:0:1337"];
           aliases = [
             "wu.retiolum"
+            "cgit.wu.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----

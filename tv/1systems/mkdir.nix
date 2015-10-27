@@ -88,7 +88,6 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
-    git # required for ./deploy, clone_or_update
     htop
     iftop
     iotop

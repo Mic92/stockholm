@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with builtins;
-with import ../4lib { inherit lib; };
+with lib;
 let
   cfg = config.krebs.github-hosts-sync;
 

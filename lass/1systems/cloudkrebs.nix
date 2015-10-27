@@ -27,30 +27,9 @@ in {
 
     }
     {
-      nix.maxJobs = 1;
       sound.enable = false;
     }
   ];
 
-  krebs.build = {
-    user = config.krebs.users.lass;
-    host = config.krebs.hosts.cloudkrebs;
-    source = {
-      dir.secrets = {
-        host = config.krebs.hosts.mors;
-        path = "/home/lass/secrets/${config.krebs.build.host.name}";
-      };
-      dir.stockholm = {
-        host = config.krebs.hosts.mors;
-        path = "/home/lass/dev/stockholm";
-      };
-    };
-  };
-
-  networking.hostName = "cloudkrebs";
-
-  environment.systemPackages = [
-    pkgs.dic
-  ];
-
+  krebs.build.host = config.krebs.hosts.cloudkrebs;
 }

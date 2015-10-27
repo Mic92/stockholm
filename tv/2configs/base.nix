@@ -15,6 +15,12 @@ in
 
   imports = [
     {
+      # stockholm dependencies
+      environment.systemPackages = with pkgs; [
+        git
+      ];
+    }
+    {
       # TODO never put hashedPassword into the store
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
@@ -147,10 +153,9 @@ in
     }
 
     {
-      nixpkgs.config.packageOverrides = pkgs:
-        {
-          nano = pkgs.runCommand "empty" {} "mkdir -p $out";
-        };
+      nixpkgs.config.packageOverrides = pkgs: {
+        nano = pkgs.vim;
+      };
 
       services.cron.enable = false;
       services.nscd.enable = false;

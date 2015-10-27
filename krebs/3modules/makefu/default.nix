@@ -1,6 +1,6 @@
 { lib, ... }:
 
-with import ../../4lib { inherit lib; };
+with lib;
 
 {
   hosts = addNames {
@@ -185,6 +185,7 @@ with import ../../4lib { inherit lib; };
           addrs6 = ["42:6e1e:cc8a:7cef:827:f938:8c64:baad"];
           aliases = [
             "graphs.wry.retiolum"
+            "graphs.retiolum"
             "paste.wry.retiolum"
             "paste.retiolum"
             "wry.retiolum"

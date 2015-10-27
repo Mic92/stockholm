@@ -1,12 +1,8 @@
 { lib, pkgs, ... }:
 
-let
-  krebs = import ../../krebs/4lib { inherit lib; };
-in
+with lib;
 
-with krebs;
-
-krebs // rec {
+{
 
   simpleScript = name: content:
     pkgs.stdenv.mkDerivation {

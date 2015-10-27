@@ -1,6 +1,6 @@
 { config, lib, ... }:
 
-with import ../4lib { inherit lib; };
+with lib;
 let
   cfg = config.krebs;
 
@@ -8,6 +8,7 @@ let
     imports = [
       ./bepasty-server.nix
       ./build.nix
+      ./current.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
       ./github-hosts-sync.nix
@@ -76,6 +77,7 @@ let
   imp = mkMerge [
     { krebs = import ./lass { inherit lib; }; }
     { krebs = import ./makefu { inherit lib; }; }
+    { krebs = import ./shared { inherit lib; }; }
     { krebs = import ./tv { inherit lib; }; }
     {
       krebs.dns.providers = {
@@ -105,8 +107,8 @@ let
 
       # Implements environment.etc."zones/<zone-name>"
       environment.etc = let
-        stripEmptyLines = s: concatStringsSep "\n"
-          (remove "\n" (remove "" (splitString "\n" s)));
+        stripEmptyLines = s: (concatStringsSep "\n"
+          (remove "\n" (remove "" (splitString "\n" s)))) + "\n";
         all-zones = foldAttrs (sum: current: sum + "\n" +current ) ""
           ([cfg.zone-head-config] ++ combined-hosts);
         combined-hosts = (mapAttrsToList (name: value: value.extraZones)  cfg.hosts );

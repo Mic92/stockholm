@@ -38,14 +38,28 @@ with lib;
     }
   ];
 
+  networking.hostName = config.krebs.build.host.name;
+  nix.maxJobs = config.krebs.build.host.cores;
+
   krebs = {
     enable = true;
     search-domain = "retiolum";
     exim-retiolum.enable = true;
-    build.source = {
-      git.nixpkgs = {
-        url = https://github.com/Lassulus/nixpkgs;
-        rev = "b9270a2e8ac3d2cf4c95075a9529528aa1d859da";
+    build = {
+      user = config.krebs.users.lass;
+      source = {
+        git.nixpkgs = {
+          url = https://github.com/Lassulus/nixpkgs;
+          rev = "33bdc011f5360288cd10b9fda90da2950442b2ab";
+        };
+        dir.secrets = {
+          host = config.krebs.hosts.mors;
+          path = "/home/lass/secrets/${config.krebs.build.host.name}";
+        };
+        dir.stockholm = {
+          host = config.krebs.hosts.mors;
+          path = "/home/lass/stockholm";
+        };
       };
     };
   };
@@ -82,6 +96,9 @@ with lib;
 
   #network
     iptables
+
+  #stuff for dl
+    aria2
   ];
 
   programs.bash = {
@@ -122,12 +139,6 @@ with lib;
   security.setuidPrograms = [
     "sendmail"
   ];
-
-  #services.gitolite = {
-  #  enable = true;
-  #  dataDir = "/home/gitolite";
-  #  adminPubkey = config.sshKeys.lass.pub;
-  #};
 
   services.openssh = {
     enable = true;
