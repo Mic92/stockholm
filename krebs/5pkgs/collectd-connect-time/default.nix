@@ -2,10 +2,10 @@
 
 pythonPackages.buildPythonPackage rec {
   name = "collectd-connect-time-${version}";
-  version = "0.1.1";
+  version = "0.2.0";
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/c/collectd-connect-time/collectd-connect-time-${version}.tar.gz";
-    sha256 = "0j2glcm4qjry1hqgci84ifj83xjpannl5yckyjadc8s9vyf0mp99";
+    sha256 = "1l63pi79z6vg4xf744a71g5rxgsngpkc96a7y4ha2x798r55g7v6";
   };
   meta = {
     homepage = https://pypi.python.org/pypi/collectd-connect-time/;
