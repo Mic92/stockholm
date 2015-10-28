@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-} -- for XS
+{-# LANGUAGE FlexibleContexts #-} -- for xmonad'
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
@@ -8,7 +9,7 @@ module Main where
 import Control.Exception
 import Text.Read (readEither)
 import XMonad
-import System.Environment (getArgs, getEnv, getEnvironment)
+import System.Environment (getArgs, withArgs, getEnv, getEnvironment)
 import System.Posix.Process (executeFile)
 import XMonad.Prompt (defaultXPConfig)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
@@ -56,7 +57,7 @@ main = getArgs >>= \case
 mainNoArgs :: IO ()
 mainNoArgs = do
     workspaces0 <- getWorkspaces0
-    xmonad
+    xmonad'
         -- $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "magenta", "-fg", "magenta", "-h", "2"], duration = 500000 }
         --                   urgencyConfig { remindWhen = Every 1 }
         -- $ withUrgencyHook borderUrgencyHook "magenta"
@@ -81,6 +82,17 @@ mainNoArgs = do
         (onWorkspace "im" $ reflectVert $ Mirror $ Tall 1 (3/100) (12/13))
         (FixedColumn 1 20 80 10 ||| Full)
 
+
+xmonad' :: (LayoutClass l Window, Read (l Window)) => XConfig l -> IO ()
+xmonad' conf = do
+    path <- getEnv "XMONAD_STATE"
+    try (readFile path) >>= \case
+        Right content -> do
+            putStrLn ("resuming from " ++ path)
+            withArgs ("--resume" : lines content) (xmonad conf)
+        Left e -> do
+            putStrLn (displaySomeException e)
+            xmonad conf
 
 getWorkspaces0 :: IO [String]
 getWorkspaces0 =

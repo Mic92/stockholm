@@ -119,12 +119,7 @@ let
     settle ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
     settle ${pkgs.xorg.xrdb}/bin/xrdb -merge ${import ./Xresources.nix args}
     settle ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c'
-    if test -e "$XMONAD_STATE"; then
-      IFS=''$'\n'
-      exec ${xmonad-pkg}/bin/xmonad --resume $(< "$XMONAD_STATE")
-    else
-      exec ${xmonad-pkg}/bin/xmonad
-    fi
+    exec ${xmonad-pkg}/bin/xmonad
   '';
 
   xmonad-stop = pkgs.writeScriptBin "xmonad-stop" ''
