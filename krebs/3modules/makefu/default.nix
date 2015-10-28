@@ -214,9 +214,10 @@ with lib;
 
       extraZones = {
         "krebsco.de" = ''
-          omo               IN A      ${head nets.internet.addrs4}
           euer              IN A      ${head nets.internet.addrs4}
+          euer.blog         IN A      ${head nets.internet.addrs4}
           gum               IN A      ${head nets.internet.addrs4}
+          euer.wiki         IN A      ${head nets.internet.addrs4}
         '';
       };
       nets = {
