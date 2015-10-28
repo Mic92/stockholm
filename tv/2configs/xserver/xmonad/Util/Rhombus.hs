@@ -18,7 +18,6 @@ import XMonad.Util.Font
 import XMonad.Util.Image ( drawIcon )
 import XMonad.Util.XUtils
 
-import Util.Debunk
 import Util.Submap
 import Util.XUtils
 import Util.Font

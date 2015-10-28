@@ -9,6 +9,7 @@ module Main where
 import Control.Exception
 import Text.Read (readEither)
 import XMonad
+import System.IO (hPutStrLn, stderr)
 import System.Environment (getArgs, withArgs, getEnv, getEnvironment)
 import System.Posix.Process (executeFile)
 import XMonad.Prompt (defaultXPConfig)
@@ -36,7 +37,6 @@ import XMonad.Layout.PerWorkspace (onWorkspace)
 --import XMonad.Actions.Submap
 import Util.Pager
 import Util.Rhombus
-import Util.Debunk
 import Util.Shutdown
 
 
@@ -88,10 +88,10 @@ xmonad' conf = do
     path <- getEnv "XMONAD_STATE"
     try (readFile path) >>= \case
         Right content -> do
-            putStrLn ("resuming from " ++ path)
+            hPutStrLn stderr ("resuming from " ++ path)
             withArgs ("--resume" : lines content) (xmonad conf)
         Left e -> do
-            putStrLn (displaySomeException e)
+            hPutStrLn stderr (displaySomeException e)
             xmonad conf
 
 getWorkspaces0 :: IO [String]
@@ -104,7 +104,7 @@ getWorkspaces0 =
           Left e -> warn e
           Right y -> return y
   where
-    warn msg = putStrLn ("getWorkspaces0: " ++ msg) >> return []
+    warn msg = hPutStrLn stderr ("getWorkspaces0: " ++ msg) >> return []
 
 displaySomeException :: SomeException -> String
 displaySomeException = displayException
@@ -135,7 +135,7 @@ myKeys conf = Map.fromList $
     , ((0   , xK_Menu   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.view) )
     , ((_S  , xK_Menu   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
     , ((_C  , xK_Menu   ), toggleWS)
-    , ((_4  , xK_Menu   ), rhombus horseConfig (liftIO . printToErrors) ["Correct", "Horse", "Battery", "Staple", "Stuhl", "Tisch"] )
+    , ((_4  , xK_Menu   ), rhombus horseConfig (liftIO . hPutStrLn stderr) ["Correct", "Horse", "Battery", "Staple", "Stuhl", "Tisch"] )
     
     -- %! Rotate through the available layout algorithms
     , ((_4  , xK_space  ), sendMessage NextLayout)
