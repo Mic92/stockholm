@@ -48,6 +48,6 @@ shutdown = do
   s <- gets (\s -> (wsData s : extState s))
   _ <- io $ do
     path <- getEnv "XMONAD_STATE"
-    writeFile path (concatMap (++"\n") s)
+    writeFile path (unlines s)
     exitSuccess
   return ()
