@@ -24,7 +24,7 @@ with lib;
   };
 
   imports = [
-    ../2configs/AO753.nix
+    ../2configs/hw/AO753.nix
     ../2configs/base.nix
     #../2configs/consul-server.nix
     ../2configs/git.nix
@@ -86,13 +86,6 @@ with lib;
     };
 
   swapDevices = [ ];
-
-  nix = {
-    buildCores = 2;
-    maxJobs = 2;
-    daemonIONiceLevel = 1;
-    daemonNiceLevel = 1;
-  };
 
   # TODO base
   boot.tmpOnTmpfs = true;

@@ -24,8 +24,8 @@ with lib;
   };
 
   imports = [
-    ../2configs/CAC-Developer-2.nix
-    ../2configs/CAC-CentOS-7-64bit.nix
+    ../2configs/hw/CAC-Developer-2.nix
+    ../2configs/fs/CAC-CentOS-7-64bit.nix
     ../2configs/base.nix
     #../2configs/consul-server.nix
     ../2configs/exim-smarthost.nix

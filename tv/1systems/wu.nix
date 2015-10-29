@@ -24,7 +24,7 @@ with lib;
   };
 
   imports = [
-    ../2configs/w110er.nix
+    ../2configs/hw/w110er.nix
     ../2configs/base.nix
     #../2configs/consul-client.nix
     ../2configs/git.nix
@@ -389,6 +389,4 @@ with lib;
   services.tor.enable = true;
   services.virtualboxHost.enable = true;
 
-  # TODO w110er if xserver is enabled
-  services.xserver.vaapiDrivers = [ pkgs.vaapiIntel ];
 }

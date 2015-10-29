@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../2configs/smartd.nix
+    ../smartd.nix
   ];
 
   boot.extraModprobeConfig = ''
@@ -30,6 +30,10 @@
     HandlePowerKey=ignore
     HandleSuspendKey=ignore
   '';
+
+  services.xserver = {
+    vaapiDrivers = [ pkgs.vaapiIntel ];
+  };
 
   system.activationScripts.powertopTunables = ''
     echo 1 > /sys/module/snd_hda_intel/parameters/power_save
