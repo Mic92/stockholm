@@ -80,9 +80,6 @@ let
     '';
   };
 
-  xmonad-pkg = pkgs.haskellPackages.callPackage xmonad-src {};
-  xmonad-src = pkgs.writeNixFromCabal "xmonad.nix" ./xmonad;
-
   xmonad-environment = {
     DISPLAY = ":${toString config.services.xserver.display}";
     XMONAD_STATE = "/tmp/xmonad.state";
@@ -119,12 +116,12 @@ let
     settle ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
     settle ${pkgs.xorg.xrdb}/bin/xrdb -merge ${import ./Xresources.nix args}
     settle ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c'
-    exec ${xmonad-pkg}/bin/xmonad
+    exec ${pkgs.xmonad-tv}/bin/xmonad
   '';
 
   xmonad-stop = pkgs.writeScriptBin "xmonad-stop" ''
     #! /bin/sh
-    exec ${xmonad-pkg}/bin/xmonad --shutdown
+    exec ${pkgs.xmonad-tv}/bin/xmonad --shutdown
   '';
 
   xserver-environment = {
