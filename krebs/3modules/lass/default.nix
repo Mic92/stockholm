@@ -33,7 +33,7 @@ let
 in {
   hosts = addNames {
     echelon = {
-      cores = 4;
+      cores = 2;
       dc = "lass"; #dc = "cac";
       nets = rec {
         internet = {
