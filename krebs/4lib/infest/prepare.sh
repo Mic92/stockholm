@@ -11,6 +11,10 @@ prepare() {(
         ;;
       centos)
         case $VERSION_ID in
+          6)
+            prepare_centos "$@"
+            exit
+            ;;
           7)
             prepare_centos "$@"
             exit
