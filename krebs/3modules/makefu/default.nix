@@ -164,6 +164,7 @@ with lib;
       dc = "makefu"; #dc = "cac";
       extraZones = {
         "krebsco.de" = ''
+          wiki.euer      IN A  ${head nets.internet.addrs4}
           wry            IN A  ${head nets.internet.addrs4}
           io             IN NS wry.krebsco.de.
           graphs         IN A  ${head nets.internet.addrs4}
@@ -189,6 +190,7 @@ with lib;
             "paste.wry.retiolum"
             "paste.retiolum"
             "wry.retiolum"
+            "wiki.makefu.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -214,8 +216,8 @@ with lib;
 
       extraZones = {
         "krebsco.de" = ''
-          omo               IN A      ${head nets.internet.addrs4}
           euer              IN A      ${head nets.internet.addrs4}
+          share.euer        IN A      ${head nets.internet.addrs4}
           gum               IN A      ${head nets.internet.addrs4}
         '';
       };

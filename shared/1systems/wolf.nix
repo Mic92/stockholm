@@ -5,6 +5,7 @@ with lib;
 {
   imports = [
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
+    ../2configs/collectd-base.nix
   ];
 
   krebs.build.host = config.krebs.hosts.wolf;
