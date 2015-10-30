@@ -48,6 +48,7 @@ with lib;
       rpc-username = "download";
       #add rpc-password in secrets
       rpc-password = "test123";
+      peer-port = 51413;
     };
   };
 
@@ -55,6 +56,8 @@ with lib;
     enable = true;
     tables.filter.INPUT.rules = [
       { predicate = "-p tcp --dport 9091"; target = "ACCEPT"; }
+      { predicate = "-p tcp --dport 51413"; target = "ACCEPT"; }
+      { predicate = "-p udp --dport 51413"; target = "ACCEPT"; }
     ];
   };
 
