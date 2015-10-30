@@ -66,6 +66,39 @@ in {
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL21QDOEFdODFh6WAfNp6odrXo15pEsDQuGJfMu/cKzK";
     };
+    prism = {
+      cores = 4;
+      dc = "lass"; #dc = "cac";
+      nets = rec {
+        internet = {
+          addrs4 = ["213.239.205.240"];
+          aliases = [
+            "prism.internet"
+          ];
+        };
+        retiolum = {
+          via = internet;
+          addrs4 = ["10.243.0.103"];
+          addrs6 = ["42:0000:0000:0000:0000:0000:0000:15ab"];
+          aliases = [
+            "prism.retiolum"
+            "cgit.prism.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAvzhoBsxUaEwm7ctiw3xvLFP2RoVaiHnF+Sm4J8E4DOerPToXxlyl
+            kxvMPaRnhtiO6MK0Vv2+VswKIeRkMm5YuD5MG7wni4vUKcRx9cCgKji/s0vGqLhl
+            JKK9i23q7epvQ32Is/e3P+fQ5KM50EO+TWACNaroCNoyJvZ/G8BWXw6WnIOsuX0I
+            AoPW2ol8/sdZxeK4hCe/aQz6y0AEvigpvPkHx+TE5fkBeIeqhiKTIWpEqjU4wXx5
+            jP2izYuaIsHAihU8mm03xRxT4+4IHYt6ddrhNeBuJBsATLkDgULdQyOoEzmXCm2j
+            anGRBZoYVazxn7d8mKBdE09ZNc1ijULZgwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINKVjJrM7fHfHpvZXEA3hmX4JliHl6h6Q8AGOPcu+9fF";
+    };
     fastpoke = {
       dc = "lass";
       nets = rec {
