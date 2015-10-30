@@ -3,19 +3,19 @@
 with lib;
 
 {
-  krebs.build.host = config.krebs.hosts.wu;
+  krebs.build.host = config.krebs.hosts.xu;
   krebs.build.user = config.krebs.users.tv;
 
-  krebs.build.target = "root@wu";
+  krebs.build.target = "root@xu";
 
   krebs.build.source = {
     git.nixpkgs = {
       url = https://github.com/NixOS/nixpkgs;
-      rev = "e916273209560b302ab231606babf5ce1c481f08";
+      rev = "e57024f821c94caf5684964474073649b8b6356b";
     };
     dir.secrets = {
       host = config.krebs.hosts.wu;
-      path = "/home/tv/secrets/wu";
+      path = "/home/tv/secrets/xu";
     };
     dir.stockholm = {
       host = config.krebs.hosts.wu;
@@ -24,7 +24,7 @@ with lib;
   };
 
   imports = [
-    ../2configs/hw/w110er.nix
+    ../2configs/hw/x220.nix
     ../2configs/base.nix
     #../2configs/consul-client.nix
     ../2configs/git.nix
@@ -60,33 +60,31 @@ with lib;
         # tv
         bc
         bind # dig
-        cac
+        #cac
         dic
         ff
         file
-        get
-        gitAndTools.qgit
+        gitAndTools.qgit  #xserver
         gnupg21
         haskellPackages.hledger
         htop
         jq
         manpages
         mkpasswd
-        mpv
+        mpv #xserver
         netcat
         nix-repl
         nmap
         nq
         p7zip
-        pavucontrol
+        pavucontrol #xserver
         posix_man_pages
-        pssh
-        push
+        #pssh
         qrencode
-        sxiv
+        sxiv #xserver
         texLive
         tmux
-        zathura
+        zathura #xserver
 
         #ack
         #apache-httpd
@@ -175,6 +173,7 @@ with lib;
       krebs.retiolum = {
         enable = true;
         connectTo = [
+          "cd"
           "gum"
           "pigstarter"
         ];
@@ -208,6 +207,7 @@ with lib;
             extraGroups = [
               "audio"
               "video"
+              "bumblebee"
             ];
           };
 
@@ -248,6 +248,7 @@ with lib;
             extraGroups = [
               "audio"
               "video"
+              "bumblebee"
             ];
           };
 
@@ -256,6 +257,7 @@ with lib;
             extraGroups = [
               "audio"
               "video"
+              "bumblebee"
             ];
           };
 
@@ -311,18 +313,18 @@ with lib;
   boot.initrd.luks = {
     cryptoModules = [ "aes" "sha512" "xts" ];
     devices = [
-      { name = "home"; device = "/dev/vg840/enchome"; preLVM = false; }
+      { name = "xuca"; device = "/dev/sda2"; }
     ];
   };
 
   fileSystems = {
     "/" = {
-      device = "/dev/mapper/vg840-wuroot";
+      device = "/dev/mapper/xuvga-root";
       fsType = "btrfs";
       options = "defaults,noatime,ssd,compress=lzo";
     };
     "/home" = {
-      device = "/dev/mapper/home";
+      device = "/dev/mapper/xuvga-home";
       fsType = "btrfs";
       options = "defaults,noatime,ssd,compress=lzo";
     };
@@ -339,26 +341,28 @@ with lib;
   nixpkgs.config.chromium.enablePepperFlash = true;
 
   nixpkgs.config.allowUnfree = true;
-  hardware.bumblebee.enable = true;
-  hardware.bumblebee.group = "video";
+  #hardware.bumblebee.enable = true;
+  #hardware.bumblebee.group = "video";
   hardware.enableAllFirmware = true;
-  hardware.opengl.driSupport32Bit = true;
+  #hardware.opengl.driSupport32Bit = true;
   hardware.pulseaudio.enable = true;
 
   environment.systemPackages = with pkgs; [
-    xlibs.fontschumachermisc
-    slock
+    #xlibs.fontschumachermisc
+    #slock
     ethtool
     #firefoxWrapper # with plugins
     #chromiumDevWrapper
     tinc
     iptables
     #jack2
+
+    gptfdisk
   ];
 
   security.setuidPrograms = [
     "sendmail"  # for cron
-    "slock"
+    #"slock"
   ];
 
   services.printing.enable = true;
@@ -373,20 +377,14 @@ with lib;
     "d /tmp 1777 root root - -" # does this work with mounted /tmp?
   ];
 
-  virtualisation.libvirtd.enable = true;
+  #virtualisation.libvirtd.enable = true;
 
-  services.udev.extraRules = ''
-    SUBSYSTEM=="net", ATTR{address}=="00:90:f5:da:aa:c3", NAME="en0"
-    SUBSYSTEM=="net", ATTR{address}=="a0:88:b4:1b:ae:6c", NAME="wl0"
+  #services.bitlbee.enable = true;
+  #services.tor.client.enable = true;
+  #services.tor.enable = true;
+  #services.virtualboxHost.enable = true;
 
-    # for jack
-    KERNEL=="rtc0", GROUP="audio"
-    KERNEL=="hpet", GROUP="audio"
-  '';
 
-  services.bitlbee.enable = true;
-  services.tor.client.enable = true;
-  services.tor.enable = true;
-  services.virtualboxHost.enable = true;
-
+  # The NixOS release to be compatible with for stateful data such as databases.
+  system.stateVersion = "15.09";
 }

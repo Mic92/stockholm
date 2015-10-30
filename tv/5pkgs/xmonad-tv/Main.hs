@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-} -- for XS
+{-# LANGUAGE FlexibleContexts #-} -- for xmonad'
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
@@ -8,7 +9,9 @@ module Main where
 import Control.Exception
 import Text.Read (readEither)
 import XMonad
-import System.Environment (getArgs, getEnv)
+import System.IO (hPutStrLn, stderr)
+import System.Environment (getArgs, withArgs, getEnv, getEnvironment)
+import System.Posix.Process (executeFile)
 import XMonad.Prompt (defaultXPConfig)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
@@ -34,7 +37,6 @@ import XMonad.Layout.PerWorkspace (onWorkspace)
 --import XMonad.Actions.Submap
 import Util.Pager
 import Util.Rhombus
-import Util.Debunk
 import Util.Shutdown
 
 
@@ -55,7 +57,7 @@ main = getArgs >>= \case
 mainNoArgs :: IO ()
 mainNoArgs = do
     workspaces0 <- getWorkspaces0
-    xmonad
+    xmonad'
         -- $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "magenta", "-fg", "magenta", "-h", "2"], duration = 500000 }
         --                   urgencyConfig { remindWhen = Every 1 }
         -- $ withUrgencyHook borderUrgencyHook "magenta"
@@ -81,6 +83,17 @@ mainNoArgs = do
         (FixedColumn 1 20 80 10 ||| Full)
 
 
+xmonad' :: (LayoutClass l Window, Read (l Window)) => XConfig l -> IO ()
+xmonad' conf = do
+    path <- getEnv "XMONAD_STATE"
+    try (readFile path) >>= \case
+        Right content -> do
+            hPutStrLn stderr ("resuming from " ++ path)
+            withArgs ("--resume" : lines content) (xmonad conf)
+        Left e -> do
+            hPutStrLn stderr (displaySomeException e)
+            xmonad conf
+
 getWorkspaces0 :: IO [String]
 getWorkspaces0 =
     try (getEnv "XMONAD_WORKSPACES0_FILE") >>= \case
@@ -91,7 +104,7 @@ getWorkspaces0 =
           Left e -> warn e
           Right y -> return y
   where
-    warn msg = putStrLn ("getWorkspaces0: " ++ msg) >> return []
+    warn msg = hPutStrLn stderr ("getWorkspaces0: " ++ msg) >> return []
 
 displaySomeException :: SomeException -> String
 displaySomeException = displayException
@@ -100,8 +113,11 @@ displaySomeException = displayException
 spawnTermAt :: String -> X ()
 --spawnTermAt _ = floatNext True >> spawn myTerm
 --spawnTermAt "ff" = floatNext True >> spawn myTerm
-spawnTermAt _    = spawn myTerm
-
+--spawnTermAt _    = spawn myTerm
+spawnTermAt ws = do
+    env <- liftIO getEnvironment
+    let env' = ("XMONAD_SPAWN_WORKSPACE", ws) : env
+    xfork (executeFile "urxvtc" True [] (Just env')) >> return ()
 
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf = Map.fromList $
@@ -119,7 +135,7 @@ myKeys conf = Map.fromList $
     , ((0   , xK_Menu   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.view) )
     , ((_S  , xK_Menu   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
     , ((_C  , xK_Menu   ), toggleWS)
-    , ((_4  , xK_Menu   ), rhombus horseConfig (liftIO . printToErrors) ["Correct", "Horse", "Battery", "Staple", "Stuhl", "Tisch"] )
+    , ((_4  , xK_Menu   ), rhombus horseConfig (liftIO . hPutStrLn stderr) ["Correct", "Horse", "Battery", "Staple", "Stuhl", "Tisch"] )
     
     -- %! Rotate through the available layout algorithms
     , ((_4  , xK_space  ), sendMessage NextLayout)

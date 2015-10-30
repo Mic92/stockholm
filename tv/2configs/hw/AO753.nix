@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../2configs/smartd.nix
+    ../smartd.nix
   ];
 
   boot.loader.grub = {
@@ -24,6 +24,13 @@
   ];
 
   networking.wireless.enable = true;
+
+  nix = {
+    buildCores = 2;
+    maxJobs = 2;
+    daemonIONiceLevel = 1;
+    daemonNiceLevel = 1;
+  };
 
   services.logind.extraConfig = ''
     HandleHibernateKey=ignore

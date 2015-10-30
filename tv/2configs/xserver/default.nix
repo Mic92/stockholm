@@ -70,10 +70,15 @@ let
         ExecStart = "${xserver}/bin/xserver";
       };
     };
-  };
 
-  xmonad-pkg = pkgs.haskellPackages.callPackage xmonad-src {};
-  xmonad-src = pkgs.writeNixFromCabal "xmonad.nix" ./xmonad;
+    programs.bash.interactiveShellInit = ''
+      case ''${XMONAD_SPAWN_WORKSPACE-} in
+        za|zh|zj|zs)
+          exec sudo -u zalora -i
+        ;;
+      esac
+    '';
+  };
 
   xmonad-environment = {
     DISPLAY = ":${toString config.services.xserver.display}";
@@ -89,7 +94,7 @@ let
       "im"
       "mail"
       "stockholm"
-      "za" "zj" "zs"
+      "za" "zh" "zj" "zs"
     ]);
   };
 
@@ -111,17 +116,12 @@ let
     settle ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
     settle ${pkgs.xorg.xrdb}/bin/xrdb -merge ${import ./Xresources.nix args}
     settle ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c'
-    if test -e "$XMONAD_STATE"; then
-      IFS=''$'\n'
-      exec ${xmonad-pkg}/bin/xmonad --resume $(< "$XMONAD_STATE")
-    else
-      exec ${xmonad-pkg}/bin/xmonad
-    fi
+    exec ${pkgs.xmonad-tv}/bin/xmonad
   '';
 
   xmonad-stop = pkgs.writeScriptBin "xmonad-stop" ''
     #! /bin/sh
-    exec ${xmonad-pkg}/bin/xmonad --shutdown
+    exec ${pkgs.xmonad-tv}/bin/xmonad --shutdown
   '';
 
   xserver-environment = {
