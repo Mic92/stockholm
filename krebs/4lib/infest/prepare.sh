@@ -47,6 +47,7 @@ prepare() {(
 )}
 
 prepare_arch() {
+  pacman -Sy
   type bzip2 2>/dev/null || pacman -S --noconfirm bzip2
   type git   2>/dev/null || pacman -S --noconfirm git
   type rsync 2>/dev/null || pacman -S --noconfirm rsync
