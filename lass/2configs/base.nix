@@ -27,8 +27,6 @@ with lib;
           createHome = true;
           useDefaultShell = true;
           extraGroups = [
-            "audio"
-            "wheel"
           ];
           openssh.authorizedKeys.keys = map readFile [
             ../../krebs/Zpubkeys/lass.ssh.pub

@@ -8,6 +8,8 @@ in {
     ./urxvt.nix
   ];
 
+  users.extraUsers.mainUser.extraGroups = [ "audio" ];
+
   time.timeZone = "Europe/Berlin";
 
   virtualisation.libvirtd.enable = true;
