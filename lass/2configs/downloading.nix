@@ -1,5 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
+with lib;
 {
   imports = [
     ../3modules/folderPerms.nix
@@ -10,8 +11,12 @@
       name = "download";
       home = "/var/download";
       createHome = true;
+      useDefaultShell = true;
       extraGroups = [
         "download"
+      ];
+      openssh.authorizedKeys.keys = map readFile [
+        ../../krebs/Zpubkeys/lass.ssh.pub
       ];
     };
 
