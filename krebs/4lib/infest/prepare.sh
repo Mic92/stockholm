@@ -21,6 +21,18 @@ prepare() {(
             ;;
         esac
         ;;
+      debian)
+        case $VERSION_ID in
+          7)
+            prepare_debian "$@"
+            exit
+            ;;
+          8)
+            prepare_debian "$@"
+            exit
+            ;;
+        esac
+        ;;
     esac
   elif test -e /etc/centos-release; then
     case $(cat /etc/centos-release) in
@@ -45,6 +57,14 @@ prepare_centos() {
   type bzip2 2>/dev/null || yum install -y bzip2
   type git   2>/dev/null || yum install -y git
   type rsync 2>/dev/null || yum install -y rsync
+  prepare_common
+}
+
+prepare_debian() {
+  apt-get update
+  type bzip2 2>/dev/null || apt-get install bzip2
+  type git   2>/dev/null || apt-get install git
+  type rsync 2>/dev/null || apt-get install rsync
   prepare_common
 }
 
