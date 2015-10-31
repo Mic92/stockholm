@@ -15,8 +15,8 @@ with lib;
       extraGroups = [
         "download"
       ];
-      openssh.authorizedKeys.keys = map readFile [
-        ../../krebs/Zpubkeys/lass.ssh.pub
+      openssh.authorizedKeys.keys = [
+        config.krebs.users.lass.pubkey
       ];
     };
 
