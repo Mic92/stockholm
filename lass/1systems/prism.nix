@@ -8,6 +8,7 @@ in {
   imports = [
     ../2configs/base.nix
     ../2configs/downloading.nix
+    ../2configs/git.nix
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
