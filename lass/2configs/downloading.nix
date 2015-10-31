@@ -1,7 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-{
+
+let
+  rpc-password = import <secrets/transmission-pw.nix>;
+in {
   imports = [
     ../3modules/folderPerms.nix
   ];
@@ -46,8 +49,7 @@ with lib;
       rpc-authentication-required = true;
       rpc-whitelist-enabled = false;
       rpc-username = "download";
-      #add rpc-password in secrets
-      rpc-password = "test123";
+      inherit rpc-password;
       peer-port = 51413;
     };
   };
