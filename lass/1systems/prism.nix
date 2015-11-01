@@ -84,6 +84,9 @@ in {
       #workaround for server dying after 6-7h
       boot.kernelPackages = pkgs.linuxPackages_4_2;
     }
+    {
+      nixpkgs.config.allowUnfree = true;
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
