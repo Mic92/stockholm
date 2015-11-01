@@ -132,6 +132,8 @@ let
       syn match Comment /\s#.*/
     ''}
 
+    au BufRead,BufNewFile /dev/shm/* set nobackup nowritebackup noswapfile
+
     nmap <esc>q :buffer
     nmap <M-q> :buffer
 
