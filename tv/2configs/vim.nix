@@ -66,11 +66,12 @@ let
 
   vim' = pkgs.writeScriptBin "vim" ''
     #! /bin/sh
-    set -eu
-    mkdir -p "$HOME"/.vim/backup
-    mkdir -p "$HOME"/.vim/cache
-    mkdir -p "$HOME"/.vim/undo
-    exec ${pkgs.vim}/bin/vim -u ${vimrc} "$@"
+    set -efu
+    ${pkgs.coreutils}/bin/mkdir -p "$HOME"/.vim/backup
+    ${pkgs.coreutils}/bin/mkdir -p "$HOME"/.vim/cache
+    ${pkgs.coreutils}/bin/mkdir -p "$HOME"/.vim/undo
+    export VIMINIT; VIMINIT=':so ${vimrc}'
+    exec ${pkgs.vim}/bin/vim "$@"
   '';
 
   vimrc = pkgs.writeText "vimrc" ''
