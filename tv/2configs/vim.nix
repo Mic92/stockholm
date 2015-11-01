@@ -112,9 +112,5 @@ let
     noremap <esc>[d <nop> | noremap! <esc>[d <nop>
     vnoremap u <nop>
   '';
-
-  # "7.4.335" -> "74"
-  majmin = x: concatStrings (take 2 (splitString "." x));
 in
 out
-#https://github.com/mbbill/undotree
