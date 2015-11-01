@@ -12,6 +12,7 @@ let
 
   runtimepath = concatStringsSep "," [
     vim-industry-colors
+    "${pkgs.vim}/share/vim/vim${majmin pkgs.vim.version}"
     "${pkgs.vimPlugins.undotree}/share/vim-plugins/undotree"
   ];
 
@@ -157,7 +158,7 @@ let
   '';
 
   # "7.4.335" -> "74"
-  #majmin = x: concatStrings (take 2 (splitString "." x));
+  majmin = x: concatStrings (take 2 (splitString "." x));
 in
 out
 #https://github.com/mbbill/undotree
