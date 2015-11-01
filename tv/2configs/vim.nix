@@ -11,9 +11,7 @@ let
   };
 
   runtimepath = concatStringsSep "," [
-    "$HOME/.vim" # TODO get rid if this and incorporate everything from wu:~tv/.vim
     "${pkgs.vimPlugins.undotree}/share/vim-plugins/undotree"
-    #"${tv-vim}/share/vim"
   ];
 
   vim-industry-colors = pkgs.writeTextFile rec {
