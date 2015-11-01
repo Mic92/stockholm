@@ -11,6 +11,7 @@ let
   };
 
   runtimepath = concatStringsSep "," [
+    vim-industry-colors
     "${pkgs.vimPlugins.undotree}/share/vim-plugins/undotree"
   ];
 
@@ -100,7 +101,8 @@ let
 
     filetype plugin indent on
 
-    "colorscheme industry # TODO
+    set t_Co=256
+    colorscheme industry
     syntax on
 
     cmap w!! w!sudo tee % >/dev/null
