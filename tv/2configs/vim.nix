@@ -4,32 +4,23 @@ with lib;
 let
   out = {
     environment.systemPackages = [
-      vim'
+      pkgs.vim
     ];
 
     # Nano really is just a stupid name for Vim.
-    # Note: passing just pkgs.vim to cvs to not rebuild it all the time
     nixpkgs.config.packageOverrides = pkgs: {
-      cvs = pkgs.cvs.override { nano = pkgs.vim; };
-      nano = vim';
+      nano = pkgs.vim;
     };
 
+    environment.etc.vimrc.source = vimrc;
+
     environment.variables.EDITOR = mkForce "vim";
+    environment.variables.VIMINIT = ":so /etc/vimrc";
   };
 
   extra-runtimepath = concatStringsSep "," [
     "${pkgs.vimPlugins.undotree}/share/vim-plugins/undotree"
   ];
-
-  vim' = pkgs.writeScriptBin "vim" ''
-    #! /bin/sh
-    set -efu
-    ${pkgs.coreutils}/bin/mkdir -p "$HOME"/.vim/backup
-    ${pkgs.coreutils}/bin/mkdir -p "$HOME"/.vim/cache
-    ${pkgs.coreutils}/bin/mkdir -p "$HOME"/.vim/undo
-    export VIMINIT; VIMINIT=':so ${vimrc}'
-    exec ${pkgs.vim}/bin/vim "$@"
-  '';
 
   vimrc = pkgs.writeText "vimrc" ''
     set nocompatible
