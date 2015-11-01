@@ -107,6 +107,25 @@ let
 
     cmap w!! w!sudo tee % >/dev/null
 
+    au BufRead,BufNewFile *.nix so ${pkgs.writeText "nix.vim" ''
+      setf nix
+
+      " Ref <nix/src/libexpr/lexer.l>
+      syn match INT   /[0-9]\+/
+      syn match PATH  /[a-zA-Z0-9\.\_\-\+]*\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
+      syn match HPATH /\~\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
+      syn match SPATH /<[a-zA-Z0-9\.\_\-\+]\+\(\/[a-zA-Z0-9\.\_\-\+]\+\)*>/
+      syn match URI   /[a-zA-Z][a-zA-Z0-9\+\-\.]*:[a-zA-Z0-9\%\/\?\:\@\&\=\+\$\,\-\_\.\!\~\*\']\+/
+      hi link INT Constant
+      hi link PATH Constant
+      hi link HPATH Constant
+      hi link SPATH Constant
+      hi link URI Constant
+
+      syn match String /"\([^"]\|\\\"\)*"/
+      syn match Comment /\s#.*/
+    ''}
+
     nmap <esc>q :buffer
     nmap <M-q> :buffer
 
