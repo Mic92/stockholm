@@ -108,7 +108,10 @@ let
     colorscheme industry
     syntax on
 
-    cmap w!! w!sudo tee % >/dev/null
+    au Syntax * syn match Tabstop containedin=ALL /\t\+/
+            \ | hi Tabstop ctermbg=16
+            \ | syn match TrailingSpace containedin=ALL /\s\+$/
+            \ | hi TrailingSpace ctermbg=88
 
     au BufRead,BufNewFile *.nix so ${pkgs.writeText "nix.vim" ''
       setf nix
