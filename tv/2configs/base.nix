@@ -3,17 +3,13 @@
 with builtins;
 with lib;
 
-let
-  # "7.4.335" -> "74"
-  majmin = x: concatStrings (take 2 (splitString "." x));
-in
-
 {
   krebs.enable = true;
 
   networking.hostName = config.krebs.build.host.name;
 
   imports = [
+    ./vim.nix
     {
       # stockholm dependencies
       environment.systemPackages = with pkgs; [
@@ -107,10 +103,8 @@ in
         lAtr = "ls -lAtr";
         # alias ll='ls -l'
         ls = "ls -h --color=auto --group-directories-first";
-        # alias vim='vim -p'
-        # alias vi='vim'
-        # alias view='vim -R'
         dmesg = "dmesg -L --reltime";
+        view = "vim -R";
       };
 
       programs.bash = {
@@ -153,10 +147,6 @@ in
     }
 
     {
-      nixpkgs.config.packageOverrides = pkgs: {
-        nano = pkgs.vim;
-      };
-
       services.cron.enable = false;
       services.nscd.enable = false;
       services.ntp.enable = false;

@@ -110,7 +110,6 @@ with lib;
         #minicom
         #mtools
         #ncmpc
-        #neovim
         #nethogs
         #nix-prefetch-scripts #cvs bug
         #openssl
