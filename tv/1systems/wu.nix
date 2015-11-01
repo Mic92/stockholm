@@ -11,7 +11,7 @@ with lib;
   krebs.build.source = {
     git.nixpkgs = {
       url = https://github.com/NixOS/nixpkgs;
-      rev = "e916273209560b302ab231606babf5ce1c481f08";
+      rev = "c44a593aa43bba6a0708f6f36065a514a5110613";
     };
     dir.secrets = {
       host = config.krebs.hosts.wu;
