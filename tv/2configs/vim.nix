@@ -85,6 +85,7 @@ let
     set hlsearch
     set incsearch
     set mouse=a
+    set noruler
     set pastetoggle=<INS>
     set runtimepath=${runtimepath}
     set shortmess+=I
