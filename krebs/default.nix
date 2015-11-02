@@ -178,7 +178,7 @@ let out = {
 
       nix-path =
         lib.concatStringsSep ":"
-          (lib.mapAttrsToList (name: _: "${name}=/root/${name}")
+          (lib.mapAttrsToList (name: src: "${name}=${src.target-path}")
             (config.krebs.build.source.dir //
              config.krebs.build.source.git));
     in ''
