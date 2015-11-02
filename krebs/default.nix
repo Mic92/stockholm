@@ -84,6 +84,7 @@ let out = {
 
       cat<<EOF
       # put following into config.krebs.hosts.$system:
+      ssh.privkey.path = <secrets/ssh.$key_type>;
       ssh.pubkey = $(echo $pubkey | jq -R .);
       EOF
     '';
