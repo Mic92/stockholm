@@ -50,6 +50,8 @@ let
     set wildmenu
     set wildmode=longest,full
 
+    set et ts=2 sts=2 sw=2
+
     filetype plugin indent on
 
     set t_Co=256
