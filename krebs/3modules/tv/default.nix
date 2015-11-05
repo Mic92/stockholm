@@ -158,7 +158,8 @@ with lib;
         };
       };
       secure = true;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILn7C3LxAs9kUynENdRNgQs4qjrhNDfXzlHTpVJt6e09";
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILMPMh3nHxVcPqM+LrkK7eYxNJY1ShBXOTg1vlSR45wx";
     };
     ok = {
       nets = {
