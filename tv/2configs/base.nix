@@ -72,6 +72,8 @@ with lib;
       nix.useChroot = true;
     }
     {
+      environment.profileRelativeEnvVars.PATH = mkForce [ "/bin" ];
+
       environment.systemPackages = with pkgs; [
         rxvt_unicode.terminfo
       ];
