@@ -69,22 +69,6 @@ with lib;
       nix.useChroot = true;
     }
     {
-      # oldvim
-      environment.systemPackages = with pkgs; [
-        vim
-      ];
-
-      environment.etc."vim/vimrc".text = ''
-        set nocp
-      '';
-
-      environment.etc."vim/vim${majmin pkgs.vim.version}".source =
-          "${pkgs.vim}/share/vim/vim${majmin pkgs.vim.version}";
-
-      environment.variables.EDITOR = mkForce "vim";
-      environment.variables.VIM = "/etc/vim";
-    }
-    {
       environment.systemPackages = with pkgs; [
         rxvt_unicode.terminfo
       ];
