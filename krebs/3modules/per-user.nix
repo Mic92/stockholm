@@ -3,10 +3,10 @@
 with lib;
 
 let
-  cfg = config.tv.per-user;
+  cfg = config.krebs.per-user;
 
   out = {
-    options.tv.per-user = api;
+    options.krebs.per-user = api;
     config = imp;
   };
 
