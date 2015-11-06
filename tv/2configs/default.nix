@@ -5,6 +5,25 @@ with lib;
 {
   krebs.enable = true;
 
+  krebs.build = {
+    user = config.krebs.users.tv;
+    target = mkDefault "root@${config.krebs.build.host.name}";
+    source = {
+      git.nixpkgs = {
+        url = mkDefault https://github.com/NixOS/nixpkgs;
+        rev = mkDefault "c44a593aa43bba6a0708f6f36065a514a5110613";
+        target-path = mkDefault "/var/src/nixpkgs";
+      };
+      dir.secrets = {
+        path = mkDefault "/home/tv/secrets/${config.krebs.build.host.name}";
+      };
+      dir.stockholm = {
+        path = mkDefault "/home/tv/stockholm";
+        target-path = mkDefault "/var/src/stockholm";
+      };
+    };
+  };
+
   networking.hostName = config.krebs.build.host.name;
 
   imports = [

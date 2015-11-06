@@ -4,22 +4,6 @@ with lib;
 
 {
   krebs.build.host = config.krebs.hosts.xu;
-  krebs.build.user = config.krebs.users.tv;
-
-  krebs.build.target = "root@xu";
-
-  krebs.build.source = {
-    git.nixpkgs = {
-      url = https://github.com/NixOS/nixpkgs;
-      rev = "c44a593aa43bba6a0708f6f36065a514a5110613";
-    };
-    dir.secrets = {
-      path = "/home/tv/secrets/xu";
-    };
-    dir.stockholm = {
-      path = "/home/tv/stockholm";
-    };
-  };
 
   imports = [
     ../2configs/hw/x220.nix
