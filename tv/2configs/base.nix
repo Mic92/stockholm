@@ -33,6 +33,7 @@ with lib;
         root = {
           openssh.authorizedKeys.keys = [
             config.krebs.users.tv.pubkey
+            config.krebs.users.tv_xu.pubkey
           ];
         };
         tv = {
