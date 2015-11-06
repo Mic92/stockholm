@@ -80,7 +80,7 @@ let
       hi link SPATH Constant
       hi link URI Constant
 
-      syn match String /"\([^"]\|\\\"\)*"/
+      syn match String /"\([^\\"]\|\\.\)*"/
       syn match Comment /\(^\|\s\)#.*/
     ''}
 
