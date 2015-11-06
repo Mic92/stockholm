@@ -23,6 +23,9 @@ with lib;
                  (import <secrets/hashedPasswords.nix>);
     }
     {
+      users.groups.subusers.gid = 1093178926; # genid subusers
+    }
+    {
       users.defaultUserShell = "/run/current-system/sw/bin/bash";
       users.mutableUsers = false;
     }

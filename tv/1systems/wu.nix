@@ -32,6 +32,7 @@ with lib;
     ../2configs/git.nix
     ../2configs/mail-client.nix
     ../2configs/xserver
+    ../2configs/z.nix
     {
       environment.systemPackages = with pkgs; [
 
@@ -286,16 +287,6 @@ with lib;
 
           onion = {
             uid = 6660010;
-          };
-
-          zalora = {
-            uid = 1000301;
-            extraGroups = [
-              "audio"
-              # TODO remove vboxusers when hardening is active
-              "vboxusers"
-              "video"
-            ];
           };
         };
 
