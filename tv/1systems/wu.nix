@@ -15,11 +15,9 @@ with lib;
       target-path = "/var/src/nixpkgs";
     };
     dir.secrets = {
-      host = config.krebs.hosts.wu;
       path = "/home/tv/secrets/wu";
     };
     dir.stockholm = {
-      host = config.krebs.hosts.wu;
       path = "/home/tv/stockholm";
       target-path = "/var/src/stockholm";
     };
@@ -27,11 +25,11 @@ with lib;
 
   imports = [
     ../2configs/hw/w110er.nix
-    ../2configs/base.nix
     #../2configs/consul-client.nix
     ../2configs/git.nix
     ../2configs/mail-client.nix
     ../2configs/xserver
+    ../2configs/z.nix
     {
       environment.systemPackages = with pkgs; [
 
@@ -286,16 +284,6 @@ with lib;
 
           onion = {
             uid = 6660010;
-          };
-
-          zalora = {
-            uid = 1000301;
-            extraGroups = [
-              "audio"
-              # TODO remove vboxusers when hardening is active
-              "vboxusers"
-              "video"
-            ];
           };
         };
 

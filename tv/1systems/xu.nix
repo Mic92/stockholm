@@ -14,22 +14,20 @@ with lib;
       rev = "c44a593aa43bba6a0708f6f36065a514a5110613";
     };
     dir.secrets = {
-      host = config.krebs.hosts.wu;
       path = "/home/tv/secrets/xu";
     };
     dir.stockholm = {
-      host = config.krebs.hosts.wu;
       path = "/home/tv/stockholm";
     };
   };
 
   imports = [
     ../2configs/hw/x220.nix
-    ../2configs/base.nix
     #../2configs/consul-client.nix
     ../2configs/git.nix
     ../2configs/mail-client.nix
     ../2configs/xserver
+    ../2configs/z.nix
     {
       environment.systemPackages = with pkgs; [
 
@@ -285,16 +283,6 @@ with lib;
 
           onion = {
             uid = 6660010;
-          };
-
-          zalora = {
-            uid = 1000301;
-            extraGroups = [
-              "audio"
-              # TODO remove vboxusers when hardening is active
-              "vboxusers"
-              "video"
-            ];
           };
         };
 

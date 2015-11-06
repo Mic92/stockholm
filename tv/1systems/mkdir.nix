@@ -27,11 +27,9 @@ in
       rev = "c44a593aa43bba6a0708f6f36065a514a5110613";
     };
     dir.secrets = {
-      host = config.krebs.hosts.wu;
       path = "/home/tv/secrets/mkdir";
     };
     dir.stockholm = {
-      host = config.krebs.hosts.wu;
       path = "/home/tv/stockholm";
     };
   };
@@ -39,7 +37,6 @@ in
   imports = [
     ../2configs/hw/CAC-Developer-1.nix
     ../2configs/fs/CAC-CentOS-7-64bit.nix
-    ../2configs/base.nix
     ../2configs/consul-server.nix
     ../2configs/exim-smarthost.nix
     ../2configs/git.nix

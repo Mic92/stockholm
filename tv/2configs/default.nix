@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with builtins;
 with lib;
 
 {
@@ -23,6 +22,9 @@ with lib;
                  (import <secrets/hashedPasswords.nix>);
     }
     {
+      users.groups.subusers.gid = 1093178926; # genid subusers
+    }
+    {
       users.defaultUserShell = "/run/current-system/sw/bin/bash";
       users.mutableUsers = false;
     }
@@ -31,6 +33,7 @@ with lib;
         root = {
           openssh.authorizedKeys.keys = [
             config.krebs.users.tv.pubkey
+            config.krebs.users.tv_xu.pubkey
           ];
         };
         tv = {
@@ -69,22 +72,8 @@ with lib;
       nix.useChroot = true;
     }
     {
-      # oldvim
-      environment.systemPackages = with pkgs; [
-        vim
-      ];
+      environment.profileRelativeEnvVars.PATH = mkForce [ "/bin" ];
 
-      environment.etc."vim/vimrc".text = ''
-        set nocp
-      '';
-
-      environment.etc."vim/vim${majmin pkgs.vim.version}".source =
-          "${pkgs.vim}/share/vim/vim${majmin pkgs.vim.version}";
-
-      environment.variables.EDITOR = mkForce "vim";
-      environment.variables.VIM = "/etc/vim";
-    }
-    {
       environment.systemPackages = with pkgs; [
         rxvt_unicode.terminfo
       ];
