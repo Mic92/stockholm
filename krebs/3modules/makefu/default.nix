@@ -210,6 +210,30 @@ with lib;
         };
       };
     };
+    filepimp = rec {
+      cores = 1;
+      dc = "makefu"; #nas
+
+      nets = {
+        retiolum = {
+          addrs4 = ["10.243.153.102"];
+          addrs6 = ["42:4b0b:d990:55ba:8da8:630f:dc0e:aae0"];
+          aliases = [
+            "filepimp.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAvgvzx3rT/3zLuCkzXk1ZkYBkG4lltxrLOLNivohw2XAzrYDIw/ZY
+            BTDDcD424EkNOF6g/3tIRWqvVGZ1u12WQ9A/R+2F7i1SsaE4nTxdNlQ5rjy80gO3
+            i1ZubMkTGwd1OYjJytYdcMTwM9V9/8QYFiiWqh77Xxu/FhY6PcQqwHxM7SMyZCJ7
+            09gtZuR16ngKnKfo2tw6C3hHQtWCfORVbWQq5cmGzCb4sdIKow5BxUC855MulNsS
+            u5l+G8wX+UbDI85VSDAtOP4QaSFzLL+U0aaDAmq0NO1QiODJoCo0iPhULZQTFZUa
+            OMDYHHfqzluEI7n8ENI4WwchDXH+MstsgwIDAQAB
+            -----END RSA PUBLIC KEY-----
+            '';
+        };
+      };
+    };
     gum = rec {
       cores = 1;
       dc = "online.net"; #root-server
