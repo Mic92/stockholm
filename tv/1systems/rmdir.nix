@@ -27,11 +27,9 @@ in
       rev = "c44a593aa43bba6a0708f6f36065a514a5110613";
     };
     dir.secrets = {
-      host = config.krebs.hosts.wu;
       path = "/home/tv/secrets/rmdir";
     };
     dir.stockholm = {
-      host = config.krebs.hosts.wu;
       path = "/home/tv/stockholm";
     };
   };

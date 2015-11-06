@@ -15,11 +15,9 @@ with lib;
       target-path = "/var/src/nixpkgs";
     };
     dir.secrets = {
-      host = config.krebs.hosts.wu;
       path = "/home/tv/secrets/wu";
     };
     dir.stockholm = {
-      host = config.krebs.hosts.wu;
       path = "/home/tv/stockholm";
       target-path = "/var/src/stockholm";
     };
