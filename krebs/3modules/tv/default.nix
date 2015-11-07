@@ -277,7 +277,8 @@ with lib;
         };
       };
       secure = true;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID554niVFWomJjuSuQoiCdMUYrCFPpPzQuaoXXYYDxlw";
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPnjfceKuHNQu7S4eYFN1FqgzMqiL7haNZMh2ZLhvuhK root@xu";
     };
   };
   users = addNames rec {
