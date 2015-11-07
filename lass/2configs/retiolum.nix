@@ -16,7 +16,7 @@
     enable = true;
     hosts = ../../krebs/Zhosts;
     connectTo = [
-      "fastpoke"
+      "prism"
       "cloudkrebs"
       "echelon"
       "pigstarter"

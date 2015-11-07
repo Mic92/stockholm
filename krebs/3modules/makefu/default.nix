@@ -164,6 +164,8 @@ with lib;
       dc = "makefu"; #dc = "cac";
       extraZones = {
         "krebsco.de" = ''
+          euer           IN A  ${head nets.internet.addrs4}
+          wiki.euer      IN A  ${head nets.internet.addrs4}
           wry            IN A  ${head nets.internet.addrs4}
           io             IN NS wry.krebsco.de.
           graphs         IN A  ${head nets.internet.addrs4}
@@ -185,9 +187,14 @@ with lib;
           addrs6 = ["42:6e1e:cc8a:7cef:827:f938:8c64:baad"];
           aliases = [
             "graphs.wry.retiolum"
+            "graphs.retiolum"
             "paste.wry.retiolum"
             "paste.retiolum"
             "wry.retiolum"
+            "wiki.makefu.retiolum"
+            "wiki.wry.retiolum"
+            "blog.makefu.retiolum"
+            "blog.wry.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -207,14 +214,37 @@ with lib;
         };
       };
     };
+    filepimp = rec {
+      cores = 1;
+      dc = "makefu"; #nas
+
+      nets = {
+        retiolum = {
+          addrs4 = ["10.243.153.102"];
+          addrs6 = ["42:4b0b:d990:55ba:8da8:630f:dc0e:aae0"];
+          aliases = [
+            "filepimp.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAvgvzx3rT/3zLuCkzXk1ZkYBkG4lltxrLOLNivohw2XAzrYDIw/ZY
+            BTDDcD424EkNOF6g/3tIRWqvVGZ1u12WQ9A/R+2F7i1SsaE4nTxdNlQ5rjy80gO3
+            i1ZubMkTGwd1OYjJytYdcMTwM9V9/8QYFiiWqh77Xxu/FhY6PcQqwHxM7SMyZCJ7
+            09gtZuR16ngKnKfo2tw6C3hHQtWCfORVbWQq5cmGzCb4sdIKow5BxUC855MulNsS
+            u5l+G8wX+UbDI85VSDAtOP4QaSFzLL+U0aaDAmq0NO1QiODJoCo0iPhULZQTFZUa
+            OMDYHHfqzluEI7n8ENI4WwchDXH+MstsgwIDAQAB
+            -----END RSA PUBLIC KEY-----
+            '';
+        };
+      };
+    };
     gum = rec {
       cores = 1;
       dc = "online.net"; #root-server
 
       extraZones = {
         "krebsco.de" = ''
-          omo               IN A      ${head nets.internet.addrs4}
-          euer              IN A      ${head nets.internet.addrs4}
+          share.euer        IN A      ${head nets.internet.addrs4}
           gum               IN A      ${head nets.internet.addrs4}
         '';
       };

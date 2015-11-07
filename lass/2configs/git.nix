@@ -33,6 +33,8 @@ let
     web-routes-wai-custom = {};
     go = {};
     newsbot-js = {};
+    kimsufi-check = {};
+    realwallpaper = {};
   };
 
   restricted-repos = mapAttrs make-restricted-repo (

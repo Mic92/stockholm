@@ -1,6 +1,10 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-{
+with lib;
+
+let
+  rpc-password = import <secrets/transmission-pw.nix>;
+in {
   imports = [
     ../3modules/folderPerms.nix
   ];
@@ -10,8 +14,12 @@
       name = "download";
       home = "/var/download";
       createHome = true;
+      useDefaultShell = true;
       extraGroups = [
         "download"
+      ];
+      openssh.authorizedKeys.keys = [
+        config.krebs.users.lass.pubkey
       ];
     };
 
@@ -41,8 +49,8 @@
       rpc-authentication-required = true;
       rpc-whitelist-enabled = false;
       rpc-username = "download";
-      #add rpc-password in secrets
-      rpc-password = "test123";
+      inherit rpc-password;
+      peer-port = 51413;
     };
   };
 
@@ -50,6 +58,8 @@
     enable = true;
     tables.filter.INPUT.rules = [
       { predicate = "-p tcp --dport 9091"; target = "ACCEPT"; }
+      { predicate = "-p tcp --dport 51413"; target = "ACCEPT"; }
+      { predicate = "-p udp --dport 51413"; target = "ACCEPT"; }
     ];
   };
 

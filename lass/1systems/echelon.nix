@@ -47,6 +47,23 @@ in {
         { predicate = "-i retiolum -p udp --dport 53"; target = "ACCEPT"; }
       ];
     }
+    {
+      users.extraUsers = {
+        satan = {
+          name = "satan";
+          uid = 1338;
+          home = "/home/satan";
+          group = "users";
+          createHome = true;
+          useDefaultShell = true;
+          extraGroups = [
+          ];
+          openssh.authorizedKeys.keys = [
+            "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+l3ajjOd80uJBM8oHO9HRbtA5hK6hvrpxxnk7qWW7OloT9IXcoM8bbON755vK0O6XyxZo1JZ1SZ7QIaOREGVIRDjcbJbqD3O+nImc6Rzxnrz7hvE+tuav9Yylwcw5HeQi82UIMGTEAwMHwLvsW6R/xyMCuOTbbzo9Ib8vlJ8IPDECY/05RhL7ZYFR0fdphI7jq7PobnO8WEpCZDhMvSYjO9jf3ac53wyghT3gH7AN0cxTR9qgQlPHhTbw+nZEI0sUKtrIhjfVE80wgK3NQXZZj7YAplRs/hYwSi7i8V0+8CBt2epc/5RKnJdDHFQnaTENq9kYQPOpUCP6YUwQIo8X nineinchnade@gmail.com"
+          ];
+        };
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.echelon;

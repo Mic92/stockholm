@@ -15,8 +15,8 @@ with lib;
     {
       users.extraUsers = {
         root = {
-          openssh.authorizedKeys.keys = map readFile [
-            ../../krebs/Zpubkeys/lass.ssh.pub
+          openssh.authorizedKeys.keys = [
+            config.krebs.users.lass.pubkey
           ];
         };
         mainUser = {
@@ -27,11 +27,9 @@ with lib;
           createHome = true;
           useDefaultShell = true;
           extraGroups = [
-            "audio"
-            "wheel"
           ];
-          openssh.authorizedKeys.keys = map readFile [
-            ../../krebs/Zpubkeys/lass.ssh.pub
+          openssh.authorizedKeys.keys = [
+            config.krebs.users.lass.pubkey
           ];
         };
       };
@@ -50,7 +48,7 @@ with lib;
       source = {
         git.nixpkgs = {
           url = https://github.com/Lassulus/nixpkgs;
-          rev = "33bdc011f5360288cd10b9fda90da2950442b2ab";
+          rev = "6d31e9b81dcd4ab927bb3dc91b612dd5abfa2f80";
         };
         dir.secrets = {
           host = config.krebs.hosts.mors;

@@ -95,8 +95,12 @@ let
 
         ExecStartPre = pkgs.writeScript "tinc_graphs-init" ''
           #!/bin/sh
+          mkdir -p "${internal_dir}" "${external_dir}"
           if ! test -e "${cfg.workingDir}/internal/index.html"; then
-            cp -fr "$(${pkgs.tinc_graphs}/bin/tincstats-static-dir)/internal/" "${internal_dir}"
+            cp -fr "$(${pkgs.tinc_graphs}/bin/tincstats-static-dir)/internal/." "${internal_dir}"
+          fi
+          if ! test -e "${cfg.workingDir}/external/index.html"; then
+            cp -fr "$(${pkgs.tinc_graphs}/bin/tincstats-static-dir)/external/." "${external_dir}"
           fi
         '';
 
@@ -118,7 +122,6 @@ let
     users.extraUsers.tinc_graphs = {
       uid = 3925439960; #genid tinc_graphs
       home = "/var/spool/tinc_graphs";
-      createHome = true;
     };
 
     krebs.nginx.servers = mkIf cfg.nginx.enable {

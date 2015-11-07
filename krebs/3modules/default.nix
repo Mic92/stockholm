@@ -108,8 +108,8 @@ let
 
       # Implements environment.etc."zones/<zone-name>"
       environment.etc = let
-        stripEmptyLines = s: concatStringsSep "\n"
-          (remove "\n" (remove "" (splitString "\n" s)));
+        stripEmptyLines = s: (concatStringsSep "\n"
+          (remove "\n" (remove "" (splitString "\n" s)))) + "\n";
         all-zones = foldAttrs (sum: current: sum + "\n" +current ) ""
           ([cfg.zone-head-config] ++ combined-hosts);
         combined-hosts = (mapAttrsToList (name: value: value.extraZones)  cfg.hosts );

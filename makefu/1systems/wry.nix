@@ -8,9 +8,10 @@ let
 in {
   imports = [
       # TODO: copy this config or move to krebs
-      ../../tv/2configs/CAC-CentOS-7-64bit.nix
-      ../2configs/base.nix
+      ../../tv/2configs/hw/CAC.nix
+      ../../tv/2configs/fs/CAC-CentOS-7-64bit.nix
       ../2configs/unstable-sources.nix
+      ../2configs/headless.nix
       ../2configs/tinc-basic-retiolum.nix
 
       ../2configs/bepasty-dual.nix
@@ -19,15 +20,16 @@ in {
 
       # Reaktor
       ../2configs/Reaktor/simpleExtend.nix
+
+      # other nginx
+      ../2configs/nginx/euer.wiki.nix
+      ../2configs/nginx/euer.blog.nix
+
+      # collectd
+      ../2configs/collectd/collectd-base.nix
   ];
 
-  krebs.build = {
-    user = config.krebs.users.makefu;
-    target = "root@wry";
-    host = config.krebs.hosts.wry;
-  };
-
-
+  krebs.build.host = config.krebs.hosts.wry;
 
   krebs.Reaktor.enable = true;
 
@@ -47,7 +49,7 @@ in {
       # TODO: remove hard-coded hostname
       complete = {
         listen = [ "${internal-ip}:80" ];
-        server-names = [ "graphs.wry" ];
+        server-names = [ "graphs.wry" "graphs.retiolum" "graphs.wry.retiolum" ];
       };
       anonymous = {
         listen = [ "${external-ip}:80" ] ;
@@ -55,9 +57,11 @@ in {
       };
     };
   };
+
   networking = {
     firewall.allowPing = true;
     firewall.allowedTCPPorts = [ 53 80 443 ];
+    firewall.allowedUDPPorts = [ 655 ];
     interfaces.enp2s1.ip4 = [{
       address = external-ip;
       prefixLength = 24;
@@ -66,7 +70,5 @@ in {
     nameservers = [ "8.8.8.8" ];
   };
 
-
-  # based on ../../tv/2configs/CAC-Developer-2.nix
-  sound.enable = false;
+  environment.systemPackages = [ pkgs.translate-shell ];
 }
