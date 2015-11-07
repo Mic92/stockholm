@@ -1,10 +1,28 @@
 { config, lib, pkgs, ... }:
 
-with builtins;
 with lib;
 
 {
   krebs.enable = true;
+
+  krebs.build = {
+    user = config.krebs.users.tv;
+    target = mkDefault "root@${config.krebs.build.host.name}";
+    source = {
+      git.nixpkgs = {
+        url = mkDefault https://github.com/NixOS/nixpkgs;
+        rev = mkDefault "c44a593aa43bba6a0708f6f36065a514a5110613";
+        target-path = mkDefault "/var/src/nixpkgs";
+      };
+      dir.secrets = {
+        path = mkDefault "/home/tv/secrets/${config.krebs.build.host.name}";
+      };
+      dir.stockholm = {
+        path = mkDefault "/home/tv/stockholm";
+        target-path = mkDefault "/var/src/stockholm";
+      };
+    };
+  };
 
   networking.hostName = config.krebs.build.host.name;
 
@@ -23,6 +41,9 @@ with lib;
                  (import <secrets/hashedPasswords.nix>);
     }
     {
+      users.groups.subusers.gid = 1093178926; # genid subusers
+    }
+    {
       users.defaultUserShell = "/run/current-system/sw/bin/bash";
       users.mutableUsers = false;
     }
@@ -31,6 +52,7 @@ with lib;
         root = {
           openssh.authorizedKeys.keys = [
             config.krebs.users.tv.pubkey
+            config.krebs.users.tv_xu.pubkey
           ];
         };
         tv = {
@@ -69,6 +91,8 @@ with lib;
       nix.useChroot = true;
     }
     {
+      environment.profileRelativeEnvVars.PATH = mkForce [ "/bin" ];
+
       environment.systemPackages = with pkgs; [
         rxvt_unicode.terminfo
       ];

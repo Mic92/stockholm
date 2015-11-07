@@ -32,7 +32,10 @@ let stockholm = {
   upath = lib.nspath current-user-name;
 
   base-module = { config, ... }: {
-    imports = map (f: f "3modules") [ kpath upath ];
+    imports = builtins.filter builtins.pathExists (lib.concatLists [
+      (map (f: f "2configs") [ upath ])
+      (map (f: f "3modules") [ kpath upath ])
+    ]);
 
     krebs.current.enable = true;
     krebs.current.host = config.krebs.hosts.${current-host-name};
