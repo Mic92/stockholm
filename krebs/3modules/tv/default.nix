@@ -159,7 +159,7 @@ with lib;
       };
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILMPMh3nHxVcPqM+LrkK7eYxNJY1ShBXOTg1vlSR45wx";
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMIHmwXHV7E9UGuk4voVCADjlLkyygqNw054jvrsPn5t root@nomic";
     };
     ok = {
       nets = {
