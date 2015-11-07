@@ -15,6 +15,7 @@ with lib;
     ../2configs/mail-client.nix
     ../2configs/xserver
     ../2configs/z.nix
+    ../2configs/sub/xr.nix
     {
       environment.systemPackages = with pkgs; [
 
@@ -236,14 +237,6 @@ with lib;
               "audio"
               "video"
               "bumblebee"
-            ];
-          };
-
-          xr = {
-            uid = 13370061;
-            extraGroups = [
-              "audio"
-              "video"
             ];
           };
 

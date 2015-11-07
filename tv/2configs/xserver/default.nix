@@ -40,6 +40,7 @@ let
       pkgs.pavucontrol
       pkgs.slock
       pkgs.sxiv
+      pkgs.xsel
       pkgs.zathura
     ];
 
