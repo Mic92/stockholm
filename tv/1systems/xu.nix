@@ -5,6 +5,9 @@ with lib;
 {
   krebs.build.host = config.krebs.hosts.xu;
 
+  krebs.build.source.git.nixpkgs.rev =
+    "7ae05edcdd14f6ace83ead9bf0d114e97c89a83a";
+
   imports = [
     ../2configs/hw/x220.nix
     #../2configs/consul-client.nix
@@ -12,6 +15,7 @@ with lib;
     ../2configs/mail-client.nix
     ../2configs/xserver
     ../2configs/z.nix
+    ../2configs/sub/xr.nix
     {
       environment.systemPackages = with pkgs; [
 
@@ -233,14 +237,6 @@ with lib;
               "audio"
               "video"
               "bumblebee"
-            ];
-          };
-
-          xr = {
-            uid = 13370061;
-            extraGroups = [
-              "audio"
-              "video"
             ];
           };
 

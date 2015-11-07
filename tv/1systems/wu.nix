@@ -12,6 +12,7 @@ with lib;
     ../2configs/mail-client.nix
     ../2configs/xserver
     ../2configs/z.nix
+    ../2configs/sub/xr.nix
     {
       environment.systemPackages = with pkgs; [
 
@@ -120,6 +121,8 @@ with lib;
         #xkill
         #xl2tpd
         #xsel
+
+        unison
       ];
     }
     {
@@ -228,14 +231,6 @@ with lib;
 
           df = {
             uid = 13370401;
-            extraGroups = [
-              "audio"
-              "video"
-            ];
-          };
-
-          xr = {
-            uid = 13370061;
             extraGroups = [
               "audio"
               "video"
