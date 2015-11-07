@@ -122,6 +122,8 @@ with lib;
         #xkill
         #xl2tpd
         #xsel
+
+        unison
       ];
     }
     {
