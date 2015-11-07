@@ -44,29 +44,23 @@ with lib;
         bind # dig
         #cac
         dic
-        ff
         file
-        gitAndTools.qgit  #xserver
         gnupg21
         haskellPackages.hledger
         htop
         jq
         manpages
         mkpasswd
-        mpv #xserver
         netcat
         nix-repl
         nmap
         nq
         p7zip
-        pavucontrol #xserver
+        pass
         posix_man_pages
-        #pssh
         qrencode
-        sxiv #xserver
         texLive
         tmux
-        zathura #xserver
 
         #ack
         #apache-httpd
