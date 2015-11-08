@@ -90,6 +90,15 @@ with lib;
         view = "vim -R";
       };
 
+      environment.variables = {
+        NIX_PATH =
+          with config.krebs.build.source; with dir; with git;
+          mkForce (concatStringsSep ":" [
+            "nixpkgs=${nixpkgs.target-path}"
+            "secrets=${stockholm.target-path}/null"
+          ]);
+      };
+
       programs.bash = {
         interactiveShellInit = ''
           HISTCONTROL='erasedups:ignorespace'
