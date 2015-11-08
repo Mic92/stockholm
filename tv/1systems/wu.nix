@@ -11,8 +11,6 @@ with lib;
     ../2configs/git.nix
     ../2configs/mail-client.nix
     ../2configs/xserver
-    ../2configs/z.nix
-    ../2configs/sub/xr.nix
     {
       environment.systemPackages = with pkgs; [
 
@@ -157,114 +155,6 @@ with lib;
           "pigstarter"
         ];
       };
-    }
-    {
-      users.extraGroups = {
-        tv.gid = 1337;
-        slaves.gid = 3799582008; # genid slaves
-      };
-
-      users.extraUsers =
-        mapAttrs (name: user@{ extraGroups ? [], ... }: user // {
-          inherit name;
-          home = "/home/${name}";
-          createHome = true;
-          useDefaultShell = true;
-          group = "tv";
-          extraGroups = ["slaves"] ++ extraGroups;
-        }) {
-          ff = {
-            uid = 13378001;
-            extraGroups = [
-              "audio"
-              "video"
-            ];
-          };
-
-          cr = {
-            uid = 13378002;
-            extraGroups = [
-              "audio"
-              "video"
-            ];
-          };
-
-          fa = {
-            uid = 2300001;
-          };
-
-          rl = {
-            uid = 2300002;
-          };
-
-          tief = {
-            uid = 2300702;
-          };
-
-          btc-bitcoind = {
-            uid = 2301001;
-          };
-
-          btc-electrum = {
-            uid = 2301002;
-          };
-
-          ltc-litecoind = {
-            uid = 2301101;
-          };
-
-          eth = {
-            uid = 2302001;
-          };
-
-          emse-hsdb = {
-            uid = 4200101;
-          };
-
-          wine = {
-            uid = 13370400;
-            extraGroups = [
-              "audio"
-              "video"
-            ];
-          };
-
-          df = {
-            uid = 13370401;
-            extraGroups = [
-              "audio"
-              "video"
-            ];
-          };
-
-          "23" = {
-            uid = 13370023;
-          };
-
-          electrum = {
-            uid = 13370102;
-          };
-
-          skype = {
-            uid = 6660001;
-            extraGroups = [
-              "audio"
-            ];
-          };
-
-          onion = {
-            uid = 6660010;
-          };
-        };
-
-      security.sudo.extraConfig =
-        let
-          isSlave = u: elem "slaves" u.extraGroups;
-          masterOf = u: u.group;
-          slaves = filterAttrs (_: isSlave) config.users.extraUsers;
-          toSudoers = u: "${masterOf u} ALL=(${u.name}) NOPASSWD: ALL";
-        in
-        concatMapStringsSep "\n" toSudoers (attrValues slaves);
     }
   ];
 

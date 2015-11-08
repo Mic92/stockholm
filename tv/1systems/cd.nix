@@ -115,7 +115,6 @@ with lib;
     iftop
     iotop
     iptables
-    mutt    # for mv
     nethogs
     ntp     # ntpate
     rxvt_unicode.terminfo
@@ -126,17 +125,4 @@ with lib;
     SystemMaxUse=1G
     RuntimeMaxUse=128M
   '';
-
-  users.extraUsers = {
-    mv = {
-      uid = 1338;
-      group = "users";
-      home = "/home/mv";
-      createHome = true;
-      useDefaultShell = true;
-      openssh.authorizedKeys.keys = [
-        config.krebs.users.mv.pubkey
-      ];
-    };
-  };
 }

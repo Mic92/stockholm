@@ -27,6 +27,7 @@ with lib;
   networking.hostName = config.krebs.build.host.name;
 
   imports = [
+    <secrets>
     ./vim.nix
     {
       # stockholm dependencies
@@ -35,40 +36,14 @@ with lib;
       ];
     }
     {
-      # TODO never put hashedPassword into the store
-      users.extraUsers =
-        mapAttrs (_: h: { hashedPassword = h; })
-                 (import <secrets/hashedPasswords.nix>);
-    }
-    {
-      users.groups.subusers.gid = 1093178926; # genid subusers
-    }
-    {
-      users.defaultUserShell = "/run/current-system/sw/bin/bash";
-      users.mutableUsers = false;
-    }
-    {
-      users.extraUsers = {
-        root = {
-          openssh.authorizedKeys.keys = [
-            config.krebs.users.tv.pubkey
-            config.krebs.users.tv_xu.pubkey
-          ];
-        };
-        tv = {
-          uid = 1337;
-          group = "users";
-          home = "/home/tv";
-          createHome = true;
-          useDefaultShell = true;
-          extraGroups = [
-            "audio"
-            "video"
-            "wheel"
-          ];
-          openssh.authorizedKeys.keys = [
-            config.krebs.users.tv.pubkey
-          ];
+      users = {
+        defaultUserShell = "/run/current-system/sw/bin/bash";
+        mutableUsers = false;
+        users = {
+          tv = {
+            isNormalUser = true;
+            uid = 1337;
+          };
         };
       };
     }
