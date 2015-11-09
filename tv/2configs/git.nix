@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with import ../4lib { inherit lib pkgs; };
+with lib;
+
 let
 
   out = {

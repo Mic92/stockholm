@@ -17,8 +17,10 @@ let stockholm = {
     let
       lib = import <nixpkgs/lib>;
       klib = import ./krebs/4lib { inherit lib; };
-      #ulib = import (./. + "/${current-user-name}/4lib") { lib = lib // klib; };
-      ulib = {}; # TODO
+      ulib = let
+        path = ./. + "/${current-user-name}/4lib";
+      in lib.optionalAttrs (klib.dir.has-default-nix path)
+                           (import path { lib = lib // klib; });
     in
     builtins // lib // klib // ulib // rec {
       # TODO move this stuff
