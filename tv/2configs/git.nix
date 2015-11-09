@@ -47,6 +47,7 @@ let
     wai-middleware-time = {};
     web-routes-wai-custom = {};
     xintmap = {};
+    xmonad-stockholm = {};
   });
 
   restricted-repos = mapAttrs make-restricted-repo (
