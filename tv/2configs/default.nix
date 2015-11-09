@@ -1,14 +1,33 @@
 { config, lib, pkgs, ... }:
 
-with builtins;
 with lib;
 
 {
   krebs.enable = true;
 
+  krebs.build = {
+    user = config.krebs.users.tv;
+    target = mkDefault "root@${config.krebs.build.host.name}";
+    source = {
+      git.nixpkgs = {
+        url = mkDefault https://github.com/NixOS/nixpkgs;
+        rev = mkDefault "c44a593aa43bba6a0708f6f36065a514a5110613";
+        target-path = mkDefault "/var/src/nixpkgs";
+      };
+      dir.secrets = {
+        path = mkDefault "/home/tv/secrets/${config.krebs.build.host.name}";
+      };
+      dir.stockholm = {
+        path = mkDefault "/home/tv/stockholm";
+        target-path = mkDefault "/var/src/stockholm";
+      };
+    };
+  };
+
   networking.hostName = config.krebs.build.host.name;
 
   imports = [
+    <secrets>
     ./vim.nix
     {
       # stockholm dependencies
@@ -17,36 +36,14 @@ with lib;
       ];
     }
     {
-      # TODO never put hashedPassword into the store
-      users.extraUsers =
-        mapAttrs (_: h: { hashedPassword = h; })
-                 (import <secrets/hashedPasswords.nix>);
-    }
-    {
-      users.defaultUserShell = "/run/current-system/sw/bin/bash";
-      users.mutableUsers = false;
-    }
-    {
-      users.extraUsers = {
-        root = {
-          openssh.authorizedKeys.keys = [
-            config.krebs.users.tv.pubkey
-          ];
-        };
-        tv = {
-          uid = 1337;
-          group = "users";
-          home = "/home/tv";
-          createHome = true;
-          useDefaultShell = true;
-          extraGroups = [
-            "audio"
-            "video"
-            "wheel"
-          ];
-          openssh.authorizedKeys.keys = [
-            config.krebs.users.tv.pubkey
-          ];
+      users = {
+        defaultUserShell = "/run/current-system/sw/bin/bash";
+        mutableUsers = false;
+        users = {
+          tv = {
+            isNormalUser = true;
+            uid = 1337;
+          };
         };
       };
     }
@@ -69,22 +66,8 @@ with lib;
       nix.useChroot = true;
     }
     {
-      # oldvim
-      environment.systemPackages = with pkgs; [
-        vim
-      ];
+      environment.profileRelativeEnvVars.PATH = mkForce [ "/bin" ];
 
-      environment.etc."vim/vimrc".text = ''
-        set nocp
-      '';
-
-      environment.etc."vim/vim${majmin pkgs.vim.version}".source =
-          "${pkgs.vim}/share/vim/vim${majmin pkgs.vim.version}";
-
-      environment.variables.EDITOR = mkForce "vim";
-      environment.variables.VIM = "/etc/vim";
-    }
-    {
       environment.systemPackages = with pkgs; [
         rxvt_unicode.terminfo
       ];
@@ -105,6 +88,15 @@ with lib;
         ls = "ls -h --color=auto --group-directories-first";
         dmesg = "dmesg -L --reltime";
         view = "vim -R";
+      };
+
+      environment.variables = {
+        NIX_PATH =
+          with config.krebs.build.source; with dir; with git;
+          mkForce (concatStringsSep ":" [
+            "nixpkgs=${nixpkgs.target-path}"
+            "secrets=${stockholm.target-path}/null"
+          ]);
       };
 
       programs.bash = {

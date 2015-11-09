@@ -84,6 +84,7 @@ let out = {
 
       cat<<EOF
       # put following into config.krebs.hosts.$system:
+      ssh.privkey.path = <secrets/ssh.$key_type>;
       ssh.pubkey = $(echo $pubkey | jq -R .);
       EOF
     '';
@@ -178,7 +179,7 @@ let out = {
 
       nix-path =
         lib.concatStringsSep ":"
-          (lib.mapAttrsToList (name: _: "${name}=/root/${name}")
+          (lib.mapAttrsToList (name: src: "${name}=${src.target-path}")
             (config.krebs.build.source.dir //
              config.krebs.build.source.git));
     in ''

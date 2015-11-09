@@ -29,10 +29,13 @@ let
     };
 
     options.krebs.build.source.dir = mkOption {
-      type = types.attrsOf (types.submodule ({ config, ... }: {
+      type = let
+        default-host = config.krebs.current.host;
+      in types.attrsOf (types.submodule ({ config, ... }: {
         options = {
           host = mkOption {
             type = types.host;
+            default = default-host;
           };
           path = mkOption {
             type = types.str;

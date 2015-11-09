@@ -15,6 +15,7 @@ let
       ./git.nix
       ./iptables.nix
       ./nginx.nix
+      ./per-user.nix
       ./Reaktor.nix
       ./retiolum-bootstrap.nix
       ./realwallpaper.nix
