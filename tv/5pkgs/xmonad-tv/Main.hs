@@ -35,9 +35,9 @@ import XMonad.Layout.PerWorkspace (onWorkspace)
 --import XMonad.Layout.BinarySpacePartition
 
 --import XMonad.Actions.Submap
-import Util.Pager
-import Util.Rhombus
-import Util.Shutdown
+import XMonad.Stockholm.Pager
+import XMonad.Stockholm.Rhombus
+import XMonad.Stockholm.Shutdown
 
 
 myTerm :: String

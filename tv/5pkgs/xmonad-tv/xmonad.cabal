@@ -9,11 +9,9 @@ Executable xmonad
   Build-Depends:
     base,
     containers,
-    filepath,
     unix,
-    X11,
-    X11-xshape,
     xmonad,
-    xmonad-contrib
+    xmonad-contrib,
+    xmonad-stockholm
   GHC-Options: -Wall -O3 -threaded -rtsopts
   Main-Is: Main.hs
