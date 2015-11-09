@@ -30,4 +30,7 @@ rec {
   subdirsOf = path:
     mapAttrs (name: _: path + "/${name}")
              (filterAttrs (_: eq "directory") (readDir path));
+
+  mapAttrValues = f: mapAttrs (_: f);
+  setAttr = name: value: set: set // { ${name} = value; };
 }
