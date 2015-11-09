@@ -32,7 +32,7 @@ let stockholm = {
   upath = lib.nspath current-user-name;
 
   base-module = { config, ... }: {
-    imports = builtins.filter builtins.pathExists (lib.concatLists [
+    imports = builtins.filter lib.dir.has-default-nix (lib.concatLists [
       (map (f: f "2configs") [ upath ])
       (map (f: f "3modules") [ kpath upath ])
     ]);

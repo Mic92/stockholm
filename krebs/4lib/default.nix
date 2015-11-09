@@ -14,6 +14,8 @@ rec {
 
   types = import ./types.nix { inherit lib; };
 
+  dir.has-default-nix = path: pathExists (path + "/default.nix");
+
   dns = import ./dns.nix { inherit lib; };
   listset = import ./listset.nix { inherit lib; };
   shell = import ./shell.nix { inherit lib; };
