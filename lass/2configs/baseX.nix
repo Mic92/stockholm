@@ -34,6 +34,7 @@ in {
     sxiv
     much
     push
+    zathura
 
   #window manager stuff
     haskellPackages.xmobar
