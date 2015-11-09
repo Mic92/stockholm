@@ -88,6 +88,25 @@ in {
     {
       nixpkgs.config.allowUnfree = true;
     }
+    {
+      #stuff for juhulian
+      users.extraUsers.juhulian = {
+        name = "juhulian";
+        uid = 1339;
+        home = "/home/juhulian";
+        group = "users";
+        createHome = true;
+        useDefaultShell = true;
+        extraGroups = [
+        ];
+        openssh.authorizedKeys.keys = [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBQhLGvfv4hyQ/nqJGy1YgHXPSVl6igeWTroJSvAhUFgoh+rG+zvqY0EahKXNb3sq0/OYDCTJVuucc0hgCg7T2KqTqMtTb9EEkRmCFbD7F7DWZojCrh/an6sHneqT5eFvzAPZ8E5hup7oVQnj5P5M3I9keRHBWt1rq6q0IcOEhsFvne4qJc73aLASTJkxzlo5U8ju3JQOl6474ECuSn0lb1fTrQ/SR1NgF7jV11eBldkS8SHEB+2GXjn4Yrn+QUKOnDp+B85vZmVlJSI+7XR1/U/xIbtAjGTEmNwB6cTbBv9NCG9jloDDOZG4ZvzzHYrlBXjaigtQh2/4mrHoKa5eV juhulian@juhulian"
+        ];
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
