@@ -19,8 +19,9 @@ let stockholm = {
       klib = import ./krebs/4lib { inherit lib; };
       ulib = let
         path = ./. + "/${current-user-name}/4lib";
-      in lib.optionalAttrs (klib.dir.has-default-nix path)
-                           (import path { lib = lib // klib; });
+      in lib.optionalAttrs
+          (builtins.pathExists path && klib.dir.has-default-nix path)
+          (import path { lib = lib // klib; });
     in
     builtins // lib // klib // ulib // rec {
       # TODO move this stuff
