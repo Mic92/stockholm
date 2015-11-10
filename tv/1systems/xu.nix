@@ -212,7 +212,6 @@ with lib;
 
   security.setuidPrograms = [
     "sendmail"  # for cron
-    #"slock"
   ];
 
   services.printing.enable = true;

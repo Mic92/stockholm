@@ -64,6 +64,10 @@ let
             \ | hi TrailingSpace ctermbg=88
             \ | hi Normal ctermfg=White
 
+    au BufRead,BufNewFile *.hs so ${pkgs.writeText "hs.vim" ''
+      syn region String start=+\[[^|]*|+ end=+|]+
+    ''}
+
     au BufRead,BufNewFile *.nix so ${pkgs.writeText "nix.vim" ''
       setf nix
       set isk=@,48-57,_,192-255,-,'

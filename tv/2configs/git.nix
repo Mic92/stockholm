@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with import ../4lib { inherit lib pkgs; };
+with lib;
+
 let
 
   out = {
@@ -20,26 +21,22 @@ let
   rules = concatMap make-rules (attrValues repos);
 
   public-repos = mapAttrs make-public-repo ({
+  } // mapAttrValues (setAttr "section" "1. Miscellaneous") {
     cac = {
       desc = "CloudAtCost command line interface";
     };
-    cgserver = {};
-    crude-mail-setup = {};
-    dot-xmonad = {};
     get = {};
     hack = {};
     load-env = {};
     make-snapshot = {};
     much = {};
-    nixos-infest = {};
     nixpkgs = {};
-    painload = {};
     push = {};
     regfish = {};
     stockholm = {
       desc = "take all the computers hostage, they'll love you!";
     };
-  } // mapAttrs (_: repo: repo // { section = "Haskell libraries"; }) {
+  } // mapAttrValues (setAttr "section" "2. Haskell libraries") {
     blessings = {};
     mime = {};
     quipper = {};
@@ -47,6 +44,13 @@ let
     wai-middleware-time = {};
     web-routes-wai-custom = {};
     xintmap = {};
+    xmonad-stockholm = {};
+  } // mapAttrValues (setAttr "section" "3. Museum") {
+    cgserver = {};
+    crude-mail-setup = {};
+    dot-xmonad = {};
+    nixos-infest = {};
+    painload = {};
   });
 
   restricted-repos = mapAttrs make-restricted-repo (
@@ -63,7 +67,7 @@ let
     inherit name desc section;
     public = true;
     hooks = {
-      post-receive = git.irc-announce {
+      post-receive = pkgs.git-hooks.irc-announce {
         # TODO make nick = config.krebs.build.host.name the default
         nick = config.krebs.build.host.name;
         channel = "#retiolum";
@@ -82,7 +86,7 @@ let
     with git // config.krebs.users;
     repo:
       singleton {
-        user = tv;
+        user = [ tv tv_xu ];
         repo = [ repo ];
         perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++

@@ -88,6 +88,12 @@ with lib;
         ls = "ls -h --color=auto --group-directories-first";
         dmesg = "dmesg -L --reltime";
         view = "vim -R";
+
+        reload = "systemctl reload";
+        restart = "systemctl restart";
+        start = "systemctl start";
+        status = "systemctl status";
+        stop = "systemctl stop";
       };
 
       environment.variables = {
@@ -166,6 +172,14 @@ with lib;
       security.setuidPrograms = [
         "sendmail"  # for sudo
       ];
+    }
+    {
+      systemd.tmpfiles.rules = let
+        forUsers = flip map users;
+        isUser = { group, ... }: hasSuffix "users" group;
+        users = filter isUser (mapAttrsToList (_: id) config.users.users);
+      in forUsers (u: "d /run/xdg/${u.name} 0700 ${u.name} ${u.group} -");
+      environment.variables.XDG_RUNTIME_DIR = "/run/xdg/$LOGNAME";
     }
   ];
 }
