@@ -88,6 +88,12 @@ with lib;
         ls = "ls -h --color=auto --group-directories-first";
         dmesg = "dmesg -L --reltime";
         view = "vim -R";
+
+        reload = "systemctl reload";
+        restart = "systemctl restart";
+        start = "systemctl start";
+        status = "systemctl status";
+        stop = "systemctl stop";
       };
 
       environment.variables = {
