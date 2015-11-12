@@ -1,7 +1,15 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (import ../4lib { inherit pkgs lib; }) simpleScript;
+  simpleScript = name: content:
+    pkgs.stdenv.mkDerivation {
+      inherit name;
+      phases = [ "installPhase" ];
+      installPhase = ''
+        mkdir -p $out/bin
+        ln -s ${pkgs.writeScript name content} $out/bin/${name}
+      '';
+    };
 
   mainUser = config.users.extraUsers.mainUser;
   createChromiumUser = name: extraGroups: packages:
