@@ -43,7 +43,7 @@ let
         collaborators = with config.krebs.users; [ tv makefu ];
       };
     } //
-    import /root/src/secrets/repos.nix { inherit config lib pkgs; }
+    import <secrets/repos.nix> { inherit config lib pkgs; }
   );
 
   make-public-repo = name: { desc ? null, ... }: {
