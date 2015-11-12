@@ -26,6 +26,11 @@ let
   };
 
   imp = {
+    services.redis = {
+      enable = mkDefault true;
+      bind = mkDefault "127.0.0.1";
+    };
+
     users.extraUsers.go = {
       name = "go";
       uid = 42774411; #genid go
