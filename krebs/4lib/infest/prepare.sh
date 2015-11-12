@@ -66,6 +66,7 @@ prepare_debian() {
   type bzip2 2>/dev/null || apt-get install bzip2
   type git   2>/dev/null || apt-get install git
   type rsync 2>/dev/null || apt-get install rsync
+  type curl 2>/dev/null || apt-get install curl
   prepare_common
 }
 
