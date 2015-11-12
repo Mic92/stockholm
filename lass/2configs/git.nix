@@ -50,7 +50,7 @@ let
     inherit name desc;
     public = true;
     hooks = {
-      post-receive = git.irc-announce {
+      post-receive = pkgs.git-hooks.irc-announce {
         # TODO make nick = config.krebs.build.host.name the default
         nick = config.krebs.build.host.name;
         channel = "#retiolum";
