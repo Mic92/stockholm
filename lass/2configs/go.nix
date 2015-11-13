@@ -2,13 +2,10 @@
 
 with lib;
 {
-  imports = [
-    ../3modules/go.nix
-  ];
   environment.systemPackages = [
     pkgs.go
   ];
-  lass.go = {
+  krebs.go = {
     enable = true;
   };
   krebs.nginx = {
