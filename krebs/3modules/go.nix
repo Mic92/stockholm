@@ -4,10 +4,10 @@ with builtins;
 with lib;
 
 let
-  cfg = config.lass.go;
+  cfg = config.krebs.go;
 
   out = {
-    options.lass.go = api;
+    options.krebs.go = api;
     config = mkIf cfg.enable imp;
   };
 
