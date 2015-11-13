@@ -1,10 +1,6 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 
-let
-  inherit (import ../4lib { inherit pkgs lib; }) getDefaultGateway;
-  inherit (lib) head;
-
-in {
+{
   imports = [
     ../2configs/base.nix
     {
