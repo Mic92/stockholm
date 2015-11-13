@@ -89,9 +89,9 @@ let
       };
 
       restartIfChanged = true;
-
       serviceConfig = {
         Type = "simple";
+        restart = "always";
 
         ExecStartPre = pkgs.writeScript "tinc_graphs-init" ''
           #!/bin/sh
