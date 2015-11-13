@@ -11,6 +11,7 @@ in {
     ../2configs/git.nix
     ../2configs/ts3.nix
     ../2configs/bitlbee.nix
+    ../2configs/weechat.nix
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
