@@ -55,7 +55,7 @@ let
         nick = config.krebs.build.host.name;
         channel = "#retiolum";
         server = "cd.retiolum";
-        verbose = config.krebs.build.host.name == "echelon";
+        verbose = config.krebs.build.host.name == "prism";
       };
     };
   };
