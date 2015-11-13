@@ -23,6 +23,12 @@
     ../2configs/firefoxPatched.nix
     ../2configs/skype.nix
     {
+      #risk of rain port
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 11100"; target = "ACCEPT"; }
+      ];
+    }
+    {
       #wordpress-test
       #imports = singleton (sitesGenerators.createWordpress "testserver.de");
       imports = [
