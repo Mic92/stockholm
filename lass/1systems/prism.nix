@@ -107,6 +107,14 @@ in {
         { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
       ];
     }
+    {
+      environment.systemPackages = [
+        pkgs.perlPackages.Plack
+      ];
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 8080"; target = "ACCEPT";}
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
