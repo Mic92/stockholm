@@ -92,6 +92,10 @@ with lib;
     most
     rxvt_unicode.terminfo
 
+  #monitoring tools
+    htop
+    iotop
+
   #network
     iptables
 
