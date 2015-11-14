@@ -156,6 +156,7 @@
     get
     genid
     teamspeak_client
+    hashPassword
   ];
 
   #TODO: fix this shit

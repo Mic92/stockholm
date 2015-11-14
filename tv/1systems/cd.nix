@@ -4,22 +4,7 @@ with lib;
 
 {
   krebs.build.host = config.krebs.hosts.cd;
-  krebs.build.user = config.krebs.users.tv;
-
   krebs.build.target = "root@cd.internet";
-
-  krebs.build.source = {
-    git.nixpkgs = {
-      url = https://github.com/NixOS/nixpkgs;
-      rev = "c44a593aa43bba6a0708f6f36065a514a5110613";
-    };
-    dir.secrets = {
-      path = "/home/tv/secrets/cd";
-    };
-    dir.stockholm = {
-      path = "/home/tv/stockholm";
-    };
-  };
 
   imports = [
     ../2configs/hw/CAC-Developer-2.nix
@@ -115,7 +100,6 @@ with lib;
     iftop
     iotop
     iptables
-    mutt    # for mv
     nethogs
     ntp     # ntpate
     rxvt_unicode.terminfo
@@ -126,17 +110,4 @@ with lib;
     SystemMaxUse=1G
     RuntimeMaxUse=128M
   '';
-
-  users.extraUsers = {
-    mv = {
-      uid = 1338;
-      group = "users";
-      home = "/home/mv";
-      createHome = true;
-      useDefaultShell = true;
-      openssh.authorizedKeys.keys = [
-        config.krebs.users.mv.pubkey
-      ];
-    };
-  };
 }

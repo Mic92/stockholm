@@ -5,9 +5,29 @@ with lib;
 {
   krebs.enable = true;
 
+  krebs.build = {
+    user = config.krebs.users.tv;
+    target = mkDefault "root@${config.krebs.build.host.name}";
+    source = {
+      git.nixpkgs = {
+        url = mkDefault https://github.com/NixOS/nixpkgs;
+        rev = mkDefault "c44a593aa43bba6a0708f6f36065a514a5110613";
+        target-path = mkDefault "/var/src/nixpkgs";
+      };
+      dir.secrets = {
+        path = mkDefault "/home/tv/secrets/${config.krebs.build.host.name}";
+      };
+      dir.stockholm = {
+        path = mkDefault "/home/tv/stockholm";
+        target-path = mkDefault "/var/src/stockholm";
+      };
+    };
+  };
+
   networking.hostName = config.krebs.build.host.name;
 
   imports = [
+    <secrets>
     ./vim.nix
     {
       # stockholm dependencies
@@ -16,40 +36,14 @@ with lib;
       ];
     }
     {
-      # TODO never put hashedPassword into the store
-      users.extraUsers =
-        mapAttrs (_: h: { hashedPassword = h; })
-                 (import <secrets/hashedPasswords.nix>);
-    }
-    {
-      users.groups.subusers.gid = 1093178926; # genid subusers
-    }
-    {
-      users.defaultUserShell = "/run/current-system/sw/bin/bash";
-      users.mutableUsers = false;
-    }
-    {
-      users.extraUsers = {
-        root = {
-          openssh.authorizedKeys.keys = [
-            config.krebs.users.tv.pubkey
-            config.krebs.users.tv_xu.pubkey
-          ];
-        };
-        tv = {
-          uid = 1337;
-          group = "users";
-          home = "/home/tv";
-          createHome = true;
-          useDefaultShell = true;
-          extraGroups = [
-            "audio"
-            "video"
-            "wheel"
-          ];
-          openssh.authorizedKeys.keys = [
-            config.krebs.users.tv.pubkey
-          ];
+      users = {
+        defaultUserShell = "/run/current-system/sw/bin/bash";
+        mutableUsers = false;
+        users = {
+          tv = {
+            isNormalUser = true;
+            uid = 1337;
+          };
         };
       };
     }
@@ -94,6 +88,21 @@ with lib;
         ls = "ls -h --color=auto --group-directories-first";
         dmesg = "dmesg -L --reltime";
         view = "vim -R";
+
+        reload = "systemctl reload";
+        restart = "systemctl restart";
+        start = "systemctl start";
+        status = "systemctl status";
+        stop = "systemctl stop";
+      };
+
+      environment.variables = {
+        NIX_PATH =
+          with config.krebs.build.source; with dir; with git;
+          mkForce (concatStringsSep ":" [
+            "nixpkgs=${nixpkgs.target-path}"
+            "secrets=${stockholm.target-path}/null"
+          ]);
       };
 
       programs.bash = {
@@ -163,6 +172,14 @@ with lib;
       security.setuidPrograms = [
         "sendmail"  # for sudo
       ];
+    }
+    {
+      systemd.tmpfiles.rules = let
+        forUsers = flip map users;
+        isUser = { group, ... }: hasSuffix "users" group;
+        users = filter isUser (mapAttrsToList (_: id) config.users.users);
+      in forUsers (u: "d /run/xdg/${u.name} 0700 ${u.name} ${u.group} -");
+      environment.variables.XDG_RUNTIME_DIR = "/run/xdg/$LOGNAME";
     }
   ];
 }

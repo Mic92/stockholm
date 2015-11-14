@@ -13,40 +13,36 @@ let stockholm = {
 
   krebs = import ./krebs (args // { inherit lib stockholm; });
 
-  lib =
-    let
-      lib = import <nixpkgs/lib>;
-      klib = import ./krebs/4lib { inherit lib; };
-      #ulib = import (./. + "/${current-user-name}/4lib") { lib = lib // klib; };
-      ulib = {}; # TODO
-    in
-    builtins // lib // klib // ulib // rec {
-      # TODO move this stuff
+  lib = let
+    nlib = import <nixpkgs/lib>;
+    klib = import (slib.kpath "4lib") { lib = nlib; };
+    slib = rec {
       stockholm-path = ./.;
       nspath = ns: p: stockholm-path + "/${ns}/${p}";
+      kpath = nspath "krebs";
+      upath = nspath current-user-name;
     };
+    ulib = let p = slib.upath "4lib"; in
+      nlib.optionalAttrs (klib.dir.has-default-nix p)
+                         (import p { lib = nlib // klib; });
+  in nlib // klib // slib // ulib // builtins;
 
   inherit (eval {}) pkgs;
 
-  kpath = lib.nspath "krebs";
-  upath = lib.nspath current-user-name;
-
   base-module = { config, ... }: {
-    imports = builtins.filter builtins.pathExists (lib.concatLists [
-      (map (f: f "2configs") [ upath ])
-      (map (f: f "3modules") [ kpath upath ])
+    imports = builtins.filter lib.dir.has-default-nix (lib.concatLists [
+      (map (f: f "2configs") [ lib.upath ])
+      (map (f: f "3modules") [ lib.kpath lib.upath ])
     ]);
 
     krebs.current.enable = true;
     krebs.current.host = config.krebs.hosts.${current-host-name};
     krebs.current.user = config.krebs.users.${current-user-name};
 
-    nixpkgs.config.packageOverrides = pkgs:
-      let
-        kpkgs = import (kpath "5pkgs") { inherit lib pkgs; };
-        upkgs = import (upath "5pkgs") { inherit lib; pkgs = pkgs // kpkgs; };
-      in
-      kpkgs // upkgs;
+    nixpkgs.config.packageOverrides = pkgs: let
+      kpkgs = import (lib.kpath "5pkgs") { inherit lib pkgs; };
+      upkgs = import (lib.upath "5pkgs") { inherit lib; pkgs = pkgs // kpkgs; };
+    in kpkgs // upkgs;
   };
 
   eval = config: import <nixpkgs/nixos/lib/eval-config.nix> {

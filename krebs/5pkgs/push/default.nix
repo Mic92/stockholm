@@ -9,12 +9,12 @@
 , ... }:
 
 stdenv.mkDerivation {
-  name = "push-1.1.0";
+  name = "push-1.1.1";
 
   src = fetchgit {
     url = http://cgit.cd.retiolum/push;
-    rev = "c5f4bda5bd00bad7778bbd5a9af8d476de0de920";
-    sha256 = "d335b644b791214263cee5c6659538c8e45326531b0588e5e7eb3bd9ef969800";
+    rev = "ea8b76569c6b226fe148e559477669b095408472";
+    sha256 = "c305a1515d30603f6ed825d44487e863fdc7d90400620ceaf2c335a3b5d1e221";
   };
 
   phases = [
@@ -45,4 +45,3 @@ stdenv.mkDerivation {
       chmod +x $out/bin/push
     '';
 }
-

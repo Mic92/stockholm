@@ -15,8 +15,8 @@ with lib;
     {
       users.extraUsers = {
         root = {
-          openssh.authorizedKeys.keys = map readFile [
-            ../../krebs/Zpubkeys/lass.ssh.pub
+          openssh.authorizedKeys.keys = [
+            config.krebs.users.lass.pubkey
           ];
         };
         mainUser = {
@@ -28,8 +28,8 @@ with lib;
           useDefaultShell = true;
           extraGroups = [
           ];
-          openssh.authorizedKeys.keys = map readFile [
-            ../../krebs/Zpubkeys/lass.ssh.pub
+          openssh.authorizedKeys.keys = [
+            config.krebs.users.lass.pubkey
           ];
         };
       };

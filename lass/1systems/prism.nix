@@ -8,6 +8,8 @@ in {
   imports = [
     ../2configs/base.nix
     ../2configs/downloading.nix
+    ../2configs/git.nix
+    ../2configs/ts3.nix
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
@@ -81,6 +83,9 @@ in {
     {
       #workaround for server dying after 6-7h
       boot.kernelPackages = pkgs.linuxPackages_4_2;
+    }
+    {
+      nixpkgs.config.allowUnfree = true;
     }
   ];
 

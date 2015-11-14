@@ -4,22 +4,9 @@ with lib;
 
 {
   krebs.build.host = config.krebs.hosts.xu;
-  krebs.build.user = config.krebs.users.tv;
 
-  krebs.build.target = "root@xu";
-
-  krebs.build.source = {
-    git.nixpkgs = {
-      url = https://github.com/NixOS/nixpkgs;
-      rev = "c44a593aa43bba6a0708f6f36065a514a5110613";
-    };
-    dir.secrets = {
-      path = "/home/tv/secrets/xu";
-    };
-    dir.stockholm = {
-      path = "/home/tv/stockholm";
-    };
-  };
+  krebs.build.source.git.nixpkgs.rev =
+    "7ae05edcdd14f6ace83ead9bf0d114e97c89a83a";
 
   imports = [
     ../2configs/hw/x220.nix
@@ -27,7 +14,6 @@ with lib;
     ../2configs/git.nix
     ../2configs/mail-client.nix
     ../2configs/xserver
-    ../2configs/z.nix
     {
       environment.systemPackages = with pkgs; [
 
@@ -60,29 +46,23 @@ with lib;
         bind # dig
         #cac
         dic
-        ff
         file
-        gitAndTools.qgit  #xserver
         gnupg21
         haskellPackages.hledger
         htop
         jq
         manpages
         mkpasswd
-        mpv #xserver
         netcat
         nix-repl
         nmap
         nq
         p7zip
-        pavucontrol #xserver
+        pass
         posix_man_pages
-        #pssh
         qrencode
-        sxiv #xserver
         texLive
         tmux
-        zathura #xserver
 
         #ack
         #apache-httpd
@@ -140,6 +120,8 @@ with lib;
         #xkill
         #xl2tpd
         #xsel
+
+        unison
       ];
     }
     {
@@ -175,125 +157,6 @@ with lib;
           "pigstarter"
         ];
       };
-    }
-    {
-      users.extraGroups = {
-        tv.gid = 1337;
-        slaves.gid = 3799582008; # genid slaves
-      };
-
-      users.extraUsers =
-        mapAttrs (name: user@{ extraGroups ? [], ... }: user // {
-          inherit name;
-          home = "/home/${name}";
-          createHome = true;
-          useDefaultShell = true;
-          group = "tv";
-          extraGroups = ["slaves"] ++ extraGroups;
-        }) {
-          ff = {
-            uid = 13378001;
-            extraGroups = [
-              "audio"
-              "video"
-            ];
-          };
-
-          cr = {
-            uid = 13378002;
-            extraGroups = [
-              "audio"
-              "video"
-              "bumblebee"
-            ];
-          };
-
-          fa = {
-            uid = 2300001;
-          };
-
-          rl = {
-            uid = 2300002;
-          };
-
-          tief = {
-            uid = 2300702;
-          };
-
-          btc-bitcoind = {
-            uid = 2301001;
-          };
-
-          btc-electrum = {
-            uid = 2301002;
-          };
-
-          ltc-litecoind = {
-            uid = 2301101;
-          };
-
-          eth = {
-            uid = 2302001;
-          };
-
-          emse-hsdb = {
-            uid = 4200101;
-          };
-
-          wine = {
-            uid = 13370400;
-            extraGroups = [
-              "audio"
-              "video"
-              "bumblebee"
-            ];
-          };
-
-          df = {
-            uid = 13370401;
-            extraGroups = [
-              "audio"
-              "video"
-              "bumblebee"
-            ];
-          };
-
-          xr = {
-            uid = 13370061;
-            extraGroups = [
-              "audio"
-              "video"
-            ];
-          };
-
-          "23" = {
-            uid = 13370023;
-          };
-
-          electrum = {
-            uid = 13370102;
-          };
-
-          skype = {
-            uid = 6660001;
-            extraGroups = [
-              "audio"
-            ];
-          };
-
-          onion = {
-            uid = 6660010;
-          };
-        };
-
-      security.sudo.extraConfig =
-        let
-          isSlave = u: elem "slaves" u.extraGroups;
-          masterOf = u: u.group;
-          slaves = filterAttrs (_: isSlave) config.users.extraUsers;
-          toSudoers = u: "${masterOf u} ALL=(${u.name}) NOPASSWD: ALL";
-        in
-        concatMapStringsSep "\n" toSudoers (attrValues slaves);
     }
   ];
 
@@ -349,7 +212,6 @@ with lib;
 
   security.setuidPrograms = [
     "sendmail"  # for cron
-    #"slock"
   ];
 
   services.printing.enable = true;
