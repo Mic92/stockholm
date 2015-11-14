@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with import ../../tv/4lib { inherit lib pkgs; };
+with lib;
 
 let
 
@@ -43,19 +43,19 @@ let
         collaborators = with config.krebs.users; [ tv makefu ];
       };
     } //
-    import /root/src/secrets/repos.nix { inherit config lib pkgs; }
+    import <secrets/repos.nix> { inherit config lib pkgs; }
   );
 
   make-public-repo = name: { desc ? null, ... }: {
     inherit name desc;
     public = true;
     hooks = {
-      post-receive = git.irc-announce {
+      post-receive = pkgs.git-hooks.irc-announce {
         # TODO make nick = config.krebs.build.host.name the default
         nick = config.krebs.build.host.name;
         channel = "#retiolum";
         server = "cd.retiolum";
-        verbose = config.krebs.build.host.name == "echelon";
+        verbose = config.krebs.build.host.name == "prism";
       };
     };
   };

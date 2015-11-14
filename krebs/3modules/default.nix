@@ -13,6 +13,7 @@ let
       ./exim-smarthost.nix
       ./github-hosts-sync.nix
       ./git.nix
+      ./go.nix
       ./iptables.nix
       ./nginx.nix
       ./per-user.nix

@@ -1,22 +1,37 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 {
-  imports = [
-    ../3modules/per-user.nix
-  ];
-
-  lass.per-user.chat.packages = [
+  krebs.per-user.chat.packages = [
     pkgs.weechat
     pkgs.tmux
   ];
 
   users.extraUsers.chat = {
     home = "/home/chat";
+    uid = 986764891; # genid chat
     useDefaultShell = true;
     createHome = true;
-    openssh.authorizedKeys.keys = map readFile [
-      ../../krebs/Zpubkeys/lass.ssh.pub
+    openssh.authorizedKeys.keys = [
+      config.krebs.users.lass.pubkey
     ];
   };
+
+  #systemd.services.chat = {
+  #  description = "chat environment setup";
+  #  after = [ "network.target" ];
+  #  wantedBy = [ "multi-user.target" ];
+
+  #  path = with pkgs; [
+  #    weechat
+  #    tmux
+  #  ];
+
+  #  restartIfChanged = true;
+
+  #  serviceConfig = {
+  #    User = "chat";
+  #    Restart = "always";
+  #    ExecStart = "${pkgs.tmux}/bin/tmux new -s IM weechat";
+  #  };
+  #};
 }

@@ -18,10 +18,37 @@
     ../2configs/chromium-patched.nix
     ../2configs/git.nix
     ../2configs/retiolum.nix
-    ../2configs/wordpress.nix
+    #../2configs/wordpress.nix
     ../2configs/bitlbee.nix
     ../2configs/firefoxPatched.nix
     ../2configs/skype.nix
+    {
+      #risk of rain port
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 11100"; target = "ACCEPT"; }
+      ];
+    }
+    {
+      #wordpress-test
+      #imports = singleton (sitesGenerators.createWordpress "testserver.de");
+      imports = [
+        ../3modules/wordpress_nginx.nix
+      ];
+      lass.wordpress."testserver.de" = {
+      };
+
+      services.mysql = {
+        enable = true;
+        package = pkgs.mariadb;
+        rootPassword = "<secrets>/mysql_rootPassword";
+      };
+      networking.extraHosts = ''
+        10.243.0.2 testserver.de
+      '';
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-i retiolum -p tcp --dport 80"; target = "ACCEPT"; precedence = 9998; }
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;

@@ -48,7 +48,7 @@ with lib;
       source = {
         git.nixpkgs = {
           url = https://github.com/Lassulus/nixpkgs;
-          rev = "6d31e9b81dcd4ab927bb3dc91b612dd5abfa2f80";
+          rev = "8d1ce129361312334bf914ce0d27e463cb0bb21b";
         };
         dir.secrets = {
           host = config.krebs.hosts.mors;
@@ -91,6 +91,10 @@ with lib;
   #style
     most
     rxvt_unicode.terminfo
+
+  #monitoring tools
+    htop
+    iotop
 
   #network
     iptables

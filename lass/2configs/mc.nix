@@ -159,37 +159,25 @@ let
 
     ### Images ###
 
-    type/^GIF
+    shell/i/.gif
       Include=image
 
-    type/^JPEG
+    regex/i/\.jpe?g$
       Include=image
 
-    type/^PC\ bitmap
+    shell/i/.bmp
       Include=image
 
-    type/^PNG
+    shell/i/.png
       Include=image
 
-    type/^JNG
+    shell/i/.jng
       Include=image
 
-    type/^MNG
+    shell/i/.mng
       Include=image
 
-    type/^TIFF
-      Include=image
-
-    type/^PBM
-      Include=image
-
-    type/^PGM
-      Include=image
-
-    type/^PPM
-      Include=image
-
-    type/^Netpbm
+    shell/i/.tiff
       Include=image
 
     shell/.ico
@@ -283,7 +271,7 @@ let
     ### Documents ###
 
     # PDF
-    type/^PDF
+    shell/i/.pdf
       Open=zathura %f
       View=zathura %f
 
