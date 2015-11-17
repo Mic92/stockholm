@@ -12,8 +12,12 @@ in
     ../2configs/shack-nix-cacher.nix
     ../2configs/shack-drivedroid.nix
   ];
+  # use your own binary cache, fallback use cache.nixos.org (which is used by
+  # apt-cacher-ng in first place)
+  nix.binaryCaches = [ "http://localhost:3142/nixos" "https://cache.nixos.org" ];
 
   networking = {
+    firewall.enable = false;
     interfaces.eth0.ip4 = [{
       address = shack-ip;
       prefixLength = 20;
