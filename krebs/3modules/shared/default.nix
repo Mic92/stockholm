@@ -36,7 +36,7 @@ in {
       dc = "shack";
       nets = {
         shack = {
-          addrs4 = [ "10.42.2.136" ];
+          addrs4 = [ "10.42.2.150" ];
           aliases = [
             "wolf.shack"
             "graphite.shack"
