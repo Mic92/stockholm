@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "get-1.3.1";
 
   src = fetchgit {
-    url = http://cgit.cd.retiolum/get;
+    url = http://cgit.cd.krebsco.de/get;
     rev = "64c97edd3f9952cd5e703208c46748a035a515bf";
     sha256 = "32ca83f4fd86fd3285bef9dcfd0917308086d239189858daceca175de49ff97c";
   };
