@@ -154,7 +154,7 @@ with lib;
         connectTo = [
           "cd"
           "gum"
-          "pigstarter"
+          "wry"
         ];
       };
     }
@@ -217,6 +217,7 @@ with lib;
     "sendmail"  # for cron
   ];
 
+  services.bitlbee.enable = true;
   services.printing.enable = true;
 
   services.journald.extraConfig = ''
