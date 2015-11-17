@@ -6,40 +6,41 @@ let
     name = "acng-configuration";
     destination = "/acng.conf";
     text = ''
-    ForeGround: 1
-    CacheDir: ${cfg.cacheDir}
-    LogDir: ${cfg.logDir}
-    PidFile: /var/run/apt-cacher-ng.pid
-    ExTreshold: ${toString cfg.cacheExpiration}
+      ForeGround: 1
+      CacheDir: ${cfg.cacheDir}
+      LogDir: ${cfg.logDir}
+      PidFile: /var/run/apt-cacher-ng.pid
+      ExTreshold: ${toString cfg.cacheExpiration}
 
-    Port: ${toString cfg.port}
-    BindAddress: ${cfg.bindAddress}
+      Port: ${toString cfg.port}
+      BindAddress: ${cfg.bindAddress}
 
-    # defaults:
-    Remap-debrep: file:deb_mirror*.gz /debian ; file:backends_debian
-    Remap-uburep: file:ubuntu_mirrors /ubuntu ; file:backends_ubuntu
-    Remap-debvol: file:debvol_mirror*.gz /debian-volatile ; file:backends_debvol
-    Remap-cygwin: file:cygwin_mirrors /cygwin
-    Remap-sfnet:  file:sfnet_mirrors
-    Remap-alxrep: file:archlx_mirrors /archlinux
-    Remap-fedora: file:fedora_mirrors
-    Remap-epel:   file:epel_mirrors
-    Remap-slrep:  file:sl_mirrors # Scientific Linux
-    Remap-gentoo: file:gentoo_mirrors.gz /gentoo ; file:backends_gentoo
+      # defaults:
+      Remap-debrep: file:deb_mirror*.gz /debian ; file:backends_debian
+      Remap-uburep: file:ubuntu_mirrors /ubuntu ; file:backends_ubuntu
+      Remap-debvol: file:debvol_mirror*.gz /debian-volatile ; file:backends_debvol
+      Remap-cygwin: file:cygwin_mirrors /cygwin
+      Remap-sfnet:  file:sfnet_mirrors
+      Remap-alxrep: file:archlx_mirrors /archlinux
+      Remap-fedora: file:fedora_mirrors
+      Remap-epel:   file:epel_mirrors
+      Remap-slrep:  file:sl_mirrors # Scientific Linux
+      Remap-gentoo: file:gentoo_mirrors.gz /gentoo ; file:backends_gentoo
 
-    ReportPage: acng-report.html
-    SupportDir: ${pkgs.apt-cacher-ng}/lib/apt-cacher-ng
-    LocalDirs: acng-doc ${pkgs.apt-cacher-ng}/share/doc/apt-cacher-ng
+      ReportPage: acng-report.html
+      SupportDir: ${pkgs.apt-cacher-ng}/lib/apt-cacher-ng
+      LocalDirs: acng-doc ${pkgs.apt-cacher-ng}/share/doc/apt-cacher-ng
 
-    # Nix cache
-    ${optionalString cfg.enableNixCache ''
-      Remap-nix: http://cache.nixos.org /nixos ; https://cache.nixos.org
-      PfilePatternEx: (^|.*?/).*\.narinfo(|\.gz|\.xz|\.bz2)$
-      VfilePatternEx: (^|.*?/)nix-cache-info$
-    ''}
+      # Nix cache
+      ${optionalString cfg.enableNixCache ''
+        Remap-nix: http://cache.nixos.org /nixos ; https://cache.nixos.org
+        PfilePatternEx: (^|.*?/).*\.narinfo(|\.gz|\.xz|\.bz2)$
+        VfilePatternEx: (^|.*?/)nix-cache-info$
+      ''}
 
-    ${cfg.extraConfig}
-  ''; };
+      ${cfg.extraConfig}
+    '';
+  };
 
   acng-home = "/var/cache/acng";
   cfg = config.krebs.apt-cacher-ng;
