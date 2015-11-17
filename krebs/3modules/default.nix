@@ -79,6 +79,7 @@ let
   imp = mkMerge [
     { krebs = import ./lass { inherit lib; }; }
     { krebs = import ./makefu { inherit lib; }; }
+    { krebs = import ./mv { inherit lib; }; }
     { krebs = import ./shared { inherit lib; }; }
     { krebs = import ./tv { inherit lib; }; }
     {
