@@ -6,6 +6,7 @@ let
 
   out = {
     imports = [
+      ./apt-cacher-ng.nix
       ./bepasty-server.nix
       ./build.nix
       ./current.nix
