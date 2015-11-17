@@ -11,6 +11,7 @@ let
       LogDir: ${cfg.logDir}
       PidFile: /var/run/apt-cacher-ng.pid
       ExTreshold: ${toString cfg.cacheExpiration}
+      CAfile: ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
 
       Port: ${toString cfg.port}
       BindAddress: ${cfg.bindAddress}
