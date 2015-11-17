@@ -86,6 +86,7 @@ let
       krebs.dns.providers = {
         de.krebsco = "zones";
         gg23 = "hosts";
+        shack = "hosts";
         internet = "hosts";
         retiolum = "hosts";
       };
