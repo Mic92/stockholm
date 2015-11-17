@@ -12,6 +12,7 @@ with lib;
 
   imports = [
     ../2configs/hw/x220.nix
+    ../2configs/git.nix
     ../2configs/mail-client.nix
     ../2configs/xserver
     {
