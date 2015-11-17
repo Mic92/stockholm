@@ -35,7 +35,7 @@ let
       # Nix cache
       ${optionalString cfg.enableNixCache ''
         Remap-nix: http://cache.nixos.org /nixos ; https://cache.nixos.org
-        PfilePatternEx: (^|.*?/).*\.narinfo(|\.gz|\.xz|\.bz2)$
+        PfilePatternEx: (^|.*?/).*\.nar(info)?(|\.gz|\.xz|\.bz2)$
         VfilePatternEx: (^|.*?/)nix-cache-info$
       ''}
 
