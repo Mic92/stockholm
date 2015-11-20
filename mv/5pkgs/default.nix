@@ -12,7 +12,11 @@
         --disk-cache-size=50000000 \
         "%@"
   '';
-  ff = pkgs.callPackage ./ff {};
+  ff = pkgs.writeScriptBin "ff" ''
+    #! /bin/sh
+    set -efu
+    exec ${pkgs.firefoxWrapper}/bin/firefox $(printf " %q" "$@")
+  '';
   xmonad-tv =
     let src = pkgs.writeNixFromCabal "xmonad-tv.nix" ./xmonad-tv; in
     pkgs.haskellPackages.callPackage src {};
