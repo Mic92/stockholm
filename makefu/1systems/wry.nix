@@ -24,11 +24,11 @@ in {
       # other nginx
       ../2configs/nginx/euer.wiki.nix
       ../2configs/nginx/euer.blog.nix
+      ../2configs/nginx/euer.test.nix
 
       # collectd
       ../2configs/collectd/collectd-base.nix
   ];
-
   krebs.build.host = config.krebs.hosts.wry;
 
   krebs.Reaktor.enable = true;
@@ -59,9 +59,12 @@ in {
   };
 
   networking = {
-    firewall.allowPing = true;
-    firewall.allowedTCPPorts = [ 53 80 443 ];
-    firewall.allowedUDPPorts = [ 655 ];
+  firewall = {
+      allowPing = true;
+      logRefusedConnections = false;
+      allowedTCPPorts = [ 53 80 443 ];
+      allowedUDPPorts = [ 655 ];
+    };
     interfaces.enp2s1.ip4 = [{
       address = external-ip;
       prefixLength = 24;
@@ -70,5 +73,9 @@ in {
     nameservers = [ "8.8.8.8" ];
   };
 
-  environment.systemPackages = [ pkgs.translate-shell ];
+  # small machine - do not forget to gc every day
+  nix.gc.automatic = true;
+  nix.gc.dates = "03:10";
+
+  environment.systemPackages = [ ];
 }

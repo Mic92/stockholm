@@ -64,6 +64,8 @@ with lib;
     # TODO
     config.krebs.users.lass.pubkey
     config.krebs.users.makefu.pubkey
+    # TODO HARDER:
+    (readFile ../../krebs/Zpubkeys/makefu_omo.ssh.pub)
     config.krebs.users.tv.pubkey
   ];
 

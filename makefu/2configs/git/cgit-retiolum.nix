@@ -1,10 +1,12 @@
 { config, lib, pkgs, ... }:
 # TODO: remove tv lib :)
-with import ../../../tv/4lib { inherit lib pkgs; };
+with lib;
 let
 
-  repos = priv-repos // krebs-repos ;
-  rules = concatMap krebs-rules (attrValues krebs-repos) ++ concatMap priv-rules (attrValues priv-repos);
+  repos = priv-repos // krebs-repos // connector-repos ;
+  rules = concatMap krebs-rules (attrValues krebs-repos)
+    ++ concatMap priv-rules (attrValues priv-repos)
+    ++ concatMap connector-rules (attrValues connector-repos);
 
   krebs-repos = mapAttrs make-krebs-repo {
     stockholm = {
@@ -19,6 +21,10 @@ let
     autosync = { };
   };
 
+  connector-repos = mapAttrs make-priv-repo {
+    connector = { };
+  };
+
 
   # TODO move users to separate module
   make-priv-repo = name: { desc ? null, ... }: {
@@ -30,7 +36,7 @@ let
     inherit name desc;
     public = true;
     hooks = {
-      post-receive = git.irc-announce {
+      post-receive = pkgs.git-hooks.irc-announce {
         nick = config.networking.hostName;
         verbose = config.krebs.build.host.name == "pnp";
         channel = "#retiolum";
@@ -40,12 +46,19 @@ let
     };
   };
 
-  set-owners = with git;repo: user:
-      singleton {
-        inherit user;
-        repo = [ repo ];
-        perm = push "refs/*" [ non-fast-forward create delete merge ];
-      };
+
+
+  # TODO: get the list of all krebsministers
+  krebsminister = with config.krebs.users; [ lass tv uriel ];
+  all-makefu = with config.krebs.users; [ makefu makefu-omo makefu-tsp ];
+  all-exco = with config.krebs.users; [ exco ];
+
+  priv-rules = repo: set-owners repo all-makefu;
+
+  connector-rules = repo: set-owners repo all-makefu ++ set-owners repo all-exco;
+
+  krebs-rules = repo:
+    set-owners repo all-makefu ++ set-ro-access repo krebsminister;
 
   set-ro-access = with git; repo: user:
       optional repo.public {
@@ -54,24 +67,28 @@ let
         perm = fetch;
       };
 
-  # TODO: get the list of all krebsministers
-  krebsminister = with config.krebs.users; [ lass tv uriel ];
-  all-makefu = with config.krebs.users; [ makefu makefu-omo makefu-tsp ];
-
-  priv-rules = repo: set-owners repo all-makefu;
-
-  krebs-rules = repo:
-    set-owners repo all-makefu ++ set-ro-access repo krebsminister;
+  set-owners = with git;repo: user:
+      singleton {
+        inherit user;
+        repo = [ repo ];
+        perm = push "refs/*" [ non-fast-forward create delete merge ];
+      };
 
 in {
   imports = [{
-    krebs.users.makefu-omo = {
+    krebs.users = {
+      makefu-omo = {
         name = "makefu-omo" ;
         pubkey= with builtins; readFile ../../../krebs/Zpubkeys/makefu_omo.ssh.pub;
-    };
-    krebs.users.makefu-tsp = {
+      };
+      makefu-tsp = {
         name = "makefu-tsp" ;
         pubkey= with builtins; readFile ../../../krebs/Zpubkeys/makefu_tsp.ssh.pub;
+      };
+      exco = {
+        name = "exco";
+        pubkey= with builtins; readFile ../../../krebs/Zpubkeys/exco.ssh.pub;
+      };
     };
   }];
   krebs.git = {

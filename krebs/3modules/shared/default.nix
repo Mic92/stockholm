@@ -33,12 +33,17 @@ let
 in {
   hosts = addNames {
     wolf = {
-      #dc = "shack";
+      dc = "shack";
       nets = {
-        #shack = {
-        #  addrs4 = [ TODO ];
-        #  aliases = ["wolf.shack"];
-        #};
+        shack = {
+          addrs4 = [ "10.42.2.150" ];
+          aliases = [
+            "wolf.shack"
+            "graphite.shack"
+            "acng.shack"
+            "drivedroid.shack"
+          ];
+        };
         retiolum = {
           addrs4 = ["10.243.77.1"];
           addrs6 = ["42:0:0:0:0:0:77:1"];

@@ -6,6 +6,7 @@ let
 
   out = {
     imports = [
+      ./apt-cacher-ng.nix
       ./bepasty-server.nix
       ./build.nix
       ./current.nix
@@ -86,6 +87,7 @@ let
       krebs.dns.providers = {
         de.krebsco = "zones";
         gg23 = "hosts";
+        shack = "hosts";
         internet = "hosts";
         retiolum = "hosts";
       };
