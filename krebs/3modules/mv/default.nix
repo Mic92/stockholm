@@ -13,6 +13,7 @@ with lib;
           addrs6 = ["42:0:0:0:0:0:111:111"];
           aliases = [
             "stro.retiolum"
+            "cgit.stro.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----

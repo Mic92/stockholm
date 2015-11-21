@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   name = "push-1.1.1";
 
   src = fetchgit {
-    url = http://cgit.cd.retiolum/push;
+    url = http://cgit.cd.krebsco.de/push;
     rev = "ea8b76569c6b226fe148e559477669b095408472";
     sha256 = "c305a1515d30603f6ed825d44487e863fdc7d90400620ceaf2c335a3b5d1e221";
   };
