@@ -4,7 +4,7 @@ with lib;
 
 let
   # TODO krebs.build.user
-  user = config.users.users.tv;
+  user = config.users.users.mv;
 
   out = {
     services.xserver.display = 11;

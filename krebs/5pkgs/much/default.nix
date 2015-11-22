@@ -12,7 +12,7 @@ mkDerivation {
   pname = "much";
   version = "1.0.0";
   src = fetchgit {
-    url = "http://cgit.cd.retiolum/much";
+    url = "http://cgit.cd.krebsco.de/much";
     rev = "045dc986b4de225a927175f81c8ccfdab450202c";
     sha256 = "cec175e3dc32ef93029ee5285f6c4042ce11d637945bc8cec02cb6699d06cc13";
   };
