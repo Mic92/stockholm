@@ -25,13 +25,6 @@ let
   configFile = pkgs.writeText "dnsmasq.conf" cfg.config;
 
   imp = {
-    #users.extraUsers.go = {
-    #  name = "go";
-    #  uid = 42774411; #genid go
-    #  description = "go url shortener user";
-    #  home = "/var/lib/go";
-    #  createHome = true;
-    #};
 
     systemd.services.dnsmasq = {
       description = "dnsmasq";

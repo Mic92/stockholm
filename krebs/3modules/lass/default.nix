@@ -9,7 +9,7 @@ with lib;
       dc = "lass"; #dc = "cac";
       nets = rec {
         internet = {
-          addrs4 = ["167.88.34.158"];
+          addrs4 = ["162.252.241.33"];
           aliases = [
             "echelon.internet"
           ];
