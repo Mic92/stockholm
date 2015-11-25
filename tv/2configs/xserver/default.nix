@@ -101,6 +101,8 @@ let
     #! ${pkgs.bash}/bin/bash
     set -efu
     export PATH; PATH=${makeSearchPath "bin" [
+      # TODO put paths into a Haskell module instead of PATH
+      pkgs.alsaUtils
       pkgs.rxvt_unicode
     ]}:/var/setuid-wrappers
     settle() {(
