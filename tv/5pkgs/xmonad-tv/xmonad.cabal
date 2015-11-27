@@ -10,6 +10,7 @@ Executable xmonad
     base,
     containers,
     unix,
+    X11,
     xmonad,
     xmonad-contrib,
     xmonad-stockholm

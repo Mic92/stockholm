@@ -13,6 +13,7 @@ with lib;
     #../2configs/consul-client.nix
     ../2configs/git.nix
     ../2configs/mail-client.nix
+    ../2configs/pulse.nix
     ../2configs/xserver
     {
       environment.systemPackages = with pkgs; [
@@ -195,7 +196,6 @@ with lib;
   #hardware.bumblebee.group = "video";
   hardware.enableAllFirmware = true;
   #hardware.opengl.driSupport32Bit = true;
-  hardware.pulseaudio.enable = true;
 
   environment.systemPackages = with pkgs; [
     #xlibs.fontschumachermisc
