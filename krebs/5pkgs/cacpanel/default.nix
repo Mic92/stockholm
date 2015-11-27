@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonPackage rec {
   name = "cacpanel-${version}";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = pkgs.fetchurl {
     url = "https://pypi.python.org/packages/source/c/cacpanel/cacpanel-${version}.tar.gz";
-    sha256 = "1rcylbiy6488lpw4s4bildb48fljdq9kn12ksjrl81shmhhq9fcj";
+    sha256 = "1zaazg5r10kgva32zh4fhpw6l6h51ijkwpa322na0kh4x6f6aqj3";
   };
 
   propagatedBuildInputs = with python3Packages; [
