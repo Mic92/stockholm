@@ -91,6 +91,7 @@ let
       restartIfChanged = true;
       serviceConfig = {
         Type = "simple";
+        TimeoutSec = 300; # we will wait 5 minutes, kill otherwise
         restart = "always";
 
         ExecStartPre = pkgs.writeScript "tinc_graphs-init" ''
@@ -103,7 +104,6 @@ let
             cp -fr "$(${pkgs.tinc_graphs}/bin/tincstats-static-dir)/external/." "${external_dir}"
           fi
         '';
-
         ExecStart = "${pkgs.tinc_graphs}/bin/all-the-graphs";
 
         ExecStartPost = pkgs.writeScript "tinc_graphs-post" ''
