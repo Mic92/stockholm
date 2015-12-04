@@ -1,12 +1,15 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+let
+  HOME = getEnv "HOME";
+in
 
 {
   krebs.enable = true;
 
   krebs.build = {
-    user = config.krebs.users.tv;
+    user = config.krebs.users.mv;
     target = mkDefault "root@${config.krebs.build.host.name}";
     source = {
       git.nixpkgs = {
@@ -15,10 +18,10 @@ with lib;
         target-path = mkDefault "/var/src/nixpkgs";
       };
       dir.secrets = {
-        path = mkDefault "/home/tv/secrets/${config.krebs.build.host.name}";
+        path = mkDefault "${HOME}/secrets/${config.krebs.build.host.name}";
       };
       dir.stockholm = {
-        path = mkDefault "/home/tv/stockholm";
+        path = mkDefault "${HOME}/stockholm";
         target-path = mkDefault "/var/src/stockholm";
       };
     };
@@ -40,16 +43,16 @@ with lib;
         defaultUserShell = "/run/current-system/sw/bin/bash";
         mutableUsers = false;
         users = {
-          tv = {
+          mv = {
             isNormalUser = true;
-            uid = 1337;
+            uid = 1338;
           };
         };
       };
     }
     {
       security.sudo.extraConfig = ''
-        Defaults mailto="${config.krebs.users.tv.mail}"
+        Defaults mailto="${config.krebs.users.mv.mail}"
       '';
       time.timeZone = "Europe/Berlin";
     }

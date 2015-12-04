@@ -7,7 +7,6 @@
 module Main where
 
 import Control.Exception
-import Graphics.X11.ExtraTypes.XF86
 import Text.Read (readEither)
 import XMonad
 import System.IO (hPutStrLn, stderr)
@@ -188,9 +187,6 @@ myKeys conf = Map.fromList $
     --,  (_4  , xK_v      ) & \k -> (k, gridselectWorkspace wsGSConfig { gs_navigate = makeGSNav k } W.view)
     --,  (_4S , xK_v      ) & \k -> (k, gridselectWorkspace wsGSConfig { gs_navigate = makeGSNav k } W.shift)
     --,  (_4  , xK_b      ) & \k -> (k, goToSelected        wGSConfig  { gs_navigate = makeGSNav k })
-    , ((noModMask, xF86XK_AudioLowerVolume), spawn "amixer sset Master 5%-")
-    , ((noModMask, xF86XK_AudioRaiseVolume), spawn "amixer sset Master 5%+")
-    , ((noModMask, xF86XK_AudioMute), spawn "amixer sset Master toggle")
     ]
     where
     _4 = mod4Mask

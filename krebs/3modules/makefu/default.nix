@@ -245,6 +245,8 @@ with lib;
       extraZones = {
         "krebsco.de" = ''
           share.euer        IN A      ${head nets.internet.addrs4}
+          mattermost.euer   IN A      ${head nets.internet.addrs4}
+          git.euer          IN A      ${head nets.internet.addrs4}
           gum               IN A      ${head nets.internet.addrs4}
         '';
       };

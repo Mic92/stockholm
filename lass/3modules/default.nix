@@ -2,7 +2,6 @@ _:
 {
   imports = [
     ./xresources.nix
-    ./bitlbee.nix
     ./folderPerms.nix
     ./newsbot-js.nix
     ./per-user.nix
