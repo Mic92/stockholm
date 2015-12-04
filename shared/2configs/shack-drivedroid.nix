@@ -4,23 +4,25 @@ let
   srepodir = lib.shell.escape repodir;
 in
 {
-  systemd.paths.drivedroid = {
-    wantedBy = [ "multi-user.target" ];
-    Description = "triggers for changes in drivedroid dir";
-    pathConfig = {
-      PathModified = repodir;
-    };
-  };
+  environment.systemPackages = [ pkgs.drivedroid-gen-repo ];
 
   systemd.services.drivedroid = {
-    ServiceConfig = {
-      ExecStartPre = pkgs.writeScript "prepare-drivedroid-repo-gen" ''
+    description = "generates drivedroid repo file";
+    restartIfChanged = true;
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Type = "simple";
+      Restart = "always";
+      ExecStartPre = pkgs.writeScript "prepare-drivedroid-gen-repo" ''
         #!/bin/sh
         mkdir -p ${srepodir}/repos
       '';
-      ExecStart = pkgs.writeScript "start-drivedroid-repo-gen" ''
+      ExecStart = pkgs.writeScript "start-drivedroid-gen-repo" ''
         #!/bin/sh
-        {pkgs.drivedroid-gen-repo}/bin/drivedroid-gen-repo --chdir "${srepodir}" repos/ > "${srepodir}/main.json"
+        while sleep 60; do
+          ${pkgs.inotify-tools}/bin/inotifywait -r ${srepodir} && ${pkgs.drivedroid-gen-repo}/bin/drivedroid-gen-repo --chdir "${srepodir}" repos/ > "${srepodir}/main.json"
+        done
       '';
     };
   };
