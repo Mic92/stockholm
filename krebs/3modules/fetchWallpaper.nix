@@ -27,7 +27,7 @@ let
     };
     stateDir = mkOption {
       type = types.str;
-      default = "/tmp/wallpaper";
+      default = "/var/lib/wallpaper";
     };
     display = mkOption {
       type = types.str;
@@ -50,11 +50,12 @@ let
   '';
 
   imp = {
-    users.extraUsers.fetchWallpaper = {
+    users.users.fetchWallpaper = {
       name = "fetchWallpaper";
       uid = 3332383611; #genid fetchWallpaper
       description = "fetchWallpaper user";
-      home = "/var/empty";
+      home = cfg.stateDir;
+      createHome = true;
     };
 
     systemd.timers.fetchWallpaper = {
