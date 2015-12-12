@@ -22,6 +22,9 @@
     ../2configs/bitlbee.nix
     ../2configs/firefoxPatched.nix
     ../2configs/skype.nix
+    ../2configs/teamviewer.nix
+    ../2configs/libvirt.nix
+    ../2configs/fetchWallpaper.nix
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
