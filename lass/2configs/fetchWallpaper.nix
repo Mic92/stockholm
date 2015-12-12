@@ -3,7 +3,7 @@
 let
 
 in {
-  lass.fetchWallpaper = {
+  krebs.fetchWallpaper = {
     enable = true;
     url = "echelon/wallpaper.png";
   };

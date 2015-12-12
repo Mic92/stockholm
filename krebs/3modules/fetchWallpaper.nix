@@ -3,10 +3,10 @@
 with lib;
 
 let
-  cfg = config.lass.fetchWallpaper;
+  cfg = config.krebs.fetchWallpaper;
 
   out = {
-    options.lass.fetchWallpaper = api;
+    options.krebs.fetchWallpaper = api;
     config = mkIf cfg.enable imp;
   };
 
