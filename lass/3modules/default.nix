@@ -8,5 +8,6 @@ _:
     ./urxvtd.nix
     ./xresources.nix
     ./wordpress_nginx.nix
+    ./fetchWallpaper.nix
   ];
 }
