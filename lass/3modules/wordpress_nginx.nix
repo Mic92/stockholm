@@ -45,35 +45,70 @@ let
           type = bool;
           default = false;
         };
+        multiSite = mkOption {
+          type = attrsOf str;
+          default = {};
+          example = {
+            "0" = "bla.testsite.de";
+            "1" = "test.testsite.de";
+          };
+        };
       };
     }));
     default = {};
   };
 
-  dataFolder = "/srv/http";
   user = config.services.nginx.user;
   group = config.services.nginx.group;
 
   imp = {
-    krebs.nginx.servers = flip mapAttrs cfg ( name: { domain, ... }: {
+    #services.nginx.appendConfig = mkIf (cfg.multiSite != {}) ''
+    #  map $http_host $blogid {
+    #  ${concatStringsSep "\n" (mapAttrsToList (n: v: indent "v n;") multiSite)}
+    #  }
+    #'';
+
+    krebs.nginx.servers = flip mapAttrs cfg ( name: { domain, folder, multiSite, ... }: {
       server-names = [
         "${domain}"
         "www.${domain}"
       ];
-      locations = [
+        #(mkIf (multiSite != {})
+        #)
+      locations = (if (multiSite != {}) then
+        [
+          (nameValuePair "~ ^/files/(.*)$" ''
+            try_files /wp-content/blogs.dir/$blogid/$uri /wp-includes/ms-files.php?file=$1 ;
+          '')
+          (nameValuePair "^~ /blogs.dir" ''
+            internal;
+            alias ${folder}/wp-content/blogs.dir ;
+            access_log off; log_not_found off; expires max;
+          '')
+        ]
+      else
+        []
+      ) ++
+      [
         (nameValuePair "/" ''
           try_files $uri $uri/ /index.php?$args;
         '')
         (nameValuePair "~ \.php$" ''
-          fastcgi_pass unix:${dataFolder}/${domain}/phpfpm.pool;
+          fastcgi_pass unix:${folder}/phpfpm.pool;
           include ${pkgs.nginx}/conf/fastcgi.conf;
         '')
         (nameValuePair "~ /\\." ''
           deny all;
         '')
+        #Directives to send expires headers and turn off 404 error logging.
+        (nameValuePair "~* ^.+\.(xml|ogg|ogv|svg|svgz|eot|otf|woff|mp4|ttf|css|rss|atom|js|jpg|jpeg|gif|png|ico|zip|tgz|gz|rar|bz2|doc|xls|exe|ppt|tar|mid|midi|wav|bmp|rtf)$" ''
+          access_log off;
+          log_not_found off;
+          expires max;
+        '')
       ];
       extraConfig = ''
-        root ${dataFolder}/${domain}/;
+        root ${folder}/;
         index index.php;
         access_log /tmp/nginx_acc.log;
         error_log /tmp/nginx_err.log;
@@ -81,8 +116,8 @@ let
         error_page 500 502 503 504 /50x.html;
       '';
     });
-    services.phpfpm.poolConfigs = flip mapAttrs cfg (name: { domain, ... }: ''
-      listen = ${dataFolder}/${domain}/phpfpm.pool
+    services.phpfpm.poolConfigs = flip mapAttrs cfg (name: { domain, folder, ... }: ''
+      listen = ${folder}/phpfpm.pool
       user = ${user}
       group = ${group}
       pm = dynamic
@@ -97,7 +132,7 @@ let
       php_admin_flag[log_errors] = on
       catch_workers_output = yes
     '');
-    systemd.services = flip mapAttrs' cfg (name: { domain, folder, charset, collate, dbName, dbUser, debug, ... }: {
+    systemd.services = flip mapAttrs' cfg (name: { domain, folder, charset, collate, dbName, dbUser, debug, multiSite, ... }: {
       name = "wordpressInit-${name}";
       value = {
         path = [
@@ -175,6 +210,13 @@ let
             ]}
 
             \$table_prefix = 'wp_';
+
+            ${if (multiSite != {}) then
+              "define('WP_ALLOW_MULTISITE', true);"
+            else
+              ""
+            }
+
             define('WP_DEBUG', ${toJSON debug});
             if ( !defined('ABSPATH') )
               define('ABSPATH', dirname(__FILE__) . '/');
@@ -186,10 +228,12 @@ let
         };
       };
     });
-    users.users.nobody2 = {
-      uid = 125816384; # genid nobody2
-      useDefaultShell = true;
+    users.users.nobody2 = mkDefault {
+      uid = mkDefault 125816384; # genid nobody2
+      useDefaultShell = mkDefault true;
     };
   };
+
+  indent = replaceChars ["\n"] ["\n  "];
 
 in out
