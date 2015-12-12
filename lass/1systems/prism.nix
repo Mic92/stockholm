@@ -124,6 +124,15 @@ in {
     {
       time.timeZone = "Europe/Berlin";
     }
+    {
+      imports = [
+        ../2configs/websites/wohnprojekt-rhh.de.nix
+        ../2configs/websites/domsen.nix
+      ];
+      krebs.iptables.tables.filter.INPUT.rules = [
+         { predicate = "-p tcp --dport 80"; target = "ACCEPT"; }
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
