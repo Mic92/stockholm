@@ -17,6 +17,7 @@ with lib;
         root = {
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
+            config.krebs.users.uriel.pubkey
           ];
         };
         mainUser = {
@@ -30,6 +31,7 @@ with lib;
           ];
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
+            config.krebs.users.uriel.pubkey
           ];
         };
       };
