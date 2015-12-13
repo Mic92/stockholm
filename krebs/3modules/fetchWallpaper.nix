@@ -37,11 +37,10 @@ let
 
   fetchWallpaperScript = pkgs.writeScript "fetchWallpaper" ''
     #! ${pkgs.bash}/bin/bash
-    ${if (cfg.predicate == null) then "" else ''
-      ${cfg.predicate}
-      if [ $? -ne 0 ]; then
-        echo "predicate failed"
-        exit 23
+    ${optionalString (cfg.predicate != null) ''
+      if ! ${cfg.predicate}; then
+        echo "predicate failed - will not fetch from remote"
+        exit 0
       fi
     ''}
     mkdir -p ${shell.escape cfg.stateDir}
