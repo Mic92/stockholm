@@ -49,6 +49,7 @@ import XMonad.Stockholm.Pager
 import XMonad.Stockholm.Rhombus
 import XMonad.Stockholm.Shutdown
 
+
 myTerm :: String
 myTerm = "urxvtc"
 
@@ -65,6 +66,7 @@ main = getArgs >>= \case
 
 mainNoArgs :: IO ()
 mainNoArgs = do
+    workspaces0 <- getWorkspaces0
     xmonad'
         -- $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "magenta", "-fg", "magenta", "-h", "2"], duration = 500000 }
         --                   urgencyConfig { remindWhen = Every 1 }
@@ -74,6 +76,7 @@ mainNoArgs = do
         $ defaultConfig
             { terminal          = myTerm
             , modMask           = mod4Mask
+            , workspaces        = workspaces0
             , layoutHook = smartBorders $ myLayoutHook
             -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
             --, handleEventHook   = handleTimerEvent
@@ -100,16 +103,26 @@ xmonad' conf = do
             hPutStrLn stderr (displaySomeException e)
             xmonad conf
 
+getWorkspaces0 :: IO [String]
+getWorkspaces0 =
+    try (getEnv "XMONAD_WORKSPACES0_FILE") >>= \case
+      Left e -> warn (displaySomeException e)
+      Right p -> try (readFile p) >>= \case
+        Left e -> warn (displaySomeException e)
+        Right x -> case readEither x of
+          Left e -> warn e
+          Right y -> return y
+  where
+    warn msg = hPutStrLn stderr ("getWorkspaces0: " ++ msg) >> return []
 
 displaySomeException :: SomeException -> String
 displaySomeException = displayException
 
 
 myKeyMap =
-    [ ("M4-<F11>", spawn "i3lock -i ~/lock.png -u" )
+    [ ("M4-<F11>", spawn "/var/setuid-wrappers/slock")
     , ("M4-p", spawn "passmenu --type")
-    , ("M4-r", spawn "exe=$(yeganesh -x) && eval \"exec $exe\"")
-    -- , ("M4-r", io (readProcess "yeganesh" ["-x"] "" >>= putStrLn )  )
+    --, ("M4-r", spawn "exe=$(yeganesh -x) && eval \"exec $exe\"")
     , ("<XF86AudioRaiseVolume>", spawn "pactl -- set-sink-volume 0 +4%")
     , ("<XF86AudioLowerVolume>", spawn "pactl -- set-sink-volume 0 -4%")
     , ("<XF86Launch1>", gridselectWorkspace myWSConfig W.view)

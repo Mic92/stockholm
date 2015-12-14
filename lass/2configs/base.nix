@@ -17,6 +17,7 @@ with lib;
         root = {
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
+            config.krebs.users.uriel.pubkey
           ];
         };
         mainUser = {
@@ -30,6 +31,7 @@ with lib;
           ];
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
+            config.krebs.users.uriel.pubkey
           ];
         };
       };
@@ -48,7 +50,7 @@ with lib;
       source = {
         git.nixpkgs = {
           url = https://github.com/Lassulus/nixpkgs;
-          rev = "8d1ce129361312334bf914ce0d27e463cb0bb21b";
+          rev = "363c8430f1efad8b03d5feae6b3a4f2fe7b29251";
         };
         dir.secrets = {
           host = config.krebs.hosts.mors;

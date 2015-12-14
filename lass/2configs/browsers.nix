@@ -1,16 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  simpleScript = name: content:
-    pkgs.stdenv.mkDerivation {
-      inherit name;
-      phases = [ "installPhase" ];
-      installPhase = ''
-        mkdir -p $out/bin
-        ln -s ${pkgs.writeScript name content} $out/bin/${name}
-      '';
-    };
-
   mainUser = config.users.extraUsers.mainUser;
   createChromiumUser = name: extraGroups: packages:
     {
@@ -26,8 +16,8 @@ let
         ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
       '';
       environment.systemPackages = [
-        (simpleScript name ''
-          sudo -u ${name} -i chromium $@
+        (pkgs.writeScriptBin name ''
+          /var/setuid-wrappers/sudo -u ${name} -i chromium $@
         '')
       ];
     };
@@ -46,8 +36,8 @@ let
         ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
       '';
       environment.systemPackages = [
-        (simpleScript name ''
-          sudo -u ${name} -i firefox $@
+        (pkgs.writeScriptBin name ''
+          /var/setuid-wrappers/sudo -u ${name} -i firefox $@
         '')
       ];
     };
@@ -57,7 +47,7 @@ let
 in {
 
   environment.systemPackages = [
-    (simpleScript "browser-select" ''
+    (pkgs.writeScriptBin "browser-select" ''
       BROWSER=$(echo -e "ff\ncr\nfb\ngm\nflash" | dmenu)
       $BROWSER $@
     '')
@@ -70,7 +60,7 @@ in {
     ( createChromiumUser "cr" [ "audio" ] [ pkgs.chromium ] )
     ( createChromiumUser "fb" [ ] [ pkgs.chromium ] )
     ( createChromiumUser "gm" [ ] [ pkgs.chromium ] )
-   # ( createChromiumUser "flash" [ ] [ pkgs.flash ] )
+    ( createChromiumUser "flash" [ ] [ pkgs.flash ] )
   ];
 
   nixpkgs.config.packageOverrides = pkgs : {

@@ -84,6 +84,31 @@ with lib;
         };
       };
     };
+
+    vbob = {
+      cores = 2;
+      dc = "makefu"; #vm local
+      nets = {
+        retiolum = {
+          addrs4 = ["10.243.1.91"];
+          addrs6 = ["42:0b2c:d90e:e717:03dd:9ac1:0000:a400"];
+          aliases = [
+            "vbob.retiolum"
+          ];
+          tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIIBCgKCAQEA+0TIo0dS9LtSdrmH0ClPHLO7dHtV9Dj7gaBAsbyuwxAI5cQgYKwr
+          4G6t7IcJW+Gu2bh+LKtPP91+zYXq4Qr1nAaKw4ajsify6kpxsCBzknmwi6ibIJMI
+          AK114dr/XSk/Pc6hOSA8kqDP4c0MZXwitRBiNjrWbTrQh6GJ3CXhmpZ2lJkoAyNP
+          hjdPerbTUrhQlNW8FanyQQzOgN5I7/PXsZShmb3iNKz1Ban5yWKFCVpn8fjWQs5o
+          Un2AKowH4Y+/g8faGemL8uy/k5xrHSrn05L92TPDUpAXrcZXzo6ao1OBiwJJVl7s
+          AVduOY18FU82GUw7edR0e/b2UC6hUONflwIDAQAB
+          -----END RSA PUBLIC KEY-----
+
+            '';
+        };
+      };
+    };
     flap = rec {
       cores = 1;
       dc = "cac"; #vps

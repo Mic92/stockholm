@@ -14,6 +14,9 @@ in {
       createHome = true;
     };
   };
+  krebs.per-user.elster.packages = [
+    pkgs.chromium
+  ];
   security.sudo.extraConfig = ''
     ${mainUser.name} ALL=(elster) NOPASSWD: ALL
   '';

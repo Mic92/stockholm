@@ -12,6 +12,7 @@ let
       ./current.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
+      ./fetchWallpaper.nix
       ./github-hosts-sync.nix
       ./git.nix
       ./go.nix

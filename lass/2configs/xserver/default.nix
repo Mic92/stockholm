@@ -108,7 +108,6 @@ let
       pkgs.rxvt_unicode
       pkgs.i3lock
       pkgs.haskellPackages.yeganesh
-      pkgs.haskellPackages.xmobar
       pkgs.dmenu
     ] ++ config.environment.systemPackages)}:/var/setuid-wrappers
     settle() {(
