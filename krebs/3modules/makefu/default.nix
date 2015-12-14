@@ -277,10 +277,22 @@ with lib;
       };
     };
   };
-  users = addNames {
+  users = addNames rec {
     makefu = {
       mail = "makefu@pornocauster.retiolum";
-      pubkey = readFile ../../Zpubkeys/makefu_arch.ssh.pub;
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl3RTOHd5DLiVeUbUr/GSiKoRWknXQnbkIf+uNiFO+XxiqZVojPlumQUVhasY8UzDzj9tSDruUKXpjut50FhIO5UFAgsBeMJyoZbgY/+R+QKU00Q19+IiUtxeFol/9dCO+F4o937MC0OpAC10LbOXN/9SYIXueYk3pJxIycXwUqhYmyEqtDdVh9Rx32LBVqlBoXRHpNGPLiswV2qNe0b5p919IGcslzf1XoUzfE3a3yjk/XbWh/59xnl4V7Oe7+iQheFxOT6rFA30WYwEygs5As//ZYtxvnn0gA02gOnXJsNjOW9irlxOUeP7IOU6Ye3WRKFRR0+7PS+w8IJLag2xb makefu@pornocauster";
+    };
+    makefu_omo = {
+      inherit (makefu) mail;
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtDhAxjiCH0SmTGNDqmlKPug9qTf+IFOVjdXfk01lAV2KMVW00CgNo2d5kl5+6pM99K7zZO7Uo7pmSFLSCAg8J6cMRI3v5OxFsnQfcJ9TeGLZt/ua7F8YsyIIr5wtqKtFbujqve31q9xJMypEpiX4np3nLiHfYwcWu7AFAUY8UHcCNl4JXm6hsmPe+9f6Mg2jICOdkfMMn0LtW+iq1KZpw1Nka2YUSiE2YuUtV+V+YaVMzdcjknkVkZNqcVk6tbJ1ZyZKM+bFEnE4VkHJYDABZfELpcgBAszfWrVG0QpEFjVCUq5atpIVHJcWWDx072r0zgdTPcBuzsHHC5PRfVBLEw== makefu@servarch";
+    };
+    makefu_tsp = {
+      inherit (makefu) mail;
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1srWa67fcsw3r64eqgIuHbMbrj6Ywd9AwzCM+2dfXqYQZblchzH4Q4oydjdFOnV9LaA1LfNcWEjV/gVQKA2/xLSyXSDwzTxQDyOAZaqseKVg1F0a7wAF20+LiegQj6KXE29wcTW1RjcPncmagTBv5/vYbo1eDLKZjwGpEnG0+s+TRftrAhrgtbsuwR1GWWYACxk1CbxbcV+nIZ1RF9E1Fngbl4C4WjXDvsASi8s24utCd/XxgKwKcSFv7EWNfXlNzlETdTqyNVdhA7anc3N7d/TGrQuzCdtrvBFq4WbD3IRhSk79PXaB3L6xJ7LS8DyOSzfPyiJPK65Zw5s4BC07Z makefu@tsp";
+    };
+    exco = {
+      mail = "dickbutt@excogitation.de";
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC7HCK+TzelJp7atCbvCbvZZnXFr3cE35ioactgpIJL7BOyQM6lJ/7y24WbbrstClTuV7n0rWolDgfjx/8kVQExP3HXEAgCwV6tIcX/Ep84EXSok7QguN0ozZMCwX9CYXOEyLmqpe2KAx3ggXDyyDUr2mWs04J95CFjiR/YgOhIfM4+gVBxGtLSTyegyR3Fk7O0KFwYDjBRLi7a5TIub3UYuOvw3Dxo7bUkdhtf38Kff8LEK8PKtIku/AyDlwZ0mZT4Z7gnihSG2ezR5mLD6QXVuGhG6gW/gsqfPVRF4aZbrtJWZCp2G21wBRafpEZJ8KFHtR18JNcvsuWA1HJmFOj2K0mAY5hBvzCbXGhSzBtcGxKOmTBDTRlZ7FIFgukP/ckSgDduydFUpsv07ZRj+qY07zKp3Nhh3RuN7ZcveCo2WpaAzTuWCMPB0BMhEQvsO8I/p5YtTaw2T1poOPorBbURQwEgNrZ92kB1lL5t1t1ZB4oNeDJX5fddKLkgnLqQZWOZBTKtoq0EAVXojTDLZaA+5z20h8DU7sicDQ/VG4LWtqm9fh8iDpvt/3IHUn/HJEEnlfE1Gd+F2Q+R80yu4e1PClmuzfWjCtkPc4aY7oDxfcJqyeuRW6husAufPqNs31W6X9qXwoaBh9vRQ1erZUo46iicxbzujXIy/Hwg67X8dw== dickbutt@excogitation.de";
     };
   };
 }
