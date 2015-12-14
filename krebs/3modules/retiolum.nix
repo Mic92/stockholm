@@ -50,6 +50,14 @@ let
       '';
     };
 
+    extraConfig = mkOption {
+      type = types.str;
+      default = "";
+      description = ''
+        Extra Configuration to be appended to tinc.conf
+      '';
+    };
+
     tincPackage = mkOption {
       type = types.package;
       default = pkgs.tinc;
@@ -203,6 +211,7 @@ let
     Interface = ${cfg.network}
     ${concatStrings (map (c : "ConnectTo = " + c + "\n") cfg.connectTo)}
     PrivateKeyFile = /tmp/retiolum-rsa_key.priv
+    ${cfg.extraConfig}
     EOF
 
     # source: krebscode/painload/retiolum/scripts/tinc_setup/tinc-up

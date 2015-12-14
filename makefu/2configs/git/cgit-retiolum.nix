@@ -24,6 +24,7 @@ let
 
   connector-repos = mapAttrs make-priv-repo {
     connector = { };
+    minikrebs = { };
     mattermost = {
       desc = "Mattermost Docker files";
     };
@@ -42,7 +43,7 @@ let
     hooks = {
       post-receive = pkgs.git-hooks.irc-announce {
         nick = config.networking.hostName;
-        verbose = config.krebs.build.host.name == "pnp";
+        verbose = config.krebs.build.host.name == "gum";
         channel = "#retiolum";
         # TODO remove the hardcoded hostname
         server = "cd.retiolum";
@@ -54,7 +55,7 @@ let
 
   # TODO: get the list of all krebsministers
   krebsminister = with config.krebs.users; [ lass tv uriel ];
-  all-makefu = with config.krebs.users; [ makefu makefu-omo makefu-tsp ];
+  all-makefu = with config.krebs.users; [ makefu makefu-omo makefu-tsp makefu-vbob ];
   all-exco = with config.krebs.users; [ exco ];
 
   priv-rules = repo: set-owners repo all-makefu;
@@ -84,6 +85,10 @@ in {
       makefu-omo = {
         name = "makefu-omo" ;
         pubkey= with builtins; readFile ../../../krebs/Zpubkeys/makefu_omo.ssh.pub;
+      };
+      makefu-vbob = {
+        name = "makefu-vbob" ;
+        pubkey= with builtins; readFile ../../../krebs/Zpubkeys/makefu_vbob.ssh.pub;
       };
       makefu-tsp = {
         name = "makefu-tsp" ;
