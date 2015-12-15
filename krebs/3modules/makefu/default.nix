@@ -273,6 +273,7 @@ with lib;
           mattermost.euer   IN A      ${head nets.internet.addrs4}
           git.euer          IN A      ${head nets.internet.addrs4}
           gum               IN A      ${head nets.internet.addrs4}
+          cgit.euer         IN A      ${head nets.internet.addrs4}
         '';
       };
       nets = {
@@ -287,6 +288,7 @@ with lib;
           addrs6 = ["42:f9f0:0000:0000:0000:0000:0000:70d2"];
           aliases = [
             "gum.retiolum"
+            "cgit.gum.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
