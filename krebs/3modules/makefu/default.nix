@@ -263,6 +263,31 @@ with lib;
         };
       };
     };
+
+    omo = rec {
+      cores = 2;
+      dc = "makefu"; #AMD E350
+
+      nets = {
+        retiolum = {
+          addrs4 = ["10.243.0.89"];
+          addrs6 = ["42:f9f0::10"];
+          aliases = [
+            "omo.retiolum"
+          ];
+          tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEAuHQEeowvxRkoHJUw6cUp431pnoIy4MVv7kTLgWEK46nzgZtld9LM
+              ZdNMJB9CuOVVMHEaiY6Q5YchUmapGxwEObc0y+8zQxTPw3I4q0GkSJqKLPrsTpkn
+              sgEkHPfs2GVdtIBXDn9I8i5JsY2+U8QF8fbIQSOO08/Vpa3nknDAMege9yEa3NFm
+              s/+x+2pS+xV6uzf/H21XNv0oufInXwZH1NCNXAy5I2V6pz7BmAHilVOGCT7g2zn6
+              GasmofiYEnro4V5s8gDlQkb7bCZEIA9EgX/HP6fZJQezSUHcDCQFI0vg26xywbr6
+              5+9tTn8fN2mWS5+Pdmx3haX1qFcBP5HglwIDAQAB
+              -----END RSA PUBLIC KEY-----
+            '';
+        };
+      };
+    };
     gum = rec {
       cores = 1;
       dc = "online.net"; #root-server
