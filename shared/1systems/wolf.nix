@@ -11,6 +11,7 @@ in
     ../2configs/collectd-base.nix
     ../2configs/shack-nix-cacher.nix
     ../2configs/shack-drivedroid.nix
+    ../2configs/cac-ci.nix
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
   # apt-cacher-ng in first place)
@@ -24,7 +25,7 @@ in
     }];
 
     defaultGateway = "10.42.0.1";
-    nameservers = [ "8.8.8.8" ];
+    nameservers = [ "10.42.0.100" "10.42.0.200" ];
   };
 
   #####################
