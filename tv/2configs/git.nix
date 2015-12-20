@@ -33,6 +33,9 @@ let
     nixpkgs = {};
     push = {};
     regfish = {};
+    soundcloud = {
+      desc = "SoundCloud command line interface";
+    };
     stockholm = {
       desc = "take all the computers hostage, they'll love you!";
     };
