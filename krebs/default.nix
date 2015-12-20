@@ -11,6 +11,7 @@ let out = {
     inherit infest;
     inherit init;
     inherit nixos-install;
+    inherit populate;
   };
 
   deploy =

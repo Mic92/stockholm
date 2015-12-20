@@ -10,6 +10,8 @@ in {
     ../2configs/downloading.nix
     ../2configs/git.nix
     ../2configs/ts3.nix
+    ../2configs/bitlbee.nix
+    ../2configs/weechat.nix
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
@@ -86,6 +88,50 @@ in {
     }
     {
       nixpkgs.config.allowUnfree = true;
+    }
+    {
+      #stuff for juhulian
+      users.extraUsers.juhulian = {
+        name = "juhulian";
+        uid = 1339;
+        home = "/home/juhulian";
+        group = "users";
+        createHome = true;
+        useDefaultShell = true;
+        extraGroups = [
+        ];
+        openssh.authorizedKeys.keys = [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBQhLGvfv4hyQ/nqJGy1YgHXPSVl6igeWTroJSvAhUFgoh+rG+zvqY0EahKXNb3sq0/OYDCTJVuucc0hgCg7T2KqTqMtTb9EEkRmCFbD7F7DWZojCrh/an6sHneqT5eFvzAPZ8E5hup7oVQnj5P5M3I9keRHBWt1rq6q0IcOEhsFvne4qJc73aLASTJkxzlo5U8ju3JQOl6474ECuSn0lb1fTrQ/SR1NgF7jV11eBldkS8SHEB+2GXjn4Yrn+QUKOnDp+B85vZmVlJSI+7XR1/U/xIbtAjGTEmNwB6cTbBv9NCG9jloDDOZG4ZvzzHYrlBXjaigtQh2/4mrHoKa5eV juhulian@juhulian"
+        ];
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
+      ];
+    }
+    {
+      environment.systemPackages = [
+        pkgs.perlPackages.Plack
+      ];
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 8080"; target = "ACCEPT";}
+      ];
+    }
+    {
+      users.users.chat.openssh.authorizedKeys.keys = [
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDJJKlOeAHyi7lToCqRF/hdA2TrtVbrTUd2ayuWsXe9JWiyeyKH/LNY3SrgxCWPZSItE9VK68ghMuVYK/A8IAcgzNhzFYLDxmtsidjiOJBj2ZGsjqevoQ5HuKB/pob8CLW3dr1Rx38Any/XXxpfeO6vemCJMGLTe5gSlrCI+Tk1qNt0Rz+rke73Hwt9wW39g8X3prF2q9ryL9OFCcsoYUE7PIOV9xM1GaDFfTR4bKux7HyFKmG+rBvmJHB5OPW8UAtVZGY/FIChwlmF6QNO5Zym497bG1RCOGplaLpRXVJrmoUkZUO7EazePPxIjz2duWYqFtwl5R9YGy1+a+F58G19DS7wJHM29td117/ZANjRTxE5q/aJm2okJYOVSqhYzdhji+BWVZ5ai7cktpAdtPo++yiZN90LvogXNB64kFxVGuX52xZcA3KLKmvrd47o9k0pzO+oCoArxPFIx0YkHfy/yw7OG8Z+KLK8l9WXWBZO5TpjcydnEcRZ8OEqVhtmDh+9h1zhPphuFBtT1JPbt8m132RUy23qsNRtZ/lnnfQbrxgHPRzVuvA8o4ahOEUdvV9SYnzKb6qMFXGp25EhlcWnR4/toyG6I3paBtByeHkaxjgCuvm9Hob6f/xFr3kEJ4WXTVguyrcFgNg2EcEfdkrTMhNn9OIHEFFQ8whIBv5jlw== JuiceSSH"
+      ];
+    }
+    {
+      time.timeZone = "Europe/Berlin";
+    }
+    {
+      imports = [
+        ../2configs/websites/wohnprojekt-rhh.de.nix
+        ../2configs/websites/domsen.nix
+      ];
+      krebs.iptables.tables.filter.INPUT.rules = [
+         { predicate = "-p tcp --dport 80"; target = "ACCEPT"; }
+      ];
     }
   ];
 

@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (import ../4lib { inherit pkgs lib; }) getDefaultGateway;
   inherit (lib) head;
 
   ip = "168.235.148.52";
+  gw = "168.235.148.1";
 in {
   imports = [
     ../2configs/base.nix
@@ -16,7 +16,7 @@ in {
           prefixLength = 24;
         }
       ];
-      networking.defaultGateway = getDefaultGateway ip;
+      networking.defaultGateway = gw;
       networking.nameservers = [
         "8.8.8.8"
       ];

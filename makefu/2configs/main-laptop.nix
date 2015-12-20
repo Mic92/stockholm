@@ -6,13 +6,17 @@
 
 with lib;
 {
-  imports = [ ./base-gui.nix ];
+  imports = [
+    ./base-gui.nix
+    ./fetchWallpaper.nix
+    ./zsh-user.nix
+  ];
   environment.systemPackages = with pkgs;[
     vlc
     firefox
     chromium
     keepassx
-
+    ntfs3g
     virtmanager
     at_spi2_core # dep for virtmanager?
   ];

@@ -2,42 +2,14 @@
 
 with lib;
 
-let
-  testHosts = lib.genAttrs [
-    "test-arch"
-    "test-centos6"
-    "test-centos7"
-  ] (name: {
-    inherit name;
-    cores = 1;
-    nets = {
-      retiolum = {
-        addrs4 = ["10.243.111.111"];
-        addrs6 = ["42:0:0:0:0:0:0:7357"];
-        aliases = [
-          "test.retiolum"
-        ];
-        tinc.pubkey = ''
-          -----BEGIN RSA PUBLIC KEY-----
-          MIIBCgKCAQEAy41YKF/wpHLnN370MSdnAo63QUW30aw+6O79cnaJyxoL6ZQkk4Nd
-          mrX2tBIfb2hhhgm4Jecy33WVymoEL7EiRZ6gshJaYwte51Jnrac6IFQyiRGMqHY5
-          TG/6IzzTOkeQrT1fw3Yfh0NRfqLBZLr0nAFoqgzIVRxvy+QO1gCU2UDKkQ/y5df1
-          K+YsMipxU08dsOkPkmLdC/+vDaZiEdYljIS3Omd+ED5JmLM3MSs/ZPQ8xjkjEAy8
-          QqD9/67bDoeXyg1ZxED2n0+aRKtU/CK/66Li//yev6yv38OQSEM4t/V0dr9sjLcY
-          VIdkxKf96F9r3vcDf/9xw2HrqVoy+D5XYQIDAQAB
-          -----END RSA PUBLIC KEY-----
-        '';
-      };
-    };
-  });
-in {
+{
   hosts = addNames {
     echelon = {
       cores = 2;
       dc = "lass"; #dc = "cac";
       nets = rec {
         internet = {
-          addrs4 = ["167.88.34.158"];
+          addrs4 = ["162.252.241.33"];
           aliases = [
             "echelon.internet"
           ];
@@ -241,7 +213,7 @@ in {
       };
     };
 
-  } // testHosts;
+  };
   users = addNames {
     lass = {
       pubkey = readFile ../../Zpubkeys/lass.ssh.pub;

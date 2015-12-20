@@ -1,16 +1,12 @@
 { config, pkgs, ... }:
 
-let
-  lpkgs = import ../5pkgs { inherit pkgs; };
-in {
-
-  imports = [
-    ../3modules/bitlbee.nix
-  ];
-
-  lass.bitlbee = {
+{
+  services.bitlbee = {
     enable = true;
-    bitlbeePkg = lpkgs.bitlbee;
     portNumber = 6666;
+    plugins = [
+      pkgs.bitlbee-facebook
+      pkgs.bitlbee-steam
+    ];
   };
 }

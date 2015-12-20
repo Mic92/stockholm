@@ -1,45 +1,41 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
+let
+  shack-ip = lib.head config.krebs.build.host.nets.shack.addrs4;
+  internal-ip = lib.head config.krebs.build.host.nets.retiolum.addrs4;
+in
 {
   imports = [
+    ../2configs/base.nix
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
     ../2configs/collectd-base.nix
+    ../2configs/shack-nix-cacher.nix
+    ../2configs/shack-drivedroid.nix
+    ../2configs/cac-ci.nix
+    ../2configs/graphite.nix
   ];
+  # use your own binary cache, fallback use cache.nixos.org (which is used by
+  # apt-cacher-ng in first place)
+  nix.binaryCaches = [ "http://localhost:3142/nixos" "https://cache.nixos.org" ];
 
+  networking = {
+    firewall.enable = false;
+    interfaces.eth0.ip4 = [{
+      address = shack-ip;
+      prefixLength = 20;
+    }];
+
+    defaultGateway = "10.42.0.1";
+    nameservers = [ "10.42.0.100" "10.42.0.200" ];
+  };
+
+  #####################
+  # uninteresting stuff
+  #####################
   krebs.build.host = config.krebs.hosts.wolf;
   # TODO rename shared user to "krebs"
   krebs.build.user = config.krebs.users.shared;
   krebs.build.target = "wolf";
-
-  krebs.enable = true;
-  krebs.retiolum = {
-    enable = true;
-    connectTo = [
-      # TODO remove connectTo cd, this was only used for bootstrapping
-      "cd"
-      "gum"
-      "pigstarter"
-    ];
-  };
-
-  krebs.build.source = {
-    git.nixpkgs = {
-      url = https://github.com/NixOS/nixpkgs;
-      rev = "6d31e9b81dcd4ab927bb3dc91b612dd5abfa2f80";
-    };
-    dir.secrets = {
-      host = config.krebs.current.host;
-      path = "${getEnv "HOME"}/secrets/krebs/wolf";
-    };
-    dir.stockholm = {
-      host = config.krebs.current.host;
-      path = "${getEnv "HOME"}/stockholm";
-    };
-  };
-
-  networking.hostName = config.krebs.build.host.name;
 
   boot.kernel.sysctl = {
     # Enable IPv6 Privacy Extensions
@@ -60,48 +56,8 @@ with lib;
   fileSystems."/" = { device = "/dev/disk/by-label/nixos"; fsType = "ext4"; };
 
   swapDevices = [
-    { device = "/dev/disk/by-label/swap"; }
-  ];
-
-  nix.maxJobs = 1;
-  nix.trustedBinaryCaches = [
-    "https://cache.nixos.org"
-    "http://cache.nixos.org"
-    "http://hydra.nixos.org"
-  ];
-  nix.useChroot = true;
-
-  nixpkgs.config.packageOverrides = pkgs: {
-    nano = pkgs.vim;
-  };
-
-  environment.systemPackages = with pkgs; [
-    git
-    rxvt_unicode.terminfo
+    { device = "/dev/disk/by-label/swap";  }
   ];
 
   time.timeZone = "Europe/Berlin";
-
-  programs.ssh.startAgent = false;
-
-  services.openssh = {
-    enable = true;
-    hostKeys = [
-      { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
-    ];
-  };
-  services.cron.enable = false;
-  services.nscd.enable = false;
-  services.ntp.enable = false;
-
-  users.mutableUsers = false;
-  users.extraUsers.root.openssh.authorizedKeys.keys = [
-    # TODO
-    config.krebs.users.lass.pubkey
-    config.krebs.users.makefu.pubkey
-    config.krebs.users.tv.pubkey
-  ];
-
-  # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "15.09";
 }

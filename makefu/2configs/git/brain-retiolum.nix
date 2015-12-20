@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 # TODO: remove tv lib :)
-with import ../../../tv/4lib { inherit lib pkgs; };
+with lib;
 let
 
   repos = priv-repos // krebs-repos ;
@@ -26,7 +26,7 @@ let
     inherit name desc;
     public = false;
     hooks = {
-      post-receive = git.irc-announce {
+      post-receive = pkgs.git-hooks.irc-announce {
         nick = config.networking.hostName;
         channel = "#retiolum";
         # TODO remove the hardcoded hostname
@@ -59,16 +59,7 @@ let
     set-owners repo all-makefu ++ set-ro-access repo krebsminister;
 
 in {
-  imports = [{
-    krebs.users.makefu-omo = {
-        name = "makefu-omo" ;
-        pubkey= with builtins; readFile ../../../krebs/Zpubkeys/makefu_omo.ssh.pub;
-    };
-    krebs.users.makefu-tsp = {
-        name = "makefu-tsp" ;
-        pubkey= with builtins; readFile ../../../krebs/Zpubkeys/makefu_tsp.ssh.pub;
-    };
-  }];
+  imports = [ ];
   krebs.git = {
     enable = true;
     cgit = false;

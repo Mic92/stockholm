@@ -6,13 +6,16 @@ let
 
   out = {
     imports = [
+      ./apt-cacher-ng.nix
       ./bepasty-server.nix
       ./build.nix
       ./current.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
+      ./fetchWallpaper.nix
       ./github-hosts-sync.nix
       ./git.nix
+      ./go.nix
       ./iptables.nix
       ./nginx.nix
       ./per-user.nix
@@ -85,6 +88,7 @@ let
       krebs.dns.providers = {
         de.krebsco = "zones";
         gg23 = "hosts";
+        shack = "hosts";
         internet = "hosts";
         retiolum = "hosts";
       };

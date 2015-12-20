@@ -84,6 +84,31 @@ with lib;
         };
       };
     };
+
+    vbob = {
+      cores = 2;
+      dc = "makefu"; #vm local
+      nets = {
+        retiolum = {
+          addrs4 = ["10.243.1.91"];
+          addrs6 = ["42:0b2c:d90e:e717:03dd:9ac1:0000:a400"];
+          aliases = [
+            "vbob.retiolum"
+          ];
+          tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIIBCgKCAQEA+0TIo0dS9LtSdrmH0ClPHLO7dHtV9Dj7gaBAsbyuwxAI5cQgYKwr
+          4G6t7IcJW+Gu2bh+LKtPP91+zYXq4Qr1nAaKw4ajsify6kpxsCBzknmwi6ibIJMI
+          AK114dr/XSk/Pc6hOSA8kqDP4c0MZXwitRBiNjrWbTrQh6GJ3CXhmpZ2lJkoAyNP
+          hjdPerbTUrhQlNW8FanyQQzOgN5I7/PXsZShmb3iNKz1Ban5yWKFCVpn8fjWQs5o
+          Un2AKowH4Y+/g8faGemL8uy/k5xrHSrn05L92TPDUpAXrcZXzo6ao1OBiwJJVl7s
+          AVduOY18FU82GUw7edR0e/b2UC6hUONflwIDAQAB
+          -----END RSA PUBLIC KEY-----
+
+            '';
+        };
+      };
+    };
     flap = rec {
       cores = 1;
       dc = "cac"; #vps
@@ -238,6 +263,31 @@ with lib;
         };
       };
     };
+
+    omo = rec {
+      cores = 2;
+      dc = "makefu"; #AMD E350
+
+      nets = {
+        retiolum = {
+          addrs4 = ["10.243.0.89"];
+          addrs6 = ["42:f9f0::10"];
+          aliases = [
+            "omo.retiolum"
+          ];
+          tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEAuHQEeowvxRkoHJUw6cUp431pnoIy4MVv7kTLgWEK46nzgZtld9LM
+              ZdNMJB9CuOVVMHEaiY6Q5YchUmapGxwEObc0y+8zQxTPw3I4q0GkSJqKLPrsTpkn
+              sgEkHPfs2GVdtIBXDn9I8i5JsY2+U8QF8fbIQSOO08/Vpa3nknDAMege9yEa3NFm
+              s/+x+2pS+xV6uzf/H21XNv0oufInXwZH1NCNXAy5I2V6pz7BmAHilVOGCT7g2zn6
+              GasmofiYEnro4V5s8gDlQkb7bCZEIA9EgX/HP6fZJQezSUHcDCQFI0vg26xywbr6
+              5+9tTn8fN2mWS5+Pdmx3haX1qFcBP5HglwIDAQAB
+              -----END RSA PUBLIC KEY-----
+            '';
+        };
+      };
+    };
     gum = rec {
       cores = 1;
       dc = "online.net"; #root-server
@@ -245,7 +295,10 @@ with lib;
       extraZones = {
         "krebsco.de" = ''
           share.euer        IN A      ${head nets.internet.addrs4}
+          mattermost.euer   IN A      ${head nets.internet.addrs4}
+          git.euer          IN A      ${head nets.internet.addrs4}
           gum               IN A      ${head nets.internet.addrs4}
+          cgit.euer         IN A      ${head nets.internet.addrs4}
         '';
       };
       nets = {
@@ -260,6 +313,7 @@ with lib;
           addrs6 = ["42:f9f0:0000:0000:0000:0000:0000:70d2"];
           aliases = [
             "gum.retiolum"
+            "cgit.gum.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -275,10 +329,26 @@ with lib;
       };
     };
   };
-  users = addNames {
+  users = addNames rec {
     makefu = {
       mail = "makefu@pornocauster.retiolum";
-      pubkey = readFile ../../Zpubkeys/makefu_arch.ssh.pub;
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl3RTOHd5DLiVeUbUr/GSiKoRWknXQnbkIf+uNiFO+XxiqZVojPlumQUVhasY8UzDzj9tSDruUKXpjut50FhIO5UFAgsBeMJyoZbgY/+R+QKU00Q19+IiUtxeFol/9dCO+F4o937MC0OpAC10LbOXN/9SYIXueYk3pJxIycXwUqhYmyEqtDdVh9Rx32LBVqlBoXRHpNGPLiswV2qNe0b5p919IGcslzf1XoUzfE3a3yjk/XbWh/59xnl4V7Oe7+iQheFxOT6rFA30WYwEygs5As//ZYtxvnn0gA02gOnXJsNjOW9irlxOUeP7IOU6Ye3WRKFRR0+7PS+w8IJLag2xb makefu@pornocauster";
+    };
+    makefu-omo = {
+      inherit (makefu) mail;
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtDhAxjiCH0SmTGNDqmlKPug9qTf+IFOVjdXfk01lAV2KMVW00CgNo2d5kl5+6pM99K7zZO7Uo7pmSFLSCAg8J6cMRI3v5OxFsnQfcJ9TeGLZt/ua7F8YsyIIr5wtqKtFbujqve31q9xJMypEpiX4np3nLiHfYwcWu7AFAUY8UHcCNl4JXm6hsmPe+9f6Mg2jICOdkfMMn0LtW+iq1KZpw1Nka2YUSiE2YuUtV+V+YaVMzdcjknkVkZNqcVk6tbJ1ZyZKM+bFEnE4VkHJYDABZfELpcgBAszfWrVG0QpEFjVCUq5atpIVHJcWWDx072r0zgdTPcBuzsHHC5PRfVBLEw== makefu@servarch";
+    };
+    makefu-tsp = {
+      inherit (makefu) mail;
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1srWa67fcsw3r64eqgIuHbMbrj6Ywd9AwzCM+2dfXqYQZblchzH4Q4oydjdFOnV9LaA1LfNcWEjV/gVQKA2/xLSyXSDwzTxQDyOAZaqseKVg1F0a7wAF20+LiegQj6KXE29wcTW1RjcPncmagTBv5/vYbo1eDLKZjwGpEnG0+s+TRftrAhrgtbsuwR1GWWYACxk1CbxbcV+nIZ1RF9E1Fngbl4C4WjXDvsASi8s24utCd/XxgKwKcSFv7EWNfXlNzlETdTqyNVdhA7anc3N7d/TGrQuzCdtrvBFq4WbD3IRhSk79PXaB3L6xJ7LS8DyOSzfPyiJPK65Zw5s4BC07Z makefu@tsp";
+    };
+    makefu-vbob = {
+      inherit (makefu) mail;
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCiKvLKaRQPL/Y/4EWx3rNhrY5YGKK4AeqDOFTLgJ7djwJnMo7FP+OIH/4pFxS6Ri2TZwS9QsR3hsycA4n8Z15jXAOXuK52kP65Ei3lLyz9mF+/s1mJsV0Ui/UKF3jE7PEAVky7zXuyYirJpMK8LhXydpFvH95aGrL1Dk30R9/vNkE9rc1XylBfNpT0X0GXmldI+r5OPOtiKLA5BHJdlV8qDYhQsU2fH8S0tmAHF/ir2bh7+PtLE2hmRT+b8I7y1ZagkJsC0sn9GT1AS8ys5s65V2xTTIfQO1zQ4sUH0LczuRuY8MLaO33GAzhyoSQdbdRAmwZQpY/JRJ3C/UROgHYt makefu@vbob";
+    };
+    exco = {
+      mail = "dickbutt@excogitation.de";
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC7HCK+TzelJp7atCbvCbvZZnXFr3cE35ioactgpIJL7BOyQM6lJ/7y24WbbrstClTuV7n0rWolDgfjx/8kVQExP3HXEAgCwV6tIcX/Ep84EXSok7QguN0ozZMCwX9CYXOEyLmqpe2KAx3ggXDyyDUr2mWs04J95CFjiR/YgOhIfM4+gVBxGtLSTyegyR3Fk7O0KFwYDjBRLi7a5TIub3UYuOvw3Dxo7bUkdhtf38Kff8LEK8PKtIku/AyDlwZ0mZT4Z7gnihSG2ezR5mLD6QXVuGhG6gW/gsqfPVRF4aZbrtJWZCp2G21wBRafpEZJ8KFHtR18JNcvsuWA1HJmFOj2K0mAY5hBvzCbXGhSzBtcGxKOmTBDTRlZ7FIFgukP/ckSgDduydFUpsv07ZRj+qY07zKp3Nhh3RuN7ZcveCo2WpaAzTuWCMPB0BMhEQvsO8I/p5YtTaw2T1poOPorBbURQwEgNrZ92kB1lL5t1t1ZB4oNeDJX5fddKLkgnLqQZWOZBTKtoq0EAVXojTDLZaA+5z20h8DU7sicDQ/VG4LWtqm9fh8iDpvt/3IHUn/HJEEnlfE1Gd+F2Q+R80yu4e1PClmuzfWjCtkPc4aY7oDxfcJqyeuRW6husAufPqNs31W6X9qXwoaBh9vRQ1erZUo46iicxbzujXIy/Hwg67X8dw== dickbutt@excogitation.de";
     };
   };
 }

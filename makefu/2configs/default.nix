@@ -65,6 +65,7 @@ with lib;
   time.timeZone = "Europe/Berlin";
   #nix.maxJobs = 1;
 
+  programs.ssh.startAgent = false;
   services.openssh.enable = true;
   nix.useChroot = true;
 
@@ -79,7 +80,14 @@ with lib;
     "d /tmp 1777 root root - -"
   ];
 
-  environment.variables.EDITOR = mkForce "vim";
+  environment.variables = {
+    NIX_PATH = with config.krebs.build.source; with dir; with git;
+      mkForce (concatStringsSep ":" [
+        "nixpkgs=${nixpkgs.target-path}"
+        "${nixpkgs.target-path}"
+      ]);
+    EDITOR = mkForce "vim";
+  };
 
   environment.systemPackages = with pkgs; [
       jq
@@ -95,6 +103,8 @@ with lib;
       HISTCONTROL='erasedups:ignorespace'
       HISTSIZE=900001
       HISTFILESIZE=$HISTSIZE
+
+      PYTHONSTARTUP="~/.pythonrc";
 
       shopt -s checkhash
       shopt -s histappend histreedit histverify
@@ -115,6 +125,9 @@ with lib;
 
   environment.shellAliases = {
     lsl = "ls -lAtr";
+    psg = "ps -ef | grep";
+    nmap = "nmap -oN $HOME/loot/scan-`date +\%s`.nmap -oX $HOME/loot/scan-`date +%s`.xml";
+    grep = "grep --color=auto";
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
@@ -123,6 +136,14 @@ with lib;
 
   services.cron.enable = false;
   services.nscd.enable = false;
+  services.ntp.enable = false;
+  services.timesyncd.enable = true;
+  services.ntp.servers = [
+    "pool.ntp.org"
+    "time.windows.com"
+    "time.apple.com"
+    "time.nist.gov"
+  ];
 
   security.setuidPrograms = [ "sendmail" ];
   services.journald.extraConfig = ''

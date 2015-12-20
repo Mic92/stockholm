@@ -4,10 +4,6 @@ let
   mainUser = config.users.extraUsers.mainUser;
 
 in {
-  imports = [
-    ../3modules/per-user.nix
-  ];
-
   users.extraUsers = {
     skype = {
       name = "skype";
@@ -20,7 +16,7 @@ in {
     };
   };
 
-  lass.per-user.skype.packages = [
+  krebs.per-user.skype.packages = [
     pkgs.skype
   ];
 
