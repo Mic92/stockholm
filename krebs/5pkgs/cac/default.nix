@@ -1,12 +1,12 @@
 { stdenv, fetchgit, coreutils, curl, gnused, inotifyTools, jq, ncurses, sshpass, ... }:
 
 stdenv.mkDerivation {
-  name = "cac-1.0.0";
+  name = "cac-1.0.2";
 
   src = fetchgit {
-    url = http://cgit.gum/cac;
-    rev = "fe3b2ecb0aaf7d863842b896e18cd2b829f2297b";
-    sha256 = "05bnd7wyjhqy8srmpnc8d234rv3jxdjgb4z0hlfb9kg7mb12w1ya";
+    url = http://cgit.cd.retiolum/cac;
+    rev = "3d6aef3631aa2e0becba447ed9c36a268dcf8bb5";
+    sha256 = "4f584ef8d53a003818ec6608d2cccda42fc7806cd6f9fa9ad179346f3f59744c";
   };
 
   phases = [
@@ -29,10 +29,7 @@ stdenv.mkDerivation {
     ''
       mkdir -p $out/bin
 
-      sed \
-        's,^\(  true) \)\(cac "$@";;\)$,\1 PATH=${path}${PATH+:$PATH} \2,' \
-        < ./cac \
-        > $out/bin/cac
+      sed 's;^_main .*;PATH=${path} &;' < ./cac > $out/bin/cac
 
       chmod +x $out/bin/cac
     '';
