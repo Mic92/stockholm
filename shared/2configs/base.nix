@@ -13,6 +13,8 @@ with lib;
     ];
   };
 
+  # TODO rename shared user to "krebs"
+  krebs.build.user = config.krebs.users.shared;
   krebs.build.source = {
     git.nixpkgs = {
       url = https://github.com/NixOS/nixpkgs;
@@ -20,7 +22,7 @@ with lib;
     };
     dir.secrets = {
       host = config.krebs.current.host;
-      path = mkDefault "${getEnv "HOME"}/secrets/krebs/wolf";
+      path = mkDefault "${getEnv "HOME"}/secrets/krebs/${config.krebs.build.host.name}";
     };
     dir.stockholm = {
       host = config.krebs.current.host;
@@ -65,7 +67,7 @@ with lib;
     config.krebs.users.lass.pubkey
     config.krebs.users.makefu.pubkey
     # TODO HARDER:
-    (readFile ../../krebs/Zpubkeys/makefu_omo.ssh.pub)
+    config.krebs.users.makefu-omo.pubkey
     config.krebs.users.tv.pubkey
   ];
 
