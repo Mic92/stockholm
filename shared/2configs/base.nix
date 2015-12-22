@@ -14,7 +14,7 @@ with lib;
   };
 
   # TODO rename shared user to "krebs"
-  krebs.build.user = config.krebs.users.shared;
+  krebs.build.user = mkDefault config.krebs.users.shared;
   krebs.build.source = {
     git.nixpkgs = {
       url = https://github.com/NixOS/nixpkgs;

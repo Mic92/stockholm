@@ -33,8 +33,6 @@ in
   # uninteresting stuff
   #####################
   krebs.build.host = config.krebs.hosts.wolf;
-  # TODO rename shared user to "krebs"
-  krebs.build.user = config.krebs.users.shared;
   krebs.build.target = "wolf";
 
   boot.kernel.sysctl = {
