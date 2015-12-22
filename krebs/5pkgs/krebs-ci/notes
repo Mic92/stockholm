@@ -1,9 +1,10 @@
 #! /bin/sh
 
 # nix-shell -p gnumake jq openssh cac cacpanel
-set -euf
+set -eufx
 
 # 2 secrets are required:
+
 krebs_cred=${krebs_cred-./cac.json}
 retiolum_key=${retiolum_key-./retiolum.rsa_key.priv}
 
@@ -18,8 +19,12 @@ fi
 krebs_secrets=$(mktemp -d)
 sec_file=$krebs_secrets/cac_config
 krebs_ssh=$krebs_secrets/tempssh
+cac_resources_cache=$krebs_secrets/res_cache.json
+cac_servers_cache=$krebs_secrets/servers_cache.json
+cac_tasks_cache=$krebs_secrets/tasks_cache.json
+cac_templates_cache=$krebs_secrets/templates_cache.json
 # we need to receive this key from buildmaster to speed up tinc bootstrap
-TRAP="rm -r $krebs_secrets"
+TRAP="rm -r $krebs_secrets;exit"
 trap "$TRAP" INT TERM EXIT
 
 cat > $sec_file <<EOF
@@ -42,11 +47,11 @@ name=$( cac build cpu=1 ram=512 storage=10 os=26 2>&1\
 id=servername:$name
 trap "cac delete $id;$TRAP" INT TERM EXIT
 # TODO: timeout?
-always_update=true cac waitstatus $id "Powered On"
+# cac_always_update=true cac waitstatus $id "Powered On"
 
 wait_login_cac(){
   # timeout
-  for t in `seq 60`;do
+  for t in `seq 180`;do
     # now we have a working cac server
     if cac ssh $1 cat /etc/redhat-release | \
       grep CentOS ;then
