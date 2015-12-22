@@ -39,7 +39,7 @@ let
     s.setServiceParent(application)
     '';
   default-packages = [ pkgs.git pkgs.bash ];
-  cfg = config.makefu.buildbot.slave;
+  cfg = config.krebs.buildbot.slave;
 
   api = {
     enable = mkEnableOption "Buildbot Slave";
@@ -180,6 +180,6 @@ let
   };
 in
 {
-  options.makefu.buildbot.slave = api;
+  options.krebs.buildbot.slave = api;
   config = mkIf cfg.enable imp;
 }

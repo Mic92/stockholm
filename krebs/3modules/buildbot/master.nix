@@ -143,7 +143,7 @@ let
     ${cfg.extraConfig}
     '';
 
-  cfg = config.makefu.buildbot.master;
+  cfg = config.krebs.buildbot.master;
 
   api = {
     enable = mkEnableOption "Buildbot Master";
@@ -258,6 +258,6 @@ let
   };
 in
 {
-  options.makefu.buildbot.master = api;
+  options.krebs.buildbot.master = api;
   config = mkIf cfg.enable imp;
 }
