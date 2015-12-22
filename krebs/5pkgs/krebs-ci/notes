@@ -19,10 +19,10 @@ fi
 krebs_secrets=$(mktemp -d)
 sec_file=$krebs_secrets/cac_config
 krebs_ssh=$krebs_secrets/tempssh
-cac_resources_cache=$krebs_secrets/res_cache.json
-cac_servers_cache=$krebs_secrets/servers_cache.json
-cac_tasks_cache=$krebs_secrets/tasks_cache.json
-cac_templates_cache=$krebs_secrets/templates_cache.json
+export cac_resources_cache=$krebs_secrets/res_cache.json
+export cac_servers_cache=$krebs_secrets/servers_cache.json
+export cac_tasks_cache=$krebs_secrets/tasks_cache.json
+export cac_templates_cache=$krebs_secrets/templates_cache.json
 # we need to receive this key from buildmaster to speed up tinc bootstrap
 TRAP="rm -r $krebs_secrets;exit"
 trap "$TRAP" INT TERM EXIT

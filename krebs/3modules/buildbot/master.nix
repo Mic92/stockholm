@@ -59,27 +59,28 @@ let
     ###### The actual build
     # couple of fast steps:
     f = util.BuildFactory()
+    # some slow steps
+    s = util.BuildFactory()
     ## fetch repo
     grab_repo = steps.Git(repourl=stockholm_repo, mode='incremental')
     f.addStep(grab_repo)
+    s.addStep(grab_repo)
 
     # the dependencies which are used by the test script
-    deps = [ "gnumake", "jq" ]
-    nixshell = ["nix-shell", "-p" ] + deps + [ "--run" ]
+    deps = [ "gnumake", "jq", "(import <stockholm> {}).pkgs.krebs-ci" ]
+    nixshell = ["nix-shell", "-I", "stockholm=.", "-p" ] + deps + [ "--run" ]
+
     def addShell(f,**kwargs):
       f.addStep(steps.ShellCommand(**kwargs))
 
-    addShell(f,name="centos7-eval",env={"LOGNAME": "shared",
-                  "get" : "krebs.deploy",
-                  "filter" : "json"
-                 },
-             command=nixshell + ["make -s eval system=test-centos7"])
+    addShell(f,name="centos7-eval",env={"LOGNAME": "shared"},
+             command=nixshell + ["make -s eval get=krebs.deploy filter=json system=test-centos7"])
 
-    addShell(f,name="wolf-eval",env={"LOGNAME": "shared",
-                  "get" : "krebs.deploy",
-                  "filter" : "json"
-                 },
-             command=nixshell + ["make -s eval system=wolf"])
+    addShell(f,name="wolf-eval",env={"LOGNAME": "shared"},
+             command=nixshell + ["make -s eval get=krebs.deploy filter=json system=wolf"])
+
+    addShell(f,name="eval-cross-check",env={"LOGNAME": "shared"},
+             command=nixshell + ["! make eval get=krebs.deploy filter=json system=test-failing"])
 
     c['builders'] = []
     c['builders'].append(
@@ -87,11 +88,20 @@ let
           slavenames=slavenames,
           factory=f))
 
-    # TODO slow build
+    # slave needs 2 files:
+    # * cac.json
+    # * retiolum
+    for file in ["cac.json", "retiolum.rsa_key.priv"]:
+      s.addStep(steps.FileDownload(mastersrc="${cfg.workDir}/{}".format(file),
+                              slavedest=file))
+
+    addShell(s,name="complete-build-centos7",env={"LOGNAME": "shared"},
+             command=nixshell + ["krebs-ci"])
+
     c['builders'].append(
         util.BuilderConfig(name="full-tests",
           slavenames=slavenames,
-          factory=f))
+          factory=s))
 
     ####### Status of Builds
     c['status'] = []
@@ -106,7 +116,7 @@ let
         forceBuild = 'auth',
         forceAllBuilds = 'auth',
         pingBuilder = False,
-        stopBuild = False,
+        stopBuild = 'auth',
         stopAllBuilds = False,
         cancelPendingBuild = False,
     )
@@ -119,8 +129,8 @@ let
                       # TODO: multiple channels
                       channels=["${cfg.irc.channel}"],
                       notify_events={
-                        #'success': 1,
-                        #'failure': 1,
+                        'success': 1,
+                        'failure': 1,
                         'exception': 1,
                         'successToFailure': 1,
                         'failureToSuccess': 1,
@@ -219,8 +229,12 @@ let
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.git ];
+      environment = {
+        SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+      };
       serviceConfig = let
         workdir="${lib.shell.escape cfg.workDir}";
+        secretsdir="${lib.shell.escape (toString <secrets>)}";
         # TODO: check if git is the only dep
       in {
         PermissionsStartOnly = true;
@@ -236,6 +250,10 @@ let
           fi
           # always override the master.cfg
           cp ${buildbot-master-config} ${workdir}/master.cfg
+          # copy secrets
+          cp ${secretsdir}/cac.json ${workdir}
+          cp ${secretsdir}/retiolum-ci.rsa_key.priv \
+             ${workdir}/retiolum.rsa_key.priv
           # sanity
           ${buildbot}/bin/buildbot checkconfig ${workdir}
 

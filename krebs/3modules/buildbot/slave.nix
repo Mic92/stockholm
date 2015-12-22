@@ -144,6 +144,7 @@ let
       path = default-packages ++ cfg.packages;
 
       environment = {
+          SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
           NIX_REMOTE="daemon";
       } // cfg.extraEnviron;
 
