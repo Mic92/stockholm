@@ -44,7 +44,7 @@ let
 
     # files everyone depends on or are part of the share branch
     def shared_files(change):
-      r =re.compile("^((krebs|share)/.*|Makefile|default.nix)")
+      r =re.compile("^((krebs|shared)/.*|Makefile|default.nix)")
       for file in change.files:
         if r.match(file):
           return True

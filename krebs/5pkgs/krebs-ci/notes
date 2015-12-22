@@ -19,7 +19,7 @@ krebs_secrets=$(mktemp -d)
 sec_file=$krebs_secrets/cac_config
 krebs_ssh=$krebs_secrets/tempssh
 # we need to receive this key from buildmaster to speed up tinc bootstrap
-TRAP="rm $sec_file;rm -r $krebs_secrets"
+TRAP="rm -r $krebs_secrets"
 trap "$TRAP" INT TERM EXIT
 
 cat > $sec_file <<EOF
