@@ -20,11 +20,11 @@ with lib;
     };
     dir.secrets = {
       host = config.krebs.current.host;
-      path = "${getEnv "HOME"}/secrets/krebs/wolf";
+      path = mkDefault "${getEnv "HOME"}/secrets/krebs/wolf";
     };
     dir.stockholm = {
       host = config.krebs.current.host;
-      path = "${getEnv "HOME"}/stockholm";
+      path = mkDefault "${getEnv "HOME"}/stockholm";
     };
   };
 
