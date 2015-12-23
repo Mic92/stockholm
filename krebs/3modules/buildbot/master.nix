@@ -95,8 +95,13 @@ let
       s.addStep(steps.FileDownload(mastersrc="${cfg.workDir}/{}".format(file),
                               slavedest=file))
 
+<<<<<<< HEAD
     addShell(s,name="infest-cac-centos7",env={"LOGNAME": "shared"},
              command=nixshell + ["infest-cac-centos7"])
+=======
+    addShell(s,name="complete-build-centos7",env={"LOGNAME": "shared"},
+             command=nix-shell + ["krebs-ci"])
+>>>>>>> f59080e76f950a5a8e33d1edd4314ffaa14187fc
 
     c['builders'].append(
         util.BuilderConfig(name="full-tests",
