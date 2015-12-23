@@ -67,7 +67,7 @@ let
     s.addStep(grab_repo)
 
     # the dependencies which are used by the test script
-    deps = [ "gnumake", "jq", "(import <stockholm> {}).pkgs.krebs-ci" ]
+    deps = [ "gnumake", "jq", "(import <stockholm> {}).pkgs.test.infest-cac-centos7" ]
     nixshell = ["nix-shell", "-I", "stockholm=.", "-p" ] + deps + [ "--run" ]
 
     def addShell(f,**kwargs):
@@ -95,8 +95,8 @@ let
       s.addStep(steps.FileDownload(mastersrc="${cfg.workDir}/{}".format(file),
                               slavedest=file))
 
-    addShell(s,name="complete-build-centos7",env={"LOGNAME": "shared"},
-             command=nixshell + ["krebs-ci"])
+    addShell(s,name="infest-cac-centos7",env={"LOGNAME": "shared"},
+             command=nixshell + ["infest-cac-centos7"])
 
     c['builders'].append(
         util.BuilderConfig(name="full-tests",

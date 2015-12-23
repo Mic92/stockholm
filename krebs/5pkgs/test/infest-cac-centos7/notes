@@ -24,7 +24,7 @@ export cac_servers_cache=$krebs_secrets/servers_cache.json
 export cac_tasks_cache=$krebs_secrets/tasks_cache.json
 export cac_templates_cache=$krebs_secrets/templates_cache.json
 # we need to receive this key from buildmaster to speed up tinc bootstrap
-TRAP="rm -r $krebs_secrets;exit"
+TRAP="rm -r $krebs_secrets;trap - INT TERM EXIT"
 trap "$TRAP" INT TERM EXIT
 
 cat > $sec_file <<EOF
@@ -45,16 +45,17 @@ name=$( cac build cpu=1 ram=512 storage=10 os=26 2>&1\
   | jq -r .servername)
 
 id=servername:$name
-trap "cac delete $id;$TRAP" INT TERM EXIT
+trap "cac delete $id;$TRAP;exit" INT TERM EXIT
 # TODO: timeout?
-# cac_always_update=true cac waitstatus $id "Powered On"
 
 wait_login_cac(){
   # timeout
   for t in `seq 180`;do
     # now we have a working cac server
-    if cac ssh $1 cat /etc/redhat-release | \
-      grep CentOS ;then
+    if cac ssh $1 -o ConnectTimeout=10 \
+                  -o BatchMode=yes \
+                  cat /etc/redhat-release | \
+                    grep CentOS ;then
       return 0
     fi
     sleep 10

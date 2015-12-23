@@ -1,7 +1,9 @@
 { stdenv, coreutils,makeWrapper, cac, cacpanel, gnumake, gnused, jq, openssh, ... }:
 
 stdenv.mkDerivation rec {
-  name = "krebs-ci-0.1.0";
+  name = "${shortname}-${version}";
+  shortname = "infest-cac-centos7";
+  version = "0.2.0";
 
   src = ./notes;
 
@@ -23,9 +25,9 @@ stdenv.mkDerivation rec {
   installPhase =
     ''
       mkdir -p $out/bin
-      cp ${src} $out/bin/krebs-ci
-      chmod +x $out/bin/krebs-ci
-      wrapProgram $out/bin/krebs-ci \
+      cp ${src} $out/bin/${shortname}
+      chmod +x $out/bin/${shortname}
+      wrapProgram $out/bin/${shortname} \
               --prefix PATH : ${path}
     '';
   meta = with stdenv.lib; {
