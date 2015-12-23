@@ -7,134 +7,81 @@ let
     # -*- python -*-
     from buildbot.plugins import *
     import re
-
+    import json
     c = BuildmasterConfig = {}
 
     c['slaves'] = []
-    # TODO: template potential buildslaves
-    # TODO: set password?
-    slavenames= [ 'testslave' ]
-    for i in slavenames:
-      c['slaves'].append(buildslave.BuildSlave(i, "krebspass"))
+    slaves = json.loads('${builtins.toJSON cfg.slaves}')
+    slavenames = [ s for s in slaves ]
+    for k,v in slaves.items():
+      c['slaves'].append(buildslave.BuildSlave(k, v))
 
+    # TODO: configure protocols?
     c['protocols'] = {'pb': {'port': 9989}}
 
     ####### Build Inputs
-    stockholm_repo = 'http://cgit.gum/stockholm'
-    c['change_source'] = []
-    c['change_source'].append(changes.GitPoller(
-            stockholm_repo,
-            workdir='stockholm-poller', branch='master',
-            project='stockholm',
-            pollinterval=120))
+    c['change_source'] = cs = []
+
+    ${ concatStringsSep "\n"
+    (mapAttrsToList (n: v: ''
+        #### Change_Source: Begin of ${n}
+        ${v}
+        #### Change_Source: End of ${n}
+      '') cfg.change_source )}
 
     ####### Build Scheduler
-    # TODO: configure scheduler
-    c['schedulers'] = []
+    c['schedulers'] = sched = []
 
-    # test the master real quick
-    fast = schedulers.SingleBranchScheduler(
-                                change_filter=util.ChangeFilter(branch="master"),
-                                name="fast-master-test",
-                                builderNames=["fast-tests"])
+    ${ concatStringsSep "\n"
+    (mapAttrsToList (n: v: ''
+        #### Schedulers: Begin of ${n}
+        ${v}
+        #### Schedulers: End of ${n}
+      '') cfg.scheduler )}
 
-    force = schedulers.ForceScheduler(
-                                name="force",
-                                builderNames=["full-tests"])
+    ###### Builder
+    c['builders'] = bu = []
+    
+    # Builder Pre: Begin
+    ${cfg.builder_pre}
+    # Builder Pre: End
 
-    # files everyone depends on or are part of the share branch
-    def shared_files(change):
-      r =re.compile("^((krebs|shared)/.*|Makefile|default.nix)")
-      for file in change.files:
-        if r.match(file):
-          return True
-      return False
+    ${ concatStringsSep "\n"
+    (mapAttrsToList (n: v: ''
+        #### Builder: Begin of ${n}
+        ${v}
+        #### Builder: End of ${n}
+      '') cfg.builder )}
 
-    full = schedulers.SingleBranchScheduler(
-                                change_filter=util.ChangeFilter(branch="master"),
-                                fileIsImportant=shared_files,
-                                name="full-master-test",
-                                builderNames=["full-tests"])
-    c['schedulers'] = [ fast, force, full ]
-    ###### The actual build
-    # couple of fast steps:
-    f = util.BuildFactory()
-    # some slow steps
-    s = util.BuildFactory()
-    ## fetch repo
-    grab_repo = steps.Git(repourl=stockholm_repo, mode='incremental')
-    f.addStep(grab_repo)
-    s.addStep(grab_repo)
 
-    # the dependencies which are used by the test script
-    deps = [ "gnumake", "jq","nix",
-             "(import <stockholm> {}).pkgs.test.infest-cac-centos7",
-             "rsync" ]
-    # TODO: --pure , prepare ENV in nix-shell command:
-    #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
-    nixshell = ["nix-shell", "-I", "stockholm=.", "-p" ] + deps + [ "--run" ]
-    env = {"LOGNAME": "shared",
-           "NIX_REMOTE": "daemon"}
-    def addShell(f,**kwargs):
-      f.addStep(steps.ShellCommand(**kwargs))
+    ####### Status
+    c['status'] = st = []
 
-    addShell(f,name="centos7-eval",env=env,
-             command=nixshell + ["make -s eval get=krebs.deploy filter=json system=test-centos7"])
+    # If you want to configure this url, override with extraConfig
+    c['buildbotURL'] = "http://${config.networking.hostName}:${toString cfg.web.port}/"
 
-    addShell(f,name="wolf-eval",env=env,
-             command=nixshell + ["make -s eval get=krebs.deploy filter=json system=wolf"])
+    ${optionalString (cfg.web.enable) ''
+      from buildbot.status import html
+      from buildbot.status.web import authz, auth
+      authz_cfg=authz.Authz(
+          auth=auth.BasicAuth([ ("${cfg.web.username}","${cfg.web.password}") ]),
+          # TODO: configure harder
+          gracefulShutdown = False,
+          forceBuild = 'auth',
+          forceAllBuilds = 'auth',
+          pingBuilder = False,
+          stopBuild = 'auth',
+          stopAllBuilds = 'auth',
+          cancelPendingBuild = 'auth'
+      )
+      # TODO: configure krebs.nginx
+      st.append(html.WebStatus(http_port=${toString cfg.web.port}, authz=authz_cfg))
+      ''}
 
-    addShell(f,name="eval-cross-check",env=env,
-             command=nixshell + ["! make eval get=krebs.deploy filter=json system=test-failing"])
-
-    c['builders'] = []
-    c['builders'].append(
-        util.BuilderConfig(name="fast-tests",
-          slavenames=slavenames,
-          factory=f))
-
-    # slave needs 2 files:
-    # * cac.json
-    # * retiolum
-    for file in ["cac.json", "retiolum.rsa_key.priv"]:
-      s.addStep(steps.FileDownload(mastersrc="${cfg.workDir}/{}".format(file),
-                              slavedest=file))
-
-    addShell(s, name="infest-cac-centos7",env=env,
-                sigtermTime=60, # SIGTERM 1 minute before SIGKILL
-                timeout=5400,   # 1.5h timeout
-                command=nixshell + ["infest-cac-centos7"])
-
-    c['builders'].append(
-        util.BuilderConfig(name="full-tests",
-          slavenames=slavenames,
-          factory=s))
-
-    ####### Status of Builds
-    c['status'] = []
-
-    from buildbot.status import html
-    from buildbot.status.web import authz, auth
-    # TODO: configure if http is wanted
-    authz_cfg=authz.Authz(
-        # TODO: configure user/pw
-        auth=auth.BasicAuth([("krebs","bob")]),
-        gracefulShutdown = False,
-        forceBuild = 'auth',
-        forceAllBuilds = 'auth',
-        pingBuilder = False,
-        stopBuild = 'auth',
-        stopAllBuilds = False,
-        cancelPendingBuild = False,
-    )
-    # TODO: configure nginx
-    c['status'].append(html.WebStatus(http_port=8010, authz=authz_cfg))
-
-    from buildbot.status import words
     ${optionalString (cfg.irc.enable) ''
-      irc = words.IRC("${cfg.irc.server}", "krebsbuild",
-                      # TODO: multiple channels
-                      channels=["${cfg.irc.channel}"],
+      from buildbot.status import words
+      irc = words.IRC("${cfg.irc.server}", "${cfg.irc.nick}",
+                      channels=${builtins.toJSON cfg.irc.channels},
                       notify_events={
                         'success': 1,
                         'failure': 1,
@@ -145,15 +92,20 @@ let
       c['status'].append(irc)
       ''}
 
+    ${ concatStringsSep "\n"
+    (mapAttrsToList (n: v: ''
+        #### Status: Begin of ${n}
+        ${v}
+        #### Status: End of ${n}
+      '') cfg.status )}
+
     ####### PROJECT IDENTITY
-    c['title'] = "Stockholm"
+    c['title'] = "${cfg.title}"
     c['titleURL'] = "http://krebsco.de"
 
-    #c['buildbotURL'] = "http://buildbot.krebsco.de/"
-    # TODO: configure url
-    c['buildbotURL'] = "http://vbob:8010/"
 
     ####### DB URL
+    # TODO: configure
     c['db'] = {
         'db_url' : "sqlite:///state.sqlite",
     }
@@ -164,6 +116,13 @@ let
 
   api = {
     enable = mkEnableOption "Buildbot Master";
+    title = mkOption {
+      default = "Buildbot CI";
+      type = types.str;
+      description = ''
+        Title of the Buildbot Installation
+      '';
+    };
     workDir = mkOption {
       default = "/var/lib/buildbot/master";
       type = types.str;
@@ -172,16 +131,144 @@ let
         Will be created on startup.
       '';
     };
+
+    slaves = mkOption {
+      default = {};
+      type = types.attrsOf types.str;
+      description = ''
+        Attrset of slavenames with their passwords
+        slavename = slavepassword
+      '';
+    };
+
+    change_source = mkOption {
+      default = {};
+      type = types.attrsOf types.str;
+      example = {
+        stockholm = ''
+          cs.append(changes.GitPoller(
+                  'http://cgit.gum/stockholm',
+                  workdir='stockholm-poller', branch='master',
+                  project='stockholm',
+                  pollinterval=120))
+        '';
+      };
+      description = ''
+        Attrset of all the change_sources which should be configured.
+        It will be directly included into the master configuration.
+
+        At the end an change object should be appended to <literal>cs</literal>
+      '';
+    };
+
+    scheduler = mkOption {
+      default = {};
+      type = types.attrsOf types.str;
+      example = {
+        force-scheduler = ''
+          sched.append(schedulers.ForceScheduler(
+                                      name="force",
+                                      builderNames=["full-tests"]))
+        '';
+      };
+      description = ''
+        Attrset of all the schedulers which should be configured.
+        It will be directly included into the master configuration.
+
+        At the end an change object should be appended to <literal>sched</literal>
+      '';
+    };
+
+    builder_pre = mkOption {
+      default = "";
+      type = types.lines;
+      example = ''
+        grab_repo = steps.Git(repourl=stockholm_repo, mode='incremental')
+      '';
+      description = ''
+        some code before the builders are being assembled.
+        can be used to define functions used by multiple builders
+      '';
+    };
+
+    builder = mkOption {
+      default = {};
+      type = types.attrsOf types.str;
+      example = {
+        fast-test = ''
+        '';
+      };
+      description = ''
+        Attrset of all the builder which should be configured.
+        It will be directly included into the master configuration.
+
+        At the end an change object should be appended to <literal>bu</literal>
+      '';
+    };
+
+    status = mkOption {
+      default = {};
+      type = types.attrsOf types.str;
+      description = ''
+        Attrset of all the extra status which should be configured.
+        It will be directly included into the master configuration.
+
+        At the end an change object should be appended to <literal>st</literal>
+
+        Right now IRC and Web status can be configured by setting
+        <literal>buildbot.master.irc.enable</literal> and
+        <literal>buildbot.master.web.enable</literal>
+      '';
+    };
+
+    # Configurable Stati
+    web = mkOption {
+      default = {};
+      type = types.submodule ({ config2, ... }: {
+        options = {
+          enable = mkEnableOption "Buildbot Master Web Status";
+          username = mkOption {
+            default = "krebs";
+            type = types.str;
+            description = ''
+              username for web authentication
+            '';
+          };
+          hostname = mkOption {
+            default = config.networking.hostName;
+            type = types.str;
+            description = ''
+              web interface Hostname
+            '';
+          };
+          password = mkOption {
+            default = "bob";
+            type = types.str;
+            description = ''
+              password for web authentication
+            '';
+          };
+          port = mkOption {
+            default = 8010;
+            type = types.int;
+            description = ''
+              port for buildbot web status
+            '';
+          };
+        };
+      });
+    };
+
     irc = mkOption {
       default = {};
       type = types.submodule ({ config, ... }: {
         options = {
           enable = mkEnableOption "Buildbot Master IRC Status";
-          channel = mkOption {
-            default = "nix-buildbot-meetup";
-            type = types.str;
+          channels = mkOption {
+            default = [ "nix-buildbot-meetup" ];
+            type = with types; listOf str;
             description = ''
-              irc channel the bot should connect to
+              irc channels the bot should connect to
             '';
           };
           allowForce = mkOption {
@@ -235,6 +322,7 @@ let
       description = "Buildbot Master";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      # TODO: add extra dependencies to master like svn and cvs
       path = [ pkgs.git ];
       environment = {
         SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
@@ -242,7 +330,6 @@ let
       serviceConfig = let
         workdir="${lib.shell.escape cfg.workDir}";
         secretsdir="${lib.shell.escape (toString <secrets>)}";
-        # TODO: check if git is the only dep
       in {
         PermissionsStartOnly = true;
         Type = "forking";
