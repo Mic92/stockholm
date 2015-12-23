@@ -95,8 +95,10 @@ let
       s.addStep(steps.FileDownload(mastersrc="${cfg.workDir}/{}".format(file),
                               slavedest=file))
 
-    addShell(s,name="infest-cac-centos7",env={"LOGNAME": "shared"},
-             command=nixshell + ["infest-cac-centos7"])
+    addShell(s, name="infest-cac-centos7",env={"LOGNAME": "shared"},
+                sigtermTime=60, # SIGTERM 1 minute before SIGKILL
+                timeout=5400,   # 1.5h timeout
+                command=nixshell + ["infest-cac-centos7"])
 
     c['builders'].append(
         util.BuilderConfig(name="full-tests",
