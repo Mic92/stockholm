@@ -67,19 +67,24 @@ let
     s.addStep(grab_repo)
 
     # the dependencies which are used by the test script
-    deps = [ "gnumake", "jq", "(import <stockholm> {}).pkgs.test.infest-cac-centos7" ]
+    deps = [ "gnumake", "jq","nix",
+             "(import <stockholm> {}).pkgs.test.infest-cac-centos7",
+             "rsync" ]
+    # TODO: --pure , prepare ENV in nix-shell command:
+    #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
     nixshell = ["nix-shell", "-I", "stockholm=.", "-p" ] + deps + [ "--run" ]
-
+    env = {"LOGNAME": "shared",
+           "NIX_REMOTE": "daemon"}
     def addShell(f,**kwargs):
       f.addStep(steps.ShellCommand(**kwargs))
 
-    addShell(f,name="centos7-eval",env={"LOGNAME": "shared"},
+    addShell(f,name="centos7-eval",env=env,
              command=nixshell + ["make -s eval get=krebs.deploy filter=json system=test-centos7"])
 
-    addShell(f,name="wolf-eval",env={"LOGNAME": "shared"},
+    addShell(f,name="wolf-eval",env=env,
              command=nixshell + ["make -s eval get=krebs.deploy filter=json system=wolf"])
 
-    addShell(f,name="eval-cross-check",env={"LOGNAME": "shared"},
+    addShell(f,name="eval-cross-check",env=env,
              command=nixshell + ["! make eval get=krebs.deploy filter=json system=test-failing"])
 
     c['builders'] = []
@@ -95,7 +100,7 @@ let
       s.addStep(steps.FileDownload(mastersrc="${cfg.workDir}/{}".format(file),
                               slavedest=file))
 
-    addShell(s, name="infest-cac-centos7",env={"LOGNAME": "shared"},
+    addShell(s, name="infest-cac-centos7",env=env,
                 sigtermTime=60, # SIGTERM 1 minute before SIGKILL
                 timeout=5400,   # 1.5h timeout
                 command=nixshell + ["infest-cac-centos7"])
