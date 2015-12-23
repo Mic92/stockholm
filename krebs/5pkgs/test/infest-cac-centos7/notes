@@ -53,7 +53,6 @@ wait_login_cac(){
   for t in `seq 180`;do
     # now we have a working cac server
     if cac ssh $1 -o ConnectTimeout=10 \
-                  -o BatchMode=yes \
                   cat /etc/redhat-release | \
                     grep CentOS ;then
       return 0
