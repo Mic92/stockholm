@@ -99,7 +99,7 @@ cac powerop $id reset
 
 wait_login(){
   # timeout
-  for t in `seq 20`;do
+  for t in `seq 90`;do
     # now we have a working cac server
     if ssh -o StrictHostKeyChecking=no \
            -o UserKnownHostsFile=/dev/null \
