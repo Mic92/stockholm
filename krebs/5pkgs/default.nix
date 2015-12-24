@@ -26,6 +26,8 @@ subdirs // rec {
     inherit (subdirs) get jq;
   };
 
+  ReaktorPlugins = pkgs.callPackage ./Reaktor/plugins.nix {};
+
   execve = name: { filename, argv, envp ? {}, destination ? "" }:
     writeC name { inherit destination; } ''
       #include <unistd.h>
