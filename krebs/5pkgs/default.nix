@@ -40,6 +40,10 @@ subdirs // rec {
       }
     '';
 
+  test = {
+    infest-cac-centos7 = pkgs.callPackage ./test/infest-cac-centos7 {};
+  };
+
   execveBin = name: cfg: execve name (cfg // { destination = "/bin/${name}"; });
 
   writeC = name: { destination ? "" }: src: pkgs.runCommand name {} ''

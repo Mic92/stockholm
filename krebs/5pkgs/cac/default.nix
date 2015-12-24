@@ -1,12 +1,12 @@
-{ stdenv, fetchgit, coreutils, curl, gnused, inotifyTools, jq, ncurses, sshpass, ... }:
+{ stdenv, fetchgit, bc, coreutils, curl, gnused, inotifyTools, jq, ncurses, sshpass, ... }:
 
 stdenv.mkDerivation {
-  name = "cac-1.0.0";
+  name = "cac-1.0.3";
 
   src = fetchgit {
-    url = http://cgit.gum/cac;
-    rev = "fe3b2ecb0aaf7d863842b896e18cd2b829f2297b";
-    sha256 = "05bnd7wyjhqy8srmpnc8d234rv3jxdjgb4z0hlfb9kg7mb12w1ya";
+    url = http://cgit.cd.retiolum/cac;
+    rev = "22acc1b990ac7d97c16344fbcbc2621e24cdf915";
+    sha256 = "135b740617c983b3f46a1983d4744be17340d5146a0a0de0dff4bb7a53688f2f";
   };
 
   phases = [
@@ -17,6 +17,7 @@ stdenv.mkDerivation {
   installPhase =
     let
       path = stdenv.lib.makeSearchPath "bin" [
+        bc
         coreutils
         curl
         gnused
@@ -29,10 +30,9 @@ stdenv.mkDerivation {
     ''
       mkdir -p $out/bin
 
-      sed \
-        's,^\(  true) \)\(cac "$@";;\)$,\1 PATH=${path}${PATH+:$PATH} \2,' \
-        < ./cac \
-        > $out/bin/cac
+      sed < ./cac > $out/bin/cac '
+        s;^_cac_main .*;PATH=${path}''${PATH+:$PATH} &;
+      '
 
       chmod +x $out/bin/cac
     '';

@@ -9,6 +9,8 @@ let
       ./apt-cacher-ng.nix
       ./bepasty-server.nix
       ./build.nix
+      ./buildbot/master.nix
+      ./buildbot/slave.nix
       ./current.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
