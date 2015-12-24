@@ -6,11 +6,11 @@ in {
     buildbot = pkgs-unst.buildbot;
     buildbot-slave = pkgs-unst.buildbot-slave;
   };
-  networking.firewall.allowedTCPPorts = [ 8010 ];
+  networking.firewall.allowedTCPPorts = [ 8010 9989 ];
   krebs.buildbot.master = {
     slaves = {
       testslave =  "krebspass";
-      testslave2 = "krebspass";
+      omo = "krebspass";
     };
     change_source.stockholm = ''
   stockholm_repo = 'http://cgit.gum/stockholm'
@@ -33,7 +33,7 @@ in {
                               name="fast-master-test",
                               builderNames=["fast-tests"]))
         '';
-        full-master-scheduler = ''
+        test-cac-infest-master = ''
   # files everyone depends on or are part of the share branch
   def shared_files(change):
     r =re.compile("^((krebs|shared)/.*|Makefile|default.nix)")
@@ -45,6 +45,7 @@ in {
   sched.append(schedulers.SingleBranchScheduler(
                               change_filter=util.ChangeFilter(branch="master"),
                               fileIsImportant=shared_files,
+                              treeStableTimer=60*60, # master was stable for the last hour
                               name="full-master-test",
                               builderNames=["full-tests"]))
         '';
