@@ -32,7 +32,7 @@ rec {
                           ''indirect_pattern.format("${name}")'' else
                           ''"${pattern}"'' },
           'argv'    : ["${src_file}"],
-          'env'     : ${builtins.toJSON path_env // env})})
+          'env'     : ${builtins.toJSON (path_env // env)})})
       '';
       config_file = pkgs.writeText "plugin.py" config;
     in buildBaseReaktorPlugin (attrs // rec {
