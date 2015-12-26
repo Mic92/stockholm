@@ -119,16 +119,14 @@ let
   imp = {
 
     users.extraUsers.acng = {
-    # uid = config.ids.uids.acng;
-      uid = 897955083; #genid Reaktor
+      uid = genid "acng";
       description = "apt-cacher-ng";
       home = acng-home;
       createHome = false;
     };
 
     users.extraGroups.acng = {
-      gid = 897955083; #genid Reaktor
-    # gid = config.ids.gids.Reaktor;
+      gid = genid "acng";
     };
 
     systemd.services.apt-cacher-ng = {

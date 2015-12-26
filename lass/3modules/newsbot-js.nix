@@ -51,7 +51,7 @@ let
   imp = {
     users.extraUsers.newsbot-js = {
       name = "newsbot-js";
-      uid = 1616759810; #genid newsbot-js
+      uid = genid "newsbot-js";
       description = "newsbot-js user";
       home = "/var/empty";
     };

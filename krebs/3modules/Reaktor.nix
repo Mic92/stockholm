@@ -1,18 +1,7 @@
-{ config, pkgs,lib, ... }:
+{ config, lib, pkgs, ... }:
 
-
+with lib;
 let
-
-  inherit (lib)
-    mkIf
-    mkOption
-    types
-    singleton
-    isString
-    optionalString
-    concatStrings
-    escapeShellArg
-  ;
 
   ReaktorConfig = pkgs.writeText "config.py" ''
       ${if (isString cfg.overrideConfig ) then ''
@@ -86,10 +75,9 @@ let
 
   imp = {
     # for reaktor get-config
-    users.extraUsers = singleton {
+    users.extraUsers = singleton rec {
       name = "Reaktor";
-      # uid = config.ids.uids.Reaktor;
-      uid = 2066439104; #genid Reaktor
+      uid = genid name;
       description = "Reaktor user";
       home = "/var/lib/Reaktor";
       createHome = true;

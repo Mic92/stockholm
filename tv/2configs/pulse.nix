@@ -69,12 +69,10 @@ in
     };
   };
 
-  users = let
-    id = 3768151709; # genid pulse
-  in {
-    groups.pulse.gid = id;
+  users = {
+    groups.pulse.gid = config.users.users.pulse.uid;
     users.pulse = {
-      uid = id;
+      uid = genid "pulse";
       group = "pulse";
       extraGroups = [ "audio" ];
       home = "${runDir}/home";

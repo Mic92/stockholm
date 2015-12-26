@@ -56,9 +56,9 @@ let
     };
   };
 
-  user = {
+  user = rec {
     name = "github-hosts-sync";
-    uid = 3220554646; # genid github-hosts-sync
+    uid = genid name;
   };
 
   # TODO move to lib?

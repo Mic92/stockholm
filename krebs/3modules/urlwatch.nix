@@ -5,7 +5,6 @@
 # cache = url: "${cfg.dataDir}/.urlwatch/cache/${hashString "sha1" url}"
 # TODO hooks.py
 
-with builtins;
 with lib;
 let
   cfg = config.krebs.urlwatch;
@@ -136,9 +135,9 @@ let
     };
   };
 
-  user = {
+  user = rec {
     name = "urlwatch";
-    uid = 3467631196; # genid urlwatch
+    uid = genid name;
   };
 in
 out

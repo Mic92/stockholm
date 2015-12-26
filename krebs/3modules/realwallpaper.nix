@@ -1,13 +1,7 @@
 arg@{ config, lib, pkgs, ... }:
 
+with lib;
 let
-  inherit (lib)
-    mkEnableOption
-    mkOption
-    types
-    mkIf
-  ;
-
   cfg = config.krebs.realwallpaper;
 
   out = {
@@ -89,7 +83,7 @@ let
     };
 
     users.extraUsers.realwallpaper = {
-      uid = 2009435407; #genid realwallpaper
+      uid = genid "realwallpaper";
       home = cfg.workingDir;
       createHome = true;
     };
