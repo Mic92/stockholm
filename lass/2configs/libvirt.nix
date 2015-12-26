@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   mainUser = config.users.extraUsers.mainUser;
@@ -8,7 +8,7 @@ in {
 
   users.extraUsers = {
     libvirt = {
-      uid = 358821352; # genid libvirt
+      uid = lib.genid "libvirt";
       description = "user for running libvirt stuff";
       home = "/home/libvirt";
       useDefaultShell = true;

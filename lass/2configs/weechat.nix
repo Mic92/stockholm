@@ -8,7 +8,7 @@
 
   users.extraUsers.chat = {
     home = "/home/chat";
-    uid = 986764891; # genid chat
+    uid = lib.genid "chat";
     useDefaultShell = true;
     createHome = true;
     openssh.authorizedKeys.keys = [

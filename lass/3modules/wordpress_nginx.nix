@@ -229,7 +229,7 @@ let
       };
     });
     users.users.nobody2 = mkDefault {
-      uid = mkDefault 125816384; # genid nobody2
+      uid = mkDefault (genid "nobody2");
       useDefaultShell = mkDefault true;
     };
   };

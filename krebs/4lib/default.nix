@@ -7,6 +7,8 @@ let out = rec {
 
   eq = x: y: x == y;
 
+  mod = x: y: x - y * (x / y);
+
   addName = name: set:
     set // { inherit name; };
 
@@ -17,6 +19,7 @@ let out = rec {
   dir.has-default-nix = path: pathExists (path + "/default.nix");
 
   dns = import ./dns.nix { inherit lib; };
+  genid = import ./genid.nix { lib = lib // out; };
   git = import ./git.nix { lib = lib // out; };
   listset = import ./listset.nix { inherit lib; };
   shell = import ./shell.nix { inherit lib; };

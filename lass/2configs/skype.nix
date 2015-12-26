@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   mainUser = config.users.extraUsers.mainUser;
@@ -7,7 +7,7 @@ in {
   users.extraUsers = {
     skype = {
       name = "skype";
-      uid = 2259819492; #genid skype
+      uid = lib.genid "skype";
       description = "user for running skype";
       home = "/home/skype";
       useDefaultShell = true;

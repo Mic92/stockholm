@@ -72,9 +72,9 @@ let
     };
   };
 
-  user = {
+  user = rec {
     name = "charybdis";
-    uid = 3748224544; # genid charybdis
+    uid = genid name;
   };
 
   configFile = toFile "charybdis-ircd.conf" ''

@@ -19,7 +19,6 @@ with lib;
       environment.systemPackages = with pkgs; [
 
         # stockholm
-        genid
         gnumake
         hashPassword
         lentil

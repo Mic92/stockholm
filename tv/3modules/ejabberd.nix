@@ -53,9 +53,9 @@ let
     };
   };
 
-  user = {
+  user = rec {
     name = "ejabberd";
-    uid = 3499746127; # genid ejabberd
+    uid = genid name;
   };
 
   my-ejabberdctl = pkgs.writeScriptBin "ejabberdctl" ''

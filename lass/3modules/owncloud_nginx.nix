@@ -207,7 +207,7 @@ let
     #  };
     #});
     users.users.nobody_oc = {
-      uid = 1651469147; # genid nobody_oc
+      uid = genid "nobody_oc";
       useDefaultShell = true;
     };
   };
