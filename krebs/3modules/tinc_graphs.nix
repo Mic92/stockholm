@@ -120,7 +120,7 @@ let
     };
 
     users.extraUsers.tinc_graphs = {
-      uid = 3925439960; #genid tinc_graphs
+      uid = genid "tinc_graphs";
       home = "/var/spool/tinc_graphs";
     };
 

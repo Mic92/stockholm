@@ -145,14 +145,14 @@ let
         ]) (filter (x: hasAttr "allow-receive-ref" x.perm) cfg.rules));
       };
     
-    users.extraUsers = singleton {
+    users.extraUsers = singleton rec {
       description = "Git repository hosting user";
       name = "git";
       shell = "/bin/sh";
       openssh.authorizedKeys.keys =
         mapAttrsToList (_: makeAuthorizedKey git-ssh-command)
           config.krebs.users;
-      uid = 129318403; # genid git
+      uid = genid name;
     };
   };
 
@@ -238,9 +238,9 @@ let
     };
   };
 
-  fcgitwrap-user = {
+  fcgitwrap-user = rec {
     name = "fcgiwrap";
-    uid = 2867890860; # genid fcgiwrap
+    uid = genid name;
     group = "fcgiwrap";
   };
 

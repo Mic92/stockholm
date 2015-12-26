@@ -109,9 +109,9 @@ let
     };
   };
 
-  user = {
+  user = rec {
     name = "consul";
-    uid = 2999951406; # genid consul
+    uid = genid name;
   };
 
 in
