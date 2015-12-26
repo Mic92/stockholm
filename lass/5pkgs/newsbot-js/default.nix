@@ -26,8 +26,8 @@ in nodePackages.buildNodePackage {
 
   src = fetchgit {
     url = "http://cgit.echelon/newsbot-js/";
-    rev = "6ee488430c6915eeae03f1569084577d39cef51d";
-    sha256 = "00xmn7hzcs0mm6hjf5i37d9nna5rcd0gra0ynch7x2id8liazksx";
+    rev = "802b172d0eed6c9625a9cb5db408f5cc8c01784e";
+    sha256 = "794fc7845aca311f7cf7b6bdc109b5a25d0e2299322bc6612edadc477b2536e2";
   };
 
   phases = [
