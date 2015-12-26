@@ -51,6 +51,14 @@ let
         configuration appended to the default or overridden configuration
       '';
     };
+
+    workdir = mkOption {
+      default = "/var/lib/Reaktor";
+      type = types.str;
+      description = ''
+        Reaktor working directory
+      '';
+    };
     extraEnviron = mkOption {
       default = {};
       type = types.attrsOf types.str;
@@ -79,7 +87,7 @@ let
       name = "Reaktor";
       uid = genid name;
       description = "Reaktor user";
-      home = "/var/lib/Reaktor";
+      home = cfg.workdir;
       createHome = true;
     };
 
@@ -101,6 +109,7 @@ let
         GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
         REAKTOR_NICKNAME = cfg.nickname;
         REAKTOR_DEBUG = (if cfg.debug  then "True" else "False");
+        state_dir = cfg.workdir;
         } // cfg.extraEnviron;
       serviceConfig= {
         ExecStartPre = pkgs.writeScript "Reaktor-init" ''

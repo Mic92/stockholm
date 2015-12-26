@@ -29,11 +29,11 @@ trap "$TRAP" INT TERM EXIT
 
 cat > $sec_file <<EOF
 cac_login="$(jq -r .email $krebs_cred)"
-cac_key="$(cac-cli panel --config $krebs_cred settings | jq -r .apicode)"
+cac_key="$(cac-cli --config $krebs_cred panel settings | jq -r .apicode)"
 EOF
 
 export cac_secrets=$sec_file
-cac-cli panel --config $krebs_cred update-api-ip
+cac-cli --config $krebs_cred panel  add-api-ip
 
 # test login:
 cac update
