@@ -9,6 +9,7 @@ with lib;
     "7ae05edcdd14f6ace83ead9bf0d114e97c89a83a";
 
   imports = [
+    ../2configs/backup.nix # TODO
     ../2configs/hw/x220.nix
     #../2configs/consul-client.nix
     ../2configs/git.nix

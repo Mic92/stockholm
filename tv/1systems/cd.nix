@@ -7,6 +7,7 @@ with lib;
   krebs.build.target = "root@cd.internet";
 
   imports = [
+    ../2configs/backup.nix
     ../2configs/hw/CAC-Developer-2.nix
     ../2configs/fs/CAC-CentOS-7-64bit.nix
     #../2configs/consul-server.nix
