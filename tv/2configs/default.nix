@@ -28,6 +28,7 @@ with lib;
 
   imports = [
     <secrets>
+    ./backup.nix
     ./vim.nix
     {
       # stockholm dependencies
