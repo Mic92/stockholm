@@ -8,6 +8,17 @@ set -eufx
 krebs_cred=${krebs_cred-./cac.json}
 retiolum_key=${retiolum_key-./retiolum.rsa_key.priv}
 
+clear_defer(){
+  echo "${trapstr:-exit}"
+  trap - INT TERM EXIT KILL
+}
+defer(){
+  if test -z "${debug:-}"; then
+    trapstr="$1;${trapstr:-exit}"
+    trap "$trapstr" INT TERM EXIT KILL
+  fi
+}
+
 # Sanity
 if test ! -r "$krebs_cred";then
   echo "\$krebs_cred=$krebs_cred must be readable"; exit 1
@@ -24,8 +35,8 @@ export cac_servers_cache=$krebs_secrets/servers_cache.json
 export cac_tasks_cache=$krebs_secrets/tasks_cache.json
 export cac_templates_cache=$krebs_secrets/templates_cache.json
 # we need to receive this key from buildmaster to speed up tinc bootstrap
-TRAP="rm -r $krebs_secrets;trap - INT TERM EXIT"
-trap "$TRAP" INT TERM EXIT
+defer "trap - INT TERM EXIT"
+defer "rm -r $krebs_secrets"
 
 cat > $sec_file <<EOF
 cac_login="$(jq -r .email $krebs_cred)"
@@ -39,30 +50,44 @@ cac-cli --config $krebs_cred panel  add-api-ip
 cac update
 cac servers
 
-# Template 26: CentOS7
-# TODO: use cac templates to determine the real Centos7 template in case it changes
-name=$( cac build cpu=1 ram=512 storage=10 os=26 2>&1\
-  | jq -r .servername)
+# preserve old trap
+old_trapstr=$(clear_defer)
+while true;do
+  # Template 26: CentOS7
+  # TODO: use cac templates to determine the real Centos7 template in case it changes
+  name=$( cac build cpu=1 ram=512 storage=10 os=26 2>&1\
+    | jq -r .servername)
+  id=servername:$name
 
-id=servername:$name
-trap "cac delete $id;$TRAP;exit" INT TERM EXIT
-# TODO: timeout?
+  clear_defer >/dev/null
+  defer "cac delete $id"
 
-wait_login_cac(){
-  # timeout
-  for t in `seq 180`;do
-    # now we have a working cac server
-    if cac ssh $1 -o ConnectTimeout=10 \
-                  cat /etc/redhat-release | \
-                    grep CentOS ;then
-      return 0
-    fi
-    sleep 10
-  done
-  return 1
-}
-# die on timeout
-wait_login_cac $id
+  # TODO: timeout?
+
+  wait_login_cac(){
+    # we wait for 15 minutes
+    for t in `seq 90`;do
+      # now we have a working cac server
+      if cac ssh $1 -o ConnectTimeout=10 \
+                    cat /etc/redhat-release | \
+                      grep CentOS ;then
+        return 0
+      fi
+      sleep 10
+    done
+    return 1
+  }
+  # die on timeout
+  if ! wait_login_cac $id;then
+    echo "unable to boot a working system within time frame, retrying..." >&2
+    echo "Cleaning up old image,last status: $(cac update;cac getserver $id | jq -r .status)"
+    eval "$(clear_defer)"
+  else
+    echo "got a working system" >&2
+  fi
+done
+clear_defer >/dev/null
+defer "cac delete $id;$old_trapstr"
 
 mkdir -p shared/2configs/temp
 cac generatenetworking $id > \
