@@ -4,7 +4,7 @@ with lib;
 let
   out = {
     environment.systemPackages = [
-      pkgs.vim
+      vim
     ];
 
     # Nano really is just a stupid name for Vim.
@@ -22,14 +22,38 @@ let
     "${pkgs.vimPlugins.undotree}/share/vim-plugins/undotree"
   ];
 
+  dirs = {
+    backupdir = "$HOME/.cache/vim/backup";
+    swapdir   = "$HOME/.cache/vim/swap";
+    undodir   = "$HOME/.cache/vim/undo";
+  };
+  files = {
+    viminfo   = "$HOME/.cache/vim/info";
+  };
+
+  mkdirs = let
+    dirOf = s: let out = concatStringsSep "/" (init (splitString "/" s));
+               in assert out != ""; out;
+    alldirs = attrValues dirs ++ map dirOf (attrValues files);
+  in unique (sort lessThan alldirs);
+
+  vim = pkgs.writeScriptBin "vim" ''
+    #! ${pkgs.dash}/bin/dash
+    set -f
+    umask 0077
+    ${concatStringsSep "\n" (map (x: "mkdir -p ${x}") mkdirs)}
+    umask 0022
+    exec ${pkgs.vim}/bin/vim "$@"
+  '';
+
   vimrc = pkgs.writeText "vimrc" ''
     set nocompatible
 
     set autoindent
     set backspace=indent,eol,start
     set backup
-    set backupdir=$HOME/.vim/backup/
-    set directory=$HOME/.vim/cache//
+    set backupdir=${dirs.backupdir}/
+    set directory=${dirs.swapdir}//
     set hlsearch
     set incsearch
     set mouse=a
@@ -40,11 +64,11 @@ let
     set showcmd
     set showmatch
     set ttimeoutlen=0
-    set undodir=$HOME/.vim/undo
+    set undodir=${dirs.undodir}
     set undofile
     set undolevels=1000000
     set undoreload=1000000
-    set viminfo='20,<1000,s100,h,n$HOME/.vim/cache/info
+    set viminfo='20,<1000,s100,h,n${files.viminfo}
     set visualbell
     set wildignore+=*.o,*.class,*.hi,*.dyn_hi,*.dyn_o
     set wildmenu

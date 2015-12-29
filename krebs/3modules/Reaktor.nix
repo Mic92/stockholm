@@ -9,6 +9,7 @@ let
       ${cfg.overrideConfig}
       '' else ""}
       ## Extra Config
+      ${concatStringsSep "\n" (map (plug: plug.config) cfg.plugins)}
       ${cfg.extraConfig}
     '';
   cfg = config.krebs.Reaktor;
@@ -35,7 +36,6 @@ let
       '';
     };
 
-
     overrideConfig = mkOption {
       default = null;
       type = types.nullOr types.str;
@@ -43,6 +43,9 @@ let
         configuration to be used instead of default ones.
         Reaktor default cfg can be retrieved via `reaktor get-config`
       '';
+    };
+    plugins = mkOption {
+      default = [pkgs.ReaktorPlugins.nixos-version];
     };
     extraConfig = mkOption {
       default = "";

@@ -48,7 +48,7 @@ let
       "slock"
     ];
 
-    systemd.services.display-manager = mkForce {};
+    systemd.services.display-manager.enable = false;
 
     services.xserver.enable = true;
 
