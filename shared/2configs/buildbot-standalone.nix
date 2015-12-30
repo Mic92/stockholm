@@ -30,6 +30,7 @@ in {
   # test the master real quick
   sched.append(schedulers.SingleBranchScheduler(
                               change_filter=util.ChangeFilter(branch="master"),
+                              treeStableTimer=10, #only test the latest push
                               name="fast-master-test",
                               builderNames=["fast-tests"]))
         '';
