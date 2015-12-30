@@ -4,6 +4,38 @@ with lib;
 
 {
   hosts = addNames {
+    dishfire = {
+      cores = 4;
+      dc = "lass"; #dc = "cac";
+      nets = rec {
+        internet = {
+          addrs4 = ["144.76.172.188"];
+          aliases = [
+            "dishfire.internet"
+          ];
+        };
+        retiolum = {
+          via = internet;
+          addrs4 = ["10.243.133.99"];
+          addrs6 = ["42:0000:0000:0000:0000:0000:d15f:1233"];
+          aliases = [
+            "dishfire.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAwKi49fN+0s5Cze6JThM7f7lj4da27PSJ/3w3tDFPvtQco11ksNLs
+            Xd3qPaQIgmcNVCR06aexae3bBeTx9y3qHvKqZVE1nCtRlRyqy1LVKSj15J1D7yz7
+            uS6u/BSZiCzmdZwu3Fq5qqoK0nfzWe/NKEDWNa5l4Mz/BZQyI/hbOpn6UfFD0LpK
+            R4jzc9Dbk/IFNAvwb5yrgEYtwBzlXzeDvHW2JcPq3qQjK2byQYNiIyV3g0GHppEd
+            vDbIPDFhTn3Hv5zz/lX+/We8izzRge7MEd+Vn9Jwb5NAzwDsOHl6ExpqASv9H49U
+            HwgPw5pstabyrsDWXybSYUb+8LcZf+unGwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      #ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      #ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL21QDOEFdODFh6WAfNp6odrXo15pEsDQuGJfMu/cKzK";
+    };
     echelon = {
       cores = 2;
       dc = "lass"; #dc = "cac";
