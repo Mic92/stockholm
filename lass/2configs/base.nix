@@ -51,6 +51,7 @@ with lib;
         git.nixpkgs = {
           url = https://github.com/Lassulus/nixpkgs;
           rev = "93d8671e2c6d1d25f126ed30e5e6f16764330119";
+          target-path = "/var/src/nixpkgs";
         };
         dir.secrets = {
           host = config.krebs.hosts.mors;
