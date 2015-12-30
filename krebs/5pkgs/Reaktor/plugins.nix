@@ -14,6 +14,7 @@ rec {
   buildSimpleReaktorPlugin = name: { script
                         , path ? []
                         , env ? {}
+                        , append_rule ? false # append the rule instead of insert
                         , pattern ? ""
                         , ... } @ attrs:
     let
@@ -26,7 +27,7 @@ rec {
       });
       src_file = "${src_dir}/bin/${name}";
       config = ''
-        public_commands.insert(0,{
+        public_commands.${if append_rule then "append(" else "insert(0," }{
           'capname' : "${name}",
           'pattern' : ${if pattern == "" then
                           ''indirect_pattern.format("${name}")'' else
@@ -58,9 +59,10 @@ rec {
   };
 
   sed-plugin = buildSimpleReaktorPlugin "sed-plugin" {
-    path = [ pkgs.gnused ];
+    path = [ pkgs.gnused pkgs.python3 ];
     # only support s///gi the plugin needs to see every msg
     # TODO: this will eat up the last regex, fix Reaktor to support fallthru
+    append_rule = true;
     pattern = "^(?P<args>.*)$$";
     script = ./scripts/sed-plugin.py;
   };
@@ -105,7 +107,7 @@ rec {
     config = ''
       def titlebot_cmd(cmd):
         from os import environ
-        return {  'capname': cmd,
+        return {  'capname': None,
                   'env': { 'TITLEDB':
                     environ['state_dir']+'/suggestions.json' },
                   'pattern': '^\\.' + cmd + '\\s*(?:\\s+(?P<args>.*))?$$',
