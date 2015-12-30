@@ -8,12 +8,9 @@ in {
   };
   networking.firewall.allowedTCPPorts = [ 8010 9989 ];
   krebs.buildbot.master = {
-    secrets = [
-      "cac.json"
-    ];
+    secrets = [ "retiolum-ci.rsa_key.priv" "cac.json" ];
     slaves = {
       testslave =  "krebspass";
-      omo = "krebspass";
     };
     change_source.stockholm = ''
   stockholm_repo = 'http://cgit.gum/stockholm'
@@ -84,6 +81,18 @@ in {
 
   addShell(f,name="eval-cross-check",env=env,
             command=nixshell + ["! make eval get=krebs.deploy filter=json system=test-failing"])
+
+  addShell(f,name="instaniate-test-all-modules",env=env,
+            command=nixshell + \
+                      ["touch retiolum.rsa_key.priv; \
+                        nix-instantiate --eval -A \
+                            users.shared.test-all-krebs-modules.system \
+                            -I stockholm=. \
+                            -I secrets=. '<stockholm>' \
+                            --argstr current-date lol \
+                            --argstr current-user-name shared \
+                            --argstr current-host-name lol \
+                            --strict --json"])
 
   bu.append(util.BuilderConfig(name="fast-tests",
         slavenames=slavenames,
