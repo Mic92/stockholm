@@ -94,6 +94,17 @@ in {
                             --argstr current-host-name lol \
                             --strict --json"])
 
+  addShell(f,name="instantiate-test-minimal-deploy",env=env,
+            command=nixshell + \
+                      ["nix-instantiate --eval -A \
+                            users.shared.test-minimal-deploy.system \
+                            -I stockholm=. \
+                            -I secrets=. '<stockholm>' \
+                            --argstr current-date lol \
+                            --argstr current-user-name shared \
+                            --argstr current-host-name lol \
+                            --strict --json"])
+
   bu.append(util.BuilderConfig(name="fast-tests",
         slavenames=slavenames,
         factory=f))
