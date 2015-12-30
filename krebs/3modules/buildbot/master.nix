@@ -132,6 +132,16 @@ let
       '';
     };
 
+    secrets = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      example = [ "cac.json" ];
+      description = ''
+        List of all the secrets in <secrets> which should be copied into the
+        buildbot master directory.
+      '';
+    };
+
     slaves = mkOption {
       default = {};
       type = types.attrsOf types.str;
@@ -344,10 +354,10 @@ let
           fi
           # always override the master.cfg
           cp ${buildbot-master-config} ${workdir}/master.cfg
+
           # copy secrets
-          cp ${secretsdir}/cac.json ${workdir}
-          cp ${secretsdir}/retiolum-ci.rsa_key.priv \
-             ${workdir}/retiolum.rsa_key.priv
+          ${ concatMapStringsSep "\n"
+            (f: "cp ${secretsdir}/${f} ${workdir}/${f}" ) cfg.secrets }
           # sanity
           ${buildbot}/bin/buildbot checkconfig ${workdir}
 
