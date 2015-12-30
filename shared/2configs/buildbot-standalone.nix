@@ -73,16 +73,16 @@ in {
       fast-tests = ''
   f = util.BuildFactory()
   f.addStep(grab_repo)
-  addShell(f,name="centos7-eval",env=env,
+  addShell(f,name="deploy-eval-centos7",env=env,
             command=nixshell + ["make -s eval get=krebs.deploy filter=json system=test-centos7"])
 
-  addShell(f,name="wolf-eval",env=env,
+  addShell(f,name="deploy-eval-wolf",env=env,
             command=nixshell + ["make -s eval get=krebs.deploy filter=json system=wolf"])
 
-  addShell(f,name="eval-cross-check",env=env,
+  addShell(f,name="deploy-eval-cross-check",env=env,
             command=nixshell + ["! make eval get=krebs.deploy filter=json system=test-failing"])
 
-  addShell(f,name="instaniate-test-all-modules",env=env,
+  addShell(f,name="instantiate-test-all-modules",env=env,
             command=nixshell + \
                       ["touch retiolum.rsa_key.priv; \
                         nix-instantiate --eval -A \
@@ -110,7 +110,7 @@ in {
 
   addShell(s, name="infest-cac-centos7",env=env,
               sigtermTime=60,           # SIGTERM 1 minute before SIGKILL
-              timeout=5400,             # 1.5h timeout
+              timeout=7200,             # 2h
               command=nixshell + ["infest-cac-centos7"])
 
   bu.append(util.BuilderConfig(name="full-tests",
@@ -137,6 +137,7 @@ in {
     username = "testslave";
     password = "krebspass";
     packages = with pkgs;[ git nix ];
+    # all nix commands will need a working nixpkgs installation
     extraEnviron = { NIX_PATH="nixpkgs=${toString <nixpkgs>}"; };
   };
 }
