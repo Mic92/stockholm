@@ -83,6 +83,9 @@ with lib;
             '';
         };
       };
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHDM0E608d/6rGzXqGbNSuMb2RlCojCJSiiz6QcPOC2G root@pornocauster";
+
     };
 
     vbob = {
@@ -108,6 +111,8 @@ with lib;
             '';
         };
       };
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICPLTMl+thSq77cjYa2XF7lz5fA7JMftrLo8Dy/OBXSg root@nixos";
     };
     flap = rec {
       cores = 1;
@@ -238,6 +243,8 @@ with lib;
           '';
         };
       };
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH4Tjx9qK6uWtxT1HCpeC0XvDZKO/kaPygyKatpAqU6I root@wry";
     };
     filepimp = rec {
       cores = 1;
@@ -287,6 +294,8 @@ with lib;
             '';
         };
       };
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIujMZ3ZFxKpWeB/cjfKfYRr77+VRZk0Eik+92t03NoA root@servarch";
     };
     gum = rec {
       cores = 1;
@@ -327,6 +336,8 @@ with lib;
             '';
         };
       };
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcxWFEPzke/Sdd9qNX6rSJgXal8NmINYajpFCxXfYdj root@gum";
     };
   };
   users = addNames rec {

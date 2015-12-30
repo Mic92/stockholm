@@ -7,7 +7,6 @@ let
   user = config.users.users.mainUser;
 
   out = {
-
     services.xserver = {
       display = 11;
       tty = 11;
@@ -40,16 +39,6 @@ let
         User = user.name;
       };
     };
-
-    environment.systemPackages = [
-      pkgs.gitAndTools.qgit
-      pkgs.mpv
-      pkgs.pavucontrol
-      pkgs.slock
-      pkgs.sxiv
-      pkgs.xsel
-      pkgs.zathura
-    ];
 
     security.setuidPrograms = [
       "slock"
@@ -106,9 +95,6 @@ let
     set -efu
     export PATH; PATH=${makeSearchPath "bin" ([
       pkgs.rxvt_unicode
-      pkgs.i3lock
-      pkgs.haskellPackages.yeganesh
-      pkgs.dmenu
     ] ++ config.environment.systemPackages)}:/var/setuid-wrappers
     settle() {(
       # Use PATH for a clean journal

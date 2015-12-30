@@ -36,6 +36,7 @@ let out = {
     { system ? current-host-name
     , target ? system
     }@args: let
+      config = get-config system;
     in ''
       #! /bin/sh
       # ${current-date} ${current-user-name}@${current-host-name}
@@ -46,6 +47,10 @@ let out = {
         ${builtins.readFile ./4lib/infest/prepare.sh}
         ${builtins.readFile ./4lib/infest/install-nix.sh}
       ''}
+
+      # Prepare target source via bind-mounting
+
+      (${populate (args // { infesting = true;}) })
 
       (${nixos-install args})
 
@@ -98,7 +103,6 @@ let out = {
       #! /bin/sh
       # ${current-date} ${current-user-name}@${current-host-name}
       # krebs.nixos-install
-      (${populate args})
 
       ${rootssh target ''
         export PATH; PATH=/root/.nix-profile/bin:$PATH
@@ -205,6 +209,7 @@ let out = {
   populate =
     { system ? current-host-name
     , target ? system
+    , infesting ? false
     }@args:
     let out = ''
         #! /bin/sh
@@ -217,6 +222,8 @@ let out = {
             ["dir" "git"])}
       '';
 
+
+      target_prefix=lib.optionalString infesting "/mnt";
       config = get-config system;
 
       current-host = config.krebs.hosts.${current-host-name};
@@ -225,17 +232,18 @@ let out = {
       methods.dir = config:
         let
           can-push = config.host.name == current-host.name;
+          target-path = target_prefix + config.target-path;
           push-method = ''
             rsync \
               --exclude .git \
               --exclude .graveyard \
               --exclude old \
               --exclude tmp \
-              --rsync-path='mkdir -p ${config.target-path} && rsync' \
+              --rsync-path='mkdir -p ${target-path} && rsync' \
               --delete-excluded \
               -vrLptgoD \
               ${config.path}/ \
-              root@${target}:${config.target-path}
+              root@${target}:${target-path}
           '';
         in
         if can-push then push-method else
@@ -244,9 +252,10 @@ let out = {
         throw "No way to push ${dir} from ${current-host.name} to ${target}";
 
       methods.git = config:
-        rootssh target ''
-          mkdir -p ${config.target-path}
-          cd ${config.target-path}
+        let target-path = target_prefix + config.target-path;
+        in rootssh target ''
+          mkdir -p ${target-path}
+          cd ${target-path}
           if ! test -e .git; then
             git init
           fi
