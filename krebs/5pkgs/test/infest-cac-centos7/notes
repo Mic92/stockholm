@@ -81,9 +81,10 @@ while true;do
   if ! wait_login_cac $id;then
     echo "unable to boot a working system within time frame, retrying..." >&2
     echo "Cleaning up old image,last status: $(cac update;cac getserver $id | jq -r .status)"
-    eval "$(clear_defer)"
+    eval "$(clear_defer | sed 's/;exit//')"
   else
     echo "got a working system" >&2
+    break
   fi
 done
 clear_defer >/dev/null

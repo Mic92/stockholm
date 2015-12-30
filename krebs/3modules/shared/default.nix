@@ -7,6 +7,7 @@ let
     "test-arch"
     "test-centos6"
     "test-centos7"
+    "test-all-krebs-modules"
   ] (name: {
     inherit name;
     cores = 1;
