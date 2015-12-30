@@ -70,12 +70,17 @@ let
           REAKTOR_HOST
           REAKTOR_PORT
           REAKTOR_STATEDIR
-          REAKTOR_CHANNELS
 
           debug and nickname can be set separately via the Reaktor api
       '';
     };
-
+    channels = mkOption {
+      default = [ "#krebs" ];
+      type = types.listOf types.str;
+      description = ''
+        Channels the Reaktor should connect to at startup.
+      '';
+    };
     debug = mkOption {
       default = false;
       description = ''
@@ -112,7 +117,9 @@ let
         GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
         REAKTOR_NICKNAME = cfg.nickname;
         REAKTOR_DEBUG = (if cfg.debug  then "True" else "False");
+        REAKTOR_CHANNELS = lib.concatStringsSep "," cfg.channels;
         state_dir = cfg.workdir;
+
         } // cfg.extraEnviron;
       serviceConfig= {
         ExecStartPre = pkgs.writeScript "Reaktor-init" ''
