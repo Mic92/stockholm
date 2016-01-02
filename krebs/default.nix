@@ -50,7 +50,6 @@ let out = {
 
       # Prepare target source via bind-mounting
 
-      (${populate (args // { infesting = true;}) })
 
       (${nixos-install args})
 
@@ -103,6 +102,7 @@ let out = {
       #! /bin/sh
       # ${current-date} ${current-user-name}@${current-host-name}
       # krebs.nixos-install
+      (${populate (args // { root = "/mnt"; })})
 
       ${rootssh target ''
         export PATH; PATH=/root/.nix-profile/bin:$PATH
@@ -209,7 +209,7 @@ let out = {
   populate =
     { system ? current-host-name
     , target ? system
-    , infesting ? false
+    , root ? ""
     }@args:
     let out = ''
         #! /bin/sh
@@ -223,7 +223,6 @@ let out = {
       '';
 
 
-      target_prefix=lib.optionalString infesting "/mnt";
       config = get-config system;
 
       current-host = config.krebs.hosts.${current-host-name};
@@ -232,7 +231,7 @@ let out = {
       methods.dir = config:
         let
           can-push = config.host.name == current-host.name;
-          target-path = target_prefix + config.target-path;
+          target-path = root + config.target-path;
           push-method = ''
             rsync \
               --exclude .git \
@@ -252,7 +251,7 @@ let out = {
         throw "No way to push ${dir} from ${current-host.name} to ${target}";
 
       methods.git = config:
-        let target-path = target_prefix + config.target-path;
+        let target-path = root + config.target-path;
         in rootssh target ''
           mkdir -p ${target-path}
           cd ${target-path}
