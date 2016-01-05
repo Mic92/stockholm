@@ -28,9 +28,17 @@ let
             type = types.krebs.file-location;
           };
           startAt = mkOption {
-            type = types.str;
+            default = "hourly";
+            type = types.str; # TODO systemd.time(7)'s calendar event
           };
           snapshots = mkOption {
+            default = {
+              hourly   = { format = "%Y-%m-%dT%H"; retain =  4; };
+              daily    = { format = "%Y-%m-%d";    retain =  7; };
+              weekly   = { format = "%YW%W";       retain =  4; };
+              monthly  = { format = "%Y-%m";       retain = 12; };
+              yearly   = { format = "%Y";                       };
+            };
             type = types.attrsOf (types.submodule {
               options = {
                 format = mkOption {
