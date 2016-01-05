@@ -292,3 +292,15 @@ let
   };
 
 in out
+# TODO ionice
+# TODO mail on failed push, pull
+# TODO mail on missing push
+# TODO don't cancel plans on activation
+#   also, don't hang while deploying at:
+#   starting the following units: backup.wu-home-xu.push.service, backup.wu-home-xu.push.timer
+# TODO make sure /bku is properly mounted
+# TODO make sure that secure hosts cannot backup to insecure ones
+# TODO optionally only backup when src and dst are near enough :)
+# TODO try using btrfs for snapshots (configurable)
+# TODO warn if partial snapshots are found
+# TODO warn if unknown stuff is found in dst path
