@@ -122,7 +122,7 @@ in {
 
   addShell(s, name="infest-cac-centos7",env=env,
               sigtermTime=60,           # SIGTERM 1 minute before SIGKILL
-              timeout=7200,             # 2h
+              timeout=10800,             # 3h
               command=nixshell + ["infest-cac-centos7"])
 
   bu.append(util.BuilderConfig(name="full-tests",
