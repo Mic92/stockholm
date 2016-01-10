@@ -55,9 +55,16 @@ old_trapstr=$(clear_defer)
 while true;do
   # Template 26: CentOS7
   # TODO: use cac templates to determine the real Centos7 template in case it changes
-  name=$( cac build cpu=1 ram=512 storage=10 os=26 2>&1\
-    | jq -r .servername)
-  id=servername:$name
+  out=$(cac build cpu=1 ram=512 storage=10 os=26 2>&1)
+  if name=$(echo "$out" | jq -r .servername);then
+    id=servername:$name
+    echo "got a working machine, id=$id"
+  else
+    echo "Unable to build a virtual machine, retrying in 15 seconds" >&2
+    echo "Output of build program: $out" >&2
+    sleep 15
+    continue
+  fi
 
   clear_defer >/dev/null
   defer "cac delete $id"
@@ -65,8 +72,8 @@ while true;do
   # TODO: timeout?
 
   wait_login_cac(){
-    # we wait for 15 minutes
-    for t in `seq 90`;do
+    # we wait for 30 minutes
+    for t in `seq 180`;do
       # now we have a working cac server
       if cac ssh $1 -o ConnectTimeout=10 \
                     cat /etc/redhat-release | \
@@ -82,6 +89,7 @@ while true;do
     echo "unable to boot a working system within time frame, retrying..." >&2
     echo "Cleaning up old image,last status: $(cac update;cac getserver $id | jq -r .status)"
     eval "$(clear_defer | sed 's/;exit//')"
+    sleep 15
   else
     echo "got a working system" >&2
     break

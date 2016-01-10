@@ -30,6 +30,7 @@ in {
   # test the master real quick
   sched.append(schedulers.SingleBranchScheduler(
                               change_filter=util.ChangeFilter(branch="master"),
+                              treeStableTimer=10, #only test the latest push
                               name="fast-master-test",
                               builderNames=["fast-tests"]))
         '';
@@ -121,7 +122,7 @@ in {
 
   addShell(s, name="infest-cac-centos7",env=env,
               sigtermTime=60,           # SIGTERM 1 minute before SIGKILL
-              timeout=7200,             # 2h
+              timeout=10800,             # 3h
               command=nixshell + ["infest-cac-centos7"])
 
   bu.append(util.BuilderConfig(name="full-tests",
