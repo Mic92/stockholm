@@ -28,9 +28,17 @@ let
             type = types.krebs.file-location;
           };
           startAt = mkOption {
-            type = types.str;
+            default = "hourly";
+            type = types.str; # TODO systemd.time(7)'s calendar event
           };
           snapshots = mkOption {
+            default = {
+              hourly   = { format = "%Y-%m-%dT%H"; retain =  4; };
+              daily    = { format = "%Y-%m-%d";    retain =  7; };
+              weekly   = { format = "%YW%W";       retain =  4; };
+              monthly  = { format = "%Y-%m";       retain = 12; };
+              yearly   = { format = "%Y";                       };
+            };
             type = types.attrsOf (types.submodule {
               options = {
                 format = mkOption {
@@ -284,3 +292,15 @@ let
   };
 
 in out
+# TODO ionice
+# TODO mail on failed push, pull
+# TODO mail on missing push
+# TODO don't cancel plans on activation
+#   also, don't hang while deploying at:
+#   starting the following units: backup.wu-home-xu.push.service, backup.wu-home-xu.push.timer
+# TODO make sure /bku is properly mounted
+# TODO make sure that secure hosts cannot backup to insecure ones
+# TODO optionally only backup when src and dst are near enough :)
+# TODO try using btrfs for snapshots (configurable)
+# TODO warn if partial snapshots are found
+# TODO warn if unknown stuff is found in dst path
