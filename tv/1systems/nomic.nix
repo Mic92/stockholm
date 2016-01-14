@@ -11,6 +11,8 @@ with lib;
     ../2configs/hw/AO753.nix
     #../2configs/consul-server.nix
     ../2configs/git.nix
+    ../2configs/pulse.nix
+    ../2configs/xserver
     {
       tv.iptables = {
         enable = true;
