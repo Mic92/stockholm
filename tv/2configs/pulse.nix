@@ -35,11 +35,6 @@ let
 in
 
 {
-  systemd.tmpfiles.rules = [
-    "d ${runDir} 0750 pulse pulse - -"
-    "d ${runDir}/home 0700 pulse pulse - -"
-  ];
-
   system.activationScripts.pulseaudio-hack = ''
     ln -fns ${clientConf} /etc/pulse/client.conf
   '';
@@ -65,6 +60,12 @@ in
     };
     serviceConfig = {
       ExecStart = "${pkg}/bin/pulseaudio";
+      ExecStartPre = pkgs.writeScript "pulse-start" ''
+        #! /bin/sh
+        install -o pulse -g pulse -m 0750 -d ${runDir}
+        install -o pulse -g pulse -m 0700 -d ${runDir}/home
+      '';
+      PermissionsStartOnly = "true";
       User = "pulse";
     };
   };
