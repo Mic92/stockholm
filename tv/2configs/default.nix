@@ -142,7 +142,12 @@ with lib;
         '';
       };
 
-      programs.ssh.startAgent = false;
+      programs.ssh = {
+        extraConfig = ''
+          UseRoaming no
+        '';
+        startAgent = false;
+      };
     }
 
     {
