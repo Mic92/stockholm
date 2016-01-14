@@ -89,7 +89,7 @@ let
             \ | hi Normal ctermfg=White
 
     au BufRead,BufNewFile *.hs so ${pkgs.writeText "hs.vim" ''
-      syn region String start=+\[[^|]*|+ end=+|]+
+      syn region String start=+\[[[:alnum:]]*|+ end=+|]+
     ''}
 
     au BufRead,BufNewFile *.nix so ${pkgs.writeText "nix.vim" ''
