@@ -11,7 +11,7 @@ in
     ../2configs/collectd-base.nix
     ../2configs/shack-nix-cacher.nix
     ../2configs/shack-drivedroid.nix
-    ../2configs/cac-ci.nix
+    ../2configs/buildbot-standalone.nix
     ../2configs/graphite.nix
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
@@ -33,8 +33,6 @@ in
   # uninteresting stuff
   #####################
   krebs.build.host = config.krebs.hosts.wolf;
-  # TODO rename shared user to "krebs"
-  krebs.build.user = config.krebs.users.shared;
   krebs.build.target = "wolf";
 
   boot.kernel.sysctl = {

@@ -1,0 +1,150 @@
+#! /bin/sh
+
+# nix-shell -p gnumake jq openssh cac cacpanel
+set -eufx
+
+# 2 secrets are required:
+
+krebs_cred=${krebs_cred-./cac.json}
+retiolum_key=${retiolum_key-./retiolum.rsa_key.priv}
+
+clear_defer(){
+  echo "${trapstr:-exit}"
+  trap - INT TERM EXIT KILL
+}
+defer(){
+  if test -z "${debug:-}"; then
+    trapstr="$1;${trapstr:-exit}"
+    trap "$trapstr" INT TERM EXIT KILL
+  fi
+}
+
+# Sanity
+if test ! -r "$krebs_cred";then
+  echo "\$krebs_cred=$krebs_cred must be readable"; exit 1
+fi
+if test ! -r "$retiolum_key";then
+  echo "\$retiolum_key=$retiolum_key must be readable"; exit 1
+fi
+
+krebs_secrets=$(mktemp -d)
+sec_file=$krebs_secrets/cac_config
+krebs_ssh=$krebs_secrets/tempssh
+export cac_resources_cache=$krebs_secrets/res_cache.json
+export cac_servers_cache=$krebs_secrets/servers_cache.json
+export cac_tasks_cache=$krebs_secrets/tasks_cache.json
+export cac_templates_cache=$krebs_secrets/templates_cache.json
+# we need to receive this key from buildmaster to speed up tinc bootstrap
+defer "trap - INT TERM EXIT"
+defer "rm -r $krebs_secrets"
+
+cat > $sec_file <<EOF
+cac_login="$(jq -r .email $krebs_cred)"
+cac_key="$(cac-cli --config $krebs_cred panel settings | jq -r .apicode)"
+EOF
+
+export cac_secrets=$sec_file
+cac-cli --config $krebs_cred panel  add-api-ip
+
+# test login:
+cac update
+cac servers
+
+# preserve old trap
+old_trapstr=$(clear_defer)
+while true;do
+  # Template 26: CentOS7
+  # TODO: use cac templates to determine the real Centos7 template in case it changes
+  out=$(cac build cpu=1 ram=512 storage=10 os=26 2>&1)
+  if name=$(echo "$out" | jq -r .servername);then
+    id=servername:$name
+    echo "got a working machine, id=$id"
+  else
+    echo "Unable to build a virtual machine, retrying in 15 seconds" >&2
+    echo "Output of build program: $out" >&2
+    sleep 15
+    continue
+  fi
+
+  clear_defer >/dev/null
+  defer "cac delete $id"
+
+  # TODO: timeout?
+
+  wait_login_cac(){
+    # we wait for 30 minutes
+    for t in `seq 180`;do
+      # now we have a working cac server
+      if cac ssh $1 -o ConnectTimeout=10 \
+                    cat /etc/redhat-release | \
+                      grep CentOS ;then
+        return 0
+      fi
+      sleep 10
+    done
+    return 1
+  }
+  # die on timeout
+  if ! wait_login_cac $id;then
+    echo "unable to boot a working system within time frame, retrying..." >&2
+    echo "Cleaning up old image,last status: $(cac update;cac getserver $id | jq -r .status)"
+    eval "$(clear_defer | sed 's/;exit//')"
+    sleep 15
+  else
+    echo "got a working system" >&2
+    break
+  fi
+done
+clear_defer >/dev/null
+defer "cac delete $id;$old_trapstr"
+
+mkdir -p shared/2configs/temp
+cac generatenetworking $id > \
+  shared/2configs/temp/networking.nix
+# new temporary ssh key we will use to log in after infest
+ssh-keygen -f $krebs_ssh -N ""
+cp $retiolum_key $krebs_secrets/retiolum.rsa_key.priv
+# we override the directories for secrets and stockholm
+# additionally we set the ssh key we generated
+ip=$(cac getserver $id | jq -r .ip)
+
+cat > shared/2configs/temp/dirs.nix <<EOF
+_: {
+  krebs.build.source.dir = {
+    secrets.path = "$krebs_secrets";
+    stockholm.path = "$(pwd)";
+  };
+  users.extraUsers.root.openssh.authorizedKeys.keys = [
+    "$(cat ${krebs_ssh}.pub)"
+  ];
+  krebs.build.target = "$ip";
+}
+EOF
+
+LOGNAME=shared make eval get=krebs.infest \
+  target=derp system=test-centos7 filter=json \
+  | sed -e "s#^ssh.*<<#cac ssh $id<<#" \
+        -e "/^rsync/a -e 'cac ssh $id' \\\\"  \
+        -e "s#root.derp:#:#" > $krebs_secrets/infest
+sh -x $krebs_secrets/infest
+
+# TODO: generate secrets directory $krebs_secrets for nix import
+cac powerop $id reset
+
+wait_login(){
+  # timeout
+  for t in `seq 90`;do
+    # now we have a working cac server
+    if ssh -o StrictHostKeyChecking=no \
+           -o UserKnownHostsFile=/dev/null \
+           -i $krebs_ssh \
+           -o ConnectTimeout=10 \
+           -o BatchMode=yes \
+           root@$1 nixos-version ;then
+      return 0
+    fi
+    sleep 10
+  done
+  return 1
+}
+wait_login $ip

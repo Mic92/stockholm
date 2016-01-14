@@ -26,6 +26,8 @@ subdirs // rec {
     inherit (subdirs) get jq;
   };
 
+  ReaktorPlugins = pkgs.callPackage ./Reaktor/plugins.nix {};
+
   execve = name: { filename, argv, envp ? {}, destination ? "" }:
     writeC name { inherit destination; } ''
       #include <unistd.h>
@@ -39,6 +41,10 @@ subdirs // rec {
         return -1;
       }
     '';
+
+  test = {
+    infest-cac-centos7 = pkgs.callPackage ./test/infest-cac-centos7 {};
+  };
 
   execveBin = name: cfg: execve name (cfg // { destination = "/bin/${name}"; });
 
