@@ -45,7 +45,11 @@ in
       #"pulse/client.conf".source = mkForce clientConf;
       "pulse/default.pa".source = configFile;
     };
-    systemPackages = [ pkg ];
+    systemPackages = [
+      pkg
+    ] ++ optionals config.services.xserver.enable [
+      pkgs.pavucontrol
+    ];
   };
 
   # Allow PulseAudio to get realtime priority using rtkit.
