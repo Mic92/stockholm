@@ -1,6 +1,6 @@
 { pkgs, ... }:
 
-(pkgs.haskellngPackages.override {
+(pkgs.haskellPackages.override {
   overrides = self: super: {
     lentil = super.lentil.override {
       mkDerivation = (attrs: self.mkDerivation (attrs // {
