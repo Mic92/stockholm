@@ -11,7 +11,7 @@ with lib;
     source = {
       git.nixpkgs = {
         url = mkDefault https://github.com/NixOS/nixpkgs;
-        rev = mkDefault "c44a593aa43bba6a0708f6f36065a514a5110613";
+        rev = mkDefault "b7ff0301d6f26bd8419e888fd0e129f3dc8bd328";
         target-path = mkDefault "/var/src/nixpkgs";
       };
       dir.secrets = {
@@ -142,7 +142,12 @@ with lib;
         '';
       };
 
-      programs.ssh.startAgent = false;
+      programs.ssh = {
+        extraConfig = ''
+          UseRoaming no
+        '';
+        startAgent = false;
+      };
     }
 
     {

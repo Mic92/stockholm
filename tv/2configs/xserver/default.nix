@@ -37,7 +37,6 @@ let
       pkgs.ff
       pkgs.gitAndTools.qgit
       pkgs.mpv
-      pkgs.pavucontrol
       pkgs.slock
       pkgs.sxiv
       pkgs.xsel
