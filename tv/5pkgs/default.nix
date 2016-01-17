@@ -11,6 +11,9 @@
         --disk-cache-size=50000000 \
         "%@"
   '';
+  ejabberd = pkgs.callPackage ./ejabberd {
+    erlang = pkgs.erlangR16;
+  };
   ff = pkgs.callPackage ./ff {};
   viljetic-pages = pkgs.callPackage ./viljetic-pages {};
   xmonad-tv =
