@@ -25,6 +25,7 @@
     ../2configs/teamviewer.nix
     ../2configs/libvirt.nix
     ../2configs/fetchWallpaper.nix
+    ../2configs/buildbot-standalone.nix
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
