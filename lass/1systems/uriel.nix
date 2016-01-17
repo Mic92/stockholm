@@ -13,6 +13,7 @@ with builtins;
     ../2configs/retiolum.nix
     ../2configs/bitlbee.nix
     ../2configs/weechat.nix
+    ../2configs/skype.nix
     {
       users.extraUsers = {
         root = {
