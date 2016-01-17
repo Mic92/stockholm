@@ -3,6 +3,7 @@
   krebs.exim-retiolum.enable = lib.mkDefault true;
   services.smartd = {
     enable = true;
+    autodetect = false;
     notifications = {
       mail = {
         enable = true;
@@ -12,8 +13,6 @@
     # short daily, long weekly, check on boot
     defaults.monitored = "-a -o on -s (S/../.././02|L/../../7/04)";
 
-    devices = lib.mkDefault [{
-      device = "/dev/sda";
-    }];
+    devices = lib.mkDefault [ ];
   };
 }

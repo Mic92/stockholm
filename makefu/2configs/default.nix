@@ -13,7 +13,7 @@ with lib;
     ./vim.nix
   ];
 
-
+  nixpkgs.config.allowUnfreePredicate =  (pkg: pkgs.lib.hasPrefix "unrar-" pkg.name);
   krebs = {
     enable = true;
     search-domain = "retiolum";
@@ -65,7 +65,12 @@ with lib;
   time.timeZone = "Europe/Berlin";
   #nix.maxJobs = 1;
 
-  programs.ssh.startAgent = false;
+  programs.ssh = {
+    startAgent = false;
+    extraConfig = ''
+      UseRoaming no
+    '';
+  };
   services.openssh.enable = true;
   nix.useChroot = true;
 
