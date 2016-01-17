@@ -50,7 +50,7 @@ with lib;
       source = {
         git.nixpkgs = {
           url = https://github.com/Lassulus/nixpkgs;
-          rev = "93d8671e2c6d1d25f126ed30e5e6f16764330119";
+          rev = "d0e3cca04edd5d1b3d61f188b4a5f61f35cdf1ce";
           target-path = "/var/src/nixpkgs";
         };
         dir.secrets = {
