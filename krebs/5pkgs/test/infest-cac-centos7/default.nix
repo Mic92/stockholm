@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
       cp ${src} $out/bin/${shortname}
       chmod +x $out/bin/${shortname}
       wrapProgram $out/bin/${shortname} \
-              --prefix PATH : ${path}
+              --prefix PATH : ${path} \
+              --set SSL_CERT_FILE ${./panel.cloudatcost.com.crt}
     '';
   meta = with stdenv.lib; {
     homepage = http://krebsco.de;
