@@ -1,0 +1,10 @@
+--- cac-orig/cac        2016-01-18 17:48:24.492284682 +0100
++++ cac/cac     2016-01-18 17:48:43.529736771 +0100
+@@ -121,7 +121,6 @@
+   for x in \
+       resources \
+       servers \
+-      tasks \
+       templates \
+       # This line intentionally left blank.
+   do

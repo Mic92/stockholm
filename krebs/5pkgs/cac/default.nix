@@ -11,9 +11,10 @@ stdenv.mkDerivation {
 
   phases = [
     "unpackPhase"
+    "patchPhase"
     "installPhase"
   ];
-
+  patches = [ ./disable-tasks.patch ];
   installPhase =
     let
       path = stdenv.lib.makeSearchPath "bin" [
