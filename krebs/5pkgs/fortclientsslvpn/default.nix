@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.fortinet.com;
     description = "Forticlient SSL-VPN client";
-    license = lib.licenses.nonfree;
+    license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.makefu ];
   };
 }
