@@ -1,11 +1,6 @@
 { lib, config, pkgs, ... }:
-let
-    pkgs-unst = import (fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz) {};
-in {
-  nixpkgs.config.packageOverrides = pkgs: {
-    buildbot = pkgs-unst.buildbot;
-    buildbot-slave = pkgs-unst.buildbot-slave;
-  };
+
+{
   networking.firewall.allowedTCPPorts = [ 8010 9989 ];
   krebs.buildbot.master = {
     secrets = [ "retiolum-ci.rsa_key.priv" "cac.json" ];
