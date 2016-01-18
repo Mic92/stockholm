@@ -39,7 +39,7 @@ let
     s.setServiceParent(application)
     '';
   default-packages = [ pkgs.git pkgs.bash ];
-  cfg = config.makefu.buildbot.slave;
+  cfg = config.krebs.buildbot.slave;
 
   api = {
     enable = mkEnableOption "Buildbot Slave";
@@ -127,7 +127,7 @@ let
   imp = {
 
     users.extraUsers.buildbotSlave = {
-      uid = 1408105834; #genid buildbotMaster
+      uid = genid "buildbotSlave";
       description = "Buildbot Slave";
       home = cfg.workDir;
       createHome = false;
@@ -144,6 +144,7 @@ let
       path = default-packages ++ cfg.packages;
 
       environment = {
+          SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
           NIX_REMOTE="daemon";
       } // cfg.extraEnviron;
 
@@ -180,6 +181,6 @@ let
   };
 in
 {
-  options.makefu.buildbot.slave = api;
+  options.krebs.buildbot.slave = api;
   config = mkIf cfg.enable imp;
 }

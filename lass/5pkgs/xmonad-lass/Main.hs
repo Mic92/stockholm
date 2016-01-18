@@ -125,6 +125,8 @@ myKeyMap =
     --, ("M4-r", spawn "exe=$(yeganesh -x) && eval \"exec $exe\"")
     , ("<XF86AudioRaiseVolume>", spawn "pactl -- set-sink-volume 0 +4%")
     , ("<XF86AudioLowerVolume>", spawn "pactl -- set-sink-volume 0 -4%")
+    , ("<XF86AudioMute>", spawn "pactl -- set-sink-mute 0 toggle")
+    , ("<XF86AudioMicMute>", spawn "pactl -- set-source-mute 1 toggle")
     , ("<XF86Launch1>", gridselectWorkspace myWSConfig W.view)
 
     , ("M4-a", focusUrgent)

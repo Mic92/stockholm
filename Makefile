@@ -35,7 +35,7 @@ ifeq ($(filter),json)
 else
 	filter() { cat; }
 endif
-	nix-instantiate \
+	result=$$(nix-instantiate \
 		$${extraArgs-} \
 		--eval \
 		-A "$$get" \
@@ -45,8 +45,9 @@ endif
 		--argstr current-host-name "$$HOSTNAME" \
 		--argstr current-user-name "$$LOGNAME" \
 		$${system+--argstr system "$$system"} \
-		$${target+--argstr target "$$target"} \
-		| filter
+		$${target+--argstr target "$$target"})
+	echo "$$result" | filter
+
 else
 $(error unbound variable: system[s])
 endif

@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with builtins;
 with lib;
 
 let
@@ -31,9 +30,9 @@ let
       bind = mkDefault "127.0.0.1";
     };
 
-    users.extraUsers.go = {
+    users.extraUsers.go = rec {
       name = "go";
-      uid = 42774411; #genid go
+      uid = genid name;
       description = "go url shortener user";
       home = "/var/lib/go";
       createHome = true;

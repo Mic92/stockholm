@@ -1,18 +1,7 @@
-{ config, pkgs,lib, ... }:
+{ config, lib, pkgs, ... }:
 
-
+with lib;
 let
-
-  inherit (lib)
-    mkIf
-    mkOption
-    types
-    singleton
-    isString
-    optionalString
-    concatStrings
-    escapeShellArg
-  ;
 
   ReaktorConfig = pkgs.writeText "config.py" ''
       ${if (isString cfg.overrideConfig ) then ''
@@ -20,6 +9,7 @@ let
       ${cfg.overrideConfig}
       '' else ""}
       ## Extra Config
+      ${concatStringsSep "\n" (map (plug: plug.config) cfg.plugins)}
       ${cfg.extraConfig}
     '';
   cfg = config.krebs.Reaktor;
@@ -46,7 +36,6 @@ let
       '';
     };
 
-
     overrideConfig = mkOption {
       default = null;
       type = types.nullOr types.str;
@@ -55,11 +44,22 @@ let
         Reaktor default cfg can be retrieved via `reaktor get-config`
       '';
     };
+    plugins = mkOption {
+      default = [pkgs.ReaktorPlugins.nixos-version];
+    };
     extraConfig = mkOption {
       default = "";
       type = types.string;
       description = ''
         configuration appended to the default or overridden configuration
+      '';
+    };
+
+    workdir = mkOption {
+      default = "/var/lib/Reaktor";
+      type = types.str;
+      description = ''
+        Reaktor working directory
       '';
     };
     extraEnviron = mkOption {
@@ -70,12 +70,17 @@ let
           REAKTOR_HOST
           REAKTOR_PORT
           REAKTOR_STATEDIR
-          REAKTOR_CHANNELS
 
           debug and nickname can be set separately via the Reaktor api
       '';
     };
-
+    channels = mkOption {
+      default = [ "#krebs" ];
+      type = types.listOf types.str;
+      description = ''
+        Channels the Reaktor should connect to at startup.
+      '';
+    };
     debug = mkOption {
       default = false;
       description = ''
@@ -86,12 +91,11 @@ let
 
   imp = {
     # for reaktor get-config
-    users.extraUsers = singleton {
+    users.extraUsers = singleton rec {
       name = "Reaktor";
-      # uid = config.ids.uids.Reaktor;
-      uid = 2066439104; #genid Reaktor
+      uid = genid name;
       description = "Reaktor user";
-      home = "/var/lib/Reaktor";
+      home = cfg.workdir;
       createHome = true;
     };
 
@@ -113,6 +117,9 @@ let
         GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
         REAKTOR_NICKNAME = cfg.nickname;
         REAKTOR_DEBUG = (if cfg.debug  then "True" else "False");
+        REAKTOR_CHANNELS = lib.concatStringsSep "," cfg.channels;
+        state_dir = cfg.workdir;
+
         } // cfg.extraEnviron;
       serviceConfig= {
         ExecStartPre = pkgs.writeScript "Reaktor-init" ''

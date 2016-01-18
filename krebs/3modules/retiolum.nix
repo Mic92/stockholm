@@ -133,9 +133,9 @@ let
     };
   };
 
-  user = {
+  user = rec {
     name = "retiolum";
-    uid = 301281149; # genid retiolum
+    uid = genid name;
   };
 
   tinc = cfg.tincPackage;

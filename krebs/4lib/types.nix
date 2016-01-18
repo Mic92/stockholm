@@ -177,4 +177,21 @@ types // rec {
   addr6 = str;
   hostname = str;
   label = str;
+
+  krebs.file-location = types.submodule {
+    options = {
+      # TODO user
+      host = mkOption {
+        type = host;
+      };
+      # TODO merge with ssl.privkey.path
+      path = mkOption {
+        type = types.either types.path types.str;
+        apply = x: {
+          path = toString x;
+          string = x;
+        }.${typeOf x};
+      };
+    };
+  };
 }

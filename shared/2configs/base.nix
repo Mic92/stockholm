@@ -14,11 +14,12 @@ with lib;
   };
 
   # TODO rename shared user to "krebs"
-  krebs.build.user = config.krebs.users.shared;
+  krebs.build.user = mkDefault config.krebs.users.shared;
   krebs.build.source = {
     git.nixpkgs = {
       url = https://github.com/NixOS/nixpkgs;
       rev = "6d31e9b81dcd4ab927bb3dc91b612dd5abfa2f80";
+      target-path = "/var/src/nixpkgs";
     };
     dir.secrets = {
       host = config.krebs.current.host;
@@ -27,6 +28,7 @@ with lib;
     dir.stockholm = {
       host = config.krebs.current.host;
       path = mkDefault "${getEnv "HOME"}/stockholm";
+      target-path = "/var/src/stockholm";
     };
   };
 

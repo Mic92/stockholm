@@ -31,10 +31,15 @@ in {
 
   environment.systemPackages = with pkgs; [
 
-    powertop
-    sxiv
+    gitAndTools.qgit
+    mpv
     much
+    pavucontrol
+    powertop
     push
+    slock
+    sxiv
+    xsel
     zathura
 
   #window manager stuff

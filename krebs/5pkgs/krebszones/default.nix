@@ -1,5 +1,10 @@
 { lib, pkgs,python3Packages,fetchurl, ... }:
 
+# TODO: Prepare a diff of future and current
+## ovh-zone export krebsco.de --config ~/secrets/krebs/cfg.json |sed 's/[ ]\+/ /g' | sort current
+## sed 's/[ ]\+/ /g'/etc/zones/krebsco.de | sort > future
+## diff future.sorted current.sorted
+
 python3Packages.buildPythonPackage rec {
   name = "krebszones-${version}";
   version = "0.4.4";

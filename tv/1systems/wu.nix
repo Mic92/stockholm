@@ -16,7 +16,6 @@ with lib;
       environment.systemPackages = with pkgs; [
 
         # stockholm
-        genid
         gnumake
         hashPassword
         lentil
@@ -234,7 +233,12 @@ with lib;
     KERNEL=="hpet", GROUP="audio"
   '';
 
-  services.bitlbee.enable = true;
+  services.bitlbee = {
+    enable = true;
+    plugins = [
+      pkgs.bitlbee-facebook
+    ];
+  };
   services.tor.client.enable = true;
   services.tor.enable = true;
   services.virtualboxHost.enable = true;
