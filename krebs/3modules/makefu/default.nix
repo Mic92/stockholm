@@ -297,6 +297,30 @@ with lib;
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIujMZ3ZFxKpWeB/cjfKfYRr77+VRZk0Eik+92t03NoA root@servarch";
     };
+    wbob = rec {
+      cores = 1;
+      dc = "none";
+      nets = {
+        retiolm = {
+          addrs4 = ["10.243.214.15/32"];
+          addrs6 = ["42:5a02:2c30:c1b1:3f2e:7c19:2496:a732/128"];
+          aliases = [
+              "wbob.retiolum"
+          ];
+          tinc.pubkey = ''
+-----BEGIN RSA PUBLIC KEY-----
+MIIBCgKCAQEAqLTJx91OdR0FlJAc2JGh+AJde95oMzzh8o36JBFpsaN7styNfD3e
+QGM/bDXFjk4ieIe5At0Z63P2KWxRp3cz8LWKJsn5cGsX2074YWMAGmKX+ZZJNlal
+cJ994xX+8MJ6L2tVKpY7Ace7gqDN+l650PrEzV2SLisIqOdxoBlbAupdwHieUBt8
+khm4NLNUCxPYUx2RtHn4iGdgSgUD/SnyHEFdyDA17lWAGfEi4yFFjFMYQce/TFrs
+rQV9t5hGaofu483Epo6mEfcBcsR4GIHI4a4WKYANsIyvFvzyGFEHOMusG6nRRqE9
+TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
+-----END RSA PUBLIC KEY-----
+'';
+        };
+      };
+    };
+
     gum = rec {
       cores = 1;
       dc = "online.net"; #root-server

@@ -84,6 +84,7 @@
                         nix-instantiate --eval -A \
                             users.shared.test-all-krebs-modules.system \
                             -I stockholm=. \
+                            --show-trace \
                             -I secrets=. '<stockholm>' \
                             --argstr current-date lol \
                             --argstr current-user-name shared \
@@ -96,6 +97,7 @@
                             users.shared.test-minimal-deploy.system \
                             -I stockholm=. \
                             -I secrets=. '<stockholm>' \
+                            --show-trace \
                             --argstr current-date lol \
                             --argstr current-user-name shared \
                             --argstr current-host-name lol \
