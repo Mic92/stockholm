@@ -12,10 +12,21 @@ in
     ../2configs/shack-nix-cacher.nix
     ../2configs/shack-drivedroid.nix
     ../2configs/buildbot-standalone.nix
-    ../2configs/graphite.nix
+    # ../2configs/graphite.nix
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
   # apt-cacher-ng in first place)
+
+  services.grafana = {
+    enable = true;
+    addr = "0.0.0.0";
+    extraOptions = { "AUTH_ANONYMOUS_ENABLED" = "true"; };
+    users.allowSignUp = true;
+    users.allowOrgCreate = true;
+    users.autoAssignOrg = true;
+    security = import <secrets/grafana_security.nix>;
+  };
+
   nix.binaryCaches = [ "http://localhost:3142/nixos" "https://cache.nixos.org" ];
 
   networking = {
