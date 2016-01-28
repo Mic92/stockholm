@@ -11,7 +11,7 @@ with lib;
     source = {
       git.nixpkgs = {
         url = mkDefault https://github.com/NixOS/nixpkgs;
-        rev = mkDefault "b7ff0301d6f26bd8419e888fd0e129f3dc8bd328";
+        rev = mkDefault "77f8f35d57618c1ba456d968524f2fb2c3448295";
         target-path = mkDefault "/var/src/nixpkgs";
       };
       dir.secrets = {
