@@ -13,14 +13,6 @@ with lib;
     ../2configs/pulse.nix
     ../2configs/retiolum.nix
     ../2configs/xserver
-    {
-      tv.iptables = {
-        enable = true;
-        input-internet-accept-new-tcp = [
-          "smtp"
-        ];
-      };
-    }
   ];
 
   boot.initrd.luks = {

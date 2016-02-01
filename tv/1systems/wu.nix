@@ -125,14 +125,6 @@ with lib;
         unison
       ];
     }
-    {
-      tv.iptables = {
-        enable = true;
-        input-internet-accept-new-tcp = [
-          "smtp"
-        ];
-      };
-    }
   ];
 
   boot.initrd.luks = {
