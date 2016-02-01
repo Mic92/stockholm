@@ -1,6 +1,6 @@
 { pkgs, ... }:
 
-pkgs.haskellngPackages.callPackage (
+pkgs.haskellPackages.callPackage (
 { mkDerivation, aeson, attoparsec, base, base64-bytestring
 , blaze-builder, blessings, bytestring, case-insensitive, containers, deepseq
 , directory, docopt, email-header, fetchgit, filepath
