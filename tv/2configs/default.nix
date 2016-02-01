@@ -163,12 +163,17 @@ with lib;
     }
 
     {
+      tv.iptables.enable = true;
+    }
+
+    {
       services.openssh = {
         enable = true;
         hostKeys = [
           { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
         ];
       };
+      tv.iptables.input-internet-accept-new-tcp = singleton "ssh";
     }
 
     {

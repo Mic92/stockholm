@@ -41,7 +41,6 @@ with lib;
       tv.iptables = {
         enable = true;
         input-internet-accept-new-tcp = [
-          "ssh"
           "tinc"
           "smtp"
           "xmpp-client"
@@ -58,10 +57,7 @@ with lib;
         "cgit.cd.krebsco.de"
         "cgit.cd.viljetic.de"
       ];
-    }
-    {
       # TODO make public_html also available to cd, cd.retiolum (AKA default)
-      tv.iptables.input-internet-accept-new-tcp = singleton "http";
       krebs.nginx.servers.public_html = {
         server-names = singleton "cd.viljetic.de";
         locations = singleton (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
