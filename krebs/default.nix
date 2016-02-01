@@ -243,7 +243,7 @@ let out = {
               --exclude tmp \
               --rsync-path='mkdir -p ${target-path} && rsync' \
               --delete-excluded \
-              -vrLptgoD \
+              -vrlptD \
               ${config.path}/ \
               root@${target}:${target-path}
           '';
