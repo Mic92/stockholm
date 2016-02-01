@@ -13,4 +13,5 @@ with lib;
       "ire"
     ];
   };
+  tv.iptables.input-internet-accept-new-tcp = singleton "tinc";
 }

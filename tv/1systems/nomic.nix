@@ -18,7 +18,6 @@ with lib;
         enable = true;
         input-internet-accept-new-tcp = [
           "http"
-          "tinc"
           "smtp"
         ];
       };
