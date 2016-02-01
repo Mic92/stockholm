@@ -60,7 +60,7 @@
     web.enable = true;
     irc = {
       enable = true;
-      nick = "lass-buildbot";
+      nick = "buildbot-lass";
       server = "cd.retiolum";
       channels = [ "retiolum" ];
       allowForce = true;
