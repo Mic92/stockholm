@@ -23,6 +23,7 @@ let
       rmdir "$tmpdir"
       trap - EXIT INT QUIT
     '        EXIT INT QUIT
+    chmod 0755 "$tmpdir"
     ${concatStringsSep "\n"
       (mapAttrsToList
         (name: spec: let dst = removePrefix "symlink:" (get-url spec); in
