@@ -31,6 +31,10 @@ with lib;
         enable = true;
         hosts = [ "jabber.viljetic.de" ];
       };
+      tv.iptables.input-internet-accept-new-tcp = [
+        "xmpp-client"
+        "xmpp-server"
+      ];
     }
     {
       krebs.github-hosts-sync.enable = true;
@@ -38,19 +42,6 @@ with lib;
         singleton config.krebs.github-hosts-sync.port;
     }
     {
-      tv.iptables = {
-        enable = true;
-        input-internet-accept-new-tcp = [
-          "xmpp-client"
-          "xmpp-server"
-        ];
-        input-retiolum-accept-new-tcp = [
-          "http"
-        ];
-      };
-    }
-    {
-      tv.iptables.input-internet-accept-new-tcp = singleton "http";
       krebs.nginx.servers.cgit.server-names = [
         "cgit.cd.krebsco.de"
         "cgit.cd.viljetic.de"
@@ -62,8 +53,6 @@ with lib;
           alias /home/$1/public_html$2;
         '');
       };
-    }
-    {
       krebs.nginx.servers.viljetic = {
         server-names = singleton "viljetic.de";
         # TODO directly set root (instead via location)
@@ -71,6 +60,7 @@ with lib;
           root ${pkgs.viljetic-pages};
         '');
       };
+      tv.iptables.input-internet-accept-new-tcp = singleton "http";
     }
   ];
 
