@@ -11,6 +11,7 @@ with lib;
     ../2configs/git.nix
     ../2configs/nginx-public_html.nix
     ../2configs/pulse.nix
+    ../2configs/retiolum.nix
     ../2configs/xserver
     {
       tv.iptables = {
@@ -20,15 +21,6 @@ with lib;
           "http"
           "tinc"
           "smtp"
-        ];
-      };
-    }
-    {
-      krebs.retiolum = {
-        enable = true;
-        connectTo = [
-          "gum"
-          "pigstarter"
         ];
       };
     }

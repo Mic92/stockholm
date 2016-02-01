@@ -12,6 +12,7 @@ with lib;
     ../2configs/mail-client.nix
     ../2configs/nginx-public_html.nix
     ../2configs/pulse.nix
+    ../2configs/retiolum.nix
     ../2configs/xserver
     {
       environment.systemPackages = with pkgs; [
@@ -132,15 +133,6 @@ with lib;
           "http"
           "tinc"
           "smtp"
-        ];
-      };
-    }
-    {
-      krebs.retiolum = {
-        enable = true;
-        connectTo = [
-          "gum"
-          "pigstarter"
         ];
       };
     }
