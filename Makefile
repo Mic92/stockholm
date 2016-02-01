@@ -24,7 +24,8 @@ else ifdef system
 deploy infest:;@
 	export get=krebs.$@
 	export filter=json
-	make -s eval | sh
+	script=$$(make -s eval)
+	echo "$$script" | sh
 
 .PHONY: deploy2
 ifdef target
