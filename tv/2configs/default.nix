@@ -8,20 +8,23 @@ with lib;
   krebs.build = {
     user = config.krebs.users.tv;
     target = mkDefault "root@${config.krebs.build.host.name}";
-    source = {
-      git.nixpkgs = {
-        url = mkDefault https://github.com/NixOS/nixpkgs;
-        rev = mkDefault "77f8f35d57618c1ba456d968524f2fb2c3448295";
-        target-path = mkDefault "/var/src/nixpkgs";
+    source-version = 2;
+    source = mapAttrs (_: mkDefault) ({
+      nixos-config = "symlink:stockholm-private/1systems/${config.krebs.build.host.name}.nix";
+      nixpkgs = symlink:stockholm-nixpkgs;
+      secrets = "/home/tv/secrets/${config.krebs.build.host.name}";
+      secrets-common = "/home/tv/secrets/common";
+      stockholm-krebs = "/home/tv/stockholm/krebs";
+      stockholm-nixpkgs = "/home/tv/stockholm/nixpkgs";
+      stockholm-private = "/home/tv/stockholm/tv";
+      upstream-nixpkgs = {
+        url = https://github.com/NixOS/nixpkgs;
+        rev = "77f8f35d57618c1ba456d968524f2fb2c3448295";
+        dev = "/home/tv/nixpkgs";
       };
-      dir.secrets = {
-        path = mkDefault "/home/tv/secrets/${config.krebs.build.host.name}";
-      };
-      dir.stockholm = {
-        path = mkDefault "/home/tv/stockholm";
-        target-path = mkDefault "/var/src/stockholm";
-      };
-    };
+    } // optionalAttrs config.krebs.build.host.secure {
+      secrets-master = "/home/tv/secrets/master";
+    });
   };
 
   networking.hostName = config.krebs.build.host.name;
@@ -98,12 +101,7 @@ with lib;
       };
 
       environment.variables = {
-        NIX_PATH =
-          with config.krebs.build.source; with dir; with git;
-          mkForce (concatStringsSep ":" [
-            "nixpkgs=${nixpkgs.target-path}"
-            "secrets=${stockholm.target-path}/null"
-          ]);
+        NIX_PATH = mkForce "/var/src";
       };
 
       programs.bash = {

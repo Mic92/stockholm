@@ -26,6 +26,25 @@ deploy infest:;@
 	export filter=json
 	make -s eval | sh
 
+.PHONY: deploy2
+ifdef target
+deploy2: export target-host = $(target)
+else
+deploy2: export target-host = $(system)
+endif
+deploy2:;@
+	target=$${target-$$system}
+	result=$$(nix-instantiate \
+			--json \
+			--eval \
+			krebs/populate.nix \
+			--arg source 'with (import ~/stockholm {}).users.$(LOGNAME).$(system).config.krebs.build; assert source-version == 2; source' \
+			--argstr target-host "$$target" \
+			--argstr target-path /var/src)
+	script=$$(echo "$$result" | jq -r .)
+	echo "$$script" | sh
+	ssh root@$$target nixos-rebuild switch -I /var/src
+
 .PHONY: eval
 eval:
 	@
