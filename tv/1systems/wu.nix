@@ -10,6 +10,7 @@ with lib;
     ../2configs/exim-retiolum.nix
     ../2configs/git.nix
     ../2configs/mail-client.nix
+    ../2configs/nginx-public_html.nix
     ../2configs/pulse.nix
     ../2configs/xserver
     {
@@ -131,16 +132,6 @@ with lib;
           "http"
           "tinc"
           "smtp"
-        ];
-      };
-    }
-    {
-      krebs.nginx = {
-        enable = true;
-        servers.default.locations = [
-          (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
-            alias /home/$1/public_html$2;
-          '')
         ];
       };
     }
