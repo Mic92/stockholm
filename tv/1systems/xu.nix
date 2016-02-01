@@ -127,7 +127,6 @@ with lib;
       tv.iptables = {
         enable = true;
         input-internet-accept-new-tcp = [
-          "http"
           "smtp"
         ];
       };
