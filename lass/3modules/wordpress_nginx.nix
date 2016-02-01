@@ -53,6 +53,23 @@ let
             "1" = "test.testsite.de";
           };
         };
+        ssl = mkOption {
+          type = with types; submodule ({
+            options = {
+              enable = mkEnableOption "ssl";
+              certificate = mkOption {
+                type = str;
+              };
+              certificate_key = mkOption {
+                type = str;
+              };
+              ciphers = mkOption {
+                type = str;
+                default = "AES128+EECDH:AES128+EDH";
+              };
+            };
+          });
+        };
       };
     }));
     default = {};
@@ -68,7 +85,7 @@ let
     #  }
     #'';
 
-    krebs.nginx.servers = flip mapAttrs cfg ( name: { domain, folder, multiSite, ... }: {
+    krebs.nginx.servers = flip mapAttrs cfg ( name: { domain, folder, multiSite, ssl, ... }: {
       server-names = [
         "${domain}"
         "www.${domain}"
@@ -114,7 +131,17 @@ let
         error_log /tmp/nginx_err.log;
         error_page 404 /404.html;
         error_page 500 502 503 504 /50x.html;
+        ${if ssl.enable then ''
+          ssl_certificate ${ssl.certificate};
+          ssl_certificate_key ${ssl.certificate_key};
+        '' else ""}
+
       '';
+      listen = (if ssl.enable then
+          [ "80" "443 ssl" ]
+        else
+          "80"
+      );
     });
     services.phpfpm.poolConfigs = flip mapAttrs cfg (name: { domain, folder, ... }: ''
       listen = ${folder}/phpfpm.pool
