@@ -18,7 +18,7 @@ with lib;
         # stockholm
         gnumake
         hashPassword
-        lentil
+        haskellPackages.lentil
         parallel
         (pkgs.writeScriptBin "im" ''
           #! ${pkgs.bash}/bin/bash

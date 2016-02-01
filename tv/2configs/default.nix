@@ -8,20 +8,23 @@ with lib;
   krebs.build = {
     user = config.krebs.users.tv;
     target = mkDefault "root@${config.krebs.build.host.name}";
-    source = {
-      git.nixpkgs = {
-        url = mkDefault https://github.com/NixOS/nixpkgs;
-        rev = mkDefault "b7ff0301d6f26bd8419e888fd0e129f3dc8bd328";
-        target-path = mkDefault "/var/src/nixpkgs";
+    source-version = 2;
+    source = mapAttrs (_: mkDefault) ({
+      nixos-config = "symlink:stockholm-private/1systems/${config.krebs.build.host.name}.nix";
+      nixpkgs = symlink:stockholm-nixpkgs;
+      secrets = "/home/tv/secrets/${config.krebs.build.host.name}";
+      secrets-common = "/home/tv/secrets/common";
+      stockholm-krebs = "/home/tv/stockholm/krebs";
+      stockholm-nixpkgs = "/home/tv/stockholm/nixpkgs";
+      stockholm-private = "/home/tv/stockholm/tv";
+      upstream-nixpkgs = {
+        url = https://github.com/NixOS/nixpkgs;
+        rev = "77f8f35d57618c1ba456d968524f2fb2c3448295";
+        dev = "/home/tv/nixpkgs";
       };
-      dir.secrets = {
-        path = mkDefault "/home/tv/secrets/${config.krebs.build.host.name}";
-      };
-      dir.stockholm = {
-        path = mkDefault "/home/tv/stockholm";
-        target-path = mkDefault "/var/src/stockholm";
-      };
-    };
+    } // optionalAttrs config.krebs.build.host.secure {
+      secrets-master = "/home/tv/secrets/master";
+    });
   };
 
   networking.hostName = config.krebs.build.host.name;
@@ -98,12 +101,7 @@ with lib;
       };
 
       environment.variables = {
-        NIX_PATH =
-          with config.krebs.build.source; with dir; with git;
-          mkForce (concatStringsSep ":" [
-            "nixpkgs=${nixpkgs.target-path}"
-            "secrets=${stockholm.target-path}/null"
-          ]);
+        NIX_PATH = mkForce "/var/src";
       };
 
       programs.bash = {
@@ -182,7 +180,8 @@ with lib;
     {
       systemd.tmpfiles.rules = let
         forUsers = flip map users;
-        isUser = { group, ... }: hasSuffix "users" group;
+        isUser = { name, group, ... }:
+          name == "root" || hasSuffix "users" group;
         users = filter isUser (mapAttrsToList (_: id) config.users.users);
       in forUsers (u: "d /run/xdg/${u.name} 0700 ${u.name} ${u.group} -");
       environment.variables.XDG_RUNTIME_DIR = "/run/xdg/$LOGNAME";

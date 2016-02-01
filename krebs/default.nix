@@ -171,9 +171,12 @@ let out = {
     ${b}
     '';
 
-  get-config = system:
-    stockholm.users.${current-user-name}.${system}.config
+  get-config = system: let
+    config = stockholm.users.${current-user-name}.${system}.config
       or (abort "unknown system: ${system}, user: ${current-user-name}");
+  in
+  assert config.krebs.build.source-version == 1;
+  config;
 
   nix-install =
     { system ? current-host-name
@@ -240,7 +243,7 @@ let out = {
               --exclude tmp \
               --rsync-path='mkdir -p ${target-path} && rsync' \
               --delete-excluded \
-              -vrLptgoD \
+              -vrlptD \
               ${config.path}/ \
               root@${target}:${target-path}
           '';

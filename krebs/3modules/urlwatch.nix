@@ -54,6 +54,10 @@ let
       example = [
         https://nixos.org/channels/nixos-unstable/git-revision
       ];
+      apply = map (x: getAttr (typeOf x) {
+        set = x;
+        string.url = x;
+      });
     };
     verbose = mkOption {
       type = types.bool;
@@ -64,7 +68,40 @@ let
     };
   };
 
-  urlsFile = toFile "urls" (concatStringsSep "\n" cfg.urls);
+  urlsFile = toFile "urls" (concatMapStringsSep "\n---\n" toJSON cfg.urls);
+
+  configFile = toFile "urlwatch.yaml" (toJSON {
+    display = {
+      error = true;
+      new = true;
+      unchanged = false;
+    };
+    report = {
+      email = {
+        enabled = false;
+        from = "";
+        html = false;
+        smtp = {
+          host = "localhost";
+          keyring = true;
+          port = 25;
+          starttls = true;
+        };
+        subject = "{count} changes: {jobs}";
+        to = "";
+      };
+      html.diff = "unified";
+      stdout = {
+        color = true;
+        enabled = true;
+      };
+      text = {
+        details = true;
+        footer = true;
+        line_length = 75;
+      };
+    };
+  });
 
   imp = {
     systemd.timers.urlwatch = {
@@ -109,10 +146,15 @@ let
           from=${escapeShellArg cfg.from}
           mailto=${escapeShellArg cfg.mailto}
           urlsFile=${escapeShellArg urlsFile}
+          configFile=${escapeShellArg configFile}
 
           cd /tmp
 
-          urlwatch -e ${optionalString cfg.verbose "-v"} --urls="$urlsFile" > changes || :
+          urlwatch \
+              ${optionalString cfg.verbose "-v"} \
+              --urls="$urlsFile" \
+              --config="$configFile" \
+            > changes || :
 
           if test -s changes; then
             date=$(date -R)
