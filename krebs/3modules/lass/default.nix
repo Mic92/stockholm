@@ -228,22 +228,6 @@ with lib;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINAMPlIG+6u75GJ3kvsPF6OoIZsU+u8ZQ+rdviv5fNMD";
     };
-    schnabel-ap = {
-      nets = {
-        gg23 = {
-          addrs4 = ["10.23.1.20"];
-          aliases = ["schnabel-ap.gg23"];
-        };
-      };
-    };
-    Reichsfunk-ap = {
-      nets = {
-        gg23 = {
-          addrs4 = ["10.23.1.10"];
-          aliases = ["Reichsfunk-ap.gg23"];
-        };
-      };
-    };
 
   };
   users = addNames {
