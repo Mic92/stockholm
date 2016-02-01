@@ -5,12 +5,9 @@ with lib;
 {
   krebs.build.host = config.krebs.hosts.xu;
 
-  krebs.build.source.git.nixpkgs.rev =
-    "7ae05edcdd14f6ace83ead9bf0d114e97c89a83a";
-
   imports = [
     ../2configs/hw/x220.nix
-    #../2configs/consul-client.nix
+    ../2configs/exim-retiolum.nix
     ../2configs/git.nix
     ../2configs/mail-client.nix
     ../2configs/pulse.nix
@@ -134,9 +131,6 @@ with lib;
           "smtp"
         ];
       };
-    }
-    {
-      krebs.exim-retiolum.enable = true;
     }
     {
       krebs.nginx = {

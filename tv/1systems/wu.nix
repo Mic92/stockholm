@@ -7,7 +7,7 @@ with lib;
 
   imports = [
     ../2configs/hw/w110er.nix
-    #../2configs/consul-client.nix
+    ../2configs/exim-retiolum.nix
     ../2configs/git.nix
     ../2configs/mail-client.nix
     ../2configs/pulse.nix
@@ -133,9 +133,6 @@ with lib;
           "smtp"
         ];
       };
-    }
-    {
-      krebs.exim-retiolum.enable = true;
     }
     {
       krebs.nginx = {

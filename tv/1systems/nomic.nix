@@ -5,11 +5,9 @@ with lib;
 {
   krebs.build.host = config.krebs.hosts.nomic;
 
-  krebs.build.target = "root@nomic.gg23";
-
   imports = [
     ../2configs/hw/AO753.nix
-    #../2configs/consul-server.nix
+    ../2configs/exim-retiolum.nix
     ../2configs/git.nix
     ../2configs/pulse.nix
     ../2configs/xserver
@@ -23,9 +21,6 @@ with lib;
           "smtp"
         ];
       };
-    }
-    {
-      krebs.exim-retiolum.enable = true;
     }
     {
       krebs.nginx = {
