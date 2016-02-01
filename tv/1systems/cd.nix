@@ -41,7 +41,6 @@ with lib;
       tv.iptables = {
         enable = true;
         input-internet-accept-new-tcp = [
-          "smtp"
           "xmpp-client"
           "xmpp-server"
         ];
