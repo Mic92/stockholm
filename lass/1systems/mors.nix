@@ -17,7 +17,6 @@
     #../2configs/ircd.nix
     ../2configs/chromium-patched.nix
     ../2configs/git.nix
-    ../2configs/retiolum.nix
     #../2configs/wordpress.nix
     ../2configs/bitlbee.nix
     ../2configs/firefoxPatched.nix
