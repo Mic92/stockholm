@@ -12,6 +12,7 @@ with lib;
     source = mapAttrs (_: mkDefault) ({
       nixos-config = "symlink:stockholm-private/1systems/${config.krebs.build.host.name}.nix";
       nixpkgs = symlink:stockholm-nixpkgs;
+      null = "/home/tv/stockholm/null";
       secrets = "/home/tv/secrets/${config.krebs.build.host.name}";
       secrets-common = "/home/tv/secrets/common";
       stockholm-krebs = "/home/tv/stockholm/krebs";
@@ -101,7 +102,7 @@ with lib;
       };
 
       environment.variables = {
-        NIX_PATH = mkForce "/var/src";
+        NIX_PATH = mkForce "secrets=/var/src/null:/var/src";
       };
 
       programs.bash = {
