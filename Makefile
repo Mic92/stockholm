@@ -73,7 +73,7 @@ populate:;@
 
 # usage: make rebuild system=foo [target=bar] [operation=switch]
 .PHONY: rebuild
-rebuild: populate ;@
+rebuild: populate ;@set -x
 	ssh root@"$$target" nixos-rebuild "$${operation-switch}" -I /var/src
 
 else

@@ -15,26 +15,34 @@ let
 
   populate = ''
     #! /bin/sh
-    set -efu
+    set -eu
+
+    verbose() {
+      printf '+' >&2
+      printf ' %q' "$@" >&2
+      printf '\n'
+      "$@"
+    }
 
     echo ${shell.escape git-script} \
       | ssh ${shell.escape "${target-user}@${target-host}"} -T
 
-    tmpdir=$(mktemp -dt stockholm.XXXXXXXX)
+    unset tmpdir
     trap '
-      set +f
       rm "$tmpdir"/*
       rmdir "$tmpdir"
       trap - EXIT INT QUIT
     '        EXIT INT QUIT
+    tmpdir=$(mktemp -dt stockholm.XXXXXXXX)
     chmod 0755 "$tmpdir"
+
     ${concatStringsSep "\n"
       (mapAttrsToList
         (name: spec: let dst = removePrefix "symlink:" (get-url spec); in
-          "ln -s ${shell.escape dst} $tmpdir/${shell.escape name}")
+          "verbose ln -s ${shell.escape dst} $tmpdir/${shell.escape name}")
         symlink-specs)}
 
-    proot \
+    verbose proot \
         -b $tmpdir:${shell.escape target-path} \
         ${concatStringsSep " \\\n    "
           (mapAttrsToList
@@ -77,6 +85,15 @@ let
     filterAttrs (_: spec: has-schema "symlink" (get-url spec)) source;
 
   git-script = ''
+    #! /bin/sh
+    set -efu
+
+    verbose() {
+      printf '+' >&2
+      printf ' %q' "$@" >&2
+      printf '\n'
+    }
+
     fetch_git() {(
       dst_dir=$1
       src_url=$2
@@ -109,6 +126,7 @@ let
     ${concatStringsSep "\n"
       (mapAttrsToList
         (name: spec: toString (map shell.escape [
+          "verbose"
           "fetch_git"
           "${target-path}/${name}"
           spec.url
