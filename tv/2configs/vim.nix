@@ -7,11 +7,6 @@ let
       vim
     ];
 
-    # Nano really is just a stupid name for Vim.
-    nixpkgs.config.packageOverrides = pkgs: {
-      nano = pkgs.vim;
-    };
-
     environment.etc.vimrc.source = vimrc;
 
     environment.variables.EDITOR = mkForce "vim";
