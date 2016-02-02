@@ -15,9 +15,7 @@ let
     set -eu
 
     verbose() {
-      printf '+' >&2
-      printf ' %q' "$@" >&2
-      printf '\n'
+      printf '+%s\n' "$(printf ' %q' "$@")" >&2
       "$@"
     }
 
@@ -86,9 +84,8 @@ let
     set -efu
 
     verbose() {
-      printf '+' >&2
-      printf ' %q' "$@" >&2
-      printf '\n'
+      printf '+%s\n' "$(printf ' %q' "$@")" >&2
+      "$@"
     }
 
     fetch_git() {(
