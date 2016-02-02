@@ -9,7 +9,11 @@ with import ~/stockholm/krebs/4lib {
 };
 with builtins;
 let
-  out = ''
+  out = {
+    inherit populate;
+  };
+
+  populate = ''
     #! /bin/sh
     set -efu
 
