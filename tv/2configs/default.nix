@@ -71,6 +71,9 @@ with lib;
       nix.useChroot = true;
     }
     {
+      nixpkgs.config.allowUnfree = false;
+    }
+    {
       environment.profileRelativeEnvVars.PATH = mkForce [ "/bin" ];
 
       environment.systemPackages = with pkgs; [
