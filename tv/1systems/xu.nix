@@ -155,7 +155,6 @@ with lib;
 
   nixpkgs.config.chromium.enablePepperFlash = true;
 
-  nixpkgs.config.allowUnfree = true;
   #hardware.bumblebee.enable = true;
   #hardware.bumblebee.group = "video";
   hardware.enableAllFirmware = true;
