@@ -1,13 +1,10 @@
-{ source
+{ lib
+, source
 , target-user ? "root"
 , target-host
 , target-path ? "/var/src"
 }:
-with import <nixpkgs/lib>;
-with import ~/stockholm/krebs/4lib {
-  lib = import <nixpkgs/lib>;
-};
-with builtins;
+with lib;
 let
   out = {
     inherit populate;

@@ -55,14 +55,18 @@ endif
 
 # usage: make populate system=foo [target=bar]
 .PHONY: populate
+populate: export lib = \
+	let nlib = import <nixpkgs/lib>; in \
+	nlib // import krebs/4lib { lib = nlib; } // builtins
 populate: export source = \
-	with (import ~/stockholm {}).users.$(LOGNAME).$(system).config.krebs.build; \
+	with (import ./. {}).users.$(LOGNAME).$(system).config.krebs.build; \
 	assert source-version == 2; \
 	source
 populate:;@
 	result=$$(nix-instantiate \
 			--eval \
 			--json \
+			--arg lib "$$lib" \
 			--arg source "$$source" \
 			--argstr target-host "$$target" \
 			--argstr target-path /var/src \
