@@ -27,30 +27,6 @@ deploy infest:;@
 	script=$$(make -s eval)
 	echo "$$script" | sh
 
-.PHONY: deploy2
-ifdef target
-deploy2: export target-host = $(target)
-else
-deploy2: export target-host = $(system)
-endif
-deploy2: export source = \
-	with (import ~/stockholm {}).users.$(LOGNAME).$(system).config.krebs.build; \
-	assert source-version == 2; \
-	source
-deploy2:;@
-	target=$${target-$$system}
-	result=$$(nix-instantiate \
-			--eval \
-			--json \
-			--arg source "$$source" \
-			--argstr target-host "$$target" \
-			--argstr target-path /var/src \
-			-A populate \
-			krebs/v2)
-	script=$$(echo "$$result" | jq -r .)
-	echo "$$script" | sh
-	ssh root@$$target nixos-rebuild switch -I /var/src
-
 .PHONY: eval
 eval:
 	@
@@ -72,6 +48,33 @@ endif
 		$${system+--argstr system "$$system"} \
 		$${target+--argstr target "$$target"})
 	echo "$$result" | filter
+
+ifndef target
+export target = $(system)
+endif
+
+# usage: make populate system=foo [target=bar]
+.PHONY: populate
+populate: export source = \
+	with (import ~/stockholm {}).users.$(LOGNAME).$(system).config.krebs.build; \
+	assert source-version == 2; \
+	source
+populate:;@
+	result=$$(nix-instantiate \
+			--eval \
+			--json \
+			--arg source "$$source" \
+			--argstr target-host "$$target" \
+			--argstr target-path /var/src \
+			-A populate \
+			krebs/v2)
+	script=$$(echo "$$result" | jq -r .)
+	echo "$$script" | sh
+
+# usage: make rebuild system=foo [target=bar] [operation=switch]
+.PHONY: rebuild
+rebuild: populate ;@
+	ssh root@"$$target" nixos-rebuild "$${operation-switch}" -I /var/src
 
 else
 $(error unbound variable: system[s])
