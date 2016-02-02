@@ -105,6 +105,8 @@ let
 
       syn match String /"\([^\\"]\|\\.\)*"/
       syn match Comment /\(^\|\s\)#.*/
+
+      let b:current_syntax = "nix"
     ''}
 
     au BufRead,BufNewFile /dev/shm/* set nobackup nowritebackup noswapfile
