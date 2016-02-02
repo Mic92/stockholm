@@ -1,1 +1,1 @@
-import <upstream-nixpkgs>
+../upstream-nixpkgs/default.nix
