@@ -39,6 +39,7 @@ let
     stockholm = {
       desc = "take all the computers hostage, they'll love you!";
     };
+    with-tmpdir = {};
   } // mapAttrValues (setAttr "section" "2. Haskell libraries") {
     blessings = {};
     mime = {};
