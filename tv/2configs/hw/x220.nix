@@ -14,7 +14,6 @@
   networking.wireless.enable = true;
 
   #hardware.enableAllFirmware = true;
-  #nixpkgs.config.allowUnfree = true;
   #zramSwap.enable = true;
   #zramSwap.numDevices = 2;
 
