@@ -49,36 +49,39 @@ endif
 		$${target+--argstr target "$$target"})
 	echo "$$result" | filter
 
-ifndef target
-export target = $(system)
-endif
+export target_host ?= $(system)
+export target_user ?= root
+export target_path ?= /var/src
 
-# usage: make populate system=foo [target=bar]
+# usage: make populate system=foo [target_host=bar]
 .PHONY: populate
 populate: export lib = \
 	let nlib = import <nixpkgs/lib>; in \
 	nlib // import krebs/4lib { lib = nlib; } // builtins
 populate: export source = \
-	with (import ./. {}).users.$(LOGNAME).$(system).config.krebs.build; \
-	assert source-version == 2; \
-	source
+	with builtins; \
+	with (import ./. {}).users.$${getEnv "LOGNAME"}.$${getEnv "system"}; \
+	assert config.krebs.build.source-version == 2; \
+	config.krebs.build.source
 populate:;@
 	result=$$(nix-instantiate \
 			--eval \
 			--json \
 			--arg lib "$$lib" \
 			--arg source "$$source" \
-			--argstr target-host "$$target" \
-			--argstr target-path /var/src \
+			--argstr target-user "$$target_user" \
+			--argstr target-host "$$target_host" \
+			--argstr target-path "$$target_path" \
 			-A populate \
 			krebs/v2)
 	script=$$(echo "$$result" | jq -r .)
 	echo "$$script" | sh
 
-# usage: make rebuild system=foo [target=bar] [operation=switch]
+# usage: make rebuild system=foo [target_host=bar] [operation=switch]
 .PHONY: rebuild
 rebuild: populate ;@set -x
-	ssh root@"$$target" nixos-rebuild "$${operation-switch}" -I /var/src
+	ssh "$$target_user@$$target_host" \
+		nixos-rebuild "$${operation-switch}" -I "$$target_path"
 
 else
 $(error unbound variable: system[s])
