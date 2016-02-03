@@ -43,7 +43,7 @@ with lib;
         # tv
         bc
         bind # dig
-        cac
+        cac-api
         dic
         file
         get

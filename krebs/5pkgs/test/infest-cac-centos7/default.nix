@@ -1,4 +1,4 @@
-{ stdenv, coreutils,makeWrapper, cac, cacpanel, gnumake, gnused, jq, openssh, ... }:
+{ stdenv, coreutils,makeWrapper, cac-api, cacpanel, gnumake, gnused, jq, openssh, ... }:
 
 stdenv.mkDerivation rec {
   name = "${shortname}-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   path = stdenv.lib.makeSearchPath "bin" [
     coreutils
-    cac
+    cac-api
     cacpanel
     gnumake
     gnused

@@ -22,8 +22,8 @@ let
 
   public-repos = mapAttrs make-public-repo ({
   } // mapAttrValues (setAttr "section" "1. Miscellaneous") {
-    cac = {
-      desc = "CloudAtCost command line interface";
+    cac-api = {
+      desc = "CloudAtCost API command line interface";
     };
     get = {};
     hack = {};

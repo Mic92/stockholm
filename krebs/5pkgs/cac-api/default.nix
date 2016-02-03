@@ -1,12 +1,12 @@
 { stdenv, fetchgit, bc, coreutils, curl, gnused, inotifyTools, jq, ncurses, sshpass, ... }:
 
 stdenv.mkDerivation {
-  name = "cac-1.0.3";
+  name = "cac-api-1.1.0";
 
   src = fetchgit {
-    url = http://cgit.cd.retiolum/cac;
-    rev = "22acc1b990ac7d97c16344fbcbc2621e24cdf915";
-    sha256 = "135b740617c983b3f46a1983d4744be17340d5146a0a0de0dff4bb7a53688f2f";
+    url = http://cgit.cd.krebsco.de/cac-api;
+    rev = "0809fae379239687ed1170e04311dc2880ef0aba";
+    sha256 = "357ced27c9ed88028967c934178a1d230bf38617a7494cd4632fabdd2a04fcdd";
   };
 
   phases = [
@@ -29,11 +29,9 @@ stdenv.mkDerivation {
     in
     ''
       mkdir -p $out/bin
-
-      sed < ./cac > $out/bin/cac '
-        s;^_cac_main .*;PATH=${path}''${PATH+:$PATH} &;
-      '
-
-      chmod +x $out/bin/cac
+      cp cac-api $out/bin/cac-api
+      sed -i '
+        s;^_cac_cli_main .*;PATH=${path}''${PATH+:$PATH} &;
+      ' $out/bin/cac-api
     '';
 }
