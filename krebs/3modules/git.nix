@@ -27,7 +27,7 @@ let
       description = ''
           Enable cgit.
           Cgit is an attempt to create a fast web interface for the git version
-          control system, using a built in cache to decrease pressure on the 
+          control system, using a built in cache to decrease pressure on the
           git server.
           cgit in this module is being served via fastcgi nginx.This module
           deploys a http://cgit.<hostname> nginx configuration and enables nginx
@@ -127,7 +127,7 @@ let
 
   git-imp = {
     system.activationScripts.git-init = "${init-script}";
-    
+
     # TODO maybe put all scripts here and then use PATH?
     environment.etc."${etc-base}".source =
       scriptFarm "git-ssh-authorizers" {
@@ -136,7 +136,7 @@ let
           (map getName (ensureList repo))
           (map getName perm.allow-commands)
         ]) cfg.rules);
-    
+
         authorize-push = makeAuthorizeScript (map ({ repo, user, perm }: [
           (map getName (ensureList user))
           (map getName (ensureList repo))
@@ -144,7 +144,7 @@ let
           (map getName perm.allow-receive-modes)
         ]) (filter (x: hasAttr "allow-receive-ref" x.perm) cfg.rules));
       };
-    
+
     users.extraUsers = singleton rec {
       description = "Git repository hosting user";
       name = "git";
