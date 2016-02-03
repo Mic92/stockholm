@@ -9,7 +9,7 @@ let
       enable = true;
       root-title = "public repositories at ${config.krebs.build.host.name}";
       root-desc = "keep calm and engage";
-      repos = mapAttrs (_: s: removeAttrs s ["collaborators"]) repos;
+      repos = repos;
       rules = rules;
     };
   };
@@ -99,7 +99,7 @@ let
         repo = [ repo ];
         perm = fetch;
       } ++
-      optional (length (repo.collaborators or []) > 0) {
+      optional (repo.collaborators or [] != []) {
         user = repo.collaborators;
         repo = [ repo ];
         perm = fetch;
