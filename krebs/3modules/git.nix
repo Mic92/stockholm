@@ -92,7 +92,7 @@ let
         }
       '';
       description = ''
-        Rules.
+        access and permission rules for git repositories.
       '';
     };
   };
