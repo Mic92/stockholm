@@ -42,7 +42,6 @@ endif
 		-A "$$get" \
 		-I stockholm="$$PWD" \
 		'<stockholm>' \
-		--argstr current-date "$$(date -Is)" \
 		--argstr current-host-name "$$HOSTNAME" \
 		--argstr current-user-name "$$LOGNAME" \
 		$${system+--argstr system "$$system"} \

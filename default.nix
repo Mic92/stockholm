@@ -1,5 +1,4 @@
-{ current-date ? abort "current-date not defined"
-, current-host-name ? abort "current-host-name not defined"
+{ current-host-name ? abort "current-host-name not defined"
 , current-user-name ? builtins.getEnv "LOGNAME"
 , StrictHostKeyChecking ? "yes"
 }@args:

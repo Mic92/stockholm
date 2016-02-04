@@ -1,5 +1,4 @@
-{ current-date
-, current-host-name
+{ current-host-name
 , current-user-name
 , lib
 , stockholm
@@ -21,7 +20,6 @@ let out = {
       config = get-config system;
     in ''
       #! /bin/sh
-      # ${current-date} ${current-user-name}@${current-host-name}
       # krebs.deploy
       set -efu
       (${populate args})
@@ -39,7 +37,6 @@ let out = {
       config = get-config system;
     in ''
       #! /bin/sh
-      # ${current-date} ${current-user-name}@${current-host-name}
       # krebs.infest
       set -efu
 
@@ -64,7 +61,6 @@ let out = {
       config = get-config system;
     in ''
       #! /bin/sh
-      # ${current-date} ${current-user-name}@${current-host-name}
       # krebs.init
       set -efu
 
@@ -100,7 +96,6 @@ let out = {
     }@args: let
     in ''
       #! /bin/sh
-      # ${current-date} ${current-user-name}@${current-host-name}
       # krebs.nixos-install
       (${populate (args // { root = "/mnt"; })})
 
@@ -196,7 +191,6 @@ let out = {
       nix-env \
         --show-trace \
         -f '<stockholm>' \
-        --argstr current-date ${lib.shell.escape current-date} \
         --argstr current-host-name ${lib.shell.escape current-host-name} \
         --argstr current-user-name ${lib.shell.escape current-user-name} \
         --profile ${lib.shell.escape config.krebs.build.profile} \
@@ -216,7 +210,6 @@ let out = {
     }@args:
     let out = ''
         #! /bin/sh
-        # ${current-date} ${current-user-name}@${current-host-name}
         set -efu
         ${lib.concatStringsSep "\n"
           (lib.concatMap

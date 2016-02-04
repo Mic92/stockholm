@@ -86,7 +86,6 @@
                             -I stockholm=. \
                             --show-trace \
                             -I secrets=. '<stockholm>' \
-                            --argstr current-date lol \
                             --argstr current-user-name shared \
                             --argstr current-host-name lol \
                             --strict --json"])
@@ -98,7 +97,6 @@
                             -I stockholm=. \
                             -I secrets=. '<stockholm>' \
                             --show-trace \
-                            --argstr current-date lol \
                             --argstr current-user-name shared \
                             --argstr current-host-name lol \
                             --strict --json"])
