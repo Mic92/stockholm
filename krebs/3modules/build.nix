@@ -74,7 +74,7 @@ let
 
           unset tmpdir
           trap '
-            rm "$tmpdir"/*
+            rm -f "$tmpdir"/*
             rmdir "$tmpdir"
             trap - EXIT INT QUIT
           '        EXIT INT QUIT
