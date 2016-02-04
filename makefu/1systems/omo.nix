@@ -27,10 +27,56 @@ in {
       ../2configs/exim-retiolum.nix
       ../2configs/smart-monitor.nix
       ../2configs/mail-client.nix
+      ../2configs/share-user-sftp.nix
+      ../2configs/nginx/omo-share.nix
       ../3modules
     ];
-  krebs.build.host = config.krebs.hosts.omo;
+  networking.firewall.trustedInterfaces = [ "enp3s0" ];
+  # udp:137 udp:138 tcp:445 tcp:139 - samba, allowed in local net
+  # tcp:80          - nginx for sharing files
+  # tcp:655 udp:655 - tinc
+  # tcp:8080        - sabnzbd
+  networking.firewall.allowedUDPPorts = [ 655 ];
+  networking.firewall.allowedTCPPorts = [ 80 655 8080 ];
+
+  # services.openssh.allowSFTP = false;
+  krebs.build.source.git.nixpkgs.rev = "d0e3cca04edd5d1b3d61f188b4a5f61f35cdf1ce";
+
+  # samba share /media/crypt1/share
+  users.users.smbguest = {
+    name = "smbguest";
+    uid = config.ids.uids.smbguest;
+    description = "smb guest user";
+    home = "/var/empty";
+  };
+  services.samba = {
+    enable = true;
+    shares = {
+      winshare = {
+        path = "/media/crypt1/share";
+        "read only" = "no";
+        browseable = "yes";
+        "guest ok" = "yes";
+      };
+    };
+    extraConfig = ''
+      guest account = smbguest
+      map to guest = bad user
+      # disable printing
+      load printers = no
+      printing = bsd
+      printcap name = /dev/null
+      disable spoolss = yes
+    '';
+  };
+
+  # copy config from <secrets/sabnzbd.ini> to /var/lib/sabnzbd/
+  services.sabnzbd.enable = true;
+  systemd.services.sabnzbd.environment.SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  # HDD Array stuff
   services.smartd.devices = builtins.map (x: { device = x; }) allDisks;
+
   makefu.snapraid = let
     toMapper = id: "/media/crypt${builtins.toString id}";
   in {
@@ -38,7 +84,6 @@ in {
     disks = map toMapper [ 0 1 ];
     parity = toMapper 2;
   };
-  # AMD E350
   fileSystems = let
     cryptMount = name:
       { "/media/${name}" = { device = "/dev/mapper/${name}"; fsType = "xfs"; };};
@@ -56,6 +101,8 @@ in {
       ${pkgs.hdparm}/sbin/hdparm -B 127 ${disk}
       ${pkgs.hdparm}/sbin/hdparm -y ${disk}
     '') allDisks);
+
+  # crypto unlocking
   boot = {
     initrd.luks = {
       devices = let
@@ -86,11 +133,11 @@ in {
     extraModulePackages = [ ];
   };
 
-  networking.firewall.allowedUDPPorts = [ 655 ];
   hardware.enableAllFirmware = true;
   hardware.cpu.amd.updateMicrocode = true;
 
-  #zramSwap.enable = true;
+  zramSwap.enable = true;
   zramSwap.numDevices = 2;
 
+  krebs.build.host = config.krebs.hosts.omo;
 }

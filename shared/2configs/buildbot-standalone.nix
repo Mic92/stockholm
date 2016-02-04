@@ -1,11 +1,6 @@
 { lib, config, pkgs, ... }:
-let
-    pkgs-unst = import (fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz) {};
-in {
-  nixpkgs.config.packageOverrides = pkgs: {
-    buildbot = pkgs-unst.buildbot;
-    buildbot-slave = pkgs-unst.buildbot-slave;
-  };
+
+{
   networking.firewall.allowedTCPPorts = [ 8010 9989 ];
   krebs.buildbot.master = {
     secrets = [ "retiolum-ci.rsa_key.priv" "cac.json" ];
@@ -89,6 +84,7 @@ in {
                         nix-instantiate --eval -A \
                             users.shared.test-all-krebs-modules.system \
                             -I stockholm=. \
+                            --show-trace \
                             -I secrets=. '<stockholm>' \
                             --argstr current-date lol \
                             --argstr current-user-name shared \
@@ -101,6 +97,7 @@ in {
                             users.shared.test-minimal-deploy.system \
                             -I stockholm=. \
                             -I secrets=. '<stockholm>' \
+                            --show-trace \
                             --argstr current-date lol \
                             --argstr current-user-name shared \
                             --argstr current-host-name lol \
