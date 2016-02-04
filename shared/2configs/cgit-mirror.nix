@@ -2,12 +2,11 @@
 
 with lib;
 let
-  rules = with git;[{
-    # user = git-sync;
-    user = git-sync;
+  rules = with git; singleton {
+    user = [ git-sync ];
     repo = [ stockholm-mirror ];
     perm = push ''refs/*'' [ non-fast-forward create delete merge ];
-  }];
+  };
 
   stockholm-mirror = {
     public = true;
