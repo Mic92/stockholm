@@ -14,12 +14,12 @@ let stockholm = {
   krebs = import ./krebs (args // { inherit lib stockholm; });
 
   lib = let
-    nlib = import <nixpkgs/lib>;
+    nlib = import (slib.npath "lib");
     klib = import (slib.kpath "4lib") { lib = nlib; };
     slib = rec {
-      nspath = ns: p: ./. + "/${ns}/${p}";
-      kpath = nspath "krebs";
-      upath = nspath current-user-name;
+      npath = p: <nixpkgs> + "/${p}";
+      kpath = p: ./. + "/krebs/${p}";
+      upath = p: ./. + "/${current-user-name}/${p}";
     };
     ulib = let p = slib.upath "4lib"; in
       nlib.optionalAttrs (klib.dir.has-default-nix p)
@@ -44,7 +44,7 @@ let stockholm = {
     in kpkgs // upkgs;
   };
 
-  eval = config: import <nixpkgs/nixos/lib/eval-config.nix> {
+  eval = config: import (lib.npath "nixos/lib/eval-config.nix") {
     specialArgs = {
       inherit lib;
     };
