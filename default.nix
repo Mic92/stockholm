@@ -27,9 +27,10 @@ let stockholm = {
     nlib = import (slib.npath "lib");
     klib = import (slib.kpath "4lib") { lib = nlib; };
     slib = rec {
+      nspath = ns: p: ./. + "/${ns}/${p}";
       npath = p: nixpkgs-path + "/${p}";
-      kpath = p: ./. + "/krebs/${p}";
-      upath = p: ./. + "/${current-user-name}/${p}";
+      kpath = nspath "krebs";
+      upath = nspath current-user-name;
     };
     ulib = let p = slib.upath "4lib"; in
       nlib.optionalAttrs (klib.dir.has-default-nix p)
