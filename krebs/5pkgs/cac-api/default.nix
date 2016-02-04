@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bc, coreutils, curl, gnused, inotifyTools, jq, ncurses, sshpass, ... }:
+{ stdenv, fetchgit, bc, coreutils, curl, dash, gnused, inotifyTools, jq, ncurses, openssh, sshpass, ... }:
 
 stdenv.mkDerivation {
   name = "cac-api-1.1.0";
@@ -14,24 +14,29 @@ stdenv.mkDerivation {
     "installPhase"
   ];
 
-  installPhase =
-    let
-      path = stdenv.lib.makeSearchPath "bin" [
-        bc
-        coreutils
-        curl
-        gnused
-        inotifyTools
-        jq
-        ncurses
-        sshpass
-      ];
-    in
-    ''
-      mkdir -p $out/bin
-      cp cac-api $out/bin/cac-api
-      sed -i '
-        s;^_cac_cli_main .*;PATH=${path}''${PATH+:$PATH} &;
-      ' $out/bin/cac-api
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    { cat <<\EOF
+    #! ${dash}/bin/dash
+    export PATH=${stdenv.lib.makeSearchPath "bin" [
+      bc
+      coreutils
+      curl
+      gnused
+      inotifyTools
+      jq
+      ncurses
+      openssh
+      sshpass
+    ]}
+    EOF
+      # [1]: Disable fetching tasks; listtasks is currently broken:
+      # Unknown column 'iod.apitask.cid' in 'field list'
+      sed '
+        /^\s*tasks \\$/d; # [1]
+        s|\<_cac_exec curl|<${./cac.pem} & --cacert /dev/stdin|
+      ' cac-api
+    } > $out/bin/cac-api
+    chmod +x $out/bin/cac-api
+  '';
 }
