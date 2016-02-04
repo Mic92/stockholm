@@ -14,7 +14,10 @@ evaluate = \
 		--show-trace \
 		$(1)
 
-execute = $(call evaluate,-A config.krebs.build.$(1) --json) | jq -r . | sh
+execute = \
+	result=$$($(call evaluate,-A config.krebs.build.$(1) --json)) && \
+	script=$$(echo "$$result" | jq -r .) && \
+	echo "$$script" | sh
 
 # usage: make deploy system=foo [target_host=bar]
 deploy:
