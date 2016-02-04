@@ -17,8 +17,7 @@ let stockholm = {
     nlib = import <nixpkgs/lib>;
     klib = import (slib.kpath "4lib") { lib = nlib; };
     slib = rec {
-      stockholm-path = ./.;
-      nspath = ns: p: stockholm-path + "/${ns}/${p}";
+      nspath = ns: p: ./. + "/${ns}/${p}";
       kpath = nspath "krebs";
       upath = nspath current-user-name;
     };
