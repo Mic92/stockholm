@@ -1,3 +1,5 @@
+assert false;
+
 { current-host-name
 , current-user-name
 , lib
@@ -6,29 +8,10 @@
 }:
 
 let out = {
-    inherit deploy;
     inherit infest;
     inherit init;
     inherit nixos-install;
-    inherit populate;
   };
-
-  deploy =
-    { system ? current-host-name
-    , target ? system
-    }@args: let
-      config = get-config system;
-    in ''
-      #! /bin/sh
-      # krebs.deploy
-      set -efu
-      (${populate args})
-      ${rootssh target ''
-        ${nix-install args}
-        ${config.krebs.build.profile}/bin/switch-to-configuration switch
-      ''}
-      echo OK
-    '';
 
   infest =
     { system ? current-host-name
@@ -44,9 +27,6 @@ let out = {
         ${builtins.readFile ./4lib/infest/prepare.sh}
         ${builtins.readFile ./4lib/infest/install-nix.sh}
       ''}
-
-      # Prepare target source via bind-mounting
-
 
       (${nixos-install args})
 
@@ -169,9 +149,7 @@ let out = {
   get-config = system: let
     config = stockholm.users.${current-user-name}.${system}.config
       or (abort "unknown system: ${system}, user: ${current-user-name}");
-  in
-  assert config.krebs.build.source-version == 1;
-  config;
+  in config;
 
   nix-install =
     { system ? current-host-name
@@ -202,73 +180,6 @@ let out = {
               "system"
             ])}
     '';
-
-  populate =
-    { system ? current-host-name
-    , target ? system
-    , root ? ""
-    }@args:
-    let out = ''
-        #! /bin/sh
-        set -efu
-        ${lib.concatStringsSep "\n"
-          (lib.concatMap
-            (type: lib.mapAttrsToList (_: methods.${type})
-                                      config.krebs.build.source.${type})
-            ["dir" "git"])}
-      '';
-
-
-      config = get-config system;
-
-      current-host = config.krebs.hosts.${current-host-name};
-      current-user = config.krebs.users.${current-user-name};
-
-      methods.dir = config:
-        let
-          can-push = config.host.name == current-host.name;
-          target-path = root + config.target-path;
-          push-method = ''
-            rsync \
-              --exclude .git \
-              --exclude .graveyard \
-              --exclude old \
-              --exclude tmp \
-              --rsync-path='mkdir -p ${target-path} && rsync' \
-              --delete-excluded \
-              -vrlptD \
-              ${config.path}/ \
-              root@${target}:${target-path}
-          '';
-        in
-        if can-push then push-method else
-        let dir = "file://${config.host.name}${config.path}"; in
-        # /!\ revise this message when using more than just push-method
-        throw "No way to push ${dir} from ${current-host.name} to ${target}";
-
-      methods.git = config:
-        let target-path = root + config.target-path;
-        in rootssh target ''
-          mkdir -p ${target-path}
-          cd ${target-path}
-          if ! test -e .git; then
-            git init
-          fi
-          if ! cur_url=$(git config remote.origin.url 2>/dev/null); then
-            git remote add origin ${config.url}
-          elif test "$cur_url" != ${config.url}; then
-            git remote set-url origin ${config.url}
-          fi
-          if test "$(git rev-parse --verify HEAD 2>/dev/null)" != ${config.rev}; then
-            git fetch origin
-            git checkout ${config.rev} -- .
-            git checkout -q ${config.rev}
-            git submodule init
-            git submodule update
-          fi
-          git clean -dxf
-        '';
-    in out;
 
   rootssh = target: script:
     let

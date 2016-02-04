@@ -1,9 +1,15 @@
-{ current-host-name ?
+{ configuration ? import (nixpkgs-path + "/nixos/lib/from-env.nix") "NIXOS_CONFIG" <nixos-config>
+, system ? builtins.currentSystem
+, current-host-name ?
     let v = builtins.getEnv "HOSTNAME"; in
     if v != "" then v else builtins.readFile /proc/sys/kernel/hostname
 , current-user-name ?
     let v = builtins.getEnv "LOGNAME"; in
     if v != "" then v else abort "undefined variable: LOGNAME"
+, nixpkgs-path ?
+    if (builtins.tryEval <nixpkgs/krebs>).success
+      then <upstream-nixpkgs>
+      else <nixpkgs>
 , StrictHostKeyChecking ? "yes"
 }@args:
 
@@ -11,7 +17,8 @@ let stockholm = {
     inherit krebs;
     inherit users;
     inherit lib;
-    inherit pkgs;
+    inherit config options pkgs;
+    system = config.system.build.toplevel;
   };
 
   krebs = import ./krebs (args // { inherit lib stockholm; });
@@ -20,7 +27,7 @@ let stockholm = {
     nlib = import (slib.npath "lib");
     klib = import (slib.kpath "4lib") { lib = nlib; };
     slib = rec {
-      npath = p: <nixpkgs> + "/${p}";
+      npath = p: nixpkgs-path + "/${p}";
       kpath = p: ./. + "/krebs/${p}";
       upath = p: ./. + "/${current-user-name}/${p}";
     };
@@ -29,7 +36,7 @@ let stockholm = {
                          (import p { lib = nlib // klib; });
   in nlib // klib // slib // ulib // builtins;
 
-  inherit (eval {}) pkgs;
+  inherit (eval configuration) config options pkgs;
 
   base-module = { config, ... }: {
     imports = builtins.filter lib.dir.has-default-nix (lib.concatLists [
@@ -48,6 +55,7 @@ let stockholm = {
   };
 
   eval = config: import (lib.npath "nixos/lib/eval-config.nix") {
+    inherit system;
     specialArgs = {
       inherit lib;
     };
