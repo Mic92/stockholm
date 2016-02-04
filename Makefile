@@ -9,34 +9,24 @@ export target_host ?= $(system)
 export target_user ?= root
 export target_path ?= /var/src
 
+evaluate = \
+	nix-instantiate \
+		--arg configuration "./$$LOGNAME/1systems/$$system.nix" \
+		--eval \
+		--readonly-mode \
+		--show-trace \
+		$(1)
+
+execute = $(call evaluate,-A config.krebs.build.$(1) --json) | jq -r . | sh
+
 # usage: make deploy system=foo [target_host=bar]
-.PHONY: deploy
-deploy: populate ;@set -x
+deploy:
+	$(call execute,populate)
 	ssh "$$target_user@$$target_host" nixos-rebuild switch -I "$$target_path"
 
-# usage: make populate system=foo [target_host=bar]
-.PHONY: populate
-populate:;@
-	result=$$(make -s eval get=config.krebs.build.populate filter=json)
-	echo "$$result" | sh
-
-# usage: make eval system=foo get=config.krebs.build [LOGNAME=tv] [filter=json]
-.PHONY: eval
-eval:;@
-ifeq ($(filter),json)
-	extraArgs='--json --strict'
-	filter() { echo "$$1" | jq -r .; }
-else
-	filter() { echo "$$1"; }
-endif
-	result=$$(nix-instantiate \
-		$${extraArgs-} \
-		--show-trace \
-		--readonly-mode \
-		--eval \
-		-A "$$get" \
-		--arg configuration "./$$LOGNAME/1systems/$$system.nix")
-	filter "$$result"
+# usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
+eval eval.:;@$(call evaluate)
+eval.%:;@$(call evaluate,-A $*)
 
 ## usage: make install system=foo target=
 #.PHONY: install
