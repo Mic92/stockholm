@@ -27,7 +27,7 @@ let
       description = ''
           Enable cgit.
           Cgit is an attempt to create a fast web interface for the git version
-          control system, using a built in cache to decrease pressure on the 
+          control system, using a built in cache to decrease pressure on the
           git server.
           cgit in this module is being served via fastcgi nginx.This module
           deploys a http://cgit.<hostname> nginx configuration and enables nginx
@@ -44,48 +44,8 @@ let
       default = "/etc/git";
     };
     repos = mkOption {
-      type = types.attrsOf (types.submodule ({
-        options = {
-          desc = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            description = ''
-              Repository description.
-            '';
-          };
-          section = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            description = ''
-              Repository section.
-            '';
-          };
-          name = mkOption {
-            type = types.str;
-            description = ''
-              Repository name.
-            '';
-          };
-          hooks = mkOption {
-            type = types.attrsOf types.str;
-            default = {};
-            description = ''
-              Repository-specific hooks.
-            '';
-          };
-          public = mkOption {
-            type = types.bool;
-            default = false;
-            description = ''
-              Allow everybody to read the repository via HTTP if cgit enabled.
-            '';
-            # TODO allow every configured user to fetch the repository via SSH.
-          };
-        };
-      }));
-
+      type = types.attrsOf subtypes.repo;
       default = {};
-
       example = literalExample ''
         {
           testing = {
@@ -99,7 +59,6 @@ let
           testing2 = { name = "testing2"; };
         }
       '';
-
       description = ''
         Repositories.
       '';
@@ -121,30 +80,158 @@ let
       '';
     };
     rules = mkOption {
-      type = types.unspecified;
+      type = types.listOf subtypes.rule;
+      default = [];
+      example = literalExample ''
+        singleton {
+          user = [ config.krebs.users.tv ];
+          repo = [ testing ]; # see literal example of repos
+          perm = push "refs/*" (with lib.git; [
+            non-fast-forward create delete merge
+          ]);
+        }
+      '';
+      description = ''
+        Rules.
+      '';
     };
+  };
+
+  # TODO put into krebs/4lib/types.nix?
+  subtypes = {
+    repo = types.submodule ({
+      options = {
+        collaborators = mkOption {
+          type = types.listOf types.user;
+          default = [];
+          description = ''
+            List of users that should be able to fetch from this repo.
+
+            This option is currently not used by krebs.git but instead can be
+            used to create rules.  See e.g. <stockholm/tv/2configs/git.nix> for
+            an example.
+          '';
+        };
+        desc = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            Repository description.
+          '';
+        };
+        section = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            Repository section.
+          '';
+        };
+        name = mkOption {
+          type = types.str;
+          description = ''
+            Repository name.
+          '';
+        };
+        hooks = mkOption {
+          type = types.attrsOf types.str;
+          default = {};
+          description = ''
+            Repository-specific hooks.
+          '';
+        };
+        public = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Allow everybody to read the repository via HTTP if cgit enabled.
+          '';
+          # TODO allow every configured user to fetch the repository via SSH.
+        };
+      };
+    });
+    rule = types.submodule ({ config, ... }: {
+      options = {
+        user = mkOption {
+          type = types.listOf types.user;
+          description = ''
+            List of users this rule should apply to.
+            Checked by authorize-command.
+          '';
+        };
+        repo = mkOption {
+          type = types.listOf subtypes.repo;
+          description = ''
+            List of repos this rule should apply to.
+            Checked by authorize-command.
+          '';
+        };
+        perm = mkOption {
+          type = types.submodule {
+            # TODO generate enum argument from krebs/4lib/git.nix
+            options = {
+              allow-commands = mkOption {
+                type = types.listOf (types.enum (with git; [
+                  git-receive-pack
+                  git-upload-pack
+                ]));
+                default = [];
+                description = ''
+                  List of commands the rule's users are allowed to execute.
+                  Checked by authorize-command.
+                '';
+              };
+              allow-receive-ref = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = ''
+                  Ref that can receive objects.
+                  Checked by authorize-push.
+                '';
+              };
+              allow-receive-modes = mkOption {
+                type = types.listOf (types.enum (with git; [
+                  fast-forward
+                  non-fast-forward
+                  create
+                  delete
+                  merge
+                ]));
+                default = [];
+                description = ''
+                  List of allowed receive modes.
+                  Checked by pre-receive hook.
+                '';
+              };
+            };
+          };
+          description = ''
+            Permissions granted.
+          '';
+        };
+      };
+    });
   };
 
   git-imp = {
     system.activationScripts.git-init = "${init-script}";
-    
+
     # TODO maybe put all scripts here and then use PATH?
     environment.etc."${etc-base}".source =
       scriptFarm "git-ssh-authorizers" {
-        authorize-command = makeAuthorizeScript (map ({ repo, user, perm }: [
-          (map getName (ensureList user))
-          (map getName (ensureList repo))
-          (map getName perm.allow-commands)
+        authorize-command = makeAuthorizeScript (map (rule: [
+          (map getName (ensureList rule.user))
+          (map getName (ensureList rule.repo))
+          (map getName rule.perm.allow-commands)
         ]) cfg.rules);
-    
-        authorize-push = makeAuthorizeScript (map ({ repo, user, perm }: [
-          (map getName (ensureList user))
-          (map getName (ensureList repo))
-          (ensureList perm.allow-receive-ref)
-          (map getName perm.allow-receive-modes)
-        ]) (filter (x: hasAttr "allow-receive-ref" x.perm) cfg.rules));
+
+        authorize-push = makeAuthorizeScript (map (rule: [
+          (map getName (ensureList rule.user))
+          (map getName (ensureList rule.repo))
+          (ensureList rule.perm.allow-receive-ref)
+          (map getName rule.perm.allow-receive-modes)
+        ]) (filter (rule: rule.perm.allow-receive-ref != null) cfg.rules));
       };
-    
+
     users.extraUsers = singleton rec {
       description = "Git repository hosting user";
       name = "git";

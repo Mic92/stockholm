@@ -6,12 +6,17 @@ with lib;
   krebs.build.host = config.krebs.hosts.cd;
   krebs.build.target = "root@cd.internet";
 
+  krebs.build.source.upstream-nixpkgs = {
+    url = https://github.com/NixOS/nixpkgs;
+    rev = "b7ff030";
+  };
+
   imports = [
     ../2configs/hw/CAC-Developer-2.nix
     ../2configs/fs/CAC-CentOS-7-64bit.nix
-    #../2configs/consul-server.nix
     ../2configs/exim-smarthost.nix
     ../2configs/git.nix
+    ../2configs/retiolum.nix
     ../2configs/urlwatch.nix
     {
       imports = [ ../2configs/charybdis.nix ];
@@ -25,6 +30,10 @@ with lib;
         enable = true;
         hosts = [ "jabber.viljetic.de" ];
       };
+      tv.iptables.input-internet-accept-new-tcp = [
+        "xmpp-client"
+        "xmpp-server"
+      ];
     }
     {
       krebs.github-hosts-sync.enable = true;
@@ -32,38 +41,17 @@ with lib;
         singleton config.krebs.github-hosts-sync.port;
     }
     {
-      tv.iptables = {
-        enable = true;
-        input-internet-accept-new-tcp = [
-          "ssh"
-          "tinc"
-          "smtp"
-          "xmpp-client"
-          "xmpp-server"
-        ];
-        input-retiolum-accept-new-tcp = [
-          "http"
-        ];
-      };
-    }
-    {
-      tv.iptables.input-internet-accept-new-tcp = singleton "http";
       krebs.nginx.servers.cgit.server-names = [
         "cgit.cd.krebsco.de"
         "cgit.cd.viljetic.de"
       ];
-    }
-    {
       # TODO make public_html also available to cd, cd.retiolum (AKA default)
-      tv.iptables.input-internet-accept-new-tcp = singleton "http";
       krebs.nginx.servers.public_html = {
         server-names = singleton "cd.viljetic.de";
         locations = singleton (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
           alias /home/$1/public_html$2;
         '');
       };
-    }
-    {
       krebs.nginx.servers.viljetic = {
         server-names = singleton "viljetic.de";
         # TODO directly set root (instead via location)
@@ -71,16 +59,7 @@ with lib;
           root ${pkgs.viljetic-pages};
         '');
       };
-    }
-    {
-      krebs.retiolum = {
-        enable = true;
-        connectTo = [
-          "fastpoke"
-          "pigstarter"
-          "ire"
-        ];
-      };
+      tv.iptables.input-internet-accept-new-tcp = singleton "http";
     }
   ];
 

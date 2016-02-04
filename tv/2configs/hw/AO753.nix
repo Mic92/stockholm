@@ -1,4 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
+
+with lib;
 
 {
   imports = [
@@ -39,8 +41,5 @@
     HandleSuspendKey=ignore
   '';
 
-  nixpkgs.config = {
-    allowUnfree = false;
-    allowUnfreePredicate = (x: pkgs.lib.hasPrefix "broadcom-sta-" x.name);
-  };
+  nixpkgs.config.allowUnfreePredicate = pkg: hasPrefix "broadcom-sta-" pkg.name;
 }

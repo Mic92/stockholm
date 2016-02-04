@@ -8,20 +8,21 @@ with lib;
   krebs.build = {
     user = config.krebs.users.tv;
     target = mkDefault "root@${config.krebs.build.host.name}";
-    source = {
-      git.nixpkgs = {
-        url = mkDefault https://github.com/NixOS/nixpkgs;
-        rev = mkDefault "c44a593aa43bba6a0708f6f36065a514a5110613";
-        target-path = mkDefault "/var/src/nixpkgs";
+    source = mapAttrs (_: mkDefault) ({
+      nixos-config = "symlink:stockholm/tv/1systems/${config.krebs.build.host.name}.nix";
+      nixpkgs = symlink:stockholm/nixpkgs;
+      secrets = "/home/tv/secrets/${config.krebs.build.host.name}";
+      secrets-common = "/home/tv/secrets/common";
+      stockholm = "/home/tv/stockholm";
+      stockholm-user = "symlink:stockholm/tv";
+      upstream-nixpkgs = {
+        url = https://github.com/NixOS/nixpkgs;
+        rev = "77f8f35d57618c1ba456d968524f2fb2c3448295";
+        dev = "/home/tv/nixpkgs";
       };
-      dir.secrets = {
-        path = mkDefault "/home/tv/secrets/${config.krebs.build.host.name}";
-      };
-      dir.stockholm = {
-        path = mkDefault "/home/tv/stockholm";
-        target-path = mkDefault "/var/src/stockholm";
-      };
-    };
+    } // optionalAttrs config.krebs.build.host.secure {
+      secrets-master = "/home/tv/secrets/master";
+    });
   };
 
   networking.hostName = config.krebs.build.host.name;
@@ -67,6 +68,9 @@ with lib;
       nix.useChroot = true;
     }
     {
+      nixpkgs.config.allowUnfree = false;
+    }
+    {
       environment.profileRelativeEnvVars.PATH = mkForce [ "/bin" ];
 
       environment.systemPackages = with pkgs; [
@@ -98,12 +102,7 @@ with lib;
       };
 
       environment.variables = {
-        NIX_PATH =
-          with config.krebs.build.source; with dir; with git;
-          mkForce (concatStringsSep ":" [
-            "nixpkgs=${nixpkgs.target-path}"
-            "secrets=${stockholm.target-path}/null"
-          ]);
+        NIX_PATH = mkForce "secrets=/var/src/stockholm/null:/var/src";
       };
 
       programs.bash = {
@@ -142,7 +141,12 @@ with lib;
         '';
       };
 
-      programs.ssh.startAgent = false;
+      programs.ssh = {
+        extraConfig = ''
+          UseRoaming no
+        '';
+        startAgent = false;
+      };
     }
 
     {
@@ -160,12 +164,17 @@ with lib;
     }
 
     {
+      tv.iptables.enable = true;
+    }
+
+    {
       services.openssh = {
         enable = true;
         hostKeys = [
           { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
         ];
       };
+      tv.iptables.input-internet-accept-new-tcp = singleton "ssh";
     }
 
     {
@@ -177,7 +186,8 @@ with lib;
     {
       systemd.tmpfiles.rules = let
         forUsers = flip map users;
-        isUser = { group, ... }: hasSuffix "users" group;
+        isUser = { name, group, ... }:
+          name == "root" || hasSuffix "users" group;
         users = filter isUser (mapAttrsToList (_: id) config.users.users);
       in forUsers (u: "d /run/xdg/${u.name} 0700 ${u.name} ${u.group} -");
       environment.variables.XDG_RUNTIME_DIR = "/run/xdg/$LOGNAME";

@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 
+with lib;
 let
   pkg = pkgs.pulseaudioLight;
   runDir = "/run/pulse";
@@ -35,36 +36,43 @@ let
 in
 
 {
-  systemd.tmpfiles.rules = [
-    "d ${runDir} 0750 pulse pulse - -"
-    "d ${runDir}/home 0700 pulse pulse - -"
-  ];
-
-  system.activationScripts.pulseaudio-hack = ''
-    ln -fns ${clientConf} /etc/pulse/client.conf
-  '';
-
   environment = {
     etc = {
       "asound.conf".source = alsaConf;
-      #"pulse/client.conf" = lib.mkForce { source = clientConf; };
+      # XXX mkForce is not strong enough (and neither is mkOverride) to create
+      # /etc/pulse/client.conf, see pulseaudio-hack below for a solution.
+      #"pulse/client.conf" = mkForce { source = clientConf; };
+      #"pulse/client.conf".source = mkForce clientConf;
       "pulse/default.pa".source = configFile;
     };
-    systemPackages = [ pkg ];
+    systemPackages = [
+      pkg
+    ] ++ optionals config.services.xserver.enable [
+      pkgs.pavucontrol
+    ];
   };
 
   # Allow PulseAudio to get realtime priority using rtkit.
   security.rtkit.enable = true;
+
+  system.activationScripts.pulseaudio-hack = ''
+    ln -fns ${clientConf} /etc/pulse/client.conf
+  '';
 
   systemd.services.pulse = {
     wantedBy = [ "sound.target" ];
     before = [ "sound.target" ];
     environment = {
       PULSE_RUNTIME_PATH = "${runDir}/home";
-      #DISPLAY = ":${toString config.services.xserver.display}";
     };
     serviceConfig = {
       ExecStart = "${pkg}/bin/pulseaudio";
+      ExecStartPre = pkgs.writeScript "pulse-start" ''
+        #! /bin/sh
+        install -o pulse -g pulse -m 0750 -d ${runDir}
+        install -o pulse -g pulse -m 0700 -d ${runDir}/home
+      '';
+      PermissionsStartOnly = "true";
       User = "pulse";
     };
   };

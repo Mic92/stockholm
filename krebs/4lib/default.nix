@@ -6,6 +6,7 @@ with lib;
 let out = rec {
 
   eq = x: y: x == y;
+  ne = x: y: x != y;
 
   mod = x: y: x - y * (x / y);
 

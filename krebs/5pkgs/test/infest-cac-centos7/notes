@@ -1,5 +1,3 @@
-#! /bin/sh
-
 # nix-shell -p gnumake jq openssh cac-api cac-panel
 set -eufx
 
@@ -54,7 +52,7 @@ cac-api servers
 old_trapstr=$(clear_defer)
 while true;do
   # Template 26: CentOS7
-  # TODO: use cac templates to determine the real Centos7 template in case it changes
+  # TODO: use cac-api templates to determine the real Centos7 template in case it changes
   out=$(cac-api build cpu=1 ram=512 storage=10 os=26 2>&1)
   if name=$(echo "$out" | jq -r .servername);then
     id=servername:$name
@@ -67,15 +65,15 @@ while true;do
   fi
 
   clear_defer >/dev/null
-  defer "cac delete $id"
+  defer "cac-api delete $id"
 
   # TODO: timeout?
 
   wait_login_cac(){
     # we wait for 30 minutes
     for t in `seq 180`;do
-      # now we have a working cac server
-      if cac ssh $1 -o ConnectTimeout=10 \
+      # now we have a working cac-api server
+      if cac-api ssh $1 -o ConnectTimeout=10 \
                     cat /etc/redhat-release | \
                       grep CentOS ;then
         return 0
@@ -134,7 +132,7 @@ cac-api powerop $id reset
 wait_login(){
   # timeout
   for t in `seq 90`;do
-    # now we have a working cac server
+    # now we have a working cac-api server
     if ssh -o StrictHostKeyChecking=no \
            -o UserKnownHostsFile=/dev/null \
            -i $krebs_ssh \

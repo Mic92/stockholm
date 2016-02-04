@@ -7,11 +7,6 @@ let
       vim
     ];
 
-    # Nano really is just a stupid name for Vim.
-    nixpkgs.config.packageOverrides = pkgs: {
-      nano = pkgs.vim;
-    };
-
     environment.etc.vimrc.source = vimrc;
 
     environment.variables.EDITOR = mkForce "vim";
@@ -89,7 +84,7 @@ let
             \ | hi Normal ctermfg=White
 
     au BufRead,BufNewFile *.hs so ${pkgs.writeText "hs.vim" ''
-      syn region String start=+\[[^|]*|+ end=+|]+
+      syn region String start=+\[[[:alnum:]]*|+ end=+|]+
     ''}
 
     au BufRead,BufNewFile *.nix so ${pkgs.writeText "nix.vim" ''
@@ -110,6 +105,8 @@ let
 
       syn match String /"\([^\\"]\|\\.\)*"/
       syn match Comment /\(^\|\s\)#.*/
+
+      let b:current_syntax = "nix"
     ''}
 
     au BufRead,BufNewFile /dev/shm/* set nobackup nowritebackup noswapfile

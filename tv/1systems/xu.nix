@@ -5,15 +5,14 @@ with lib;
 {
   krebs.build.host = config.krebs.hosts.xu;
 
-  krebs.build.source.git.nixpkgs.rev =
-    "7ae05edcdd14f6ace83ead9bf0d114e97c89a83a";
-
   imports = [
     ../2configs/hw/x220.nix
-    #../2configs/consul-client.nix
+    ../2configs/exim-retiolum.nix
     ../2configs/git.nix
     ../2configs/mail-client.nix
+    ../2configs/nginx-public_html.nix
     ../2configs/pulse.nix
+    ../2configs/retiolum.nix
     ../2configs/xserver
     {
       environment.systemPackages = with pkgs; [
@@ -21,7 +20,7 @@ with lib;
         # stockholm
         gnumake
         hashPassword
-        lentil
+        haskellPackages.lentil
         parallel
         (pkgs.writeScriptBin "im" ''
           #! ${pkgs.bash}/bin/bash
@@ -124,40 +123,6 @@ with lib;
         unison
       ];
     }
-    {
-      tv.iptables = {
-        enable = true;
-        input-internet-accept-new-tcp = [
-          "ssh"
-          "http"
-          "tinc"
-          "smtp"
-        ];
-      };
-    }
-    {
-      krebs.exim-retiolum.enable = true;
-    }
-    {
-      krebs.nginx = {
-        enable = true;
-        servers.default.locations = [
-          (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
-            alias /home/$1/public_html$2;
-          '')
-        ];
-      };
-    }
-    {
-      krebs.retiolum = {
-        enable = true;
-        connectTo = [
-          "cd"
-          "gum"
-          "pigstarter"
-        ];
-      };
-    }
   ];
 
   boot.initrd.luks = {
@@ -190,7 +155,6 @@ with lib;
 
   nixpkgs.config.chromium.enablePepperFlash = true;
 
-  nixpkgs.config.allowUnfree = true;
   #hardware.bumblebee.enable = true;
   #hardware.bumblebee.group = "video";
   hardware.enableAllFirmware = true;
