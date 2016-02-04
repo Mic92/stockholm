@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bc, coreutils, curl, dash, gnused, inotifyTools, jq, ncurses, openssh, sshpass, ... }:
+{ stdenv, fetchgit, bc, cac-cert, coreutils, curl, dash, gnused, inotifyTools, jq, ncurses, openssh, sshpass, ... }:
 
 stdenv.mkDerivation {
   name = "cac-api-1.1.0";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
       # Unknown column 'iod.apitask.cid' in 'field list'
       sed '
         /^\s*tasks \\$/d; # [1]
-        s|\<_cac_exec curl|<${./cac.pem} & --cacert /dev/stdin|
+        s|\<_cac_exec curl|<${cac-cert} & --cacert /dev/stdin|
       ' cac-api
     } > $out/bin/cac-api
     chmod +x $out/bin/cac-api

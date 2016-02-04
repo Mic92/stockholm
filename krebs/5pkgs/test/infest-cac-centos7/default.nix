@@ -1,4 +1,4 @@
-{ stdenv, coreutils,makeWrapper, cac-api, cac-panel, gnumake, gnused, jq, openssh, ... }:
+{ stdenv, coreutils,makeWrapper, cac-api, cac-cert, cac-panel, gnumake, gnused, jq, openssh, ... }:
 
 stdenv.mkDerivation rec {
   name = "${shortname}-${version}";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   phases = [
     "installPhase"
   ];
+
   buildInputs = [ makeWrapper ];
 
   path = stdenv.lib.makeSearchPath "bin" [
@@ -22,16 +23,15 @@ stdenv.mkDerivation rec {
     openssh
   ];
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      cp ${src} $out/bin/${shortname}
-      chmod +x $out/bin/${shortname}
-      wrapProgram $out/bin/${shortname} \
-              --prefix PATH : ${path} \
-              --set SSL_CERT_FILE ${./panel.cloudatcost.com.crt} \
-              --set REQUESTS_CA_BUNDLE ${./panel.cloudatcost.com.crt}
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    cp ${src} $out/bin/${shortname}
+    chmod +x $out/bin/${shortname}
+    wrapProgram $out/bin/${shortname} \
+        --prefix PATH : ${path} \
+        --set REQUESTS_CA_BUNDLE ${cac-cert} \
+        --set SSL_CERT_FILE ${cac-cert}
+  '';
   meta = with stdenv.lib; {
     homepage = http://krebsco.de;
     description = "Krebs CI Scripts";
