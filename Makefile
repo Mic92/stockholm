@@ -35,7 +35,7 @@ endif
 		--readonly-mode \
 		--eval \
 		-A "$$get" \
-		--arg configuration "<stockholm/$$LOGNAME/1systems/$$system.nix>")
+		--arg configuration "./$$LOGNAME/1systems/$$system.nix")
 	filter "$$result"
 
 ## usage: make install system=foo target=
