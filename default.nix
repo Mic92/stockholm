@@ -1,5 +1,9 @@
-{ current-host-name ? abort "current-host-name not defined"
-, current-user-name ? builtins.getEnv "LOGNAME"
+{ current-host-name ?
+    let v = builtins.getEnv "HOSTNAME"; in
+    if v != "" then v else builtins.readFile /proc/sys/kernel/hostname
+, current-user-name ?
+    let v = builtins.getEnv "LOGNAME"; in
+    if v != "" then v else abort "undefined variable: LOGNAME"
 , StrictHostKeyChecking ? "yes"
 }@args:
 
