@@ -40,6 +40,7 @@ with lib;
           aliases = [
             "cd.r"
             "cd.retiolum"
+            "cgit.cd.r"
             "cgit.cd.retiolum"
           ];
           tinc.pubkey = ''
@@ -80,6 +81,7 @@ with lib;
           aliases = [
             "mkdir.r"
             "mkdir.retiolum"
+            "cgit.mkdir.r"
             "cgit.mkdir.retiolum"
           ];
           tinc.pubkey = ''
@@ -181,6 +183,7 @@ with lib;
           aliases = [
             "nomic.r"
             "nomic.retiolum"
+            "cgit.nomic.r"
             "cgit.nomic.retiolum"
           ];
           tinc.pubkey = ''
@@ -225,6 +228,7 @@ with lib;
           aliases = [
             "rmdir.r"
             "rmdir.retiolum"
+            "cgit.rmdir.r"
             "cgit.rmdir.retiolum"
           ];
           tinc.pubkey = ''
@@ -273,6 +277,7 @@ with lib;
           aliases = [
             "wu.r"
             "wu.retiolum"
+            "cgit.wu.r"
             "cgit.wu.retiolum"
           ];
           tinc.pubkey = ''
