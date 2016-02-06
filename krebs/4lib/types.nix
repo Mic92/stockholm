@@ -162,7 +162,7 @@ types // rec {
         type = str; # TODO retiolum mail address
       };
       name = mkOption {
-        type = str; # TODO
+        type = username;
         default = config._module.args.name;
       };
       pubkey = mkOption {
@@ -193,5 +193,21 @@ types // rec {
         }.${typeOf x};
       };
     };
+  };
+
+  # POSIX.1‐2013, 3.278 Portable Filename Character Set
+  filename = mkOptionType {
+    name = "POSIX filename";
+    check = let
+      filename-chars = stringToCharacters
+        "-.0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    in s: all (flip elem filename-chars) (stringToCharacters s);
+    merge = mergeOneOption;
+  };
+
+  # POSIX.1-2013, 3.431 User Name
+  username = mkOptionType {
+    name = "POSIX username";
+    check = s: filename.check s && substring 0 1 s != "-";
   };
 }
