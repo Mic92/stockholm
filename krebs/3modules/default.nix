@@ -103,10 +103,8 @@ let
               aliases = longs ++ shorts;
               providers = dns.split-by-provider net.aliases cfg.dns.providers;
               longs = providers.hosts;
-              shorts =
-                map (removeSuffix ".${cfg.search-domain}")
-                    (filter (hasSuffix ".${cfg.search-domain}")
-                            longs);
+              shorts = let s = ".${cfg.search-domain}"; in
+                map (removeSuffix s) (filter (hasSuffix s) longs);
             in
               map (addr: "${addr} ${toString aliases}") net.addrs
           ) (filterAttrs (name: host: host.aliases != []) host.nets)
