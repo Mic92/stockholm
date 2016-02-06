@@ -1,29 +1,18 @@
 { stdenv, fetchurl, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
-  name = "urlwatch-2.0";
+  name = "urlwatch-2.1";
 
   src = fetchurl {
     url = "https://thp.io/2008/urlwatch/${name}.tar.gz";
-    sha256 = "0j38qzw4jxw41vnnpi6j851hqpv8d6p1cbni6cv8r2vqf5307s3b";
+    sha256 = "0xn435cml9wjwk39117p1diqmvw3jbmv9ccr7230iaf7z59vf9v6";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    pyyaml
     keyring
-    (python3Packages.buildPythonPackage rec {
-      name = "minidb-2.0.1";
-      src = fetchurl {
-        url = "https://thp.io/2010/minidb/${name}.tar.gz";
-        sha256 = "1x958zr9jc26vaqij451qb9m2l7apcpz34ir9fwfjg4fwv24z2dy";
-      };
-      meta = {
-        description = "A simple SQLite3-based store for Python objects";
-        homepage = https://thp.io/2010/minidb/;
-        license = stdenv.lib.licenses.isc;
-        maintainers = [ stdenv.lib.maintainers.tv ];
-      };
-    })
+    minidb
+    pyyaml
+    requests2
   ];
 
   postFixup = ''
@@ -36,4 +25,4 @@ python3Packages.buildPythonPackage rec {
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.tv ];
   };
-}#
+}

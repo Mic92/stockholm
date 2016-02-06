@@ -82,7 +82,7 @@ rec {
   };
   stockholm-issue = buildSimpleReaktorPlugin "stockholm-issue" {
     script = ./scripts/random-issue.sh;
-    path = with pkgs; [ git gnused lentil ];
+    path = with pkgs; [ git gnused haskellPackages.lentil ];
     env = { "origin" = "http://cgit.gum/stockholm"; };
   };
 

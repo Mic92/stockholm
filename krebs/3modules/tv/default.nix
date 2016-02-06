@@ -24,6 +24,7 @@ with lib;
         internet = {
           addrs4 = ["162.219.7.216"];
           aliases = [
+            "cd.i"
             "cd.internet"
             "cd.krebsco.de"
             "cgit.cd.krebsco.de"
@@ -37,7 +38,9 @@ with lib;
           addrs4 = ["10.243.113.222"];
           addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af3"];
           aliases = [
+            "cd.r"
             "cd.retiolum"
+            "cgit.cd.r"
             "cgit.cd.retiolum"
           ];
           tinc.pubkey = ''
@@ -67,6 +70,7 @@ with lib;
         internet = {
           addrs4 = ["104.167.114.142"];
           aliases = [
+            "mkdir.i"
             "mkdir.internet"
           ];
         };
@@ -75,7 +79,9 @@ with lib;
           addrs4 = ["10.243.113.223"];
           addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af4"];
           aliases = [
+            "mkdir.r"
             "mkdir.retiolum"
+            "cgit.mkdir.r"
             "cgit.mkdir.retiolum"
           ];
           tinc.pubkey = ''
@@ -104,6 +110,7 @@ with lib;
         internet = {
           addrs4 = ["198.147.22.115"];
           aliases = [
+            "ire.i"
             "ire.internet"
             "ire.krebsco.de"
           ];
@@ -113,6 +120,7 @@ with lib;
           addrs4 = ["10.243.231.66"];
           addrs6 = ["42:b912:0f42:a82d:0d27:8610:e89b:490c"];
           aliases = [
+            "ire.r"
             "ire.retiolum"
           ];
           tinc.pubkey = ''
@@ -130,6 +138,59 @@ with lib;
       };
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBaMjBJ/BfYlHjyn5CO0xzFNaQ0LPvMP3W9UlOs1OxGY";
     };
+    kaepsele = {
+      nets = {
+        internet = {
+          addrs4 = ["92.222.10.169"];
+          aliases = [
+            "kaepsele.i"
+            "kaepsele.internet"
+            # TODO "kaepsele.org"
+          ];
+        };
+        retiolum = {
+          addrs4 = ["10.243.166.2"];
+          addrs6 = ["42:0b9d:6660:d07c:2bb7:4e91:1a01:2e7d"];
+          aliases = [
+            "kaepsele.r"
+            "kaepsele.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAxj7kaye4pGLou7mVRTVgtcWFjuEosJlxVg24gM7nU1EaoRnBD93/
+            Y3Je7BSUbz5xMXr5SFTPSkitInL7vU+jDOf2bEpqv+uUJAJIz85494oPS9xocdWo
+            rQsrQRAtOg4MLD+YIoAxQm2Mc4nt2CSE1+UP4uXGxpuh0c051b+9Kmwv1bTyHB9y
+            y01VSkDvNyHk5eA+RGDiujBAzhi35hzTlQgCJ3REOBiq4YmE1d3qpk3oNiYUcrcu
+            yFzQrSRIfhXjuzIR+wxqS95HDUsewSwt9HgkjJzYF5sQZSea0/XsroFqZyTJ8iB5
+            FQx2emBqB525cWKOt0f5jgyjklhozhJyiwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDA9cDUg7qm37uOhQpdKSgpnJPWao9VZR6LFNphVcJQ++gYvVgWu6WMhigiy7DcGQSStUlXkZc4HZBBugwwNWcf7aAF6ijBuG5rVwb9AFQmSexpTOfWap33iA5f+LXYFHe7iv4Pt9TYO1ga1Ryl4EGKb7ol2h5vbKC+JiGaDejB0WqhBAyrTg4tTWO8k2JT11CrlTjNVctqV0IVAMtTc/hcJcNusnoGD4ic0QGSzEMYxcIGRNvIgWmxhI6GHeaHxXWH5fv4b0OpLlDfVUsIvEo9KVozoLGm/wgLBG/tQXKaF9qVMVgOYi9sX/hDLwhRrcD2cyAlq9djo2pMARYiriXF";
+    };
+    mu = {
+      nets = {
+        retiolum = {
+          addrs4 = ["10.243.20.01"];
+          addrs6 = ["42:0:0:0:0:0:0:2001"];
+          aliases = [
+            "mu.r"
+            "mu.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEApXErmPSn2CO4V25lqxanCGCFgxEAjdzFUiTCCu0IvELEuCc3PqVA
+            g4ecf8gGwPCbzMW/1txjlgbsQcm87U5enaCwzSv/pa7P9/memV74OhqEVOypFlDE
+            XeZczqQfNbjoLYl4cKZpTsSZmOgASXaMDrH2N37f50q35C0MQw0HRzaQM5VLrzb4
+            o87MClS+yPqpvp34QjW+1lqnOKvMkr6mDrmtcAjCOs9Ma16txyfjGVFi8KmYqIs1
+            QEJmyC9Uocz5zuoSLUghgVRn9yl4+MEw6++akFDwKt/eMkcSq0GPB+3Rz/WLDiBs
+            FK6BsssQWdwiEWpv6xIl1Fi+s7F0riq2cwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     nomic = {
       cores = 2;
       dc = "tv"; #dc = "gg23";
@@ -142,7 +203,9 @@ with lib;
           addrs4 = ["10.243.0.110"];
           addrs6 = ["42:02d5:733f:d6da:c0f5:2bb7:2b18:09ec"];
           aliases = [
+            "nomic.r"
             "nomic.retiolum"
+            "cgit.nomic.r"
             "cgit.nomic.retiolum"
           ];
           tinc.pubkey = ''
@@ -176,6 +239,7 @@ with lib;
         internet = {
           addrs4 = ["167.88.34.182"];
           aliases = [
+            "rmdir.i"
             "rmdir.internet"
           ];
         };
@@ -184,7 +248,9 @@ with lib;
           addrs4 = ["10.243.113.224"];
           addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af5"];
           aliases = [
+            "rmdir.r"
             "rmdir.retiolum"
+            "cgit.rmdir.r"
             "cgit.rmdir.retiolum"
           ];
           tinc.pubkey = ''
@@ -231,7 +297,9 @@ with lib;
           addrs4 = ["10.243.13.37"];
           addrs6 = ["42:0:0:0:0:0:0:1337"];
           aliases = [
+            "wu.r"
             "wu.retiolum"
+            "cgit.wu.r"
             "cgit.wu.retiolum"
           ];
           tinc.pubkey = ''
@@ -263,6 +331,7 @@ with lib;
           addrs4 = ["10.243.13.38"];
           addrs6 = ["42:0:0:0:0:0:0:1338"];
           aliases = [
+            "xu.r"
             "xu.retiolum"
           ];
           tinc.pubkey = ''

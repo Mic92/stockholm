@@ -119,16 +119,18 @@ types // rec {
         default = {};
       };
       tinc = mkOption {
-        type = let net-config = config; in nullOr (submodule ({ config, ... }: {
+        type = let net = config; in nullOr (submodule ({ config, ... }: {
           options = {
             config = mkOption {
               type = str;
-              default = ''
-                ${optionalString (net-config.via != null)
-                  (concatMapStringsSep "\n" (a: "Address = ${a}") net-config.via.addrs)}
-                ${concatMapStringsSep "\n" (a: "Subnet = ${a}") net-config.addrs}
-                ${config.pubkey}
-              '';
+              default = concatStringsSep "\n" (
+                (optionals (net.via != null)
+                  (map (a: "Address = ${a}") net.via.addrs))
+                ++
+                (map (a: "Subnet = ${a}") net.addrs)
+                ++
+                [config.pubkey]
+              );
             };
             pubkey = mkOption {
               type = str;

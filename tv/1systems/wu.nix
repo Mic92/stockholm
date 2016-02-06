@@ -7,10 +7,12 @@ with lib;
 
   imports = [
     ../2configs/hw/w110er.nix
-    #../2configs/consul-client.nix
+    ../2configs/exim-retiolum.nix
     ../2configs/git.nix
     ../2configs/mail-client.nix
+    ../2configs/nginx-public_html.nix
     ../2configs/pulse.nix
+    ../2configs/retiolum.nix
     ../2configs/xserver
     {
       environment.systemPackages = with pkgs; [
@@ -41,7 +43,7 @@ with lib;
         # tv
         bc
         bind # dig
-        cac
+        cac-api
         dic
         file
         get
@@ -123,39 +125,6 @@ with lib;
         unison
       ];
     }
-    {
-      tv.iptables = {
-        enable = true;
-        input-internet-accept-new-tcp = [
-          "ssh"
-          "http"
-          "tinc"
-          "smtp"
-        ];
-      };
-    }
-    {
-      krebs.exim-retiolum.enable = true;
-    }
-    {
-      krebs.nginx = {
-        enable = true;
-        servers.default.locations = [
-          (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
-            alias /home/$1/public_html$2;
-          '')
-        ];
-      };
-    }
-    {
-      krebs.retiolum = {
-        enable = true;
-        connectTo = [
-          "gum"
-          "pigstarter"
-        ];
-      };
-    }
   ];
 
   boot.initrd.luks = {
@@ -188,7 +157,7 @@ with lib;
 
   nixpkgs.config.chromium.enablePepperFlash = true;
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfreePredicate = pkg: hasPrefix "nvidia-x11-" pkg.name;
   hardware.bumblebee.enable = true;
   hardware.bumblebee.group = "video";
   hardware.enableAllFirmware = true;

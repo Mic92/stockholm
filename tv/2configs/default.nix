@@ -8,15 +8,13 @@ with lib;
   krebs.build = {
     user = config.krebs.users.tv;
     target = mkDefault "root@${config.krebs.build.host.name}";
-    source-version = 2;
     source = mapAttrs (_: mkDefault) ({
-      nixos-config = "symlink:stockholm-private/1systems/${config.krebs.build.host.name}.nix";
-      nixpkgs = symlink:stockholm-nixpkgs;
+      nixos-config = "symlink:stockholm/tv/1systems/${config.krebs.build.host.name}.nix";
+      nixpkgs = symlink:stockholm/nixpkgs;
       secrets = "/home/tv/secrets/${config.krebs.build.host.name}";
       secrets-common = "/home/tv/secrets/common";
-      stockholm-krebs = "/home/tv/stockholm/krebs";
-      stockholm-nixpkgs = "/home/tv/stockholm/nixpkgs";
-      stockholm-private = "/home/tv/stockholm/tv";
+      stockholm = "/home/tv/stockholm";
+      stockholm-user = "symlink:stockholm/tv";
       upstream-nixpkgs = {
         url = https://github.com/NixOS/nixpkgs;
         rev = "77f8f35d57618c1ba456d968524f2fb2c3448295";
@@ -70,6 +68,9 @@ with lib;
       nix.useChroot = true;
     }
     {
+      nixpkgs.config.allowUnfree = false;
+    }
+    {
       environment.profileRelativeEnvVars.PATH = mkForce [ "/bin" ];
 
       environment.systemPackages = with pkgs; [
@@ -101,7 +102,7 @@ with lib;
       };
 
       environment.variables = {
-        NIX_PATH = mkForce "/var/src";
+        NIX_PATH = mkForce "secrets=/var/src/stockholm/null:/var/src";
       };
 
       programs.bash = {
@@ -163,12 +164,17 @@ with lib;
     }
 
     {
+      tv.iptables.enable = true;
+    }
+
+    {
       services.openssh = {
         enable = true;
         hostKeys = [
           { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
         ];
       };
+      tv.iptables.input-internet-accept-new-tcp = singleton "ssh";
     }
 
     {

@@ -1,73 +1,41 @@
-#
-# usage:
-#		make infest system=foo [target=bar]
-#		make [deploy] system=foo [target=bar]
-#		make [deploy] systems='foo bar'
-#		make eval get=users.tv.wu.config.time.timeZone [filter=json]
-#
-
-.ONESHELL:
-.SHELLFLAGS := -eufc
-
-ifdef systems
-$(systems):
-	@
-	unset target
-	parallel \
-		--line-buffer \
-		-j0 \
-		--no-notice \
-		--tagstring {} \
-		-q make -s systems= system={} ::: $(systems)
-else ifdef system
-.PHONY: deploy infest
-deploy infest:;@
-	export get=krebs.$@
-	export filter=json
-	script=$$(make -s eval)
-	echo "$$script" | sh
-
-.PHONY: deploy2
-ifdef target
-deploy2: export target-host = $(target)
-else
-deploy2: export target-host = $(system)
+ifndef system
+$(error unbound variable: system)
 endif
-deploy2:;@
-	target=$${target-$$system}
-	result=$$(nix-instantiate \
-			--json \
-			--eval \
-			krebs/populate.nix \
-			--arg source 'with (import ~/stockholm {}).users.$(LOGNAME).$(system).config.krebs.build; assert source-version == 2; source' \
-			--argstr target-host "$$target" \
-			--argstr target-path /var/src)
-	script=$$(echo "$$result" | jq -r .)
-	echo "$$script" | sh
-	ssh root@$$target nixos-rebuild switch -I /var/src
 
-.PHONY: eval
-eval:
-	@
-ifeq ($(filter),json)
-	extraArgs='--json --strict'
-	filter() { jq -r .; }
-else
-	filter() { cat; }
-endif
-	result=$$(nix-instantiate \
-		$${extraArgs-} \
+export target_host ?= $(system)
+export target_user ?= root
+export target_path ?= /var/src
+
+evaluate = \
+	nix-instantiate \
+		--arg configuration "./$$LOGNAME/1systems/$$system.nix" \
 		--eval \
-		-A "$$get" \
-		-I stockholm="$$PWD" \
-		'<stockholm>' \
-		--argstr current-date "$$(date -Is)" \
-		--argstr current-host-name "$$HOSTNAME" \
-		--argstr current-user-name "$$LOGNAME" \
-		$${system+--argstr system "$$system"} \
-		$${target+--argstr target "$$target"})
-	echo "$$result" | filter
+		--readonly-mode \
+		--show-trace \
+		$(1)
 
-else
-$(error unbound variable: system[s])
-endif
+execute = \
+	result=$$($(call evaluate,-A config.krebs.build.$(1) --json)) && \
+	script=$$(echo "$$result" | jq -r .) && \
+	echo "$$script" | sh
+
+# usage: make deploy system=foo [target_host=bar]
+deploy:
+	$(call execute,populate)
+	@set -x; ssh "$$target_user@$$target_host" nixos-rebuild switch -I "$$target_path"
+
+# usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
+eval eval.:;@$(call evaluate)
+eval.%:;@$(call evaluate,-A $*)
+
+## usage: make install system=foo target=
+#.PHONY: install
+#install: ssh = ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+#install:;@set -x
+#	$(ssh) "$$target_user@$$target_host" \
+#		env target_path="$target_path" \
+#			sh -s prepare < krebs/4lib/infest/prepare.sh
+#	make -s populate target_path=/mnt"$$target_path"
+#	$(ssh) "$$target_user@$$target_host" \
+#		env NIXOS_CONFIG=/var/src/nixos-config \
+#			nixos-install

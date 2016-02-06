@@ -1,6 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with builtins;
 with lib;
 let
   cfg = config.krebs.retiolum;
@@ -31,22 +29,13 @@ let
       '';
     };
 
-    generateEtcHosts = mkOption {
-      type = types.str;
-      default = "both";
-      description = ''
-        If set to <literal>short</literal>, <literal>long</literal>, or <literal>both</literal>,
-        then generate entries in <filename>/etc/hosts</filename> from subnets.
-      '';
-    };
-
-    network = mkOption {
+    netname = mkOption {
       type = types.str;
       default = "retiolum";
       description = ''
         The tinc network name.
-        It is used to generate long host entries,
-        and name the TUN device.
+        It is used to name the TUN device and to generate the default value for
+        <literal>config.krebs.retiolum.hosts</literal>.
       '';
     };
 
@@ -65,10 +54,13 @@ let
     };
 
     hosts = mkOption {
-      type = with types; either package path;
-      default = ../Zhosts;
+      type = with types; attrsOf host;
+      default =
+        filterAttrs (_: h: hasAttr cfg.netname h.nets) config.krebs.hosts;
       description = ''
-        If a path is given, then it will be used to generate an ad-hoc package.
+        Hosts which should be part of the tinc configuration.
+        Note that these hosts must have a correspondingly named network
+        configured, see <literal>config.krebs.retiolum.netname</literal>.
       '';
     };
 
@@ -104,9 +96,7 @@ let
   };
 
   imp = {
-    environment.systemPackages = [ tinc hosts iproute ];
-
-    networking.extraHosts = retiolumExtraHosts;
+    environment.systemPackages = [ tinc iproute ];
 
     systemd.services.retiolum = {
       description = "Tinc daemon for Retiolum";
@@ -140,59 +130,19 @@ let
 
   tinc = cfg.tincPackage;
 
-  hosts = getAttr (typeOf cfg.hosts) {
-    package = cfg.hosts;
-    path = pkgs.stdenv.mkDerivation {
-      name = "custom-retiolum-hosts";
-      src = cfg.hosts;
-      installPhase = ''
-        mkdir $out
-        find . -name .git -prune -o -type f -print0 \
-          | xargs -0 cp --target-directory $out
-      '';
-    };
+  tinc-hosts = pkgs.stdenv.mkDerivation {
+    name = "${cfg.netname}-tinc-hosts";
+    phases = [ "installPhase" ];
+    installPhase = ''
+      mkdir $out
+      ${concatStrings (mapAttrsToList (_: host: ''
+        echo ${shell.escape host.nets.${cfg.netname}.tinc.config} \
+          > $out/${shell.escape host.name}
+      '') cfg.hosts)}
+    '';
   };
 
   iproute = cfg.iproutePackage;
-
-  retiolumExtraHosts = import (pkgs.runCommand "retiolum-etc-hosts"
-    { }
-    ''
-      generate() {
-        (cd ${hosts}
-          printf \'\'
-          for i in `ls`; do
-            names=$(hostnames $i)
-            for j in `sed -En 's|^ *Aliases *= *(.+)|\1|p' $i`; do
-              names="$names $(hostnames $j)"
-            done
-            sed -En '
-              s|^ *Subnet *= *([^ /]*)(/[0-9]*)? *$|\1  '"$names"'|p
-            ' $i
-          done | sort
-          printf \'\'
-        )
-      }
-
-      case ${cfg.generateEtcHosts} in
-        short)
-          hostnames() { echo "$1"; }
-          generate
-          ;;
-        long)
-          hostnames() { echo "$1.${cfg.network}"; }
-          generate
-          ;;
-        both)
-          hostnames() { echo "$1.${cfg.network} $1"; }
-          generate
-          ;;
-        *)
-          echo '""'
-          ;;
-      esac > $out
-    '');
-
 
   confDir = pkgs.runCommand "retiolum" {
     # TODO text
@@ -203,12 +153,12 @@ let
 
     mkdir -p $out
 
-    ln -s ${hosts} $out/hosts
+    ln -s ${tinc-hosts} $out/hosts
 
     cat > $out/tinc.conf <<EOF
     Name = ${cfg.name}
     Device = /dev/net/tun
-    Interface = ${cfg.network}
+    Interface = ${cfg.netname}
     ${concatStrings (map (c : "ConnectTo = " + c + "\n") cfg.connectTo)}
     PrivateKeyFile = /tmp/retiolum-rsa_key.priv
     ${cfg.extraConfig}

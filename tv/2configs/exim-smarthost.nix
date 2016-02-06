@@ -1,4 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
+
+with lib;
 
 {
   krebs.exim-smarthost = {
@@ -34,4 +36,5 @@
       { from = "mirko"; to = "mv"; }
     ];
   };
+  tv.iptables.input-internet-accept-new-tcp = singleton "smtp";
 }

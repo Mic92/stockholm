@@ -93,11 +93,12 @@ let
         de.krebsco = "zones";
         gg23 = "hosts";
         shack = "hosts";
+        i = "hosts";
         internet = "hosts";
+        r = "hosts";
         retiolum = "hosts";
       };
 
-      # XXX This overlaps with krebs.retiolum
       networking.extraHosts = concatStringsSep "\n" (flatten (
         mapAttrsToList (hostname: host:
           mapAttrsToList (netname: net:
@@ -105,10 +106,8 @@ let
               aliases = longs ++ shorts;
               providers = dns.split-by-provider net.aliases cfg.dns.providers;
               longs = providers.hosts;
-              shorts =
-                map (removeSuffix ".${cfg.search-domain}")
-                    (filter (hasSuffix ".${cfg.search-domain}")
-                            longs);
+              shorts = let s = ".${cfg.search-domain}"; in
+                map (removeSuffix s) (filter (hasSuffix s) longs);
             in
               map (addr: "${addr} ${toString aliases}") net.addrs
           ) (filterAttrs (name: host: host.aliases != []) host.nets)

@@ -9,7 +9,7 @@ let
       enable = true;
       root-title = "public repositories at ${config.krebs.build.host.name}";
       root-desc = "keep calm and engage";
-      repos = mapAttrs (_: s: removeAttrs s ["collaborators"]) repos;
+      repos = repos;
       rules = rules;
     };
   };
@@ -22,8 +22,8 @@ let
 
   public-repos = mapAttrs make-public-repo ({
   } // mapAttrValues (setAttr "section" "1. Miscellaneous") {
-    cac = {
-      desc = "CloudAtCost command line interface";
+    cac-api = {
+      desc = "CloudAtCost API command line interface";
     };
     get = {};
     hack = {};
@@ -39,6 +39,7 @@ let
     stockholm = {
       desc = "take all the computers hostage, they'll love you!";
     };
+    with-tmpdir = {};
   } // mapAttrValues (setAttr "section" "2. Haskell libraries") {
     blessings = {};
     mime = {};
@@ -98,7 +99,7 @@ let
         repo = [ repo ];
         perm = fetch;
       } ++
-      optional (length (repo.collaborators or []) > 0) {
+      optional (repo.collaborators or [] != []) {
         user = repo.collaborators;
         repo = [ repo ];
         perm = fetch;

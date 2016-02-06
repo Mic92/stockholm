@@ -1,6 +1,4 @@
-#! /bin/sh
-
-# nix-shell -p gnumake jq openssh cac cacpanel
+# nix-shell -p gnumake jq openssh cac-api cac-panel
 set -eufx
 
 # 2 secrets are required:
@@ -40,22 +38,22 @@ defer "rm -r $krebs_secrets"
 
 cat > $sec_file <<EOF
 cac_login="$(jq -r .email $krebs_cred)"
-cac_key="$(cac-cli --config $krebs_cred panel settings | jq -r .apicode)"
+cac_key="$(cac-panel --config $krebs_cred settings | jq -r .apicode)"
 EOF
 
 export cac_secrets=$sec_file
-cac-cli --config $krebs_cred panel  add-api-ip
+cac-panel --config $krebs_cred add-api-ip
 
 # test login:
-cac update
-cac servers
+cac-api update
+cac-api servers
 
 # preserve old trap
 old_trapstr=$(clear_defer)
 while true;do
   # Template 26: CentOS7
-  # TODO: use cac templates to determine the real Centos7 template in case it changes
-  out=$(cac build cpu=1 ram=512 storage=10 os=26 2>&1)
+  # TODO: use cac-api templates to determine the real Centos7 template in case it changes
+  out=$(cac-api build cpu=1 ram=512 storage=10 os=26 2>&1)
   if name=$(echo "$out" | jq -r .servername);then
     id=servername:$name
     echo "got a working machine, id=$id"
@@ -67,15 +65,15 @@ while true;do
   fi
 
   clear_defer >/dev/null
-  defer "cac delete $id"
+  defer "cac-api delete $id"
 
   # TODO: timeout?
 
   wait_login_cac(){
     # we wait for 30 minutes
     for t in `seq 180`;do
-      # now we have a working cac server
-      if cac ssh $1 -o ConnectTimeout=10 \
+      # now we have a working cac-api server
+      if cac-api ssh $1 -o ConnectTimeout=10 \
                     cat /etc/redhat-release | \
                       grep CentOS ;then
         return 0
@@ -87,7 +85,7 @@ while true;do
   # die on timeout
   if ! wait_login_cac $id;then
     echo "unable to boot a working system within time frame, retrying..." >&2
-    echo "Cleaning up old image,last status: $(cac update;cac getserver $id | jq -r .status)"
+    echo "Cleaning up old image,last status: $(cac-api update;cac-api getserver $id | jq -r .status)"
     eval "$(clear_defer | sed 's/;exit//')"
     sleep 15
   else
@@ -96,17 +94,17 @@ while true;do
   fi
 done
 clear_defer >/dev/null
-defer "cac delete $id;$old_trapstr"
+defer "cac-api delete $id;$old_trapstr"
 
 mkdir -p shared/2configs/temp
-cac generatenetworking $id > \
+cac-api generatenetworking $id > \
   shared/2configs/temp/networking.nix
 # new temporary ssh key we will use to log in after infest
 ssh-keygen -f $krebs_ssh -N ""
 cp $retiolum_key $krebs_secrets/retiolum.rsa_key.priv
 # we override the directories for secrets and stockholm
 # additionally we set the ssh key we generated
-ip=$(cac getserver $id | jq -r .ip)
+ip=$(cac-api getserver $id | jq -r .ip)
 
 cat > shared/2configs/temp/dirs.nix <<EOF
 _: {
@@ -123,18 +121,18 @@ EOF
 
 LOGNAME=shared make eval get=krebs.infest \
   target=derp system=test-centos7 filter=json \
-  | sed -e "s#^ssh.*<<#cac ssh $id<<#" \
-        -e "/^rsync/a -e 'cac ssh $id' \\\\"  \
+  | sed -e "s#^ssh.*<<#cac-api ssh $id<<#" \
+        -e "/^rsync/a -e 'cac-api ssh $id' \\\\"  \
         -e "s#root.derp:#:#" > $krebs_secrets/infest
 sh -x $krebs_secrets/infest
 
 # TODO: generate secrets directory $krebs_secrets for nix import
-cac powerop $id reset
+cac-api powerop $id reset
 
 wait_login(){
   # timeout
   for t in `seq 90`;do
-    # now we have a working cac server
+    # now we have a working cac-api server
     if ssh -o StrictHostKeyChecking=no \
            -o UserKnownHostsFile=/dev/null \
            -i $krebs_ssh \
