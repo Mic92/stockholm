@@ -14,7 +14,6 @@
 
   krebs.retiolum = {
     enable = true;
-    hosts = ../../krebs/Zhosts;
     connectTo = [
       "prism"
       "cloudkrebs"
