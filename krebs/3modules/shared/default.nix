@@ -50,6 +50,7 @@ in {
           addrs6 = ["42:0:0:0:0:0:77:1"];
           aliases = [
             "wolf.retiolum"
+            "cgit.wolf.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----

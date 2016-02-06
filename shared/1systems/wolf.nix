@@ -11,7 +11,8 @@ in
     ../2configs/collectd-base.nix
     ../2configs/shack-nix-cacher.nix
     ../2configs/shack-drivedroid.nix
-    ../2configs/buildbot-standalone.nix
+    ../2configs/shared-buildbot.nix
+    ../2configs/cgit-mirror.nix
     # ../2configs/graphite.nix
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by

@@ -1,5 +1,9 @@
 { lib, config, pkgs, ... }:
+# The buildbot config is seilf-contained and provides a way to test "shared"
+# configuration (infrastructure to be used by every krebsminister).
 
+# You can add your own test, test steps as required. Deploy the config on a
+# shared host like wolf and everything should be fine.
 {
   networking.firewall.allowedTCPPorts = [ 8010 9989 ];
   krebs.buildbot.master = {
@@ -59,7 +63,10 @@
             "(import <stockholm> {}).pkgs.test.infest-cac-centos7" ]
   # TODO: --pure , prepare ENV in nix-shell command:
   #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
-  nixshell = ["nix-shell", "-I", "stockholm=.", "-p" ] + deps + [ "--run" ]
+  nixshell = ["nix-shell",
+                "-I", "stockholm=.",
+                "-I", "nixpkgs=/var/src/upstream-nixpkgs",
+                "-p" ] + deps + [ "--run" ]
 
   # prepare addShell function
   def addShell(factory,**kwargs):
@@ -69,14 +76,9 @@
       fast-tests = ''
   f = util.BuildFactory()
   f.addStep(grab_repo)
-  addShell(f,name="deploy-eval-centos7",env=env,
-            command=nixshell + ["make -s eval get=krebs.deploy filter=json system=test-centos7"])
-
-  addShell(f,name="deploy-eval-wolf",env=env,
-            command=nixshell + ["make -s eval get=krebs.deploy filter=json system=wolf"])
-
-  addShell(f,name="deploy-eval-cross-check",env=env,
-            command=nixshell + ["! make eval get=krebs.deploy filter=json system=test-failing"])
+  for i in [ "test-centos7", "wolf", "test-failing" ]:
+    addShell(f,name="populate-{}".format(i),env=env,
+            command=nixshell + ["set -o pipefail;{}( nix-instantiate --arg configuration shared/1systems/{}.nix --eval --readonly-mode --show-trace -A config.krebs.build.populate --strict | jq -r .)".format("!" if "failing" in i else "",i)])
 
   addShell(f,name="instantiate-test-all-modules",env=env,
             command=nixshell + \
@@ -86,8 +88,6 @@
                             -I stockholm=. \
                             --show-trace \
                             -I secrets=. '<stockholm>' \
-                            --argstr current-user-name shared \
-                            --argstr current-host-name lol \
                             --strict --json"])
 
   addShell(f,name="instantiate-test-minimal-deploy",env=env,
@@ -97,8 +97,6 @@
                             -I stockholm=. \
                             -I secrets=. '<stockholm>' \
                             --show-trace \
-                            --argstr current-user-name shared \
-                            --argstr current-host-name lol \
                             --strict --json"])
 
   bu.append(util.BuilderConfig(name="fast-tests",
@@ -145,6 +143,6 @@
     password = "krebspass";
     packages = with pkgs;[ git nix ];
     # all nix commands will need a working nixpkgs installation
-    extraEnviron = { NIX_PATH="nixpkgs=${toString <nixpkgs>}"; };
+    extraEnviron = { NIX_PATH="/var/src"; };
   };
 }

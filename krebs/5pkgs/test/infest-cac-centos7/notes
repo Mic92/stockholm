@@ -1,6 +1,4 @@
-#! /bin/sh
-
-# nix-shell -p gnumake jq openssh cac-api cacpanel
+# nix-shell -p gnumake jq openssh cac-api cac-panel
 set -eufx
 
 # 2 secrets are required:
@@ -40,11 +38,11 @@ defer "rm -r $krebs_secrets"
 
 cat > $sec_file <<EOF
 cac_login="$(jq -r .email $krebs_cred)"
-cac_key="$(cac-cli --config $krebs_cred panel settings | jq -r .apicode)"
+cac_key="$(cac-panel --config $krebs_cred settings | jq -r .apicode)"
 EOF
 
 export cac_secrets=$sec_file
-cac-cli --config $krebs_cred panel  add-api-ip
+cac-panel --config $krebs_cred add-api-ip
 
 # test login:
 cac-api update

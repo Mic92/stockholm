@@ -16,20 +16,16 @@ with lib;
   # TODO rename shared user to "krebs"
   krebs.build.user = mkDefault config.krebs.users.shared;
   krebs.build.source = {
-    git.nixpkgs = {
+    upstream-nixpkgs = mkDefault {
       url = https://github.com/NixOS/nixpkgs;
       rev = "d0e3cca";
-      target-path = "/var/src/nixpkgs";
     };
-    dir.secrets = {
-      host = config.krebs.current.host;
-      path = mkDefault "${getEnv "HOME"}/secrets/krebs/${config.krebs.build.host.name}";
-    };
-    dir.stockholm = {
-      host = config.krebs.current.host;
-      path = mkDefault "${getEnv "HOME"}/stockholm";
-      target-path = "/var/src/stockholm";
-    };
+    secrets =  mkDefault "${getEnv "HOME"}/secrets/krebs/${config.krebs.build.host.name}";
+    stockholm = mkDefault "${getEnv "HOME"}/stockholm";
+
+    nixos-config = "symlink:stockholm/${config.krebs.build.user.name}/1systems/${config.krebs.build.host.name}.nix";
+    nixpkgs = symlink:stockholm/nixpkgs;
+    stockholm-user = "symlink:stockholm/${config.krebs.build.user.name}";
   };
 
   networking.hostName = config.krebs.build.host.name;
