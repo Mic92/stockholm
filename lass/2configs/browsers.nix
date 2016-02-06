@@ -54,8 +54,6 @@ in {
   ];
 
   imports = [
-    ../3modules/per-user.nix
-  ] ++ [
     ( createFirefoxUser "ff" [ "audio" ] [ ] )
     ( createChromiumUser "cr" [ "audio" ] [ pkgs.chromium ] )
     ( createChromiumUser "fb" [ ] [ pkgs.chromium ] )
