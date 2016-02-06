@@ -48,21 +48,21 @@ with lib;
     exim-retiolum.enable = true;
     build = {
       user = config.krebs.users.lass;
-      source = {
-        git.nixpkgs = {
+      source = mapAttrs (_: mkDefault) ({
+        nixos-config = "symlink:stockholm/lass/1systems/${config.krebs.build.host.name}.nix";
+        nixpkgs = symlink:stockholm/nixpkgs;
+        secrets = "/home/lass/secrets/${config.krebs.build.host.name}";
+        #secrets-common = "/home/lass/secrets/common";
+        stockholm = "/home/lass/stockholm";
+        stockholm-user = "symlink:stockholm/lass";
+        upstream-nixpkgs = {
           url = https://github.com/Lassulus/nixpkgs;
           rev = "d0e3cca04edd5d1b3d61f188b4a5f61f35cdf1ce";
-          target-path = "/var/src/nixpkgs";
+          dev = "/home/lass/src/nixpkgs";
         };
-        dir.secrets = {
-          host = config.krebs.hosts.mors;
-          path = "/home/lass/secrets/${config.krebs.build.host.name}";
-        };
-        dir.stockholm = {
-          host = config.krebs.hosts.mors;
-          path = "/home/lass/stockholm";
-        };
-      };
+      } // optionalAttrs config.krebs.build.host.secure {
+        #secrets-master = "/home/lass/secrets/master";
+      });
     };
   };
 
