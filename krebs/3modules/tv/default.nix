@@ -24,6 +24,7 @@ with lib;
         internet = {
           addrs4 = ["162.219.7.216"];
           aliases = [
+            "cd.i"
             "cd.internet"
             "cd.krebsco.de"
             "cgit.cd.krebsco.de"
@@ -37,6 +38,7 @@ with lib;
           addrs4 = ["10.243.113.222"];
           addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af3"];
           aliases = [
+            "cd.r"
             "cd.retiolum"
             "cgit.cd.retiolum"
           ];
@@ -67,6 +69,7 @@ with lib;
         internet = {
           addrs4 = ["104.167.114.142"];
           aliases = [
+            "mkdir.i"
             "mkdir.internet"
           ];
         };
@@ -75,6 +78,7 @@ with lib;
           addrs4 = ["10.243.113.223"];
           addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af4"];
           aliases = [
+            "mkdir.r"
             "mkdir.retiolum"
             "cgit.mkdir.retiolum"
           ];
@@ -104,6 +108,7 @@ with lib;
         internet = {
           addrs4 = ["198.147.22.115"];
           aliases = [
+            "ire.i"
             "ire.internet"
             "ire.krebsco.de"
           ];
@@ -113,6 +118,7 @@ with lib;
           addrs4 = ["10.243.231.66"];
           addrs6 = ["42:b912:0f42:a82d:0d27:8610:e89b:490c"];
           aliases = [
+            "ire.r"
             "ire.retiolum"
           ];
           tinc.pubkey = ''
@@ -135,6 +141,7 @@ with lib;
         internet = {
           addrs4 = ["92.222.10.169"];
           aliases = [
+            "kaepsele.i"
             "kaepsele.internet"
             # TODO "kaepsele.org"
           ];
@@ -143,6 +150,7 @@ with lib;
           addrs4 = ["10.243.166.2"];
           addrs6 = ["42:0b9d:6660:d07c:2bb7:4e91:1a01:2e7d"];
           aliases = [
+            "kaepsele.r"
             "kaepsele.retiolum"
           ];
           tinc.pubkey = ''
@@ -171,6 +179,7 @@ with lib;
           addrs4 = ["10.243.0.110"];
           addrs6 = ["42:02d5:733f:d6da:c0f5:2bb7:2b18:09ec"];
           aliases = [
+            "nomic.r"
             "nomic.retiolum"
             "cgit.nomic.retiolum"
           ];
@@ -205,6 +214,7 @@ with lib;
         internet = {
           addrs4 = ["167.88.34.182"];
           aliases = [
+            "rmdir.i"
             "rmdir.internet"
           ];
         };
@@ -213,6 +223,7 @@ with lib;
           addrs4 = ["10.243.113.224"];
           addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af5"];
           aliases = [
+            "rmdir.r"
             "rmdir.retiolum"
             "cgit.rmdir.retiolum"
           ];
@@ -260,6 +271,7 @@ with lib;
           addrs4 = ["10.243.13.37"];
           addrs6 = ["42:0:0:0:0:0:0:1337"];
           aliases = [
+            "wu.r"
             "wu.retiolum"
             "cgit.wu.retiolum"
           ];
@@ -292,6 +304,7 @@ with lib;
           addrs4 = ["10.243.13.38"];
           addrs6 = ["42:0:0:0:0:0:0:1338"];
           aliases = [
+            "xu.r"
             "xu.retiolum"
           ];
           tinc.pubkey = ''
