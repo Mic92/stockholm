@@ -6,7 +6,7 @@ with lib;
   dns.providers = {
     de.viljetic = "regfish";
   };
-  hosts = addNames {
+  hosts = {
     cd = rec {
       cores = 2;
       dc = "tv"; #dc = "cac";
@@ -351,7 +351,7 @@ with lib;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPnjfceKuHNQu7S4eYFN1FqgzMqiL7haNZMh2ZLhvuhK root@xu";
     };
   };
-  users = addNames rec {
+  users = rec {
     mv = {
       mail = "mv@cd.retiolum";
       pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGer9e2+Lew7vnisgBbsFNECEIkpNJgEaqQqgb9inWkQ mv@vod";

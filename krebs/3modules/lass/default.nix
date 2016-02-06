@@ -3,7 +3,7 @@
 with lib;
 
 {
-  hosts = addNames {
+  hosts = {
     echelon = {
       cores = 2;
       dc = "lass"; #dc = "cac";
@@ -214,7 +214,7 @@ with lib;
     };
 
   };
-  users = addNames {
+  users = {
     lass = {
       pubkey = readFile ../../Zpubkeys/lass.ssh.pub;
       mail = "lass@mors.retiolum";

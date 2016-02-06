@@ -1,7 +1,7 @@
 { config, lib, ... }:
 with lib;
 {
-  krebs.backup.plans = addNames {
+  krebs.backup.plans = {
     wu-home-xu = {
       method = "push";
       src = { host = config.krebs.hosts.wu; path = "/home"; };

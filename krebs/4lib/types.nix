@@ -10,6 +10,7 @@ types // rec {
     options = {
       name = mkOption {
         type = label;
+        default = config._module.args.name;
       };
       dc = mkOption {
         type = label;
@@ -155,19 +156,20 @@ types // rec {
       merge = mergeOneOption;
     };
 
-  user = submodule {
+  user = submodule ({ config, ... }: {
     options = {
       mail = mkOption {
         type = str; # TODO retiolum mail address
       };
       name = mkOption {
         type = str; # TODO
+        default = config._module.args.name;
       };
       pubkey = mkOption {
         type = str;
       };
     };
-  };
+  });
 
   # TODO
   addr = str;

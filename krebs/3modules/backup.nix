@@ -12,7 +12,7 @@ let
     enable = mkEnableOption "krebs.backup" // { default = true; };
     plans = mkOption {
       default = {};
-      type = types.attrsOf (types.submodule ({
+      type = types.attrsOf (types.submodule ({ config, ... }: {
         # TODO enable = mkEnableOption "TODO" // { default = true; };
         options = {
           method = mkOption {
@@ -20,6 +20,7 @@ let
           };
           name = mkOption {
             type = types.str;
+            default = config._module.args.name;
           };
           src = mkOption {
             type = types.krebs.file-location;
