@@ -96,7 +96,6 @@ let
         retiolum = "hosts";
       };
 
-      # XXX This overlaps with krebs.retiolum
       networking.extraHosts = concatStringsSep "\n" (flatten (
         mapAttrsToList (hostname: host:
           mapAttrsToList (netname: net:

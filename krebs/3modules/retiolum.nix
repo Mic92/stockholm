@@ -29,22 +29,13 @@ let
       '';
     };
 
-    generateEtcHosts = mkOption {
-      type = types.str;
-      default = "both";
-      description = ''
-        If set to <literal>short</literal>, <literal>long</literal>, or <literal>both</literal>,
-        then generate entries in <filename>/etc/hosts</filename> from subnets.
-      '';
-    };
-
     netname = mkOption {
       type = types.str;
       default = "retiolum";
       description = ''
         The tinc network name.
-        It is used to generate long host entries,
-        and name the TUN device.
+        It is used to name the TUN device and to generate the default value for
+        <literal>config.krebs.retiolum.hosts</literal>.
       '';
     };
 
@@ -107,8 +98,6 @@ let
   imp = {
     environment.systemPackages = [ tinc iproute ];
 
-    networking.extraHosts = retiolumExtraHosts;
-
     systemd.services.retiolum = {
       description = "Tinc daemon for Retiolum";
       after = [ "network.target" ];
@@ -154,45 +143,6 @@ let
   };
 
   iproute = cfg.iproutePackage;
-
-  retiolumExtraHosts = import (pkgs.runCommand "retiolum-etc-hosts"
-    { }
-    ''
-      generate() {
-        (cd ${tinc-hosts}
-          printf \'\'
-          for i in `ls`; do
-            names=$(hostnames $i)
-            for j in `sed -En 's|^ *Aliases *= *(.+)|\1|p' $i`; do
-              names="$names $(hostnames $j)"
-            done
-            sed -En '
-              s|^ *Subnet *= *([^ /]*)(/[0-9]*)? *$|\1  '"$names"'|p
-            ' $i
-          done | sort
-          printf \'\'
-        )
-      }
-
-      case ${cfg.generateEtcHosts} in
-        short)
-          hostnames() { echo "$1"; }
-          generate
-          ;;
-        long)
-          hostnames() { echo "$1.${cfg.netname}"; }
-          generate
-          ;;
-        both)
-          hostnames() { echo "$1.${cfg.netname} $1"; }
-          generate
-          ;;
-        *)
-          echo '""'
-          ;;
-      esac > $out
-    '');
-
 
   confDir = pkgs.runCommand "retiolum" {
     # TODO text
