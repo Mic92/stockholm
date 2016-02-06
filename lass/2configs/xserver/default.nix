@@ -95,6 +95,7 @@ let
     set -efu
     export PATH; PATH=${makeSearchPath "bin" [
       pkgs.alsaUtils
+      pkgs.pulseaudioLight
       pkgs.rxvt_unicode
     ]}:/var/setuid-wrappers
     settle() {(
