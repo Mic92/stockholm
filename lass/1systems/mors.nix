@@ -226,7 +226,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    cac
+    cac-api
     sshpass
     get
     teamspeak_client
