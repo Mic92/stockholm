@@ -169,6 +169,28 @@ with lib;
       };
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDA9cDUg7qm37uOhQpdKSgpnJPWao9VZR6LFNphVcJQ++gYvVgWu6WMhigiy7DcGQSStUlXkZc4HZBBugwwNWcf7aAF6ijBuG5rVwb9AFQmSexpTOfWap33iA5f+LXYFHe7iv4Pt9TYO1ga1Ryl4EGKb7ol2h5vbKC+JiGaDejB0WqhBAyrTg4tTWO8k2JT11CrlTjNVctqV0IVAMtTc/hcJcNusnoGD4ic0QGSzEMYxcIGRNvIgWmxhI6GHeaHxXWH5fv4b0OpLlDfVUsIvEo9KVozoLGm/wgLBG/tQXKaF9qVMVgOYi9sX/hDLwhRrcD2cyAlq9djo2pMARYiriXF";
     };
+    mu = {
+      nets = {
+        retiolum = {
+          addrs4 = ["10.243.20.01"];
+          addrs6 = ["42:0:0:0:0:0:0:2001"];
+          aliases = [
+            "mu.r"
+            "mu.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEApXErmPSn2CO4V25lqxanCGCFgxEAjdzFUiTCCu0IvELEuCc3PqVA
+            g4ecf8gGwPCbzMW/1txjlgbsQcm87U5enaCwzSv/pa7P9/memV74OhqEVOypFlDE
+            XeZczqQfNbjoLYl4cKZpTsSZmOgASXaMDrH2N37f50q35C0MQw0HRzaQM5VLrzb4
+            o87MClS+yPqpvp34QjW+1lqnOKvMkr6mDrmtcAjCOs9Ma16txyfjGVFi8KmYqIs1
+            QEJmyC9Uocz5zuoSLUghgVRn9yl4+MEw6++akFDwKt/eMkcSq0GPB+3Rz/WLDiBs
+            FK6BsssQWdwiEWpv6xIl1Fi+s7F0riq2cwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     nomic = {
       cores = 2;
       dc = "tv"; #dc = "gg23";
