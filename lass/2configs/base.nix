@@ -91,6 +91,7 @@ with lib;
     git
     jq
     parallel
+    proot
 
   #style
     most
