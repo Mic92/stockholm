@@ -160,7 +160,7 @@ let
           -aAXF --delete \
           -e "ssh -F /dev/null -i $identity ''${dst_port:+-p $dst_port}" \
           --rsync-path ${shell.escape
-            "mkdir -m 0700 -p ${shell.escape plan.dst.path} && rsync"} \
+            "mkdir -m 0700 -p ${shell.escape plan.dst.path}/current && rsync"} \
           --link-dest="$dst_path/current" \
           "$src/" \
           "$dst/.partial"
