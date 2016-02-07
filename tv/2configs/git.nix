@@ -90,7 +90,7 @@ let
     with git // config.krebs.users;
     repo:
       singleton {
-        user = [ tv tv_xu ];
+        user = [ tv tv-xu ];
         repo = [ repo ];
         perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++
