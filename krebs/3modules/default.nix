@@ -179,7 +179,6 @@ let
                 (mapAttrsToList
                   (net-name: net:
                     let
-                      aliases = shorts ++ longs;
                       longs = net.aliases;
                       shorts =
                         map (removeSuffix ".${cfg.search-domain}")
@@ -190,7 +189,7 @@ let
                           then "[${a}]:${toString net.ssh.port}"
                           else a;
                     in
-                    aliases ++ map add-port net.addrs)
+                    map add-port (shorts ++ longs ++ net.addrs))
                   host.nets);
 
             publicKey = host.ssh.pubkey;
