@@ -198,6 +198,7 @@ with lib;
         gg23 = {
           addrs4 = ["10.23.1.110"];
           aliases = ["nomic.gg23"];
+          ssh.port = 11423;
         };
         retiolum = {
           addrs4 = ["10.243.0.110"];
@@ -292,6 +293,7 @@ with lib;
         gg23 = {
           addrs4 = ["10.23.1.37"];
           aliases = ["wu.gg23"];
+          ssh.port = 11423;
         };
         retiolum = {
           addrs4 = ["10.243.13.37"];
@@ -326,6 +328,7 @@ with lib;
         gg23 = {
           addrs4 = ["10.23.1.38"];
           aliases = ["xu.gg23"];
+          ssh.port = 11423;
         };
         retiolum = {
           addrs4 = ["10.243.13.38"];
