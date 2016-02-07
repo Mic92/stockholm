@@ -13,8 +13,10 @@ let
     plans = mkOption {
       default = {};
       type = types.attrsOf (types.submodule ({ config, ... }: {
-        # TODO enable = mkEnableOption "TODO" // { default = true; };
         options = {
+          enable = mkEnableOption "krebs.backup.${config.name}" // {
+            default = true;
+          };
           method = mkOption {
             type = types.enum ["pull" "push"];
           };
@@ -78,7 +80,7 @@ let
         inherit (plan) startAt;
       }) (filter (plan: build-host-is "pull" "dst" plan ||
                         build-host-is "push" "src" plan)
-                 (attrValues cfg.plans)));
+                 enabled-plans));
 
     users.groups.backup.gid = genid "backup";
     users.users.root.openssh.authorizedKeys.keys =
@@ -87,8 +89,10 @@ let
         pull = plan.dst.host.ssh.pubkey;
       }) (filter (plan: build-host-is "pull" "src" plan ||
                         build-host-is "push" "dst" plan)
-                 (attrValues cfg.plans));
+                 enabled-plans);
   };
+
+  enabled-plans = filter (getAttr "enable") (attrValues cfg.plans);
 
   build-host-is = method: side: plan:
     plan.method == method &&
