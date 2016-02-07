@@ -44,13 +44,9 @@ let
     alldirs = attrValues dirs ++ map dirOf (attrValues files);
   in unique (sort lessThan alldirs);
 
-  vim = pkgs.writeScriptBin "vim" ''
-    #! ${pkgs.dash}/bin/dash
-    set -f
-    umask=$(umask)
-    umask 0077
-    ${concatStringsSep "\n" (map (x: "mkdir -p ${x}") mkdirs)}
-    umask "$umask"
+  vim = pkgs.writeDashBin "vim" ''
+    set -efu
+    (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
     exec ${pkgs.vim}/bin/vim "$@"
   '';
 
