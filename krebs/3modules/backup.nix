@@ -128,11 +128,11 @@ let
   };
 
   push = plan: let
-    # We use writeDashBin and return the absolute path so systemd will produce
-    # nice names in the log, i.e. without the Nix store hash.
+    # We use pkgs.writeDashBin and return the absolute path so systemd will
+    # produce nice names in the log, i.e. without the Nix store hash.
     out = "${main}/bin/${main.name}";
 
-    main = writeDashBin "backup.${plan.name}.push" ''
+    main = pkgs.writeDashBin "backup.${plan.name}.push" ''
       set -efu
       dst=${shell.escape plan.dst.path}
 
@@ -140,7 +140,7 @@ let
       exec flock -n "$dst" ${critical-section}
     '';
 
-    critical-section = writeDash "backup.${plan.name}.push.critical-section" ''
+    critical-section = pkgs.writeDash "backup.${plan.name}.push.critical-section" ''
       # TODO check if there is a previous
       set -efu
       identity=${shell.escape plan.src.host.ssh.privkey.path}
@@ -173,7 +173,7 @@ let
           env NOW="$NOW" /bin/sh < ${remote-snapshot}
     '';
 
-    remote-snapshot = writeDash "backup.${plan.name}.push.remote-snapshot" ''
+    remote-snapshot = pkgs.writeDash "backup.${plan.name}.push.remote-snapshot" ''
       set -efu
       dst=${shell.escape plan.dst.path}
 
@@ -191,11 +191,11 @@ let
 
   # TODO admit plan.dst.user and its ssh identity
   pull = plan: let
-    # We use writeDashBin and return the absolute path so systemd will produce
-    # nice names in the log, i.e. without the Nix store hash.
+    # We use pkgs.writeDashBin and return the absolute path so systemd will
+    # produce nice names in the log, i.e. without the Nix store hash.
     out = "${main}/bin/${main.name}";
 
-    main = writeDashBin "backup.${plan.name}.pull" ''
+    main = pkgs.writeDashBin "backup.${plan.name}.pull" ''
       set -efu
       dst=${shell.escape plan.dst.path}
 
@@ -203,7 +203,7 @@ let
       exec flock -n "$dst" ${critical-section}
     '';
 
-    critical-section = writeDash "backup.${plan.name}.pull.critical-section" ''
+    critical-section = pkgs.writeDash "backup.${plan.name}.pull.critical-section" ''
       # TODO check if there is a previous
       set -efu
       identity=${shell.escape plan.dst.host.ssh.privkey.path}
@@ -235,7 +235,7 @@ let
     '';
   in out;
 
-  take-snapshots = plan: writeDash "backup.${plan.name}.take-snapshots" ''
+  take-snapshots = plan: pkgs.writeDash "backup.${plan.name}.take-snapshots" ''
     set -efu
     NOW=''${NOW-$(date +%s)}
     dst=${shell.escape plan.dst.path}
@@ -279,21 +279,6 @@ let
       ]))
       plan.snapshots)}
   '';
-
-  writeDash = name: text: pkgs.writeScript name ''
-    #! ${pkgs.dash}/bin/dash
-    ${text}
-  '';
-
-  writeDashBin = name: text: pkgs.writeTextFile {
-    executable = true;
-    destination = "/bin/${name}";
-    name = name;
-    text = ''
-      #! ${pkgs.dash}/bin/dash
-      ${text}
-    '';
-  };
 
   # XXX Is one ping enough to determine fastest address?
   # Note that we're using net.addrs4 instead of net.aliases because we define

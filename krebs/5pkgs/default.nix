@@ -61,6 +61,21 @@ subdirs // rec {
     strip --strip-unneeded "$exe"
   '';
 
+  writeDash = name: text: pkgs.writeScript name ''
+    #! ${pkgs.dash}/bin/dash
+    ${text}
+  '';
+
+  writeDashBin = name: text: pkgs.writeTextFile {
+    executable = true;
+    destination = "/bin/${name}";
+    name = name;
+    text = ''
+      #! ${pkgs.dash}/bin/dash
+      ${text}
+    '';
+  };
+
   writeNixFromCabal = name: path: pkgs.runCommand name {} ''
     ${pkgs.cabal2nix}/bin/cabal2nix ${path} > $out
   '';
