@@ -13,9 +13,21 @@ let
     environment.variables.VIMINIT = ":so /etc/vimrc";
   };
 
-  extra-runtimepath = concatStringsSep "," [
-    "${pkgs.vimPlugins.undotree}/share/vim-plugins/undotree"
-  ];
+  extra-runtimepath = let
+    inherit (pkgs.vimUtils) buildVimPlugin rtpPath;
+    fromVimPlugins = pkgs: concatStringsSep ","
+      (mapAttrsToList (name: pkg: "${pkg}/${rtpPath}/${name}") pkgs);
+  in fromVimPlugins {
+    inherit (pkgs.vimPlugins) undotree;
+    file-line = buildVimPlugin {
+      name = "file-line-1.0";
+      src = pkgs.fetchgit {
+        url = git://github.com/bogado/file-line;
+        rev = "refs/tags/1.0";
+        sha256 = "0z47zq9rqh06ny0q8lpcdsraf3lyzn9xvb59nywnarf3nxrk6hx0";
+      };
+    };
+  };
 
   dirs = {
     backupdir = "$HOME/.cache/vim/backup";
