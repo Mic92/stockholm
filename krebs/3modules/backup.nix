@@ -72,12 +72,12 @@ let
       ;
     systemd.services =
       flip mapAttrs' (filterAttrs (_:isPullDst) cfg.plans) (name: plan: {
-        name = "backup.${name}.pull";
+        name = "backup.${name}";
         value = makePullService plan;
       })
       //
       flip mapAttrs' (filterAttrs (_:isPushSrc) cfg.plans) (name: plan: {
-        name = "backup.${name}.push";
+        name = "backup.${name}";
         value = makePushService plan;
       })
       ;
