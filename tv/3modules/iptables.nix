@@ -13,6 +13,11 @@ let
   api = {
     enable = mkEnableOption "tv.iptables";
 
+    accept-echo-request = mkOption {
+      type = with types; nullOr (enum ["internet" "retiolum"]);
+      default = "retiolum";
+    };
+
     input-internet-accept-new-tcp = mkOption {
       type = with types; listOf (either int str);
       default = [];
@@ -49,10 +54,14 @@ let
   };
 
 
-  accept-new-tcp = port:
-    "-p tcp -m tcp --dport ${port} -m conntrack --ctstate NEW -j ACCEPT";
-
-  rules = iptables-version:
+  rules = iptables-version: let
+    accept-echo-request = {
+      ip4tables = "-p icmp -m icmp --icmp-type echo-request -j ACCEPT";
+      ip6tables = "-p ipv6-icmp -m icmp6 --icmpv6-type echo-request -j ACCEPT";
+    }."ip${toString iptables-version}tables";
+    accept-new-tcp = port:
+      "-p tcp -m tcp --dport ${port} -m conntrack --ctstate NEW -j ACCEPT";
+  in
     pkgs.writeText "tv-iptables-rules${toString iptables-version}" ''
       *nat
       :PREROUTING ACCEPT [0:0]
@@ -76,18 +85,12 @@ let
           "-m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT"
           "-i lo -j ACCEPT"
         ]
+        ++ optional (cfg.accept-echo-request == "internet") accept-echo-request
         ++ map accept-new-tcp (unique (map toString cfg.input-internet-accept-new-tcp))
         ++ ["-i retiolum -j Retiolum"]
       )}
       ${concatMapStringsSep "\n" (rule: "-A Retiolum ${rule}") ([]
-        ++ {
-          ip4tables = [
-            "-p icmp -m icmp --icmp-type echo-request -j ACCEPT"
-          ];
-          ip6tables = [
-            "-p ipv6-icmp -m icmp6 --icmpv6-type echo-request -j ACCEPT"
-          ];
-        }."ip${toString iptables-version}tables"
+        ++ optional (cfg.accept-echo-request == "retiolum") accept-echo-request
         ++ map accept-new-tcp (unique (map toString cfg.input-retiolum-accept-new-tcp))
         ++ {
           ip4tables = [

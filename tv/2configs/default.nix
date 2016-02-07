@@ -165,6 +165,7 @@ with lib;
 
     {
       tv.iptables.enable = true;
+      tv.iptables.accept-echo-request = "internet";
     }
 
     {
