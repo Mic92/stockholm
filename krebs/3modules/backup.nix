@@ -30,7 +30,7 @@ let
           };
           startAt = mkOption {
             default = "hourly";
-            type = types.str; # TODO systemd.time(7)'s calendar event
+            type = with types; nullOr str; # TODO systemd.time(7)'s calendar event
           };
           snapshots = mkOption {
             default = {
@@ -115,7 +115,8 @@ let
       ExecStart = push plan;
       Type = "oneshot";
     };
-    startAt = plan.startAt;
+  } // optionalAttrs (plan.startAt != null) {
+    inherit (plan) startAt;
   };
 
   makePullService = plan: assert isPullDst plan; {
@@ -124,7 +125,8 @@ let
       ExecStart = pull plan;
       Type = "oneshot";
     };
-    startAt = plan.startAt;
+  } // optionalAttrs (plan.startAt != null) {
+    inherit (plan) startAt;
   };
 
   push = plan: let
