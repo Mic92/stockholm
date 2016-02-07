@@ -155,7 +155,16 @@ let
         let inherit (config.krebs.build.host.ssh) privkey; in
         mkIf (privkey != null) (mkForce [privkey]);
 
+      # TODO use imports for merging
       services.openssh.knownHosts =
+        (let inherit (config.krebs.build.host.ssh) pubkey; in
+          optionalAttrs (pubkey != null) {
+            localhost = {
+              hostNames = ["localhost" "127.0.0.1" "::1"];
+              publicKey = pubkey;
+            };
+          })
+        //
         # GitHub's IPv4 address range is 192.30.252.0/22
         # Refs https://help.github.com/articles/what-ip-addresses-does-github-use-that-i-should-whitelist/
         # 192.30.252.0/22 = 192.30.252.0-192.30.255.255 (1024 addresses)
