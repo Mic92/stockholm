@@ -2,8 +2,9 @@
 
 with lib;
 let
-  subdirs = mapAttrs (_: flip pkgs.callPackage {}) (subdirsOf ./.);
-  pkgs' = pkgs // subdirs;
+  subdirs = mapAttrs (_: flip pkgs.callPackage {})
+                     (filterAttrs (_: dir.has-default-nix)
+                                  (subdirsOf ./.));
 in
 
 subdirs // rec {
@@ -22,7 +23,7 @@ subdirs // rec {
           (builtins.readDir ./haskell-overrides));
   };
 
-  push = pkgs'.callPackage ./push {
+  push = pkgs.callPackage ./push {
     inherit (subdirs) get jq;
   };
 
