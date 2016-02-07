@@ -47,9 +47,10 @@ let
   vim = pkgs.writeScriptBin "vim" ''
     #! ${pkgs.dash}/bin/dash
     set -f
+    umask=$(umask)
     umask 0077
     ${concatStringsSep "\n" (map (x: "mkdir -p ${x}") mkdirs)}
-    umask 0022
+    umask "$umask"
     exec ${pkgs.vim}/bin/vim "$@"
   '';
 
