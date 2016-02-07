@@ -175,8 +175,6 @@ types // rec {
   addr = str;
   addr4 = str;
   addr6 = str;
-  hostname = str;
-  label = str;
 
   krebs.file-location = types.submodule {
     options = {
@@ -193,6 +191,22 @@ types // rec {
         }.${typeOf x};
       };
     };
+  };
+
+  # RFC952, B. Lexical grammar, <hname>
+  hostname = mkOptionType {
+    name = "hostname";
+    check = x: all label.check (splitString "." x);
+    merge = mergeOneOption;
+  };
+
+  # RFC952, B. Lexical grammar, <name>
+  # RFC1123, 2.1  Host Names and Numbers
+  label = mkOptionType {
+    name = "label";
+    # TODO case-insensitive labels
+    check = x: match "[0-9A-Za-z]([0-9A-Za-z-]*[0-9A-Za-z])?" x != null;
+    merge = mergeOneOption;
   };
 
   # POSIX.1‐2013, 3.278 Portable Filename Character Set
