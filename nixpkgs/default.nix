@@ -1,1 +1,1 @@
-../upstream-nixpkgs/default.nix
+../../upstream-nixpkgs/default.nix
