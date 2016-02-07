@@ -145,9 +145,11 @@ let
       set -efu
       identity=${shell.escape plan.src.host.ssh.privkey.path}
       src=${shell.escape plan.src.path}
-      dst_target=${shell.escape "root@${getFQDN plan.dst.host}"}
+      dst_user=root
+      dst_host=$(${fastest-address plan.dst.host})
+      dst_port=$(${network-ssh-port plan.dst.host "$dst_host"})
       dst_path=${shell.escape plan.dst.path}
-      dst=$dst_target:$dst_path
+      dst=$dst_user@$dst_host:$dst_path
 
       # Export NOW so runtime of rsync doesn't influence snapshot naming.
       export NOW
@@ -156,7 +158,7 @@ let
       echo >&2 "update snapshot: current; $src -> $dst"
       rsync >&2 \
           -aAXF --delete \
-          -e "ssh -F /dev/null -i $identity" \
+          -e "ssh -F /dev/null -i $identity ''${dst_port:+-p $dst_port}" \
           --rsync-path ${shell.escape
             "mkdir -m 0700 -p ${shell.escape plan.dst.path} && rsync"} \
           --link-dest="$dst_path/current" \
@@ -165,10 +167,10 @@ let
 
       exec ssh -F /dev/null \
           -i "$identity" \
-          "$dst_target" \
+          ''${dst_port:+-p $dst_port} \
+          "$dst_user@$dst_host" \
           -T \
           env NOW="$NOW" /bin/sh < ${remote-snapshot}
-      EOF
     '';
 
     remote-snapshot = writeDash "backup.${plan.name}.push.remote-snapshot" ''
@@ -205,7 +207,11 @@ let
       # TODO check if there is a previous
       set -efu
       identity=${shell.escape plan.dst.host.ssh.privkey.path}
-      src=${shell.escape "root@${getFQDN plan.src.host}:${plan.src.path}"}
+      src_user=root
+      src_host=$(${fastest-address plan.src.host})
+      src_port=$(${network-ssh-port plan.src.host "$src_host"})
+      src_path=${shell.escape plan.src.path}
+      src=$src_user@$src_host:$src_path
       dst=${shell.escape plan.dst.path}
 
       # Export NOW so runtime of rsync doesn't influence snapshot naming.
@@ -216,7 +222,7 @@ let
       mkdir -m 0700 -p ${shell.escape plan.dst.path}
       rsync >&2 \
           -aAXF --delete \
-          -e "ssh -F /dev/null -i $identity" \
+          -e "ssh -F /dev/null -i $identity ''${src_port:+-p $src_port}" \
           --link-dest="$dst/current" \
           "$src/" \
           "$dst/.partial"
@@ -274,9 +280,6 @@ let
       plan.snapshots)}
   '';
 
-  # TODO getFQDN: admit hosts in other domains
-  getFQDN = host: "${host.name}.${config.krebs.search-domain}";
-
   writeDash = name: text: pkgs.writeScript name ''
     #! ${pkgs.dash}/bin/dash
     ${text}
@@ -291,6 +294,26 @@ let
       ${text}
     '';
   };
+
+  # XXX Is one ping enough to determine fastest address?
+  # Note that we're using net.addrs4 instead of net.aliases because we define
+  # ports only for addresses.  See krebs/3modules/default.nix
+  fastest-address = host: ''
+    { ${pkgs.fping}/bin/fping </dev/null -a \
+        ${concatMapStringsSep " " shell.escape
+          (mapAttrsToList (_: net: head net.addrs4) host.nets)} \
+      | ${pkgs.coreutils}/bin/head -1; }
+  '';
+
+  # Note that we don't escape word on purpose, so we deref shell vars.
+  # TODO type word
+  network-ssh-port = host: word: ''
+    case ${word} in
+    ${concatStringsSep ";;\n" (mapAttrsToList
+      (_: net: "(${head net.addrs4}) echo ${toString net.ssh.port}")
+      host.nets)};;
+    esac
+  '';
 
 in out
 # TODO ionice
