@@ -172,7 +172,7 @@ with lib;
     mu = {
       nets = {
         retiolum = {
-          addrs4 = ["10.243.20.01"];
+          addrs4 = ["10.243.20.1"];
           addrs6 = ["42:0:0:0:0:0:0:2001"];
           aliases = [
             "mu.r"
