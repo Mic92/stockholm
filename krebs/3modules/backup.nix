@@ -204,12 +204,10 @@ let
   '';
 
   # XXX Is one ping enough to determine fastest address?
-  # Note that we're using net.addrs4 instead of net.aliases because we define
-  # ports only for addresses.  See krebs/3modules/default.nix
   fastest-address = host: ''
     { ${pkgs.fping}/bin/fping </dev/null -a \
         ${concatMapStringsSep " " shell.escape
-          (mapAttrsToList (_: net: head net.addrs4) host.nets)} \
+          (mapAttrsToList (_: net: head net.aliases) host.nets)} \
       | ${pkgs.coreutils}/bin/head -1; }
   '';
 
@@ -218,7 +216,7 @@ let
   network-ssh-port = host: word: ''
     case ${word} in
     ${concatStringsSep ";;\n" (mapAttrsToList
-      (_: net: "(${head net.addrs4}) echo ${toString net.ssh.port}")
+      (_: net: "(${head net.aliases}) echo ${toString net.ssh.port}")
       host.nets)};;
     esac
   '';
