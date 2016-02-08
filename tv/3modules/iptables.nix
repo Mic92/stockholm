@@ -48,7 +48,12 @@ let
         Type = "simple";
         RemainAfterExit = true;
         Restart = "always";
-        ExecStart = "@${startScript} tv-iptables_start";
+        SyslogIdentifier = "tv-iptables_start";
+        ExecStart = pkgs.writeDash "tv-iptables_start" ''
+          set -euf
+          iptables-restore < ${rules 4}
+          ip6tables-restore < ${rules 6}
+        '';
       };
     };
   };
@@ -108,16 +113,7 @@ let
       )}
       COMMIT
     '';
-
-  startScript = pkgs.writeScript "tv-iptables_start" ''
-    #! /bin/sh
-    set -euf
-    iptables-restore < ${rules 4}
-    ip6tables-restore < ${rules 6}
-  '';
-
-in
-out
+in out
 
 #let
 #  cfg = config.tv.iptables;
