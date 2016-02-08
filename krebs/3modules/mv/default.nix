@@ -6,7 +6,6 @@ with lib;
   hosts = {
     stro = {
       cores = 4;
-      dc = "mv";
       nets = {
         retiolum = {
           addrs4 = ["10.243.111.111"];

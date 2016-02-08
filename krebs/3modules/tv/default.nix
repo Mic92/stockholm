@@ -9,7 +9,6 @@ with lib;
   hosts = {
     cd = rec {
       cores = 2;
-      dc = "tv"; #dc = "cac";
       extraZones = {
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
         "krebsco.de" = ''
@@ -65,7 +64,6 @@ with lib;
     };
     mkdir = rec {
       cores = 1;
-      dc = "tv"; #dc = "cac";
       nets = rec {
         internet = {
           addrs4 = ["104.167.114.142"];
@@ -193,7 +191,6 @@ with lib;
     };
     nomic = {
       cores = 2;
-      dc = "tv"; #dc = "gg23";
       nets = rec {
         gg23 = {
           addrs4 = ["10.23.1.110"];
@@ -235,7 +232,6 @@ with lib;
     };
     rmdir = rec {
       cores = 1;
-      dc = "tv"; #dc = "cac";
       nets = rec {
         internet = {
           addrs4 = ["167.88.34.182"];
@@ -287,8 +283,6 @@ with lib;
     };
     wu = {
       cores = 4;
-      # TODO wu is mobile, so dc means "home data center"
-      dc = "tv"; #dc = "gg23";
       nets = {
         gg23 = {
           addrs4 = ["10.23.1.37"];
@@ -322,8 +316,6 @@ with lib;
     };
     xu = {
       cores = 4;
-      # TODO xu is mobile, so dc means "home data center"
-      dc = "tv"; #dc = "gg23";
       nets = {
         gg23 = {
           addrs4 = ["10.23.1.38"];

@@ -12,9 +12,6 @@ types // rec {
         type = label;
         default = config._module.args.name;
       };
-      dc = mkOption {
-        type = label;
-      };
       cores = mkOption {
         type = positive;
       };

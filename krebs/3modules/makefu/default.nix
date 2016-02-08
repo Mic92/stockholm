@@ -6,7 +6,6 @@ with lib;
   hosts = {
     pnp = {
       cores = 1;
-      dc = "makefu"; #vm on 'omo'
       nets = {
         retiolum = {
           addrs4 = ["10.243.0.210"];
@@ -30,7 +29,6 @@ with lib;
     };
     tsp = {
       cores = 1;
-      dc = "makefu"; #x200
       nets = {
         retiolum = {
           addrs4 = ["10.243.0.212"];
@@ -58,7 +56,6 @@ with lib;
     };
     pornocauster = {
       cores = 2;
-      dc = "makefu"; #x220
       nets = {
         retiolum = {
           addrs4 = ["10.243.0.91"];
@@ -90,7 +87,6 @@ with lib;
 
     vbob = {
       cores = 2;
-      dc = "makefu"; #vm local
       nets = {
         retiolum = {
           addrs4 = ["10.243.1.91"];
@@ -116,7 +112,6 @@ with lib;
     };
     flap = rec {
       cores = 1;
-      dc = "cac"; #vps
 
       extraZones = {
         "krebsco.de" = ''
@@ -152,7 +147,6 @@ with lib;
     };
     pigstarter = rec {
       cores = 1;
-      dc = "frontrange"; #vps
 
       extraZones = {
         "krebsco.de" = ''
@@ -191,7 +185,6 @@ with lib;
     };
     wry = rec {
       cores = 1;
-      dc = "makefu"; #dc = "cac";
       extraZones = {
         "krebsco.de" = ''
           euer           IN A  ${head nets.internet.addrs4}
@@ -248,7 +241,6 @@ with lib;
     };
     filepimp = rec {
       cores = 1;
-      dc = "makefu"; #nas
 
       nets = {
         retiolum = {
@@ -273,7 +265,6 @@ with lib;
 
     omo = rec {
       cores = 2;
-      dc = "makefu"; #AMD E350
 
       nets = {
         retiolum = {
@@ -299,7 +290,6 @@ with lib;
     };
     wbob = rec {
       cores = 1;
-      dc = "none";
       nets = {
         retiolm = {
           addrs4 = ["10.243.214.15/32"];
@@ -323,7 +313,6 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
 
     gum = rec {
       cores = 1;
-      dc = "online.net"; #root-server
 
       extraZones = {
         "krebsco.de" = ''

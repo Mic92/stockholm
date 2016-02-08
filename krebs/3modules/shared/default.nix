@@ -34,7 +34,6 @@ let
 in {
   hosts = {
     wolf = {
-      dc = "shack";
       nets = {
         shack = {
           addrs4 = [ "10.42.2.150" ];

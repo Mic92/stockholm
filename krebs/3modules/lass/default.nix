@@ -6,7 +6,6 @@ with lib;
   hosts = {
     echelon = {
       cores = 2;
-      dc = "lass"; #dc = "cac";
       nets = rec {
         internet = {
           addrs4 = ["162.252.241.33"];
@@ -40,7 +39,6 @@ with lib;
     };
     prism = {
       cores = 4;
-      dc = "lass"; #dc = "cac";
       nets = rec {
         internet = {
           addrs4 = ["213.239.205.240"];
@@ -72,7 +70,6 @@ with lib;
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQChm4sqQ2bUZj+2YnTf6G5HHRTpSe1jTUhJRnwcYPYZKF+CBqBncipRpuGlGXEsptNa+7ZMcQC0ySsz5SUOMt3Ih+NehVe/qt3VtRz0l0MgOWmH2qBwKK9Y4IuxrJQzUmP4UGlOGlFj9DORssSMOyFIG4eZ9k2qMn3xal0NVRfGTShKlouWsiUILZ8I+sDNE00z8DAYesgc1yazvRnjzvLkRxdNdpYiAFBbmXMpPKK95McRJaWsuNSeal9kd5p5PagWcgN4DZ6+ebzz3NKnmzk4j+vuHX0U9lTXBqKMlzzmM2YNLRtDPfrtJNyHqLpZUpFhJKqZCD+4/0zdrzRfC7Th+5czzUCSvHiKPVsqw5eOdiQX6EyzNAF5zpkpRp//QdUNNXC5/Ku6GKCO491+TuA8VCha0fOwBONccTLUI/hGNmCh88mLbukVoeGJrbYNCOA/6kEz7ZLEveU4i+TT7okhDElMsNk+AWCZ8/NdJQNX3/K6+JJ9qAn+/yC8LdjgYYJ2oU/aw5/HyOgiQ0z4n9UfQ7j+nHysY9CQb1b3guX7yjJoc3KpNXCXEztuIRHjFD1EP8NRTSmGjsa/VjLmTLSsqjD+7IE5mT0tO5RJvmagDgdJSr/iR5D9zjW7hx7ttvektrlp9g0v3CiCFVaW4l95hGYT0HaNBLJ5R0YHm0lD+Q==";
     };
     fastpoke = {
-      dc = "lass";
       nets = rec {
         internet = {
           addrs4 = ["193.22.164.36"];
@@ -103,7 +100,6 @@ with lib;
     };
     cloudkrebs = {
       cores = 1;
-      dc = "lass"; #dc = "cac";
       nets = rec {
         internet = {
           addrs4 = ["104.167.113.104"];
@@ -136,7 +132,6 @@ with lib;
     };
     uriel = {
       cores = 1;
-      dc = "lass";
       nets = {
         gg23 = {
           addrs4 = ["10.23.1.12"];
@@ -167,7 +162,6 @@ with lib;
     };
     mors = {
       cores = 2;
-      dc = "lass";
       nets = {
         gg23 = {
           addrs4 = ["10.23.1.11"];
