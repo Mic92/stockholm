@@ -7,7 +7,6 @@ with lib;
 
   krebs.build = {
     user = config.krebs.users.tv;
-    target = mkDefault "root@${config.krebs.build.host.name}";
     source = mapAttrs (_: mkDefault) ({
       nixos-config = "symlink:stockholm/tv/1systems/${config.krebs.build.host.name}.nix";
       nixpkgs = symlink:stockholm/nixpkgs;

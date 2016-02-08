@@ -18,8 +18,6 @@ in
 {
   krebs.build.host = config.krebs.hosts.rmdir;
 
-  krebs.build.target = "root@rmdir.internet";
-
   imports = [
     ../2configs/hw/CAC-Developer-1.nix
     ../2configs/fs/CAC-CentOS-7-64bit.nix

@@ -4,7 +4,6 @@ with lib;
 
 {
   krebs.build.host = config.krebs.hosts.cd;
-  krebs.build.target = "root@cd.internet";
 
   imports = [
     ../2configs/hw/CAC-Developer-2.nix

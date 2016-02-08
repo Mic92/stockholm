@@ -17,7 +17,6 @@ in
 
 {
   krebs.build.host = config.krebs.hosts.mkdir;
-  krebs.build.target = "root@${primary-addr4}";
 
   imports = [
     ../2configs/hw/CAC-Developer-1.nix
