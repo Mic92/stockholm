@@ -76,8 +76,7 @@ let
           SyslogIdentifier = ExecStart.name;
           Type = "oneshot";
         };
-      } // optionalAttrs (plan.startAt != null) {
-        inherit (plan) startAt;
+        startAt = mkIf (plan.startAt != null) plan.startAt;
       }) (filter (plan: build-host-is "pull" "dst" plan ||
                         build-host-is "push" "src" plan)
                  enabled-plans));
