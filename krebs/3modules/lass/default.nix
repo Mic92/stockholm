@@ -4,6 +4,37 @@ with lib;
 
 {
   hosts = {
+    dishfire = {
+      cores = 4;
+      nets = rec {
+        internet = {
+          addrs4 = ["144.76.172.188"];
+          aliases = [
+            "dishfire.internet"
+          ];
+        };
+        retiolum = {
+          via = internet;
+          addrs4 = ["10.243.133.99"];
+          addrs6 = ["42:0000:0000:0000:0000:0000:d15f:1233"];
+          aliases = [
+            "dishfire.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAwKi49fN+0s5Cze6JThM7f7lj4da27PSJ/3w3tDFPvtQco11ksNLs
+            Xd3qPaQIgmcNVCR06aexae3bBeTx9y3qHvKqZVE1nCtRlRyqy1LVKSj15J1D7yz7
+            uS6u/BSZiCzmdZwu3Fq5qqoK0nfzWe/NKEDWNa5l4Mz/BZQyI/hbOpn6UfFD0LpK
+            R4jzc9Dbk/IFNAvwb5yrgEYtwBzlXzeDvHW2JcPq3qQjK2byQYNiIyV3g0GHppEd
+            vDbIPDFhTn3Hv5zz/lX+/We8izzRge7MEd+Vn9Jwb5NAzwDsOHl6ExpqASv9H49U
+            HwgPw5pstabyrsDWXybSYUb+8LcZf+unGwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGv0JMp0y+E5433GRSFKVK3cQmP0AAlS9aH9fk49yFxy";
+    };
     echelon = {
       cores = 2;
       nets = rec {
@@ -190,32 +221,46 @@ with lib;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINAMPlIG+6u75GJ3kvsPF6OoIZsU+u8ZQ+rdviv5fNMD";
     };
-    schnabel-ap = {
+    helios = {
+      cores = 2;
       nets = {
-        gg23 = {
-          addrs4 = ["10.23.1.20"];
-          aliases = ["schnabel-ap.gg23"];
+        retiolum = {
+          addrs4 = ["10.243.0.3"];
+          addrs6 = ["42:0:0:0:0:0:0:7105"];
+          aliases = [
+            "helios.retiolum"
+            "cgit.helios.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA9SItL2mhQpTl95gjSWRstrDajUnI5YbrVCuaDKfw9gRwMyPNiO/y
+            Xwv/w4Ri8NCJZLZGkj2vG3X0EfJFBEPTJPTCbF9fP7PqqVs38BD41txLp+NrFxEq
+            5fmFk65/eg8ujrNQoOSUGmky/BKqQhWjvxdAWuwjN933wJCcNCxyaUwljHLYEK/I
+            oIJX+spnFmPwmhW9hsOj8K06eHixT13+0W48GG/ZNcV3x5vWxcKUvZ4Qtzz2iMNB
+            hud5kae7xMUfFAzCeKF/zsjuyt2d/xQg1WgR8MXGNgYhNJFSXz94r/bivNO6H4vP
+            Pfjndnh8cD46ADo8woS1nQ19WId+sMbipwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
         };
       };
-    };
-    Reichsfunk-ap = {
-      nets = {
-        gg23 = {
-          addrs4 = ["10.23.1.10"];
-          aliases = ["Reichsfunk-ap.gg23"];
-        };
-      };
+      secure = true;
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDWlIxkX41V55Yker8n4gErx2xcKpXFNKthhbP3+bTJ7";
     };
 
   };
   users = {
     lass = {
-      pubkey = readFile ../../Zpubkeys/lass.ssh.pub;
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAp83zynhIueJJsWlSEykVSBrrgBFKq38+vT8bRfa+csqyjZBl2SQFuCPo+Qbh49mwchpZRshBa9jQEIGqmXxv/PYdfBFQuOFgyUq9ZcTZUXqeynicg/SyOYFW86iiqYralIAkuGPfQ4howLPVyjTZtWeEeeEttom6p6LMY5Aumjz2em0FG0n9rRFY2fBzrdYAgk9C0N6ojCs/Gzknk9SGntA96MDqHJ1HXWFMfmwOLCnxtE5TY30MqSmkrJb7Fsejwjoqoe9Y/mCaR0LpG2cStC1+37GbHJNH0caCMaQCX8qdfgMVbWTVeFWtV6aWOaRgwLrPDYn4cHWQJqTfhtPrNQ== lass@mors";
       mail = "lass@mors.retiolum";
     };
-    uriel = {
-      pubkey = readFile ../../Zpubkeys/uriel.ssh.pub;
+    lass-uriel = {
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDExWuRcltGM2FqXO695nm6/QY3wU3r1bDTyCpMrLfUSym7TxcXDSmZSWcueexPXV6GENuUfjJPZswOdWqIo5u2AXw9t0aGvwEDmI6uJ7K5nzQOsXIneGMdYuoOaAzWI8pxZ4N+lIP1HsOYttIPDp8RwU6kyG+Ud8mnVHWSTO13C7xC9vePnDP6b+44nHS691Zj3X/Cq35Ls0ISC3EM17jreucdP62L3TKk2R4NCm3Sjqj+OYEv0LAqIpgqSw5FypTYQgNByxRcIcNDlri63Q1yVftUP1338UiUfxtraUu6cqa2CdsHQmtX5mTNWEluVWO3uUKTz9zla3rShC+d3qvr lass@uriel";
       mail = "lass@uriel.retiolum";
+    };
+    lass-helios = {
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDBOnMtgy5GH6R6tHp2ugy5QTe3gAGxh2CKsstSNSNAJwvWGiaWJkbNmgM8KlCWeq1GJBGa95kU4I2BDO5fJd7J9vqyrTGF1+sx0Nwj/ELKSNVxDoKVYiU09pTqSB3pi46i+E8N49y4/8aRhu4/7O2dSTH7OS3YoZpt2Soas+cYJYhQdZtYQAgPX5LOkTfQvPhGR8AzrrTvOUrHyTWaSBEELVZ088LrFT6ibXHcPhwXX7A5+YMS8LLr3KRstySWzJEmfVOJxuMhQJSH1Xiq4bLilVn9V4AK5pCOnlALSYf48SexsCqzBUKgISuncurIBbXtW9EkNTMX3jSKlSQ7WniGRlmzrBAJCh4VXJUZgXDf8hAaPckIRbLosbTnEAauWcfnIXLfvI+bYkURhfYKsWelM+MS6ihk+P2yr8rNT9w5iUVJGVypOXUp45PrFuPn6ayCpNRJzqPwCCPE7fFagzLs7wibIXlrhCnRALT5HHyExFFcQoGvIq/8o+Oia8mrTimb55IDLwkiYrG6I5DPXFPKsTC0hium9T3I8dC+M7n9GbwnLTUK2kWnoklD3HTab21xJTtbF98nQ94df7doqPFxL/jongeZCGMB+PJ+BdQTtHr7tCY0kN2GXpoHxz/2w8YEWTKHhWIUsD+Utf8pDkKQfCqlm7iR7byxL51gHL9Z3Q== lass@helios";
+      mail = "lass@helios.retiolum";
     };
   };
 }

@@ -17,7 +17,6 @@
     #../2configs/ircd.nix
     ../2configs/chromium-patched.nix
     ../2configs/git.nix
-    ../2configs/retiolum.nix
     #../2configs/wordpress.nix
     ../2configs/bitlbee.nix
     ../2configs/firefoxPatched.nix
@@ -25,6 +24,7 @@
     ../2configs/teamviewer.nix
     ../2configs/libvirt.nix
     ../2configs/fetchWallpaper.nix
+    ../2configs/buildbot-standalone.nix
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
@@ -32,51 +32,70 @@
       ];
     }
     {
-      #wordpress-test
-      #imports = singleton (sitesGenerators.createWordpress "testserver.de");
+      #static-nginx-test
       imports = [
-        ../3modules/wordpress_nginx.nix
+        ../3modules/static_nginx.nix
       ];
-      lass.wordpress."testserver.de" = {
-        multiSite = {
-          "1" = "testserver.de";
-          "2" = "bla.testserver.de";
+      lass.staticPage."testserver.de" = {
+        #sslEnable = true;
+        #certificate = "${toString <secrets>}/testserver.de/server.cert";
+        #certificate_key = "${toString <secrets>}/testserver.de/server.pem";
+        ssl = {
+          enable = true;
+          certificate = "${toString <secrets>}/testserver.de/server.cert";
+          certificate_key = "${toString <secrets>}/testserver.de/server.pem";
         };
-      };
-
-      services.mysql = {
-        enable = true;
-        package = pkgs.mariadb;
-        rootPassword = "<secrets>/mysql_rootPassword";
       };
       networking.extraHosts = ''
         10.243.0.2 testserver.de
       '';
-      krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-i retiolum -p tcp --dport 80"; target = "ACCEPT"; precedence = 9998; }
-      ];
     }
-    {
-      #owncloud-test
-      #imports = singleton (sitesGenerators.createWordpress "testserver.de");
-      imports = [
-        ../3modules/owncloud_nginx.nix
-      ];
-      lass.owncloud."owncloud-test.de" = {
-      };
+    #{
+    #  #wordpress-test
+    #  #imports = singleton (sitesGenerators.createWordpress "testserver.de");
+    #  imports = [
+    #    ../3modules/wordpress_nginx.nix
+    #  ];
+    #  lass.wordpress."testserver.de" = {
+    #    multiSite = {
+    #      "1" = "testserver.de";
+    #      "2" = "bla.testserver.de";
+    #    };
+    #  };
 
-      #services.mysql = {
-      #  enable = true;
-      #  package = pkgs.mariadb;
-      #  rootPassword = "<secrets>/mysql_rootPassword";
-      #};
-      networking.extraHosts = ''
-        10.243.0.2 owncloud-test.de
-      '';
-      krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-i retiolum -p tcp --dport 80"; target = "ACCEPT"; precedence = 9998; }
-      ];
-    }
+    #  services.mysql = {
+    #    enable = true;
+    #    package = pkgs.mariadb;
+    #    rootPassword = "<secrets>/mysql_rootPassword";
+    #  };
+    #  networking.extraHosts = ''
+    #    10.243.0.2 testserver.de
+    #  '';
+    #  krebs.iptables.tables.filter.INPUT.rules = [
+    #    { predicate = "-i retiolum -p tcp --dport 80"; target = "ACCEPT"; precedence = 9998; }
+    #  ];
+    #}
+    #{
+    #  #owncloud-test
+    #  #imports = singleton (sitesGenerators.createWordpress "testserver.de");
+    #  imports = [
+    #    ../3modules/owncloud_nginx.nix
+    #  ];
+    #  lass.owncloud."owncloud-test.de" = {
+    #  };
+
+    #  #services.mysql = {
+    #  #  enable = true;
+    #  #  package = pkgs.mariadb;
+    #  #  rootPassword = "<secrets>/mysql_rootPassword";
+    #  #};
+    #  networking.extraHosts = ''
+    #    10.243.0.2 owncloud-test.de
+    #  '';
+    #  krebs.iptables.tables.filter.INPUT.rules = [
+    #    { predicate = "-i retiolum -p tcp --dport 80"; target = "ACCEPT"; precedence = 9998; }
+    #  ];
+    #}
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
@@ -207,7 +226,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    cac
+    cac-api
     sshpass
     get
     teamspeak_client

@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
-{
+let
+  mainUser = config.users.extraUsers.mainUser;
+in {
   environment.systemPackages = with pkgs; [
     electrum
   ];
@@ -14,4 +16,7 @@
       createHome = true;
     };
   };
+  security.sudo.extraConfig = ''
+    ${mainUser.name} ALL=(bitcoin) NOPASSWD: ALL
+  '';
 }

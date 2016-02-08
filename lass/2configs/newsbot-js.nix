@@ -161,7 +161,7 @@ let
     torrentfreak|http://feeds.feedburner.com/Torrentfreak|#news
     torr_news|http://feed.torrentfreak.com/Torrentfreak/|#news
     travel_warnings|http://feeds.travel.state.gov/ca/travelwarnings-alerts|#news
-    truther|http://truthernews.wordpress.com/feed/|#news
+    #truther|http://truthernews.wordpress.com/feed/|#news
     un_afr|http://www.un.org/apps/news/rss/rss_africa.asp|#news
     un_am|http://www.un.org/apps/news/rss/rss_americas.asp|#news
     un_eu|http://www.un.org/apps/news/rss/rss_europe.asp|#news
