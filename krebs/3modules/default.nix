@@ -21,6 +21,7 @@ let
       ./go.nix
       ./iptables.nix
       ./nginx.nix
+      ./nixpkgs.nix
       ./per-user.nix
       ./Reaktor.nix
       ./retiolum-bootstrap.nix
