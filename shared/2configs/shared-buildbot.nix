@@ -12,10 +12,10 @@
       testslave =  "krebspass";
     };
     change_source.stockholm = ''
-  stockholm_repo = 'http://cgit.gum/stockholm'
+  stockholm_repo = 'http://cgit.wolf/stockholm-mirror'
   cs.append(changes.GitPoller(
           stockholm_repo,
-          workdir='stockholm-poller', branch='master',
+          workdir='stockholm-poller', branches=True,
           project='stockholm',
           pollinterval=120))
     '';
@@ -28,7 +28,9 @@
         fast-tests-scheduler = ''
   # test the master real quick
   sched.append(schedulers.SingleBranchScheduler(
-                              change_filter=util.ChangeFilter(branch="master"),
+                              ## all branches
+                              change_filter=util.ChangeFilter(branch_re=".*"),
+                              # change_filter=util.ChangeFilter(branch="master"),
                               treeStableTimer=10, #only test the latest push
                               name="fast-master-test",
                               builderNames=["fast-tests"]))
@@ -52,7 +54,6 @@
     };
     builder_pre = ''
   # prepare grab_repo step for stockholm
-  stockholm_repo = "http://cgit.gum.retiolum/stockholm"
   grab_repo = steps.Git(repourl=stockholm_repo, mode='incremental')
 
   env = {"LOGNAME": "shared", "NIX_REMOTE": "daemon"}
@@ -78,8 +79,11 @@
   f.addStep(grab_repo)
   for i in [ "test-centos7", "wolf", "test-failing" ]:
     addShell(f,name="populate-{}".format(i),env=env,
-            command=nixshell + ["set -o pipefail;{}( nix-instantiate --arg configuration shared/1systems/{}.nix --eval --readonly-mode --show-trace -A config.krebs.build.populate --strict | jq -r .)".format("!" if "failing" in i else "",i)])
+            command=nixshell + \
+                      ["{}( make system={} eval.config.krebs.build.populate \
+                         | jq -er .)".format("!" if "failing" in i else "",i)])
 
+  # XXX we must prepare ./retiolum.rsa_key.priv for secrets to work
   addShell(f,name="instantiate-test-all-modules",env=env,
             command=nixshell + \
                       ["touch retiolum.rsa_key.priv; \
