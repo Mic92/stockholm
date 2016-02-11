@@ -43,16 +43,12 @@ let stockholm = {
     imports = builtins.filter lib.dir.has-default-nix (lib.concatLists [
       (map (f: f "2configs") [ lib.upath ])
       (map (f: f "3modules") [ lib.kpath lib.upath ])
+      (map (f: f "5pkgs") [ lib.kpath lib.upath ])
     ]);
 
     krebs.current.enable = true;
     krebs.current.host = config.krebs.hosts.${current-host-name};
     krebs.current.user = config.krebs.users.${current-user-name};
-
-    nixpkgs.config.packageOverrides = pkgs: let
-      kpkgs = import (lib.kpath "5pkgs") { inherit lib pkgs; };
-      upkgs = import (lib.upath "5pkgs") { inherit lib; pkgs = pkgs // kpkgs; };
-    in kpkgs // upkgs;
   };
 
   eval = config: import (lib.npath "nixos/lib/eval-config.nix") {
