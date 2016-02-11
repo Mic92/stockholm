@@ -44,7 +44,7 @@ let
       "slock"
     ];
 
-    systemd.services.display-manager = mkForce {};
+    systemd.services.display-manager.enable = false;
 
     services.xserver.enable = true;
 
@@ -93,9 +93,11 @@ let
   xmonad-start = pkgs.writeScriptBin "xmonad" ''
     #! ${pkgs.bash}/bin/bash
     set -efu
-    export PATH; PATH=${makeSearchPath "bin" ([
+    export PATH; PATH=${makeSearchPath "bin" [
+      pkgs.alsaUtils
+      pkgs.pulseaudioLight
       pkgs.rxvt_unicode
-    ] ++ config.environment.systemPackages)}:/var/setuid-wrappers
+    ]}:/var/setuid-wrappers
     settle() {(
       # Use PATH for a clean journal
       command=''${1##*/}

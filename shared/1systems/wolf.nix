@@ -45,7 +45,6 @@ in
   # uninteresting stuff
   #####################
   krebs.build.host = config.krebs.hosts.wolf;
-  krebs.build.target = "wolf";
 
   boot.kernel.sysctl = {
     # Enable IPv6 Privacy Extensions

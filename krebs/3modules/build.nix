@@ -3,8 +3,6 @@
 with lib;
 
 let
-  target = config.krebs.build // { user.name = "root"; };
-
   out = {
     # TODO deprecate krebs.build.host
     options.krebs.build.host = mkOption {
@@ -15,12 +13,6 @@ let
     options.krebs.build.profile = mkOption {
       type = types.str;
       default = "/nix/var/nix/profiles/system";
-    };
-
-    # TODO make krebs.build.target.host :: host
-    options.krebs.build.target = mkOption {
-      type = with types; nullOr str;
-      default = null;
     };
 
     # TODO deprecate krebs.build.user
@@ -74,7 +66,7 @@ let
 
           unset tmpdir
           trap '
-            rm "$tmpdir"/*
+            rm -f "$tmpdir"/*
             rmdir "$tmpdir"
             trap - EXIT INT QUIT
           '        EXIT INT QUIT

@@ -8,8 +8,6 @@ with lib;
   krebs.build.source.git.nixpkgs.rev =
     "7ae05edcdd14f6ace83ead9bf0d114e97c89a83a";
 
-  krebs.build.target = "lolwat";
-
   imports = [
     ../2configs/hw/x220.nix
     ../2configs/git.nix

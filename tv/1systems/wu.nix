@@ -157,7 +157,7 @@ with lib;
 
   nixpkgs.config.chromium.enablePepperFlash = true;
 
-  nixpkgs.config.allowUnfreePredicate = pkg: hasPrefix "nvidia-x11-" pkg.name;
+  krebs.nixpkgs.allowUnfreePredicate = pkg: hasPrefix "nvidia-x11-" pkg.name;
   hardware.bumblebee.enable = true;
   hardware.bumblebee.group = "video";
   hardware.enableAllFirmware = true;

@@ -32,9 +32,8 @@ let
     };
   });
 in {
-  hosts = addNames {
+  hosts = {
     wolf = {
-      dc = "shack";
       nets = {
         shack = {
           addrs4 = [ "10.42.2.150" ];
@@ -68,7 +67,7 @@ in {
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKYMXMWZIK0jjnZDM9INiYAKcwjXs2241vew54K8veCR";
     };
   } // testHosts;
-  users = addNames {
+  users = {
     shared = {
       mail = "spam@krebsco.de";
       pubkey = "lol"; # TODO krebs.users.shared.pubkey should be unnecessary

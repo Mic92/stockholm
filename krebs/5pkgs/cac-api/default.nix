@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bc, cac-cert, coreutils, curl, dash, gnused, inotifyTools, jq, ncurses, openssh, sshpass, ... }:
+{ stdenv, fetchgit, bc, cac-cert, coreutils, curl, dash, gnugrep, gnused, inotifyTools, jq, ncurses, openssh, sshpass, ... }:
 
 stdenv.mkDerivation {
   name = "cac-api-1.1.0";
@@ -22,6 +22,7 @@ stdenv.mkDerivation {
       bc
       coreutils
       curl
+      gnugrep
       gnused
       inotifyTools
       jq

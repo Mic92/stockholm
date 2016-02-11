@@ -6,10 +6,9 @@ with lib;
   dns.providers = {
     de.viljetic = "regfish";
   };
-  hosts = addNames {
+  hosts = {
     cd = rec {
       cores = 2;
-      dc = "tv"; #dc = "cac";
       extraZones = {
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
         "krebsco.de" = ''
@@ -24,6 +23,7 @@ with lib;
         internet = {
           addrs4 = ["162.219.7.216"];
           aliases = [
+            "cd.i"
             "cd.internet"
             "cd.krebsco.de"
             "cgit.cd.krebsco.de"
@@ -37,7 +37,9 @@ with lib;
           addrs4 = ["10.243.113.222"];
           addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af3"];
           aliases = [
+            "cd.r"
             "cd.retiolum"
+            "cgit.cd.r"
             "cgit.cd.retiolum"
           ];
           tinc.pubkey = ''
@@ -62,11 +64,11 @@ with lib;
     };
     mkdir = rec {
       cores = 1;
-      dc = "tv"; #dc = "cac";
       nets = rec {
         internet = {
           addrs4 = ["104.167.114.142"];
           aliases = [
+            "mkdir.i"
             "mkdir.internet"
           ];
         };
@@ -75,7 +77,9 @@ with lib;
           addrs4 = ["10.243.113.223"];
           addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af4"];
           aliases = [
+            "mkdir.r"
             "mkdir.retiolum"
+            "cgit.mkdir.r"
             "cgit.mkdir.retiolum"
           ];
           tinc.pubkey = ''
@@ -104,6 +108,7 @@ with lib;
         internet = {
           addrs4 = ["198.147.22.115"];
           aliases = [
+            "ire.i"
             "ire.internet"
             "ire.krebsco.de"
           ];
@@ -113,6 +118,7 @@ with lib;
           addrs4 = ["10.243.231.66"];
           addrs6 = ["42:b912:0f42:a82d:0d27:8610:e89b:490c"];
           aliases = [
+            "ire.r"
             "ire.retiolum"
           ];
           tinc.pubkey = ''
@@ -130,19 +136,74 @@ with lib;
       };
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBaMjBJ/BfYlHjyn5CO0xzFNaQ0LPvMP3W9UlOs1OxGY";
     };
+    kaepsele = {
+      nets = {
+        internet = {
+          addrs4 = ["92.222.10.169"];
+          aliases = [
+            "kaepsele.i"
+            "kaepsele.internet"
+            # TODO "kaepsele.org"
+          ];
+        };
+        retiolum = {
+          addrs4 = ["10.243.166.2"];
+          addrs6 = ["42:0b9d:6660:d07c:2bb7:4e91:1a01:2e7d"];
+          aliases = [
+            "kaepsele.r"
+            "kaepsele.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAxj7kaye4pGLou7mVRTVgtcWFjuEosJlxVg24gM7nU1EaoRnBD93/
+            Y3Je7BSUbz5xMXr5SFTPSkitInL7vU+jDOf2bEpqv+uUJAJIz85494oPS9xocdWo
+            rQsrQRAtOg4MLD+YIoAxQm2Mc4nt2CSE1+UP4uXGxpuh0c051b+9Kmwv1bTyHB9y
+            y01VSkDvNyHk5eA+RGDiujBAzhi35hzTlQgCJ3REOBiq4YmE1d3qpk3oNiYUcrcu
+            yFzQrSRIfhXjuzIR+wxqS95HDUsewSwt9HgkjJzYF5sQZSea0/XsroFqZyTJ8iB5
+            FQx2emBqB525cWKOt0f5jgyjklhozhJyiwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDA9cDUg7qm37uOhQpdKSgpnJPWao9VZR6LFNphVcJQ++gYvVgWu6WMhigiy7DcGQSStUlXkZc4HZBBugwwNWcf7aAF6ijBuG5rVwb9AFQmSexpTOfWap33iA5f+LXYFHe7iv4Pt9TYO1ga1Ryl4EGKb7ol2h5vbKC+JiGaDejB0WqhBAyrTg4tTWO8k2JT11CrlTjNVctqV0IVAMtTc/hcJcNusnoGD4ic0QGSzEMYxcIGRNvIgWmxhI6GHeaHxXWH5fv4b0OpLlDfVUsIvEo9KVozoLGm/wgLBG/tQXKaF9qVMVgOYi9sX/hDLwhRrcD2cyAlq9djo2pMARYiriXF";
+    };
+    mu = {
+      nets = {
+        retiolum = {
+          addrs4 = ["10.243.20.1"];
+          addrs6 = ["42:0:0:0:0:0:0:2001"];
+          aliases = [
+            "mu.r"
+            "mu.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEApXErmPSn2CO4V25lqxanCGCFgxEAjdzFUiTCCu0IvELEuCc3PqVA
+            g4ecf8gGwPCbzMW/1txjlgbsQcm87U5enaCwzSv/pa7P9/memV74OhqEVOypFlDE
+            XeZczqQfNbjoLYl4cKZpTsSZmOgASXaMDrH2N37f50q35C0MQw0HRzaQM5VLrzb4
+            o87MClS+yPqpvp34QjW+1lqnOKvMkr6mDrmtcAjCOs9Ma16txyfjGVFi8KmYqIs1
+            QEJmyC9Uocz5zuoSLUghgVRn9yl4+MEw6++akFDwKt/eMkcSq0GPB+3Rz/WLDiBs
+            FK6BsssQWdwiEWpv6xIl1Fi+s7F0riq2cwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     nomic = {
       cores = 2;
-      dc = "tv"; #dc = "gg23";
       nets = rec {
         gg23 = {
           addrs4 = ["10.23.1.110"];
           aliases = ["nomic.gg23"];
+          ssh.port = 11423;
         };
         retiolum = {
           addrs4 = ["10.243.0.110"];
           addrs6 = ["42:02d5:733f:d6da:c0f5:2bb7:2b18:09ec"];
           aliases = [
+            "nomic.r"
             "nomic.retiolum"
+            "cgit.nomic.r"
             "cgit.nomic.retiolum"
           ];
           tinc.pubkey = ''
@@ -171,11 +232,11 @@ with lib;
     };
     rmdir = rec {
       cores = 1;
-      dc = "tv"; #dc = "cac";
       nets = rec {
         internet = {
           addrs4 = ["167.88.34.182"];
           aliases = [
+            "rmdir.i"
             "rmdir.internet"
           ];
         };
@@ -184,7 +245,9 @@ with lib;
           addrs4 = ["10.243.113.224"];
           addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af5"];
           aliases = [
+            "rmdir.r"
             "rmdir.retiolum"
+            "cgit.rmdir.r"
             "cgit.rmdir.retiolum"
           ];
           tinc.pubkey = ''
@@ -220,18 +283,19 @@ with lib;
     };
     wu = {
       cores = 4;
-      # TODO wu is mobile, so dc means "home data center"
-      dc = "tv"; #dc = "gg23";
       nets = {
         gg23 = {
           addrs4 = ["10.23.1.37"];
           aliases = ["wu.gg23"];
+          ssh.port = 11423;
         };
         retiolum = {
           addrs4 = ["10.243.13.37"];
           addrs6 = ["42:0:0:0:0:0:0:1337"];
           aliases = [
+            "wu.r"
             "wu.retiolum"
+            "cgit.wu.r"
             "cgit.wu.retiolum"
           ];
           tinc.pubkey = ''
@@ -252,17 +316,17 @@ with lib;
     };
     xu = {
       cores = 4;
-      # TODO xu is mobile, so dc means "home data center"
-      dc = "tv"; #dc = "gg23";
       nets = {
         gg23 = {
           addrs4 = ["10.23.1.38"];
           aliases = ["xu.gg23"];
+          ssh.port = 11423;
         };
         retiolum = {
           addrs4 = ["10.243.13.38"];
           addrs6 = ["42:0:0:0:0:0:0:1338"];
           aliases = [
+            "xu.r"
             "xu.retiolum"
           ];
           tinc.pubkey = ''
@@ -282,7 +346,7 @@ with lib;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPnjfceKuHNQu7S4eYFN1FqgzMqiL7haNZMh2ZLhvuhK root@xu";
     };
   };
-  users = addNames rec {
+  users = rec {
     mv = {
       mail = "mv@cd.retiolum";
       pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGer9e2+Lew7vnisgBbsFNECEIkpNJgEaqQqgb9inWkQ mv@vod";
@@ -291,11 +355,11 @@ with lib;
       mail = "tv@wu.retiolum";
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAEAQDFR//RnCvEZAt0F6ExDsatKZ/DDdifanuSL360mqOhaFieKI34RoOwfQT9T+Ga52Vh5V2La6esvlph686EdgzeKLvDoxEwFM9ZYFBcMrNzu4bMTlgE7YUYw5JiORyXNfznBGnme6qpuvx9ibYhUyiZo99kM8ys5YrUHrP2JXQJMezDFZHxT4GFMOuSdh/1daGoKKD6hYL/jEHX8CI4E3BSmKK6ygYr1fVX0K0Tv77lIi5mLXucjR7CytWYWYnhM6DC3Hxpv2zRkPgf3k0x/Y1hrw3V/r0Me5h90pd2C8pFaWA2ZoUT/fmyVqvx1tZPYToU/O2dMItY0zgx2kR0yD+6g7Aahz3R+KlXkV8k5c8bbTbfGnZWDR1ZlbLRM9Yt5vosfwapUD90MmVkpmR3wUkO2sUKi80QfC7b4KvSDXQ+MImbGxMaU5Bnsq1PqLN95q+uat3nlAVBAELkcx51FlE9CaIS65y4J7FEDg8BE5JeuCNshh62VSYRXVSFt8bk3f/TFGgzC8OIo14BhVmiRQQ503Z1sROyf5xLX2a/EJavMm1i2Bs2TH6ROKY9z5Pz8hT5US0r381V8oG7TZyLF9HTtoy3wCYsgWA5EmLanjAsVU2YEeAA0rxzdtYP8Y2okFiJ6u+M4HQZ3Wg3peSodyp3vxdYce2vk4EKeqEFuuS82850DYb7Et7fmp+wQQUT8Q/bMO0DreWjHoMM5lE4LJ4ME6AxksmMiFtfo/4Fe2q9D+LAqZ+ANOcv9M+8Rn6ngiYmuRNd0l/a02q1PEvO6vTfXgcl4f7Z1IULHPEaDNZHCJS1K5RXYFqYQ6OHsTmOm7hnwaRAS97+VFMo1i5uvTx9nYaAcY7yzq3Ckfb67dMBKApGOpJpkvPgfrP7bgBO5rOZXM1opXqVPb09nljAhhAhyCTh1e/8+mJrBo0cLQ/LupQzVxGDgm3awSMPxsZAN45PSWz76zzxdDa1MMo51do+VJHfs7Wl0NcXAQrniOBYL9Wqt0qNkn1gY5smkkISGeQ/vxNap4MmzeZE7b5fpOy+2fpcRVQLpc4nooQzJvSVTFz+25lgZ6iHf45K87gQFMIAri1Pf/EDDpL87az+bRWvWi+BA2kMe1kf+Ay1LyMz8r+g51H0ma0bNFh6+fbWMfUiD9JCepIObclnUJ4NlWfcgHxTf17d/4tl6z4DTcLpCCk8Da77JouSHgvtcRbRlFV1OfhWZLXUsrlfpaQTiItv6TGIr3k7+7b66o3Qw/GQVs5GmYifaIZIz8n8my4XjkaMBd0SZfBzzvFjHMq6YUP9+SbjvReqofuoO+5tW1wTYZXitFFBfwuHlXm6w77K5QDBW6olT7pat41/F5eGxLcz tv@wu";
     };
-    tv_nomic = {
+    tv-nomic = {
       inherit (tv) mail;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC3dYR/n4Yw8OsYmfR2rSUG7o10G6AqOlSJHuHSEmANbMkqjiWl1TnpORtt5bAktyAGI4vWf9vhNEnxuIqGXWSV+3yCd7yfBHR1m0Y9QSw6blQ0xc1venl3JU0kpEyJfUn8a9cdXlnRiS0MP1gcsN7Zk8cqBELJYJajkSEnsT4eVaU5/wdnyzUO1fk8D8tFBJbF/tsWDLJPu4P18rpxq4wZgA2qmyHoVDEVlrz2OYcziXT6gpG0JGnToteaNg9ok5QavEYFpp8P+k1AacrBjc1PAb4MaMX1nfkSyaZwSqLdH35XkNRgPhVVmqZ5PlG3VeNpPSwpdcKi8P3zH1xG9g6Usx1SAyvcoAyGHdOwmFuA2tc1HgYEiQ+OsPrHZHujBOOZsKTN9+IZHScCAe+UmUcK413WEZKPs8PeFjf1gQAoDXb55JpksxLAnC/SQOl4FhkctIAXxr12ALlyt9UFPzIoj/Nj2MpFzGSlf653fTFmnMbQ8+GICc4TUpqx5GELZhfQuprBTv/55a9zKvM4B8XT3Bn9olQzMQIXEjXb3WUVFDDNWeNydToorYn1wG3ZWQ+3f0IlqRicWO7Q9BRj1Lp5rcUCb+naJ48tGY6HFUZ1Kz/0x458GDFvUd8mCJjqqmeSkUEeZd0xet5tVFg/bYoSslEqPF6pz7V3ruJMSdYxnQ== tv@nomic #2";
     };
-    tv_xu = {
+    tv-xu = {
       inherit (tv) mail;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC/3nkqxe8YrDVt615n96A7iC3vvwsiqgpsBYC/bhwfBHu1bAtBmTWVqSKDIdwg7p8TQpIKtAgZ3IJT3BlrnVTeR4RIviLjHjYWW1NBhm+nXi+heThgi5fLciE3lVLVsy5X9Kc1ZPLgLa1In0REOanwbueOD0ESN1yKIDwUUdczw/o3dLDMzanqFHKuSSN4o9Ex2x+MRj9eLsb706s4VSYMo3lirRCJeAOGv1C7Xg1cuepdhIeJsq9aF7vSy15c0nCkWwr8zdY7pbMPYCe5zvIEymZ0UowZ5HQ3NmIZnYDxa4E1PFjDczHdQbVmmGMI80grNwMsHzQ6bynHSPXDoLf4WodXlhS0+9Ju5QavDT6uqZ9uhDBuWC8QNgWUMIJnEaTBFyA0OI1akl8Q2RLC+qnNf5IwItSq+GDwEsB2ZJNW3kOk1kNiCUrBafRYpPaFeP97wzzP4uYlBKAr2SOLrrkf7NFEdw2ihxhDMNnps/ErRJ8U0zdpmalw8mItGyqRULpHjk/wN00rYOdBIhW3G3QJuVgtGnWtGCBG5x70EfMiSEXPD3YSsVVsgKD+v8qr+YiilRRD+N3gaHhiOWA6HgxRNul/P4llk0ktTpb9LoHk2+oooTH5ZuuT/8yF8J4stZt7EIOH+mSOAXG1z0BwnEkQu7pVKwu/oOZpGJTvBrGwww== tv@xu";
     };

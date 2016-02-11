@@ -12,14 +12,17 @@ let
     enable = mkEnableOption "krebs.backup" // { default = true; };
     plans = mkOption {
       default = {};
-      type = types.attrsOf (types.submodule ({
-        # TODO enable = mkEnableOption "TODO" // { default = true; };
+      type = types.attrsOf (types.submodule ({ config, ... }: {
         options = {
+          enable = mkEnableOption "krebs.backup.${config.name}" // {
+            default = true;
+          };
           method = mkOption {
             type = types.enum ["pull" "push"];
           };
           name = mkOption {
             type = types.str;
+            default = config._module.args.name;
           };
           src = mkOption {
             type = types.krebs.file-location;
@@ -29,7 +32,7 @@ let
           };
           startAt = mkOption {
             default = "hourly";
-            type = types.str; # TODO systemd.time(7)'s calendar event
+            type = with types; nullOr str; # TODO systemd.time(7)'s calendar event
           };
           snapshots = mkOption {
             default = {
@@ -57,239 +60,165 @@ let
   };
 
   imp = {
-    users.groups.backup.gid = genid "backup";
-    users.users = {}
-      // {
-        root.openssh.authorizedKeys.keys =
-          map (plan: plan.dst.host.ssh.pubkey)
-              (filter isPullSrc (attrValues cfg.plans))
-          ++
-          map (plan: plan.src.host.ssh.pubkey)
-              (filter isPushDst (attrValues cfg.plans))
-          ;
-      }
-      ;
     systemd.services =
-      flip mapAttrs' (filterAttrs (_:isPullDst) cfg.plans) (name: plan: {
-        name = "backup.${name}.pull";
-        value = makePullService plan;
-      })
-      //
-      flip mapAttrs' (filterAttrs (_:isPushSrc) cfg.plans) (name: plan: {
-        name = "backup.${name}.push";
-        value = makePushService plan;
-      })
-      ;
+      listToAttrs (map (plan: nameValuePair "backup.${plan.name}" {
+        # TODO if there is plan.user, then use its privkey
+        # TODO push destination users need a similar path
+        path = with pkgs; [
+          coreutils
+          gnused
+          openssh
+          rsync
+          utillinux
+        ];
+        serviceConfig = rec {
+          ExecStart = start plan;
+          SyslogIdentifier = ExecStart.name;
+          Type = "oneshot";
+        };
+        startAt = mkIf (plan.startAt != null) plan.startAt;
+      }) (filter (plan: build-host-is "pull" "dst" plan ||
+                        build-host-is "push" "src" plan)
+                 enabled-plans));
+
+    users.groups.backup.gid = genid "backup";
+    users.users.root.openssh.authorizedKeys.keys =
+      map (plan: getAttr plan.method {
+        push = plan.src.host.ssh.pubkey;
+        pull = plan.dst.host.ssh.pubkey;
+      }) (filter (plan: build-host-is "pull" "src" plan ||
+                        build-host-is "push" "dst" plan)
+                 enabled-plans);
   };
 
-  isPushSrc = plan:
-    plan.method == "push" &&
-    plan.src.host.name == config.krebs.build.host.name;
+  enabled-plans = filter (getAttr "enable") (attrValues cfg.plans);
 
-  isPullSrc = plan:
-    plan.method == "pull" &&
-    plan.src.host.name == config.krebs.build.host.name;
+  build-host-is = method: side: plan:
+    plan.method == method &&
+    config.krebs.build.host.name == plan.${side}.host.name;
 
-  isPushDst = plan:
-    plan.method == "push" &&
-    plan.dst.host.name == config.krebs.build.host.name;
-
-  isPullDst = plan:
-    plan.method == "pull" &&
-    plan.dst.host.name == config.krebs.build.host.name;
-
-  # TODO push destination needs this in the dst.user's PATH
-  service-path = [
-    pkgs.coreutils
-    pkgs.gnused
-    pkgs.openssh
-    pkgs.rsync
-    pkgs.utillinux
-  ];
-
-  # TODO if there is plan.user, then use its privkey
-  makePushService = plan: assert isPushSrc plan; {
-    path = service-path;
-    serviceConfig = {
-      ExecStart = push plan;
-      Type = "oneshot";
-    };
-    startAt = plan.startAt;
-  };
-
-  makePullService = plan: assert isPullDst plan; {
-    path = service-path;
-    serviceConfig = {
-      ExecStart = pull plan;
-      Type = "oneshot";
-    };
-    startAt = plan.startAt;
-  };
-
-  push = plan: let
-    # We use writeDashBin and return the absolute path so systemd will produce
-    # nice names in the log, i.e. without the Nix store hash.
-    out = "${main}/bin/${main.name}";
-
-    main = writeDashBin "backup.${plan.name}.push" ''
+  start = plan: pkgs.writeDash "backup.${plan.name}" ''
+    set -efu
+    ${getAttr plan.method {
+      push = ''
+        identity=${shell.escape plan.src.host.ssh.privkey.path}
+        src_path=${shell.escape plan.src.path}
+        src=$src_path
+        dst_user=root
+        dst_host=$(${fastest-address plan.dst.host})
+        dst_port=$(${network-ssh-port plan.dst.host "$dst_host"})
+        dst_path=${shell.escape plan.dst.path}
+        dst=$dst_user@$dst_host:$dst_path
+        echo "update snapshot: current; $src -> $dst" >&2
+        dst_shell() {
+          exec ssh -F /dev/null \
+              -i "$identity" \
+              ''${dst_port:+-p $dst_port} \
+              "$dst_user@$dst_host" \
+              -T "$with_dst_path_lock_script"
+        }
+      '';
+      pull = ''
+        identity=${shell.escape plan.dst.host.ssh.privkey.path}
+        src_user=root
+        src_host=$(${fastest-address plan.src.host})
+        src_port=$(${network-ssh-port plan.src.host "$src_host"})
+        src_path=${shell.escape plan.src.path}
+        src=$src_user@$src_host:$src_path
+        dst_path=${shell.escape plan.dst.path}
+        dst=$dst_path
+        echo "update snapshot: current; $dst <- $src" >&2
+        dst_shell() {
+          eval "$with_dst_path_lock_script"
+        }
+      '';
+    }}
+    # Note that this only works because we trust date +%s to produce output
+    # that doesn't need quoting when used to generate a command string.
+    # TODO relax this requirement by selectively allowing to inject variables
+    #   e.g.: ''${shell.quote "exec env NOW=''${shell.unquote "$NOW"} ..."}
+    with_dst_path_lock_script="exec env start_date=$(date +%s) "${shell.escape
+      "flock -n ${shell.escape plan.dst.path} /bin/sh"
+    }
+    rsync >&2 \
+        -aAXF --delete \
+        -e "ssh -F /dev/null -i $identity ''${dst_port:+-p $dst_port}" \
+        --rsync-path ${shell.escape (concatStringsSep " && " [
+          "mkdir -m 0700 -p ${shell.escape plan.dst.path}/current"
+          "exec flock -n ${shell.escape plan.dst.path} rsync"
+        ])} \
+        --link-dest="$dst_path/current" \
+        "$src/" \
+        "$dst/.partial"
+    dst_shell < ${toFile "backup.${plan.name}.take-snapshots" ''
       set -efu
+      : $start_date
+
       dst=${shell.escape plan.dst.path}
 
-      mkdir -m 0700 -p "$dst"
-      exec flock -n "$dst" ${critical-section}
-    '';
-
-    critical-section = writeDash "backup.${plan.name}.push.critical-section" ''
-      # TODO check if there is a previous
-      set -efu
-      identity=${shell.escape plan.src.host.ssh.privkey.path}
-      src=${shell.escape plan.src.path}
-      dst_target=${shell.escape "root@${getFQDN plan.dst.host}"}
-      dst_path=${shell.escape plan.dst.path}
-      dst=$dst_target:$dst_path
-
-      # Export NOW so runtime of rsync doesn't influence snapshot naming.
-      export NOW
-      NOW=$(date +%s)
-
-      echo >&2 "update snapshot: current; $src -> $dst"
-      rsync >&2 \
-          -aAXF --delete \
-          -e "ssh -F /dev/null -i $identity" \
-          --rsync-path ${shell.escape
-            "mkdir -m 0700 -p ${shell.escape plan.dst.path} && rsync"} \
-          --link-dest="$dst_path/current" \
-          "$src/" \
-          "$dst/.partial"
-
-      exec ssh -F /dev/null \
-          -i "$identity" \
-          "$dst_target" \
-          -T \
-          env NOW="$NOW" /bin/sh < ${remote-snapshot}
-      EOF
-    '';
-
-    remote-snapshot = writeDash "backup.${plan.name}.push.remote-snapshot" ''
-      set -efu
-      dst=${shell.escape plan.dst.path}
-
-      if test -e "$dst/current"; then
-        mv "$dst/current" "$dst/.previous"
-      fi
-      mv "$dst/.partial" "$dst/current"
-      rm -fR "$dst/.previous"
-      echo >&2
-
-      (${(take-snapshots plan).text})
-    '';
-
-  in out;
-
-  # TODO admit plan.dst.user and its ssh identity
-  pull = plan: let
-    # We use writeDashBin and return the absolute path so systemd will produce
-    # nice names in the log, i.e. without the Nix store hash.
-    out = "${main}/bin/${main.name}";
-
-    main = writeDashBin "backup.${plan.name}.pull" ''
-      set -efu
-      dst=${shell.escape plan.dst.path}
-
-      mkdir -m 0700 -p "$dst"
-      exec flock -n "$dst" ${critical-section}
-    '';
-
-    critical-section = writeDash "backup.${plan.name}.pull.critical-section" ''
-      # TODO check if there is a previous
-      set -efu
-      identity=${shell.escape plan.dst.host.ssh.privkey.path}
-      src=${shell.escape "root@${getFQDN plan.src.host}:${plan.src.path}"}
-      dst=${shell.escape plan.dst.path}
-
-      # Export NOW so runtime of rsync doesn't influence snapshot naming.
-      export NOW
-      NOW=$(date +%s)
-
-      echo >&2 "update snapshot: current; $dst <- $src"
-      mkdir -m 0700 -p ${shell.escape plan.dst.path}
-      rsync >&2 \
-          -aAXF --delete \
-          -e "ssh -F /dev/null -i $identity" \
-          --link-dest="$dst/current" \
-          "$src/" \
-          "$dst/.partial"
       mv "$dst/current" "$dst/.previous"
       mv "$dst/.partial" "$dst/current"
       rm -fR "$dst/.previous"
       echo >&2
 
-      exec ${take-snapshots plan}
-    '';
-  in out;
+      snapshot() {(
+        : $ns $format $retain
+        name=$(date --date="@$start_date" +"$format")
+        if ! test -e "$dst/$ns/$name"; then
+          echo >&2 "create snapshot: $ns/$name"
+          mkdir -m 0700 -p "$dst/$ns"
+          rsync >&2 \
+              -aAXF --delete \
+              --link-dest="$dst/current" \
+              "$dst/current/" \
+              "$dst/$ns/.partial.$name"
+          mv "$dst/$ns/.partial.$name" "$dst/$ns/$name"
+          echo >&2
+        fi
+        case $retain in
+          ([0-9]*)
+            delete_from=$(($retain + 1))
+            ls -r "$dst/$ns" \
+              | sed -n "$delete_from,\$p" \
+              | while read old_name; do
+                  echo >&2 "delete snapshot: $ns/$old_name"
+                  rm -fR "$dst/$ns/$old_name"
+                done
+            ;;
+          (ALL)
+            :
+            ;;
+        esac
+      )}
 
-  take-snapshots = plan: writeDash "backup.${plan.name}.take-snapshots" ''
-    set -efu
-    NOW=''${NOW-$(date +%s)}
-    dst=${shell.escape plan.dst.path}
-
-    snapshot() {(
-      : $ns $format $retain
-      name=$(date --date="@$NOW" +"$format")
-      if ! test -e "$dst/$ns/$name"; then
-        echo >&2 "create snapshot: $ns/$name"
-        mkdir -m 0700 -p "$dst/$ns"
-        rsync >&2 \
-            -aAXF --delete \
-            --link-dest="$dst/current" \
-            "$dst/current/" \
-            "$dst/$ns/.partial.$name"
-        mv "$dst/$ns/.partial.$name" "$dst/$ns/$name"
-        echo >&2
-      fi
-      case $retain in
-        ([0-9]*)
-          delete_from=$(($retain + 1))
-          ls -r "$dst/$ns" \
-            | sed -n "$delete_from,\$p" \
-            | while read old_name; do
-                echo >&2 "delete snapshot: $ns/$old_name"
-                rm -fR "$dst/$ns/$old_name"
-              done
-          ;;
-        (ALL)
-          :
-          ;;
-      esac
-    )}
-
-    ${concatStringsSep "\n" (mapAttrsToList (ns: { format, retain ? null, ... }:
-      toString (map shell.escape [
-        "ns=${ns}"
-        "format=${format}"
-        "retain=${if retain == null then "ALL" else toString retain}"
-        "snapshot"
-      ]))
-      plan.snapshots)}
+      ${concatStringsSep "\n" (mapAttrsToList (ns: { format, retain, ... }:
+        toString (map shell.escape [
+          "ns=${ns}"
+          "format=${format}"
+          "retain=${if retain == null then "ALL" else toString retain}"
+          "snapshot"
+        ]))
+        plan.snapshots)}
+    ''}
   '';
 
-  # TODO getFQDN: admit hosts in other domains
-  getFQDN = host: "${host.name}.${config.krebs.search-domain}";
-
-  writeDash = name: text: pkgs.writeScript name ''
-    #! ${pkgs.dash}/bin/dash
-    ${text}
+  # XXX Is one ping enough to determine fastest address?
+  fastest-address = host: ''
+    { ${pkgs.fping}/bin/fping </dev/null -a \
+        ${concatMapStringsSep " " shell.escape
+          (mapAttrsToList (_: net: head net.aliases) host.nets)} \
+      | ${pkgs.coreutils}/bin/head -1; }
   '';
 
-  writeDashBin = name: text: pkgs.writeTextFile {
-    executable = true;
-    destination = "/bin/${name}";
-    name = name;
-    text = ''
-      #! ${pkgs.dash}/bin/dash
-      ${text}
-    '';
-  };
+  # Note that we don't escape word on purpose, so we deref shell vars.
+  # TODO type word
+  network-ssh-port = host: word: ''
+    case ${word} in
+    ${concatStringsSep ";;\n" (mapAttrsToList
+      (_: net: "(${head net.aliases}) echo ${toString net.ssh.port}")
+      host.nets)};;
+    esac
+  '';
 
 in out
 # TODO ionice

@@ -17,7 +17,8 @@ with lib;
         root = {
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
-            config.krebs.users.uriel.pubkey
+            config.krebs.users.lass-uriel.pubkey
+            config.krebs.users.lass-helios.pubkey
           ];
         };
         mainUser = {
@@ -31,7 +32,7 @@ with lib;
           ];
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
-            config.krebs.users.uriel.pubkey
+            config.krebs.users.lass-uriel.pubkey
           ];
         };
       };
@@ -47,20 +48,21 @@ with lib;
     exim-retiolum.enable = true;
     build = {
       user = config.krebs.users.lass;
-      source = {
-        git.nixpkgs = {
+      source = mapAttrs (_: mkDefault) ({
+        nixos-config = "symlink:stockholm/lass/1systems/${config.krebs.build.host.name}.nix";
+        nixpkgs = symlink:stockholm/nixpkgs;
+        secrets = "/home/lass/secrets/${config.krebs.build.host.name}";
+        #secrets-common = "/home/lass/secrets/common";
+        stockholm = "/home/lass/stockholm";
+        stockholm-user = "symlink:stockholm/lass";
+        upstream-nixpkgs = {
           url = https://github.com/Lassulus/nixpkgs;
-          rev = "93d8671e2c6d1d25f126ed30e5e6f16764330119";
+          rev = "d0e3cca04edd5d1b3d61f188b4a5f61f35cdf1ce";
+          dev = "/home/lass/src/nixpkgs";
         };
-        dir.secrets = {
-          host = config.krebs.hosts.mors;
-          path = "/home/lass/secrets/${config.krebs.build.host.name}";
-        };
-        dir.stockholm = {
-          host = config.krebs.hosts.mors;
-          path = "/home/lass/stockholm";
-        };
-      };
+      } // optionalAttrs config.krebs.build.host.secure {
+        #secrets-master = "/home/lass/secrets/master";
+      });
     };
   };
 
@@ -89,6 +91,7 @@ with lib;
     git
     jq
     parallel
+    proot
 
   #style
     most
@@ -174,6 +177,12 @@ with lib;
 
   networking.dhcpcd.extraConfig = ''
     noipv4ll
+  '';
+
+  #CVE-2016-0777 and CVE-2016-0778 workaround
+  #https://www.qualys.com/2016/01/14/cve-2016-0777-cve-2016-0778/openssh-cve-2016-0777-cve-2016-0778.txt
+  programs.ssh.extraConfig = ''
+    UseRoaming no
   '';
 
 }

@@ -115,7 +115,6 @@ _: {
   users.extraUsers.root.openssh.authorizedKeys.keys = [
     "$(cat ${krebs_ssh}.pub)"
   ];
-  krebs.build.target = "$ip";
 }
 EOF
 

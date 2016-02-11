@@ -21,6 +21,7 @@ let
       ./go.nix
       ./iptables.nix
       ./nginx.nix
+      ./nixpkgs.nix
       ./per-user.nix
       ./Reaktor.nix
       ./retiolum-bootstrap.nix
@@ -84,6 +85,7 @@ let
   imp = mkMerge [
     { krebs = import ./lass { inherit lib; }; }
     { krebs = import ./makefu { inherit lib; }; }
+    { krebs = import ./miefda { inherit lib; }; }
     { krebs = import ./mv { inherit lib; }; }
     { krebs = import ./shared { inherit lib; }; }
     { krebs = import ./tv { inherit lib; }; }
@@ -92,11 +94,12 @@ let
         de.krebsco = "zones";
         gg23 = "hosts";
         shack = "hosts";
+        i = "hosts";
         internet = "hosts";
+        r = "hosts";
         retiolum = "hosts";
       };
 
-      # XXX This overlaps with krebs.retiolum
       networking.extraHosts = concatStringsSep "\n" (flatten (
         mapAttrsToList (hostname: host:
           mapAttrsToList (netname: net:
@@ -104,10 +107,8 @@ let
               aliases = longs ++ shorts;
               providers = dns.split-by-provider net.aliases cfg.dns.providers;
               longs = providers.hosts;
-              shorts =
-                map (removeSuffix ".${cfg.search-domain}")
-                    (filter (hasSuffix ".${cfg.search-domain}")
-                            longs);
+              shorts = let s = ".${cfg.search-domain}"; in
+                map (removeSuffix s) (filter (hasSuffix s) longs);
             in
               map (addr: "${addr} ${toString aliases}") net.addrs
           ) (filterAttrs (name: host: host.aliases != []) host.nets)
@@ -156,7 +157,16 @@ let
         let inherit (config.krebs.build.host.ssh) privkey; in
         mkIf (privkey != null) (mkForce [privkey]);
 
+      # TODO use imports for merging
       services.openssh.knownHosts =
+        (let inherit (config.krebs.build.host.ssh) pubkey; in
+          optionalAttrs (pubkey != null) {
+            localhost = {
+              hostNames = ["localhost" "127.0.0.1" "::1"];
+              publicKey = pubkey;
+            };
+          })
+        //
         # GitHub's IPv4 address range is 192.30.252.0/22
         # Refs https://help.github.com/articles/what-ip-addresses-does-github-use-that-i-should-whitelist/
         # 192.30.252.0/22 = 192.30.252.0-192.30.255.255 (1024 addresses)
@@ -180,7 +190,6 @@ let
                 (mapAttrsToList
                   (net-name: net:
                     let
-                      aliases = shorts ++ longs;
                       longs = net.aliases;
                       shorts =
                         map (removeSuffix ".${cfg.search-domain}")
@@ -191,7 +200,7 @@ let
                           then "[${a}]:${toString net.ssh.port}"
                           else a;
                     in
-                    aliases ++ map add-port net.addrs)
+                    map add-port (shorts ++ longs ++ net.addrs))
                   host.nets);
 
             publicKey = host.ssh.pubkey;
