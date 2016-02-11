@@ -39,8 +39,5 @@
   services.xserver = {
     videoDriver = "intel";
     vaapiDrivers = [ pkgs.vaapiIntel pkgs.vaapiVdpau ];
-    deviceSection = ''
-      Option "AccelMethod" "sna"
-    '';
   };
 }
