@@ -58,9 +58,9 @@ let
       default =
         filterAttrs (_: h: hasAttr cfg.netname h.nets) config.krebs.hosts;
       description = ''
-        Hosts which should be part of the tinc configuration.
-        Note that these hosts must have a correspondingly named network
-        configured, see <literal>config.krebs.retiolum.netname</literal>.
+        Hosts to generate <literal>config.krebs.retiolum.hostsPackage</literal>.
+        Note that these hosts must have a network named
+        <literal>config.krebs.retiolum.netname</literal>.
       '';
     };
 
@@ -77,6 +77,20 @@ let
           '') cfg.hosts)}
         '';
       };
+      description = ''
+        Package of tinc host configuration files.  By default, a package will
+        be generated from <literal>config.krebs.retiolum.hosts</literal>.  This
+        option's main purpose is to expose the generated hosts package to other
+        modules, like <literal>config.krebs.tinc_graphs</literal>.  But it can
+        also be used to provide a custom hosts directory.
+      '';
+      example = literalExample ''
+        (pkgs.stdenv.mkDerivation {
+          name = "my-tinc-hosts";
+          src = /home/tv/my-tinc-hosts;
+          installPhase = "cp -R . $out";
+        })
+      '';
     };
 
     iproutePackage = mkOption {
