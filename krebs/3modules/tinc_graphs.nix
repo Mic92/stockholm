@@ -85,7 +85,7 @@ let
         EXTERNAL_FOLDER = external_dir;
         INTERNAL_FOLDER = internal_dir;
         GEODB = cfg.geodbPath;
-        TINC_HOSTPATH=config.krebs.retiolum.hosts;
+        TINC_HOSTPATH = config.krebs.retiolum.hostsPackage;
       };
 
       restartIfChanged = true;

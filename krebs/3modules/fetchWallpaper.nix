@@ -12,10 +12,6 @@ let
 
   api = {
     enable = mkEnableOption "fetch wallpaper";
-    predicate = mkOption {
-      type = with types; nullOr path;
-      default = null;
-    };
     url = mkOption {
       type = types.str;
     };
@@ -33,16 +29,20 @@ let
       type = types.str;
       default = ":11";
     };
+    unitConfig = mkOption {
+      type = types.attrsOf types.str;
+      description = "Extra unit configuration for fetchWallpaper to define conditions and assertions for the unit";
+      example = literalExample ''
+        # do not start when running on umts
+        { ConditionPathExists = "!/var/run/ppp0.pid"; }
+      '';
+      default = {};
+    };
   };
 
   fetchWallpaperScript = pkgs.writeScript "fetchWallpaper" ''
     #! ${pkgs.bash}/bin/bash
-    ${optionalString (cfg.predicate != null) ''
-      if ! ${cfg.predicate}; then
-        echo "predicate failed - will not fetch from remote"
-        exit 0
-      fi
-    ''}
+
     mkdir -p ${shell.escape cfg.stateDir}
     curl -s -o ${shell.escape cfg.stateDir}/wallpaper -z ${shell.escape cfg.stateDir}/wallpaper ${shell.escape cfg.url}
     feh --no-fehbg --bg-scale ${shell.escape cfg.stateDir}/wallpaper
@@ -76,7 +76,6 @@ let
         URL = cfg.url;
         DISPLAY = cfg.display;
       };
-
       restartIfChanged = true;
 
       serviceConfig = {
@@ -84,6 +83,8 @@ let
         ExecStart = fetchWallpaperScript;
         User = "fetchWallpaper";
       };
+
+      unitConfig = cfg.unitConfig;
     };
   };
 in out
