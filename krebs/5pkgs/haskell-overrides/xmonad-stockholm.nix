@@ -3,11 +3,11 @@
 }:
 mkDerivation {
   pname = "xmonad-stockholm";
-  version = "1.0.0";
+  version = "1.1.0";
   src = fetchgit {
-    url = "http://cgit.cd.krebsco.de/xmonad-stockholm";
-    sha256 = "35dda5d16acc90af94ae2fae10ab5cc2d5b450c3f1ff2e7f515ac53877269abf";
-    rev = "2dbefe42fc5cfe9093465bf3e22ba8f82feeef6e";
+    url = http://cgit.cd.krebsco.de/xmonad-stockholm;
+    rev = "179d29fd4c765dee698058ef63295331ac603639";
+    sha256 = "0c6mj68xsxxr4j8adkzhjszi7bg6cpisrsmqn587a16sblpbrnkj";
   };
   libraryHaskellDepends = [
     base containers X11 X11-xshape xmonad xmonad-contrib

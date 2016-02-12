@@ -13,7 +13,6 @@ import XMonad
 import System.IO (hPutStrLn, stderr)
 import System.Environment (getArgs, withArgs, getEnv, getEnvironment)
 import System.Posix.Process (executeFile)
-import XMonad.Prompt (defaultXPConfig)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
 import XMonad.Actions.GridSelect
@@ -64,7 +63,7 @@ mainNoArgs = do
         -- $ withUrgencyHook borderUrgencyHook "magenta"
         -- $ withUrgencyHookC BorderUrgencyHook { urgencyBorderColor = "magenta" } urgencyConfig { suppressWhen = Never }
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
-        $ defaultConfig
+        $ def
             { terminal          = myTerm
             , modMask           = mod4Mask
             , keys              = myKeys
@@ -179,8 +178,8 @@ myKeys conf = Map.fromList $
     , ((_4  , xK_comma  ), sendMessage $ IncMasterN 1)
     , ((_4  , xK_period ), sendMessage $ IncMasterN (-1))
 
-    , ((_4  , xK_a      ), addWorkspacePrompt defaultXPConfig)
-    , ((_4  , xK_r      ), renameWorkspace defaultXPConfig)
+    , ((_4  , xK_a      ), addWorkspacePrompt def)
+    , ((_4  , xK_r      ), renameWorkspace def)
     , ((_4  , xK_Delete ), removeEmptyWorkspace)
 
     , ((_4  , xK_Return ), toggleWS)
@@ -205,7 +204,7 @@ myKeys conf = Map.fromList $
 
 
 pagerConfig :: PagerConfig
-pagerConfig = defaultPagerConfig
+pagerConfig = def
     { pc_font           = myFont
     , pc_cellwidth      = 64
     --, pc_cellheight     = 36 -- TODO automatically keep screen aspect
@@ -218,13 +217,13 @@ pagerConfig = defaultPagerConfig
     where
     windowColors _ _ _ True _ = ("#ef4242","#ff2323")
     windowColors wsf m c u wf = do
-        let def = defaultWindowColors wsf m c u wf
+        let y = defaultWindowColors wsf m c u wf
         if m == False && wf == True
-            then ("#402020", snd def)
-            else def
+            then ("#402020", snd y)
+            else y
 
 horseConfig :: RhombusConfig
-horseConfig = defaultRhombusConfig
+horseConfig = def
     { rc_font           = myFont
     , rc_cellwidth      = 64
     --, rc_cellheight     = 36 -- TODO automatically keep screen aspect
@@ -236,7 +235,7 @@ horseConfig = defaultRhombusConfig
     }
 
 wGSConfig :: GSConfig Window
-wGSConfig = defaultGSConfig
+wGSConfig = def
     { gs_cellheight = 20
     , gs_cellwidth = 192
     , gs_cellpadding = 5
@@ -244,7 +243,7 @@ wGSConfig = defaultGSConfig
     , gs_navigate = navNSearch
     }
 
--- wsGSConfig = defaultGSConfig
+-- wsGSConfig = def
 --     { gs_cellheight = 20
 --     , gs_cellwidth = 64
 --     , gs_cellpadding = 5
