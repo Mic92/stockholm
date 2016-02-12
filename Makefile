@@ -8,7 +8,7 @@ export target_path ?= /var/src
 
 evaluate = \
 	nix-instantiate \
-		--arg configuration "./$$LOGNAME/1systems/$$system.nix" \
+		--arg configuration ./$(LOGNAME)/1systems/$(system).nix \
 		--eval \
 		--readonly-mode \
 		--show-trace \
@@ -22,7 +22,7 @@ execute = \
 # usage: make deploy system=foo [target_host=bar]
 deploy:
 	$(call execute,populate)
-	@set -x; ssh "$$target_user@$$target_host" nixos-rebuild switch -I "$$target_path"
+	ssh $(target_user)@$(target_host) nixos-rebuild switch -I $(target_path)
 
 # usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
 eval eval.:;@$(call evaluate)
