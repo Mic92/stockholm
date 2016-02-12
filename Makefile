@@ -28,14 +28,13 @@ deploy:
 eval eval.:;@$(call evaluate)
 eval.%:;@$(call evaluate,-A $*)
 
-## usage: make install system=foo target=
-#.PHONY: install
-#install: ssh = ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
-#install:;@set -x
-#	$(ssh) "$$target_user@$$target_host" \
-#		env target_path="$target_path" \
-#			sh -s prepare < krebs/4lib/infest/prepare.sh
-#	make -s populate target_path=/mnt"$$target_path"
-#	$(ssh) "$$target_user@$$target_host" \
-#		env NIXOS_CONFIG=/var/src/nixos-config \
-#			nixos-install
+# usage: make install system=foo [target_host=bar]
+install: ssh = ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+install:
+	$(ssh) $(target_user)@$(target_host) \
+		env target_path=$(target_path) \
+			sh -s prepare < krebs/4lib/infest/prepare.sh
+	target_path=/mnt$(target_path) $(call execute,populate)
+	$(ssh) $(target_user)@$(target_host) \
+		env NIXOS_CONFIG=$(target_path)/nixos-config \
+			nixos-install
