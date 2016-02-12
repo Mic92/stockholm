@@ -26,13 +26,12 @@
                               builderNames=["full-tests"]))
         '';
         fast-tests-scheduler = ''
-  # test the master real quick
+  # test everything BUT the master real quick
   sched.append(schedulers.SingleBranchScheduler(
                               ## all branches
-                              change_filter=util.ChangeFilter(branch_re=".*"),
-                              # change_filter=util.ChangeFilter(branch="master"),
-                              treeStableTimer=10, #only test the latest push
-                              name="fast-master-test",
+                              change_filter=util.ChangeFilter(branch_re="(?!^master$)"),
+                              # treeStableTimer=10,
+                              name="fast-test-all-branches",
                               builderNames=["fast-tests"]))
         '';
         test-cac-infest-master = ''
