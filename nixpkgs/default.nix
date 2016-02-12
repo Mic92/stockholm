@@ -1,1 +1,5 @@
-../../upstream-nixpkgs/default.nix
+_:
+
+(import <stockholm> {
+  configuration = {};
+}).pkgs
