@@ -29,7 +29,7 @@ eval eval.:;@$(call evaluate)
 eval.%:;@$(call evaluate,-A $*)
 
 # usage: make install system=foo [target_host=bar]
-install: ssh = ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+install: ssh ?= ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
 install:
 	$(ssh) $(target_user)@$(target_host) \
 		env target_path=$(target_path) \
