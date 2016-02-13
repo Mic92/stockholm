@@ -74,13 +74,13 @@ with lib;
       SyslogIdentifier = "xu-qemu0";
       ExecStart = pkgs.writeDash "xu-qemu0" ''
         set -efu
+        ${pkgs.coreutils}/bin/mkdir -p "$HOME/tmp"
         img=$HOME/tmp/xu-qemu0.raw
         if ! test -e "$img"; then
-          ${pkgs.coreutils}/bin/mkdir -p "$(${pkgs.coreutils}/bin/dirname "$img")"
           ${pkgs.kvm}/bin/qemu-img create "$img" 10G
         fi
         exec ${pkgs.kvm}/bin/qemu-kvm \
-            -monitor unix:$HOME/xu-qemu0.sock,server,nowait \
+            -monitor unix:$HOME/tmp/xu-qemu0.sock,server,nowait \
             -boot order=cd \
             -cdrom ${pkgs.fetchurl {
               url = https://nixos.org/releases/nixos/15.09/nixos-15.09.1012.9fe0c23/nixos-minimal-15.09.1012.9fe0c23-x86_64-linux.iso;
@@ -102,7 +102,7 @@ with lib;
       filename = "${pkgs.writeDash "xu-qemu0-monitor" ''
         exec ${pkgs.socat}/bin/socat \
             stdio \
-            UNIX-CONNECT:${config.users.users.xu-qemu0.home}/xu-qemu0.sock \
+            UNIX-CONNECT:${config.users.users.xu-qemu0.home}/tmp/xu-qemu0.sock \
       ''}";
     }}
     dst=${config.security.wrapperDir}/xu-qemu0-monitor
