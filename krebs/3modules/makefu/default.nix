@@ -292,8 +292,8 @@ with lib;
       cores = 1;
       nets = {
         retiolm = {
-          addrs4 = ["10.243.214.15/32"];
-          addrs6 = ["42:5a02:2c30:c1b1:3f2e:7c19:2496:a732/128"];
+          addrs4 = ["10.243.214.15"];
+          addrs6 = ["42:5a02:2c30:c1b1:3f2e:7c19:2496:a732"];
           aliases = [
               "wbob.retiolum"
           ];
