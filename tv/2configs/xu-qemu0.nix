@@ -15,33 +15,31 @@ in
 #
 #   make [install] system=xu-qemu0 target_host=10.56.0.101
 
-# TODO iptables -A INPUT -p udp -m udp --dport bootps -j ACCEPT
+# TODO iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 # TODO iptables -A FORWARD -i qemubr0 -s 10.56.0.1/24 -m conntrack --ctstate NEW -j ACCEPT
 # TODO iptables -A POSTROUTING -t nat -j MASQUERADE
-# TODO iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+# TODO iptables -A INPUT -i qemubr0 -p udp -m udp --dport bootps -j ACCEPT
 # TODO iptables -A INPUT -i qemubr0 -p udp -m udp --dport domain -j ACCEPT
 # TODO echo 1 > /proc/sys/net/ipv4/ip_forward
-# TODO ifconfig qemubr0 10.56.0.1/24 up
 
 with lib;
 
 {
-  #networking.wireless.interfaces = [ "wlp3s0" ];
-
-  #networking.useNetworkd = true;
-
-  #networking.dhcpcd.allowInterfaces = [
-  #  "qemubr0"
-  #];
-
-  #systemd.network.networks.wlp3s0 = {
-  #  matchConfig.name = "wlp3s0";
-  #  networkConfig.Bridge = "qemubr0";
-  #};
+  networking.dhcpcd.denyInterfaces = [ "qemubr0" ];
 
   systemd.network.enable = true;
   services.resolved.enable = mkForce false;
 
+  systemd.network.networks.qemubr0 = {
+    matchConfig.Name = "qemubr0";
+    address = ["10.56.0.1/24"];
+    routes = [{
+      routeConfig = {
+        Gateway = "*";
+        Destination = "10.56.0.0";
+      };
+    }];
+  };
   systemd.network.netdevs.qemubr0 = {
     netdevConfig = {
       Name = "qemubr0";
