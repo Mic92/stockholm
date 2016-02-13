@@ -184,6 +184,15 @@ with lib;
       ];
     }
     {
+      environment.systemPackages = [
+        pkgs.get
+        pkgs.krebszones
+        pkgs.nix-prefetch-scripts
+        pkgs.push
+      ];
+    }
+
+    {
       systemd.tmpfiles.rules = let
         forUsers = flip map users;
         isUser = { name, group, ... }:
