@@ -20,7 +20,6 @@ in
 # TODO iptables -A POSTROUTING -t nat -j MASQUERADE
 # TODO iptables -A INPUT -i qemubr0 -p udp -m udp --dport bootps -j ACCEPT
 # TODO iptables -A INPUT -i qemubr0 -p udp -m udp --dport domain -j ACCEPT
-# TODO echo 1 > /proc/sys/net/ipv4/ip_forward
 
 with lib;
 
@@ -29,6 +28,8 @@ with lib;
 
   systemd.network.enable = true;
   services.resolved.enable = mkForce false;
+
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
 
   systemd.network.networks.qemubr0 = {
     matchConfig.Name = "qemubr0";
