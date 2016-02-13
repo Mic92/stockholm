@@ -68,7 +68,6 @@ with lib;
   systemd.services.xu-qemu0 = let
   in {
     after = [ "network.target" "systemd-resolved.service" ];
-    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       User = "xu-qemu0";
       SyslogIdentifier = "xu-qemu0";
