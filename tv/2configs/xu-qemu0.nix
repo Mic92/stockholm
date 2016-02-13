@@ -7,8 +7,7 @@ let
 in
 
 # usage:
-#   sudo -iu df xu-qemu0
-#   set_password vnc correcthorze
+#   echo set_password vnc correcthorze | xu-qemu0-monitor
 #
 #   vncdo -s xu:1 type 'curl init.xu.r' key shift-\\ type sh key return
 #
@@ -16,6 +15,13 @@ in
 #
 #   make [install] system=xu-qemu0 target_host=10.56.0.101
 
+# TODO iptables -A INPUT -p udp -m udp --dport bootps -j ACCEPT
+# TODO iptables -A FORWARD -i qemubr0 -s 10.56.0.1/24 -m conntrack --ctstate NEW -j ACCEPT
+# TODO iptables -A POSTROUTING -t nat -j MASQUERADE
+# TODO iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+# TODO iptables -A INPUT -i qemubr0 -p udp -m udp --dport domain -j ACCEPT
+# TODO echo 1 > /proc/sys/net/ipv4/ip_forward
+# TODO ifconfig qemubr0 10.56.0.1/24 up
 
 with lib;
 
@@ -43,7 +49,6 @@ with lib;
   };
 
   users.groups.qemu-users.gid = genid "qemu-users";
-  users.users.df.extraGroups = [ "qemu-users" ];
 
   environment.etc."qemu/bridge.conf".text = ''
     allow qemubr0
@@ -53,29 +58,58 @@ with lib;
     pkgs.vncdotool
   ];
 
-  krebs.per-user.df.packages = [
-    (pkgs.writeDashBin "xu-qemu0" ''
-      set -efux
-      img=$HOME/tmp/xu-qemu0.raw
-      if ! test -e "$img"; then
-        ${pkgs.coreutils}/bin/mkdir -p "$(${pkgs.coreutils}/bin/dirname "$img")"
-        ${pkgs.kvm}/bin/qemu-img create "$img" 10G
-      fi
-      exec ${pkgs.kvm}/bin/qemu-kvm \
-          -monitor stdio \
-          -boot order=cd \
-          -cdrom ${pkgs.fetchurl {
-            url = https://nixos.org/releases/nixos/15.09/nixos-15.09.1012.9fe0c23/nixos-minimal-15.09.1012.9fe0c23-x86_64-linux.iso;
-            sha256 = "18bc9wrsrjnhj9rya75xliqkl99gxbsk4dmwqivhvwfzb5qb5yp9";
-          }} \
-          -m 1024 \
-          -netdev bridge,br=qemubr0,id=hn0,helper=/var/setuid-wrappers/qemu-bridge-helper \
-          -net nic,netdev=hn0,id=nic1,macaddr=52:54:00:12:34:56 \
-          -drive file="$img",format=raw \
-          -display vnc=:1,websocket=5701,password,lossy \
-          -name xu-qemu0 \
-    '')
-  ];
+  users.users.xu-qemu0 = {
+    createHome = true;
+    group = "qemu-users";
+    home = "/home/xu-qemu0";
+    uid = genid "xu-qemu0";
+  };
+
+  systemd.services.xu-qemu0 = let
+  in {
+    after = [ "network.target" "systemd-resolved.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      User = "xu-qemu0";
+      SyslogIdentifier = "xu-qemu0";
+      ExecStart = pkgs.writeDash "xu-qemu0" ''
+        set -efu
+        img=$HOME/tmp/xu-qemu0.raw
+        if ! test -e "$img"; then
+          ${pkgs.coreutils}/bin/mkdir -p "$(${pkgs.coreutils}/bin/dirname "$img")"
+          ${pkgs.kvm}/bin/qemu-img create "$img" 10G
+        fi
+        exec ${pkgs.kvm}/bin/qemu-kvm \
+            -monitor unix:$HOME/xu-qemu0.sock,server,nowait \
+            -boot order=cd \
+            -cdrom ${pkgs.fetchurl {
+              url = https://nixos.org/releases/nixos/15.09/nixos-15.09.1012.9fe0c23/nixos-minimal-15.09.1012.9fe0c23-x86_64-linux.iso;
+              sha256 = "18bc9wrsrjnhj9rya75xliqkl99gxbsk4dmwqivhvwfzb5qb5yp9";
+            }} \
+            -m 1024 \
+            -netdev bridge,br=qemubr0,id=hn0,helper=/var/setuid-wrappers/qemu-bridge-helper \
+            -net nic,netdev=hn0,id=nic1,macaddr=52:54:00:12:34:56 \
+            -drive file="$img",format=raw \
+            -display vnc=:1,websocket=5701,password,lossy \
+            -name xu-qemu0 \
+      '';
+    };
+  };
+
+  system.activationScripts."krebs.setuid.xu-qemu0-monitor" = stringAfter [ "setuid" ] ''
+    src=${pkgs.execve "xu-qemu0-monitor" {
+      # TODO toC should handle derivation, then we don't have to "${...}" here
+      filename = "${pkgs.writeDash "xu-qemu0-monitor" ''
+        exec ${pkgs.socat}/bin/socat \
+            stdio \
+            UNIX-CONNECT:${config.users.users.xu-qemu0.home}/xu-qemu0.sock \
+      ''}";
+    }}
+    dst=${config.security.wrapperDir}/xu-qemu0-monitor
+    cp "$src" "$dst"
+    chown xu-qemu0.tv "$dst"
+    chmod 4710 "$dst"
+  '';
 
   #TODO krebs.setuid.qemu-bridge-helper = {
   #  filename = "${pkgs.qemu}/libexec/qemu-bridge-helper";

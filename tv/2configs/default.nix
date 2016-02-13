@@ -44,6 +44,7 @@ with lib;
           tv = {
             isNormalUser = true;
             uid = 1337;
+            extraGroups = [ "tv" ];
           };
         };
       };
