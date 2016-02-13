@@ -26,5 +26,28 @@ with lib;
         yearly   = { format = "%Y";                       };
       };
     };
+  } // mapAttrs (_: recursiveUpdate {
+    snapshots = {
+      minutely = { format = "%Y-%m-%dT%H:%M"; retain = 3; };
+      hourly   = { format = "%Y-%m-%dT%H";    retain = 3; };
+      daily    = { format = "%Y-%m-%d";       retain = 3; };
+    };
+    startAt = null;
+  }) {
+    xu-test-push-xu = {
+      method = "push";
+      src = { host = config.krebs.hosts.xu; path = "/tmp/xu-bku-test-data"; };
+      dst = { host = config.krebs.hosts.xu; path = "/bku/xu-test-push"; };
+    };
+    xu-test-pull-xu = {
+      method = "pull";
+      src = { host = config.krebs.hosts.xu; path = "/tmp/xu-bku-test-data"; };
+      dst = { host = config.krebs.hosts.xu; path = "/bku/xu-test-pull"; };
+    };
+    xu-test-push-wu = {
+      method = "push";
+      src = { host = config.krebs.hosts.xu; path = "/tmp/xu-bku-test-data"; };
+      dst = { host = config.krebs.hosts.wu; path = "/bku/xu-test-push"; };
+    };
   };
 }
