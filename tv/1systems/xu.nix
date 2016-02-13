@@ -14,6 +14,7 @@ with lib;
     ../2configs/pulse.nix
     ../2configs/retiolum.nix
     ../2configs/xserver
+    ../2configs/xu-qemu0.nix
     {
       environment.systemPackages = with pkgs; [
 
