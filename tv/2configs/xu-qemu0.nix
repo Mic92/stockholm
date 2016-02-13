@@ -40,6 +40,7 @@ with lib;
   #};
 
   systemd.network.enable = true;
+  services.resolved.enable = mkForce false;
 
   systemd.network.netdevs.qemubr0 = {
     netdevConfig = {
