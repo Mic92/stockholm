@@ -191,8 +191,6 @@ with lib;
     "d /tmp 1777 root root - -" # does this work with mounted /tmp?
   ];
 
-  virtualisation.libvirtd.enable = true;
-
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="00:90:f5:da:aa:c3", NAME="en0"
     SUBSYSTEM=="net", ATTR{address}=="a0:88:b4:1b:ae:6c", NAME="wl0"
@@ -211,5 +209,4 @@ with lib;
   services.tor.client.enable = true;
   services.tor.enable = true;
   services.virtualboxHost.enable = true;
-
 }

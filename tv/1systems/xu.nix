@@ -189,8 +189,6 @@ with lib;
     "d /tmp 1777 root root - -" # does this work with mounted /tmp?
   ];
 
-  #virtualisation.libvirtd.enable = true;
-
   #services.bitlbee.enable = true;
   #services.tor.client.enable = true;
   #services.tor.enable = true;
