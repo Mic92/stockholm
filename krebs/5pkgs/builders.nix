@@ -1,19 +1,30 @@
 { lib, pkgs, ... }:
 with lib;
-{
-  execve = name: { filename, argv, envp ? {}, destination ? "" }:
-    writeC name { inherit destination; } ''
-      #include <unistd.h>
-      int main () {
-        const char *filename = ${toC filename};
-        char *const argv[] = ${toC (argv ++ [null])};
-        char *const envp[] = ${toC (
-          mapAttrsToList (k: v: "${k}=${v}") envp ++ [null]
-        )};
-        execve(filename, argv, envp);
-        return -1;
-      }
-    '';
+rec {
+  execve = name: { filename, argv ? null, envp ? {}, destination ? "" }: let
+  in writeC name { inherit destination; } ''
+    #include <unistd.h>
+
+    static char *const filename = ${toC filename};
+
+    ${if argv == null
+      then /* Propagate arguments */ ''
+        #define MAIN_ARGS int argc, char **argv
+      ''
+      else /* Provide fixed arguments */ ''
+        #define MAIN_ARGS void
+        static char *const argv[] = ${toC (argv ++ [null])};
+      ''}
+
+    static char *const envp[] = ${toC (
+      mapAttrsToList (k: v: "${k}=${v}") envp ++ [null]
+    )};
+
+    int main (MAIN_ARGS) {
+      execve(filename, argv, envp);
+      return -1;
+    }
+  '';
 
   execveBin = name: cfg: execve name (cfg // { destination = "/bin/${name}"; });
 
