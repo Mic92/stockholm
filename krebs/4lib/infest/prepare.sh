@@ -36,6 +36,13 @@ prepare() {(
             ;;
         esac
         ;;
+      nixos)
+        case $(cat /proc/cmdline) in
+          *' root=LABEL=NIXOS_ISO '*)
+            prepare_nixos_iso "$@"
+            exit
+        esac
+        ;;
     esac
   elif test -e /etc/centos-release; then
     case $(cat /etc/centos-release) in
@@ -71,6 +78,24 @@ prepare_debian() {
   type rsync 2>/dev/null || apt-get install rsync
   type curl 2>/dev/null || apt-get install curl
   prepare_common
+}
+
+prepare_nixos_iso() {
+  mountpoint /mnt
+
+  type git 2>/dev/null || nix-env -iA nixos.git
+
+  mkdir -p /mnt/"$target_path"
+  mkdir -p "$target_path"
+
+  if ! mountpoint "$target_path"; then
+    mount --rbind /mnt/"$target_path" "$target_path"
+  fi
+
+  mkdir -p bin
+  rm -f bin/nixos-install
+  cp "$(type -p nixos-install)" bin/nixos-install
+  sed -i "s@^NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
 }
 
 prepare_common() {(
