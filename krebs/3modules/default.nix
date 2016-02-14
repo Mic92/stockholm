@@ -20,6 +20,7 @@ let
       ./git.nix
       ./go.nix
       ./iptables.nix
+      ./lib.nix
       ./nginx.nix
       ./nixpkgs.nix
       ./per-user.nix

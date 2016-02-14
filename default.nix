@@ -46,6 +46,8 @@ let stockholm = {
       (map (f: f "5pkgs") [ lib.kpath lib.upath ])
     ]);
 
+    krebs.lib = lib;
+
     krebs.current.enable = true;
     krebs.current.host = config.krebs.hosts.${current-host-name};
     krebs.current.user = config.krebs.users.${current-user-name};
