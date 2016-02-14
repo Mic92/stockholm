@@ -24,7 +24,7 @@ execute = \
 deploy:
 	$(call execute,populate)
 	ssh $(target_user)@$(target_host) -p $(target_port) \
-		nixos-rebuild switch -I $(target_path)
+		nixos-rebuild switch --show-trace -I $(target_path)
 
 # usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
 eval eval.:;@$(call evaluate)
