@@ -1,13 +1,12 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, pkgs, ... }:
 
-with builtins;
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs.nginx;
 
   out = {
     options.krebs.nginx = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {

@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 {
   hardware.enableAllFirmware = true;
   nixpkgs.config.allowUnfree = true;

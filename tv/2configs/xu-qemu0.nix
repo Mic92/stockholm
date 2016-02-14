@@ -21,7 +21,7 @@ in
 # TODO iptables -A INPUT -i qemubr0 -p udp -m udp --dport bootps -j ACCEPT
 # TODO iptables -A INPUT -i qemubr0 -p udp -m udp --dport domain -j ACCEPT
 
-with lib;
+with config.krebs.lib;
 
 {
   networking.dhcpcd.denyInterfaces = [ "qemubr0" ];

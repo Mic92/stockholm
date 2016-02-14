@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs.tinc_graphs;
   internal_dir = "${cfg.workingDir}/internal";
@@ -8,7 +8,7 @@ let
 
   out = {
     options.krebs.tinc_graphs = api;
-    config = mkIf cfg.enable imp ;
+    config = lib.mkIf cfg.enable imp ;
   };
 
   api = {

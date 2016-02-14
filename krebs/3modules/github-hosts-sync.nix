@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs.github-hosts-sync;
 
   out = {
     options.krebs.github-hosts-sync = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {

@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 
-with lib;
+with config.krebs.lib;
 let
   acng-config = pkgs.writeTextFile {
     name = "acng-configuration";
@@ -151,5 +151,5 @@ let
 in
 {
   options.krebs.apt-cacher-ng = api;
-  config = mkIf cfg.enable imp;
+  config = lib.mkIf cfg.enable imp;
 }

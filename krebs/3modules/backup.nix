@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
-with lib;
+with config.krebs.lib;
 let
   out = {
     options.krebs.backup = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   cfg = config.krebs.backup;

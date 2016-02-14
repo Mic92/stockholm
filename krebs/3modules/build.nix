@@ -1,6 +1,6 @@
 { config, lib, ... }:
 
-with lib;
+with config.krebs.lib;
 
 let
   out = {

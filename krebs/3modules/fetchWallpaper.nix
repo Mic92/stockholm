@@ -1,13 +1,13 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 
 let
   cfg = config.krebs.fetchWallpaper;
 
   out = {
     options.krebs.fetchWallpaper = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {

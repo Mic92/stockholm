@@ -1,5 +1,5 @@
 { config, pkgs, lib, ... }:
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs.setuid;
 

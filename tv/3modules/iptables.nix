@@ -1,13 +1,12 @@
 { config, lib, pkgs, ... }:
 
-with builtins;
-with lib;
+with config.krebs.lib;
 let
   cfg = config.tv.iptables;
 
   out = {
     options.tv.iptables = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {
