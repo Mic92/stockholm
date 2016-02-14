@@ -79,7 +79,7 @@ with lib;
           ${pkgs.kvm}/bin/qemu-img create "$img" 10G
         fi
         exec ${pkgs.kvm}/bin/qemu-kvm \
-            -monitor unix:$HOME/tmp/xu-qemu0.sock,server,nowait \
+            -monitor unix:$HOME/tmp/xu-qemu0-monitor.sock,server,nowait \
             -boot order=cd \
             -cdrom ${pkgs.fetchurl {
               url = https://nixos.org/releases/nixos/15.09/nixos-15.09.1012.9fe0c23/nixos-minimal-15.09.1012.9fe0c23-x86_64-linux.iso;
@@ -95,36 +95,20 @@ with lib;
     };
   };
 
-  system.activationScripts."krebs.setuid.xu-qemu0-monitor" = stringAfter [ "setuid" ] ''
-    src=${pkgs.execve "xu-qemu0-monitor" {
-      # TODO toC should handle derivation, then we don't have to "${...}" here
-      filename = "${pkgs.writeDash "xu-qemu0-monitor" ''
-        exec ${pkgs.socat}/bin/socat \
-            stdio \
-            UNIX-CONNECT:${config.users.users.xu-qemu0.home}/tmp/xu-qemu0.sock \
-      ''}";
-    }}
-    dst=${config.security.wrapperDir}/xu-qemu0-monitor
-    cp "$src" "$dst"
-    chown xu-qemu0.tv "$dst"
-    chmod 4710 "$dst"
-  '';
+  krebs.setuid.xu-qemu0-monitor = {
+    filename = pkgs.writeDash "xu-qemu0-monitor" ''
+      exec ${pkgs.socat}/bin/socat \
+          stdio \
+          UNIX-CONNECT:${config.users.users.xu-qemu0.home}/tmp/xu-qemu0-monitor.sock \
+    '';
+    owner = "xu-qemu0";
+    group = "tv";
+  };
 
-  #TODO krebs.setuid.qemu-bridge-helper = {
-  #  filename = "${pkgs.qemu}/libexec/qemu-bridge-helper";
-  #  owner = "root";
-  #  group = "qemu-users";
-  #  mode = "4710";
-  #};
-  system.activationScripts."krebs.setuid" = stringAfter [ "setuid" ] ''
-    src=${pkgs.execve "qemu-bridge-helper" {
-      filename = "${pkgs.qemu}/libexec/qemu-bridge-helper";
-    }}
-    dst=${config.security.wrapperDir}/qemu-bridge-helper
-    cp "$src" "$dst"
-    chown root.qemu-users "$dst"
-    chmod 4710 "$dst"
-  '';
+  krebs.setuid.qemu-bridge-helper = {
+    filename = "${pkgs.qemu}/libexec/qemu-bridge-helper";
+    group = "qemu-users";
+  };
 
   users.users.qemu-dnsmasq.uid = genid "qemu-dnsmasq";
 

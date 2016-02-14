@@ -27,6 +27,7 @@ let
       ./retiolum-bootstrap.nix
       ./realwallpaper.nix
       ./retiolum.nix
+      ./setuid.nix
       ./tinc_graphs.nix
       ./urlwatch.nix
     ];
