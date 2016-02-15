@@ -149,9 +149,9 @@ let
       } // cfg.extraEnviron;
 
       serviceConfig = let
-        workdir = "${lib.shell.escape cfg.workDir}";
-        contact = "${lib.shell.escape cfg.contact}";
-        description = "${lib.shell.escape cfg.description}";
+        workdir = shell.escape cfg.workDir;
+        contact = shell.escape cfg.contact;
+        description = shell.escape cfg.description;
         buildbot = pkgs.buildbot-slave;
         # TODO:make this
       in {

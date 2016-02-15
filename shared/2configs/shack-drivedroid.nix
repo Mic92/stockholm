@@ -1,7 +1,8 @@
 { pkgs, lib, config, ... }:
+with config.krebs.lib;
 let
   repodir = "/var/srv/drivedroid";
-  srepodir = lib.shell.escape repodir;
+  srepodir = shell.escape repodir;
 in
 {
   environment.systemPackages = [ pkgs.drivedroid-gen-repo ];

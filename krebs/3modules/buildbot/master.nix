@@ -338,8 +338,8 @@ let
         SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
       };
       serviceConfig = let
-        workdir="${lib.shell.escape cfg.workDir}";
-        secretsdir="${lib.shell.escape (toString <secrets>)}";
+        workdir = shell.escape cfg.workDir;
+        secretsdir = shell.escape (toString <secrets>);
       in {
         PermissionsStartOnly = true;
         Type = "forking";
