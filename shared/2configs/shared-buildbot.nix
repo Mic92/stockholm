@@ -69,7 +69,7 @@
   #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
   nixshell = ["nix-shell",
                 "-I", "stockholm=.",
-                "-I", "nixpkgs=/var/src/upstream-nixpkgs",
+                "-I", "nixpkgs=/var/src/nixpkgs",
                 "-p" ] + deps + [ "--run" ]
 
   # prepare addShell function
@@ -90,21 +90,21 @@
   addShell(f,name="instantiate-test-all-modules",env=env,
             command=nixshell + \
                       ["touch retiolum.rsa_key.priv; \
-                        nix-instantiate --eval -A \
-                            users.shared.test-all-krebs-modules.system \
-                            -I stockholm=. \
-                            --show-trace \
-                            -I secrets=. '<stockholm>' \
-                            --strict --json"])
+                        nix-instantiate \
+                            --show-trace --eval --strict --json \
+                            -I nixos-config=./shared/1systems/test-all-krebs-modules.nix  \
+                            -I secrets=. \
+                            -A config.system.build.toplevel"]
+          )
 
-  addShell(f,name="instantiate-test-minimal-deploy",env=env,
+  addShell(f,name="build-test-minimal",env=env,
             command=nixshell + \
-                      ["nix-instantiate --eval -A \
-                            users.shared.test-minimal-deploy.system \
-                            -I stockholm=. \
-                            -I secrets=. '<stockholm>' \
-                            --show-trace \
-                            --strict --json"])
+                      ["nix-instantiate \
+                            --show-trace --eval --strict --json \
+                            -I nixos-config=./shared/1systems/test-minimal-deploy.nix  \
+                            -I secrets=. \
+                            -A config.system.build.toplevel"]
+          )
 
   bu.append(util.BuilderConfig(name="fast-tests",
         slavenames=slavenames,
@@ -151,6 +151,6 @@
     packages = with pkgs;[ git nix ];
     # all nix commands will need a working nixpkgs installation
     extraEnviron = {
-      NIX_PATH="nixpkgs=/var/src/upstream-nixpkgs:nixos-config=./shared/1systems/wolf.nix"; };
+      NIX_PATH="nixpkgs=/var/src/nixpkgs:nixos-config=./shared/1systems/wolf.nix"; };
   };
 }
