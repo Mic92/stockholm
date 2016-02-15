@@ -61,7 +61,7 @@
   # prepare nix-shell
   # the dependencies which are used by the test script
   deps = [ "gnumake", "jq","nix","rsync",
-            "(import <stockholm> {}).pkgs.test.infest-cac-centos7" ]
+            "(import <stockholm>).pkgs.test.infest-cac-centos7" ]
   # TODO: --pure , prepare ENV in nix-shell command:
   #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
   nixshell = ["nix-shell",
