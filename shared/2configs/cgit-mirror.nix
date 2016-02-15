@@ -3,7 +3,7 @@
 with lib;
 let
   rules = with git; singleton {
-    user = [ git-sync ];
+    user = [ wolf-repo-sync ];
     repo = [ stockholm-mirror ];
     perm = push ''refs/*'' [ non-fast-forward create delete merge ];
   };
@@ -22,14 +22,15 @@ let
     };
   };
 
-  git-sync = {
-    name = "git-sync";
+  wolf-repo-sync = {
+    name = "wolf-repo-sync";
     mail = "spam@krebsco.de";
     # TODO put git-sync pubkey somewhere more appropriate
-    pubkey = ''ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzUuzyoAhMgJmsiaTVWNSXqcrZNTpKpv0nfFBOMcNXUWEbvfAq5eNpg5cX+P8eoYl6UQgfftbYi06flKK3yJdntxoZKLwJGgJt9NZr8yZTsiIfMG8XosvGNQtGPkBtpLusgmPpu7t2RQ9QrqumBvoUDGYEauKTslLwupp1QeyWKUGEhihn4CuqQKiPrz+9vbNd75XOfVZMggk3j4F7HScatmA+p1EQXWyq5Jj78jQN5ZIRnHjMQcIZ4DOz1U96atwSKMviI1xEZIODYfgoGjjiWYeEtKaLVPtSqtLRGI7l+RNouMfwHLdTWOJSlIdFncfPXC6R19hTll3UHeHLtqLP git-sync'';
+    pubkey = ''ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwuAZB3wtAvBJFYh+gWdyGaZU4mtqM2dFXmh2rORlbXeh02msu1uv07ck1VKkQ4LgvCBcBsAOeVa1NTz99eLqutwgcqMCytvRNUCibcoEWwHObsK53KhDJj+zotwlFhnPPeK9+EpOP4ngh/tprJikttos5BwBwe2K+lfiid3fmVPZcTTYa77nCwijimMvWEx6CEjq1wiXMUc4+qcEn8Swbwomz/EEQdNE2hgoC3iMW9RqduTFdIJWnjVi0KaxenX9CvQRGbVK5SSu2gwzN59D/okQOCP6+p1gL5r3QRHSLSSRiEHctVQTkpKOifrtLZGSr5zArEmLd/cOVyssHQPCX repo-sync@wolf'';
   };
 
 in {
+  krebs.users.wolf-repo-sync = wolf-repo-sync;
   krebs.git = {
     enable = true;
     root-title = "Shared Repos";
