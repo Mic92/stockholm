@@ -97,6 +97,39 @@
     #    { predicate = "-i retiolum -p tcp --dport 80"; target = "ACCEPT"; precedence = 9998; }
     #  ];
     #}
+    {
+      containers.pythonenv = {
+        config = {
+          services.openssh.enable = true;
+          users.users.root.openssh.authorizedKeys.keys = [
+            config.krebs.users.lass.pubkey
+          ];
+
+          environment = {
+            systemPackages = with pkgs; [
+              git
+              libxml2
+              libxslt
+              libzip
+              python27Full
+              python27Packages.buildout
+              stdenv
+              zlib
+            ];
+
+            pathsToLink = [ "/include" ];
+
+            shellInit = ''
+              # help pip to find libz.so when building lxml
+              export LIBRARY_PATH=/var/run/current-system/sw/lib
+              # ditto for header files, e.g. sqlite
+              export C_INCLUDE_PATH=/var/run/current-system/sw/include
+            '';
+          };
+
+        };
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
