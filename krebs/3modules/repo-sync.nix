@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.krebs.repo-sync;
 
@@ -71,7 +70,7 @@ let
   imp = {
     users.users.repo-sync = {
       name = "repo-sync";
-      uid = genid "repo-sync";
+      uid = config.krebs.lib.genid "repo-sync";
       description = "repo-sync user";
       home = cfg.stateDir;
       createHome = true;
@@ -98,7 +97,7 @@ let
         PermissionsStartOnly = true;
         ExecStartPre = pkgs.writeScript "prepare-repo-sync-user" ''
           #! /bin/sh
-          cp -v ${lib.shell.escape cfg.privateKeyFile} ${cfg.stateDir}/ssh.priv
+          cp -v ${config.krebs.lib.shell.escape cfg.privateKeyFile} ${cfg.stateDir}/ssh.priv
           chown repo-sync ${cfg.stateDir}/ssh.priv
         '';
         ExecStart = "${pkgs.repo-sync}/bin/repo-sync ${repo-sync-config}";

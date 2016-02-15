@@ -1,7 +1,8 @@
 { pkgs, lib, config, ... }:
+
 let
   repodir = "/var/srv/drivedroid";
-  srepodir = lib.shell.escape repodir;
+  srepodir = config.krebs.lib.shell.escape repodir;
 in
 {
   environment.systemPackages = [ pkgs.drivedroid-gen-repo ];
@@ -40,5 +41,4 @@ in
       };
     };
   };
-
 }
