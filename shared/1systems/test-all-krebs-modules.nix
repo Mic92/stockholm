@@ -2,6 +2,9 @@
 let
   en = { enable = true;};
 in {
+  imports = [
+    ../.
+  ];
   krebs = {
     enable = true;
     build.user = config.krebs.users.shared;

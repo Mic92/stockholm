@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 
-with lib;
+with config.krebs.lib;
 let
   buildbot = pkgs.buildbot;
   buildbot-master-config = pkgs.writeText "buildbot-master.cfg" ''
@@ -381,5 +381,5 @@ let
 in
 {
   options.krebs.buildbot.master = api;
-  config = mkIf cfg.enable imp;
+  config = lib.mkIf cfg.enable imp;
 }

@@ -5,6 +5,7 @@ let
 
 in {
   imports = [
+    ../.
     ../2configs/base.nix
     ../2configs/os-templates/CAC-CentOS-7-64bit.nix
     ../2configs/temp/networking.nix

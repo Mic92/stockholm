@@ -1,13 +1,12 @@
 { config, pkgs, lib, ... }:
 
-with builtins;
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs.exim-smarthost;
 
   out = {
     options.krebs.exim-smarthost = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {

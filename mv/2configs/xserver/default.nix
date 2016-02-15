@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }@args:
 
-with lib;
+with config.krebs.lib;
 
 let
   # TODO krebs.build.user

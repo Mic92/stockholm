@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
-with lib;
+with config.krebs.lib;
 let
   out = {
     options.krebs.backup = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   cfg = config.krebs.backup;
@@ -210,7 +210,7 @@ let
       | ${pkgs.coreutils}/bin/head -1; }
   '';
 
-  # Note that we don't escape word on purpose, so we deref shell vars.
+  # Note that we don't escape word on purpose, so we can deref shell vars.
   # TODO type word
   network-ssh-port = host: word: ''
     case ${word} in

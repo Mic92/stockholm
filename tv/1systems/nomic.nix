@@ -1,11 +1,12 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 
 {
   krebs.build.host = config.krebs.hosts.nomic;
 
   imports = [
+    ../.
     ../2configs/hw/AO753.nix
     ../2configs/exim-retiolum.nix
     ../2configs/git.nix

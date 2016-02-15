@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 
-with lib;
+with config.krebs.lib;
 let
   buildbot-slave-init = pkgs.writeText "buildbot-slave.tac" ''
     import os
@@ -182,5 +182,5 @@ let
 in
 {
   options.krebs.buildbot.slave = api;
-  config = mkIf cfg.enable imp;
+  config = lib.mkIf cfg.enable imp;
 }

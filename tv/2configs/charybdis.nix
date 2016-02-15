@@ -1,13 +1,12 @@
 { config, lib, pkgs, ... }:
 
-with builtins;
-with lib;
+with config.krebs.lib;
 let
   cfg = config.tv.charybdis;
 
   out = {
     options.tv.charybdis = api;
-    config = mkIf cfg.enable (mkMerge [
+    config = lib.mkIf cfg.enable (lib.mkMerge [
       imp
       { tv.iptables.input-retiolum-accept-new-tcp = [ 6667 6697 ]; }
     ]);

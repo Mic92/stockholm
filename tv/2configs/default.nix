@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 
 {
   krebs.enable = true;
@@ -9,12 +9,10 @@ with lib;
     user = config.krebs.users.tv;
     source = mapAttrs (_: mkDefault) ({
       nixos-config = "symlink:stockholm/tv/1systems/${config.krebs.build.host.name}.nix";
-      nixpkgs = symlink:stockholm/nixpkgs;
       secrets = "/home/tv/secrets/${config.krebs.build.host.name}";
       secrets-common = "/home/tv/secrets/common";
       stockholm = "/home/tv/stockholm";
-      stockholm-user = "symlink:stockholm/tv";
-      upstream-nixpkgs = {
+      nixpkgs = {
         url = https://github.com/NixOS/nixpkgs;
         rev = "77f8f35d57618c1ba456d968524f2fb2c3448295";
         dev = "/home/tv/nixpkgs";
@@ -44,6 +42,7 @@ with lib;
           tv = {
             isNormalUser = true;
             uid = 1337;
+            extraGroups = [ "tv" ];
           };
         };
       };
@@ -183,6 +182,15 @@ with lib;
         "sendmail"  # for sudo
       ];
     }
+    {
+      environment.systemPackages = [
+        pkgs.get
+        pkgs.krebszones
+        pkgs.nix-prefetch-scripts
+        pkgs.push
+      ];
+    }
+
     {
       systemd.tmpfiles.rules = let
         forUsers = flip map users;

@@ -1,9 +1,8 @@
-{ lib, ... }:
+{ config, ... }:
 
-with lib;
-
+with config.krebs.lib;
 let
-  testHosts = lib.genAttrs [
+  testHosts = genAttrs [
     "test-arch"
     "test-centos6"
     "test-centos7"

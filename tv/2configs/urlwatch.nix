@@ -51,6 +51,9 @@
       # <stockholm/tv/2configs/xserver/xserver.conf.nix>
       # is derived from `configFile` in:
       https://raw.githubusercontent.com/NixOS/nixpkgs/master/nixos/modules/services/x11/xserver.nix
+
+      https://pypi.python.org/pypi/vncdotool
+      https://api.github.com/repos/kanaka/noVNC/tags
     ];
   };
 }

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 # TODO: krebs.collectd.plugins
-with lib;
+with config.krebs.lib;
 let
   connect-time-cfg = with pkgs; writeText "collectd-connect-time.conf" ''
     LoadPlugin python

@@ -6,6 +6,7 @@ let
 in
 {
   imports = [
+    ../.
     ../2configs/base.nix
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
     ../2configs/collectd-base.nix

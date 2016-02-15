@@ -5,14 +5,14 @@
 # cache = url: "${cfg.dataDir}/.urlwatch/cache/${hashString "sha1" url}"
 # TODO hooks.py
 
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs.urlwatch;
 
   # TODO assert sendmail's existence
   out = {
     options.krebs.urlwatch = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {

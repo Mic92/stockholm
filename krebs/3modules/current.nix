@@ -1,13 +1,13 @@
 { config, pkgs, lib, ... }:
 
-with lib;
+with config.krebs.lib;
 
 let
   cfg = config.krebs.current;
 
   out = {
     options.krebs.current = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {

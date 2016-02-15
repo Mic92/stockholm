@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 
 pkgs.writeText "Xresources" ''
   URxvt*scrollBar:                      false

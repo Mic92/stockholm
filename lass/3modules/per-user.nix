@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with builtins;
-with lib;
+with config.krebs.lib;
 let
   cfg = config.lass.per-user;
 

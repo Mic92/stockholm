@@ -1,11 +1,11 @@
-{ config, pkgs, lib, ... }:
-with lib;
+{ config, lib, pkgs, ... }:
+with config.krebs.lib;
 let
   cfg = config.krebs.nixpkgs;
 
   out = {
     options.krebs.nixpkgs = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {
@@ -37,7 +37,7 @@ let
     };
   };
 
-  imp = mkIf (cfg.allowUnfreePredicate != null) {
+  imp = lib.mkIf (cfg.allowUnfreePredicate != null) {
     nixpkgs.config.allowUnfreePredicate = cfg.allowUnfreePredicate;
   };
 in out

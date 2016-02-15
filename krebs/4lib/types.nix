@@ -17,6 +17,7 @@ types // rec {
       };
       nets = mkOption {
         type = attrsOf net;
+        default = {};
       };
 
       extraZones = mkOption {

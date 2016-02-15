@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 {
   imports = [
     ../2configs/vim.nix
@@ -50,12 +50,10 @@ with lib;
       user = config.krebs.users.lass;
       source = mapAttrs (_: mkDefault) ({
         nixos-config = "symlink:stockholm/lass/1systems/${config.krebs.build.host.name}.nix";
-        nixpkgs = symlink:stockholm/nixpkgs;
         secrets = "/home/lass/secrets/${config.krebs.build.host.name}";
         #secrets-common = "/home/lass/secrets/common";
         stockholm = "/home/lass/stockholm";
-        stockholm-user = "symlink:stockholm/lass";
-        upstream-nixpkgs = {
+        nixpkgs = {
           url = https://github.com/Lassulus/nixpkgs;
           rev = "d0e3cca04edd5d1b3d61f188b4a5f61f35cdf1ce";
           dev = "/home/lass/src/nixpkgs";

@@ -1,5 +1,5 @@
-{ lib, pkgs, ... }@args:
-with lib;
+{ config, lib, pkgs, ... }@args:
+with config.krebs.lib;
 {
   nixpkgs.config.packageOverrides = pkgs: {
     haskellPackages = pkgs.haskellPackages.override {

@@ -1,11 +1,12 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 
 {
   krebs.build.host = config.krebs.hosts.cd;
 
   imports = [
+    ../.
     ../2configs/hw/CAC-Developer-2.nix
     ../2configs/fs/CAC-CentOS-7-64bit.nix
     ../2configs/exim-smarthost.nix

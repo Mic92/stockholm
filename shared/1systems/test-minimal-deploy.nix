@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }:
 {
+  imports = [
+    ../.
+  ];
   krebs = {
     enable = true;
     build.user = config.krebs.users.shared;

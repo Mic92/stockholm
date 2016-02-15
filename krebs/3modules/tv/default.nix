@@ -1,6 +1,6 @@
-{ lib, ... }:
+{ config, ... }:
 
-with lib;
+with config.krebs.lib;
 
 {
   dns.providers = {
