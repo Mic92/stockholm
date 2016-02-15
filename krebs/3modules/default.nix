@@ -29,6 +29,7 @@ let
       ./retiolum.nix
       ./tinc_graphs.nix
       ./urlwatch.nix
+      ./repo-sync.nix
     ];
     options.krebs = api;
     config = mkIf cfg.enable imp;

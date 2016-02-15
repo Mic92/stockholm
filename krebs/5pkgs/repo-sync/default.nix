@@ -1,4 +1,5 @@
 { lib, pkgs, python3Packages, fetchurl, ... }:
+
 with python3Packages; buildPythonPackage rec {
   name = "repo-sync-${version}";
   version = "0.2.5";
@@ -6,6 +7,7 @@ with python3Packages; buildPythonPackage rec {
   propagatedBuildInputs = [
     docopt
     GitPython
+    pkgs.git
   ];
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/r/repo-sync/repo-sync-${version}.tar.gz";
