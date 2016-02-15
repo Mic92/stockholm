@@ -63,15 +63,6 @@ with builtins;
   #  SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:b8:c8:2e", NAME="et0"
   #'';
 
-  services.xserver = {
-    videoDriver = "intel";
-    vaapiDrivers = [ pkgs.vaapiIntel ];
-    deviceSection = ''
-      Option "AccelMethod" "sna"
-      BusID "PCI:0:2:0"
-    '';
-  };
-
   services.xserver.synaptics = {
     enable = true;
     twoFingerScroll = true;
