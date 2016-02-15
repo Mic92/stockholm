@@ -14,6 +14,7 @@ in
     ../2configs/shack-drivedroid.nix
     ../2configs/shared-buildbot.nix
     ../2configs/cgit-mirror.nix
+    ../2configs/repo-sync.nix
     # ../2configs/graphite.nix
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by

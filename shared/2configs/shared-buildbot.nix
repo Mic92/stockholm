@@ -1,18 +1,22 @@
 { lib, config, pkgs, ... }:
-# The buildbot config is seilf-contained and provides a way to test "shared"
-# configuration (infrastructure to be used by every krebsminister).
+# The buildbot config is self-contained and currently provides a way 
+# to test "shared" configuration (infrastructure to be used by every krebsminister).
 
 # You can add your own test, test steps as required. Deploy the config on a
 # shared host like wolf and everything should be fine.
+
+# TODO for all users schedule a build for fast tests
 {
   networking.firewall.allowedTCPPorts = [ 8010 9989 ];
-  krebs.buildbot.master = {
+  krebs.buildbot.master = let
+    stockholm-mirror-url = http://cgit.wolf/stockholm-mirror ;
+  in {
     secrets = [ "retiolum-ci.rsa_key.priv" "cac.json" ];
     slaves = {
       testslave =  "krebspass";
     };
     change_source.stockholm = ''
-  stockholm_repo = 'http://cgit.wolf/stockholm-mirror'
+  stockholm_repo = '${stockholm-mirror-url}'
   cs.append(changes.GitPoller(
           stockholm_repo,
           workdir='stockholm-poller', branches=True,
@@ -23,16 +27,15 @@
         force-scheduler = ''
   sched.append(schedulers.ForceScheduler(
                               name="force",
-                              builderNames=["full-tests"]))
+                              builderNames=["full-tests","fast-tests"]))
         '';
         fast-tests-scheduler = ''
-  # test the master real quick
+  # test everything real quick
   sched.append(schedulers.SingleBranchScheduler(
                               ## all branches
                               change_filter=util.ChangeFilter(branch_re=".*"),
-                              # change_filter=util.ChangeFilter(branch="master"),
-                              treeStableTimer=10, #only test the latest push
-                              name="fast-master-test",
+                              # treeStableTimer=10,
+                              name="fast-test-all-branches",
                               builderNames=["fast-tests"]))
         '';
         test-cac-infest-master = ''
@@ -133,7 +136,7 @@
     };
     irc = {
       enable = true;
-      nick = "shared-buildbot";
+      nick = "wolfbot";
       server = "cd.retiolum";
       channels = [ "retiolum" ];
       allowForce = true;
@@ -147,6 +150,7 @@
     password = "krebspass";
     packages = with pkgs;[ git nix ];
     # all nix commands will need a working nixpkgs installation
-    extraEnviron = { NIX_PATH="/var/src"; };
+    extraEnviron = {
+      NIX_PATH="nixpkgs=/var/src/upstream-nixpkgs:nixos-config=./shared/1systems/wolf.nix"; };
   };
 }
