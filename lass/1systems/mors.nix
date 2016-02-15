@@ -130,6 +130,12 @@
         };
       };
     }
+    {
+      services.postgresql = {
+        enable = true;
+        authentication = "local all all ident";
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
