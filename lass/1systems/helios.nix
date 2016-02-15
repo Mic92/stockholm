@@ -7,6 +7,7 @@ with builtins;
     ../2configs/browsers.nix
     ../2configs/programs.nix
     ../2configs/git.nix
+    ../2configs/pass.nix
     #{
     #  users.extraUsers = {
     #    root = {
