@@ -9,9 +9,9 @@ let
       ./apt-cacher-ng.nix
       ./backup.nix
       ./bepasty-server.nix
-      ./build.nix
       ./buildbot/master.nix
       ./buildbot/slave.nix
+      ./build.nix
       ./current.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
@@ -25,8 +25,8 @@ let
       ./nixpkgs.nix
       ./per-user.nix
       ./Reaktor.nix
-      ./retiolum-bootstrap.nix
       ./realwallpaper.nix
+      ./retiolum-bootstrap.nix
       ./retiolum.nix
       ./setuid.nix
       ./tinc_graphs.nix

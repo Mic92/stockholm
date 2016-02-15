@@ -210,7 +210,7 @@ let
       | ${pkgs.coreutils}/bin/head -1; }
   '';
 
-  # Note that we don't escape word on purpose, so we deref shell vars.
+  # Note that we don't escape word on purpose, so we can deref shell vars.
   # TODO type word
   network-ssh-port = host: word: ''
     case ${word} in

@@ -6,7 +6,8 @@
 
 #
 #
-with config.krebs.lib;
+with builtins;
+with lib;
 
 
 let

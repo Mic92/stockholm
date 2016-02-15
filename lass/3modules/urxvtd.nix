@@ -3,7 +3,8 @@
 let
 in
 
-with config.krebs.lib;
+with builtins;
+with lib;
 
 {
   options = {
