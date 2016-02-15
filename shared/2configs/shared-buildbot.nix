@@ -23,13 +23,13 @@
         force-scheduler = ''
   sched.append(schedulers.ForceScheduler(
                               name="force",
-                              builderNames=["full-tests"]))
+                              builderNames=["full-tests","fast-tests"]))
         '';
         fast-tests-scheduler = ''
-  # test everything BUT the master real quick
+  # test everything real quick
   sched.append(schedulers.SingleBranchScheduler(
                               ## all branches
-                              change_filter=util.ChangeFilter(branch_re="(?!^master$)"),
+                              change_filter=util.ChangeFilter(branch_re=".*"),
                               # treeStableTimer=10,
                               name="fast-test-all-branches",
                               builderNames=["fast-tests"]))
@@ -132,7 +132,7 @@
     };
     irc = {
       enable = true;
-      nick = "shared-buildbot";
+      nick = "wolfbot";
       server = "cd.retiolum";
       channels = [ "retiolum" ];
       allowForce = true;
@@ -146,6 +146,7 @@
     password = "krebspass";
     packages = with pkgs;[ git nix ];
     # all nix commands will need a working nixpkgs installation
-    extraEnviron = { NIX_PATH="/var/src"; };
+    extraEnviron = {
+      NIX_PATH="nixpkgs=/var/src/upstream-nixpkgs:nixos-config=./shared/1systems/wolf.nix"; };
   };
 }
