@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../.
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
     ../2configs/base.nix
     ../2configs/git.nix

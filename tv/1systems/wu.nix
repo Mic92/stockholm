@@ -6,6 +6,7 @@ with config.krebs.lib;
   krebs.build.host = config.krebs.hosts.wu;
 
   imports = [
+    ../.
     ../2configs/hw/w110er.nix
     ../2configs/exim-retiolum.nix
     ../2configs/git.nix

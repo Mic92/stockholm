@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with config.krebs.lib;
+with builtins;
+with lib;
 
 let
   cfg = config.lass.newsbot-js;

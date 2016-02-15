@@ -7,6 +7,7 @@ let
   gw = "168.235.148.1";
 in {
   imports = [
+    ../.
     ../2configs/base.nix
     ../2configs/os-templates/CAC-CentOS-6.5-64bit.nix
     {

@@ -9,10 +9,11 @@ export target_path ?= /var/src
 
 evaluate = \
 	nix-instantiate \
-		--arg configuration ./$(LOGNAME)/1systems/$(system).nix \
 		--eval \
 		--readonly-mode \
 		--show-trace \
+		-I nixos-config=./$(LOGNAME)/1systems/$(system).nix \
+		-I stockholm=. \
 		$(1)
 
 execute = \

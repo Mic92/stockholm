@@ -16,7 +16,7 @@ with config.krebs.lib;
   # TODO rename shared user to "krebs"
   krebs.build.user = mkDefault config.krebs.users.shared;
   krebs.build.source = {
-    upstream-nixpkgs = mkDefault {
+    nixpkgs = mkDefault {
       url = https://github.com/NixOS/nixpkgs;
       rev = "77f8f35d57618c1ba456d968524f2fb2c3448295"; # for urlwatch-minidb
     };
@@ -24,8 +24,6 @@ with config.krebs.lib;
     stockholm = mkDefault "${getEnv "HOME"}/stockholm";
 
     nixos-config = "symlink:stockholm/${config.krebs.build.user.name}/1systems/${config.krebs.build.host.name}.nix";
-    nixpkgs = symlink:stockholm/nixpkgs;
-    stockholm-user = "symlink:stockholm/${config.krebs.build.user.name}";
   };
 
   networking.hostName = config.krebs.build.host.name;

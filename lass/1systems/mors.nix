@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../.
     ../2configs/baseX.nix
     ../2configs/programs.nix
     ../2configs/bitcoin.nix

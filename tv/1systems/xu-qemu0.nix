@@ -10,6 +10,7 @@
   krebs.build.host = config.krebs.hosts.xu-qemu0;
 
   imports = [
+    ../.
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
   ];
 
