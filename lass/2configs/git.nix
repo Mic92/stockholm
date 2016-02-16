@@ -42,6 +42,7 @@ let
       brain = {
         collaborators = with config.krebs.users; [ tv makefu ];
       };
+      extraction_webinterface = {};
     } //
     import <secrets/repos.nix> { inherit config lib pkgs; }
   );
