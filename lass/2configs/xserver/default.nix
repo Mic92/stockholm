@@ -93,11 +93,9 @@ let
   xmonad-start = pkgs.writeScriptBin "xmonad" ''
     #! ${pkgs.bash}/bin/bash
     set -efu
-    export PATH; PATH=${makeSearchPath "bin" [
-      pkgs.alsaUtils
-      pkgs.pulseaudioLight
+    export PATH; PATH=${makeSearchPath "bin" ([
       pkgs.rxvt_unicode
-    ]}:/var/setuid-wrappers
+    ] ++ config.environment.systemPackages)}:/var/setuid-wrappers
     settle() {(
       # Use PATH for a clean journal
       command=''${1##*/}
