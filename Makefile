@@ -54,9 +54,10 @@ execute = \
 	echo "$$script" | sh
 
 # usage: make deploy system=foo [target_host=bar]
+deploy: ssh ?= ssh
 deploy:
 	$(call execute,populate)
-	ssh $(target_user)@$(target_host) -p $(target_port) \
+	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		nixos-rebuild switch --show-trace -I $(target_path)
 
 # usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
@@ -75,8 +76,9 @@ install:
 			nixos-install
 
 # usage: make test system=foo [target=bar]
+test: ssh ?= ssh
 test:
 	$(call execute,populate)
-	ssh $(target_user)@$(target_host) -p $(target_port) \
+	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		nix-build --no-out-link --show-trace -I $(target_path) \
 			-A config.system.build.toplevel $(target_path)/stockholm
