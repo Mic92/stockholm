@@ -75,10 +75,20 @@ install:
 		env NIXOS_CONFIG=$(target_path)/nixos-config \
 			nixos-install
 
-# usage: make test system=foo [target=bar]
+# usage: make test system=foo [target=bar] [method={eval,build}]
+method ?= eval
+ifeq ($(method),build)
+test: command = nix-build --no-out-link
+else
+ifeq ($(method),eval)
+test: command ?= nix-instantiate --eval --json --readonly-mode --strict
+else
+$(error bad method: $(method))
+endif
+endif
 test: ssh ?= ssh
 test:
 	$(call execute,populate)
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
-		nix-build --no-out-link --show-trace -I $(target_path) \
+		$(command) --show-trace -I $(target_path) \
 			-A config.system.build.toplevel $(target_path)/stockholm
