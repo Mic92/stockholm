@@ -7,6 +7,11 @@
 
 # TODO for all users schedule a build for fast tests
 {
+  # due to the fact that we actually build stuff on the box via the daemon,
+  # /nix/store should be cleaned up automatically as well
+  nix.gc.automatic = true;
+  nix.gc.dates = "05:23";
+
   networking.firewall.allowedTCPPorts = [ 8010 9989 ];
   krebs.buildbot.master = let
     stockholm-mirror-url = http://cgit.wolf/stockholm-mirror ;
@@ -27,7 +32,7 @@
         force-scheduler = ''
   sched.append(schedulers.ForceScheduler(
                               name="force",
-                              builderNames=["full-tests","fast-tests"]))
+                              builderNames=["full-tests","fast-tests","build-local"]))
         '';
         fast-tests-scheduler = ''
   # test everything real quick
@@ -35,7 +40,7 @@
                               ## all branches
                               change_filter=util.ChangeFilter(branch_re=".*"),
                               # treeStableTimer=10,
-                              name="fast-test-all-branches",
+                              name="fast-all-branches",
                               builderNames=["fast-tests"]))
         '';
         test-cac-infest-master = ''
@@ -51,8 +56,8 @@
                               change_filter=util.ChangeFilter(branch="master"),
                               fileIsImportant=shared_files,
                               treeStableTimer=60*60, # master was stable for the last hour
-                              name="full-master-test",
-                              builderNames=["full-tests"]))
+                              name="full-master",
+                              builderNames=["full-tests","build-local"]))
         '';
     };
     builder_pre = ''
@@ -107,6 +112,26 @@
           )
 
   bu.append(util.BuilderConfig(name="fast-tests",
+        slavenames=slavenames,
+        factory=f))
+      '';
+      # this build will try to build against local nixpkgs
+      # TODO change to do a 'local' populate and use the retrieved nixpkgs
+      build-local = ''
+  f = util.BuildFactory()
+  f.addStep(grab_repo)
+
+  addShell(f,name="build-test-all-modules",env=env,
+            command=nixshell + \
+                      ["touch retiolum.rsa_key.priv; \
+                        nix-build \
+                            --show-trace --no-out-link \
+                            -I nixos-config=./shared/1systems/test-all-krebs-modules.nix  \
+                            -I secrets=. \
+                            -A config.system.build.toplevel"]
+          )
+
+  bu.append(util.BuilderConfig(name="build-local",
         slavenames=slavenames,
         factory=f))
       '';
