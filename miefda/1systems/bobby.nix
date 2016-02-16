@@ -7,7 +7,7 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-
+      ../.
       ../2configs/miefda.nix
       ../2configs/tlp.nix
       ../2configs/x220t.nix

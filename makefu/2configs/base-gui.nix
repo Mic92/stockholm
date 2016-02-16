@@ -21,7 +21,7 @@
 # URxvt.visualBell: false
 # URxvt.font : xft:Terminus
 
-with lib;
+with config.krebs.lib;
 let
   mainUser = config.krebs.build.user.name;
   awesomecfg = pkgs.awesomecfg.full;
@@ -44,6 +44,8 @@ in
     displayManager.auto.user = mainUser;
     desktopManager.xterm.enable = false;
   };
+  # lid switch is handled via button presses
+  services.logind.extraConfig = mkDefault "HandleLidSwitch=ignore";
   nixpkgs.config.packageOverrides = pkgs: rec {
     awesome = pkgs.stdenv.lib.overrideDerivation pkgs.awesome (oldAttrs : {
       postFixup = ''

@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 
 let
 
@@ -45,7 +45,7 @@ let
         perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++
       optional repo.public {
-        user = [ lass makefu uriel tv tv_xu ];
+        user = [ lass makefu uriel tv tv-xu ];
         repo = [ repo ];
         perm = fetch;
       } ++

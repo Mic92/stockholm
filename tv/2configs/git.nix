@@ -1,14 +1,14 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 
 let
 
   out = {
     krebs.git = {
       enable = true;
-      root-title = "public repositories at ${config.krebs.build.host.name}";
-      root-desc = "keep calm and engage";
+      root-title = "repositories at ${config.krebs.build.host.name}";
+      root-desc = "mostly krebs";
       repos = repos;
       rules = rules;
     };
@@ -21,7 +21,7 @@ let
   rules = concatMap make-rules (attrValues repos);
 
   public-repos = mapAttrs make-public-repo ({
-  } // mapAttrValues (setAttr "section" "1. Miscellaneous") {
+  } // mapAttrValues (setAttr "section" "1. miscellaneous") {
     cac-api = {
       desc = "CloudAtCost API command line interface";
     };
@@ -37,7 +37,7 @@ let
       desc = "SoundCloud command line interface";
     };
     stockholm = {
-      desc = "take all the computers hostage, they'll love you!";
+      desc = "NixOS configuration";
     };
     with-tmpdir = {};
   } // mapAttrValues (setAttr "section" "2. Haskell libraries") {
@@ -49,7 +49,7 @@ let
     web-routes-wai-custom = {};
     xintmap = {};
     xmonad-stockholm = {};
-  } // mapAttrValues (setAttr "section" "3. Museum") {
+  } // mapAttrValues (setAttr "section" "3. museum") {
     cgserver = {};
     crude-mail-setup = {};
     dot-xmonad = {};
@@ -90,12 +90,12 @@ let
     with git // config.krebs.users;
     repo:
       singleton {
-        user = [ tv tv_xu ];
+        user = [ tv tv-xu ];
         repo = [ repo ];
         perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++
       optional repo.public {
-        user = [ lass makefu uriel ];
+        user = [ lass makefu ];
         repo = [ repo ];
         perm = fetch;
       } ++

@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 
 let
   # TODO: currently it is only netzclub
@@ -32,7 +32,7 @@ let
 
   out = {
     options.makefu.umts = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {
@@ -56,19 +56,12 @@ let
 
     environment.wvdial.dialerDefaults = wvdial-defaults;
 
-    systemd.targets.network-umts = {
-      description = "System is running on UMTS";
-      unitConfig.StopWhenUnneeded = true;
-    };
-
     systemd.services.umts = {
       description = "UMTS wvdial Service";
-      before = [ "network-umts.target" ];
-
       serviceConfig = {
         Type = "simple";
         Restart = "always";
-        RestartSec = "4s";
+        RestartSec = "10s";
         ExecStart = "${pkgs.wvdial}/bin/wvdial -n";
       };
     };

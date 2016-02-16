@@ -26,11 +26,15 @@ let out = rec {
   shell = import ./shell.nix { inherit lib; };
   tree = import ./tree.nix { inherit lib; };
 
-  toC = x: {
+  toC = x: let
+    type = typeOf x;
+    reject = throw "cannot convert ${type}";
+  in {
     list = "{ ${concatStringsSep ", " (map toC x)} }";
     null = "NULL";
+    set = if isDerivation x then toJSON x else reject;
     string = toJSON x; # close enough
-  }.${typeOf x};
+  }.${type} or reject;
 
   subdirsOf = path:
     mapAttrs (name: _: path + "/${name}")

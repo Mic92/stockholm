@@ -6,6 +6,7 @@ let
   ip = (head config.krebs.build.host.nets.internet.addrs4);
 in {
   imports = [
+    ../.
     ../2configs/base.nix
     ../2configs/downloading.nix
     ../2configs/git.nix

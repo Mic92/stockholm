@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs.tinc_graphs;
   internal_dir = "${cfg.workingDir}/internal";
@@ -8,7 +8,7 @@ let
 
   out = {
     options.krebs.tinc_graphs = api;
-    config = mkIf cfg.enable imp ;
+    config = lib.mkIf cfg.enable imp ;
   };
 
   api = {
@@ -85,7 +85,7 @@ let
         EXTERNAL_FOLDER = external_dir;
         INTERNAL_FOLDER = internal_dir;
         GEODB = cfg.geodbPath;
-        TINC_HOSTPATH=config.krebs.retiolum.hosts;
+        TINC_HOSTPATH = config.krebs.retiolum.hostsPackage;
       };
 
       restartIfChanged = true;

@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 
 {
   imports = [
@@ -41,5 +41,5 @@ with lib;
     HandleSuspendKey=ignore
   '';
 
-  nixpkgs.config.allowUnfreePredicate = pkg: hasPrefix "broadcom-sta-" pkg.name;
+  krebs.nixpkgs.allowUnfreePredicate = pkg: hasPrefix "broadcom-sta-" pkg.name;
 }

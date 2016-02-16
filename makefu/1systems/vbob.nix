@@ -4,9 +4,9 @@
 { lib, config, pkgs, ... }:
 {
   krebs.build.host = config.krebs.hosts.vbob;
-  krebs.build.target = "root@10.10.10.220";
   imports =
     [ # Include the results of the hardware scan.
+      ../.
       <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix>
       ../2configs/main-laptop.nix #< base-gui
 
@@ -18,8 +18,8 @@
     tinc = pkgs.tinc_pre;
   };
 
-  krebs.build.source.nixpkgs = {
-    # url = https://github.com/nixos/nixpkgs;
+  krebs.build.source.upstream-nixpkgs = {
+    url = https://github.com/makefu/nixpkgs;
     # HTTP Everywhere + libredir
     rev = "8239ac6";
   };
@@ -39,7 +39,6 @@
     buildbot
     buildbot-slave
     get
-    genid
     logstash
   ];
 

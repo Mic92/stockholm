@@ -1,12 +1,12 @@
 { config, pkgs, lib, ... }:
 
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs.exim-retiolum;
 
   out = {
     options.krebs.exim-retiolum = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {

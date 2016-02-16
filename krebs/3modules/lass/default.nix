@@ -1,12 +1,11 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
-with lib;
+with config.krebs.lib;
 
 {
-  hosts = addNames {
+  hosts = {
     dishfire = {
       cores = 4;
-      dc = "lass"; #dc = "cac";
       nets = rec {
         internet = {
           addrs4 = ["144.76.172.188"];
@@ -38,7 +37,6 @@ with lib;
     };
     echelon = {
       cores = 2;
-      dc = "lass"; #dc = "cac";
       nets = rec {
         internet = {
           addrs4 = ["162.252.241.33"];
@@ -72,7 +70,6 @@ with lib;
     };
     prism = {
       cores = 4;
-      dc = "lass"; #dc = "cac";
       nets = rec {
         internet = {
           addrs4 = ["213.239.205.240"];
@@ -104,7 +101,6 @@ with lib;
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQChm4sqQ2bUZj+2YnTf6G5HHRTpSe1jTUhJRnwcYPYZKF+CBqBncipRpuGlGXEsptNa+7ZMcQC0ySsz5SUOMt3Ih+NehVe/qt3VtRz0l0MgOWmH2qBwKK9Y4IuxrJQzUmP4UGlOGlFj9DORssSMOyFIG4eZ9k2qMn3xal0NVRfGTShKlouWsiUILZ8I+sDNE00z8DAYesgc1yazvRnjzvLkRxdNdpYiAFBbmXMpPKK95McRJaWsuNSeal9kd5p5PagWcgN4DZ6+ebzz3NKnmzk4j+vuHX0U9lTXBqKMlzzmM2YNLRtDPfrtJNyHqLpZUpFhJKqZCD+4/0zdrzRfC7Th+5czzUCSvHiKPVsqw5eOdiQX6EyzNAF5zpkpRp//QdUNNXC5/Ku6GKCO491+TuA8VCha0fOwBONccTLUI/hGNmCh88mLbukVoeGJrbYNCOA/6kEz7ZLEveU4i+TT7okhDElMsNk+AWCZ8/NdJQNX3/K6+JJ9qAn+/yC8LdjgYYJ2oU/aw5/HyOgiQ0z4n9UfQ7j+nHysY9CQb1b3guX7yjJoc3KpNXCXEztuIRHjFD1EP8NRTSmGjsa/VjLmTLSsqjD+7IE5mT0tO5RJvmagDgdJSr/iR5D9zjW7hx7ttvektrlp9g0v3CiCFVaW4l95hGYT0HaNBLJ5R0YHm0lD+Q==";
     };
     fastpoke = {
-      dc = "lass";
       nets = rec {
         internet = {
           addrs4 = ["193.22.164.36"];
@@ -135,7 +131,6 @@ with lib;
     };
     cloudkrebs = {
       cores = 1;
-      dc = "lass"; #dc = "cac";
       nets = rec {
         internet = {
           addrs4 = ["104.167.113.104"];
@@ -168,7 +163,6 @@ with lib;
     };
     uriel = {
       cores = 1;
-      dc = "lass";
       nets = {
         gg23 = {
           addrs4 = ["10.23.1.12"];
@@ -199,7 +193,6 @@ with lib;
     };
     mors = {
       cores = 2;
-      dc = "lass";
       nets = {
         gg23 = {
           addrs4 = ["10.23.1.11"];
@@ -230,7 +223,6 @@ with lib;
     };
     helios = {
       cores = 2;
-      dc = "lass";
       nets = {
         retiolum = {
           addrs4 = ["10.243.0.3"];
@@ -257,16 +249,16 @@ with lib;
     };
 
   };
-  users = addNames {
+  users = {
     lass = {
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAp83zynhIueJJsWlSEykVSBrrgBFKq38+vT8bRfa+csqyjZBl2SQFuCPo+Qbh49mwchpZRshBa9jQEIGqmXxv/PYdfBFQuOFgyUq9ZcTZUXqeynicg/SyOYFW86iiqYralIAkuGPfQ4howLPVyjTZtWeEeeEttom6p6LMY5Aumjz2em0FG0n9rRFY2fBzrdYAgk9C0N6ojCs/Gzknk9SGntA96MDqHJ1HXWFMfmwOLCnxtE5TY30MqSmkrJb7Fsejwjoqoe9Y/mCaR0LpG2cStC1+37GbHJNH0caCMaQCX8qdfgMVbWTVeFWtV6aWOaRgwLrPDYn4cHWQJqTfhtPrNQ== lass@mors";
       mail = "lass@mors.retiolum";
     };
-    lass_uriel = {
+    lass-uriel = {
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDExWuRcltGM2FqXO695nm6/QY3wU3r1bDTyCpMrLfUSym7TxcXDSmZSWcueexPXV6GENuUfjJPZswOdWqIo5u2AXw9t0aGvwEDmI6uJ7K5nzQOsXIneGMdYuoOaAzWI8pxZ4N+lIP1HsOYttIPDp8RwU6kyG+Ud8mnVHWSTO13C7xC9vePnDP6b+44nHS691Zj3X/Cq35Ls0ISC3EM17jreucdP62L3TKk2R4NCm3Sjqj+OYEv0LAqIpgqSw5FypTYQgNByxRcIcNDlri63Q1yVftUP1338UiUfxtraUu6cqa2CdsHQmtX5mTNWEluVWO3uUKTz9zla3rShC+d3qvr lass@uriel";
       mail = "lass@uriel.retiolum";
     };
-    lass_helios = {
+    lass-helios = {
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDBOnMtgy5GH6R6tHp2ugy5QTe3gAGxh2CKsstSNSNAJwvWGiaWJkbNmgM8KlCWeq1GJBGa95kU4I2BDO5fJd7J9vqyrTGF1+sx0Nwj/ELKSNVxDoKVYiU09pTqSB3pi46i+E8N49y4/8aRhu4/7O2dSTH7OS3YoZpt2Soas+cYJYhQdZtYQAgPX5LOkTfQvPhGR8AzrrTvOUrHyTWaSBEELVZ088LrFT6ibXHcPhwXX7A5+YMS8LLr3KRstySWzJEmfVOJxuMhQJSH1Xiq4bLilVn9V4AK5pCOnlALSYf48SexsCqzBUKgISuncurIBbXtW9EkNTMX3jSKlSQ7WniGRlmzrBAJCh4VXJUZgXDf8hAaPckIRbLosbTnEAauWcfnIXLfvI+bYkURhfYKsWelM+MS6ihk+P2yr8rNT9w5iUVJGVypOXUp45PrFuPn6ayCpNRJzqPwCCPE7fFagzLs7wibIXlrhCnRALT5HHyExFFcQoGvIq/8o+Oia8mrTimb55IDLwkiYrG6I5DPXFPKsTC0hium9T3I8dC+M7n9GbwnLTUK2kWnoklD3HTab21xJTtbF98nQ94df7doqPFxL/jongeZCGMB+PJ+BdQTtHr7tCY0kN2GXpoHxz/2w8YEWTKHhWIUsD+Utf8pDkKQfCqlm7iR7byxL51gHL9Z3Q== lass@helios";
       mail = "lass@helios.retiolum";
     };

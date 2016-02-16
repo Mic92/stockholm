@@ -1,11 +1,11 @@
 { config, pkgs, lib, ... }:
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs.retiolum;
 
   out = {
     options.krebs.retiolum = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {
@@ -58,9 +58,38 @@ let
       default =
         filterAttrs (_: h: hasAttr cfg.netname h.nets) config.krebs.hosts;
       description = ''
-        Hosts which should be part of the tinc configuration.
-        Note that these hosts must have a correspondingly named network
-        configured, see <literal>config.krebs.retiolum.netname</literal>.
+        Hosts to generate <literal>config.krebs.retiolum.hostsPackage</literal>.
+        Note that these hosts must have a network named
+        <literal>config.krebs.retiolum.netname</literal>.
+      '';
+    };
+
+    hostsPackage = mkOption {
+      type = types.package;
+      default = pkgs.stdenv.mkDerivation {
+        name = "${cfg.netname}-tinc-hosts";
+        phases = [ "installPhase" ];
+        installPhase = ''
+          mkdir $out
+          ${concatStrings (mapAttrsToList (_: host: ''
+            echo ${shell.escape host.nets.${cfg.netname}.tinc.config} \
+              > $out/${shell.escape host.name}
+          '') cfg.hosts)}
+        '';
+      };
+      description = ''
+        Package of tinc host configuration files.  By default, a package will
+        be generated from <literal>config.krebs.retiolum.hosts</literal>.  This
+        option's main purpose is to expose the generated hosts package to other
+        modules, like <literal>config.krebs.tinc_graphs</literal>.  But it can
+        also be used to provide a custom hosts directory.
+      '';
+      example = literalExample ''
+        (pkgs.stdenv.mkDerivation {
+          name = "my-tinc-hosts";
+          src = /home/tv/my-tinc-hosts;
+          installPhase = "cp -R . $out";
+        })
       '';
     };
 
@@ -130,18 +159,6 @@ let
 
   tinc = cfg.tincPackage;
 
-  tinc-hosts = pkgs.stdenv.mkDerivation {
-    name = "${cfg.netname}-tinc-hosts";
-    phases = [ "installPhase" ];
-    installPhase = ''
-      mkdir $out
-      ${concatStrings (mapAttrsToList (_: host: ''
-        echo ${shell.escape host.nets.${cfg.netname}.tinc.config} \
-          > $out/${shell.escape host.name}
-      '') cfg.hosts)}
-    '';
-  };
-
   iproute = cfg.iproutePackage;
 
   confDir = pkgs.runCommand "retiolum" {
@@ -153,7 +170,7 @@ let
 
     mkdir -p $out
 
-    ln -s ${tinc-hosts} $out/hosts
+    ln -s ${cfg.hostsPackage} $out/hosts
 
     cat > $out/tinc.conf <<EOF
     Name = ${cfg.name}

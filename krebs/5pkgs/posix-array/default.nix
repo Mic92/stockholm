@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, ... }:
+{ fetchgit, lib, stdenv, ... }:
 
-with stdenv; stdenv.mkDerivation rec {
-  name = "posix-array";
+stdenv.mkDerivation rec {
+  name = "posix-array-${version}";
   version = "1.0.0";
 
   src = fetchgit {
@@ -16,16 +16,15 @@ with stdenv; stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p "$out/bin"
+    mkdir -p $out/bin
     cp -a ./array $out/bin
-    rm *
   '';
 
   meta = {
-    description = "Posix-compliant array implementation";
+    description = "POSIX-compliant array implementation";
     url = https://github.com/makefu/array;
-    license = licenses.wtfpl;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ makefu ];
+    license = lib.licenses.wtfpl;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ makefu ];
   };
 }

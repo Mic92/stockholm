@@ -1,11 +1,12 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 
 {
   krebs.build.host = config.krebs.hosts.xu;
 
   imports = [
+    ../.
     ../2configs/hw/x220.nix
     ../2configs/exim-retiolum.nix
     ../2configs/git.nix
@@ -14,6 +15,7 @@ with lib;
     ../2configs/pulse.nix
     ../2configs/retiolum.nix
     ../2configs/xserver
+    ../2configs/xu-qemu0.nix
     {
       environment.systemPackages = with pkgs; [
 
@@ -43,7 +45,7 @@ with lib;
         # tv
         bc
         bind # dig
-        #cac
+        cac-api
         dic
         file
         gnupg21
@@ -188,8 +190,6 @@ with lib;
   systemd.tmpfiles.rules = [
     "d /tmp 1777 root root - -" # does this work with mounted /tmp?
   ];
-
-  #virtualisation.libvirtd.enable = true;
 
   #services.bitlbee.enable = true;
   #services.tor.client.enable = true;

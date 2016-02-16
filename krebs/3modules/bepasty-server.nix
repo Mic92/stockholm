@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 let
   gunicorn = pkgs.pythonPackages.gunicorn;
   bepasty = pkgs.pythonPackages.bepasty-server;
@@ -10,8 +10,8 @@ let
 
   out = {
     options.krebs.bepasty = api;
-    config = mkIf cfg.enable (mkMerge [
-      (mkIf cfg.serveNginx nginx-imp)
+    config = lib.mkIf cfg.enable (lib.mkMerge [
+      (lib.mkIf cfg.serveNginx nginx-imp)
       imp
     ]);
   };

@@ -1,10 +1,9 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 {
   krebs.retiolum = {
     enable = true;
-    hosts = ../../krebs/Zhosts;
     connectTo = [
       "gum"
       "pigstarter"

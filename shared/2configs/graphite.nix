@@ -5,7 +5,7 @@
 
 # TODO: krebs.graphite.minimal.enable
 # TODO: configure firewall
-with lib;
+with config.krebs.lib;
 {
   imports = [ ];
 

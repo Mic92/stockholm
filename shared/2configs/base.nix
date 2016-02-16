@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 {
   krebs.enable = true;
   krebs.retiolum = {
@@ -16,16 +16,14 @@ with lib;
   # TODO rename shared user to "krebs"
   krebs.build.user = mkDefault config.krebs.users.shared;
   krebs.build.source = {
-    upstream-nixpkgs = mkDefault {
+    nixpkgs = mkDefault {
       url = https://github.com/NixOS/nixpkgs;
-      rev = "d0e3cca";
+      rev = "77f8f35d57618c1ba456d968524f2fb2c3448295"; # for urlwatch-minidb
     };
     secrets =  mkDefault "${getEnv "HOME"}/secrets/krebs/${config.krebs.build.host.name}";
     stockholm = mkDefault "${getEnv "HOME"}/stockholm";
 
     nixos-config = "symlink:stockholm/${config.krebs.build.user.name}/1systems/${config.krebs.build.host.name}.nix";
-    nixpkgs = symlink:stockholm/nixpkgs;
-    stockholm-user = "symlink:stockholm/${config.krebs.build.user.name}";
   };
 
   networking.hostName = config.krebs.build.host.name;

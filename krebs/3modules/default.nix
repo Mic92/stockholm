@@ -1,6 +1,6 @@
 { config, lib, ... }:
 
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs;
 
@@ -9,9 +9,9 @@ let
       ./apt-cacher-ng.nix
       ./backup.nix
       ./bepasty-server.nix
-      ./build.nix
       ./buildbot/master.nix
       ./buildbot/slave.nix
+      ./build.nix
       ./current.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
@@ -20,17 +20,20 @@ let
       ./git.nix
       ./go.nix
       ./iptables.nix
+      ./lib.nix
       ./nginx.nix
+      ./nixpkgs.nix
       ./per-user.nix
       ./Reaktor.nix
-      ./retiolum-bootstrap.nix
       ./realwallpaper.nix
+      ./retiolum-bootstrap.nix
       ./retiolum.nix
+      ./setuid.nix
       ./tinc_graphs.nix
       ./urlwatch.nix
     ];
     options.krebs = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {
@@ -81,13 +84,13 @@ let
     };
   };
 
-  imp = mkMerge [
-    { krebs = import ./lass { inherit lib; }; }
-    { krebs = import ./makefu { inherit lib; }; }
-    { krebs = import ./miefda { inherit lib; }; }
-    { krebs = import ./mv { inherit lib; }; }
-    { krebs = import ./shared { inherit lib; }; }
-    { krebs = import ./tv { inherit lib; }; }
+  imp = lib.mkMerge [
+    { krebs = import ./lass   { inherit config lib; }; }
+    { krebs = import ./makefu { inherit config lib; }; }
+    { krebs = import ./miefda { inherit config lib; }; }
+    { krebs = import ./mv     { inherit config lib; }; }
+    { krebs = import ./shared { inherit config lib; }; }
+    { krebs = import ./tv     { inherit config lib; }; }
     {
       krebs.dns.providers = {
         de.krebsco = "zones";
@@ -156,7 +159,16 @@ let
         let inherit (config.krebs.build.host.ssh) privkey; in
         mkIf (privkey != null) (mkForce [privkey]);
 
+      # TODO use imports for merging
       services.openssh.knownHosts =
+        (let inherit (config.krebs.build.host.ssh) pubkey; in
+          optionalAttrs (pubkey != null) {
+            localhost = {
+              hostNames = ["localhost" "127.0.0.1" "::1"];
+              publicKey = pubkey;
+            };
+          })
+        //
         # GitHub's IPv4 address range is 192.30.252.0/22
         # Refs https://help.github.com/articles/what-ip-addresses-does-github-use-that-i-should-whitelist/
         # 192.30.252.0/22 = 192.30.252.0-192.30.255.255 (1024 addresses)
@@ -180,7 +192,6 @@ let
                 (mapAttrsToList
                   (net-name: net:
                     let
-                      aliases = shorts ++ longs;
                       longs = net.aliases;
                       shorts =
                         map (removeSuffix ".${cfg.search-domain}")
@@ -191,7 +202,7 @@ let
                           then "[${a}]:${toString net.ssh.port}"
                           else a;
                     in
-                    aliases ++ map add-port net.addrs)
+                    map add-port (shorts ++ longs ++ net.addrs))
                   host.nets);
 
             publicKey = host.ssh.pubkey;

@@ -1,10 +1,8 @@
 { config, lib, ... }:
 
-with lib;
+with config.krebs.lib;
 
 let
-  target = config.krebs.build // { user.name = "root"; };
-
   out = {
     # TODO deprecate krebs.build.host
     options.krebs.build.host = mkOption {
@@ -15,12 +13,6 @@ let
     options.krebs.build.profile = mkOption {
       type = types.str;
       default = "/nix/var/nix/profiles/system";
-    };
-
-    # TODO make krebs.build.target.host :: host
-    options.krebs.build.target = mkOption {
-      type = with types; nullOr str;
-      default = null;
     };
 
     # TODO deprecate krebs.build.user
@@ -59,6 +51,7 @@ let
         source = config.krebs.build.source;
         target-user = maybeEnv "target_user" "root";
         target-host = maybeEnv "target_host" config.krebs.build.host.name;
+        target-port = maybeEnv "target_port" "22";
         target-path = maybeEnv "target_path" "/var/src";
         out = ''
           #! /bin/sh
@@ -70,7 +63,8 @@ let
           }
 
           echo ${shell.escape git-script} \
-            | ssh ${shell.escape "${target-user}@${target-host}"} -T
+            | ssh -p ${shell.escape target-port} \
+                  ${shell.escape "${target-user}@${target-host}"} -T
 
           unset tmpdir
           trap '
@@ -101,6 +95,7 @@ let
                     (attrNames file-specs)} \
                   --delete \
                   -vFrlptD \
+                  -e ${shell.escape "ssh -p ${target-port}"} \
                   ${shell.escape target-path}/ \
                   ${shell.escape "${target-user}@${target-host}:${target-path}"}
         '';

@@ -1,12 +1,12 @@
-arg@{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs.realwallpaper;
 
   out = {
     options.krebs.realwallpaper = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {

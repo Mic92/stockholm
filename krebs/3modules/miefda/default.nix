@@ -1,12 +1,11 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
-with lib;
+with config.krebs.lib;
 
 {
-  hosts = addNames {
+  hosts = {
     bobby = {
       cores = 4;
-      dc = "miefda";
       nets = {
         retiolum = {
           addrs4 = ["10.243.111.112"];
@@ -31,7 +30,7 @@ with lib;
       #ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+7Qa51l0NSkBiaK2s8vQEoeObV3UPZyEzMxfUK/ZAO root@stro";
     };
   };
-  users = addNames {
+  users = {
     miefda = {
       mail = "miefda@miefda.de";
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCVdNCks6mrItKHYIwgW3s+NINFhHqZtLPj3l6TJUWd93ZSuuI6P+Z/0m0G9Z4tWWaXWsOCnzMA2WOKcitBbLcaQxVypJfvmfoA5CVlh4/nf8NfvbMFkVIYPehxR7YoejfKOxPOCNC3248RiD8kqa4/5IF8qdqE+mRQUIZJXvN0jZZ+rGnYo5Z544O9JqsV+VjjOgK0Fchpxf/lC8dnBucIce7gUwi5npwsGQZgSDmRobBRFVDZag1abLFNZN2faI8uqzSlU6KRRapYV266Of7j3kmDokMan4szjP1EexmTWm+arwRiz9p0M5oKs6zofez0mOyF5ux02NB3XIhbJc8CfMjeA7PmSg4ZhghjlSjIOR+1mMIDiDVi6PNLw5atzvpyfYtpf5sWpdIpXCS0lyzIgasqW4gbAiWoFPv5A0mw0QI6UqlxQ8Pdm6R7P6yQxyknrxnvFGMQPiqgl21ssSNA9A+YRd4j0nATntzOeD1bxTZkyU4FtW++0hg3Ph6HiHLfPd9w70wPr7b0RITVnBcN2ZqIO+5NIqQYU801FCNXsTuBh0ueTsVTGJYySUGkmkHyH5spLYdr1Z5w+4W+HgbxPk40pyZJ18S0umL49igxR9NsniucFy1/jqqi0TiDIsHx6vsawFT1F2rq9ZtGaRcJL6Yfz0p+uZC5rc/nI+mMlQ== miefda@nixos";

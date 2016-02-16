@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 {
   system.stateVersion = "15.09";
 
@@ -18,20 +18,17 @@ with lib;
     enable = true;
     search-domain = "retiolum";
     build =  {
-      target = mkDefault "root@${config.krebs.build.host.name}";
       user = config.krebs.users.makefu;
       source =  mapAttrs (_: mkDefault) {
-        upstream-nixpkgs = {
+        nixpkgs = {
           url = https://github.com/nixos/nixpkgs;
-          rev = "93d8671e2c6d1d25f126ed30e5e6f16764330119"; # unstable @ 2015-01-03, tested on filepimp
+          rev = "77f8f35d57618c1ba456d968524f2fb2c3448295"; # unstable @ 2015-01-27, tested on wry
         };
         secrets = "/home/makefu/secrets/${config.krebs.build.host.name}/";
         stockholm = "/home/makefu/stockholm";
 
         # Defaults for all stockholm users?
         nixos-config = "symlink:stockholm/${config.krebs.build.user.name}/1systems/${config.krebs.build.host.name}.nix";
-        nixpkgs = symlink:stockholm/nixpkgs;
-        stockholm-user = "symlink:stockholm/${config.krebs.build.user.name}";
       };
     };
   };
@@ -87,6 +84,7 @@ with lib;
   environment.systemPackages = with pkgs; [
       jq
       git
+      get
       gnumake
       rxvt_unicode.terminfo
       htop

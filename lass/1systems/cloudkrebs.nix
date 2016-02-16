@@ -7,6 +7,7 @@ let
   ip = (head config.krebs.build.host.nets.internet.addrs4);
 in {
   imports = [
+    ../.
     ../2configs/os-templates/CAC-CentOS-7-64bit.nix
     ../2configs/base.nix
     ../2configs/retiolum.nix

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 # TODO unify logging of shell scripts to user and journal
 # TODO move all scripts to ${etcDir}, so ControlMaster connections
@@ -6,13 +6,13 @@
 # TODO when authorized_keys changes, then restart ssh
 #       (or kill already connected users somehow)
 
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs.git;
 
   out = {
     options.krebs.git = api;
-    config = mkIf cfg.enable (mkMerge [
+    config = with lib; mkIf cfg.enable (mkMerge [
       (mkIf cfg.cgit cgit-imp)
       git-imp
     ]);
@@ -86,7 +86,7 @@ let
         singleton {
           user = [ config.krebs.users.tv ];
           repo = [ testing ]; # see literal example of repos
-          perm = push "refs/*" (with lib.git; [
+          perm = push "refs/*" (with config.krebs.lib.git; [
             non-fast-forward create delete merge
           ]);
         }

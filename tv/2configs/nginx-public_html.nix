@@ -1,6 +1,6 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
-with lib;
+with config.krebs.lib;
 
 {
   krebs.nginx = {

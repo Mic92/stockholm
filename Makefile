@@ -4,14 +4,16 @@ endif
 
 export target_host ?= $(system)
 export target_user ?= root
+export target_port ?= 22
 export target_path ?= /var/src
 
 evaluate = \
 	nix-instantiate \
-		--arg configuration "./$$LOGNAME/1systems/$$system.nix" \
 		--eval \
 		--readonly-mode \
 		--show-trace \
+		-I nixos-config=./$(LOGNAME)/1systems/$(system).nix \
+		-I stockholm=. \
 		$(1)
 
 execute = \
@@ -22,20 +24,20 @@ execute = \
 # usage: make deploy system=foo [target_host=bar]
 deploy:
 	$(call execute,populate)
-	@set -x; ssh "$$target_user@$$target_host" nixos-rebuild switch -I "$$target_path"
+	ssh $(target_user)@$(target_host) -p $(target_port) \
+		nixos-rebuild switch --show-trace -I $(target_path)
 
 # usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
 eval eval.:;@$(call evaluate)
 eval.%:;@$(call evaluate,-A $*)
 
-## usage: make install system=foo target=
-#.PHONY: install
-#install: ssh = ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
-#install:;@set -x
-#	$(ssh) "$$target_user@$$target_host" \
-#		env target_path="$target_path" \
-#			sh -s prepare < krebs/4lib/infest/prepare.sh
-#	make -s populate target_path=/mnt"$$target_path"
-#	$(ssh) "$$target_user@$$target_host" \
-#		env NIXOS_CONFIG=/var/src/nixos-config \
-#			nixos-install
+# usage: make install system=foo [target_host=bar]
+install: ssh ?= ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+install:
+	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
+		env target_path=$(target_path) \
+			sh -s prepare < krebs/4lib/infest/prepare.sh
+	target_path=/mnt$(target_path) $(call execute,populate)
+	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
+		env NIXOS_CONFIG=$(target_path)/nixos-config \
+			nixos-install

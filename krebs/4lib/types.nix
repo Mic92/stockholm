@@ -10,15 +10,14 @@ types // rec {
     options = {
       name = mkOption {
         type = label;
-      };
-      dc = mkOption {
-        type = label;
+        default = config._module.args.name;
       };
       cores = mkOption {
         type = positive;
       };
       nets = mkOption {
         type = attrsOf net;
+        default = {};
       };
 
       extraZones = mkOption {
@@ -155,26 +154,25 @@ types // rec {
       merge = mergeOneOption;
     };
 
-  user = submodule {
+  user = submodule ({ config, ... }: {
     options = {
       mail = mkOption {
         type = str; # TODO retiolum mail address
       };
       name = mkOption {
-        type = str; # TODO
+        type = username;
+        default = config._module.args.name;
       };
       pubkey = mkOption {
         type = str;
       };
     };
-  };
+  });
 
   # TODO
   addr = str;
   addr4 = str;
   addr6 = str;
-  hostname = str;
-  label = str;
 
   krebs.file-location = types.submodule {
     options = {
@@ -191,5 +189,37 @@ types // rec {
         }.${typeOf x};
       };
     };
+  };
+
+  # RFC952, B. Lexical grammar, <hname>
+  hostname = mkOptionType {
+    name = "hostname";
+    check = x: all label.check (splitString "." x);
+    merge = mergeOneOption;
+  };
+
+  # RFC952, B. Lexical grammar, <name>
+  # RFC1123, 2.1  Host Names and Numbers
+  label = mkOptionType {
+    name = "label";
+    # TODO case-insensitive labels
+    check = x: match "[0-9A-Za-z]([0-9A-Za-z-]*[0-9A-Za-z])?" x != null;
+    merge = mergeOneOption;
+  };
+
+  # POSIX.1‐2013, 3.278 Portable Filename Character Set
+  filename = mkOptionType {
+    name = "POSIX filename";
+    check = let
+      filename-chars = stringToCharacters
+        "-.0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    in s: all (flip elem filename-chars) (stringToCharacters s);
+    merge = mergeOneOption;
+  };
+
+  # POSIX.1-2013, 3.431 User Name
+  username = mkOptionType {
+    name = "POSIX username";
+    check = s: filename.check s && substring 0 1 s != "-";
   };
 }

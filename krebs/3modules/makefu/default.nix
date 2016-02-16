@@ -1,12 +1,11 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
-with lib;
+with config.krebs.lib;
 
 {
-  hosts = addNames {
+  hosts = {
     pnp = {
       cores = 1;
-      dc = "makefu"; #vm on 'omo'
       nets = {
         retiolum = {
           addrs4 = ["10.243.0.210"];
@@ -30,7 +29,6 @@ with lib;
     };
     tsp = {
       cores = 1;
-      dc = "makefu"; #x200
       nets = {
         retiolum = {
           addrs4 = ["10.243.0.212"];
@@ -58,7 +56,6 @@ with lib;
     };
     pornocauster = {
       cores = 2;
-      dc = "makefu"; #x220
       nets = {
         retiolum = {
           addrs4 = ["10.243.0.91"];
@@ -90,7 +87,6 @@ with lib;
 
     vbob = {
       cores = 2;
-      dc = "makefu"; #vm local
       nets = {
         retiolum = {
           addrs4 = ["10.243.1.91"];
@@ -116,7 +112,6 @@ with lib;
     };
     flap = rec {
       cores = 1;
-      dc = "cac"; #vps
 
       extraZones = {
         "krebsco.de" = ''
@@ -152,7 +147,6 @@ with lib;
     };
     pigstarter = rec {
       cores = 1;
-      dc = "frontrange"; #vps
 
       extraZones = {
         "krebsco.de" = ''
@@ -191,7 +185,6 @@ with lib;
     };
     wry = rec {
       cores = 1;
-      dc = "makefu"; #dc = "cac";
       extraZones = {
         "krebsco.de" = ''
           euer           IN A  ${head nets.internet.addrs4}
@@ -248,7 +241,6 @@ with lib;
     };
     filepimp = rec {
       cores = 1;
-      dc = "makefu"; #nas
 
       nets = {
         retiolum = {
@@ -273,7 +265,6 @@ with lib;
 
     omo = rec {
       cores = 2;
-      dc = "makefu"; #AMD E350
 
       nets = {
         retiolum = {
@@ -299,11 +290,10 @@ with lib;
     };
     wbob = rec {
       cores = 1;
-      dc = "none";
       nets = {
         retiolm = {
-          addrs4 = ["10.243.214.15/32"];
-          addrs6 = ["42:5a02:2c30:c1b1:3f2e:7c19:2496:a732/128"];
+          addrs4 = ["10.243.214.15"];
+          addrs6 = ["42:5a02:2c30:c1b1:3f2e:7c19:2496:a732"];
           aliases = [
               "wbob.retiolum"
           ];
@@ -323,7 +313,6 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
 
     gum = rec {
       cores = 1;
-      dc = "online.net"; #root-server
 
       extraZones = {
         "krebsco.de" = ''
@@ -364,7 +353,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcxWFEPzke/Sdd9qNX6rSJgXal8NmINYajpFCxXfYdj root@gum";
     };
   };
-  users = addNames rec {
+  users = rec {
     makefu = {
       mail = "makefu@pornocauster.retiolum";
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl3RTOHd5DLiVeUbUr/GSiKoRWknXQnbkIf+uNiFO+XxiqZVojPlumQUVhasY8UzDzj9tSDruUKXpjut50FhIO5UFAgsBeMJyoZbgY/+R+QKU00Q19+IiUtxeFol/9dCO+F4o937MC0OpAC10LbOXN/9SYIXueYk3pJxIycXwUqhYmyEqtDdVh9Rx32LBVqlBoXRHpNGPLiswV2qNe0b5p919IGcslzf1XoUzfE3a3yjk/XbWh/59xnl4V7Oe7+iQheFxOT6rFA30WYwEygs5As//ZYtxvnn0gA02gOnXJsNjOW9irlxOUeP7IOU6Ye3WRKFRR0+7PS+w8IJLag2xb makefu@pornocauster";

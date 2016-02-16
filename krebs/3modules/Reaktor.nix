@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 let
 
   ReaktorConfig = pkgs.writeText "config.py" ''
@@ -16,7 +16,7 @@ let
 
   out = {
     options.krebs.Reaktor = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {

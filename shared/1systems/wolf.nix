@@ -6,6 +6,7 @@ let
 in
 {
   imports = [
+    ../.
     ../2configs/base.nix
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
     ../2configs/collectd-base.nix
@@ -45,7 +46,6 @@ in
   # uninteresting stuff
   #####################
   krebs.build.host = config.krebs.hosts.wolf;
-  krebs.build.target = "wolf";
 
   boot.kernel.sysctl = {
     # Enable IPv6 Privacy Extensions

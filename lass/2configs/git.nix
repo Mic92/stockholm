@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 
 let
 
@@ -71,7 +71,7 @@ let
     with git // config.krebs.users;
     repo:
       singleton {
-        user = [ lass lass_helios lass_uriel ];
+        user = [ lass lass-helios lass-uriel ];
         repo = [ repo ];
         perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++

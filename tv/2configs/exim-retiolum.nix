@@ -1,6 +1,6 @@
-{ lib, ... }:
+{ config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 
 {
   krebs.exim-retiolum.enable = true;

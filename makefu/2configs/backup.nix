@@ -1,5 +1,5 @@
 { config, lib, ... }:
-with lib;
+with config.krebs.lib;
 let
   startAt = "0,6,12,18:00";
   defaultBackupServer = config.krebs.hosts.omo;
@@ -24,7 +24,7 @@ let
     };
   };
 in {
-  krebs.backup.plans = addNames {
+  krebs.backup.plans = {
     wry-to-omo_var-www = defaultPull wry "/var/www";
   };
 }

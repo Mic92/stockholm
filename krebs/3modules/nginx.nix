@@ -1,13 +1,12 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, pkgs, ... }:
 
-with builtins;
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs.nginx;
 
   out = {
     options.krebs.nginx = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {
@@ -34,6 +33,7 @@ let
         };
         locations = mkOption {
           type = with types; listOf (attrsOf str);
+          default = [];
         };
         extraConfig = mkOption {
           type = with types; string;
@@ -76,8 +76,8 @@ let
     server {
       ${concatMapStringsSep "\n" (x: "listen ${x};") listen}
       server_name ${toString server-names};
-      ${extraConfig}
-      ${indent (concatStrings (map to-location locations))}
+      ${indent extraConfig}
+      ${indent (concatMapStrings to-location locations)}
     }
   '';
 
