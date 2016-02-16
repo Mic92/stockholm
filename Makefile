@@ -1,5 +1,8 @@
-ifndef system
-$(error unbound variable: system)
+stockholm ?= .
+
+ifndef nixos-config
+$(if $(system),,$(error unbound variable: system))
+nixos-config = ./$(LOGNAME)/1systems/$(system).nix
 endif
 
 # target = [target_user@]target_host[:target_port][/target_path]
@@ -31,13 +34,18 @@ export target_user ?= root
 export target_port ?= 22
 export target_path ?= /var/src
 
+$(if $(target_host),,$(error unbound variable: target_host))
+$(if $(target_user),,$(error unbound variable: target_user))
+$(if $(target_port),,$(error unbound variable: target_port))
+$(if $(target_path),,$(error unbound variable: target_path))
+
 evaluate = \
 	nix-instantiate \
 		--eval \
 		--readonly-mode \
 		--show-trace \
-		-I nixos-config=./$(LOGNAME)/1systems/$(system).nix \
-		-I stockholm=. \
+		-I nixos-config=$(nixos-config) \
+		-I stockholm=$(stockholm) \
 		$(1)
 
 execute = \
