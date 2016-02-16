@@ -73,3 +73,10 @@ install:
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		env NIXOS_CONFIG=$(target_path)/nixos-config \
 			nixos-install
+
+# usage: make test system=foo [target=bar]
+test:
+	$(call execute,populate)
+	ssh $(target_user)@$(target_host) -p $(target_port) \
+		nix-build --no-out-link --show-trace -I $(target_path) \
+			-A config.system.build.toplevel $(target_path)/stockholm
