@@ -12,6 +12,7 @@ with config.krebs.lib;
     ../2configs/git.nix
     ../2configs/im.nix
     ../2configs/mail-client.nix
+    ../2configs/man.nix
     ../2configs/nginx-public_html.nix
     ../2configs/pulse.nix
     ../2configs/retiolum.nix
@@ -40,14 +41,12 @@ with config.krebs.lib;
         haskellPackages.hledger
         htop
         jq
-        manpages
         mkpasswd
         netcat
         nix-repl
         nmap
         nq
         p7zip
-        posix_man_pages
         push
         qrencode
         texLive

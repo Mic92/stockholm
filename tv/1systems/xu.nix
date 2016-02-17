@@ -11,6 +11,7 @@ with config.krebs.lib;
     ../2configs/exim-retiolum.nix
     ../2configs/git.nix
     ../2configs/mail-client.nix
+    ../2configs/man.nix
     ../2configs/nginx-public_html.nix
     ../2configs/pulse.nix
     ../2configs/retiolum.nix
@@ -52,7 +53,6 @@ with config.krebs.lib;
         haskellPackages.hledger
         htop
         jq
-        manpages
         mkpasswd
         netcat
         nix-repl
@@ -60,7 +60,6 @@ with config.krebs.lib;
         nq
         p7zip
         pass
-        posix_man_pages
         qrencode
         texLive
         tmux
