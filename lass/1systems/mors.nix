@@ -210,6 +210,11 @@
       device = "/dev/big/public";
       fsType = "ext4";
     };
+
+    "/mnt/conf" = {
+      device = "/dev/big/conf";
+      fsType = "ext4";
+    };
   };
 
   services.udev.extraRules = ''
