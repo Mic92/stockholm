@@ -31,6 +31,7 @@ let
       ./setuid.nix
       ./tinc_graphs.nix
       ./urlwatch.nix
+      ./repo-sync.nix
     ];
     options.krebs = api;
     config = lib.mkIf cfg.enable imp;
