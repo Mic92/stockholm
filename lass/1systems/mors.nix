@@ -20,12 +20,12 @@
     ../2configs/git.nix
     #../2configs/wordpress.nix
     ../2configs/bitlbee.nix
-    ../2configs/firefoxPatched.nix
+    #../2configs/firefoxPatched.nix
     ../2configs/skype.nix
     ../2configs/teamviewer.nix
     ../2configs/libvirt.nix
     ../2configs/fetchWallpaper.nix
-    ../2configs/buildbot-standalone.nix
+    #../2configs/buildbot-standalone.nix
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
