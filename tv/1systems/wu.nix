@@ -10,6 +10,7 @@ with config.krebs.lib;
     ../2configs/hw/w110er.nix
     ../2configs/exim-retiolum.nix
     ../2configs/git.nix
+    ../2configs/im.nix
     ../2configs/mail-client.nix
     ../2configs/nginx-public_html.nix
     ../2configs/pulse.nix
@@ -23,19 +24,6 @@ with config.krebs.lib;
         hashPassword
         haskellPackages.lentil
         parallel
-        (pkgs.writeScriptBin "im" ''
-          #! ${pkgs.bash}/bin/bash
-          export PATH=${makeSearchPath "bin" (with pkgs; [
-            tmux
-            gnugrep
-            weechat
-          ])}
-          if tmux list-sessions -F\#S | grep -q '^im''$'; then
-            exec tmux attach -t im
-          else
-            exec tmux new -s im weechat
-          fi
-        '')
 
         # root
         cryptsetup
@@ -201,12 +189,6 @@ with config.krebs.lib;
     KERNEL=="hpet", GROUP="audio"
   '';
 
-  services.bitlbee = {
-    enable = true;
-    plugins = [
-      pkgs.bitlbee-facebook
-    ];
-  };
   services.tor.client.enable = true;
   services.tor.enable = true;
   services.virtualboxHost.enable = true;
