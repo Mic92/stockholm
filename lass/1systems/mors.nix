@@ -131,9 +131,10 @@
       };
     }
     {
-      services.postgresql = {
+      services.mysql = {
         enable = true;
-        authentication = "local all all ident";
+        package = pkgs.mariadb;
+        rootPassword = "<secrets>/mysql_rootPassword";
       };
     }
   ];
