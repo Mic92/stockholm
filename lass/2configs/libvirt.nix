@@ -2,13 +2,14 @@
 
 let
   mainUser = config.users.extraUsers.mainUser;
+  inherit (config.krebs.lib) genid;
 
 in {
   virtualisation.libvirtd.enable = true;
 
   users.extraUsers = {
     libvirt = {
-      uid = lib.genid "libvirt";
+      uid = genid "libvirt";
       description = "user for running libvirt stuff";
       home = "/home/libvirt";
       useDefaultShell = true;
