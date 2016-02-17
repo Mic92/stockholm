@@ -27,6 +27,8 @@ with config.krebs.lib;
   networking.dhcpcd.denyInterfaces = [ "qemubr0" ];
 
   systemd.network.enable = true;
+  systemd.services.systemd-networkd-wait-online.enable = false;
+
   services.resolved.enable = mkForce false;
 
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
