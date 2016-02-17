@@ -153,11 +153,7 @@ with config.krebs.lib;
   hardware.opengl.driSupport32Bit = true;
 
   environment.systemPackages = with pkgs; [
-    xlibs.fontschumachermisc
-    slock
     ethtool
-    #firefoxWrapper # with plugins
-    #chromiumDevWrapper
     tinc
     iptables
     #jack2
@@ -165,7 +161,6 @@ with config.krebs.lib;
 
   security.setuidPrograms = [
     "sendmail"  # for cron
-    "slock"
   ];
 
   services.printing.enable = true;

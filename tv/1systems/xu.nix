@@ -163,11 +163,7 @@ with config.krebs.lib;
   #hardware.opengl.driSupport32Bit = true;
 
   environment.systemPackages = with pkgs; [
-    #xlibs.fontschumachermisc
-    #slock
     ethtool
-    #firefoxWrapper # with plugins
-    #chromiumDevWrapper
     tinc
     iptables
     #jack2
