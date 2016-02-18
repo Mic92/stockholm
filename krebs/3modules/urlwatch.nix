@@ -3,7 +3,6 @@
 # TODO multiple users
 # TODO inform about unused caches
 # cache = url: "${cfg.dataDir}/.urlwatch/cache/${hashString "sha1" url}"
-# TODO hooks.py
 
 with config.krebs.lib;
 let
@@ -32,6 +31,14 @@ let
         Content of the From: header of the generated mails.
       '';
     };
+    # TODO hooks :: attrsOf hook
+    hooksFile = mkOption {
+      type = with types; nullOr path;
+      default = null;
+      description = ''
+        File to use as hooks.py module.
+      '';
+    };
     mailto = mkOption {
       type = types.str;
       default = config.krebs.build.user.mail;
@@ -48,7 +55,7 @@ let
       '';
     };
     urls = mkOption {
-      type = with types; listOf str;
+      type = with types; listOf (either str subtypes.job);
       default = [];
       description = "URL to watch.";
       example = [
@@ -56,7 +63,10 @@ let
       ];
       apply = map (x: getAttr (typeOf x) {
         set = x;
-        string.url = x;
+        string = {
+          url = x;
+          filter = null;
+        };
       });
     };
     verbose = mkOption {
@@ -68,9 +78,12 @@ let
     };
   };
 
-  urlsFile = toFile "urls" (concatMapStringsSep "\n---\n" toJSON cfg.urls);
+  urlsFile = pkgs.writeText "urls"
+    (concatMapStringsSep "\n---\n" toJSON cfg.urls);
 
-  configFile = toFile "urlwatch.yaml" (toJSON {
+  hooksFile = cfg.hooksFile;
+
+  configFile = pkgs.writeText "urlwatch.yaml" (toJSON {
     display = {
       error = true;
       new = true;
@@ -127,10 +140,10 @@ let
         User = user.name;
         PermissionsStartOnly = "true";
         PrivateTmp = "true";
+        SyslogIdentifier = "urlwatch";
         Type = "oneshot";
         ExecStartPre =
-          pkgs.writeScript "urlwatch-prestart" ''
-            #! /bin/sh
+          pkgs.writeDash "urlwatch-prestart" ''
             set -euf
 
             dataDir=$HOME
@@ -140,31 +153,29 @@ let
               chown ${user.name}: "$dataDir"
             fi
           '';
-        ExecStart = pkgs.writeScript "urlwatch" ''
-          #! /bin/sh
+        ExecStart = pkgs.writeDash "urlwatch" ''
           set -euf
-          from=${escapeShellArg cfg.from}
-          mailto=${escapeShellArg cfg.mailto}
-          urlsFile=${escapeShellArg urlsFile}
-          configFile=${escapeShellArg configFile}
 
           cd /tmp
 
           urlwatch \
               ${optionalString cfg.verbose "-v"} \
-              --urls="$urlsFile" \
-              --config="$configFile" \
+              --config=${shell.escape configFile} \
+              ${optionalString (hooksFile != null)
+                "--hooks=${shell.escape hooksFile}"
+              } \
+              --urls=${shell.escape urlsFile} \
             > changes || :
 
           if test -s changes; then
-            date=$(date -R)
-            subject=$(sed -n 's/^\(CHANGED\|ERROR\|NEW\): //p' changes \
-              | tr \\n \ )
             {
-              echo "Date: $date"
-              echo "From: $from"
-              echo "Subject: $subject"
-              echo "To: $mailto"
+              echo Date: $(date -R)
+              echo From: ${shell.escape cfg.from}
+              echo Subject: $(
+                sed -n 's/^\(CHANGED\|ERROR\|NEW\): //p' changes \
+                  | tr '\n' ' '
+              )
+              echo To: ${shell.escape cfg.mailto}
               echo
               cat changes
             } | /var/setuid-wrappers/sendmail -t
@@ -181,5 +192,15 @@ let
     name = "urlwatch";
     uid = genid name;
   };
-in
-out
+
+  subtypes.job = types.submodule {
+    options = {
+      url = mkOption {
+        type = types.str;
+      };
+      filter = mkOption {
+        type = with types; nullOr str; # TODO nullOr subtypes.filter
+      };
+    };
+  };
+in out
