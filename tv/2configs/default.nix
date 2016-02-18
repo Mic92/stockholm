@@ -50,6 +50,7 @@ with config.krebs.lib;
     {
       security.sudo.extraConfig = ''
         Defaults mailto="${config.krebs.users.tv.mail}"
+        Defaults !lecture
       '';
       time.timeZone = "Europe/Berlin";
     }
