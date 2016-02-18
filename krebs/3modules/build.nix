@@ -42,12 +42,13 @@ let
           set -eu
 
           verbose() {
-            printf '+%s\n' "$(printf ' %q' "$@")" >&2
+            printf '%s%s\n' "$PS5$(printf ' %q' "$@")" >&2
             "$@"
           }
 
-          echo ${shell.escape git-script} \
-            | ssh -p ${shell.escape target-port} \
+          { printf 'PS5=%q%q\n' @ "$PS5"
+            echo ${shell.escape git-script}
+          } | verbose ssh -p ${shell.escape target-port} \
                   ${shell.escape "${target-user}@${target-host}"} -T
 
           unset tmpdir
@@ -86,7 +87,7 @@ let
           set -efu
 
           verbose() {
-            printf '+%s\n' "$(printf ' %q' "$@")" >&2
+            printf '%s%s\n' "$PS5$(printf ' %q' "$@")" >&2
             "$@"
           }
 
