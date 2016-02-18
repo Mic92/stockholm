@@ -137,6 +137,14 @@
         rootPassword = "<secrets>/mysql_rootPassword";
       };
     }
+    {
+      services.elasticsearch = {
+        enable = true;
+        plugins = [
+          pkgs.elasticsearchPlugins.elasticsearch_kopf
+        ];
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
