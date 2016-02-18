@@ -2,41 +2,43 @@
 with config.krebs.lib;
 {
   krebs.backup.plans = {
+  } // mapAttrs (_: recursiveUpdate {
+    snapshots = {
+      daily    = { format = "%Y-%m-%d"; retain =  7; };
+      weekly   = { format = "%YW%W";    retain =  4; };
+      monthly  = { format = "%Y-%m";    retain = 12; };
+      yearly   = { format = "%Y";                    };
+    };
+  }) {
     nomic-home-xu = {
       method = "push";
       src = { host = config.krebs.hosts.nomic; path = "/home"; };
       dst = { host = config.krebs.hosts.xu;    path = "/bku/nomic-home"; };
       startAt = "05:00";
-      snapshots = {
-        daily    = { format = "%Y-%m-%d";    retain =  7; };
-        weekly   = { format = "%YW%W";       retain =  4; };
-        monthly  = { format = "%Y-%m";       retain = 12; };
-        yearly   = { format = "%Y";                       };
-      };
     };
     wu-home-xu = {
       method = "push";
       src = { host = config.krebs.hosts.wu; path = "/home"; };
       dst = { host = config.krebs.hosts.xu; path = "/bku/wu-home"; };
       startAt = "05:00";
-      snapshots = {
-        daily    = { format = "%Y-%m-%d";    retain =  7; };
-        weekly   = { format = "%YW%W";       retain =  4; };
-        monthly  = { format = "%Y-%m";       retain = 12; };
-        yearly   = { format = "%Y";                       };
-      };
     };
     xu-home-wu = {
       method = "push";
       src = { host = config.krebs.hosts.xu; path = "/home"; };
       dst = { host = config.krebs.hosts.wu; path = "/bku/xu-home"; };
       startAt = "06:00";
-      snapshots = {
-        daily    = { format = "%Y-%m-%d";    retain =  7; };
-        weekly   = { format = "%YW%W";       retain =  4; };
-        monthly  = { format = "%Y-%m";       retain = 12; };
-        yearly   = { format = "%Y";                       };
-      };
+    };
+    xu-pull-cd-ejabberd = {
+      method = "pull";
+      src = { host = config.krebs.hosts.cd; path = "/var/ejabberd"; };
+      dst = { host = config.krebs.hosts.xu; path = "/bku/cd-ejabberd"; };
+      startAt = "07:00";
+    };
+    xu-pull-cd-home = {
+      method = "pull";
+      src = { host = config.krebs.hosts.cd; path = "/home"; };
+      dst = { host = config.krebs.hosts.xu; path = "/bku/cd-home"; };
+      startAt = "07:00";
     };
   } // mapAttrs (_: recursiveUpdate {
     snapshots = {
