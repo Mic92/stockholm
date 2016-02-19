@@ -116,7 +116,7 @@ let
             if ! test "$(git log --format=%H -1)" = "$hash"; then
               git fetch origin
               git checkout "$hash" -- "$dst_dir"
-              git checkout "$hash"
+              git checkout -f "$hash"
             fi
 
             git clean -dxf
