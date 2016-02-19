@@ -1,20 +1,21 @@
 { fetchgit, lib, stdenv
 , coreutils
-, get
 , git
+, gnumake
 , gnused
 , jq
+, nix
 , openssh
 , parallel
 , ... }:
 
 stdenv.mkDerivation {
-  name = "push-1.1.1";
+  name = "push-1.1.2";
 
   src = fetchgit {
     url = http://cgit.cd.krebsco.de/push;
-    rev = "ea8b76569c6b226fe148e559477669b095408472";
-    sha256 = "c305a1515d30603f6ed825d44487e863fdc7d90400620ceaf2c335a3b5d1e221";
+    rev = "da5b3a4b05ef822cc41d36b6cc2071a2e78506d4";
+    sha256 = "0gfxz207lm11g77rw02jcqpvzhx07j9hzgjgscbmslzl5r8icd6g";
   };
 
   phases = [
@@ -26,10 +27,11 @@ stdenv.mkDerivation {
     let
       path = lib.makeSearchPath "bin" [
         coreutils
-        get
         git
+        gnumake
         gnused
         jq
+        nix
         openssh
         parallel
       ];
