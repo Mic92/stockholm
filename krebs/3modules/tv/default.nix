@@ -6,7 +6,7 @@ with config.krebs.lib;
   dns.providers = {
     de.viljetic = "regfish";
   };
-  hosts = {
+  hosts = mapAttrs (_: setAttr "owner" config.krebs.users.tv) {
     cd = rec {
       cores = 2;
       extraZones = {

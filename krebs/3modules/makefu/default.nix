@@ -3,7 +3,7 @@
 with config.krebs.lib;
 
 {
-  hosts = {
+  hosts = mapAttrs (_: setAttr "owner" config.krebs.users.makefu) {
     pnp = {
       cores = 1;
       nets = {

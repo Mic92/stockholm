@@ -20,6 +20,15 @@ types // rec {
         default = {};
       };
 
+      owner = mkOption {
+        type = user;
+        # TODO proper user
+        default = {
+          name = "krebs";
+          mail = "spam@krebsco.de";
+        };
+      };
+
       extraZones = mkOption {
         default = {};
         # TODO: string is either MX, NS, A or AAAA
