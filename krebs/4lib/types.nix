@@ -35,19 +35,6 @@ types // rec {
         type = with types; attrsOf string;
       };
 
-      infest = {
-        addr = mkOption {
-          type = str;
-          apply = trace "Obsolete option `krebs.hosts.${config.name}.infest.addr' is used.  It was replaced by the `target' argument to `make` or `get`.  See Makefile for more information.";
-        };
-        port = mkOption {
-          type = int;
-          default = 22;
-          # TODO replacement: allow target with port, SSH-style: [lol]:666
-          apply = trace "Obsolete option `krebs.hosts.${config.name}.infest.port' is used.  It's gone without replacement.";
-        };
-      };
-
       secure = mkOption {
         type = bool;
         default = false;
