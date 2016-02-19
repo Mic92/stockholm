@@ -1,4 +1,4 @@
-# nix-shell -p gnumake jq openssh cac-api cac-panel
+# nix-shell -p gnumake jq openssh cac-api cac-panel sshpass
 set -eufx
 
 # 2 secrets are required:
@@ -99,7 +99,7 @@ defer "cac-api delete $id;$old_trapstr"
 mkdir -p shared/2configs/temp
 cac-api generatenetworking $id > \
   shared/2configs/temp/networking.nix
-# new temporary ssh key we will use to log in after infest
+# new temporary ssh key we will use to log in after install
 ssh-keygen -f $krebs_ssh -N ""
 cp $retiolum_key $krebs_secrets/retiolum.rsa_key.priv
 # we override the directories for secrets and stockholm
@@ -118,12 +118,12 @@ _: {
 }
 EOF
 
-LOGNAME=shared make eval get=krebs.infest \
-  target=derp system=test-centos7 filter=json \
-  | sed -e "s#^ssh.*<<#cac-api ssh $id<<#" \
-        -e "/^rsync/a -e 'cac-api ssh $id' \\\\"  \
-        -e "s#root.derp:#:#" > $krebs_secrets/infest
-sh -x $krebs_secrets/infest
+make install \
+    LOGNAME=shared \
+    SSHPASS="$(cac-api getserver $id | jq -r .rootpass)" \
+    ssh='sshpass -e ssh -S none -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' \
+    system=test-centos7 \
+    target=$ip
 
 # TODO: generate secrets directory $krebs_secrets for nix import
 cac-api powerop $id reset
