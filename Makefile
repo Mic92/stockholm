@@ -46,10 +46,12 @@ evaluate = \
 		--show-trace \
 		-I nixos-config=$(nixos-config) \
 		-I stockholm=$(stockholm) \
-		$(1)
+		-E '{ eval, f }: f eval' \
+		--arg eval 'import ./.' \
+		--arg f "eval@{ config, ... }: $(1)"
 
 execute = \
-	result=$$($(call evaluate,-A config.krebs.build.$(1) --json)) && \
+	result=$$($(call evaluate,config.krebs.build.$(1))) && \
 	script=$$(echo "$$result" | jq -r .) && \
 	echo "$$script" | PS5=% sh
 
@@ -61,8 +63,8 @@ deploy:
 		nixos-rebuild switch --show-trace -I $(target_path)
 
 # usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
-eval eval.:;@$(call evaluate)
-eval.%:;@$(call evaluate,-A $*)
+eval eval.:;@$(call evaluate,$${expr-eval})
+eval.%:;@$(call evaluate,$*)
 
 # usage: make install system=foo [target_host=bar]
 install: ssh ?= ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
