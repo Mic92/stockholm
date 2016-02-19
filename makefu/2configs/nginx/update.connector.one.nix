@@ -8,7 +8,7 @@ in {
   krebs.nginx = {
     enable = mkDefault true;
     servers = {
-      omo-share = {
+      update-connector-one = {
         listen = [ "${external-ip}:80" ];
         server-names = [
           "update.connector.one"
