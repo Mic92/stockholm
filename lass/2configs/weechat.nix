@@ -4,6 +4,7 @@ let
   inherit (config.krebs.lib) genid;
 in {
   krebs.per-user.chat.packages = with pkgs; [
+    mosh
     tmux
     weechat
   ];
