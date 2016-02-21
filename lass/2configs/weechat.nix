@@ -1,14 +1,16 @@
 { config, lib, pkgs, ... }:
 
-{
-  krebs.per-user.chat.packages = [
-    pkgs.weechat
-    pkgs.tmux
+let
+  inherit (config.krebs.lib) genid;
+in {
+  krebs.per-user.chat.packages = with pkgs; [
+    tmux
+    weechat
   ];
 
   users.extraUsers.chat = {
     home = "/home/chat";
-    uid = lib.genid "chat";
+    uid = genid "chat";
     useDefaultShell = true;
     createHome = true;
     openssh.authorizedKeys.keys = [
