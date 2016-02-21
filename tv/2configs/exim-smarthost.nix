@@ -5,7 +5,6 @@ with config.krebs.lib;
 {
   krebs.exim-smarthost = {
     enable = true;
-    primary_hostname = "${config.networking.hostName}.retiolum";
     sender_domains = [
       "shackspace.de"
       "viljetic.de"

@@ -11,6 +11,24 @@ let
 
   api = {
     enable = mkEnableOption "krebs.exim-retiolum";
+    local_domains = mkOption {
+      type = with types; listOf hostname;
+      default = ["localhost"] ++ config.krebs.build.host.nets.retiolum.aliases;
+    };
+    primary_hostname = mkOption {
+      type = types.str;
+      default = let x = "${config.krebs.build.host.name}.r"; in
+        assert elem x config.krebs.build.host.nets.retiolum.aliases;
+        x;
+    };
+    relay_to_domains = mkOption {
+      # TODO hostname with wildcards
+      type = with types; listOf str;
+      default = [
+        "*.r"
+        "*.retiolum"
+      ];
+    };
   };
 
   imp = {
@@ -21,9 +39,9 @@ let
         # TODO modular configuration
         assert config.krebs.retiolum.enable;
         ''
-          primary_hostname = ${retiolumHostname}
-          domainlist local_domains    = @ : localhost
-          domainlist relay_to_domains = *.retiolum
+          primary_hostname = ${cfg.primary_hostname}
+          domainlist local_domains = ${concatStringsSep ":" cfg.local_domains}
+          domainlist relay_to_domains = ${concatStringsSep ":" cfg.relay_to_domains}
           hostlist   relay_from_hosts = <; 127.0.0.1 ; ::1
 
           acl_smtp_rcpt = acl_check_rcpt
@@ -85,7 +103,7 @@ let
 
           retiolum:
             driver = manualroute
-            domains = ! ${retiolumHostname} : *.retiolum
+            domains = ! +local_domains : +relay_to_domains
             transport = remote_smtp
             route_list = ^.* $0 byname
             no_more
@@ -125,8 +143,8 @@ let
           # mode = 0660
 
           begin retry
-          *.retiolum             *           F,42d,1m
-          *                      *           F,2h,15m; G,16h,1h,1.5; F,4d,6h
+          ${concatMapStringsSep "\n" (k: "${k} * F,42d,1m") cfg.relay_to_domains}
+          * * F,2h,15m; G,16h,1h,1.5; F,4d,6h
 
           begin rewrite
 
@@ -134,8 +152,4 @@ let
         '';
     };
   };
-
-  # TODO get the hostname from somewhere else.
-  retiolumHostname = "${config.networking.hostName}.retiolum";
-in
-out
+in out

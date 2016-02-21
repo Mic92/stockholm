@@ -143,12 +143,11 @@ let
         { text=(stripEmptyLines value); }) all-zones;
 
       krebs.exim-smarthost.internet-aliases = let
-        format = from: to:
+        format = from: to: {
+          inherit from;
           # TODO assert is-retiolum-mail-address to;
-          { inherit from;
-            to = if typeOf to == "list"
-                   then concatMapStringsSep "," (getAttr "mail") to
-                   else to.mail; };
+          to = concatMapStringsSep "," (getAttr "mail") (toList to);
+        };
       in mapAttrsToList format (with config.krebs.users; let
         spam-ml = [
           lass
@@ -167,6 +166,10 @@ let
         "makefu@retiolum" = makefu;
         "spam@retiolum" = spam-ml;
         "tv@retiolum" = tv;
+        "lass@r" = lass;
+        "makefu@r" = makefu;
+        "spam@r" = spam-ml;
+        "tv@r" = tv;
       });
 
       services.openssh.hostKeys =

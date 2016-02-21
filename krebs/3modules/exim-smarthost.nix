@@ -25,14 +25,31 @@ let
       }));
     };
 
+    local_domains = mkOption {
+      type = with types; listOf hostname;
+      default = ["localhost"] ++ config.krebs.build.host.nets.retiolum.aliases;
+    };
+
     relay_from_hosts = mkOption {
       type = with types; listOf str;
       default = [];
+      apply = xs: ["127.0.0.1" "::1"] ++ xs;
+    };
+
+    relay_to_domains = mkOption {
+      # TODO hostname with wildcards
+      type = with types; listOf str;
+      default = [
+        "*.r"
+        "*.retiolum"
+      ];
     };
 
     primary_hostname = mkOption {
       type = types.str;
-      default = "${config.networking.hostName}.retiolum";
+      default = let x = "${config.krebs.build.host.name}.r"; in
+        assert elem x config.krebs.build.host.nets.retiolum.aliases;
+        x;
     };
 
     sender_domains = mkOption {
@@ -63,19 +80,11 @@ let
         # HOST_REDIR contains the real destinations for "local_domains".
         #HOST_REDIR = /etc/exim4/host_redirect
 
-
         # Domains not listed in local_domains need to be deliverable remotely.
         # XXX We abuse local_domains to mean "domains, we're the gateway for".
-        domainlist local_domains = @ : localhost
-        domainlist relay_to_domains =
-        hostlist relay_from_hosts = <;${concatStringsSep ";" (
-          [
-            "127.0.0.1"
-            "::1"
-          ]
-          ++
-          cfg.relay_from_hosts
-        )}
+        domainlist local_domains = ${concatStringsSep ":" cfg.local_domains}
+        domainlist relay_to_domains = ${concatStringsSep ":" cfg.relay_to_domains}
+        hostlist relay_from_hosts = <;${concatStringsSep ";" cfg.relay_from_hosts}
 
         acl_smtp_rcpt = acl_check_rcpt
         acl_smtp_data = acl_check_data
@@ -144,7 +153,7 @@ let
         retiolum:
           debug_print = "R: retiolum for $local_part@$domain"
           driver = manualroute
-          domains = ! ${cfg.primary_hostname} : *.retiolum
+          domains = ! +local_domains : +relay_to_domains
           transport = retiolum_smtp
           route_list = ^.* $0 byname
           no_more
@@ -197,8 +206,11 @@ let
           return_path_add
 
         begin retry
-        *.retiolum             *           F,42d,1m
-        *                      *           F,2h,15m; G,16h,1h,1.5; F,4d,6h
+        ${concatMapStringsSep "\n" (k: "${k} * F,42d,1m") cfg.relay_to_domains}
+        ${concatMapStringsSep "\n" (k: "${k} * F,42d,1m")
+                                   # TODO don't include relay_to_domains
+                                   (map (getAttr "from") cfg.internet-aliases)}
+        * * F,2h,15m; G,16h,1h,1.5; F,4d,6h
 
         begin rewrite
         begin authenticators
