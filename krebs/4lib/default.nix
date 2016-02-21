@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 with builtins;
 with lib;
@@ -15,7 +15,10 @@ let out = rec {
 
   addNames = mapAttrs addName;
 
-  types = import ./types.nix { lib = lib // { inherit genid; }; };
+  types = import ./types.nix {
+    inherit config;
+    lib = lib // { inherit genid; };
+  };
 
   dir.has-default-nix = path: pathExists (path + "/default.nix");
 

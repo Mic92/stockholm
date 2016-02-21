@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 with builtins;
 with lib;
@@ -22,11 +22,7 @@ types // rec {
 
       owner = mkOption {
         type = user;
-        # TODO proper user
-        default = {
-          name = "krebs";
-          mail = "spam@krebsco.de";
-        };
+        default = config.krebs.users.krebs;
       };
 
       extraZones = mkOption {
@@ -183,7 +179,8 @@ types // rec {
         default = config._module.args.name;
       };
       pubkey = mkOption {
-        type = str;
+        type = nullOr str;
+        default = null;
       };
       uid = mkOption {
         type = int;

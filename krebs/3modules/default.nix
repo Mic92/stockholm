@@ -104,11 +104,16 @@ let
         retiolum = "hosts";
       };
 
-      krebs.users.root = {
-        home = "/root";
-        name = "root";
-        pubkey = config.krebs.build.host.ssh.pubkey;
-        uid = 0;
+      krebs.users = {
+        krebs = {
+          home = "/krebs";
+          mail = "spam@krebsco.de";
+        };
+        root = {
+          home = "/root";
+          pubkey = config.krebs.build.host.ssh.pubkey;
+          uid = 0;
+        };
       };
 
       networking.extraHosts = concatStringsSep "\n" (flatten (
