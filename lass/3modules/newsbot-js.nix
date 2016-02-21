@@ -4,6 +4,8 @@ with builtins;
 with lib;
 
 let
+  inherit (config.krebs.lib) genid;
+
   cfg = config.lass.newsbot-js;
 
   out = {
