@@ -147,8 +147,14 @@ types // rec {
     options = {
       path = mkOption { type = str; };
       mode = mkOption { type = str; default = "0400"; };
-      owner-name = mkOption { type = str; default = "root"; };
-      group-name = mkOption { type = str; default = "root"; };
+      owner = mkOption {
+        type = user;
+        default = config.krebs.users.root;
+      };
+      group-name = mkOption {
+        type = str;
+        default = "root";
+      };
       source-path = mkOption {
         type = str;
         default = toString <secrets> + "/${config._module.args.name}";

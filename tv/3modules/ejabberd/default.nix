@@ -7,7 +7,7 @@ in {
       type = types.secret-file;
       default = {
         path = "${cfg.user.home}/ejabberd.pem";
-        owner-name = "ejabberd";
+        owner = cfg.user;
         source-path = toString <secrets> + "/ejabberd.pem";
       };
     };

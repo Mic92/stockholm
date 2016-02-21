@@ -25,7 +25,7 @@ in {
                   --compare \
                   --verbose \
                   --mode=${shell.escape file.mode} \
-                  --owner=${shell.escape file.owner-name} \
+                  --owner=${shell.escape file.owner.name} \
                   --group=${shell.escape file.group-name} \
                   ${shell.escape file.source-path} \
                   ${shell.escape file.path} \

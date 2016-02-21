@@ -104,6 +104,13 @@ let
         retiolum = "hosts";
       };
 
+      krebs.users.root = {
+        home = "/root";
+        name = "root";
+        pubkey = config.krebs.build.host.ssh.pubkey;
+        uid = 0;
+      };
+
       networking.extraHosts = concatStringsSep "\n" (flatten (
         mapAttrsToList (hostname: host:
           mapAttrsToList (netname: net:

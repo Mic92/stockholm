@@ -18,7 +18,7 @@ in {
       type = types.secret-file;
       default = {
         path = "${cfg.user.home}/dh.pem";
-        owner-name = "charybdis";
+        owner = cfg.user;
         source-path = toString <secrets> + "/charybdis.dh.pem";
       };
     };
@@ -26,7 +26,7 @@ in {
       type = types.secret-file;
       default = {
         path = "${cfg.user.home}/ssl.key.pem";
-        owner-name = "charybdis";
+        owner = cfg.user;
         source-path = toString <secrets> + "/charybdis.key.pem";
       };
     };
