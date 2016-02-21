@@ -83,10 +83,10 @@ in {
     {
       sound.enable = false;
     }
-    {
-      #workaround for server dying after 6-7h
-      boot.kernelPackages = pkgs.linuxPackages_4_2;
-    }
+    #{
+    #  #workaround for server dying after 6-7h
+    #  boot.kernelPackages = pkgs.linuxPackages_4_2;
+    #}
     {
       nixpkgs.config.allowUnfree = true;
     }
