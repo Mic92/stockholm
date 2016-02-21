@@ -16,8 +16,6 @@
     enable = true;
     connectTo = [
       "prism"
-      "cloudkrebs"
-      "echelon"
       "pigstarter"
       "gum"
       "flap"
