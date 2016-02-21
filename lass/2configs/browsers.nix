@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
+  inherit (config.krebs.lib) genid;
+
   mainUser = config.users.extraUsers.mainUser;
   createChromiumUser = name: extraGroups: packages:
     {
@@ -8,6 +10,7 @@ let
         inherit name;
         inherit extraGroups;
         home = "/home/${name}";
+        uid = genid name;
         useDefaultShell = true;
         createHome = true;
       };
@@ -28,6 +31,7 @@ let
         inherit name;
         inherit extraGroups;
         home = "/home/${name}";
+        uid = genid name;
         useDefaultShell = true;
         createHome = true;
       };
