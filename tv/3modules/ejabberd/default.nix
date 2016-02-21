@@ -30,19 +30,11 @@ in {
       default = cfg.certfile;
     };
     user = mkOption {
-      type = types.submodule {
-        options = {
-          name = mkOption {
-            type = types.str;
-            default = "ejabberd";
-          };
-          home = mkOption {
-            type = types.str;
-            default = "/var/ejabberd";
-          };
-        };
+      type = types.user;
+      default = {
+        name = "ejabberd";
+        home = "/var/ejabberd";
       };
-      default = {};
     };
   };
   config = lib.mkIf cfg.enable {

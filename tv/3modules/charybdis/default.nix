@@ -35,16 +35,7 @@ in {
       default = 6697;
     };
     user = mkOption {
-      type = types.submodule {
-        options = {
-          name = mkOption {
-            type = types.str;
-          };
-          home = mkOption {
-            type = types.str;
-          };
-        };
-      };
+      type = types.user;
       default = {
         name = "charybdis";
         home = "/var/lib/charybdis";
