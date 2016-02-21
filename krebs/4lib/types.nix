@@ -179,6 +179,10 @@ types // rec {
       pubkey = mkOption {
         type = str;
       };
+      uid = mkOption {
+        type = int;
+        default = genid config.name;
+      };
     };
   });
 

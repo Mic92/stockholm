@@ -73,9 +73,8 @@ in {
     };
 
     users.users.${cfg.user.name} = {
-      inherit (cfg.user) home name;
+      inherit (cfg.user) home name uid;
       createHome = true;
-      uid = genid cfg.user.name;
     };
   };
 }

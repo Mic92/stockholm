@@ -15,7 +15,7 @@ let out = rec {
 
   addNames = mapAttrs addName;
 
-  types = import ./types.nix { inherit lib; };
+  types = import ./types.nix { lib = lib // { inherit genid; }; };
 
   dir.has-default-nix = path: pathExists (path + "/default.nix");
 
