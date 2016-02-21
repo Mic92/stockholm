@@ -143,6 +143,19 @@ types // rec {
     merge = mergeOneOption;
   };
 
+  secret-file = submodule ({ config, ... }: {
+    options = {
+      path = mkOption { type = str; };
+      mode = mkOption { type = str; default = "0400"; };
+      owner-name = mkOption { type = str; default = "root"; };
+      group-name = mkOption { type = str; default = "root"; };
+      source-path = mkOption {
+        type = str;
+        default = toString <secrets> + "/${config._module.args.name}";
+      };
+    };
+  });
+
   suffixed-str = suffs:
     mkOptionType {
       name = "string suffixed by ${concatStringsSep ", " suffs}";
