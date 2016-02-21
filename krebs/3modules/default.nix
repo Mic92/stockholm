@@ -43,9 +43,7 @@ let
 
     dns = {
       providers = mkOption {
-        # TODO with types; tree dns.label dns.provider, so we can merge.
-        # Currently providers can only be merged if aliases occur just once.
-        type = with types; attrsOf unspecified;
+        type = with types; attrsOf str;
       };
     };
 
@@ -95,7 +93,7 @@ let
     { krebs = import ./tv     { inherit config lib; }; }
     {
       krebs.dns.providers = {
-        de.krebsco = "zones";
+        "krebsco.de" = "zones";
         gg23 = "hosts";
         shack = "hosts";
         i = "hosts";
@@ -116,13 +114,15 @@ let
         };
       };
 
-      networking.extraHosts = concatStringsSep "\n" (flatten (
+      networking.extraHosts = let
+        domains = attrNames (filterAttrs (_: eq "hosts") cfg.dns.providers);
+        check = hostname: any (domain: hasSuffix ".${domain}" hostname) domains;
+      in concatStringsSep "\n" (flatten (
         mapAttrsToList (hostname: host:
           mapAttrsToList (netname: net:
             let
               aliases = longs ++ shorts;
-              providers = dns.split-by-provider net.aliases cfg.dns.providers;
-              longs = providers.hosts;
+              longs = filter check net.aliases;
               shorts = let s = ".${cfg.search-domain}"; in
                 map (removeSuffix s) (filter (hasSuffix s) longs);
             in

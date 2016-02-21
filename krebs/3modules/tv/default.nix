@@ -4,7 +4,7 @@ with config.krebs.lib;
 
 {
   dns.providers = {
-    de.viljetic = "regfish";
+    "viljetic.de" = "regfish";
   };
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.tv) {
     cd = rec {
