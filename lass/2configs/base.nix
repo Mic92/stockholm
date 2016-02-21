@@ -54,8 +54,8 @@ with config.krebs.lib;
         #secrets-common = "/home/lass/secrets/common";
         stockholm = "/home/lass/stockholm";
         nixpkgs = {
-          url = https://github.com/Lassulus/nixpkgs;
-          rev = "d0e3cca04edd5d1b3d61f188b4a5f61f35cdf1ce";
+          url = https://github.com/NixOS/nixpkgs;
+          rev = "77f8f35d57618c1ba456d968524f2fb2c3448295";
           dev = "/home/lass/src/nixpkgs";
         };
       } // optionalAttrs config.krebs.build.host.secure {
