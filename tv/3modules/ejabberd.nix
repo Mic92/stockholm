@@ -12,9 +12,17 @@ let
   api = {
     enable = mkEnableOption "tv.ejabberd";
 
-    certFile = mkOption {
-      type = types.str;
-      default = toString <secrets/ejabberd.pem>;
+    certfile = mkOption {
+      type = types.secret-file;
+      default = {
+        path = "/etc/ejabberd/ejabberd.pem";
+        owner-name = "ejabberd";
+        source-path = toString <secrets> + "/ejabberd.pem";
+      };
+    };
+    s2s_certfile = mkOption {
+      type = types.secret-file;
+      default = cfg.certfile;
     };
 
     hosts = mkOption {
@@ -25,21 +33,22 @@ let
   imp = {
     environment.systemPackages = [ my-ejabberdctl ];
 
+    krebs.secret.files = {
+      ejabberd-certfile = cfg.certfile;
+      ejabberd-s2s_certfile = cfg.s2s_certfile;
+    };
+
     systemd.services.ejabberd = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      requires = [ "secret.service" ];
+      after = [ "network.target" "secret.service" ];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = "yes";
         PermissionsStartOnly = "true";
         SyslogIdentifier = "ejabberd";
         User = user.name;
-        ExecStartPre = pkgs.writeScript "ejabberd-start" ''
-          #! /bin/sh
-          install -o ${user.name} -m 0400 ${cfg.certFile} /etc/ejabberd/ejabberd.pem
-        '';
-        ExecStart = pkgs.writeScript "ejabberd-service" ''
-          #! /bin/sh
+        ExecStart = pkgs.writeDash "ejabberd" ''
           ${my-ejabberdctl}/bin/ejabberdctl start
         '';
       };
@@ -75,7 +84,7 @@ let
      [
       {5222, ejabberd_c2s, [
           starttls,
-          {certfile, "/etc/ejabberd/ejabberd.pem"},
+          {certfile, ${toErlang cfg.certfile.path}},
           {access, c2s},
           {shaper, c2s_shaper},
           {max_stanza_size, 65536}
@@ -92,7 +101,7 @@ let
           ]}
      ]}.
     {s2s_use_starttls, required}.
-    {s2s_certfile, "/etc/ejabberd/ejabberd.pem"}.
+    {s2s_certfile, ${toErlang cfg.s2s_certfile.path}}.
     {auth_method, internal}.
     {shaper, normal, {maxrate, 1000}}.
     {shaper, fast, {maxrate, 50000}}.
@@ -161,5 +170,4 @@ let
   # XXX this is a placeholder that happens to work the default strings.
   toErlang = builtins.toJSON;
 
-in
-out
+in out
