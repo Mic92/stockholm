@@ -2,7 +2,7 @@ _:
 
 {
   imports = [
-    ./ejabberd.nix
+    ./ejabberd
     ./iptables.nix
   ];
 }
