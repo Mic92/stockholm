@@ -165,6 +165,10 @@ types // rec {
 
   user = submodule ({ config, ... }: {
     options = {
+      home = mkOption {
+        type = absolute-pathname;
+        default = "/home/${config.name}";
+      };
       mail = mkOption {
         type = str; # TODO retiolum mail address
       };
@@ -224,6 +228,21 @@ types // rec {
         "-.0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     in s: all (flip elem filename-chars) (stringToCharacters s);
     merge = mergeOneOption;
+  };
+
+  # POSIX.1‐2013, 3.2 Absolute Pathname
+  # TODO normalize slashes
+  # TODO two slashes
+  absolute-pathname = mkOptionType {
+    name = "POSIX absolute pathname";
+    check = s: pathname.check s && substring 0 1 s == "/";
+  };
+
+  # POSIX.1‐2013, 3.267 Pathname
+  # TODO normalize slashes
+  pathname = mkOptionType {
+    name = "POSIX pathname";
+    check = s: isString s && all filename.check (splitString "/" s);
   };
 
   # POSIX.1-2013, 3.431 User Name
