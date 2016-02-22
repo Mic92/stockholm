@@ -1,4 +1,6 @@
-{ stdenv, coreutils,makeWrapper, cac-api, cac-cert, cac-panel, gnumake, gnused, jq, openssh, ... }:
+{ stdenv, coreutils, makeWrapper,
+  cac-api, cac-cert, cac-panel, gnumake, gnused, jq, openssh, sshpass,
+  ... }:
 
 stdenv.mkDerivation rec {
   name = "${shortname}-${version}";
@@ -21,6 +23,7 @@ stdenv.mkDerivation rec {
     gnused
     jq
     openssh
+    sshpass
   ];
 
   installPhase = ''
