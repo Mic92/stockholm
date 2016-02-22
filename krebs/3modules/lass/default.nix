@@ -19,6 +19,7 @@ with config.krebs.lib;
           addrs6 = ["42:0000:0000:0000:0000:0000:d15f:1233"];
           aliases = [
             "dishfire.retiolum"
+            "dishfire.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -52,6 +53,7 @@ with config.krebs.lib;
             "echelon.retiolum"
             "cgit.echelon.retiolum"
             "go.retiolum"
+            "go.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -83,6 +85,7 @@ with config.krebs.lib;
           addrs6 = ["42:0000:0000:0000:0000:0000:0000:15ab"];
           aliases = [
             "prism.retiolum"
+            "prism.r"
             "cgit.prism.retiolum"
           ];
           tinc.pubkey = ''
@@ -114,6 +117,7 @@ with config.krebs.lib;
           addrs6 = ["42:422a:194f:ff3b:e196:2f82:5cf5:bc00"];
           aliases = [
             "fastpoke.retiolum"
+            "fastpoke.r"
             "cgit.fastpoke.retiolum"
           ];
           tinc.pubkey = ''
@@ -144,6 +148,7 @@ with config.krebs.lib;
           addrs6 = ["42:941e:2816:35f4:5c5e:206b:3f0b:f762"];
           aliases = [
             "cloudkrebs.retiolum"
+            "cloudkrebs.r"
             "cgit.cloudkrebs.retiolum"
           ];
           tinc.pubkey = ''
@@ -173,6 +178,7 @@ with config.krebs.lib;
           addrs6 = ["42:dc25:60cf:94ef:759b:d2b6:98a9:2e56"];
           aliases = [
             "uriel.retiolum"
+            "uriel.r"
             "cgit.uriel.retiolum"
           ];
           tinc.pubkey = ''
@@ -203,6 +209,7 @@ with config.krebs.lib;
           addrs6 = ["42:0:0:0:0:0:0:dea7"];
           aliases = [
             "mors.retiolum"
+            "mors.r"
             "cgit.mors.retiolum"
           ];
           tinc.pubkey = ''
@@ -229,6 +236,7 @@ with config.krebs.lib;
           addrs6 = ["42:0:0:0:0:0:0:7105"];
           aliases = [
             "helios.retiolum"
+            "helios.r"
             "cgit.helios.retiolum"
           ];
           tinc.pubkey = ''
