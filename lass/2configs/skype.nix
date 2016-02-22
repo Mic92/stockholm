@@ -2,12 +2,13 @@
 
 let
   mainUser = config.users.extraUsers.mainUser;
+  inherit (config.krebs.lib) genid;
 
 in {
   users.extraUsers = {
     skype = {
       name = "skype";
-      uid = lib.genid "skype";
+      uid = genid "skype";
       description = "user for running skype";
       home = "/home/skype";
       useDefaultShell = true;

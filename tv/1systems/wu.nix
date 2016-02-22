@@ -10,7 +10,9 @@ with config.krebs.lib;
     ../2configs/hw/w110er.nix
     ../2configs/exim-retiolum.nix
     ../2configs/git.nix
+    ../2configs/im.nix
     ../2configs/mail-client.nix
+    ../2configs/man.nix
     ../2configs/nginx-public_html.nix
     ../2configs/pulse.nix
     ../2configs/retiolum.nix
@@ -23,19 +25,6 @@ with config.krebs.lib;
         hashPassword
         haskellPackages.lentil
         parallel
-        (pkgs.writeScriptBin "im" ''
-          #! ${pkgs.bash}/bin/bash
-          export PATH=${makeSearchPath "bin" (with pkgs; [
-            tmux
-            gnugrep
-            weechat
-          ])}
-          if tmux list-sessions -F\#S | grep -q '^im''$'; then
-            exec tmux attach -t im
-          else
-            exec tmux new -s im weechat
-          fi
-        '')
 
         # root
         cryptsetup
@@ -52,14 +41,12 @@ with config.krebs.lib;
         haskellPackages.hledger
         htop
         jq
-        manpages
         mkpasswd
         netcat
         nix-repl
         nmap
         nq
         p7zip
-        posix_man_pages
         push
         qrencode
         texLive
@@ -165,11 +152,7 @@ with config.krebs.lib;
   hardware.opengl.driSupport32Bit = true;
 
   environment.systemPackages = with pkgs; [
-    xlibs.fontschumachermisc
-    slock
     ethtool
-    #firefoxWrapper # with plugins
-    #chromiumDevWrapper
     tinc
     iptables
     #jack2
@@ -177,7 +160,6 @@ with config.krebs.lib;
 
   security.setuidPrograms = [
     "sendmail"  # for cron
-    "slock"
   ];
 
   services.printing.enable = true;
@@ -201,12 +183,6 @@ with config.krebs.lib;
     KERNEL=="hpet", GROUP="audio"
   '';
 
-  services.bitlbee = {
-    enable = true;
-    plugins = [
-      pkgs.bitlbee-facebook
-    ];
-  };
   services.tor.client.enable = true;
   services.tor.enable = true;
   services.virtualboxHost.enable = true;

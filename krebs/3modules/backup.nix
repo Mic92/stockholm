@@ -117,6 +117,14 @@ let
               "$dst_user@$dst_host" \
               -T "$with_dst_path_lock_script"
         }
+        rsh="ssh -F /dev/null -i $identity ''${dst_port:+-p $dst_port}"
+        local_rsync() {
+          rsync "$@"
+        }
+        remote_rsync=${shell.escape (concatStringsSep " && " [
+          "mkdir -m 0700 -p ${shell.escape plan.dst.path}/current"
+          "exec flock -n ${shell.escape plan.dst.path} rsync"
+        ])}
       '';
       pull = ''
         identity=${shell.escape plan.dst.host.ssh.privkey.path}
@@ -131,6 +139,12 @@ let
         dst_shell() {
           eval "$with_dst_path_lock_script"
         }
+        rsh="ssh -F /dev/null -i $identity ''${src_port:+-p $src_port}"
+        local_rsync() {
+          mkdir -m 0700 -p ${shell.escape plan.dst.path}/current
+          flock -n ${shell.escape plan.dst.path} rsync "$@"
+        }
+        remote_rsync=rsync
       '';
     }}
     # Note that this only works because we trust date +%s to produce output
@@ -140,13 +154,10 @@ let
     with_dst_path_lock_script="exec env start_date=$(date +%s) "${shell.escape
       "flock -n ${shell.escape plan.dst.path} /bin/sh"
     }
-    rsync >&2 \
+    local_rsync >&2 \
         -aAXF --delete \
-        -e "ssh -F /dev/null -i $identity ''${dst_port:+-p $dst_port}" \
-        --rsync-path ${shell.escape (concatStringsSep " && " [
-          "mkdir -m 0700 -p ${shell.escape plan.dst.path}/current"
-          "exec flock -n ${shell.escape plan.dst.path} rsync"
-        ])} \
+        --rsh="$rsh" \
+        --rsync-path="$remote_rsync" \
         --link-dest="$dst_path/current" \
         "$src/" \
         "$dst/.partial"

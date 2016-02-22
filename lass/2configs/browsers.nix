@@ -58,7 +58,7 @@ in {
     ( createChromiumUser "cr" [ "audio" ] [ pkgs.chromium ] )
     ( createChromiumUser "fb" [ ] [ pkgs.chromium ] )
     ( createChromiumUser "gm" [ ] [ pkgs.chromium ] )
-    ( createChromiumUser "flash" [ ] [ pkgs.flash ] )
+    ( createChromiumUser "flash" [ "audio" ] [ pkgs.flash ] )
   ];
 
   nixpkgs.config.packageOverrides = pkgs : {

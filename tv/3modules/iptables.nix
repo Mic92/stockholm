@@ -26,6 +26,21 @@ let
       type = with types; listOf (either int str);
       default = [];
     };
+
+    extra = {
+      nat.POSTROUTING = mkOption {
+        type = with types; listOf str;
+        default = [];
+      };
+      filter.FORWARD = mkOption {
+        type = with types; listOf str;
+        default = [];
+      };
+      filter.INPUT = mkOption {
+        type = with types; listOf str;
+        default = [];
+      };
+    };
   };
 
   imp = {
@@ -57,6 +72,11 @@ let
     };
   };
 
+  formatTable = table:
+    (concatStringsSep "\n"
+      (mapAttrsToList
+        (chain: concatMapStringsSep "\n" (rule: "-A ${chain} ${rule}"))
+        table));
 
   rules = iptables-version: let
     accept-echo-request = {
@@ -79,6 +99,7 @@ let
       ${concatMapStringsSep "\n" (rule: "-A OUTPUT ${rule}") [
         "-o lo -p tcp -m tcp --dport 11423 -j REDIRECT --to-ports 22"
       ]}
+      ${formatTable cfg.extra.nat}
       COMMIT
       *filter
       :INPUT DROP [0:0]
@@ -94,6 +115,7 @@ let
         ++ map accept-new-tcp (unique (map toString cfg.input-internet-accept-new-tcp))
         ++ ["-i retiolum -j Retiolum"]
       )}
+      ${formatTable cfg.extra.filter}
       ${concatMapStringsSep "\n" (rule: "-A Retiolum ${rule}") ([]
         ++ optional (cfg.accept-echo-request == "retiolum") accept-echo-request
         ++ map accept-new-tcp (unique (map toString cfg.input-retiolum-accept-new-tcp))

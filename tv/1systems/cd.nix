@@ -14,11 +14,14 @@ with config.krebs.lib;
     ../2configs/retiolum.nix
     ../2configs/urlwatch.nix
     {
-      imports = [ ../2configs/charybdis.nix ];
       tv.charybdis = {
         enable = true;
-        sslCert = ../Zcerts/charybdis_cd.crt.pem;
+        ssl_cert = ../Zcerts/charybdis_cd.crt.pem;
       };
+      tv.iptables.input-retiolum-accept-new-tcp = [
+        config.tv.charybdis.port
+        config.tv.charybdis.sslport
+      ];
     }
     {
       tv.ejabberd = {

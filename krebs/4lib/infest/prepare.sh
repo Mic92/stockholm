@@ -184,26 +184,21 @@ prepare_common() {(
 
   . /root/.nix-profile/etc/profile.d/nix.sh
 
-  for i in \
-    bash \
-    coreutils \
-    # This line intentionally left blank.
-  do
-    if ! nix-env -q $i | grep -q .; then
-      nix-env -iA nixpkgs.pkgs.$i
-    fi
-  done
+  mkdir -p /mnt/"$target_path"
+  mkdir -p "$target_path"
 
-  # install nixos-install
-  if ! type nixos-install 2>/dev/null; then
-    nixpkgs_expr='import <nixpkgs> { system = builtins.currentSystem; }'
-    nixpkgs_path=$(find /nix/store -mindepth 1 -maxdepth 1 -name *-nixpkgs-* -type d)
-    nix-env \
-      --arg config "{ nix.package = ($nixpkgs_expr).nix; }" \
-      --arg pkgs "$nixpkgs_expr" \
-      --arg modulesPath 'throw "no modulesPath"' \
-      -f $nixpkgs_path/nixpkgs/nixos/modules/installer/tools/tools.nix \
-      -iA config.system.build.nixos-install
+  if ! mountpoint "$target_path"; then
+    mount --rbind /mnt/"$target_path" "$target_path"
+  fi
+
+  mkdir -p bin
+  rm -f bin/nixos-install
+  cp "$(type -p nixos-install)" bin/nixos-install
+  sed -i "s@^NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
+
+  if ! grep -q '^PATH.*#krebs' .bashrc; then
+    echo '. /root/.nix-profile/etc/profile.d/nix.sh' >> .bashrc
+    echo 'PATH=$HOME/bin:$PATH #krebs' >> .bashrc
   fi
 )}
 

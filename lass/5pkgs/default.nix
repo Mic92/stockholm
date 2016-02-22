@@ -1,16 +1,13 @@
 { pkgs, ... }:
 
-let
-  inherit (pkgs) callPackage;
-in
 {
   nixpkgs.config.packageOverrides = rec {
     firefoxPlugins = {
-      noscript = callPackage ./firefoxPlugins/noscript.nix {};
-      ublock = callPackage ./firefoxPlugins/ublock.nix {};
-      vimperator = callPackage ./firefoxPlugins/vimperator.nix {};
+      noscript = pkgs.callPackage ./firefoxPlugins/noscript.nix {};
+      ublock = pkgs.callPackage ./firefoxPlugins/ublock.nix {};
+      vimperator = pkgs.callPackage ./firefoxPlugins/vimperator.nix {};
     };
-    newsbot-js = callPackage ./newsbot-js/default.nix {};
+    newsbot-js = pkgs.callPackage ./newsbot-js/default.nix {};
     xmonad-lass =
       let src = pkgs.writeNixFromCabal "xmonad-lass.nix" ./xmonad-lass; in
       pkgs.haskellPackages.callPackage src {};

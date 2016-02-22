@@ -8,6 +8,7 @@ with builtins;
     ../2configs/browsers.nix
     ../2configs/programs.nix
     ../2configs/git.nix
+    ../2configs/pass.nix
     #{
     #  users.extraUsers = {
     #    root = {
@@ -17,6 +18,15 @@ with builtins;
     #    };
     #  };
     #}
+    {
+      krebs.iptables = {
+        tables = {
+          filter.INPUT.rules = [
+            { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; precedence = 9001; }
+          ];
+        };
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.helios;
@@ -52,15 +62,6 @@ with builtins;
   #  SUBSYSTEM=="net", ATTR{address}=="64:27:37:7d:d8:ae", NAME="wl0"
   #  SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:b8:c8:2e", NAME="et0"
   #'';
-
-  services.xserver = {
-    videoDriver = "intel";
-    vaapiDrivers = [ pkgs.vaapiIntel ];
-    deviceSection = ''
-      Option "AccelMethod" "sna"
-      BusID "PCI:0:2:0"
-    '';
-  };
 
   services.xserver.synaptics = {
     enable = true;

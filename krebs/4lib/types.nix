@@ -1,8 +1,13 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 with builtins;
 with lib;
 with types;
+
+let
+  # Inherited attributes are used in submodules that have their own `config`.
+  inherit (config.krebs) users;
+in
 
 types // rec {
 
@@ -20,23 +25,15 @@ types // rec {
         default = {};
       };
 
+      owner = mkOption {
+        type = user;
+        default = users.krebs;
+      };
+
       extraZones = mkOption {
         default = {};
         # TODO: string is either MX, NS, A or AAAA
         type = with types; attrsOf string;
-      };
-
-      infest = {
-        addr = mkOption {
-          type = str;
-          apply = trace "Obsolete option `krebs.hosts.${config.name}.infest.addr' is used.  It was replaced by the `target' argument to `make` or `get`.  See Makefile for more information.";
-        };
-        port = mkOption {
-          type = int;
-          default = 22;
-          # TODO replacement: allow target with port, SSH-style: [lol]:666
-          apply = trace "Obsolete option `krebs.hosts.${config.name}.infest.port' is used.  It's gone without replacement.";
-        };
       };
 
       secure = mkOption {
@@ -147,6 +144,25 @@ types // rec {
     merge = mergeOneOption;
   };
 
+  secret-file = submodule ({ config, ... }: {
+    options = {
+      path = mkOption { type = str; };
+      mode = mkOption { type = str; default = "0400"; };
+      owner = mkOption {
+        type = user;
+        default = config.krebs.users.root;
+      };
+      group-name = mkOption {
+        type = str;
+        default = "root";
+      };
+      source-path = mkOption {
+        type = str;
+        default = toString <secrets> + "/${config._module.args.name}";
+      };
+    };
+  });
+
   suffixed-str = suffs:
     mkOptionType {
       name = "string suffixed by ${concatStringsSep ", " suffs}";
@@ -156,6 +172,10 @@ types // rec {
 
   user = submodule ({ config, ... }: {
     options = {
+      home = mkOption {
+        type = absolute-pathname;
+        default = "/home/${config.name}";
+      };
       mail = mkOption {
         type = str; # TODO retiolum mail address
       };
@@ -164,7 +184,12 @@ types // rec {
         default = config._module.args.name;
       };
       pubkey = mkOption {
-        type = str;
+        type = nullOr str;
+        default = null;
+      };
+      uid = mkOption {
+        type = int;
+        default = genid config.name;
       };
     };
   });
@@ -215,6 +240,21 @@ types // rec {
         "-.0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     in s: all (flip elem filename-chars) (stringToCharacters s);
     merge = mergeOneOption;
+  };
+
+  # POSIX.1‐2013, 3.2 Absolute Pathname
+  # TODO normalize slashes
+  # TODO two slashes
+  absolute-pathname = mkOptionType {
+    name = "POSIX absolute pathname";
+    check = s: pathname.check s && substring 0 1 s == "/";
+  };
+
+  # POSIX.1‐2013, 3.267 Pathname
+  # TODO normalize slashes
+  pathname = mkOptionType {
+    name = "POSIX pathname";
+    check = s: isString s && all filename.check (splitString "/" s);
   };
 
   # POSIX.1-2013, 3.431 User Name

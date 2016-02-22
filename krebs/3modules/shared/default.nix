@@ -15,6 +15,7 @@ let
         addrs4 = ["10.243.111.111"];
         addrs6 = ["42:0:0:0:0:0:0:7357"];
         aliases = [
+          "test.r"
           "test.retiolum"
         ];
         tinc.pubkey = ''

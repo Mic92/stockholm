@@ -20,35 +20,19 @@ let
       type = types.user;
     };
 
-    options.krebs.build.source = let
-      raw = types.either types.str types.path;
-      url = types.submodule {
+    options.krebs.build.source = mkOption {
+      type = with types; attrsOf (either str (submodule {
         options = {
-          url = mkOption {
-            type = types.str;
-          };
-          rev = mkOption {
-            type = types.str;
-          };
-          dev = mkOption {
-            type = types.str;
-          };
+          url = str;
+          rev = str;
         };
-      };
-    in mkOption {
-      type = types.attrsOf (types.either types.str url);
-      apply = let f = mapAttrs (_: value: {
-        string = value;
-        path = toString value;
-        set = f value;
-      }.${typeOf value}); in f;
+      }));
       default = {};
     };
 
     options.krebs.build.populate = mkOption {
       type = types.str;
       default = let
-        source = config.krebs.build.source;
         target-user = maybeEnv "target_user" "root";
         target-host = maybeEnv "target_host" config.krebs.build.host.name;
         target-port = maybeEnv "target_port" "22";
@@ -57,13 +41,16 @@ let
           #! /bin/sh
           set -eu
 
+          ssh=''${ssh-ssh}
+
           verbose() {
-            printf '+%s\n' "$(printf ' %q' "$@")" >&2
+            printf '%s%s\n' "$PS5$(printf ' %q' "$@")" >&2
             "$@"
           }
 
-          echo ${shell.escape git-script} \
-            | ssh -p ${shell.escape target-port} \
+          { printf 'PS5=%q%q\n' @ "$PS5"
+            echo ${shell.escape git-script}
+          } | verbose $ssh -p ${shell.escape target-port} \
                   ${shell.escape "${target-user}@${target-host}"} -T
 
           unset tmpdir
@@ -75,61 +62,34 @@ let
           tmpdir=$(mktemp -dt stockholm.XXXXXXXX)
           chmod 0755 "$tmpdir"
 
-          ${concatStringsSep "\n"
-            (mapAttrsToList
-              (name: spec: let dst = removePrefix "symlink:" (get-url spec); in
-                "verbose ln -s ${shell.escape dst} $tmpdir/${shell.escape name}")
-              symlink-specs)}
+          ${concatStringsSep "\n" (mapAttrsToList (name: symlink: ''
+            verbose ln -s ${shell.escape symlink.target} \
+                          "$tmpdir"/${shell.escape name}
+          '') source-by-method.symlink)}
 
           verbose proot \
-              -b $tmpdir:${shell.escape target-path} \
-              ${concatStringsSep " \\\n    "
-                (mapAttrsToList
-                  (name: spec:
-                    "-b ${shell.escape "${get-url spec}:${target-path}/${name}"}")
-                  file-specs)} \
+              -b "$tmpdir":${shell.escape target-path} \
+              ${concatStringsSep " \\\n    " (mapAttrsToList (name: file:
+                "-b ${shell.escape "${file.path}:${target-path}/${name}"}"
+              ) source-by-method.file)} \
               rsync \
                   -f ${shell.escape "P /*"} \
-                  ${concatMapStringsSep " \\\n        "
-                    (name: "-f ${shell.escape "R /${name}"}")
-                    (attrNames file-specs)} \
+                  ${concatMapStringsSep " \\\n        " (name:
+                    "-f ${shell.escape "R /${name}"}"
+                  ) (attrNames source-by-method.file)} \
                   --delete \
                   -vFrlptD \
-                  -e ${shell.escape "ssh -p ${target-port}"} \
+                  -e "$ssh -p ${shell.escape target-port}" \
                   ${shell.escape target-path}/ \
                   ${shell.escape "${target-user}@${target-host}:${target-path}"}
         '';
-
-        get-schema = uri:
-          if substring 0 1 uri == "/"
-            then "file"
-            else head (splitString ":" uri);
-
-        has-schema = schema: uri: get-schema uri == schema;
-
-        get-url = spec: {
-          string = spec;
-          path = toString spec;
-          set = get-url spec.url;
-        }.${typeOf spec};
-
-        git-specs =
-          filterAttrs (_: spec: has-schema "https" (get-url spec)) source //
-          filterAttrs (_: spec: has-schema "http" (get-url spec)) source //
-          filterAttrs (_: spec: has-schema "git" (get-url spec)) source;
-
-        file-specs =
-          filterAttrs (_: spec: has-schema "file" (get-url spec)) source;
-
-        symlink-specs =
-          filterAttrs (_: spec: has-schema "symlink" (get-url spec)) source;
 
         git-script = ''
           #! /bin/sh
           set -efu
 
           verbose() {
-            printf '+%s\n' "$(printf ' %q' "$@")" >&2
+            printf '%s%s\n' "$PS5$(printf ' %q' "$@")" >&2
             "$@"
           }
 
@@ -156,26 +116,48 @@ let
             if ! test "$(git log --format=%H -1)" = "$hash"; then
               git fetch origin
               git checkout "$hash" -- "$dst_dir"
-              git checkout "$hash"
+              git checkout -f "$hash"
             fi
 
             git clean -dxf
           )}
 
-          ${concatStringsSep "\n"
-            (mapAttrsToList
-              (name: spec: toString (map shell.escape [
-                "verbose"
-                "fetch_git"
-                "${target-path}/${name}"
-                spec.url
-                spec.rev
-              ]))
-              git-specs)}
+          ${concatStringsSep "\n" (mapAttrsToList (name: git: ''
+            verbose fetch_git ${concatMapStringsSep " " shell.escape [
+              "${target-path}/${name}"
+              git.url
+              git.rev
+            ]}
+          '') source-by-method.git)}
         '';
       in out;
     };
 
   };
 
+  source-by-method = let
+    known-methods = ["git" "file" "symlink"];
+  in genAttrs known-methods (const {}) // recursiveUpdate source-by-scheme {
+    git = source-by-scheme.http or {} //
+          source-by-scheme.https or {};
+  };
+
+  source-by-scheme = foldl' (out: { k, v }: recursiveUpdate out {
+    ${v.scheme}.${k} = v;
+  }) {} (mapAttrsToList (k: v: { inherit k v; }) normalized-source);
+
+  normalized-source = mapAttrs (name: let f = x: getAttr (typeOf x) {
+    path = f (toString x);
+    string = f {
+      url = if substring 0 1 x == "/" then "file://${x}" else x;
+    };
+    set = let scheme = head (splitString ":" x.url); in recursiveUpdate x {
+      inherit scheme;
+    } // {
+      symlink.target = removePrefix "symlink:" x.url;
+      file.path = # TODO file://host/...
+                  assert hasPrefix "file:///" x.url;
+                  removePrefix "file://" x.url;
+    }.${scheme} or {};
+  }; in f) config.krebs.build.source;
 in out

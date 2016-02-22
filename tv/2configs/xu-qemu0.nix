@@ -15,18 +15,26 @@ in
 #
 #   make [install] system=xu-qemu0 target_host=10.56.0.101
 
-# TODO iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-# TODO iptables -A FORWARD -i qemubr0 -s 10.56.0.1/24 -m conntrack --ctstate NEW -j ACCEPT
-# TODO iptables -A POSTROUTING -t nat -j MASQUERADE
-# TODO iptables -A INPUT -i qemubr0 -p udp -m udp --dport bootps -j ACCEPT
-# TODO iptables -A INPUT -i qemubr0 -p udp -m udp --dport domain -j ACCEPT
-
 with config.krebs.lib;
 
 {
   networking.dhcpcd.denyInterfaces = [ "qemubr0" ];
 
+  tv.iptables.extra = {
+    nat.POSTROUTING = ["-j MASQUERADE"];
+    filter.FORWARD = [
+      "-m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT"
+      "-i qemubr0 -s 10.56.0.1/24 -m conntrack --ctstate NEW -j ACCEPT"
+    ];
+    filter.INPUT = [
+      "-i qemubr0 -p udp -m udp --dport bootps -j ACCEPT"
+      "-i qemubr0 -p udp -m udp --dport domain -j ACCEPT"
+    ];
+  };
+
   systemd.network.enable = true;
+  systemd.services.systemd-networkd-wait-online.enable = false;
+
   services.resolved.enable = mkForce false;
 
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;

@@ -1,5 +1,5 @@
-{ config, ... }:
-
+{ config, pkgs, ... }:
+with config.krebs.lib;
 {
   krebs.urlwatch = {
     enable = true;
@@ -52,8 +52,43 @@
       # is derived from `configFile` in:
       https://raw.githubusercontent.com/NixOS/nixpkgs/master/nixos/modules/services/x11/xserver.nix
 
-      https://pypi.python.org/pypi/vncdotool
+      {
+        url = https://pypi.python.org/pypi/vncdotool/json;
+        filter = "system:${pkgs.jq}/bin/jq -r '.releases|keys[]'";
+      }
       https://api.github.com/repos/kanaka/noVNC/tags
     ];
+    hooksFile = toFile "hooks.py" ''
+      import subprocess
+      import urlwatch
+
+      class CaseFilter(urlwatch.filters.FilterBase):
+          """Filter for piping data through an external process"""
+
+          __kind__ = 'system'
+
+          def filter(self, data, subfilter=None):
+              if subfilter is None:
+                  raise ValueError('The system filter needs a command')
+
+              proc = subprocess.Popen(
+                  subfilter,
+                  shell=True,
+                  stdin=subprocess.PIPE,
+                  stdout=subprocess.PIPE,
+                  stderr=subprocess.PIPE,
+                  )
+
+              (stdout, stderr) = proc.communicate(data.encode())
+
+              if proc.returncode != 0:
+                  raise RuntimeError(
+                    "system filter returned non-zero exit status %d; stderr:\n"
+                    % proc.returncode
+                    + stderr.decode()
+                    )
+
+              return stdout.decode()
+    '';
   };
 }
