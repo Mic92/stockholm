@@ -41,6 +41,8 @@ let
           #! /bin/sh
           set -eu
 
+          ssh=''${ssh-ssh}
+
           verbose() {
             printf '%s%s\n' "$PS5$(printf ' %q' "$@")" >&2
             "$@"
@@ -48,7 +50,7 @@ let
 
           { printf 'PS5=%q%q\n' @ "$PS5"
             echo ${shell.escape git-script}
-          } | verbose ssh -p ${shell.escape target-port} \
+          } | verbose $ssh -p ${shell.escape target-port} \
                   ${shell.escape "${target-user}@${target-host}"} -T
 
           unset tmpdir
@@ -77,7 +79,7 @@ let
                   ) (attrNames source-by-method.file)} \
                   --delete \
                   -vFrlptD \
-                  -e ${shell.escape "ssh -p ${target-port}"} \
+                  -e "$ssh -p ${shell.escape target-port}" \
                   ${shell.escape target-path}/ \
                   ${shell.escape "${target-user}@${target-host}:${target-path}"}
         '';
@@ -114,7 +116,7 @@ let
             if ! test "$(git log --format=%H -1)" = "$hash"; then
               git fetch origin
               git checkout "$hash" -- "$dst_dir"
-              git checkout "$hash"
+              git checkout -f "$hash"
             fi
 
             git clean -dxf

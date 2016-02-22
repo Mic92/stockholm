@@ -40,8 +40,8 @@ with config.krebs.lib;
         mutableUsers = false;
         users = {
           tv = {
+            inherit (config.krebs.users.tv) home uid;
             isNormalUser = true;
-            uid = 1337;
             extraGroups = [ "tv" ];
           };
         };
@@ -124,7 +124,7 @@ with config.krebs.lib;
             0)
               PS1='\[\e[1;31m\]\w\[\e[0m\] '
               ;;
-            1337)
+            ${toString config.krebs.users.tv.uid})
               PS1='\[\e[1;32m\]\w\[\e[0m\] '
               ;;
             *)

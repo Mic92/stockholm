@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 with builtins;
 with lib;
@@ -15,14 +15,15 @@ let out = rec {
 
   addNames = mapAttrs addName;
 
-  types = import ./types.nix { inherit lib; };
+  types = import ./types.nix {
+    inherit config;
+    lib = lib // { inherit genid; };
+  };
 
   dir.has-default-nix = path: pathExists (path + "/default.nix");
 
-  dns = import ./dns.nix { inherit lib; };
   genid = import ./genid.nix { lib = lib // out; };
   git = import ./git.nix { lib = lib // out; };
-  listset = import ./listset.nix { inherit lib; };
   shell = import ./shell.nix { inherit lib; };
   tree = import ./tree.nix { inherit lib; };
 

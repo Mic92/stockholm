@@ -19,9 +19,13 @@ in {
       username = "lol";
       password = "wut";
     };
-    exim-retiolum.enable = true;
+    exim-retiolum = {
+      enable = true;
+      primary_hostname = "test.r";
+    };
     exim-smarthost = {
       enable = true;
+      primary_hostname = "test.r";
       system-aliases = [ { from = "dick"; to = "butt"; } ];
     };
     go.enable = true;

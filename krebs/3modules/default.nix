@@ -28,6 +28,7 @@ let
       ./realwallpaper.nix
       ./retiolum-bootstrap.nix
       ./retiolum.nix
+      ./secret.nix
       ./setuid.nix
       ./tinc_graphs.nix
       ./urlwatch.nix
@@ -42,9 +43,7 @@ let
 
     dns = {
       providers = mkOption {
-        # TODO with types; tree dns.label dns.provider, so we can merge.
-        # Currently providers can only be merged if aliases occur just once.
-        type = with types; attrsOf unspecified;
+        type = with types; attrsOf str;
       };
     };
 
@@ -94,7 +93,7 @@ let
     { krebs = import ./tv     { inherit config lib; }; }
     {
       krebs.dns.providers = {
-        de.krebsco = "zones";
+        "krebsco.de" = "zones";
         gg23 = "hosts";
         shack = "hosts";
         i = "hosts";
@@ -103,13 +102,27 @@ let
         retiolum = "hosts";
       };
 
-      networking.extraHosts = concatStringsSep "\n" (flatten (
+      krebs.users = {
+        krebs = {
+          home = "/krebs";
+          mail = "spam@krebsco.de";
+        };
+        root = {
+          home = "/root";
+          pubkey = config.krebs.build.host.ssh.pubkey;
+          uid = 0;
+        };
+      };
+
+      networking.extraHosts = let
+        domains = attrNames (filterAttrs (_: eq "hosts") cfg.dns.providers);
+        check = hostname: any (domain: hasSuffix ".${domain}" hostname) domains;
+      in concatStringsSep "\n" (flatten (
         mapAttrsToList (hostname: host:
           mapAttrsToList (netname: net:
             let
               aliases = longs ++ shorts;
-              providers = dns.split-by-provider net.aliases cfg.dns.providers;
-              longs = providers.hosts;
+              longs = filter check net.aliases;
               shorts = let s = ".${cfg.search-domain}"; in
                 map (removeSuffix s) (filter (hasSuffix s) longs);
             in
@@ -130,12 +143,11 @@ let
         { text=(stripEmptyLines value); }) all-zones;
 
       krebs.exim-smarthost.internet-aliases = let
-        format = from: to:
+        format = from: to: {
+          inherit from;
           # TODO assert is-retiolum-mail-address to;
-          { inherit from;
-            to = if typeOf to == "list"
-                   then concatMapStringsSep "," (getAttr "mail") to
-                   else to.mail; };
+          to = concatMapStringsSep "," (getAttr "mail") (toList to);
+        };
       in mapAttrsToList format (with config.krebs.users; let
         spam-ml = [
           lass
@@ -154,6 +166,10 @@ let
         "makefu@retiolum" = makefu;
         "spam@retiolum" = spam-ml;
         "tv@retiolum" = tv;
+        "lass@r" = lass;
+        "makefu@r" = makefu;
+        "spam@r" = spam-ml;
+        "tv@r" = tv;
       });
 
       services.openssh.hostKeys =

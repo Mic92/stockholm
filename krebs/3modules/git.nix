@@ -232,13 +232,15 @@ let
         ]) (filter (rule: rule.perm.allow-receive-ref != null) cfg.rules));
       };
 
-    users.extraUsers = singleton rec {
+    # TODO cfg.user
+    users.users.git = rec {
       description = "Git repository hosting user";
       name = "git";
       shell = "/bin/sh";
       openssh.authorizedKeys.keys =
         mapAttrsToList (_: makeAuthorizedKey git-ssh-command)
-          config.krebs.users;
+                       (filterAttrs (_: user: isString user.pubkey)
+                                    config.krebs.users);
       uid = genid name;
     };
   };

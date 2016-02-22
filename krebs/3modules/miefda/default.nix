@@ -3,7 +3,7 @@
 with config.krebs.lib;
 
 {
-  hosts = {
+  hosts = mapAttrs (_: setAttr "owner" config.krebs.users.miefda) {
     bobby = {
       cores = 4;
       nets = {

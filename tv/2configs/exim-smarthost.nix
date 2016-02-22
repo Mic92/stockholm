@@ -5,19 +5,23 @@ with config.krebs.lib;
 {
   krebs.exim-smarthost = {
     enable = true;
-    primary_hostname = "${config.networking.hostName}.retiolum";
     sender_domains = [
+      "krebsco.de"
       "shackspace.de"
       "viljetic.de"
     ];
-    relay_from_hosts = [
-      "10.243.13.37"
+    relay_from_hosts = concatMap (host: host.nets.retiolum.addrs4) [
+      config.krebs.hosts.nomic
+      config.krebs.hosts.wu
+      config.krebs.hosts.xu
     ];
     internet-aliases = with config.krebs.users; [
+      { from = "postmaster@viljetic.de"; to = tv.mail; } # RFC 822
       { from = "mirko@viljetic.de"; to = mv.mail; }
       { from = "tomislav@viljetic.de"; to = tv.mail; }
       { from = "tv@destroy.dyn.shackspace.de"; to = tv.mail; }
       { from = "tv@viljetic.de"; to = tv.mail; }
+      { from = "tv@shackspace.de"; to = tv.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }

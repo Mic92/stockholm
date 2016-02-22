@@ -2,7 +2,8 @@ _:
 
 {
   imports = [
-    ./ejabberd.nix
+    ./charybdis
+    ./ejabberd
     ./iptables.nix
   ];
 }
