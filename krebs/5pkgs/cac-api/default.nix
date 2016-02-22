@@ -1,12 +1,12 @@
 { stdenv, fetchgit, bc, cac-cert, coreutils, curl, dash, gnugrep, gnused, inotifyTools, jq, ncurses, openssh, sshpass, ... }:
 
 stdenv.mkDerivation {
-  name = "cac-api-1.1.1";
+  name = "cac-api-1.1.2";
 
   src = fetchgit {
     url = http://cgit.cd.krebsco.de/cac-api;
-    rev = "46c7af2935ccc096ba0e93cd1adf575026edf44a";
-    sha256 = "0i8aspkmfw74np7hlbip3hk7zbgl6cxrnbg83x4wgqrj5dpx6vy0";
+    rev = "67e93510e7742acae44db30275abbfe671aa9b7b";
+    sha256 = "1vxh57j7vrq5sg9j1sam0538kkkhqpgf230vvdz2ifzgkj01z27l";
   };
 
   phases = [
