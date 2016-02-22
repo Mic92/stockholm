@@ -4,6 +4,11 @@ with builtins;
 with lib;
 with types;
 
+let
+  # Inherited attributes are used in submodules that have their own `config`.
+  inherit (config.krebs) users;
+in
+
 types // rec {
 
   host = submodule ({ config, ... }: {
@@ -22,7 +27,7 @@ types // rec {
 
       owner = mkOption {
         type = user;
-        default = config.krebs.users.krebs;
+        default = users.krebs;
       };
 
       extraZones = mkOption {
