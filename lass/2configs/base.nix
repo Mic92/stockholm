@@ -104,6 +104,9 @@ with config.krebs.lib;
 
   #stuff for dl
     aria2
+
+  #neat utils
+    krebspaste
   ];
 
   programs.bash = {
