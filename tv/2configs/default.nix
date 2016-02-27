@@ -54,15 +54,14 @@ with config.krebs.lib;
       '';
       time.timeZone = "Europe/Berlin";
     }
+
     {
       # TODO check if both are required:
       nix.chrootDirs = [ "/etc/protocols" pkgs.iana_etc.outPath ];
 
-      nix.trustedBinaryCaches = [
-        "https://cache.nixos.org"
-        "http://cache.nixos.org"
-        "http://hydra.nixos.org"
-      ];
+      nix.requireSignedBinaryCaches = true;
+
+      nix.binaryCaches = ["https://cache.nixos.org"];
 
       nix.useChroot = true;
     }
