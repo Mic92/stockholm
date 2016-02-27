@@ -138,12 +138,12 @@ with config.krebs.lib;
     "/" = {
       device = "/dev/mapper/xuvga-root";
       fsType = "btrfs";
-      options = "defaults,noatime,ssd,compress=lzo";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
     "/home" = {
       device = "/dev/mapper/xuvga-home";
       fsType = "btrfs";
-      options = "defaults,noatime,ssd,compress=lzo";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
     "/boot" = {
       device = "/dev/sda1";
@@ -151,7 +151,7 @@ with config.krebs.lib;
     "/tmp" = {
       device = "tmpfs";
       fsType = "tmpfs";
-      options = "nosuid,nodev,noatime";
+      options = ["nosuid" "nodev" "noatime"];
     };
   };
 
