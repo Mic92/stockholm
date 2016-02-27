@@ -286,7 +286,10 @@ with config.krebs.lib;
       nets = {
         gg23 = {
           addrs4 = ["10.23.1.37"];
-          aliases = ["wu.gg23"];
+          aliases = [
+            "wu.gg23"
+            "cache.wu.gg23"
+          ];
           ssh.port = 11423;
         };
         retiolum = {
