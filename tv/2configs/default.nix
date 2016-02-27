@@ -178,12 +178,6 @@ with config.krebs.lib;
     }
 
     {
-      # TODO: exim
-      security.setuidPrograms = [
-        "sendmail"  # for sudo
-      ];
-    }
-    {
       environment.systemPackages = [
         pkgs.get
         pkgs.krebszones
