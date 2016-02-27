@@ -104,7 +104,7 @@ with config.krebs.lib;
           ire 60 IN A ${elemAt nets.internet.addrs4 0}
         '';
       };
-      nets = {
+      nets = rec {
         internet = {
           addrs4 = ["198.147.22.115"];
           aliases = [
@@ -115,6 +115,7 @@ with config.krebs.lib;
           ssh.port = 11423;
         };
         retiolum = {
+          via = internet;
           addrs4 = ["10.243.231.66"];
           addrs6 = ["42:b912:0f42:a82d:0d27:8610:e89b:490c"];
           aliases = [
@@ -286,7 +287,10 @@ with config.krebs.lib;
       nets = {
         gg23 = {
           addrs4 = ["10.23.1.37"];
-          aliases = ["wu.gg23"];
+          aliases = [
+            "wu.gg23"
+            "cache.wu.gg23"
+          ];
           ssh.port = 11423;
         };
         retiolum = {

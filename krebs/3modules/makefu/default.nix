@@ -323,7 +323,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
           cgit.euer         IN A      ${head nets.internet.addrs4}
         '';
       };
-      nets = {
+      nets = rec {
         internet = {
           addrs4 = ["195.154.108.70"];
           aliases = [
@@ -331,6 +331,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
           ];
         };
         retiolum = {
+          via = internet;
           addrs4 = ["10.243.0.211"];
           addrs6 = ["42:f9f0:0000:0000:0000:0000:0000:70d2"];
           aliases = [
