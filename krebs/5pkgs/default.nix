@@ -17,7 +17,7 @@ with config.krebs.lib;
     };
 
     push = pkgs.callPackage ./push {
-      inherit (subdirs) get jq;
+      inherit (subdirs) get;
     };
 
     ReaktorPlugins = pkgs.callPackage ./Reaktor/plugins.nix {};
