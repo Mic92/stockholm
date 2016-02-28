@@ -13,33 +13,34 @@ let
     enable = mkEnableOption "krebs.nginx";
 
     servers = mkOption {
-      type = with types; attrsOf optionSet;
-      options = singleton {
-        server-names = mkOption {
-          type = with types; listOf str;
-          # TODO use identity
-          default = [
-            "${config.networking.hostName}"
-            "${config.networking.hostName}.retiolum"
-          ];
+      type = types.attrsOf (types.submodule {
+        options = {
+          server-names = mkOption {
+            type = with types; listOf str;
+            # TODO use identity
+            default = [
+              "${config.networking.hostName}"
+              "${config.networking.hostName}.retiolum"
+            ];
+          };
+          listen = mkOption {
+            type = with types; either str (listOf str);
+            default = "80";
+            apply = x:
+              if typeOf x != "list"
+                then [x]
+                else x;
+          };
+          locations = mkOption {
+            type = with types; listOf (attrsOf str);
+            default = [];
+          };
+          extraConfig = mkOption {
+            type = with types; string;
+            default = "";
+          };
         };
-        listen = mkOption {
-          type = with types; either str (listOf str);
-          default = "80";
-          apply = x:
-            if typeOf x != "list"
-              then [x]
-              else x;
-        };
-        locations = mkOption {
-          type = with types; listOf (attrsOf str);
-          default = [];
-        };
-        extraConfig = mkOption {
-          type = with types; string;
-          default = "";
-        };
-      };
+      });
       default = {};
     };
   };

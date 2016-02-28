@@ -14,8 +14,7 @@ with config.krebs.lib;
       stockholm = "/home/tv/stockholm";
       nixpkgs = {
         url = https://github.com/NixOS/nixpkgs;
-        rev = "77f8f35d57618c1ba456d968524f2fb2c3448295";
-        dev = "/home/tv/nixpkgs";
+        rev = "40c586b7ce2c559374df435f46d673baf711c543";
       };
     } // optionalAttrs config.krebs.build.host.secure {
       secrets-master = "/home/tv/secrets/master";
@@ -49,20 +48,20 @@ with config.krebs.lib;
     }
     {
       security.sudo.extraConfig = ''
+        Defaults env_keep+="SSH_CLIENT"
         Defaults mailto="${config.krebs.users.tv.mail}"
         Defaults !lecture
       '';
       time.timeZone = "Europe/Berlin";
     }
+
     {
       # TODO check if both are required:
       nix.chrootDirs = [ "/etc/protocols" pkgs.iana_etc.outPath ];
 
-      nix.trustedBinaryCaches = [
-        "https://cache.nixos.org"
-        "http://cache.nixos.org"
-        "http://hydra.nixos.org"
-      ];
+      nix.requireSignedBinaryCaches = true;
+
+      nix.binaryCaches = ["https://cache.nixos.org"];
 
       nix.useChroot = true;
     }
@@ -177,12 +176,6 @@ with config.krebs.lib;
       tv.iptables.input-internet-accept-new-tcp = singleton "ssh";
     }
 
-    {
-      # TODO: exim
-      security.setuidPrograms = [
-        "sendmail"  # for sudo
-      ];
-    }
     {
       environment.systemPackages = [
         pkgs.get

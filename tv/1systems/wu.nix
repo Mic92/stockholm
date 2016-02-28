@@ -16,6 +16,7 @@ with config.krebs.lib;
     ../2configs/nginx-public_html.nix
     ../2configs/pulse.nix
     ../2configs/retiolum.nix
+    ../2configs/wu-binary-cache
     ../2configs/xserver
     {
       environment.systemPackages = with pkgs; [
@@ -126,12 +127,12 @@ with config.krebs.lib;
     "/" = {
       device = "/dev/mapper/vg840-wuroot";
       fsType = "btrfs";
-      options = "defaults,noatime,ssd,compress=lzo";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
     "/home" = {
       device = "/dev/mapper/home";
       fsType = "btrfs";
-      options = "defaults,noatime,ssd,compress=lzo";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
     "/boot" = {
       device = "/dev/sda1";
@@ -139,7 +140,7 @@ with config.krebs.lib;
     "/tmp" = {
       device = "tmpfs";
       fsType = "tmpfs";
-      options = "nosuid,nodev,noatime";
+      options = ["nosuid" "nodev" "noatime"];
     };
   };
 

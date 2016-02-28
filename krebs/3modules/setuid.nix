@@ -46,6 +46,7 @@ let
             check = x:
               isString x &&
               match "[0-7][0-7][0-7][0-7]" x != null;
+            merge = mergeOneOption;
           };
         };
         activate = mkOption {
