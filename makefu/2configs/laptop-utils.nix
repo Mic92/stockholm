@@ -6,7 +6,11 @@
 # essentially `nix-env -q` of the main user
 # TODO: split gui and non-gui
 {
-  environment.systemPackages = with pkgs; [
+  nixpkgs.config.firefox = {
+    enableAdobeFlash = true;
+  };
+
+  krebs.per-user.makefu.packages = with pkgs; [
     # core
     at_spi2_core
     acpi
@@ -27,21 +31,20 @@
 
 
     # gui
+    chromium
     clipit
     feh
+    firefox
     keepassx
     pcmanfm
     skype
+    mirage
     tightvnc
     gnome3.dconf
     vlc
     virtmanager
     wireshark
     xdotool
-
-    # browser
-    firefox
-    chromium
 
     # sectools
     aria2
@@ -53,10 +56,10 @@
 
 
     # stuff
-    cac-cli
+    cac-api
     cac-panel
     krebspaste
     ledger
-    password-store
+    pass
   ];
 }
