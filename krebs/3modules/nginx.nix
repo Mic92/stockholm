@@ -39,6 +39,34 @@ let
             type = with types; string;
             default = "";
           };
+          ssl = mkOption {
+            type = with types; submodule ({
+              options = {
+                enable = mkEnableOption "ssl";
+                certificate = mkOption {
+                  type = str;
+                };
+                certificate_key = mkOption {
+                  type = str;
+                };
+                #TODO: check for valid cipher
+                ciphers = mkOption {
+                  type = str;
+                  default = "AES128+EECDH:AES128+EDH";
+                };
+                prefer_server_ciphers = mkOption {
+                  type = bool;
+                  default = true;
+                };
+                protocols = mkOption {
+                  type = listOf (enum [ "SSLv2" "SSLv3" "TLSv1" "TLSv1.1" "TLSv1.2" ]);
+                  default = [ "TLSv1.1" "TLSv1.2" ];
+
+                };
+              };
+            });
+            default = {};
+          };
         };
       });
       default = {};
@@ -73,14 +101,28 @@ let
     }
   '';
 
-  to-server = { server-names, listen, locations, extraConfig, ... }: ''
-    server {
-      ${concatMapStringsSep "\n" (x: "listen ${x};") listen}
-      server_name ${toString server-names};
-      ${indent extraConfig}
-      ${indent (concatMapStrings to-location locations)}
-    }
-  '';
+  to-server = { server-names, listen, locations, extraConfig, ssl, ... }:
+    let
+      _extraConfig = if ssl.enable then
+        extraConfig + ''
+          ssl_certificate ${ssl.certificate};
+          ssl_certificate_key ${ssl.certificate_key};
+          ${optionalString ssl.prefer_server_ciphers "ssl_prefer_server_ciphers On;"}
+          ssl_ciphers ${ssl.ciphers};
+          ssl_protocols ${toString ssl.protocols};
+        ''
+      else
+        extraConfig
+      ;
+
+    in ''
+      server {
+        ${concatMapStringsSep "\n" (x: "listen ${x};") (listen ++ optional ssl.enable "443 ssl")}
+        server_name ${toString server-names};
+        ${indent _extraConfig}
+        ${indent (concatMapStrings to-location locations)}
+      }
+    '';
 
 in
 out
