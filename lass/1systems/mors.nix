@@ -141,7 +141,7 @@
       services.elasticsearch = {
         enable = true;
         plugins = [
-          pkgs.elasticsearchPlugins.elasticsearch_kopf
+        #  pkgs.elasticsearchPlugins.elasticsearch_kopf
         ];
       };
     }
