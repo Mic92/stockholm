@@ -5,7 +5,7 @@ pkgs.writeScriptBin "hashPassword" ''
   # usage: hashPassword
   set -euf
 
-  export PATH=${lib.makeSearchPath "bin" (with pkgs; [
+  export PATH=${lib.makeBinPath (with pkgs; [
     coreutils
     mkpasswd
     openssl

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   installPhase =
     let
-      path = stdenv.lib.makeSearchPath "bin" [
+      path = stdenv.lib.makeBinPath [
         coreutils
         curl
         gnused
