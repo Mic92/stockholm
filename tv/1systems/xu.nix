@@ -58,7 +58,6 @@ with config.krebs.lib;
         netcat
         nix-repl
         nmap
-        nq
         p7zip
         pass
         qrencode
