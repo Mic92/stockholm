@@ -12,6 +12,34 @@ let
   api = {
     enable = mkEnableOption "krebs.exim-smarthost";
 
+    # TODO DKIM for multiple domains
+    dkim = mkOption {
+      default = null;
+      type = types.nullOr (types.submodule ({ config, ... }: {
+        options = {
+          canon = mkOption {
+            type = types.enum ["relaxed"];
+            default = "relaxed";
+          };
+          domain = mkOption {
+            type = types.str;
+          };
+          private_key = mkOption {
+            type = types.secret-file;
+            default = {
+              path = "/run/krebs.secret/${config.domain}.dkim_private_key";
+              owner.name = "exim";
+              source-path = toString <secrets> + "/${config.domain}.dkim.priv";
+            };
+          };
+          selector = mkOption {
+            type = types.str;
+            default = "default";
+          };
+        };
+      }));
+    };
+
     internet-aliases = mkOption {
       type = types.listOf (types.submodule ({
         options = {
@@ -72,6 +100,15 @@ let
   };
 
   imp = {
+    krebs.secret.files = mkIf (cfg.dkim != null) {
+      exim-dkim_private_key = cfg.dkim.private_key;
+    };
+    systemd.services = mkIf (cfg.dkim != null) {
+      exim = {
+        after = [ "secret.service" ];
+        requires = [ "secret.service" ];
+      };
+    };
     services.exim = {
       enable = true;
       config = ''
@@ -193,6 +230,12 @@ let
 
         remote_smtp:
           driver = smtp
+          ${optionalString (cfg.dkim != null) ''
+            dkim_domain = ${cfg.dkim.domain}
+            dkim_selector = ${cfg.dkim.selector}
+            dkim_private_key = ${cfg.dkim.private_key.path}
+            dkim_canon = ${cfg.dkim.canon}
+          ''}
           helo_data = ''${if eq{$acl_m_special_dom}{}  \
                                {$primary_hostname}   \
                                {$acl_m_special_dom} }
@@ -228,5 +271,4 @@ let
 
   to-lsearch = concatMapStringsSep "\n" ({ from, to, ... }: "${from}: ${to}");
 
-in
-out
+in out
