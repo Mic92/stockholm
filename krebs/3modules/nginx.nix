@@ -77,7 +77,6 @@ let
     services.nginx = {
       enable = true;
       httpConfig = ''
-        include           ${pkgs.nginx}/conf/mime.types;
         default_type      application/octet-stream;
         sendfile          on;
         keepalive_timeout 65;

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   installPhase =
     let
       ca-bundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-      path = stdenv.lib.makeSearchPath "bin" (with pkgs; [
+      path = stdenv.lib.makeBinPath (with pkgs; [
         coreutils
         findutils
         git

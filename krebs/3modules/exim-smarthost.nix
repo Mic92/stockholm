@@ -12,6 +12,29 @@ let
   api = {
     enable = mkEnableOption "krebs.exim-smarthost";
 
+    dkim = mkOption {
+      type = types.listOf (types.submodule ({ config, ... }: {
+        options = {
+          domain = mkOption {
+            type = types.str;
+          };
+          private_key = mkOption {
+            type = types.secret-file;
+            default = {
+              path = "/run/krebs.secret/${config.domain}.dkim_private_key";
+              owner.name = "exim";
+              source-path = toString <secrets> + "/${config.domain}.dkim.priv";
+            };
+          };
+          selector = mkOption {
+            type = types.str;
+            default = "default";
+          };
+        };
+      }));
+      default = [];
+    };
+
     internet-aliases = mkOption {
       type = types.listOf (types.submodule ({
         options = {
@@ -72,9 +95,21 @@ let
   };
 
   imp = {
+    krebs.secret.files = listToAttrs (flip map cfg.dkim (dkim: {
+      name = "exim.dkim_private_key/${dkim.domain}";
+      value = dkim.private_key;
+    }));
+    systemd.services = mkIf (cfg.dkim != []) {
+      exim = {
+        after = [ "secret.service" ];
+        requires = [ "secret.service" ];
+      };
+    };
     services.exim = {
       enable = true;
       config = ''
+        keep_environment =
+
         primary_hostname = ${cfg.primary_hostname}
 
         # HOST_REDIR contains the real destinations for "local_domains".
@@ -191,6 +226,12 @@ let
 
         remote_smtp:
           driver = smtp
+          ${optionalString (cfg.dkim != []) ''
+            dkim_canon = relaxed
+            dkim_domain = $sender_address_domain
+            dkim_private_key = ''${lookup{$sender_address_domain}lsearch{${lsearch.dkim_private_key}}}
+            dkim_selector = ''${lookup{$sender_address_domain}lsearch{${lsearch.dkim_selector}}}
+          ''}
           helo_data = ''${if eq{$acl_m_special_dom}{}  \
                                {$primary_hostname}   \
                                {$acl_m_special_dom} }
@@ -219,12 +260,20 @@ let
   };
 
 
-  lsearch = mapAttrs (name: set: toFile name (to-lsearch set)) {
+  lsearch = mapAttrs (name: set: toFile name (to-lsearch set)) ({
     inherit (cfg) internet-aliases;
     inherit (cfg) system-aliases;
-  };
+  } // optionalAttrs (cfg.dkim != []) {
+    dkim_private_key = flip map cfg.dkim (dkim: {
+      from = dkim.domain;
+      to = dkim.private_key.path;
+    });
+    dkim_selector = flip map cfg.dkim (dkim: {
+      from = dkim.domain;
+      to = dkim.selector;
+    });
+  });
 
-  to-lsearch = concatMapStringsSep "\n" ({ from, to, ... }: "${from}: ${to}");
+  to-lsearch = concatMapStrings ({ from, to, ... }: "${from}: ${to}\n");
 
-in
-out
+in out

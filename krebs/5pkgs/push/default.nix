@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   installPhase =
     let
-      path = lib.makeSearchPath "bin" [
+      path = lib.makeBinPath [
         coreutils
         git
         gnumake
