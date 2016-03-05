@@ -13,7 +13,7 @@ with config.krebs.lib;
     ../2configs/im.nix
     ../2configs/mail-client.nix
     ../2configs/man.nix
-    ../2configs/nginx-public_html.nix
+    ../2configs/nginx/public_html.nix
     ../2configs/pulse.nix
     ../2configs/retiolum.nix
     ../2configs/wu-binary-cache
