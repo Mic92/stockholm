@@ -274,6 +274,6 @@ let
     });
   });
 
-  to-lsearch = concatMapStringsSep "\n" ({ from, to, ... }: "${from}: ${to}");
+  to-lsearch = concatMapStrings ({ from, to, ... }: "${from}: ${to}\n");
 
 in out
