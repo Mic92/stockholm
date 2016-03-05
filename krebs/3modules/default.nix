@@ -23,6 +23,7 @@ let
       ./lib.nix
       ./nginx.nix
       ./nixpkgs.nix
+      ./os-release.nix
       ./per-user.nix
       ./Reaktor.nix
       ./realwallpaper.nix
