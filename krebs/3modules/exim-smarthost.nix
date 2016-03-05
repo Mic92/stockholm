@@ -75,6 +75,8 @@ let
     services.exim = {
       enable = true;
       config = ''
+        keep_environment =
+
         primary_hostname = ${cfg.primary_hostname}
 
         # HOST_REDIR contains the real destinations for "local_domains".

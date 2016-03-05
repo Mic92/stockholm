@@ -39,6 +39,8 @@ let
         # TODO modular configuration
         assert config.krebs.retiolum.enable;
         ''
+          keep_environment =
+
           primary_hostname = ${cfg.primary_hostname}
           domainlist local_domains = ${concatStringsSep ":" cfg.local_domains}
           domainlist relay_to_domains = ${concatStringsSep ":" cfg.relay_to_domains}
