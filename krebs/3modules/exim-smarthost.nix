@@ -12,15 +12,9 @@ let
   api = {
     enable = mkEnableOption "krebs.exim-smarthost";
 
-    # TODO DKIM for multiple domains
     dkim = mkOption {
-      default = null;
-      type = types.nullOr (types.submodule ({ config, ... }: {
+      type = types.listOf (types.submodule ({ config, ... }: {
         options = {
-          canon = mkOption {
-            type = types.enum ["relaxed"];
-            default = "relaxed";
-          };
           domain = mkOption {
             type = types.str;
           };
@@ -38,6 +32,7 @@ let
           };
         };
       }));
+      default = [];
     };
 
     internet-aliases = mkOption {
@@ -100,10 +95,11 @@ let
   };
 
   imp = {
-    krebs.secret.files = mkIf (cfg.dkim != null) {
-      exim-dkim_private_key = cfg.dkim.private_key;
-    };
-    systemd.services = mkIf (cfg.dkim != null) {
+    krebs.secret.files = listToAttrs (flip map cfg.dkim (dkim: {
+      name = "exim.dkim_private_key/${dkim.domain}";
+      value = dkim.private_key;
+    }));
+    systemd.services = mkIf (cfg.dkim != []) {
       exim = {
         after = [ "secret.service" ];
         requires = [ "secret.service" ];
@@ -230,11 +226,11 @@ let
 
         remote_smtp:
           driver = smtp
-          ${optionalString (cfg.dkim != null) ''
-            dkim_domain = ${cfg.dkim.domain}
-            dkim_selector = ${cfg.dkim.selector}
-            dkim_private_key = ${cfg.dkim.private_key.path}
-            dkim_canon = ${cfg.dkim.canon}
+          ${optionalString (cfg.dkim != []) ''
+            dkim_canon = relaxed
+            dkim_domain = $sender_address_domain
+            dkim_private_key = ''${lookup{$sender_address_domain}lsearch{${lsearch.dkim_private_key}}}
+            dkim_selector = ''${lookup{$sender_address_domain}lsearch{${lsearch.dkim_selector}}}
           ''}
           helo_data = ''${if eq{$acl_m_special_dom}{}  \
                                {$primary_hostname}   \
@@ -264,10 +260,19 @@ let
   };
 
 
-  lsearch = mapAttrs (name: set: toFile name (to-lsearch set)) {
+  lsearch = mapAttrs (name: set: toFile name (to-lsearch set)) ({
     inherit (cfg) internet-aliases;
     inherit (cfg) system-aliases;
-  };
+  } // optionalAttrs (cfg.dkim != []) {
+    dkim_private_key = flip map cfg.dkim (dkim: {
+      from = dkim.domain;
+      to = dkim.private_key.path;
+    });
+    dkim_selector = flip map cfg.dkim (dkim: {
+      from = dkim.domain;
+      to = dkim.selector;
+    });
+  });
 
   to-lsearch = concatMapStringsSep "\n" ({ from, to, ... }: "${from}: ${to}");
 
