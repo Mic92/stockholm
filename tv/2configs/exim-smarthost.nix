@@ -5,6 +5,9 @@ with config.krebs.lib;
 {
   krebs.exim-smarthost = {
     enable = true;
+    dkim = [
+      { domain = "viljetic.de"; }
+    ];
     sender_domains = [
       "krebsco.de"
       "shackspace.de"

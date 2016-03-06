@@ -26,6 +26,7 @@ with config.krebs.lib;
   imports = [
     <secrets>
     ./backup.nix
+    ./nginx
     ./vim.nix
     {
       # stockholm dependencies

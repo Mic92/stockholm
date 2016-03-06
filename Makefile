@@ -1,5 +1,12 @@
 stockholm ?= .
 
+export STOCKHOLM_VERSION ?= $(shell \
+	version=git.$$(git describe --always --dirty); \
+	case $$version in (*-dirty) version=$$version@$$(hostname); esac; \
+	date=$$(date +%y.%m); \
+	printf '%s' "$$date.$$version"; \
+)
+
 ifndef nixos-config
 $(if $(system),,$(error unbound variable: system))
 nixos-config = ./$(LOGNAME)/1systems/$(system).nix
@@ -60,7 +67,8 @@ deploy: ssh ?= ssh
 deploy:
 	$(call execute,populate)
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
-		nixos-rebuild switch --show-trace -I $(target_path)
+		env STOCKHOLM_VERSION="$$STOCKHOLM_VERSION" \
+			nixos-rebuild switch --show-trace -I $(target_path)
 
 # usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
 eval eval.:;@$(call evaluate,$${expr-eval})
@@ -75,6 +83,7 @@ install:
 	target_path=/mnt$(target_path) $(call execute,populate)
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		env NIXOS_CONFIG=$(target_path)/nixos-config \
+				STOCKHOLM_VERSION="$$STOCKHOLM_VERSION" \
 			nixos-install
 
 # usage: make test system=foo [target=bar] [method={eval,build}]
