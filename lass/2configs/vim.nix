@@ -1,13 +1,24 @@
 { config, pkgs, ... }:
 
 let
-  customPlugins.mustang2 = pkgs.vimUtils.buildVimPlugin {
-    name = "Mustang2";
-    src = pkgs.fetchFromGitHub {
-      owner = "croaker";
-      repo = "mustang-vim";
-      rev = "6533d7d21bf27cae94d9c2caa575f627f003dfd5";
-      sha256 = "0zlmcrr04j3dkiivrhqi90f618lmnnnpvbz1b9msfs78cmgw9w67";
+  customPlugins = {
+    mustang2 = pkgs.vimUtils.buildVimPlugin {
+      name = "Mustang2";
+      src = pkgs.fetchFromGitHub {
+        owner = "croaker";
+        repo = "mustang-vim";
+        rev = "6533d7d21bf27cae94d9c2caa575f627f003dfd5";
+        sha256 = "0zlmcrr04j3dkiivrhqi90f618lmnnnpvbz1b9msfs78cmgw9w67";
+      };
+    };
+    unimpaired = pkgs.vimUtils.buildVimPlugin {
+      name = "unimpaired-vim";
+      src = pkgs.fetchFromGitHub {
+        owner = "tpope";
+        repo = "vim-unimpaired";
+        rev = "11dc568dbfd7a56866a4354c737515769f08e9fe";
+        sha256 = "1an941j5ckas8l3vkfhchdzjwcray16229rhv3a1d4pbxifwshi8";
+      };
     };
   };
 
@@ -105,11 +116,24 @@ in {
 
       "esc timeout
       set timeoutlen=1000 ttimeoutlen=0
+
+      "foldfunctions
+      inoremap <F9> <C-O>za
+      nnoremap <F9> za
+      onoremap <F9> <C-C>za
+      vnoremap <F9> zf
     '';
 
       vimrcConfig.vam.knownPlugins = pkgs.vimPlugins // customPlugins;
       vimrcConfig.vam.pluginDictionaries = [
-        { names = [ "Gundo" "commentary" "mustang2" ]; }
+        { names = [
+          "Gundo"
+          "commentary"
+          "mustang2"
+          "extradite"
+          "fugitive"
+          "unimpaired"
+        ]; }
         { names = [ "vim-addon-nix" ]; ft_regex = "^nix\$"; }
       ];
 
