@@ -135,6 +135,12 @@ in {
          { predicate = "-p tcp --dport 80"; target = "ACCEPT"; }
       ];
     }
+    {
+      services.tor = {
+        enable = true;
+        client.enable = true;
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
