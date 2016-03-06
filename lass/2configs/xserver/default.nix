@@ -49,7 +49,7 @@ let
     services.xserver.enable = true;
 
     systemd.services.xmonad = {
-      wantedBy = [ "multi-user.target" ];
+      #wantedBy = [ "multi-user.target" ];
       requires = [ "xserver.service" ];
       environment = xmonad-environment;
       serviceConfig = {
