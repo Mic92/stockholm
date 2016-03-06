@@ -23,7 +23,29 @@ with config.krebs.lib;
             TG12MT+XQr6JUu4jPpzdhb6H/36V6ADCIkBjzWh0iSfWGiFDQFinD+YSWbA1NOTr
             Qtd1I3Ov+He7uc2Z719mb0Og2kCGnCnPIwIDAQAB
             -----END RSA PUBLIC KEY-----
-            '';
+          '';
+        };
+      };
+    };
+    darth = {
+      cores = 4;
+      nets = {
+        retiolum = {
+          addrs4 = ["10.243.0.84"];
+          addrs6 = ["42:ff6b:5f0b:460d:2cee:4d05:73f7:5566/128"];
+          aliases = [
+            "darth.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA1pWNU+FY9XpQxw6srUb5mvGFgqSyJQAelFoufZng6EFeTnAzQOdq
+            qT7IWN+o3kSbQQsC2tQUnRYFoPagsgFP610D+LGwmeJlNgAf23gBI9ar1agUAvYX
+            yzYBj7R9OgGXHm6ECKwsxUJoGxM4L0l6mk/rTMVFnzgYPbpVJk1o6NPmiZhW8xIi
+            3BfxJUSt8rEQ1OudCirvdSr9uYv/WMR5B538wg4JeQK715yKEYbYi8bqOPnTvGD8
+            q5HRwXszWzCYYnqrdlmXzoCA1fT4vQdtov+63CvHT2RV7o42ruGZbHy7JIX9X3IE
+            u0nA8nZhZ5byhWGCpDyr6bTkvwJpltJypQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
         };
       };
     };
