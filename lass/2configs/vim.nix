@@ -67,7 +67,8 @@ in {
       vnoremap < <gv
       vnoremap > >gv
 
-      nmap <esc>q :buffer 
+      nmap <esc>q :buffer
+
 
       "Tabwidth
       set ts=2 sts=2 sw=2 et
