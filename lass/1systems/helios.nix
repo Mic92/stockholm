@@ -21,9 +21,6 @@ with builtins;
     {
       services.elasticsearch = {
         enable = true;
-        plugins = [
-          pkgs.elasticsearchPlugins.elasticsearch_kopf
-        ];
       };
     }
   ];
