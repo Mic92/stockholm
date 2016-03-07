@@ -20,6 +20,15 @@ let
         sha256 = "1an941j5ckas8l3vkfhchdzjwcray16229rhv3a1d4pbxifwshi8";
       };
     };
+    brogrammer = pkgs.vimUtils.buildVimPlugin {
+      name = "brogrammer";
+      src = pkgs.fetchFromGitHub {
+        owner = "marciomazza";
+        repo = "vim-brogrammer-theme";
+        rev = "3e412d8e8909d8d89eb5a4cbe955b5bc0833a3c3";
+        sha256 = "0am1qk8ls74z5ipgf9viacayq08y9i9vd7sxxiivwgsjh2ancbv6";
+      };
+    };
   };
 
 in {
@@ -34,7 +43,7 @@ in {
       syntax on
       " TODO autoload colorscheme file
       set background=dark
-      colorscheme mustang
+      colorscheme brogrammer
       filetype off
       filetype plugin indent on
 
@@ -134,6 +143,7 @@ in {
           "extradite"
           "fugitive"
           "unimpaired"
+          "brogrammer"
         ]; }
         { names = [ "vim-addon-nix" ]; ft_regex = "^nix\$"; }
       ];
