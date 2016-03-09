@@ -1,10 +1,26 @@
-# nix-shell -p gnumake jq openssh cac-api cac-panel sshpass
-set -eufx
+#! /bin/sh
+# usage: user=makefu target_system=wry debug=true \
+#         krebs_cred=~/secrets/cac.json \
+#         retiolum_key=~/secrets/wry/retiolum.rsa_key.priv \
+#           infest-cac-centos7
+
+# IMPORTANT: set debug to TRUE if you want to actually keep the system
+
+# must be run in <stockholm>
+set -euf
 
 # 2 secrets are required:
-
+#   login to panel
 krebs_cred=${krebs_cred-./cac.json}
+#   tinc retiolum key for host
 retiolum_key=${retiolum_key-./retiolum.rsa_key.priv}
+# build this host
+user=${user:-shared}
+target=${target_system:-test-centos7}
+
+log(){
+  echo "[$(date +"%Y-%m-%d %T")] $@" 2>&1
+}
 
 clear_defer(){
   echo "${trapstr:-exit}"
@@ -14,8 +30,12 @@ defer(){
   if test -z "${debug:-}"; then
     trapstr="$1;${trapstr:-exit}"
     trap "$trapstr" INT TERM EXIT KILL
+  else
+    log "ignored defer: $1"
   fi
 }
+
+test -z "${debug:-}" && log "debug enabled, vm will not be deleted on error"
 
 # Sanity
 if test ! -r "$krebs_cred";then
@@ -25,6 +45,11 @@ if test ! -r "$retiolum_key";then
   echo "\$retiolum_key=$retiolum_key must be readable"; exit 1
 fi
 
+if test ! -r "${user}/1systems/${target}.nix" ;then
+  echo "cannot find ${user}/1systems/${target}.nix , not started in stockholm directory?"
+  exit 1
+fi
+
 krebs_secrets=$(mktemp -d)
 sec_file=$krebs_secrets/cac_config
 krebs_ssh=$krebs_secrets/tempssh
@@ -32,7 +57,7 @@ export cac_resources_cache=$krebs_secrets/res_cache.json
 export cac_servers_cache=$krebs_secrets/servers_cache.json
 export cac_tasks_cache=$krebs_secrets/tasks_cache.json
 export cac_templates_cache=$krebs_secrets/templates_cache.json
-# we need to receive this key from buildmaster to speed up tinc bootstrap
+
 defer "trap - INT TERM EXIT"
 defer "rm -r $krebs_secrets"
 
@@ -42,10 +67,13 @@ cac_key="$(cac-panel --config $krebs_cred settings | jq -r .apicode)"
 EOF
 
 export cac_secrets=$sec_file
+log "adding own ip to allowed ips via cac-panel"
 cac-panel --config $krebs_cred add-api-ip
 
 # test login:
+log "updating cac-api state"
 cac-api update
+log "list of cac servers:"
 cac-api servers
 
 # preserve old trap
@@ -56,10 +84,10 @@ while true;do
   out=$(cac-api build cpu=1 ram=512 storage=10 os=26 2>&1)
   if name=$(echo "$out" | jq -r .servername);then
     id=servername:$name
-    echo "got a working machine, id=$id"
+    log "got a working machine, id=$id"
   else
-    echo "Unable to build a virtual machine, retrying in 15 seconds" >&2
-    echo "Output of build program: $out" >&2
+    elog "Unable to build a virtual machine, retrying in 15 seconds"
+    log "Output of build program: $out"
     sleep 15
     continue
   fi
@@ -74,22 +102,23 @@ while true;do
     for t in `seq 180`;do
       # now we have a working cac-api server
       if cac-api ssh $1 -o ConnectTimeout=10 \
-                    cat /etc/redhat-release | \
-                      grep CentOS ;then
+                    cat /etc/redhat-release >/dev/null 2>&1 ;then
         return 0
       fi
+      log "cac-api ssh $1 failed, retrying"
       sleep 10
     done
+    log "cac-api ssh failed for 30 minutes, assuming something else broke. bailing ou.t"
     return 1
   }
   # die on timeout
   if ! wait_login_cac $id;then
-    echo "unable to boot a working system within time frame, retrying..." >&2
-    echo "Cleaning up old image,last status: $(cac-api update;cac-api getserver $id | jq -r .status)"
+    log "unable to boot a working system within time frame, retrying..."
+    log "Cleaning up old image,last status: $(cac-api update;cac-api getserver $id | jq -r .status)"
     eval "$(clear_defer | sed 's/;exit//')"
     sleep 15
   else
-    echo "got a working system" >&2
+    log "got a working system: $id"
     break
   fi
 done
@@ -101,16 +130,16 @@ cac-api generatenetworking $id > \
   shared/2configs/temp/networking.nix
 # new temporary ssh key we will use to log in after install
 ssh-keygen -f $krebs_ssh -N ""
-cp $retiolum_key $krebs_secrets/retiolum.rsa_key.priv
+cp "$retiolum_key" $krebs_secrets/retiolum.rsa_key.priv
 # we override the directories for secrets and stockholm
 # additionally we set the ssh key we generated
 ip=$(cac-api getserver $id | jq -r .ip)
 
 cat > shared/2configs/temp/dirs.nix <<EOF
 _: {
-  krebs.build.source.dir = {
-    secrets.path = "$krebs_secrets";
-    stockholm.path = "$(pwd)";
+  krebs.build.source = {
+    secrets = "$krebs_secrets";
+    stockholm = "$(pwd)";
   };
   users.extraUsers.root.openssh.authorizedKeys.keys = [
     "$(cat ${krebs_ssh}.pub)"
@@ -118,14 +147,17 @@ _: {
 }
 EOF
 
+log "starting prepare and installation"
+# TODO: try harder
 make install \
-    LOGNAME=shared \
+    LOGNAME=${user} \
     SSHPASS="$(cac-api getserver $id | jq -r .rootpass)" \
     ssh='sshpass -e ssh -S none -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' \
-    system=test-centos7 \
+    system=${target} \
     target=$ip
-
-# TODO: generate secrets directory $krebs_secrets for nix import
+log "finalizing installation"
+cac-api ssh $id < ~/stockholm/krebs/4lib/infest/finalize.sh
+log "reset $id"
 cac-api powerop $id reset
 
 wait_login(){
@@ -137,11 +169,15 @@ wait_login(){
            -i $krebs_ssh \
            -o ConnectTimeout=10 \
            -o BatchMode=yes \
-           root@$1 nixos-version ;then
+           root@$1 nixos-version >/dev/null 2>&1;then
+      log "login to host $1 successful"
       return 0
     fi
+    log "unable to log into server, waiting"
     sleep 10
   done
+  log "unable to log in after 15 minutes, bailing out"
   return 1
 }
+log "waiting for system to come up"
 wait_login $ip
