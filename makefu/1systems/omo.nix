@@ -10,11 +10,25 @@ let
   homePartition = byid "ata-INTEL_SSDSA2M080G2GC_CVPO003402PB080BGN-part3";
   # cryptsetup luksFormat $dev --cipher aes-xts-plain64 -s 512 -h sha512
   # cryptsetup luksAddKey $dev tmpkey
-  # cryptsetup luksOpen $dev crypt0
-  # mkfs.xfs /dev/mapper/crypt0 -L crypt0
+  # cryptsetup luksOpen $dev crypt0 --key-file tmpkey --keyfile-size=4096
+  # mkfs.ext4 /dev/mapper/crypt0 -L crypt0 -T largefile
+
+  # omo Chassis:
+  # __FRONT_
+  # |* d2   |
+  # |       |
+  # |* d3   |
+  # |       |
+  # |* d0   |
+  # |       |
+  # |* d1   |
+  # |*      |
+  # |  * r0 |
+  # |_______|
   cryptDisk0 = byid "ata-ST2000DM001-1CH164_Z240XTT6";
   cryptDisk1 = byid "ata-TP02000GB_TPW151006050068";
-  cryptDisk2 = byid "ata-WDC_WD20EARS-00MVWB0_WD-WCAZA5548487";
+  cryptDisk2 = byid "ata-ST4000DM000-1F2168_Z303HVSG";
+  # cryptDisk3 = byid "ata-WDC_WD20EARS-00MVWB0_WD-WMAZA1786907";
   # all physical disks
   allDisks = [ rootDisk cryptDisk0 cryptDisk1 cryptDisk2 ];
 in {
@@ -40,7 +54,6 @@ in {
   networking.firewall.allowedTCPPorts = [ 80 655 8080 ];
 
   # services.openssh.allowSFTP = false;
-  krebs.build.source.nixpkgs.rev = "d0e3cca04edd5d1b3d61f188b4a5f61f35cdf1ce";
 
   # copy config from <secrets/sabnzbd.ini> to /var/lib/sabnzbd/
   services.sabnzbd.enable = true;

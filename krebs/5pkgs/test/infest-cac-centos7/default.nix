@@ -1,9 +1,11 @@
-{ stdenv, coreutils,makeWrapper, cac-api, cac-cert, cac-panel, gnumake, gnused, jq, openssh, ... }:
+{ stdenv, coreutils, makeWrapper,
+  cac-api, cac-cert, cac-panel, gnumake, gnused, jq, openssh, sshpass, proot,
+  ... }:
 
 stdenv.mkDerivation rec {
   name = "${shortname}-${version}";
   shortname = "infest-cac-centos7";
-  version = "0.2.0";
+  version = "0.2.6";
 
   src = ./notes;
 
@@ -21,6 +23,8 @@ stdenv.mkDerivation rec {
     gnused
     jq
     openssh
+    sshpass
+    proot
   ];
 
   installPhase = ''
@@ -34,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with stdenv.lib; {
     homepage = http://krebsco.de;
-    description = "Krebs CI Scripts";
+    description = "infest a CaC box with stockholm";
     license = licenses.wtfpl;
     maintainers = [ maintainers.makefu ];
   };
