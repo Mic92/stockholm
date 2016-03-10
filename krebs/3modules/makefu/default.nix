@@ -294,6 +294,7 @@ with config.krebs.lib;
           addrs6 = ["42:f9f0::10"];
           aliases = [
             "omo.retiolum"
+            "omo.r"
           ];
           tinc.pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----

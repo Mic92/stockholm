@@ -98,6 +98,19 @@ prepare_nixos_iso() {
   sed -i "s@^NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
 }
 
+get_nixos_install() {
+  echo "installing nixos-install" 2>&1
+  c=$(mktemp)
+
+  cat <<EOF > $c
+{ fileSystems."/" = {};
+    boot.loader.grub.enable = false;
+}
+EOF
+  export NIXOS_CONFIG=$c
+  nix-env -i -A config.system.build.nixos-install -f "<nixpkgs/nixos>"
+  rm -v $c
+}
 prepare_common() {(
 
   if ! getent group nixbld >/dev/null; then
@@ -191,6 +204,7 @@ prepare_common() {(
     mount --rbind /mnt/"$target_path" "$target_path"
   fi
 
+  get_nixos_install
   mkdir -p bin
   rm -f bin/nixos-install
   cp "$(type -p nixos-install)" bin/nixos-install
