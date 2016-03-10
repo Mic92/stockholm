@@ -16,7 +16,7 @@ krebs_cred=${krebs_cred-./cac.json}
 retiolum_key=${retiolum_key-./retiolum.rsa_key.priv}
 # build this host
 user=${user:-shared}
-target=${target_system:-test-centos7}
+system=${target_system:-test-centos7}
 
 log(){
   echo "[$(date +"%Y-%m-%d %T")] $@" 2>&1
@@ -45,8 +45,8 @@ if test ! -r "$retiolum_key";then
   echo "\$retiolum_key=$retiolum_key must be readable"; exit 1
 fi
 
-if test ! -r "${user}/1systems/${target}.nix" ;then
-  echo "cannot find ${user}/1systems/${target}.nix , not started in stockholm directory?"
+if test ! -r "${user}/1systems/${system}.nix" ;then
+  echo "cannot find ${user}/1systems/${system}.nix , not started in stockholm directory?"
   exit 1
 fi
 
@@ -86,7 +86,7 @@ while true;do
     id=servername:$name
     log "got a working machine, id=$id"
   else
-    elog "Unable to build a virtual machine, retrying in 15 seconds"
+    log "Unable to build a virtual machine, retrying in 15 seconds"
     log "Output of build program: $out"
     sleep 15
     continue
@@ -153,7 +153,7 @@ make install \
     LOGNAME=${user} \
     SSHPASS="$(cac-api getserver $id | jq -r .rootpass)" \
     ssh='sshpass -e ssh -S none -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' \
-    system=${target} \
+    system=${system} \
     target=$ip
 log "finalizing installation"
 cac-api ssh $id < krebs/4lib/infest/finalize.sh
