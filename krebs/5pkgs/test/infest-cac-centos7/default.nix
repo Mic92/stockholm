@@ -1,5 +1,5 @@
 { stdenv, coreutils, makeWrapper,
-  cac-api, cac-cert, cac-panel, gnumake, gnused, jq, openssh, sshpass,
+  cac-api, cac-cert, cac-panel, gnumake, gnused, jq, openssh, sshpass, proot,
   ... }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     jq
     openssh
     sshpass
+    proot
   ];
 
   installPhase = ''
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with stdenv.lib; {
     homepage = http://krebsco.de;
-    description = "Krebs CI Scripts";
+    description = "infest a CaC box with stockholm";
     license = licenses.wtfpl;
     maintainers = [ maintainers.makefu ];
   };
