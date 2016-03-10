@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     { cat <<\EOF
     #! ${dash}/bin/dash
-    export PATH=${stdenv.lib.makeSearchPath "bin" [
+    export PATH=${stdenv.lib.makeBinPath [
       bc
       coreutils
       curl

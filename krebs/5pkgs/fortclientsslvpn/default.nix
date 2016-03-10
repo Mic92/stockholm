@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
-  binPath = lib.makeSearchPath "bin" [
+  binPath = lib.makeBinPath [
     coreutils
     gawk
   ];

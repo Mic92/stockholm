@@ -400,7 +400,7 @@ let
     #! /bin/sh
     set -euf
 
-    PATH=${makeSearchPath "bin" (with pkgs; [
+    PATH=${makeBinPath (with pkgs; [
       coreutils
       git
       gnugrep
@@ -451,7 +451,7 @@ let
     #! /bin/sh
     set -euf
 
-    PATH=${makeSearchPath "bin" (with pkgs; [
+    PATH=${makeBinPath (with pkgs; [
       coreutils
       findutils
       gawk
@@ -511,7 +511,7 @@ let
       #! /bin/sh
       set -euf
 
-      PATH=${makeSearchPath "bin" (with pkgs; [
+      PATH=${makeBinPath (with pkgs; [
         coreutils # env
         git
         systemd

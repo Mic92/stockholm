@@ -12,7 +12,7 @@ let
     #! /bin/sh
     set -euf
 
-    export PATH=${makeSearchPath "bin" (with pkgs; [
+    export PATH=${makeBinPath (with pkgs; [
       coreutils
       git
       gnused

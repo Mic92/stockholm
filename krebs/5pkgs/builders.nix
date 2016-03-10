@@ -29,7 +29,7 @@ rec {
   execveBin = name: cfg: execve name (cfg // { destination = "/bin/${name}"; });
 
   writeC = name: { destination ? "" }: src: pkgs.runCommand name {} ''
-    PATH=${makeSearchPath "bin" (with pkgs; [
+    PATH=${makeBinPath (with pkgs; [
       binutils
       coreutils
       gcc
