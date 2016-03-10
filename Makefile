@@ -1,8 +1,10 @@
 stockholm ?= .
 
+export HOSTNAME ?= $(shell cat /proc/sys/kernel/hostname)
+
 export STOCKHOLM_VERSION ?= $(shell \
 	version=git.$$(git describe --always --dirty); \
-	case $$version in (*-dirty) version=$$version@$$(hostname); esac; \
+	case $$version in (*-dirty) version=$$version@$$HOSTNAME; esac; \
 	date=$$(date +%y.%m); \
 	printf '%s' "$$date.$$version"; \
 )
