@@ -9,10 +9,9 @@ export STOCKHOLM_VERSION ?= $(shell \
 	printf '%s' "$$date.$$version"; \
 )
 
-ifndef nixos-config
 $(if $(system),,$(error unbound variable: system))
-nixos-config = ./$(LOGNAME)/1systems/$(system).nix
-endif
+
+nixos-config ?= $(stockholm)/$(LOGNAME)/1systems/$(system).nix
 
 # target = [target_user@]target_host[:target_port][/target_path]
 ifdef target
