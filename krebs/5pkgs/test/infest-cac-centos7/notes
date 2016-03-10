@@ -156,7 +156,7 @@ make install \
     system=${target} \
     target=$ip
 log "finalizing installation"
-cac-api ssh $id < ~/stockholm/krebs/4lib/infest/finalize.sh
+cac-api ssh $id < krebs/4lib/infest/finalize.sh
 log "reset $id"
 cac-api powerop $id reset
 
