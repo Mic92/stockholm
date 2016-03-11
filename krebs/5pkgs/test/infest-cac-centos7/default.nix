@@ -5,7 +5,7 @@
 stdenv.mkDerivation rec {
   name = "${shortname}-${version}";
   shortname = "infest-cac-centos7";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = ./notes;
 
