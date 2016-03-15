@@ -30,6 +30,7 @@ let
     load-env = {};
     make-snapshot = {};
     much = {};
+    newsbot-js = {};
     nixpkgs = {};
     push = {};
     regfish = {};
