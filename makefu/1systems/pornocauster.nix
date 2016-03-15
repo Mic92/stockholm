@@ -11,7 +11,6 @@
       ../2configs/laptop-utils.nix
 
       # Krebs
-      ../2configs/tinc-basic-retiolum.nix
       #../2configs/disable_v6.nix
 
 
@@ -35,11 +34,10 @@
       ../2configs/fs/sda-crypto-root-home.nix
       # ../2configs/mediawiki.nix
       #../2configs/wordpress.nix
+      ../2configs/nginx/public_html.nix
     ];
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    tinc = pkgs.tinc_pre;
-  };
+  krebs.retiolum.enable = true;
   # steam
   hardware.opengl.driSupport32Bit = true;
   hardware.pulseaudio.support32Bit = true;
@@ -48,6 +46,7 @@
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [
     25
+    80
   ];
 
   krebs.build.host = config.krebs.hosts.pornocauster;

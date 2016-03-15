@@ -144,7 +144,6 @@
   # * retiolum
   s.addStep(steps.FileDownload(mastersrc="${config.krebs.buildbot.master.workDir}/cac.json", slavedest="cac.json"))
   s.addStep(steps.FileDownload(mastersrc="${config.krebs.buildbot.master.workDir}/retiolum-ci.rsa_key.priv", slavedest="retiolum.rsa_key.priv"))
-
   addShell(s, name="infest-cac-centos7",env=env,
               sigtermTime=60,           # SIGTERM 1 minute before SIGKILL
               timeout=10800,             # 3h
@@ -173,7 +172,7 @@
     masterhost = "localhost";
     username = "testslave";
     password = "krebspass";
-    packages = with pkgs;[ git nix ];
+    packages = with pkgs;[ git nix gnumake jq rsync ];
     # all nix commands will need a working nixpkgs installation
     extraEnviron = {
       NIX_PATH="nixpkgs=/var/src/nixpkgs:nixos-config=./shared/1systems/wolf.nix"; };

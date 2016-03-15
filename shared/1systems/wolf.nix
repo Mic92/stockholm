@@ -20,6 +20,9 @@ in
   # use your own binary cache, fallback use cache.nixos.org (which is used by
   # apt-cacher-ng in first place)
 
+  # local discovery in shackspace
+  nixpkgs.config.packageOverrides = pkgs: { tinc = pkgs.tinc_pre; };
+
   services.grafana = {
     enable = true;
     addr = "0.0.0.0";
