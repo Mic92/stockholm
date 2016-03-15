@@ -21,4 +21,8 @@
       "flap"
     ];
   };
+
+  nixpkgs.config.packageOverrides = pkgs: {
+    tinc = pkgs.tinc_pre;
+  };
 }
