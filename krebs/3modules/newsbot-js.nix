@@ -6,10 +6,10 @@ with lib;
 let
   inherit (config.krebs.lib) genid;
 
-  cfg = config.lass.newsbot-js;
+  cfg = config.krebs.newsbot-js;
 
   out = {
-    options.lass.newsbot-js = api;
+    options.krebs.newsbot-js = api;
     config = mkIf cfg.enable imp;
   };
 
