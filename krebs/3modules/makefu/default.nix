@@ -35,6 +35,7 @@ with config.krebs.lib;
           addrs6 = ["42:ff6b:5f0b:460d:2cee:4d05:73f7:5566/128"];
           aliases = [
             "darth.retiolum"
+            "darth.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
