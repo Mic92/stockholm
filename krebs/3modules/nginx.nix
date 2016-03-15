@@ -34,6 +34,7 @@ let
             # TODO use identity
             default = [
               "${config.networking.hostName}"
+              "${config.networking.hostName}.r"
               "${config.networking.hostName}.retiolum"
             ];
           };
