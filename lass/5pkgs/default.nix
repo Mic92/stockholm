@@ -2,6 +2,7 @@
 
 {
   nixpkgs.config.packageOverrides = rec {
+    acronym = pkgs.callPackage ./acronym/default.nix {};
     firefoxPlugins = {
       noscript = pkgs.callPackage ./firefoxPlugins/noscript.nix {};
       ublock = pkgs.callPackage ./firefoxPlugins/ublock.nix {};
