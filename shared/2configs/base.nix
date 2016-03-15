@@ -3,15 +3,7 @@
 with config.krebs.lib;
 {
   krebs.enable = true;
-  krebs.retiolum = {
-    enable = true;
-    connectTo = [
-      # TODO remove connectTo cd, this was only used for bootstrapping
-      "cd"
-      "gum"
-      "pigstarter"
-    ];
-  };
+  krebs.retiolum.enable = true;
 
   # TODO rename shared user to "krebs"
   krebs.build.user = mkDefault config.krebs.users.shared;
