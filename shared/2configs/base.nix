@@ -18,7 +18,7 @@ with config.krebs.lib;
   krebs.build.source = {
     nixpkgs = mkDefault {
       url = https://github.com/NixOS/nixpkgs;
-      rev = "77f8f35d57618c1ba456d968524f2fb2c3448295"; # for urlwatch-minidb
+      rev = "40c586b7ce2c559374df435f46d673baf711c543";
     };
     secrets =  mkDefault "${getEnv "HOME"}/secrets/krebs/${config.krebs.build.host.name}";
     stockholm = mkDefault "${getEnv "HOME"}/stockholm";

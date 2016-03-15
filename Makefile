@@ -1,16 +1,17 @@
 stockholm ?= .
 
+export HOSTNAME ?= $(shell cat /proc/sys/kernel/hostname)
+
 export STOCKHOLM_VERSION ?= $(shell \
 	version=git.$$(git describe --always --dirty); \
-	case $$version in (*-dirty) version=$$version@$$(hostname); esac; \
+	case $$version in (*-dirty) version=$$version@$$HOSTNAME; esac; \
 	date=$$(date +%y.%m); \
 	printf '%s' "$$date.$$version"; \
 )
 
-ifndef nixos-config
 $(if $(system),,$(error unbound variable: system))
-nixos-config = ./$(LOGNAME)/1systems/$(system).nix
-endif
+
+nixos-config ?= $(stockholm)/$(LOGNAME)/1systems/$(system).nix
 
 # target = [target_user@]target_host[:target_port][/target_path]
 ifdef target
