@@ -51,6 +51,7 @@ with config.krebs.lib;
           addrs6 = ["42:941e:2816:35f4:5c5e:206b:3f0b:f763"];
           aliases = [
             "echelon.retiolum"
+            "echelon.r"
             "cgit.echelon.retiolum"
             "go.retiolum"
             "go.r"
