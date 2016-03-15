@@ -287,6 +287,7 @@
   #};
 
   environment.systemPackages = with pkgs; [
+    acronym
     cac-api
     sshpass
     get
