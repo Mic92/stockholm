@@ -81,7 +81,7 @@ with config.krebs.lib;
   # multiple-definition-problem when defining environment.variables.EDITOR
   environment.extraInit = ''
     EDITOR=vim
-    PAGER=most
+    MANPAGER=most
   '';
 
   environment.systemPackages = with pkgs; [

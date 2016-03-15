@@ -54,10 +54,6 @@
 
       #eval $( dircolors -b ~/.LS_COLORS )
 
-      #exports
-      export EDITOR='vim'
-      export MANPAGER='most'
-      export PAGER='vim -R -'
       # export MANPAGER='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | vim -R -c "set ft=man nonu nomod nolist" -'
 
       #beautiful colors
