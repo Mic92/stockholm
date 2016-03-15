@@ -146,6 +146,12 @@
         ];
       };
     }
+    {
+      services.postgresql = {
+        enable = true;
+        package = pkgs.postgresql;
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
