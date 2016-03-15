@@ -29,6 +29,15 @@ let
         sha256 = "0am1qk8ls74z5ipgf9viacayq08y9i9vd7sxxiivwgsjh2ancbv6";
       };
     };
+    file-line = pkgs.vimUtils.buildVimPlugin {
+      name = "file-line";
+      src = pkgs.fetchFromGitHub {
+        owner = "bogado";
+        repo = "file-line";
+        rev = "f9ffa1879ad84ce4a386110446f395bc1795b72a";
+        sha256 = "173n47w9zd01rcyrrmm194v79xq7d1ggzr19n1lsxrqfgr2c1rvk";
+      };
+    };
   };
 
 in {
@@ -137,13 +146,14 @@ in {
       vimrcConfig.vam.knownPlugins = pkgs.vimPlugins // customPlugins;
       vimrcConfig.vam.pluginDictionaries = [
         { names = [
-          "Gundo"
-          "commentary"
-          "mustang2"
-          "extradite"
-          "fugitive"
-          "unimpaired"
           "brogrammer"
+          "commentary"
+          "extradite"
+          "file-line"
+          "fugitive"
+          "Gundo"
+          "mustang2"
+          "unimpaired"
         ]; }
         { names = [ "vim-addon-nix" ]; ft_regex = "^nix\$"; }
       ];
