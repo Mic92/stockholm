@@ -40,6 +40,7 @@ in {
     push
     slock
     sxiv
+    xorg.xbacklight
     xsel
     zathura
 
