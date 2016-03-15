@@ -68,8 +68,9 @@ with config.krebs.lib;
 
   users.mutableUsers = false;
 
+  services.timesyncd.enable = true;
+
   #why is this on in the first place?
-  services.ntp.enable = false;
   services.nscd.enable = false;
 
   boot.tmpOnTmpfs = true;
