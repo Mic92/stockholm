@@ -17,7 +17,7 @@ let out = rec {
 
   types = import ./types.nix {
     inherit config;
-    lib = lib // { inherit genid; };
+    lib = lib // { inherit genid optionalTrace; };
   };
 
   dir.has-default-nix = path: pathExists (path + "/default.nix");
@@ -43,5 +43,7 @@ let out = rec {
 
   mapAttrValues = f: mapAttrs (_: f);
   setAttr = name: value: set: set // { ${name} = value; };
+
+  optionalTrace = c: msg: x: if c then trace msg x else x;
 
 }; in out
