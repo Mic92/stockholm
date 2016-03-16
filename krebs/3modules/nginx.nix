@@ -12,6 +12,20 @@ let
   api = {
     enable = mkEnableOption "krebs.nginx";
 
+    default404 = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        By default all requests not directed to an explicit hostname are
+        replied with a 404 error to avoid accidental exposition of nginx
+        services.
+
+        Set this value to `false` to disable this behavior - you will then be
+        able to configure a new `default_server` in the listen address entries
+        again.
+      '';
+    };
+
     servers = mkOption {
       type = types.attrsOf (types.submodule {
         options = {
@@ -20,6 +34,7 @@ let
             # TODO use identity
             default = [
               "${config.networking.hostName}"
+              "${config.networking.hostName}.r"
               "${config.networking.hostName}.retiolum"
             ];
           };
@@ -53,17 +68,19 @@ let
         sendfile          on;
         keepalive_timeout 65;
         gzip              on;
-        server {
-          listen 80 default_server;
-          server_name _;
-          return 404;
-        }
+
+        ${optionalString cfg.default404 ''
+          server {
+            listen 80 default_server;
+            server_name _;
+            return 404;
+          }''}
+
         ${concatStrings (mapAttrsToList (_: to-server) cfg.servers)}
       '';
     };
   };
 
-  
   indent = replaceChars ["\n"] ["\n  "];
 
   to-location = { name, value }: ''
