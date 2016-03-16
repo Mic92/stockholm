@@ -6,7 +6,7 @@ with types;
 
 let
   # Inherited attributes are used in submodules that have their own `config`.
-  inherit (config.krebs) users;
+  inherit (config.krebs) build users;
 in
 
 types // rec {
@@ -47,33 +47,15 @@ types // rec {
       };
 
       ssh.pubkey = mkOption {
-        type = nullOr str;
+        type = nullOr ssh-pubkey;
         default = null;
         apply = x:
-          if x != null
-            then x
-            else trace "The option `krebs.hosts.${config.name}.ssh.pubkey' is unused." null;
+          optionalTrace (x == null && config.owner.name == build.user.name)
+            "The option `krebs.hosts.${config.name}.ssh.pubkey' is unused."
+            x;
       };
       ssh.privkey = mkOption {
-        type = nullOr (submodule {
-          options = {
-            bits = mkOption {
-              type = nullOr (enum ["4096"]);
-              default = null;
-            };
-            path = mkOption {
-              type = either path str;
-              apply = x: {
-                path = toString x;
-                string = x;
-              }.${typeOf x};
-            };
-            type = mkOption {
-              type = enum ["rsa" "ed25519"];
-              default = "ed25519";
-            };
-          };
-        });
+        type = nullOr ssh-privkey;
         default = null;
       };
     };
@@ -129,7 +111,7 @@ types // rec {
               );
             };
             pubkey = mkOption {
-              type = str;
+              type = tinc-pubkey;
             };
           };
         }));
@@ -183,8 +165,18 @@ types // rec {
         type = username;
         default = config._module.args.name;
       };
+      pgp.pubkeys = mkOption {
+        type = attrsOf pgp-pubkey;
+        default = {};
+        description = ''
+          Set of user's PGP public keys.
+
+          Modules supporting PGP may use well-known key names to define option
+          defaults, e.g. using `getAttrDef well-known-name pubkeys`.
+        '';
+      };
       pubkey = mkOption {
-        type = nullOr str;
+        type = nullOr ssh-pubkey;
         default = null;
       };
       uid = mkOption {
@@ -198,6 +190,31 @@ types // rec {
   addr = str;
   addr4 = str;
   addr6 = str;
+
+  pgp-pubkey = str;
+
+  ssh-pubkey = str;
+  ssh-privkey = submodule {
+    options = {
+      bits = mkOption {
+        type = nullOr (enum ["4096"]);
+        default = null;
+      };
+      path = mkOption {
+        type = either path str;
+        apply = x: {
+          path = toString x;
+          string = x;
+        }.${typeOf x};
+      };
+      type = mkOption {
+        type = enum ["rsa" "ed25519"];
+        default = "ed25519";
+      };
+    };
+  };
+
+  tinc-pubkey = str;
 
   krebs.file-location = types.submodule {
     options = {
