@@ -165,6 +165,16 @@ types // rec {
         type = username;
         default = config._module.args.name;
       };
+      pgp.pubkeys = mkOption {
+        type = attrsOf pgp-pubkey;
+        default = {};
+        description = ''
+          Set of user's PGP public keys.
+
+          Modules supporting PGP may use well-known key names to define option
+          defaults, e.g. using `getAttrDef well-known-name pubkeys`.
+        '';
+      };
       pubkey = mkOption {
         type = nullOr ssh-pubkey;
         default = null;
@@ -180,6 +190,9 @@ types // rec {
   addr = str;
   addr4 = str;
   addr6 = str;
+
+  pgp-pubkey = str;
+
   ssh-pubkey = str;
   ssh-privkey = submodule {
     options = {

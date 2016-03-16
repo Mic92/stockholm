@@ -357,7 +357,7 @@ with config.krebs.lib;
     };
     tv = {
       mail = "tv@nomic.retiolum";
-      pgp.pubkey = ''
+      pgp.pubkeys.default = ''
         -----BEGIN PGP PUBLIC KEY BLOCK-----
         mQINBFbJ/B0BEADZx8l5gRurzhEHcc3PbBepdZqDJQZ2cGHixi8VEk9iN25qJO5y
         HB0q5sQRsh7oNCbzKp6qRhaG9kXmEda+Uu+qbHWxE32QcT76+W8npH73qthaFwC/
