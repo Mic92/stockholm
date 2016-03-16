@@ -47,7 +47,7 @@ types // rec {
       };
 
       ssh.pubkey = mkOption {
-        type = nullOr str;
+        type = nullOr ssh-pubkey;
         default = null;
         apply = x:
           optionalTrace (x == null && config.owner.name == build.user.name)
@@ -55,25 +55,7 @@ types // rec {
             x;
       };
       ssh.privkey = mkOption {
-        type = nullOr (submodule {
-          options = {
-            bits = mkOption {
-              type = nullOr (enum ["4096"]);
-              default = null;
-            };
-            path = mkOption {
-              type = either path str;
-              apply = x: {
-                path = toString x;
-                string = x;
-              }.${typeOf x};
-            };
-            type = mkOption {
-              type = enum ["rsa" "ed25519"];
-              default = "ed25519";
-            };
-          };
-        });
+        type = nullOr ssh-privkey;
         default = null;
       };
     };
@@ -184,7 +166,7 @@ types // rec {
         default = config._module.args.name;
       };
       pubkey = mkOption {
-        type = nullOr str;
+        type = nullOr ssh-pubkey;
         default = null;
       };
       uid = mkOption {
@@ -198,6 +180,26 @@ types // rec {
   addr = str;
   addr4 = str;
   addr6 = str;
+  ssh-pubkey = str;
+  ssh-privkey = submodule {
+    options = {
+      bits = mkOption {
+        type = nullOr (enum ["4096"]);
+        default = null;
+      };
+      path = mkOption {
+        type = either path str;
+        apply = x: {
+          path = toString x;
+          string = x;
+        }.${typeOf x};
+      };
+      type = mkOption {
+        type = enum ["rsa" "ed25519"];
+        default = "ed25519";
+      };
+    };
+  };
 
   krebs.file-location = types.submodule {
     options = {
