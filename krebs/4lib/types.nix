@@ -6,7 +6,7 @@ with types;
 
 let
   # Inherited attributes are used in submodules that have their own `config`.
-  inherit (config.krebs) users;
+  inherit (config.krebs) build users;
 in
 
 types // rec {
@@ -50,9 +50,9 @@ types // rec {
         type = nullOr str;
         default = null;
         apply = x:
-          if x != null
-            then x
-            else trace "The option `krebs.hosts.${config.name}.ssh.pubkey' is unused." null;
+          optionalTrace (x == null && config.owner.name == build.user.name)
+            "The option `krebs.hosts.${config.name}.ssh.pubkey' is unused."
+            x;
       };
       ssh.privkey = mkOption {
         type = nullOr (submodule {
