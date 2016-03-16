@@ -111,7 +111,7 @@ types // rec {
               );
             };
             pubkey = mkOption {
-              type = str;
+              type = tinc-pubkey;
             };
           };
         }));
@@ -213,6 +213,8 @@ types // rec {
       };
     };
   };
+
+  tinc-pubkey = str;
 
   krebs.file-location = types.submodule {
     options = {
