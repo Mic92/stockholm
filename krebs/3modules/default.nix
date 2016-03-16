@@ -24,6 +24,7 @@ let
       ./newsbot-js.nix
       ./nginx.nix
       ./nixpkgs.nix
+      ./on-failure.nix
       ./os-release.nix
       ./per-user.nix
       ./Reaktor.nix

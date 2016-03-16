@@ -60,6 +60,12 @@ let
   };
 
   imp = {
+    krebs.on-failure.plans =
+      listToAttrs (map (plan: nameValuePair "backup.${plan.name}" {
+      }) (filter (plan: build-host-is "pull" "dst" plan ||
+                        build-host-is "push" "src" plan)
+                 enabled-plans));
+
     systemd.services =
       listToAttrs (map (plan: nameValuePair "backup.${plan.name}" {
         # TODO if there is plan.user, then use its privkey
