@@ -32,7 +32,7 @@ with config.krebs.lib;
       nets = {
         retiolum = {
           addrs4 = ["10.243.0.84"];
-          addrs6 = ["42:ff6b:5f0b:460d:2cee:4d05:73f7:5566/128"];
+          addrs6 = ["42:ff6b:5f0b:460d:2cee:4d05:73f7:5566"];
           aliases = [
             "darth.retiolum"
             "darth.r"
@@ -388,7 +388,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       nets = {
         retiolum = {
           addrs4 = ["10.243.231.219"];
-          addrs6 = ["42:f7bf:178d:4b68:1c1b:42e8:6b27:6a72/128"];
+          addrs6 = ["42:f7bf:178d:4b68:1c1b:42e8:6b27:6a72"];
           aliases = [
             "nukular.r"
           ];
