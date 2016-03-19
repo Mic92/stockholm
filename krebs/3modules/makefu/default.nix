@@ -89,19 +89,14 @@ with config.krebs.lib;
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAwW+RjRcp3uarkfXZ+FcCYY2GFcfI595GDpLRuiS/YQAB3JZEirHi
-            HFhDJN80fZ9qHqtq9Af462xSx+cIb282TxAqCM1Z9buipOcYTYo0m8xIqkT10dB3
-            mR87B+Ed1H6G3J6isdwEb9ZMegyGIIeyR53FJQYMZXjxdJbAmGMDKqjZSk1D5mo+
-            n5Vx3lGzTuDy84VyphfO2ypG48RHCxHUAx4Yt3o84LKoiy/y5E66jaowCOjZ6SqG
-            R0cymuhoBhMIk2xAXk0Qn7MZ1AOm9N7Wru7FXyoLc7B3+Gb0/8jXOJciysTG7+Gr
-            Txza6fJvq2FaH8iBnfezSELmicIYhc8Ynlq4xElcHhQEmRTQavVe/LDhJ0i6xJSi
-            aOu0njnK+9xK+MyDkB7n8dO1Iwnn7aG4n3CjVBB4BDO08lrovD3zdpDX0xhWgPRo
-            ReOJ3heRO/HsVpzxKlqraKWoHuOXXcREfU9cj3F6CRd0ECOhqtFMEr6TnuSc8GaE
-            KCKxY1oN45NbEFOCv2XKd2wEZFH37LFO6xxzSRr1DbVuKRYIPjtOiFKpwN1TIT8v
-            XGzTT4TJpBGnq0jfhFwhVjfCjLuGj29MCkvg0nqObQ07qYrjdQI4W1GnGOuyXkvQ
-            teyxjUXYbp0doTGxKvQaTWp+JapeEaJPN2MDOhrRFjPrzgo3aW9+97UCAwEAAQ==
+            MIIBCgKCAQEAnztrijsfao+fmNtwAjqwIDKsRaMP3ECsq2T2zqKvxwCyXk69G9bG
+            RFhWjgaawS9ZhnHSlgWK/vtoR0O9NxpzdU/mvdQijbVGxM02DegjO9qDSIe8EGmA
+            kscW4nDqYtw4rtjOVPfnNiWXbcWD8eiYR0kcSWmSvfOpVvdhTETqduTx5HRHyEFD
+            JRQYR/tJSvVWXmM670PENAPNJFJ4VSJR60s5A+bFT7J/uw7HzJXX28LygJz73Dj2
+            2a4ev0WcZQngLq072h/91R/TOpg+ogUDVhXkQtKyFj7im0287JTL4bXGofZBhzaf
+            +h9dFGs1QLoNyhG/cgt9fog7boSXTelAiQIDAQAB
             -----END RSA PUBLIC KEY-----
-            '';
+          '';
         };
       };
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
