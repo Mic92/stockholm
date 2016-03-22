@@ -88,6 +88,7 @@ with config.krebs.lib;
   environment.systemPackages = with pkgs; [
   #stockholm
     git
+    gnumake
     jq
     parallel
     proot
