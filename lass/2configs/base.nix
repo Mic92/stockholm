@@ -10,7 +10,7 @@ with config.krebs.lib;
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
-                 (import /root/secrets/hashedPasswords.nix);
+                 (import <secrets/hashedPasswords.nix>);
     }
     {
       users.extraUsers = {
