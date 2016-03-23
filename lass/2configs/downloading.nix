@@ -20,6 +20,7 @@ in {
       ];
       openssh.authorizedKeys.keys = [
         config.krebs.users.lass.pubkey
+        config.krebs.users.lass-uriel.pubkey
       ];
     };
 
