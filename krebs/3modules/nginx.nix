@@ -117,28 +117,24 @@ let
     }
   '';
 
-  to-server = { server-names, listen, locations, extraConfig, ssl, ... }:
-    let
-      _extraConfig = if ssl.enable then
-        extraConfig + ''
-          ssl_certificate ${ssl.certificate};
-          ssl_certificate_key ${ssl.certificate_key};
-          ${optionalString ssl.prefer_server_ciphers "ssl_prefer_server_ciphers On;"}
-          ssl_ciphers ${ssl.ciphers};
-          ssl_protocols ${toString ssl.protocols};
-        ''
-      else
-        extraConfig
-      ;
-
-    in ''
-      server {
-        ${concatMapStringsSep "\n" (x: "listen ${x};") (listen ++ optional ssl.enable "443 ssl")}
-        server_name ${toString server-names};
-        ${indent _extraConfig}
-        ${indent (concatMapStrings to-location locations)}
-      }
-    '';
+  to-server = { server-names, listen, locations, extraConfig, ssl, ... }: ''
+    server {
+      server_name ${toString server-names};
+      ${concatMapStringsSep "\n" (x: indent "listen ${x};") listen}
+      ${optionalString ssl.enable (indent ''
+        listen 443 ssl;
+        ssl_certificate ${ssl.certificate};
+        ssl_certificate_key ${ssl.certificate_key};
+        ${optionalString ssl.prefer_server_ciphers ''
+          ssl_prefer_server_ciphers On;
+        ''}
+        ssl_ciphers ${ssl.ciphers};
+        ssl_protocols ${toString ssl.protocols};
+      '')}
+      ${indent extraConfig}
+      ${indent (concatMapStrings to-location locations)}
+    }
+  '';
 
 in
 out
