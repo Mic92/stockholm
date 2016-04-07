@@ -33,16 +33,19 @@ in {
 
     dmenu
     gitAndTools.qgit
-    mpv
     much
     pavucontrol
     powertop
     push
     slock
     sxiv
+    xorg.xbacklight
     xsel
     zathura
 
+    mpv
+    mpv-poll
+    yt-next
   #window manager stuff
     #haskellPackages.xmobar
     #haskellPackages.yeganesh

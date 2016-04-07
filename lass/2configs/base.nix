@@ -54,8 +54,8 @@ with config.krebs.lib;
         #secrets-common = "/home/lass/secrets/common";
         stockholm = "/home/lass/stockholm";
         nixpkgs = {
-          url = https://github.com/Lassulus/nixpkgs;
-          rev = "d0e3cca04edd5d1b3d61f188b4a5f61f35cdf1ce";
+          url = https://github.com/NixOS/nixpkgs;
+          rev = "40c586b7ce2c559374df435f46d673baf711c543";
           dev = "/home/lass/src/nixpkgs";
         };
       } // optionalAttrs config.krebs.build.host.secure {
@@ -68,8 +68,9 @@ with config.krebs.lib;
 
   users.mutableUsers = false;
 
+  services.timesyncd.enable = true;
+
   #why is this on in the first place?
-  services.ntp.enable = false;
   services.nscd.enable = false;
 
   boot.tmpOnTmpfs = true;
@@ -81,7 +82,7 @@ with config.krebs.lib;
   # multiple-definition-problem when defining environment.variables.EDITOR
   environment.extraInit = ''
     EDITOR=vim
-    PAGER=most
+    MANPAGER=most
   '';
 
   environment.systemPackages = with pkgs; [
@@ -104,6 +105,9 @@ with config.krebs.lib;
 
   #stuff for dl
     aria2
+
+  #neat utils
+    krebspaste
   ];
 
   programs.bash = {

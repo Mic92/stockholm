@@ -16,11 +16,13 @@
     enable = true;
     connectTo = [
       "prism"
-      "cloudkrebs"
-      "echelon"
       "pigstarter"
       "gum"
       "flap"
     ];
+  };
+
+  nixpkgs.config.packageOverrides = pkgs: {
+    tinc = pkgs.tinc_pre;
   };
 }

@@ -21,6 +21,7 @@ let
       ./go.nix
       ./iptables.nix
       ./lib.nix
+      ./newsbot-js.nix
       ./nginx.nix
       ./nixpkgs.nix
       ./on-failure.nix

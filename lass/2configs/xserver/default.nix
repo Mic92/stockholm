@@ -52,6 +52,7 @@ let
       wantedBy = [ "multi-user.target" ];
       requires = [ "xserver.service" ];
       environment = xmonad-environment;
+      restartIfChanged = false;
       serviceConfig = {
         ExecStart = "${xmonad-start}/bin/xmonad";
         ExecStop = "${xmonad-stop}/bin/xmonad-stop";

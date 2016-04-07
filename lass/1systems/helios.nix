@@ -19,12 +19,8 @@ with builtins;
     #  };
     #}
     {
-      krebs.iptables = {
-        tables = {
-          filter.INPUT.rules = [
-            { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; precedence = 9001; }
-          ];
-        };
+      services.elasticsearch = {
+        enable = true;
       };
     }
   ];

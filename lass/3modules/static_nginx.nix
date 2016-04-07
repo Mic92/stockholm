@@ -42,10 +42,6 @@ let
               certificate_key = mkOption {
                 type = str;
               };
-              ciphers = mkOption {
-                type = str;
-                default = "AES128+EECDH:AES128+EDH";
-              };
             };
           });
           default = {};
@@ -74,16 +70,7 @@ let
           deny all;
         '')
       ];
-
-      listen = (if ssl.enable then
-          [ "80" "443 ssl" ]
-        else
-          "80"
-      );
-      extraConfig = (if ssl.enable then ''
-        ssl_certificate ${ssl.certificate};
-        ssl_certificate_key ${ssl.certificate_key};
-      '' else "");
+      inherit ssl;
 
     });
   };

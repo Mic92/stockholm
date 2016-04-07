@@ -19,6 +19,7 @@ with config.krebs.lib;
           addrs6 = ["42:0000:0000:0000:0000:0000:d15f:1233"];
           aliases = [
             "dishfire.retiolum"
+            "dishfire.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -50,8 +51,10 @@ with config.krebs.lib;
           addrs6 = ["42:941e:2816:35f4:5c5e:206b:3f0b:f763"];
           aliases = [
             "echelon.retiolum"
+            "echelon.r"
             "cgit.echelon.retiolum"
             "go.retiolum"
+            "go.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -83,6 +86,7 @@ with config.krebs.lib;
           addrs6 = ["42:0000:0000:0000:0000:0000:0000:15ab"];
           aliases = [
             "prism.retiolum"
+            "prism.r"
             "cgit.prism.retiolum"
           ];
           tinc.pubkey = ''
@@ -114,6 +118,7 @@ with config.krebs.lib;
           addrs6 = ["42:422a:194f:ff3b:e196:2f82:5cf5:bc00"];
           aliases = [
             "fastpoke.retiolum"
+            "fastpoke.r"
             "cgit.fastpoke.retiolum"
           ];
           tinc.pubkey = ''
@@ -128,6 +133,7 @@ with config.krebs.lib;
           '';
         };
       };
+      ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDRyEogeejET/UlqYYzrla3W2xG771oLK8uTFsVlVQFes4/c++Pp3KryJ/+avb/FQGlUb5YTO2SViZyAPTyw3Anv/8wxryB6ExDcfiiPL9D4Kgk559Gc1C+8vJu3Se3zB9huefllhdwsVkeFrInyWRarH3LNSbBq1TH2Rw/T4wyDVILu/QFxyqECdNzi6sufQ/92rEi3oDqlMbS8f45nbVm9CJpdn7ATwLW1PoBrrYkGll3P7ggOmR45rgldTVCLq3rIrIooiOaOhY1Leq+/sBeDa7fVeRFxFaLGYb9KFjQ4x2kL+3dDv0r726wKhrMQX75g/+Hqkv2di4/AGETI71b";
     };
     cloudkrebs = {
       cores = 1;
@@ -144,6 +150,7 @@ with config.krebs.lib;
           addrs6 = ["42:941e:2816:35f4:5c5e:206b:3f0b:f762"];
           aliases = [
             "cloudkrebs.retiolum"
+            "cloudkrebs.r"
             "cgit.cloudkrebs.retiolum"
           ];
           tinc.pubkey = ''
@@ -173,6 +180,7 @@ with config.krebs.lib;
           addrs6 = ["42:dc25:60cf:94ef:759b:d2b6:98a9:2e56"];
           aliases = [
             "uriel.retiolum"
+            "uriel.r"
             "cgit.uriel.retiolum"
           ];
           tinc.pubkey = ''
@@ -203,6 +211,7 @@ with config.krebs.lib;
           addrs6 = ["42:0:0:0:0:0:0:dea7"];
           aliases = [
             "mors.retiolum"
+            "mors.r"
             "cgit.mors.retiolum"
           ];
           tinc.pubkey = ''
@@ -229,6 +238,7 @@ with config.krebs.lib;
           addrs6 = ["42:0:0:0:0:0:0:7105"];
           aliases = [
             "helios.retiolum"
+            "helios.r"
             "cgit.helios.retiolum"
           ];
           tinc.pubkey = ''
@@ -253,6 +263,7 @@ with config.krebs.lib;
     lass = {
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAp83zynhIueJJsWlSEykVSBrrgBFKq38+vT8bRfa+csqyjZBl2SQFuCPo+Qbh49mwchpZRshBa9jQEIGqmXxv/PYdfBFQuOFgyUq9ZcTZUXqeynicg/SyOYFW86iiqYralIAkuGPfQ4howLPVyjTZtWeEeeEttom6p6LMY5Aumjz2em0FG0n9rRFY2fBzrdYAgk9C0N6ojCs/Gzknk9SGntA96MDqHJ1HXWFMfmwOLCnxtE5TY30MqSmkrJb7Fsejwjoqoe9Y/mCaR0LpG2cStC1+37GbHJNH0caCMaQCX8qdfgMVbWTVeFWtV6aWOaRgwLrPDYn4cHWQJqTfhtPrNQ== lass@mors";
       mail = "lass@mors.retiolum";
+      pgp.pubkeys.default = builtins.readFile ./default.pgp;
     };
     lass-uriel = {
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDExWuRcltGM2FqXO695nm6/QY3wU3r1bDTyCpMrLfUSym7TxcXDSmZSWcueexPXV6GENuUfjJPZswOdWqIo5u2AXw9t0aGvwEDmI6uJ7K5nzQOsXIneGMdYuoOaAzWI8pxZ4N+lIP1HsOYttIPDp8RwU6kyG+Ud8mnVHWSTO13C7xC9vePnDP6b+44nHS691Zj3X/Cq35Ls0ISC3EM17jreucdP62L3TKk2R4NCm3Sjqj+OYEv0LAqIpgqSw5FypTYQgNByxRcIcNDlri63Q1yVftUP1338UiUfxtraUu6cqa2CdsHQmtX5mTNWEluVWO3uUKTz9zla3rShC+d3qvr lass@uriel";

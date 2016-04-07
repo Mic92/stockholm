@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
+  inherit (config.krebs.lib) genid;
+
   mainUser = config.users.extraUsers.mainUser;
   createChromiumUser = name: extraGroups: packages:
     {
@@ -8,6 +10,7 @@ let
         inherit name;
         inherit extraGroups;
         home = "/home/${name}";
+        uid = genid name;
         useDefaultShell = true;
         createHome = true;
       };
@@ -28,6 +31,7 @@ let
         inherit name;
         inherit extraGroups;
         home = "/home/${name}";
+        uid = genid name;
         useDefaultShell = true;
         createHome = true;
       };
@@ -48,16 +52,17 @@ in {
 
   environment.systemPackages = [
     (pkgs.writeScriptBin "browser-select" ''
-      BROWSER=$(echo -e "ff\ncr\nfb\ngm\nflash" | dmenu)
+      BROWSER=$(echo -e "ff\ncr\nwk\nfb\ngm\nflash" | dmenu)
       $BROWSER $@
     '')
   ];
 
   imports = [
-    ( createFirefoxUser "ff" [ "audio" ] [ ] )
+    ( createFirefoxUser "ff" [ "audio" ] [ pkgs.firefox ] )
     ( createChromiumUser "cr" [ "audio" ] [ pkgs.chromium ] )
-    ( createChromiumUser "fb" [ ] [ pkgs.chromium ] )
-    ( createChromiumUser "gm" [ ] [ pkgs.chromium ] )
+    ( createChromiumUser "wk" [ "audio" ] [ pkgs.chromium ] )
+    ( createChromiumUser "fb" [ "audio" ] [ pkgs.chromium ] )
+    ( createChromiumUser "gm" [ "audio" ] [ pkgs.chromium ] )
     ( createChromiumUser "flash" [ "audio" ] [ pkgs.flash ] )
   ];
 

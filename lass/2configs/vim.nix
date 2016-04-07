@@ -1,13 +1,42 @@
 { config, pkgs, ... }:
 
 let
-  customPlugins.mustang2 = pkgs.vimUtils.buildVimPlugin {
-    name = "Mustang2";
-    src = pkgs.fetchFromGitHub {
-      owner = "croaker";
-      repo = "mustang-vim";
-      rev = "6533d7d21bf27cae94d9c2caa575f627f003dfd5";
-      sha256 = "0zlmcrr04j3dkiivrhqi90f618lmnnnpvbz1b9msfs78cmgw9w67";
+  customPlugins = {
+    mustang2 = pkgs.vimUtils.buildVimPlugin {
+      name = "Mustang2";
+      src = pkgs.fetchFromGitHub {
+        owner = "croaker";
+        repo = "mustang-vim";
+        rev = "6533d7d21bf27cae94d9c2caa575f627f003dfd5";
+        sha256 = "0zlmcrr04j3dkiivrhqi90f618lmnnnpvbz1b9msfs78cmgw9w67";
+      };
+    };
+    unimpaired = pkgs.vimUtils.buildVimPlugin {
+      name = "unimpaired-vim";
+      src = pkgs.fetchFromGitHub {
+        owner = "tpope";
+        repo = "vim-unimpaired";
+        rev = "11dc568dbfd7a56866a4354c737515769f08e9fe";
+        sha256 = "1an941j5ckas8l3vkfhchdzjwcray16229rhv3a1d4pbxifwshi8";
+      };
+    };
+    brogrammer = pkgs.vimUtils.buildVimPlugin {
+      name = "brogrammer";
+      src = pkgs.fetchFromGitHub {
+        owner = "marciomazza";
+        repo = "vim-brogrammer-theme";
+        rev = "3e412d8e8909d8d89eb5a4cbe955b5bc0833a3c3";
+        sha256 = "0am1qk8ls74z5ipgf9viacayq08y9i9vd7sxxiivwgsjh2ancbv6";
+      };
+    };
+    file-line = pkgs.vimUtils.buildVimPlugin {
+      name = "file-line";
+      src = pkgs.fetchFromGitHub {
+        owner = "bogado";
+        repo = "file-line";
+        rev = "f9ffa1879ad84ce4a386110446f395bc1795b72a";
+        sha256 = "173n47w9zd01rcyrrmm194v79xq7d1ggzr19n1lsxrqfgr2c1rvk";
+      };
     };
   };
 
@@ -23,7 +52,7 @@ in {
       syntax on
       " TODO autoload colorscheme file
       set background=dark
-      colorscheme mustang
+      colorscheme brogrammer
       filetype off
       filetype plugin indent on
 
@@ -56,7 +85,8 @@ in {
       vnoremap < <gv
       vnoremap > >gv
 
-      nmap <esc>q :buffer 
+      nmap <esc>q :buffer
+
 
       "Tabwidth
       set ts=2 sts=2 sw=2 et
@@ -105,11 +135,26 @@ in {
 
       "esc timeout
       set timeoutlen=1000 ttimeoutlen=0
+
+      "foldfunctions
+      inoremap <F9> <C-O>za
+      nnoremap <F9> za
+      onoremap <F9> <C-C>za
+      vnoremap <F9> zf
     '';
 
       vimrcConfig.vam.knownPlugins = pkgs.vimPlugins // customPlugins;
       vimrcConfig.vam.pluginDictionaries = [
-        { names = [ "Gundo" "commentary" "mustang2" ]; }
+        { names = [
+          "brogrammer"
+          "commentary"
+          "extradite"
+          "file-line"
+          "fugitive"
+          "Gundo"
+          "mustang2"
+          "unimpaired"
+        ]; }
         { names = [ "vim-addon-nix" ]; ft_regex = "^nix\$"; }
       ];
 

@@ -25,6 +25,7 @@
     ../2configs/teamviewer.nix
     ../2configs/libvirt.nix
     ../2configs/fetchWallpaper.nix
+    ../2configs/cbase.nix
     #../2configs/buildbot-standalone.nix
     {
       #risk of rain port
@@ -141,8 +142,14 @@
       services.elasticsearch = {
         enable = true;
         plugins = [
-          pkgs.elasticsearchPlugins.elasticsearch_kopf
+        #  pkgs.elasticsearchPlugins.elasticsearch_kopf
         ];
+      };
+    }
+    {
+      services.postgresql = {
+        enable = true;
+        package = pkgs.postgresql;
       };
     }
   ];
@@ -270,16 +277,17 @@
     emulateWheel = true;
   };
 
-  services.xserver = {
-    videoDriver = "intel";
-    vaapiDrivers = [ pkgs.vaapiIntel ];
-    deviceSection = ''
-      Option "AccelMethod" "sna"
-      BusID "PCI:0:2:0"
-    '';
-  };
+  #services.xserver = {
+  #  videoDriver = "intel";
+  #  vaapiDrivers = [ pkgs.vaapiIntel ];
+  #  deviceSection = ''
+  #    Option "AccelMethod" "sna"
+  #    BusID "PCI:0:2:0"
+  #  '';
+  #};
 
   environment.systemPackages = with pkgs; [
+    acronym
     cac-api
     sshpass
     get
@@ -328,7 +336,4 @@
     tapButtons = false;
     twoFingerScroll = true;
   };
-
-  #for google hangout
-  users.extraUsers.gm.extraGroups = [ "audio" "video" ];
 }

@@ -15,15 +15,6 @@ with builtins;
     ../2configs/bitlbee.nix
     ../2configs/weechat.nix
     ../2configs/skype.nix
-    {
-      users.extraUsers = {
-        root = {
-          openssh.authorizedKeys.keys = map readFile [
-            ../../krebs/Zpubkeys/uriel.ssh.pub
-          ];
-        };
-      };
-    }
   ];
 
   krebs.build.host = config.krebs.hosts.uriel;

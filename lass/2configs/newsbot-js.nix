@@ -187,13 +187,10 @@ let
     hackernews|https://news.ycombinator.com/rss|#news
   '';
 in {
-  imports = [
-    ../3modules/newsbot-js.nix
-  ];
   environment.systemPackages = [
     pkgs.newsbot-js
   ];
-  lass.newsbot-js = {
+  krebs.newsbot-js = {
     enable = true;
     ircServer = "localhost";
     feeds = newsfile;
