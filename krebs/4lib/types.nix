@@ -220,7 +220,7 @@ types // rec {
     check = let
       IPv4address = let d = "([1-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])"; in
         concatMapStringsSep "." (const d) (range 1 4);
-    in x: match IPv4address != null;
+    in x: match IPv4address x != null;
     merge = mergeOneOption;
   };
   addr6 = str; # TODO
