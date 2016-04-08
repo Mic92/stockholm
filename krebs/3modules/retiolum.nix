@@ -17,7 +17,7 @@ let
     };
 
     netname = mkOption {
-      type = types.hostname;
+      type = types.enum (attrNames cfg.host.nets);
       default = "retiolum";
       description = ''
         The tinc network name.
@@ -114,7 +114,7 @@ let
   imp = {
     environment.systemPackages = [ tinc iproute ];
 
-    systemd.services.retiolum = {
+    systemd.services.${cfg.netname} = {
       description = "Tinc daemon for Retiolum";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
@@ -125,12 +125,12 @@ let
         Restart = "always";
         # TODO we cannot chroot (-R) b/c we use symlinks to hosts
         #      and the private key.
-        ExecStartPre = pkgs.writeScript "retiolum-init" ''
+        ExecStartPre = pkgs.writeScript "${cfg.netname}-prestart" ''
           #! /bin/sh
           install -o ${user.name} -m 0400 ${cfg.privateKeyFile} /tmp/retiolum-rsa_key.priv
         '';
         ExecStart = "${tinc}/sbin/tincd -c ${confDir} -d 0 -U ${user.name} -D --pidfile=/var/run/tinc.${SyslogIdentifier}.pid";
-        SyslogIdentifier = "retiolum";
+        SyslogIdentifier = cfg.netname;
       };
     };
 
@@ -140,7 +140,7 @@ let
   };
 
   user = rec {
-    name = "retiolum";
+    name = cfg.netname;
     uid = genid name;
   };
 
