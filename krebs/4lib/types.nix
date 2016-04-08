@@ -223,7 +223,14 @@ types // rec {
     in x: match IPv4address x != null;
     merge = mergeOneOption;
   };
-  addr6 = str; # TODO
+  addr6 = mkOptionType {
+    name = "IPv6 address";
+    check = let
+      # TODO check IPv6 address harder
+      IPv6address = "[0-9a-f.:]+";
+    in x: match IPv6address x != null;
+    merge = mergeOneOption;
+  };
 
   pgp-pubkey = str;
 

@@ -548,7 +548,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.163";
-          ip6.addr = "42:b67b:5752:a730:5f28:d80d:6b37:5bda/128";
+          ip6.addr = "42:b67b:5752:a730:5f28:d80d:6b37:5bda";
           aliases = [
             "senderechner.r"
           ];
