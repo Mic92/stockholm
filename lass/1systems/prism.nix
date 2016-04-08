@@ -123,7 +123,7 @@ in {
     }
     {
       users.users.chat.openssh.authorizedKeys.keys = [
-        "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAFhFJUMTfPbv3SzqlT9S67Av/m/ctLfTd3mMhD4O9hZc+t+dZmaHWj3v1KujzMBiDp3Yfo2YdVVZLTwTluHD8yNoQH418Vm01nrYHwOsc5J0br3mb0URZSstPiz6/6Fc+PNCDfQ2skUAWUidWiH+JolROFQ4y2lfpLOw+wsK2jj+Gqx6w== JuiceSSH"
+        "ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBBQjn/3n283RZkBs2CFqbpukyQ3zkLIjewRpKttPa5d4PUiT7/vOlutWH5EP4BxXQSoeZStx8D2alGjxfK+nfDvRJGGofpm23cN4j4i24Fcam1y1H7wqRXO1qbz5AB3qPg== JuiceSSH"
         config.krebs.users.lass-uriel.pubkey
       ];
     }
