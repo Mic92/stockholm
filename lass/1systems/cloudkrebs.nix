@@ -11,7 +11,6 @@ in {
     ../2configs/os-templates/CAC-CentOS-7-64bit.nix
     ../2configs/base.nix
     ../2configs/retiolum.nix
-    ../2configs/fastpoke-pages.nix
     ../2configs/git.nix
     ../2configs/realwallpaper.nix
     {
