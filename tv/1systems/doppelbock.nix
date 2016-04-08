@@ -13,8 +13,8 @@ with config.krebs.lib;
   networking = {
     interfaces.enp2s1.ip4 = singleton {
       address = let
-        addr4 = "45.62.237.203";
-      in assert config.krebs.build.host.nets.internet.addrs4 == [addr4]; addr4;
+        addr = "45.62.237.203";
+      in assert config.krebs.build.host.nets.internet.ip4.addr == addr; addr;
       prefixLength = 24;
     };
     defaultGateway = "45.62.237.1";

@@ -56,9 +56,9 @@ in toFile "charybdis.conf" ''
     /* On multi-homed hosts you may need the following. These define
      * the addresses we connect from to other servers. */
     /* for IPv4 */
-    vhost = ${concatMapStringsSep ", " toJSON config.krebs.build.host.nets.retiolum.addrs4};
+    vhost = ${toJSON config.krebs.build.host.nets.retiolum.ip4.addr};
     /* for IPv6 */
-    vhost6 = ${concatMapStringsSep ", " toJSON config.krebs.build.host.nets.retiolum.addrs6};
+    vhost6 = ${toJSON config.krebs.build.host.nets.retiolum.ip6.addr};
 
     /* ssl_private_key: our ssl private key */
     ssl_private_key = ${toJSON cfg.ssl_private_key.path};
@@ -160,10 +160,7 @@ in toFile "charybdis.conf" ''
     /* If you want to listen on a specific IP only, specify host.
      * host definitions apply only to the following port line.
      */
-    # XXX This is stupid because only one host is allowed[?]
-    #host = ''${concatMapStringsSep ", " toJSON (
-    #  config.krebs.build.host.nets.retiolum.addrs
-    #)};
+    #host = ${toJSON config.krebs.build.host.nets.retiolum.ip4.addr};
     port = ${toString cfg.port};
     sslport = ${toString cfg.sslport};
   };

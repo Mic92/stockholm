@@ -63,27 +63,55 @@ types // rec {
 
   net = submodule ({ config, ... }: {
     options = {
+      name = mkOption {
+        type = label;
+        default = config._module.args.name;
+      };
       via = mkOption {
         type = nullOr net;
         default = null;
       };
       addrs = mkOption {
         type = listOf addr;
-        default = config.addrs4 ++ config.addrs6;
-        # TODO only default addrs make sense
-      };
-      addrs4 = mkOption {
-        type = listOf addr4;
-        default = [];
-      };
-      addrs6 = mkOption {
-        type = listOf addr6;
-        default = [];
+        default =
+          optional (config.ip4 != null) config.ip4.addr ++
+          optional (config.ip6 != null) config.ip6.addr;
+        readOnly = true;
       };
       aliases = mkOption {
         # TODO nonEmptyListOf hostname
         type = listOf hostname;
         default = [];
+      };
+      ip4 = mkOption {
+        type = nullOr (submodule {
+          options = {
+            addr = mkOption {
+              type = addr4;
+            };
+            prefix = mkOption ({
+              type = str; # TODO routing prefix (CIDR)
+            } // optionalAttrs (config.name == "retiolum") {
+              default = "10.243.0.0/16";
+            });
+          };
+        });
+        default = null;
+      };
+      ip6 = mkOption {
+        type = nullOr (submodule {
+          options = {
+            addr = mkOption {
+              type = addr6;
+            };
+            prefix = mkOption ({
+              type = str; # TODO routing prefix (CIDR)
+            } // optionalAttrs (config.name == "retiolum") {
+              default = "42::/16";
+            });
+          };
+        });
+        default = null;
       };
       ssh = mkOption {
         type = submodule {

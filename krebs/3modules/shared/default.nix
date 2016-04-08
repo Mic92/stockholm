@@ -12,8 +12,8 @@ let
     cores = 1;
     nets = {
       retiolum = {
-        addrs4 = ["10.243.111.111"];
-        addrs6 = ["42:0:0:0:0:0:0:7357"];
+        ip4.addr = "10.243.111.111";
+        ip6.addr = "42:0:0:0:0:0:0:7357";
         aliases = [
           "test.r"
           "test.retiolum"
@@ -36,7 +36,7 @@ in {
     wolf = {
       nets = {
         shack = {
-          addrs4 = [ "10.42.2.150" ];
+          ip4.addr =  "10.42.2.150" ;
           aliases = [
             "wolf.shack"
             "graphite.shack"
@@ -45,8 +45,8 @@ in {
           ];
         };
         retiolum = {
-          addrs4 = ["10.243.77.1"];
-          addrs6 = ["42:0:0:0:0:0:77:1"];
+          ip4.addr = "10.243.77.1";
+          ip6.addr = "42:0:0:0:0:0:77:1";
           aliases = [
             "wolf.retiolum"
             "cgit.wolf.retiolum"

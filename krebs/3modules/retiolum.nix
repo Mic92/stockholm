@@ -11,26 +11,13 @@ let
   api = {
     enable = mkEnableOption "krebs.retiolum";
 
-    name = mkOption {
-      type = types.str;
-      default = config.networking.hostName;
-      # Description stolen from tinc.conf(5).
-      description = ''
-        This is the name which identifies this tinc daemon.  It must
-        be unique for the virtual private network this daemon will
-        connect to.  The Name may only consist of alphanumeric and
-        underscore characters.  If Name starts with a $, then the
-        contents of the environment variable that follows will be
-        used.  In that case, invalid characters will be converted to
-        underscores.  If Name is $HOST, but no such environment
-        variable exist, the hostname will be read using the
-        gethostnname() system call This is the name which identifies
-        the this tinc daemon.
-      '';
+    host = mkOption {
+      type = types.host;
+      default = config.krebs.build.host;
     };
 
     netname = mkOption {
-      type = types.str;
+      type = types.hostname;
       default = "retiolum";
       description = ''
         The tinc network name.
@@ -157,46 +144,34 @@ let
     uid = genid name;
   };
 
+  net = cfg.host.nets.${cfg.netname};
+
   tinc = cfg.tincPackage;
 
   iproute = cfg.iproutePackage;
 
-  confDir = pkgs.runCommand "retiolum" {
-    # TODO text
-    executable = true;
-    preferLocalBuild = true;
-  } ''
-    set -euf
-
-    mkdir -p $out
-
-    ln -s ${cfg.hostsPackage} $out/hosts
-
-    cat > $out/tinc.conf <<EOF
-    Name = ${cfg.name}
-    Device = /dev/net/tun
-    Interface = ${cfg.netname}
-    ${concatStrings (map (c : "ConnectTo = " + c + "\n") cfg.connectTo)}
-    PrivateKeyFile = /tmp/retiolum-rsa_key.priv
-    ${cfg.extraConfig}
-    EOF
-
-    # source: krebscode/painload/retiolum/scripts/tinc_setup/tinc-up
-    cat > $out/tinc-up <<EOF
-    host=$out/hosts/${cfg.name}
-    ${iproute}/sbin/ip link set \$INTERFACE up
-
-    addr4=\$(sed -n 's|^ *Subnet *= *\(10[.][^ ]*\) *$|\1|p' \$host)
-    if [ -n "\$addr4" ];then
-        ${iproute}/sbin/ip -4 addr add \$addr4 dev \$INTERFACE
-        ${iproute}/sbin/ip -4 route add 10.243.0.0/16 dev \$INTERFACE
-    fi
-    addr6=\$(sed -n 's|^ *Subnet *= *\(42[:][^ ]*\) *$|\1|p' \$host)
-    ${iproute}/sbin/ip -6 addr add \$addr6 dev \$INTERFACE
-    ${iproute}/sbin/ip -6 route add 42::/16 dev \$INTERFACE
-    EOF
-
-    chmod +x $out/tinc-up
-  '';
+  confDir = let
+    namePathPair = name: path: { inherit name path; };
+  in pkgs.linkFarm "${cfg.netname}-etc-tinc" (mapAttrsToList namePathPair {
+    "hosts" = cfg.hostsPackage;
+    "tinc.conf" = pkgs.writeText "${cfg.netname}-tinc.conf" ''
+      Name = ${cfg.host.name}
+      Interface = ${cfg.netname}
+      ${concatStrings (map (c: "ConnectTo = ${c}\n") cfg.connectTo)}
+      PrivateKeyFile = /tmp/retiolum-rsa_key.priv
+      ${cfg.extraConfig}
+    '';
+    "tinc-up" = pkgs.writeScript "${cfg.netname}-tinc-up" ''
+      ${iproute}/sbin/ip link set ${cfg.netname} up
+      ${optionalString (net.ip4 != null) ''
+        ${iproute}/sbin/ip -4 addr add ${net.ip4.addr} dev ${cfg.netname}
+        ${iproute}/sbin/ip -4 route add ${net.ip4.prefix} dev ${cfg.netname}
+      ''}
+      ${optionalString (net.ip6 != null) ''
+        ${iproute}/sbin/ip -6 addr add ${net.ip6.addr} dev ${cfg.netname}
+        ${iproute}/sbin/ip -6 route add ${net.ip6.prefix} dev ${cfg.netname}
+      ''}
+    '';
+  });
 
 in out
