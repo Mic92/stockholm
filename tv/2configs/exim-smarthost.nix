@@ -13,7 +13,7 @@ with config.krebs.lib;
       "shackspace.de"
       "viljetic.de"
     ];
-    relay_from_hosts = concatMap (host: host.nets.retiolum.ip4.addr) [
+    relay_from_hosts = map (host: host.nets.retiolum.ip4.addr) [
       config.krebs.hosts.nomic
       config.krebs.hosts.wu
       config.krebs.hosts.xu
