@@ -63,27 +63,55 @@ types // rec {
 
   net = submodule ({ config, ... }: {
     options = {
+      name = mkOption {
+        type = label;
+        default = config._module.args.name;
+      };
       via = mkOption {
         type = nullOr net;
         default = null;
       };
       addrs = mkOption {
         type = listOf addr;
-        default = config.addrs4 ++ config.addrs6;
-        # TODO only default addrs make sense
-      };
-      addrs4 = mkOption {
-        type = listOf addr4;
-        default = [];
-      };
-      addrs6 = mkOption {
-        type = listOf addr6;
-        default = [];
+        default =
+          optional (config.ip4 != null) config.ip4.addr ++
+          optional (config.ip6 != null) config.ip6.addr;
+        readOnly = true;
       };
       aliases = mkOption {
         # TODO nonEmptyListOf hostname
         type = listOf hostname;
         default = [];
+      };
+      ip4 = mkOption {
+        type = nullOr (submodule {
+          options = {
+            addr = mkOption {
+              type = addr4;
+            };
+            prefix = mkOption ({
+              type = str; # TODO routing prefix (CIDR)
+            } // optionalAttrs (config.name == "retiolum") {
+              default = "10.243.0.0/16";
+            });
+          };
+        });
+        default = null;
+      };
+      ip6 = mkOption {
+        type = nullOr (submodule {
+          options = {
+            addr = mkOption {
+              type = addr6;
+            };
+            prefix = mkOption ({
+              type = str; # TODO routing prefix (CIDR)
+            } // optionalAttrs (config.name == "retiolum") {
+              default = "42::/16";
+            });
+          };
+        });
+        default = null;
       };
       ssh = mkOption {
         type = submodule {
@@ -186,10 +214,23 @@ types // rec {
     };
   });
 
-  # TODO
-  addr = str;
-  addr4 = str;
-  addr6 = str;
+  addr = either addr4 addr6;
+  addr4 = mkOptionType {
+    name = "IPv4 address";
+    check = let
+      IPv4address = let d = "([1-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])"; in
+        concatMapStringsSep "." (const d) (range 1 4);
+    in x: match IPv4address x != null;
+    merge = mergeOneOption;
+  };
+  addr6 = mkOptionType {
+    name = "IPv6 address";
+    check = let
+      # TODO check IPv6 address harder
+      IPv6address = "[0-9a-f.:]+";
+    in x: match IPv6address x != null;
+    merge = mergeOneOption;
+  };
 
   pgp-pubkey = str;
 

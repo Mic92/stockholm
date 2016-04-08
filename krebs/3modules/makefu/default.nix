@@ -8,8 +8,8 @@ with config.krebs.lib;
       cores = 1;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.0.210"];
-          addrs6 = ["42:f9f1:0000:0000:0000:0000:0000:0001"];
+          ip4.addr = "10.243.0.210";
+          ip6.addr = "42:f9f1:0000:0000:0000:0000:0000:0001";
           aliases = [
             "pnp.retiolum"
             "cgit.pnp.retiolum"
@@ -31,8 +31,8 @@ with config.krebs.lib;
       cores = 4;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.0.84"];
-          addrs6 = ["42:ff6b:5f0b:460d:2cee:4d05:73f7:5566"];
+          ip4.addr = "10.243.0.84";
+          ip6.addr = "42:ff6b:5f0b:460d:2cee:4d05:73f7:5566";
           aliases = [
             "darth.retiolum"
             "darth.r"
@@ -54,8 +54,8 @@ with config.krebs.lib;
       cores = 1;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.0.212"];
-          addrs6 = ["42:f9f1:0000:0000:0000:0000:0000:0002"];
+          ip4.addr = "10.243.0.212";
+          ip6.addr = "42:f9f1:0000:0000:0000:0000:0000:0002";
           aliases = [
             "tsp.retiolum"
           ];
@@ -81,8 +81,8 @@ with config.krebs.lib;
       cores = 2;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.0.91"];
-          addrs6 = ["42:0b2c:d90e:e717:03dc:9ac1:7c30:a4db"];
+          ip4.addr = "10.243.0.91";
+          ip6.addr = "42:0b2c:d90e:e717:03dc:9ac1:7c30:a4db";
           aliases = [
             "pornocauster.retiolum"
             "pornocauster.r"
@@ -108,8 +108,8 @@ with config.krebs.lib;
       cores = 2;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.1.91"];
-          addrs6 = ["42:0b2c:d90e:e717:03dd:9ac1:0000:a400"];
+          ip4.addr = "10.243.1.91";
+          ip6.addr = "42:0b2c:d90e:e717:03dd:9ac1:0000:a400";
           aliases = [
             "vbob.retiolum"
           ];
@@ -135,22 +135,22 @@ with config.krebs.lib;
       extraZones = {
         "krebsco.de" = ''
           euer              IN MX 1   aspmx.l.google.com.
-          pigstarter        IN A      ${head nets.internet.addrs4}
-          gold              IN A      ${head nets.internet.addrs4}
-          boot              IN A      ${head nets.internet.addrs4}
+          pigstarter        IN A      ${nets.internet.ip4.addr}
+          gold              IN A      ${nets.internet.ip4.addr}
+          boot              IN A      ${nets.internet.ip4.addr}
         '';
       };
       nets = {
         internet = {
-          addrs4 = ["192.40.56.122"];
-          addrs6 = ["2604:2880::841f:72c"];
+          ip4.addr = "192.40.56.122";
+          ip6.addr = "2604:2880::841f:72c";
           aliases = [
             "pigstarter.internet"
           ];
         };
         retiolum = {
-          addrs4 = ["10.243.0.153"];
-          addrs6 = ["42:9143:b4c0:f981:6030:7aa2:8bc5:4110"];
+          ip4.addr = "10.243.0.153";
+          ip6.addr = "42:9143:b4c0:f981:6030:7aa2:8bc5:4110";
           aliases = [
             "pigstarter.retiolum"
           ];
@@ -171,18 +171,18 @@ with config.krebs.lib;
       cores = 1;
       extraZones = {
         "krebsco.de" = ''
-          euer           IN A  ${head nets.internet.addrs4}
-          wiki.euer      IN A  ${head nets.internet.addrs4}
-          wry            IN A  ${head nets.internet.addrs4}
+          euer           IN A  ${nets.internet.ip4.addr}
+          wiki.euer      IN A  ${nets.internet.ip4.addr}
+          wry            IN A  ${nets.internet.ip4.addr}
           io             IN NS wry.krebsco.de.
-          graphs         IN A  ${head nets.internet.addrs4}
-          paste       60 IN A  ${head nets.internet.addrs4}
-          tinc           IN A  ${head nets.internet.addrs4}
+          graphs         IN A  ${nets.internet.ip4.addr}
+          paste       60 IN A  ${nets.internet.ip4.addr}
+          tinc           IN A  ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
         internet = {
-          addrs4 = ["104.233.87.86"];
+          ip4.addr = "104.233.87.86";
           aliases = [
             "wry.internet"
             "paste.internet"
@@ -190,8 +190,8 @@ with config.krebs.lib;
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.29.169"];
-          addrs6 = ["42:6e1e:cc8a:7cef:827:f938:8c64:baad"];
+          ip4.addr = "10.243.29.169";
+          ip6.addr = "42:6e1e:cc8a:7cef:827:f938:8c64:baad";
           aliases = [
             "graphs.wry.retiolum"
             "graphs.retiolum"
@@ -228,8 +228,8 @@ with config.krebs.lib;
 
       nets = {
         retiolum = {
-          addrs4 = ["10.243.153.102"];
-          addrs6 = ["42:4b0b:d990:55ba:8da8:630f:dc0e:aae0"];
+          ip4.addr = "10.243.153.102";
+          ip6.addr = "42:4b0b:d990:55ba:8da8:630f:dc0e:aae0";
           aliases = [
             "filepimp.retiolum"
           ];
@@ -252,8 +252,8 @@ with config.krebs.lib;
 
       nets = {
         retiolum = {
-          addrs4 = ["10.243.0.89"];
-          addrs6 = ["42:f9f0::10"];
+          ip4.addr = "10.243.0.89";
+          ip6.addr = "42:f9f0::10";
           aliases = [
             "omo.retiolum"
             "omo.r"
@@ -277,8 +277,8 @@ with config.krebs.lib;
       cores = 1;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.214.15"];
-          addrs6 = ["42:5a02:2c30:c1b1:3f2e:7c19:2496:a732"];
+          ip4.addr = "10.243.214.15";
+          ip6.addr = "42:5a02:2c30:c1b1:3f2e:7c19:2496:a732";
           aliases = [
               "wbob.retiolum"
           ];
@@ -301,24 +301,24 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
 
       extraZones = {
         "krebsco.de" = ''
-          share.euer        IN A      ${head nets.internet.addrs4}
-          mattermost.euer   IN A      ${head nets.internet.addrs4}
-          git.euer          IN A      ${head nets.internet.addrs4}
-          gum               IN A      ${head nets.internet.addrs4}
-          cgit.euer         IN A      ${head nets.internet.addrs4}
+          share.euer        IN A      ${nets.internet.ip4.addr}
+          mattermost.euer   IN A      ${nets.internet.ip4.addr}
+          git.euer          IN A      ${nets.internet.ip4.addr}
+          gum               IN A      ${nets.internet.ip4.addr}
+          cgit.euer         IN A      ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
         internet = {
-          addrs4 = ["195.154.108.70"];
+          ip4.addr = "195.154.108.70";
           aliases = [
             "gum.internet"
           ];
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.0.211"];
-          addrs6 = ["42:f9f0:0000:0000:0000:0000:0000:70d2"];
+          ip4.addr = "10.243.0.211";
+          ip6.addr = "42:f9f0:0000:0000:0000:0000:0000:70d2";
           aliases = [
             "gum.r"
             "gum.retiolum"
@@ -346,20 +346,20 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       cores = 1;
       extraZones = {
         "krebsco.de" = ''
-          mediengewitter    IN A      ${head nets.internet.addrs4}
-          flap              IN A      ${head nets.internet.addrs4}
+          mediengewitter    IN A      ${nets.internet.ip4.addr}
+          flap              IN A      ${nets.internet.ip4.addr}
         '';
       };
       nets = {
         internet = {
-          addrs4 = ["162.248.11.162"];
+          ip4.addr = "162.248.11.162";
           aliases = [
             "flap.internet"
           ];
         };
         retiolum = {
-          addrs4 = ["10.243.211.172"];
-          addrs6 = ["42:472a:3d01:bbe4:4425:567e:592b:065d"];
+          ip4.addr = "10.243.211.172";
+          ip6.addr = "42:472a:3d01:bbe4:4425:567e:592b:065d";
           aliases = [
             "flap.retiolum"
             "flap.r"
@@ -382,8 +382,8 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       cores = 1;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.231.219"];
-          addrs6 = ["42:f7bf:178d:4b68:1c1b:42e8:6b27:6a72"];
+          ip4.addr = "10.243.231.219";
+          ip6.addr = "42:f7bf:178d:4b68:1c1b:42e8:6b27:6a72";
           aliases = [
             "nukular.r"
           ];
@@ -405,8 +405,8 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       cores = 1;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.124.21"];
-          addrs6 = ["42:9898:a8be:ce56:0ee3:b99c:42c5:109e"];
+          ip4.addr = "10.243.124.21";
+          ip6.addr = "42:9898:a8be:ce56:0ee3:b99c:42c5:109e";
           aliases = [
             "heidi.r"
           ];
@@ -428,7 +428,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       cores = 1;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.69.184"];
+          ip4.addr = "10.243.69.184";
           aliases = [
             "soundflower.r"
           ];
@@ -450,7 +450,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       cores = 1;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.120.19"];
+          ip4.addr = "10.243.120.19";
           aliases = [
             "falk.r"
           ];
@@ -472,8 +472,8 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       cores = 4;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.189.130"];
-          addrs6 = ["42:c64e:011f:9755:31e1:c3e6:73c0:af2d"];
+          ip4.addr = "10.243.189.130";
+          ip6.addr = "42:c64e:011f:9755:31e1:c3e6:73c0:af2d";
           aliases = [
             "filebitch.r"
           ];
@@ -495,8 +495,8 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       cores = 1;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.26.29"];
-          addrs6 = ["42:927a:3d59:1cb3:29d6:1a08:78d3:812e"];
+          ip4.addr = "10.243.26.29";
+          ip6.addr = "42:927a:3d59:1cb3:29d6:1a08:78d3:812e";
           aliases = [
             "excobridge.r"
           ];
@@ -518,14 +518,14 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       cores = 1;
       nets = {
         internet = {
-          addrs4 = ["148.251.47.69"];
+          ip4.addr = "148.251.47.69";
           aliases = [
             "wooki.internet"
           ];
         };
         retiolum = {
-          addrs4 = ["10.243.57.85"];
-          addrs6 = ["42:2f06:b899:a3b5:1dcf:51a4:a02b:8731"];
+          ip4.addr = "10.243.57.85";
+          ip6.addr = "42:2f06:b899:a3b5:1dcf:51a4:a02b:8731";
           aliases = [
             "wooki.r"
           ];
@@ -543,18 +543,41 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       };
     };
 
+    senderechner = rec {
+      cores = 2;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.0.163";
+          ip6.addr = "42:b67b:5752:a730:5f28:d80d:6b37:5bda";
+          aliases = [
+            "senderechner.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA0zCc5aLVRO6NuxUoR6BVzq2PQ/U5AEjYTdGkQufRot42N29MhxY7
+            lJBfPfkw/yg2FOzmAzTi62QyrLWSaF1x54rKu+JeNSsOAX+BorGhM67N45DGvJ0X
+            rakIL0BrVoV7Kxssq3DscGVbjbNS5B5c+IvTp97me/MpuDrfYqUyZk5mS9nB0oDL
+            inao/A5AtOO4sdqN5BNE9/KisN/9dD359Gz2ZGGq6Ki7o4HBdBj5vi0f4fTofZxT
+            BJH4BxbWaHwXMC0HYGlhQS0Y7tKYT6h3ChxoLDuW2Ox2IF5AQ/O4t4PIBDp1XaAO
+            OK8SsmsiD6ZZm6q/nLWBkYH08geYfq0BhQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+
     muhbaasu = rec {
       cores = 1;
       nets = {
         internet = {
-          addrs4 = ["217.160.206.154"];
+          ip4.addr = "217.160.206.154";
           aliases = [
             "muhbaasu.internet"
           ];
         };
         retiolum = {
-          addrs4 = ["10.243.139.184"];
-          addrs6 = ["42:d568:6106:ba30:753b:0f2a:8225:b1fb"];
+          ip4.addr = "10.243.139.184";
+          ip6.addr = "42:d568:6106:ba30:753b:0f2a:8225:b1fb";
           aliases = [
             "muhbaasu.r"
           ];

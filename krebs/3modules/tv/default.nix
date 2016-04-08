@@ -13,15 +13,15 @@ with config.krebs.lib;
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
         "krebsco.de" = ''
           krebsco.de. 60 IN MX 5 mx23
-          mx23        60 IN A ${elemAt nets.internet.addrs4 0}
-          cd          60 IN A ${elemAt nets.internet.addrs4 0}
-          cgit        60 IN A ${elemAt nets.internet.addrs4 0}
-          cgit.cd     60 IN A ${elemAt nets.internet.addrs4 0}
+          mx23        60 IN A ${nets.internet.ip4.addr}
+          cd          60 IN A ${nets.internet.ip4.addr}
+          cgit        60 IN A ${nets.internet.ip4.addr}
+          cgit.cd     60 IN A ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
         internet = {
-          addrs4 = ["162.219.7.216"];
+          ip4.addr = "162.219.7.216";
           aliases = [
             "cd.i"
             "cd.internet"
@@ -34,8 +34,8 @@ with config.krebs.lib;
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.113.222"];
-          addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af3"];
+          ip4.addr = "10.243.113.222";
+          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af3";
           aliases = [
             "cd.r"
             "cd.retiolum"
@@ -62,11 +62,46 @@ with config.krebs.lib;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOd/HqZIO9Trn3eycl23GZAz21HQCISaVNfNyaLSQvJ6";
     };
+    doppelbock = rec {
+      cores = 2;
+      nets = rec {
+        internet = {
+          ip4.addr = "45.62.237.203";
+          aliases = [
+            "doppelbock.i"
+            "doppelbock.internet"
+          ];
+        };
+        retiolum = {
+          via = internet;
+          ip4.addr = "10.243.113.224";
+          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af5";
+          aliases = [
+            "doppelbock.r"
+            "doppelbock.retiolum"
+            "cgit.doppelbock.r"
+            "cgit.doppelbock.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAq/luvzH4CQX5qRuucUqR3aLwXtzsRmBOdd2hvrPG1z8ML2kKV+IG
+            0aBfyJmQ8csfeGhOj0y0LEBv4bkEjEtYObs+LJfdWZC5e39eAVUE0z8QbSPOx4di
+            /7Bo+9sFRELP1kYb47eLR8quiIkslMWQMbTLM5RHoXJ5jE8fQSitfp4WUZYiSPDF
+            d5F7RU/ZQfTZuh8gv7RmSn/6N6bXAQWrueK6ZqMuImIjBrmYyXUWxgsDnpeHxR5j
+            j/0F2Bda5lyp+Qzv24PREdPT8FazUfmIQwZTTArXHxiqLq+SEVT21E4WEf2sJRan
+            dti9yVUW3eiqpu8b9BRpvxOB3YdkyqlrGwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_rsa>;
+      ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLhrVTEmbtuTsgRTHHxsLrq7ai1Yt7+oKFevr1gzktCQqHuyucXzxn60F00kuNDkNiKIF5fHmWy6ajU+6PKD3TfiFMagT9ah0x0RSB0+0tevxnlOp6VdHhrdM5YrBduWMiELmOiI1lvYhRqKd/ZE7b2mra6KYe5VtTi9UX3wQp8qN+bI01KCxv0p6ciUgEO8fnwLKDBUuFJ2UfE7Ais9XrXFIBFXB+MKcpLnIXvrV6dSXdUEiaswg8wo0Q0Y3tMaQ0dNJdH2yp3FVn1aiX3E/vVnffmDKMWYWqn78klujdEdmLm8/8NkXnc/jpgu8ZlSpQHECO2ZUJzd35yRnVKALv";
+    };
     mkdir = rec {
       cores = 1;
       nets = rec {
         internet = {
-          addrs4 = ["104.167.114.142"];
+          ip4.addr = "104.167.114.142";
           aliases = [
             "mkdir.i"
             "mkdir.internet"
@@ -74,8 +109,8 @@ with config.krebs.lib;
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.113.223"];
-          addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af4"];
+          ip4.addr = "10.243.113.223";
+          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af4";
           aliases = [
             "mkdir.r"
             "mkdir.retiolum"
@@ -101,12 +136,12 @@ with config.krebs.lib;
       extraZones = {
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
         "krebsco.de" = ''
-          ire 60 IN A ${elemAt nets.internet.addrs4 0}
+          ire 60 IN A ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
         internet = {
-          addrs4 = ["198.147.22.115"];
+          ip4.addr = "198.147.22.115";
           aliases = [
             "ire.i"
             "ire.internet"
@@ -116,8 +151,8 @@ with config.krebs.lib;
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.231.66"];
-          addrs6 = ["42:b912:0f42:a82d:0d27:8610:e89b:490c"];
+          ip4.addr = "10.243.231.66";
+          ip6.addr = "42:b912:0f42:a82d:0d27:8610:e89b:490c";
           aliases = [
             "ire.r"
             "ire.retiolum"
@@ -140,7 +175,7 @@ with config.krebs.lib;
     kaepsele = {
       nets = {
         internet = {
-          addrs4 = ["92.222.10.169"];
+          ip4.addr = "92.222.10.169";
           aliases = [
             "kaepsele.i"
             "kaepsele.internet"
@@ -148,8 +183,8 @@ with config.krebs.lib;
           ];
         };
         retiolum = {
-          addrs4 = ["10.243.166.2"];
-          addrs6 = ["42:0b9d:6660:d07c:2bb7:4e91:1a01:2e7d"];
+          ip4.addr = "10.243.166.2";
+          ip6.addr = "42:0b9d:6660:d07c:2bb7:4e91:1a01:2e7d";
           aliases = [
             "kaepsele.r"
             "kaepsele.retiolum"
@@ -169,10 +204,11 @@ with config.krebs.lib;
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDA9cDUg7qm37uOhQpdKSgpnJPWao9VZR6LFNphVcJQ++gYvVgWu6WMhigiy7DcGQSStUlXkZc4HZBBugwwNWcf7aAF6ijBuG5rVwb9AFQmSexpTOfWap33iA5f+LXYFHe7iv4Pt9TYO1ga1Ryl4EGKb7ol2h5vbKC+JiGaDejB0WqhBAyrTg4tTWO8k2JT11CrlTjNVctqV0IVAMtTc/hcJcNusnoGD4ic0QGSzEMYxcIGRNvIgWmxhI6GHeaHxXWH5fv4b0OpLlDfVUsIvEo9KVozoLGm/wgLBG/tQXKaF9qVMVgOYi9sX/hDLwhRrcD2cyAlq9djo2pMARYiriXF";
     };
     mu = {
+      cores = 2;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.20.1"];
-          addrs6 = ["42:0:0:0:0:0:0:2001"];
+          ip4.addr = "10.243.20.1";
+          ip6.addr = "42:0:0:0:0:0:0:2001";
           aliases = [
             "mu.r"
             "mu.retiolum"
@@ -189,18 +225,20 @@ with config.krebs.lib;
           '';
         };
       };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1vJsAddvxMA84u9iJEOrIkKn7pQiemMbfW5cfK1d7g root@mu";
     };
     nomic = {
       cores = 2;
       nets = rec {
         gg23 = {
-          addrs4 = ["10.23.1.110"];
+          ip4.addr = "10.23.1.110";
           aliases = ["nomic.gg23"];
           ssh.port = 11423;
         };
         retiolum = {
-          addrs4 = ["10.243.0.110"];
-          addrs6 = ["42:02d5:733f:d6da:c0f5:2bb7:2b18:09ec"];
+          ip4.addr = "10.243.0.110";
+          ip6.addr = "42:02d5:733f:d6da:c0f5:2bb7:2b18:09ec";
           aliases = [
             "nomic.r"
             "nomic.retiolum"
@@ -226,7 +264,7 @@ with config.krebs.lib;
     ok = {
       nets = {
         gg23 = {
-          addrs4 = ["10.23.1.1"];
+          ip4.addr = "10.23.1.1";
           aliases = ["ok.gg23"];
         };
       };
@@ -235,7 +273,7 @@ with config.krebs.lib;
       cores = 1;
       nets = rec {
         internet = {
-          addrs4 = ["167.88.34.182"];
+          ip4.addr = "167.88.34.182";
           aliases = [
             "rmdir.i"
             "rmdir.internet"
@@ -243,8 +281,8 @@ with config.krebs.lib;
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.113.224"];
-          addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af5"];
+          ip4.addr = "10.243.113.224";
+          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af5";
           aliases = [
             "rmdir.r"
             "rmdir.retiolum"
@@ -269,7 +307,7 @@ with config.krebs.lib;
     schnabeldrucker = {
       nets = {
         gg23 = {
-          addrs4 = ["10.23.1.21"];
+          ip4.addr = "10.23.1.21";
           aliases = ["schnabeldrucker.gg23"];
         };
       };
@@ -277,7 +315,7 @@ with config.krebs.lib;
     schnabelscanner = {
       nets = {
         gg23 = {
-          addrs4 = ["10.23.1.22"];
+          ip4.addr = "10.23.1.22";
           aliases = ["schnabelscanner.gg23"];
         };
       };
@@ -286,7 +324,7 @@ with config.krebs.lib;
       cores = 4;
       nets = {
         gg23 = {
-          addrs4 = ["10.23.1.37"];
+          ip4.addr = "10.23.1.37";
           aliases = [
             "wu.gg23"
             "cache.wu.gg23"
@@ -294,8 +332,8 @@ with config.krebs.lib;
           ssh.port = 11423;
         };
         retiolum = {
-          addrs4 = ["10.243.13.37"];
-          addrs6 = ["42:0:0:0:0:0:0:1337"];
+          ip4.addr = "10.243.13.37";
+          ip6.addr = "42:0:0:0:0:0:0:1337";
           aliases = [
             "wu.r"
             "wu.retiolum"
@@ -322,13 +360,13 @@ with config.krebs.lib;
       cores = 4;
       nets = {
         gg23 = {
-          addrs4 = ["10.23.1.38"];
+          ip4.addr = "10.23.1.38";
           aliases = ["xu.gg23"];
           ssh.port = 11423;
         };
         retiolum = {
-          addrs4 = ["10.243.13.38"];
-          addrs6 = ["42:0:0:0:0:0:0:1338"];
+          ip4.addr = "10.243.13.38";
+          ip6.addr = "42:0:0:0:0:0:0:1338";
           aliases = [
             "xu.r"
             "xu.retiolum"
@@ -387,7 +425,7 @@ with config.krebs.lib;
         -----END PGP PUBLIC KEY BLOCK-----
       '';
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAEAQDFR//RnCvEZAt0F6ExDsatKZ/DDdifanuSL360mqOhaFieKI34RoOwfQT9T+Ga52Vh5V2La6esvlph686EdgzeKLvDoxEwFM9ZYFBcMrNzu4bMTlgE7YUYw5JiORyXNfznBGnme6qpuvx9ibYhUyiZo99kM8ys5YrUHrP2JXQJMezDFZHxT4GFMOuSdh/1daGoKKD6hYL/jEHX8CI4E3BSmKK6ygYr1fVX0K0Tv77lIi5mLXucjR7CytWYWYnhM6DC3Hxpv2zRkPgf3k0x/Y1hrw3V/r0Me5h90pd2C8pFaWA2ZoUT/fmyVqvx1tZPYToU/O2dMItY0zgx2kR0yD+6g7Aahz3R+KlXkV8k5c8bbTbfGnZWDR1ZlbLRM9Yt5vosfwapUD90MmVkpmR3wUkO2sUKi80QfC7b4KvSDXQ+MImbGxMaU5Bnsq1PqLN95q+uat3nlAVBAELkcx51FlE9CaIS65y4J7FEDg8BE5JeuCNshh62VSYRXVSFt8bk3f/TFGgzC8OIo14BhVmiRQQ503Z1sROyf5xLX2a/EJavMm1i2Bs2TH6ROKY9z5Pz8hT5US0r381V8oG7TZyLF9HTtoy3wCYsgWA5EmLanjAsVU2YEeAA0rxzdtYP8Y2okFiJ6u+M4HQZ3Wg3peSodyp3vxdYce2vk4EKeqEFuuS82850DYb7Et7fmp+wQQUT8Q/bMO0DreWjHoMM5lE4LJ4ME6AxksmMiFtfo/4Fe2q9D+LAqZ+ANOcv9M+8Rn6ngiYmuRNd0l/a02q1PEvO6vTfXgcl4f7Z1IULHPEaDNZHCJS1K5RXYFqYQ6OHsTmOm7hnwaRAS97+VFMo1i5uvTx9nYaAcY7yzq3Ckfb67dMBKApGOpJpkvPgfrP7bgBO5rOZXM1opXqVPb09nljAhhAhyCTh1e/8+mJrBo0cLQ/LupQzVxGDgm3awSMPxsZAN45PSWz76zzxdDa1MMo51do+VJHfs7Wl0NcXAQrniOBYL9Wqt0qNkn1gY5smkkISGeQ/vxNap4MmzeZE7b5fpOy+2fpcRVQLpc4nooQzJvSVTFz+25lgZ6iHf45K87gQFMIAri1Pf/EDDpL87az+bRWvWi+BA2kMe1kf+Ay1LyMz8r+g51H0ma0bNFh6+fbWMfUiD9JCepIObclnUJ4NlWfcgHxTf17d/4tl6z4DTcLpCCk8Da77JouSHgvtcRbRlFV1OfhWZLXUsrlfpaQTiItv6TGIr3k7+7b66o3Qw/GQVs5GmYifaIZIz8n8my4XjkaMBd0SZfBzzvFjHMq6YUP9+SbjvReqofuoO+5tW1wTYZXitFFBfwuHlXm6w77K5QDBW6olT7pat41/F5eGxLcz tv@wu";
-      uid = 1337; # TODO use default
+      uid = 1337; # TODO use default and document what has to be done (for vv)
     };
     tv-nomic = {
       inherit (tv) mail;
@@ -396,6 +434,10 @@ with config.krebs.lib;
     tv-xu = {
       inherit (tv) mail;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC/3nkqxe8YrDVt615n96A7iC3vvwsiqgpsBYC/bhwfBHu1bAtBmTWVqSKDIdwg7p8TQpIKtAgZ3IJT3BlrnVTeR4RIviLjHjYWW1NBhm+nXi+heThgi5fLciE3lVLVsy5X9Kc1ZPLgLa1In0REOanwbueOD0ESN1yKIDwUUdczw/o3dLDMzanqFHKuSSN4o9Ex2x+MRj9eLsb706s4VSYMo3lirRCJeAOGv1C7Xg1cuepdhIeJsq9aF7vSy15c0nCkWwr8zdY7pbMPYCe5zvIEymZ0UowZ5HQ3NmIZnYDxa4E1PFjDczHdQbVmmGMI80grNwMsHzQ6bynHSPXDoLf4WodXlhS0+9Ju5QavDT6uqZ9uhDBuWC8QNgWUMIJnEaTBFyA0OI1akl8Q2RLC+qnNf5IwItSq+GDwEsB2ZJNW3kOk1kNiCUrBafRYpPaFeP97wzzP4uYlBKAr2SOLrrkf7NFEdw2ihxhDMNnps/ErRJ8U0zdpmalw8mItGyqRULpHjk/wN00rYOdBIhW3G3QJuVgtGnWtGCBG5x70EfMiSEXPD3YSsVVsgKD+v8qr+YiilRRD+N3gaHhiOWA6HgxRNul/P4llk0ktTpb9LoHk2+oooTH5ZuuT/8yF8J4stZt7EIOH+mSOAXG1z0BwnEkQu7pVKwu/oOZpGJTvBrGwww== tv@xu";
+    };
+    vv = {
+      mail = "vv@mu.r";
+      uid = 2000; # TODO use default
     };
   };
 }

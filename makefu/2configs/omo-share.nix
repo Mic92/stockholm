@@ -5,7 +5,7 @@ let
   hostname = config.krebs.build.host.name;
   # TODO local-ip from the nets config
   local-ip = "192.168.1.11";
-  # local-ip = head config.krebs.build.host.nets.retiolum.addrs4;
+  # local-ip = config.krebs.build.host.nets.retiolum.ip4.addr;
 in {
   krebs.nginx = {
     enable = mkDefault true;
@@ -45,6 +45,13 @@ in {
       winshare = {
         path = "/media/crypt1/share";
         "read only" = "no";
+        browseable = "yes";
+        "guest ok" = "yes";
+      };
+
+      emu = {
+        path = "/media/crypt1/emu";
+        "read only" = "yes";
         browseable = "yes";
         "guest ok" = "yes";
       };

@@ -7,12 +7,7 @@ let
   getDefaultGateway = ip:
     concatStringsSep "." (take 3 (splitString "." ip) ++ ["1"]);
 
-
-  primary-addr4 =
-    builtins.elemAt config.krebs.build.host.nets.internet.addrs4 0;
-
-  #secondary-addr4 =
-  #  builtins.elemAt config.krebs.build.host.nets.internet.addrs4 1;
+  primary-addr4 = config.krebs.build.host.nets.internet.ip4.addr;
 in
 
 {
@@ -55,10 +50,6 @@ in
       address = primary-addr4;
       prefixLength = 24;
     }
-    #{
-    #  address = secondary-addr4;
-    #  prefixLength = 24;
-    #}
   ];
 
   # TODO define gateway in krebs/3modules/default.nix

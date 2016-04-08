@@ -8,15 +8,15 @@ with config.krebs.lib;
       cores = 4;
       nets = rec {
         internet = {
-          addrs4 = ["144.76.172.188"];
+          ip4.addr = "144.76.172.188";
           aliases = [
             "dishfire.internet"
           ];
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.133.99"];
-          addrs6 = ["42:0000:0000:0000:0000:0000:d15f:1233"];
+          ip4.addr = "10.243.133.99";
+          ip6.addr = "42:0000:0000:0000:0000:0000:d15f:1233";
           aliases = [
             "dishfire.retiolum"
             "dishfire.r"
@@ -40,15 +40,15 @@ with config.krebs.lib;
       cores = 2;
       nets = rec {
         internet = {
-          addrs4 = ["162.252.241.33"];
+          ip4.addr = "162.252.241.33";
           aliases = [
             "echelon.internet"
           ];
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.206.103"];
-          addrs6 = ["42:941e:2816:35f4:5c5e:206b:3f0b:f763"];
+          ip4.addr = "10.243.206.103";
+          ip6.addr = "42:941e:2816:35f4:5c5e:206b:3f0b:f763";
           aliases = [
             "echelon.retiolum"
             "echelon.r"
@@ -75,15 +75,15 @@ with config.krebs.lib;
       cores = 4;
       nets = rec {
         internet = {
-          addrs4 = ["213.239.205.240"];
+          ip4.addr = "213.239.205.240";
           aliases = [
             "prism.internet"
           ];
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.0.103"];
-          addrs6 = ["42:0000:0000:0000:0000:0000:0000:15ab"];
+          ip4.addr = "10.243.0.103";
+          ip6.addr = "42:0000:0000:0000:0000:0000:0000:15ab";
           aliases = [
             "prism.retiolum"
             "prism.r"
@@ -107,15 +107,15 @@ with config.krebs.lib;
     fastpoke = {
       nets = rec {
         internet = {
-          addrs4 = ["193.22.164.36"];
+          ip4.addr = "193.22.164.36";
           aliases = [
             "fastpoke.internet"
           ];
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.253.152"];
-          addrs6 = ["42:422a:194f:ff3b:e196:2f82:5cf5:bc00"];
+          ip4.addr = "10.243.253.152";
+          ip6.addr = "42:422a:194f:ff3b:e196:2f82:5cf5:bc00";
           aliases = [
             "fastpoke.retiolum"
             "fastpoke.r"
@@ -139,15 +139,15 @@ with config.krebs.lib;
       cores = 1;
       nets = rec {
         internet = {
-          addrs4 = ["104.167.113.104"];
+          ip4.addr = "104.167.113.104";
           aliases = [
             "cloudkrebs.internet"
           ];
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.206.102"];
-          addrs6 = ["42:941e:2816:35f4:5c5e:206b:3f0b:f762"];
+          ip4.addr = "10.243.206.102";
+          ip6.addr = "42:941e:2816:35f4:5c5e:206b:3f0b:f762";
           aliases = [
             "cloudkrebs.retiolum"
             "cloudkrebs.r"
@@ -172,12 +172,12 @@ with config.krebs.lib;
       cores = 1;
       nets = {
         gg23 = {
-          addrs4 = ["10.23.1.12"];
+          ip4.addr = "10.23.1.12";
           aliases = ["uriel.gg23"];
         };
         retiolum = {
-          addrs4 = ["10.243.81.176"];
-          addrs6 = ["42:dc25:60cf:94ef:759b:d2b6:98a9:2e56"];
+          ip4.addr = "10.243.81.176";
+          ip6.addr = "42:dc25:60cf:94ef:759b:d2b6:98a9:2e56";
           aliases = [
             "uriel.retiolum"
             "uriel.r"
@@ -203,12 +203,12 @@ with config.krebs.lib;
       cores = 2;
       nets = {
         gg23 = {
-          addrs4 = ["10.23.1.11"];
+          ip4.addr = "10.23.1.11";
           aliases = ["mors.gg23"];
         };
         retiolum = {
-          addrs4 = ["10.243.0.2"];
-          addrs6 = ["42:0:0:0:0:0:0:dea7"];
+          ip4.addr = "10.243.0.2";
+          ip6.addr = "42:0:0:0:0:0:0:dea7";
           aliases = [
             "mors.retiolum"
             "mors.r"
@@ -234,8 +234,8 @@ with config.krebs.lib;
       cores = 2;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.0.3"];
-          addrs6 = ["42:0:0:0:0:0:0:7105"];
+          ip4.addr = "10.243.0.3";
+          ip6.addr = "42:0:0:0:0:0:0:7105";
           aliases = [
             "helios.retiolum"
             "helios.r"
