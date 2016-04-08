@@ -86,17 +86,13 @@ let
       description = "Iproute2 package to use.";
     };
 
-
-    privateKeyFile = mkOption {
-      # TODO if it's types.path then it gets copied to /nix/store with
-      #      bad unsafe permissions...
-      type = types.str;
-      default = toString <secrets/retiolum.rsa_key.priv>;
-      description = ''
-          Generate file with <literal>tincd -K</literal>.
-          This file must exist on the local system. The default points to 
-          <secrets/retiolum.rsa_key.priv>.
-        '';
+    privkey = mkOption {
+      type = types.secret-file;
+      default = {
+        path = "${cfg.user.home}/tinc.rsa_key.priv";
+        owner = cfg.user;
+        source-path = toString <secrets> + "/${cfg.netname}.rsa_key.priv";
+      };
     };
 
     connectTo = mkOption {
@@ -109,39 +105,37 @@ let
       '';
     };
 
+    user = mkOption {
+      type = types.user;
+      default = {
+        name = cfg.netname;
+        home = "/var/lib/${cfg.user.name}";
+      };
+    };
   };
 
   imp = {
+    krebs.secret.files."${cfg.netname}.rsa_key.priv" = cfg.privkey;
+
     environment.systemPackages = [ tinc iproute ];
 
     systemd.services.${cfg.netname} = {
       description = "Tinc daemon for Retiolum";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      requires = [ "secret.service" ];
       path = [ tinc iproute ];
       serviceConfig = rec {
-        PermissionsStartOnly = "true";
-        PrivateTmp = "true";
         Restart = "always";
-        # TODO we cannot chroot (-R) b/c we use symlinks to hosts
-        #      and the private key.
-        ExecStartPre = pkgs.writeScript "${cfg.netname}-prestart" ''
-          #! /bin/sh
-          install -o ${user.name} -m 0400 ${cfg.privateKeyFile} /tmp/retiolum-rsa_key.priv
-        '';
-        ExecStart = "${tinc}/sbin/tincd -c ${confDir} -d 0 -U ${user.name} -D --pidfile=/var/run/tinc.${SyslogIdentifier}.pid";
+        ExecStart = "${tinc}/sbin/tincd -c ${confDir} -d 0 -U ${cfg.user.name} -D --pidfile=/var/run/tinc.${SyslogIdentifier}.pid";
         SyslogIdentifier = cfg.netname;
       };
     };
 
-    users.extraUsers = singleton {
-      inherit (user) name uid;
+    users.users.${cfg.user.name} = {
+      inherit (cfg.user) home name uid;
+      createHome = true;
     };
-  };
-
-  user = rec {
-    name = cfg.netname;
-    uid = genid name;
   };
 
   net = cfg.host.nets.${cfg.netname};
@@ -158,7 +152,7 @@ let
       Name = ${cfg.host.name}
       Interface = ${cfg.netname}
       ${concatStrings (map (c: "ConnectTo = ${c}\n") cfg.connectTo)}
-      PrivateKeyFile = /tmp/retiolum-rsa_key.priv
+      PrivateKeyFile = ${cfg.privkey.path}
       ${cfg.extraConfig}
     '';
     "tinc-up" = pkgs.writeScript "${cfg.netname}-tinc-up" ''
