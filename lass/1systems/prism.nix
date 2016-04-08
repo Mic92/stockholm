@@ -79,6 +79,10 @@ in {
         device = "/dev/pool/download";
       };
 
+      fileSystems."/srv/http/o.ubikmedia.de" = {
+        device = "/dev/pool/owncloud-ubik";
+      };
+
     }
     {
       sound.enable = false;
