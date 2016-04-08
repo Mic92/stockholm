@@ -136,7 +136,8 @@ in {
         ../2configs/websites/domsen.nix
       ];
       krebs.iptables.tables.filter.INPUT.rules = [
-         { predicate = "-p tcp --dport 80"; target = "ACCEPT"; }
+         { predicate = "-p tcp --dport http"; target = "ACCEPT"; }
+         { predicate = "-p tcp --dport https"; target = "ACCEPT"; }
       ];
     }
     {
