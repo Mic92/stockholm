@@ -34,71 +34,6 @@
       ];
     }
     {
-      #static-nginx-test
-      imports = [
-        ../3modules/static_nginx.nix
-      ];
-      lass.staticPage."testserver.de" = {
-        #sslEnable = true;
-        #certificate = "${toString <secrets>}/testserver.de/server.cert";
-        #certificate_key = "${toString <secrets>}/testserver.de/server.pem";
-        ssl = {
-          enable = true;
-          certificate = "${toString <secrets>}/testserver.de/server.cert";
-          certificate_key = "${toString <secrets>}/testserver.de/server.pem";
-        };
-      };
-      networking.extraHosts = ''
-        10.243.0.2 testserver.de
-      '';
-    }
-    #{
-    #  #wordpress-test
-    #  #imports = singleton (sitesGenerators.createWordpress "testserver.de");
-    #  imports = [
-    #    ../3modules/wordpress_nginx.nix
-    #  ];
-    #  lass.wordpress."testserver.de" = {
-    #    multiSite = {
-    #      "1" = "testserver.de";
-    #      "2" = "bla.testserver.de";
-    #    };
-    #  };
-
-    #  services.mysql = {
-    #    enable = true;
-    #    package = pkgs.mariadb;
-    #    rootPassword = "<secrets>/mysql_rootPassword";
-    #  };
-    #  networking.extraHosts = ''
-    #    10.243.0.2 testserver.de
-    #  '';
-    #  krebs.iptables.tables.filter.INPUT.rules = [
-    #    { predicate = "-i retiolum -p tcp --dport 80"; target = "ACCEPT"; precedence = 9998; }
-    #  ];
-    #}
-    #{
-    #  #owncloud-test
-    #  #imports = singleton (sitesGenerators.createWordpress "testserver.de");
-    #  imports = [
-    #    ../3modules/owncloud_nginx.nix
-    #  ];
-    #  lass.owncloud."owncloud-test.de" = {
-    #  };
-
-    #  #services.mysql = {
-    #  #  enable = true;
-    #  #  package = pkgs.mariadb;
-    #  #  rootPassword = "<secrets>/mysql_rootPassword";
-    #  #};
-    #  networking.extraHosts = ''
-    #    10.243.0.2 owncloud-test.de
-    #  '';
-    #  krebs.iptables.tables.filter.INPUT.rules = [
-    #    { predicate = "-i retiolum -p tcp --dport 80"; target = "ACCEPT"; precedence = 9998; }
-    #  ];
-    #}
-    {
       services.mysql = {
         enable = true;
         package = pkgs.mariadb;
@@ -124,15 +59,6 @@
   krebs.build.host = config.krebs.hosts.mors;
 
   networking.wireless.enable = true;
-
-  networking.extraHosts = ''
-    213.239.205.240 wohnprojekt-rhh.de
-    213.239.205.240 karlaskop.de
-    213.239.205.240 makeup.apanowicz.de
-    213.239.205.240 pixelpocket.de
-    213.239.205.240 reich-gebaeudereinigung.de
-    213.239.205.240 o.ubikmedia.de
-  '';
 
   hardware.enableAllFirmware = true;
   nixpkgs.config.allowUnfree = true;
