@@ -6,5 +6,4 @@
     gnupg1
   ];
 
-  services.xserver.startGnuPGAgent = true;
 }
