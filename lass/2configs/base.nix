@@ -85,6 +85,8 @@ with config.krebs.lib;
     MANPAGER=most
   '';
 
+  nixpkgs.config.allowUnfree = true;
+
   environment.systemPackages = with pkgs; [
   #stockholm
     git
@@ -109,6 +111,11 @@ with config.krebs.lib;
 
   #neat utils
     krebspaste
+
+  #unpack stuff
+    p7zip
+    unzip
+    unrar
   ];
 
   programs.bash = {
