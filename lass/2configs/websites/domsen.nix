@@ -1,26 +1,32 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   inherit (config.krebs.lib) genid;
+  inherit (import ../../4lib { inherit lib pkgs; })
+    manageCert
+    activateACME
+    ssl
+    servePage
+    serveOwncloud;
+
 in {
   imports = [
-    ../../3modules/static_nginx.nix
-    ../../3modules/owncloud_nginx.nix
-    ../../3modules/wordpress_nginx.nix
+    ( ssl "reich-gebaeudereinigung.de" )
+    ( servePage "reich-gebaeudereinigung.de" )
+
+    ( servePage "karlaskop.de" )
+    ( manageCert "karlaskop.de" )
+
+    ( servePage "makeup.apanowicz.de" )
+    ( manageCert "makeup.apanowicz.de" )
+
+    ( servePage "pixelpocket.de" )
+    ( manageCert "pixelpocket.de" )
+
+    ( ssl "o.ubikmedia.de" )
+    ( serveOwncloud "o.ubikmedia.de" )
+
   ];
-
-  lass.staticPage = {
-    "karlaskop.de" = {};
-    "makeup.apanowicz.de" = {};
-    "pixelpocket.de" = {};
-    "reich-gebaeudereinigung.de" = {};
-  };
-
-  lass.owncloud = {
-    "o.ubikmedia.de" = {
-      instanceid = "oc8n8ddbftgh";
-    };
-  };
 
   services.mysql = {
     enable = true;

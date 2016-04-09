@@ -1,23 +1,39 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-{
+let
+  inherit (import ../../4lib { inherit lib pkgs; })
+    manageCert
+    activateACME
+    ssl
+    servePage
+    serveOwncloud;
 
+in {
   imports = [
-    ../../3modules/static_nginx.nix
-    ../../3modules/owncloud_nginx.nix
-    ../../3modules/wordpress_nginx.nix
-  ];
+    ( manageCert "biostase.de" )
+    ( servePage "biostase.de" )
 
-  lass.staticPage = {
-    "biostase.de" = {};
-    "gs-maubach.de" = {};
-    "spielwaren-kern.de" = {};
-    "societyofsimtech.de" = {};
-    "ttf-kleinaspach.de" = {};
-    "edsn.de" = {};
-    "eab.berkeley.edu" = {};
-    "habsys.de" = {};
-  };
+    ( manageCert "gs-maubach.de" )
+    ( servePage "gs-maubach.de" )
+
+    ( manageCert "spielwaren-kern.de" )
+    ( servePage "spielwaren-kern.de" )
+
+    ( manageCert "societyofsimtech.de" )
+    ( servePage "societyofsimtech.de" )
+
+    ( manageCert "ttf-kleinaspach.de" )
+    ( servePage "ttf-kleinaspach.de" )
+
+    ( manageCert "edsn.de" )
+    ( servePage "edsn.de" )
+
+    ( manageCert "eab.berkeley.edu" )
+    ( servePage "eab.berkeley.edu" )
+
+    ( manageCert "habsys.de" )
+    ( servePage "habsys.de" )
+  ];
 
   #lass.owncloud = {
   #  "o.ubikmedia.de" = {
