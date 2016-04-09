@@ -26,6 +26,11 @@
         fsType = "ext4";
       };
 
+      fileSystems."/srv/http" = {
+        device = "/dev/pool/srv_http";
+        fsType = "ext4";
+      };
+
       fileSystems."/boot" = {
         device = "/dev/vda1";
         fsType = "ext4";
