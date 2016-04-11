@@ -77,8 +77,16 @@ in {
         device = "/dev/pool/download";
       };
 
-      fileSystems."/srv/http/o.ubikmedia.de" = {
-        device = "/dev/pool/owncloud-ubik";
+      fileSystems."/srv/http" = {
+        device = "/dev/pool/http";
+      };
+
+      fileSystems."/srv/o.ubikmedia.de-data" = {
+        device = "/dev/pool/owncloud-ubik-data";
+      };
+
+      fileSystems."/bku" = {
+        device = "/dev/pool/bku";
       };
 
     }
