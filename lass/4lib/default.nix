@@ -15,7 +15,6 @@ rec {
           webroot = "/var/lib/acme/challenges/${domain}";
           plugins = [
             "account_key.json"
-            "cert.pem"
             "key.pem"
             "fullchain.pem"
           ];
@@ -74,7 +73,7 @@ rec {
       krebs.nginx.servers."${domain}" = {
         ssl = {
           enable = true;
-          certificate = "/var/lib/acme/${domain}/cert.pem";
+          certificate = "/var/lib/acme/${domain}/fullchain.pem";
           certificate_key = "/var/lib/acme/${domain}/key.pem";
         };
       };
