@@ -33,6 +33,34 @@ rec {
       };
     };
 
+  manageCerts = domains:
+    let
+      domain = head domains;
+    in {
+      security.acme = {
+        certs."${domain}" = {
+          email = "lassulus@gmail.com";
+          webroot = "/var/lib/acme/challenges/${domain}";
+          plugins = [
+            "account_key.json"
+            "key.pem"
+            "fullchain.pem"
+          ];
+          group = "nginx";
+          allowKeysForGroup = true;
+          extraDomains = genAttrs domains (_: null);
+        };
+      };
+
+      krebs.nginx.servers."${domain}" = {
+        locations = [
+          (nameValuePair "/.well-known/acme-challenge" ''
+            root /var/lib/acme/challenges/${domain}/;
+          '')
+        ];
+      };
+    };
+
   ssl = domain:
     {
       imports = [
@@ -155,6 +183,58 @@ rec {
           # Optional: Don't log access to other assets
           (nameValuePair "~* \.(?:jpg|jpeg|gif|bmp|ico|png|swf)$" ''
             access_log off;
+          '')
+        ];
+      };
+      services.phpfpm.poolConfigs."${domain}" = ''
+        listen = /srv/http/${domain}/phpfpm.pool
+        user = nginx
+        group = nginx
+        pm = dynamic
+        pm.max_children = 5
+        pm.start_servers = 2
+        pm.min_spare_servers = 1
+        pm.max_spare_servers = 3
+        listen.owner = nginx
+        listen.group = nginx
+        # errors to journal
+        php_admin_value[error_log] = 'stderr'
+        php_admin_flag[log_errors] = on
+        catch_workers_output = yes
+      '';
+    };
+
+  serveWordpress = domains:
+    let
+      domain = head domains;
+
+    in {
+      krebs.nginx.servers."${domain}" = {
+        server-names = domains;
+        extraConfig = ''
+          root /srv/http/${domain}/;
+          index index.php;
+          access_log /tmp/nginx_acc.log;
+          error_log /tmp/nginx_err.log;
+          error_page 404 /404.html;
+          error_page 500 502 503 504 /50x.html;
+        '';
+        locations = [
+          (nameValuePair "/" ''
+            try_files $uri $uri/ /index.php?$args;
+          '')
+          (nameValuePair "~ \.php$" ''
+            fastcgi_pass unix:/srv/http/${domain}/phpfpm.pool;
+            include ${pkgs.nginx}/conf/fastcgi.conf;
+          '')
+          (nameValuePair "~ /\\." ''
+            deny all;
+          '')
+          #Directives to send expires headers and turn off 404 error logging.
+          (nameValuePair "~* ^.+\.(xml|ogg|ogv|svg|svgz|eot|otf|woff|mp4|ttf|css|rss|atom|js|jpg|jpeg|gif|png|ico|zip|tgz|gz|rar|bz2|doc|xls|exe|ppt|tar|mid|midi|wav|bmp|rtf)$" ''
+            access_log off;
+            log_not_found off;
+            expires max;
           '')
         ];
       };
