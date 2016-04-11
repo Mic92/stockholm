@@ -4,28 +4,32 @@ let
   inherit (config.krebs.lib) genid;
   inherit (import ../../4lib { inherit lib pkgs; })
     manageCert
+    manageCerts
     activateACME
     ssl
     servePage
-    serveOwncloud;
+    serveOwncloud
+    serveWordpress;
 
 in {
   imports = [
     ( ssl "reich-gebaeudereinigung.de" )
     ( servePage "reich-gebaeudereinigung.de" )
 
-    ( servePage "karlaskop.de" )
     ( manageCert "karlaskop.de" )
+    ( servePage "karlaskop.de" )
 
-    ( servePage "makeup.apanowicz.de" )
     ( manageCert "makeup.apanowicz.de" )
+    ( servePage "makeup.apanowicz.de" )
 
-    ( servePage "pixelpocket.de" )
     ( manageCert "pixelpocket.de" )
+    ( servePage "pixelpocket.de" )
 
     ( ssl "o.ubikmedia.de" )
     ( serveOwncloud "o.ubikmedia.de" )
 
+    ( manageCerts [ "ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ] )
+    ( serveWordpress [ "ubikmedia.de" "*.ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ] )
   ];
 
   services.mysql = {
