@@ -99,7 +99,7 @@
       fsType = "ext4";
     };
 
-    "/mnt/backups" = {
+    "/bku" = {
       device = "/dev/big/backups";
       fsType = "ext4";
     };
