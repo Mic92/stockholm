@@ -56,10 +56,13 @@ in {
     createHome = true;
   };
 
-  #lass.wordpress = {
-  #  "ubikmedia.de" = {
-  #  };
-  #};
-
+  services.phpfpm.phpIni = pkgs.runCommand "php.ini" {
+     options = ''
+      extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
+    '';
+  } ''
+    cat ${pkgs.php}/etc/php-recommended.ini > $out
+    echo "$options" >> $out
+  '';
 }
 
