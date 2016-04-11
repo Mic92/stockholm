@@ -47,6 +47,11 @@ with builtins;
       fsType = "ext4";
     };
 
+    "/bku" = {
+      device = "/dev/pool/bku";
+      fsType = "ext4";
+    };
+
     "/boot" = {
       device = "/dev/sda1";
     };
