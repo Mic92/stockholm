@@ -38,6 +38,15 @@ in {
     rootPassword = toString (<secrets/mysql_rootPassword>);
   };
 
+  services.mysqlBackup = {
+    enable = true;
+    databases = [
+      "ubikmedia_de"
+      "o_ubikmedia_de"
+    ];
+    location = "/bku/sql_dumps";
+  };
+
   users.users.domsen = {
     uid = genid "domsen";
     description = "maintenance acc for domsen";
