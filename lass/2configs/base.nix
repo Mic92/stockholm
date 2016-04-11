@@ -7,6 +7,7 @@ with config.krebs.lib;
     ../2configs/zsh.nix
     ../2configs/mc.nix
     ../2configs/retiolum.nix
+    ./backups.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
