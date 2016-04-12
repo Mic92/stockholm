@@ -45,7 +45,6 @@ with config.krebs.lib;
   krebs = {
     enable = true;
     search-domain = "retiolum";
-    exim-retiolum.enable = true;
     build = {
       user = config.krebs.users.lass;
       source = mapAttrs (_: mkDefault) ({
@@ -152,10 +151,6 @@ with config.krebs.lib;
       fi
     '';
   };
-
-  security.setuidPrograms = [
-    "sendmail"
-  ];
 
   services.openssh = {
     enable = true;
