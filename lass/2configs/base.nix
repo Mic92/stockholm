@@ -19,7 +19,6 @@ with config.krebs.lib;
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
             config.krebs.users.lass-uriel.pubkey
-            config.krebs.users.lass-helios.pubkey
           ];
         };
         mainUser = {
