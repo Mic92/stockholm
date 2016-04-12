@@ -136,6 +136,8 @@ let
         syslog_timestamp = false
         syslog_duplication = false
 
+        tls_advertise_hosts =
+
         begin acl
 
         acl_check_rcpt:
