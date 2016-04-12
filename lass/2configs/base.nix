@@ -173,6 +173,13 @@ with config.krebs.lib;
   krebs.iptables = {
     enable = true;
     tables = {
+      nat.PREROUTING.rules = [
+        { predicate = "! -i retiolum -p tcp -m tcp --dport 22"; target = "REDIRECT --to-ports 0"; precedence = 100; }
+        { predicate = "-p tcp -m tcp --dport 45621"; target = "REDIRECT --to-ports 22"; precedence = 99; }
+      ];
+      nat.OUTPUT.rules = [
+        { predicate = "-o lo -p tcp -m tcp --dport 45621"; target = "REDIRECT --to-ports 22"; precedence = 100; }
+      ];
       filter.INPUT.policy = "DROP";
       filter.FORWARD.policy = "DROP";
       filter.INPUT.rules = [
