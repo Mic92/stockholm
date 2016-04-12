@@ -5,6 +5,7 @@
     ../.
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
     ../2configs/base.nix
+    ../2configs/exim-retiolum.nix
     ../2configs/git.nix
     ../2configs/websites/fritz.nix
     {

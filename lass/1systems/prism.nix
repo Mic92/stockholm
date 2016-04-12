@@ -6,6 +6,7 @@ in {
   imports = [
     ../.
     ../2configs/base.nix
+    ../2configs/exim-smarthost.nix
     ../2configs/downloading.nix
     ../2configs/git.nix
     ../2configs/ts3.nix

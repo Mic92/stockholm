@@ -4,6 +4,7 @@
   imports = [
     ../.
     ../2configs/baseX.nix
+    ../2configs/exim-retiolum.nix
     ../2configs/programs.nix
     ../2configs/bitcoin.nix
     ../2configs/browsers.nix
