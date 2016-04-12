@@ -61,16 +61,16 @@ with config.krebs.lib;
     }
   ];
 
-  networking.interfaces.enp2s1.ip4 = [
-    {
-      address = "162.219.7.216";
+  networking = {
+    interfaces.enp2s1.ip4 = singleton {
+      address = let
+        addr = "45.62.237.203";
+      in assert config.krebs.build.host.nets.internet.ip4.addr == addr; addr;
       prefixLength = 24;
-    }
-  ];
-  networking.defaultGateway = "162.219.7.1";
-  networking.nameservers = [
-    "8.8.8.8"
-  ];
+    };
+    defaultGateway = "45.62.237.1";
+    nameservers = ["8.8.8.8"];
+  };
 
   environment.systemPackages = with pkgs; [
     htop

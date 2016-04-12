@@ -21,7 +21,7 @@ with config.krebs.lib;
       };
       nets = rec {
         internet = {
-          ip4.addr = "162.219.7.216";
+          ip4.addr = "45.62.237.203";
           aliases = [
             "cd.i"
             "cd.internet"
@@ -61,41 +61,6 @@ with config.krebs.lib;
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOd/HqZIO9Trn3eycl23GZAz21HQCISaVNfNyaLSQvJ6";
-    };
-    doppelbock = rec {
-      cores = 2;
-      nets = rec {
-        internet = {
-          ip4.addr = "45.62.237.203";
-          aliases = [
-            "doppelbock.i"
-            "doppelbock.internet"
-          ];
-        };
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.113.224";
-          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af5";
-          aliases = [
-            "doppelbock.r"
-            "doppelbock.retiolum"
-            "cgit.doppelbock.r"
-            "cgit.doppelbock.retiolum"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAq/luvzH4CQX5qRuucUqR3aLwXtzsRmBOdd2hvrPG1z8ML2kKV+IG
-            0aBfyJmQ8csfeGhOj0y0LEBv4bkEjEtYObs+LJfdWZC5e39eAVUE0z8QbSPOx4di
-            /7Bo+9sFRELP1kYb47eLR8quiIkslMWQMbTLM5RHoXJ5jE8fQSitfp4WUZYiSPDF
-            d5F7RU/ZQfTZuh8gv7RmSn/6N6bXAQWrueK6ZqMuImIjBrmYyXUWxgsDnpeHxR5j
-            j/0F2Bda5lyp+Qzv24PREdPT8FazUfmIQwZTTArXHxiqLq+SEVT21E4WEf2sJRan
-            dti9yVUW3eiqpu8b9BRpvxOB3YdkyqlrGwIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_rsa>;
-      ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLhrVTEmbtuTsgRTHHxsLrq7ai1Yt7+oKFevr1gzktCQqHuyucXzxn60F00kuNDkNiKIF5fHmWy6ajU+6PKD3TfiFMagT9ah0x0RSB0+0tevxnlOp6VdHhrdM5YrBduWMiELmOiI1lvYhRqKd/ZE7b2mra6KYe5VtTi9UX3wQp8qN+bI01KCxv0p6ciUgEO8fnwLKDBUuFJ2UfE7Ais9XrXFIBFXB+MKcpLnIXvrV6dSXdUEiaswg8wo0Q0Y3tMaQ0dNJdH2yp3FVn1aiX3E/vVnffmDKMWYWqn78klujdEdmLm8/8NkXnc/jpgu8ZlSpQHECO2ZUJzd35yRnVKALv";
     };
     mkdir = rec {
       cores = 1;
