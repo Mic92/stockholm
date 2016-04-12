@@ -5,9 +5,9 @@ with config.krebs.lib;
 {
   krebs.exim-smarthost = {
     enable = true;
-    #dkim = [
-    #  { domain = "lassul.us"; }
-    #];
+    dkim = [
+      { domain = "lassul.us"; }
+    ];
     sender_domains = [
       "lassul.us"
     ];
