@@ -38,6 +38,20 @@ in {
     ( servePage [ "habsys.de" ])
   ];
 
+  services.mysql = {
+    enable = true;
+    package = pkgs.mariadb;
+    rootPassword = toString (<secrets/mysql_rootPassword>);
+  };
+
+  services.mysqlBackup = {
+    enable = true;
+    databases = [
+      "eastuttgart_de"
+    ];
+    location = "/bku/sql_dumps";
+  };
+
   #lass.owncloud = {
   #  "o.ubikmedia.de" = {
   #    instanceid = "oc8n8ddbftgh";
