@@ -12,6 +12,7 @@ with config.krebs.lib;
           aliases = [
             "dishfire.internet"
           ];
+          ssh.port = 45621;
         };
         retiolum = {
           via = internet;
@@ -44,6 +45,7 @@ with config.krebs.lib;
           aliases = [
             "echelon.internet"
           ];
+          ssh.port = 45621;
         };
         retiolum = {
           via = internet;
@@ -79,6 +81,7 @@ with config.krebs.lib;
           aliases = [
             "prism.internet"
           ];
+          ssh.port = 45621;
         };
         retiolum = {
           via = internet;
@@ -143,6 +146,7 @@ with config.krebs.lib;
           aliases = [
             "cloudkrebs.internet"
           ];
+          ssh.port = 45621;
         };
         retiolum = {
           via = internet;
@@ -174,6 +178,7 @@ with config.krebs.lib;
         gg23 = {
           ip4.addr = "10.23.1.12";
           aliases = ["uriel.gg23"];
+          ssh.port = 45621;
         };
         retiolum = {
           ip4.addr = "10.243.81.176";
@@ -205,6 +210,7 @@ with config.krebs.lib;
         gg23 = {
           ip4.addr = "10.23.1.11";
           aliases = ["mors.gg23"];
+          ssh.port = 45621;
         };
         retiolum = {
           ip4.addr = "10.243.0.2";
