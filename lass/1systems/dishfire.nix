@@ -50,6 +50,11 @@
     {
       sound.enable = false;
     }
+    {
+      environment.systemPackages = with pkgs; [
+        mk_sql_pair
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.dishfire;
