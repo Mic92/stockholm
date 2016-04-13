@@ -21,6 +21,7 @@ with config.krebs.lib;
       { from = "lass@lassul.us"; to = lass.mail; }
       { from = "lassulus@lassul.us"; to = lass.mail; }
       { from = "test@lassul.us"; to = lass.mail; }
+      { from = "outlook@lassul.us"; to = lass.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }
