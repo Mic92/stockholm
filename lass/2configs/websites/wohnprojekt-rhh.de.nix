@@ -3,16 +3,13 @@
 let
   inherit (config.krebs.lib) genid;
   inherit (import ../../4lib { inherit lib pkgs; })
-    manageCert
-    activateACME
     ssl
-    servePage
-    serveOwncloud;
+    servePage;
 
 in {
   imports = [
-    ( ssl "wohnprojekt-rhh.de" )
-    ( servePage "wohnprojekt-rhh.de" )
+    ( ssl [ "wohnprojekt-rhh.de" ])
+    ( servePage [ "wohnprojekt-rhh.de" ])
   ];
 
   users.users.laura = {

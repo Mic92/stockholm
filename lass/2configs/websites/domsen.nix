@@ -13,22 +13,22 @@ let
 
 in {
   imports = [
-    ( ssl "reich-gebaeudereinigung.de" )
-    ( servePage "reich-gebaeudereinigung.de" )
+    ( ssl [ "reich-gebaeudereinigung.de" ])
+    ( servePage [ "reich-gebaeudereinigung.de" ])
 
-    ( manageCert "karlaskop.de" )
-    ( servePage "karlaskop.de" )
+    ( manageCerts [ "karlaskop.de" ])
+    ( servePage [ "karlaskop.de" ])
 
-    ( manageCert "makeup.apanowicz.de" )
-    ( servePage "makeup.apanowicz.de" )
+    ( ssl [ "makeup.apanowicz.de" ])
+    ( servePage [ "makeup.apanowicz.de" ])
 
-    ( manageCert "pixelpocket.de" )
-    ( servePage "pixelpocket.de" )
+    ( manageCerts [ "pixelpocket.de" ])
+    ( servePage [ "pixelpocket.de" ])
 
-    ( ssl "o.ubikmedia.de" )
-    ( serveOwncloud "o.ubikmedia.de" )
+    ( ssl [ "o.ubikmedia.de" ])
+    ( serveOwncloud [ "o.ubikmedia.de" ])
 
-    ( manageCerts [ "ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ] )
+    ( ssl [ "ubikmedia.de" "aldona.ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ] )
     ( serveWordpress [ "ubikmedia.de" "*.ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ] )
   ];
 

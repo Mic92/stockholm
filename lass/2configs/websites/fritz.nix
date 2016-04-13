@@ -2,37 +2,40 @@
 
 let
   inherit (import ../../4lib { inherit lib pkgs; })
-    manageCert
+    manageCerts
     activateACME
     ssl
     servePage
-    serveOwncloud;
+    serveWordpress;
 
 in {
   imports = [
-    ( manageCert "biostase.de" )
-    ( servePage "biostase.de" )
+    #( manageCerts [ "biostase.de" ])
+    #( servePage [ "biostase.de" ])
 
-    ( manageCert "gs-maubach.de" )
-    ( servePage "gs-maubach.de" )
+    #( manageCerts [ "gs-maubach.de" ])
+    #( servePage [ "gs-maubach.de" ])
 
-    ( manageCert "spielwaren-kern.de" )
-    ( servePage "spielwaren-kern.de" )
+    #( manageCerts [ "spielwaren-kern.de" ])
+    #( servePage [ "spielwaren-kern.de" ])
 
-    ( manageCert "societyofsimtech.de" )
-    ( servePage "societyofsimtech.de" )
+    #( manageCerts [ "societyofsimtech.de" ])
+    #( servePage [ "societyofsimtech.de" ])
 
-    ( manageCert "ttf-kleinaspach.de" )
-    ( servePage "ttf-kleinaspach.de" )
+    #( manageCerts [ "ttf-kleinaspach.de" ])
+    #( servePage [ "ttf-kleinaspach.de" ])
 
-    ( manageCert "edsn.de" )
-    ( servePage "edsn.de" )
+    #( manageCerts [ "edsn.de" ])
+    #( servePage [ "edsn.de" ])
 
-    ( manageCert "eab.berkeley.edu" )
-    ( servePage "eab.berkeley.edu" )
+    #( manageCerts [ "eab.berkeley.edu" ])
+    #( servePage [ "eab.berkeley.edu" ])
 
-    ( manageCert "habsys.de" )
-    ( servePage "habsys.de" )
+    ( manageCerts [ "eastuttgart.de" ])
+    ( serveWordpress [ "eastuttgart.de" ])
+
+    ( manageCerts [ "habsys.de" ])
+    ( servePage [ "habsys.de" ])
   ];
 
   #lass.owncloud = {

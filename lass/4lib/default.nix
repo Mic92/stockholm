@@ -7,31 +7,6 @@ rec {
   getDefaultGateway = ip:
     concatStringsSep "." (take 3 (splitString "." ip) ++ ["1"]);
 
-  manageCert = domain:
-    {
-      security.acme = {
-        certs."${domain}" = {
-          email = "lassulus@gmail.com";
-          webroot = "/var/lib/acme/challenges/${domain}";
-          plugins = [
-            "account_key.json"
-            "key.pem"
-            "fullchain.pem"
-          ];
-          group = "nginx";
-          allowKeysForGroup = true;
-        };
-      };
-
-      krebs.nginx.servers."${domain}" = {
-        locations = [
-          (nameValuePair "/.well-known/acme-challenge" ''
-            root /var/lib/acme/challenges/${domain}/;
-          '')
-        ];
-      };
-    };
-
   manageCerts = domains:
     let
       domain = head domains;
@@ -60,11 +35,11 @@ rec {
       };
     };
 
-  ssl = domain:
+  ssl = domains:
     {
       imports = [
-        ( manageCert domain )
-        ( activateACME domain )
+        ( manageCerts domains )
+        ( activateACME (head domains) )
       ];
     };
 
@@ -79,13 +54,12 @@ rec {
       };
     };
 
-  servePage = domain:
-    {
+  servePage = domains:
+    let
+      domain = head domains;
+    in {
       krebs.nginx.servers."${domain}" = {
-        server-names = [
-          "${domain}"
-          "www.${domain}"
-        ];
+        server-names = domains;
         locations = [
           (nameValuePair "/" ''
             root /srv/http/${domain};
@@ -94,13 +68,12 @@ rec {
       };
     };
 
-  serveOwncloud = domain:
-    {
+  serveOwncloud = domains:
+    let
+      domain = head domains;
+    in {
       krebs.nginx.servers."${domain}" = {
-        server-names = [
-          "${domain}"
-          "www.${domain}"
-        ];
+        server-names = domains;
         extraConfig = ''
           # Add headers to serve security related headers
           add_header Strict-Transport-Security "max-age=15768000; includeSubDomains; preload;";
