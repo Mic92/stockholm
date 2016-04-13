@@ -36,6 +36,10 @@
         device = "/dev/vda1";
         fsType = "ext4";
       };
+      fileSystems."/bku" = {
+        device = "/dev/pool/bku";
+        fsType = "ext4";
+      };
     }
     {
       networking.dhcpcd.allowInterfaces = [
