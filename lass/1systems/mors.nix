@@ -34,26 +34,28 @@
         { predicate = "-p tcp --dport 11100"; target = "ACCEPT"; }
       ];
     }
+    #{
+    #  services.mysql = {
+    #    enable = true;
+    #    package = pkgs.mariadb;
+    #    rootPassword = "<secrets>/mysql_rootPassword";
+    #  };
+    #}
+    #{
+    #  services.elasticsearch = {
+    #    enable = true;
+    #    plugins = [
+    #    #  pkgs.elasticsearchPlugins.elasticsearch_kopf
+    #    ];
+    #  };
+    #}
+    #{
+    #  services.postgresql = {
+    #    enable = true;
+    #    package = pkgs.postgresql;
+    #  };
+    #}
     {
-      services.mysql = {
-        enable = true;
-        package = pkgs.mariadb;
-        rootPassword = "<secrets>/mysql_rootPassword";
-      };
-    }
-    {
-      services.elasticsearch = {
-        enable = true;
-        plugins = [
-        #  pkgs.elasticsearchPlugins.elasticsearch_kopf
-        ];
-      };
-    }
-    {
-      services.postgresql = {
-        enable = true;
-        package = pkgs.postgresql;
-      };
     }
   ];
 
