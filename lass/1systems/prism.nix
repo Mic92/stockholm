@@ -12,6 +12,7 @@ in {
     ../2configs/ts3.nix
     ../2configs/bitlbee.nix
     ../2configs/weechat.nix
+    ../2configs/privoxy-retiolum.nix
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
