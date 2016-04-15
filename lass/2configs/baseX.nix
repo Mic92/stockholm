@@ -4,7 +4,7 @@ let
   mainUser = config.users.extraUsers.mainUser;
 in {
   imports = [
-    ./base.nix
+    ./default.nix
     #./urxvt.nix
     ./xserver
   ];
