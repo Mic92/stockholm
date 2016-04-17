@@ -103,7 +103,8 @@ let
     plan.method == method &&
     config.krebs.build.host.name == plan.${side}.host.name;
 
-  start = plan: pkgs.writeDash "backup.${plan.name}" ''
+  start = plan: pkgs.writeScript "backup.${plan.name}" ''
+    #! ${pkgs.bash}/bin/bash
     set -efu
     ${getAttr plan.method {
       push = ''
@@ -116,12 +117,12 @@ let
         dst_path=${shell.escape plan.dst.path}
         dst=$dst_user@$dst_host:$dst_path
         echo "update snapshot: current; $src -> $dst" >&2
-        dst_shell() {
+        dst_exec() {
           exec ssh -F /dev/null \
               -i "$identity" \
               ''${dst_port:+-p $dst_port} \
               "$dst_user@$dst_host" \
-              -T "$with_dst_path_lock_script"
+              -T "exec$(printf ' %q' "$@")"
         }
         rsh="ssh -F /dev/null -i $identity ''${dst_port:+-p $dst_port}"
         local_rsync() {
@@ -142,8 +143,8 @@ let
         dst_path=${shell.escape plan.dst.path}
         dst=$dst_path
         echo "update snapshot: current; $dst <- $src" >&2
-        dst_shell() {
-          eval "$with_dst_path_lock_script"
+        dst_exec() {
+          exec "$@"
         }
         rsh="ssh -F /dev/null -i $identity ''${src_port:+-p $src_port}"
         local_rsync() {
@@ -153,13 +154,7 @@ let
         remote_rsync=rsync
       '';
     }}
-    # Note that this only works because we trust date +%s to produce output
-    # that doesn't need quoting when used to generate a command string.
-    # TODO relax this requirement by selectively allowing to inject variables
-    #   e.g.: ''${shell.quote "exec env NOW=''${shell.unquote "$NOW"} ..."}
-    with_dst_path_lock_script="exec env start_date=$(date +%s) "${shell.escape
-      "flock -n ${shell.escape plan.dst.path} /bin/sh"
-    }
+    start_date=$(date +%s)
     local_rsync >&2 \
         -aAXF --delete \
         --rsh="$rsh" \
@@ -167,7 +162,10 @@ let
         --link-dest="$dst_path/current" \
         "$src/" \
         "$dst/.partial"
-    dst_shell < ${toFile "backup.${plan.name}.take-snapshots" ''
+    dst_exec env \
+        start_date="$start_date" \
+        flock -n "$dst_path" \
+        /bin/sh < ${toFile "backup.${plan.name}.take-snapshots" ''
       set -efu
       : $start_date
 
