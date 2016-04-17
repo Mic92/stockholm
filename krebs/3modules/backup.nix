@@ -113,7 +113,7 @@ let
         src=$src_path
         dst_user=root
         dst_host=$(${fastest-address plan.dst.host})
-        dst_port=$(${network-ssh-port plan.dst.host "$dst_host"})
+        dst_port=$(${pkgs.get-ssh-port}/bin/get-ssh-port "$dst_host")
         dst_path=${shell.escape plan.dst.path}
         dst=$dst_user@$dst_host:$dst_path
         echo "update snapshot: current; $src -> $dst" >&2
@@ -137,7 +137,7 @@ let
         identity=${shell.escape plan.dst.host.ssh.privkey.path}
         src_user=root
         src_host=$(${fastest-address plan.src.host})
-        src_port=$(${network-ssh-port plan.src.host "$src_host"})
+        src_port=$(${pkgs.get-ssh-port}/bin/get-ssh-port "$src_host")
         src_path=${shell.escape plan.src.path}
         src=$src_user@$src_host:$src_path
         dst_path=${shell.escape plan.dst.path}
@@ -222,19 +222,6 @@ let
         ${concatMapStringsSep " " shell.escape
           (mapAttrsToList (_: net: head net.aliases) host.nets)} \
       | ${pkgs.coreutils}/bin/head -1; }
-  '';
-
-  # Note that we don't escape word on purpose, so we can deref shell vars.
-  # TODO type word
-  network-ssh-port = host: word: ''
-    case ${word} in
-    ${concatStringsSep ";;\n" (mapAttrsToList
-      (_: net: "(${head net.aliases}) echo ${toString net.ssh.port}")
-      host.nets)};;
-    (*)
-      echo network-ssh-port: unhandled case: ${word} >&2
-      exit 1
-    esac
   '';
 
 in out
