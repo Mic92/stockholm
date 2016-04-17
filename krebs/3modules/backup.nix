@@ -163,41 +163,40 @@ let
         "$src/" \
         "$dst/.partial"
     dst_exec env \
+        dst_path="$dst_path" \
         start_date="$start_date" \
         flock -n "$dst_path" \
         /bin/sh < ${toFile "backup.${plan.name}.take-snapshots" ''
       set -efu
-      : $start_date
+      : $dst_path $start_date
 
-      dst=${shell.escape plan.dst.path}
-
-      mv "$dst/current" "$dst/.previous"
-      mv "$dst/.partial" "$dst/current"
-      rm -fR "$dst/.previous"
+      mv "$dst_path/current" "$dst_path/.previous"
+      mv "$dst_path/.partial" "$dst_path/current"
+      rm -fR "$dst_path/.previous"
       echo >&2
 
       snapshot() {(
         : $ns $format $retain
         name=$(date --date="@$start_date" +"$format")
-        if ! test -e "$dst/$ns/$name"; then
+        if ! test -e "$dst_path/$ns/$name"; then
           echo >&2 "create snapshot: $ns/$name"
-          mkdir -m 0700 -p "$dst/$ns"
+          mkdir -m 0700 -p "$dst_path/$ns"
           rsync >&2 \
               -aAXF --delete \
-              --link-dest="$dst/current" \
-              "$dst/current/" \
-              "$dst/$ns/.partial.$name"
-          mv "$dst/$ns/.partial.$name" "$dst/$ns/$name"
+              --link-dest="$dst_path/current" \
+              "$dst_path/current/" \
+              "$dst_path/$ns/.partial.$name"
+          mv "$dst_path/$ns/.partial.$name" "$dst_path/$ns/$name"
           echo >&2
         fi
         case $retain in
           ([0-9]*)
             delete_from=$(($retain + 1))
-            ls -r "$dst/$ns" \
+            ls -r "$dst_path/$ns" \
               | sed -n "$delete_from,\$p" \
               | while read old_name; do
                   echo >&2 "delete snapshot: $ns/$old_name"
-                  rm -fR "$dst/$ns/$old_name"
+                  rm -fR "$dst_path/$ns/$old_name"
                 done
             ;;
           (ALL)
