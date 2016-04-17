@@ -218,7 +218,7 @@ let
                             (filter (hasSuffix ".${cfg.search-domain}")
                                     longs);
                       add-port = a:
-                        if net.ssh.port != null
+                        if net.ssh.port != 22
                           then "[${a}]:${toString net.ssh.port}"
                           else a;
                     in

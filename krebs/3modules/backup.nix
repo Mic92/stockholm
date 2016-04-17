@@ -120,11 +120,11 @@ let
         dst_exec() {
           exec ssh -F /dev/null \
               -i "$identity" \
-              ''${dst_port:+-p $dst_port} \
+              -p $dst_port \
               "$dst_user@$dst_host" \
               -T "exec$(printf ' %q' "$@")"
         }
-        rsh="ssh -F /dev/null -i $identity ''${dst_port:+-p $dst_port}"
+        rsh="ssh -F /dev/null -i $identity -p $dst_port"
         local_rsync() {
           rsync "$@"
         }
@@ -146,7 +146,7 @@ let
         dst_exec() {
           exec "$@"
         }
-        rsh="ssh -F /dev/null -i $identity ''${src_port:+-p $src_port}"
+        rsh="ssh -F /dev/null -i $identity -p $src_port"
         local_rsync() {
           mkdir -m 0700 -p ${shell.escape plan.dst.path}/current
           flock -n ${shell.escape plan.dst.path} rsync "$@"
@@ -231,6 +231,9 @@ let
     ${concatStringsSep ";;\n" (mapAttrsToList
       (_: net: "(${head net.aliases}) echo ${toString net.ssh.port}")
       host.nets)};;
+    (*)
+      echo network-ssh-port: unhandled case: ${word} >&2
+      exit 1
     esac
   '';
 
