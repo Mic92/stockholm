@@ -121,7 +121,7 @@ let
         routeable IPv4 or IPv6 address.
 
         In stockholm this can be done by configuring:
-          host.nets.${netname?"retiolum"}.via.addrs4 =
+          krebs.hosts.${connect-host}.nets.${netname?"retiolum"}.via.addrs4 =
             [ "${external-ip} ${external-port}" ]
       '';
     };
