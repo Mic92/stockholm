@@ -20,10 +20,6 @@ with config.krebs.lib;
               (filterAttrs (_: dir.has-default-nix)
                            (subdirsOf ./.))
   // {
-    get-ssh-port = callPackage ./get-ssh-port {
-      inherit config;
-    };
-
     haskellPackages = pkgs.haskellPackages.override {
       overrides = self: super:
         mapAttrs (name: path: self.callPackage path {})

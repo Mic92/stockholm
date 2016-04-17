@@ -103,74 +103,63 @@ let
     plan.method == method &&
     config.krebs.build.host.name == plan.${side}.host.name;
 
-  start = plan: pkgs.writeScript "backup.${plan.name}" ''
+  start = plan: let
+    login-name = "root";
+    identity = local.host.ssh.privkey.path;
+    ssh = "ssh -i ${shell.escape identity}";
+    local = getAttr plan.method {
+      push = plan.src // { rsync = src-rsync; };
+      pull = plan.dst // { rsync = dst-rsync; };
+    };
+    remote = getAttr plan.method {
+      push = plan.dst // { rsync = dst-rsync; };
+      pull = plan.src // { rsync = src-rsync; };
+    };
+    src-rsync = "rsync";
+    dst-rsync = concatStringsSep " && " [
+      "stat ${shell.escape plan.dst.path} >/dev/null"
+      "mkdir -m 0700 -p ${shell.escape plan.dst.path}/current"
+      "flock -n ${shell.escape plan.dst.path} rsync"
+    ];
+  in pkgs.writeScript "backup.${plan.name}" ''
     #! ${pkgs.bash}/bin/bash
     set -efu
+    start_date=$(date +%s)
+    ssh_target=${shell.escape login-name}@$(${fastest-address remote.host})
     ${getAttr plan.method {
       push = ''
-        identity=${shell.escape plan.src.host.ssh.privkey.path}
-        src_path=${shell.escape plan.src.path}
-        src=$src_path
-        dst_user=root
-        dst_host=$(${fastest-address plan.dst.host})
-        dst_port=$(${pkgs.get-ssh-port}/bin/get-ssh-port "$dst_host")
-        dst_path=${shell.escape plan.dst.path}
-        dst=$dst_user@$dst_host:$dst_path
-        echo "update snapshot: current; $src -> $dst" >&2
-        dst_exec() {
-          exec ssh -F /dev/null \
-              -i "$identity" \
-              -p $dst_port \
-              "$dst_user@$dst_host" \
-              -T "exec$(printf ' %q' "$@")"
-        }
-        rsh="ssh -F /dev/null -i $identity -p $dst_port"
-        local_rsync() {
-          rsync "$@"
-        }
-        remote_rsync=${shell.escape (concatStringsSep " && " [
-          "stat ${shell.escape plan.dst.path} >/dev/null"
-          "mkdir -m 0700 -p ${shell.escape plan.dst.path}/current"
-          "exec flock -n ${shell.escape plan.dst.path} rsync"
-        ])}
+        rsync_src=${shell.escape plan.src.path}
+        rsync_dst=$ssh_target:${shell.escape plan.dst.path}
+        echo >&2 "update snapshot current; $rsync_src -> $rsync_dst"
       '';
       pull = ''
-        identity=${shell.escape plan.dst.host.ssh.privkey.path}
-        src_user=root
-        src_host=$(${fastest-address plan.src.host})
-        src_port=$(${pkgs.get-ssh-port}/bin/get-ssh-port "$src_host")
-        src_path=${shell.escape plan.src.path}
-        src=$src_user@$src_host:$src_path
-        dst_path=${shell.escape plan.dst.path}
-        dst=$dst_path
-        echo "update snapshot: current; $dst <- $src" >&2
-        dst_exec() {
-          exec "$@"
-        }
-        rsh="ssh -F /dev/null -i $identity -p $src_port"
-        local_rsync() {
-          stat ${shell.escape plan.dst.path} >/dev/null
-          mkdir -m 0700 -p ${shell.escape plan.dst.path}/current
-          flock -n ${shell.escape plan.dst.path} rsync "$@"
-        }
-        remote_rsync=rsync
+        rsync_src=$ssh_target:${shell.escape plan.src.path}
+        rsync_dst=${shell.escape plan.dst.path}
+        echo >&2 "update snapshot current; $rsync_dst <- $rsync_src"
       '';
     }}
-    start_date=$(date +%s)
-    local_rsync >&2 \
+    ${local.rsync} >&2 \
         -aAXF --delete \
-        --rsh="$rsh" \
-        --rsync-path="$remote_rsync" \
-        --link-dest="$dst_path/current" \
-        "$src/" \
-        "$dst/.partial"
+        --rsh=${shell.escape ssh} \
+        --rsync-path=${shell.escape remote.rsync} \
+        --link-dest=${shell.escape plan.dst.path}/current \
+        "$rsync_src/" \
+        "$rsync_dst/.partial"
+
+    dst_exec() {
+      ${getAttr plan.method {
+        push = ''exec ${ssh} "$ssh_target" -T "exec$(printf ' %q' "$@")"'';
+        pull = ''exec "$@"'';
+      }}
+    }
     dst_exec env \
-        dst_path="$dst_path" \
         start_date="$start_date" \
-        flock -n "$dst_path" \
+        flock -n ${shell.escape plan.dst.path} \
         /bin/sh < ${toFile "backup.${plan.name}.take-snapshots" ''
       set -efu
-      : $dst_path $start_date
+      : $start_date
+
+      dst_path=${shell.escape plan.dst.path}
 
       mv "$dst_path/current" "$dst_path/.previous"
       mv "$dst_path/.partial" "$dst_path/current"
