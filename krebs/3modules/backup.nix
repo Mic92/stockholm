@@ -129,6 +129,7 @@ let
           rsync "$@"
         }
         remote_rsync=${shell.escape (concatStringsSep " && " [
+          "stat ${shell.escape plan.dst.path} >/dev/null"
           "mkdir -m 0700 -p ${shell.escape plan.dst.path}/current"
           "exec flock -n ${shell.escape plan.dst.path} rsync"
         ])}
@@ -148,6 +149,7 @@ let
         }
         rsh="ssh -F /dev/null -i $identity -p $src_port"
         local_rsync() {
+          stat ${shell.escape plan.dst.path} >/dev/null
           mkdir -m 0700 -p ${shell.escape plan.dst.path}/current
           flock -n ${shell.escape plan.dst.path} rsync "$@"
         }
@@ -230,7 +232,6 @@ in out
 # TODO don't cancel plans on activation
 #   also, don't hang while deploying at:
 #   starting the following units: backup.wu-home-xu.push.service, backup.wu-home-xu.push.timer
-# TODO make sure /bku is properly mounted
 # TODO make sure that secure hosts cannot backup to insecure ones
 # TODO optionally only backup when src and dst are near enough :)
 # TODO try using btrfs for snapshots (configurable)
