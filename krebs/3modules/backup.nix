@@ -226,7 +226,6 @@ let
 
 in out
 # TODO ionice
-# TODO mail on failed push, pull
 # TODO mail on missing push
 # TODO don't cancel plans on activation
 #   also, don't hang while deploying at:
