@@ -103,103 +103,91 @@ let
     plan.method == method &&
     config.krebs.build.host.name == plan.${side}.host.name;
 
-  start = plan: pkgs.writeDash "backup.${plan.name}" ''
+  start = plan: let
+    login-name = "root";
+    identity = local.host.ssh.privkey.path;
+    ssh = "ssh -i ${shell.escape identity}";
+    local = getAttr plan.method {
+      push = plan.src // { rsync = src-rsync; };
+      pull = plan.dst // { rsync = dst-rsync; };
+    };
+    remote = getAttr plan.method {
+      push = plan.dst // { rsync = dst-rsync; };
+      pull = plan.src // { rsync = src-rsync; };
+    };
+    src-rsync = "rsync";
+    dst-rsync = concatStringsSep " && " [
+      "stat ${shell.escape plan.dst.path} >/dev/null"
+      "mkdir -m 0700 -p ${shell.escape plan.dst.path}/current"
+      "flock -n ${shell.escape plan.dst.path} rsync"
+    ];
+  in pkgs.writeScript "backup.${plan.name}" ''
+    #! ${pkgs.bash}/bin/bash
     set -efu
+    start_date=$(date +%s)
+    ssh_target=${shell.escape login-name}@$(${fastest-address remote.host})
     ${getAttr plan.method {
       push = ''
-        identity=${shell.escape plan.src.host.ssh.privkey.path}
-        src_path=${shell.escape plan.src.path}
-        src=$src_path
-        dst_user=root
-        dst_host=$(${fastest-address plan.dst.host})
-        dst_port=$(${network-ssh-port plan.dst.host "$dst_host"})
-        dst_path=${shell.escape plan.dst.path}
-        dst=$dst_user@$dst_host:$dst_path
-        echo "update snapshot: current; $src -> $dst" >&2
-        dst_shell() {
-          exec ssh -F /dev/null \
-              -i "$identity" \
-              ''${dst_port:+-p $dst_port} \
-              "$dst_user@$dst_host" \
-              -T "$with_dst_path_lock_script"
-        }
-        rsh="ssh -F /dev/null -i $identity ''${dst_port:+-p $dst_port}"
-        local_rsync() {
-          rsync "$@"
-        }
-        remote_rsync=${shell.escape (concatStringsSep " && " [
-          "mkdir -m 0700 -p ${shell.escape plan.dst.path}/current"
-          "exec flock -n ${shell.escape plan.dst.path} rsync"
-        ])}
+        rsync_src=${shell.escape plan.src.path}
+        rsync_dst=$ssh_target:${shell.escape plan.dst.path}
+        echo >&2 "update snapshot current; $rsync_src -> $rsync_dst"
       '';
       pull = ''
-        identity=${shell.escape plan.dst.host.ssh.privkey.path}
-        src_user=root
-        src_host=$(${fastest-address plan.src.host})
-        src_port=$(${network-ssh-port plan.src.host "$src_host"})
-        src_path=${shell.escape plan.src.path}
-        src=$src_user@$src_host:$src_path
-        dst_path=${shell.escape plan.dst.path}
-        dst=$dst_path
-        echo "update snapshot: current; $dst <- $src" >&2
-        dst_shell() {
-          eval "$with_dst_path_lock_script"
-        }
-        rsh="ssh -F /dev/null -i $identity ''${src_port:+-p $src_port}"
-        local_rsync() {
-          mkdir -m 0700 -p ${shell.escape plan.dst.path}/current
-          flock -n ${shell.escape plan.dst.path} rsync "$@"
-        }
-        remote_rsync=rsync
+        rsync_src=$ssh_target:${shell.escape plan.src.path}
+        rsync_dst=${shell.escape plan.dst.path}
+        echo >&2 "update snapshot current; $rsync_dst <- $rsync_src"
       '';
     }}
-    # Note that this only works because we trust date +%s to produce output
-    # that doesn't need quoting when used to generate a command string.
-    # TODO relax this requirement by selectively allowing to inject variables
-    #   e.g.: ''${shell.quote "exec env NOW=''${shell.unquote "$NOW"} ..."}
-    with_dst_path_lock_script="exec env start_date=$(date +%s) "${shell.escape
-      "flock -n ${shell.escape plan.dst.path} /bin/sh"
-    }
-    local_rsync >&2 \
+    ${local.rsync} >&2 \
         -aAXF --delete \
-        --rsh="$rsh" \
-        --rsync-path="$remote_rsync" \
-        --link-dest="$dst_path/current" \
-        "$src/" \
-        "$dst/.partial"
-    dst_shell < ${toFile "backup.${plan.name}.take-snapshots" ''
+        --rsh=${shell.escape ssh} \
+        --rsync-path=${shell.escape remote.rsync} \
+        --link-dest=${shell.escape plan.dst.path}/current \
+        "$rsync_src/" \
+        "$rsync_dst/.partial"
+
+    dst_exec() {
+      ${getAttr plan.method {
+        push = ''exec ${ssh} "$ssh_target" -T "exec$(printf ' %q' "$@")"'';
+        pull = ''exec "$@"'';
+      }}
+    }
+    dst_exec env \
+        start_date="$start_date" \
+        flock -n ${shell.escape plan.dst.path} \
+        /bin/sh < ${toFile "backup.${plan.name}.take-snapshots" ''
       set -efu
       : $start_date
 
-      dst=${shell.escape plan.dst.path}
+      dst_path=${shell.escape plan.dst.path}
 
-      mv "$dst/current" "$dst/.previous"
-      mv "$dst/.partial" "$dst/current"
-      rm -fR "$dst/.previous"
+      mv "$dst_path/current" "$dst_path/.previous"
+      mv "$dst_path/.partial" "$dst_path/current"
+      rm -fR "$dst_path/.previous"
       echo >&2
 
       snapshot() {(
         : $ns $format $retain
         name=$(date --date="@$start_date" +"$format")
-        if ! test -e "$dst/$ns/$name"; then
+        if ! test -e "$dst_path/$ns/$name"; then
           echo >&2 "create snapshot: $ns/$name"
-          mkdir -m 0700 -p "$dst/$ns"
+          mkdir -m 0700 -p "$dst_path/$ns"
           rsync >&2 \
               -aAXF --delete \
-              --link-dest="$dst/current" \
-              "$dst/current/" \
-              "$dst/$ns/.partial.$name"
-          mv "$dst/$ns/.partial.$name" "$dst/$ns/$name"
+              --link-dest="$dst_path/current" \
+              "$dst_path/current/" \
+              "$dst_path/$ns/.partial.$name"
+          mv "$dst_path/$ns/.partial.$name" "$dst_path/$ns/$name"
           echo >&2
         fi
         case $retain in
           ([0-9]*)
             delete_from=$(($retain + 1))
-            ls -r "$dst/$ns" \
+            ls -r "$dst_path/$ns" \
               | sed -n "$delete_from,\$p" \
               | while read old_name; do
                   echo >&2 "delete snapshot: $ns/$old_name"
-                  rm -fR "$dst/$ns/$old_name"
+                  rm -fR "$dst_path/$ns/$old_name"
                 done
             ;;
           (ALL)
@@ -227,24 +215,12 @@ let
       | ${pkgs.coreutils}/bin/head -1; }
   '';
 
-  # Note that we don't escape word on purpose, so we can deref shell vars.
-  # TODO type word
-  network-ssh-port = host: word: ''
-    case ${word} in
-    ${concatStringsSep ";;\n" (mapAttrsToList
-      (_: net: "(${head net.aliases}) echo ${toString net.ssh.port}")
-      host.nets)};;
-    esac
-  '';
-
 in out
 # TODO ionice
-# TODO mail on failed push, pull
 # TODO mail on missing push
 # TODO don't cancel plans on activation
 #   also, don't hang while deploying at:
 #   starting the following units: backup.wu-home-xu.push.service, backup.wu-home-xu.push.timer
-# TODO make sure /bku is properly mounted
 # TODO make sure that secure hosts cannot backup to insecure ones
 # TODO optionally only backup when src and dst are near enough :)
 # TODO try using btrfs for snapshots (configurable)

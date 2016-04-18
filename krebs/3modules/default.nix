@@ -218,7 +218,7 @@ let
                             (filter (hasSuffix ".${cfg.search-domain}")
                                     longs);
                       add-port = a:
-                        if net.ssh.port != null
+                        if net.ssh.port != 22
                           then "[${a}]:${toString net.ssh.port}"
                           else a;
                     in
@@ -228,8 +228,25 @@ let
             publicKey = host.ssh.pubkey;
           })
           (filterAttrs (_: host: host.ssh.pubkey != null) cfg.hosts);
+
+      programs.ssh.extraConfig = concatMapStrings
+        (net: ''
+          Host ${toString (net.aliases ++ net.addrs)}
+            Port ${toString net.ssh.port}
+        '')
+        (filter
+          (net: net.ssh.port != 22)
+          (concatMap (host: attrValues host.nets)
+            (mapAttrsToList
+              (_: host: recursiveUpdate host
+                (optionalAttrs (hasAttr config.krebs.search-domain host.nets) {
+                  nets."" = host.nets.${config.krebs.search-domain} // {
+                    aliases = [host.name];
+                    addrs = [];
+                  };
+                }))
+              config.krebs.hosts)));
     }
   ];
 
-in
-out
+in out

@@ -117,8 +117,8 @@ types // rec {
         type = submodule {
           options = {
             port = mkOption {
-              type = nullOr int;
-              default = null;
+              type = int;
+              default = 22;
             };
           };
         };
