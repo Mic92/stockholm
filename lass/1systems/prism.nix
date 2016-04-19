@@ -13,7 +13,16 @@ in {
     ../2configs/bitlbee.nix
     ../2configs/weechat.nix
     ../2configs/privoxy-retiolum.nix
-    ../2configs/buildbot-standalone.nix
+    {
+      #we need to use old sqlite for buildbot
+      imports = [
+        ../2configs/buildbot-standalone.nix
+      ];
+      krebs.build.source.nixpkgs = lib.mkForce {
+        url = https://github.com/NixOS/nixpkgs;
+        rev = "0d05f172b27e94d9eea3257f42d7e03371e63acc";
+      };
+    }
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
