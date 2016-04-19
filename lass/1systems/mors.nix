@@ -27,6 +27,7 @@
     ../2configs/libvirt.nix
     ../2configs/fetchWallpaper.nix
     ../2configs/cbase.nix
+    ../2configs/mail.nix
     #../2configs/buildbot-standalone.nix
     {
       #risk of rain port
