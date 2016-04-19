@@ -10,8 +10,8 @@ let
     account default: prism
   '';
 
-  msmtp = pkgs.writeScriptBin "msmtp" ''
-    ${pkgs.msmtp}/bin/msmtp -C ${msmtprc} $@
+  msmtp = pkgs.writeDashBin "msmtp" ''
+    exec ${pkgs.msmtp}/bin/msmtp -C ${msmtprc} $@
   '';
 
   muttrc = pkgs.writeText "muttrc" ''
@@ -74,8 +74,8 @@ let
     macro index ~ ,@( 'Toggle sidebar'      # toggle the sidebar
   '';
 
-  mutt = pkgs.writeScriptBin "mutt" ''
-    ${pkgs.mutt-kz}/bin/mutt -F ${muttrc} $@
+  mutt = pkgs.writeDashBin "mutt" ''
+    exec ${pkgs.mutt-kz}/bin/mutt -F ${muttrc} $@
   '';
 
 in {
