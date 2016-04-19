@@ -10,6 +10,7 @@ with config.krebs.lib;
     ];
     sender_domains = [
       "lassul.us"
+      "aidsballs.de"
     ];
     relay_from_hosts = map (host: host.nets.retiolum.ip4.addr) [
       config.krebs.hosts.mors
@@ -22,6 +23,8 @@ with config.krebs.lib;
       { from = "lassulus@lassul.us"; to = lass.mail; }
       { from = "test@lassul.us"; to = lass.mail; }
       { from = "outlook@lassul.us"; to = lass.mail; }
+      { from = "steuer@aidsballs.de"; to = lass.mail; }
+      { from = "lass@aidsballs.de"; to = lass.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }
