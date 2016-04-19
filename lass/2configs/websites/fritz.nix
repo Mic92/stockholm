@@ -34,8 +34,8 @@ in {
     ( manageCerts [ "eastuttgart.de" ])
     ( serveWordpress [ "eastuttgart.de" ])
 
-    ( manageCerts [ "habsys.de" ])
-    ( servePage [ "habsys.de" ])
+    ( manageCerts [ "habsys.de" "habsys.eu" ])
+    ( servePage [ "habsys.de" "habsys.eu" ])
   ];
 
   services.mysql = {
