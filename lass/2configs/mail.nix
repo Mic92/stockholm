@@ -15,6 +15,13 @@ let
   '';
 
   muttrc = pkgs.writeText "muttrc" ''
+    # gpg
+    source ${pkgs.mutt-kz}/share/doc/mutt-kz/samples/gpg.rc
+    set pgp_use_gpg_agent = yes
+    set pgp_sign_as = 0x976A7E4D
+    set crypt_autosign = yes
+    set crypt_replyencrypt = yes
+
     # notmuch
     set nm_default_uri="notmuch://$HOME/Maildir" # path to the maildir
     set nm_record = yes
