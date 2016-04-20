@@ -1,11 +1,11 @@
 _:
 {
   imports = [
-    ./xresources.nix
     ./folderPerms.nix
+    ./mysql-backup.nix
     ./per-user.nix
     ./urxvtd.nix
-    ./xresources.nix
     ./wordpress_nginx.nix
+    ./xresources.nix
   ];
 }
