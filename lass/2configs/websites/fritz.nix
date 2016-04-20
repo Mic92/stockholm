@@ -44,23 +44,19 @@ in {
     rootPassword = toString (<secrets/mysql_rootPassword>);
   };
 
-  services.mysqlBackup = {
+  lass.mysqlBackup = {
     enable = true;
-    databases = [
-      "eastuttgart_de"
-    ];
-    location = "/bku/sql_dumps";
+    config.fritz = {
+      password = toString (<secrets/mysql_rootPassword>);
+      databases = [
+        "eastuttgart_de"
+      ];
+    };
   };
 
   #lass.owncloud = {
   #  "o.ubikmedia.de" = {
   #    instanceid = "oc8n8ddbftgh";
   #  };
-  #};
-
-  #services.mysql = {
-  #  enable = true;
-  #  package = pkgs.mariadb;
-  #  rootPassword = toString (<secrets/mysql_rootPassword>);
   #};
 }

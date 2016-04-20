@@ -38,6 +38,16 @@ in {
     rootPassword = toString (<secrets/mysql_rootPassword>);
   };
 
+  lass.mysqlBackup = {
+    enable = true;
+    config.domsen = {
+      password = toString (<secrets/mysql_rootPassword>);
+      databases = [
+        "ubikmedia_de"
+        "o_ubikmedia_de"
+      ];
+    };
+  };
   services.mysqlBackup = {
     enable = true;
     databases = [
