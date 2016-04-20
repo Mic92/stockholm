@@ -104,6 +104,7 @@ with config.krebs.lib;
 
   #network
     iptables
+    iftop
 
   #stuff for dl
     aria2
