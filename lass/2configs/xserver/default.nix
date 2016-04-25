@@ -78,12 +78,7 @@ let
 
     # XXX JSON is close enough :)
     XMONAD_WORKSPACES0_FILE = pkgs.writeText "xmonad.workspaces0" (toJSON [
-      "cr"
-      "gm"
-      "ff"
-      "IM"
-      "mail"
-      "stockholm"
+      "dashboard"
     ]);
   };
 
