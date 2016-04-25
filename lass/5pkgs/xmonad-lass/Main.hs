@@ -25,7 +25,9 @@ import XMonad.Hooks.Place (placeHook, smart)
 import XMonad.Hooks.UrgencyHook (focusUrgent)
 import XMonad.Hooks.UrgencyHook (SpawnUrgencyHook(..), withUrgencyHook)
 import XMonad.Layout.FixedColumn (FixedColumn(..))
+import XMonad.Layout.Minimize (minimize, minimizeWindow, MinimizeMsg(RestoreNextMinimizedWin))
 import XMonad.Layout.NoBorders ( smartBorders )
+import XMonad.Operations (withFocused)
 import XMonad.Prompt (autoComplete, searchPredicate, XPConfig)
 import XMonad.Prompt.Window (windowPromptGoto, windowPromptBringCopy)
 import XMonad.Stockholm.Shutdown (sendShutdownEvent, handleShutdownEvent)
@@ -65,7 +67,7 @@ mainNoArgs = do
 
 myLayoutHook = defLayout
   where
-    defLayout = (avoidStruts $ Tall 1 (3/100) (1/2) ||| Full ||| Mirror (Tall 1 (3/100) (1/2))) ||| FixedColumn 2 80 80 1
+    defLayout = minimize $ ((avoidStruts $ Tall 1 (3/100) (1/2) ||| Full ||| Mirror (Tall 1 (3/100) (1/2))) ||| FixedColumn 2 80 80 1)
 
 
 xmonad' :: (LayoutClass l Window, Read (l Window)) => XConfig l -> IO ()
@@ -119,6 +121,9 @@ myKeyMap =
     , ("M4-v", withWorkspace autoXPConfig (windows . W.view))
     , ("M4-S-v", withWorkspace autoXPConfig (windows . W.shift))
     , ("M4-C-v", withWorkspace autoXPConfig (windows . copy))
+
+    , ("M4-m", withFocused minimizeWindow)
+    , ("M4-S-m", sendMessage RestoreNextMinimizedWin)
 
     , ("M4-q", windowPromptGoto infixAutoXPConfig)
     , ("M4-C-q", windowPromptBringCopy infixAutoXPConfig)
