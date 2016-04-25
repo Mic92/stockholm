@@ -31,10 +31,10 @@ in {
     #( manageCerts [ "eab.berkeley.edu" ])
     #( servePage [ "eab.berkeley.edu" ])
 
-    ( manageCerts [ "eastuttgart.de" ])
+    ( ssl [ "eastuttgart.de" ])
     ( serveWordpress [ "eastuttgart.de" ])
 
-    ( manageCerts [ "habsys.de" "habsys.eu" ])
+    ( ssl [ "habsys.de" "habsys.eu" ])
     ( servePage [ "habsys.de" "habsys.eu" ])
   ];
 
