@@ -98,7 +98,7 @@ displaySomeException = displayException
 
 myKeyMap :: [([Char], X ())]
 myKeyMap =
-    [ ("M4-<F11>", spawn "i3lock -i /tmp/wallpaper.png -f")
+    [ ("M4-<F11>", spawn "i3lock -i /var/lib/wallpaper/wallpaper -f")
     , ("M4-p", spawn "passmenu --type")
     , ("<XF86AudioRaiseVolume>", spawn "pactl -- set-sink-volume 0 +4%")
     , ("<XF86AudioLowerVolume>", spawn "pactl -- set-sink-volume 0 -4%")
