@@ -75,7 +75,7 @@ xmonad' conf = do
     path <- getEnv "XMONAD_STATE"
     try (readFile path) >>= \case
         Right content -> do
-            hPutStrLn stderr ("resuming from " ++ path)
+            hPutStrLn stderr ("resuming from " ++ path ++ "; state = " ++ show content)
             withArgs ("--resume" : lines content) (xmonad conf)
         Left e -> do
             hPutStrLn stderr (displaySomeException e)
