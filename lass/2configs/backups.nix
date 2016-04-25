@@ -47,6 +47,18 @@ with config.krebs.lib;
       dst = { host = config.krebs.hosts.uriel;    path = "/bku/dishfire-sql"; };
       startAt = "03:25";
     };
+    prism-bitlbee-mors = {
+      method = "pull";
+      src = { host = config.krebs.hosts.prism; path = "/var/lib/bitlbee"; };
+      dst = { host = config.krebs.hosts.mors; path = "/bku/prism-bitlbee"; };
+      startAt = "03:25";
+    };
+    prism-bitlbee-uriel = {
+      method = "pull";
+      src = { host = config.krebs.hosts.prism; path = "/var/lib/bitlbee"; };
+      dst = { host = config.krebs.hosts.uriel; path = "/bku/prism-bitlbee"; };
+      startAt = "03:25";
+    };
     prism-chat-mors = {
       method = "pull";
       src = { host = config.krebs.hosts.prism; path = "/home/chat"; };
