@@ -119,7 +119,7 @@ displaySomeException = displayException
 
 
 myKeyMap =
-    [ ("M4-<F11>", spawn "/var/setuid-wrappers/slock")
+    [ ("M4-<F11>", spawn "i3lock -i /tmp/wallpaper.png -f")
     , ("M4-p", spawn "passmenu --type")
     --, ("M4-r", spawn "exe=$(yeganesh -x) && eval \"exec $exe\"")
     , ("<XF86AudioRaiseVolume>", spawn "pactl -- set-sink-volume 0 +4%")

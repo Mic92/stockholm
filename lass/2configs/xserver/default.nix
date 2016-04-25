@@ -40,10 +40,6 @@ let
       };
     };
 
-    security.setuidPrograms = [
-      "slock"
-    ];
-
     systemd.services.display-manager.enable = false;
 
     services.xserver.enable = true;
@@ -96,6 +92,7 @@ let
     set -efu
     export PATH; PATH=${makeSearchPath "bin" ([
       pkgs.rxvt_unicode
+      pkgs.i3lock
     ] ++ config.environment.systemPackages)}:/var/setuid-wrappers
     settle() {(
       # Use PATH for a clean journal
