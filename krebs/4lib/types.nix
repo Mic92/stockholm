@@ -213,6 +213,18 @@ types // rec {
       };
     };
   });
+  group = submodule ({ config, ... }: {
+    options = {
+      name = mkOption {
+        type = username;
+        default = config._module.args.name;
+      };
+      gid = mkOption {
+        type = int;
+        default = genid config.name;
+      };
+    };
+  });
 
   addr = either addr4 addr6;
   addr4 = mkOptionType {
