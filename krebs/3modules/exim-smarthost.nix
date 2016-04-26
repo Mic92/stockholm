@@ -105,7 +105,7 @@ let
         requires = [ "secret.service" ];
       };
     };
-    services.exim = {
+    krebs.exim = {
       enable = true;
       config = ''
         keep_environment =

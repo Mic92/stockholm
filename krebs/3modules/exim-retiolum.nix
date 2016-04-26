@@ -32,7 +32,7 @@ let
   };
 
   imp = {
-    services.exim = {
+    krebs.exim = {
       enable = true;
       config =
         # This configuration makes only sense for retiolum-enabled hosts.
