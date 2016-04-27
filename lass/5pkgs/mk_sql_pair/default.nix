@@ -12,8 +12,8 @@ pkgs.writeScriptBin "mk_sql_pair" ''
   fi
 
   cat <<EOF
-    create database $name;
-    create user $name;
-    grant all on $name.* to $name@'localhost' identified by '$password';
+  create database $name;
+  create user $name;
+  grant all on $name.* to $name@'localhost' identified by '$password';
   EOF
 ''
