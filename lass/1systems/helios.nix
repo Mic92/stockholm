@@ -11,6 +11,7 @@ with builtins;
     ../2configs/git.nix
     ../2configs/pass.nix
     ../2configs/fetchWallpaper.nix
+    ../2configs/backups.nix
     #{
     #  users.extraUsers = {
     #    root = {
