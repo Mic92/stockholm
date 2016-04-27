@@ -42,11 +42,6 @@ with config.krebs.lib;
       { from = "root"; to = "lass"; }
     ];
   };
-
-  krebs.setuid.sendmail = {
-    filename = "${pkgs.exim}/bin/exim";
-    mode = "4111";
-  };
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp --dport smtp"; target = "ACCEPT"; }
   ];
