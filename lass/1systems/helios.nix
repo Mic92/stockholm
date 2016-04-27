@@ -10,6 +10,7 @@ with builtins;
     ../2configs/programs.nix
     ../2configs/git.nix
     ../2configs/pass.nix
+    ../2configs/fetchWallpaper.nix
     #{
     #  users.extraUsers = {
     #    root = {
