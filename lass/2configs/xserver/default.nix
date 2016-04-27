@@ -89,6 +89,7 @@ let
       pkgs.rxvt_unicode
       pkgs.i3lock
       pkgs.pulseaudioLight
+      pkgs.xorg.xbacklight
     ] ++ config.environment.systemPackages)}:/var/setuid-wrappers
     settle() {(
       # Use PATH for a clean journal

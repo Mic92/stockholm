@@ -105,6 +105,8 @@ myKeyMap =
     , ("<XF86AudioMute>", spawn "pactl -- set-sink-mute 0 toggle")
     , ("<XF86AudioMicMute>", spawn "pactl -- set-source-mute 1 toggle")
     , ("<XF86Launch1>", gridselectWorkspace gridConfig W.view)
+    , ("<XF86MonBrightnessUp>", spawn "xbacklight -steps 1 -time 1 -inc 3")
+    , ("<XF86MonBrightnessDown>", spawn "xbacklight -steps 1 -time 1 -dec 3")
 
     , ("M4-a", focusUrgent)
     , ("M4-S-r", renameWorkspace    def)
