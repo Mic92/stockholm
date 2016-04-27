@@ -19,10 +19,11 @@ in {
       username = "lol";
       password = "wut";
     };
-    exim-retiolum = {
-      enable = true;
-      primary_hostname = "test.r";
-    };
+    # XXX exim-retiolum and exim-smarthost are mutually exclusive
+    #exim-retiolum = {
+    #  enable = true;
+    #  primary_hostname = "test.r";
+    #};
     exim-smarthost = {
       enable = true;
       primary_hostname = "test.r";
