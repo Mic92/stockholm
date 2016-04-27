@@ -36,9 +36,6 @@ import XMonad.Util.EZConfig (additionalKeysP)
 myTerm :: String
 myTerm = "urxvtc"
 
-myRootTerm :: String
-myRootTerm = "urxvtc -name root-urxvt -e su -"
-
 myFont :: String
 myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
 
