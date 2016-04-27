@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
+  krebs.per-user.lass.packages = with pkgs; [
     pass
     gnupg1
   ];
