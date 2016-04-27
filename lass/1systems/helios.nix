@@ -53,6 +53,11 @@ with builtins;
     "/boot" = {
       device = "/dev/sda1";
     };
+
+    "/bku" = {
+      device = "/dev/pool/bku";
+      fsType = "ext4";
+    };
   };
 
   #services.udev.extraRules = ''
