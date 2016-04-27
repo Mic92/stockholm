@@ -183,7 +183,5 @@ with config.krebs.lib;
     KERNEL=="hpet", GROUP="audio"
   '';
 
-  services.tor.client.enable = true;
-  services.tor.enable = true;
   services.virtualboxHost.enable = true;
 }

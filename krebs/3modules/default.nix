@@ -13,6 +13,7 @@ let
       ./buildbot/slave.nix
       ./build.nix
       ./current.nix
+      ./exim.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
       ./fetchWallpaper.nix
