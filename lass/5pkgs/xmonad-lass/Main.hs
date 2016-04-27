@@ -141,8 +141,8 @@ infixAutoXPConfig = autoXPConfig
 
 gridConfig :: GSConfig WorkspaceId
 gridConfig = def
-    { gs_cellwidth = 50
-    , gs_cellheight = 50
+    { gs_cellwidth = 100
+    , gs_cellheight = 30
     , gs_cellpadding = 2
     , gs_navigate = navNSearch
     , gs_font = myFont
