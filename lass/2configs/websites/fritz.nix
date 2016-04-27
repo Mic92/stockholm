@@ -10,26 +10,23 @@ let
 
 in {
   imports = [
-    #( manageCerts [ "biostase.de" ])
-    #( servePage [ "biostase.de" ])
+    ( manageCerts [ "biostase.de" "www.biostase.de" ])
+    #( serveWordpress [ "biostase.de" "www.biostase.de" ])
 
-    #( manageCerts [ "gs-maubach.de" ])
-    #( servePage [ "gs-maubach.de" ])
+    ( manageCerts [ "radical-dreamers.de" ])
+    ( serveWordpress [ "radical-dreamers.de" ])
 
-    #( manageCerts [ "spielwaren-kern.de" ])
-    #( servePage [ "spielwaren-kern.de" ])
+    ( manageCerts [ "gs-maubach.de" ])
+    ( serveWordpress [ "gs-maubach.de" ])
 
-    #( manageCerts [ "societyofsimtech.de" ])
-    #( servePage [ "societyofsimtech.de" ])
+    ( manageCerts [ "spielwaren-kern.de" ])
+    ( serveWordpress [ "spielwaren-kern.de" ])
 
-    #( manageCerts [ "ttf-kleinaspach.de" ])
-    #( servePage [ "ttf-kleinaspach.de" ])
+    ( manageCerts [ "familienpraxis-korntal.de" ])
+    ( servePage [ "familienpraxis-korntal.de" ])
 
-    #( manageCerts [ "edsn.de" ])
-    #( servePage [ "edsn.de" ])
-
-    #( manageCerts [ "eab.berkeley.edu" ])
-    #( servePage [ "eab.berkeley.edu" ])
+    ( manageCerts [ "ttf-kleinaspach.de" ])
+    ( serveWordpress [ "ttf-kleinaspach.de" ])
 
     ( ssl [ "eastuttgart.de" ])
     ( serveWordpress [ "eastuttgart.de" ])
@@ -49,14 +46,12 @@ in {
     config.fritz = {
       password = toString (<secrets/mysql_rootPassword>);
       databases = [
+        "biostase_de"
         "eastuttgart_de"
+        "radical_dreamers_de"
+        "spielwaren_kern_de"
+        "ttf_kleinaspach_de"
       ];
     };
   };
-
-  #lass.owncloud = {
-  #  "o.ubikmedia.de" = {
-  #    instanceid = "oc8n8ddbftgh";
-  #  };
-  #};
 }
