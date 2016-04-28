@@ -108,7 +108,8 @@ let
 
   xmonad-stop = pkgs.writeScriptBin "xmonad-stop" ''
     #! /bin/sh
-    exec ${pkgs.xmonad-lass}/bin/xmonad --shutdown
+    ${pkgs.xmonad-lass}/bin/xmonad --shutdown
+    ${pkgs.coreutils}/bin/sleep 2s
   '';
 
   xserver-environment = {
