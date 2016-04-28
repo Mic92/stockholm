@@ -7,6 +7,7 @@ in {
     ./default.nix
     #./urxvt.nix
     ./xserver
+    ./mpv.nix
   ];
 
   users.extraUsers.mainUser.extraGroups = [ "audio" ];
@@ -44,7 +45,6 @@ in {
     xsel
     zathura
 
-    mpv
     mpv-poll
     yt-next
   #window manager stuff
