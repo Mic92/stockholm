@@ -45,24 +45,6 @@ let
         instanceid = mkOption {
           type = str;
         };
-        ssl = mkOption {
-          type = with types; submodule ({
-            options = {
-              enable = mkEnableOption "ssl";
-              certificate = mkOption {
-                type = str;
-              };
-              certificate_key = mkOption {
-                type = str;
-              };
-              ciphers = mkOption {
-                type = str;
-                default = "AES128+EECDH:AES128+EDH";
-              };
-            };
-          });
-          default = {};
-        };
       };
     }));
     default = {};
@@ -72,7 +54,7 @@ let
   group = config.services.nginx.group;
 
   imp = {
-    krebs.nginx.servers = flip mapAttrs cfg ( name: { domain, folder, ssl, ... }: {
+    krebs.nginx.servers = flip mapAttrs cfg ( name: { domain, folder, ... }: {
       server-names = [
         "${domain}"
         "www.${domain}"
@@ -116,16 +98,7 @@ let
 
         error_page 403 /core/templates/403.php;
         error_page 404 /core/templates/404.php;
-        ${if ssl.enable then ''
-          ssl_certificate ${ssl.certificate};
-          ssl_certificate_key ${ssl.certificate_key};
-        '' else ""}
       '';
-      listen = (if ssl.enable then
-          [ "80" "443 ssl" ]
-        else
-          "80"
-      );
     });
     services.phpfpm.poolConfigs = flip mapAttrs cfg (name: { domain, folder, ... }: ''
       listen = ${folder}/phpfpm.pool

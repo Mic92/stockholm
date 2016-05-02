@@ -32,7 +32,7 @@ with config.krebs.lib;
       nets = {
         retiolum = {
           addrs4 = ["10.243.0.84"];
-          addrs6 = ["42:ff6b:5f0b:460d:2cee:4d05:73f7:5566/128"];
+          addrs6 = ["42:ff6b:5f0b:460d:2cee:4d05:73f7:5566"];
           aliases = [
             "darth.retiolum"
             "darth.r"
@@ -383,7 +383,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       nets = {
         retiolum = {
           addrs4 = ["10.243.231.219"];
-          addrs6 = ["42:f7bf:178d:4b68:1c1b:42e8:6b27:6a72/128"];
+          addrs6 = ["42:f7bf:178d:4b68:1c1b:42e8:6b27:6a72"];
           aliases = [
             "nukular.r"
           ];
@@ -537,6 +537,29 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
             9jjThuidiEwY4EMtJGKisnTGx8yS5iQibDMqzrcRpCxCLcl68FgFNKCTtSIj1mo6
             hgO1ZKmHw73ysmrL2tImmalHYcqDJnq/KInG2ZkCZI/2ZqfJyrRSTk86t5ubfD6p
             egC5N0Y5dQHJd66AytNwXxymiAcWuYth9QIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+
+    senderechner = rec {
+      cores = 2;
+      nets = {
+        retiolum = {
+          addrs4 = ["10.243.0.163"];
+          addrs6 = ["42:b67b:5752:a730:5f28:d80d:6b37:5bda/128"];
+          aliases = [
+            "senderechner.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA0zCc5aLVRO6NuxUoR6BVzq2PQ/U5AEjYTdGkQufRot42N29MhxY7
+            lJBfPfkw/yg2FOzmAzTi62QyrLWSaF1x54rKu+JeNSsOAX+BorGhM67N45DGvJ0X
+            rakIL0BrVoV7Kxssq3DscGVbjbNS5B5c+IvTp97me/MpuDrfYqUyZk5mS9nB0oDL
+            inao/A5AtOO4sdqN5BNE9/KisN/9dD359Gz2ZGGq6Ki7o4HBdBj5vi0f4fTofZxT
+            BJH4BxbWaHwXMC0HYGlhQS0Y7tKYT6h3ChxoLDuW2Ox2IF5AQ/O4t4PIBDp1XaAO
+            OK8SsmsiD6ZZm6q/nLWBkYH08geYfq0BhQIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
         };

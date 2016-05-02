@@ -133,6 +133,7 @@ with config.krebs.lib;
           '';
         };
       };
+      ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDRyEogeejET/UlqYYzrla3W2xG771oLK8uTFsVlVQFes4/c++Pp3KryJ/+avb/FQGlUb5YTO2SViZyAPTyw3Anv/8wxryB6ExDcfiiPL9D4Kgk559Gc1C+8vJu3Se3zB9huefllhdwsVkeFrInyWRarH3LNSbBq1TH2Rw/T4wyDVILu/QFxyqECdNzi6sufQ/92rEi3oDqlMbS8f45nbVm9CJpdn7ATwLW1PoBrrYkGll3P7ggOmR45rgldTVCLq3rIrIooiOaOhY1Leq+/sBeDa7fVeRFxFaLGYb9KFjQ4x2kL+3dDv0r726wKhrMQX75g/+Hqkv2di4/AGETI71b";
     };
     cloudkrebs = {
       cores = 1;

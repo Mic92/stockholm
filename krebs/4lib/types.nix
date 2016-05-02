@@ -186,10 +186,16 @@ types // rec {
     };
   });
 
-  # TODO
-  addr = str;
-  addr4 = str;
-  addr6 = str;
+  addr = either addr4 addr6;
+  addr4 = mkOptionType {
+    name = "IPv4 address";
+    check = let
+      IPv4address = let d = "([1-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])"; in
+        concatMapStringsSep "." (const d) (range 1 4);
+    in x: match IPv4address != null;
+    merge = mergeOneOption;
+  };
+  addr6 = str; # TODO
 
   pgp-pubkey = str;
 
