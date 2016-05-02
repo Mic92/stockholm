@@ -5,6 +5,10 @@ stdenv.mkDerivation rec {
   # forticlient will be copied into /tmp before execution. this is necessary as
   # the software demands $base to be writeable
 
+  # mkdir /etc/ppp ; touch /etc/ppp/options
+  ## i still have not found which tool uses tail ... i tried redirecting it in forticlientsslvpn and subproc
+  # ln -s /run/current-system/sw/bin/tail /usr/bin/tail
+
   src = fetchurl {
     # archive.org mirror:
     # https://archive.org/download/ForticlientsslvpnLinux4.4.23171.tar/forticlientsslvpn_linux_4.4.2317.tar.gz
