@@ -42,9 +42,11 @@ let
 
   fetchWallpaperScript = pkgs.writeScript "fetchWallpaper" ''
     #! ${pkgs.bash}/bin/bash
+    set -euf
 
     mkdir -p ${shell.escape cfg.stateDir}
-    curl -s -o ${shell.escape cfg.stateDir}/wallpaper -z ${shell.escape cfg.stateDir}/wallpaper ${shell.escape cfg.url}
+    cd ${shell.escape cfg.stateDir}
+    curl -s -o wallpaper.tmp -z wallpaper ${shell.escape cfg.url} && mv wallpaper.tmp wallpaper
     feh --no-fehbg --bg-scale ${shell.escape cfg.stateDir}/wallpaper
   '';
 
