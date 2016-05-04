@@ -111,6 +111,7 @@ with config.krebs.lib;
 
   #neat utils
     krebspaste
+    psmisc
 
   #unpack stuff
     p7zip
