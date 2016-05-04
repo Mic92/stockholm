@@ -14,7 +14,7 @@ let
         useDefaultShell = true;
         createHome = true;
       };
-      lass.per-user.${name}.packages = packages;
+      krebs.per-user.${name}.packages = packages;
       security.sudo.extraConfig = ''
         ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
       '';
@@ -35,7 +35,7 @@ let
         useDefaultShell = true;
         createHome = true;
       };
-      lass.per-user.${name}.packages = packages;
+      krebs.per-user.${name}.packages = packages;
       security.sudo.extraConfig = ''
         ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
       '';
