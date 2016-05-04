@@ -193,7 +193,6 @@
     hashPassword
     urban
     mk_sql_pair
-    skype
   ];
 
   #TODO: fix this shit
