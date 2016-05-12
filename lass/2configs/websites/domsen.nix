@@ -1,7 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (config.krebs.lib) genid;
+  inherit (config.krebs.lib)
+    genid
+    readFile
+    ;
   inherit (import ../../4lib { inherit lib pkgs; })
     manageCert
     manageCerts
@@ -10,6 +13,16 @@ let
     servePage
     serveOwncloud
     serveWordpress;
+
+  msmtprc = pkgs.writeText "msmtprc" ''
+    account prism
+      host localhost
+    account default: prism
+  '';
+
+  sendmail = pkgs.writeDash "msmtp" ''
+    exec ${pkgs.msmtp}/bin/msmtp --read-envelope-from -C ${msmtprc} "$@"
+  '';
 
 in {
   imports = [
@@ -66,13 +79,10 @@ in {
     createHome = true;
   };
 
-  services.phpfpm.phpIni = pkgs.runCommand "php.ini" {
-     options = ''
-      extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
-    '';
-  } ''
-    cat ${pkgs.php}/etc/php-recommended.ini > $out
-    echo "$options" >> $out
+  services.phpfpm.phpIni = pkgs.writeText "php.ini" ''
+    ${readFile "${pkgs.php}/etc/php-recommended.ini"}
+    extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
+    sendmail_path = ${sendmail} -t
   '';
 }
 
