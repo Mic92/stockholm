@@ -270,8 +270,8 @@ with config.krebs.lib;
             '';
         };
       };
-      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIujMZ3ZFxKpWeB/cjfKfYRr77+VRZk0Eik+92t03NoA root@servarch";
+      #ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      #ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIujMZ3ZFxKpWeB/cjfKfYRr77+VRZk0Eik+92t03NoA root@servarch";
     };
     wbob = rec {
       cores = 1;
@@ -407,9 +407,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
         retiolum = {
           addrs4 = ["10.243.124.21"];
           addrs6 = ["42:9898:a8be:ce56:0ee3:b99c:42c5:109e"];
-          aliases = [
-            "heidi.r"
-          ];
+          aliases = [ "heidi.r" "heidi.retiolum" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIBCgKCAQEAqRLnAJNZ1OoO1bTS58DQgxi1VKgITHIuTW0fVGDvbXnsjPUB3cgx
@@ -423,6 +421,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
         };
       };
     };
+
 
     soundflower = rec {
       cores = 1;
@@ -594,7 +593,28 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
         };
       };
     };
-
+  } // { # hosts only maintained in stockholm, not owned by me
+    tpsw = {
+      cores = 2;
+      owner = config.krebs.users.ciko; # main laptop
+      nets = {
+        retiolum = {
+          addrs4 = ["10.243.183.236"];
+          addrs6 = ["42:8ca8:d2e4:adf6:5c0f:38cb:e9ef:eb3c"];
+          aliases = [ "tpsw.r" "tpsw.retiolum" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAvwYPFAINwV0EH0myFpNzRjVbqXdAmJP616C5JvODklhZWJxFxlKJ
+            Poczl57j2Z+4bonkTrJmsNtSaQLPKYH4H1qfo/lwz7nqEpPi3Xp4Fgts23w36eML
+            WBvbw0fQO9R8zZJIIdRkJ2qqlhZiTlor1Gtlm8Z1RmpKkhL9O6Yzj94VhGLhABVl
+            OsaF2M3PgXJMiLry67jzbAs3+mVaT3iBTzWOaOyREjKQEUg9B9IDxrmZMSWqdXZM
+            0wfzaCjS40jD73m7tqi7W3tXzAUP4mEeUqkC+NC2Zgm/lJ5B1KPx7AyNqtRLsBLd
+            pIdJs6ng63WV1fyHYUWMYqZk9zB/tQ0b0wIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
   };
   users = rec {
     makefu = {
@@ -614,6 +634,9 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
     makefu-vbob = {
       inherit (makefu) mail pgp;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCiKvLKaRQPL/Y/4EWx3rNhrY5YGKK4AeqDOFTLgJ7djwJnMo7FP+OIH/4pFxS6Ri2TZwS9QsR3hsycA4n8Z15jXAOXuK52kP65Ei3lLyz9mF+/s1mJsV0Ui/UKF3jE7PEAVky7zXuyYirJpMK8LhXydpFvH95aGrL1Dk30R9/vNkE9rc1XylBfNpT0X0GXmldI+r5OPOtiKLA5BHJdlV8qDYhQsU2fH8S0tmAHF/ir2bh7+PtLE2hmRT+b8I7y1ZagkJsC0sn9GT1AS8ys5s65V2xTTIfQO1zQ4sUH0LczuRuY8MLaO33GAzhyoSQdbdRAmwZQpY/JRJ3C/UROgHYt makefu@vbob";
+    };
+    ciko = {
+      mail = "wieczorek.stefan@googlemail.com";
     };
     exco = {
       mail = "dickbutt@excogitation.de";
