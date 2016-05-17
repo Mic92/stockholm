@@ -56,6 +56,11 @@ with builtins;
       device = "/dev/sda1";
     };
 
+    "/home" = {
+      device = "/dev/pool/home";
+      fsType = "ext4";
+    };
+
     "/bku" = {
       device = "/dev/pool/bku";
       fsType = "ext4";
