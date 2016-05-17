@@ -41,7 +41,7 @@ with config.krebs.lib;
       cores = 2;
       nets = rec {
         internet = {
-          ip4.addr = "104.167.115.184";
+          ip4.addr = "104.233.79.118";
           aliases = [
             "echelon.internet"
           ];
