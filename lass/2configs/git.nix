@@ -35,6 +35,7 @@ let
     newsbot-js = {};
     kimsufi-check = {};
     realwallpaper = {};
+    xmonad-stockholm = {};
   };
 
   restricted-repos = mapAttrs make-restricted-repo (
