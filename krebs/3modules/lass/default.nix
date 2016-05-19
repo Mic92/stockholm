@@ -263,6 +263,33 @@ with config.krebs.lib;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDWlIxkX41V55Yker8n4gErx2xcKpXFNKthhbP3+bTJ7";
     };
+    shodan = {
+      cores = 2;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.0.4";
+          ip6.addr = "42:0:0:0:0:0:0:50d4";
+          aliases = [
+            "shodan.retiolum"
+            "shodan.r"
+            "cgit.shodan.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA9bUSItw8rEu2Cm2+3IGHyRxopre9lqpFjZNG2QTnjXkZ97QlDesT
+            YYZgM2lBkYcDN3/LdGaFFKrQQSGiF90oXA2wFqPuIfycx+1+TENGCzF8pExwbTd7
+            ROSVnISbghXYDgr3TqkjpPmnM+piFKymMDBGhxWuy1bw1AUfvRzhQwPAvtjB4VvF
+            7AVN/Z9dAZ/LLmYfYq7fL8V7PzQNvR+f5DP6+Eubx0xCuyuo63bWuGgp3pqKupx4
+            xsixtMQPuqMBvOUo0SBCCPa9a+6I8dSwqAmKWM5BhmNlNCRDi37mH/m96av7SIiZ
+            V29hwypVnmLoJEFiDzPMCdiH9wJNpHuHuQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      secure = true;
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC9vup68R0I+62FK+8LNtwM90V9P4ukBmU7G7d54wf4C";
+    };
 
   };
   users = {
