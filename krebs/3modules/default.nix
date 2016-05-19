@@ -161,6 +161,7 @@ let
         ciko.mail = "ciko@shackspace.de";
         Mic92.mail = "joerg@higgsboson.tk";
       in {
+        "cfp@eloop.org" = [{ mail = "eloop2016@krebsco.de"; }];
         "eloop2016@krebsco.de" = spam-ml ++ [ ciko Mic92 ];
         "postmaster@krebsco.de" = spam-ml; # RFC 822
         "lass@krebsco.de" = lass;
