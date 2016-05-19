@@ -158,7 +158,10 @@ let
           makefu
           tv
         ];
+        ciko.mail = "ciko@shackspace.de";
+        Mic92.mail = "joerg@higgsboson.tk";
       in {
+        "eloop2016@krebsco.de" = spam-ml ++ [ ciko Mic92 ];
         "postmaster@krebsco.de" = spam-ml; # RFC 822
         "lass@krebsco.de" = lass;
         "makefu@krebsco.de" = makefu;
