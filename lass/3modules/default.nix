@@ -1,6 +1,7 @@
 _:
 {
   imports = [
+    ./ejabberd
     ./folderPerms.nix
     ./mysql-backup.nix
     ./urxvtd.nix
