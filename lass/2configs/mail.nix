@@ -21,6 +21,21 @@ let
     set pgp_sign_as = 0x976A7E4D
     set crypt_autosign = yes
     set crypt_replyencrypt = yes
+    set crypt_verify_sig = yes
+    set pgp_verify_command = "gpg --no-verbose --batch --output - --verify %s %f"
+
+    macro index \Cv \
+    "<enter-command> set my_crypt_verify_sig=\$crypt_verify_sig<enter> \
+    <enter-command> set crypt_verify_sig=yes<enter> \
+    <display-message><enter-command> set crypt_verify_sig=\$my_crypt_verify_sig<enter>" \
+     'Verify PGP signature and open the message'
+
+    macro pager \Cv \
+    "<exit><enter-command> set my_crypt_verify_sig=\$crypt_verify_sig<enter> \
+    <enter-command> set crypt_verify_sig=yes<enter> \
+    <display-message><enter-command> set crypt_verify_sig=\$my_crypt_verify_sig<enter>" \
+     'Verify PGP signature'
+
 
     # notmuch
     set nm_default_uri="notmuch://$HOME/Maildir" # path to the maildir
