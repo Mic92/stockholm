@@ -54,7 +54,7 @@ with config.krebs.lib;
         stockholm = "/home/lass/stockholm";
         nixpkgs = {
           url = https://github.com/NixOS/nixpkgs;
-          rev = "e781a8257b4312f6b138c7d0511c77d8c06ed819";
+          rev = "d541e0dc1c05f5514bf30f8039e687adddb45616";
           dev = "/home/lass/src/nixpkgs";
         };
       } // optionalAttrs config.krebs.build.host.secure {
