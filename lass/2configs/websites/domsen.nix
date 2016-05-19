@@ -79,8 +79,7 @@ in {
     createHome = true;
   };
 
-  services.phpfpm.phpIni = pkgs.writeText "php.ini" ''
-    ${readFile "${pkgs.php}/etc/php-recommended.ini"}
+  services.phpfpm.phpOptions = ''
     extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
     sendmail_path = ${sendmail} -t
   '';
