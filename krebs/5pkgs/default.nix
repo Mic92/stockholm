@@ -36,6 +36,11 @@ with config.krebs.lib;
 
     ReaktorPlugins = callPackage ./Reaktor/plugins.nix {};
 
+    # XXX symlinkJoin changed arguments somewhere around nixpkgs d541e0d
+    symlinkJoin = { name, paths, ... }@args: let
+      x = pkgs.symlinkJoin args;
+    in if typeOf x != "lambda" then x else pkgs.symlinkJoin name paths;
+
     test = {
       infest-cac-centos7 = callPackage ./test/infest-cac-centos7 {};
     };
