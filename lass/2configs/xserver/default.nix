@@ -40,6 +40,10 @@ let
       };
     };
 
+    krebs.per-user.lass.packages = [
+      pkgs.rxvt_unicode_with-plugins
+    ];
+
     systemd.services.display-manager.enable = false;
 
     services.xserver.enable = true;
