@@ -2,6 +2,10 @@
 
 let
   ip = config.krebs.build.host.nets.internet.ip4.addr;
+
+  inherit (import ../../4lib { inherit lib pkgs; })
+    manageCerts;
+
 in {
   imports = [
     ../.
@@ -158,6 +162,38 @@ in {
       services.tor = {
         enable = true;
       };
+    }
+    {
+      security.acme = {
+        certs."lassul.us" = {
+          email = "lass@lassul.us";
+          webroot = "/var/lib/acme/challenges/lassul.us";
+          plugins = [
+            "account_key.json"
+            "key.pem"
+            "fullchain.pem"
+            "full.pem"
+          ];
+          user = "ejabberd";
+        };
+      };
+      krebs.nginx.servers."lassul.us" = {
+        server-names = [ "lassul.us" ];
+        locations = [
+          (lib.nameValuePair "/.well-known/acme-challenge" ''
+            root /var/lib/acme/challenges/lassul.us/;
+          '')
+        ];
+      };
+      lass.ejabberd = {
+        enable = true;
+        hosts = [ "lassul.us" ];
+        certfile = "/var/lib/acme/lassul.us/full.pem";
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport xmpp-client"; target = "ACCEPT"; }
+        { predicate = "-p tcp --dport xmpp-server"; target = "ACCEPT"; }
+      ];
     }
   ];
 
