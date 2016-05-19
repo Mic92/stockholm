@@ -127,7 +127,7 @@ let
   xserver = pkgs.writeScriptBin "xserver" ''
     #! /bin/sh
     set -efu
-    exec ${pkgs.xorg.xorgserver}/bin/X \
+    exec ${pkgs.xorg.xorgserver.out}/bin/X \
         :${toString config.services.xserver.display} \
         vt${toString config.services.xserver.tty} \
         -config ${import ./xserver.conf.nix args} \
