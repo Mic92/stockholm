@@ -158,7 +158,7 @@ let
           makefu
           tv
         ];
-        ciko.mail = "ciko@shackspace.de";
+        ciko.mail = "wieczorek.stefan@gmail.com";
         Mic92.mail = "joerg@higgsboson.tk";
       in {
         "cfp@eloop.org" = [{ mail = "eloop2016@krebsco.de"; }];
