@@ -63,6 +63,10 @@ execute = \
 	script=$$(echo "$$result" | jq -r .) && \
 	echo "$$script" | PS5=% sh
 
+ifeq ($(MAKECMDGOALS),)
+$(error No goals specified)
+endif
+
 # usage: make deploy system=foo [target_host=bar]
 deploy: ssh ?= ssh
 deploy:
