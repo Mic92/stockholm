@@ -54,9 +54,7 @@ evaluate = \
 		--show-trace \
 		-I nixos-config=$(nixos-config) \
 		-I stockholm=$(stockholm) \
-		-E '{ eval, f }: f eval' \
-		--arg eval 'import ./.' \
-		--arg f "eval@{ config, ... }: $(1)"
+		-E "let eval = import <stockholm>; in with eval; $(1)"
 
 execute = \
 	result=$$($(call evaluate,config.krebs.build.$(1))) && \
@@ -77,7 +75,7 @@ deploy:
 
 # usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
 eval eval.:;@$(call evaluate,$${expr-eval})
-eval.%:;@$(call evaluate,$*)
+eval.%:;@$(call evaluate,$@)
 
 # usage: make install system=foo [target_host=bar]
 install: ssh ?= ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
