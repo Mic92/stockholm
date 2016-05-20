@@ -9,6 +9,7 @@ export STOCKHOLM_VERSION ?= $(shell \
 	printf '%s' "$$date.$$version"; \
 )
 
+system ?= $(HOSTNAME)
 $(if $(system),,$(error unbound variable: system))
 
 nixos-config ?= $(stockholm)/$(LOGNAME)/1systems/$(system).nix
