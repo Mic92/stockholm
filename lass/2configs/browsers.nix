@@ -59,11 +59,11 @@ in {
 
   imports = [
     ( createFirefoxUser "ff" [ "audio" ] [ pkgs.firefox ] )
-    ( createChromiumUser "cr" [ "audio" ] [ pkgs.chromium ] )
-    ( createChromiumUser "wk" [ "audio" ] [ pkgs.chromium ] )
-    ( createChromiumUser "fb" [ "audio" ] [ pkgs.chromium ] )
-    ( createChromiumUser "gm" [ "audio" ] [ pkgs.chromium ] )
     ( createChromiumUser "flash" [ "audio" ] [ pkgs.flash ] )
+    ( createChromiumUser "cr" [ "video" "audio" ] [ pkgs.chromium ] )
+    ( createChromiumUser "wk" [ "video" "audio" ] [ pkgs.chromium ] )
+    ( createChromiumUser "fb" [ "video" "audio" ] [ pkgs.chromium ] )
+    ( createChromiumUser "gm" [ "video" "audio" ] [ pkgs.chromium ] )
   ];
 
   nixpkgs.config.packageOverrides = pkgs : {
