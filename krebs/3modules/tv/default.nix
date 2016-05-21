@@ -355,11 +355,11 @@ with config.krebs.lib;
   };
   users = rec {
     mv = {
-      mail = "mv@cd.retiolum";
+      mail = "mv@cd.r";
       pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGer9e2+Lew7vnisgBbsFNECEIkpNJgEaqQqgb9inWkQ mv@vod";
     };
     tv = {
-      mail = "tv@nomic.retiolum";
+      mail = "tv@nomic.r";
       pgp.pubkeys.default = ''
         -----BEGIN PGP PUBLIC KEY BLOCK-----
 
