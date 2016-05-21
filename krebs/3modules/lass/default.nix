@@ -294,17 +294,18 @@ with config.krebs.lib;
   };
   users = {
     lass = {
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAp83zynhIueJJsWlSEykVSBrrgBFKq38+vT8bRfa+csqyjZBl2SQFuCPo+Qbh49mwchpZRshBa9jQEIGqmXxv/PYdfBFQuOFgyUq9ZcTZUXqeynicg/SyOYFW86iiqYralIAkuGPfQ4howLPVyjTZtWeEeeEttom6p6LMY5Aumjz2em0FG0n9rRFY2fBzrdYAgk9C0N6ojCs/Gzknk9SGntA96MDqHJ1HXWFMfmwOLCnxtE5TY30MqSmkrJb7Fsejwjoqoe9Y/mCaR0LpG2cStC1+37GbHJNH0caCMaQCX8qdfgMVbWTVeFWtV6aWOaRgwLrPDYn4cHWQJqTfhtPrNQ== lass@mors";
       mail = "lass@mors.retiolum";
-      pgp.pubkeys.default = builtins.readFile ./default.pgp;
+      pubkey = builtins.readFile ./ssh/mors.rsa;
+      pgp.pubkeys.default = builtins.readFile ./pgp/mors.pgp;
     };
     lass-uriel = {
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDExWuRcltGM2FqXO695nm6/QY3wU3r1bDTyCpMrLfUSym7TxcXDSmZSWcueexPXV6GENuUfjJPZswOdWqIo5u2AXw9t0aGvwEDmI6uJ7K5nzQOsXIneGMdYuoOaAzWI8pxZ4N+lIP1HsOYttIPDp8RwU6kyG+Ud8mnVHWSTO13C7xC9vePnDP6b+44nHS691Zj3X/Cq35Ls0ISC3EM17jreucdP62L3TKk2R4NCm3Sjqj+OYEv0LAqIpgqSw5FypTYQgNByxRcIcNDlri63Q1yVftUP1338UiUfxtraUu6cqa2CdsHQmtX5mTNWEluVWO3uUKTz9zla3rShC+d3qvr lass@uriel";
       mail = "lass@uriel.retiolum";
+      pubkey = builtins.readFile ./ssh/uriel.rsa;
     };
     lass-helios = {
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDBOnMtgy5GH6R6tHp2ugy5QTe3gAGxh2CKsstSNSNAJwvWGiaWJkbNmgM8KlCWeq1GJBGa95kU4I2BDO5fJd7J9vqyrTGF1+sx0Nwj/ELKSNVxDoKVYiU09pTqSB3pi46i+E8N49y4/8aRhu4/7O2dSTH7OS3YoZpt2Soas+cYJYhQdZtYQAgPX5LOkTfQvPhGR8AzrrTvOUrHyTWaSBEELVZ088LrFT6ibXHcPhwXX7A5+YMS8LLr3KRstySWzJEmfVOJxuMhQJSH1Xiq4bLilVn9V4AK5pCOnlALSYf48SexsCqzBUKgISuncurIBbXtW9EkNTMX3jSKlSQ7WniGRlmzrBAJCh4VXJUZgXDf8hAaPckIRbLosbTnEAauWcfnIXLfvI+bYkURhfYKsWelM+MS6ihk+P2yr8rNT9w5iUVJGVypOXUp45PrFuPn6ayCpNRJzqPwCCPE7fFagzLs7wibIXlrhCnRALT5HHyExFFcQoGvIq/8o+Oia8mrTimb55IDLwkiYrG6I5DPXFPKsTC0hium9T3I8dC+M7n9GbwnLTUK2kWnoklD3HTab21xJTtbF98nQ94df7doqPFxL/jongeZCGMB+PJ+BdQTtHr7tCY0kN2GXpoHxz/2w8YEWTKHhWIUsD+Utf8pDkKQfCqlm7iR7byxL51gHL9Z3Q== lass@helios";
       mail = "lass@helios.retiolum";
+      pubkey = builtins.readFile ./ssh/helios.rsa;
+    };
     };
   };
 }
