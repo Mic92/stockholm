@@ -306,6 +306,10 @@ with config.krebs.lib;
       mail = "lass@helios.retiolum";
       pubkey = builtins.readFile ./ssh/helios.rsa;
     };
+    lass-shodan = {
+      mail = "lass@shodan.retiolum";
+      pubkey = builtins.readFile ./ssh/shodan.rsa;
+      pgp.pubkeys.default = builtins.readFile ./pgp/shodan.pgp;
     };
   };
 }
