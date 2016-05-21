@@ -17,6 +17,7 @@ in {
     ../2configs/bitlbee.nix
     ../2configs/weechat.nix
     ../2configs/privoxy-retiolum.nix
+    ../2configs/radio.nix
     {
       #we need to use old sqlite for buildbot
       imports = [
