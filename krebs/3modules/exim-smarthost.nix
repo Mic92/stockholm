@@ -164,7 +164,7 @@ let
                   control       = dkim_disable_verify
 
           accept message = relay not permitted 2
-                  recipients = lsearch;${lsearch.internet-aliases}
+                  recipients = lsearch*@;${lsearch.internet-aliases}
 
           require message = relay not permitted
                   domains = +local_domains : +relay_to_domains
@@ -198,7 +198,7 @@ let
         internet_aliases:
           debug_print = "R: internet_aliases for $local_part@$domain"
           driver = redirect
-          data = ''${lookup{$local_part@$domain}lsearch{${lsearch.internet-aliases}}}
+          data = ''${lookup{$local_part@$domain}lsearch*@{${lsearch.internet-aliases}}}
 
         dnslookup:
           debug_print = "R: dnslookup for $local_part@$domain"

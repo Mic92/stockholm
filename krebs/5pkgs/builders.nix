@@ -56,6 +56,14 @@ rec {
     '';
   };
 
+  writeEximConfig = name: text: pkgs.runCommand name {
+    inherit text;
+    passAsFile = [ "text" ];
+  } ''
+    ${pkgs.exim}/bin/exim -C "$textPath" -bV >/dev/null
+    mv "$textPath" $out
+  '';
+
   writeNixFromCabal = name: path: pkgs.runCommand name {} ''
     ${pkgs.cabal2nix}/bin/cabal2nix ${path} > $out
   '';
