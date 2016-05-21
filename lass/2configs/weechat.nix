@@ -16,6 +16,7 @@ in {
     createHome = true;
     openssh.authorizedKeys.keys = [
       config.krebs.users.lass.pubkey
+      config.krebs.users.lass-shodan.pubkey
     ];
   };
 
