@@ -37,7 +37,7 @@ in {
   };
   config = lib.mkIf cfg.enable {
     environment = {
-      etc."exim.conf".text = ''
+      etc."exim.conf".source = pkgs.writeEximConfig "exim.conf" ''
         exim_user = ${cfg.user.name}
         exim_group = ${cfg.group.name}
         exim_path = /var/setuid-wrappers/exim
