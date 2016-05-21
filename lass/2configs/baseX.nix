@@ -34,6 +34,7 @@ in {
 
     dmenu
     gitAndTools.qgit
+    nmap
     much
     pavucontrol
     powertop
