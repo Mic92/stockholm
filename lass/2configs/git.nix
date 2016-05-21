@@ -36,6 +36,7 @@ let
     kimsufi-check = {};
     realwallpaper = {};
     xmonad-stockholm = {};
+    the_playlist = {};
   };
 
   restricted-repos = mapAttrs make-restricted-repo (
