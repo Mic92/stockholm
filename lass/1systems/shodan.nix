@@ -19,6 +19,25 @@ with builtins;
     #    };
     #  };
     #}
+    {
+      #x220 config from mors
+      #TODO: make x220 config file (or look in other user dir)
+      hardware.trackpoint = {
+        enable = true;
+        sensitivity = 220;
+        speed = 0;
+        emulateWheel = true;
+      };
+
+      services.xserver = {
+        videoDriver = "intel";
+        vaapiDrivers = [ pkgs.vaapiIntel ];
+        deviceSection = ''
+          Option "AccelMethod" "sna"
+          BusID "PCI:0:2:0"
+        '';
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.shodan;
