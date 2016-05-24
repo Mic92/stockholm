@@ -56,8 +56,8 @@ let
       requires = [ "xserver.service" ];
       environment = xmonad-environment;
       serviceConfig = {
-        ExecStart = "${xmonad-start}/bin/xmonad";
-        ExecStop = "${xmonad-stop}/bin/xmonad-stop";
+        ExecStart = "${pkgs.xmonad-tv}/bin/xmonad-tv";
+        ExecStop = "${pkgs.xmonad-tv}/bin/xmonad-tv --shutdown";
         User = user.name;
         WorkingDirectory = user.home;
       };
@@ -80,6 +80,14 @@ let
 
   xmonad-environment = {
     DISPLAY = ":${toString config.services.xserver.display}";
+
+    XMONAD_STARTUP_HOOK = pkgs.writeDash "xmonad-startup-hook" ''
+      ${pkgs.xorg.xhost}/bin/xhost +LOCAL: &
+      ${pkgs.xorg.xrdb}/bin/xrdb -merge ${import ./Xresources.nix args} &
+      ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c' &
+      wait
+    '';
+
     XMONAD_STATE = "/tmp/xmonad.state";
 
     # XXX JSON is close enough :)
@@ -95,29 +103,6 @@ let
       "za" "zh" "zj" "zs"
     ]);
   };
-
-  xmonad-start = pkgs.writeScriptBin "xmonad" ''
-    #! ${pkgs.bash}/bin/bash
-    set -efu
-    settle() {(
-      # Use PATH for a clean journal
-      command=''${1##*/}
-      PATH=''${1%/*}; export PATH
-      shift
-      until "$command" "$@"; do
-        ${pkgs.coreutils}/bin/sleep 1
-      done
-    )&}
-    settle ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
-    settle ${pkgs.xorg.xrdb}/bin/xrdb -merge ${import ./Xresources.nix args}
-    settle ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c'
-    exec ${pkgs.xmonad-tv}/bin/xmonad-tv
-  '';
-
-  xmonad-stop = pkgs.writeScriptBin "xmonad-stop" ''
-    #! /bin/sh
-    exec ${pkgs.xmonad-tv}/bin/xmonad-tv --shutdown
-  '';
 
   xserver-environment = {
     XKB_BINDIR = "${pkgs.xorg.xkbcomp}/bin"; # Needed for the Xkb extension.

@@ -83,7 +83,9 @@ mainNoArgs = do
             -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
             --, handleEventHook   = handleTimerEvent
             , manageHook        = placeHook (smart (1,0)) <+> floatNextHook
-            , startupHook       = liftIO (putStrLn "emit XMonadStartup")
+            , startupHook = do
+                path <- liftIO (getEnv "XMONAD_STARTUP_HOOK")
+                forkFile path [] Nothing
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
             , handleEventHook = handleShutdownEvent
