@@ -11,7 +11,7 @@ let
 in {
   imports = [
     ( manageCerts [ "biostase.de" "www.biostase.de" ])
-    #( serveWordpress [ "biostase.de" "www.biostase.de" ])
+    ( serveWordpress [ "biostase.de" "www.biostase.de" ])
 
     ( manageCerts [ "radical-dreamers.de" "www.radical-dreamers.de" ])
     ( serveWordpress [ "radical-dreamers.de" "www.radical-dreamers.de" ])
