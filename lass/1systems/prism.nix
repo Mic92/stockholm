@@ -2,15 +2,28 @@
 
 let
   ip = config.krebs.build.host.nets.internet.ip4.addr;
+
+  inherit (import ../../4lib { inherit lib pkgs; })
+    manageCerts;
+
 in {
   imports = [
     ../.
-    ../2configs/base.nix
+    ../2configs/default.nix
+    ../2configs/exim-smarthost.nix
     ../2configs/downloading.nix
     ../2configs/git.nix
     ../2configs/ts3.nix
     ../2configs/bitlbee.nix
     ../2configs/weechat.nix
+    ../2configs/privoxy-retiolum.nix
+    ../2configs/radio.nix
+    {
+      #we need to use old sqlite for buildbot
+      imports = [
+        ../2configs/buildbot-standalone.nix
+      ];
+    }
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
@@ -77,6 +90,18 @@ in {
         device = "/dev/pool/download";
       };
 
+      fileSystems."/srv/http" = {
+        device = "/dev/pool/http";
+      };
+
+      fileSystems."/srv/o.ubikmedia.de-data" = {
+        device = "/dev/pool/owncloud-ubik-data";
+      };
+
+      fileSystems."/bku" = {
+        device = "/dev/pool/bku";
+      };
+
     }
     {
       sound.enable = false;
@@ -117,7 +142,7 @@ in {
     }
     {
       users.users.chat.openssh.authorizedKeys.keys = [
-        "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAFhFJUMTfPbv3SzqlT9S67Av/m/ctLfTd3mMhD4O9hZc+t+dZmaHWj3v1KujzMBiDp3Yfo2YdVVZLTwTluHD8yNoQH418Vm01nrYHwOsc5J0br3mb0URZSstPiz6/6Fc+PNCDfQ2skUAWUidWiH+JolROFQ4y2lfpLOw+wsK2jj+Gqx6w== JuiceSSH"
+        "ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBBQjn/3n283RZkBs2CFqbpukyQ3zkLIjewRpKttPa5d4PUiT7/vOlutWH5EP4BxXQSoeZStx8D2alGjxfK+nfDvRJGGofpm23cN4j4i24Fcam1y1H7wqRXO1qbz5AB3qPg== JuiceSSH"
         config.krebs.users.lass-uriel.pubkey
       ];
     }
@@ -130,14 +155,46 @@ in {
         ../2configs/websites/domsen.nix
       ];
       krebs.iptables.tables.filter.INPUT.rules = [
-         { predicate = "-p tcp --dport 80"; target = "ACCEPT"; }
+         { predicate = "-p tcp --dport http"; target = "ACCEPT"; }
+         { predicate = "-p tcp --dport https"; target = "ACCEPT"; }
       ];
     }
     {
       services.tor = {
         enable = true;
-        client.enable = true;
       };
+    }
+    {
+      security.acme = {
+        certs."lassul.us" = {
+          email = "lass@lassul.us";
+          webroot = "/var/lib/acme/challenges/lassul.us";
+          plugins = [
+            "account_key.json"
+            "key.pem"
+            "fullchain.pem"
+            "full.pem"
+          ];
+          user = "ejabberd";
+        };
+      };
+      krebs.nginx.servers."lassul.us" = {
+        server-names = [ "lassul.us" ];
+        locations = [
+          (lib.nameValuePair "/.well-known/acme-challenge" ''
+            root /var/lib/acme/challenges/lassul.us/;
+          '')
+        ];
+      };
+      lass.ejabberd = {
+        enable = true;
+        hosts = [ "lassul.us" ];
+        certfile = "/var/lib/acme/lassul.us/full.pem";
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport xmpp-client"; target = "ACCEPT"; }
+        { predicate = "-p tcp --dport xmpp-server"; target = "ACCEPT"; }
+      ];
     }
   ];
 

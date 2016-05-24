@@ -147,13 +147,8 @@ in {
       vimrcConfig.vam.pluginDictionaries = [
         { names = [
           "brogrammer"
-          "commentary"
-          "extradite"
           "file-line"
-          "fugitive"
           "Gundo"
-          "mustang2"
-          "unimpaired"
         ]; }
         { names = [ "vim-addon-nix" ]; ft_regex = "^nix\$"; }
       ];

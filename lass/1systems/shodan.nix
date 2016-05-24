@@ -8,8 +8,6 @@ with builtins;
     ../2configs/exim-retiolum.nix
     ../2configs/browsers.nix
     ../2configs/programs.nix
-    ../2configs/git.nix
-    ../2configs/pass.nix
     ../2configs/fetchWallpaper.nix
     ../2configs/backups.nix
     #{
@@ -22,13 +20,27 @@ with builtins;
     #  };
     #}
     {
-      services.elasticsearch = {
+      #x220 config from mors
+      #TODO: make x220 config file (or look in other user dir)
+      hardware.trackpoint = {
         enable = true;
+        sensitivity = 220;
+        speed = 0;
+        emulateWheel = true;
+      };
+
+      services.xserver = {
+        videoDriver = "intel";
+        vaapiDrivers = [ pkgs.vaapiIntel ];
+        deviceSection = ''
+          Option "AccelMethod" "sna"
+          BusID "PCI:0:2:0"
+        '';
       };
     }
   ];
 
-  krebs.build.host = config.krebs.hosts.helios;
+  krebs.build.host = config.krebs.hosts.shodan;
 
   networking.wireless.enable = true;
 
@@ -55,30 +67,10 @@ with builtins;
     "/boot" = {
       device = "/dev/sda1";
     };
-
-    "/home" = {
-      device = "/dev/pool/home";
-      fsType = "ext4";
-    };
-
-    "/bku" = {
-      device = "/dev/pool/bku";
-      fsType = "ext4";
-    };
   };
 
   #services.udev.extraRules = ''
   #  SUBSYSTEM=="net", ATTR{address}=="64:27:37:7d:d8:ae", NAME="wl0"
   #  SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:b8:c8:2e", NAME="et0"
   #'';
-
-  services.xserver.synaptics = {
-    enable = true;
-    twoFingerScroll = true;
-    accelFactor = "0.035";
-    additionalOptions = ''
-      Option "FingerHigh" "60"
-      Option "FingerLow"  "60"
-    '';
-  };
 }

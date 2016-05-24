@@ -40,8 +40,8 @@ let
       };
     };
 
-    security.setuidPrograms = [
-      "slock"
+    krebs.per-user.lass.packages = [
+      pkgs.rxvt_unicode_with-plugins
     ];
 
     systemd.services.display-manager.enable = false;
@@ -52,7 +52,7 @@ let
       wantedBy = [ "multi-user.target" ];
       requires = [ "xserver.service" ];
       environment = xmonad-environment;
-      restartIfChanged = false;
+      restartIfChanged = true;
       serviceConfig = {
         ExecStart = "${xmonad-start}/bin/xmonad";
         ExecStop = "${xmonad-stop}/bin/xmonad-stop";
@@ -82,12 +82,7 @@ let
 
     # XXX JSON is close enough :)
     XMONAD_WORKSPACES0_FILE = pkgs.writeText "xmonad.workspaces0" (toJSON [
-      "cr"
-      "gm"
-      "ff"
-      "IM"
-      "mail"
-      "stockholm"
+      "dashboard"
     ]);
   };
 
@@ -96,6 +91,9 @@ let
     set -efu
     export PATH; PATH=${makeSearchPath "bin" ([
       pkgs.rxvt_unicode
+      pkgs.i3lock
+      pkgs.pulseaudioLight
+      pkgs.xorg.xbacklight
     ] ++ config.environment.systemPackages)}:/var/setuid-wrappers
     settle() {(
       # Use PATH for a clean journal
@@ -114,7 +112,8 @@ let
 
   xmonad-stop = pkgs.writeScriptBin "xmonad-stop" ''
     #! /bin/sh
-    exec ${pkgs.xmonad-lass}/bin/xmonad --shutdown
+    ${pkgs.xmonad-lass}/bin/xmonad --shutdown
+    ${pkgs.coreutils}/bin/sleep 2s
   '';
 
   xserver-environment = {
@@ -128,7 +127,7 @@ let
   xserver = pkgs.writeScriptBin "xserver" ''
     #! /bin/sh
     set -efu
-    exec ${pkgs.xorg.xorgserver}/bin/X \
+    exec ${pkgs.xorg.xorgserver.out}/bin/X \
         :${toString config.services.xserver.display} \
         vt${toString config.services.xserver.tty} \
         -config ${import ./xserver.conf.nix args} \

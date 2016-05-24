@@ -26,7 +26,10 @@ let
     environment = {
       etc = flip mapAttrs' cfg (name: { packages, ... }: {
         name = "per-user/${name}";
-        value.source = pkgs.symlinkJoin "per-user.${name}" packages;
+        value.source = pkgs.symlinkJoin {
+          name = "per-user.${name}";
+          paths = packages;
+        };
       });
       profiles = ["/etc/per-user/$LOGNAME"];
     };

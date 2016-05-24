@@ -7,10 +7,11 @@ with config.krebs.lib;
     ../2configs/zsh.nix
     ../2configs/mc.nix
     ../2configs/retiolum.nix
+    ./backups.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
-                 (import /root/secrets/hashedPasswords.nix);
+                 (import <secrets/hashedPasswords.nix>);
     }
     {
       users.extraUsers = {
@@ -18,7 +19,7 @@ with config.krebs.lib;
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
             config.krebs.users.lass-uriel.pubkey
-            config.krebs.users.lass-helios.pubkey
+            config.krebs.users.lass-shodan.pubkey
           ];
         };
         mainUser = {
@@ -33,6 +34,7 @@ with config.krebs.lib;
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
             config.krebs.users.lass-uriel.pubkey
+            config.krebs.users.lass-shodan.pubkey
           ];
         };
       };
@@ -45,7 +47,6 @@ with config.krebs.lib;
   krebs = {
     enable = true;
     search-domain = "retiolum";
-    exim-retiolum.enable = true;
     build = {
       user = config.krebs.users.lass;
       source = mapAttrs (_: mkDefault) ({
@@ -55,7 +56,7 @@ with config.krebs.lib;
         stockholm = "/home/lass/stockholm";
         nixpkgs = {
           url = https://github.com/NixOS/nixpkgs;
-          rev = "40c586b7ce2c559374df435f46d673baf711c543";
+          rev = "d541e0dc1c05f5514bf30f8039e687adddb45616";
           dev = "/home/lass/src/nixpkgs";
         };
       } // optionalAttrs config.krebs.build.host.secure {
@@ -85,9 +86,12 @@ with config.krebs.lib;
     MANPAGER=most
   '';
 
+  nixpkgs.config.allowUnfree = true;
+
   environment.systemPackages = with pkgs; [
   #stockholm
     git
+    gnumake
     jq
     parallel
     proot
@@ -102,12 +106,20 @@ with config.krebs.lib;
 
   #network
     iptables
+    iftop
 
   #stuff for dl
     aria2
 
   #neat utils
     krebspaste
+    psmisc
+    untilport
+
+  #unpack stuff
+    p7zip
+    unzip
+    unrar
   ];
 
   programs.bash = {
@@ -145,10 +157,6 @@ with config.krebs.lib;
     '';
   };
 
-  security.setuidPrograms = [
-    "sendmail"
-  ];
-
   services.openssh = {
     enable = true;
     hostKeys = [
@@ -165,6 +173,13 @@ with config.krebs.lib;
   krebs.iptables = {
     enable = true;
     tables = {
+      nat.PREROUTING.rules = [
+        { predicate = "! -i retiolum -p tcp -m tcp --dport 22"; target = "REDIRECT --to-ports 0"; precedence = 100; }
+        { predicate = "-p tcp -m tcp --dport 45621"; target = "REDIRECT --to-ports 22"; precedence = 99; }
+      ];
+      nat.OUTPUT.rules = [
+        { predicate = "-o lo -p tcp -m tcp --dport 45621"; target = "REDIRECT --to-ports 22"; precedence = 100; }
+      ];
       filter.INPUT.policy = "DROP";
       filter.FORWARD.policy = "DROP";
       filter.INPUT.rules = [

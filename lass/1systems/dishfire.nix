@@ -4,9 +4,9 @@
   imports = [
     ../.
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
-    ../2configs/base.nix
+    ../2configs/default.nix
+    ../2configs/exim-retiolum.nix
     ../2configs/git.nix
-    ../2configs/websites/fritz.nix
     {
       boot.loader.grub = {
         device = "/dev/vda";
@@ -26,8 +26,17 @@
         fsType = "ext4";
       };
 
+      fileSystems."/srv/http" = {
+        device = "/dev/pool/srv_http";
+        fsType = "ext4";
+      };
+
       fileSystems."/boot" = {
         device = "/dev/vda1";
+        fsType = "ext4";
+      };
+      fileSystems."/bku" = {
+        device = "/dev/pool/bku";
         fsType = "ext4";
       };
     }
@@ -39,6 +48,20 @@
     }
     {
       sound.enable = false;
+    }
+    {
+      environment.systemPackages = with pkgs; [
+        mk_sql_pair
+      ];
+    }
+    {
+      imports = [
+        ../2configs/websites/fritz.nix
+      ];
+      krebs.iptables.tables.filter.INPUT.rules = [
+         { predicate = "-p tcp --dport http"; target = "ACCEPT"; }
+         { predicate = "-p tcp --dport https"; target = "ACCEPT"; }
+      ];
     }
   ];
 

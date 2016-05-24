@@ -40,8 +40,7 @@ let
     };
   };
 
-  fetchWallpaperScript = pkgs.writeScript "fetchWallpaper" ''
-    #! ${pkgs.bash}/bin/bash
+  fetchWallpaperScript = pkgs.writeDash "fetchWallpaper" ''
     set -euf
 
     mkdir -p ${shell.escape cfg.stateDir}

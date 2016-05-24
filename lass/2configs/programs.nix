@@ -8,7 +8,6 @@
     htop
     i3lock
     mosh
-    mpv
     pass
     pavucontrol
     pv
