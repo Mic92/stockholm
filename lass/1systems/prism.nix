@@ -196,6 +196,16 @@ in {
         { predicate = "-p tcp --dport xmpp-server"; target = "ACCEPT"; }
       ];
     }
+    {
+      imports = [
+        ../2configs/realwallpaper-server.nix
+      ];
+      krebs.nginx.servers."lassul.us".locations = [
+        (lib.nameValuePair "/wallpaper.png" ''
+          alias /tmp/wallpaper.png;
+        '')
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
