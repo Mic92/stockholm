@@ -54,4 +54,7 @@ in {
       ];
     };
   };
+  users.users.root.openssh.authorizedKeys.keys = [
+    config.krebs.users.fritz.pubkey
+  ];
 }
