@@ -106,7 +106,12 @@ rec {
         '';
       };
 
-  writeNixFromCabal = name: path: pkgs.runCommand name {} ''
-    ${pkgs.cabal2nix}/bin/cabal2nix ${path} > $out
-  '';
+  writeNixFromCabal =
+    trace (toString [
+      "The function `writeNixFromCabal` has been deprecated in favour of"
+      "`writeHaskellBin'."
+    ])
+    (name: path: pkgs.runCommand name {} ''
+      ${pkgs.cabal2nix}/bin/cabal2nix ${path} > $out
+    '');
 }
