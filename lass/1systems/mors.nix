@@ -175,14 +175,14 @@
     emulateWheel = true;
   };
 
-  #services.xserver = {
-  #  videoDriver = "intel";
-  #  vaapiDrivers = [ pkgs.vaapiIntel ];
-  #  deviceSection = ''
-  #    Option "AccelMethod" "sna"
-  #    BusID "PCI:0:2:0"
-  #  '';
-  #};
+  services.xserver = {
+    videoDriver = "intel";
+    vaapiDrivers = [ pkgs.vaapiIntel ];
+    deviceSection = ''
+      Option "AccelMethod" "sna"
+      BusID "PCI:0:2:0"
+    '';
+  };
 
   environment.systemPackages = with pkgs; [
     acronym
