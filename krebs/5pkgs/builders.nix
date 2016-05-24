@@ -60,7 +60,9 @@ rec {
     inherit text;
     passAsFile = [ "text" ];
   } ''
-    ${pkgs.exim}/bin/exim -C "$textPath" -bV >/dev/null
+    # TODO validate exim config even with config.nix.useChroot == true
+    # currently doing so will fail because "user exim was not found"
+    #${pkgs.exim}/bin/exim -C "$textPath" -bV >/dev/null
     mv "$textPath" $out
   '';
 
