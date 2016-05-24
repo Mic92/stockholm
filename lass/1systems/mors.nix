@@ -14,7 +14,7 @@
     ../2configs/elster.nix
     ../2configs/steam.nix
     ../2configs/wine.nix
-    ../2configs/texlive.nix
+    #../2configs/texlive.nix
     ../2configs/binary-caches.nix
     #../2configs/ircd.nix
     ../2configs/chromium-patched.nix
