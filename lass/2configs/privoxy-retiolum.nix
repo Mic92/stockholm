@@ -1,8 +1,7 @@
 { config, lib, ... }:
 
 let
-  r_ip = (head config.krebs.build.host.nets.retiolum.addrs4);
-  inherit (lib) head;
+  r_ip = config.krebs.build.host.nets.retiolum.ip4.addr;
 
 in {
   imports = [

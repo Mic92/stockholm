@@ -2,9 +2,8 @@
 
 let
   inherit (import ../4lib { inherit pkgs lib; }) getDefaultGateway;
-  inherit (lib) head;
 
-  ip = (head config.krebs.build.host.nets.internet.addrs4);
+  ip = config.krebs.build.host.nets.internet.ip4.addr;
 in {
   imports = [
     ../.

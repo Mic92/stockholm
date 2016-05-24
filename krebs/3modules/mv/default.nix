@@ -8,8 +8,8 @@ with config.krebs.lib;
       cores = 4;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.111.111"];
-          addrs6 = ["42:0:0:0:0:0:111:111"];
+          ip4.addr = "10.243.111.111";
+          ip6.addr = "42:0:0:0:0:0:111:111";
           aliases = [
             "stro.retiolum"
             "cgit.stro.retiolum"

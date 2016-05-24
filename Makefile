@@ -9,6 +9,7 @@ export STOCKHOLM_VERSION ?= $(shell \
 	printf '%s' "$$date.$$version"; \
 )
 
+system ?= $(HOSTNAME)
 $(if $(system),,$(error unbound variable: system))
 
 nixos-config ?= $(stockholm)/$(LOGNAME)/1systems/$(system).nix
@@ -54,14 +55,16 @@ evaluate = \
 		--show-trace \
 		-I nixos-config=$(nixos-config) \
 		-I stockholm=$(stockholm) \
-		-E '{ eval, f }: f eval' \
-		--arg eval 'import ./.' \
-		--arg f "eval@{ config, ... }: $(1)"
+		-E "let eval = import <stockholm>; in with eval; $(1)"
 
 execute = \
 	result=$$($(call evaluate,config.krebs.build.$(1))) && \
 	script=$$(echo "$$result" | jq -r .) && \
 	echo "$$script" | PS5=% sh
+
+ifeq ($(MAKECMDGOALS),)
+$(error No goals specified)
+endif
 
 # usage: make deploy system=foo [target_host=bar]
 deploy: ssh ?= ssh
@@ -73,7 +76,7 @@ deploy:
 
 # usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
 eval eval.:;@$(call evaluate,$${expr-eval})
-eval.%:;@$(call evaluate,$*)
+eval.%:;@$(call evaluate,$@)
 
 # usage: make install system=foo [target_host=bar]
 install: ssh ?= ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null

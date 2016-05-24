@@ -88,6 +88,8 @@ let
           #! /bin/sh
           set -efu
 
+          export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+
           verbose() {
             printf '%s%s\n' "$PS5$(printf ' %q' "$@")" >&2
             "$@"

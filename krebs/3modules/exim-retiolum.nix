@@ -32,7 +32,7 @@ let
   };
 
   imp = {
-    services.exim = {
+    krebs.exim = {
       enable = true;
       config =
         # This configuration makes only sense for retiolum-enabled hosts.
@@ -56,6 +56,8 @@ let
           log_file_path = syslog
           syslog_timestamp = false
           syslog_duplication = false
+
+          tls_advertise_hosts =
 
           begin acl
 

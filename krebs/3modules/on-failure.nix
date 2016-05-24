@@ -84,6 +84,14 @@
       ${pkgs.systemd}/bin/journalctl \
           --lines=${toString plan.journalctl.lines} \
           --output=${plan.journalctl.output} \
+          --since="$(
+            ${pkgs.coreutils}/bin/date +'%F %T UTC' -ud "$(
+              ${pkgs.systemd}/bin/systemctl show \
+                  -p ExecMainStartTimestamp \
+                  ${shell.escape plan.name} \
+                | ${pkgs.coreutils}/bin/cut -d= -f2-
+            )"
+          )" \
           --unit=${shell.escape plan.name}.service
     } | ${shell.escape cfg.sendmail} -t
   '';

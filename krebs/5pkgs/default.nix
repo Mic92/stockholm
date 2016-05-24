@@ -14,7 +14,12 @@ with config.krebs.lib;
       then trace "Upstream `${upstream.name}' gets overridden by `${override.name}'." override
       else override;
 
-  in {
+  in {}
+  // import ./builders.nix args
+  // mapAttrs (_: flip callPackage {})
+              (filterAttrs (_: dir.has-default-nix)
+                           (subdirsOf ./.))
+  // {
     haskellPackages = pkgs.haskellPackages.override {
       overrides = self: super:
         mapAttrs (name: path: self.callPackage path {})
@@ -29,18 +34,10 @@ with config.krebs.lib;
             (builtins.readDir ./haskell-overrides));
     };
 
-    push = callPackage ./push {
-      inherit (subdirs) get;
-    };
-
     ReaktorPlugins = callPackage ./Reaktor/plugins.nix {};
 
     test = {
       infest-cac-centos7 = callPackage ./test/infest-cac-centos7 {};
     };
-  }
-  // import ./builders.nix args
-  // mapAttrs (_: flip callPackage {})
-              (filterAttrs (_: dir.has-default-nix)
-                           (subdirsOf ./.));
+  };
 }

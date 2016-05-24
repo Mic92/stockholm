@@ -13,7 +13,7 @@ with config.krebs.lib;
       "shackspace.de"
       "viljetic.de"
     ];
-    relay_from_hosts = concatMap (host: host.nets.retiolum.addrs4) [
+    relay_from_hosts = map (host: host.nets.retiolum.ip4.addr) [
       config.krebs.hosts.nomic
       config.krebs.hosts.wu
       config.krebs.hosts.xu
@@ -42,10 +42,6 @@ with config.krebs.lib;
       { from = "root"; to = "tv"; }
       { from = "mirko"; to = "mv"; }
     ];
-  };
-  krebs.setuid.sendmail = {
-    filename = "${pkgs.exim}/bin/exim";
-    mode = "4111";
   };
   tv.iptables.input-internet-accept-new-tcp = singleton "smtp";
 }

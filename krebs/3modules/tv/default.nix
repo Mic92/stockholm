@@ -13,15 +13,15 @@ with config.krebs.lib;
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
         "krebsco.de" = ''
           krebsco.de. 60 IN MX 5 mx23
-          mx23        60 IN A ${elemAt nets.internet.addrs4 0}
-          cd          60 IN A ${elemAt nets.internet.addrs4 0}
-          cgit        60 IN A ${elemAt nets.internet.addrs4 0}
-          cgit.cd     60 IN A ${elemAt nets.internet.addrs4 0}
+          mx23        60 IN A ${nets.internet.ip4.addr}
+          cd          60 IN A ${nets.internet.ip4.addr}
+          cgit        60 IN A ${nets.internet.ip4.addr}
+          cgit.cd     60 IN A ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
         internet = {
-          addrs4 = ["162.219.7.216"];
+          ip4.addr = "45.62.237.203";
           aliases = [
             "cd.i"
             "cd.internet"
@@ -34,8 +34,8 @@ with config.krebs.lib;
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.113.222"];
-          addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af3"];
+          ip4.addr = "10.243.113.222";
+          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af3";
           aliases = [
             "cd.r"
             "cd.retiolum"
@@ -66,7 +66,7 @@ with config.krebs.lib;
       cores = 1;
       nets = rec {
         internet = {
-          addrs4 = ["104.167.114.142"];
+          ip4.addr = "104.167.114.142";
           aliases = [
             "mkdir.i"
             "mkdir.internet"
@@ -74,8 +74,8 @@ with config.krebs.lib;
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.113.223"];
-          addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af4"];
+          ip4.addr = "10.243.113.223";
+          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af4";
           aliases = [
             "mkdir.r"
             "mkdir.retiolum"
@@ -101,12 +101,12 @@ with config.krebs.lib;
       extraZones = {
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
         "krebsco.de" = ''
-          ire 60 IN A ${elemAt nets.internet.addrs4 0}
+          ire 60 IN A ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
         internet = {
-          addrs4 = ["198.147.22.115"];
+          ip4.addr = "198.147.22.115";
           aliases = [
             "ire.i"
             "ire.internet"
@@ -116,8 +116,8 @@ with config.krebs.lib;
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.231.66"];
-          addrs6 = ["42:b912:0f42:a82d:0d27:8610:e89b:490c"];
+          ip4.addr = "10.243.231.66";
+          ip6.addr = "42:b912:0f42:a82d:0d27:8610:e89b:490c";
           aliases = [
             "ire.r"
             "ire.retiolum"
@@ -140,7 +140,7 @@ with config.krebs.lib;
     kaepsele = {
       nets = {
         internet = {
-          addrs4 = ["92.222.10.169"];
+          ip4.addr = "92.222.10.169";
           aliases = [
             "kaepsele.i"
             "kaepsele.internet"
@@ -148,8 +148,8 @@ with config.krebs.lib;
           ];
         };
         retiolum = {
-          addrs4 = ["10.243.166.2"];
-          addrs6 = ["42:0b9d:6660:d07c:2bb7:4e91:1a01:2e7d"];
+          ip4.addr = "10.243.166.2";
+          ip6.addr = "42:0b9d:6660:d07c:2bb7:4e91:1a01:2e7d";
           aliases = [
             "kaepsele.r"
             "kaepsele.retiolum"
@@ -172,8 +172,8 @@ with config.krebs.lib;
       cores = 2;
       nets = {
         retiolum = {
-          addrs4 = ["10.243.20.1"];
-          addrs6 = ["42:0:0:0:0:0:0:2001"];
+          ip4.addr = "10.243.20.1";
+          ip6.addr = "42:0:0:0:0:0:0:2001";
           aliases = [
             "mu.r"
             "mu.retiolum"
@@ -197,13 +197,13 @@ with config.krebs.lib;
       cores = 2;
       nets = rec {
         gg23 = {
-          addrs4 = ["10.23.1.110"];
+          ip4.addr = "10.23.1.110";
           aliases = ["nomic.gg23"];
           ssh.port = 11423;
         };
         retiolum = {
-          addrs4 = ["10.243.0.110"];
-          addrs6 = ["42:02d5:733f:d6da:c0f5:2bb7:2b18:09ec"];
+          ip4.addr = "10.243.0.110";
+          ip6.addr = "42:02d5:733f:d6da:c0f5:2bb7:2b18:09ec";
           aliases = [
             "nomic.r"
             "nomic.retiolum"
@@ -229,7 +229,7 @@ with config.krebs.lib;
     ok = {
       nets = {
         gg23 = {
-          addrs4 = ["10.23.1.1"];
+          ip4.addr = "10.23.1.1";
           aliases = ["ok.gg23"];
         };
       };
@@ -238,7 +238,7 @@ with config.krebs.lib;
       cores = 1;
       nets = rec {
         internet = {
-          addrs4 = ["167.88.34.182"];
+          ip4.addr = "167.88.34.182";
           aliases = [
             "rmdir.i"
             "rmdir.internet"
@@ -246,8 +246,8 @@ with config.krebs.lib;
         };
         retiolum = {
           via = internet;
-          addrs4 = ["10.243.113.224"];
-          addrs6 = ["42:4522:25f8:36bb:8ccb:0150:231a:2af5"];
+          ip4.addr = "10.243.113.224";
+          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af5";
           aliases = [
             "rmdir.r"
             "rmdir.retiolum"
@@ -272,7 +272,7 @@ with config.krebs.lib;
     schnabeldrucker = {
       nets = {
         gg23 = {
-          addrs4 = ["10.23.1.21"];
+          ip4.addr = "10.23.1.21";
           aliases = ["schnabeldrucker.gg23"];
         };
       };
@@ -280,7 +280,7 @@ with config.krebs.lib;
     schnabelscanner = {
       nets = {
         gg23 = {
-          addrs4 = ["10.23.1.22"];
+          ip4.addr = "10.23.1.22";
           aliases = ["schnabelscanner.gg23"];
         };
       };
@@ -289,7 +289,7 @@ with config.krebs.lib;
       cores = 4;
       nets = {
         gg23 = {
-          addrs4 = ["10.23.1.37"];
+          ip4.addr = "10.23.1.37";
           aliases = [
             "wu.gg23"
             "cache.wu.gg23"
@@ -297,8 +297,8 @@ with config.krebs.lib;
           ssh.port = 11423;
         };
         retiolum = {
-          addrs4 = ["10.243.13.37"];
-          addrs6 = ["42:0:0:0:0:0:0:1337"];
+          ip4.addr = "10.243.13.37";
+          ip6.addr = "42:0:0:0:0:0:0:1337";
           aliases = [
             "wu.r"
             "wu.retiolum"
@@ -325,13 +325,13 @@ with config.krebs.lib;
       cores = 4;
       nets = {
         gg23 = {
-          addrs4 = ["10.23.1.38"];
+          ip4.addr = "10.23.1.38";
           aliases = ["xu.gg23"];
           ssh.port = 11423;
         };
         retiolum = {
-          addrs4 = ["10.243.13.38"];
-          addrs6 = ["42:0:0:0:0:0:0:1338"];
+          ip4.addr = "10.243.13.38";
+          ip6.addr = "42:0:0:0:0:0:0:1338";
           aliases = [
             "xu.r"
             "xu.retiolum"
@@ -355,13 +355,14 @@ with config.krebs.lib;
   };
   users = rec {
     mv = {
-      mail = "mv@cd.retiolum";
+      mail = "mv@cd.r";
       pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGer9e2+Lew7vnisgBbsFNECEIkpNJgEaqQqgb9inWkQ mv@vod";
     };
     tv = {
-      mail = "tv@nomic.retiolum";
+      mail = "tv@nomic.r";
       pgp.pubkeys.default = ''
         -----BEGIN PGP PUBLIC KEY BLOCK-----
+
         mQINBFbJ/B0BEADZx8l5gRurzhEHcc3PbBepdZqDJQZ2cGHixi8VEk9iN25qJO5y
         HB0q5sQRsh7oNCbzKp6qRhaG9kXmEda+Uu+qbHWxE32QcT76+W8npH73qthaFwC/
         5RA8KcSE8/XFxVBnVb14PNVHyAVxPHawawbhsOeaiZcHrq5IF6sVzcsc2KN87sIE

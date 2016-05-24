@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
-  shack-ip = lib.head config.krebs.build.host.nets.shack.addrs4;
-  internal-ip = lib.head config.krebs.build.host.nets.retiolum.addrs4;
+  shack-ip = config.krebs.build.host.nets.shack.ip4.addr;
+  internal-ip = config.krebs.build.host.nets.retiolum.ip4.addr;
 in
 {
   imports = [
