@@ -1,3 +1,14 @@
+{ pkgs, ... }:
+pkgs.writeHaskellBin "xmonad-tv" {
+  depends = [
+    "containers"
+    "unix"
+    "X11"
+    "xmonad"
+    "xmonad-contrib"
+    "xmonad-stockholm"
+  ];
+} ''
 {-# LANGUAGE DeriveDataTypeable #-} -- for XS
 {-# LANGUAGE FlexibleContexts #-} -- for xmonad'
 {-# LANGUAGE LambdaCase #-}
@@ -278,3 +289,4 @@ wGSConfig = def
 allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
 allWorkspaceNames ws =
     return $ map W.tag (W.hidden ws) ++ [W.tag $ W.workspace $ W.current ws]
+''

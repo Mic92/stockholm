@@ -116,12 +116,12 @@ let
     settle ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
     settle ${pkgs.xorg.xrdb}/bin/xrdb -merge ${import ./Xresources.nix args}
     settle ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c'
-    exec ${pkgs.xmonad-tv}/bin/xmonad
+    exec ${pkgs.xmonad-tv}/bin/xmonad-tv
   '';
 
   xmonad-stop = pkgs.writeScriptBin "xmonad-stop" ''
     #! /bin/sh
-    exec ${pkgs.xmonad-tv}/bin/xmonad --shutdown
+    exec ${pkgs.xmonad-tv}/bin/xmonad-tv --shutdown
   '';
 
   xserver-environment = {
