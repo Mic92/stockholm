@@ -13,26 +13,26 @@ in {
     ( manageCerts [ "biostase.de" "www.biostase.de" ])
     #( serveWordpress [ "biostase.de" "www.biostase.de" ])
 
-    ( manageCerts [ "radical-dreamers.de" ])
-    ( serveWordpress [ "radical-dreamers.de" ])
+    ( manageCerts [ "radical-dreamers.de" "www.radical-dreamers.de" ])
+    ( serveWordpress [ "radical-dreamers.de" "www.radical-dreamers.de" ])
 
-    ( manageCerts [ "gs-maubach.de" ])
-    ( serveWordpress [ "gs-maubach.de" ])
+    ( manageCerts [ "gs-maubach.de" "www.gs-maubach.de" ])
+    ( serveWordpress [ "gs-maubach.de" "www.gs-maubach.de" ])
 
-    ( manageCerts [ "spielwaren-kern.de" ])
-    ( serveWordpress [ "spielwaren-kern.de" ])
+    ( manageCerts [ "spielwaren-kern.de" "www.spielwaren-kern.de" ])
+    ( serveWordpress [ "spielwaren-kern.de" "www.spielwaren-kern.de" ])
 
-    ( manageCerts [ "familienpraxis-korntal.de" ])
-    ( servePage [ "familienpraxis-korntal.de" ])
+    ( manageCerts [ "familienpraxis-korntal.de" "www.familienpraxis-korntal.de" ])
+    ( servePage [ "familienpraxis-korntal.de" "www.familienpraxis-korntal.de" ])
 
-    ( manageCerts [ "ttf-kleinaspach.de" ])
-    ( serveWordpress [ "ttf-kleinaspach.de" ])
+    ( manageCerts [ "ttf-kleinaspach.de" "www.ttf-kleinaspach.de" ])
+    ( serveWordpress [ "ttf-kleinaspach.de" "www.ttf-kleinaspach.de" ])
 
-    ( ssl [ "eastuttgart.de" ])
-    ( serveWordpress [ "eastuttgart.de" ])
+    ( ssl [ "eastuttgart.de" "www.eastuttgart.de" ])
+    ( serveWordpress [ "eastuttgart.de" "www.eastuttgart.de" ])
 
-    ( ssl [ "habsys.de" "habsys.eu" ])
-    ( servePage [ "habsys.de" "habsys.eu" ])
+    ( ssl [ "www.habsys.de" "habsys.de" "www.habsys.eu" "habsys.eu" ])
+    ( servePage [ "www.habsys.de" "habsys.de" "www.habsys.eu" "habsys.eu" ])
   ];
 
   services.mysql = {
