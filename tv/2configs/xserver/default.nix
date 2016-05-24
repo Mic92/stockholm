@@ -73,7 +73,15 @@ let
       environment = xserver-environment;
       serviceConfig = {
         ExecReload = need-reload "xserver.service";
-        ExecStart = "${xserver}/bin/xserver";
+        ExecStart = toString [
+          "${pkgs.xorg.xorgserver}/bin/X"
+          ":${toString config.services.xserver.display}"
+          "vt${toString config.services.xserver.tty}"
+          "-config ${import ./xserver.conf.nix args}"
+          "-logfile /var/log/X.${toString config.services.xserver.display}.log"
+          "-nolisten tcp"
+          "-xkbdir ${pkgs.xkeyboard_config}/etc/X11/xkb"
+        ];
       };
     };
   };
@@ -111,18 +119,6 @@ let
       [ "${pkgs.xorg.libX11}/lib" "${pkgs.xorg.libXext}/lib" ]
       ++ concatLists (catAttrs "libPath" config.services.xserver.drivers));
   };
-
-  xserver = pkgs.writeScriptBin "xserver" ''
-    #! /bin/sh
-    set -efu
-    exec ${pkgs.xorg.xorgserver}/bin/X \
-        :${toString config.services.xserver.display} \
-        vt${toString config.services.xserver.tty} \
-        -config ${import ./xserver.conf.nix args} \
-        -logfile /var/log/X.${toString config.services.xserver.display}.log \
-        -nolisten tcp \
-        -xkbdir ${pkgs.xkeyboard_config}/etc/X11/xkb \
-  '';
 
   need-reload = s: let
     pkg = pkgs.writeScriptBin "need-reload" ''
