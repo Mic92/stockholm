@@ -146,4 +146,23 @@ in {
       ExecStart = "${autoAdd} 100";
     };
   };
+
+  krebs.Reaktor = {
+    enable = true;
+    nickname = "the_playlist|r";
+    channels = [ "#the_playlist" ];
+    extraEnviron = {
+      REAKTOR_HOST = "irc.freenode.org";
+    };
+    plugins = with pkgs.ReaktorPlugins; [
+      (buildSimpleReaktorPlugin "skip" {
+        script = "${skip_track}/bin/skip_track";
+        pattern = "^skip$";
+      })
+      (buildSimpleReaktorPlugin "current" {
+        script = "${print_current}/bin/print_current";
+        pattern = "^current$";
+      })
+    ];
+  };
 }
