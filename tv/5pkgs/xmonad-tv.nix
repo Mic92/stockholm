@@ -1,3 +1,14 @@
+{ pkgs, ... }:
+pkgs.writeHaskellBin "xmonad-tv" {
+  depends = [
+    "containers"
+    "unix"
+    "X11"
+    "xmonad"
+    "xmonad-contrib"
+    "xmonad-stockholm"
+  ];
+} ''
 {-# LANGUAGE DeriveDataTypeable #-} -- for XS
 {-# LANGUAGE FlexibleContexts #-} -- for xmonad'
 {-# LANGUAGE LambdaCase #-}
@@ -40,11 +51,11 @@ import XMonad.Stockholm.Rhombus
 import XMonad.Stockholm.Shutdown
 
 
-myTerm :: String
-myTerm = "urxvtc"
+amixerPath :: FilePath
+amixerPath = "${pkgs.alsaUtils}/bin/amixer"
 
-myRootTerm :: String
-myRootTerm = "urxvtc -name root-urxvt -e su -"
+urxvtcPath :: FilePath
+urxvtcPath = "${pkgs.rxvt_unicode}/bin/urxvtc"
 
 myFont :: String
 myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
@@ -64,7 +75,7 @@ mainNoArgs = do
         -- $ withUrgencyHookC BorderUrgencyHook { urgencyBorderColor = "magenta" } urgencyConfig { suppressWhen = Never }
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
-            { terminal          = myTerm
+            { terminal          = urxvtcPath
             , modMask           = mod4Mask
             , keys              = myKeys
             , workspaces        = workspaces0
@@ -72,7 +83,9 @@ mainNoArgs = do
             -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
             --, handleEventHook   = handleTimerEvent
             , manageHook        = placeHook (smart (1,0)) <+> floatNextHook
-            , startupHook       = spawn "echo emit XMonadStartup"
+            , startupHook = do
+                path <- liftIO (getEnv "XMONAD_STARTUP_HOOK")
+                forkFile path [] Nothing
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
             , handleEventHook = handleShutdownEvent
@@ -110,24 +123,30 @@ displaySomeException :: SomeException -> String
 displaySomeException = displayException
 
 
+forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()
+forkFile path args env =
+    xfork (executeFile path False args env) >> return ()
+
+spawnRootTerm :: X ()
+spawnRootTerm =
+    forkFile
+        urxvtcPath
+        ["-name", "root-urxvt", "-e", "/var/setuid-wrappers/su", "-"]
+        Nothing
+
 spawnTermAt :: String -> X ()
---spawnTermAt _ = floatNext True >> spawn myTerm
---spawnTermAt "ff" = floatNext True >> spawn myTerm
---spawnTermAt _    = spawn myTerm
 spawnTermAt ws = do
     env <- liftIO getEnvironment
     let env' = ("XMONAD_SPAWN_WORKSPACE", ws) : env
-    xfork (executeFile "urxvtc" True [] (Just env')) >> return ()
+    forkFile urxvtcPath [] (Just env')
 
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf = Map.fromList $
-    [ ((_4  , xK_Escape ), spawn "/var/setuid-wrappers/slock")
+    [ ((_4  , xK_Escape ), forkFile "/var/setuid-wrappers/slock" [] Nothing)
     , ((_4S , xK_c      ), kill)
 
     , ((_4  , xK_x      ), chooseAction spawnTermAt)
-    , ((_4C , xK_x      ), spawn myRootTerm)
-    --, ((_4M , xK_x      ), spawn "xterm")
-    --, ((_4M , xK_x      ), mySpawn "xterm")
+    , ((_4C , xK_x      ), spawnRootTerm)
 
     --, ((_4  , xK_F1     ), withFocused jojo)
     --, ((_4  , xK_F1     ), printAllGeometries)
@@ -187,9 +206,9 @@ myKeys conf = Map.fromList $
     --,  (_4  , xK_v      ) & \k -> (k, gridselectWorkspace wsGSConfig { gs_navigate = makeGSNav k } W.view)
     --,  (_4S , xK_v      ) & \k -> (k, gridselectWorkspace wsGSConfig { gs_navigate = makeGSNav k } W.shift)
     --,  (_4  , xK_b      ) & \k -> (k, goToSelected        wGSConfig  { gs_navigate = makeGSNav k })
-    , ((noModMask, xF86XK_AudioLowerVolume), spawn "amixer sset Master 5%-")
-    , ((noModMask, xF86XK_AudioRaiseVolume), spawn "amixer sset Master 5%+")
-    , ((noModMask, xF86XK_AudioMute), spawn "amixer sset Master toggle")
+    , ((noModMask, xF86XK_AudioLowerVolume), amixer ["sset", "Master", "5%+"])
+    , ((noModMask, xF86XK_AudioRaiseVolume), amixer ["sset", "Master", "5%-"])
+    , ((noModMask, xF86XK_AudioMute), amixer ["sset", "Master", "toggle"])
     ]
     where
     _4 = mod4Mask
@@ -201,6 +220,8 @@ myKeys conf = Map.fromList $
     _4M = _4 .|. _M
     _4CM = _4 .|. _C .|. _M
     _4SM = _4 .|. _S .|. _M
+
+    amixer args = forkFile amixerPath args Nothing
 
 
 pagerConfig :: PagerConfig
@@ -278,3 +299,4 @@ wGSConfig = def
 allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
 allWorkspaceNames ws =
     return $ map W.tag (W.hidden ws) ++ [W.tag $ W.workspace $ W.current ws]
+''

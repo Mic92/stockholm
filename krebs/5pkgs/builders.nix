@@ -66,7 +66,52 @@ rec {
     mv "$textPath" $out
   '';
 
-  writeNixFromCabal = name: path: pkgs.runCommand name {} ''
-    ${pkgs.cabal2nix}/bin/cabal2nix ${path} > $out
-  '';
+  writeHaskellBin =
+    k:
+    let
+      k' = parseDrvName k;
+      name = k'.name;
+      version = if k'.version != "" then k'.version else "0";
+    in
+    { build-depends ? ["base"] ++ depends
+    , depends ? []
+    , ghc-options ? ["-Wall" "-O3" "-threaded" "-rtsopts"]
+    , haskellPackages ? pkgs.haskellPackages
+    , license ? "WTFPL"
+    }:
+    main-text:
+    let
+      cabal-file = pkgs.writeText "${name}-${version}.cabal" ''
+        build-type: Simple
+        cabal-version: >= 1.2
+        name: ${name}
+        version: ${version}
+
+        executable ${name}
+          build-depends: ${concatStringsSep "," build-depends}
+          ghc-options: ${toString ghc-options}
+          main-is: ${main-file.name}
+      '';
+      main-file = pkgs.writeText "${name}-${version}.hs" main-text;
+    in
+      haskellPackages.mkDerivation rec {
+        inherit license version;
+        executableHaskellDepends = attrVals build-depends haskellPackages;
+        isExecutable = true;
+        isLibrary = false;
+        pname = name;
+        src = pkgs.runCommand "${name}-${version}-src" {} ''
+          install -D ${cabal-file} $out/${cabal-file.name}
+          install -D ${main-file}  $out/${main-file.name}
+        '';
+      };
+
+  writeNixFromCabal =
+    trace (toString [
+      "The function `writeNixFromCabal` has been deprecated in favour of"
+      "`writeHaskellBin'."
+    ])
+    (name: path: pkgs.runCommand name {} ''
+      ${pkgs.cabal2nix}/bin/cabal2nix ${path} > $out
+    '');
 }
