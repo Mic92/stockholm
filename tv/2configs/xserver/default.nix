@@ -18,7 +18,7 @@ in {
     pkgs.xlibs.fontschumachermisc
   ];
 
-  # TODO dedicated group, i.e. with a single user
+  # TODO dedicated group, i.e. with a single user [per-user-setuid]
   # TODO krebs.setuid.slock.path vs /var/setuid-wrappers
   krebs.setuid.slock = {
     filename = "${pkgs.slock}/bin/slock";
