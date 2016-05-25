@@ -21,7 +21,9 @@ let
   '';
 
   print_current = pkgs.writeDashBin "print_current" ''
-    ${pkgs.mpc_cli}/bin/mpc current -f %file%
+    echo "$(${pkgs.mpc_cli}/bin/mpc current -f %file%) \
+    $(${pkgs.mpc_cli}/bin/mpc current -f %file% \
+      | ${pkgs.gnused}/bin/sed 's@.*\(.\{11\}\)\.ogg@http://www.youtube.com/watch?v=\1@')"
   '';
 
 in {
