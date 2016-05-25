@@ -37,6 +37,8 @@ let
     realwallpaper = {};
     xmonad-stockholm = {};
     the_playlist = {};
+  } // mapAttrs make-public-repo-silent {
+    the_playlist = {};
   };
 
   restricted-repos = mapAttrs make-restricted-repo (
@@ -62,6 +64,11 @@ let
         verbose = config.krebs.build.host.name == "prism";
       };
     };
+  };
+
+  make-public-repo-silent = name: { desc ? null, ... }: {
+    inherit name desc;
+    public = true;
   };
 
   make-restricted-repo = name: { collaborators ? [], desc ? null, ... }: {
