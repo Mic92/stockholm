@@ -37,15 +37,21 @@ let
       pkgs.ff
       pkgs.gitAndTools.qgit
       pkgs.mpv
-      pkgs.slock
       pkgs.sxiv
       pkgs.xsel
       pkgs.zathura
     ];
 
-    security.setuidPrograms = [
-      "slock"
-    ];
+    # TODO dedicated group, i.e. with a single user
+    # TODO krebs.setuid.slock.path vs /var/setuid-wrappers
+    krebs.setuid.slock = {
+      filename = "${pkgs.slock}/bin/slock";
+      group = "wheel";
+      envp = {
+        DISPLAY = ":${toString config.services.xserver.display}";
+        USER = user.name;
+      };
+    };
 
     systemd.services.display-manager.enable = false;
 
