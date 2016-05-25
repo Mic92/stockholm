@@ -121,11 +121,9 @@ let
       ++ concatLists (catAttrs "libPath" config.services.xserver.drivers));
   };
 
-  need-reload = s: let
-    pkg = pkgs.writeScriptBin "need-reload" ''
-      #! /bin/sh
-      echo "$*"
-    '';
-  in "${pkg}/bin/need-reload ${s}";
+  need-reload = s: toString [
+    "${pkgs.writeDashBin "need-reload" ''echo "$*"''}/bin/need-reload"
+    (shell.escape s)
+  ];
 
 in out
