@@ -97,7 +97,7 @@ in {
     };
     serviceConfig = {
       SyslogIdentifier = "xserver";
-      ExecReload = "${pkgs.need-reload}/bin/need-reload xserver.service";
+      ExecReload = "${pkgs.coreutils}/bin/echo NOP";
       ExecStart = toString [
         "${pkgs.xorg.xorgserver}/bin/X"
         ":${toString config.services.xserver.display}"
@@ -115,7 +115,7 @@ in {
     reloadIfChanged = true;
     serviceConfig = {
       SyslogIdentifier = "urxvtd";
-      ExecReload = "${pkgs.need-reload}/bin/need-reload urxvtd.service";
+      ExecReload = "${pkgs.coreutils}/bin/echo NOP";
       ExecStart = "${pkgs.rxvt_unicode}/bin/urxvtd";
       Restart = "always";
       RestartSec = "2s";
