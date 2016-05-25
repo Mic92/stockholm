@@ -91,6 +91,7 @@ let
 
     XMONAD_STARTUP_HOOK = pkgs.writeDash "xmonad-startup-hook" ''
       ${pkgs.xorg.xhost}/bin/xhost +LOCAL: &
+      ${pkgs.xorg.xmodmap}/bin/xmodmap ${import ./Xmodmap.nix args} &
       ${pkgs.xorg.xrdb}/bin/xrdb -merge ${import ./Xresources.nix args} &
       ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c' &
       wait
