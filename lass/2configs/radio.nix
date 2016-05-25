@@ -1,4 +1,7 @@
 { config, pkgs, ... }:
+
+with config.krebs.lib;
+
 let
   name = "radio";
   mainUser = config.users.extraUsers.mainUser;
@@ -6,6 +9,20 @@ let
 
   admin-password = import <secrets/icecast-admin-pw>;
   source-password = import <secrets/icecast-source-pw>;
+
+  add_random = pkgs.writeDashBin "add_random" ''
+    mpc add "$(mpc ls | shuf -n1)"
+  '';
+
+  skip_track = pkgs.writeDashBin "skip_track" ''
+    ${add_random}/bin/add_random
+    echo skipping: "$(${print_current}/bin/print_current)"
+    ${pkgs.mpc_cli}/bin/mpc -q next
+  '';
+
+  print_current = pkgs.writeDashBin "print_current" ''
+    ${pkgs.mpc_cli}/bin/mpc current -f %file%
+  '';
 
 in {
   users.users = {
@@ -28,6 +45,9 @@ in {
   };
 
   krebs.per-user.${name}.packages = with pkgs; [
+    add_random
+    skip_track
+    print_current
     ncmpcpp
     mpc_cli
     tmux
@@ -100,10 +120,6 @@ in {
     autoAdd = pkgs.writeDash "autoAdd" ''
       LIMIT=$1 #in secconds
 
-      addRandom () {
-        mpc add "$(mpc ls | shuf -n1)"
-      }
-
       timeLeft () {
         playlistDuration=$(mpc --format '%time%' playlist | awk -F ':' 'BEGIN{t=0} {t+=$1*60+$2} END{print t}')
         currentTime=$(mpc status | awk '/^\[playing\]/ { sub(/\/.+/,"",$3); split($3,a,/:/); print a[1]*60+a[2] }')
@@ -111,7 +127,7 @@ in {
       }
 
       if test $(timeLeft) -le $LIMIT; then
-        addRandom
+        ${add_random}/bin/add_random
       fi
     '';
   in {
