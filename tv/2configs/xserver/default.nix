@@ -73,6 +73,7 @@ in {
       ]);
     };
     serviceConfig = {
+      SyslogIdentifier = "xmonad";
       ExecStart = "${pkgs.xmonad-tv}/bin/xmonad-tv";
       ExecStop = "${pkgs.xmonad-tv}/bin/xmonad-tv --shutdown";
       User = user.name;
@@ -95,6 +96,7 @@ in {
         ++ concatLists (catAttrs "libPath" config.services.xserver.drivers));
     };
     serviceConfig = {
+      SyslogIdentifier = "xserver";
       ExecReload = "${pkgs.need-reload}/bin/need-reload xserver.service";
       ExecStart = toString [
         "${pkgs.xorg.xorgserver}/bin/X"
@@ -112,6 +114,7 @@ in {
     wantedBy = [ "multi-user.target" ];
     reloadIfChanged = true;
     serviceConfig = {
+      SyslogIdentifier = "urxvtd";
       ExecReload = "${pkgs.need-reload}/bin/need-reload urxvtd.service";
       ExecStart = "${pkgs.rxvt_unicode}/bin/urxvtd";
       Restart = "always";
