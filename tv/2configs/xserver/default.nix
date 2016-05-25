@@ -95,14 +95,13 @@ in {
         ++ concatLists (catAttrs "libPath" config.services.xserver.drivers));
     };
     serviceConfig = {
-      SyslogIdentifier = "xserver";
       ExecReload = "${pkgs.need-reload}/bin/need-reload xserver.service";
       ExecStart = toString [
         "${pkgs.xorg.xorgserver}/bin/X"
         ":${toString config.services.xserver.display}"
         "vt${toString config.services.xserver.tty}"
         "-config ${import ./xserver.conf.nix args}"
-        "-logfile /var/log/X.${toString config.services.xserver.display}.log"
+        "-logfile /dev/null -logverbose 0 -verbose 3"
         "-nolisten tcp"
         "-xkbdir ${pkgs.xkeyboard_config}/etc/X11/xkb"
       ];
