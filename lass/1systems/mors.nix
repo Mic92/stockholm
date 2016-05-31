@@ -193,6 +193,7 @@
     hashPassword
     urban
     mk_sql_pair
+    remmina
   ];
 
   #TODO: fix this shit
