@@ -119,7 +119,7 @@ let
 
   to-server = { server-names, listen, locations, extraConfig, ssl, ... }: ''
     server {
-      server_name ${toString server-names};
+      server_name ${toString (unique server-names)};
       ${concatMapStringsSep "\n" (x: indent "listen ${x};") listen}
       ${optionalString ssl.enable (indent ''
         listen 443 ssl;
