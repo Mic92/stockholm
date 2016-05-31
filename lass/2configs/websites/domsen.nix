@@ -1,14 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (config.krebs.lib)
+  inherit (import <stockholm/krebs/4lib> { config = {}; inherit lib; })
     genid
-    readFile
     ;
-  inherit (import ../../4lib { inherit lib pkgs; })
-    manageCert
-    manageCerts
-    activateACME
+  inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
     ssl
     servePage
     serveOwncloud

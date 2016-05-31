@@ -3,8 +3,9 @@
 let
   ip = config.krebs.build.host.nets.internet.ip4.addr;
 
-  inherit (import ../../4lib { inherit lib pkgs; })
-    manageCerts;
+  inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
+    manageCerts
+  ;
 
 in {
   imports = [

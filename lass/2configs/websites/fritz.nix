@@ -1,12 +1,16 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (import ../../4lib { inherit lib pkgs; })
-    manageCerts
-    activateACME
+  inherit (import <stockholm/krebs/4lib> { config = {}; inherit lib; })
+    genid
+    head
+    nameValuePair
+  ;
+  inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
     ssl
     servePage
-    serveWordpress;
+    serveWordpress
+  ;
 
 in {
   imports = [
