@@ -13,13 +13,21 @@ in {
     ../2configs/default.nix
     ../2configs/exim-smarthost.nix
     ../2configs/downloading.nix
-    ../2configs/git.nix
     ../2configs/ts3.nix
     ../2configs/bitlbee.nix
     ../2configs/weechat.nix
     ../2configs/privoxy-retiolum.nix
     ../2configs/radio.nix
     ../2configs/buildbot-standalone.nix
+    {
+      imports = [
+        ../2configs/git.nix
+        ( manageCerts [ "cgit.lassul.us" ])
+      ];
+      krebs.nginx.servers.cgit.server-names = [
+        "cgit.lassul.us"
+      ];
+    }
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
