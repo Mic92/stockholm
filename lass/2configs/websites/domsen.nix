@@ -22,49 +22,30 @@ let
 
 in {
   imports = [
-    ( ssl [ "reich-gebaeudereinigung.de" ])
-    ( servePage [ "reich-gebaeudereinigung.de" ])
+    ./sqlBackup.nix
+    (ssl [ "reich-gebaeudereinigung.de" ])
+    (servePage [ "reich-gebaeudereinigung.de" ])
 
-    ( manageCerts [ "karlaskop.de" ])
-    ( servePage [ "karlaskop.de" ])
+    (ssl [ "karlaskop.de" ])
+    (servePage [ "karlaskop.de" ])
 
-    ( ssl [ "makeup.apanowicz.de" ])
-    ( servePage [ "makeup.apanowicz.de" ])
+    (ssl [ "makeup.apanowicz.de" ])
+    (servePage [ "makeup.apanowicz.de" ])
 
-    ( manageCerts [ "pixelpocket.de" ])
-    ( servePage [ "pixelpocket.de" ])
+    (ssl [ "pixelpocket.de" ])
+    (servePage [ "pixelpocket.de" ])
 
-    ( ssl [ "o.ubikmedia.de" ])
-    ( serveOwncloud [ "o.ubikmedia.de" ])
+    (ssl [ "o.ubikmedia.de" ])
+    (serveOwncloud [ "o.ubikmedia.de" ])
 
-    ( ssl [ "ubikmedia.de" "aldona.ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ] )
-    ( serveWordpress [ "ubikmedia.de" "*.ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ] )
+    (ssl [ "ubikmedia.de" "aldona.ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ])
+    (serveWordpress [ "ubikmedia.de" "*.ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ])
   ];
 
-  services.mysql = {
-    enable = true;
-    package = pkgs.mariadb;
-    rootPassword = toString (<secrets/mysql_rootPassword>);
-  };
-
-  lass.mysqlBackup = {
-    enable = true;
-    config.domsen = {
-      password = toString (<secrets/mysql_rootPassword>);
-      databases = [
-        "ubikmedia_de"
-        "o_ubikmedia_de"
-      ];
-    };
-  };
-  services.mysqlBackup = {
-    enable = true;
-    databases = [
-      "ubikmedia_de"
-      "o_ubikmedia_de"
-    ];
-    location = "/bku/sql_dumps";
-  };
+  lass.mysqlBackup.config.all.databases = [
+    "ubikmedia_de"
+    "o_ubikmedia_de"
+  ];
 
   users.users.domsen = {
     uid = genid "domsen";
