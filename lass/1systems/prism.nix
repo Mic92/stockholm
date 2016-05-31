@@ -19,12 +19,7 @@ in {
     ../2configs/weechat.nix
     ../2configs/privoxy-retiolum.nix
     ../2configs/radio.nix
-    {
-      #we need to use old sqlite for buildbot
-      imports = [
-        ../2configs/buildbot-standalone.nix
-      ];
-    }
+    ../2configs/buildbot-standalone.nix
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
