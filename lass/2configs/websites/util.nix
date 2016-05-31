@@ -24,6 +24,7 @@ rec {
       };
 
       krebs.nginx.servers."${domain}" = {
+        server-names = domains;
         locations = [
           (nameValuePair "/.well-known/acme-challenge" ''
             root /var/lib/acme/challenges/${domain}/;
