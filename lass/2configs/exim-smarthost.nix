@@ -26,6 +26,7 @@ with config.krebs.lib;
       { from = "steuer@aidsballs.de"; to = lass.mail; }
       { from = "lass@aidsballs.de"; to = lass.mail; }
       { from = "wordpress@ubikmedia.de"; to = lass.mail; }
+      { from = "finanzamt@lassul.us"; to = lass.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }
