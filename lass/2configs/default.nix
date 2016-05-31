@@ -30,6 +30,7 @@ with config.krebs.lib;
           createHome = true;
           useDefaultShell = true;
           extraGroups = [
+            "fuse"
           ];
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
