@@ -602,8 +602,8 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       owner = config.krebs.users.ciko; # main laptop
       nets = {
         retiolum = {
-          addrs4 = ["10.243.183.236"];
-          addrs6 = ["42:8ca8:d2e4:adf6:5c0f:38cb:e9ef:eb3c"];
+          ip4.addr = "10.243.183.236";
+          ip6.addr = "42:8ca8:d2e4:adf6:5c0f:38cb:e9ef:eb3c";
           aliases = [ "tpsw.r" "tpsw.retiolum" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
