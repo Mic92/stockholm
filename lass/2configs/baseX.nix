@@ -34,8 +34,9 @@ in {
 
     dmenu
     gitAndTools.qgit
-    nmap
+    lm_sensors
     much
+    nmap
     pavucontrol
     powertop
     push
