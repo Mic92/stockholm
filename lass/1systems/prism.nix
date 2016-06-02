@@ -3,8 +3,9 @@
 let
   ip = config.krebs.build.host.nets.internet.ip4.addr;
 
-  inherit (import ../../4lib { inherit lib pkgs; })
-    manageCerts;
+  inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
+    manageCerts
+  ;
 
 in {
   imports = [
@@ -12,16 +13,19 @@ in {
     ../2configs/default.nix
     ../2configs/exim-smarthost.nix
     ../2configs/downloading.nix
-    ../2configs/git.nix
     ../2configs/ts3.nix
     ../2configs/bitlbee.nix
     ../2configs/weechat.nix
     ../2configs/privoxy-retiolum.nix
     ../2configs/radio.nix
+    ../2configs/buildbot-standalone.nix
     {
-      #we need to use old sqlite for buildbot
       imports = [
-        ../2configs/buildbot-standalone.nix
+        ../2configs/git.nix
+        ( manageCerts [ "cgit.lassul.us" ])
+      ];
+      krebs.nginx.servers.cgit.server-names = [
+        "cgit.lassul.us"
       ];
     }
     {
@@ -194,6 +198,16 @@ in {
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp --dport xmpp-client"; target = "ACCEPT"; }
         { predicate = "-p tcp --dport xmpp-server"; target = "ACCEPT"; }
+      ];
+    }
+    {
+      imports = [
+        ../2configs/realwallpaper-server.nix
+      ];
+      krebs.nginx.servers."lassul.us".locations = [
+        (lib.nameValuePair "/wallpaper.png" ''
+          alias /tmp/wallpaper.png;
+        '')
       ];
     }
   ];

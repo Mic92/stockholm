@@ -63,5 +63,6 @@ in {
     ( createChromiumUser "wk" [ "video" "audio" ] [ pkgs.chromium ] )
     ( createChromiumUser "fb" [ "video" "audio" ] [ pkgs.chromium ] )
     ( createChromiumUser "gm" [ "video" "audio" ] [ pkgs.chromium ] )
+    ( createChromiumUser "com" [ "video" "audio" ] [ pkgs.chromium ] )
   ];
 }

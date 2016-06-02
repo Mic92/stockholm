@@ -14,7 +14,7 @@
     ../2configs/elster.nix
     ../2configs/steam.nix
     ../2configs/wine.nix
-    ../2configs/texlive.nix
+    #../2configs/texlive.nix
     ../2configs/binary-caches.nix
     #../2configs/ircd.nix
     ../2configs/chromium-patched.nix
@@ -175,14 +175,14 @@
     emulateWheel = true;
   };
 
-  #services.xserver = {
-  #  videoDriver = "intel";
-  #  vaapiDrivers = [ pkgs.vaapiIntel ];
-  #  deviceSection = ''
-  #    Option "AccelMethod" "sna"
-  #    BusID "PCI:0:2:0"
-  #  '';
-  #};
+  services.xserver = {
+    videoDriver = "intel";
+    vaapiDrivers = [ pkgs.vaapiIntel ];
+    deviceSection = ''
+      Option "AccelMethod" "sna"
+      BusID "PCI:0:2:0"
+    '';
+  };
 
   environment.systemPackages = with pkgs; [
     acronym
@@ -193,6 +193,7 @@
     hashPassword
     urban
     mk_sql_pair
+    remmina
   ];
 
   #TODO: fix this shit

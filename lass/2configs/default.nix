@@ -30,6 +30,7 @@ with config.krebs.lib;
           createHome = true;
           useDefaultShell = true;
           extraGroups = [
+            "fuse"
           ];
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
@@ -55,8 +56,8 @@ with config.krebs.lib;
         #secrets-common = "/home/lass/secrets/common";
         stockholm = "/home/lass/stockholm";
         nixpkgs = {
-          url = https://github.com/NixOS/nixpkgs;
-          rev = "d541e0dc1c05f5514bf30f8039e687adddb45616";
+          url = https://github.com/lassulus/nixpkgs;
+          rev = "f632f8edaf80ffa8bf0b8c9b9064cae3ccbe3894";
           dev = "/home/lass/src/nixpkgs";
         };
       } // optionalAttrs config.krebs.build.host.secure {

@@ -111,6 +111,13 @@ let
       syn match String /"\([^\\"]\|\\.\)*"/
       syn match Comment /\(^\|\s\)#.*/
 
+      " Haskell comments
+      syn region Comment start=/\(^\|\s\){-#/ end=/#-}/
+      syn match Comment /\(^\|\s\)--.*/
+
+      " Vim comments
+      syn match Comment /\(^\|\s\)"[^"]*$/
+
       let b:current_syntax = "nix"
     ''}
 

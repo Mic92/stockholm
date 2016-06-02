@@ -1,11 +1,13 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (config.krebs.lib) genid;
-  inherit (import ../../4lib { inherit lib pkgs; })
+  inherit (import <stockholm/krebs/4lib> { config = {}; inherit lib; })
+    genid
+  ;
+  inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
     ssl
-    servePage;
-
+    servePage
+  ;
 in {
   imports = [
     ( ssl [ "wohnprojekt-rhh.de" ])
