@@ -60,6 +60,7 @@ with config.krebs.lib;
         nmap
         p7zip
         pass
+        q
         qrencode
         texLive
         tmux

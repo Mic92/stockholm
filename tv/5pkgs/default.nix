@@ -17,6 +17,7 @@
       erlang = pkgs.erlangR16;
     };
     ff = pkgs.callPackage ./ff {};
+    q = pkgs.callPackage ./q {};
     viljetic-pages = pkgs.callPackage ./viljetic-pages {};
     xmonad-tv = import ./xmonad-tv.nix { inherit pkgs; };
   };
