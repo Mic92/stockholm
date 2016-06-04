@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 with config.krebs.lib;
 rec {
   execve = name: { filename, argv ? null, envp ? {}, destination ? "" }: let
@@ -66,50 +66,112 @@ rec {
     mv "$textPath" $out
   '';
 
-  writeHaskellBin =
+  writeHaskell =
     k:
     let
       k' = parseDrvName k;
       name = k'.name;
       version = if k'.version != "" then k'.version else "0";
     in
-    { build-depends ? ["base"] ++ depends
-    , depends ? []
+    { base-depends ? ["base"]
+    , executables ? {}
     , ghc-options ? ["-Wall" "-O3" "-threaded" "-rtsopts"]
     , haskellPackages ? pkgs.haskellPackages
+    , library ? null
     , license ? "WTFPL"
     }:
-    main-text:
     let
+      isExecutable = executables != {};
+      isLibrary = library != null;
+
       cabal-file = pkgs.writeText "${name}-${version}.cabal" ''
         build-type: Simple
         cabal-version: >= 1.2
         name: ${name}
         version: ${version}
-
-        executable ${name}
-          build-depends: ${concatStringsSep "," build-depends}
-          ghc-options: ${toString ghc-options}
-          main-is: ${main-file.name}
+        ${concatStringsSep "\n" (mapAttrsToList exe-section executables)}
+        ${optionalString isLibrary (lib-section library)}
       '';
-      main-file = pkgs.writeText "${name}-${version}.hs" main-text;
+
+      exe-install =
+        exe-name:
+        { file ? pkgs.writeText "${name}-${exe-name}.hs" text
+        , relpath ? "${exe-name}.hs"
+        , text
+        , ... }:
+        if types.filename.check exe-name
+          then "install -D ${file} $out/${relpath}"
+          else throw "argument ‘exe-name’ is not a ${types.filename.name}";
+
+      exe-section =
+        exe-name:
+        { build-depends ? base-depends ++ extra-depends
+        , extra-depends ? []
+        , file ? pkgs.writeText "${name}-${exe-name}.hs" text
+        , relpath ? "${exe-name}.hs"
+        , text
+        , ... }: ''
+          executable ${exe-name}
+            build-depends: ${concatStringsSep "," build-depends}
+            ghc-options: ${toString ghc-options}
+            main-is: ${relpath}
+        '';
+
+      get-depends =
+        { build-depends ? base-depends ++ extra-depends
+        , extra-depends ? []
+        , ...
+        }:
+        build-depends;
+
+      lib-install =
+        { exposed-modules
+        , ... }:
+        concatStringsSep "\n" (mapAttrsToList mod-install exposed-modules);
+
+      lib-section =
+        { build-depends ? base-depends ++ extra-depends
+        , extra-depends ? []
+        , exposed-modules
+        , ... }: ''
+          library
+            build-depends: ${concatStringsSep "," build-depends}
+            ghc-options: ${toString ghc-options}
+            exposed-modules: ${concatStringsSep "," (attrNames exposed-modules)}
+        '';
+
+      mod-install =
+        mod-name:
+        { file ? pkgs.writeText "${name}-${mod-name}.hs" text
+        , relpath ? "${replaceStrings ["."] ["/"] mod-name}.hs"
+        , text
+        , ... }:
+        if types.haskell.modid.check mod-name
+          then "install -D ${file} $out/${relpath}"
+          else throw "argument ‘mod-name’ is not a ${types.haskell.modid.name}";
     in
-      haskellPackages.mkDerivation rec {
-        inherit license version;
-        executableHaskellDepends = attrVals build-depends haskellPackages;
-        isExecutable = true;
-        isLibrary = false;
+      haskellPackages.mkDerivation {
+        inherit isExecutable isLibrary license version;
+        executableHaskellDepends =
+          attrVals
+            (concatMap get-depends (attrValues executables))
+            haskellPackages;
+        libraryHaskellDepends =
+          attrVals
+            (optionals isLibrary (get-depends library))
+            haskellPackages;
         pname = name;
         src = pkgs.runCommand "${name}-${version}-src" {} ''
           install -D ${cabal-file} $out/${cabal-file.name}
-          install -D ${main-file}  $out/${main-file.name}
+          ${optionalString isLibrary (lib-install library)}
+          ${concatStringsSep "\n" (mapAttrsToList exe-install executables)}
         '';
       };
 
   writeNixFromCabal =
     trace (toString [
       "The function `writeNixFromCabal` has been deprecated in favour of"
-      "`writeHaskellBin'."
+      "`writeHaskell`."
     ])
     (name: path: pkgs.runCommand name {} ''
       ${pkgs.cabal2nix}/bin/cabal2nix ${path} > $out
