@@ -48,6 +48,14 @@ $(if $(target_user),,$(error unbound variable: target_user))
 $(if $(target_port),,$(error unbound variable: target_port))
 $(if $(target_path),,$(error unbound variable: target_path))
 
+build = \
+	nix-build \
+		--no-out-link \
+		--show-trace \
+		-I nixos-config=$(nixos-config) \
+		-I stockholm=$(stockholm) \
+		-E "let build = import <stockholm>; in $(1)"
+
 evaluate = \
 	nix-instantiate \
 		--eval \
@@ -73,6 +81,10 @@ deploy:
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		env STOCKHOLM_VERSION="$$STOCKHOLM_VERSION" \
 			nixos-rebuild switch --show-trace -I $(target_path)
+
+# usage: make build.pkgs.get
+build build.:;@$(call build,$${expr-eval})
+build.%:;@$(call build,$@)
 
 # usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
 eval eval.:;@$(call evaluate,$${expr-eval})
