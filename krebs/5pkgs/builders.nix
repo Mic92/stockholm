@@ -28,6 +28,21 @@ rec {
 
   execveBin = name: cfg: execve name (cfg // { destination = "/bin/${name}"; });
 
+  writeBash = name: text: pkgs.writeScript name ''
+    #! ${pkgs.bash}/bin/bash
+    ${text}
+  '';
+
+  writeBashBin = name: text: pkgs.writeTextFile {
+    executable = true;
+    destination = "/bin/${name}";
+    name = name;
+    text = ''
+      #! ${pkgs.bash}/bin/bash
+      ${text}
+    '';
+  };
+
   writeC = name: { destination ? "" }: src: pkgs.runCommand name {} ''
     PATH=${makeBinPath (with pkgs; [
       binutils
