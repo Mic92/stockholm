@@ -286,6 +286,19 @@ types // rec {
     };
   };
 
+  haskell.conid = mkOptionType {
+    name = "Haskell constructor identifier";
+    check = x:
+      isString x && match "[[:upper:]][[:lower:]_[:upper:]0-9']*" x != null;
+    merge = mergeOneOption;
+  };
+
+  haskell.modid = mkOptionType {
+    name = "Haskell module identifier";
+    check = x: isString x && all haskell.conid.check (splitString "." x);
+    merge = mergeOneOption;
+  };
+
   # RFC952, B. Lexical grammar, <hname>
   hostname = mkOptionType {
     name = "hostname";

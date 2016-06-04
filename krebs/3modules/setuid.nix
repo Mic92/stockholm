@@ -20,6 +20,10 @@ let
           type = types.filename;
           default = config._module.args.name;
         };
+        envp = mkOption {
+          type = types.attrsOf types.str;
+          default = {};
+        };
         filename = mkOption {
           type = mkOptionType {
             # TODO unyuck string and merge with toC
@@ -57,7 +61,7 @@ let
       };
       config.activate = let
         src = pkgs.execve config.name {
-          inherit (config) filename;
+          inherit (config) envp filename;
         };
         dst = "${wrapperDir}/${config.name}";
       in ''
