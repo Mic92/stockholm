@@ -68,6 +68,11 @@ with builtins;
     "/boot" = {
       device = "/dev/sda1";
     };
+
+    "/home/lass" = {
+      device = "/dev/pool/home-lass";
+      fsType = "ext4";
+    };
   };
 
   services.udev.extraRules = ''
