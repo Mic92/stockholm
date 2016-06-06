@@ -74,8 +74,8 @@ in {
     };
     serviceConfig = {
       SyslogIdentifier = "xmonad";
-      ExecStart = "${pkgs.xmonad-tv}/bin/xmonad-tv";
-      ExecStop = "${pkgs.xmonad-tv}/bin/xmonad-tv --shutdown";
+      ExecStart = "${pkgs.xmonad-tv}/bin/xmonad";
+      ExecStop = "${pkgs.xmonad-tv}/bin/xmonad --shutdown";
       User = user.name;
       WorkingDirectory = user.home;
     };
