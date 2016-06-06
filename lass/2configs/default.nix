@@ -57,7 +57,7 @@ with config.krebs.lib;
         stockholm = "/home/lass/stockholm";
         nixpkgs = {
           url = https://github.com/lassulus/nixpkgs;
-          rev = "f632f8edaf80ffa8bf0b8c9b9064cae3ccbe3894";
+          rev = "5ae35cd00571033901c424001c3878f5974f4992";
           dev = "/home/lass/src/nixpkgs";
         };
       } // optionalAttrs config.krebs.build.host.secure {
