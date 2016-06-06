@@ -154,7 +154,6 @@ let
     telepolis|http://www.heise.de/tp/rss/news-atom.xml|#news
     the_insider|http://www.theinsider.org/rss/news/headlines-xml.asp|#news
     tigsource|http://www.tigsource.com/feed/|#news
-    times|http://www.thetimes.co.uk/tto/news/rss|#news
     tinc|http://tinc-vpn.org/news/index.rss|#news
     topix_b|http://www.topix.com/rss/wire/de/berlin|#news
     torr_bits|http://feeds.feedburner.com/TorrentfreakBits|#news

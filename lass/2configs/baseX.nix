@@ -4,9 +4,10 @@ let
   mainUser = config.users.extraUsers.mainUser;
 in {
   imports = [
-    ./base.nix
+    ./default.nix
     #./urxvt.nix
     ./xserver
+    ./mpv.nix
   ];
 
   users.extraUsers.mainUser.extraGroups = [ "audio" ];
@@ -33,17 +34,19 @@ in {
 
     dmenu
     gitAndTools.qgit
+    lm_sensors
     much
+    nmap
     pavucontrol
     powertop
     push
     slock
     sxiv
+    xclip
     xorg.xbacklight
     xsel
     zathura
 
-    mpv
     mpv-poll
     yt-next
   #window manager stuff

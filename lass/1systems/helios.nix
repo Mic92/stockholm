@@ -5,10 +5,13 @@ with builtins;
   imports = [
     ../.
     ../2configs/baseX.nix
+    ../2configs/exim-retiolum.nix
     ../2configs/browsers.nix
     ../2configs/programs.nix
     ../2configs/git.nix
     ../2configs/pass.nix
+    ../2configs/fetchWallpaper.nix
+    ../2configs/backups.nix
     #{
     #  users.extraUsers = {
     #    root = {
@@ -51,6 +54,16 @@ with builtins;
 
     "/boot" = {
       device = "/dev/sda1";
+    };
+
+    "/home" = {
+      device = "/dev/pool/home";
+      fsType = "ext4";
+    };
+
+    "/bku" = {
+      device = "/dev/pool/bku";
+      fsType = "ext4";
     };
   };
 

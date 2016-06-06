@@ -1,13 +1,18 @@
-{ config, ... }:
+{ config, pkgs, lib, ... }:
 
-{
+let
+  inherit (import <stockholm/krebs/4lib> { config = {}; inherit lib; })
+    genid
+  ;
+  inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
+    ssl
+    servePage
+  ;
+in {
   imports = [
-    ../../3modules/static_nginx.nix
+    ( ssl [ "wohnprojekt-rhh.de" ])
+    ( servePage [ "wohnprojekt-rhh.de" ])
   ];
-
-  lass.staticPage = {
-    "wohnprojekt-rhh.de" = {};
-  };
 
   users.users.laura = {
     home = "/srv/http/wohnprojekt-rhh.de";

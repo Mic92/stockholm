@@ -3,7 +3,7 @@
 with config.krebs.lib;
 
 let
-  rpc-password = import <secrets/transmission-pw.nix>;
+  rpc-password = import <secrets/transmission-pw>;
 in {
   imports = [
     ../3modules/folderPerms.nix
@@ -20,6 +20,7 @@ in {
       ];
       openssh.authorizedKeys.keys = [
         config.krebs.users.lass.pubkey
+        config.krebs.users.lass-uriel.pubkey
       ];
     };
 

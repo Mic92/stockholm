@@ -36,6 +36,19 @@ with config.krebs.lib;
 
     ReaktorPlugins = callPackage ./Reaktor/plugins.nix {};
 
+    #buildbot = callPackage <nixpkgs/pkgs/development/tools/build-managers/buildbot> {
+    #  inherit (pkgs.pythonPackages) twisted jinja2;
+    #  dateutil = pkgs.pythonPackages.dateutil_1_5;
+    #  sqlalchemy_migrate_0_7 = pkgs.pythonPackages.sqlalchemy_migrate_func (pkgs.pythonPackages.sqlalchemy7.override {
+    #    doCheck = false;
+    #  });
+    #};
+
+    # XXX symlinkJoin changed arguments somewhere around nixpkgs d541e0d
+    symlinkJoin = { name, paths, ... }@args: let
+      x = pkgs.symlinkJoin args;
+    in if typeOf x != "lambda" then x else pkgs.symlinkJoin name paths;
+
     test = {
       infest-cac-centos7 = callPackage ./test/infest-cac-centos7 {};
     };

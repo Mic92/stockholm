@@ -12,6 +12,7 @@ with config.krebs.lib;
           aliases = [
             "dishfire.internet"
           ];
+          ssh.port = 45621;
         };
         retiolum = {
           via = internet;
@@ -40,10 +41,11 @@ with config.krebs.lib;
       cores = 2;
       nets = rec {
         internet = {
-          ip4.addr = "162.252.241.33";
+          ip4.addr = "104.233.79.118";
           aliases = [
             "echelon.internet"
           ];
+          ssh.port = 45621;
         };
         retiolum = {
           via = internet;
@@ -79,6 +81,7 @@ with config.krebs.lib;
           aliases = [
             "prism.internet"
           ];
+          ssh.port = 45621;
         };
         retiolum = {
           via = internet;
@@ -143,6 +146,7 @@ with config.krebs.lib;
           aliases = [
             "cloudkrebs.internet"
           ];
+          ssh.port = 45621;
         };
         retiolum = {
           via = internet;
@@ -174,6 +178,7 @@ with config.krebs.lib;
         gg23 = {
           ip4.addr = "10.23.1.12";
           aliases = ["uriel.gg23"];
+          ssh.port = 45621;
         };
         retiolum = {
           ip4.addr = "10.243.81.176";
@@ -205,6 +210,7 @@ with config.krebs.lib;
         gg23 = {
           ip4.addr = "10.23.1.11";
           aliases = ["mors.gg23"];
+          ssh.port = 45621;
         };
         retiolum = {
           ip4.addr = "10.243.0.2";
@@ -257,21 +263,56 @@ with config.krebs.lib;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDWlIxkX41V55Yker8n4gErx2xcKpXFNKthhbP3+bTJ7";
     };
+    shodan = {
+      cores = 2;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.0.4";
+          ip6.addr = "42:0:0:0:0:0:0:50d4";
+          aliases = [
+            "shodan.retiolum"
+            "shodan.r"
+            "cgit.shodan.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA9bUSItw8rEu2Cm2+3IGHyRxopre9lqpFjZNG2QTnjXkZ97QlDesT
+            YYZgM2lBkYcDN3/LdGaFFKrQQSGiF90oXA2wFqPuIfycx+1+TENGCzF8pExwbTd7
+            ROSVnISbghXYDgr3TqkjpPmnM+piFKymMDBGhxWuy1bw1AUfvRzhQwPAvtjB4VvF
+            7AVN/Z9dAZ/LLmYfYq7fL8V7PzQNvR+f5DP6+Eubx0xCuyuo63bWuGgp3pqKupx4
+            xsixtMQPuqMBvOUo0SBCCPa9a+6I8dSwqAmKWM5BhmNlNCRDi37mH/m96av7SIiZ
+            V29hwypVnmLoJEFiDzPMCdiH9wJNpHuHuQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      secure = true;
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC9vup68R0I+62FK+8LNtwM90V9P4ukBmU7G7d54wf4C";
+    };
 
   };
   users = {
     lass = {
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAp83zynhIueJJsWlSEykVSBrrgBFKq38+vT8bRfa+csqyjZBl2SQFuCPo+Qbh49mwchpZRshBa9jQEIGqmXxv/PYdfBFQuOFgyUq9ZcTZUXqeynicg/SyOYFW86iiqYralIAkuGPfQ4howLPVyjTZtWeEeeEttom6p6LMY5Aumjz2em0FG0n9rRFY2fBzrdYAgk9C0N6ojCs/Gzknk9SGntA96MDqHJ1HXWFMfmwOLCnxtE5TY30MqSmkrJb7Fsejwjoqoe9Y/mCaR0LpG2cStC1+37GbHJNH0caCMaQCX8qdfgMVbWTVeFWtV6aWOaRgwLrPDYn4cHWQJqTfhtPrNQ== lass@mors";
       mail = "lass@mors.retiolum";
-      pgp.pubkeys.default = builtins.readFile ./default.pgp;
+      pubkey = builtins.readFile ./ssh/mors.rsa;
+      pgp.pubkeys.default = builtins.readFile ./pgp/mors.pgp;
     };
     lass-uriel = {
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDExWuRcltGM2FqXO695nm6/QY3wU3r1bDTyCpMrLfUSym7TxcXDSmZSWcueexPXV6GENuUfjJPZswOdWqIo5u2AXw9t0aGvwEDmI6uJ7K5nzQOsXIneGMdYuoOaAzWI8pxZ4N+lIP1HsOYttIPDp8RwU6kyG+Ud8mnVHWSTO13C7xC9vePnDP6b+44nHS691Zj3X/Cq35Ls0ISC3EM17jreucdP62L3TKk2R4NCm3Sjqj+OYEv0LAqIpgqSw5FypTYQgNByxRcIcNDlri63Q1yVftUP1338UiUfxtraUu6cqa2CdsHQmtX5mTNWEluVWO3uUKTz9zla3rShC+d3qvr lass@uriel";
       mail = "lass@uriel.retiolum";
+      pubkey = builtins.readFile ./ssh/uriel.rsa;
     };
     lass-helios = {
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDBOnMtgy5GH6R6tHp2ugy5QTe3gAGxh2CKsstSNSNAJwvWGiaWJkbNmgM8KlCWeq1GJBGa95kU4I2BDO5fJd7J9vqyrTGF1+sx0Nwj/ELKSNVxDoKVYiU09pTqSB3pi46i+E8N49y4/8aRhu4/7O2dSTH7OS3YoZpt2Soas+cYJYhQdZtYQAgPX5LOkTfQvPhGR8AzrrTvOUrHyTWaSBEELVZ088LrFT6ibXHcPhwXX7A5+YMS8LLr3KRstySWzJEmfVOJxuMhQJSH1Xiq4bLilVn9V4AK5pCOnlALSYf48SexsCqzBUKgISuncurIBbXtW9EkNTMX3jSKlSQ7WniGRlmzrBAJCh4VXJUZgXDf8hAaPckIRbLosbTnEAauWcfnIXLfvI+bYkURhfYKsWelM+MS6ihk+P2yr8rNT9w5iUVJGVypOXUp45PrFuPn6ayCpNRJzqPwCCPE7fFagzLs7wibIXlrhCnRALT5HHyExFFcQoGvIq/8o+Oia8mrTimb55IDLwkiYrG6I5DPXFPKsTC0hium9T3I8dC+M7n9GbwnLTUK2kWnoklD3HTab21xJTtbF98nQ94df7doqPFxL/jongeZCGMB+PJ+BdQTtHr7tCY0kN2GXpoHxz/2w8YEWTKHhWIUsD+Utf8pDkKQfCqlm7iR7byxL51gHL9Z3Q== lass@helios";
       mail = "lass@helios.retiolum";
+      pubkey = builtins.readFile ./ssh/helios.rsa;
+    };
+    lass-shodan = {
+      mail = "lass@shodan.retiolum";
+      pubkey = builtins.readFile ./ssh/shodan.rsa;
+      pgp.pubkeys.default = builtins.readFile ./pgp/shodan.pgp;
+    };
+    fritz = {
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCz34435NSXgj72YAOL4cIlRq/4yInKEyL9no+gymURoW5x1nkYpP0EK331e7UyQQSOdWOogRo6d7YHcFqNlYWv5xlYcHucIhgJwC4Zda1liVA+v7tSOJz2BjmFvOT3/qlcPS69f3zdLHZooz2C33uHX1FgGRXlxiA8dpqGnSr8o76QLZjuQkuDqr8reOspjO/RHCo2Moq0Xm5q9OgN1WLAZzupqt9A5lx567mRzYsRAr23pUxVN8T/tSCgDlPe4ktEjYX9CXLKfMyh9WuBVi+AuH4GFEWBT+AMpsHeF45w+w956x56mz0F5nYOQNK87gFr+Jr+mh2AF1ot2CxzrfTb fritz@scriptkiddiT540";
     };
   };
 }

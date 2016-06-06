@@ -4,6 +4,7 @@
   imports = [
     ../.
     ../2configs/baseX.nix
+    ../2configs/exim-retiolum.nix
     ../2configs/programs.nix
     ../2configs/bitcoin.nix
     ../2configs/browsers.nix
@@ -13,7 +14,7 @@
     ../2configs/elster.nix
     ../2configs/steam.nix
     ../2configs/wine.nix
-    ../2configs/texlive.nix
+    #../2configs/texlive.nix
     ../2configs/binary-caches.nix
     #../2configs/ircd.nix
     ../2configs/chromium-patched.nix
@@ -26,6 +27,8 @@
     ../2configs/libvirt.nix
     ../2configs/fetchWallpaper.nix
     ../2configs/cbase.nix
+    ../2configs/mail.nix
+    ../2configs/krebs-pass.nix
     #../2configs/buildbot-standalone.nix
     {
       #risk of rain port
@@ -33,139 +36,34 @@
         { predicate = "-p tcp --dport 11100"; target = "ACCEPT"; }
       ];
     }
-    {
-      #static-nginx-test
-      imports = [
-        ../3modules/static_nginx.nix
-      ];
-      lass.staticPage."testserver.de" = {
-        #sslEnable = true;
-        #certificate = "${toString <secrets>}/testserver.de/server.cert";
-        #certificate_key = "${toString <secrets>}/testserver.de/server.pem";
-        ssl = {
-          enable = true;
-          certificate = "${toString <secrets>}/testserver.de/server.cert";
-          certificate_key = "${toString <secrets>}/testserver.de/server.pem";
-        };
-      };
-      networking.extraHosts = ''
-        10.243.0.2 testserver.de
-      '';
-    }
     #{
-    #  #wordpress-test
-    #  #imports = singleton (sitesGenerators.createWordpress "testserver.de");
-    #  imports = [
-    #    ../3modules/wordpress_nginx.nix
-    #  ];
-    #  lass.wordpress."testserver.de" = {
-    #    multiSite = {
-    #      "1" = "testserver.de";
-    #      "2" = "bla.testserver.de";
-    #    };
-    #  };
-
     #  services.mysql = {
     #    enable = true;
     #    package = pkgs.mariadb;
     #    rootPassword = "<secrets>/mysql_rootPassword";
     #  };
-    #  networking.extraHosts = ''
-    #    10.243.0.2 testserver.de
-    #  '';
-    #  krebs.iptables.tables.filter.INPUT.rules = [
-    #    { predicate = "-i retiolum -p tcp --dport 80"; target = "ACCEPT"; precedence = 9998; }
-    #  ];
     #}
     #{
-    #  #owncloud-test
-    #  #imports = singleton (sitesGenerators.createWordpress "testserver.de");
-    #  imports = [
-    #    ../3modules/owncloud_nginx.nix
-    #  ];
-    #  lass.owncloud."owncloud-test.de" = {
+    #  services.elasticsearch = {
+    #    enable = true;
+    #    plugins = [
+    #    #  pkgs.elasticsearchPlugins.elasticsearch_kopf
+    #    ];
     #  };
-
-    #  #services.mysql = {
-    #  #  enable = true;
-    #  #  package = pkgs.mariadb;
-    #  #  rootPassword = "<secrets>/mysql_rootPassword";
-    #  #};
-    #  networking.extraHosts = ''
-    #    10.243.0.2 owncloud-test.de
-    #  '';
-    #  krebs.iptables.tables.filter.INPUT.rules = [
-    #    { predicate = "-i retiolum -p tcp --dport 80"; target = "ACCEPT"; precedence = 9998; }
-    #  ];
+    #}
+    #{
+    #  services.postgresql = {
+    #    enable = true;
+    #    package = pkgs.postgresql;
+    #  };
     #}
     {
-      containers.pythonenv = {
-        config = {
-          services.openssh.enable = true;
-          users.users.root.openssh.authorizedKeys.keys = [
-            config.krebs.users.lass.pubkey
-          ];
-
-          environment = {
-            systemPackages = with pkgs; [
-              git
-              libxml2
-              libxslt
-              libzip
-              python27Full
-              python27Packages.buildout
-              stdenv
-              zlib
-            ];
-
-            pathsToLink = [ "/include" ];
-
-            shellInit = ''
-              # help pip to find libz.so when building lxml
-              export LIBRARY_PATH=/var/run/current-system/sw/lib
-              # ditto for header files, e.g. sqlite
-              export C_INCLUDE_PATH=/var/run/current-system/sw/include
-            '';
-          };
-
-        };
-      };
-    }
-    {
-      services.mysql = {
-        enable = true;
-        package = pkgs.mariadb;
-        rootPassword = "<secrets>/mysql_rootPassword";
-      };
-    }
-    {
-      services.elasticsearch = {
-        enable = true;
-        plugins = [
-        #  pkgs.elasticsearchPlugins.elasticsearch_kopf
-        ];
-      };
-    }
-    {
-      services.postgresql = {
-        enable = true;
-        package = pkgs.postgresql;
-      };
     }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
 
   networking.wireless.enable = true;
-
-  networking.extraHosts = ''
-    213.239.205.240 wohnprojekt-rhh.de
-    213.239.205.240 karlaskop.de
-    213.239.205.240 makeup.apanowicz.de
-    213.239.205.240 pixelpocket.de
-    213.239.205.240 reich-gebaeudereinigung.de
-    213.239.205.240 o.ubikmedia.de
-  '';
 
   hardware.enableAllFirmware = true;
   nixpkgs.config.allowUnfree = true;
@@ -206,7 +104,7 @@
       fsType = "ext4";
     };
 
-    "/mnt/backups" = {
+    "/bku" = {
       device = "/dev/big/backups";
       fsType = "ext4";
     };
@@ -277,14 +175,14 @@
     emulateWheel = true;
   };
 
-  #services.xserver = {
-  #  videoDriver = "intel";
-  #  vaapiDrivers = [ pkgs.vaapiIntel ];
-  #  deviceSection = ''
-  #    Option "AccelMethod" "sna"
-  #    BusID "PCI:0:2:0"
-  #  '';
-  #};
+  services.xserver = {
+    videoDriver = "intel";
+    vaapiDrivers = [ pkgs.vaapiIntel ];
+    deviceSection = ''
+      Option "AccelMethod" "sna"
+      BusID "PCI:0:2:0"
+    '';
+  };
 
   environment.systemPackages = with pkgs; [
     acronym
@@ -293,6 +191,9 @@
     get
     teamspeak_client
     hashPassword
+    urban
+    mk_sql_pair
+    remmina
   ];
 
   #TODO: fix this shit
@@ -323,17 +224,5 @@
         { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; precedence = 9001; }
       ];
     };
-  };
-
-  #touchpad config
-  services.xserver.synaptics = {
-    enable = true;
-    accelFactor = "0.035";
-    additionalOptions = ''
-      Option "FingerHigh" "60"
-      Option "FingerLow"  "60"
-    '';
-    tapButtons = false;
-    twoFingerScroll = true;
   };
 }

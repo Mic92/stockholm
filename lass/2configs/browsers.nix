@@ -14,7 +14,7 @@ let
         useDefaultShell = true;
         createHome = true;
       };
-      lass.per-user.${name}.packages = packages;
+      krebs.per-user.${name}.packages = packages;
       security.sudo.extraConfig = ''
         ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
       '';
@@ -35,7 +35,7 @@ let
         useDefaultShell = true;
         createHome = true;
       };
-      lass.per-user.${name}.packages = packages;
+      krebs.per-user.${name}.packages = packages;
       security.sudo.extraConfig = ''
         ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
       '';
@@ -59,20 +59,10 @@ in {
 
   imports = [
     ( createFirefoxUser "ff" [ "audio" ] [ pkgs.firefox ] )
-    ( createChromiumUser "cr" [ "audio" ] [ pkgs.chromium ] )
-    ( createChromiumUser "wk" [ "audio" ] [ pkgs.chromium ] )
-    ( createChromiumUser "fb" [ "audio" ] [ pkgs.chromium ] )
-    ( createChromiumUser "gm" [ "audio" ] [ pkgs.chromium ] )
-    ( createChromiumUser "flash" [ "audio" ] [ pkgs.flash ] )
+    ( createChromiumUser "cr" [ "video" "audio" ] [ pkgs.chromium ] )
+    ( createChromiumUser "wk" [ "video" "audio" ] [ pkgs.chromium ] )
+    ( createChromiumUser "fb" [ "video" "audio" ] [ pkgs.chromium ] )
+    ( createChromiumUser "gm" [ "video" "audio" ] [ pkgs.chromium ] )
+    ( createChromiumUser "com" [ "video" "audio" ] [ pkgs.chromium ] )
   ];
-
-  nixpkgs.config.packageOverrides = pkgs : {
-    flash = pkgs.chromium.override {
-    #  pulseSupport = true;
-      enablePepperFlash = true;
-    };
-    #chromium = pkgs.chromium.override {
-    #  pulseSupport = true;
-    #};
-  };
 }

@@ -20,6 +20,7 @@ let
     flatten
     length
     hasAttr
+    hasPrefix
     mkEnableOption
     mkOption
     mkIf
@@ -123,7 +124,7 @@ let
 
       buildRule = tn: cn: rule:
         #target validation test:
-        assert (elem rule.target ([ "ACCEPT" "REJECT" "DROP" "QUEUE" "LOG" "RETURN" ] ++ (attrNames ts."${tn}")));
+        assert (elem rule.target ([ "ACCEPT" "REJECT" "DROP" "QUEUE" "LOG" "RETURN" ] ++ (attrNames ts."${tn}"))) || hasPrefix "REDIRECT" rule.target || hasPrefix "DNAT" rule.target;
 
         #predicate validation test:
         #maybe use iptables-test
