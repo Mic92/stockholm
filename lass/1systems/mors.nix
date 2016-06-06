@@ -146,7 +146,7 @@
     #Autosuspend for USB device Broadcom Bluetooth Device [Broadcom Corp]
     #echo 'auto' > '/sys/bus/usb/devices/1-1.4/power/control'
     #Autosuspend for USB device Biometric Coprocessor
-    echo 'auto' > '/sys/bus/usb/devices/1-1.3/power/control'
+    #echo 'auto' > '/sys/bus/usb/devices/1-1.3/power/control'
 
     #Runtime PMs
     echo 'auto' > '/sys/bus/pci/devices/0000:00:02.0/power/control'
