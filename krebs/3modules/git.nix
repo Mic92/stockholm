@@ -290,15 +290,15 @@ let
     environment.etc."${etc-base}".source =
       scriptFarm "git-ssh-authorizers" {
         authorize-command = makeAuthorizeScript (map (rule: [
-          (map getName (ensureList rule.user))
-          (map getName (ensureList rule.repo))
+          (map getName (toList rule.user))
+          (map getName (toList rule.repo))
           (map getName rule.perm.allow-commands)
         ]) cfg.rules);
 
         authorize-push = makeAuthorizeScript (map (rule: [
-          (map getName (ensureList rule.user))
-          (map getName (ensureList rule.repo))
-          (ensureList rule.perm.allow-receive-ref)
+          (map getName (toList rule.user))
+          (map getName (toList rule.repo))
+          (toList rule.perm.allow-receive-ref)
           (map getName rule.perm.allow-receive-modes)
         ]) (filter (rule: rule.perm.allow-receive-ref != null) cfg.rules));
       };
@@ -400,10 +400,6 @@ let
     gid = fcgitwrap-user.uid;
   };
 
-
-  ensureList = x:
-    if typeOf x == "list" then x else [x];
-
   getName = x: x.name;
 
   isPublicRepo = getAttr "public"; # TODO this is also in ./cgit.nix
@@ -428,7 +424,7 @@ let
   makeAuthorizeScript =
     let
       # TODO escape
-      to-pattern = x: concatStringsSep "|" (ensureList x);
+      to-pattern = x: concatStringsSep "|" (toList x);
       go = i: ps:
         if ps == []
           then "exit 0"
