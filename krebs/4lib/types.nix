@@ -337,7 +337,7 @@ types // rec {
   # TODO two slashes
   absolute-pathname = mkOptionType {
     name = "POSIX absolute pathname";
-    check = s: pathname.check s && substring 0 1 s == "/";
+    check = s: s == "/" || (pathname.check s && substring 0 1 s == "/");
   };
 
   # POSIX.1‐2013, 3.267 Pathname
