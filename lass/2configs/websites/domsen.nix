@@ -23,20 +23,20 @@ let
 in {
   imports = [
     ./sqlBackup.nix
-    (ssl [ "reich-gebaeudereinigung.de" ])
-    (servePage [ "reich-gebaeudereinigung.de" ])
+    (ssl [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
+    (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
 
-    (ssl [ "karlaskop.de" ])
-    (servePage [ "karlaskop.de" ])
+    (ssl [ "karlaskop.de" "www.karlaskop.de" ])
+    (servePage [ "karlaskop.de" "www.karlaskop.de" ])
 
-    (ssl [ "makeup.apanowicz.de" ])
-    (servePage [ "makeup.apanowicz.de" ])
+    (ssl [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
+    (servePage [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
 
-    (ssl [ "pixelpocket.de" ])
-    (servePage [ "pixelpocket.de" ])
+    (ssl [ "pixelpocket.de" "www.pixelpocket.de" ])
+    (servePage [ "pixelpocket.de" "www.pixelpocket.de" ])
 
-    (ssl [ "o.ubikmedia.de" ])
-    (serveOwncloud [ "o.ubikmedia.de" ])
+    (ssl [ "o.ubikmedia.de" "www.o.ubikmedia.de" ])
+    (serveOwncloud [ "o.ubikmedia.de" "www.o.ubikmedia.de" ])
 
     (ssl [ "ubikmedia.de" "aldona.ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ])
     (serveWordpress [ "ubikmedia.de" "*.ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ])
