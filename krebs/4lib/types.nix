@@ -199,8 +199,9 @@ types // rec {
         description = ''
           Set of user's PGP public keys.
 
-          Modules supporting PGP may use well-known key names to define option
-          defaults, e.g. using `getAttrDef well-known-name pubkeys`.
+          Modules supporting PGP may use well-known key names to define
+          default values for options, in which case the well-known name
+          should be documented in the respective option's description.
         '';
       };
       pubkey = mkOption {
