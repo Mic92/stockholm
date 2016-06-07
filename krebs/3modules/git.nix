@@ -174,6 +174,10 @@ let
           type = types.nullOr types.str;
           default = null;
         };
+        virtual-root = mkOption {
+          type = types.nullOr types.absolute-pathname;
+          default = "/";
+        };
       };
     };
     repo = types.submodule ({ config, ... }: {
