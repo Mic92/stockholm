@@ -111,7 +111,7 @@ let
       type = types.user;
       default = {
         name = "git";
-        home = "/var/lib/git";
+        home = toString pkgs.empty;
       };
     };
   };
@@ -336,7 +336,6 @@ let
 
     users.users.${cfg.user.name} = {
       inherit (cfg.user) home name uid;
-      createHome = true;
       description = "Git repository hosting user";
       shell = "/bin/sh";
       openssh.authorizedKeys.keys =
