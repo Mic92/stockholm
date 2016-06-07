@@ -392,6 +392,7 @@ let
       servers.cgit = {
         server-names = [
           "cgit.${config.networking.hostName}"
+          "cgit.${config.networking.hostName}.r"
           "cgit.${config.networking.hostName}.retiolum"
         ];
         locations = [
