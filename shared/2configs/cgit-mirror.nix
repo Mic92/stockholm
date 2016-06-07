@@ -11,7 +11,7 @@ let
   stockholm-mirror = {
     public = true;
     name = "stockholm-mirror";
-    desc = "mirror for all stockholm branches";
+    cgit.desc = "mirror for all stockholm branches";
     hooks = {
       post-receive = pkgs.git-hooks.irc-announce {
         nick = config.networking.hostName;
@@ -33,8 +33,12 @@ in {
   krebs.users.wolf-repo-sync = wolf-repo-sync;
   krebs.git = {
     enable = true;
-    root-title = "Shared Repos";
-    root-desc = "keep on krebsing";
+    cgit = {
+      settings = {
+        root-title = "Shared Repos";
+        root-desc = "keep on krebsing";
+      };
+    };
     inherit rules;
     repos.stockholm-mirror = stockholm-mirror;
   };

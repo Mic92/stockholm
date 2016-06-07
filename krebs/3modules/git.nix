@@ -25,6 +25,11 @@ let
       type = types.submodule {
         options = {
           enable = mkEnableOption "krebs.git.cgit" // { default = true; };
+          settings = mkOption {
+            apply = flip removeAttrs ["_module"];
+            default = {};
+            type = subtypes.cgit-settings;
+          };
         };
       };
       default = {};
@@ -66,22 +71,6 @@ let
         Repositories.
       '';
     };
-    root-desc = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = ''
-        Text printed below the heading on the repository index page.
-        Default value: "a fast webinterface for the git dscm".
-      '';
-    };
-    root-title = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = ''
-        Text printed as heading on the repository index page.
-        Default value: "Git Repository Browser".
-      '';
-    };
     rules = mkOption {
       type = types.listOf subtypes.rule;
       default = [];
@@ -102,8 +91,101 @@ let
 
   # TODO put into krebs/4lib/types.nix?
   subtypes = {
-    repo = types.submodule ({
+    cgit-settings = types.submodule {
+      # A setting's value of `null` means cgit's default should be used.
       options = {
+        cache-root = mkOption {
+          type = types.absolute-pathname;
+          default = "/tmp/cgit";
+        };
+        cache-size = mkOption {
+          type = types.uint;
+          default = 1000;
+        };
+        css = mkOption {
+          type = types.absolute-pathname;
+          default = "/static/cgit.css";
+        };
+        enable-commit-graph = mkOption {
+          type = types.bool;
+          default = true;
+        };
+        enable-index-links = mkOption {
+          type = types.bool;
+          default = true;
+        };
+        enable-index-owner = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        enable-log-filecount = mkOption {
+          type = types.bool;
+          default = true;
+        };
+        enable-log-linecount = mkOption {
+          type = types.bool;
+          default = true;
+        };
+        enable-remote-branches = mkOption {
+          type = types.bool;
+          default = true;
+        };
+        logo = mkOption {
+          type = types.absolute-pathname;
+          default = "/static/cgit.png";
+        };
+        max-stats = mkOption {
+          type =
+            types.nullOr (types.enum ["week" "month" "quarter" "year"]);
+          default = "year";
+        };
+        robots = mkOption {
+          type = types.nullOr (types.listOf types.str);
+          default = ["nofollow" "noindex"];
+        };
+        root-desc = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+        };
+        root-title = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+        };
+      };
+    };
+    repo = types.submodule ({ config, ... }: {
+      options = {
+        cgit = {
+          desc = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Repository description.
+            '';
+          };
+          path = mkOption {
+            type = types.str;
+            default = "${cfg.dataDir}/${config.name}";
+            description = ''
+              An absolute path to the repository directory. For non-bare
+              repositories this is the .git-directory.
+            '';
+          };
+          section = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Repository section.
+            '';
+          };
+          url = mkOption {
+            type = types.str;
+            default = config.name;
+            description = ''
+              The relative url used to access the repository.
+            '';
+          };
+        };
         collaborators = mkOption {
           type = types.listOf types.user;
           default = [];
@@ -113,20 +195,6 @@ let
             This option is currently not used by krebs.git but instead can be
             used to create rules.  See e.g. <stockholm/tv/2configs/git.nix> for
             an example.
-          '';
-        };
-        desc = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            Repository description.
-          '';
-        };
-        section = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            Repository section.
           '';
         };
         name = mkOption {
@@ -266,43 +334,34 @@ let
       # socketType = "unix" (default)
     };
 
-    environment.etc."cgitrc".text = ''
-      css=/static/cgit.css
-      logo=/static/cgit.png
+    environment.etc."cgitrc".text = let
+      repo-to-cgitrc = _: repo:
+        optionals (isPublicRepo repo) (concatLists [
+          [""] # empty line
+          [(kv-to-cgitrc "repo.url" repo.cgit.url)]
+          (mapAttrsToList kv-to-cgitrc
+            (mapAttrs' (k: nameValuePair "repo.${k}")
+              (removeAttrs repo.cgit ["url"])))
+        ]);
 
-      # if you do not want that webcrawler (like google) index your site
-      robots=noindex, nofollow
-
-      virtual-root=/
-
-      # TODO make this nicer (and/or somewhere else)
-      cache-root=/tmp/cgit
-
-      cache-size=1000
-      enable-commit-graph=1
-      enable-index-links=1
-      enable-index-owner=0
-      enable-log-filecount=1
-      enable-log-linecount=1
-      enable-remote-branches=1
-
-      ${optionalString (cfg.root-title != null) "root-title=${cfg.root-title}"}
-      ${optionalString (cfg.root-desc != null) "root-desc=${cfg.root-desc}"}
-
-      snapshots=0
-      max-stats=year
-
-      ${concatMapStringsSep "\n" (repo: ''
-        repo.url=${repo.name}
-        repo.path=${cfg.dataDir}/${repo.name}
-        ${optionalString (repo.section != null) "repo.section=${repo.section}"}
-        ${optionalString (repo.desc != null) "repo.desc=${repo.desc}"}
-      '') (filter isPublicRepo (attrValues cfg.repos))}
-    '';
+      kv-to-cgitrc = k: v: getAttr (typeOf v) {
+        bool = kv-to-cgitrc k (if v then 1 else 0);
+        null = []; # This will be removed by `flatten`.
+        list = "${k}=${concatStringsSep ", " v}";
+        int = "${k}=${toString v}";
+        string = "${k}=${v}";
+      };
+    in
+      concatStringsSep "\n"
+        (flatten (
+          mapAttrsToList kv-to-cgitrc cfg.cgit.settings
+          ++
+          mapAttrsToList repo-to-cgitrc cfg.repos
+        ));
 
     system.activationScripts.cgit = ''
-      mkdir -m 0700 -p /tmp/cgit
-      chown ${toString fcgitwrap-user.uid}:${toString fcgitwrap-group.gid} /tmp/cgit
+      mkdir -m 0700 -p ${cfg.cgit.settings.cache-root}
+      chown ${toString fcgitwrap-user.uid}:${toString fcgitwrap-group.gid} ${cfg.cgit.settings.cache-root}
     '';
 
     krebs.nginx = {

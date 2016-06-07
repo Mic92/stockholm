@@ -7,8 +7,12 @@ let
   out = {
     krebs.git = {
       enable = true;
-      root-title = "public repositories at ${config.krebs.build.host.name}";
-      root-desc = "Hmhmh, im Moment nicht.";
+      cgit = {
+        settings = {
+          root-title = "public repositories at ${config.krebs.build.host.name}";
+          root-desc = "Hmhmh, im Moment nicht.";
+        };
+      };
       repos = mapAttrs (_: s: removeAttrs s ["collaborators"]) repos;
       rules = rules;
     };
@@ -22,8 +26,8 @@ let
     stockholm = {};
   };
 
-  make-public-repo = name: { desc ? null, section ? null, ... }: {
-    inherit name desc section;
+  make-public-repo = name: { cgit ? {}, ... }: {
+    inherit cgit name;
     public = true;
     hooks = {
       post-receive = pkgs.git-hooks.irc-announce {
