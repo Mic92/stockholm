@@ -154,6 +154,12 @@ types // rec {
     merge = mergeOneOption;
   };
 
+  uint = mkOptionType {
+    name = "unsigned integer";
+    check = x: isInt x && x >= 0;
+    merge = mergeOneOption;
+  };
+
   secret-file = submodule ({ config, ... }: {
     options = {
       path = mkOption { type = str; };
