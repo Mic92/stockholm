@@ -63,7 +63,11 @@ let
       description = "Directory used to store repositories.";
     };
     etcDir = mkOption {
-      type = types.str;
+      type = mkOptionType {
+        name = "${types.absolute-pathname.name} starting with `/etc/'";
+        check = x: types.absolute-pathname.check x && hasPrefix "/etc/" x;
+        merge = mergeOneOption;
+      };
       default = "/etc/git";
     };
     repos = mkOption {
@@ -314,7 +318,7 @@ let
     system.activationScripts.git-init = "${init-script}";
 
     # TODO maybe put all scripts here and then use PATH?
-    environment.etc."${etc-base}".source =
+    environment.etc.${removePrefix "/etc/" cfg.etcDir}.source =
       scriptFarm "git-ssh-authorizers" {
         authorize-command = makeAuthorizeScript (map (rule: [
           (map getName (toList rule.user))
@@ -641,10 +645,6 @@ let
         ${repo.hooks.post-receive}''}
     '';
   };
-
-  etc-base =
-    assert (hasPrefix "/etc/" cfg.etcDir);
-    removePrefix "/etc/" cfg.etcDir;
 
 in
 out
