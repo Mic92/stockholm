@@ -20,6 +20,8 @@ with config.krebs.lib;
               (filterAttrs (_: dir.has-default-nix)
                            (subdirsOf ./.))
   // {
+    empty = pkgs.runCommand "empty-1.0.0" {} "mkdir $out";
+
     haskellPackages = pkgs.haskellPackages.override {
       overrides = self: super:
         mapAttrs (name: path: self.callPackage path {})
