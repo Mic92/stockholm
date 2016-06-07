@@ -38,8 +38,36 @@ in {
     (ssl [ "o.ubikmedia.de" "www.o.ubikmedia.de" ])
     (serveOwncloud [ "o.ubikmedia.de" "www.o.ubikmedia.de" ])
 
-    (ssl [ "ubikmedia.de" "aldona.ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ])
-    (serveWordpress [ "ubikmedia.de" "*.ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ])
+    (ssl [
+      "ubikmedia.de"
+      "aldona.ubikmedia.de"
+      "apanowicz.de"
+      "nirwanabluete.de"
+      "aldonasiech.com"
+      "360gradvideo.tv"
+      "ubikmedia.eu"
+      "www.ubikmedia.de"
+      "www.aldona.ubikmedia.de"
+      "www.apanowicz.de"
+      "www.nirwanabluete.de"
+      "www.aldonasiech.com"
+      "www.360gradvideo.tv"
+      "www.ubikmedia.eu"
+    ])
+    (serveWordpress [
+      "ubikmedia.de"
+      "apanowicz.de"
+      "nirwanabluete.de"
+      "aldonasiech.com"
+      "360gradvideo.tv"
+      "ubikmedia.eu"
+      "www.apanowicz.de"
+      "www.nirwanabluete.de"
+      "www.aldonasiech.com"
+      "www.360gradvideo.tv"
+      "www.ubikmedia.eu"
+      "*.ubikmedia.de"
+    ])
   ];
 
   lass.mysqlBackup.config.all.databases = [
