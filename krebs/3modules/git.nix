@@ -25,6 +25,21 @@ let
       type = types.submodule {
         options = {
           enable = mkEnableOption "krebs.git.cgit" // { default = true; };
+          fcgiwrap = {
+            group = mkOption {
+              type = types.group;
+              default = {
+                name = "fcgiwrap";
+              };
+            };
+            user = mkOption {
+              type = types.user;
+              default = {
+                name = "fcgiwrap";
+                home = toString pkgs.empty;
+              };
+            };
+          };
           settings = mkOption {
             apply = flip removeAttrs ["_module"];
             default = {};
@@ -324,19 +339,20 @@ let
   };
 
   cgit-imp = {
-    users.extraUsers = lib.singleton {
-      inherit (fcgitwrap-user) group name uid;
-      home = toString (pkgs.runCommand "empty" {} "mkdir -p $out");
-    };
-
-    users.extraGroups = lib.singleton {
-      inherit (fcgitwrap-group) gid name;
+    users = {
+      groups.${cfg.cgit.fcgiwrap.group.name} = {
+        inherit (cfg.cgit.fcgiwrap.group) name gid;
+      };
+      users.${cfg.cgit.fcgiwrap.user.name} = {
+        inherit (cfg.cgit.fcgiwrap.user) home name uid;
+        group = cfg.cgit.fcgiwrap.group.name;
+      };
     };
 
     services.fcgiwrap = {
       enable = true;
-      user = fcgitwrap-user.name;
-      group = fcgitwrap-user.group;
+      user = cfg.cgit.fcgiwrap.user.name;
+      group = cfg.cgit.fcgiwrap.group.name;
       # socketAddress = "/run/fcgiwrap.sock" (default)
       # socketType = "unix" (default)
     };
@@ -368,7 +384,7 @@ let
 
     system.activationScripts.cgit = ''
       mkdir -m 0700 -p ${cfg.cgit.settings.cache-root}
-      chown ${toString fcgitwrap-user.uid}:${toString fcgitwrap-group.gid} ${cfg.cgit.settings.cache-root}
+      chown ${toString cfg.cgit.fcgiwrap.user.uid}:${toString cfg.cgit.fcgiwrap.group.gid} ${cfg.cgit.settings.cache-root}
     '';
 
     krebs.nginx = {
@@ -394,17 +410,6 @@ let
         ];
       };
     };
-  };
-
-  fcgitwrap-user = rec {
-    name = "fcgiwrap";
-    uid = genid name;
-    group = "fcgiwrap";
-  };
-
-  fcgitwrap-group = {
-    name = fcgitwrap-user.name;
-    gid = fcgitwrap-user.uid;
   };
 
   getName = x: x.name;
