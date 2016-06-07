@@ -87,6 +87,14 @@ let
         access and permission rules for git repositories.
       '';
     };
+
+    user = mkOption {
+      type = types.user;
+      default = {
+        name = "git";
+        home = "/var/lib/git";
+      };
+    };
   };
 
   # TODO put into krebs/4lib/types.nix?
@@ -303,16 +311,15 @@ let
         ]) (filter (rule: rule.perm.allow-receive-ref != null) cfg.rules));
       };
 
-    # TODO cfg.user
-    users.users.git = rec {
+    users.users.${cfg.user.name} = {
+      inherit (cfg.user) home name uid;
+      createHome = true;
       description = "Git repository hosting user";
-      name = "git";
       shell = "/bin/sh";
       openssh.authorizedKeys.keys =
         mapAttrsToList (_: makeAuthorizedKey git-ssh-command)
                        (filterAttrs (_: user: isString user.pubkey)
                                     config.krebs.users);
-      uid = genid name;
     };
   };
 
