@@ -13,7 +13,7 @@ let
   out = {
     options.krebs.git = api;
     config = with lib; mkIf cfg.enable (mkMerge [
-      (mkIf cfg.cgit cgit-imp)
+      (mkIf cfg.cgit.enable cgit-imp)
       git-imp
     ]);
   };
@@ -22,10 +22,13 @@ let
     enable = mkEnableOption "krebs.git";
 
     cgit = mkOption {
-      type = types.bool;
-      default = true;
+      type = types.submodule {
+        options = {
+          enable = mkEnableOption "krebs.git.cgit" // { default = true; };
+        };
+      };
+      default = {};
       description = ''
-          Enable cgit.
           Cgit is an attempt to create a fast web interface for the git version
           control system, using a built in cache to decrease pressure on the
           git server.
