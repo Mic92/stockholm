@@ -28,6 +28,7 @@ with config.krebs.lib;
       { from = "wordpress@ubikmedia.de"; to = lass.mail; }
       { from = "finanzamt@lassul.us"; to = lass.mail; }
       { from = "dominik@apanowicz.de"; to = "dma@ubikmedia.eu"; }
+      { from = "netzclub@lassul.us"; to = lass.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }
