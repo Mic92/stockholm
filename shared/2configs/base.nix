@@ -10,7 +10,7 @@ with config.krebs.lib;
   krebs.build.source = {
     nixpkgs = mkDefault {
       url = https://github.com/NixOS/nixpkgs;
-      rev = "40c586b7ce2c559374df435f46d673baf711c543";
+      rev = "63b9785"; # stable @ 2016-06-01
     };
     secrets =  mkDefault "${getEnv "HOME"}/secrets/krebs/${config.krebs.build.host.name}";
     stockholm = mkDefault "${getEnv "HOME"}/stockholm";

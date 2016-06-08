@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "apt-cacher-ng-${version}";
-  version = "0.8.8";
+  version = "0.9.3";
 
   src = fetchurl {
     url = "http://ftp.debian.org/debian/pool/main/a/apt-cacher-ng/apt-cacher-ng_${version}.orig.tar.xz";
-    sha256 = "0n7yy4h8g7j0g94xngbywmfhrkg9xl3j2c4wzrjknfwvxmqgjivq";
+    sha256 = "1bd7l1wg0q1p9pg0v6lqflf2znydx8mrh2jxbvv6xsrp1473nfwg";
   };
 
   NIX_LDFLAGS = "-lpthread";
