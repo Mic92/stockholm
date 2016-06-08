@@ -88,38 +88,9 @@ let
             \ | hi TrailingSpace ctermbg=88
             \ | hi Normal ctermfg=White
 
-    au BufRead,BufNewFile *.hs so ${pkgs.writeText "hs.vim" ''
-      syn region String start=+\[[[:alnum:]]*|+ end=+|]+
-    ''}
+    au BufRead,BufNewFile *.hs so ${hs.vim}
 
-    au BufRead,BufNewFile *.nix so ${pkgs.writeText "nix.vim" ''
-      setf nix
-      set isk=@,48-57,_,192-255,-,'
-
-      " Ref <nix/src/libexpr/lexer.l>
-      syn match INT   /\<[0-9]\+\>/
-      syn match PATH  /[a-zA-Z0-9\.\_\-\+]*\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
-      syn match HPATH /\~\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
-      syn match SPATH /<[a-zA-Z0-9\.\_\-\+]\+\(\/[a-zA-Z0-9\.\_\-\+]\+\)*>/
-      syn match URI   /[a-zA-Z][a-zA-Z0-9\+\-\.]*:[a-zA-Z0-9\%\/\?\:\@\&\=\+\$\,\-\_\.\!\~\*\']\+/
-      hi link INT Constant
-      hi link PATH Constant
-      hi link HPATH Constant
-      hi link SPATH Constant
-      hi link URI Constant
-
-      syn match String /"\([^\\"]\|\\.\)*"/
-      syn match Comment /\(^\|\s\)#.*/
-
-      " Haskell comments
-      syn region Comment start=/\(^\|\s\){-#/ end=/#-}/
-      syn match Comment /\(^\|\s\)--.*/
-
-      " Vim comments
-      syn match Comment /\(^\|\s\)"[^"]*$/
-
-      let b:current_syntax = "nix"
-    ''}
+    au BufRead,BufNewFile *.nix so ${nix.vim}
 
     au BufRead,BufNewFile /dev/shm/* set nobackup nowritebackup noswapfile
 
@@ -151,6 +122,39 @@ let
     noremap <esc>[c <nop> | noremap! <esc>[c <nop>
     noremap <esc>[d <nop> | noremap! <esc>[d <nop>
     vnoremap u <nop>
+  '';
+
+  hs.vim = pkgs.writeText "hs.vim" ''
+    syn region String start=+\[[[:alnum:]]*|+ end=+|]+
+  '';
+
+  nix.vim = pkgs.writeText "nix.vim" ''
+    setf nix
+    set isk=@,48-57,_,192-255,-,'
+
+    " Ref <nix/src/libexpr/lexer.l>
+    syn match INT   /\<[0-9]\+\>/
+    syn match PATH  /[a-zA-Z0-9\.\_\-\+]*\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
+    syn match HPATH /\~\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
+    syn match SPATH /<[a-zA-Z0-9\.\_\-\+]\+\(\/[a-zA-Z0-9\.\_\-\+]\+\)*>/
+    syn match URI   /[a-zA-Z][a-zA-Z0-9\+\-\.]*:[a-zA-Z0-9\%\/\?\:\@\&\=\+\$\,\-\_\.\!\~\*\']\+/
+    hi link INT Constant
+    hi link PATH Constant
+    hi link HPATH Constant
+    hi link SPATH Constant
+    hi link URI Constant
+
+    syn match String /"\([^\\"]\|\\.\)*"/
+    syn match Comment /\(^\|\s\)#.*/
+
+    " Haskell comments
+    syn region Comment start=/\(^\|\s\){-#/ end=/#-}/
+    syn match Comment /\(^\|\s\)--.*/
+
+    " Vim comments
+    syn match Comment /\(^\|\s\)"[^"]*$/
+
+    let b:current_syntax = "nix"
   '';
 in
 out
