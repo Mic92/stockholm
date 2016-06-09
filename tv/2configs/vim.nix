@@ -212,6 +212,8 @@ let
         \ contains=@${name}Syntax
       syn cluster NixSubLangs add=${name}Block,@${name}Syntax
       unlet b:current_syntax
+
+      hi link ${name}Block Statement
     '') {
       haskell = {};
       sh.start = ''write\(Ba\|Da\)sh[^ ]* *\"[^\"]*\"'';
