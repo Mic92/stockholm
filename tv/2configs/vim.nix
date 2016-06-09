@@ -25,9 +25,8 @@ let
     })
     ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
       name = "hack";
-      version = "1.0";
     in {
-      name = "vim-color-${name}-${version}";
+      name = "vim-color-${name}-1.0";
       destination = "/colors/${name}.vim";
       text = /* vim */ ''
         set background=dark
