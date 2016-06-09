@@ -232,15 +232,16 @@ with config.krebs.lib;
           ip6.addr = "42:4b0b:d990:55ba:8da8:630f:dc0e:aae0";
           aliases = [
             "filepimp.retiolum"
+            "filepimp.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAvgvzx3rT/3zLuCkzXk1ZkYBkG4lltxrLOLNivohw2XAzrYDIw/ZY
-            BTDDcD424EkNOF6g/3tIRWqvVGZ1u12WQ9A/R+2F7i1SsaE4nTxdNlQ5rjy80gO3
-            i1ZubMkTGwd1OYjJytYdcMTwM9V9/8QYFiiWqh77Xxu/FhY6PcQqwHxM7SMyZCJ7
-            09gtZuR16ngKnKfo2tw6C3hHQtWCfORVbWQq5cmGzCb4sdIKow5BxUC855MulNsS
-            u5l+G8wX+UbDI85VSDAtOP4QaSFzLL+U0aaDAmq0NO1QiODJoCo0iPhULZQTFZUa
-            OMDYHHfqzluEI7n8ENI4WwchDXH+MstsgwIDAQAB
+            MIIBCgKCAQEA43w+A1TMOfugZ/CVwilJn4c36wWSjihaeVe7suZD0DSscKBcbkGg
+            3dTCSTnu6Qb9sYd2mKebKXLreO6nhEEoFGsRU0yw/1h8gl7mWYEdTifPfvM5EWwS
+            wkN9dJ5njwIUSRyWH7QTsLkiRJVFN2UxEwrhAbo1FJ7yuhRgAKqKJSN4yPVViZwR
+            oHyyobvm/i2J+XSiDI9MRo74vNjnDLvO7R6ErIrhOPP1bD9fx3u+UYUfgS0iCO3X
+            UN0duBz/faRcl6IRytZOuHaIp30eJ4850ZK8RPz/Dqqj+USMFq60i0oMsuAi/ljB
+            8b+eQBt6OXu4MSntxoR8Ja7ht+EOTDnBOwIDAQAB
             -----END RSA PUBLIC KEY-----
             '';
         };
