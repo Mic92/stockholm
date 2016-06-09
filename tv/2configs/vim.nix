@@ -179,31 +179,43 @@ let
 
     hi link NixEnter NixCode
     hi link NixExit NixData
+    hi link NixQuote NixData
+    hi link NixQuote2 NixQuote
+    hi link NixQuote3 NixQuote
 
-    syn include @HaskellSyntax syntax/haskell.vim
-    syn region HaskellBlock
-      \ matchgroup=NixExit
-      \ start="/\* haskell \*/ '''"
-      \ skip="''''"
-      \ end="'''"
-      \ contains=@HaskellSyntax
-    unlet b:current_syntax
+    syn cluster NixSubLangs contains=NONE
 
-    syn include @VimSyntax syntax/vim.vim
-    syn region VimBlock
-      \ matchgroup=NixExit
-      \ start="\(/\* vim \*/\|write[-0-9A-Za-z'_]* *\"\(\([^\"]*\.\)\?vimrc\|[^\"]*\.vim\)\"\) *'''"
-      \ skip="''''"
-      \ end="'''"
-      \ contains=@VimSyntax
-    unlet b:current_syntax
+    ${concatStringsSep "\n" (mapAttrsToList (name: { start ? null }: let
+    in /* vim */ ''
+      syn include @${name}Syntax syntax/${name}.vim
+      syn region ${name}Block
+        \ matchgroup=NixExit
+        \ start="\(/\* ${name} \*/${optionalString (start != null) ''\|${start}''}\) '''"
+        \ skip="'''\('\|[$]\|\\[nrt]\)"
+        \ end="'''"
+        \ contains=@${name}Syntax
+      syn cluster NixSubLangs add=${name}Block,@${name}Syntax
+      unlet b:current_syntax
+    '') {
+      haskell = {};
+      vim.start = ''write[^ ]* *\"\(\([^\"]*\.\)\?vimrc\|[^\"]*\.vim\)\"'';
+    })}
 
     syn region NixBlock
       \ matchgroup=NixEnter
       \ start="[$]{"
       \ end="}"
-      \ contains=ALL
-      \ containedin=HaskellBlock,@HaskellSyntax,VimBlock,@VimSyntax
+      \ contains=TOP
+      \ containedin=@NixSubLangs
+
+    syn region NixBlockHack
+      \ start="{"
+      \ end="}"
+      \ contains=TOP
+
+    syn match NixQuote  "'''[$]"he=e-1  contained containedin=@NixSubLangs
+    syn match NixQuote2 "''''"he=s+1    contained containedin=@NixSubLangs
+    syn match NixQuote3 "'''\\[nrt]"    contained containedin=@NixSubLangs
 
     let b:current_syntax = "nix"
   '';
