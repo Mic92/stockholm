@@ -289,6 +289,8 @@ let
     syn match NixQuote2 "''''"he=s+1    contained containedin=@NixSubLangs
     syn match NixQuote3 "'''\\[nrt]"    contained containedin=@NixSubLangs
 
+    syn sync fromstart
+
     let b:current_syntax = "nix"
 
     set isk=@,48-57,_,192-255,-,'
