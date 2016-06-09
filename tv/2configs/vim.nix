@@ -207,7 +207,6 @@ let
 
   nix.vim = pkgs.writeText "nix.vim" ''
     setf nix
-    set isk=@,48-57,_,192-255,-,'
 
     syn match NixCode /./
 
@@ -291,6 +290,8 @@ let
     syn match NixQuote3 "'''\\[nrt]"    contained containedin=@NixSubLangs
 
     let b:current_syntax = "nix"
+
+    set isk=@,48-57,_,192-255,-,'
   '';
 in
 out
