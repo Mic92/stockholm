@@ -219,6 +219,12 @@ let
     syn match NixURI   /[a-zA-Z][a-zA-Z0-9\+\-\.]*:[a-zA-Z0-9\%\/\?\:\@\&\=\+\$\,\-\_\.\!\~\*\']\+/
 
     syn match NixString /"\([^\\"]\|\\.\)*"/
+    syn region NixString2
+      \ matchgroup=NixString2
+      \ start="'''"
+      \ skip="'''\('\|[$]\|\\[nrt]\)"
+      \ end="'''"
+
     syn match NixCommentMatch /\(^\|\s\)#.*/
     syn region NixCommentRegion start="/\*" end="\*/"
 
@@ -234,6 +240,7 @@ let
     hi link NixSPATH NixData
     hi link NixURI NixData
     hi link NixString NixData
+    hi link NixString2 NixString
 
     hi link NixEnter NixCode
     hi link NixExit NixData
@@ -270,6 +277,7 @@ let
       \ containedin=@NixSubLangs
 
     syn region NixBlockHack
+      \ matchgroup=NixEnter
       \ start="{"
       \ end="}"
       \ contains=TOP
