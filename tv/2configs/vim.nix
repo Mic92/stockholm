@@ -40,8 +40,8 @@ let
         hi Normal   ctermbg=235
         hi Comment  ctermfg=240
 
-        hi Tabstop        ctermbg=16
-        hi TrailingSpace  ctermbg=88
+        hi Garbage  ctermbg=088
+        hi TabStop  ctermbg=016
       '';
     })))
     ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
@@ -116,8 +116,8 @@ let
     colorscheme hack
     syntax on
 
-    au Syntax * syn match Tabstop containedin=ALL /\t\+/
-            \ | syn match TrailingSpace containedin=ALL /\s\+$/
+    au Syntax * syn match TabStop containedin=ALL /\t\+/
+            \ | syn match Garbage containedin=ALL /\s\+$/
 
     au BufRead,BufNewFile *.hs so ${hs.vim}
 
