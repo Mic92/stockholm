@@ -157,6 +157,10 @@ let
 
   hs.vim = pkgs.writeText "hs.vim" ''
     syn region String start=+\[[[:alnum:]]*|+ end=+|]+
+
+    hi link ConId Identifier
+    hi link VarId Identifier
+    hi link hsDelimiter Delimiter
   '';
 
   nix.vim = pkgs.writeText "nix.vim" ''
