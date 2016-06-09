@@ -180,10 +180,10 @@ let
     syn match NixCommentMatch /\(^\|\s\)#.*/
     syn region NixCommentRegion start="/\*" end="\*/"
 
-    hi NixCode ctermfg=034
-    hi NixData ctermfg=040
-
+    hi link NixCode Statement
+    hi link NixData Constant
     hi link NixComment Comment
+
     hi link NixCommentMatch NixComment
     hi link NixCommentRegion NixComment
     hi link NixINT NixData
