@@ -23,6 +23,28 @@ let
         sha256 = "0z47zq9rqh06ny0q8lpcdsraf3lyzn9xvb59nywnarf3nxrk6hx0";
       };
     })
+    ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
+      name = "hack";
+      version = "1.0";
+    in {
+      name = "vim-color-${name}-${version}";
+      destination = "/colors/${name}.vim";
+      text = /* vim */ ''
+        set background=dark
+        hi clear
+        if exists("syntax_on")
+          syntax clear
+        endif
+
+        let colors_name = ${toJSON name}
+
+        hi Normal   ctermbg=235
+        hi Comment  ctermfg=240
+
+        hi Tabstop        ctermbg=16
+        hi TrailingSpace  ctermbg=88
+      '';
+    })))
   ];
 
   dirs = {
@@ -79,14 +101,11 @@ let
     filetype plugin indent on
 
     set t_Co=256
-    colorscheme industry
+    colorscheme hack
     syntax on
 
     au Syntax * syn match Tabstop containedin=ALL /\t\+/
-            \ | hi Tabstop ctermbg=16
             \ | syn match TrailingSpace containedin=ALL /\s\+$/
-            \ | hi TrailingSpace ctermbg=88
-            \ | hi Normal ctermfg=White
 
     au BufRead,BufNewFile *.hs so ${hs.vim}
 
