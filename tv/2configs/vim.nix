@@ -132,27 +132,59 @@ let
     setf nix
     set isk=@,48-57,_,192-255,-,'
 
+    syn match NixCode /./
+
     " Ref <nix/src/libexpr/lexer.l>
-    syn match INT   /\<[0-9]\+\>/
-    syn match PATH  /[a-zA-Z0-9\.\_\-\+]*\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
-    syn match HPATH /\~\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
-    syn match SPATH /<[a-zA-Z0-9\.\_\-\+]\+\(\/[a-zA-Z0-9\.\_\-\+]\+\)*>/
-    syn match URI   /[a-zA-Z][a-zA-Z0-9\+\-\.]*:[a-zA-Z0-9\%\/\?\:\@\&\=\+\$\,\-\_\.\!\~\*\']\+/
-    hi link INT Constant
-    hi link PATH Constant
-    hi link HPATH Constant
-    hi link SPATH Constant
-    hi link URI Constant
+    syn match NixINT   /\<[0-9]\+\>/
+    syn match NixPATH  /[a-zA-Z0-9\.\_\-\+]*\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
+    syn match NixHPATH /\~\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
+    syn match NixSPATH /<[a-zA-Z0-9\.\_\-\+]\+\(\/[a-zA-Z0-9\.\_\-\+]\+\)*>/
+    syn match NixURI   /[a-zA-Z][a-zA-Z0-9\+\-\.]*:[a-zA-Z0-9\%\/\?\:\@\&\=\+\$\,\-\_\.\!\~\*\']\+/
 
-    syn match String /"\([^\\"]\|\\.\)*"/
-    syn match Comment /\(^\|\s\)#.*/
+    syn match NixString /"\([^\\"]\|\\.\)*"/
+    syn match NixCommentMatch /\(^\|\s\)#.*/
+    syn region NixCommentRegion start="/\*" end="\*/"
 
-    " Haskell comments
-    syn region Comment start=/\(^\|\s\){-#/ end=/#-}/
-    syn match Comment /\(^\|\s\)--.*/
+    hi NixCode ctermfg=034
+    hi NixData ctermfg=040
 
-    " Vim comments
-    syn match Comment /\(^\|\s\)"[^"]*$/
+    hi link NixComment Comment
+    hi link NixCommentMatch NixComment
+    hi link NixCommentRegion NixComment
+    hi link NixINT NixData
+    hi link NixPATH NixData
+    hi link NixHPATH NixData
+    hi link NixSPATH NixData
+    hi link NixURI NixData
+    hi link NixString NixData
+
+    hi link NixEnter NixCode
+    hi link NixExit NixData
+
+    syn include @HaskellSyntax syntax/haskell.vim
+    syn region HaskellBlock
+      \ matchgroup=NixExit
+      \ start="/\* haskell \*/ '''"
+      \ skip="''''"
+      \ end="'''"
+      \ contains=@HaskellSyntax
+    unlet b:current_syntax
+
+    syn include @VimSyntax syntax/vim.vim
+    syn region VimBlock
+      \ matchgroup=NixExit
+      \ start="\(/\* vim \*/\|write[-0-9A-Za-z'_]* *\"\(\([^\"]*\.\)\?vimrc\|[^\"]*\.vim\)\"\) *'''"
+      \ skip="''''"
+      \ end="'''"
+      \ contains=@VimSyntax
+    unlet b:current_syntax
+
+    syn region NixBlock
+      \ matchgroup=NixEnter
+      \ start="[$]{"
+      \ end="}"
+      \ contains=ALL
+      \ containedin=HaskellBlock,@HaskellSyntax,VimBlock,@VimSyntax
 
     let b:current_syntax = "nix"
   '';
