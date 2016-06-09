@@ -269,6 +269,10 @@ let
       vim.start = ''write[^ ]* *\"\(\([^\"]*\.\)\?vimrc\|[^\"]*\.vim\)\"'';
     })}
 
+    " Clear syntax that interferes with NixBlock.
+    " TODO redefine NixBlock so sh syntax don't have to be cleared
+    syn clear shOperator shSetList shVarAssign
+
     syn region NixBlock
       \ matchgroup=NixEnter
       \ start="[$]{"
