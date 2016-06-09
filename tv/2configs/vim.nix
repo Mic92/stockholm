@@ -198,6 +198,7 @@ let
       unlet b:current_syntax
     '') {
       haskell = {};
+      sh.start = ''write\(Ba\|Da\)sh[^ ]* *\"[^\"]*\"'';
       vim.start = ''write[^ ]* *\"\(\([^\"]*\.\)\?vimrc\|[^\"]*\.vim\)\"'';
     })}
 
