@@ -54,6 +54,7 @@ let
 
         hi NixCode      ctermfg=040
         hi NixData      ctermfg=046
+        hi NixQuote     ctermfg=071
 
         hi diffNewFile  ctermfg=207
         hi diffFile     ctermfg=207
