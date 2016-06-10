@@ -158,8 +158,9 @@ let
     colorscheme hack
     syntax on
 
-    au Syntax * syn match TabStop containedin=ALL /\t\+/
-            \ | syn match Garbage containedin=ALL /\s\+$/
+    au Syntax * syn match Garbage containedin=ALL /\s\+$/
+            \ | syn match TabStop containedin=ALL /\t\+/
+            \ | syn keyword Todo containedin=ALL TODO
 
     au BufRead,BufNewFile *.hs so ${hs.vim}
 
