@@ -297,8 +297,9 @@ let
     })}
 
     " Clear syntax that interferes with NixBlock.
-    " TODO redefine NixBlock so sh syntax don't have to be cleared
+    " TODO redefine NixBlock so syntax don't have to be cleared
     syn clear shOperator shSetList shVarAssign
+    syn clear vimString
 
     syn region NixBlock
       \ matchgroup=NixEnter
