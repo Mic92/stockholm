@@ -216,13 +216,14 @@ let
     syn match NixHPATH /\~\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
     syn match NixSPATH /<[a-zA-Z0-9\.\_\-\+]\+\(\/[a-zA-Z0-9\.\_\-\+]\+\)*>/
     syn match NixURI   /[a-zA-Z][a-zA-Z0-9\+\-\.]*:[a-zA-Z0-9\%\/\?\:\@\&\=\+\$\,\-\_\.\!\~\*\']\+/
-
-    syn match NixString /"\([^\\"]\|\\.\)*"/
-    syn region NixString2
-      \ matchgroup=NixString2
+    syn match NixSTRING /"\([^\\"]\|\\.\)*"/
+    syn region NixIND_STRING
+      \ matchgroup=NixIND_STRING
       \ start="'''"
       \ skip="'''\('\|[$]\|\\[nrt]\)"
       \ end="'''"
+
+    syn cluster NixStrings contains=NixSTRING,NixIND_STRING
 
     syn match NixCommentMatch /\(^\|\s\)#.*/
     syn region NixCommentRegion start="/\*" end="\*/"
@@ -238,8 +239,8 @@ let
     hi link NixHPATH NixData
     hi link NixSPATH NixData
     hi link NixURI NixData
-    hi link NixString NixData
-    hi link NixString2 NixString
+    hi link NixSTRING NixData
+    hi link NixIND_STRING NixData
 
     hi link NixEnter NixCode
     hi link NixExit NixData
@@ -277,7 +278,7 @@ let
       \ start="[$]{"
       \ end="}"
       \ contains=TOP
-      \ containedin=@NixSubLangs
+      \ containedin=@NixSubLangs,@NixStrings
 
     syn region NixBlockHack
       \ matchgroup=NixEnter
