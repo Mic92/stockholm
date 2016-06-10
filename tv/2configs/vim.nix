@@ -26,7 +26,7 @@ let
     ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
       name = "hack";
     in {
-      name = "vim-color-${name}-1.0.1";
+      name = "vim-color-${name}-1.0.2";
       destination = "/colors/${name}.vim";
       text = /* vim */ ''
         set background=dark
@@ -50,6 +50,7 @@ let
 
         hi Garbage      ctermbg=088
         hi TabStop      ctermbg=016
+        hi Todo         ctermfg=174 ctermbg=NONE
 
         hi NixCode      ctermfg=040
         hi NixData      ctermfg=046
