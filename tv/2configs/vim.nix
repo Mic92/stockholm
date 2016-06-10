@@ -266,6 +266,8 @@ let
 
       hi link ${name}Block Statement
     '') {
+      c = {};
+      cabal = {};
       haskell = {};
       sh.start = ''write\(Ba\|Da\)sh[^ ]* *\"[^\"]*\"'';
       vim.start = ''write[^ ]* *\"\(\([^\"]*\.\)\?vimrc\|[^\"]*\.vim\)\"'';
