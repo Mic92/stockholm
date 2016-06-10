@@ -138,7 +138,6 @@ in {
     restartIfChanged = true;
 
     serviceConfig = {
-      Restart = "always";
       ExecStart = "${autoAdd} 100";
     };
   };
