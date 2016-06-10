@@ -11,7 +11,7 @@ let
   source-password = import <secrets/icecast-source-pw>;
 
   add_random = pkgs.writeDashBin "add_random" ''
-    mpc add "$(mpc ls | shuf -n1)"
+    ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.mpc_cli}/bin/mpc ls | shuf -n1)"
   '';
 
   skip_track = pkgs.writeDashBin "skip_track" ''
@@ -122,8 +122,8 @@ in {
       LIMIT=$1 #in secconds
 
       timeLeft () {
-        playlistDuration=$(mpc --format '%time%' playlist | awk -F ':' 'BEGIN{t=0} {t+=$1*60+$2} END{print t}')
-        currentTime=$(mpc status | awk '/^\[playing\]/ { sub(/\/.+/,"",$3); split($3,a,/:/); print a[1]*60+a[2] }')
+        playlistDuration=$(${pkgs.mpc_cli}/bin/mpc --format '%time%' playlist | ${pkgs.gawk}/bin/awk -F ':' 'BEGIN{t=0} {t+=$1*60+$2} END{print t}')
+        currentTime=$(${pkgs.mpc_cli}/bin/mpc status | ${pkgs.gawk}/bin/awk '/^\[playing\]/ { sub(/\/.+/,"",$3); split($3,a,/:/); print a[1]*60+a[2] }')
         expr ''${playlistDuration:-0} - ''${currentTime:-0}
       }
 
@@ -134,11 +134,6 @@ in {
   in {
     description = "radio playlist autoadder";
     after = [ "network.target" ];
-
-    path = with pkgs; [
-      gawk
-      mpc_cli
-    ];
 
     restartIfChanged = true;
 
