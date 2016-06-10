@@ -29,16 +29,26 @@
                                     name="fast-all-branches",
                                     builderNames=["fast-tests"]))
       '';
+      build-all-scheduler = ''
+        # build all lass hosts
+        sched.append(schedulers.SingleBranchScheduler(
+                                    ## only master
+                                    change_filter=util.ChangeFilter(branch_re="master"),
+                                    # treeStableTimer=10,
+                                    name="prism-master",
+                                    builderNames=["build-all"]))
+      '';
     };
     builder_pre = ''
       # prepare grab_repo step for stockholm
       grab_repo = steps.Git(repourl=stockholm_repo, mode='incremental')
 
-      env = {"LOGNAME": "lass", "NIX_REMOTE": "daemon"}
+      # TODO: get nixpkgs/stockholm paths from krebs
+      env = {"LOGNAME": "lass", "NIX_REMOTE": "daemon", "dummy_secrets": "true", "NIX_PATH": "nixpkgs=/var/src/nixpkgs:stockholm=/var/src/stockholm"}
 
       # prepare nix-shell
       # the dependencies which are used by the test script
-      deps = [ "gnumake", "jq","nix","rsync" ]
+      deps = [ "gnumake", "jq", "nix", "rsync" ]
       # TODO: --pure , prepare ENV in nix-shell command:
       #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
       nixshell = ["nix-shell",
@@ -51,6 +61,24 @@
         factory.addStep(steps.ShellCommand(**kwargs))
     '';
     builder = {
+      build-all = ''
+        f = util.BuildFactory()
+        f.addStep(grab_repo)
+        #TODO: get hosts via krebs
+        for i in [ "mors", "uriel", "shodan", "helios", "cloudkrebs", "echelon", "dishfire", "prism" ]:
+          addShell(f,name="build-{}".format(i),env=env,
+                  command=nixshell + \
+                      ["nix-build \
+                            --show-trace --no-out-link \
+                            -I nixos-config=./lass/1systems/{}.nix \
+                            -I secrets=/var/src/stockholm/lass/2configs/tests/dummy-secrets \
+                            -A config.system.build.toplevel".format(i)])
+
+        bu.append(util.BuilderConfig(name="build-all",
+              slavenames=slavenames,
+              factory=f))
+
+            '';
       fast-tests = ''
         f = util.BuildFactory()
         f.addStep(grab_repo)
@@ -93,7 +121,7 @@
     password = "lasspass";
     packages = with pkgs;[ git nix gnumake jq rsync ];
     extraEnviron = {
-      NIX_PATH="nixpkgs=/var/src/nixpkgs:nixos-config=./shared/1systems/wolf.nix";
+      NIX_PATH="nixpkgs=/var/src/nixpkgs";
     };
   };
   krebs.iptables = {
