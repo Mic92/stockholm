@@ -256,25 +256,44 @@ let
 
     syn cluster NixSubLangs contains=NONE
 
-    ${concatStringsSep "\n" (mapAttrsToList (name: { start ? null }: let
+    ${concatStringsSep "\n" (mapAttrsToList (lang: { extraStart ? null }: let
+      startAlts = filter isString [
+        ''/\* ${lang} \*/''
+        extraStart
+      ];
+      sigil = ''\(${concatStringsSep ''\|'' startAlts}\)[ \t\r\n]*'';
     in /* vim */ ''
-      syn include @${name}Syntax syntax/${name}.vim
-      syn region ${name}Block
-        \ matchgroup=NixExit
-        \ start="\(/\* ${name} \*/${optionalString (start != null) ''\|${start}''}\) '''"
-        \ skip="'''\('\|[$]\|\\[nrt]\)"
-        \ end="'''"
-        \ contains=@${name}Syntax
-      syn cluster NixSubLangs add=${name}Block,@${name}Syntax
+      syn include @${lang}Syntax syntax/${lang}.vim
       unlet b:current_syntax
 
-      hi link ${name}Block Statement
+      syn region ${lang}Block_NixSTRING
+        \ matchgroup=NixExit
+        \ extend
+        \ start='${replaceStrings ["'"] ["\\'"] sigil}"'
+        \ skip='\\"'
+        \ end='"'
+        \ contains=@${lang}Syntax
+
+      syn region ${lang}Block_NixIND_STRING
+        \ matchgroup=NixExit
+        \ extend
+        \ start="${replaceStrings ["\""] ["\\\""] sigil}'''"
+        \ skip="'''\('\|[$]\|\\[nrt]\)"
+        \ end="'''"
+        \ contains=@${lang}Syntax
+
+      syn cluster NixSubLangs
+        \ add=@${lang}Syntax,${lang}Block_NixSTRING,${lang}Block_NixIND_STRING
+
+      hi link ${lang}Block_NixSTRING Statement
+      hi link ${lang}Block_NixIND_STRING Statement
     '') {
       c = {};
       cabal = {};
       haskell = {};
-      sh.start = ''write\(Ba\|Da\)sh[^ ]* *\"[^\"]*\"'';
-      vim.start = ''write[^ ]* *\"\(\([^\"]*\.\)\?vimrc\|[^\"]*\.vim\)\"'';
+      sh.extraStart = ''write\(Ba\|Da\)sh[^ \t\r\n]*[ \t\r\n]*"[^"]*"'';
+      vim.extraStart =
+        ''write[^ \t\r\n]*[ \t\r\n]*"\(\([^"]*\.\)\?vimrc\|[^"]*\.vim\)"'';
     })}
 
     " Clear syntax that interferes with NixBlock.
