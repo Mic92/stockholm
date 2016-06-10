@@ -218,7 +218,11 @@ let
     syn match NixHPATH /\~\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
     syn match NixSPATH /<[a-zA-Z0-9\.\_\-\+]\+\(\/[a-zA-Z0-9\.\_\-\+]\+\)*>/
     syn match NixURI   /[a-zA-Z][a-zA-Z0-9\+\-\.]*:[a-zA-Z0-9\%\/\?\:\@\&\=\+\$\,\-\_\.\!\~\*\']\+/
-    syn match NixSTRING /"\([^\\"]\|\\.\)*"/
+    syn region NixSTRING
+      \ matchgroup=NixSTRING
+      \ start='"'
+      \ skip='\\"'
+      \ end='"'
     syn region NixIND_STRING
       \ matchgroup=NixIND_STRING
       \ start="'''"
