@@ -32,6 +32,7 @@ in {
 
   environment.systemPackages = with pkgs; [
 
+    acpi
     dmenu
     gitAndTools.qgit
     lm_sensors
@@ -44,6 +45,7 @@ in {
     sxiv
     xclip
     xorg.xbacklight
+    xorg.xhost
     xsel
     zathura
 

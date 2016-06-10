@@ -5,7 +5,6 @@ let
 in {
   krebs.per-user.chat.packages = with pkgs; [
     mosh
-    tmux
     weechat
   ];
 

@@ -123,8 +123,11 @@ with config.krebs.lib;
 
   #neat utils
     krebspaste
+    pciutils
     psmisc
+    tmux
     untilport
+    usbutils
 
   #unpack stuff
     p7zip

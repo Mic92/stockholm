@@ -52,7 +52,6 @@ in {
     print_current
     ncmpcpp
     mpc_cli
-    tmux
   ];
 
   security.sudo.extraConfig = ''
