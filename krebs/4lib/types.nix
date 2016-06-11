@@ -325,7 +325,7 @@ types // rec {
   # POSIX.1‐2013, 3.278 Portable Filename Character Set
   filename = mkOptionType {
     name = "POSIX filename";
-    check = x: match "[0-9A-Za-z._-]+" x != null;
+    check = x: match "([0-9A-Za-z._])[0-9A-Za-z._-]*" x != null;
     merge = mergeOneOption;
   };
 
@@ -347,6 +347,6 @@ types // rec {
   # POSIX.1-2013, 3.431 User Name
   username = mkOptionType {
     name = "POSIX username";
-    check = s: filename.check s && substring 0 1 s != "-";
+    check = filename.check;
   };
 }
