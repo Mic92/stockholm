@@ -335,6 +335,7 @@ types // rec {
   absolute-pathname = mkOptionType {
     name = "POSIX absolute pathname";
     check = s: s == "/" || (pathname.check s && substring 0 1 s == "/");
+    merge = mergeOneOption;
   };
 
   # POSIX.1‐2013, 3.267 Pathname
@@ -342,11 +343,13 @@ types // rec {
   pathname = mkOptionType {
     name = "POSIX pathname";
     check = s: isString s && all filename.check (splitString "/" s);
+    merge = mergeOneOption;
   };
 
   # POSIX.1-2013, 3.431 User Name
   username = mkOptionType {
     name = "POSIX username";
     check = filename.check;
+    merge = mergeOneOption;
   };
 }
