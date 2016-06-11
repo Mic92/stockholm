@@ -44,7 +44,7 @@
       grab_repo = steps.Git(repourl=stockholm_repo, mode='incremental')
 
       # TODO: get nixpkgs/stockholm paths from krebs
-      env = {"LOGNAME": "lass", "NIX_REMOTE": "daemon", "dummy_secrets": "true", "NIX_PATH": "nixpkgs=/var/src/nixpkgs:stockholm=/var/src/stockholm"}
+      env = {"LOGNAME": "lass", "NIX_REMOTE": "daemon", "dummy_secrets": "true"}
 
       # prepare nix-shell
       # the dependencies which are used by the test script
@@ -71,7 +71,8 @@
                       ["nix-build \
                             --show-trace --no-out-link \
                             -I nixos-config=./lass/1systems/{}.nix \
-                            -I secrets=/var/src/stockholm/lass/2configs/tests/dummy-secrets \
+                            -I secrets=./lass/2configs/tests/dummy-secrets \
+                            -I stockholm=. \
                             -A config.system.build.toplevel".format(i)])
 
         bu.append(util.BuilderConfig(name="build-all",
