@@ -325,10 +325,7 @@ types // rec {
   # POSIX.1‐2013, 3.278 Portable Filename Character Set
   filename = mkOptionType {
     name = "POSIX filename";
-    check = let
-      filename-chars = stringToCharacters
-        "-.0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    in s: all (flip elem filename-chars) (stringToCharacters s);
+    check = x: match "[0-9A-Za-z._-]+" x != null;
     merge = mergeOneOption;
   };
 
