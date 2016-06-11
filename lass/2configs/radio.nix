@@ -113,7 +113,7 @@ in {
     wantedBy = [ "timers.target" ];
 
     timerConfig = {
-      OnCalendar = "*:*";
+      OnCalendar = "*:0/1";
     };
   };
 
