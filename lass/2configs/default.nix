@@ -7,6 +7,7 @@ with config.krebs.lib;
     ../2configs/zsh.nix
     ../2configs/mc.nix
     ../2configs/retiolum.nix
+    ../2configs/nixpkgs.nix
     ./backups.nix
     {
       users.extraUsers =
@@ -64,11 +65,6 @@ with config.krebs.lib;
           else "/home/lass/secrets/${config.krebs.build.host.name}";
         #secrets-common = "/home/lass/secrets/common";
         stockholm = "/home/lass/stockholm";
-        nixpkgs = {
-          url = https://github.com/lassulus/nixpkgs;
-          rev = "2e971b07db3fb77e0590fff09d0b9cb086159caa";
-          dev = "/home/lass/src/nixpkgs";
-        };
       } // optionalAttrs config.krebs.build.host.secure {
         #secrets-master = "/home/lass/secrets/master";
       });
