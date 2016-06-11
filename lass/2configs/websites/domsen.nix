@@ -46,6 +46,7 @@ in {
       "aldonasiech.com"
       "360gradvideo.tv"
       "ubikmedia.eu"
+      "facts.cloud"
       "www.ubikmedia.de"
       "www.aldona.ubikmedia.de"
       "www.apanowicz.de"
@@ -53,6 +54,7 @@ in {
       "www.aldonasiech.com"
       "www.360gradvideo.tv"
       "www.ubikmedia.eu"
+      "www.facts.cloud"
     ])
     (serveWordpress [
       "ubikmedia.de"
@@ -61,12 +63,14 @@ in {
       "aldonasiech.com"
       "360gradvideo.tv"
       "ubikmedia.eu"
+      "facts.cloud"
+      "*.ubikmedia.de"
       "www.apanowicz.de"
       "www.nirwanabluete.de"
       "www.aldonasiech.com"
       "www.360gradvideo.tv"
       "www.ubikmedia.eu"
-      "*.ubikmedia.de"
+      "www.facts.cloud"
     ])
   ];
 
