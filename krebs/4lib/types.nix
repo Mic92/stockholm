@@ -239,7 +239,7 @@ types // rec {
     check = let
       IPv4address = let d = "([1-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])"; in
         concatMapStringsSep "." (const d) (range 1 4);
-    in x: match IPv4address x != null;
+    in x: isString x && match IPv4address x != null;
     merge = mergeOneOption;
   };
   addr6 = mkOptionType {
@@ -247,7 +247,7 @@ types // rec {
     check = let
       # TODO check IPv6 address harder
       IPv6address = "[0-9a-f.:]+";
-    in x: match IPv6address x != null;
+    in x: isString x && match IPv6address x != null;
     merge = mergeOneOption;
   };
 
@@ -315,7 +315,7 @@ types // rec {
   # RFC952, B. Lexical grammar, <hname>
   hostname = mkOptionType {
     name = "hostname";
-    check = x: all label.check (splitString "." x);
+    check = x: isString x && all label.check (splitString "." x);
     merge = mergeOneOption;
   };
 
@@ -324,14 +324,15 @@ types // rec {
   label = mkOptionType {
     name = "label";
     # TODO case-insensitive labels
-    check = x: match "[0-9A-Za-z]([0-9A-Za-z-]*[0-9A-Za-z])?" x != null;
+    check = x: isString x
+            && match "[0-9A-Za-z]([0-9A-Za-z-]*[0-9A-Za-z])?" x != null;
     merge = mergeOneOption;
   };
 
   # POSIX.1‐2013, 3.278 Portable Filename Character Set
   filename = mkOptionType {
     name = "POSIX filename";
-    check = x: match "([0-9A-Za-z._])[0-9A-Za-z._-]*" x != null;
+    check = x: isString x && match "([0-9A-Za-z._])[0-9A-Za-z._-]*" x != null;
     merge = mergeOneOption;
   };
 
@@ -341,7 +342,7 @@ types // rec {
   absolute-pathname = mkOptionType {
     name = "POSIX absolute pathname";
     check = x: let xs = splitString "/" x; xa = head xs; in
-      xa == "/" || (xa == "" && all filename.check (tail xs));
+      isString x && (xa == "/" || (xa == "" && all filename.check (tail xs)));
     merge = mergeOneOption;
   };
 
@@ -350,7 +351,7 @@ types // rec {
   pathname = mkOptionType {
     name = "POSIX pathname";
     check = x: let xs = splitString "/" x; in
-      all filename.check (if head xs == "" then tail xs else xs);
+      isString x && all filename.check (if head xs == "" then tail xs else xs);
     merge = mergeOneOption;
   };
 
