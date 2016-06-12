@@ -37,6 +37,11 @@ let out = rec {
   shell = import ./shell.nix { inherit lib; };
   tree = import ./tree.nix { inherit lib; };
 
+  lpad = n: c: s:
+    if stringLength s < n
+      then lpad n c (c + s)
+      else s;
+
   toC = x: let
     type = typeOf x;
     reject = throw "cannot convert ${type}";
