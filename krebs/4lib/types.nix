@@ -163,7 +163,7 @@ types // rec {
   secret-file = submodule ({ config, ... }: {
     options = {
       path = mkOption { type = str; };
-      mode = mkOption { type = str; default = "0400"; };
+      mode = mkOption { type = file-mode; default = "0400"; };
       owner = mkOption {
         type = user;
         default = config.krebs.users.root;
@@ -291,6 +291,12 @@ types // rec {
         }.${typeOf x};
       };
     };
+  };
+
+  file-mode = mkOptionType {
+    name = "file mode";
+    check = x: isString x && match "[0-7]{4}" x != null;
+    merge = mergeOneOption;
   };
 
   haskell.conid = mkOptionType {
