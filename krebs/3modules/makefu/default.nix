@@ -340,6 +340,35 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcxWFEPzke/Sdd9qNX6rSJgXal8NmINYajpFCxXfYdj root@gum";
     };
+    shoney = rec {
+      cores = 1;
+      nets = {
+        internet = {
+          ip4.addr = "64.137.235.70";
+          aliases = [
+            "shoney.i"
+          ];
+        };
+        retiolum = {
+          ip4.addr = "10.243.205.131";
+          ip6.addr = "42:490d:cd82:d2bb:56d5:abd1:b88b:e8b4";
+          aliases = [
+            "shoney.retiolum"
+            "shoney.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAsYXzbotmODJqos+Ilve8WyO2qBti6eMDSOP59Aqb18h8A5b4tCTL
+            ygDo2xLLzRaINQAxfdaKcdMOWSEkiy1j/pBYs1tfqv4mT6BO+1t8LXz82D+YcT+4
+            okGXklZ/H5L+T9cynbpKIwzTrw0DuOUhzs/WRFJU60B4cJ0Tl3IQs5ePX1SevVht
+            M5n1ob47SCHxEuC+ZLNdLc6KRumcp3Ozk6Yxj3lZ0tqyngxY1C+1kTJwRyw9A7vO
+            +DAH8t1YusYi7ICHcYt5J1p0ZGizcs8oEnZLBy4D+bJX86g7zbix1lZ37LxDCpQ5
+            uCoAYFes7QqLVDYhucZ5ElRWdATM2mBtZwIDAQAB
+            -----END RSA PUBLIC KEY-----
+            '';
+        };
+      };
+    };
 
     # non-stockholm
 
