@@ -56,6 +56,8 @@ let out = rec {
     mapAttrs (name: _: path + "/${name}")
              (filterAttrs (_: eq "directory") (readDir path));
 
+  genAttrs' = names: f: listToAttrs (map f names);
+
   setAttr = name: value: set: set // { ${name} = value; };
 
   optionalTrace = c: msg: x: if c then trace msg x else x;
