@@ -28,20 +28,20 @@ rec {
 
   execveBin = name: cfg: execve name (cfg // { destination = "/bin/${name}"; });
 
-  writeBash = name: text: pkgs.writeScript name ''
-    #! ${pkgs.bash}/bin/bash
-    ${text}
-  '';
+  makeScriptWriter = interpreter: name: text:
+    assert (with types; either absolute-pathname filename).check name;
+    pkgs.writeOut (baseNameOf name) {
+      ${optionalString (types.absolute-pathname.check name) name} = {
+        executable = true;
+        text = "#! ${interpreter}\n${text}";
+      };
+    };
 
-  writeBashBin = name: text: pkgs.writeTextFile {
-    executable = true;
-    destination = "/bin/${name}";
-    name = name;
-    text = ''
-      #! ${pkgs.bash}/bin/bash
-      ${text}
-    '';
-  };
+  writeBash = makeScriptWriter "${pkgs.bash}/bin/bash";
+
+  writeBashBin = name:
+    assert types.filename.check name;
+    pkgs.writeBash "/bin/${name}";
 
   writeC = name: { destination ? "" }: src: pkgs.runCommand name {} ''
     PATH=${makeBinPath (with pkgs; [
@@ -56,20 +56,11 @@ rec {
     strip --strip-unneeded "$exe"
   '';
 
-  writeDash = name: text: pkgs.writeScript name ''
-    #! ${pkgs.dash}/bin/dash
-    ${text}
-  '';
+  writeDash = makeScriptWriter "${pkgs.dash}/bin/dash";
 
-  writeDashBin = name: text: pkgs.writeTextFile {
-    executable = true;
-    destination = "/bin/${name}";
-    name = name;
-    text = ''
-      #! ${pkgs.dash}/bin/dash
-      ${text}
-    '';
-  };
+  writeDashBin = name:
+    assert types.filename.check name;
+    pkgs.writeDash "/bin/${name}";
 
   writeEximConfig = name: text: pkgs.runCommand name {
     inherit text;
