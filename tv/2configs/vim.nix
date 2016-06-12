@@ -279,6 +279,7 @@ let
         \ end='"'
         \ contained
         \ contains=@nix_${lang}_syntax
+        \ transparent
 
       syn region nix_${lang}_region_IND_STRING
         \ matchgroup=NixIND_STRING
@@ -287,6 +288,7 @@ let
         \ end="'''"
         \ contained
         \ contains=@nix_${lang}_syntax
+        \ transparent
 
       syn cluster nix_ind_strings
         \ add=nix_${lang}_region_IND_STRING
@@ -305,22 +307,24 @@ let
         ''write[^ \t\r\n]*[ \t\r\n]*"\(\([^"]*\.\)\?vimrc\|[^"]*\.vim\)"'';
     })}
 
-    " Clear syntax that interferes with NixBlock.
-    " TODO redefine NixBlock so syntax don't have to be cleared
-    syn clear shOperator shSetList shVarAssign
+    " Clear syntax that interferes with nixINSIDE_DOLLAR_CURLY.
+    syn clear shVarAssign
 
-    syn region NixBlock
+    syn region nixINSIDE_DOLLAR_CURLY
       \ matchgroup=NixEnter
       \ start="[$]{"
       \ end="}"
       \ contains=TOP
       \ containedin=@nix_has_dollar_curly
+      \ transparent
 
-    syn region NixBlockHack
+    syn region nix_inside_curly
       \ matchgroup=NixEnter
       \ start="{"
       \ end="}"
       \ contains=TOP
+      \ containedin=nixINSIDE_DOLLAR_CURLY,nix_inside_curly
+      \ transparent
 
     syn match NixQuote /'''\([''$']\|\\.\)/he=s+2
       \ containedin=@nix_ind_strings
