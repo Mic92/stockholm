@@ -13,7 +13,7 @@ let
   out = {
     options.krebs.git = api;
     config = with lib; mkIf cfg.enable (mkMerge [
-      (mkIf cfg.cgit cgit-imp)
+      (mkIf cfg.cgit.enable cgit-imp)
       git-imp
     ]);
   };
@@ -22,10 +22,33 @@ let
     enable = mkEnableOption "krebs.git";
 
     cgit = mkOption {
-      type = types.bool;
-      default = true;
+      type = types.submodule {
+        options = {
+          enable = mkEnableOption "krebs.git.cgit" // { default = true; };
+          fcgiwrap = {
+            group = mkOption {
+              type = types.group;
+              default = {
+                name = "fcgiwrap";
+              };
+            };
+            user = mkOption {
+              type = types.user;
+              default = {
+                name = "fcgiwrap";
+                home = toString pkgs.empty;
+              };
+            };
+          };
+          settings = mkOption {
+            apply = flip removeAttrs ["_module"];
+            default = {};
+            type = subtypes.cgit-settings;
+          };
+        };
+      };
+      default = {};
       description = ''
-          Enable cgit.
           Cgit is an attempt to create a fast web interface for the git version
           control system, using a built in cache to decrease pressure on the
           git server.
@@ -40,7 +63,11 @@ let
       description = "Directory used to store repositories.";
     };
     etcDir = mkOption {
-      type = types.str;
+      type = mkOptionType {
+        name = "${types.absolute-pathname.name} starting with `/etc/'";
+        check = x: types.absolute-pathname.check x && hasPrefix "/etc/" x;
+        merge = mergeOneOption;
+      };
       default = "/etc/git";
     };
     repos = mkOption {
@@ -63,22 +90,6 @@ let
         Repositories.
       '';
     };
-    root-desc = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = ''
-        Text printed below the heading on the repository index page.
-        Default value: "a fast webinterface for the git dscm".
-      '';
-    };
-    root-title = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = ''
-        Text printed as heading on the repository index page.
-        Default value: "Git Repository Browser".
-      '';
-    };
     rules = mkOption {
       type = types.listOf subtypes.rule;
       default = [];
@@ -95,12 +106,117 @@ let
         access and permission rules for git repositories.
       '';
     };
+
+    user = mkOption {
+      type = types.user;
+      default = {
+        name = "git";
+        home = toString pkgs.empty;
+      };
+    };
   };
 
   # TODO put into krebs/4lib/types.nix?
   subtypes = {
-    repo = types.submodule ({
+    cgit-settings = types.submodule {
+      # A setting's value of `null` means cgit's default should be used.
       options = {
+        cache-root = mkOption {
+          type = types.absolute-pathname;
+          default = "/tmp/cgit";
+        };
+        cache-size = mkOption {
+          type = types.uint;
+          default = 1000;
+        };
+        css = mkOption {
+          type = types.absolute-pathname;
+          default = "/static/cgit.css";
+        };
+        enable-commit-graph = mkOption {
+          type = types.bool;
+          default = true;
+        };
+        enable-index-links = mkOption {
+          type = types.bool;
+          default = true;
+        };
+        enable-index-owner = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        enable-log-filecount = mkOption {
+          type = types.bool;
+          default = true;
+        };
+        enable-log-linecount = mkOption {
+          type = types.bool;
+          default = true;
+        };
+        enable-remote-branches = mkOption {
+          type = types.bool;
+          default = true;
+        };
+        logo = mkOption {
+          type = types.absolute-pathname;
+          default = "/static/cgit.png";
+        };
+        max-stats = mkOption {
+          type =
+            types.nullOr (types.enum ["week" "month" "quarter" "year"]);
+          default = "year";
+        };
+        robots = mkOption {
+          type = types.nullOr (types.listOf types.str);
+          default = ["nofollow" "noindex"];
+        };
+        root-desc = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+        };
+        root-title = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+        };
+        virtual-root = mkOption {
+          type = types.nullOr types.absolute-pathname;
+          default = "/";
+        };
+      };
+    };
+    repo = types.submodule ({ config, ... }: {
+      options = {
+        cgit = {
+          desc = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Repository description.
+            '';
+          };
+          path = mkOption {
+            type = types.str;
+            default = "${cfg.dataDir}/${config.name}";
+            description = ''
+              An absolute path to the repository directory. For non-bare
+              repositories this is the .git-directory.
+            '';
+          };
+          section = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Repository section.
+            '';
+          };
+          url = mkOption {
+            type = types.str;
+            default = config.name;
+            description = ''
+              The relative url used to access the repository.
+            '';
+          };
+        };
         collaborators = mkOption {
           type = types.listOf types.user;
           default = [];
@@ -110,20 +226,6 @@ let
             This option is currently not used by krebs.git but instead can be
             used to create rules.  See e.g. <stockholm/tv/2configs/git.nix> for
             an example.
-          '';
-        };
-        desc = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            Repository description.
-          '';
-        };
-        section = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            Repository section.
           '';
         };
         name = mkOption {
@@ -216,90 +318,80 @@ let
     system.activationScripts.git-init = "${init-script}";
 
     # TODO maybe put all scripts here and then use PATH?
-    environment.etc."${etc-base}".source =
+    environment.etc.${removePrefix "/etc/" cfg.etcDir}.source =
       scriptFarm "git-ssh-authorizers" {
         authorize-command = makeAuthorizeScript (map (rule: [
-          (map getName (ensureList rule.user))
-          (map getName (ensureList rule.repo))
+          (map getName (toList rule.user))
+          (map getName (toList rule.repo))
           (map getName rule.perm.allow-commands)
         ]) cfg.rules);
 
         authorize-push = makeAuthorizeScript (map (rule: [
-          (map getName (ensureList rule.user))
-          (map getName (ensureList rule.repo))
-          (ensureList rule.perm.allow-receive-ref)
+          (map getName (toList rule.user))
+          (map getName (toList rule.repo))
+          (toList rule.perm.allow-receive-ref)
           (map getName rule.perm.allow-receive-modes)
         ]) (filter (rule: rule.perm.allow-receive-ref != null) cfg.rules));
       };
 
-    # TODO cfg.user
-    users.users.git = rec {
+    users.users.${cfg.user.name} = {
+      inherit (cfg.user) home name uid;
       description = "Git repository hosting user";
-      name = "git";
       shell = "/bin/sh";
       openssh.authorizedKeys.keys =
         mapAttrsToList (_: makeAuthorizedKey git-ssh-command)
                        (filterAttrs (_: user: isString user.pubkey)
                                     config.krebs.users);
-      uid = genid name;
     };
   };
 
   cgit-imp = {
-    users.extraUsers = lib.singleton {
-      inherit (fcgitwrap-user) group name uid;
-      home = toString (pkgs.runCommand "empty" {} "mkdir -p $out");
-    };
-
-    users.extraGroups = lib.singleton {
-      inherit (fcgitwrap-group) gid name;
+    users = {
+      groups.${cfg.cgit.fcgiwrap.group.name} = {
+        inherit (cfg.cgit.fcgiwrap.group) name gid;
+      };
+      users.${cfg.cgit.fcgiwrap.user.name} = {
+        inherit (cfg.cgit.fcgiwrap.user) home name uid;
+        group = cfg.cgit.fcgiwrap.group.name;
+      };
     };
 
     services.fcgiwrap = {
       enable = true;
-      user = fcgitwrap-user.name;
-      group = fcgitwrap-user.group;
+      user = cfg.cgit.fcgiwrap.user.name;
+      group = cfg.cgit.fcgiwrap.group.name;
       # socketAddress = "/run/fcgiwrap.sock" (default)
       # socketType = "unix" (default)
     };
 
-    environment.etc."cgitrc".text = ''
-      css=/static/cgit.css
-      logo=/static/cgit.png
+    environment.etc."cgitrc".text = let
+      repo-to-cgitrc = _: repo:
+        optionals (isPublicRepo repo) (concatLists [
+          [""] # empty line
+          [(kv-to-cgitrc "repo.url" repo.cgit.url)]
+          (mapAttrsToList kv-to-cgitrc
+            (mapAttrs' (k: nameValuePair "repo.${k}")
+              (removeAttrs repo.cgit ["url"])))
+        ]);
 
-      # if you do not want that webcrawler (like google) index your site
-      robots=noindex, nofollow
-
-      virtual-root=/
-
-      # TODO make this nicer (and/or somewhere else)
-      cache-root=/tmp/cgit
-
-      cache-size=1000
-      enable-commit-graph=1
-      enable-index-links=1
-      enable-index-owner=0
-      enable-log-filecount=1
-      enable-log-linecount=1
-      enable-remote-branches=1
-
-      ${optionalString (cfg.root-title != null) "root-title=${cfg.root-title}"}
-      ${optionalString (cfg.root-desc != null) "root-desc=${cfg.root-desc}"}
-
-      snapshots=0
-      max-stats=year
-
-      ${concatMapStringsSep "\n" (repo: ''
-        repo.url=${repo.name}
-        repo.path=${cfg.dataDir}/${repo.name}
-        ${optionalString (repo.section != null) "repo.section=${repo.section}"}
-        ${optionalString (repo.desc != null) "repo.desc=${repo.desc}"}
-      '') (filter isPublicRepo (attrValues cfg.repos))}
-    '';
+      kv-to-cgitrc = k: v: getAttr (typeOf v) {
+        bool = kv-to-cgitrc k (if v then 1 else 0);
+        null = []; # This will be removed by `flatten`.
+        list = "${k}=${concatStringsSep ", " v}";
+        int = "${k}=${toString v}";
+        string = "${k}=${v}";
+      };
+    in
+      concatStringsSep "\n"
+        (flatten (
+          mapAttrsToList kv-to-cgitrc cfg.cgit.settings
+          ++
+          mapAttrsToList repo-to-cgitrc cfg.repos
+        ));
 
     system.activationScripts.cgit = ''
-      mkdir -m 0700 -p /tmp/cgit
-      chown ${toString fcgitwrap-user.uid}:${toString fcgitwrap-group.gid} /tmp/cgit
+      mkdir -m 0700 -p ${cfg.cgit.settings.cache-root}
+      chown ${toString cfg.cgit.fcgiwrap.user.uid}:${toString cfg.cgit.fcgiwrap.group.gid} ${cfg.cgit.settings.cache-root}
     '';
 
     krebs.nginx = {
@@ -307,6 +399,7 @@ let
       servers.cgit = {
         server-names = [
           "cgit.${config.networking.hostName}"
+          "cgit.${config.networking.hostName}.r"
           "cgit.${config.networking.hostName}.retiolum"
         ];
         locations = [
@@ -326,21 +419,6 @@ let
       };
     };
   };
-
-  fcgitwrap-user = rec {
-    name = "fcgiwrap";
-    uid = genid name;
-    group = "fcgiwrap";
-  };
-
-  fcgitwrap-group = {
-    name = fcgitwrap-user.name;
-    gid = fcgitwrap-user.uid;
-  };
-
-
-  ensureList = x:
-    if typeOf x == "list" then x else [x];
 
   getName = x: x.name;
 
@@ -366,7 +444,7 @@ let
   makeAuthorizeScript =
     let
       # TODO escape
-      to-pattern = x: concatStringsSep "|" (ensureList x);
+      to-pattern = x: concatStringsSep "|" (toList x);
       go = i: ps:
         if ps == []
           then "exit 0"
@@ -566,10 +644,6 @@ let
         ${repo.hooks.post-receive}''}
     '';
   };
-
-  etc-base =
-    assert (hasPrefix "/etc/" cfg.etcDir);
-    removePrefix "/etc/" cfg.etcDir;
 
 in
 out

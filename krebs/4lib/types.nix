@@ -154,6 +154,12 @@ types // rec {
     merge = mergeOneOption;
   };
 
+  uint = mkOptionType {
+    name = "unsigned integer";
+    check = x: isInt x && x >= 0;
+    merge = mergeOneOption;
+  };
+
   secret-file = submodule ({ config, ... }: {
     options = {
       path = mkOption { type = str; };
@@ -199,8 +205,9 @@ types // rec {
         description = ''
           Set of user's PGP public keys.
 
-          Modules supporting PGP may use well-known key names to define option
-          defaults, e.g. using `getAttrDef well-known-name pubkeys`.
+          Modules supporting PGP may use well-known key names to define
+          default values for options, in which case the well-known name
+          should be documented in the respective option's description.
         '';
       };
       pubkey = mkOption {
@@ -318,10 +325,7 @@ types // rec {
   # POSIX.1‐2013, 3.278 Portable Filename Character Set
   filename = mkOptionType {
     name = "POSIX filename";
-    check = let
-      filename-chars = stringToCharacters
-        "-.0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    in s: all (flip elem filename-chars) (stringToCharacters s);
+    check = x: match "([0-9A-Za-z._])[0-9A-Za-z._-]*" x != null;
     merge = mergeOneOption;
   };
 
@@ -330,19 +334,24 @@ types // rec {
   # TODO two slashes
   absolute-pathname = mkOptionType {
     name = "POSIX absolute pathname";
-    check = s: pathname.check s && substring 0 1 s == "/";
+    check = x: let xs = splitString "/" x; xa = head xs; in
+      xa == "/" || (xa == "" && all filename.check (tail xs));
+    merge = mergeOneOption;
   };
 
   # POSIX.1‐2013, 3.267 Pathname
   # TODO normalize slashes
   pathname = mkOptionType {
     name = "POSIX pathname";
-    check = s: isString s && all filename.check (splitString "/" s);
+    check = x: let xs = splitString "/" x; in
+      all filename.check (if head xs == "" then tail xs else xs);
+    merge = mergeOneOption;
   };
 
   # POSIX.1-2013, 3.431 User Name
   username = mkOptionType {
     name = "POSIX username";
-    check = s: filename.check s && substring 0 1 s != "-";
+    check = filename.check;
+    merge = mergeOneOption;
   };
 }
