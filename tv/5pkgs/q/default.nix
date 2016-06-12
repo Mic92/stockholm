@@ -13,10 +13,10 @@ let
         | ${pkgs.gawk}/bin/awk '{printf "%-23s\n", $0}' \
         | ${pkgs.gnused}/bin/sed '
               # colorize header
-              1,2s/.*/[30;1m&[39;22m/
+              1,2s/.*/[38;5;238;1m&[39;22m/
 
               # colorize week number
-              s/^[ 1-9][0-9]/[30;1m&[39;22m/
+              s/^[ 1-9][0-9]/[38;5;238;1m&[39;22m/
             '
     }'';
   in ''

@@ -7,8 +7,12 @@ let
   out = {
     krebs.git = {
       enable = true;
-      root-title = "public repositories at ${config.krebs.build.host.name}";
-      root-desc = "keep calm and engage";
+      cgit = {
+        settings = {
+          root-title = "public repositories at ${config.krebs.build.host.name}";
+          root-desc = "keep calm and engage";
+        };
+      };
       repos = mapAttrs (_: s: removeAttrs s ["collaborators"]) repos;
       rules = rules;
     };
@@ -27,7 +31,7 @@ let
   public-repos = mapAttrs make-public-repo {
     painload = {};
     stockholm = {
-      desc = "take all the computers hostage, they'll love you!";
+      cgit.desc = "take all the computers hostage, they'll love you!";
     };
     #wai-middleware-time = {};
     #web-routes-wai-custom = {};
@@ -46,8 +50,8 @@ let
     import <secrets/repos.nix> { inherit config lib pkgs; }
   );
 
-  make-public-repo = name: { desc ? null, ... }: {
-    inherit name desc;
+  make-public-repo = name: { cgit ? {}, ... }: {
+    inherit cgit name;
     public = true;
     hooks = {
       post-receive = pkgs.git-hooks.irc-announce {
@@ -60,8 +64,8 @@ let
     };
   };
 
-  make-restricted-repo = name: { collaborators ? [], desc ? null, ... }: {
-    inherit name collaborators desc;
+  make-restricted-repo = name: { collaborators ? [], ... }: {
+    inherit collaborators name;
     public = false;
   };
 

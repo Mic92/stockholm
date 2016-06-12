@@ -14,7 +14,7 @@ with config.krebs.lib;
       stockholm = "/home/tv/stockholm";
       nixpkgs = {
         url = https://github.com/NixOS/nixpkgs;
-        rev = "40c586b7ce2c559374df435f46d673baf711c543";
+        rev = "87fe38fd0e19ca83fc3ea338f8e0e7b12971d204";
       };
     } // optionalAttrs config.krebs.build.host.secure {
       secrets-master = "/home/tv/secrets/master";

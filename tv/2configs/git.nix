@@ -7,8 +7,12 @@ let
   out = {
     krebs.git = {
       enable = true;
-      root-title = "repositories at ${config.krebs.build.host.name}";
-      root-desc = "mostly krebs";
+      cgit = {
+        settings = {
+          root-title = "repositories at ${config.krebs.build.host.name}";
+          root-desc = "mostly krebs";
+        };
+      };
       repos = repos;
       rules = rules;
     };
@@ -21,9 +25,9 @@ let
   rules = concatMap make-rules (attrValues repos);
 
   public-repos = mapAttrs make-public-repo ({
-  } // mapAttrValues (setAttr "section" "1. miscellaneous") {
+  } // mapAttrs (_: recursiveUpdate { cgit.section = "1. miscellaneous"; }) {
     cac-api = {
-      desc = "CloudAtCost API command line interface";
+      cgit.desc = "CloudAtCost API command line interface";
     };
     get = {};
     hack = {};
@@ -35,13 +39,13 @@ let
     push = {};
     regfish = {};
     soundcloud = {
-      desc = "SoundCloud command line interface";
+      cgit.desc = "SoundCloud command line interface";
     };
     stockholm = {
-      desc = "NixOS configuration";
+      cgit.desc = "NixOS configuration";
     };
     with-tmpdir = {};
-  } // mapAttrValues (setAttr "section" "2. Haskell libraries") {
+  } // mapAttrs (_: recursiveUpdate { cgit.section = "2. Haskell libraries"; }) {
     blessings = {};
     mime = {};
     quipper = {};
@@ -50,7 +54,7 @@ let
     web-routes-wai-custom = {};
     xintmap = {};
     xmonad-stockholm = {};
-  } // mapAttrValues (setAttr "section" "3. museum") {
+  } // mapAttrs (_: recursiveUpdate { cgit.section = "3. museum"; }) {
     cgserver = {};
     crude-mail-setup = {};
     dot-xmonad = {};
@@ -68,8 +72,8 @@ let
     import <secrets/repos.nix> { inherit config lib pkgs; }
   );
 
-  make-public-repo = name: { desc ? null, section ? null, ... }: {
-    inherit name desc section;
+  make-public-repo = name: { cgit ? {}, ... }: {
+    inherit cgit name;
     public = true;
     hooks = optionalAttrs (config.krebs.build.host.name == "cd") {
       post-receive = pkgs.git-hooks.irc-announce {
@@ -82,8 +86,8 @@ let
     };
   };
 
-  make-restricted-repo = name: { collaborators ? [], desc ? null, ... }: {
-    inherit name collaborators desc;
+  make-restricted-repo = name: { collaborators ? [], ... }: {
+    inherit collaborators name;
     public = false;
   };
 

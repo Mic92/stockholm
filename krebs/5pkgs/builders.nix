@@ -81,6 +81,26 @@ rec {
     mv "$textPath" $out
   '';
 
+  writeFiles = name: specs0:
+  let
+    specs = mapAttrsToList (path: spec0: {
+      path = assert types.pathname.check path; path;
+      var = "file_${hashString "sha1" path}";
+      text = spec0.text;
+    }) specs0;
+
+    filevars = genAttrs' specs (spec: nameValuePair spec.var spec.text);
+
+    env = filevars // { passAsFile = attrNames filevars; };
+  in
+    pkgs.runCommand name env /* sh */ ''
+      set -efu
+      PATH=${makeBinPath [pkgs.coreutils]}
+      ${concatMapStrings (spec: /* sh */ ''
+        install -D ''$${spec.var}Path $out${spec.path}
+      '') specs}
+    '';
+
   writeHaskell =
     k:
     let
