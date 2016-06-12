@@ -229,7 +229,6 @@ let
       \ skip="'''\('\|[$]\|\\[nrt]\)"
       \ end="'''"
 
-    syn cluster NixStrings contains=NixSTRING,NixIND_STRING
     syn match NixOther /[():/;=.,?\[\]]/
 
     syn match NixCommentMatch /\(^\|\s\)#.*/
@@ -251,13 +250,12 @@ let
     hi link NixIND_STRING NixData
 
     hi link NixEnter NixCode
-    hi link NixExit NixData
     hi link NixOther NixCode
     hi link NixQuote NixData
-    hi link NixQuote2 NixQuote
-    hi link NixQuote3 NixQuote
 
-    syn cluster NixSubLangs contains=NONE
+    syn cluster nix_has_dollar_curly contains=@nix_ind_strings,@nix_strings
+    syn cluster nix_ind_strings contains=NixIND_STRING
+    syn cluster nix_strings contains=NixSTRING
 
     ${concatStringsSep "\n" (mapAttrsToList (lang: { extraStart ? null }: let
       startAlts = filter isString [
@@ -271,10 +269,10 @@ let
 
       syn match nix_${lang}_sigil
         \ X${replaceStrings ["X"] ["\\X"] sigil}\ze\('''\|"\)X
-        \ nextgroup=nix_${lang}_region
+        \ nextgroup=nix_${lang}_region_IND_STRING,nix_${lang}_region_STRING
         \ transparent
 
-      syn region nix_${lang}_region
+      syn region nix_${lang}_region_STRING
         \ matchgroup=NixSTRING
         \ start='"'
         \ skip='\\"'
@@ -282,7 +280,7 @@ let
         \ contained
         \ contains=@nix_${lang}_syntax
 
-      syn region nix_${lang}_region
+      syn region nix_${lang}_region_IND_STRING
         \ matchgroup=NixIND_STRING
         \ start="'''"
         \ skip="'''\('\|[$]\|\\[nrt]\)"
@@ -290,8 +288,14 @@ let
         \ contained
         \ contains=@nix_${lang}_syntax
 
-      syn cluster NixSubLangs
-        \ add=nix_${lang}_region,@nix_${lang}_syntax
+      syn cluster nix_ind_strings
+        \ add=nix_${lang}_region_IND_STRING
+
+      syn cluster nix_strings
+        \ add=nix_${lang}_region_STRING
+
+      syn cluster nix_has_dollar_curly
+        \ add=@nix_${lang}_syntax
     '') {
       c = {};
       cabal = {};
@@ -310,7 +314,7 @@ let
       \ start="[$]{"
       \ end="}"
       \ contains=TOP
-      \ containedin=@NixSubLangs,@NixStrings
+      \ containedin=@nix_has_dollar_curly
 
     syn region NixBlockHack
       \ matchgroup=NixEnter
@@ -318,9 +322,13 @@ let
       \ end="}"
       \ contains=TOP
 
-    syn match NixQuote  "'''[$]"he=e-1  contained containedin=@NixSubLangs
-    syn match NixQuote2 "''''"he=s+1    contained containedin=@NixSubLangs
-    syn match NixQuote3 "'''\\[nrt]"    contained containedin=@NixSubLangs
+    syn match NixQuote /'''\([''$']\|\\.\)/he=s+2
+      \ containedin=@nix_ind_strings
+      \ contained
+
+    syn match NixQuote /\\./he=s+1
+      \ containedin=@nix_strings
+      \ contained
 
     syn sync fromstart
 
