@@ -334,7 +334,8 @@ types // rec {
   # TODO two slashes
   absolute-pathname = mkOptionType {
     name = "POSIX absolute pathname";
-    check = s: s == "/" || (pathname.check s && substring 0 1 s == "/");
+    check = x: let xs = splitString "/" x; xa = head xs; in
+      xa == "/" || (xa == "" && all filename.check (tail xs));
     merge = mergeOneOption;
   };
 
@@ -342,7 +343,8 @@ types // rec {
   # TODO normalize slashes
   pathname = mkOptionType {
     name = "POSIX pathname";
-    check = s: isString s && all filename.check (splitString "/" s);
+    check = x: let xs = splitString "/" x; in
+      all filename.check (if head xs == "" then tail xs else xs);
     merge = mergeOneOption;
   };
 
