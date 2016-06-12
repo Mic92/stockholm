@@ -211,9 +211,8 @@ let
   nix.vim = pkgs.writeText "nix.vim" ''
     setf nix
 
-    syn match NixCode /./
-
     " Ref <nix/src/libexpr/lexer.l>
+    syn match NixID    /[a-zA-Z\_][a-zA-Z0-9\_\'\-]*/
     syn match NixINT   /\<[0-9]\+\>/
     syn match NixPATH  /[a-zA-Z0-9\.\_\-\+]*\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
     syn match NixHPATH /\~\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
@@ -231,6 +230,7 @@ let
       \ end="'''"
 
     syn cluster NixStrings contains=NixSTRING,NixIND_STRING
+    syn match NixOther /[():/;=.,?\[\]]/
 
     syn match NixCommentMatch /\(^\|\s\)#.*/
     syn region NixCommentRegion start="/\*" end="\*/"
@@ -241,6 +241,7 @@ let
 
     hi link NixCommentMatch NixComment
     hi link NixCommentRegion NixComment
+    hi link NixID NixCode
     hi link NixINT NixData
     hi link NixPATH NixData
     hi link NixHPATH NixData
@@ -251,6 +252,7 @@ let
 
     hi link NixEnter NixCode
     hi link NixExit NixData
+    hi link NixOther NixCode
     hi link NixQuote NixData
     hi link NixQuote2 NixQuote
     hi link NixQuote3 NixQuote
