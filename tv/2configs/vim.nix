@@ -264,30 +264,32 @@ let
       ];
       sigil = ''\(${concatStringsSep ''\|'' startAlts}\)[ \t\r\n]*'';
     in /* vim */ ''
-      syn include @${lang}Syntax syntax/${lang}.vim
+      syn include @nix_${lang}_syntax syntax/${lang}.vim
       unlet b:current_syntax
 
-      syn region ${lang}Block_NixSTRING
-        \ matchgroup=NixExit
-        \ extend
-        \ start='${replaceStrings ["'"] ["\\'"] sigil}"'
+      syn match nix_${lang}_sigil
+        \ X${replaceStrings ["X"] ["\\X"] sigil}\ze\('''\|"\)X
+        \ nextgroup=nix_${lang}_region
+        \ transparent
+
+      syn region nix_${lang}_region
+        \ matchgroup=NixSTRING
+        \ start='"'
         \ skip='\\"'
         \ end='"'
-        \ contains=@${lang}Syntax
+        \ contained
+        \ contains=@nix_${lang}_syntax
 
-      syn region ${lang}Block_NixIND_STRING
-        \ matchgroup=NixExit
-        \ extend
-        \ start="${replaceStrings ["\""] ["\\\""] sigil}'''"
+      syn region nix_${lang}_region
+        \ matchgroup=NixIND_STRING
+        \ start="'''"
         \ skip="'''\('\|[$]\|\\[nrt]\)"
         \ end="'''"
-        \ contains=@${lang}Syntax
+        \ contained
+        \ contains=@nix_${lang}_syntax
 
       syn cluster NixSubLangs
-        \ add=@${lang}Syntax,${lang}Block_NixSTRING,${lang}Block_NixIND_STRING
-
-      hi link ${lang}Block_NixSTRING Statement
-      hi link ${lang}Block_NixIND_STRING Statement
+        \ add=nix_${lang}_region,@nix_${lang}_syntax
     '') {
       c = {};
       cabal = {};
