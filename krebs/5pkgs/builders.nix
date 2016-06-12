@@ -81,12 +81,23 @@ rec {
     mv "$textPath" $out
   '';
 
-  writeFiles = name: specs0:
+  writeOut = name: specs0:
   let
-    specs = mapAttrsToList (path: spec0: {
-      path = assert types.pathname.check path; path;
+    specs = mapAttrsToList (path0: spec0: rec {
+      path = guard {
+        type = types.pathname;
+        value = path0;
+      };
       var = "file_${hashString "sha1" path}";
       text = spec0.text;
+      executable = guard {
+        type = types.bool;
+        value = spec0.executable or false;
+      };
+      mode = guard {
+        type = types.file-mode;
+        value = spec0.mode or (if executable then "0755" else "0644");
+      };
     }) specs0;
 
     filevars = genAttrs' specs (spec: nameValuePair spec.var spec.text);
@@ -97,7 +108,7 @@ rec {
       set -efu
       PATH=${makeBinPath [pkgs.coreutils]}
       ${concatMapStrings (spec: /* sh */ ''
-        install -D ''$${spec.var}Path $out${spec.path}
+        install -m ${spec.mode} -D ''$${spec.var}Path $out${spec.path}
       '') specs}
     '';
 
