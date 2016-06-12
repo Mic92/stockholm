@@ -15,6 +15,16 @@ let out = rec {
 
   addNames = mapAttrs addName;
 
+  guard = spec@{ type, value, ... }:
+    assert isOptionType type;
+    if type.check value
+      then value
+      else throw (toString (filter isString [
+        "argument"
+        (if spec ? name then "‘${spec.name}’" else null)
+        "is not a ${type.name}"
+      ]));
+
   types = import ./types.nix {
     inherit config;
     lib = lib // { inherit genid optionalTrace; };
