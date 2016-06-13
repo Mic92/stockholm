@@ -22,7 +22,7 @@ in
 
   # local discovery in shackspace
   nixpkgs.config.packageOverrides = pkgs: { tinc = pkgs.tinc_pre; };
-
+  krebs.retiolum.extraConfig = "TCPOnly = yes";
   services.grafana = {
     enable = true;
     addr = "0.0.0.0";
