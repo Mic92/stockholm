@@ -121,6 +121,7 @@ with config.krebs.lib;
     krebspaste
     pciutils
     psmisc
+    rs
     tmux
     untilport
     usbutils
