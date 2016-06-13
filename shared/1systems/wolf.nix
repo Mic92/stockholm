@@ -37,7 +37,7 @@ in
 
   networking = {
     firewall.enable = false;
-    interfaces.eth0.ip4 = [{
+    interfaces.enp0s3.ip4 = [{
       address = shack-ip;
       prefixLength = 20;
     }];
