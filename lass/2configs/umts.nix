@@ -28,10 +28,12 @@ let
     Modem = ${modem-device}
     Init1 = AT+CFUN=1
     Init2 = AT+CGDCONT=1,"IP","pinternet.interkom.de","",0,0
-    Stupid mode = 1
+    Baud = 460800
     phone= *99#
     Username = netzclub
     Password = netzclub
+    Stupid Mode = 1
+    Idle Seconds = 0
   '';
 
 
