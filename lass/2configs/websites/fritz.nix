@@ -12,6 +12,16 @@ let
     serveWordpress
   ;
 
+  msmtprc = pkgs.writeText "msmtprc" ''
+    account localhost
+      host localhost
+    account default: localhost
+  '';
+
+  sendmail = pkgs.writeDash "msmtp" ''
+    exec ${pkgs.msmtp}/bin/msmtp --read-envelope-from -C ${msmtprc} "$@"
+  '';
+
 in {
   imports = [
     ./sqlBackup.nix
@@ -51,4 +61,14 @@ in {
   users.users.root.openssh.authorizedKeys.keys = [
     config.krebs.users.fritz.pubkey
   ];
+
+  services.phpfpm.phpIni = pkgs.runCommand "php.ini" {
+     options = ''
+      extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
+      sendmail_path = "${sendmail} -t -i"
+    '';
+  } ''
+    cat ${pkgs.php}/etc/php-recommended.ini > $out
+    echo "$options" >> $out
+  '';
 }
