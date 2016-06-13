@@ -19,10 +19,9 @@ let
     set -euf
     systemctl stop wpa_supplicant
     systemctl start umts
-    trap "systemctl stop umts;trap - INT TERM EXIT;exit" INT TERM EXIT
+    trap "systemctl stop umts && systemctl start wpa_supplicant;trap - INT TERM EXIT;exit" INT TERM EXIT
     echo nameserver 8.8.8.8 | tee -a /etc/resolv.conf
     journalctl -xfu umts
-    systemctl start wpa_supplicant
   '';
 
   wvdial-defaults = ''
