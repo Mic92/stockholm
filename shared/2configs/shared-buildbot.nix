@@ -26,7 +26,7 @@
           stockholm_repo,
           workdir='stockholm-poller', branches=True,
           project='stockholm',
-          pollinterval=120))
+          pollinterval=60))
     '';
     scheduler = {
         force-scheduler = ''
@@ -43,7 +43,7 @@
   sched.append(schedulers.SingleBranchScheduler(
                               ## all branches
                               change_filter=util.ChangeFilter(branch_re=".*"),
-                              # treeStableTimer=10,
+                              treeStableTimer=10,
                               name="fast-all-branches",
                               builderNames=["fast-tests"]))
         '';
