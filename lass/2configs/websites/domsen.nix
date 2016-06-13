@@ -11,9 +11,9 @@ let
     serveWordpress;
 
   msmtprc = pkgs.writeText "msmtprc" ''
-    account prism
+    account localhost
       host localhost
-    account default: prism
+    account default: localhost
   '';
 
   sendmail = pkgs.writeDash "msmtp" ''
