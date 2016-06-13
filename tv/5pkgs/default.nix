@@ -3,8 +3,7 @@
 {
   nixpkgs.config.packageOverrides = {
     # TODO use XDG_RUNTIME_DIR?
-    cr = pkgs.writeScriptBin "cr" ''
-      #! /bin/sh
+    cr = pkgs.writeDashBin "cr" ''
       set -efu
       export LC_TIME=de_DE.utf8
       exec ${pkgs.chromium}/bin/chromium \

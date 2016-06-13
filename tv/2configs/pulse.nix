@@ -67,8 +67,7 @@ in
     };
     serviceConfig = {
       ExecStart = "${pkg}/bin/pulseaudio";
-      ExecStartPre = pkgs.writeScript "pulse-start" ''
-        #! /bin/sh
+      ExecStartPre = pkgs.writeDash "pulse-start" ''
         install -o pulse -g pulse -m 0750 -d ${runDir}
         install -o pulse -g pulse -m 0700 -d ${runDir}/home
       '';

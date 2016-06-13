@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 let
   cfg = config.krebs.repo-sync;
 
   out = {
     options.krebs.repo-sync = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {
@@ -70,7 +70,7 @@ let
   imp = {
     users.users.repo-sync = {
       name = "repo-sync";
-      uid = config.krebs.lib.genid "repo-sync";
+      uid = genid "repo-sync";
       description = "repo-sync user";
       home = cfg.stateDir;
       createHome = true;
@@ -95,9 +95,8 @@ let
       serviceConfig = {
         Type = "simple";
         PermissionsStartOnly = true;
-        ExecStartPre = pkgs.writeScript "prepare-repo-sync-user" ''
-          #! /bin/sh
-          cp -v ${config.krebs.lib.shell.escape cfg.privateKeyFile} ${cfg.stateDir}/ssh.priv
+        ExecStartPre = pkgs.writeDash "prepare-repo-sync-user" ''
+          cp -v ${shell.escape cfg.privateKeyFile} ${cfg.stateDir}/ssh.priv
           chown repo-sync ${cfg.stateDir}/ssh.priv
         '';
         ExecStart = "${pkgs.repo-sync}/bin/repo-sync ${repo-sync-config}";
