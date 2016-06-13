@@ -74,8 +74,7 @@ rec {
   };
 
   nixos-version = buildSimpleReaktorPlugin "nixos-version" {
-    script = pkgs.writeScript "nixos-version" ''
-      #! /bin/sh
+    script = pkgs.writeDash "nixos-version" ''
       . /etc/os-release
       echo "$PRETTY_NAME"
       '';

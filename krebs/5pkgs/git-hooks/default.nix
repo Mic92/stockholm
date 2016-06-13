@@ -101,8 +101,7 @@ let
     fi
   '';
 
-  irc-announce-script = pkgs.writeScript "irc-announce-script" ''
-    #! /bin/sh
+  irc-announce-script = pkgs.writeDash "irc-announce-script" ''
     set -euf
 
     export PATH=${makeSearchPath "bin" (with pkgs; [

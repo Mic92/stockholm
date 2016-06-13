@@ -1,7 +1,6 @@
-{ writeScriptBin }:
+{ writeDashBin }:
 
-writeScriptBin "pssh" ''
-  #! /bin/sh
+writeDashBin "pssh" ''
   set -efu
   case ''${1-} in
 

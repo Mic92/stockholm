@@ -1,7 +1,7 @@
 arg@{ config, lib, pkgs, ... }:
 
 let
-  inherit (pkgs) writeScript writeText;
+  inherit (pkgs) writeText;
 
   inherit (builtins)
     elem
@@ -175,8 +175,7 @@ let
         ${buildTables iptables-version tables}
       '';
 
-  startScript = writeScript "krebs-iptables_start" ''
-    #! /bin/sh
+  startScript = pkgs.writeDash "krebs-iptables_start" ''
     set -euf
     iptables-restore < ${rules4 4}
     ip6tables-restore < ${rules4 6}

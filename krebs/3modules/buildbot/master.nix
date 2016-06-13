@@ -345,8 +345,7 @@ let
         Type = "forking";
         PIDFile = "${workdir}/twistd.pid";
         # TODO: maybe also prepare buildbot.tac?
-        ExecStartPre = pkgs.writeScript "buildbot-master-init" ''
-          #!/bin/sh
+        ExecStartPre = pkgs.writeDash "buildbot-master-init" ''
           set -efux
           if [ ! -e ${workdir} ];then
             mkdir -p ${workdir}

@@ -135,8 +135,7 @@ let
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         PermissionsStartOnly = true;
-        ExecStartPre = pkgs.writeScript "acng-init" ''
-          #!/bin/sh
+        ExecStartPre = pkgs.writeDash "acng-init" ''
           mkdir -p ${shell.escape cfg.cacheDir} ${shell.escape cfg.logDir}
           chown acng:acng  ${shell.escape cfg.cacheDir} ${shell.escape cfg.logDir}
         '';

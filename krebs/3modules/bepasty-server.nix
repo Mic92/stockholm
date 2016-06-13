@@ -109,8 +109,7 @@ let
           Type = "simple";
           PrivateTmp = true;
 
-          ExecStartPre = assert server.secretKey != ""; pkgs.writeScript "bepasty-server.${name}-init" ''
-            #!/bin/sh
+          ExecStartPre = assert server.secretKey != ""; pkgs.writeDash "bepasty-server.${name}-init" ''
             mkdir -p "${server.dataDir}" "${server.workDir}"
             chown bepasty:bepasty "${server.workDir}" "${server.dataDir}"
             cat > "${server.workDir}/bepasty-${name}.conf" <<EOF

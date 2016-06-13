@@ -1,7 +1,6 @@
-{ writeScriptBin, pkgs }:
+{ writeDashBin, bepasty-client-cli }:
 
-# TODO: use `wrapProgram --add-flags` instead?
-writeScriptBin "krebspaste" ''
-  #! /bin/sh
-  exec ${pkgs.bepasty-client-cli}/bin/bepasty-cli --url http://paste.retiolum "$@"
+# TODO use `execve` instead?
+writeDashBin "krebspaste" ''
+  exec ${bepasty-client-cli}/bin/bepasty-cli --url http://paste.retiolum "$@"
 ''

@@ -462,7 +462,7 @@ let
 
   reponames = rules: sort lessThan (unique (map (x: x.repo.name) rules));
 
-  # TODO makeGitHooks that uses runCommand instead of scriptFarm?
+  # TODO use `writeOut`
   scriptFarm =
     farm-name: scripts:
     let
