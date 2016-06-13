@@ -211,9 +211,8 @@ let
   nix.vim = pkgs.writeText "nix.vim" ''
     setf nix
 
-    syn match NixCode /./
-
     " Ref <nix/src/libexpr/lexer.l>
+    syn match NixID    /[a-zA-Z\_][a-zA-Z0-9\_\'\-]*/
     syn match NixINT   /\<[0-9]\+\>/
     syn match NixPATH  /[a-zA-Z0-9\.\_\-\+]*\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
     syn match NixHPATH /\~\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
@@ -230,7 +229,7 @@ let
       \ skip="'''\('\|[$]\|\\[nrt]\)"
       \ end="'''"
 
-    syn cluster NixStrings contains=NixSTRING,NixIND_STRING
+    syn match NixOther /[():/;=.,?\[\]]/
 
     syn match NixCommentMatch /\(^\|\s\)#.*/
     syn region NixCommentRegion start="/\*" end="\*/"
@@ -241,6 +240,7 @@ let
 
     hi link NixCommentMatch NixComment
     hi link NixCommentRegion NixComment
+    hi link NixID NixCode
     hi link NixINT NixData
     hi link NixPATH NixData
     hi link NixHPATH NixData
@@ -250,12 +250,12 @@ let
     hi link NixIND_STRING NixData
 
     hi link NixEnter NixCode
-    hi link NixExit NixData
+    hi link NixOther NixCode
     hi link NixQuote NixData
-    hi link NixQuote2 NixQuote
-    hi link NixQuote3 NixQuote
 
-    syn cluster NixSubLangs contains=NONE
+    syn cluster nix_has_dollar_curly contains=@nix_ind_strings,@nix_strings
+    syn cluster nix_ind_strings contains=NixIND_STRING
+    syn cluster nix_strings contains=NixSTRING
 
     ${concatStringsSep "\n" (mapAttrsToList (lang: { extraStart ? null }: let
       startAlts = filter isString [
@@ -269,27 +269,35 @@ let
 
       syn match nix_${lang}_sigil
         \ X${replaceStrings ["X"] ["\\X"] sigil}\ze\('''\|"\)X
-        \ nextgroup=nix_${lang}_region
+        \ nextgroup=nix_${lang}_region_IND_STRING,nix_${lang}_region_STRING
         \ transparent
 
-      syn region nix_${lang}_region
+      syn region nix_${lang}_region_STRING
         \ matchgroup=NixSTRING
         \ start='"'
         \ skip='\\"'
         \ end='"'
         \ contained
         \ contains=@nix_${lang}_syntax
+        \ transparent
 
-      syn region nix_${lang}_region
+      syn region nix_${lang}_region_IND_STRING
         \ matchgroup=NixIND_STRING
         \ start="'''"
         \ skip="'''\('\|[$]\|\\[nrt]\)"
         \ end="'''"
         \ contained
         \ contains=@nix_${lang}_syntax
+        \ transparent
 
-      syn cluster NixSubLangs
-        \ add=nix_${lang}_region,@nix_${lang}_syntax
+      syn cluster nix_ind_strings
+        \ add=nix_${lang}_region_IND_STRING
+
+      syn cluster nix_strings
+        \ add=nix_${lang}_region_STRING
+
+      syn cluster nix_has_dollar_curly
+        \ add=@nix_${lang}_syntax
     '') {
       c = {};
       cabal = {};
@@ -299,26 +307,32 @@ let
         ''write[^ \t\r\n]*[ \t\r\n]*"\(\([^"]*\.\)\?vimrc\|[^"]*\.vim\)"'';
     })}
 
-    " Clear syntax that interferes with NixBlock.
-    " TODO redefine NixBlock so syntax don't have to be cleared
-    syn clear shOperator shSetList shVarAssign
+    " Clear syntax that interferes with nixINSIDE_DOLLAR_CURLY.
+    syn clear shVarAssign
 
-    syn region NixBlock
+    syn region nixINSIDE_DOLLAR_CURLY
       \ matchgroup=NixEnter
       \ start="[$]{"
       \ end="}"
       \ contains=TOP
-      \ containedin=@NixSubLangs,@NixStrings
+      \ containedin=@nix_has_dollar_curly
+      \ transparent
 
-    syn region NixBlockHack
+    syn region nix_inside_curly
       \ matchgroup=NixEnter
       \ start="{"
       \ end="}"
       \ contains=TOP
+      \ containedin=nixINSIDE_DOLLAR_CURLY,nix_inside_curly
+      \ transparent
 
-    syn match NixQuote  "'''[$]"he=e-1  contained containedin=@NixSubLangs
-    syn match NixQuote2 "''''"he=s+1    contained containedin=@NixSubLangs
-    syn match NixQuote3 "'''\\[nrt]"    contained containedin=@NixSubLangs
+    syn match NixQuote /'''\([''$']\|\\.\)/he=s+2
+      \ containedin=@nix_ind_strings
+      \ contained
+
+    syn match NixQuote /\\./he=s+1
+      \ containedin=@nix_strings
+      \ contained
 
     syn sync fromstart
 

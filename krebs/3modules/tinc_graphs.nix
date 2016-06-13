@@ -94,8 +94,7 @@ let
         TimeoutSec = 300; # we will wait 5 minutes, kill otherwise
         restart = "always";
 
-        ExecStartPre = pkgs.writeScript "tinc_graphs-init" ''
-          #!/bin/sh
+        ExecStartPre = pkgs.writeDash "tinc_graphs-init" ''
           mkdir -p "${internal_dir}" "${external_dir}"
           if ! test -e "${cfg.workingDir}/internal/index.html"; then
             cp -fr "$(${pkgs.tinc_graphs}/bin/tincstats-static-dir)/internal/." "${internal_dir}"
@@ -106,8 +105,7 @@ let
         '';
         ExecStart = "${pkgs.tinc_graphs}/bin/all-the-graphs";
 
-        ExecStartPost = pkgs.writeScript "tinc_graphs-post" ''
-          #!/bin/sh
+        ExecStartPost = pkgs.writeDash "tinc_graphs-post" ''
           # TODO: this may break if workingDir is set to something stupid
           # this is needed because homedir is created with 700
           chmod 755  "${cfg.workingDir}"

@@ -159,13 +159,13 @@ let
       PrivateKeyFile = ${cfg.privkey.path}
       ${cfg.extraConfig}
     '';
-    "tinc-up" = pkgs.writeScript "${cfg.netname}-tinc-up" ''
+    "tinc-up" = pkgs.writeDash "${cfg.netname}-tinc-up" ''
       ${iproute}/sbin/ip link set ${cfg.netname} up
-      ${optionalString (net.ip4 != null) ''
+      ${optionalString (net.ip4 != null) /* sh */ ''
         ${iproute}/sbin/ip -4 addr add ${net.ip4.addr} dev ${cfg.netname}
         ${iproute}/sbin/ip -4 route add ${net.ip4.prefix} dev ${cfg.netname}
       ''}
-      ${optionalString (net.ip6 != null) ''
+      ${optionalString (net.ip6 != null) /* sh */ ''
         ${iproute}/sbin/ip -6 addr add ${net.ip6.addr} dev ${cfg.netname}
         ${iproute}/sbin/ip -6 route add ${net.ip6.prefix} dev ${cfg.netname}
       ''}

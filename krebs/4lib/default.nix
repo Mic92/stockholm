@@ -15,6 +15,16 @@ let out = rec {
 
   addNames = mapAttrs addName;
 
+  guard = spec@{ type, value, ... }:
+    assert isOptionType type;
+    if type.check value
+      then value
+      else throw (toString (filter isString [
+        "argument"
+        (if spec ? name then "‘${spec.name}’" else null)
+        "is not a ${type.name}"
+      ]));
+
   types = import ./types.nix {
     inherit config;
     lib = lib // { inherit genid optionalTrace; };
@@ -26,6 +36,11 @@ let out = rec {
   git = import ./git.nix { lib = lib // out; };
   shell = import ./shell.nix { inherit lib; };
   tree = import ./tree.nix { inherit lib; };
+
+  lpad = n: c: s:
+    if stringLength s < n
+      then lpad n c (c + s)
+      else s;
 
   toC = x: let
     type = typeOf x;
@@ -40,6 +55,8 @@ let out = rec {
   subdirsOf = path:
     mapAttrs (name: _: path + "/${name}")
              (filterAttrs (_: eq "directory") (readDir path));
+
+  genAttrs' = names: f: listToAttrs (map f names);
 
   setAttr = name: value: set: set // { ${name} = value; };
 

@@ -13,6 +13,9 @@ system ?= $(HOSTNAME)
 $(if $(system),,$(error unbound variable: system))
 
 nixos-config ?= $(stockholm)/$(LOGNAME)/1systems/$(system).nix
+ifneq ($(words $(wildcard $(nixos-config))),1)
+$(error bad nixos-config: $(nixos-config))
+endif
 
 # target = [target_user@]target_host[:target_port][/target_path]
 ifdef target

@@ -26,8 +26,7 @@ with config.krebs.lib;
         hashPassword
         haskellPackages.lentil
         parallel
-        (pkgs.writeScriptBin "im" ''
-          #! ${pkgs.bash}/bin/bash
+        (pkgs.writeBashBin "im" ''
           export PATH=${makeSearchPath "bin" (with pkgs; [
             tmux
             gnugrep

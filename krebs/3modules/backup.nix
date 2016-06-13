@@ -121,8 +121,7 @@ let
       "mkdir -m 0700 -p ${shell.escape plan.dst.path}/current"
       "flock -n ${shell.escape plan.dst.path} rsync"
     ];
-  in pkgs.writeScript "backup.${plan.name}" ''
-    #! ${pkgs.bash}/bin/bash
+  in pkgs.writeBash "backup.${plan.name}" ''
     set -efu
     start_date=$(date +%s)
     ssh_target=${shell.escape login-name}@$(${fastest-address remote.host})

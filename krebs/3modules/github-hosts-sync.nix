@@ -37,8 +37,7 @@ let
         SyslogIdentifier = "github-hosts-sync";
         User = user.name;
         Restart = "always";
-        ExecStartPre = pkgs.writeScript "github-hosts-sync-init" ''
-          #! /bin/sh
+        ExecStartPre = pkgs.writeDash "github-hosts-sync-init" ''
           set -euf
           install -m 0711 -o ${user.name} -d ${cfg.dataDir}
           install -m 0700 -o ${user.name} -d ${cfg.dataDir}/.ssh

@@ -47,8 +47,7 @@ with config.krebs.lib;
   boot.tmpOnTmpfs = true;
 
   environment.systemPackages = with pkgs; [
-    (writeScriptBin "play" ''
-      #! /bin/sh
+    (writeDashBin "play" ''
       set -euf
       mpv() { exec ${mpv}/bin/mpv "$@"; }
       case $1 in
