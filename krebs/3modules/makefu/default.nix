@@ -344,7 +344,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       cores = 1;
       nets = {
         internet = {
-          ip4.addr = "64.137.235.70";
+          ip4.addr = "64.137.234.215";
           aliases = [
             "shoney.i"
           ];
