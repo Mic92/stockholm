@@ -25,7 +25,7 @@
         sched.append(schedulers.SingleBranchScheduler(
                                     ## all branches
                                     change_filter=util.ChangeFilter(branch_re=".*"),
-                                    # treeStableTimer=10,
+                                    treeStableTimer=10,
                                     name="fast-all-branches",
                                     builderNames=["fast-tests"]))
       '';
@@ -34,7 +34,7 @@
         sched.append(schedulers.SingleBranchScheduler(
                                     ## only master
                                     change_filter=util.ChangeFilter(branch_re="master"),
-                                    # treeStableTimer=10,
+                                    treeStableTimer=10,
                                     name="prism-master",
                                     builderNames=["build-all"]))
       '';
