@@ -62,6 +62,16 @@ with config.krebs.lib;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOd/HqZIO9Trn3eycl23GZAz21HQCISaVNfNyaLSQvJ6";
     };
+    ju = {
+      nets = {
+        gg23 = {
+          ip4.addr = "10.23.1.144";
+          aliases = [
+            "ju.gg23"
+          ];
+        };
+      };
+    };
     mkdir = rec {
       cores = 1;
       nets = rec {
