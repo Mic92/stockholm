@@ -54,10 +54,6 @@ in {
     mpc_cli
   ];
 
-  security.sudo.extraConfig = ''
-    ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
-  '';
-
   services.mpd = {
     enable = true;
     group = "radio";
