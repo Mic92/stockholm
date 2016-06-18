@@ -25,6 +25,13 @@ let
     default-server = unix:${runDir}/socket
   '';
 
+  daemonConf = pkgs.writeText "daemon.conf" ''
+    exit-idle-time=0
+    flat-volumes = no
+    default-fragments = 4
+    default-fragment-size-msec = 25
+  '';
+
   configFile = pkgs.writeText "default.pa" ''
     .include ${pkg}/etc/pulse/default.pa
     load-module ${toString [
@@ -44,6 +51,7 @@ in
       #"pulse/client.conf" = mkForce { source = clientConf; };
       #"pulse/client.conf".source = mkForce clientConf;
       "pulse/default.pa".source = configFile;
+      "pulse/daemon.pa".source = daemonConf;
     };
     systemPackages = [
       pkg
