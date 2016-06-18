@@ -1,13 +1,13 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+with config.krebs.lib;
 
 let
   cfg = config.lass.power-action;
 
   out = {
     options.lass.power-action = api;
-    config = mkIf cfg.enable imp;
+    config = lib.mkIf cfg.enable imp;
   };
 
   api = {
@@ -43,7 +43,7 @@ let
     systemd.services.power-action = {
       serviceConfig = rec {
         ExecStart = startScript;
-        User = cfg.user;
+        User = cfg.user.name;
       };
       startAt = cfg.startAt;
     };
