@@ -9,6 +9,7 @@ in {
     ./xserver
     ./mpv.nix
     ./pulse.nix
+    ./power-action.nix
   ];
 
   users.extraUsers.mainUser.extraGroups = [ "audio" ];
