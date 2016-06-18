@@ -84,6 +84,7 @@ in {
                             test \
                             ssh=${sshWrapper} \
                             target=build@localhost:${config.users.users.build.home}/testbuild \
+                            method=build \
                             system={}".format(i)])
 
         bu.append(util.BuilderConfig(name="build-all",
