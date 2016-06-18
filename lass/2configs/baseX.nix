@@ -8,6 +8,7 @@ in {
     #./urxvt.nix
     ./xserver
     ./mpv.nix
+    ./pulse.nix
   ];
 
   users.extraUsers.mainUser.extraGroups = [ "audio" ];
@@ -15,11 +16,6 @@ in {
   time.timeZone = "Europe/Berlin";
 
   virtualisation.libvirtd.enable = true;
-
-  hardware.pulseaudio = {
-    enable = true;
-    systemWide = true;
-  };
 
   programs.ssh.startAgent = false;
 
