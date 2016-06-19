@@ -8,9 +8,13 @@ in {
     #./urxvt.nix
     ./xserver
     ./mpv.nix
-    ./pulse.nix
+    #./pulse.nix
     ./power-action.nix
   ];
+  hardware.pulseaudio = {
+    enable = true;
+    systemWide = true;
+  };
 
   users.extraUsers.mainUser.extraGroups = [ "audio" ];
 
