@@ -1,158 +1,345 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
+with config.krebs.lib;
 let
-  customPlugins = {
-    mustang2 = pkgs.vimUtils.buildVimPlugin {
-      name = "Mustang2";
-      src = pkgs.fetchFromGitHub {
-        owner = "croaker";
-        repo = "mustang-vim";
-        rev = "6533d7d21bf27cae94d9c2caa575f627f003dfd5";
-        sha256 = "0zlmcrr04j3dkiivrhqi90f618lmnnnpvbz1b9msfs78cmgw9w67";
-      };
-    };
-    unimpaired = pkgs.vimUtils.buildVimPlugin {
-      name = "unimpaired-vim";
-      src = pkgs.fetchFromGitHub {
-        owner = "tpope";
-        repo = "vim-unimpaired";
-        rev = "11dc568dbfd7a56866a4354c737515769f08e9fe";
-        sha256 = "1an941j5ckas8l3vkfhchdzjwcray16229rhv3a1d4pbxifwshi8";
-      };
-    };
-    brogrammer = pkgs.vimUtils.buildVimPlugin {
-      name = "brogrammer";
-      src = pkgs.fetchFromGitHub {
-        owner = "marciomazza";
-        repo = "vim-brogrammer-theme";
-        rev = "3e412d8e8909d8d89eb5a4cbe955b5bc0833a3c3";
-        sha256 = "0am1qk8ls74z5ipgf9viacayq08y9i9vd7sxxiivwgsjh2ancbv6";
-      };
-    };
-    file-line = pkgs.vimUtils.buildVimPlugin {
-      name = "file-line";
-      src = pkgs.fetchFromGitHub {
-        owner = "bogado";
-        repo = "file-line";
-        rev = "f9ffa1879ad84ce4a386110446f395bc1795b72a";
-        sha256 = "173n47w9zd01rcyrrmm194v79xq7d1ggzr19n1lsxrqfgr2c1rvk";
-      };
-    };
+  out = {
+    environment.systemPackages = [
+      vim
+    ];
+
+    environment.etc.vimrc.source = vimrc;
+
+    environment.variables.EDITOR = mkForce "vim";
+    environment.variables.VIMINIT = ":so /etc/vimrc";
   };
 
-in {
-
-  environment.systemPackages = [
-    (pkgs.vim_configurable.customize {
-      name = "vim";
-
-    vimrcConfig.customRC = ''
-      set nocompatible
-      set t_Co=16
-      syntax on
-      " TODO autoload colorscheme file
-      set background=dark
-      colorscheme brogrammer
-      filetype off
-      filetype plugin indent on
-
-      imap <F1> <nop>
-
-      set mouse=a
-      set ruler
-      set showmatch
-      set backspace=2
-      set visualbell
-      set encoding=utf8
-      set showcmd
-      set wildmenu
-
-      set title
-      set titleold=
-      set titlestring=%t%(\ %M%)%(\ (%{expand(\"%:p:h\")})%)%(\ %a%)\ -\ %{v:servername}
-
-      set autoindent
-
-      set ttyfast
-
-      set pastetoggle=<INS>
-
-
-      " Force Saving Files that Require Root Permission
-      command! W silent w !sudo tee "%" >/dev/null
-
-      nnoremap <C-c> :q<Return>
-      vnoremap < <gv
-      vnoremap > >gv
-
-      nmap <esc>q :buffer
-
-
-      "Tabwidth
-      set ts=2 sts=2 sw=2 et
-
-      " create Backup/tmp/undo dirs
-      function! InitBackupDir()
-        let l:parent = $HOME . '/.vim/'
-        let l:backup = l:parent . 'backups/'
-        let l:tmpdir = l:parent . 'tmp/'
-        let l:undodi = l:parent . 'undo/'
-
-        if !isdirectory(l:parent)
-          call mkdir(l:parent)
-        endif
-        if !isdirectory(l:backup)
-          call mkdir(l:backup)
-        endif
-        if !isdirectory(l:tmpdir)
-          call mkdir(l:tmpdir)
-        endif
-        if !isdirectory(l:undodi)
-          call mkdir(l:undodi)
-        endif
-      endfunction
-      call InitBackupDir()
-
-      " Backups & Files
-      set backup
-      set backupdir=~/.vim/backups
-      set directory=~/.vim/tmp//
-      set viminfo='20,<1000,s100,h,n~/.vim/tmp/info
-      set undodir=$HOME/.vim/undo
-      set undofile
-
-      " highlight whitespaces
-      highlight ExtraWhitespace ctermbg=red guibg=red
-      match ExtraWhitespace /\s\+$/
-      autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-      autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-      autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-      autocmd BufWinLeave * call clearmatches()
-
-      "ft specific stuff
-      autocmd BufRead *.js,*.json set ts=2 sts=2 sw=2 et
-      autocmd BufRead *.hs set ts=4 sts=4 sw=4 et
-
-      "esc timeout
-      set timeoutlen=1000 ttimeoutlen=0
-
-      "foldfunctions
-      inoremap <F9> <C-O>za
-      nnoremap <F9> za
-      onoremap <F9> <C-C>za
-      vnoremap <F9> zf
-    '';
-
-      vimrcConfig.vam.knownPlugins = pkgs.vimPlugins // customPlugins;
-      vimrcConfig.vam.pluginDictionaries = [
-        { names = [
-          "brogrammer"
-          "file-line"
-          "Gundo"
-        ]; }
-        { names = [ "vim-addon-nix" ]; ft_regex = "^nix\$"; }
-      ];
-
+  extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
+    pkgs.vimPlugins.undotree
+    pkgs.vimPlugins.Gundo
+    (pkgs.vimUtils.buildVimPlugin {
+      name = "file-line-1.0";
+      src = pkgs.fetchgit {
+        url = git://github.com/bogado/file-line;
+        rev = "refs/tags/1.0";
+        sha256 = "0z47zq9rqh06ny0q8lpcdsraf3lyzn9xvb59nywnarf3nxrk6hx0";
+      };
     })
+    ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
+      name = "hack";
+    in {
+      name = "vim-color-${name}-1.0.2";
+      destination = "/colors/${name}.vim";
+      text = /* vim */ ''
+        set background=dark
+        hi clear
+        if exists("syntax_on")
+          syntax clear
+        endif
+
+        let colors_name = ${toJSON name}
+
+        hi Normal       ctermbg=235
+        hi Comment      ctermfg=242
+        hi Constant     ctermfg=255
+        hi Identifier   ctermfg=253
+        hi Function     ctermfg=253
+        hi Statement    ctermfg=253
+        hi PreProc      ctermfg=251
+        hi Type         ctermfg=251
+        hi Delimiter    ctermfg=251
+        hi Special      ctermfg=255
+
+        hi Garbage      ctermbg=088
+        hi TabStop      ctermbg=016
+        hi Todo         ctermfg=174 ctermbg=NONE
+
+        hi NixCode      ctermfg=040
+        hi NixData      ctermfg=046
+        hi NixQuote     ctermfg=071
+
+        hi diffNewFile  ctermfg=207
+        hi diffFile     ctermfg=207
+        hi diffLine     ctermfg=207
+        hi diffSubname  ctermfg=207
+        hi diffAdded    ctermfg=010
+        hi diffRemoved  ctermfg=009
+      '';
+    })))
+    ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
+      name = "vim";
+    in {
+      name = "vim-syntax-${name}-1.0.0";
+      destination = "/syntax/${name}.vim";
+      text = /* vim */ ''
+        ${concatMapStringsSep "\n" (s: /* vim */ ''
+          syn keyword vimColor${s} ${s}
+            \ containedin=ALLBUT,vimComment,vimLineComment
+          hi vimColor${s} ctermfg=${s}
+        '') (map (i: lpad 3 "0" (toString i)) (range 0 255))}
+      '';
+    })))
+    ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
+      name = "showsyntax";
+    in {
+      name = "vim-plugin-${name}-1.0.0";
+      destination = "/plugin/${name}.vim";
+      text = /* vim */ ''
+        if exists('g:loaded_showsyntax')
+          finish
+        endif
+        let g:loaded_showsyntax = 0
+
+        fu! ShowSyntax()
+          let id = synID(line("."), col("."), 1)
+          let name = synIDattr(id, "name")
+          let transName = synIDattr(synIDtrans(id),"name")
+          if name != transName
+            let name .= " (" . transName . ")"
+          endif
+          echo "Syntax: " . name
+        endfu
+
+        command! -n=0 -bar ShowSyntax :call ShowSyntax()
+      '';
+    })))
   ];
-}
+
+  dirs = {
+    backupdir = "$HOME/.cache/vim/backup";
+    swapdir   = "$HOME/.cache/vim/swap";
+    undodir   = "$HOME/.cache/vim/undo";
+  };
+  files = {
+    viminfo   = "$HOME/.cache/vim/info";
+  };
+
+  mkdirs = let
+    dirOf = s: let out = concatStringsSep "/" (init (splitString "/" s));
+               in assert out != ""; out;
+    alldirs = attrValues dirs ++ map dirOf (attrValues files);
+  in unique (sort lessThan alldirs);
+
+  vim = pkgs.writeDashBin "vim" ''
+    set -efu
+    (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
+    exec ${pkgs.neovim}/bin/nvim "$@"
+  '';
+
+  vimrc = pkgs.writeText "vimrc" ''
+    set nocompatible
+
+    set autoindent
+    set backspace=indent,eol,start
+    set backup
+    set backupdir=${dirs.backupdir}/
+    set directory=${dirs.swapdir}//
+    set hlsearch
+    set incsearch
+    set mouse=a
+    set noruler
+    set pastetoggle=<INS>
+    set runtimepath=${extra-runtimepath},$VIMRUNTIME
+    set shortmess+=I
+    set showcmd
+    set showmatch
+    set ttimeoutlen=0
+    set undodir=${dirs.undodir}
+    set undofile
+    set undolevels=1000000
+    set undoreload=1000000
+    set viminfo='20,<1000,s100,h,n${files.viminfo}
+    set visualbell
+    set wildignore+=*.o,*.class,*.hi,*.dyn_hi,*.dyn_o
+    set wildmenu
+    set wildmode=longest,full
+
+    set et ts=2 sts=2 sw=2
+
+    filetype plugin indent on
+
+    set t_Co=256
+    colorscheme hack
+    syntax on
+
+    au Syntax * syn match Garbage containedin=ALL /\s\+$/
+            \ | syn match TabStop containedin=ALL /\t\+/
+            \ | syn keyword Todo containedin=ALL TODO
+
+    au BufRead,BufNewFile *.hs so ${hs.vim}
+
+    au BufRead,BufNewFile *.nix so ${nix.vim}
+
+    au BufRead,BufNewFile /dev/shm/* set nobackup nowritebackup noswapfile
+
+    nmap <esc>q :buffer
+    nmap <M-q> :buffer
+
+    cnoremap <C-A> <Home>
+
+    noremap  <C-c> :q<cr>
+
+    nnoremap <esc>[5^  :tabp<cr>
+    nnoremap <esc>[6^  :tabn<cr>
+    nnoremap <esc>[5@  :tabm -1<cr>
+    nnoremap <esc>[6@  :tabm +1<cr>
+
+    nnoremap <f1> :tabp<cr>
+    nnoremap <f2> :tabn<cr>
+    inoremap <f1> <esc>:tabp<cr>
+    inoremap <f2> <esc>:tabn<cr>
+
+    " <C-{Up,Down,Right,Left>
+    noremap <esc>Oa <nop> | noremap! <esc>Oa <nop>
+    noremap <esc>Ob <nop> | noremap! <esc>Ob <nop>
+    noremap <esc>Oc <nop> | noremap! <esc>Oc <nop>
+    noremap <esc>Od <nop> | noremap! <esc>Od <nop>
+    " <[C]S-{Up,Down,Right,Left>
+    noremap <esc>[a <nop> | noremap! <esc>[a <nop>
+    noremap <esc>[b <nop> | noremap! <esc>[b <nop>
+    noremap <esc>[c <nop> | noremap! <esc>[c <nop>
+    noremap <esc>[d <nop> | noremap! <esc>[d <nop>
+    vnoremap u <nop>
+  '';
+
+  hs.vim = pkgs.writeText "hs.vim" ''
+    syn region String start=+\[[[:alnum:]]*|+ end=+|]+
+
+    hi link ConId Identifier
+    hi link VarId Identifier
+    hi link hsDelimiter Delimiter
+  '';
+
+  nix.vim = pkgs.writeText "nix.vim" ''
+    setf nix
+
+    " Ref <nix/src/libexpr/lexer.l>
+    syn match NixID    /[a-zA-Z\_][a-zA-Z0-9\_\'\-]*/
+    syn match NixINT   /\<[0-9]\+\>/
+    syn match NixPATH  /[a-zA-Z0-9\.\_\-\+]*\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
+    syn match NixHPATH /\~\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
+    syn match NixSPATH /<[a-zA-Z0-9\.\_\-\+]\+\(\/[a-zA-Z0-9\.\_\-\+]\+\)*>/
+    syn match NixURI   /[a-zA-Z][a-zA-Z0-9\+\-\.]*:[a-zA-Z0-9\%\/\?\:\@\&\=\+\$\,\-\_\.\!\~\*\']\+/
+    syn region NixSTRING
+      \ matchgroup=NixSTRING
+      \ start='"'
+      \ skip='\\"'
+      \ end='"'
+    syn region NixIND_STRING
+      \ matchgroup=NixIND_STRING
+      \ start="'''"
+      \ skip="'''\('\|[$]\|\\[nrt]\)"
+      \ end="'''"
+
+    syn match NixOther /[():/;=.,?\[\]]/
+
+    syn match NixCommentMatch /\(^\|\s\)#.*/
+    syn region NixCommentRegion start="/\*" end="\*/"
+
+    hi link NixCode Statement
+    hi link NixData Constant
+    hi link NixComment Comment
+
+    hi link NixCommentMatch NixComment
+    hi link NixCommentRegion NixComment
+    hi link NixID NixCode
+    hi link NixINT NixData
+    hi link NixPATH NixData
+    hi link NixHPATH NixData
+    hi link NixSPATH NixData
+    hi link NixURI NixData
+    hi link NixSTRING NixData
+    hi link NixIND_STRING NixData
+
+    hi link NixEnter NixCode
+    hi link NixOther NixCode
+    hi link NixQuote NixData
+
+    syn cluster nix_has_dollar_curly contains=@nix_ind_strings,@nix_strings
+    syn cluster nix_ind_strings contains=NixIND_STRING
+    syn cluster nix_strings contains=NixSTRING
+
+    ${concatStringsSep "\n" (mapAttrsToList (lang: { extraStart ? null }: let
+      startAlts = filter isString [
+        ''/\* ${lang} \*/''
+        extraStart
+      ];
+      sigil = ''\(${concatStringsSep ''\|'' startAlts}\)[ \t\r\n]*'';
+    in /* vim */ ''
+      syn include @nix_${lang}_syntax syntax/${lang}.vim
+      unlet b:current_syntax
+
+      syn match nix_${lang}_sigil
+        \ X${replaceStrings ["X"] ["\\X"] sigil}\ze\('''\|"\)X
+        \ nextgroup=nix_${lang}_region_IND_STRING,nix_${lang}_region_STRING
+        \ transparent
+
+      syn region nix_${lang}_region_STRING
+        \ matchgroup=NixSTRING
+        \ start='"'
+        \ skip='\\"'
+        \ end='"'
+        \ contained
+        \ contains=@nix_${lang}_syntax
+        \ transparent
+
+      syn region nix_${lang}_region_IND_STRING
+        \ matchgroup=NixIND_STRING
+        \ start="'''"
+        \ skip="'''\('\|[$]\|\\[nrt]\)"
+        \ end="'''"
+        \ contained
+        \ contains=@nix_${lang}_syntax
+        \ transparent
+
+      syn cluster nix_ind_strings
+        \ add=nix_${lang}_region_IND_STRING
+
+      syn cluster nix_strings
+        \ add=nix_${lang}_region_STRING
+
+      syn cluster nix_has_dollar_curly
+        \ add=@nix_${lang}_syntax
+    '') {
+      c = {};
+      cabal = {};
+      haskell = {};
+      sh.extraStart = ''write\(Ba\|Da\)sh[^ \t\r\n]*[ \t\r\n]*"[^"]*"'';
+      vim.extraStart =
+        ''write[^ \t\r\n]*[ \t\r\n]*"\(\([^"]*\.\)\?vimrc\|[^"]*\.vim\)"'';
+    })}
+
+    " Clear syntax that interferes with nixINSIDE_DOLLAR_CURLY.
+    syn clear shVarAssign
+
+    syn region nixINSIDE_DOLLAR_CURLY
+      \ matchgroup=NixEnter
+      \ start="[$]{"
+      \ end="}"
+      \ contains=TOP
+      \ containedin=@nix_has_dollar_curly
+      \ transparent
+
+    syn region nix_inside_curly
+      \ matchgroup=NixEnter
+      \ start="{"
+      \ end="}"
+      \ contains=TOP
+      \ containedin=nixINSIDE_DOLLAR_CURLY,nix_inside_curly
+      \ transparent
+
+    syn match NixQuote /'''\([''$']\|\\.\)/he=s+2
+      \ containedin=@nix_ind_strings
+      \ contained
+
+    syn match NixQuote /\\./he=s+1
+      \ containedin=@nix_strings
+      \ contained
+
+    syn sync fromstart
+
+    let b:current_syntax = "nix"
+
+    set isk=@,48-57,_,192-255,-,'
+  '';
+in
+out
