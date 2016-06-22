@@ -62,7 +62,7 @@ in {
       audio_output {
           type        "shout"
           encoding    "ogg"
-          name        "my cool stream"
+          name        "the_playlist"
           host        "localhost"
           port        "8000"
           mount       "/radio.ogg"
@@ -79,7 +79,7 @@ in {
       # Optional Parameters
           user        "source"
       #   description "here is my long description"
-      #   genre       "jazz"
+         genre       "good music"
       } # end of audio_output
 
     '';
