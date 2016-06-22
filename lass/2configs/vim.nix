@@ -14,8 +14,9 @@ let
   };
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
-    pkgs.vimPlugins.undotree
     pkgs.vimPlugins.Gundo
+    pkgs.vimPlugins.Syntastic
+    pkgs.vimPlugins.undotree
     (pkgs.vimUtils.buildVimPlugin {
       name = "file-line-1.0";
       src = pkgs.fetchgit {
@@ -40,22 +41,22 @@ let
 
         hi Normal       ctermbg=235
         hi Comment      ctermfg=242
-        hi Constant     ctermfg=255
-        hi Identifier   ctermfg=253
-        hi Function     ctermfg=253
-        hi Statement    ctermfg=253
-        hi PreProc      ctermfg=251
-        hi Type         ctermfg=251
+        hi Constant     ctermfg=062
+        hi Identifier   ctermfg=068
+        hi Function     ctermfg=041
+        hi Statement    ctermfg=167
+        hi PreProc      ctermfg=167
+        hi Type         ctermfg=041
         hi Delimiter    ctermfg=251
-        hi Special      ctermfg=255
+        hi Special      ctermfg=062
 
         hi Garbage      ctermbg=088
         hi TabStop      ctermbg=016
         hi Todo         ctermfg=174 ctermbg=NONE
 
-        hi NixCode      ctermfg=040
-        hi NixData      ctermfg=046
-        hi NixQuote     ctermfg=071
+        hi NixCode      ctermfg=148
+        hi NixData      ctermfg=149
+        hi NixQuote     ctermfg=150
 
         hi diffNewFile  ctermfg=207
         hi diffFile     ctermfg=207
@@ -171,12 +172,17 @@ let
 
     au BufRead,BufNewFile /dev/shm/* set nobackup nowritebackup noswapfile
 
+    "Syntastic config
+    let g:syntastic_python_checkers=['flake8']
+
     nmap <esc>q :buffer
     nmap <M-q> :buffer
 
     cnoremap <C-A> <Home>
 
     noremap  <C-c> :q<cr>
+    vnoremap < <gv
+    vnoremap > >gv
 
     nnoremap <esc>[5^  :tabp<cr>
     nnoremap <esc>[6^  :tabn<cr>
