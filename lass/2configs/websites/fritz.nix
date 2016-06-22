@@ -62,11 +62,11 @@ in {
   krebs.nginx.servers."biostase.de".locations = [
     (nameValuePair "/old_biostase.de" ''
       auth_basic "Administrator Login";
-      auth_basic_user_file /srv/http/biostase.de/old_biostase.de/.htaccess;
+      auth_basic_user_file /srv/http/biostase.de/old_biostase.de/.htpasswd;
     '')
     (nameValuePair "/mysqldumper" ''
       auth_basic "Administrator Login";
-      auth_basic_user_file /srv/http/biostase.de/mysqldumper/.htaccess;
+      auth_basic_user_file /srv/http/biostase.de/mysqldumper/.htpasswd;
     '')
   ];
 
