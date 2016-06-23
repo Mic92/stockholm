@@ -20,6 +20,18 @@ let
       default = "${pkgs.geolite-legacy}/share/GeoIP/GeoIPCity.dat";
     };
 
+    hostsPath = mkOption {
+      type = types.str;
+      description = "Path to Hosts directory";
+      default = "${config.krebs.retiolum.hostsPackage}";
+    };
+
+    network = mkOption {
+      type = types.str;
+      description = "Tinc Network to use";
+      default = "retiolum";
+    };
+
     nginx = {
       enable = mkEnableOption "enable tinc_graphs to be served with nginx";
 
@@ -73,10 +85,10 @@ let
   };
 
   imp = {
-    environment.systemPackages = [ pkgs.tinc_graphs];
+    environment.systemPackages = [ pkgs.tinc_graphs ];
     systemd.timers.tinc_graphs = {
       description = "Build Tinc Graphs via via timer";
-      wantedBy = [ "timers.target"];
+      wantedBy = [ "timers.target" ];
       timerConfig = cfg.timerConfig;
     };
     systemd.services.tinc_graphs = {
@@ -85,7 +97,8 @@ let
         EXTERNAL_FOLDER = external_dir;
         INTERNAL_FOLDER = internal_dir;
         GEODB = cfg.geodbPath;
-        TINC_HOSTPATH = config.krebs.retiolum.hostsPackage;
+        TINC_HOSTPATH = cfg.hostsPath;
+        TINC_NETWORK = cfg.network;
       };
 
       restartIfChanged = true;
@@ -103,7 +116,7 @@ let
             cp -fr "$(${pkgs.tinc_graphs}/bin/tincstats-static-dir)/external/." "${external_dir}"
           fi
         '';
-        ExecStart = "${pkgs.tinc_graphs}/bin/all-the-graphs";
+        ExecStart = ''${pkgs.tinc_graphs}/bin/all-the-graphs "${cfg.network}"'';
 
         ExecStartPost = pkgs.writeDash "tinc_graphs-post" ''
           # TODO: this may break if workingDir is set to something stupid
@@ -121,24 +134,26 @@ let
       uid = genid "tinc_graphs";
       home = "/var/spool/tinc_graphs";
     };
-
-    krebs.nginx.servers = mkIf cfg.nginx.enable {
-      tinc_graphs_complete = mkMerge [ cfg.nginx.complete  {
-        locations = [
-          (nameValuePair "/" ''
-            autoindex on;
-            root ${internal_dir};
-          '')
-        ];
-      }] ;
-      tinc_graphs_anonymous = mkMerge [ cfg.nginx.anonymous {
-        locations = [
-          (nameValuePair "/" ''
-            autoindex on;
-            root ${external_dir};
-          '')
-        ];
-      }];
+    krebs.nginx = mkIf cfg.nginx.enable {
+      enable = mkDefault true;
+      servers = {
+        tinc_graphs_complete = mkMerge [ cfg.nginx.complete  {
+          locations = [
+            (nameValuePair "/" ''
+              autoindex on;
+              root ${internal_dir};
+            '')
+          ];
+        }] ;
+        tinc_graphs_anonymous = mkMerge [ cfg.nginx.anonymous {
+          locations = [
+            (nameValuePair "/" ''
+              autoindex on;
+              root ${external_dir};
+            '')
+          ];
+        }];
+      };
     };
   };
 
