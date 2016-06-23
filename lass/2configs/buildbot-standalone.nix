@@ -37,14 +37,14 @@ in {
                                     name="fast-all-branches",
                                     builderNames=["fast-tests"]))
       '';
-      build-all-scheduler = ''
+      build-lass-scheduler = ''
         # build all lass hosts
         sched.append(schedulers.SingleBranchScheduler(
                                     ## only master
                                     change_filter=util.ChangeFilter(branch_re="master"),
                                     treeStableTimer=10,
                                     name="prism-master",
-                                    builderNames=["build-all"]))
+                                    builderNames=["build-lass"]))
       '';
     };
     builder_pre = ''
@@ -52,7 +52,7 @@ in {
       grab_repo = steps.Git(repourl=stockholm_repo, mode='incremental')
 
       # TODO: get nixpkgs/stockholm paths from krebs
-      env = {
+      env_lass = {
         "LOGNAME": "lass",
         "NIX_REMOTE": "daemon",
         "dummy_secrets": "true",
@@ -73,12 +73,12 @@ in {
         factory.addStep(steps.ShellCommand(**kwargs))
     '';
     builder = {
-      build-all = ''
+      build-lass = ''
         f = util.BuildFactory()
         f.addStep(grab_repo)
         #TODO: get hosts via krebs
         for i in [ "mors", "uriel", "shodan", "helios", "cloudkrebs", "echelon", "dishfire", "prism" ]:
-          addShell(f,name="build-{}".format(i),env=env,
+          addShell(f,name="build-{}".format(i),env=env_lass,
                   command=nixshell + \
                       ["make \
                             test \
@@ -87,7 +87,7 @@ in {
                             method=build \
                             system={}".format(i)])
 
-        bu.append(util.BuilderConfig(name="build-all",
+        bu.append(util.BuilderConfig(name="build-lass",
               slavenames=slavenames,
               factory=f))
 
@@ -96,12 +96,12 @@ in {
         f = util.BuildFactory()
         f.addStep(grab_repo)
         for i in [ "prism", "mors", "echelon" ]:
-          addShell(f,name="populate-{}".format(i),env=env,
+          addShell(f,name="populate-{}".format(i),env=env_lass,
                   command=nixshell + \
                             ["{}( make system={} eval.config.krebs.build.populate \
                                | jq -er .)".format("!" if "failing" in i else "",i)])
 
-        addShell(f,name="build-test-minimal",env=env,
+        addShell(f,name="build-test-minimal",env=env_lass,
                   command=nixshell + \
                             ["nix-instantiate \
                                   --show-trace --eval --strict --json \
