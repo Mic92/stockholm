@@ -48,6 +48,12 @@ with config.krebs.lib;
             -----END RSA PUBLIC KEY-----
           '';
         };
+        siem = {
+          ip4.addr = "10.8.10.2";
+          aliases = [
+            "darth.siem"
+          ];
+        };
       };
     };
     tsp = {
@@ -97,6 +103,12 @@ with config.krebs.lib;
             +h9dFGs1QLoNyhG/cgt9fog7boSXTelAiQIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
+        };
+        siem = {
+          ip4.addr = "10.8.10.4";
+          aliases = [
+            "arch.siem"
+          ];
         };
       };
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
@@ -184,6 +196,8 @@ with config.krebs.lib;
         internet = {
           ip4.addr = "104.233.87.86";
           aliases = [
+            "wry.i"
+            "paste.i"
             "wry.internet"
             "paste.internet"
           ];
@@ -194,10 +208,10 @@ with config.krebs.lib;
           ip6.addr = "42:6e1e:cc8a:7cef:827:f938:8c64:baad";
           aliases = [
             "graphs.wry.retiolum"
-            "graphs.retiolum"
+            "graphs.r" "graphs.retiolum"
             "paste.wry.retiolum"
-            "paste.retiolum"
-            "wry.retiolum"
+            "paste.r" "paste.retiolum"
+            "wry.r" "wry.retiolum"
             "wiki.makefu.retiolum"
             "wiki.wry.retiolum"
             "blog.makefu.retiolum"
@@ -343,6 +357,13 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
     shoney = rec {
       cores = 1;
       nets = {
+        siem = {
+          ip4.addr = "10.8.10.1";
+          aliases = [
+            "sjump.siem"
+            "graphs.siem"
+          ];
+        };
         internet = {
           ip4.addr = "64.137.234.215";
           aliases = [
@@ -455,6 +476,28 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       };
     };
 
+
+    lariat = rec {
+      cores = 2;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.64.7";
+          aliases = [
+            "lariat.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAqiDzxADQYY8cWBH+R5aKSoxaFHLvPvVMgB7R1Y6QVTqD5YUCuINX
+            eBLFV9idHnHzdZU+xo/c8EFQf0hvyP0z3bcXaiw+RlpEYdK6tuaypJ3870toqWmA
+            269H8ufA3DA0hxlY7dwnhg8Rb7KGIlNN8fy4RMGe73PupF5aAmiDiEhPalv4E0qJ
+            unmk5y1OHQFPxYm++yLo5SVFlcO89jDtGpvg5papp8JvtxTkrshby1lXf/sph3Cv
+            d1z6h7S+HgT+BMwTZY5dIrwYAcob/t1sRmWsY62P1n02RbiJFm27wg0t/ZcfsI2o
+            yBjRTiK5ACJaIdpM99/902gJsuJASPGB2QIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
 
     soundflower = rec {
       cores = 1;
@@ -598,6 +641,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       };
     };
 
+  } // { # hosts only maintained in stockholm, not owned by me
     muhbaasu = rec {
       cores = 1;
       nets = {
@@ -626,7 +670,6 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
         };
       };
     };
-  } // { # hosts only maintained in stockholm, not owned by me
     tpsw = {
       cores = 2;
       owner = config.krebs.users.ciko; # main laptop
