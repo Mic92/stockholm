@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 
+with lib;
 let
   inherit (import <stockholm/krebs/4lib> { config = {}; inherit lib; })
     genid
     head
-    nameValuePair
   ;
   inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
     ssl
@@ -56,6 +56,18 @@ in {
     "radical_dreamers_de"
     "spielwaren_kern_de"
     "ttf_kleinaspach_de"
+  ];
+
+  #password protect some dirs
+  krebs.nginx.servers."biostase.de".locations = [
+    (nameValuePair "/old_biostase.de" ''
+      auth_basic "Administrator Login";
+      auth_basic_user_file /srv/http/biostase.de/old_biostase.de/.htpasswd;
+    '')
+    (nameValuePair "/mysqldumper" ''
+      auth_basic "Administrator Login";
+      auth_basic_user_file /srv/http/biostase.de/mysqldumper/.htpasswd;
+    '')
   ];
 
   users.users.root.openssh.authorizedKeys.keys = [

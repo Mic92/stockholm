@@ -29,6 +29,7 @@ with config.krebs.lib;
       { from = "finanzamt@lassul.us"; to = lass.mail; }
       { from = "dominik@apanowicz.de"; to = "dma@ubikmedia.eu"; }
       { from = "netzclub@lassul.us"; to = lass.mail; }
+      { from = "nebenan@lassul.us"; to = lass.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }

@@ -8,18 +8,19 @@ in {
     #./urxvt.nix
     ./xserver
     ./mpv.nix
+    #./pulse.nix
+    ./power-action.nix
   ];
+  hardware.pulseaudio = {
+    enable = true;
+    systemWide = true;
+  };
 
   users.extraUsers.mainUser.extraGroups = [ "audio" ];
 
   time.timeZone = "Europe/Berlin";
 
   virtualisation.libvirtd.enable = true;
-
-  hardware.pulseaudio = {
-    enable = true;
-    systemWide = true;
-  };
 
   programs.ssh.startAgent = false;
 

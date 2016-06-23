@@ -54,10 +54,6 @@ in {
     mpc_cli
   ];
 
-  security.sudo.extraConfig = ''
-    ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
-  '';
-
   services.mpd = {
     enable = true;
     group = "radio";
@@ -66,7 +62,7 @@ in {
       audio_output {
           type        "shout"
           encoding    "ogg"
-          name        "my cool stream"
+          name        "the_playlist"
           host        "localhost"
           port        "8000"
           mount       "/radio.ogg"
@@ -83,7 +79,7 @@ in {
       # Optional Parameters
           user        "source"
       #   description "here is my long description"
-      #   genre       "jazz"
+         genre       "good music"
       } # end of audio_output
 
     '';
@@ -138,7 +134,7 @@ in {
     restartIfChanged = true;
 
     serviceConfig = {
-      ExecStart = "${autoAdd} 100";
+      ExecStart = "${autoAdd} 150";
     };
   };
 

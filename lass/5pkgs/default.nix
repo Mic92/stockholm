@@ -13,9 +13,7 @@
     rs = pkgs.callPackage ./rs/default.nix {};
     untilport = pkgs.callPackage ./untilport/default.nix {};
     urban = pkgs.callPackage ./urban/default.nix {};
-    xmonad-lass =
-      let src = pkgs.writeNixFromCabal "xmonad-lass.nix" ./xmonad-lass; in
-      pkgs.haskellPackages.callPackage src {};
+    xmonad-lass = import ./xmonad-lass.nix { inherit pkgs; };
     yt-next = pkgs.callPackage ./yt-next/default.nix {};
   };
 }

@@ -10,8 +10,9 @@ let
     account default: prism
   '';
 
-  msmtp = pkgs.writeDashBin "msmtp" ''
-    exec ${pkgs.msmtp}/bin/msmtp -C ${msmtprc} $@
+  msmtp = pkgs.writeBashBin "msmtp" ''
+    ${pkgs.coreutils}/bin/tee >(${pkgs.notmuch}/bin/notmuch insert +sent) | \
+      ${pkgs.msmtp}/bin/msmtp -C ${msmtprc} $@
   '';
 
   muttrc = pkgs.writeText "muttrc" ''
@@ -42,7 +43,7 @@ let
     set nm_record = yes
     set nm_record_tags = "-inbox me archive"
     set virtual_spoolfile=yes                    # enable virtual folders
-    set sendmail="msmtp"                         # enables parsing of outgoing mail
+    set sendmail="${msmtp}/bin/msmtp"                         # enables parsing of outgoing mail
     set use_from=yes
     set envelope_from=yes
 
