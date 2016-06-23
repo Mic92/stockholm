@@ -302,7 +302,10 @@ let
       c = {};
       cabal = {};
       haskell = {};
-      sh.extraStart = ''write\(Ba\|Da\)sh[^ \t\r\n]*[ \t\r\n]*"[^"]*"'';
+      sh.extraStart = concatStringsSep ''\|'' [
+        ''write\(Ba\|Da\)sh[^ \t\r\n]*[ \t\r\n]*"[^"]*"''
+        ''[a-z]*Phase[ \t\r\n]*=''
+      ];
       vim.extraStart =
         ''write[^ \t\r\n]*[ \t\r\n]*"\(\([^"]*\.\)\?vimrc\|[^"]*\.vim\)"'';
     })}
