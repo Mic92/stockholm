@@ -19,6 +19,7 @@ in {
     ../2configs/privoxy-retiolum.nix
     ../2configs/radio.nix
     ../2configs/buildbot-standalone.nix
+    ../2configs/repo-sync.nix
     {
       imports = [
         ../2configs/git.nix
