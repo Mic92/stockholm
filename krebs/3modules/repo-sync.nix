@@ -103,6 +103,7 @@ let
 
         environment = {
           GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh -i ${cfg.stateDir}/ssh.priv";
+          REPONAME = "${name}.git";
         };
 
         serviceConfig = {
