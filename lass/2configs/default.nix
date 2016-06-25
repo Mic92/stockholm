@@ -120,6 +120,7 @@ with config.krebs.lib;
     krebspaste
     pciutils
     psmisc
+    q
     rs
     tmux
     untilport
