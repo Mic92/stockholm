@@ -203,7 +203,7 @@ in {
     }
     {
       imports = [
-        ../2configs/realwallpaper-server.nix
+        ../2configs/realwallpaper.nix
       ];
       krebs.nginx.servers."lassul.us".locations = [
         (lib.nameValuePair "/wallpaper.png" ''

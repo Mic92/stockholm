@@ -11,7 +11,7 @@ in {
     ../2configs/default.nix
     ../2configs/exim-retiolum.nix
     ../2configs/retiolum.nix
-    ../2configs/realwallpaper-server.nix
+    ../2configs/realwallpaper.nix
     ../2configs/privoxy-retiolum.nix
     ../2configs/git.nix
     #../2configs/redis.nix

@@ -3,6 +3,7 @@
 {
   imports = [
     ../.
+    ../2configs/hw/tp-x220.nix
     ../2configs/baseX.nix
     ../2configs/exim-retiolum.nix
     ../2configs/programs.nix
@@ -14,14 +15,9 @@
     ../2configs/elster.nix
     ../2configs/steam.nix
     ../2configs/wine.nix
-    #../2configs/texlive.nix
-    ../2configs/binary-caches.nix
-    #../2configs/ircd.nix
     ../2configs/chromium-patched.nix
     ../2configs/git.nix
-    #../2configs/wordpress.nix
     ../2configs/bitlbee.nix
-    #../2configs/firefoxPatched.nix
     ../2configs/skype.nix
     ../2configs/teamviewer.nix
     ../2configs/libvirt.nix
@@ -57,16 +53,9 @@
     #    package = pkgs.postgresql;
     #  };
     #}
-    {
-    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
-
-  networking.wireless.enable = true;
-
-  hardware.enableAllFirmware = true;
-  nixpkgs.config.allowUnfree = true;
 
   boot = {
     loader.grub.enable = true;
@@ -77,7 +66,6 @@
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
     #kernelModules = [ "kvm-intel" "msr" ];
-    kernelModules = [ "msr" ];
   };
   fileSystems = {
     "/" = {
@@ -168,22 +156,6 @@
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1c.4/power/control'
   '';
 
-  hardware.trackpoint = {
-    enable = true;
-    sensitivity = 220;
-    speed = 0;
-    emulateWheel = true;
-  };
-
-  services.xserver = {
-    videoDriver = "intel";
-    vaapiDrivers = [ pkgs.vaapiIntel ];
-    deviceSection = ''
-      Option "AccelMethod" "sna"
-      BusID "PCI:0:2:0"
-    '';
-  };
-
   environment.systemPackages = with pkgs; [
     acronym
     cac-api
@@ -216,13 +188,5 @@
 
   services.mongodb = {
     enable = true;
-  };
-
-  krebs.iptables = {
-    tables = {
-      filter.INPUT.rules = [
-        { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; precedence = 9001; }
-      ];
-    };
   };
 }

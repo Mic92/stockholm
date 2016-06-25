@@ -4,6 +4,7 @@ with builtins;
 {
   imports = [
     ../.
+    ../2configs/hw/tp-x220.nix
     ../2configs/baseX.nix
     ../2configs/git.nix
     ../2configs/exim-retiolum.nix
@@ -20,33 +21,9 @@ with builtins;
     #    };
     #  };
     #}
-    {
-      #x220 config from mors
-      #TODO: make x220 config file (or look in other user dir)
-      hardware.trackpoint = {
-        enable = true;
-        sensitivity = 220;
-        speed = 0;
-        emulateWheel = true;
-      };
-
-      services.xserver = {
-        videoDriver = "intel";
-        vaapiDrivers = [ pkgs.vaapiIntel ];
-        deviceSection = ''
-          Option "AccelMethod" "sna"
-          BusID "PCI:0:2:0"
-        '';
-      };
-    }
   ];
 
   krebs.build.host = config.krebs.hosts.shodan;
-
-  networking.wireless.enable = true;
-
-  hardware.enableAllFirmware = true;
-  nixpkgs.config.allowUnfree = true;
 
   boot = {
     loader.grub.enable = true;
@@ -57,7 +34,6 @@ with builtins;
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
     #kernelModules = [ "kvm-intel" "msr" ];
-    kernelModules = [ "msr" ];
   };
   fileSystems = {
     "/" = {
