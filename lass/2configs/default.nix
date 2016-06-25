@@ -9,6 +9,7 @@ with config.krebs.lib;
     ../2configs/retiolum.nix
     ../2configs/nixpkgs.nix
     ../2configs/binary-cache/client.nix
+    ../2configs/gc.nix
     ./backups.nix
     {
       users.extraUsers =
