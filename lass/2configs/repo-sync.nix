@@ -58,10 +58,6 @@ let
           origin.url = url;
           mirror.url = "${mirror}${name}";
         };
-        "@latest" = {
-          mirror.url = "${mirror}${name}";
-          mirror.ref = "heads/newest";
-        };
       };
       krebs.git = defineRepo name;
     };
