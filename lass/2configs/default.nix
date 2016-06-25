@@ -8,6 +8,7 @@ with config.krebs.lib;
     ../2configs/mc.nix
     ../2configs/retiolum.nix
     ../2configs/nixpkgs.nix
+    ../2configs/binary-cache/client.nix
     ./backups.nix
     {
       users.extraUsers =
@@ -39,12 +40,6 @@ with config.krebs.lib;
             config.krebs.users.lass-shodan.pubkey
           ];
         };
-      };
-    }
-    {
-      nix = {
-        binaryCaches = ["http://cache.prism.r"];
-        binaryCachePublicKeys = ["cache.prism-1:+S+6Lo/n27XEtvdlQKuJIcb1yO5NUqUCE2lolmTgNJU="];
       };
     }
   ];

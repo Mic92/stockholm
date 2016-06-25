@@ -20,6 +20,7 @@ in {
     ../2configs/radio.nix
     ../2configs/buildbot-standalone.nix
     ../2configs/repo-sync.nix
+    ../2configs/binary-cache/server.nix
     {
       imports = [
         ../2configs/git.nix
@@ -210,30 +211,6 @@ in {
           alias /tmp/wallpaper.png;
         '')
       ];
-    }
-    {
-      services.nix-serve = {
-        enable = true;
-        secretKeyFile = config.krebs.secret.files.nix-serve-key.path;
-      };
-      systemd.services.nix-serve = {
-        requires = ["secret.service"];
-        after = ["secret.service"];
-      };
-      krebs.secret.files.nix-serve-key = {
-        path = "/run/secret/nix-serve.key";
-        owner.name = "nix-serve";
-        source-path = toString <secrets> + "/nix-serve.key";
-      };
-      krebs.nginx = {
-        enable = true;
-        servers.nix-serve = {
-          server-names = [ "cache.prism.r" ];
-          locations = lib.singleton (lib.nameValuePair "/" ''
-            proxy_pass http://localhost:${toString config.services.nix-serve.port};
-          '');
-        };
-      };
     }
   ];
 
