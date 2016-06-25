@@ -40,8 +40,7 @@ in {
       build-lass-scheduler = ''
         # build all lass hosts
         sched.append(schedulers.SingleBranchScheduler(
-                                    ## only master
-                                    change_filter=util.ChangeFilter(branch_re="master"),
+                                    change_filter=util.ChangeFilter(branch_re="newest"),
                                     treeStableTimer=10,
                                     name="prism-master",
                                     builderNames=["build-lass"]))
