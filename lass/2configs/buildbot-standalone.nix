@@ -43,7 +43,7 @@ in {
                                     change_filter=util.ChangeFilter(branch_re=".*"),
                                     treeStableTimer=10,
                                     name="prism-all-branches",
-                                    builderNames=["build-lass", "build-makefu"]))
+                                    builderNames=["build-all"]))
       '';
     };
     builder_pre = ''
@@ -77,10 +77,9 @@ in {
         factory.addStep(steps.ShellCommand(**kwargs))
     '';
     builder = {
-      build-lass = ''
+      build-all = ''
         f = util.BuildFactory()
         f.addStep(grab_repo)
-        #TODO: get hosts via krebs
         for i in [ "mors", "uriel", "shodan", "helios", "cloudkrebs", "echelon", "dishfire", "prism" ]:
           addShell(f,name="build-{}".format(i),env=env_lass,
                   command=nixshell + \
@@ -91,15 +90,6 @@ in {
                             method=build \
                             system={}".format(i)])
 
-        bu.append(util.BuilderConfig(name="build-lass",
-              slavenames=slavenames,
-              factory=f))
-
-            '';
-      build-makefu = ''
-        f = util.BuildFactory()
-        f.addStep(grab_repo)
-        #TODO: get hosts via krebs
         for i in [ "pornocauster", "wry" ]:
           addShell(f,name="build-{}".format(i),env=env_makefu,
                   command=nixshell + \
@@ -110,11 +100,12 @@ in {
                             method=build \
                             system={}".format(i)])
 
-        bu.append(util.BuilderConfig(name="build-makefu",
+        bu.append(util.BuilderConfig(name="build-all",
               slavenames=slavenames,
               factory=f))
 
             '';
+
       fast-tests = ''
         f = util.BuildFactory()
         f.addStep(grab_repo)
