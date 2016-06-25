@@ -63,9 +63,7 @@ with config.krebs.lib;
           then toString <stockholm/lass/2configs/tests/dummy-secrets>
           else "/home/lass/secrets/${config.krebs.build.host.name}";
         #secrets-common = "/home/lass/secrets/common";
-        stockholm = if getEnv "dummy_secrets" == "true"
-          then "/var/lib/buildbot/slave/build-all/build"
-          else "/home/lass/stockholm";
+        stockholm = getEnv "PWD";
       } // optionalAttrs config.krebs.build.host.secure {
         #secrets-master = "/home/lass/secrets/master";
       });
