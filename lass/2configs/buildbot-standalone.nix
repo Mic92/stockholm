@@ -37,21 +37,13 @@ in {
                                     name="fast-all-branches",
                                     builderNames=["fast-tests"]))
       '';
-      build-makefu-scheduler = ''
-        # build makefu hosts
+      build-scheduler = ''
+        # build all hosts
         sched.append(schedulers.SingleBranchScheduler(
-                                    change_filter=util.ChangeFilter(branch_re="newest"),
+                                    change_filter=util.ChangeFilter(branch_re=".*"),
                                     treeStableTimer=10,
-                                    name="prism-newest",
-                                    builderNames=["build-makefu"]))
-      '';
-      build-lass-scheduler = ''
-        # build all lass hosts
-        sched.append(schedulers.SingleBranchScheduler(
-                                    change_filter=util.ChangeFilter(branch_re="newest"),
-                                    treeStableTimer=10,
-                                    name="prism-master",
-                                    builderNames=["build-lass"]))
+                                    name="prism-all-branches",
+                                    builderNames=["build-lass", "build-makefu"]))
       '';
     };
     builder_pre = ''
