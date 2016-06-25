@@ -37,6 +37,14 @@ in {
                                     name="fast-all-branches",
                                     builderNames=["fast-tests"]))
       '';
+      build-makefu-scheduler = ''
+        # build makefu hosts
+        sched.append(schedulers.SingleBranchScheduler(
+                                    change_filter=util.ChangeFilter(branch_re="newest"),
+                                    treeStableTimer=10,
+                                    name="prism-newest",
+                                    builderNames=["build-makefu"]))
+      '';
       build-lass-scheduler = ''
         # build all lass hosts
         sched.append(schedulers.SingleBranchScheduler(
@@ -53,6 +61,11 @@ in {
       # TODO: get nixpkgs/stockholm paths from krebs
       env_lass = {
         "LOGNAME": "lass",
+        "NIX_REMOTE": "daemon",
+        "dummy_secrets": "true",
+      }
+      env_makefu = {
+        "LOGNAME": "makefu",
         "NIX_REMOTE": "daemon",
         "dummy_secrets": "true",
       }
@@ -87,6 +100,25 @@ in {
                             system={}".format(i)])
 
         bu.append(util.BuilderConfig(name="build-lass",
+              slavenames=slavenames,
+              factory=f))
+
+            '';
+      build-makefu = ''
+        f = util.BuildFactory()
+        f.addStep(grab_repo)
+        #TODO: get hosts via krebs
+        for i in [ "pornocauster", "wry" ]:
+          addShell(f,name="build-{}".format(i),env=env_makefu,
+                  command=nixshell + \
+                      ["make \
+                            test \
+                            ssh=${sshWrapper} \
+                            target=build@localhost:${config.users.users.build.home}/testbuild \
+                            method=build \
+                            system={}".format(i)])
+
+        bu.append(util.BuilderConfig(name="build-makefu",
               slavenames=slavenames,
               factory=f))
 
