@@ -77,6 +77,7 @@ in {
   krebs.repo-sync = {
     enable = true;
     privateKeyFile = toString <secrets/repo-sync.key>;
+    unitConfig.ConditionPathExists = "!/var/run/ppp0.pid";
   };
   imports = [
     (sync-remote "array" "https://github.com/makefu/array")
