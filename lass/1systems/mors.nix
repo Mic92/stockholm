@@ -26,6 +26,7 @@
     ../2configs/mail.nix
     ../2configs/krebs-pass.nix
     ../2configs/umts.nix
+    ../2configs/repo-sync.nix
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
