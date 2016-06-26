@@ -16,6 +16,7 @@ let
           verbose = false;
           channel = "#retiolum";
           server = "cd.retiolum";
+          branches = [ "newest" ];
         };
       });
     };

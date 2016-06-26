@@ -56,6 +56,7 @@ let
         channel = "#retiolum";
         server = "cd.retiolum";
         verbose = config.krebs.build.host.name == "prism";
+        branches = [ "master" ];
       };
     };
   };
