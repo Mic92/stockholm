@@ -75,6 +75,16 @@ let
       };
     };
 
+    unitConfig = mkOption {
+      type = types.attrsOf types.str;
+      description = "Extra unit configuration for fetchWallpaper to define conditions and assertions for the unit";
+      example = literalExample ''
+        # do not start when running on umts
+        { ConditionPathExists = "!/var/run/ppp0.pid"; }
+      '';
+      default = {};
+    };
+
   };
 
   imp = {
@@ -113,6 +123,7 @@ let
           WorkingDirectory = cfg.stateDir;
           User = "repo-sync";
         };
+        unitConfig = cfg.unitConfig;
       }
     ) cfg.repos;
   };
