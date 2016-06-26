@@ -9,7 +9,7 @@ let
     repo = {
       public = true;
       name = mkDefault "${name}";
-      cgit.desc = mkDefault "mirror for all ${name} branches";
+      cgit.desc = mkDefault "mirror for ${name}";
       hooks = mkIf announce (mkDefault {
         post-receive = pkgs.git-hooks.irc-announce {
           nick = config.networking.hostName;
