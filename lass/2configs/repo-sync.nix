@@ -5,19 +5,19 @@ with config.krebs.lib;
 let
   mirror = "git@${config.networking.hostName}:";
 
-  defineRepo = name: let
+  defineRepo = name: announce: let
     repo = {
       public = true;
       name = mkDefault "${name}";
       cgit.desc = mkDefault "mirror for all ${name} branches";
-      hooks = mkDefault {
+      hooks = mkIf announce (mkDefault {
         post-receive = pkgs.git-hooks.irc-announce {
           nick = config.networking.hostName;
           verbose = false;
           channel = "#retiolum";
           server = "cd.retiolum";
         };
-      };
+      });
     };
   in {
     rules = with git; singleton {
@@ -48,7 +48,7 @@ let
           mirror.ref = "heads/newest";
         };
       };
-      krebs.git = defineRepo name;
+      krebs.git = defineRepo name true;
     };
 
   sync-remote = name: url:
@@ -59,9 +59,19 @@ let
           mirror.url = "${mirror}${name}";
         };
       };
-      krebs.git = defineRepo name;
+      krebs.git = defineRepo name true;
     };
 
+  sync-remote-silent = name: url:
+    {
+      krebs.repo-sync.repos.${name} = {
+        remote = {
+          origin.url = url;
+          mirror.url = "${mirror}${name}";
+        };
+      };
+      krebs.git = defineRepo name false;
+    };
 
 in {
   krebs.repo-sync = {
@@ -72,11 +82,11 @@ in {
     (sync-remote "array" "https://github.com/makefu/array")
     (sync-remote "email-header" "https://github.com/4z3/email-header")
     (sync-remote "mycube-flask" "https://github.com/makefu/mycube-flask")
-    (sync-remote "nixpkgs" "https://github.com/nixos/nixpkgs")
     (sync-remote "reaktor-titlebot" "https://github.com/makefu/reaktor-titlebot")
     (sync-remote "repo-sync" "https://github.com/makefu/repo-sync")
     (sync-remote "skytraq-datalogger" "https://github.com/makefu/skytraq-datalogger")
     (sync-remote "xintmap" "https://github.com/4z3/xintmap")
+    (sync-remote-silent "nixpkgs" "https://github.com/nixos/nixpkgs")
     (sync-retiolum "go")
     (sync-retiolum "much")
     (sync-retiolum "newsbot-js")
