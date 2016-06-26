@@ -48,7 +48,7 @@ let
           mirror.ref = "heads/newest";
         };
       };
-      krebs.git = defineRepo name true;
+      krebs.git = defineRepo name (config.networking.hostName == "prism");
     };
 
   sync-remote = name: url:
@@ -59,7 +59,7 @@ let
           mirror.url = "${mirror}${name}";
         };
       };
-      krebs.git = defineRepo name true;
+      krebs.git = defineRepo name (config.networking.hostName == "prism");
     };
 
   sync-remote-silent = name: url:
