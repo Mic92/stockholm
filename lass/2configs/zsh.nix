@@ -7,9 +7,6 @@
       zsh-newuser-install() { :; }
     '';
     interactiveShellInit = ''
-      HISTFILE=~/.histfile
-      HISTSIZE=1000000
-      SAVEHIST=100000
       #unsetopt nomatch
       setopt autocd extendedglob
       bindkey -e
@@ -92,6 +89,11 @@
       esac
     '';
     promptInit = ''
+      # TODO: figure out why we need to set this here
+      HISTSIZE=900001
+      HISTFILESIZE=$HISTSIZE
+      SAVEHIST=$HISTSIZE
+
       autoload -U promptinit
       promptinit
 
