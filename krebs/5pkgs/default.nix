@@ -38,13 +38,13 @@ with config.krebs.lib;
 
     ReaktorPlugins = callPackage ./Reaktor/plugins.nix {};
 
-    #buildbot = callPackage <nixpkgs/pkgs/development/tools/build-managers/buildbot> {
-    #  inherit (pkgs.pythonPackages) twisted jinja2;
-    #  dateutil = pkgs.pythonPackages.dateutil_1_5;
-    #  sqlalchemy_migrate_0_7 = pkgs.pythonPackages.sqlalchemy_migrate_func (pkgs.pythonPackages.sqlalchemy7.override {
-    #    doCheck = false;
-    #  });
-    #};
+    buildbot = callPackage <nixpkgs/pkgs/development/tools/build-managers/buildbot> {
+      inherit (pkgs.pythonPackages) twisted jinja2;
+      dateutil = pkgs.pythonPackages.dateutil_1_5;
+      sqlalchemy_migrate_0_7 = pkgs.pythonPackages.sqlalchemy_migrate_func (pkgs.pythonPackages.sqlalchemy7.override {
+        doCheck = false;
+      });
+    };
 
     # XXX symlinkJoin changed arguments somewhere around nixpkgs d541e0d
     symlinkJoin = { name, paths, ... }@args: let
