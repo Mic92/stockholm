@@ -109,18 +109,18 @@ in {
     createHome = true;
   };
 
-  #services.phpfpm.phpOptions = ''
-  #  extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
-  #  sendmail_path = ${sendmail} -t
-  #'';
-  services.phpfpm.phpIni = pkgs.runCommand "php.ini" {
-     options = ''
-      extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
-      sendmail_path = "${sendmail} -t -i"
-    '';
-  } ''
-    cat ${pkgs.php}/etc/php-recommended.ini > $out
-    echo "$options" >> $out
+  services.phpfpm.phpOptions = ''
+    extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
+    sendmail_path = ${sendmail} -t
   '';
+  #services.phpfpm.phpIni = pkgs.runCommand "php.ini" {
+  #   options = ''
+  #    extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
+  #    sendmail_path = "${sendmail} -t -i"
+  #  '';
+  #} ''
+  #  cat ${pkgs.php}/etc/php-recommended.ini > $out
+  #  echo "$options" >> $out
+  #'';
 }
 
