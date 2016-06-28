@@ -68,8 +68,6 @@ in {
 
     }
     {
-      #boot.loader.gummiboot.enable = true;
-      #boot.loader.efi.canTouchEfiVariables = true;
       boot.loader.grub = {
         devices = [
           "/dev/sda"
@@ -112,10 +110,6 @@ in {
     {
       sound.enable = false;
     }
-    #{
-    #  #workaround for server dying after 6-7h
-    #  boot.kernelPackages = pkgs.linuxPackages_4_2;
-    #}
     {
       nixpkgs.config.allowUnfree = true;
     }
