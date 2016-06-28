@@ -22,7 +22,11 @@ let
     };
   in {
     rules = with git; singleton {
-      user = [ config.krebs.users."${config.networking.hostName}-repo-sync" ];
+      user = with config.krebs.users; [
+        config.krebs.users."${config.networking.hostName}-repo-sync"
+        lass
+        lass-shodan
+      ];
       repo = [ repo ];
       perm = push ''refs/*'' [ non-fast-forward create delete merge ];
     };
