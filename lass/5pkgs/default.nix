@@ -3,6 +3,9 @@
 {
   nixpkgs.config.packageOverrides = rec {
     acronym = pkgs.callPackage ./acronym/default.nix {};
+    ejabberd = pkgs.callPackage ./ejabberd {
+      erlang = pkgs.erlangR16;
+    };
     firefoxPlugins = {
       noscript = pkgs.callPackage ./firefoxPlugins/noscript.nix {};
       ublock = pkgs.callPackage ./firefoxPlugins/ublock.nix {};
