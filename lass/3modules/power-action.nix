@@ -84,9 +84,9 @@ let
   '';
 
   state = pkgs.writeDash "state" ''
-    if [ "$(cat /sys/class/power_supply/BAT0/status)" = "Charging" ]
-      then echo "true"
-      else echo "false"
+    if [ "$(cat /sys/class/power_supply/BAT0/status)" = "Discharging" ]
+      then echo "false"
+      else echo "true"
     fi
   '';
 
