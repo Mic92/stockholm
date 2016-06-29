@@ -153,7 +153,7 @@ with config.krebs.lib;
 
   environment.systemPackages = with pkgs; [
     ethtool
-    tinc
+    tinc_pre
     iptables
     #jack2
   ];
