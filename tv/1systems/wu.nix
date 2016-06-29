@@ -38,7 +38,7 @@ with config.krebs.lib;
         dic
         file
         get
-        gnupg21
+        gnupg1compat
         haskellPackages.hledger
         htop
         jq

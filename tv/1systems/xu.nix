@@ -49,7 +49,7 @@ with config.krebs.lib;
         cac-api
         dic
         file
-        gnupg21
+        gnupg1compat
         haskellPackages.hledger
         htop
         jq

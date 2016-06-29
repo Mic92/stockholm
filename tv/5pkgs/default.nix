@@ -16,6 +16,10 @@
       erlang = pkgs.erlangR16;
     };
     ff = pkgs.callPackage ./ff {};
+    gnupg =
+      if elem config.krebs.build.host.name ["xu" "wu"]
+        then super.gnupg21
+        else super.gnupg;
     q = pkgs.callPackage ./q {};
     viljetic-pages = pkgs.callPackage ./viljetic-pages {};
     xmonad-tv = import ./xmonad-tv.nix { inherit pkgs; };
