@@ -18,7 +18,7 @@ with config.krebs.lib;
         enable = true;
         ssl_cert = ../Zcerts/charybdis_cd.crt.pem;
       };
-      tv.iptables.input-retiolum-accept-new-tcp = [
+      tv.iptables.input-retiolum-accept-tcp = [
         config.tv.charybdis.port
         config.tv.charybdis.sslport
       ];
@@ -28,14 +28,14 @@ with config.krebs.lib;
         enable = true;
         hosts = [ "jabber.viljetic.de" ];
       };
-      tv.iptables.input-internet-accept-new-tcp = [
+      tv.iptables.input-internet-accept-tcp = [
         "xmpp-client"
         "xmpp-server"
       ];
     }
     {
       krebs.github-hosts-sync.enable = true;
-      tv.iptables.input-internet-accept-new-tcp =
+      tv.iptables.input-internet-accept-tcp =
         singleton config.krebs.github-hosts-sync.port;
     }
     {
@@ -57,7 +57,7 @@ with config.krebs.lib;
           root ${pkgs.viljetic-pages};
         '');
       };
-      tv.iptables.input-internet-accept-new-tcp = singleton "http";
+      tv.iptables.input-internet-accept-tcp = singleton "http";
     }
   ];
 

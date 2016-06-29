@@ -17,12 +17,22 @@ let
       default = "retiolum";
     };
 
-    input-internet-accept-new-tcp = mkOption {
+    input-internet-accept-tcp = mkOption {
       type = with types; listOf (either int str);
       default = [];
     };
 
-    input-retiolum-accept-new-tcp = mkOption {
+    input-internet-accept-udp = mkOption {
+      type = with types; listOf (either int str);
+      default = [];
+    };
+
+    input-retiolum-accept-tcp = mkOption {
+      type = with types; listOf (either int str);
+      default = [];
+    };
+
+    input-retiolum-accept-udp = mkOption {
       type = with types; listOf (either int str);
       default = [];
     };
@@ -83,8 +93,8 @@ let
       ip4tables = "-p icmp -m icmp --icmp-type echo-request -j ACCEPT";
       ip6tables = "-p ipv6-icmp -m icmp6 --icmpv6-type echo-request -j ACCEPT";
     }."ip${toString iptables-version}tables";
-    accept-new-tcp = port:
-      "-p tcp -m tcp --dport ${port} -m conntrack --ctstate NEW -j ACCEPT";
+    accept-tcp = port: "-p tcp -m tcp --dport ${port} -j ACCEPT";
+    accept-udp = port: "-p udp -m udp --dport ${port} -j ACCEPT";
   in
     pkgs.writeText "tv-iptables-rules${toString iptables-version}" ''
       *nat
@@ -112,13 +122,15 @@ let
           "-i lo -j ACCEPT"
         ]
         ++ optional (cfg.accept-echo-request == "internet") accept-echo-request
-        ++ map accept-new-tcp (unique (map toString cfg.input-internet-accept-new-tcp))
+        ++ map accept-tcp (unique (map toString cfg.input-internet-accept-tcp))
+        ++ map accept-udp (unique (map toString cfg.input-internet-accept-udp))
         ++ ["-i retiolum -j Retiolum"]
       )}
       ${formatTable cfg.extra.filter}
       ${concatMapStringsSep "\n" (rule: "-A Retiolum ${rule}") ([]
         ++ optional (cfg.accept-echo-request == "retiolum") accept-echo-request
-        ++ map accept-new-tcp (unique (map toString cfg.input-retiolum-accept-new-tcp))
+        ++ map accept-tcp (unique (map toString cfg.input-retiolum-accept-tcp))
+        ++ map accept-udp (unique (map toString cfg.input-retiolum-accept-udp))
         ++ {
           ip4tables = [
             "-p tcp -j REJECT --reject-with tcp-reset"

@@ -13,5 +13,5 @@ with config.krebs.lib;
       "ire"
     ];
   };
-  tv.iptables.input-internet-accept-new-tcp = singleton "tinc";
+  tv.iptables.input-internet-accept-tcp = singleton "tinc";
 }

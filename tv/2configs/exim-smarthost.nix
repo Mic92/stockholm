@@ -43,5 +43,5 @@ with config.krebs.lib;
       { from = "mirko"; to = "mv"; }
     ];
   };
-  tv.iptables.input-internet-accept-new-tcp = singleton "smtp";
+  tv.iptables.input-internet-accept-tcp = singleton "smtp";
 }

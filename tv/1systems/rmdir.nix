@@ -22,12 +22,12 @@ in
     {
       tv.iptables = {
         enable = true;
-        input-internet-accept-new-tcp = [
+        input-internet-accept-tcp = [
           "ssh"
           "tinc"
           "smtp"
         ];
-        input-retiolum-accept-new-tcp = [
+        input-retiolum-accept-tcp = [
           "http"
         ];
       };

@@ -11,5 +11,5 @@ with config.krebs.lib;
       '')
     ];
   };
-  tv.iptables.input-internet-accept-new-tcp = singleton "http";
+  tv.iptables.input-internet-accept-tcp = singleton "http";
 }
