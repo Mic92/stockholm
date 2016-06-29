@@ -15,4 +15,5 @@ with config.krebs.lib;
     tincPackage = pkgs.tinc_pre;
   };
   tv.iptables.input-internet-accept-tcp = singleton "tinc";
+  tv.iptables.input-internet-accept-udp = singleton "tinc";
 }
