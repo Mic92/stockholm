@@ -22,7 +22,7 @@ in nodePackages.buildNodePackage {
   name = "go";
 
   src = fetchgit {
-    url = "http://cgit.echelon/go/";
+    url = "http://cgit.prism/go/";
     rev = "05d02740e0adbb36cc461323647f0c1e7f493156";
     sha256 = "6015c9a93317375ae8099c7ab982df0aa93a59ec2b48972e253887bb6ca0004f";
   };
