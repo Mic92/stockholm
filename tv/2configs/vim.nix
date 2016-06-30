@@ -137,7 +137,7 @@ let
     set mouse=a
     set noruler
     set pastetoggle=<INS>
-    set runtimepath=${extra-runtimepath},$VIMRUNTIME
+    set runtimepath=$VIMRUNTIME,${extra-runtimepath}
     set shortmess+=I
     set showcmd
     set showmatch
