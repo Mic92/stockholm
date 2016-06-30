@@ -258,6 +258,12 @@ let
 
         set isk=@,48-57,_,192-255,-,'
       '';
+      "/syntax/sed.vim".text = /* vim */ ''
+        syn region sedBranch
+          \ matchgroup=sedFunction start="T"
+          \ matchgroup=sedSemicolon end=";\|$"
+          \ contains=sedWhitespace
+      '';
     }))
   ];
 
