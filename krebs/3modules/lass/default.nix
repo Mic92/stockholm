@@ -91,6 +91,7 @@ with config.krebs.lib;
             "prism.retiolum"
             "prism.r"
             "cgit.prism.retiolum"
+            "cgit.prism.r"
             "cache.prism.r"
           ];
           tinc.pubkey = ''
