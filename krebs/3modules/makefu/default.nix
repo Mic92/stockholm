@@ -48,6 +48,12 @@ with config.krebs.lib;
             -----END RSA PUBLIC KEY-----
           '';
         };
+        siem = {
+          ip4.addr = "10.8.10.2";
+          aliases = [
+            "darth.siem"
+          ];
+        };
       };
     };
     tsp = {
@@ -97,6 +103,12 @@ with config.krebs.lib;
             +h9dFGs1QLoNyhG/cgt9fog7boSXTelAiQIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
+        };
+        siem = {
+          ip4.addr = "10.8.10.4";
+          aliases = [
+            "arch.siem"
+          ];
         };
       };
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
@@ -184,6 +196,8 @@ with config.krebs.lib;
         internet = {
           ip4.addr = "104.233.87.86";
           aliases = [
+            "wry.i"
+            "paste.i"
             "wry.internet"
             "paste.internet"
           ];
@@ -194,10 +208,10 @@ with config.krebs.lib;
           ip6.addr = "42:6e1e:cc8a:7cef:827:f938:8c64:baad";
           aliases = [
             "graphs.wry.retiolum"
-            "graphs.retiolum"
+            "graphs.r" "graphs.retiolum"
             "paste.wry.retiolum"
-            "paste.retiolum"
-            "wry.retiolum"
+            "paste.r" "paste.retiolum"
+            "wry.r" "wry.retiolum"
             "wiki.makefu.retiolum"
             "wiki.wry.retiolum"
             "blog.makefu.retiolum"
@@ -232,15 +246,16 @@ with config.krebs.lib;
           ip6.addr = "42:4b0b:d990:55ba:8da8:630f:dc0e:aae0";
           aliases = [
             "filepimp.retiolum"
+            "filepimp.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAvgvzx3rT/3zLuCkzXk1ZkYBkG4lltxrLOLNivohw2XAzrYDIw/ZY
-            BTDDcD424EkNOF6g/3tIRWqvVGZ1u12WQ9A/R+2F7i1SsaE4nTxdNlQ5rjy80gO3
-            i1ZubMkTGwd1OYjJytYdcMTwM9V9/8QYFiiWqh77Xxu/FhY6PcQqwHxM7SMyZCJ7
-            09gtZuR16ngKnKfo2tw6C3hHQtWCfORVbWQq5cmGzCb4sdIKow5BxUC855MulNsS
-            u5l+G8wX+UbDI85VSDAtOP4QaSFzLL+U0aaDAmq0NO1QiODJoCo0iPhULZQTFZUa
-            OMDYHHfqzluEI7n8ENI4WwchDXH+MstsgwIDAQAB
+            MIIBCgKCAQEA43w+A1TMOfugZ/CVwilJn4c36wWSjihaeVe7suZD0DSscKBcbkGg
+            3dTCSTnu6Qb9sYd2mKebKXLreO6nhEEoFGsRU0yw/1h8gl7mWYEdTifPfvM5EWwS
+            wkN9dJ5njwIUSRyWH7QTsLkiRJVFN2UxEwrhAbo1FJ7yuhRgAKqKJSN4yPVViZwR
+            oHyyobvm/i2J+XSiDI9MRo74vNjnDLvO7R6ErIrhOPP1bD9fx3u+UYUfgS0iCO3X
+            UN0duBz/faRcl6IRytZOuHaIp30eJ4850ZK8RPz/Dqqj+USMFq60i0oMsuAi/ljB
+            8b+eQBt6OXu4MSntxoR8Ja7ht+EOTDnBOwIDAQAB
             -----END RSA PUBLIC KEY-----
             '';
         };
@@ -339,6 +354,42 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcxWFEPzke/Sdd9qNX6rSJgXal8NmINYajpFCxXfYdj root@gum";
     };
+    shoney = rec {
+      cores = 1;
+      nets = {
+        siem = {
+          ip4.addr = "10.8.10.1";
+          aliases = [
+            "sjump.siem"
+            "graphs.siem"
+          ];
+        };
+        internet = {
+          ip4.addr = "64.137.234.215";
+          aliases = [
+            "shoney.i"
+          ];
+        };
+        retiolum = {
+          ip4.addr = "10.243.205.131";
+          ip6.addr = "42:490d:cd82:d2bb:56d5:abd1:b88b:e8b4";
+          aliases = [
+            "shoney.retiolum"
+            "shoney.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAsYXzbotmODJqos+Ilve8WyO2qBti6eMDSOP59Aqb18h8A5b4tCTL
+            ygDo2xLLzRaINQAxfdaKcdMOWSEkiy1j/pBYs1tfqv4mT6BO+1t8LXz82D+YcT+4
+            okGXklZ/H5L+T9cynbpKIwzTrw0DuOUhzs/WRFJU60B4cJ0Tl3IQs5ePX1SevVht
+            M5n1ob47SCHxEuC+ZLNdLc6KRumcp3Ozk6Yxj3lZ0tqyngxY1C+1kTJwRyw9A7vO
+            +DAH8t1YusYi7ICHcYt5J1p0ZGizcs8oEnZLBy4D+bJX86g7zbix1lZ37LxDCpQ5
+            uCoAYFes7QqLVDYhucZ5ElRWdATM2mBtZwIDAQAB
+            -----END RSA PUBLIC KEY-----
+            '';
+        };
+      };
+    };
 
     # non-stockholm
 
@@ -425,6 +476,28 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       };
     };
 
+
+    lariat = rec {
+      cores = 2;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.64.7";
+          aliases = [
+            "lariat.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAqiDzxADQYY8cWBH+R5aKSoxaFHLvPvVMgB7R1Y6QVTqD5YUCuINX
+            eBLFV9idHnHzdZU+xo/c8EFQf0hvyP0z3bcXaiw+RlpEYdK6tuaypJ3870toqWmA
+            269H8ufA3DA0hxlY7dwnhg8Rb7KGIlNN8fy4RMGe73PupF5aAmiDiEhPalv4E0qJ
+            unmk5y1OHQFPxYm++yLo5SVFlcO89jDtGpvg5papp8JvtxTkrshby1lXf/sph3Cv
+            d1z6h7S+HgT+BMwTZY5dIrwYAcob/t1sRmWsY62P1n02RbiJFm27wg0t/ZcfsI2o
+            yBjRTiK5ACJaIdpM99/902gJsuJASPGB2QIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
 
     soundflower = rec {
       cores = 1;
@@ -568,6 +641,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       };
     };
 
+  } // { # hosts only maintained in stockholm, not owned by me
     muhbaasu = rec {
       cores = 1;
       nets = {
@@ -596,7 +670,6 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
         };
       };
     };
-  } // { # hosts only maintained in stockholm, not owned by me
     tpsw = {
       cores = 2;
       owner = config.krebs.users.ciko; # main laptop

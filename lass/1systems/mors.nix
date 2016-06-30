@@ -3,6 +3,7 @@
 {
   imports = [
     ../.
+    ../2configs/hw/tp-x220.nix
     ../2configs/baseX.nix
     ../2configs/exim-retiolum.nix
     ../2configs/programs.nix
@@ -14,22 +15,18 @@
     ../2configs/elster.nix
     ../2configs/steam.nix
     ../2configs/wine.nix
-    #../2configs/texlive.nix
-    ../2configs/binary-caches.nix
-    #../2configs/ircd.nix
     ../2configs/chromium-patched.nix
     ../2configs/git.nix
-    #../2configs/wordpress.nix
     ../2configs/bitlbee.nix
-    #../2configs/firefoxPatched.nix
     ../2configs/skype.nix
     ../2configs/teamviewer.nix
     ../2configs/libvirt.nix
     ../2configs/fetchWallpaper.nix
-    ../2configs/cbase.nix
+    ../2configs/c-base.nix
     ../2configs/mail.nix
     ../2configs/krebs-pass.nix
-    #../2configs/buildbot-standalone.nix
+    ../2configs/umts.nix
+    ../2configs/repo-sync.nix
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
@@ -57,16 +54,9 @@
     #    package = pkgs.postgresql;
     #  };
     #}
-    {
-    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
-
-  networking.wireless.enable = true;
-
-  hardware.enableAllFirmware = true;
-  nixpkgs.config.allowUnfree = true;
 
   boot = {
     loader.grub.enable = true;
@@ -77,7 +67,6 @@
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
     #kernelModules = [ "kvm-intel" "msr" ];
-    kernelModules = [ "msr" ];
   };
   fileSystems = {
     "/" = {
@@ -131,8 +120,8 @@
   };
 
   services.udev.extraRules = ''
-    SUBSYSTEM=="net", ATTR{address}=="a0:88:b4:29:26:bc", NAME="wl0"
-    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:0c:a7:63", NAME="et0"
+    SUBSYSTEM=="net", ATTR{address}=="00:24:d7:f0:a0:0c", NAME="wl0"
+    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:8f:85:c9", NAME="et0"
   '';
 
   #TODO activationScripts seem broken, fix them!
@@ -146,7 +135,7 @@
     #Autosuspend for USB device Broadcom Bluetooth Device [Broadcom Corp]
     #echo 'auto' > '/sys/bus/usb/devices/1-1.4/power/control'
     #Autosuspend for USB device Biometric Coprocessor
-    echo 'auto' > '/sys/bus/usb/devices/1-1.3/power/control'
+    #echo 'auto' > '/sys/bus/usb/devices/1-1.3/power/control'
 
     #Runtime PMs
     echo 'auto' > '/sys/bus/pci/devices/0000:00:02.0/power/control'
@@ -167,22 +156,6 @@
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1c.1/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1c.4/power/control'
   '';
-
-  hardware.trackpoint = {
-    enable = true;
-    sensitivity = 220;
-    speed = 0;
-    emulateWheel = true;
-  };
-
-  services.xserver = {
-    videoDriver = "intel";
-    vaapiDrivers = [ pkgs.vaapiIntel ];
-    deviceSection = ''
-      Option "AccelMethod" "sna"
-      BusID "PCI:0:2:0"
-    '';
-  };
 
   environment.systemPackages = with pkgs; [
     acronym
@@ -214,15 +187,11 @@
     };
   };
 
-  services.mongodb = {
-    enable = true;
+  krebs.repo-sync.timerConfig = {
+    OnCalendar = "00:37";
   };
 
-  krebs.iptables = {
-    tables = {
-      filter.INPUT.rules = [
-        { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; precedence = 9001; }
-      ];
-    };
+  services.mongodb = {
+    enable = true;
   };
 }

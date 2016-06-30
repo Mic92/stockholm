@@ -7,6 +7,9 @@ with config.krebs.lib;
     ../2configs/zsh.nix
     ../2configs/mc.nix
     ../2configs/retiolum.nix
+    ../2configs/nixpkgs.nix
+    ../2configs/binary-cache/client.nix
+    ../2configs/gc.nix
     ./backups.nix
     {
       users.extraUsers =
@@ -52,21 +55,18 @@ with config.krebs.lib;
       user = config.krebs.users.lass;
       source = mapAttrs (_: mkDefault) ({
         nixos-config = "symlink:stockholm/lass/1systems/${config.krebs.build.host.name}.nix";
-        secrets = "/home/lass/secrets/${config.krebs.build.host.name}";
+        secrets = if getEnv "dummy_secrets" == "true"
+          then toString <stockholm/lass/2configs/tests/dummy-secrets>
+          else "/home/lass/secrets/${config.krebs.build.host.name}";
         #secrets-common = "/home/lass/secrets/common";
-        stockholm = "/home/lass/stockholm";
-        nixpkgs = {
-          url = https://github.com/lassulus/nixpkgs;
-          rev = "f632f8edaf80ffa8bf0b8c9b9064cae3ccbe3894";
-          dev = "/home/lass/src/nixpkgs";
-        };
+        stockholm = getEnv "PWD";
       } // optionalAttrs config.krebs.build.host.secure {
         #secrets-master = "/home/lass/secrets/master";
       });
     };
   };
 
-  nix.useChroot = true;
+  nix.useSandbox = true;
 
   users.mutableUsers = false;
 
@@ -114,8 +114,13 @@ with config.krebs.lib;
 
   #neat utils
     krebspaste
+    pciutils
     psmisc
+    q
+    rs
+    tmux
     untilport
+    usbutils
 
   #unpack stuff
     p7zip

@@ -5,7 +5,7 @@
     ../.
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
     ../2configs/default.nix
-    ../2configs/exim-retiolum.nix
+    #../2configs/exim-retiolum.nix
     ../2configs/git.nix
     {
       boot.loader.grub = {
@@ -61,6 +61,35 @@
       krebs.iptables.tables.filter.INPUT.rules = [
          { predicate = "-p tcp --dport http"; target = "ACCEPT"; }
          { predicate = "-p tcp --dport https"; target = "ACCEPT"; }
+      ];
+    }
+    {
+      #TODO: abstract & move to own file
+      krebs.exim-smarthost = {
+        enable = true;
+        relay_from_hosts = map (host: host.nets.retiolum.ip4.addr) [
+          config.krebs.hosts.mors
+          config.krebs.hosts.uriel
+          config.krebs.hosts.helios
+        ];
+        system-aliases = [
+          { from = "mailer-daemon"; to = "postmaster"; }
+          { from = "postmaster"; to = "root"; }
+          { from = "nobody"; to = "root"; }
+          { from = "hostmaster"; to = "root"; }
+          { from = "usenet"; to = "root"; }
+          { from = "news"; to = "root"; }
+          { from = "webmaster"; to = "root"; }
+          { from = "www"; to = "root"; }
+          { from = "ftp"; to = "root"; }
+          { from = "abuse"; to = "root"; }
+          { from = "noc"; to = "root"; }
+          { from = "security"; to = "root"; }
+          { from = "root"; to = "lass"; }
+        ];
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport smtp"; target = "ACCEPT"; }
       ];
     }
   ];

@@ -22,7 +22,7 @@ in
 
   # local discovery in shackspace
   nixpkgs.config.packageOverrides = pkgs: { tinc = pkgs.tinc_pre; };
-
+  krebs.retiolum.extraConfig = "TCPOnly = yes";
   services.grafana = {
     enable = true;
     addr = "0.0.0.0";
@@ -37,7 +37,7 @@ in
 
   networking = {
     firewall.enable = false;
-    interfaces.eth0.ip4 = [{
+    interfaces.enp0s3.ip4 = [{
       address = shack-ip;
       prefixLength = 20;
     }];

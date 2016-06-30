@@ -1,3 +1,15 @@
+{ pkgs, ... }:
+pkgs.writeHaskell "xmonad-lass" {
+  executables.xmonad = {
+    extra-depends = [
+      "containers"
+      "unix"
+      "X11"
+      "xmonad"
+      "xmonad-contrib"
+      "xmonad-stockholm"
+    ];
+    text = ''
 {-# LANGUAGE DeriveDataTypeable #-} -- for XS
 {-# LANGUAGE FlexibleContexts #-} -- for xmonad'
 {-# LANGUAGE LambdaCase #-}
@@ -147,3 +159,8 @@ gridConfig = def
     , gs_navigate = navNSearch
     , gs_font = myFont
     }
+
+    '';
+  };
+}
+

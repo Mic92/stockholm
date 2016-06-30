@@ -5,7 +5,8 @@ let
 in {
   krebs.fetchWallpaper = {
     enable = true;
-    url = "cloudkrebs/wallpaper.png";
+    unitConfig.ConditionPathExists = "!/var/run/ppp0.pid";
+    url = "prism/wallpaper.png";
   };
 }
 

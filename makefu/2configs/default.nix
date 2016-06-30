@@ -16,6 +16,8 @@ with config.krebs.lib;
   nixpkgs.config.allowUnfreePredicate =  (pkg: pkgs.lib.hasPrefix "unrar-" pkg.name);
   krebs = {
     enable = true;
+
+    dns.providers.siem = "hosts";
     search-domain = "retiolum";
     build =  {
       user = config.krebs.users.makefu;
@@ -24,7 +26,9 @@ with config.krebs.lib;
           url = https://github.com/nixos/nixpkgs;
           rev = "63b9785"; # stable @ 2016-06-01
         };
-        secrets = "/home/makefu/secrets/${config.krebs.build.host.name}/";
+        secrets = if getEnv "dummy_secrets" == "true"
+                  then toString <stockholm/makefu/6tests/data/secrets>
+                  else "/home/makefu/secrets/${config.krebs.build.host.name}";
         stockholm = "/home/makefu/stockholm";
 
         # Defaults for all stockholm users?
@@ -153,6 +157,15 @@ with config.krebs.lib;
     "net.ipv6.conf.all.use_tempaddr" = 2;
     "net.ipv6.conf.default.use_tempaddr" = 2;
   };
+
+  system.activationScripts.nix-defexpr = ''
+    (set -euf
+     for i in /home/makefu /root/;do
+       f="$i/.nix-defexpr"
+       rm -fr "$f"
+       ln -s /var/src/nixpkgs "$f"
+     done)
+  '';
 
   i18n = {
     consoleKeyMap = "us";

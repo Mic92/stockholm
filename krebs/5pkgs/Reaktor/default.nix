@@ -3,6 +3,9 @@
 python3Packages.buildPythonPackage rec {
   name = "Reaktor-${version}";
   version = "0.5.1";
+
+  doCheck = false;
+
   propagatedBuildInputs = with pkgs;[
     python3Packages.docopt
     python3Packages.requests2

@@ -11,38 +11,39 @@ let
 
   api = {
     enable = mkEnableOption "repo-sync";
-    config = mkOption {
-      type = with types;attrsOf (attrsOf (attrsOf str));
+    repos = mkOption {
+      type = with types;attrsOf (attrsOf (attrsOf (attrsOf str)));
       example = literalExample ''
         # see `repo-sync --help`
         #   `ref` provides sane defaults and can be omitted
 
         # attrset will be converted to json and be used as config
-        {
+        { repo = {
             makefu = {
-                origin = {
-                    url = http://github.com/makefu/repo ;
-                    ref = "heads/dev" ;
-                };
-                mirror = {
-                    url = "git@internal:mirror" ;
-                    ref = "heads/github-mirror-dev" ;
-                };
+              origin = {
+                url = http://github.com/makefu/repo ;
+                ref = "heads/dev" ;
+              };
+              mirror = {
+                url = "git@internal:mirror" ;
+                ref = "heads/github-mirror-dev" ;
+              };
             };
             lass = {
-                origin = {
-                    url = http://github.com/lass/repo ;
-                };
-                mirror = {
-                    url = "git@internal:mirror" ;
-                };
+              origin = {
+                url = http://github.com/lass/repo ;
+              };
+              mirror = {
+                url = "git@internal:mirror" ;
+              };
             };
             "@latest" = {
-                mirror = {
-                    url = "git@internal:mirror";
-                    ref = "heads/master";
-                };
+              mirror = {
+                url = "git@internal:mirror";
+                ref = "heads/master";
+              };
             };
+          };
         };
       '';
     };
@@ -56,53 +57,75 @@ let
       type = types.str;
       default = "/var/lib/repo-sync";
     };
-    privateKeyFile = mkOption {
-      type = types.str;
-      description = ''
-        used by repo-sync to identify with ssh service
-      '';
-      default = toString <secrets/wolf-repo-sync.rsa_key.priv>;
+
+    user = mkOption {
+      type = types.user;
+      default = {
+        name = "repo-sync";
+        home = cfg.stateDir;
+      };
     };
+
+    privateKeyFile = mkOption {
+      type = types.secret-file;
+      default = {
+        path = "${cfg.stateDir}/ssh.priv";
+        owner = cfg.user;
+        source-path = toString <secrets> + "/repo-sync.ssh.key";
+      };
+    };
+
+    unitConfig = mkOption {
+      type = types.attrsOf types.str;
+      description = "Extra unit configuration for fetchWallpaper to define conditions and assertions for the unit";
+      example = literalExample ''
+        # do not start when running on umts
+        { ConditionPathExists = "!/var/run/ppp0.pid"; }
+      '';
+      default = {};
+    };
+
   };
-  repo-sync-config = pkgs.writeText "repo-sync-config.json"
-    (builtins.toJSON cfg.config);
 
   imp = {
-    users.users.repo-sync = {
-      name = "repo-sync";
-      uid = genid "repo-sync";
-      description = "repo-sync user";
-      home = cfg.stateDir;
+    krebs.secret.files.repo-sync-key = cfg.privateKeyFile;
+    users.users.${cfg.user.name} = {
+      inherit (cfg.user) home name uid;
       createHome = true;
+      description = "repo-sync user";
     };
 
-    systemd.timers.repo-sync = {
-      description = "repo-sync timer";
-      wantedBy = [ "timers.target" ];
+    systemd.timers = mapAttrs' (name: repo:
+      nameValuePair "repo-sync-${name}" {
+        description = "repo-sync timer";
+        wantedBy = [ "timers.target" ];
 
-      timerConfig = cfg.timerConfig;
-    };
-    systemd.services.repo-sync = {
-      description = "repo-sync";
-      after = [ "network.target" ];
+        timerConfig = cfg.timerConfig;
+      }
+    ) cfg.repos;
 
-      path = with pkgs; [ ];
+    systemd.services = mapAttrs' (name: repo:
+      let
+        repo-sync-config = pkgs.writeText "repo-sync-config-${name}.json"
+          (builtins.toJSON repo);
+      in nameValuePair "repo-sync-${name}" {
+        description = "repo-sync";
+        after = [ "network.target" "secret.service" ];
 
-      environment = {
-        GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh -i ${cfg.stateDir}/ssh.priv";
-      };
+        environment = {
+          GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh -i ${cfg.stateDir}/ssh.priv";
+          REPONAME = "${name}.git";
+        };
 
-      serviceConfig = {
-        Type = "simple";
-        PermissionsStartOnly = true;
-        ExecStartPre = pkgs.writeDash "prepare-repo-sync-user" ''
-          cp -v ${shell.escape cfg.privateKeyFile} ${cfg.stateDir}/ssh.priv
-          chown repo-sync ${cfg.stateDir}/ssh.priv
-        '';
-        ExecStart = "${pkgs.repo-sync}/bin/repo-sync ${repo-sync-config}";
-        WorkingDirectory = cfg.stateDir;
-        User = "repo-sync";
-      };
-    };
+        serviceConfig = {
+          Type = "simple";
+          PermissionsStartOnly = true;
+          ExecStart = "${pkgs.repo-sync}/bin/repo-sync ${repo-sync-config}";
+          WorkingDirectory = cfg.stateDir;
+          User = "repo-sync";
+        };
+        unitConfig = cfg.unitConfig;
+      }
+    ) cfg.repos;
   };
 in out

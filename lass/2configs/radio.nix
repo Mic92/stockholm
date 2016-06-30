@@ -11,7 +11,7 @@ let
   source-password = import <secrets/icecast-source-pw>;
 
   add_random = pkgs.writeDashBin "add_random" ''
-    mpc add "$(mpc ls | shuf -n1)"
+    ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.mpc_cli}/bin/mpc ls | shuf -n1)"
   '';
 
   skip_track = pkgs.writeDashBin "skip_track" ''
@@ -52,12 +52,7 @@ in {
     print_current
     ncmpcpp
     mpc_cli
-    tmux
   ];
-
-  security.sudo.extraConfig = ''
-    ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
-  '';
 
   services.mpd = {
     enable = true;
@@ -67,7 +62,7 @@ in {
       audio_output {
           type        "shout"
           encoding    "ogg"
-          name        "my cool stream"
+          name        "the_playlist"
           host        "localhost"
           port        "8000"
           mount       "/radio.ogg"
@@ -84,7 +79,7 @@ in {
       # Optional Parameters
           user        "source"
       #   description "here is my long description"
-      #   genre       "jazz"
+         genre       "good music"
       } # end of audio_output
 
     '';
@@ -114,7 +109,7 @@ in {
     wantedBy = [ "timers.target" ];
 
     timerConfig = {
-      OnCalendar = "*:*";
+      OnCalendar = "*:0/1";
     };
   };
 
@@ -123,8 +118,8 @@ in {
       LIMIT=$1 #in secconds
 
       timeLeft () {
-        playlistDuration=$(mpc --format '%time%' playlist | awk -F ':' 'BEGIN{t=0} {t+=$1*60+$2} END{print t}')
-        currentTime=$(mpc status | awk '/^\[playing\]/ { sub(/\/.+/,"",$3); split($3,a,/:/); print a[1]*60+a[2] }')
+        playlistDuration=$(${pkgs.mpc_cli}/bin/mpc --format '%time%' playlist | ${pkgs.gawk}/bin/awk -F ':' 'BEGIN{t=0} {t+=$1*60+$2} END{print t}')
+        currentTime=$(${pkgs.mpc_cli}/bin/mpc status | ${pkgs.gawk}/bin/awk '/^\[playing\]/ { sub(/\/.+/,"",$3); split($3,a,/:/); print a[1]*60+a[2] }')
         expr ''${playlistDuration:-0} - ''${currentTime:-0}
       }
 
@@ -136,16 +131,10 @@ in {
     description = "radio playlist autoadder";
     after = [ "network.target" ];
 
-    path = with pkgs; [
-      gawk
-      mpc_cli
-    ];
-
     restartIfChanged = true;
 
     serviceConfig = {
-      Restart = "always";
-      ExecStart = "${autoAdd} 100";
+      ExecStart = "${autoAdd} 150";
     };
   };
 

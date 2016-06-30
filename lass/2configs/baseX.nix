@@ -8,18 +8,19 @@ in {
     #./urxvt.nix
     ./xserver
     ./mpv.nix
+    #./pulse.nix
+    ./power-action.nix
   ];
+  hardware.pulseaudio = {
+    enable = true;
+    systemWide = true;
+  };
 
   users.extraUsers.mainUser.extraGroups = [ "audio" ];
 
   time.timeZone = "Europe/Berlin";
 
   virtualisation.libvirtd.enable = true;
-
-  hardware.pulseaudio = {
-    enable = true;
-    systemWide = true;
-  };
 
   programs.ssh.startAgent = false;
 
@@ -32,6 +33,7 @@ in {
 
   environment.systemPackages = with pkgs; [
 
+    acpi
     dmenu
     gitAndTools.qgit
     lm_sensors
@@ -44,6 +46,7 @@ in {
     sxiv
     xclip
     xorg.xbacklight
+    xorg.xhost
     xsel
     zathura
 

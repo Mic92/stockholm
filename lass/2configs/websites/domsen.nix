@@ -11,9 +11,9 @@ let
     serveWordpress;
 
   msmtprc = pkgs.writeText "msmtprc" ''
-    account prism
+    account localhost
       host localhost
-    account default: prism
+    account default: localhost
   '';
 
   sendmail = pkgs.writeDash "msmtp" ''
@@ -23,29 +23,82 @@ let
 in {
   imports = [
     ./sqlBackup.nix
-    (ssl [ "reich-gebaeudereinigung.de" ])
-    (servePage [ "reich-gebaeudereinigung.de" ])
+    (ssl [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
+    (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
 
-    (ssl [ "karlaskop.de" ])
-    (servePage [ "karlaskop.de" ])
+    (ssl [ "karlaskop.de" "www.karlaskop.de" ])
+    (servePage [ "karlaskop.de" "www.karlaskop.de" ])
 
-    (ssl [ "makeup.apanowicz.de" ])
-    (servePage [ "makeup.apanowicz.de" ])
+    (ssl [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
+    (servePage [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
 
-    (ssl [ "pixelpocket.de" ])
-    (servePage [ "pixelpocket.de" ])
+    (ssl [ "pixelpocket.de" "www.pixelpocket.de" ])
+    (servePage [ "pixelpocket.de" "www.pixelpocket.de" ])
 
-    (ssl [ "o.ubikmedia.de" ])
-    (serveOwncloud [ "o.ubikmedia.de" ])
+    (ssl [ "o.ubikmedia.de" "www.o.ubikmedia.de" ])
+    (serveOwncloud [ "o.ubikmedia.de" "www.o.ubikmedia.de" ])
 
-    (ssl [ "ubikmedia.de" "aldona.ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ])
-    (serveWordpress [ "ubikmedia.de" "*.ubikmedia.de" "apanowicz.de" "nirwanabluete.de" "aldonasiech.com" "360gradvideo.tv" "ubikmedia.eu" ])
+    (ssl [
+      "ubikmedia.de"
+      "aldona.ubikmedia.de"
+      "apanowicz.de"
+      "nirwanabluete.de"
+      "aldonasiech.com"
+      "360gradvideo.tv"
+      "ubikmedia.eu"
+      "facts.cloud"
+      "www.ubikmedia.de"
+      "www.aldona.ubikmedia.de"
+      "www.apanowicz.de"
+      "www.nirwanabluete.de"
+      "www.aldonasiech.com"
+      "www.360gradvideo.tv"
+      "www.ubikmedia.eu"
+      "www.facts.cloud"
+    ])
+    (serveWordpress [
+      "ubikmedia.de"
+      "apanowicz.de"
+      "nirwanabluete.de"
+      "aldonasiech.com"
+      "360gradvideo.tv"
+      "ubikmedia.eu"
+      "facts.cloud"
+      "*.ubikmedia.de"
+      "www.apanowicz.de"
+      "www.nirwanabluete.de"
+      "www.aldonasiech.com"
+      "www.360gradvideo.tv"
+      "www.ubikmedia.eu"
+      "www.facts.cloud"
+    ])
   ];
 
   lass.mysqlBackup.config.all.databases = [
     "ubikmedia_de"
     "o_ubikmedia_de"
   ];
+
+  krebs.backup.plans = {
+    prism-sql-domsen = {
+      method = "push";
+      src = { host = config.krebs.hosts.prism;      path = "/bku/sql_dumps"; };
+      dst = { host = config.krebs.hosts.domsen-nas; path = "/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES/prism-sql"; };
+      startAt = "00:01";
+    };
+    prism-http-domsen = {
+      method = "push";
+      src = { host = config.krebs.hosts.prism;      path = "/srv/http"; };
+      dst = { host = config.krebs.hosts.domsen-nas; path = "/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES/prism-http"; };
+      startAt = "00:10";
+    };
+    prism-o-ubikmedia-domsen = {
+      method = "push";
+      src = { host = config.krebs.hosts.prism;      path = "/srv/o.ubikmedia.de-data"; };
+      dst = { host = config.krebs.hosts.domsen-nas; path = "/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES/prism-owncloud"; };
+      startAt = "00:30";
+    };
+  };
 
   users.users.domsen = {
     uid = genid "domsen";
@@ -56,18 +109,18 @@ in {
     createHome = true;
   };
 
-  #services.phpfpm.phpOptions = ''
-  #  extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
-  #  sendmail_path = ${sendmail} -t
-  #'';
-  services.phpfpm.phpIni = pkgs.runCommand "php.ini" {
-     options = ''
-      extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
-      sendmail_path = ${sendmail} -t -i"
-    '';
-  } ''
-    cat ${pkgs.php}/etc/php-recommended.ini > $out
-    echo "$options" >> $out
+  services.phpfpm.phpOptions = ''
+    extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
+    sendmail_path = ${sendmail} -t
   '';
+  #services.phpfpm.phpIni = pkgs.runCommand "php.ini" {
+  #   options = ''
+  #    extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
+  #    sendmail_path = "${sendmail} -t -i"
+  #  '';
+  #} ''
+  #  cat ${pkgs.php}/etc/php-recommended.ini > $out
+  #  echo "$options" >> $out
+  #'';
 }
 

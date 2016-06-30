@@ -19,6 +19,8 @@ in {
     ../2configs/privoxy-retiolum.nix
     ../2configs/radio.nix
     ../2configs/buildbot-standalone.nix
+    ../2configs/repo-sync.nix
+    ../2configs/binary-cache/server.nix
     {
       imports = [
         ../2configs/git.nix
@@ -66,8 +68,6 @@ in {
 
     }
     {
-      #boot.loader.gummiboot.enable = true;
-      #boot.loader.efi.canTouchEfiVariables = true;
       boot.loader.grub = {
         devices = [
           "/dev/sda"
@@ -110,10 +110,6 @@ in {
     {
       sound.enable = false;
     }
-    #{
-    #  #workaround for server dying after 6-7h
-    #  boot.kernelPackages = pkgs.linuxPackages_4_2;
-    #}
     {
       nixpkgs.config.allowUnfree = true;
     }
@@ -202,7 +198,7 @@ in {
     }
     {
       imports = [
-        ../2configs/realwallpaper-server.nix
+        ../2configs/realwallpaper.nix
       ];
       krebs.nginx.servers."lassul.us".locations = [
         (lib.nameValuePair "/wallpaper.png" ''

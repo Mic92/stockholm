@@ -41,7 +41,6 @@ let
     cryptogon|http://www.cryptogon.com/?feed=rss2|#news
     csm|http://rss.csmonitor.com/feeds/csm|#news
     csm_world|http://rss.csmonitor.com/feeds/world|#news
-    cyberguerrilla|https://www.cyberguerrilla.org/a/2012/?feed=rss2|#news
     danisch|http://www.danisch.de/blog/feed/|#news
     dod|http://www.defense.gov/news/afps2.xml|#news
     dwn|http://deutsche-wirtschafts-nachrichten.de/feed/customfeed/|#news
@@ -102,7 +101,7 @@ let
     npr_headlines|http://www.npr.org/rss/rss.php?id=1001|#news
     npr_pol|http://www.npr.org/rss/rss.php?id=1012|#news
     npr_world|http://www.npr.org/rss/rss.php?id=1004|#news
-    nsa|http://www.nsa.gov/rss.shtml|#news #bullerei
+    nsa|https://www.nsa.gov/rss.xml|#news #bullerei
     nytimes|http://rss.nytimes.com/services/xml/rss/nyt/World.xml|#news
     painload|https://github.com/krebscode/painload/commits/master.atom|#news
     phys|http://phys.org/rss-feed/|#news

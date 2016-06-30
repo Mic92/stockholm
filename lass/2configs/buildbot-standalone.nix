@@ -1,6 +1,14 @@
 { lib, config, pkgs, ... }:
-{
-  krebs.buildbot.master = let
+
+with config.krebs.lib;
+
+let
+  sshWrapper = pkgs.writeDash "ssh-wrapper" ''
+    ${pkgs.openssh}/bin/ssh -i ${shell.escape config.lass.build-ssh-privkey.path} "$@"
+  '';
+
+in {
+  config.krebs.buildbot.master = let
     stockholm-mirror-url = http://cgit.prism/stockholm ;
   in {
     slaves = {
@@ -25,20 +33,38 @@
         sched.append(schedulers.SingleBranchScheduler(
                                     ## all branches
                                     change_filter=util.ChangeFilter(branch_re=".*"),
-                                    # treeStableTimer=10,
+                                    treeStableTimer=10,
                                     name="fast-all-branches",
                                     builderNames=["fast-tests"]))
+      '';
+      build-scheduler = ''
+        # build all hosts
+        sched.append(schedulers.SingleBranchScheduler(
+                                    change_filter=util.ChangeFilter(branch_re=".*"),
+                                    treeStableTimer=10,
+                                    name="prism-all-branches",
+                                    builderNames=["build-all"]))
       '';
     };
     builder_pre = ''
       # prepare grab_repo step for stockholm
       grab_repo = steps.Git(repourl=stockholm_repo, mode='incremental')
 
-      env = {"LOGNAME": "lass", "NIX_REMOTE": "daemon"}
+      # TODO: get nixpkgs/stockholm paths from krebs
+      env_lass = {
+        "LOGNAME": "lass",
+        "NIX_REMOTE": "daemon",
+        "dummy_secrets": "true",
+      }
+      env_makefu = {
+        "LOGNAME": "makefu",
+        "NIX_REMOTE": "daemon",
+        "dummy_secrets": "true",
+      }
 
       # prepare nix-shell
       # the dependencies which are used by the test script
-      deps = [ "gnumake", "jq","nix","rsync" ]
+      deps = [ "gnumake", "jq", "nix", "rsync", "proot" ]
       # TODO: --pure , prepare ENV in nix-shell command:
       #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
       nixshell = ["nix-shell",
@@ -51,16 +77,45 @@
         factory.addStep(steps.ShellCommand(**kwargs))
     '';
     builder = {
+      build-all = ''
+        f = util.BuildFactory()
+        f.addStep(grab_repo)
+        for i in [ "mors", "uriel", "shodan", "helios", "cloudkrebs", "echelon", "dishfire", "prism" ]:
+          addShell(f,name="build-{}".format(i),env=env_lass,
+                  command=nixshell + \
+                      ["make \
+                            test \
+                            ssh=${sshWrapper} \
+                            target=build@localhost:${config.users.users.build.home}/testbuild \
+                            method=build \
+                            system={}".format(i)])
+
+        for i in [ "pornocauster", "wry" ]:
+          addShell(f,name="build-{}".format(i),env=env_makefu,
+                  command=nixshell + \
+                      ["make \
+                            test \
+                            ssh=${sshWrapper} \
+                            target=build@localhost:${config.users.users.build.home}/testbuild \
+                            method=build \
+                            system={}".format(i)])
+
+        bu.append(util.BuilderConfig(name="build-all",
+              slavenames=slavenames,
+              factory=f))
+
+            '';
+
       fast-tests = ''
         f = util.BuildFactory()
         f.addStep(grab_repo)
         for i in [ "prism", "mors", "echelon" ]:
-          addShell(f,name="populate-{}".format(i),env=env,
+          addShell(f,name="populate-{}".format(i),env=env_lass,
                   command=nixshell + \
                             ["{}( make system={} eval.config.krebs.build.populate \
                                | jq -er .)".format("!" if "failing" in i else "",i)])
 
-        addShell(f,name="build-test-minimal",env=env,
+        addShell(f,name="build-test-minimal",env=env_lass,
                   command=nixshell + \
                             ["nix-instantiate \
                                   --show-trace --eval --strict --json \
@@ -86,21 +141,46 @@
     };
   };
 
-  krebs.buildbot.slave = {
+  config.krebs.buildbot.slave = {
     enable = true;
     masterhost = "localhost";
     username = "testslave";
     password = "lasspass";
     packages = with pkgs;[ git nix gnumake jq rsync ];
     extraEnviron = {
-      NIX_PATH="nixpkgs=/var/src/nixpkgs:nixos-config=./shared/1systems/wolf.nix";
+      NIX_PATH="nixpkgs=/var/src/nixpkgs";
     };
   };
-  krebs.iptables = {
+  config.krebs.iptables = {
     tables = {
       filter.INPUT.rules = [
         { predicate = "-p tcp --dport 8010"; target = "ACCEPT"; }
         { predicate = "-p tcp --dport 9989"; target = "ACCEPT"; }
+      ];
+    };
+  };
+
+  #ssh workaround for make test
+  options.lass.build-ssh-privkey = mkOption {
+    type = types.secret-file;
+    default = {
+      path = "${config.users.users.buildbotSlave.home}/ssh.privkey";
+      owner = { inherit (config.users.users.buildbotSlave ) name uid;};
+      source-path = toString <secrets> + "/build.ssh.key";
+    };
+  };
+  config.krebs.secret.files = {
+    build-ssh-privkey = config.lass.build-ssh-privkey;
+  };
+  config.users.users = {
+    build = {
+      name = "build";
+      uid = genid "build";
+      home = "/home/build";
+      useDefaultShell = true;
+      createHome = true;
+      openssh.authorizedKeys.keys = [
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiV0Xn60aVLHC/jGJknlrcxSvKd/MVeh2tjBpxSBT3II9XQGZhID2Gdh84eAtoWyxGVFQx96zCHSuc7tfE2YP2LhXnwaxHTeDc8nlMsdww53lRkxihZIEV7QHc/3LRcFMkFyxdszeUfhWz8PbJGL2GYT+s6CqoPwwa68zF33U1wrMOAPsf/NdpSN4alsqmjFc2STBjnOd9dXNQn1VEJQqGLG3kR3WkCuwMcTLS5eu0KLwG4i89Twjy+TGp2QsF5K6pNE+ZepwaycRgfYzGcPTn5d6YQXBgcKgHMoSJsK8wqpr0+eFPCDiEA3HDnf76E4mX4t6/9QkMXCLmvs0IO/WP lass@mors"
       ];
     };
   };

@@ -4,7 +4,9 @@ with builtins;
 {
   imports = [
     ../.
+    ../2configs/hw/tp-x220.nix
     ../2configs/baseX.nix
+    ../2configs/git.nix
     ../2configs/exim-retiolum.nix
     ../2configs/browsers.nix
     ../2configs/programs.nix
@@ -19,33 +21,9 @@ with builtins;
     #    };
     #  };
     #}
-    {
-      #x220 config from mors
-      #TODO: make x220 config file (or look in other user dir)
-      hardware.trackpoint = {
-        enable = true;
-        sensitivity = 220;
-        speed = 0;
-        emulateWheel = true;
-      };
-
-      services.xserver = {
-        videoDriver = "intel";
-        vaapiDrivers = [ pkgs.vaapiIntel ];
-        deviceSection = ''
-          Option "AccelMethod" "sna"
-          BusID "PCI:0:2:0"
-        '';
-      };
-    }
   ];
 
   krebs.build.host = config.krebs.hosts.shodan;
-
-  networking.wireless.enable = true;
-
-  hardware.enableAllFirmware = true;
-  nixpkgs.config.allowUnfree = true;
 
   boot = {
     loader.grub.enable = true;
@@ -56,7 +34,6 @@ with builtins;
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
     #kernelModules = [ "kvm-intel" "msr" ];
-    kernelModules = [ "msr" ];
   };
   fileSystems = {
     "/" = {
@@ -67,10 +44,15 @@ with builtins;
     "/boot" = {
       device = "/dev/sda1";
     };
+
+    "/home/lass" = {
+      device = "/dev/pool/home-lass";
+      fsType = "ext4";
+    };
   };
 
-  #services.udev.extraRules = ''
-  #  SUBSYSTEM=="net", ATTR{address}=="64:27:37:7d:d8:ae", NAME="wl0"
-  #  SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:b8:c8:2e", NAME="et0"
-  #'';
+  services.udev.extraRules = ''
+    SUBSYSTEM=="net", ATTR{address}=="a0:88:b4:29:26:bc", NAME="wl0"
+    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:0c:a7:63", NAME="et0"
+  '';
 }

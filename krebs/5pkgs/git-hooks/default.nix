@@ -8,13 +8,14 @@ let
   };
 
   # TODO irc-announce should return a derivation
-  irc-announce = { nick, channel, server, port ? 6667, verbose ? false }: ''
+  irc-announce = { nick, channel, server, port ? 6667, verbose ? false, branches ? [] }: ''
     #! /bin/sh
     set -euf
 
     export PATH=${makeBinPath (with pkgs; [
       coreutils
       git
+      gnugrep
       gnused
     ])}
 
@@ -54,6 +55,12 @@ let
 
       h=$(echo $ref | sed 's:^refs/heads/::')
 
+      ${optionalString (branches != []) ''
+        if ! (echo "$h" | grep -qE "${concatStringsSep "|" branches}"); then
+          echo "we are not serving this branch: $h"
+          exit 0
+        fi
+      ''}
       # empty_tree=$(git hash-object -t tree /dev/null)
       empty_tree=4b825dc6
 

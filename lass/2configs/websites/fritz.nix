@@ -1,16 +1,26 @@
 { config, pkgs, lib, ... }:
 
+with lib;
 let
   inherit (import <stockholm/krebs/4lib> { config = {}; inherit lib; })
     genid
     head
-    nameValuePair
   ;
   inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
     ssl
     servePage
     serveWordpress
   ;
+
+  msmtprc = pkgs.writeText "msmtprc" ''
+    account localhost
+      host localhost
+    account default: localhost
+  '';
+
+  sendmail = pkgs.writeDash "msmtp" ''
+    exec ${pkgs.msmtp}/bin/msmtp --read-envelope-from -C ${msmtprc} "$@"
+  '';
 
 in {
   imports = [
@@ -48,7 +58,34 @@ in {
     "ttf_kleinaspach_de"
   ];
 
+  #password protect some dirs
+  krebs.nginx.servers."biostase.de".locations = [
+    (nameValuePair "/old_biostase.de" ''
+      auth_basic "Administrator Login";
+      auth_basic_user_file /srv/http/biostase.de/old_biostase.de/.htpasswd;
+    '')
+    (nameValuePair "/mysqldumper" ''
+      auth_basic "Administrator Login";
+      auth_basic_user_file /srv/http/biostase.de/mysqldumper/.htpasswd;
+    '')
+  ];
+
   users.users.root.openssh.authorizedKeys.keys = [
     config.krebs.users.fritz.pubkey
   ];
+
+  services.phpfpm.phpOptions = ''
+    extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
+    sendmail_path = ${sendmail} -t
+  '';
+
+  #services.phpfpm.phpIni = pkgs.runCommand "php.ini" {
+  #   options = ''
+  #    extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
+  #    sendmail_path = "${sendmail} -t -i"
+  #  '';
+  #} ''
+  #  cat ${pkgs.php}/etc/php-recommended.ini > $out
+  #  echo "$options" >> $out
+  #'';
 }

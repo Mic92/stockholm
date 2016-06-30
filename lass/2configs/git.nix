@@ -29,18 +29,10 @@ let
   rules = concatMap make-rules (attrValues repos);
 
   public-repos = mapAttrs make-public-repo {
-    painload = {};
     stockholm = {
       cgit.desc = "take all the computers hostage, they'll love you!";
     };
-    wai-middleware-time = {};
-    web-routes-wai-custom = {};
-    go = {};
-    newsbot-js = {};
     kimsufi-check = {};
-    realwallpaper = {};
-    xmonad-stockholm = {};
-    the_playlist = {};
   } // mapAttrs make-public-repo-silent {
     the_playlist = {};
   };
@@ -50,8 +42,6 @@ let
       brain = {
         collaborators = with config.krebs.users; [ tv makefu ];
       };
-      extraction_webinterface = {};
-      politics-fetching = {};
     } //
     import <secrets/repos.nix> { inherit config lib pkgs; }
   );
@@ -66,6 +56,7 @@ let
         channel = "#retiolum";
         server = "cd.retiolum";
         verbose = config.krebs.build.host.name == "prism";
+        branches = [ "master" ];
       };
     };
   };
@@ -84,7 +75,7 @@ let
     with git // config.krebs.users;
     repo:
       singleton {
-        user = [ lass lass-helios lass-uriel ];
+        user = [ lass lass-uriel ];
         repo = [ repo ];
         perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++
