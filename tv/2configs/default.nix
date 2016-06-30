@@ -25,6 +25,7 @@ with config.krebs.lib;
 
   imports = [
     <secrets>
+    ./audit.nix
     ./backup.nix
     ./nginx
     ./vim.nix
