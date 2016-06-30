@@ -74,33 +74,59 @@ rec {
 
   writeOut = name: specs0:
   let
-    specs = mapAttrsToList (path0: spec0: rec {
-      path = guard {
-        type = types.pathname;
-        value = path0;
+    writers.link =
+      { path
+      , link
+      }:
+      assert path == "" || types.absolute-pathname.check path;
+      assert types.package.check link;
+      {
+        install = /* sh */ ''
+          ${optionalString (dirOf path != "/") /* sh */ ''
+            ${pkgs.coreutils}/bin/mkdir -p $out${dirOf path}
+          ''}
+          ${pkgs.coreutils}/bin/ln -s ${link} $out${path}
+        '';
       };
-      var = "file_${hashString "sha1" path}";
-      text = spec0.text;
-      executable = guard {
-        type = types.bool;
-        value = spec0.executable or false;
-      };
-      mode = guard {
-        type = types.file-mode;
-        value = spec0.mode or (if executable then "0755" else "0644");
-      };
-    }) specs0;
 
-    filevars = genAttrs' specs (spec: nameValuePair spec.var spec.text);
+    writers.text =
+      { path
+      , executable ? false
+      , mode ? if executable then "0755" else "0644"
+      , text
+      }:
+      assert path == "" || types.absolute-pathname.check path;
+      assert types.bool.check executable;
+      assert types.file-mode.check mode;
+      rec {
+        var = "file_${hashString "sha1" path}";
+        val = text;
+        install = /* sh */ ''
+          ${pkgs.coreutils}/bin/install -m ${mode} -D ''$${var}Path $out${path}
+        '';
+      };
+
+    write = spec: writers.${spec.type} (removeAttrs spec ["type"]);
+
+    specs =
+      mapAttrsToList
+        (path: spec: let
+          known-types = [ "link" "text" ];
+          found-types = attrNames (getAttrs known-types spec);
+          type = assert length found-types == 1; head found-types;
+        in spec // { inherit path type; })
+        specs0;
+
+    files = map write specs;
+
+    filevars = genAttrs' (filter (hasAttr "var") files)
+                         (spec: nameValuePair spec.var spec.val);
 
     env = filevars // { passAsFile = attrNames filevars; };
   in
     pkgs.runCommand name env /* sh */ ''
       set -efu
-      PATH=${makeBinPath [pkgs.coreutils]}
-      ${concatMapStrings (spec: /* sh */ ''
-        install -m ${spec.mode} -D ''$${spec.var}Path $out${spec.path}
-      '') specs}
+      ${concatMapStringsSep "\n" (getAttr "install") files}
     '';
 
   writeHaskell =
