@@ -80,7 +80,7 @@ let
         perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++
       optional repo.public {
-        user = [ tv makefu miefda ];
+        user = [ tv makefu ];
         repo = [ repo ];
         perm = fetch;
       } ++
