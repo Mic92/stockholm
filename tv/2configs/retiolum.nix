@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with config.krebs.lib;
 
@@ -12,6 +12,8 @@ with config.krebs.lib;
       "cd"
       "ire"
     ];
+    tincPackage = pkgs.tinc_pre;
   };
-  tv.iptables.input-internet-accept-new-tcp = singleton "tinc";
+  tv.iptables.input-internet-accept-tcp = singleton "tinc";
+  tv.iptables.input-internet-accept-udp = singleton "tinc";
 }

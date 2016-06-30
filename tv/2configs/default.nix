@@ -174,7 +174,7 @@ with config.krebs.lib;
           { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
         ];
       };
-      tv.iptables.input-internet-accept-new-tcp = singleton "ssh";
+      tv.iptables.input-internet-accept-tcp = singleton "ssh";
     }
 
     {

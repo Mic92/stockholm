@@ -38,7 +38,7 @@ with config.krebs.lib;
         dic
         file
         get
-        gnupg21
+        gnupg1compat
         haskellPackages.hledger
         htop
         jq
@@ -153,7 +153,7 @@ with config.krebs.lib;
 
   environment.systemPackages = with pkgs; [
     ethtool
-    tinc
+    tinc_pre
     iptables
     #jack2
   ];

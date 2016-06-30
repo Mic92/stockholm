@@ -4,5 +4,5 @@ with config.krebs.lib;
 
 {
   krebs.exim-retiolum.enable = true;
-  tv.iptables.input-retiolum-accept-new-tcp = singleton "smtp";
+  tv.iptables.input-retiolum-accept-tcp = singleton "smtp";
 }

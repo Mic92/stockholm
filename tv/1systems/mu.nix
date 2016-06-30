@@ -76,7 +76,7 @@ with config.krebs.lib;
 
   environment.systemPackages = with pkgs; [
     slock
-    tinc
+    tinc_pre
     iptables
     vim
     gimp

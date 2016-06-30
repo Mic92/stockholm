@@ -12,6 +12,6 @@ with config.krebs.lib;
     ];
   };
   tv.iptables = optionalAttrs config.krebs.nginx.enable {
-    input-retiolum-accept-new-tcp = singleton "http";
+    input-retiolum-accept-tcp = singleton "http";
   };
 }
