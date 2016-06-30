@@ -14,6 +14,7 @@ let
   };
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
+    pkgs.vimPlugins.ctrlp
     pkgs.vimPlugins.undotree
     (pkgs.vimUtils.buildVimPlugin {
       name = "file-line-1.0";
@@ -101,6 +102,170 @@ let
         command! -n=0 -bar ShowSyntax :call ShowSyntax()
       '';
     })))
+    ((rtp: rtp // { inherit rtp; }) (pkgs.writeOut "vim-tv" {
+      "/syntax/haskell.vim".text = /* vim */ ''
+        syn region String start=+\[[[:alnum:]]*|+ end=+|]+
+
+        hi link ConId Identifier
+        hi link VarId Identifier
+        hi link hsDelimiter Delimiter
+      '';
+      "/syntax/nix.vim".text = /* vim */ ''
+        "" Quit when a (custom) syntax file was already loaded
+        "if exists("b:current_syntax")
+        "  finish
+        "endif
+
+        "setf nix
+
+        " Ref <nix/src/libexpr/lexer.l>
+        syn match NixID    /[a-zA-Z\_][a-zA-Z0-9\_\'\-]*/
+        syn match NixINT   /\<[0-9]\+\>/
+        syn match NixPATH  /[a-zA-Z0-9\.\_\-\+]*\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
+        syn match NixHPATH /\~\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
+        syn match NixSPATH /<[a-zA-Z0-9\.\_\-\+]\+\(\/[a-zA-Z0-9\.\_\-\+]\+\)*>/
+        syn match NixURI   /[a-zA-Z][a-zA-Z0-9\+\-\.]*:[a-zA-Z0-9\%\/\?\:\@\&\=\+\$\,\-\_\.\!\~\*\']\+/
+        syn region NixSTRING
+          \ matchgroup=NixSTRING
+          \ start='"'
+          \ skip='\\"'
+          \ end='"'
+        syn region NixIND_STRING
+          \ matchgroup=NixIND_STRING
+          \ start="'''"
+          \ skip="'''\('\|[$]\|\\[nrt]\)"
+          \ end="'''"
+
+        syn match NixOther /[-!+&<>|():/;=.,?\[\]*@]/
+
+        syn match NixCommentMatch /\(^\|\s\)#.*/
+        syn region NixCommentRegion start="/\*" end="\*/"
+
+        hi link NixCode Statement
+        hi link NixData Constant
+        hi link NixComment Comment
+
+        hi link NixCommentMatch NixComment
+        hi link NixCommentRegion NixComment
+        hi link NixID NixCode
+        hi link NixINT NixData
+        hi link NixPATH NixData
+        hi link NixHPATH NixData
+        hi link NixSPATH NixData
+        hi link NixURI NixData
+        hi link NixSTRING NixData
+        hi link NixIND_STRING NixData
+
+        hi link NixEnter NixCode
+        hi link NixOther NixCode
+        hi link NixQuote NixData
+
+        syn cluster nix_has_dollar_curly contains=@nix_ind_strings,@nix_strings
+        syn cluster nix_ind_strings contains=NixIND_STRING
+        syn cluster nix_strings contains=NixSTRING
+
+        ${concatStringsSep "\n" (mapAttrsToList (lang: { extraStart ? null }: let
+          startAlts = filter isString [
+            ''/\* ${lang} \*/''
+            extraStart
+          ];
+          sigil = ''\(${concatStringsSep ''\|'' startAlts}\)[ \t\r\n]*'';
+        in /* vim */ ''
+          syn include @nix_${lang}_syntax syntax/${lang}.vim
+          unlet b:current_syntax
+
+          syn match nix_${lang}_sigil
+            \ X${replaceStrings ["X"] ["\\X"] sigil}\ze\('''\|"\)X
+            \ nextgroup=nix_${lang}_region_IND_STRING,nix_${lang}_region_STRING
+            \ transparent
+
+          syn region nix_${lang}_region_STRING
+            \ matchgroup=NixSTRING
+            \ start='"'
+            \ skip='\\"'
+            \ end='"'
+            \ contained
+            \ contains=@nix_${lang}_syntax
+            \ transparent
+
+          syn region nix_${lang}_region_IND_STRING
+            \ matchgroup=NixIND_STRING
+            \ start="'''"
+            \ skip="'''\('\|[$]\|\\[nrt]\)"
+            \ end="'''"
+            \ contained
+            \ contains=@nix_${lang}_syntax
+            \ transparent
+
+          syn cluster nix_ind_strings
+            \ add=nix_${lang}_region_IND_STRING
+
+          syn cluster nix_strings
+            \ add=nix_${lang}_region_STRING
+
+          " This is required because containedin isn't transitive.
+          syn cluster nix_has_dollar_curly
+            \ add=@nix_${lang}_syntax
+        '') {
+          c = {};
+          cabal = {};
+          diff = {};
+          haskell = {};
+          lua = {};
+          sed.extraStart = ''writeSed[^ \t\r\n]*[ \t\r\n]*"[^"]*"'';
+          sh.extraStart = concatStringsSep ''\|'' [
+            ''write\(Ba\|Da\)sh[^ \t\r\n]*[ \t\r\n]*"[^"]*"''
+            ''[a-z]*Phase[ \t\r\n]*=''
+          ];
+          vim.extraStart =
+            ''write[^ \t\r\n]*[ \t\r\n]*"\(\([^"]*\.\)\?vimrc\|[^"]*\.vim\)"'';
+          xdefaults = {};
+        })}
+
+        " Clear syntax that interferes with nixINSIDE_DOLLAR_CURLY.
+        syn clear shVarAssign
+
+        syn region nixINSIDE_DOLLAR_CURLY
+          \ matchgroup=NixEnter
+          \ start="[$]{"
+          \ end="}"
+          \ contains=TOP
+          \ containedin=@nix_has_dollar_curly
+          \ transparent
+
+        syn region nix_inside_curly
+          \ matchgroup=NixEnter
+          \ start="{"
+          \ end="}"
+          \ contains=TOP
+          \ containedin=nixINSIDE_DOLLAR_CURLY,nix_inside_curly
+          \ transparent
+
+        syn match NixQuote /'''\(''$\|\\.\)/he=s+2
+          \ containedin=@nix_ind_strings
+          \ contained
+
+        syn match NixQuote /'''\('\|\\.\)/he=s+1
+          \ containedin=@nix_ind_strings
+          \ contained
+
+        syn match NixQuote /\\./he=s+1
+          \ containedin=@nix_strings
+          \ contained
+
+        syn sync fromstart
+
+        let b:current_syntax = "nix"
+
+        set isk=@,48-57,_,192-255,-,'
+      '';
+      "/syntax/sed.vim".text = /* vim */ ''
+        syn region sedBranch
+          \ matchgroup=sedFunction start="T"
+          \ matchgroup=sedSemicolon end=";\|$"
+          \ contains=sedWhitespace
+      '';
+    }))
   ];
 
   dirs = {
@@ -121,6 +286,9 @@ let
   vim = pkgs.writeDashBin "vim" ''
     set -efu
     (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
+    if test $# = 0 && test -e "$PWD/.ctrlpignore"; then
+      set -- +CtrlP
+    fi
     exec ${pkgs.vim}/bin/vim "$@"
   '';
 
@@ -137,7 +305,7 @@ let
     set mouse=a
     set noruler
     set pastetoggle=<INS>
-    set runtimepath=${extra-runtimepath},$VIMRUNTIME
+    set runtimepath=$VIMRUNTIME,${extra-runtimepath}
     set shortmess+=I
     set showcmd
     set showmatch
@@ -164,14 +332,9 @@ let
             \ | syn match TabStop containedin=ALL /\t\+/
             \ | syn keyword Todo containedin=ALL TODO
 
-    au BufRead,BufNewFile *.hs so ${hs.vim}
-
-    au BufRead,BufNewFile *.nix so ${nix.vim}
+    au BufRead,BufNewFile *.nix set ft=nix
 
     au BufRead,BufNewFile /dev/shm/* set nobackup nowritebackup noswapfile
-
-    nmap <esc>q :buffer
-    nmap <M-q> :buffer
 
     cnoremap <C-A> <Home>
 
@@ -198,150 +361,41 @@ let
     noremap <esc>[c <nop> | noremap! <esc>[c <nop>
     noremap <esc>[d <nop> | noremap! <esc>[d <nop>
     vnoremap u <nop>
-  '';
 
-  hs.vim = pkgs.writeText "hs.vim" ''
-    syn region String start=+\[[[:alnum:]]*|+ end=+|]+
-
-    hi link ConId Identifier
-    hi link VarId Identifier
-    hi link hsDelimiter Delimiter
-  '';
-
-  nix.vim = pkgs.writeText "nix.vim" ''
-    setf nix
-
-    " Ref <nix/src/libexpr/lexer.l>
-    syn match NixID    /[a-zA-Z\_][a-zA-Z0-9\_\'\-]*/
-    syn match NixINT   /\<[0-9]\+\>/
-    syn match NixPATH  /[a-zA-Z0-9\.\_\-\+]*\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
-    syn match NixHPATH /\~\(\/[a-zA-Z0-9\.\_\-\+]\+\)\+/
-    syn match NixSPATH /<[a-zA-Z0-9\.\_\-\+]\+\(\/[a-zA-Z0-9\.\_\-\+]\+\)*>/
-    syn match NixURI   /[a-zA-Z][a-zA-Z0-9\+\-\.]*:[a-zA-Z0-9\%\/\?\:\@\&\=\+\$\,\-\_\.\!\~\*\']\+/
-    syn region NixSTRING
-      \ matchgroup=NixSTRING
-      \ start='"'
-      \ skip='\\"'
-      \ end='"'
-    syn region NixIND_STRING
-      \ matchgroup=NixIND_STRING
-      \ start="'''"
-      \ skip="'''\('\|[$]\|\\[nrt]\)"
-      \ end="'''"
-
-    syn match NixOther /[():/;=.,?\[\]]/
-
-    syn match NixCommentMatch /\(^\|\s\)#.*/
-    syn region NixCommentRegion start="/\*" end="\*/"
-
-    hi link NixCode Statement
-    hi link NixData Constant
-    hi link NixComment Comment
-
-    hi link NixCommentMatch NixComment
-    hi link NixCommentRegion NixComment
-    hi link NixID NixCode
-    hi link NixINT NixData
-    hi link NixPATH NixData
-    hi link NixHPATH NixData
-    hi link NixSPATH NixData
-    hi link NixURI NixData
-    hi link NixSTRING NixData
-    hi link NixIND_STRING NixData
-
-    hi link NixEnter NixCode
-    hi link NixOther NixCode
-    hi link NixQuote NixData
-
-    syn cluster nix_has_dollar_curly contains=@nix_ind_strings,@nix_strings
-    syn cluster nix_ind_strings contains=NixIND_STRING
-    syn cluster nix_strings contains=NixSTRING
-
-    ${concatStringsSep "\n" (mapAttrsToList (lang: { extraStart ? null }: let
-      startAlts = filter isString [
-        ''/\* ${lang} \*/''
-        extraStart
-      ];
-      sigil = ''\(${concatStringsSep ''\|'' startAlts}\)[ \t\r\n]*'';
-    in /* vim */ ''
-      syn include @nix_${lang}_syntax syntax/${lang}.vim
-      unlet b:current_syntax
-
-      syn match nix_${lang}_sigil
-        \ X${replaceStrings ["X"] ["\\X"] sigil}\ze\('''\|"\)X
-        \ nextgroup=nix_${lang}_region_IND_STRING,nix_${lang}_region_STRING
-        \ transparent
-
-      syn region nix_${lang}_region_STRING
-        \ matchgroup=NixSTRING
-        \ start='"'
-        \ skip='\\"'
-        \ end='"'
-        \ contained
-        \ contains=@nix_${lang}_syntax
-        \ transparent
-
-      syn region nix_${lang}_region_IND_STRING
-        \ matchgroup=NixIND_STRING
-        \ start="'''"
-        \ skip="'''\('\|[$]\|\\[nrt]\)"
-        \ end="'''"
-        \ contained
-        \ contains=@nix_${lang}_syntax
-        \ transparent
-
-      syn cluster nix_ind_strings
-        \ add=nix_${lang}_region_IND_STRING
-
-      syn cluster nix_strings
-        \ add=nix_${lang}_region_STRING
-
-      syn cluster nix_has_dollar_curly
-        \ add=@nix_${lang}_syntax
-    '') {
-      c = {};
-      cabal = {};
-      haskell = {};
-      sh.extraStart = concatStringsSep ''\|'' [
-        ''write\(Ba\|Da\)sh[^ \t\r\n]*[ \t\r\n]*"[^"]*"''
-        ''[a-z]*Phase[ \t\r\n]*=''
-      ];
-      vim.extraStart =
-        ''write[^ \t\r\n]*[ \t\r\n]*"\(\([^"]*\.\)\?vimrc\|[^"]*\.vim\)"'';
-    })}
-
-    " Clear syntax that interferes with nixINSIDE_DOLLAR_CURLY.
-    syn clear shVarAssign
-
-    syn region nixINSIDE_DOLLAR_CURLY
-      \ matchgroup=NixEnter
-      \ start="[$]{"
-      \ end="}"
-      \ contains=TOP
-      \ containedin=@nix_has_dollar_curly
-      \ transparent
-
-    syn region nix_inside_curly
-      \ matchgroup=NixEnter
-      \ start="{"
-      \ end="}"
-      \ contains=TOP
-      \ containedin=nixINSIDE_DOLLAR_CURLY,nix_inside_curly
-      \ transparent
-
-    syn match NixQuote /'''\([''$']\|\\.\)/he=s+2
-      \ containedin=@nix_ind_strings
-      \ contained
-
-    syn match NixQuote /\\./he=s+1
-      \ containedin=@nix_strings
-      \ contained
-
-    syn sync fromstart
-
-    let b:current_syntax = "nix"
-
-    set isk=@,48-57,_,192-255,-,'
+    "
+    " CtrlP-related configuration
+    "
+    hi CtrlPPrtCursor ctermbg=199
+    hi CtrlPMatch     ctermfg=226
+    set showtabline=0
+    let g:ctrlp_cmd = 'CtrlPMixed'
+    let g:ctrlp_map = '<esc>q'
+    let g:ctrlp_working_path_mode = 'a'
+    " Cannot use autoignore extension because it fails to initialize properly:
+    " when started the first time, e.g. using `vim +CtrlP`, then it won't use
+    " patterns from .ctrlpignore until CtrlP gets reopened and F5 pressed...
+    fu s:gen_ctrlp_custom_ignore()
+      let l:prefix = getcwd()
+      let l:pats = readfile(l:prefix . "/.ctrlpignore")
+      let l:pats = filter(l:pats, 's:ctrlpignore_filter(v:val)')
+      let l:pats = map(l:pats, 's:ctrlpignore_rewrite(v:val)')
+      return l:prefix . "\\(" . join(l:pats, "\\|") . "\\)"
+    endfu
+    fu s:ctrlpignore_filter(s)
+      " filter comments and blank lines
+      return match(a:s, '^\s*\(#.*\)''$') == -1
+    endfu
+    fu s:ctrlpignore_rewrite(s)
+      if a:s[0:0] == "^"
+        return "/" . a:s[1:]
+      else
+        return "/.*" . a:s
+      endif
+    endfu
+    try
+      let g:ctrlp_custom_ignore = s:gen_ctrlp_custom_ignore()
+    catch /^Vim\%((\a\+)\)\=:E484/
+    endtry
   '';
 in
 out

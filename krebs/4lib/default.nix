@@ -58,6 +58,10 @@ let out = rec {
 
   genAttrs' = names: f: listToAttrs (map f names);
 
+  getAttrs = names: set:
+    listToAttrs (map (name: nameValuePair name set.${name})
+                     (filter (flip hasAttr set) names));
+
   setAttr = name: value: set: set // { ${name} = value; };
 
   optionalTrace = c: msg: x: if c then trace msg x else x;
