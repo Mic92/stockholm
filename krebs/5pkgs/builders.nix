@@ -213,4 +213,6 @@ rec {
     (name: path: pkgs.runCommand name {} /* sh */ ''
       ${pkgs.cabal2nix}/bin/cabal2nix ${path} > $out
     '');
+
+  writeSed = makeScriptWriter "${pkgs.gnused}/bin/sed -f";
 }
