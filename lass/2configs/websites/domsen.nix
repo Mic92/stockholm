@@ -32,10 +32,10 @@ in {
     (ssl [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
     (servePage [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
 
-    (ssl [ "pixelpocket.de" "www.pixelpocket.de" ])
+    (ssl [ "pixelpocket.de" ])
     (servePage [ "pixelpocket.de" "www.pixelpocket.de" ])
 
-    (ssl [ "o.ubikmedia.de" "www.o.ubikmedia.de" ])
+    (ssl [ "o.ubikmedia.de" ])
     (serveOwncloud [ "o.ubikmedia.de" "www.o.ubikmedia.de" ])
 
     (ssl [
