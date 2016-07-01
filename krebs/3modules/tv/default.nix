@@ -70,7 +70,31 @@ with config.krebs.lib;
             "ju.gg23"
           ];
         };
+        retiolum = {
+          ip4.addr = "10.243.13.39";
+          ip6.addr = "42:0:0:0:0:0:0:1339";
+          aliases = [
+            "ju.r"
+            "ju.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAy2xyuOJ/G7uuXz8SfL8mkeX/YwAqnty98/h4BGHwd4ENLt2cUtim
+            BUjVFIWdIMRds+4H8UtveGSeuYgRs3CpQeNuAeq20YlwoxeZgsc8mA+FP/zeN10n
+            OAaP/+BTLKAHQ3Ixq41vLrFXU4Ah53YhOw1LqxQG80Tcr4J8Yehx+mrdGhcDnp2p
+            4QpMLtMoAn0dQ3K5muZUQzGMHamLIril8hDKkJPqBVN0DRQ2lAVcK70AcqyuFIUM
+            rWkG8gI7AT1bhZ3viIMX9wjpuA3BaitqIEyUCjWv2ZLy2HmTDGGfhEqNYdx/pXKt
+            HToZk1XPnNfopFFtOHiSh1P06VqPex6MIHpbgEf7cVlxxNUOH2qssPGbo6ulzGyo
+            YLeJZNP+1GxPLtyBBSiFApGdJBH8aMlQlz0vjFIdmJbIbUhSSi1TOtbQuB1SCvYO
+            rp9Hm9Ah0508kxLfGlmKdQ3zO3wKbmPqCjwqSGsgtHn3KZzhgr+pTwgHIKdur1VU
+            yW0vvj2ofyajgAb53cM77ScIHwbimkZ0/CbAVeM1z7OXOQ5ruXW/FVCZPe+clY2F
+            ah6UOM5FdI+AYWOhkbP1EP0DGugHs5YUgTxOMMwot1TkxD/y4CZ/ctukoWZrIHHR
+            vKpLhs9nWcnVXRP/trLtVl2okhs1vTYqgArgH6C0jbSXoNQbnZ+a860CAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
       };
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHM6dL0fQ8Bd0hER0Xa3I2pAWVHdnwOBaAZhbDlLJmUu";
     };
     mkdir = rec {
       cores = 1;
