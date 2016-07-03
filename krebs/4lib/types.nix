@@ -76,7 +76,6 @@ types // rec {
         default =
           optional (config.ip4 != null) config.ip4.addr ++
           optional (config.ip6 != null) config.ip6.addr;
-        readOnly = true;
       };
       aliases = mkOption {
         # TODO nonEmptyListOf hostname

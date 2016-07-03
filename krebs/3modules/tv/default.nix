@@ -7,11 +7,11 @@ with config.krebs.lib;
     "viljetic.de" = "regfish";
   };
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.tv) {
-    caxi = rec {
+    caxi = {
       cores = 2;
       extraZones = {
         "krebsco.de" = ''
-          caxi 60 IN A ${nets.internet.ip4.addr}
+          caxi 60 IN A ${config.krebs.hosts.caxi.nets.internet.ip4.addr}
         '';
       };
       nets = {
@@ -27,7 +27,7 @@ with config.krebs.lib;
           ssh.port = 11423;
         };
         retiolum = {
-          via = nets.internet;
+          via = config.krebs.hosts.caxi.nets.internet;
           ip4.addr = "10.243.113.226";
           ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af6";
           aliases = [
@@ -49,19 +49,19 @@ with config.krebs.lib;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKdJ4xGi+qn4IfMZJ3Kv7AGZGbhlR+GrkD87z2tcyRZy";
     };
-    cd = rec {
+    cd = {
       cores = 2;
       extraZones = {
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
         "krebsco.de" = ''
           krebsco.de. 60 IN MX 5 mx23
-          mx23        60 IN A ${nets.internet.ip4.addr}
-          cd          60 IN A ${nets.internet.ip4.addr}
-          cgit        60 IN A ${nets.internet.ip4.addr}
-          cgit.cd     60 IN A ${nets.internet.ip4.addr}
+          mx23        60 IN A ${config.krebs.hosts.cd.nets.internet.ip4.addr}
+          cd          60 IN A ${config.krebs.hosts.cd.nets.internet.ip4.addr}
+          cgit        60 IN A ${config.krebs.hosts.cd.nets.internet.ip4.addr}
+          cgit.cd     60 IN A ${config.krebs.hosts.cd.nets.internet.ip4.addr}
         '';
       };
-      nets = rec {
+      nets = {
         internet = {
           ip4.addr = "45.62.237.203";
           aliases = [
@@ -75,7 +75,7 @@ with config.krebs.lib;
           ssh.port = 11423;
         };
         retiolum = {
-          via = internet;
+          via = config.krebs.hosts.cd.nets.internet;
           ip4.addr = "10.243.113.222";
           ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af3";
           aliases = [
@@ -138,14 +138,14 @@ with config.krebs.lib;
       };
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHM6dL0fQ8Bd0hER0Xa3I2pAWVHdnwOBaAZhbDlLJmUu";
     };
-    ire = rec {
+    ire = {
       extraZones = {
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
         "krebsco.de" = ''
-          ire 60 IN A ${nets.internet.ip4.addr}
+          ire 60 IN A ${config.krebs.hosts.ire.nets.internet.ip4.addr}
         '';
       };
-      nets = rec {
+      nets = {
         internet = {
           ip4.addr = "198.147.22.115";
           aliases = [
@@ -156,7 +156,7 @@ with config.krebs.lib;
           ssh.port = 11423;
         };
         retiolum = {
-          via = internet;
+          via = config.krebs.hosts.ire.nets.internet;
           ip4.addr = "10.243.231.66";
           ip6.addr = "42:b912:0f42:a82d:0d27:8610:e89b:490c";
           aliases = [
@@ -236,7 +236,7 @@ with config.krebs.lib;
     };
     nomic = {
       cores = 2;
-      nets = rec {
+      nets = {
         gg23 = {
           ip4.addr = "10.23.1.110";
           aliases = ["nomic.gg23"];
@@ -359,7 +359,7 @@ with config.krebs.lib;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPnjfceKuHNQu7S4eYFN1FqgzMqiL7haNZMh2ZLhvuhK root@xu";
     };
   };
-  users = rec {
+  users = {
     mv = {
       mail = "mv@cd.r";
       pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGer9e2+Lew7vnisgBbsFNECEIkpNJgEaqQqgb9inWkQ mv@vod";
@@ -371,11 +371,11 @@ with config.krebs.lib;
       uid = 1337; # TODO use default and document what has to be done (for vv)
     };
     tv-nomic = {
-      inherit (tv) mail;
+      inherit (config.krebs.users.tv) mail;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC3dYR/n4Yw8OsYmfR2rSUG7o10G6AqOlSJHuHSEmANbMkqjiWl1TnpORtt5bAktyAGI4vWf9vhNEnxuIqGXWSV+3yCd7yfBHR1m0Y9QSw6blQ0xc1venl3JU0kpEyJfUn8a9cdXlnRiS0MP1gcsN7Zk8cqBELJYJajkSEnsT4eVaU5/wdnyzUO1fk8D8tFBJbF/tsWDLJPu4P18rpxq4wZgA2qmyHoVDEVlrz2OYcziXT6gpG0JGnToteaNg9ok5QavEYFpp8P+k1AacrBjc1PAb4MaMX1nfkSyaZwSqLdH35XkNRgPhVVmqZ5PlG3VeNpPSwpdcKi8P3zH1xG9g6Usx1SAyvcoAyGHdOwmFuA2tc1HgYEiQ+OsPrHZHujBOOZsKTN9+IZHScCAe+UmUcK413WEZKPs8PeFjf1gQAoDXb55JpksxLAnC/SQOl4FhkctIAXxr12ALlyt9UFPzIoj/Nj2MpFzGSlf653fTFmnMbQ8+GICc4TUpqx5GELZhfQuprBTv/55a9zKvM4B8XT3Bn9olQzMQIXEjXb3WUVFDDNWeNydToorYn1wG3ZWQ+3f0IlqRicWO7Q9BRj1Lp5rcUCb+naJ48tGY6HFUZ1Kz/0x458GDFvUd8mCJjqqmeSkUEeZd0xet5tVFg/bYoSslEqPF6pz7V3ruJMSdYxnQ== tv@nomic #2";
     };
     tv-xu = {
-      inherit (tv) mail;
+      inherit (config.krebs.users.tv) mail;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC/3nkqxe8YrDVt615n96A7iC3vvwsiqgpsBYC/bhwfBHu1bAtBmTWVqSKDIdwg7p8TQpIKtAgZ3IJT3BlrnVTeR4RIviLjHjYWW1NBhm+nXi+heThgi5fLciE3lVLVsy5X9Kc1ZPLgLa1In0REOanwbueOD0ESN1yKIDwUUdczw/o3dLDMzanqFHKuSSN4o9Ex2x+MRj9eLsb706s4VSYMo3lirRCJeAOGv1C7Xg1cuepdhIeJsq9aF7vSy15c0nCkWwr8zdY7pbMPYCe5zvIEymZ0UowZ5HQ3NmIZnYDxa4E1PFjDczHdQbVmmGMI80grNwMsHzQ6bynHSPXDoLf4WodXlhS0+9Ju5QavDT6uqZ9uhDBuWC8QNgWUMIJnEaTBFyA0OI1akl8Q2RLC+qnNf5IwItSq+GDwEsB2ZJNW3kOk1kNiCUrBafRYpPaFeP97wzzP4uYlBKAr2SOLrrkf7NFEdw2ihxhDMNnps/ErRJ8U0zdpmalw8mItGyqRULpHjk/wN00rYOdBIhW3G3QJuVgtGnWtGCBG5x70EfMiSEXPD3YSsVVsgKD+v8qr+YiilRRD+N3gaHhiOWA6HgxRNul/P4llk0ktTpb9LoHk2+oooTH5ZuuT/8yF8J4stZt7EIOH+mSOAXG1z0BwnEkQu7pVKwu/oOZpGJTvBrGwww== tv@xu";
     };
     vv = {
