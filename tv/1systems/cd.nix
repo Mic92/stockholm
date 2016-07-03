@@ -112,9 +112,4 @@ with config.krebs.lib;
     rxvt_unicode.terminfo
     tcpdump
   ];
-
-  services.journald.extraConfig = ''
-    SystemMaxUse=1G
-    RuntimeMaxUse=128M
-  '';
 }

@@ -176,11 +176,6 @@ with config.krebs.lib;
 
   services.printing.enable = true;
 
-  services.journald.extraConfig = ''
-    SystemMaxUse=1G
-    RuntimeMaxUse=128M
-  '';
-
   # see tmpfiles.d(5)
   systemd.tmpfiles.rules = [
     "d /tmp 1777 root root - -" # does this work with mounted /tmp?

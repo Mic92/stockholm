@@ -169,6 +169,13 @@ with config.krebs.lib;
     }
 
     {
+      services.journald.extraConfig = ''
+        SystemMaxUse=1G
+        RuntimeMaxUse=128M
+      '';
+    }
+
+    {
       services.openssh = {
         enable = true;
         hostKeys = [
