@@ -180,7 +180,9 @@ let
           sigil = ''\(${concatStringsSep ''\|'' startAlts}\)[ \t\r\n]*'';
         in /* vim */ ''
           syn include @nix_${lang}_syntax syntax/${lang}.vim
-          unlet b:current_syntax
+          if exists("b:current_syntax")
+            unlet b:current_syntax
+          endif
 
           syn match nix_${lang}_sigil
             \ X${replaceStrings ["X"] ["\\X"] sigil}\ze\('''\|"\)X
