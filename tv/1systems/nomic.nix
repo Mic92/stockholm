@@ -60,7 +60,6 @@ with config.krebs.lib;
       esac
     '')
     gnupg
-    ntp # ntpate
     rxvt_unicode.terminfo
     tmux
   ];

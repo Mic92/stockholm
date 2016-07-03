@@ -41,7 +41,6 @@ with config.krebs.lib;
 
         # root
         cryptsetup
-        ntp # ntpate
 
         # tv
         bc

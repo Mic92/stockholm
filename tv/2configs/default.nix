@@ -153,6 +153,7 @@ with config.krebs.lib;
       services.cron.enable = false;
       services.nscd.enable = false;
       services.ntp.enable = false;
+      services.timesyncd.enable = true;
     }
 
     {

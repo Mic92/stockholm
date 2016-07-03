@@ -108,7 +108,6 @@ with config.krebs.lib;
     iotop
     iptables
     nethogs
-    ntp     # ntpate
     rxvt_unicode.terminfo
     tcpdump
   ];
