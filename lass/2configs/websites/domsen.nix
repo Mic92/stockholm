@@ -32,10 +32,10 @@ in {
     (ssl [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
     (servePage [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
 
-    (ssl [ "pixelpocket.de" "www.pixelpocket.de" ])
+    (ssl [ "pixelpocket.de" ])
     (servePage [ "pixelpocket.de" "www.pixelpocket.de" ])
 
-    (ssl [ "o.ubikmedia.de" "www.o.ubikmedia.de" ])
+    (ssl [ "o.ubikmedia.de" ])
     (serveOwncloud [ "o.ubikmedia.de" "www.o.ubikmedia.de" ])
 
     (ssl [
@@ -47,6 +47,7 @@ in {
       "360gradvideo.tv"
       "ubikmedia.eu"
       "facts.cloud"
+      "youthtube.xyz"
       "www.ubikmedia.de"
       "www.aldona.ubikmedia.de"
       "www.apanowicz.de"
@@ -55,6 +56,7 @@ in {
       "www.360gradvideo.tv"
       "www.ubikmedia.eu"
       "www.facts.cloud"
+      "www.youthtube.xyz"
     ])
     (serveWordpress [
       "ubikmedia.de"
@@ -64,13 +66,15 @@ in {
       "360gradvideo.tv"
       "ubikmedia.eu"
       "facts.cloud"
-      "*.ubikmedia.de"
+      "youthtube.xyz"
       "www.apanowicz.de"
       "www.nirwanabluete.de"
       "www.aldonasiech.com"
       "www.360gradvideo.tv"
       "www.ubikmedia.eu"
       "www.facts.cloud"
+      "www.youthtube.xyz"
+      "*.ubikmedia.de"
     ])
   ];
 

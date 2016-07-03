@@ -46,7 +46,7 @@ import XMonad.Util.EZConfig (additionalKeysP)
 
 
 myTerm :: String
-myTerm = "urxvtc"
+myTerm = "${pkgs.rxvt_unicode}/bin/urxvtc"
 
 myFont :: String
 myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
@@ -108,11 +108,11 @@ displaySomeException = displayException
 myKeyMap :: [([Char], X ())]
 myKeyMap =
     [ ("M4-<F11>", spawn "i3lock -i /var/lib/wallpaper/wallpaper -f")
-    , ("M4-p", spawn "passmenu --type")
-    , ("<XF86AudioRaiseVolume>", spawn "pactl -- set-sink-volume 0 +4%")
-    , ("<XF86AudioLowerVolume>", spawn "pactl -- set-sink-volume 0 -4%")
-    , ("<XF86AudioMute>", spawn "pactl -- set-sink-mute 0 toggle")
-    , ("<XF86AudioMicMute>", spawn "pactl -- set-source-mute 1 toggle")
+    , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
+    , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume 0 +4%")
+    , ("<XF86AudioLowerVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume 0 -4%")
+    , ("<XF86AudioMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-mute 0 toggle")
+    , ("<XF86AudioMicMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-source-mute 1 toggle")
     , ("<XF86Launch1>", gridselectWorkspace gridConfig W.view)
     , ("<XF86MonBrightnessUp>", spawn "xbacklight -steps 1 -time 1 -inc 3")
     , ("<XF86MonBrightnessDown>", spawn "xbacklight -steps 1 -time 1 -dec 3")
