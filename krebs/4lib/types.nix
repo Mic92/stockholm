@@ -162,11 +162,21 @@ types // rec {
 
   secret-file = submodule ({ config, ... }: {
     options = {
-      path = mkOption { type = str; };
-      mode = mkOption { type = file-mode; default = "0400"; };
+      name = mkOption {
+        type = filename;
+        default = config._module.args.name;
+      };
+      path = mkOption {
+        type = absolute-pathname;
+        default = "/run/keys/${config.name}";
+      };
+      mode = mkOption {
+        type = file-mode;
+        default = "0400";
+      };
       owner = mkOption {
         type = user;
-        default = config.krebs.users.root;
+        default = users.root;
       };
       group-name = mkOption {
         type = str;
@@ -174,7 +184,7 @@ types // rec {
       };
       source-path = mkOption {
         type = str;
-        default = toString <secrets> + "/${config._module.args.name}";
+        default = toString <secrets> + "/${config.name}";
       };
     };
   });
