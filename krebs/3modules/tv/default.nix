@@ -138,41 +138,6 @@ with config.krebs.lib;
       };
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHM6dL0fQ8Bd0hER0Xa3I2pAWVHdnwOBaAZhbDlLJmUu";
     };
-    mkdir = rec {
-      cores = 1;
-      nets = rec {
-        internet = {
-          ip4.addr = "104.167.114.142";
-          aliases = [
-            "mkdir.i"
-            "mkdir.internet"
-          ];
-        };
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.113.223";
-          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af4";
-          aliases = [
-            "mkdir.r"
-            "mkdir.retiolum"
-            "cgit.mkdir.r"
-            "cgit.mkdir.retiolum"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAuyfM+3od75zOYXqnqRMAt+yp/4z/vC3vSWdjUvEmCuM23c5BOBw+
-            dKqbWoSPTzOuaQ0szdL7a6YxT+poSUXd/i3pPz59KgCl192rd1pZoJKgvoluITev
-            voYSP9rFQOUrustfDb9qKW/ZY95cwdCvypo7Vf4ghxwDCnlmyCGz7qXTJMLydNKF
-            2PH9KiY4suv15sCg/zisu+q0ZYQXUc1TcgpoIYBOftDunOJoNdbti+XjwWdjGmJZ
-            Bn4GelsrrpwJFvfDmouHUe8GsD7nTgbZFtiJbKfCEiK16N0Q0d0ZFHhAV2nPjsk2
-            3JhG4n9vxATBkO82f7RLrcrhkx9cbLfN3wIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICuShEqU0Cdm7KCaMD5x1D6mgj+cr7qoqbzFJDKoBbbw";
-    };
     ire = rec {
       extraZones = {
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
@@ -309,41 +274,6 @@ with config.krebs.lib;
           aliases = ["ok.gg23"];
         };
       };
-    };
-    rmdir = rec {
-      cores = 1;
-      nets = rec {
-        internet = {
-          ip4.addr = "167.88.34.182";
-          aliases = [
-            "rmdir.i"
-            "rmdir.internet"
-          ];
-        };
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.113.224";
-          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af5";
-          aliases = [
-            "rmdir.r"
-            "rmdir.retiolum"
-            "cgit.rmdir.r"
-            "cgit.rmdir.retiolum"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEA+twy4obSbJdmZLfBoe9YYeyoDnXkO/WPa2D6Eh6jXrWk5fbhBjRf
-            i3EAQfLiXXFJX3E8V8YvJyazXklI19jJtCLDiu/F5kgJJfyAkWHH+a/hcg7qllDM
-            Xx2CvS/nCbs+p48/VLO6zLC7b1oHu3K/ob5M5bwPK6j9NEDIL5qYiM5PQzV6zryz
-            hS9E/+l8Z+UUpYcfS3bRovXJAerB4txc/gD3Xmptq1zk53yn1kJFYfVlwyyz+NEF
-            59JZj2PDrvWoG0kx/QjiNurs6XfdnyHe/gP3rmSTrihKFVuA3cZM62sDR4FcaeWH
-            SnKSp02pqjBOjC/dOK97nXpKLJgNH046owIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICLuhLRmt8M5s2Edwwl9XY0KAAivzmPCEweesH5/KhR4";
     };
     schnabeldrucker = {
       nets = {
