@@ -342,7 +342,9 @@ types // rec {
   absolute-pathname = mkOptionType {
     name = "POSIX absolute pathname";
     check = x: let xs = splitString "/" x; xa = head xs; in
-      isString x && (xa == "/" || (xa == "" && all filename.check (tail xs)));
+         isString x
+      && stringLength x > 0
+      && (xa == "/" || (xa == "" && all filename.check (tail xs)));
     merge = mergeOneOption;
   };
 
