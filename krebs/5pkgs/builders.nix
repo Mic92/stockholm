@@ -231,6 +231,17 @@ rec {
         '';
       };
 
+  writeJq = name: src: pkgs.runCommand name {} /* sh */ ''
+    name=${assert types.filename.check name; name}
+    src=${shell.escape src}
+
+    # syntax check
+    printf '%s' "$src" > src.jq
+    ${pkgs.jq}/bin/jq -f src.jq < /dev/null
+
+    cp src.jq "$out"
+  '';
+
   writeNixFromCabal =
     trace (toString [
       "The function `writeNixFromCabal` has been deprecated in favour of"
