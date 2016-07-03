@@ -7,6 +7,48 @@ with config.krebs.lib;
     "viljetic.de" = "regfish";
   };
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.tv) {
+    caxi = rec {
+      cores = 2;
+      extraZones = {
+        "krebsco.de" = ''
+          caxi 60 IN A ${nets.internet.ip4.addr}
+        '';
+      };
+      nets = {
+        internet = {
+          ip4 = {
+            addr = "104.233.124.70";
+            prefix = "104.233.124.0/24";
+          };
+          aliases = [
+            "caxi.i"
+            "caxi.krebsco.de"
+          ];
+          ssh.port = 11423;
+        };
+        retiolum = {
+          via = nets.internet;
+          ip4.addr = "10.243.113.226";
+          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af6";
+          aliases = [
+            "caxi.r"
+            "caxi.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAxNh1xhvCFzjUOmBq+F6NjUdntKh/7qo7LrsXjPVn92r1hGTVHJO1
+            E+XP5dabZ/mFWySY8GvG7XlZ27wsjkvHEyb16IhOqYrnaONf9LifAWQ3qBlHtp1T
+            eZeP6wcXLhR/pOPy0pT6EABmDHbOzErjYv4pdrXHuxlM10Ljtpp3mClNeXY9eby+
+            HekEE8LY8/zWqJ90lMaxPhLh1VqEvTVTnem5e1F8HDzNvRWa0kWUYG33zPQMyKgR
+            BCvp1DR7Y2LwDmGKnhzBm4JTcP+fcs+z/eGie/CEIgFM0BFJaTBAYZOtUlhBSe0y
+            UYE2W9CJkPN2Uepf53nPnshjKC64fgTr7wIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKdJ4xGi+qn4IfMZJ3Kv7AGZGbhlR+GrkD87z2tcyRZy";
+    };
     cd = rec {
       cores = 2;
       extraZones = {
