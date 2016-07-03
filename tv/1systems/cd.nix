@@ -44,20 +44,50 @@ with config.krebs.lib;
         "cgit.cd.viljetic.de"
       ];
       # TODO make public_html also available to cd, cd.retiolum (AKA default)
-      krebs.nginx.servers.public_html = {
-        server-names = singleton "cd.viljetic.de";
-        locations = singleton (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
-          alias /home/$1/public_html$2;
-        '');
-      };
-      krebs.nginx.servers.viljetic = {
+      krebs.nginx.servers."https://viljetic.de" = {
         server-names = singleton "viljetic.de";
-        # TODO directly set root (instead via location)
-        locations = singleton (nameValuePair "/" ''
-          root ${pkgs.viljetic-pages};
-        '');
+        listen = mkForce []; # disable default
+        ssl = {
+          enable = true;
+          certificate = "/var/lib/acme/viljetic.de/fullchain.pem";
+          certificate_key = "/var/lib/acme/viljetic.de/key.pem";
+        };
+        locations = [
+          (nameValuePair "/" ''
+            root ${pkgs.viljetic-pages};
+          '')
+          (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
+            alias /home/$1/public_html$2;
+          '')
+        ];
       };
-      tv.iptables.input-internet-accept-tcp = singleton "http";
+      krebs.nginx.servers."http://viljetic.de" = {
+        server-names = singleton "viljetic.de";
+        locations = [
+          (nameValuePair "/.well-known/acme-challenge/" ''
+            root /var/lib/acme/challenges/viljetic.de/;
+          '')
+          (nameValuePair "/" ''
+            return 301 https://viljetic.de$request_uri;
+          '')
+        ];
+      };
+      security.acme = {
+        certs."viljetic.de" = {
+          email = "tomislav@viljetic.de";
+          webroot = "/var/lib/acme/challenges/viljetic.de";
+          plugins = [
+            "account_key.json"
+            "key.pem"
+            "fullchain.pem"
+          ];
+          user = "nginx";
+        };
+      };
+      tv.iptables.input-internet-accept-tcp = [
+        "http"
+        "https"
+      ];
     }
   ];
 
