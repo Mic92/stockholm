@@ -17,6 +17,14 @@ let
     pkgs.vimPlugins.ctrlp
     pkgs.vimPlugins.undotree
     (pkgs.vimUtils.buildVimPlugin {
+      name = "vim-syntax-jq";
+      src = pkgs.fetchgit {
+        url = https://github.com/vito-c/jq.vim;
+        rev = "99d55a300047946a82ecdd7617323a751199ad2d";
+        sha256 = "00mmwg4swwmllknzzx07af080lcy7y5i6341rc6c08i2vka48nv9";
+      };
+    })
+    (pkgs.vimUtils.buildVimPlugin {
       name = "file-line-1.0";
       src = pkgs.fetchgit {
         url = git://github.com/bogado/file-line;
@@ -211,6 +219,10 @@ let
           cabal = {};
           diff = {};
           haskell = {};
+          jq.extraStart = concatStringsSep ''\|'' [
+            ''writeJq.*''
+            ''write[^ \t\r\n]*[ \t\r\n]*"[^"]*\.jq"''
+          ];
           lua = {};
           sed.extraStart = ''writeSed[^ \t\r\n]*[ \t\r\n]*"[^"]*"'';
           sh.extraStart = concatStringsSep ''\|'' [
