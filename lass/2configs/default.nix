@@ -66,7 +66,7 @@ with config.krebs.lib;
     };
   };
 
-  nix.useSandbox = true;
+  nix.useChroot = true;
 
   users.mutableUsers = false;
 
