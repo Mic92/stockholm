@@ -12,6 +12,10 @@ let
 
   api = {
     enable = mkEnableOption "power-action";
+    battery = mkOption {
+      type = types.str;
+      default = "BAT0";
+    };
     user = mkOption {
       type = types.user;
       default = {
@@ -80,11 +84,11 @@ let
     "if [ $power -ge ${toString plan.lowerLimit} ] && [ $power -le ${toString plan.upperLimit} ] ${charging_check plan}; then ${plan.action}; fi";
 
   powerlvl = pkgs.writeDash "powerlvl" ''
-    cat /sys/class/power_supply/BAT0/capacity
+    cat /sys/class/power_supply/${cfg.battery}/capacity
   '';
 
   state = pkgs.writeDash "state" ''
-    if [ "$(cat /sys/class/power_supply/BAT0/status)" = "Discharging" ]
+    if [ "$(cat /sys/class/power_supply/${cfg.battery}/status)" = "Discharging" ]
       then echo "false"
       else echo "true"
     fi
