@@ -16,6 +16,12 @@ with builtins;
     ../2configs/bitlbee.nix
     ../2configs/weechat.nix
     ../2configs/skype.nix
+    {
+      lass.umts = {
+        enable = true;
+        modem = "/dev/serial/by-id/usb-HUAWEI_Technologies_HUAWEI_Mobile-if00-port0";
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.uriel;
