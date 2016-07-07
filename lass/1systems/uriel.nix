@@ -16,6 +16,12 @@ with builtins;
     ../2configs/bitlbee.nix
     ../2configs/weechat.nix
     ../2configs/skype.nix
+    {
+      lass.umts = {
+        enable = true;
+        modem = "/dev/serial/by-id/usb-HUAWEI_Technologies_HUAWEI_Mobile-if00-port0";
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.uriel;
@@ -33,8 +39,8 @@ with builtins;
     #loader.grub.version = 2;
     #loader.grub.device = "/dev/sda";
 
-    loader.gummiboot.enable = true;
-    loader.gummiboot.timeout = 5;
+    loader.systemd-boot.enable = true;
+    loader.timeout = 5;
 
     initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; } ];
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];

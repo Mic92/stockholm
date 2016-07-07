@@ -25,7 +25,6 @@
     ../2configs/c-base.nix
     ../2configs/mail.nix
     ../2configs/krebs-pass.nix
-    ../2configs/umts.nix
     ../2configs/repo-sync.nix
     {
       #risk of rain port
@@ -54,6 +53,16 @@
     #    package = pkgs.postgresql;
     #  };
     #}
+    {
+      lass.umts = {
+        enable = true;
+        modem = "/dev/serial/by-id/usb-Lenovo_F5521gw_38214921FBBBC7B0-if09";
+        initstrings = ''
+          Init1 = AT+CFUN=1
+          Init2 = AT+CGDCONT=1,"IP","pinternet.interkom.de","",0,0
+        '';
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
