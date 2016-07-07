@@ -4,7 +4,12 @@ in {
   options.lass.ejabberd = {
     enable = mkEnableOption "lass.ejabberd";
     certfile = mkOption {
-      type = types.str;
+      type = types.secret-file;
+      default = {
+        path = "${cfg.user.home}/ejabberd.pem";
+        owner = cfg.user;
+        source-path = "/var/lib/acme/lassul.us/full.pem";
+      };
     };
     hosts = mkOption {
       type = with types; listOf str;
@@ -17,12 +22,11 @@ in {
         export EJABBERD_CONFIG_PATH=${shell.escape (import ./config.nix args)}
         exec ${pkgs.ejabberd}/bin/ejabberdctl \
             --logs ${shell.escape cfg.user.home} \
-            --spool ${shell.escape cfg.user.home} \
             "$@"
       '';
     };
     s2s_certfile = mkOption {
-      type = types.str;
+      type = types.secret-file;
       default = cfg.certfile;
     };
     user = mkOption {
@@ -36,9 +40,15 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.pkgs.ejabberdctl ];
 
+    krebs.secret.files = {
+      ejabberd-certfile = cfg.certfile;
+      ejabberd-s2s_certfile = cfg.s2s_certfile;
+    };
+
     systemd.services.ejabberd = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      requires = [ "secret.service" ];
+      after = [ "network.target" "secret.service" ];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = "yes";

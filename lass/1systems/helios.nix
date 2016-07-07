@@ -26,6 +26,9 @@ with builtins;
         enable = true;
       };
     }
+    {
+      lass.power-action.battery = "BAT1";
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.helios;
