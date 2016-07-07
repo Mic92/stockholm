@@ -10,7 +10,7 @@ in toFile "ejabberd.conf" ''
    [
     {5222, ejabberd_c2s, [
         starttls,
-        {certfile, ${toErlang cfg.certfile}},
+        {certfile, ${toErlang cfg.certfile.path}},
         {access, c2s},
         {shaper, c2s_shaper},
         {max_stanza_size, 65536}
@@ -27,7 +27,7 @@ in toFile "ejabberd.conf" ''
         ]}
    ]}.
   {s2s_use_starttls, required}.
-  {s2s_certfile, ${toErlang cfg.s2s_certfile}}.
+  {s2s_certfile, ${toErlang cfg.s2s_certfile.path}}.
   {auth_method, internal}.
   {shaper, normal, {maxrate, 1000}}.
   {shaper, fast, {maxrate, 50000}}.
