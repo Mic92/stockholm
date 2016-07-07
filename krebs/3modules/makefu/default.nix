@@ -56,6 +56,16 @@ with config.krebs.lib;
         };
       };
     };
+    ossim = { # vm on darth
+      nets = {
+        siem = {
+          ip4.addr = "10.8.10.6";
+          aliases = [
+            "ossim.siem"
+          ];
+        };
+      };
+    };
     tsp = {
       cores = 1;
       nets = {
@@ -291,6 +301,10 @@ with config.krebs.lib;
     wbob = rec {
       cores = 1;
       nets = {
+        siem = {
+          ip4.addr = "10.8.10.7";
+          aliases = [ "display.siem" ];
+        };
         retiolum = {
           ip4.addr = "10.243.214.15";
           ip6.addr = "42:5a02:2c30:c1b1:3f2e:7c19:2496:a732";
