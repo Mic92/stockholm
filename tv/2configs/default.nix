@@ -153,6 +153,7 @@ with config.krebs.lib;
       services.cron.enable = false;
       services.nscd.enable = false;
       services.ntp.enable = false;
+      services.timesyncd.enable = true;
     }
 
     {
@@ -166,6 +167,13 @@ with config.krebs.lib;
     {
       tv.iptables.enable = true;
       tv.iptables.accept-echo-request = "internet";
+    }
+
+    {
+      services.journald.extraConfig = ''
+        SystemMaxUse=1G
+        RuntimeMaxUse=128M
+      '';
     }
 
     {

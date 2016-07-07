@@ -41,7 +41,6 @@ with config.krebs.lib;
 
         # root
         cryptsetup
-        ntp # ntpate
 
         # tv
         bc
@@ -175,11 +174,6 @@ with config.krebs.lib;
   ];
 
   services.printing.enable = true;
-
-  services.journald.extraConfig = ''
-    SystemMaxUse=1G
-    RuntimeMaxUse=128M
-  '';
 
   # see tmpfiles.d(5)
   systemd.tmpfiles.rules = [
