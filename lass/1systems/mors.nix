@@ -47,12 +47,15 @@
     #    ];
     #  };
     #}
-    #{
-    #  services.postgresql = {
-    #    enable = true;
-    #    package = pkgs.postgresql;
-    #  };
-    #}
+    {
+      #zalando project
+      services.postgresql = {
+        enable = true;
+        package = pkgs.postgresql;
+      };
+      virtualisation.docker.enable = true;
+      users.users.mainUser.extraGroups = [ "docker" ];
+    }
     {
       lass.umts = {
         enable = true;
