@@ -52,11 +52,11 @@ with config.krebs.lib;
     #    };
     #  };
     #}
-    {
-      services.elasticsearch = {
-        enable = true;
-      };
-    }
+    #{
+    #  services.elasticsearch = {
+    #    enable = true;
+    #  };
+    #}
     {
       lass.power-action.battery = "BAT1";
     }
