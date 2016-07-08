@@ -1,10 +1,11 @@
 { config, pkgs, ... }:
 
 with builtins;
+with config.krebs.lib;
+
 {
   imports = [
     ../.
-    ../2configs/baseX.nix
     ../2configs/exim-retiolum.nix
     ../2configs/browsers.nix
     ../2configs/programs.nix
@@ -12,6 +13,36 @@ with builtins;
     ../2configs/pass.nix
     ../2configs/fetchWallpaper.nix
     ../2configs/backups.nix
+
+    #{
+    #  # conflicting stuff with gnome setup
+    #  # TODO: fix this
+    #  imports = [
+    #    ../2configs/baseX.nix
+    #  ];
+    #  networking.wireless.enable = true;
+    #}
+    {
+      # gnome3 for suja
+      imports = [
+        ../2configs/default.nix
+      ];
+      services.xserver.enable = true;
+      services.xserver.desktopManager.gnome3.enable = true;
+      users.users.suja = {
+        uid = genid "suja";
+        home = "/home/suja";
+        group = "users";
+        createHome = true;
+        useDefaultShell = true;
+        extraGroups = [
+        ];
+      };
+      environment.systemPackages = with pkgs; [
+        firefox
+        chromium
+      ];
+    }
     #{
     #  users.extraUsers = {
     #    root = {
@@ -33,7 +64,6 @@ with builtins;
 
   krebs.build.host = config.krebs.hosts.helios;
 
-  networking.wireless.enable = true;
 
   hardware.enableAllFirmware = true;
   nixpkgs.config.allowUnfree = true;
