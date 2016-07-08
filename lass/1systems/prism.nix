@@ -202,7 +202,6 @@ in {
       lass.ejabberd = {
         enable = true;
         hosts = [ "lassul.us" ];
-        certfile = "/var/lib/acme/lassul.us/full.pem";
       };
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp --dport xmpp-client"; target = "ACCEPT"; }
