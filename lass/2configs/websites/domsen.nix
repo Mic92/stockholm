@@ -78,6 +78,12 @@ in {
     ])
   ];
 
+  krebs.nginx.servers."ubikmedia.de".locations = [
+    (lib.nameValuePair "/piwik" ''
+      try_files $uri $uri/ /index.php?$args;
+    '')
+  ];
+
   lass.mysqlBackup.config.all.databases = [
     "ubikmedia_de"
     "o_ubikmedia_de"
