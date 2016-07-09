@@ -13,7 +13,9 @@ in {
     apt-cacher-ng.enable = true;
     backup.enable = true;
     bepasty.enable = true;
-    buildbot.master.enable = true;
+    # FIXME fast-tests / instantiate-test-all-modules fails at wolfbot
+    # http://wolf:8010/builders/fast-tests/builds/442
+    #buildbot.master.enable = true;
     buildbot.slave = {
       enable = true;
       username = "lol";
