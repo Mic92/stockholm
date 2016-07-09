@@ -123,7 +123,7 @@ let
   '';
 
   q-online = ''
-    if ${pkgs.curl.bin}/bin/curl -s google.com >/dev/null; then
+    if ${pkgs.curl}/bin/curl -s google.com >/dev/null; then
       echo '[32;1monline[m'
     else
       echo offline

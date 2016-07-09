@@ -1,5 +1,7 @@
 { config, lib, pkgs, ... }:
 
+with config.krebs.lib;
+
 let
   ip = config.krebs.build.host.nets.internet.ip4.addr;
 
@@ -24,11 +26,22 @@ in {
     {
       imports = [
         ../2configs/git.nix
-        ( manageCerts [ "cgit.lassul.us" ])
       ];
-      krebs.nginx.servers.cgit.server-names = [
-        "cgit.lassul.us"
-      ];
+      krebs.nginx.servers.cgit = {
+        server-names = [
+          "cgit.lassul.us"
+        ];
+        locations = [
+          (nameValuePair "/.well-known/acme-challenge" ''
+            root /var/lib/acme/challenges/cgit.lassul.us/;
+          '')
+        ];
+        ssl = {
+          enable = true;
+          certificate = "/var/lib/acme/cgit.lassul.us/fullchain.pem";
+          certificate_key = "/var/lib/acme/cgit.lassul.us/key.pem";
+        };
+      };
     }
     {
       users.extraGroups = {
@@ -189,7 +202,6 @@ in {
       lass.ejabberd = {
         enable = true;
         hosts = [ "lassul.us" ];
-        certfile = "/var/lib/acme/lassul.us/full.pem";
       };
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp --dport xmpp-client"; target = "ACCEPT"; }
@@ -204,6 +216,11 @@ in {
         (lib.nameValuePair "/wallpaper.png" ''
           alias /tmp/wallpaper.png;
         '')
+      ];
+    }
+    {
+      environment.systemPackages = with pkgs; [
+        mk_sql_pair
       ];
     }
   ];

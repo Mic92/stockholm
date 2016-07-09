@@ -7,7 +7,7 @@ with lib;
     mirror = "git@wolf:stockholm-mirror";
   in {
     enable = true;
-    config = {
+    repos.stockholm = {
       makefu = {
         origin.url = http://cgit.gum/stockholm ;
         mirror.url = mirror;
