@@ -223,6 +223,18 @@ in {
         mk_sql_pair
       ];
     }
+    {
+      users.users.tv = {
+        uid = genid "tv";
+        home = "/home/tv";
+        group = "users";
+        createHome = true;
+        useDefaultShell = true;
+        openssh.authorizedKeys.keys = [
+          config.krebs.users.tv.pubkey
+        ];
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
