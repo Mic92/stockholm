@@ -13,6 +13,7 @@
     };
     mk_sql_pair = pkgs.callPackage ./mk_sql_pair/default.nix {};
     mpv-poll = pkgs.callPackage ./mpv-poll/default.nix {};
+    pop = pkgs.callPackage ./pop/default.nix {};
     q = pkgs.callPackage ./q {};
     rs = pkgs.callPackage ./rs/default.nix {};
     untilport = pkgs.callPackage ./untilport/default.nix {};
