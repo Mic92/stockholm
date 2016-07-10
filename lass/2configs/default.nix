@@ -115,6 +115,7 @@ with config.krebs.lib;
   #neat utils
     krebspaste
     pciutils
+    pop
     psmisc
     q
     rs
