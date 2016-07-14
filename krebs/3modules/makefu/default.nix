@@ -66,6 +66,16 @@ with config.krebs.lib;
         };
       };
     };
+    honeydrive = { # vm on darth
+      nets = {
+        internet = { # via shoney
+          ip4.addr = "64.137.234.232";
+          aliases = [
+            "honeydrive.i"
+          ];
+        };
+      };
+    };
     tsp = {
       cores = 1;
       nets = {

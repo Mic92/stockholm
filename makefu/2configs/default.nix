@@ -2,8 +2,6 @@
 
 with config.krebs.lib;
 {
-  system.stateVersion = "15.09";
-
   imports = [
     {
       users.extraUsers =
@@ -11,6 +9,8 @@ with config.krebs.lib;
                  (import <secrets/hashedPasswords.nix>);
     }
     ./vim.nix
+    ./binary-cache/nixos.nix
+    ./binary-cache/lass.nix
   ];
 
   nixpkgs.config.allowUnfreePredicate =  (pkg: pkgs.lib.hasPrefix "unrar-" pkg.name);
@@ -24,7 +24,7 @@ with config.krebs.lib;
       source =  mapAttrs (_: mkDefault) {
         nixpkgs = {
           url = https://github.com/nixos/nixpkgs;
-          rev = "63b9785"; # stable @ 2016-06-01
+          rev = "0546a4a"; # stable @ 2016-06-11
         };
         secrets = if getEnv "dummy_secrets" == "true"
                   then toString <stockholm/makefu/6tests/data/secrets>
@@ -62,9 +62,6 @@ with config.krebs.lib;
 
   programs.ssh = {
     startAgent = false;
-    extraConfig = ''
-      UseRoaming no
-    '';
   };
   services.openssh.enable = true;
   nix.useChroot = true;

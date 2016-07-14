@@ -75,6 +75,7 @@ in {
 
 
   # HDD Array stuff
+  environment.systemPackages = [ pkgs.mergerfs ];
   services.smartd.devices = builtins.map (x: { device = x; }) allDisks;
 
   makefu.snapraid = let
@@ -129,7 +130,10 @@ in {
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
   };
-
+  users.users.misa = {
+    uid = 9002;
+    name = "misa";
+  };
   hardware.enableAllFirmware = true;
   hardware.cpu.intel.updateMicrocode = true;
 
