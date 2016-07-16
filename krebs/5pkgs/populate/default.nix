@@ -1,8 +1,9 @@
-{ coreutils, fetchgit, jq, openssh, proot, rsync, stdenv, ... }:
+{ coreutils, fetchgit, git, jq, openssh, proot, rsync, stdenv, ... }:
 
 let
   PATH = stdenv.lib.makeBinPath [
     coreutils
+    git
     jq
     openssh
     proot
