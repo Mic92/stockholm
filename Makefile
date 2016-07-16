@@ -83,6 +83,9 @@ deploy: populate
 ifeq ($(debug),true)
 populate: populate-flags = --debug
 endif
+ifneq ($(ssh),)
+populate: populate-flags += --ssh=$(ssh)
+endif
 populate:
 	$(call evaluate,config.krebs.build.source) --json --strict | \
 	populate \
