@@ -7,18 +7,18 @@ with config.krebs.lib;
 
   krebs.build = {
     user = config.krebs.users.tv;
-    source = mapAttrs (_: mkDefault) ({
-      nixos-config = "symlink:stockholm/tv/1systems/${config.krebs.build.host.name}.nix";
-      secrets = "/home/tv/secrets/${config.krebs.build.host.name}";
-      secrets-common = "/home/tv/secrets/common";
-      stockholm = "/home/tv/stockholm";
-      nixpkgs = {
+    source = let inherit (config.krebs.build) host; in {
+      nixos-config.symlink = "stockholm/tv/1systems/${host.name}.nix";
+      secrets.file = "/home/tv/secrets/${host.name}";
+      secrets-common.file = "/home/tv/secrets/common";
+      stockholm.file = "/home/tv/stockholm";
+      nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
-        rev = "8bf31d7d27cae435d7c1e9e0ccb0a320b424066f";
+        ref = "8bf31d7d27cae435d7c1e9e0ccb0a320b424066f";
       };
-    } // optionalAttrs config.krebs.build.host.secure {
-      secrets-master = "/home/tv/secrets/master";
-    });
+    } // optionalAttrs host.secure {
+      secrets-master.file = "/home/tv/secrets/master";
+    };
   };
 
   networking.hostName = config.krebs.build.host.name;

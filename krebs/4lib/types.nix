@@ -188,6 +188,75 @@ types // rec {
     };
   });
 
+
+  source = submodule ({ config, ... }: {
+    options = {
+      type = let
+        types = ["file" "git" "symlink"];
+      in mkOption {
+        type = enum types;
+        default = let
+          cands = filter (k: config.${k} != null) types;
+        in
+          if length cands == 1
+            then head cands
+            else throw "cannot determine type";
+      };
+      file = let
+        file-path = (file-source.getSubOptions "FIXME").path.type;
+      in mkOption {
+        type = nullOr (either file-source file-path);
+        default = null;
+        apply = x:
+          if file-path.check x
+            then { path = x; }
+            else x;
+      };
+      git = mkOption {
+        type = nullOr git-source;
+        default = null;
+      };
+      symlink = let
+        symlink-target = (symlink-source.getSubOptions "FIXME").target.type;
+      in mkOption {
+        type = nullOr (either symlink-source symlink-target);
+        default = null;
+        apply = x:
+          if symlink-target.check x
+            then { target = x; }
+            else x;
+      };
+    };
+  });
+
+  file-source = submodule {
+    options = {
+      path = mkOption {
+        type = absolute-pathname;
+      };
+    };
+  };
+
+  git-source = submodule {
+    options = {
+      ref = mkOption {
+        type = str; # TODO types.git.ref
+      };
+      url = mkOption {
+        type = str; # TODO types.git.url
+      };
+    };
+  };
+
+  symlink-source = submodule {
+    options = {
+      target = mkOption {
+        type = pathname; # TODO relative-pathname
+      };
+    };
+  };
+
+
   suffixed-str = suffs:
     mkOptionType {
       name = "string suffixed by ${concatStringsSep ", " suffs}";

@@ -68,22 +68,26 @@ evaluate = \
 		-I stockholm=$(stockholm) \
 		-E "let eval = import <stockholm>; in with eval; $(1)"
 
-execute = \
-	result=$$($(call evaluate,config.krebs.build.$(1))) && \
-	script=$$(echo "$$result" | jq -r .) && \
-	echo "$$script" | PS5=% sh
-
 ifeq ($(MAKECMDGOALS),)
 $(error No goals specified)
 endif
 
 # usage: make deploy system=foo [target_host=bar]
 deploy: ssh ?= ssh
-deploy:
-	$(call execute,populate)
+deploy: populate
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		env STOCKHOLM_VERSION="$$STOCKHOLM_VERSION" \
 			nixos-rebuild switch --show-trace -I $(target_path)
+
+# usage: make populate system=foo
+ifeq ($(debug),true)
+populate: populate-flags = --debug
+endif
+populate:
+	source=$$($(call evaluate,config.krebs.build.source) --json --strict) && \
+	echo $$source | populate \
+			$(target_user)@$(target_host):$(target_port)$(target_path) \
+			$(populate-flags)
 
 # usage: make build.pkgs.get
 build build.:;@$(call build,$${expr-eval})
@@ -99,7 +103,7 @@ install:
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		env target_path=$(target_path) \
 			sh -s prepare < krebs/4lib/infest/prepare.sh
-	target_path=/mnt$(target_path) $(call execute,populate)
+	$(MAKE) populate target_path=/mnt$(target_path)
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		env NIXOS_CONFIG=$(target_path)/nixos-config \
 				STOCKHOLM_VERSION="$$STOCKHOLM_VERSION" \
@@ -117,8 +121,7 @@ $(error bad method: $(method))
 endif
 endif
 test: ssh ?= ssh
-test:
-	$(call execute,populate)
+test: populate
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		$(command) --show-trace -I $(target_path) \
 			-A config.system.build.toplevel $(target_path)/stockholm

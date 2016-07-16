@@ -7,15 +7,14 @@ with config.krebs.lib;
 
   # TODO rename shared user to "krebs"
   krebs.build.user = mkDefault config.krebs.users.shared;
-  krebs.build.source = {
-    nixpkgs = mkDefault {
+  krebs.build.source = let inherit (config.krebs.build) host user; in {
+    nixos-config.symlink = "stockholm/${user.name}/1systems/${host.name}.nix";
+    nixpkgs.git = {
       url = https://github.com/NixOS/nixpkgs;
-      rev = "63b9785"; # stable @ 2016-06-01
+      ref = "63b9785"; # stable @ 2016-06-01
     };
-    secrets =  mkDefault "${getEnv "HOME"}/secrets/krebs/${config.krebs.build.host.name}";
-    stockholm = mkDefault "${getEnv "HOME"}/stockholm";
-
-    nixos-config = "symlink:stockholm/${config.krebs.build.user.name}/1systems/${config.krebs.build.host.name}.nix";
+    secrets.file = "${getEnv "HOME"}/secrets/krebs/${host.name}";
+    stockholm.file = "${getEnv "HOME"}/stockholm";
   };
 
   networking.hostName = config.krebs.build.host.name;
