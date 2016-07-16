@@ -84,10 +84,10 @@ ifeq ($(debug),true)
 populate: populate-flags = --debug
 endif
 populate:
-	source=$$($(call evaluate,config.krebs.build.source) --json --strict) && \
-	echo $$source | populate \
-			$(target_user)@$(target_host):$(target_port)$(target_path) \
-			$(populate-flags)
+	$(call evaluate,config.krebs.build.source) --json --strict | \
+	populate \
+		$(target_user)@$(target_host):$(target_port)$(target_path) \
+		$(populate-flags)
 
 # usage: make build.pkgs.get
 build build.:;@$(call build,$${expr-eval})
