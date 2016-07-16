@@ -12,12 +12,12 @@ in
 
 stdenv.mkDerivation rec {
   name = "populate";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchgit {
     url = http://cgit.cd.krebsco.de/populate;
     rev = "refs/tags/v${version}";
-    sha256 = "12d8p8k6c8096rn423xjnbhbrxacbfpdm7c78g4g5j5nqxknghp5";
+    sha256 = "19drrzji4zdpfn9r1cfms8j4jrn7xgqpyrs6bfd5zszrx4wyw3gw";
   };
 
   phases = [
