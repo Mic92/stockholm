@@ -57,7 +57,7 @@ build = \
 		--show-trace \
 		-I nixos-config=$(nixos-config) \
 		-I stockholm=$(stockholm) \
-		-E "let build = import <stockholm>; in $(1)"
+		-E "with import <stockholm>; $(1)"
 
 evaluate = \
 	nix-instantiate \
@@ -89,9 +89,9 @@ populate:
 		$(target_user)@$(target_host):$(target_port)$(target_path) \
 		$(populate-flags)
 
-# usage: make build.pkgs.get
-build build.:;@$(call build,$${expr-eval})
-build.%:;@$(call build,$@)
+# usage: make pkgs.populate
+pkgs:;@$(error no package selected)
+pkgs.%:;@$(call build,$@)
 
 # usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
 eval eval.:;@$(call evaluate,$${expr-eval})
