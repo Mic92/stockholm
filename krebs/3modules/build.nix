@@ -9,9 +9,8 @@ with config.krebs.lib;
       type = types.host;
     };
 
-    # TODO make krebs.build.profile shell safe
     profile = mkOption {
-      type = types.str;
+      type = types.absolute-path;
       default = "/nix/var/nix/profiles/system";
     };
 
