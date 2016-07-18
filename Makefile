@@ -41,15 +41,17 @@ target_path ?= $(_target_path)
 endif
 endif
 
-export target_host ?= $(system)
-export target_user ?= root
-export target_port ?= 22
-export target_path ?= /var/src
+target_host ?= $(system)
+target_user ?= root
+target_port ?= 22
+target_path ?= /var/src
 
 $(if $(target_host),,$(error unbound variable: target_host))
 $(if $(target_user),,$(error unbound variable: target_user))
 $(if $(target_port),,$(error unbound variable: target_port))
 $(if $(target_path),,$(error unbound variable: target_path))
+
+target ?= $(target_user)@$(target_host):$(target_port)$(target_path)
 
 build = \
 	nix-build \
@@ -57,7 +59,7 @@ build = \
 		--show-trace \
 		-I nixos-config=$(nixos-config) \
 		-I stockholm=$(stockholm) \
-		-E "let build = import <stockholm>; in $(1)"
+		-E "with import <stockholm>; $(1)"
 
 evaluate = \
 	nix-instantiate \
@@ -68,26 +70,37 @@ evaluate = \
 		-I stockholm=$(stockholm) \
 		-E "let eval = import <stockholm>; in with eval; $(1)"
 
-execute = \
-	result=$$($(call evaluate,config.krebs.build.$(1))) && \
-	script=$$(echo "$$result" | jq -r .) && \
-	echo "$$script" | PS5=% sh
-
 ifeq ($(MAKECMDGOALS),)
 $(error No goals specified)
 endif
 
 # usage: make deploy system=foo [target_host=bar]
+ifeq ($(debug),true)
+deploy: rebuild-command = dry-activate
+else
+deploy: rebuild-command = switch
+endif
 deploy: ssh ?= ssh
 deploy:
-	$(call execute,populate)
+	$(MAKE) populate debug=false
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		env STOCKHOLM_VERSION="$$STOCKHOLM_VERSION" \
-			nixos-rebuild switch --show-trace -I $(target_path)
+			nixos-rebuild $(rebuild-command) --show-trace -I $(target_path)
 
-# usage: make build.pkgs.get
-build build.:;@$(call build,$${expr-eval})
-build.%:;@$(call build,$@)
+# usage: make populate system=foo
+ifeq ($(debug),true)
+populate: populate-flags += --debug
+endif
+ifneq ($(ssh),)
+populate: populate-flags += --ssh=$(ssh)
+endif
+populate:
+	$(call evaluate,config.krebs.build.source) --json --strict | \
+	populate $(target) $(populate-flags)
+
+# usage: make pkgs.populate
+pkgs:;@$(error no package selected)
+pkgs.%:;@$(call build,$@)
 
 # usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
 eval eval.:;@$(call evaluate,$${expr-eval})
@@ -99,7 +112,7 @@ install:
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		env target_path=$(target_path) \
 			sh -s prepare < krebs/4lib/infest/prepare.sh
-	target_path=/mnt$(target_path) $(call execute,populate)
+	$(MAKE) populate target_path=/mnt$(target_path)
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		env NIXOS_CONFIG=$(target_path)/nixos-config \
 				STOCKHOLM_VERSION="$$STOCKHOLM_VERSION" \
@@ -117,8 +130,7 @@ $(error bad method: $(method))
 endif
 endif
 test: ssh ?= ssh
-test:
-	$(call execute,populate)
+test: populate
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		$(command) --show-trace -I $(target_path) \
 			-A config.system.build.toplevel $(target_path)/stockholm

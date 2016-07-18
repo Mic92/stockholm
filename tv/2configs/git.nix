@@ -36,6 +36,7 @@ let
     much = {};
     newsbot-js = {};
     nixpkgs = {};
+    populate.desc = "source code installer";
     push = {};
     regfish = {};
     soundcloud = {
