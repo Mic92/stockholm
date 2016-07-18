@@ -5,9 +5,10 @@ stdenv.mkDerivation rec {
   # forticlient will be copied into /tmp before execution. this is necessary as
   # the software demands $base to be writeable
 
+  # TODO: chroot and create the following files instead of copying files manually
   # mkdir /etc/ppp ; touch /etc/ppp/options
-  ## i still have not found which tool uses tail ... i tried redirecting it in forticlientsslvpn and subproc
   # ln -s /run/current-system/sw/bin/tail /usr/bin/tail
+  # ln -s /run/current-system/sw/bin/pppd /usr/sbin/pppd
 
   src = fetchurl {
     # archive.org mirror:
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
     cp -r 64bit/. "$out/opt/fortinet"
     wrapProgram $out/opt/fortinet/forticlientsslvpn \
       --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-      --set NIX_REDIRECTS /usr/sbin/ip=${iproute}/bin/ip:/usr/sbin/ppp=${ppp}/bin/ppp
+      --set NIX_REDIRECTS /usr/bin/tail=${coreutils}/bin/tail:/usr/sbin/ip=${iproute}/bin/ip:/usr/sbin/pppd=${ppp}/bin/pppd
 
     mkdir -p "$out/bin/"
 
