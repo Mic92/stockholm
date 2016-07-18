@@ -53,16 +53,14 @@ with config.krebs.lib;
     search-domain = "retiolum";
     build = {
       user = config.krebs.users.lass;
-      source = mapAttrs (_: mkDefault) ({
-        nixos-config = "symlink:stockholm/lass/1systems/${config.krebs.build.host.name}.nix";
-        secrets = if getEnv "dummy_secrets" == "true"
-          then toString <stockholm/lass/2configs/tests/dummy-secrets>
-          else "/home/lass/secrets/${config.krebs.build.host.name}";
-        #secrets-common = "/home/lass/secrets/common";
-        stockholm = getEnv "PWD";
-      } // optionalAttrs config.krebs.build.host.secure {
-        #secrets-master = "/home/lass/secrets/master";
-      });
+      source = let inherit (config.krebs.build) host; in {
+        nixos-config.symlink = "stockholm/lass/1systems/${host.name}.nix";
+        secrets.file =
+          if getEnv "dummy_secrets" == "true"
+            then toString <stockholm/lass/2configs/tests/dummy-secrets>
+            else "/home/lass/secrets/${host.name}";
+        stockholm.file = getEnv "PWD";
+      };
     };
   };
 

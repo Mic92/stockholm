@@ -138,8 +138,8 @@ ip=$(cac-api getserver $id | jq -r .ip)
 cat > shared/2configs/temp/dirs.nix <<EOF
 _: {
   krebs.build.source = {
-    secrets = "$krebs_secrets";
-    stockholm = "$(pwd)";
+    secrets.file = "$krebs_secrets";
+    stockholm.file = "$(pwd)";
   };
   users.extraUsers.root.openssh.authorizedKeys.keys = [
     "$(cat ${krebs_ssh}.pub)"

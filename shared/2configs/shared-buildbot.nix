@@ -75,7 +75,8 @@
 
   # prepare nix-shell
   # the dependencies which are used by the test script
-  deps = [ "gnumake", "jq","nix","rsync",
+  deps = [ "gnumake", "jq", "nix",
+            "(import <stockholm>).pkgs.populate",
             "(import <stockholm>).pkgs.test.infest-cac-centos7" ]
   # TODO: --pure , prepare ENV in nix-shell command:
   #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
@@ -95,8 +96,7 @@
   for i in [ "test-centos7", "wolf", "test-failing" ]:
     addShell(f,name="populate-{}".format(i),env=env,
             command=nixshell + \
-                      ["{}( make system={} eval.config.krebs.build.populate \
-                         | jq -er .)".format("!" if "failing" in i else "",i)])
+                      ["{}(make system={} populate debug=true)".format("!" if "failing" in i else "",i)])
 
   # XXX we must prepare ./retiolum.rsa_key.priv for secrets to work
   addShell(f,name="instantiate-test-all-modules",env=env,
@@ -179,7 +179,7 @@
     masterhost = "localhost";
     username = "testslave";
     password = "krebspass";
-    packages = with pkgs;[ git nix gnumake jq rsync ];
+    packages = with pkgs; [ gnumake jq nix populate ];
     # all nix commands will need a working nixpkgs installation
     extraEnviron = {
       NIX_PATH="nixpkgs=/var/src/nixpkgs:nixos-config=./shared/1systems/wolf.nix"; };

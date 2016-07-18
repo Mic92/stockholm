@@ -64,7 +64,7 @@ in {
 
       # prepare nix-shell
       # the dependencies which are used by the test script
-      deps = [ "gnumake", "jq", "nix", "rsync", "proot" ]
+      deps = [ "gnumake", "jq", "nix", "(import <stockholm>).pkgs.populate" ]
       # TODO: --pure , prepare ENV in nix-shell command:
       #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
       nixshell = ["nix-shell",
@@ -112,8 +112,7 @@ in {
         for i in [ "prism", "mors", "echelon" ]:
           addShell(f,name="populate-{}".format(i),env=env_lass,
                   command=nixshell + \
-                            ["{}( make system={} eval.config.krebs.build.populate \
-                               | jq -er .)".format("!" if "failing" in i else "",i)])
+                            ["{}(make system={} populate debug=true)".format("!" if "failing" in i else "",i)])
 
         addShell(f,name="build-test-minimal",env=env_lass,
                   command=nixshell + \
@@ -146,7 +145,7 @@ in {
     masterhost = "localhost";
     username = "testslave";
     password = "lasspass";
-    packages = with pkgs;[ git nix gnumake jq rsync ];
+    packages = with pkgs; [ gnumake jq nix populate ];
     extraEnviron = {
       NIX_PATH="nixpkgs=/var/src/nixpkgs";
     };
