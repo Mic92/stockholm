@@ -147,7 +147,7 @@ in {
     password = "lasspass";
     packages = with pkgs; [ gnumake jq nix populate ];
     extraEnviron = {
-      NIX_PATH="nixpkgs=/var/src/nixpkgs";
+      NIX_PATH="/var/src";
     };
   };
   config.krebs.iptables = {
