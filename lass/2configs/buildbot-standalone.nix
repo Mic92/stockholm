@@ -86,7 +86,7 @@ in {
                       ["make \
                             test \
                             ssh=${sshWrapper} \
-                            target=build@localhost:${config.users.users.build.home}/testbuild \
+                            target=build@localhost${config.users.users.build.home}/testbuild \
                             method=build \
                             system={}".format(i)])
 
@@ -96,7 +96,7 @@ in {
                       ["make \
                             test \
                             ssh=${sshWrapper} \
-                            target=build@localhost:${config.users.users.build.home}/testbuild \
+                            target=build@localhost${config.users.users.build.home}/testbuild \
                             method=build \
                             system={}".format(i)])
 
