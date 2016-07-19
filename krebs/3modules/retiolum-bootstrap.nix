@@ -27,12 +27,12 @@ let
     ssl_certificate_key = mkOption {
         type = types.str;
         description = "Certificate key to use for ssl";
-        default = "/root/secrets/tinc.krebsco.de.key";
+        default = "${toString <secrets>}/tinc.krebsco.de.key";
     };
     ssl_certificate = mkOption {
         type = types.str;
         description = "Certificate file to use for ssl";
-        default = "/root/secrets/tinc.krebsco.de.crt" ;
+        default = "${toString <secrets>}/tinc.krebsco.de.crt" ;
     };
     # in use:
     #  <secrets/tinc.krebsco.de.crt>
