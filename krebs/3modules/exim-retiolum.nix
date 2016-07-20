@@ -37,7 +37,7 @@ let
       config =
         # This configuration makes only sense for retiolum-enabled hosts.
         # TODO modular configuration
-        assert (lib.hasAttr "retiolum" config.krebs.tinc);
+        assert config.krebs.tinc.retiolum.enable;
         ''
           keep_environment =
 
