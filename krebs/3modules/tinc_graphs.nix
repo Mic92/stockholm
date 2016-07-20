@@ -23,7 +23,7 @@ let
     hostsPath = mkOption {
       type = types.str;
       description = "Path to Hosts directory";
-      default = "${config.krebs.retiolum.hostsPackage}";
+      default = "${config.krebs.tinc.retiolum.hostsPackage}";
     };
 
     network = mkOption {

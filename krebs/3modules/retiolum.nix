@@ -50,9 +50,9 @@ let
           default =
             filterAttrs (_: h: hasAttr tinc.config.netname h.nets) config.krebs.hosts;
           description = ''
-            Hosts to generate <literal>config.krebs.retiolum.hostsPackage</literal>.
+            Hosts to generate <literal>config.krebs.tinc.retiolum.hostsPackage</literal>.
             Note that these hosts must have a network named
-            <literal>config.krebs.retiolum.netname</literal>.
+            <literal>config.krebs.tinc.retiolum.netname</literal>.
           '';
         };
 

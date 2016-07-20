@@ -15,14 +15,14 @@ in
     ../2configs/shared-buildbot.nix
     ../2configs/cgit-mirror.nix
     ../2configs/repo-sync.nix
-    # ../2configs/graphite.nix
+    ../2configs/graphite.nix
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
   # apt-cacher-ng in first place)
 
   # local discovery in shackspace
   nixpkgs.config.packageOverrides = pkgs: { tinc = pkgs.tinc_pre; };
-  krebs.retiolum.extraConfig = "TCPOnly = yes";
+  krebs.tinc.retiolum.extraConfig = "TCPOnly = yes";
   services.grafana = {
     enable = true;
     addr = "0.0.0.0";

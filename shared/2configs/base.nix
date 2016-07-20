@@ -3,7 +3,7 @@
 with config.krebs.lib;
 {
   krebs.enable = true;
-  krebs.retiolum.enable = true;
+  krebs.tinc.retiolum.enable = true;
 
   # TODO rename shared user to "krebs"
   krebs.build.user = mkDefault config.krebs.users.shared;

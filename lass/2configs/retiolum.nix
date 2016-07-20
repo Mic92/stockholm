@@ -12,7 +12,7 @@
     };
   };
 
-  krebs.retiolum = {
+  krebs.tinc.retiolum = {
     enable = true;
     connectTo = [
       "prism"
