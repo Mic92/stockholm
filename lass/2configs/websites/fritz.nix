@@ -7,6 +7,7 @@ let
     head
   ;
   inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
+    manageCerts
     ssl
     servePage
     serveWordpress
@@ -48,6 +49,9 @@ in {
 
     (ssl [ "habsys.de" "www.habsys.de" "habsys.eu" "www.habsys.eu" ])
     (servePage [ "habsys.de" "www.habsys.de" "habsys.eu" "www.habsys.eu" ])
+
+    (manageCerts [ "goldbarrendiebstahl.radical-dreamers.de" ])
+    (serveWordpress [ "goldbarrendiebstahl.radical-dreamers.de" ])
   ];
 
   lass.mysqlBackup.config.all.databases = [
@@ -73,6 +77,16 @@ in {
   users.users.root.openssh.authorizedKeys.keys = [
     config.krebs.users.fritz.pubkey
   ];
+
+  users.users.goldbarrendiebstahl = {
+    home = "/srv/http/goldbarrendiebstahl.radical-dreamers.de";
+    uid = genid "goldbarrendiebstahl";
+    createHome = true;
+    useDefaultShell = true;
+    openssh.authorizedKeys.keys = [
+      config.krebs.users.fritz.pubkey
+    ];
+  };
 
   services.phpfpm.phpIni = pkgs.runCommand "php.ini" {
      options = ''

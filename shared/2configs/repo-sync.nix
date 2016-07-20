@@ -17,7 +17,7 @@ with lib;
         mirror.url = mirror;
       };
       lassulus = {
-        origin.url = http://cgit.cloudkrebs/stockholm ;
+        origin.url = http://cgit.prism/stockholm ;
         mirror.url = mirror;
       };
       "@latest" = {
