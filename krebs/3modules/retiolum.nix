@@ -2,7 +2,6 @@
 with config.krebs.lib;
 let
   out = {
-    options.krebs.retiolum = trace "krebs.retiolum is obsolete, use krebs.tinc.retiolum instead" config.krebs.tinc.retiolum;
     options.krebs.tinc = api;
     config = imp;
   };
