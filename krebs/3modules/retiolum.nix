@@ -126,15 +126,15 @@ let
   };
   imp = {
     # TODO environment.systemPackages = [ tinc iproute ]; AND avoid conflicts
-    krebs.secret.files = lib.mapAttrs' (netname: cfg:
+    krebs.secret.files = mapAttrs' (netname: cfg:
       nameValuePair "${netname}.rsa_key.priv" cfg.privkey ) config.krebs.tinc;
-    users.users = lib.mapAttrs' (netname: cfg:
+    users.users = mapAttrs' (netname: cfg:
       nameValuePair "${netname}" {
       inherit (cfg.user) home name uid;
       createHome = true;
       } ) config.krebs.tinc;
 
-    systemd.services = lib.mapAttrs (netname: cfg:
+    systemd.services = mapAttrs (netname: cfg:
       let
         net = cfg.host.nets.${netname};
 
@@ -144,7 +144,7 @@ let
 
         confDir = let
           namePathPair = name: path: { inherit name path; };
-        in pkgs.linkFarm "${netname}-etc-tinc" (lib.mapAttrsToList namePathPair {
+        in pkgs.linkFarm "${netname}-etc-tinc" (mapAttrsToList namePathPair {
           "hosts" = cfg.hostsPackage;
           "tinc.conf" = pkgs.writeText "${cfg.netname}-tinc.conf" ''
             Name = ${cfg.host.name}
