@@ -13,6 +13,9 @@ let
     '';
     type = with types; attrsOf (submodule (tinc: {
       options = {
+
+        enable = mkEnableOption "krebs.tinc.${tinc.config._module.args.name}" // { default = true; }; 
+
         host = mkOption {
           type = types.host;
           default = config.krebs.build.host;
@@ -121,58 +124,58 @@ let
       };
     }));
   };
-  imp = lib.mkMerge ( lib.mapAttrsToList (netname: cfg:
-  let
-    net = cfg.host.nets.${netname};
-
-    tinc = cfg.tincPackage;
-
-    iproute = cfg.iproutePackage;
-
-    confDir = let
-      namePathPair = name: path: { inherit name path; };
-    in pkgs.linkFarm "${netname}-etc-tinc" (lib.mapAttrsToList namePathPair {
-      "hosts" = cfg.hostsPackage;
-      "tinc.conf" = pkgs.writeText "${cfg.netname}-tinc.conf" ''
-        Name = ${cfg.host.name}
-        Interface = ${netname}
-        ${concatStrings (map (c: "ConnectTo = ${c}\n") cfg.connectTo)}
-        PrivateKeyFile = ${cfg.privkey.path}
-        ${cfg.extraConfig}
-      '';
-      "tinc-up" = pkgs.writeDash "${netname}-tinc-up" ''
-        ${iproute}/sbin/ip link set ${netname} up
-        ${optionalString (net.ip4 != null) /* sh */ ''
-          ${iproute}/sbin/ip -4 addr add ${net.ip4.addr} dev ${netname}
-          ${iproute}/sbin/ip -4 route add ${net.ip4.prefix} dev ${netname}
-        ''}
-        ${optionalString (net.ip6 != null) /* sh */ ''
-          ${iproute}/sbin/ip -6 addr add ${net.ip6.addr} dev ${netname}
-          ${iproute}/sbin/ip -6 route add ${net.ip6.prefix} dev ${netname}
-        ''}
-      '';
-    });
-  in {
-    krebs.secret.files."${netname}.rsa_key.priv" = cfg.privkey;
-
-    environment.systemPackages = [ tinc iproute ];
-
-    systemd.services.${netname} = {
-      description = "Tinc daemon for ${netname}";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "secret.service" ];
-      path = [ tinc iproute ];
-      serviceConfig = rec {
-        Restart = "always";
-        ExecStart = "${tinc}/sbin/tincd -c ${confDir} -d 0 -U ${cfg.user.name} -D --pidfile=/var/run/tinc.${SyslogIdentifier}.pid";
-        SyslogIdentifier = netname;
-      };
-    };
-
-    users.users.${cfg.user.name} = {
+  imp = {
+    # TODO environment.systemPackages = [ tinc iproute ]; AND avoid conflicts
+    krebs.secret.files = lib.mapAttrs' (netname: cfg:
+      nameValuePair "${netname}.rsa_key.priv" cfg.privkey ) config.krebs.tinc;
+    users.users = lib.mapAttrs' (netname: cfg:
+      nameValuePair "${netname}" {
       inherit (cfg.user) home name uid;
       createHome = true;
-    };
-  }) {} ); # TODO <<<< replace with the "config.krebs.tinc" and avoid infinite recursion
+      } ) config.krebs.tinc;
+
+    systemd.services = lib.mapAttrs (netname: cfg:
+      let
+        net = cfg.host.nets.${netname};
+
+        tinc = cfg.tincPackage;
+
+        iproute = cfg.iproutePackage;
+
+        confDir = let
+          namePathPair = name: path: { inherit name path; };
+        in pkgs.linkFarm "${netname}-etc-tinc" (lib.mapAttrsToList namePathPair {
+          "hosts" = cfg.hostsPackage;
+          "tinc.conf" = pkgs.writeText "${cfg.netname}-tinc.conf" ''
+            Name = ${cfg.host.name}
+            Interface = ${netname}
+            ${concatStrings (map (c: "ConnectTo = ${c}\n") cfg.connectTo)}
+            PrivateKeyFile = ${cfg.privkey.path}
+            ${cfg.extraConfig}
+          '';
+          "tinc-up" = pkgs.writeDash "${netname}-tinc-up" ''
+            ${iproute}/sbin/ip link set ${netname} up
+            ${optionalString (net.ip4 != null) /* sh */ ''
+              ${iproute}/sbin/ip -4 addr add ${net.ip4.addr} dev ${netname}
+              ${iproute}/sbin/ip -4 route add ${net.ip4.prefix} dev ${netname}
+            ''}
+            ${optionalString (net.ip6 != null) /* sh */ ''
+              ${iproute}/sbin/ip -6 addr add ${net.ip6.addr} dev ${netname}
+              ${iproute}/sbin/ip -6 route add ${net.ip6.prefix} dev ${netname}
+            ''}
+          '';
+        });
+      in {
+          description = "Tinc daemon for ${netname}";
+          after = [ "network.target" ];
+          wantedBy = [ "multi-user.target" ];
+          requires = [ "secret.service" ];
+          path = [ tinc iproute ];
+          serviceConfig = rec {
+            Restart = "always";
+            ExecStart = "${tinc}/sbin/tincd -c ${confDir} -d 0 -U ${cfg.user.name} -D --pidfile=/var/run/tinc.${SyslogIdentifier}.pid";
+            SyslogIdentifier = netname;
+          };
+        } ) config.krebs.tinc;
+  };
 in out
