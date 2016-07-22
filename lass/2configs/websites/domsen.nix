@@ -110,14 +110,6 @@ in {
     };
   };
 
-  users.users.domsen = {
-    uid = genid "domsen";
-    description = "maintenance acc for domsen";
-    home = "/home/domsen";
-    useDefaultShell = true;
-    extraGroups = [ "nginx" ];
-    createHome = true;
-  };
 
   #services.phpfpm.phpOptions = ''
   #  extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
@@ -133,5 +125,40 @@ in {
     cat ${pkgs.php}/etc/php-recommended.ini > $out
     echo "$options" >> $out
   '';
+
+  # MAIL STUFF
+  # TODO: make into its own module
+    services.dovecot2 = {
+      enable = true;
+      mailLocation = "maildir:~/Mail";
+    };
+    krebs.iptables.tables.filter.INPUT.rules = [
+      { predicate = "-p tcp --dport pop3"; target = "ACCEPT"; }
+      { predicate = "-p tcp --dport imap"; target = "ACCEPT"; }
+    ];
+  krebs.exim-smarthost = {
+    internet-aliases = [
+      { from = "dominik@apanowicz.de"; to = "dma@ubikmedia.eu"; }
+      { from = "mail@jla-trading.com"; to = "jla-trading"; }
+    ];
+    system-aliases = [
+    ];
+  };
+
+  users.users.domsen = {
+    uid = genid "domsen";
+    description = "maintenance acc for domsen";
+    home = "/home/domsen";
+    useDefaultShell = true;
+    extraGroups = [ "nginx" ];
+    createHome = true;
+  };
+
+  users.users.jla-trading = {
+    uid = genid "jla-trading";
+    home = "/home/jla-trading";
+    useDefaultShell = true;
+    createHome = true;
+  };
 }
 

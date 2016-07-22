@@ -226,7 +226,7 @@ in {
     {
       users.users.tv = {
         uid = genid "tv";
-        home = "/home/tv";
+        inherit (config.krebs.users.tv) home;
         group = "users";
         createHome = true;
         useDefaultShell = true;

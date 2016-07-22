@@ -259,8 +259,13 @@ with config.krebs.lib;
     };
     filepimp = rec {
       cores = 1;
-
       nets = {
+        lan = {
+          ip4.addr = "192.168.1.12";
+          aliases = [
+            "filepimp.lan"
+          ];
+        };
         retiolum = {
           ip4.addr = "10.243.153.102";
           ip6.addr = "42:4b0b:d990:55ba:8da8:630f:dc0e:aae0";
@@ -286,6 +291,12 @@ with config.krebs.lib;
       cores = 2;
 
       nets = {
+        lan = {
+          ip4.addr = "192.168.1.11";
+          aliases = [
+            "omo.lan"
+          ];
+        };
         retiolum = {
           ip4.addr = "10.243.0.89";
           ip6.addr = "42:f9f0::10";

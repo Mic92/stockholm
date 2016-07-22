@@ -38,7 +38,7 @@ in {
     };
     nginx.enable = true;
     realwallpaper.enable = true;
-    retiolum.enable = true;
+    tinc.retiolum.enable = true;
     retiolum-bootstrap.enable = true;
     tinc_graphs.enable = true;
     urlwatch.enable = true;

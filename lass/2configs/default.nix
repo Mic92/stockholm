@@ -3,13 +3,14 @@
 with config.krebs.lib;
 {
   imports = [
-    ../2configs/vim.nix
-    ../2configs/zsh.nix
-    ../2configs/mc.nix
-    ../2configs/retiolum.nix
-    ../2configs/nixpkgs.nix
+    ../2configs/audit.nix
     ../2configs/binary-cache/client.nix
     ../2configs/gc.nix
+    ../2configs/mc.nix
+    ../2configs/nixpkgs.nix
+    ../2configs/retiolum.nix
+    ../2configs/vim.nix
+    ../2configs/zsh.nix
     ./backups.nix
     {
       users.extraUsers =

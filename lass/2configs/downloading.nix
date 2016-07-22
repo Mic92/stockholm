@@ -5,9 +5,6 @@ with config.krebs.lib;
 let
   rpc-password = import <secrets/transmission-pw>;
 in {
-  imports = [
-    ../3modules/folderPerms.nix
-  ];
 
   users.extraUsers = {
     download = {
@@ -62,17 +59,6 @@ in {
       { predicate = "-p tcp --dport 9091"; target = "ACCEPT"; }
       { predicate = "-p tcp --dport 51413"; target = "ACCEPT"; }
       { predicate = "-p udp --dport 51413"; target = "ACCEPT"; }
-    ];
-  };
-
-  lass.folderPerms = {
-    enable = true;
-    permissions = [
-      {
-        path = "/var/download";
-        permission = "775";
-        owner = "transmission:download";
-      }
     ];
   };
 }

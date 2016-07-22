@@ -27,7 +27,6 @@ with config.krebs.lib;
       { from = "lass@aidsballs.de"; to = lass.mail; }
       { from = "wordpress@ubikmedia.de"; to = lass.mail; }
       { from = "finanzamt@lassul.us"; to = lass.mail; }
-      { from = "dominik@apanowicz.de"; to = "dma@ubikmedia.eu"; }
       { from = "netzclub@lassul.us"; to = lass.mail; }
       { from = "nebenan@lassul.us"; to = lass.mail; }
     ];

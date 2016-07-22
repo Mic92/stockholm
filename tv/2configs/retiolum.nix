@@ -3,7 +3,7 @@
 with config.krebs.lib;
 
 {
-  krebs.retiolum = {
+  krebs.tinc.retiolum = {
     enable = true;
     connectTo = filter (ne config.krebs.build.host.name) [
       "gum"

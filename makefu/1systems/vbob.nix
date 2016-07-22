@@ -8,9 +8,10 @@
       (toString <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix>)
       (toString <nixpkgs/nixos/modules/virtualisation/virtualbox-guest.nix>)
       ../2configs/main-laptop.nix #< base-gui
-      # (toString <secrets>)/extra-hosts.nix
+      # <secrets/extra-hosts.nix>
 
       # environment
+      ../2configs/tinc/retiolum.nix
 
     ];
   # workaround for https://github.com/NixOS/nixpkgs/issues/16641
@@ -28,8 +29,15 @@
         openssh.authorizedKeys.keys = [ config.krebs.users.makefu-vbob.pubkey  ];
     };
   };
+
+  environment.shellAliases = {
+    forti  = "cat ~/vpn/pw.txt | xclip; sudo forticlientsslvpn";
+  };
+  # TODO: for forticleintsslpn
+  #       ln -s /r/current-system/sw/bin/pppd /usr/sbin/pppd
+  #       ln -s /r/current-system/sw/bin/tail /usr/bin/tail
   environment.systemPackages = with pkgs;[
-    fortclientsslvpn
+    fortclientsslvpn ppp xclip
     get
     logstash
     docker
@@ -45,13 +53,6 @@
     8010
   ];
 
-  krebs.retiolum = {
-    enable = true;
-    connectTo = [
-      "omo"
-      "gum"
-    ];
-  };
   virtualisation.docker.enable = false;
 
   fileSystems."/media/share" = {

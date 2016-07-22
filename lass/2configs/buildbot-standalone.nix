@@ -86,17 +86,17 @@ in {
                       ["make \
                             test \
                             ssh=${sshWrapper} \
-                            target=build@localhost:${config.users.users.build.home}/testbuild \
+                            target=build@localhost${config.users.users.build.home}/testbuild \
                             method=build \
                             system={}".format(i)])
 
-        for i in [ "pornocauster", "wry" ]:
+        for i in [ "pornocauster", "wry", "vbob", "wbob", "shoney" ]:
           addShell(f,name="build-{}".format(i),env=env_makefu,
                   command=nixshell + \
                       ["make \
                             test \
                             ssh=${sshWrapper} \
-                            target=build@localhost:${config.users.users.build.home}/testbuild \
+                            target=build@localhost${config.users.users.build.home}/testbuild \
                             method=build \
                             system={}".format(i)])
 
@@ -147,7 +147,7 @@ in {
     password = "lasspass";
     packages = with pkgs; [ gnumake jq nix populate ];
     extraEnviron = {
-      NIX_PATH="nixpkgs=/var/src/nixpkgs";
+      NIX_PATH="/var/src";
     };
   };
   config.krebs.iptables = {
