@@ -86,6 +86,16 @@ let
       default = [];
     };
 
+    ssl_cert = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+    };
+
+    ssl_key = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+    };
+
     system-aliases = mkOption {
       type = types.listOf (types.submodule ({
         options = {
@@ -142,7 +152,9 @@ let
         syslog_timestamp = false
         syslog_duplication = false
 
-        tls_advertise_hosts =
+        ${optionalString (cfg.ssl_cert != null) "tls_certificate = ${cfg.ssl_cert}"}
+        ${optionalString (cfg.ssl_key != null) "tls_privatekey = ${cfg.ssl_key}"}
+        tls_advertise_hosts =${optionalString (cfg.ssl_cert != null) " *"}
 
         begin acl
 
