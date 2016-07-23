@@ -91,6 +91,7 @@ let
   imp = lib.mkMerge [
     { krebs = import ./lass   { inherit config lib; }; }
     { krebs = import ./makefu { inherit config lib; }; }
+    { krebs = import ./mv     { inherit config lib; }; }
     { krebs = import ./shared { inherit config lib; }; }
     { krebs = import ./tv     { inherit config lib; }; }
     {
