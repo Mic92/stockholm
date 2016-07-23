@@ -161,11 +161,6 @@ with config.krebs.lib;
 
   nixpkgs.config.chromium.enablePepperFlash = true;
 
-  #hardware.bumblebee.enable = true;
-  #hardware.bumblebee.group = "video";
-  hardware.enableAllFirmware = true;
-  #hardware.opengl.driSupport32Bit = true;
-
   environment.systemPackages = with pkgs; [
     ethtool
     tinc_pre
@@ -194,36 +189,4 @@ with config.krebs.lib;
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "15.09";
-
-#/*
-#{ host api.doraemon.sg.zalora.net | awk '{print$4" api.zalora.sg"}';
-#  host bob.live.sg.zalora.net | awk '{print$4" bob.zalora.sg"}';
-#  host www.live.sg.zalora.net | awk '{print$4" www.zalora.sg costa.zalora.sg"}'; }
-#*/
-#  networking.extraHosts = optionalString (1 == 1) ''
-#54.255.133.72 api.zalora.sg
-#52.77.12.194 bob.zalora.sg
-#52.74.232.49 www.zalora.sg costa.zalora.sg
-#  '';
-
-
-  #services.elasticsearch.enable = true;
-  #services.kibana.enable = true;
-  #services.logstash.enable = true;
-
-  environment.etc."ssh/ssh_config".text = mkForce ''
-    AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
-
-    ${optionalString config.programs.ssh.setXAuthLocation ''
-      XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
-    ''}
-
-    ForwardX11 ${if config.programs.ssh.forwardX11 then "yes" else "no"}
-
-    # Allow DSA keys for now. (These were deprecated in OpenSSH 7.0.)
-    #PubkeyAcceptedKeyTypes +ssh-dss
-
-    ${config.programs.ssh.extraConfig}
-  '';
-
 }

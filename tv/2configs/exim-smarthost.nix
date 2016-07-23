@@ -20,7 +20,7 @@ with config.krebs.lib;
     ];
     internet-aliases = with config.krebs.users; [
       { from = "postmaster@viljetic.de"; to = tv.mail; } # RFC 822
-      { from = "mirko@viljetic.de"; to = mv.mail; }
+      { from = "mirko@viljetic.de"; to = mv-cd.mail; }
       { from = "tomislav@viljetic.de"; to = tv.mail; }
       { from = "tv@destroy.dyn.shackspace.de"; to = tv.mail; }
       { from = "tv@viljetic.de"; to = tv.mail; }
