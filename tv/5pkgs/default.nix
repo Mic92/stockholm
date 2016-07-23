@@ -15,7 +15,9 @@
     ejabberd = pkgs.callPackage ./ejabberd {
       erlang = pkgs.erlangR16;
     };
-    ff = pkgs.callPackage ./ff {};
+    ff = pkgs.writeDashBin "ff" ''
+      exec ${pkgs.firefoxWrapper}/bin/firefox "$@"
+    '';
     gnupg =
       if elem config.krebs.build.host.name ["xu" "wu"]
         then super.gnupg21
