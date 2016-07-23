@@ -30,6 +30,7 @@ with config.krebs.lib;
     ./bash.nix
     ./nginx
     ./ssh.nix
+    ./sshd.nix
     ./vim.nix
     {
       # stockholm dependencies
@@ -133,16 +134,6 @@ with config.krebs.lib;
         SystemMaxUse=1G
         RuntimeMaxUse=128M
       '';
-    }
-
-    {
-      services.openssh = {
-        enable = true;
-        hostKeys = [
-          { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
-        ];
-      };
-      tv.iptables.input-internet-accept-tcp = singleton "ssh";
     }
 
     {
