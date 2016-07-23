@@ -1,8 +1,7 @@
 { config, pkgs, ... }@args:
 with config.krebs.lib;
 let
-  # TODO krebs.build.user
-  user = config.users.users.tv;
+  user = config.krebs.build.user;
 in {
 
   environment.systemPackages = [
