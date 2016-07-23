@@ -28,6 +28,7 @@ with config.krebs.lib;
     ./audit.nix
     ./backup.nix
     ./nginx
+    ./ssh.nix
     ./vim.nix
     {
       # stockholm dependencies
@@ -139,13 +140,6 @@ with config.krebs.lib;
             PS1="ssh-agent[$SSH_AGENT_PID] $PS1"
           fi
         '';
-      };
-
-      programs.ssh = {
-        extraConfig = ''
-          UseRoaming no
-        '';
-        startAgent = false;
       };
     }
 
