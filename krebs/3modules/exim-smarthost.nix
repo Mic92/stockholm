@@ -2,6 +2,7 @@
 
 with config.krebs.lib;
 let
+  indent = replaceChars ["\n"] ["\n  "];
   cfg = config.krebs.exim-smarthost;
 
   out = {
@@ -11,6 +12,11 @@ let
 
   api = {
     enable = mkEnableOption "krebs.exim-smarthost";
+
+    authenticators = mkOption {
+      type = types.attrsOf types.str;
+      default = {};
+    };
 
     dkim = mkOption {
       type = types.listOf (types.submodule ({ config, ... }: {
@@ -257,6 +263,10 @@ let
 
         begin rewrite
         begin authenticators
+        ${concatStringsSep "\n" (mapAttrsToList (name: text: ''
+        ${name}:
+          ${indent text}
+        '') cfg.authenticators)}
       '';
     };
   };
