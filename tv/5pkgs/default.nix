@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 with config.krebs.lib;
 {
-  nixpkgs.config.packageOverrides = {
+  nixpkgs.config.packageOverrides = super: {
     # TODO use XDG_RUNTIME_DIR?
     cr = pkgs.writeDashBin "cr" ''
       set -efu
