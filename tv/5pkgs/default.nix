@@ -10,7 +10,7 @@
           --ssl-version-min=tls1 \
           --disk-cache-dir=/tmp/chromium-disk-cache_"$LOGNAME" \
           --disk-cache-size=50000000 \
-          "%@"
+          "$@"
     '';
     ejabberd = pkgs.callPackage ./ejabberd {
       erlang = pkgs.erlangR16;
