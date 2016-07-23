@@ -10,6 +10,9 @@
 
   networking.wireless.enable = true;
 
+  # Required for Centrino.
+  hardware.enableAllFirmware = true;
+
   hardware.trackpoint = {
     enable = true;
     sensitivity = 220;

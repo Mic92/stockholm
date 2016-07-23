@@ -161,11 +161,6 @@ with config.krebs.lib;
 
   nixpkgs.config.chromium.enablePepperFlash = true;
 
-  #hardware.bumblebee.enable = true;
-  #hardware.bumblebee.group = "video";
-  hardware.enableAllFirmware = true;
-  #hardware.opengl.driSupport32Bit = true;
-
   environment.systemPackages = with pkgs; [
     ethtool
     tinc_pre

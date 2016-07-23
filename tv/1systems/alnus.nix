@@ -53,7 +53,6 @@ with config.krebs.lib;
   };
 
   hardware = {
-    enableAllFirmware = true;
     opengl.driSupport32Bit = true;
     pulseaudio.enable = true;
   };
