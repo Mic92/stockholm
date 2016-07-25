@@ -167,6 +167,7 @@ with config.krebs.lib;
       extraZones = {
         "krebsco.de" = ''
           euer              IN MX 1   aspmx.l.google.com.
+          nixos.unstable    IN CNAME  krebscode.github.io.
           pigstarter        IN A      ${nets.internet.ip4.addr}
           gold              IN A      ${nets.internet.ip4.addr}
           boot              IN A      ${nets.internet.ip4.addr}
