@@ -11,7 +11,7 @@ let
     '';
 
 in {
-  lass.power-action = {
+  krebs.power-action = {
     enable = true;
     plans.low-battery = {
       upperLimit = 30;
@@ -36,6 +36,6 @@ in {
   ];
 
   security.sudo.extraConfig = ''
-    ${config.lass.power-action.user.name} ALL= (root) NOPASSWD: ${suspend}
+    ${config.krebs.power-action.user.name} ALL= (root) NOPASSWD: ${suspend}
   '';
 }

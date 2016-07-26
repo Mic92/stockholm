@@ -3,10 +3,10 @@
 with config.krebs.lib;
 
 let
-  cfg = config.lass.power-action;
+  cfg = config.krebs.power-action;
 
   out = {
-    options.lass.power-action = api;
+    options.krebs.power-action = api;
     config = lib.mkIf cfg.enable imp;
   };
 

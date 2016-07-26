@@ -58,7 +58,7 @@ with config.krebs.lib;
     #  };
     #}
     {
-      lass.power-action.battery = "BAT1";
+      krebs.power-action.battery = "BAT1";
     }
   ];
 
