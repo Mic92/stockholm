@@ -12,9 +12,11 @@ let
       define a tinc network
     '';
     type = with types; attrsOf (submodule (tinc: {
-      options = {
+      options = let
+        netname = tinc.config._module.args.name;
+      in {
 
-        enable = mkEnableOption "krebs.tinc.${tinc.config._module.args.name}" // { default = true; };
+        enable = mkEnableOption "krebs.tinc.${netname}" // { default = true; };
 
         host = mkOption {
           type = types.host;
@@ -23,7 +25,7 @@ let
 
         netname = mkOption {
           type = types.enum (attrNames tinc.config.host.nets);
-          default = tinc.config._module.args.name;
+          default = netname;
           description = ''
             The tinc network name.
             It is used to name the TUN device and to generate the default value for
@@ -36,6 +38,27 @@ let
           default = "";
           description = ''
             Extra Configuration to be appended to tinc.conf
+          '';
+        };
+        tincUp = mkOption {
+          type = types.string;
+          default = let
+            net = tinc.config.host.nets.${netname};
+            iproute = tinc.config.iproutePackage;
+          in ''
+            ${optionalString (net.ip4 != null) /* sh */ ''
+              ${iproute}/sbin/ip -4 addr add ${net.ip4.addr} dev ${netname}
+              ${iproute}/sbin/ip -4 route add ${net.ip4.prefix} dev ${netname}
+            ''}
+            ${optionalString (net.ip6 != null) /* sh */ ''
+              ${iproute}/sbin/ip -6 addr add ${net.ip6.addr} dev ${netname}
+              ${iproute}/sbin/ip -6 route add ${net.ip6.prefix} dev ${netname}
+            ''}
+          '';
+          description = ''
+            tinc-up script to be used. Defaults to setting the
+            krebs.host.nets.<netname>.ip4 and ip6 for the new ips and
+            configures forwarding of the respecitive netmask as subnet.
           '';
         };
 
@@ -131,6 +154,7 @@ let
 
     krebs.secret.files = mapAttrs' (netname: cfg:
       nameValuePair "${netname}.rsa_key.priv" cfg.privkey ) config.krebs.tinc;
+
     users.users = mapAttrs' (netname: cfg:
       nameValuePair "${netname}" {
         inherit (cfg.user) home name uid;
@@ -140,7 +164,6 @@ let
 
     systemd.services = mapAttrs (netname: cfg:
       let
-        net = cfg.host.nets.${netname};
         tinc = cfg.tincPackage;
         iproute = cfg.iproutePackage;
 
@@ -157,14 +180,7 @@ let
             '';
             "tinc-up" = pkgs.writeDash "${netname}-tinc-up" ''
               ${iproute}/sbin/ip link set ${netname} up
-              ${optionalString (net.ip4 != null) /* sh */ ''
-                ${iproute}/sbin/ip -4 addr add ${net.ip4.addr} dev ${netname}
-                ${iproute}/sbin/ip -4 route add ${net.ip4.prefix} dev ${netname}
-              ''}
-              ${optionalString (net.ip6 != null) /* sh */ ''
-                ${iproute}/sbin/ip -6 addr add ${net.ip6.addr} dev ${netname}
-                ${iproute}/sbin/ip -6 route add ${net.ip6.prefix} dev ${netname}
-              ''}
+              ${cfg.tincUp}
             '';
           }
         );
