@@ -49,7 +49,8 @@ with config.krebs.lib;
           '';
         };
         siem = {
-          ip4.addr = "10.8.10.2";
+          ip4.addr   = "10.8.10.2";
+          ip4.prefix = "10.8.10.0/24";
           aliases = [
             "darth.siem"
           ];
@@ -71,6 +72,7 @@ with config.krebs.lib;
       nets = {
         siem = {
           ip4.addr = "10.8.10.6";
+          ip4.prefix = "10.8.10.0/24";
           aliases = [
             "ossim.siem"
           ];
@@ -147,6 +149,7 @@ with config.krebs.lib;
         };
         siem = {
           ip4.addr = "10.8.10.4";
+          ip4.prefix = "10.8.10.0/24";
           aliases = [
             "makefu.siem"
           ];
@@ -357,6 +360,7 @@ with config.krebs.lib;
       nets = {
         siem = {
           ip4.addr = "10.8.10.7";
+          ip4.prefix = "10.8.10.0/24";
           aliases = [ "display.siem" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -440,6 +444,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       nets = {
         siem = {
           ip4.addr = "10.8.10.1";
+          ip4.prefix = "10.8.10.0/24";
           aliases = [
             "shoney.siem"
             "graphs.siem"
