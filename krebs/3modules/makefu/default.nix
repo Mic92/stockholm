@@ -53,6 +53,17 @@ with config.krebs.lib;
           aliases = [
             "darth.siem"
           ];
+          tinc.pubkey = ''
+            Ed25519PublicKey = 24t9ye4gRLg6UbVxBvuuDlvU/cnByxMjYjym4LO6GkK
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCQKCAQEApcUeTecVahqNIfLEkfgNiaW+eHQ9Y90DxHhy9vdPZh8dmLqoFBoW
+            TCPcZIRpyj7hxRkNIhh34Ewpul0oQ1tzrUGcT2xvMNwaCupRDmhZn9jR9aFFEYKb
+            fUOplCxb4y2UKbWAA6hie3PKH9wnPfbwSsexb2BSQAqSt4iNIVCV6j7LXpiopbGS
+            Exs3/Pz+IeMtGyuMYA3rUmJsVRKR1o7axLtlhYK7JSMbqdYhaQJ4NZrvIXw//w21
+            kM/TJTPZ4j47ME18jQInO62X5h+xVch6DtvwvjBMMMKbS0am9qw1P3qo7MP3PmQh
+            rvVQRth8L63q4NLOnT29XmnxPSVGL1PBQQICEAE=
+            -----END RSA PUBLIC KEY-----
+          '';
         };
       };
     };
@@ -63,6 +74,16 @@ with config.krebs.lib;
           aliases = [
             "ossim.siem"
           ];
+        tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIIBCgKCAQEAv5qv9R3E1AHJOhTnHJ2E5zWjItRdXSw/inpz/W+KcBeM/HSG0XEl
+          RyGAwty7VP4CiLp7CagWmtVsz/5ytnXJzLDeRLn5t+KzO6am0aOpvAt6ZggZXPhL
+          cQkn4IGi1TJE5tw+lzabBkUZm3zD1KEXpqJeZ6spA4e9lB/+T3Tx23g9WDEOKand
+          mAJrsdsvTCIiVJefidOAmgeZVVOV3ltBonNP1nqEy+5v4B3EBT/Uj7ImL2aRj/pd
+          dPs6dGV2LqSQvnrSbFZzuKVXKpD1M+wgT/5NQk/hVJJxBQC6rxvpg1XyQkepcLWL
+          WjvogOl4NjXStmKDX2+gPPFx6XTmwDenOwIDAQAB
+          -----END RSA PUBLIC KEY-----
+        '';
         };
       };
     };
@@ -127,8 +148,19 @@ with config.krebs.lib;
         siem = {
           ip4.addr = "10.8.10.4";
           aliases = [
-            "arch.siem"
+            "makefu.siem"
           ];
+          tinc.pubkey = ''
+            Ed25519PublicKey = rFTglGxm563e/w82Q9Qqy/E+V/ipT4DOTyTuYrWrtmI
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCQKCAQEAx+OQXQj6rlXIByo48JZXSexRz5G5oJVZTHAJ0GF5f70U65C0x83p
+            XtNp4LGYti+cyyzmQjf/N7jr2CxUlOATN2nRO4CT+JaMM2MoqnPWqTZBPMDiHq2y
+            ce0zjLPPl0hVc5mg+6F0tgolbUvTIo2CgAIl5lNvJiVfmXRSehmMprf1NPkxJd/O
+            vAOD7mgnCjkEAWElf1cfxSGZqSLbNltRK340nE5x6A5tY7iEueP/r9chEmOnVjKm
+            t+GJAJIe1PClWJHJYAXF8I7R3g+XQIqgw+VTN3Ng5cS5W/mbTFIzLWMZpdZaAhWR
+            56pthtZAE5FZ+4vxMpDQ4yeDu0b6gajWNQICEAE=
+            -----END RSA PUBLIC KEY-----
+          '';
         };
       };
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
@@ -326,6 +358,19 @@ with config.krebs.lib;
         siem = {
           ip4.addr = "10.8.10.7";
           aliases = [ "display.siem" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA+/TpxsVIBL9J9QAe/+jB6sgu/O6J+KY4YrAzZ6dM4kbFv5JA64f5
+            6znv8EFqn6loS9Aez3e08P5scyGjiwWytdKN5Yztlffc0xDD7MUU2RiCsQF1X74J
+            +1i8NhSq3PJ6UeUURxYYnAYzBlFvsxev4vpniFTsIR9tmcAYX9NT9420D6nV7xq7
+            FdkoBlYj4eUQqQzHH1T/Lmt+BGmf+BufIJas+Oo/Sg59vIk9OM08WyAjHVT2iNbg
+            LXDhzVaeGOOM3GOa0YGG0giM3Rd245YPaPiVbwrMy8HQRBpMzXOPjcC1nYZSjxrW
+            LQxtRS+dmfEMG7MJ8T2T2bseX6z6mONc1QIDAQAB
+            -----END RSA PUBLIC KEY-----
+            -----BEGIN ED25519 PUBLIC KEY-----
+            3JGeGnADWR+hfb4TEoHDyopEYgkfGNJKwy71bqcsNrO
+            -----END ED25519 PUBLIC KEY-----
+          '';
         };
         retiolum = {
           ip4.addr = "10.243.214.15";
@@ -396,9 +441,19 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
         siem = {
           ip4.addr = "10.8.10.1";
           aliases = [
-            "sjump.siem"
+            "shoney.siem"
             "graphs.siem"
           ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA0OK28PHsMGMxAqVRiRGv93zzEWJgV3hMFquWrpbYC3OZwHDYcNHu
+            74skwRRwwnbcq0ZtWroEvUTmZczuPt2FewdtuEutT7uZJnAYnzSOrB9lmmdoXKQU
+            l4ho1LEf/J0sMBi7RU/OJosuruQTAl53ca5KQbRCXkcPlmq4KzUpvgPINpEpYQjB
+            CGC3ErOvw2jXESbDnWomYZgJl3uilJUEYlyQEwyWVG+fO8uxlz9qKLXMlkoJTbs4
+            fTIcxh7y6ZA7QfMN3Ruq1R66smfXQ4xu1hybvqL66RLiDQgH3BRyKIgobS1UxI4z
+            L+xhIsiMXQIo2hv8aOUnf/7Ac9DXNR83GwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
         };
         internet = {
           ip4.addr = "64.137.234.215";
