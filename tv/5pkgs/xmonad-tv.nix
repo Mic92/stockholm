@@ -9,7 +9,7 @@ pkgs.writeHaskell "xmonad-tv" {
       "xmonad-contrib"
       "xmonad-stockholm"
     ];
-    text = ''
+    text = /* haskell */ ''
 {-# LANGUAGE DeriveDataTypeable #-} -- for XS
 {-# LANGUAGE FlexibleContexts #-} -- for xmonad'
 {-# LANGUAGE LambdaCase #-}
@@ -207,8 +207,8 @@ myKeys conf = Map.fromList $
     --,  (_4  , xK_v      ) & \k -> (k, gridselectWorkspace wsGSConfig { gs_navigate = makeGSNav k } W.view)
     --,  (_4S , xK_v      ) & \k -> (k, gridselectWorkspace wsGSConfig { gs_navigate = makeGSNav k } W.shift)
     --,  (_4  , xK_b      ) & \k -> (k, goToSelected        wGSConfig  { gs_navigate = makeGSNav k })
-    , ((noModMask, xF86XK_AudioLowerVolume), amixer ["sset", "Master", "5%+"])
-    , ((noModMask, xF86XK_AudioRaiseVolume), amixer ["sset", "Master", "5%-"])
+    , ((noModMask, xF86XK_AudioLowerVolume), amixer ["sset", "Master", "5%-"])
+    , ((noModMask, xF86XK_AudioRaiseVolume), amixer ["sset", "Master", "5%+"])
     , ((noModMask, xF86XK_AudioMute), amixer ["sset", "Master", "toggle"])
     ]
     where
