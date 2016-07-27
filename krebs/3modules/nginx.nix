@@ -31,12 +31,10 @@ let
         options = {
           server-names = mkOption {
             type = with types; listOf str;
-            # TODO use identity
-            default = [
-              "${config.networking.hostName}"
-              "${config.networking.hostName}.r"
-              "${config.networking.hostName}.retiolum"
-            ];
+            default =
+              [config.krebs.build.host.name] ++
+              concatMap (getAttr "aliases")
+                        (attrValues config.krebs.build.host.nets);
           };
           listen = mkOption {
             type = with types; either str (listOf str);

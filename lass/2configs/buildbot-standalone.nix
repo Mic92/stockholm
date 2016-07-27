@@ -3,8 +3,13 @@
 with config.krebs.lib;
 
 let
+  sshHostConfig = pkgs.writeText "ssh-config" ''
+    ControlMaster auto
+    ControlPath /tmp/%u_sshmux_%r@%h:%p
+    ControlPersist 4h
+  '';
   sshWrapper = pkgs.writeDash "ssh-wrapper" ''
-    ${pkgs.openssh}/bin/ssh -i ${shell.escape config.lass.build-ssh-privkey.path} "$@"
+    ${pkgs.openssh}/bin/ssh -F ${sshHostConfig} -i ${shell.escape config.lass.build-ssh-privkey.path} "$@"
   '';
 
 in {

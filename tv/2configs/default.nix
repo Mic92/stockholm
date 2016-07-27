@@ -14,7 +14,7 @@ with config.krebs.lib;
       stockholm.file = "/home/tv/stockholm";
       nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
-        ref = "8bf31d7d27cae435d7c1e9e0ccb0a320b424066f";
+        ref = "2568ee3d73bdebd6bab6739adf8a900f3429c8e6";
       };
     } // optionalAttrs host.secure {
       secrets-master.file = "/home/tv/secrets/master";
@@ -27,8 +27,12 @@ with config.krebs.lib;
     <secrets>
     ./audit.nix
     ./backup.nix
+    ./bash.nix
     ./nginx
+    ./ssh.nix
+    ./sshd.nix
     ./vim.nix
+    ./xdg.nix
     {
       # stockholm dependencies
       environment.systemPackages = with pkgs; [
@@ -104,49 +108,6 @@ with config.krebs.lib;
       environment.variables = {
         NIX_PATH = mkForce "secrets=/var/src/stockholm/null:/var/src";
       };
-
-      programs.bash = {
-        interactiveShellInit = ''
-          HISTCONTROL='erasedups:ignorespace'
-          HISTSIZE=65536
-          HISTFILESIZE=$HISTSIZE
-
-          shopt -s checkhash
-          shopt -s histappend histreedit histverify
-          shopt -s no_empty_cmd_completion
-          complete -d cd
-
-          ${readFile ./bash_completion.sh}
-
-          # TODO source bridge
-        '';
-        promptInit = ''
-          case $UID in
-            0)
-              PS1='\[\e[1;31m\]\w\[\e[0m\] '
-              ;;
-            ${toString config.krebs.users.tv.uid})
-              PS1='\[\e[1;32m\]\w\[\e[0m\] '
-              ;;
-            *)
-              PS1='\[\e[1;35m\]\u \[\e[1;32m\]\w\[\e[0m\] '
-              ;;
-          esac
-          if test -n "$SSH_CLIENT"; then
-            PS1='\[\e[35m\]\h'" $PS1"
-          fi
-          if test -n "$SSH_AGENT_PID"; then
-            PS1="ssh-agent[$SSH_AGENT_PID] $PS1"
-          fi
-        '';
-      };
-
-      programs.ssh = {
-        extraConfig = ''
-          UseRoaming no
-        '';
-        startAgent = false;
-      };
     }
 
     {
@@ -177,32 +138,12 @@ with config.krebs.lib;
     }
 
     {
-      services.openssh = {
-        enable = true;
-        hostKeys = [
-          { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
-        ];
-      };
-      tv.iptables.input-internet-accept-tcp = singleton "ssh";
-    }
-
-    {
       environment.systemPackages = [
         pkgs.get
         pkgs.krebszones
         pkgs.nix-prefetch-scripts
         pkgs.push
       ];
-    }
-
-    {
-      systemd.tmpfiles.rules = let
-        forUsers = flip map users;
-        isUser = { name, group, ... }:
-          name == "root" || hasSuffix "users" group;
-        users = filter isUser (mapAttrsToList (_: id) config.users.users);
-      in forUsers (u: "d /run/xdg/${u.name} 0700 ${u.name} ${u.group} -");
-      environment.variables.XDG_RUNTIME_DIR = "/run/xdg/$LOGNAME";
     }
   ];
 }
