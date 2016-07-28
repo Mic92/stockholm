@@ -134,11 +134,18 @@ types // rec {
                 ++
                 (map (a: "Subnet = ${a}") net.addrs)
                 ++
+                [config.extraConfig]
+                ++
                 [config.pubkey]
               );
             };
             pubkey = mkOption {
               type = tinc-pubkey;
+            };
+            extraConfig = mkOption {
+              description = "Extra Configuration to be appended to the hosts file";
+              default = "";
+              type = string;
             };
             port = mkOption {
               type = int;
