@@ -132,8 +132,9 @@ let
             routeable IPv4 or IPv6 address.
 
             In stockholm this can be done by configuring:
-              krebs.hosts.${connect-host}.nets.${netname?"retiolum"}.via.addrs4 =
-                [ "${external-ip} ${external-port}" ]
+              krebs.hosts.${connect-host}.nets.${netname?"retiolum"}.via.ip4.addr =
+                "${external-ip} ${external-port}"
+              krebs.hosts.${connect-host}.nets.${netname?"retiolum"}.tinc.port = 1655;
           '';
         };
 
@@ -176,6 +177,7 @@ let
               Interface = ${netname}
               ${concatStrings (map (c: "ConnectTo = ${c}\n") cfg.connectTo)}
               PrivateKeyFile = ${cfg.privkey.path}
+              Port = ${toString cfg.host.nets.${cfg.netname}.tinc.port}
               ${cfg.extraConfig}
             '';
             "tinc-up" = pkgs.writeDash "${netname}-tinc-up" ''
