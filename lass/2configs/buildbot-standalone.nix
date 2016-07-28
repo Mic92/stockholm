@@ -95,7 +95,7 @@ in {
                             method=build \
                             system={}".format(i)])
 
-        for i in [ "pornocauster", "wry", "vbob", "wbob", "shoney" ]:
+        for i in [ "x", "wry", "vbob", "wbob", "shoney" ]:
           addShell(f,name="build-{}".format(i),env=env_makefu,
                   command=nixshell + \
                       ["make \

@@ -126,15 +126,15 @@ with config.krebs.lib;
         };
       };
     };
-    pornocauster = {
+    x = {
       cores = 2;
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.91";
           ip6.addr = "42:0b2c:d90e:e717:03dc:9ac1:7c30:a4db";
           aliases = [
-            "pornocauster.retiolum"
-            "pornocauster.r"
+            "x.retiolum"
+            "x.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -167,7 +167,7 @@ with config.krebs.lib;
         };
       };
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHDM0E608d/6rGzXqGbNSuMb2RlCojCJSiiz6QcPOC2G root@pornocauster";
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHDM0E608d/6rGzXqGbNSuMb2RlCojCJSiiz6QcPOC2G root@x";
 
     };
 
@@ -441,8 +441,9 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
     };
     shoney = rec {
       cores = 1;
-      nets = {
+      nets = rec {
         siem = {
+          via = internet;
           ip4.addr = "10.8.10.1";
           ip4.prefix = "10.8.10.0/24";
           aliases = [
@@ -459,6 +460,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
             L+xhIsiMXQIo2hv8aOUnf/7Ac9DXNR83GwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
+          tinc.port = 1655;
         };
         internet = {
           ip4.addr = "64.137.234.215";
@@ -790,8 +792,8 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
   };
   users = rec {
     makefu = {
-      mail = "makefu@pornocauster.retiolum";
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl3RTOHd5DLiVeUbUr/GSiKoRWknXQnbkIf+uNiFO+XxiqZVojPlumQUVhasY8UzDzj9tSDruUKXpjut50FhIO5UFAgsBeMJyoZbgY/+R+QKU00Q19+IiUtxeFol/9dCO+F4o937MC0OpAC10LbOXN/9SYIXueYk3pJxIycXwUqhYmyEqtDdVh9Rx32LBVqlBoXRHpNGPLiswV2qNe0b5p919IGcslzf1XoUzfE3a3yjk/XbWh/59xnl4V7Oe7+iQheFxOT6rFA30WYwEygs5As//ZYtxvnn0gA02gOnXJsNjOW9irlxOUeP7IOU6Ye3WRKFRR0+7PS+w8IJLag2xb makefu@pornocauster";
+      mail = "makefu@x.retiolum";
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl3RTOHd5DLiVeUbUr/GSiKoRWknXQnbkIf+uNiFO+XxiqZVojPlumQUVhasY8UzDzj9tSDruUKXpjut50FhIO5UFAgsBeMJyoZbgY/+R+QKU00Q19+IiUtxeFol/9dCO+F4o937MC0OpAC10LbOXN/9SYIXueYk3pJxIycXwUqhYmyEqtDdVh9Rx32LBVqlBoXRHpNGPLiswV2qNe0b5p919IGcslzf1XoUzfE3a3yjk/XbWh/59xnl4V7Oe7+iQheFxOT6rFA30WYwEygs5As//ZYtxvnn0gA02gOnXJsNjOW9irlxOUeP7IOU6Ye3WRKFRR0+7PS+w8IJLag2xb makefu@x";
       pgp.pubkeys.default = builtins.readFile ./default.pgp;
       pgp.pubkeys.brain = builtins.readFile ./brain.pgp;
     };
