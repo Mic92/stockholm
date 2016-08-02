@@ -29,6 +29,7 @@ in {
         /var/setuid-wrappers/sudo ${suspend}
       '';
     };
+    user = "lass";
   };
 
   users.users.power-action.extraGroups = [
@@ -36,6 +37,6 @@ in {
   ];
 
   security.sudo.extraConfig = ''
-    ${config.krebs.power-action.user.name} ALL= (root) NOPASSWD: ${suspend}
+    ${config.krebs.power-action.user} ALL= (root) NOPASSWD: ${suspend}
   '';
 }
