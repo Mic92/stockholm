@@ -1,6 +1,5 @@
 { lib, ... }:
 
-with builtins;
 with lib;
 
 rec {
