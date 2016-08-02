@@ -3,7 +3,7 @@
 with builtins;
 with lib;
 
-let out = rec {
+let out = import <stockholm/lib> // rec {
 
   eq = x: y: x == y;
   ne = x: y: x != y;
@@ -34,7 +34,6 @@ let out = rec {
 
   genid = import ./genid.nix { lib = lib // out; };
   git = import ./git.nix { lib = lib // out; };
-  shell = import ./shell.nix { inherit lib; };
   tree = import ./tree.nix { inherit lib; };
 
   lpad = n: c: s:
