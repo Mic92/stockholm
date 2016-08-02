@@ -17,10 +17,8 @@ let
       default = "BAT0";
     };
     user = mkOption {
-      type = types.user;
-      default = {
-        name = "power-action";
-      };
+      type = types.string;
+      default = "power-action";
     };
     startAt = mkOption {
       type = types.str;
@@ -57,12 +55,9 @@ let
     systemd.services.power-action = {
       serviceConfig = rec {
         ExecStart = startScript;
-        User = cfg.user.name;
+        User = cfg.user;
       };
       startAt = cfg.startAt;
-    };
-    users.users.${cfg.user.name} = {
-      inherit (cfg.user) name uid;
     };
   };
 
