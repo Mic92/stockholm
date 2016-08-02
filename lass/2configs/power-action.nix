@@ -11,7 +11,7 @@ let
     '';
 
 in {
-  lass.power-action = {
+  krebs.power-action = {
     enable = true;
     plans.low-battery = {
       upperLimit = 30;
@@ -29,6 +29,7 @@ in {
         /var/setuid-wrappers/sudo ${suspend}
       '';
     };
+    user = "lass";
   };
 
   users.users.power-action.extraGroups = [
@@ -36,6 +37,6 @@ in {
   ];
 
   security.sudo.extraConfig = ''
-    ${config.lass.power-action.user.name} ALL= (root) NOPASSWD: ${suspend}
+    ${config.krebs.power-action.user} ALL= (root) NOPASSWD: ${suspend}
   '';
 }

@@ -130,15 +130,27 @@ types // rec {
               type = str;
               default = concatStringsSep "\n" (
                 (optionals (net.via != null)
-                  (map (a: "Address = ${a}") net.via.addrs))
+                  (map (a: "Address = ${a} ${toString config.port}") net.via.addrs))
                 ++
                 (map (a: "Subnet = ${a}") net.addrs)
+                ++
+                [config.extraConfig]
                 ++
                 [config.pubkey]
               );
             };
             pubkey = mkOption {
               type = tinc-pubkey;
+            };
+            extraConfig = mkOption {
+              description = "Extra Configuration to be appended to the hosts file";
+              default = "";
+              type = string;
+            };
+            port = mkOption {
+              type = int;
+              description = "tinc port to use to connect to host";
+              default = 655;
             };
           };
         }));

@@ -4,7 +4,6 @@ _:
     ./ejabberd
     ./folderPerms.nix
     ./mysql-backup.nix
-    ./power-action.nix
     ./umts.nix
     ./urxvtd.nix
     ./wordpress_nginx.nix

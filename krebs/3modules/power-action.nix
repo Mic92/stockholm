@@ -3,10 +3,10 @@
 with config.krebs.lib;
 
 let
-  cfg = config.lass.power-action;
+  cfg = config.krebs.power-action;
 
   out = {
-    options.lass.power-action = api;
+    options.krebs.power-action = api;
     config = lib.mkIf cfg.enable imp;
   };
 
@@ -17,10 +17,8 @@ let
       default = "BAT0";
     };
     user = mkOption {
-      type = types.user;
-      default = {
-        name = "power-action";
-      };
+      type = types.string;
+      default = "power-action";
     };
     startAt = mkOption {
       type = types.str;
@@ -35,7 +33,7 @@ let
             description = ''
               check for charging status.
               null = don't care
-              true = only if system is charging
+              true = only if system is charging or unknown
               false = only if system is discharging
             '';
           };
@@ -57,12 +55,9 @@ let
     systemd.services.power-action = {
       serviceConfig = rec {
         ExecStart = startScript;
-        User = cfg.user.name;
+        User = cfg.user;
       };
       startAt = cfg.startAt;
-    };
-    users.users.${cfg.user.name} = {
-      inherit (cfg.user) name uid;
     };
   };
 

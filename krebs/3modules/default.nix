@@ -28,6 +28,7 @@ let
       ./on-failure.nix
       ./os-release.nix
       ./per-user.nix
+      ./power-action.nix
       ./Reaktor.nix
       ./realwallpaper.nix
       ./retiolum-bootstrap.nix

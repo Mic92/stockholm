@@ -71,6 +71,14 @@ let
                   type = bool;
                   default = true;
                 };
+                force_encryption = mkOption {
+                  type = bool;
+                  default = false;
+                  description = ''
+                    redirect all `http` traffic to the same domain but with ssl
+                    protocol.
+                  '';
+                };
                 protocols = mkOption {
                   type = listOf (enum [ "SSLv2" "SSLv3" "TLSv1" "TLSv1.1" "TLSv1.2" ]);
                   default = [ "TLSv1.1" "TLSv1.2" ];
@@ -120,6 +128,11 @@ let
       server_name ${toString (unique server-names)};
       ${concatMapStringsSep "\n" (x: indent "listen ${x};") listen}
       ${optionalString ssl.enable (indent ''
+        ${optionalString ssl.force_encryption ''
+          if ($scheme = http){
+            return 301 https://$server_name$request_uri;
+          }
+        ''}
         listen 443 ssl;
         ssl_certificate ${ssl.certificate};
         ssl_certificate_key ${ssl.certificate_key};

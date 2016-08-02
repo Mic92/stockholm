@@ -4,6 +4,7 @@
 
 { config, pkgs, lib, ... }:
 let
+  toMapper = id: "/media/crypt${builtins.toString id}";
   byid = dev: "/dev/disk/by-id/" + dev;
   keyFile = byid "usb-Verbatim_STORE_N_GO_070B3CEE0B223954-0:0";
   rootDisk = byid "ata-SanDisk_SD8SNAT128G1122_162099420904";
@@ -33,7 +34,8 @@ let
   # all physical disks
 
   # TODO callPackage ../3modules/MonitorDisks { disks = allDisks }
-  allDisks = [ rootDisk cryptDisk0 cryptDisk1 cryptDisk2 ];
+  dataDisks = [ cryptDisk0 cryptDisk1 cryptDisk2 ];
+  allDisks = [ rootDisk ] ++ dataDisks;
 in {
   imports =
     [
@@ -72,26 +74,41 @@ in {
   systemd.services.sabnzbd.environment.SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
   virtualisation.docker.enable = true;
-
-
+  makefu.ps3netsrv = {
+    enable = true;
+    servedir = "/media/cryptX/emu/ps3";
+  };
   # HDD Array stuff
-  environment.systemPackages = [ pkgs.mergerfs ];
   services.smartd.devices = builtins.map (x: { device = x; }) allDisks;
 
-  makefu.snapraid = let
-    toMapper = id: "/media/crypt${builtins.toString id}";
-  in {
+  makefu.snapraid = {
     enable = true;
     disks = map toMapper [ 0 1 ];
     parity = toMapper 2;
   };
 
+  # TODO create folders in /media
+  system.activationScripts.createCryptFolders = ''
+    ${lib.concatMapStringsSep "\n"
+      (d: "install -m 755 -d " + (toMapper d) )
+      [ 0 1 2 "X" ]}
+  '';
+  environment.systemPackages = with pkgs;[ 
+    mergerfs # hard requirement for mount
+    wol # wake up filepimp
+  ];
   fileSystems = let
     cryptMount = name:
       { "/media/${name}" = { device = "/dev/mapper/${name}"; fsType = "xfs"; };};
   in   cryptMount "crypt0"
     // cryptMount "crypt1"
-    // cryptMount "crypt2";
+    // cryptMount "crypt2"
+    // { "/media/cryptX" = {
+            device = (lib.concatMapStringsSep ":" (d: (toMapper d)) [ 0 1 2 ]);
+            fsType = "mergerfs";
+            options = [ "defaults" "allow_other" ];
+          };
+       };
 
   powerManagement.powerUpCommands = lib.concatStrings (map (disk: ''
       ${pkgs.hdparm}/sbin/hdparm -S 100 ${disk}

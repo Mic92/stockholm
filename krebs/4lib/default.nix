@@ -33,6 +33,7 @@ let out = import <stockholm/lib> // rec {
   dir.has-default-nix = path: pathExists (path + "/default.nix");
 
   genid = import ./genid.nix { lib = lib // out; };
+  genid_signed = x: ((genid x) + 16777216) / 2;
   git = import ./git.nix { lib = lib // out; };
   tree = import ./tree.nix { inherit lib; };
 

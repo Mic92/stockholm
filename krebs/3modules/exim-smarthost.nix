@@ -2,6 +2,7 @@
 
 with config.krebs.lib;
 let
+  indent = replaceChars ["\n"] ["\n  "];
   cfg = config.krebs.exim-smarthost;
 
   out = {
@@ -11,6 +12,11 @@ let
 
   api = {
     enable = mkEnableOption "krebs.exim-smarthost";
+
+    authenticators = mkOption {
+      type = types.attrsOf types.str;
+      default = {};
+    };
 
     dkim = mkOption {
       type = types.listOf (types.submodule ({ config, ... }: {
@@ -80,6 +86,16 @@ let
       default = [];
     };
 
+    ssl_cert = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+    };
+
+    ssl_key = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+    };
+
     system-aliases = mkOption {
       type = types.listOf (types.submodule ({
         options = {
@@ -136,7 +152,9 @@ let
         syslog_timestamp = false
         syslog_duplication = false
 
-        tls_advertise_hosts =
+        ${optionalString (cfg.ssl_cert != null) "tls_certificate = ${cfg.ssl_cert}"}
+        ${optionalString (cfg.ssl_key != null) "tls_privatekey = ${cfg.ssl_key}"}
+        tls_advertise_hosts =${optionalString (cfg.ssl_cert != null) " *"}
 
         begin acl
 
@@ -257,6 +275,10 @@ let
 
         begin rewrite
         begin authenticators
+        ${concatStringsSep "\n" (mapAttrsToList (name: text: ''
+        ${name}:
+          ${indent text}
+        '') cfg.authenticators)}
       '';
     };
   };

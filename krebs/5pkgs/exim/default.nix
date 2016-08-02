@@ -1,4 +1,4 @@
-{ coreutils, fetchurl, db, openssl, pcre, perl, pkgconfig, stdenv }:
+{ coreutils, fetchurl, db, openssl, pam, pcre, perl, pkgconfig, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "exim-4.87";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jbxn13shq90kpn0s73qpjnx5xm8jrpwhcwwgqw5s6sdzw6iwsbl";
   };
 
-  buildInputs = [ coreutils db openssl pcre perl pkgconfig ];
+  buildInputs = [ coreutils db openssl pam pcre perl pkgconfig ];
 
   preBuild = ''
     sed '
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
       s:^# \(SUPPORT_TLS\)=.*:\1=yes:
       s:^# \(USE_OPENSSL_PC=openssl\)$:\1:
       s:^# \(LOG_FILE_PATH=syslog\)$:\1:
+      s:^# \(SUPPORT_PAM\)=.*:\1=yes\nEXTRALIBS=-lpam:
       s:^# \(HAVE_IPV6=yes\)$:\1:
       s:^# \(CHOWN_COMMAND\)=.*:\1=${coreutils}/bin/chown:
       s:^# \(CHGRP_COMMAND\)=.*:\1=${coreutils}/bin/chgrp:
