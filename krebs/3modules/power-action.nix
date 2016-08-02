@@ -33,7 +33,7 @@ let
             description = ''
               check for charging status.
               null = don't care
-              true = only if system is charging
+              true = only if system is charging or unknown
               false = only if system is discharging
             '';
           };
