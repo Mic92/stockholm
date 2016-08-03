@@ -242,6 +242,8 @@ rec {
     cp src.jq "$out"
   '';
 
+  writeJSON = name: value: pkgs.writeText name (toJSON value);
+
   writeNixFromCabal =
     trace (toString [
       "The function `writeNixFromCabal` has been deprecated in favour of"
