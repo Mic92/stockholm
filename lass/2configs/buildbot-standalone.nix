@@ -66,6 +66,11 @@ in {
         "NIX_REMOTE": "daemon",
         "dummy_secrets": "true",
       }
+      env_shared = {
+        "LOGNAME": "shared",
+        "NIX_REMOTE": "daemon",
+        "dummy_secrets": "true",
+      }
 
       # prepare nix-shell
       # the dependencies which are used by the test script
@@ -114,19 +119,35 @@ in {
       fast-tests = ''
         f = util.BuildFactory()
         f.addStep(grab_repo)
-        for i in [ "prism", "mors", "echelon" ]:
-          addShell(f,name="populate-{}".format(i),env=env_lass,
+        for i in [ "mors", "uriel", "shodan", "helios", "cloudkrebs", "echelon", "dishfire", "prism" ]:
+          addShell(f,name="build-{}".format(i),env=env_lass,
                   command=nixshell + \
-                            ["{}(make system={} populate debug=true)".format("!" if "failing" in i else "",i)])
+                      ["make \
+                            test \
+                            ssh=${sshWrapper} \
+                            target=build@localhost${config.users.users.build.home}/testbuild \
+                            method=eval \
+                            system={}".format(i)])
 
-        addShell(f,name="build-test-minimal",env=env_lass,
+        for i in [ "x", "wry", "vbob", "wbob", "shoney" ]:
+          addShell(f,name="build-{}".format(i),env=env_makefu,
                   command=nixshell + \
-                            ["nix-instantiate \
-                                  --show-trace --eval --strict --json \
-                                  -I nixos-config=./shared/1systems/test-minimal-deploy.nix  \
-                                  -I secrets=. \
-                                  -A config.system.build.toplevel"]
-                )
+                      ["make \
+                            test \
+                            ssh=${sshWrapper} \
+                            target=build@localhost${config.users.users.build.home}/testbuild \
+                            method=eval \
+                            system={}".format(i)])
+
+        for i in [ "test-minimal-deploy" ]:
+          addShell(f,name="build-{}".format(i),env=env_shared,
+                  command=nixshell + \
+                      ["make \
+                            test \
+                            ssh=${sshWrapper} \
+                            target=build@localhost${config.users.users.build.home}/testbuild \
+                            method=eval \
+                            system={}".format(i)])
 
         bu.append(util.BuilderConfig(name="fast-tests",
               slavenames=slavenames,
