@@ -16,7 +16,7 @@ in {
     systemWide = true;
   };
 
-  users.extraUsers.mainUser.extraGroups = [ "audio" ];
+  users.extraUsers.mainUser.extraGroups = [ "audio" "video" ];
 
   time.timeZone = "Europe/Berlin";
 
