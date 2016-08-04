@@ -159,8 +159,6 @@ with config.krebs.lib;
     };
   };
 
-  nixpkgs.config.chromium.enablePepperFlash = true;
-
   environment.systemPackages = with pkgs; [
     ethtool
     tinc_pre

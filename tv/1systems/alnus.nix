@@ -69,8 +69,6 @@ with config.krebs.lib;
 
   nixpkgs.config = {
     allowUnfree = true;
-    chromium.enablePepperFlash = true;
-    firefox.enableAdobeFlash = true;
   };
 
   services.xserver = {
