@@ -91,37 +91,24 @@
     '';
     builder = {
       fast-tests = ''
-  f = util.BuildFactory()
-  f.addStep(grab_repo)
-  for i in [ "test-centos7", "wolf", "test-failing" ]:
-    addShell(f,name="populate-{}".format(i),env=env,
-            command=nixshell + \
-                      ["{}(make system={} populate debug=true)".format("!" if "failing" in i else "",i)])
+        f = util.BuildFactory()
+        f.addStep(grab_repo)
 
-  # XXX we must prepare ./retiolum.rsa_key.priv for secrets to work
-  addShell(f,name="instantiate-test-all-modules",env=env,
-            command=nixshell + \
-                      ["touch retiolum.rsa_key.priv; \
-                        nix-instantiate \
-                            --show-trace --eval --strict --json \
-                            -I nixos-config=./shared/1systems/test-all-krebs-modules.nix  \
-                            -I secrets=. \
-                            -A config.system.build.toplevel"]
-          )
+        for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" "test-failing" ]:
+          addShell(f,name="build-{}".format(i),env=env,
+                  command=nixshell + \
+                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+                        make \
+                            test \
+                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
+                            method=eval \
+                            system={}".format(i)])
 
-  addShell(f,name="build-test-minimal",env=env,
-            command=nixshell + \
-                      ["nix-instantiate \
-                            --show-trace --eval --strict --json \
-                            -I nixos-config=./shared/1systems/test-minimal-deploy.nix  \
-                            -I secrets=. \
-                            -A config.system.build.toplevel"]
-          )
+        bu.append(util.BuilderConfig(name="fast-tests",
+              slavenames=slavenames,
+              factory=f))
 
-  bu.append(util.BuilderConfig(name="fast-tests",
-        slavenames=slavenames,
-        factory=f))
-      '';
+            '';
       # this build will try to build against local nixpkgs
       # TODO change to do a 'local' populate and use the retrieved nixpkgs
       build-local = ''
