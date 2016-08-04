@@ -14,7 +14,7 @@ with config.krebs.lib;
       ref = "63b9785"; # stable @ 2016-06-01
     };
     secrets.file = "${getEnv "HOME"}/secrets/krebs/${host.name}";
-    stockholm.file = "${getEnv "HOME"}/stockholm";
+    stockholm.file = getEnv "PWD";
   };
 
   networking.hostName = config.krebs.build.host.name;
