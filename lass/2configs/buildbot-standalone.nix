@@ -8,9 +8,6 @@ let
     ControlPath /tmp/%u_sshmux_%r@%h:%p
     ControlPersist 4h
   '';
-  sshWrapper = pkgs.writeDash "ssh-wrapper" ''
-    ${pkgs.openssh}/bin/ssh -F ${sshHostConfig} -i ${shell.escape config.lass.build-ssh-privkey.path} "$@"
-  '';
 
 in {
   config.krebs.buildbot.master = let
@@ -74,7 +71,7 @@ in {
 
       # prepare nix-shell
       # the dependencies which are used by the test script
-      deps = [ "gnumake", "jq", "nix", "(import <stockholm>).pkgs.populate" ]
+      deps = [ "gnumake", "jq", "nix", "(import <stockholm>).pkgs.populate", "openssh" ]
       # TODO: --pure , prepare ENV in nix-shell command:
       #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
       nixshell = ["nix-shell",
@@ -93,20 +90,20 @@ in {
         for i in [ "mors", "uriel", "shodan", "helios", "cloudkrebs", "echelon", "dishfire", "prism" ]:
           addShell(f,name="build-{}".format(i),env=env_lass,
                   command=nixshell + \
-                      ["make \
+                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+                        make \
                             test \
-                            ssh=${sshWrapper} \
-                            target=build@localhost${config.users.users.build.home}/testbuild \
+                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
                             method=build \
                             system={}".format(i)])
 
         for i in [ "x", "wry", "vbob", "wbob", "shoney" ]:
           addShell(f,name="build-{}".format(i),env=env_makefu,
                   command=nixshell + \
-                      ["make \
+                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+                        make \
                             test \
-                            ssh=${sshWrapper} \
-                            target=build@localhost${config.users.users.build.home}/testbuild \
+                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
                             method=build \
                             system={}".format(i)])
 
@@ -122,30 +119,30 @@ in {
         for i in [ "mors", "uriel", "shodan", "helios", "cloudkrebs", "echelon", "dishfire", "prism" ]:
           addShell(f,name="build-{}".format(i),env=env_lass,
                   command=nixshell + \
-                      ["make \
+                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+                        make \
                             test \
-                            ssh=${sshWrapper} \
-                            target=build@localhost${config.users.users.build.home}/testbuild \
+                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
                             method=eval \
                             system={}".format(i)])
 
         for i in [ "x", "wry", "vbob", "wbob", "shoney" ]:
           addShell(f,name="build-{}".format(i),env=env_makefu,
                   command=nixshell + \
-                      ["make \
+                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+                        make \
                             test \
-                            ssh=${sshWrapper} \
-                            target=build@localhost${config.users.users.build.home}/testbuild \
+                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
                             method=eval \
                             system={}".format(i)])
 
-        for i in [ "test-minimal-deploy" ]:
+        for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf" ]:
           addShell(f,name="build-{}".format(i),env=env_shared,
                   command=nixshell + \
-                      ["make \
+                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+                        make \
                             test \
-                            ssh=${sshWrapper} \
-                            target=build@localhost${config.users.users.build.home}/testbuild \
+                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
                             method=eval \
                             system={}".format(i)])
 
