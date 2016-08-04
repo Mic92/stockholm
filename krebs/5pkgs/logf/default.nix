@@ -14,6 +14,7 @@ let
     "5" = 255; # notice
     "6" = 250; # info
     "7" = 139; # debug
+    "-" = 005; # undefined priority
   };
 in
 
