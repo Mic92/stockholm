@@ -190,4 +190,7 @@ pkgs.writeBashBin "q" ''
   (${q-thermal_zone}) &
   wait
   ${q-todo}
+  if [ "$PWD" != "$HOME" ]; then
+    (HOME=$PWD; ${q-todo})
+  fi
 ''

@@ -130,7 +130,12 @@ $(error bad method: $(method))
 endif
 endif
 test: ssh ?= ssh
+ifeq ($(target_user)@$(target_host),$(LOGNAME)@$(HOSTNAME))
+test: wrapper = exec
+else
+test: wrapper = $(ssh) $(target_user)@$(target_host) -p $(target_port)
+endif
 test: populate
-	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
+	$(wrapper) \
 		$(command) --show-trace -I $(target_path) \
 			-A config.system.build.toplevel $(target_path)/stockholm
