@@ -142,8 +142,6 @@ with config.krebs.lib;
     };
   };
 
-  nixpkgs.config.chromium.enablePepperFlash = true;
-
   krebs.nixpkgs.allowUnfreePredicate = pkg: hasPrefix "nvidia-x11-" pkg.name;
   hardware.bumblebee.enable = true;
   hardware.bumblebee.group = "video";

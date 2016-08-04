@@ -59,9 +59,6 @@ with config.krebs.lib;
 
   swapDevices =[ ];
 
-  nixpkgs.config.firefox.enableAdobeFlash = true;
-  nixpkgs.config.chromium.enablePepperFlash = true;
-
   nixpkgs.config.allowUnfree = true;
   hardware.opengl.driSupport32Bit = true;
 
