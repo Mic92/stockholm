@@ -23,9 +23,9 @@ pkgs.writeDashBin "logf" ''
   LOGF_PRIO_COLORS=$(cat "''${LOGF_PRIO_COLORS-${default-prio-colors}}")
   printf '%s\0' "$@" \
     | ${pkgs.findutils}/bin/xargs -0 -P 0 -n 1 ${pkgs.writeDash "logf-remote" ''
-        target=$1 \
-        target_host=$(echo "$1" | sed 's/^.*@//;s/\..*//') \
-        exec 3>&1;
+        target=$1
+        target_host=$(echo "$1" | sed 's/^.*@//;s/\..*//')
+        exec 3>&1
         2>&1 1>&3 ssh "$target" -T \
             -o PreferredAuthentications=publickey \
             -o StrictHostKeyChecking=yes \
