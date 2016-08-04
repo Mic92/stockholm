@@ -31,7 +31,7 @@ pkgs.writeDashBin "logf" ''
             -o PreferredAuthentications=publickey \
             -o StrictHostKeyChecking=yes \
             exec journalctl -af -n 0 -o json \
-          | stdbuf -oL jq -Rf ${pkgs.writeJq "logf-remote-error.jq" ''
+          | stdbuf -oL jq -Rcf ${pkgs.writeJq "logf-remote-error.jq" ''
               {
                 PRIORITY: "4",
                 MESSAGE: .,
@@ -41,7 +41,7 @@ pkgs.writeDashBin "logf" ''
         sleep 10m
         exec "$0" "$@"
       ''} \
-    | ${pkgs.jq}/bin/jq -rf ${pkgs.writeJq "logf-filter.jq" ''
+    | ${pkgs.jq}/bin/jq -Rrf ${pkgs.writeJq "logf-filter.jq" ''
         (env.LOGF_HOST_COLORS | fromjson) as $host_colors |
         (env.LOGF_PRIO_COLORS | fromjson) as $prio_colors |
 
@@ -93,6 +93,11 @@ pkgs.writeDashBin "logf" ''
           #| agsub("Start queue"; "\(.)\u0007" | col(fg(42); $prio_c))
           | col($prio_c);
 
+        try fromjson catch {
+          _SOURCE_REALTIME_TIMESTAMP: now | tostring | sub("[.]"; ""),
+          SYSLOG_IDENTIFIER: "logf/journalctl",
+          MESSAGE: .,
+        } |
 
         [ p_time
         , p_host
