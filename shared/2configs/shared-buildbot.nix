@@ -98,7 +98,7 @@
         f = util.BuildFactory()
         f.addStep(grab_repo)
 
-        for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" "test-failing" ]:
+        for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7", "test-failing" ]:
           addShell(f,name="build-{}".format(i),env=env,
                   command=nixshell + \
                       ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
