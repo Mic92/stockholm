@@ -71,7 +71,11 @@
   # prepare grab_repo step for stockholm
   grab_repo = steps.Git(repourl=stockholm_repo, mode='incremental')
 
-  env = {"LOGNAME": "shared", "NIX_REMOTE": "daemon"}
+  env = {
+    "LOGNAME": "shared",
+    "NIX_REMOTE": "daemon",
+    "dummy_secrets": "true",
+  }
 
   # prepare nix-shell
   # the dependencies which are used by the test script

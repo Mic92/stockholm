@@ -13,7 +13,10 @@ with config.krebs.lib;
       url = https://github.com/NixOS/nixpkgs;
       ref = "63b9785"; # stable @ 2016-06-01
     };
-    secrets.file = "${getEnv "HOME"}/secrets/krebs/${host.name}";
+    secrets.file =
+      if getEnv "dummy_secrets" == "true"
+        then toString <stockholm/shared/6tests/data/secrets>
+        else "${getEnv "HOME"}/secrets/krebs/${host.name}";
     stockholm.file = getEnv "PWD";
   };
 
