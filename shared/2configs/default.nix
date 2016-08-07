@@ -11,10 +11,13 @@ with config.krebs.lib;
     nixos-config.symlink = "stockholm/${user.name}/1systems/${host.name}.nix";
     nixpkgs.git = {
       url = https://github.com/NixOS/nixpkgs;
-      ref = "63b9785"; # stable @ 2016-06-01
+      ref = "9cb194cfa449c43f63185a25c8d10307aea3b358"; # nixos-16.03 @ 2016-08-05
     };
-    secrets.file = "${getEnv "HOME"}/secrets/krebs/${host.name}";
-    stockholm.file = "${getEnv "HOME"}/stockholm";
+    secrets.file =
+      if getEnv "dummy_secrets" == "true"
+        then toString <stockholm/shared/6tests/data/secrets>
+        else "${getEnv "HOME"}/secrets/krebs/${host.name}";
+    stockholm.file = getEnv "PWD";
   };
 
   networking.hostName = config.krebs.build.host.name;

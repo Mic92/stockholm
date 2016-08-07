@@ -8,7 +8,6 @@ let
 in {
   imports = [
     ../.
-    ../2configs/base.nix
     ../2configs/os-templates/CAC-CentOS-6.5-64bit.nix
     {
       networking.interfaces.enp11s0.ip4 = [

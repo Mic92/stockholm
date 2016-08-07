@@ -3,15 +3,8 @@
 with config.krebs.lib;
 let
 
-  # https://github.com/NixOS/nixpkgs/issues/14026
-  nixpkgs-fix = import (pkgs.fetchgit {
-    url = https://github.com/nixos/nixpkgs;
-    rev = "e026b5c243ea39810826e68362718f5d703fb5d0";
-    sha256 = "87e0724910a6df0371f883f99a8cf42e366fb4119f676f6f74ffb404beca2632";
-  }) {};
-
-  buildbot = nixpkgs-fix.buildbot;
-  buildbot-master-config = pkgs.writeText "buildbot-master.cfg" ''
+  buildbot = pkgs.buildbot;
+  buildbot-master-config = pkgs.writePython2 "buildbot-master.cfg" ''
     # -*- python -*-
     from buildbot.plugins import *
     import re

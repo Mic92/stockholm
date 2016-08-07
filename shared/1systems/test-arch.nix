@@ -3,7 +3,6 @@
 {
   imports = [
     ../.
-    ../2configs/base.nix
     {
       boot.loader.grub = {
         device = "/dev/sda";
