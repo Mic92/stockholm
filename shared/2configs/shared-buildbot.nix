@@ -120,14 +120,14 @@
   f.addStep(grab_repo)
 
   addShell(f,name="build-test-all-modules",env=env,
-            command=nixshell + \
-                      ["touch retiolum.rsa_key.priv; \
-                        nix-build \
-                            --show-trace --no-out-link \
-                            -I nixos-config=./shared/1systems/test-all-krebs-modules.nix  \
-                            -I secrets=. \
-                            -A config.system.build.toplevel"]
-          )
+      command=nixshell + \
+          ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+            make \
+                test \
+                target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
+                method=build \
+                system=test-all-krebs-modules"]
+      )
 
   bu.append(util.BuilderConfig(name="build-local",
         slavenames=slavenames,
