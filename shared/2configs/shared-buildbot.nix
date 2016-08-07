@@ -119,15 +119,15 @@
   f = util.BuildFactory()
   f.addStep(grab_repo)
 
-  addShell(f,name="build-test-all-modules",env=env,
-      command=nixshell + \
-          ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-            make \
-                test \
-                target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                method=build \
-                system=test-all-krebs-modules"]
-      )
+  for i in [ "test-all-krebs-modules", "wolf" ]:
+    addShell(f,name="build-{}".format(i),env=env,
+            command=nixshell + \
+                ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+                  make \
+                      test \
+                      target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
+                      method=build \
+                      system={}".format(i)])
 
   bu.append(util.BuilderConfig(name="build-local",
         slavenames=slavenames,
