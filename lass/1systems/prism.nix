@@ -188,9 +188,16 @@ in {
             "fullchain.pem"
             "full.pem"
           ];
-          user = "ejabberd";
+          allowKeysForGroup = true;
+          group = "lasscert";
         };
       };
+      users.groups.lasscert.members = [
+        "dovecot2"
+        "ejabberd"
+        "exim"
+        "nginx"
+      ];
       krebs.nginx.servers."lassul.us" = {
         server-names = [ "lassul.us" ];
         locations = [
