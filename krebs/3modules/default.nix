@@ -153,6 +153,7 @@ let
           to = concatMapStringsSep "," (getAttr "mail") (toList to);
         };
       in mapAttrsToList format (with config.krebs.users; let
+        eloop-ml = spam-ml ++ [ ciko Mic92 ];
         spam-ml = [
           lass
           makefu
@@ -161,8 +162,10 @@ let
         ciko.mail = "wieczorek.stefan@gmail.com";
         Mic92.mail = "joerg@higgsboson.tk";
       in {
-        "*@eloop.org" = [{ mail = "eloop2016@krebsco.de"; }];
-        "eloop2016@krebsco.de" = spam-ml ++ [ ciko Mic92 ];
+        "cfp@eloop.org" = eloop-ml;
+        "kontakt@eloop.org" = eloop-ml;
+        "root@eloop.org" = eloop-ml;
+        "eloop2016@krebsco.de" = eloop-ml;
         "postmaster@krebsco.de" = spam-ml; # RFC 822
         "lass@krebsco.de" = lass;
         "makefu@krebsco.de" = makefu;
