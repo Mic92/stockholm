@@ -19,6 +19,7 @@ with config.krebs.lib;
       config.krebs.hosts.xu
     ];
     internet-aliases = with config.krebs.users; [
+      { from = "bku-eppler@viljetic.de"; to = tv.mail; }
       { from = "postmaster@viljetic.de"; to = tv.mail; } # RFC 822
       { from = "mirko@viljetic.de"; to = mv-cd.mail; }
       { from = "tomislav@viljetic.de"; to = tv.mail; }
