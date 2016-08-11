@@ -54,7 +54,8 @@ pkgs.writeDashBin "logf" ''
 
         # anaphoric gsub
         def agsub(re; f):
-          gsub("(?<it>\(re))"; .it | f);
+          # Don't try empty regex: https://github.com/stedolan/jq/issues/1206
+          when(re != ""; gsub("(?<it>\(re))"; .it | f));
 
         # :: [int] -> sgr
         def sgr: "\u001b[\(map(tostring) | join(";"))m";
