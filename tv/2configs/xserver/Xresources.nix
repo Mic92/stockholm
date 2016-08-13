@@ -2,7 +2,7 @@
 
 with config.krebs.lib;
 
-pkgs.writeText "Xresources" ''
+pkgs.writeText "Xresources" /* xdefaults */ ''
   !URxvt*background:	#050505
 
   !  2013-02-25 \e was reas escape before
@@ -203,7 +203,7 @@ pkgs.writeText "Xresources" ''
   ! ref https://github.com/muennich/urxvt-perls
   URxvt*perl-ext: default,url-select
   URxvt*keysym.M-u: perl:url-select:select_next
-  URxvt*url-select.launcher: ${pkgs.ff}/bin/ff -new-tab
+  URxvt*url-select.launcher: /etc/per-user/${config.krebs.build.user.name}/bin/ff -new-tab
   URxvt*url-select.underline: true
   URxvt*colorUL: #4682B4
   URxvt.perl-lib: ${pkgs.urxvt_perls}/lib/urxvt/perl
