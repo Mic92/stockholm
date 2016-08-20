@@ -4,6 +4,28 @@ with config.krebs.lib;
 
 {
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.makefu) {
+    drop = rec {
+        cores = 1;
+        nets = {
+            retiolum = {
+                ip4.addr = "10.243.177.9";
+                ip6.addr = "42:f63:ddf8:7520:cfec:9b61:d807:1dce";
+                aliases = [
+                    "drop.retiolum"
+                ];
+                tinc.pubkey = ''
+    -----BEGIN RSA PUBLIC KEY-----
+    MIIBCgKCAQEA1QxukdeDqI47nm7/gd5Y9dZZbJULA02ak0A2cB4lmysJjgMFAfbl
+    6qpH7HCZk6s+4eI7H+UHUF177W7Z1qq3bqGLmlgdMMAzuDNz9UvNLhrthZMp3tCI
+    GIFD28O1bKgDAYgsF/X21CRqEvgk3vRDp9yqIVIzQDmerOrZUx62Rx9Fssl/7ooW
+    0319fxcTw6GZEp7RXNzgIobnWPydakh+/I0inP0rC6It/vM5Hi2bV71QPZUyJ78C
+    Szh4S8TznW7yMzTQaOENeaUKfqEyN+CW2OomVdWIBOvTJVpvfAut/kg1dyUGgHlT
+    F8OlAoNAyxCSxqbM0fY0wtqKD7FaYY9cbQIDAQAB
+    -----END RSA PUBLIC KEY-----
+    '';
+            };
+        };
+    };
     pnp = {
       cores = 1;
       nets = {
@@ -338,6 +360,7 @@ with config.krebs.lib;
           ip6.addr = "42:f9f0::10";
           aliases = [
             "omo.retiolum"
+            "tracker.makefu.r"
             "omo.r"
           ];
           tinc.pubkey = ''
