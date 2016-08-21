@@ -32,6 +32,7 @@ with config.krebs.lib;
     <stockholm/tv/2configs/hw/x220.nix>
     <stockholm/tv/2configs/im.nix>
     <stockholm/tv/2configs/mail-client.nix>
+    <stockholm/tv/2configs/nginx/public_html.nix>
     <stockholm/tv/2configs/retiolum.nix>
     <stockholm/tv/2configs/ssh.nix>
     <stockholm/tv/2configs/sshd.nix>

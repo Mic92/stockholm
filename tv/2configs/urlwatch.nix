@@ -51,12 +51,6 @@ with config.krebs.lib;
       # <stockholm/tv/2configs/xserver/xserver.conf.nix>
       # is derived from `configFile` in:
       https://raw.githubusercontent.com/NixOS/nixpkgs/master/nixos/modules/services/x11/xserver.nix
-
-      {
-        url = https://pypi.python.org/pypi/vncdotool/json;
-        filter = "system:${pkgs.jq}/bin/jq -r '.releases|keys[]'";
-      }
-      https://api.github.com/repos/kanaka/noVNC/tags
     ];
     hooksFile = toFile "hooks.py" ''
       import subprocess

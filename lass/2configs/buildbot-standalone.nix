@@ -195,7 +195,6 @@ in {
           "tinc_graphs",
           "translate-shell",
           "urlwatch",
-          "vncdotool",
           "with-tmpdir",
           "youtube-tools",
         ]:
