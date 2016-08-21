@@ -15,10 +15,11 @@ in {
       extraGroups = [
         "download"
       ];
-      openssh.authorizedKeys.keys = [
-        config.krebs.users.lass.pubkey
-        config.krebs.users.lass-uriel.pubkey
-        config.krebs.users.lass-shodan.pubkey
+      openssh.authorizedKeys.keys = with config.krebs.users; [
+        lass.pubkey
+        lass-uriel.pubkey
+        lass-shodan.pubkey
+        makefu.pubkey
       ];
     };
 

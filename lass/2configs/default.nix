@@ -44,6 +44,11 @@ with config.krebs.lib;
         };
       };
     }
+    {
+      environment.variables = {
+        NIX_PATH = mkForce "secrets=/var/src/stockholm/null:/var/src";
+      };
+    }
   ];
 
   networking.hostName = config.krebs.build.host.name;

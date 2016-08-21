@@ -253,5 +253,27 @@ rec {
       ${pkgs.cabal2nix}/bin/cabal2nix ${path} > $out
     '');
 
+  writePython2 = name: src: pkgs.runCommand name {} /* sh */ ''
+    name=${assert types.filename.check name; name}
+    src=${shell.escape src}
+
+    # syntax check
+    printf '%s' "$src" > src.py
+    ${pkgs.python2}/bin/python -m py_compile src.py
+
+    cp src.py "$out"
+  '';
+
+  writePython3 = name: src: pkgs.runCommand name {} /* sh */ ''
+    name=${assert types.filename.check name; name}
+    src=${shell.escape src}
+
+    # syntax check
+    printf '%s' "$src" > src.py
+    ${pkgs.python3}/bin/python -m py_compile src.py
+
+    cp src.py "$out"
+  '';
+
   writeSed = makeScriptWriter "${pkgs.gnused}/bin/sed -f";
 }
