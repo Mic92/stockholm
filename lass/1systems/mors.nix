@@ -17,7 +17,6 @@
     ../2configs/wine.nix
     ../2configs/chromium-patched.nix
     ../2configs/git.nix
-    ../2configs/bitlbee.nix
     ../2configs/skype.nix
     ../2configs/teamviewer.nix
     ../2configs/libvirt.nix

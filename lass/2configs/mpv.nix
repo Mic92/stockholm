@@ -28,6 +28,9 @@ let
   good = moveToDir "G" "./.good";
   delete = moveToDir "D" "./.graveyard";
 
+  up = moveToDir "U" "./up";
+  down = moveToDir "Y" "./down";
+
   deleteCurrentTrack = pkgs.writeText "delete.lua" ''
     deleted_tmp = "./.graveyard"
 

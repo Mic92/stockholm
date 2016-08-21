@@ -44,8 +44,8 @@ in {
         sched.append(schedulers.SingleBranchScheduler(
                                     change_filter=util.ChangeFilter(branch_re=".*"),
                                     treeStableTimer=10,
-                                    name="prism-all-branches",
-                                    builderNames=["build-all"]))
+                                    name="build-all-branches",
+                                    builderNames=["build-all", "build-pkgs"]))
       '';
     };
     builder_pre = ''
@@ -111,7 +111,7 @@ in {
               slavenames=slavenames,
               factory=f))
 
-            '';
+      '';
 
       fast-tests = ''
         f = util.BuildFactory()
@@ -149,7 +149,64 @@ in {
         bu.append(util.BuilderConfig(name="fast-tests",
               slavenames=slavenames,
               factory=f))
+      '';
+      build-pkgs = ''
+        f = util.BuildFactory()
+        f.addStep(grab_repo)
+        for i in [
+          "apt-cacher-ng",
+          "bepasty-client-cli",
+          "cac-api",
+          "cac-cert",
+          "cac-panel",
+          "charybdis",
+          "collectd-connect-time",
+          "dic",
+          "drivedroid-gen-repo",
+          "exim",
+          "fortclientsslvpn",
+          "get",
+          "git-hooks",
+          "github-hosts-sync",
+          "go",
+          "hashPassword",
+          "haskellPackages.blessings",
+          "haskellPackages.email-header",
+          "haskellPackages.megaparsec",
+          "haskellPackages.scanner",
+          "haskellPackages.xmonad-stockholm",
+          "krebspaste",
+          "krebszones",
+          "logf",
+          "much",
+          "newsbot-js",
+          "noVNC",
+          "passwdqc-utils",
+          "populate",
+          "posix-array",
+          "pssh",
+          "push",
+          "Reaktor",
+          "realwallpaper",
+          "repo-sync",
+          "retiolum-bootstrap",
+          "tarantool",
+          "test",
+          "tinc_graphs",
+          "translate-shell",
+          "urlwatch",
+          "vncdotool",
+          "with-tmpdir",
+          "youtube-tools",
+        ]:
+          addShell(f,name="build-{}".format(i),env=env_lass,
+                  command=nixshell + \
+                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+                        make system=prism pkgs.{}".format(i)])
 
+        bu.append(util.BuilderConfig(name="build-pkgs",
+              slavenames=slavenames,
+              factory=f))
             '';
     };
     enable = true;
