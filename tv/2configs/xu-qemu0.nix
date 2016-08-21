@@ -63,7 +63,6 @@ with config.krebs.lib;
   '';
 
   krebs.per-user.tv.packages = [
-    pkgs.vncdotool
   ];
 
   users.users.xu-qemu0 = {
