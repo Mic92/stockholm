@@ -360,7 +360,6 @@ with config.krebs.lib;
           ip6.addr = "42:f9f0::10";
           aliases = [
             "omo.retiolum"
-            "tracker.makefu.r"
             "omo.r"
           ];
           tinc.pubkey = ''
@@ -446,6 +445,8 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
             "gum.r"
             "gum.retiolum"
             "cgit.gum.retiolum"
+            "tracker.makefu.r"
+            "tracker.makefu.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -761,6 +762,32 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
         };
       };
     };
+    tcac-0-1 = rec {
+        cores = 1;
+    ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+    ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcX7rlGmGp1zCStrERXZ3XuT/j69FDBXV4ceLn9RXsG tcac-0-1
+    ";
+        nets = {
+          retiolum = {
+            ip4.addr = "10.243.144.142";
+            ip6.addr  = "42:4bf8:94b:eec5:69e2:c837:686e:f278";
+            aliases = [
+                "tcac-0-1.retiolum"
+            ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEA+3zuZa8FhFBcUNdNGyTQph6Jes0WDQB4CDcEcnK9okP60Z0ONq8j
+              7sKmxzQ43WFm04fd992Aa/KLbYBbXmGtYuu68DQwQGwk3HVNksp6ha7uVK1ibgNs
+              zJIKizpFqK4NAYit0OfAy7ugVSvtyIxg9CDhnASDZ5NRq8/OLhvo5M4c3r3lGOlO
+              Hv1nf4Tl2IYRln3c+AJEiw2369K46mRlt28yHeKUw1ur6hrbahnkYW+bjeliROIs
+              QLp8J8Jl6evtPOyZpgyGHLQ/WPsQRK5svVA9ou17R//m4KNL1kBjTfxs7GaJWHLl
+              HpSZTqRKsuK6K9R6kzu7NU81Wz0HXxw/qwIDAQAB
+              -----END RSA PUBLIC KEY-----
+            '';
+          };
+        };
+    };
+
 
   } // { # hosts only maintained in stockholm, not owned by me
     muhbaasu = rec {
