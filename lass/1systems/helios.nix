@@ -6,6 +6,7 @@ with config.krebs.lib;
 {
   imports = [
     ../.
+    ../2configs/retiolum.nix
     ../2configs/exim-retiolum.nix
     ../2configs/browsers.nix
     ../2configs/programs.nix

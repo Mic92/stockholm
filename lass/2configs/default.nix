@@ -8,7 +8,6 @@ with config.krebs.lib;
     ../2configs/gc.nix
     ../2configs/mc.nix
     ../2configs/nixpkgs.nix
-    ../2configs/retiolum.nix
     ../2configs/vim.nix
     ../2configs/zsh.nix
     ./backups.nix

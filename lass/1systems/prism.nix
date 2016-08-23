@@ -12,7 +12,7 @@ let
 in {
   imports = [
     ../.
-    ../2configs/default.nix
+    ../2configs/retiolum.nix
     ../2configs/exim-smarthost.nix
     ../2configs/downloading.nix
     ../2configs/ts3.nix

@@ -3,8 +3,8 @@
 {
   imports = [
     ../.
+    ../2configs/retiolum.nix
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
-    ../2configs/default.nix
     #../2configs/exim-retiolum.nix
     ../2configs/git.nix
     {
