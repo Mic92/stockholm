@@ -21,27 +21,33 @@ with config.krebs.lib;
     #  imports = [
     #    ../2configs/baseX.nix
     #  ];
-    #  networking.wireless.enable = true;
     #}
     {
       # gnome3 for suja
       imports = [
         ../2configs/default.nix
       ];
+      time.timeZone = "Europe/Berlin";
       services.xserver.enable = true;
-      services.xserver.desktopManager.gnome3.enable = true;
-      users.users.suja = {
-        uid = genid "suja";
-        home = "/home/suja";
+      services.xserver.desktopManager.xfce.enable = true;
+      networking.wireless.enable = true;
+      users.users.ferret = {
+        uid = genid "ferret";
+        home = "/home/ferret";
         group = "users";
         createHome = true;
         useDefaultShell = true;
         extraGroups = [
         ];
+        hashedPassword = "$6$SaneLuyep90p8BPn$0IDbvLgNbRGZL96obWavanTmY6IkBG84vs2b/2oqlpbmTZH3retOYbQKF1uVqu6dD0ZGF4eBq9tqPbwUjRyY00";
       };
       environment.systemPackages = with pkgs; [
         firefox
         chromium
+        oraclejre8
+        maven
+        arandr
+        libreoffice
       ];
     }
     #{
