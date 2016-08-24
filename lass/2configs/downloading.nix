@@ -2,10 +2,7 @@
 
 with config.krebs.lib;
 
-let
-  rpc-password = import <secrets/transmission-pw>;
-in {
-
+{
   users.extraUsers = {
     download = {
       name = "download";
@@ -39,19 +36,20 @@ in {
     };
   };
 
-  services.transmission = {
+  krebs.rtorrent = {
     enable = true;
-    settings = {
-      download-dir = "/var/download/finished";
-      incomplete-dir = "/var/download/incoming";
-      incomplete-dir-enabled = true;
-
-      rpc-authentication-required = true;
-      rpc-whitelist-enabled = false;
-      rpc-username = "download";
-      inherit rpc-password;
-      peer-port = 51413;
+    web = {
+      enable = true;
+      enableAuth = true;
+      listenAddress = "9091";
+      authfile = <secrets/torrent-authfile>;
     };
+    rutorrent.enable = true;
+    enableXMLRPC = true;
+    listenPort = 51413;
+    downloadDir = "/var/download/finished";
+    # dump old torrents into watch folder to have them re-added
+    watchDir = "/var/download/watch";
   };
 
   krebs.iptables = {
