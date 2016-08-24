@@ -24,9 +24,6 @@ with config.krebs.lib;
     #}
     {
       # gnome3 for suja
-      imports = [
-        ../2configs/default.nix
-      ];
       time.timeZone = "Europe/Berlin";
       services.xserver.enable = true;
       services.xserver.desktopManager.xfce.enable = true;
