@@ -33,6 +33,7 @@ let
       ./realwallpaper.nix
       ./retiolum-bootstrap.nix
       ./retiolum.nix
+      ./rtorrent.nix
       ./secret.nix
       ./setuid.nix
       ./tinc_graphs.nix

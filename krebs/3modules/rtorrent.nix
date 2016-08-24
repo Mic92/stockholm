@@ -2,9 +2,9 @@
 
 with config.krebs.lib;
 let
-  cfg = config.makefu.rtorrent;
-  webcfg = config.makefu.rtorrent.web;
-  rucfg = config.makefu.rtorrent.rutorrent;
+  cfg = config.krebs.rtorrent;
+  webcfg = config.krebs.rtorrent.web;
+  rucfg = config.krebs.rtorrent.rutorrent;
 
   nginx-user = config.services.nginx.user;
   nginx-group = config.services.nginx.group;
@@ -55,7 +55,7 @@ let
   '';
 
   out = {
-    options.makefu.rtorrent = api;
+    options.krebs.rtorrent = api;
     # This only works because none of the attrsets returns the same key
     config = with lib; mkIf cfg.enable (lib.mkMerge [
       (lib.mkIf webcfg.enable rpcweb-imp)
@@ -184,8 +184,8 @@ let
         see ${cfg.package}/share/doc/rtorrent/rtorrent.rc
       '';
       example = literalExample ''
-        log.execute = ${config.makefu.rtorrent.workDir}/execute.log
-        log.xmlrpc = ${config.makefu.rtorrent.workDir}/xmlrpc.log
+        log.execute = ${cfg.workDir}/execute.log
+        log.xmlrpc = ${cfg.workDir}/xmlrpc.log
       '';
       default = "";
     };
