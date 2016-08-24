@@ -88,4 +88,9 @@ in {
     HandleLidSwitch=ignore
   '';
 
+  services.xserver.synaptics = {
+    enable = true;
+    twoFingerScroll = true;
+    accelFactor = "0.035";
+  };
 }
