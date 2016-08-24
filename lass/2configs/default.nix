@@ -8,7 +8,6 @@ with config.krebs.lib;
     ../2configs/gc.nix
     ../2configs/mc.nix
     ../2configs/nixpkgs.nix
-    ../2configs/retiolum.nix
     ../2configs/vim.nix
     ../2configs/zsh.nix
     ./backups.nix
@@ -206,11 +205,4 @@ with config.krebs.lib;
   networking.dhcpcd.extraConfig = ''
     noipv4ll
   '';
-
-  #CVE-2016-0777 and CVE-2016-0778 workaround
-  #https://www.qualys.com/2016/01/14/cve-2016-0777-cve-2016-0778/openssh-cve-2016-0777-cve-2016-0778.txt
-  programs.ssh.extraConfig = ''
-    UseRoaming no
-  '';
-
 }

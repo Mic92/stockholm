@@ -3,6 +3,7 @@
 {
   imports = [
     ../.
+    ../2configs/retiolum.nix
     ../2configs/hw/tp-x220.nix
     ../2configs/baseX.nix
     ../2configs/exim-retiolum.nix

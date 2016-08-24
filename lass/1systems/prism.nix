@@ -12,7 +12,7 @@ let
 in {
   imports = [
     ../.
-    ../2configs/default.nix
+    ../2configs/retiolum.nix
     ../2configs/exim-smarthost.nix
     ../2configs/downloading.nix
     ../2configs/ts3.nix
@@ -157,6 +157,7 @@ in {
       users.users.chat.openssh.authorizedKeys.keys = [
         "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAHF9tijlMoEevRZCG1AggukxWggfxPHUwg6Ye113ODG6PZ2m98oSmnsjixDy4GfIJjy+8HBbkwS6iH+fsNk86QtAgFNMjBl+9YvEzNRBzcyCqdOkZFvvZvV2oYA7I15il4ln62PDPKjEIS3YPhZPSwc6GhrlsFTnIG56NF/93IhF7R/FA== JuiceSSH"
         config.krebs.users.lass-uriel.pubkey
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDQ8DJhHAqmdrB2+qkV/OuKjR4QDXUww2TWItyDrs+/6F58WacMozgaZr2goA5JQJ5d19nC3LzYb4yLGguADsp987I6cAu5iXPT5PHKc0eRWDN+AGlpTgUtN1BvVrnJZaUJrR9WlHhFYlkOkzAsB15fKYciVWsyxBCVZ+3oiTEjs2L/sfbrgailWqHIUWDftUnJx8EFmSUVZ2GZWklMcgBo0FJD1i0x5u2dQGguNY+28DzQmKgUMS+xD/uUZvrFIWr9I6CBqhsuHJo8n85BT3B3QdG8ARLt5FKPr5L3My6UjlxOkKrDNLjJFjERFCsuIxnrO3tQhvKXQYlOyskHokocYSdcIq8svghJLA3kmRYIjHjZ4y1BNENsk79WyYNMAi5y+A0Evmu+g3ks/DiW3vI/Sw/D3Uc7ilbImpaoL5qUC4+WZM3J2b3Z1AU5D1QiojpKkB9Qt1bokCm8hrRCG9ZDKqAD6IqmI1ARRjfgA4zKwKUhmMqG4p55YGGVf9OeK0rXgX0Z2InyFXeBaU2aBcDfdKD/65w5MnC9CsJnjELdd4r9u2ugTPExzOo3WUlNuOTB1WoZ8CiY2OVGle/E/MzKUDfGuIFhUsFeX0YcLHPbo+mesISNUPaeadSuMuHE8W4FOeEq51toBo/gkxgjtqqWMOd9SxnDQTMBKq3L/w7nEQ== lass@mors"
       ];
     }
     {

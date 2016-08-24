@@ -123,7 +123,7 @@ let
   vim = pkgs.writeDashBin "vim" ''
     set -efu
     (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
-    exec ${pkgs.neovim}/bin/nvim "$@"
+    exec ${pkgs.vim}/bin/vim "$@"
   '';
 
   vimrc = pkgs.writeText "vimrc" ''

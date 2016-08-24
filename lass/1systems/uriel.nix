@@ -4,6 +4,7 @@ with builtins;
 {
   imports = [
     ../.
+    ../2configs/retiolum.nix
     ../2configs/baseX.nix
     ../2configs/exim-retiolum.nix
     ../2configs/browsers.nix
@@ -12,7 +13,6 @@ with builtins;
     ../2configs/bird.nix
     ../2configs/git.nix
     ../2configs/chromium-patched.nix
-    ../2configs/retiolum.nix
     ../2configs/bitlbee.nix
     ../2configs/weechat.nix
     ../2configs/skype.nix
