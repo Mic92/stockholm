@@ -190,6 +190,8 @@ with config.krebs.lib;
     urban
     mk_sql_pair
     remmina
+
+    logf
   ];
 
   #TODO: fix this shit
