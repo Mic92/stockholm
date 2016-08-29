@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 
+with config.krebs.lib;
 {
   imports = [
     ../.
