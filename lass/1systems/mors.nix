@@ -181,6 +181,8 @@ with config.krebs.lib;
   '';
 
   environment.systemPackages = with pkgs; [
+    exfat
+
     acronym
     cac-api
     sshpass
