@@ -48,6 +48,9 @@ in {
       "ubikmedia.eu"
       "facts.cloud"
       "youthtube.xyz"
+      "illucloud.eu"
+      "illucloud.de"
+      "illucloud.com"
       "www.ubikmedia.de"
       "www.aldona.ubikmedia.de"
       "www.apanowicz.de"
@@ -57,6 +60,9 @@ in {
       "www.ubikmedia.eu"
       "www.facts.cloud"
       "www.youthtube.xyz"
+      "www.illucloud.eu"
+      "www.illucloud.de"
+      "www.illucloud.com"
     ])
     (serveWordpress [
       "ubikmedia.de"
@@ -67,6 +73,9 @@ in {
       "ubikmedia.eu"
       "facts.cloud"
       "youthtube.xyz"
+      "illucloud.eu"
+      "illucloud.de"
+      "illucloud.com"
       "www.apanowicz.de"
       "www.nirwanabluete.de"
       "www.aldonasiech.com"
@@ -74,6 +83,9 @@ in {
       "www.ubikmedia.eu"
       "www.facts.cloud"
       "www.youthtube.xyz"
+      "www.illucloud.eu"
+      "www.illucloud.de"
+      "www.illucloud.com"
       "*.ubikmedia.de"
     ])
   ];
