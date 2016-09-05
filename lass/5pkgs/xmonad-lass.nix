@@ -43,6 +43,7 @@ import XMonad.Prompt (autoComplete, searchPredicate, XPConfig)
 import XMonad.Prompt.Window (windowPromptGoto, windowPromptBringCopy)
 import XMonad.Stockholm.Shutdown (sendShutdownEvent, handleShutdownEvent)
 import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Layout.SimpleFloat (simpleFloat)
 
 
 myTerm :: String
@@ -75,7 +76,7 @@ mainNoArgs = do
 
 myLayoutHook = defLayout
   where
-    defLayout = minimize $ ((avoidStruts $ Tall 1 (3/100) (1/2) ||| Full ||| Mirror (Tall 1 (3/100) (1/2))) ||| FixedColumn 2 80 80 1)
+    defLayout = minimize $ ((avoidStruts $ Tall 1 (3/100) (1/2) ||| Full ||| Mirror (Tall 1 (3/100) (1/2))) ||| FixedColumn 2 80 80 1) ||| simpleFloat
 
 
 xmonad' :: (LayoutClass l Window, Read (l Window)) => XConfig l -> IO ()
