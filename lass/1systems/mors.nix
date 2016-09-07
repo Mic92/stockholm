@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 
+with config.krebs.lib;
 {
   imports = [
     ../.
@@ -64,6 +65,16 @@
           Init1 = AT+CFUN=1
           Init2 = AT+CGDCONT=1,"IP","pinternet.interkom.de","",0,0
         '';
+      };
+    }
+    {
+      krebs.nginx = {
+        enable = true;
+        servers.default.locations = [
+          (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
+            alias /home/$1/public_html$2;
+          '')
+        ];
       };
     }
   ];
@@ -170,6 +181,8 @@
   '';
 
   environment.systemPackages = with pkgs; [
+    exfat
+
     acronym
     cac-api
     sshpass
@@ -179,6 +192,8 @@
     urban
     mk_sql_pair
     remmina
+
+    logf
   ];
 
   #TODO: fix this shit

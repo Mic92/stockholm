@@ -4,11 +4,8 @@ let
   mainUser = config.users.extraUsers.mainUser;
 in {
   imports = [
-    ./default.nix
-    #./urxvt.nix
     ./xserver
     ./mpv.nix
-    #./pulse.nix
     ./power-action.nix
   ];
   hardware.pulseaudio = {

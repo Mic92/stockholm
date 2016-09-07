@@ -243,6 +243,23 @@ in {
         ];
       };
     }
+    {
+      krebs.nginx = {
+        enable = true;
+        servers.public = {
+          listen = [ "8088" ];
+          server-names = [ "default" ];
+          locations = [
+            (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
+              alias /home/$1/public_html$2;
+            '')
+          ];
+        };
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+       { predicate = "-p tcp --dport 8088"; target = "ACCEPT"; }
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
