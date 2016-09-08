@@ -188,6 +188,7 @@ rec {
           error_log /tmp/nginx_err.log;
           error_page 404 /404.html;
           error_page 500 502 503 504 /50x.html;
+          client_max_body_size 100m;
         '';
         locations = [
           (nameValuePair "/" ''
