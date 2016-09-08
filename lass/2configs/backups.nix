@@ -23,10 +23,10 @@ with config.krebs.lib;
       dst = { host = config.krebs.hosts.mors;     path = "/bku/dishfire-http"; };
       startAt = "03:05";
     };
-    dishfire-http-uriel = {
+    dishfire-http-shodan = {
       method = "pull";
       src = { host = config.krebs.hosts.dishfire; path = "/srv/http"; };
-      dst = { host = config.krebs.hosts.uriel;    path = "/bku/dishfire-http"; };
+      dst = { host = config.krebs.hosts.shodan;    path = "/bku/dishfire-http"; };
       startAt = "03:10";
     };
     dishfire-sql-prism = {
@@ -41,10 +41,10 @@ with config.krebs.lib;
       dst = { host = config.krebs.hosts.mors;     path = "/bku/dishfire-sql"; };
       startAt = "03:20";
     };
-    dishfire-sql-uriel = {
+    dishfire-sql-shodan = {
       method = "pull";
       src = { host = config.krebs.hosts.dishfire; path = "/bku/sql_dumps"; };
-      dst = { host = config.krebs.hosts.uriel;    path = "/bku/dishfire-sql"; };
+      dst = { host = config.krebs.hosts.shodan;    path = "/bku/dishfire-sql"; };
       startAt = "03:25";
     };
     prism-bitlbee-mors = {
@@ -53,10 +53,10 @@ with config.krebs.lib;
       dst = { host = config.krebs.hosts.mors; path = "/bku/prism-bitlbee"; };
       startAt = "03:25";
     };
-    prism-bitlbee-uriel = {
+    prism-bitlbee-shodan = {
       method = "pull";
       src = { host = config.krebs.hosts.prism; path = "/var/lib/bitlbee"; };
-      dst = { host = config.krebs.hosts.uriel; path = "/bku/prism-bitlbee"; };
+      dst = { host = config.krebs.hosts.shodan; path = "/bku/prism-bitlbee"; };
       startAt = "03:25";
     };
     prism-chat-mors = {
@@ -65,10 +65,10 @@ with config.krebs.lib;
       dst = { host = config.krebs.hosts.mors;  path = "/bku/prism-chat"; };
       startAt = "03:30";
     };
-    prism-chat-uriel = {
+    prism-chat-shodan = {
       method = "pull";
       src = { host = config.krebs.hosts.prism; path = "/home/chat"; };
-      dst = { host = config.krebs.hosts.uriel; path = "/bku/prism-chat"; };
+      dst = { host = config.krebs.hosts.shodan; path = "/bku/prism-chat"; };
       startAt = "03:35";
     };
     prism-sql-mors = {
@@ -77,10 +77,10 @@ with config.krebs.lib;
       dst = { host = config.krebs.hosts.mors;  path = "/bku/prism-sql_dumps"; };
       startAt = "03:40";
     };
-    prism-sql-uriel = {
+    prism-sql-shodan = {
       method = "pull";
       src = { host = config.krebs.hosts.prism; path = "/bku/sql_dumps"; };
-      dst = { host = config.krebs.hosts.uriel; path = "/bku/prism-sql_dumps"; };
+      dst = { host = config.krebs.hosts.shodan; path = "/bku/prism-sql_dumps"; };
       startAt = "03:45";
     };
     prism-http-mors = {
@@ -89,22 +89,22 @@ with config.krebs.lib;
       dst = { host = config.krebs.hosts.mors;  path = "/bku/prism-http"; };
       startAt = "03:50";
     };
-    prism-http-uriel = {
+    prism-http-shodan = {
       method = "pull";
       src = { host = config.krebs.hosts.prism; path = "/srv/http"; };
-      dst = { host = config.krebs.hosts.uriel; path = "/bku/prism-http"; };
+      dst = { host = config.krebs.hosts.shodan; path = "/bku/prism-http"; };
       startAt = "03:55";
     };
-    uriel-home-mors = {
+    shodan-home-mors = {
       method = "pull";
-      src = { host = config.krebs.hosts.uriel; path = "/home"; };
-      dst = { host = config.krebs.hosts.mors;  path = "/bku/uriel-home"; };
+      src = { host = config.krebs.hosts.shodan; path = "/home"; };
+      dst = { host = config.krebs.hosts.mors;  path = "/bku/shodan-home"; };
       startAt = "04:00";
     };
-    mors-home-uriel = {
+    mors-home-shodan = {
       method = "push";
       src = { host = config.krebs.hosts.mors;  path = "/home"; };
-      dst = { host = config.krebs.hosts.uriel; path = "/bku/mors-home"; };
+      dst = { host = config.krebs.hosts.shodan; path = "/bku/mors-home"; };
       startAt = "05:00";
     };
     dishfire-http-helios = {
