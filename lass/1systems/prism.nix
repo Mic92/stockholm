@@ -260,6 +260,11 @@ in {
        { predicate = "-p tcp --dport 8088"; target = "ACCEPT"; }
       ];
     }
+    {
+      krebs.repo-sync.timerConfig = {
+        OnCalendar = "*:0/5";
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
