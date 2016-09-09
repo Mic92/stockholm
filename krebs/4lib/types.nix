@@ -284,6 +284,7 @@ types // rec {
       };
       mail = mkOption {
         type = str; # TODO retiolum mail address
+        default = "${config._module.args.name}@${config.networking.hostName}.r";
       };
       name = mkOption {
         type = username;
