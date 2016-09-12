@@ -23,6 +23,7 @@ in {
     ../2configs/buildbot-standalone.nix
     ../2configs/repo-sync.nix
     ../2configs/binary-cache/server.nix
+    ../2configs/iodined.nix
     {
       imports = [
         ../2configs/git.nix
