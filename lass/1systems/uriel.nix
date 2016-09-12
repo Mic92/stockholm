@@ -35,9 +35,6 @@ with config.krebs.lib;
       ];
       services.xserver.desktopManager.xfce = {
         enable = true;
-        thunarPlugins = [
-          pkgs.xfce/xfce_battery_plugin
-        ];
       };
     }
   ];
