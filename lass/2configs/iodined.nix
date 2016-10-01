@@ -14,7 +14,7 @@ in {
   };
 
   krebs.iptables.tables.filter.INPUT.rules = [
-    { predicate = "-p udp --dport 54"; target = "ACCEPT";}
+    { predicate = "-p udp --dport 53"; target = "ACCEPT";}
   ];
 
 }
