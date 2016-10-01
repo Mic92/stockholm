@@ -194,6 +194,7 @@ with config.krebs.lib;
     remmina
 
     logf
+    iodine
   ];
 
   #TODO: fix this shit
