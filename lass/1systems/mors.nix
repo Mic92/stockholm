@@ -195,6 +195,8 @@ with config.krebs.lib;
 
     logf
     iodine
+
+    macchanger
   ];
 
   #TODO: fix this shit
