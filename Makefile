@@ -51,8 +51,6 @@ $(if $(target_user),,$(error unbound variable: target_user))
 $(if $(target_port),,$(error unbound variable: target_port))
 $(if $(target_path),,$(error unbound variable: target_path))
 
-target ?= $(target_user)@$(target_host):$(target_port)$(target_path)
-
 build = \
 	nix-build \
 		--no-out-link \
@@ -88,6 +86,8 @@ deploy:
 			nixos-rebuild $(rebuild-command) --show-trace -I $(target_path)
 
 # usage: make populate system=foo
+populate: populate-target = \
+	$(target_user)@$(target_host):$(target_port)$(target_path)
 ifeq ($(debug),true)
 populate: populate-flags += --debug
 endif
@@ -96,7 +96,7 @@ populate: populate-flags += --ssh=$(ssh)
 endif
 populate:
 	$(call evaluate,config.krebs.build.source) --json --strict | \
-	populate $(target) $(populate-flags)
+	populate $(populate-target) $(populate-flags)
 
 # usage: make pkgs.populate
 pkgs:;@$(error no package selected)
