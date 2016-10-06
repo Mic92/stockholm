@@ -5,13 +5,15 @@
     ../smartd.nix
   ];
 
-  boot.loader.gummiboot.enable = true;
+  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.wireless.enable = true;
 
   # Required for Centrino.
   hardware.enableAllFirmware = true;
+
+  hardware.opengl.extraPackages = [ pkgs.vaapiIntel pkgs.vaapiVdpau ];
 
   hardware.trackpoint = {
     enable = true;
@@ -41,6 +43,5 @@
 
   services.xserver = {
     videoDriver = "intel";
-    vaapiDrivers = [ pkgs.vaapiIntel pkgs.vaapiVdpau ];
   };
 }

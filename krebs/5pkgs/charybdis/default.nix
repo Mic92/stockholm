@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/atheme/charybdis.git";
     rev = "61815bf9324e872f51255e09fe37a8c595f94a60";
-    sha256 = "0zsd6xk2cnspc1cvryy2296p3ix4hwjd9k24wmgbh5wzks0wahwy";
+    sha256 = "1q9h7j2pm1wsbcybmm7r7hzimp1zda04lw9x2akb26l9p12zgfgc";
   };
 
   patches = [

@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://github.com/kanaka/noVNC;
     rev = "refs/tags/v0.5.1";
-    sha256 = "1azsnppwnrsv3axj0r5bw8lfarkibgz5vhgcyj8dzn4afn98f55w";
+    sha256 = "1vckvvfcawgfqmx415r5rnl6k2alx53jbqmsj49kxpbdvvxpb49d";
   };
 
   phases = [

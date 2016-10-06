@@ -24,7 +24,7 @@ with config.krebs.lib;
         # stockholm
         gnumake
         hashPassword
-        haskellPackages.lentil
+        #haskellPackages.lentil
         parallel
         (pkgs.writeBashBin "im" ''
           export PATH=${makeSearchPath "bin" (with pkgs; [
@@ -60,7 +60,7 @@ with config.krebs.lib;
         pass
         q
         qrencode
-        texLive
+        #texLive
         tmux
 
         #ack
