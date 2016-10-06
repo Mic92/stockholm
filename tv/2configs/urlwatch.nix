@@ -31,6 +31,7 @@ with config.krebs.lib;
 
       ## other
 
+      https://nixos.org/channels/nixos-16.09/git-revision
       https://nixos.org/channels/nixos-unstable/git-revision
 
       ## 2014-10-17
