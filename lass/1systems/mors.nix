@@ -200,6 +200,9 @@ with config.krebs.lib;
     thunderbird
 
     logf
+    iodine
+
+    macchanger
   ];
 
   #TODO: fix this shit

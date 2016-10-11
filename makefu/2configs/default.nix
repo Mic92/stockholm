@@ -22,7 +22,7 @@ with config.krebs.lib;
     build = {
       user = config.krebs.users.makefu;
       source = let inherit (config.krebs.build) host user; in {
-        nixpkgs = if config.makefu.full-populate or (getEnv "dummy_secrets" == "true") then
+        nixpkgs = if config.makefu.full-populate || (getEnv "dummy_secrets" == "true") then
           { # stable @ 2016-07-20
             git = { url = https://github.com/nixos/nixpkgs; ref = "125ffff"; };
           }

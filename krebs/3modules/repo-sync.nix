@@ -17,29 +17,57 @@ let
         # see `repo-sync --help`
         #   `ref` provides sane defaults and can be omitted
 
+        # you can have multiple repo-sync groups and therefore multiple @latest
+        # configuration entries.
         # attrset will be converted to json and be used as config
-        { repo = {
+        # each attrset defines a group of repos for syncing
+
+        { nxpkgs = {
             makefu = {
               origin = {
-                url = http://github.com/makefu/repo ;
+                url = http://github.com/makefu/nixpkgs;
                 ref = "heads/dev" ;
               };
               mirror = {
-                url = "git@internal:mirror" ;
+                url = "git@internal:nixpkgs-mirror" ;
                 ref = "heads/github-mirror-dev" ;
               };
             };
             lass = {
               origin = {
-                url = http://github.com/lass/repo ;
+                url = http://github.com/lass/nixpkgs;
               };
               mirror = {
-                url = "git@internal:mirror" ;
+                url = "git@internal:nixpkgs-mirror" ;
               };
             };
             "@latest" = {
               mirror = {
-                url = "git@internal:mirror";
+                url = "git@internal:nixpkgs-mirror";
+                ref = "heads/master";
+              };
+            };
+          };
+          stockholm = {
+            lass = {
+              origin = {
+                url = http://cgit.prism.r/stockholm;
+              };
+              mirror = {
+                url = "git@internal:stockholm-mirror" ;
+              };
+            };
+            makefu = {
+              origin = {
+                url = http://gum.krebsco.de/stockholm;
+              };
+              mirror = {
+                url = "git@internal:stockholm-mirror" ;
+              };
+            };
+            "@latest" = {
+              mirror = {
+                url = "git@internal:stockholm-mirror";
                 ref = "heads/master";
               };
             };
