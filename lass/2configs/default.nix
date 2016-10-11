@@ -97,6 +97,7 @@ with config.krebs.lib;
     jq
     parallel
     proot
+    populate
 
   #style
     most
