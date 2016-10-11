@@ -54,8 +54,8 @@ with config.krebs.lib;
         enable = true;
         package = pkgs.postgresql;
       };
-      virtualisation.docker.enable = true;
-      users.users.mainUser.extraGroups = [ "docker" ];
+      #virtualisation.docker.enable = true;
+      #users.users.mainUser.extraGroups = [ "docker" ];
     }
     {
       lass.umts = {
