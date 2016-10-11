@@ -77,6 +77,11 @@ with config.krebs.lib;
     "/boot" = {
       device = "/dev/sda1";
     };
+    "/tmp" = {
+      device = "tmpfs";
+      fsType = "tmpfs";
+      options = ["nosuid" "nodev" "noatime"];
+    };
   };
 
   services.udev.extraRules = ''

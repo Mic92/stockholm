@@ -120,6 +120,12 @@ in {
         device = "/dev/pool/bku";
       };
 
+      fileSystems."/tmp" = {
+        device = "tmpfs";
+        fsType = "tmpfs";
+        options = ["nosuid" "nodev" "noatime"];
+      };
+
     }
     {
       sound.enable = false;

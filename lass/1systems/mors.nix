@@ -140,6 +140,11 @@ with config.krebs.lib;
       device = "/dev/big/conf";
       fsType = "ext4";
     };
+    "/tmp" = {
+      device = "tmpfs";
+      fsType = "tmpfs";
+      options = ["nosuid" "nodev" "noatime"];
+    };
   };
 
   services.udev.extraRules = ''
