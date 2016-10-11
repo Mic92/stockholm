@@ -197,6 +197,7 @@ with config.krebs.lib;
     urban
     mk_sql_pair
     remmina
+    thunderbird
 
     logf
   ];
