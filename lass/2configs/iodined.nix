@@ -6,7 +6,7 @@ let
   pw = import <secrets/iodinepw.nix>;
 in {
 
-  services.iodined = {
+  services.iodine.server = {
     enable = true;
     domain = domain;
     ip = "172.16.10.1/24";
