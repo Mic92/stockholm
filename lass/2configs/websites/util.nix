@@ -167,7 +167,6 @@ rec {
         pm.max_spare_servers = 3
         listen.owner = nginx
         listen.group = nginx
-        # errors to journal
         php_admin_value[error_log] = 'stderr'
         php_admin_flag[log_errors] = on
         catch_workers_output = yes
@@ -220,7 +219,6 @@ rec {
         pm.max_spare_servers = 3
         listen.owner = nginx
         listen.group = nginx
-        # errors to journal
         php_admin_value[error_log] = 'stderr'
         php_admin_flag[log_errors] = on
         catch_workers_output = yes
