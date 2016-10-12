@@ -143,11 +143,8 @@ in {
     };
   };
 
-
   services.phpfpm.phpOptions = ''
-    extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
     sendmail_path = ${sendmail} -t
-    always_populate_raw_post_data = -1
     upload_max_filesize = 100M
     post_max_size = 100M
     file_uploads = on
