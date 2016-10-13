@@ -1,9 +1,12 @@
-{ config, lib, ... }:
+_:
 
-with builtins;
+let
+  lib = import <stockholm/lib>;
+in
+
 with lib;
 
-let out = import <stockholm/lib> // rec {
+let out = lib // rec {
 
   eq = x: y: x == y;
   ne = x: y: x != y;
