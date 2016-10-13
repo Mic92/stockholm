@@ -178,6 +178,11 @@ in
 pkgs.writeBashBin "q" ''
   set -eu
   export PATH=/var/empty
+  (${q-todo}) || :
+  if [ "$PWD" != "$HOME" ]; then
+    (HOME=$PWD; ${q-todo}) || :
+  fi
+  echo
   ${q-cal}
   echo
   ${q-isodate}
@@ -189,8 +194,4 @@ pkgs.writeBashBin "q" ''
   (${q-online}) &
   (${q-thermal_zone}) &
   wait
-  ${q-todo}
-  if [ "$PWD" != "$HOME" ]; then
-    (HOME=$PWD; ${q-todo})
-  fi
 ''
