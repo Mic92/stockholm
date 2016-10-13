@@ -54,6 +54,7 @@ with config.krebs.lib;
       };
     }
     {
+      security.hideProcessInformation = true;
       security.sudo.extraConfig = ''
         Defaults env_keep+="SSH_CLIENT"
         Defaults mailto="${config.krebs.users.tv.mail}"
