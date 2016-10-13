@@ -19,7 +19,6 @@ let out = lib // rec {
       ]));
 
   types = import ./types.nix {
-    inherit config;
     lib = lib // { inherit genid optionalTrace; };
   };
 
