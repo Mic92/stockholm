@@ -23,7 +23,7 @@ with config.krebs.lib;
     ../2configs/teamviewer.nix
     ../2configs/libvirt.nix
     ../2configs/fetchWallpaper.nix
-    ../2configs/c-base.nix
+    #../2configs/c-base.nix
     ../2configs/mail.nix
     ../2configs/krebs-pass.nix
     ../2configs/repo-sync.nix
@@ -54,8 +54,8 @@ with config.krebs.lib;
         enable = true;
         package = pkgs.postgresql;
       };
-      virtualisation.docker.enable = true;
-      users.users.mainUser.extraGroups = [ "docker" ];
+      #virtualisation.docker.enable = true;
+      #users.users.mainUser.extraGroups = [ "docker" ];
     }
     {
       lass.umts = {
@@ -140,6 +140,11 @@ with config.krebs.lib;
       device = "/dev/big/conf";
       fsType = "ext4";
     };
+    "/tmp" = {
+      device = "tmpfs";
+      fsType = "tmpfs";
+      options = ["nosuid" "nodev" "noatime"];
+    };
   };
 
   services.udev.extraRules = ''
@@ -192,8 +197,12 @@ with config.krebs.lib;
     urban
     mk_sql_pair
     remmina
+    thunderbird
 
     logf
+    iodine
+
+    macchanger
   ];
 
   #TODO: fix this shit

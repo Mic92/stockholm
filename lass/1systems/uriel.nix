@@ -23,7 +23,6 @@ with config.krebs.lib;
         useDefaultShell = true;
       };
       networking.networkmanager.enable = true;
-      networking.wireless.enable = mkForce false;
       hardware.pulseaudio = {
         enable = true;
         systemWide = true;
@@ -40,8 +39,6 @@ with config.krebs.lib;
   ];
 
   krebs.build.host = config.krebs.hosts.uriel;
-
-  networking.wireless.enable = true;
 
   hardware.enableAllFirmware = true;
   nixpkgs.config.allowUnfree = true;
@@ -76,6 +73,11 @@ with config.krebs.lib;
 
     "/boot" = {
       device = "/dev/sda1";
+    };
+    "/tmp" = {
+      device = "tmpfs";
+      fsType = "tmpfs";
+      options = ["nosuid" "nodev" "noatime"];
     };
   };
 
