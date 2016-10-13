@@ -791,6 +791,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
 
   } // { # hosts only maintained in stockholm, not owned by me
     muhbaasu = rec {
+      owner = config.krebs.users.root;
       cores = 1;
       nets = {
         internet = {
