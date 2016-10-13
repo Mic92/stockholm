@@ -17,7 +17,7 @@ with config.krebs.lib;
   in {}
   // import ./builders.nix args
   // mapAttrs (_: flip callPackage {})
-              (filterAttrs (_: dir.has-default-nix)
+              (filterAttrs (_: dir: pathExists (dir + "/default.nix"))
                            (subdirsOf ./.))
   // {
     empty = pkgs.runCommand "empty-1.0.0" {} "mkdir $out";

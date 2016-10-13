@@ -1,19 +1,12 @@
-{ config, lib, ... }:
+_:
 
-with builtins;
+let
+  lib = import <stockholm/lib>;
+in
+
 with lib;
 
-let out = import <stockholm/lib> // rec {
-
-  eq = x: y: x == y;
-  ne = x: y: x != y;
-
-  mod = x: y: x - y * (x / y);
-
-  addName = name: set:
-    set // { inherit name; };
-
-  addNames = mapAttrs addName;
+let out = lib // rec {
 
   guard = spec@{ type, value, ... }:
     assert isOptionType type;
@@ -26,11 +19,8 @@ let out = import <stockholm/lib> // rec {
       ]));
 
   types = import ./types.nix {
-    inherit config;
     lib = lib // { inherit genid optionalTrace; };
   };
-
-  dir.has-default-nix = path: pathExists (path + "/default.nix");
 
   genid = import ./genid.nix { lib = lib // out; };
   genid_signed = x: ((genid x) + 16777216) / 2;
