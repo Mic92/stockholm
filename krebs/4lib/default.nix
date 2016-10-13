@@ -8,11 +8,6 @@ with lib;
 
 let out = lib // rec {
 
-  eq = x: y: x == y;
-  ne = x: y: x != y;
-
-  mod = x: y: x - y * (x / y);
-
   guard = spec@{ type, value, ... }:
     assert isOptionType type;
     if type.check value
