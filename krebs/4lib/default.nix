@@ -13,11 +13,6 @@ let out = lib // rec {
 
   mod = x: y: x - y * (x / y);
 
-  addName = name: set:
-    set // { inherit name; };
-
-  addNames = mapAttrs addName;
-
   guard = spec@{ type, value, ... }:
     assert isOptionType type;
     if type.check value

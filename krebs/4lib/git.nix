@@ -1,7 +1,12 @@
 { lib, ... }:
 
+with lib;
+
 let
-  inherit (lib) addNames escapeShellArg makeSearchPath optionalString;
+  addName = name: set:
+    set // { inherit name; };
+
+  addNames = mapAttrs addName;
 
   commands = addNames {
     git-receive-pack = {};
