@@ -138,6 +138,11 @@ with config.krebs.lib;
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
+    "/bku" = {
+      device = "/dev/mapper/xuvga-bku";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+    };
     "/home" = {
       device = "/dev/mapper/xuvga-home";
       fsType = "btrfs";
