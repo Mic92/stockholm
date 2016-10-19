@@ -25,26 +25,6 @@ in {
     ../2configs/binary-cache/server.nix
     ../2configs/iodined.nix
     {
-      imports = [
-        ../2configs/git.nix
-      ];
-      krebs.nginx.servers.cgit = {
-        server-names = [
-          "cgit.lassul.us"
-        ];
-        locations = [
-          (nameValuePair "/.well-known/acme-challenge" ''
-            root /var/lib/acme/challenges/cgit.lassul.us/;
-          '')
-        ];
-        ssl = {
-          enable = true;
-          certificate = "/var/lib/acme/cgit.lassul.us/fullchain.pem";
-          certificate_key = "/var/lib/acme/cgit.lassul.us/key.pem";
-        };
-      };
-    }
-    {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
         #    Loaded: loaded (/nix/store/2l33gg7nmncqkpysq9f5fxyhlw6ncm2j-systemd-217/example/systemd/system/systemd-tmpfiles-setup.service)
@@ -174,6 +154,7 @@ in {
       imports = [
         ../2configs/websites/wohnprojekt-rhh.de.nix
         ../2configs/websites/domsen.nix
+        ../2configs/websites/lassulus.nix
       ];
       krebs.iptables.tables.filter.INPUT.rules = [
          { predicate = "-p tcp --dport http"; target = "ACCEPT"; }
@@ -186,34 +167,6 @@ in {
       };
     }
     {
-      security.acme = {
-        certs."lassul.us" = {
-          email = "lass@lassul.us";
-          webroot = "/var/lib/acme/challenges/lassul.us";
-          plugins = [
-            "account_key.json"
-            "key.pem"
-            "fullchain.pem"
-            "full.pem"
-          ];
-          allowKeysForGroup = true;
-          group = "lasscert";
-        };
-      };
-      users.groups.lasscert.members = [
-        "dovecot2"
-        "ejabberd"
-        "exim"
-        "nginx"
-      ];
-      krebs.nginx.servers."lassul.us" = {
-        server-names = [ "lassul.us" ];
-        locations = [
-          (lib.nameValuePair "/.well-known/acme-challenge" ''
-            root /var/lib/acme/challenges/lassul.us/;
-          '')
-        ];
-      };
       lass.ejabberd = {
         enable = true;
         hosts = [ "lassul.us" ];
