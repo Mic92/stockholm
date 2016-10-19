@@ -9,6 +9,7 @@ with config.krebs.lib;
     ../2configs/exim-retiolum.nix
     {
       # locke config
+      i18n.defaultLocale ="de_DE.UTF-8";
       time.timeZone = "Europe/Berlin";
       services.xserver.enable = true;
       users.users.locke = {
