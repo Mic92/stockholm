@@ -41,10 +41,6 @@ let
 
   wvdial = nixpkgs-1509.wvdial; # https://github.com/NixOS/nixpkgs/issues/16113
 
-  #modem-device = "/dev/serial/by-id/usb-Lenovo_F5521gw_38214921FBBBC7B0-if09";
-  modem-device = "/dev/serial/by-id/usb-HUAWEI_Technologies_HUAWEI_Mobile-if00-port0";
-
-  # TODO: currently it is only netzclub
   umts-bin = pkgs.writeScriptBin "umts" ''
     #!/bin/sh
     set -euf

@@ -14,7 +14,7 @@ with config.krebs.lib;
       stockholm.file = "/home/tv/stockholm";
       nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
-        ref = "2568ee3d73bdebd6bab6739adf8a900f3429c8e6";
+        ref = "354fd3728952c229fee4f2924737c601d7ab4725";
       };
     } // optionalAttrs host.secure {
       secrets-master.file = "/home/tv/secrets/master";
@@ -37,6 +37,7 @@ with config.krebs.lib;
       # stockholm dependencies
       environment.systemPackages = with pkgs; [
         git
+        populate
       ];
     }
     {
@@ -53,6 +54,7 @@ with config.krebs.lib;
       };
     }
     {
+      security.hideProcessInformation = true;
       security.sudo.extraConfig = ''
         Defaults env_keep+="SSH_CLIENT"
         Defaults mailto="${config.krebs.users.tv.mail}"
@@ -63,13 +65,13 @@ with config.krebs.lib;
 
     {
       # TODO check if both are required:
-      nix.chrootDirs = [ "/etc/protocols" pkgs.iana_etc.outPath ];
+      nix.sandboxPaths = [ "/etc/protocols" pkgs.iana_etc.outPath ];
 
       nix.requireSignedBinaryCaches = true;
 
       nix.binaryCaches = ["https://cache.nixos.org"];
 
-      nix.useChroot = true;
+      nix.useSandbox = true;
     }
     {
       nixpkgs.config.allowUnfree = false;

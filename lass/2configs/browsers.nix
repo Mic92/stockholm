@@ -1,11 +1,28 @@
 { config, lib, pkgs, ... }:
 
+with config.krebs.lib;
 let
-  inherit (config.krebs.lib) genid;
 
   mainUser = config.users.extraUsers.mainUser;
-  createChromiumUser = name: extraGroups: packages:
-    {
+
+  browser-select = pkgs.writeScriptBin "browser-select" ''
+    BROWSER=$(echo -e "${concatStringsSep "\\n" (attrNames config.lass.browser.paths)}" | ${pkgs.dmenu}/bin/dmenu)
+    case $BROWSER in
+    ${concatMapStringsSep "\n" (n: ''
+      ${n})
+        export BIN=${config.lass.browser.paths.${n}}/bin/${n}
+        ;;
+    '') (attrNames config.lass.browser.paths)}
+    esac
+    $BIN "$@"
+  '';
+
+  createChromiumUser = name: extraGroups:
+    let
+      bin = pkgs.writeScriptBin name ''
+        /var/setuid-wrappers/sudo -u ${name} -i ${pkgs.chromium}/bin/chromium $@
+      '';
+    in {
       users.extraUsers.${name} = {
         inherit name;
         inherit extraGroups;
@@ -14,19 +31,21 @@ let
         useDefaultShell = true;
         createHome = true;
       };
-      krebs.per-user.${name}.packages = packages;
+      lass.browser.paths.${name} = bin;
       security.sudo.extraConfig = ''
         ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
       '';
       environment.systemPackages = [
-        (pkgs.writeScriptBin name ''
-          /var/setuid-wrappers/sudo -u ${name} -i chromium $@
-        '')
+        bin
       ];
     };
 
-  createFirefoxUser = name: extraGroups: packages:
-    {
+  createFirefoxUser = name: extraGroups:
+    let
+      bin = pkgs.writeScriptBin name ''
+        /var/setuid-wrappers/sudo -u ${name} -i ${pkgs.firefox}/bin/firefox $@
+      '';
+    in {
       users.extraUsers.${name} = {
         inherit name;
         inherit extraGroups;
@@ -35,14 +54,12 @@ let
         useDefaultShell = true;
         createHome = true;
       };
-      krebs.per-user.${name}.packages = packages;
+      lass.browser.paths.${name} = bin;
       security.sudo.extraConfig = ''
         ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
       '';
       environment.systemPackages = [
-        (pkgs.writeScriptBin name ''
-          /var/setuid-wrappers/sudo -u ${name} -i firefox $@
-        '')
+        bin
       ];
     };
 
@@ -50,19 +67,26 @@ let
 
 in {
 
+  lass.browser.select = browser-select;
+
   environment.systemPackages = [
-    (pkgs.writeScriptBin "browser-select" ''
-      BROWSER=$(echo -e "ff\ncr\nwk\nfb\ngm\nflash" | dmenu)
-      $BROWSER $@
-    '')
+    browser-select
   ];
 
   imports = [
-    ( createFirefoxUser "ff" [ "audio" ] [ pkgs.firefox ] )
-    ( createChromiumUser "cr" [ "video" "audio" ] [ pkgs.chromium ] )
-    ( createChromiumUser "wk" [ "video" "audio" ] [ pkgs.chromium ] )
-    ( createChromiumUser "fb" [ "video" "audio" ] [ pkgs.chromium ] )
-    ( createChromiumUser "gm" [ "video" "audio" ] [ pkgs.chromium ] )
-    ( createChromiumUser "com" [ "video" "audio" ] [ pkgs.chromium ] )
+    {
+      options.lass.browser.select = mkOption {
+        type = types.path;
+      };
+      options.lass.browser.paths = mkOption {
+        type = with types; attrsOf path;
+      };
+    }
+    ( createFirefoxUser "ff" [ "audio" ] )
+    ( createChromiumUser "cr" [ "video" "audio" ] )
+    ( createChromiumUser "wk" [ "video" "audio" ] )
+    ( createChromiumUser "fb" [ "video" "audio" ] )
+    ( createChromiumUser "gm" [ "video" "audio" ] )
+    ( createChromiumUser "com" [ "video" "audio" ] )
   ];
 }

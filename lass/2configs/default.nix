@@ -21,7 +21,6 @@ with config.krebs.lib;
         root = {
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
-            config.krebs.users.lass-uriel.pubkey
             config.krebs.users.lass-shodan.pubkey
           ];
         };
@@ -37,7 +36,6 @@ with config.krebs.lib;
           ];
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
-            config.krebs.users.lass-uriel.pubkey
             config.krebs.users.lass-shodan.pubkey
           ];
         };
@@ -69,7 +67,7 @@ with config.krebs.lib;
     };
   };
 
-  nix.useChroot = true;
+  nix.useSandbox = true;
 
   users.mutableUsers = false;
 
@@ -99,6 +97,7 @@ with config.krebs.lib;
     jq
     parallel
     proot
+    populate
 
   #style
     most
@@ -143,15 +142,6 @@ with config.krebs.lib;
       shopt -s histappend histreedit histverify
       shopt -s no_empty_cmd_completion
       complete -d cd
-
-      #fancy colors
-      if [ -e ~/LS_COLORS ]; then
-        eval $(dircolors ~/LS_COLORS)
-      fi
-
-      if [ -e /etc/nixos/dotfiles/link ]; then
-        /etc/nixos/dotfiles/link
-      fi
     '';
     promptInit = ''
       if test $UID = 0; then

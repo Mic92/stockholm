@@ -1,32 +1,44 @@
 { config, pkgs, ... }:
 
 with builtins;
+with config.krebs.lib;
 {
   imports = [
     ../.
     ../2configs/retiolum.nix
-    ../2configs/baseX.nix
     ../2configs/exim-retiolum.nix
-    ../2configs/browsers.nix
-    ../2configs/games.nix
-    ../2configs/pass.nix
-    ../2configs/bird.nix
-    ../2configs/git.nix
-    ../2configs/chromium-patched.nix
-    ../2configs/bitlbee.nix
-    ../2configs/weechat.nix
-    ../2configs/skype.nix
     {
-      lass.umts = {
+      # locke config
+      time.timeZone = "Europe/Berlin";
+      services.xserver.enable = true;
+      users.users.locke = {
+        uid = genid "locke";
+        home = "/home/locke";
+        group = "users";
+        createHome = true;
+        extraGroups = [
+          "audio"
+          "networkmanager"
+        ];
+        useDefaultShell = true;
+      };
+      networking.networkmanager.enable = true;
+      hardware.pulseaudio = {
         enable = true;
-        modem = "/dev/serial/by-id/usb-HUAWEI_Technologies_HUAWEI_Mobile-if00-port0";
+        systemWide = true;
+      };
+      environment.systemPackages = with pkgs; [
+        firefox
+        hexchat
+        networkmanagerapplet
+      ];
+      services.xserver.desktopManager.xfce = {
+        enable = true;
       };
     }
   ];
 
   krebs.build.host = config.krebs.hosts.uriel;
-
-  networking.wireless.enable = true;
 
   hardware.enableAllFirmware = true;
   nixpkgs.config.allowUnfree = true;
@@ -61,6 +73,11 @@ with builtins;
 
     "/boot" = {
       device = "/dev/sda1";
+    };
+    "/tmp" = {
+      device = "tmpfs";
+      fsType = "tmpfs";
+      options = ["nosuid" "nodev" "noatime"];
     };
   };
 

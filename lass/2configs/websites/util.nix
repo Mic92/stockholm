@@ -167,7 +167,6 @@ rec {
         pm.max_spare_servers = 3
         listen.owner = nginx
         listen.group = nginx
-        # errors to journal
         php_admin_value[error_log] = 'stderr'
         php_admin_flag[log_errors] = on
         catch_workers_output = yes
@@ -188,6 +187,7 @@ rec {
           error_log /tmp/nginx_err.log;
           error_page 404 /404.html;
           error_page 500 502 503 504 /50x.html;
+          client_max_body_size 100m;
         '';
         locations = [
           (nameValuePair "/" ''
@@ -219,7 +219,6 @@ rec {
         pm.max_spare_servers = 3
         listen.owner = nginx
         listen.group = nginx
-        # errors to journal
         php_admin_value[error_log] = 'stderr'
         php_admin_flag[log_errors] = on
         catch_workers_output = yes

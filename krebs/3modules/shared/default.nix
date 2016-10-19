@@ -8,6 +8,7 @@ let
     "test-centos7"
     "test-all-krebs-modules"
   ] (name: {
+    owner = config.krebs.users.shared;
     inherit name;
     cores = 1;
     nets = {
@@ -34,6 +35,7 @@ let
 in {
   hosts = {
     wolf = {
+      owner = config.krebs.users.shared;
       nets = {
         shack = {
           ip4.addr =  "10.42.2.150" ;

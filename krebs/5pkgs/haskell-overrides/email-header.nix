@@ -7,8 +7,8 @@ mkDerivation {
   version = "0.3.0";
   src = fetchgit {
     url = "https://github.com/4z3/email-header";
-    sha256 = "f33fba567a39b1f2448869b269c26c40d8007599c23ab83bde5b4dfd9fd76ebc";
     rev = "7b179bd31192ead8afe7a0b6e34bcad4039deaa8";
+    sha256 = "12j2n3sbvzjnw99gga7kkdygm8n3qx2lh8q26ad6a53xm5whnz59";
   };
   buildDepends = [
     attoparsec base base64-bytestring bytestring case-insensitive

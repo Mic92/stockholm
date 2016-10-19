@@ -9,7 +9,7 @@ pkgs.writeHaskell "xmonad-lass" {
       "xmonad-contrib"
       "xmonad-stockholm"
     ];
-    text = ''
+    text = /* haskell */ ''
 {-# LANGUAGE DeriveDataTypeable #-} -- for XS
 {-# LANGUAGE FlexibleContexts #-} -- for xmonad'
 {-# LANGUAGE LambdaCase #-}
@@ -24,6 +24,7 @@ import Control.Exception
 import Data.List (isInfixOf)
 import System.Environment (getArgs, withArgs, getEnv)
 import System.IO (hPutStrLn, stderr)
+import System.Posix.Process (executeFile)
 import Text.Read (readEither)
 import XMonad.Actions.CopyWindow (copy, kill1)
 import XMonad.Actions.CycleWS (toggleWS)
@@ -41,12 +42,13 @@ import XMonad.Layout.Minimize (minimize, minimizeWindow, MinimizeMsg(RestoreNext
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Prompt (autoComplete, searchPredicate, XPConfig)
 import XMonad.Prompt.Window (windowPromptGoto, windowPromptBringCopy)
-import XMonad.Stockholm.Shutdown (sendShutdownEvent, handleShutdownEvent)
 import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Layout.SimpleFloat (simpleFloat)
 
+import XMonad.Stockholm.Shutdown
 
-myTerm :: String
-myTerm = "${pkgs.rxvt_unicode}/bin/urxvtc"
+urxvtcPath :: FilePath
+urxvtcPath = "${pkgs.rxvt_unicode}/bin/urxvtc"
 
 myFont :: String
 myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
@@ -62,12 +64,14 @@ mainNoArgs = do
     xmonad'
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
-            { terminal          = myTerm
+            { terminal          = urxvtcPath
             , modMask           = mod4Mask
             , workspaces        = workspaces0
             , layoutHook = smartBorders $ myLayoutHook
             , manageHook        = placeHook (smart (1,0)) <+> floatNextHook
-            , startupHook       = spawn "echo emit XMonadStartup"
+            , startupHook = do
+                path <- liftIO (getEnv "XMONAD_STARTUP_HOOK")
+                forkFile path [] Nothing
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
             , handleEventHook = handleShutdownEvent
@@ -75,7 +79,7 @@ mainNoArgs = do
 
 myLayoutHook = defLayout
   where
-    defLayout = minimize $ ((avoidStruts $ Tall 1 (3/100) (1/2) ||| Full ||| Mirror (Tall 1 (3/100) (1/2))) ||| FixedColumn 2 80 80 1)
+    defLayout = minimize $ ((avoidStruts $ Tall 1 (3/100) (1/2) ||| Full ||| Mirror (Tall 1 (3/100) (1/2))) ||| FixedColumn 2 80 80 1) ||| simpleFloat
 
 
 xmonad' :: (LayoutClass l Window, Read (l Window)) => XConfig l -> IO ()
@@ -83,7 +87,7 @@ xmonad' conf = do
     path <- getEnv "XMONAD_STATE"
     try (readFile path) >>= \case
         Right content -> do
-            hPutStrLn stderr ("resuming from " ++ path ++ "; state = " ++ show content)
+            hPutStrLn stderr ("resuming from " ++ path)
             withArgs ("--resume" : lines content) (xmonad conf)
         Left e -> do
             hPutStrLn stderr (displaySomeException e)
@@ -107,7 +111,7 @@ displaySomeException = displayException
 
 myKeyMap :: [([Char], X ())]
 myKeyMap =
-    [ ("M4-<F11>", spawn "i3lock -i /var/lib/wallpaper/wallpaper -f")
+    [ ("M4-<F11>", spawn "${pkgs.i3lock}/bin/i3lock -i /var/lib/wallpaper/wallpaper -f")
     , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
     , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume 0 +4%")
     , ("<XF86AudioLowerVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume 0 -4%")
@@ -123,8 +127,8 @@ myKeyMap =
     , ("M4-S-<Backspace>", removeEmptyWorkspace)
     , ("M4-S-c", kill1)
     , ("M4-<Esc>", toggleWS)
-    , ("M4-S-<Enter>", spawn myTerm)
-    , ("M4-x", floatNext True >> spawn myTerm)
+    , ("M4-S-<Enter>", spawn urxvtcPath)
+    , ("M4-x", floatNext True >> spawn urxvtcPath)
     , ("M4-f", floatNext True)
     , ("M4-b", sendMessage ToggleStruts)
 
@@ -140,6 +144,10 @@ myKeyMap =
 
     , ("M4-S-q", return ())
     ]
+
+forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()
+forkFile path args env =
+    xfork (executeFile path False args env) >> return ()
 
 autoXPConfig :: XPConfig
 autoXPConfig = def
@@ -159,8 +167,6 @@ gridConfig = def
     , gs_navigate = navNSearch
     , gs_font = myFont
     }
-
     '';
   };
 }
-

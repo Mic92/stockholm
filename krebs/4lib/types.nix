@@ -1,13 +1,8 @@
-{ config, lib, ... }:
+{ lib, ... }:
 
 with builtins;
 with lib;
 with types;
-
-let
-  # Inherited attributes are used in submodules that have their own `config`.
-  inherit (config.krebs) build users;
-in
 
 types // rec {
 
@@ -27,7 +22,6 @@ types // rec {
 
       owner = mkOption {
         type = user;
-        default = users.krebs;
       };
 
       extraZones = mkOption {
@@ -49,10 +43,6 @@ types // rec {
       ssh.pubkey = mkOption {
         type = nullOr ssh-pubkey;
         default = null;
-        apply = x:
-          optionalTrace (x == null && config.owner.name == build.user.name)
-            "The option `krebs.hosts.${config.name}.ssh.pubkey' is unused."
-            x;
       };
       ssh.privkey = mkOption {
         type = nullOr ssh-privkey;
@@ -187,7 +177,6 @@ types // rec {
       };
       owner = mkOption {
         type = user;
-        default = users.root;
       };
       group-name = mkOption {
         type = str;
@@ -284,6 +273,7 @@ types // rec {
       };
       mail = mkOption {
         type = str; # TODO retiolum mail address
+        default = "${config._module.args.name}@${config.networking.hostName}.r";
       };
       name = mkOption {
         type = username;

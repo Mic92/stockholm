@@ -23,6 +23,7 @@ in {
     ../2configs/buildbot-standalone.nix
     ../2configs/repo-sync.nix
     ../2configs/binary-cache/server.nix
+    ../2configs/iodined.nix
     {
       imports = [
         ../2configs/git.nix
@@ -117,6 +118,12 @@ in {
 
       fileSystems."/bku" = {
         device = "/dev/pool/bku";
+      };
+
+      fileSystems."/tmp" = {
+        device = "tmpfs";
+        fsType = "tmpfs";
+        options = ["nosuid" "nodev" "noatime"];
       };
 
     }
@@ -259,6 +266,11 @@ in {
       krebs.iptables.tables.filter.INPUT.rules = [
        { predicate = "-p tcp --dport 8088"; target = "ACCEPT"; }
       ];
+    }
+    {
+      krebs.repo-sync.timerConfig = {
+        OnCalendar = "*:0/5";
+      };
     }
   ];
 

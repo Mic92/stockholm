@@ -14,7 +14,7 @@ mkDerivation {
   src = fetchgit {
     url = "http://cgit.cd.krebsco.de/much";
     rev = "045dc986b4de225a927175f81c8ccfdab450202c";
-    sha256 = "cec175e3dc32ef93029ee5285f6c4042ce11d637945bc8cec02cb6699d06cc13";
+    sha256 = "17jbw7x82a3bgn1qv5k764f103knrf865dmx48h7192vdh8gz766";
   };
   isLibrary = false;
   isExecutable = true;
