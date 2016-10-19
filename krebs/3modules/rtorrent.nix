@@ -223,7 +223,7 @@ let
             touch ${systemd-logfile}
             cp -f ${configFile} ${cfg.workDir}/.rtorrent.rc
           '';
-          ExecStart = "${pkgs.tmux}/bin/tmux new-session -s rt -n rtorrent -d 'PATH=/bin:/usr/bin:${makeBinPath rutorrent-deps} ${cfg.package}/bin/rtorrent'";
+          ExecStart = "${pkgs.tmux.bin}/bin/tmux new-session -s rt -n rtorrent -d 'PATH=/bin:/usr/bin:${makeBinPath rutorrent-deps} ${cfg.package}/bin/rtorrent'";
 
           ## you can simply sudo -u rtorrent tmux a if privateTmp is set to false
           ## otherwise the tmux session is stored in some private folder in /tmp
