@@ -29,6 +29,7 @@ with config.krebs.lib;
         systemWide = true;
       };
       environment.systemPackages = with pkgs; [
+        pavucontrol
         firefox
         hexchat
         networkmanagerapplet
