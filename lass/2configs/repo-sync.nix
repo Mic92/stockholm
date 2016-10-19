@@ -92,6 +92,7 @@ in {
     (sync-remote "skytraq-datalogger" "https://github.com/makefu/skytraq-datalogger")
     (sync-remote "xintmap" "https://github.com/4z3/xintmap")
     (sync-remote "realwallpaper" "https://github.com/lassulus/realwallpaper")
+    (sync-remote "lassulus-blog" "https://github.com/lassulus/lassulus-blog")
     (sync-remote-silent "nixpkgs" "https://github.com/nixos/nixpkgs")
     (sync-retiolum "go")
     (sync-retiolum "much")
