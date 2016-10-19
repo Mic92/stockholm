@@ -374,8 +374,8 @@ with config.krebs.lib;
             '';
         };
       };
-      #ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
-      #ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIujMZ3ZFxKpWeB/cjfKfYRr77+VRZk0Eik+92t03NoA root@servarch";
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPTBGboU/P00yYiwYje53G0oqDFWmcSJ+hIpMsl4f/HH";
     };
     wbob = rec {
       cores = 1;
@@ -512,6 +512,32 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
         };
       };
     };
+    sdev = rec {
+      cores = 1;
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILtm6ETzNgLcXNkrKs2VUEiGsTKBmOFpW2fazbzdUfOg sdev";
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.83.237";
+          ip6.addr  = "42:af50:99cf:c185:f1a8:14d5:acb:8101";
+          aliases = [
+              "sdev.retiolum"
+              "sdev.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA8BwHwQ4pLZpskVnQONJsmzRPll4ZKMjAC56sY5p+GfT9ZBMkVDn+
+            LeH9wuTRiX/ehgtBiyu8w37cz62hz/71H+3mnWJlTm9bbBTc5N0y8l9b+YYeExW4
+            XPm4bUbJWKNRG9tHQAns/OREYDsHLsY6UoyNFmB0wTDpgs7egDCoe7E2eT+pG428
+            ysCDYlaZaigOyW+bj/HFLj8FSfpF5C/ug7NE/D7QocadsRUiLtVYrJsfmT+KHWf+
+            f5rLWLvuFiz1SWf7wZ9sICF3RCaC9Qhz7zplgHbvwbOHtF+Z/6DxduRMkggZUsUD
+            nm+40Ex1XJTe+s4V4GKLgh/fDKBTS6JwewIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+
 
     # non-stockholm
 
