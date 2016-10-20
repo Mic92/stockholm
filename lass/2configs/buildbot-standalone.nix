@@ -172,7 +172,6 @@ in {
           "hashPassword",
           "haskellPackages.blessings",
           "haskellPackages.email-header",
-          "haskellPackages.megaparsec",
           "haskellPackages.scanner",
           "haskellPackages.xmonad-stockholm",
           "krebspaste",
