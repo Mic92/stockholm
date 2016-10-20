@@ -305,5 +305,7 @@ with config.krebs.lib;
       pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGv6N/UjFnX5vUicT9Sw0+3x4mR0760iaVWZ/JDtdV4h";
       mail = "lass@mors.r";
     };
+    sokratess = {
+    };
   };
 }
