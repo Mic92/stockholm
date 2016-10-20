@@ -10,6 +10,6 @@ let
     type = types.attrs;
   };
   imp = {
-    krebs.lib = lib // import ../4lib { inherit config lib; } // builtins;
+    krebs.lib = import <stockholm/lib>;
   };
 in out
