@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: with config.krebs.lib;
+{ config, lib, pkgs, ... }: with import <stockholm/lib>;
 {
   services.nix-serve = assert config.krebs.build.host.name == "wu"; {
     enable = true;

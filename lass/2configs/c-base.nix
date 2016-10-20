@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (config.krebs.lib) genid;
+  inherit (import <stockholm/lib>) genid;
 
 in {
 

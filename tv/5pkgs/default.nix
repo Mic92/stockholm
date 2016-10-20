@@ -1,5 +1,5 @@
 { config, pkgs, ... }:
-with config.krebs.lib;
+with import <stockholm/lib>;
 {
   nixpkgs.config.packageOverrides = super: {
     # TODO use XDG_RUNTIME_DIR?

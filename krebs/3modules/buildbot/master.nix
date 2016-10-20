@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 let
 
   # https://github.com/NixOS/nixpkgs/issues/14026

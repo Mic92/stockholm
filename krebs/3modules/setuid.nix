@@ -1,5 +1,5 @@
 { config, pkgs, lib, ... }:
-with config.krebs.lib;
+with import <stockholm/lib>;
 let
   cfg = config.krebs.setuid;
 

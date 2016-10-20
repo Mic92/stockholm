@@ -1,5 +1,5 @@
 { config, pkgs, ... }@args:
-with config.krebs.lib;
+with import <stockholm/lib>;
 let
   user = config.krebs.build.user;
 in {

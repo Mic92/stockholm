@@ -1,5 +1,5 @@
 { config, lib, pkgs, ... }:
-with config.krebs.lib;
+with import <stockholm/lib>;
 let
   out = {
     options.krebs.backup = api;

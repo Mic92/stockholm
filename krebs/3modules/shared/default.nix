@@ -1,6 +1,6 @@
 { config, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 let
   testHosts = genAttrs [
     "test-arch"

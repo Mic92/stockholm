@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 
 {
   # Override NixOS's "Allow DSA keys for now."

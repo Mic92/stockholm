@@ -1,11 +1,11 @@
 { config, pkgs, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 
 let
   name = "radio";
   mainUser = config.users.extraUsers.mainUser;
-  inherit (config.krebs.lib) genid;
+  inherit (import <stockholm/lib>) genid;
 
   admin-password = import <secrets/icecast-admin-pw>;
   source-password = import <secrets/icecast-source-pw>;

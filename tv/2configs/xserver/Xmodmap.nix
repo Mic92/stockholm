@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 
 pkgs.writeText "Xmodmap" ''
   !keycode 66 = Caps_Lock
