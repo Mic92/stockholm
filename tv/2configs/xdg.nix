@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 
 {
   environment.variables.XDG_RUNTIME_DIR = "/run/xdg/$LOGNAME";

@@ -1,5 +1,5 @@
 { config, lib, pkgs, ... }:
-with config.krebs.lib;
+with import <stockholm/lib>;
 {
   environment.systemPackages = with pkgs; [
     (pkgs.writeDashBin "im" ''

@@ -1,5 +1,5 @@
 { config, lib, pkgs, ... }@args:
-with config.krebs.lib;
+with import <stockholm/lib>;
 {
   nixpkgs.config.packageOverrides = pkgs: let
 

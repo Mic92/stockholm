@@ -4,7 +4,7 @@
 # TODO inform about unused caches
 # cache = url: "${cfg.dataDir}/.urlwatch/cache/${hashString "sha1" url}"
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 let
   cfg = config.krebs.urlwatch;
 

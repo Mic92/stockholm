@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }@args: with config.krebs.lib; let
+{ config, lib, pkgs, ... }@args: with import <stockholm/lib>; let
   cfg = config.tv.ejabberd;
 in {
   options.tv.ejabberd = {

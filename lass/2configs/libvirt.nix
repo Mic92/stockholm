@@ -2,7 +2,7 @@
 
 let
   mainUser = config.users.extraUsers.mainUser;
-  inherit (config.krebs.lib) genid;
+  inherit (import <stockholm/lib>) genid;
 
 in {
   virtualisation.libvirtd.enable = true;

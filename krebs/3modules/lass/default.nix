@@ -1,6 +1,6 @@
 { config, lib, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 
 {
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.lass) {

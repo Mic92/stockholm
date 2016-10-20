@@ -1,5 +1,5 @@
 { config, pkgs, ... }:
-with config.krebs.lib;
+with import <stockholm/lib>;
 rec {
   execve = name: { filename, argv ? null, envp ? {}, destination ? "" }: let
   in writeC name { inherit destination; } /* c */ ''
