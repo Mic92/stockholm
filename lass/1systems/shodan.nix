@@ -22,6 +22,26 @@ with builtins;
     #    };
     #  };
     #}
+    {
+      users.users.sokratess = {
+        uid = genid "sokratess";
+        home = "/home/sokratess";
+        group = "users";
+        createHome = true;
+        extraGroups = [
+         "audio"
+          "networkmanager"
+        ];
+        useDefaultShell = true;
+        password = "aidsballs";
+      };
+      krebs.per-user.sokratess.packages = [
+        pkgs.firefox
+        pkgs.python27Packages.virtualenv
+        pkgs.python27Packages.ipython
+        pkgs.python27Packages.python
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.shodan;
