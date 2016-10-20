@@ -77,6 +77,9 @@ with import <stockholm/lib>;
         ];
       };
     }
+    {
+      services.redis.enable = true;
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
