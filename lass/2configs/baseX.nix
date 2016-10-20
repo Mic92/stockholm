@@ -49,6 +49,8 @@ in {
 
     mpv-poll
     yt-next
+
+    youtube-tools
   #window manager stuff
     #haskellPackages.xmobar
     #haskellPackages.yeganesh

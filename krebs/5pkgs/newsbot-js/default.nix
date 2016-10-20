@@ -1,9 +1,9 @@
-{ stdenv, makeWrapper, lib, buildEnv, fetchgit, nodePackages, nodejs }:
+{ stdenv, makeWrapper, callPackage, lib, buildEnv, fetchgit, nodePackages, nodejs }:
 
 with lib;
 
 let
-  np = nodePackages.override {
+  np = (callPackage <nixpkgs/pkgs/top-level/node-packages.nix>) {
     generated = ./packages.nix;
     self = np;
   };
@@ -21,7 +21,7 @@ let
     ignoreCollisions = true;
   };
 
-in nodePackages.buildNodePackage {
+in np.buildNodePackage {
   name = "newsbot-js";
 
   src = fetchgit {

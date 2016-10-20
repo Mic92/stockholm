@@ -11,7 +11,7 @@ with config.krebs.lib;
     nixos-config.symlink = "stockholm/${user.name}/1systems/${host.name}.nix";
     nixpkgs.git = {
       url = https://github.com/NixOS/nixpkgs;
-      ref = "9cb194cfa449c43f63185a25c8d10307aea3b358"; # nixos-16.03 @ 2016-08-05
+      ref = "b8ede35d2efa96490857c22c751e75d600bea44f"; # nixos-16.09 @ 2016-10-19
     };
     secrets.file =
       if getEnv "dummy_secrets" == "true"
@@ -28,7 +28,7 @@ with config.krebs.lib;
     "http://cache.nixos.org"
     "http://hydra.nixos.org"
   ];
-  nix.useChroot = true;
+  nix.useSandbox = true;
 
   nixpkgs.config.packageOverrides = pkgs: {
     nano = pkgs.vim;

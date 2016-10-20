@@ -25,26 +25,6 @@ in {
     ../2configs/binary-cache/server.nix
     ../2configs/iodined.nix
     {
-      imports = [
-        ../2configs/git.nix
-      ];
-      krebs.nginx.servers.cgit = {
-        server-names = [
-          "cgit.lassul.us"
-        ];
-        locations = [
-          (nameValuePair "/.well-known/acme-challenge" ''
-            root /var/lib/acme/challenges/cgit.lassul.us/;
-          '')
-        ];
-        ssl = {
-          enable = true;
-          certificate = "/var/lib/acme/cgit.lassul.us/fullchain.pem";
-          certificate_key = "/var/lib/acme/cgit.lassul.us/key.pem";
-        };
-      };
-    }
-    {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
         #    Loaded: loaded (/nix/store/2l33gg7nmncqkpysq9f5fxyhlw6ncm2j-systemd-217/example/systemd/system/systemd-tmpfiles-setup.service)
@@ -164,7 +144,6 @@ in {
       users.users.chat.openssh.authorizedKeys.keys = [
         "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAHF9tijlMoEevRZCG1AggukxWggfxPHUwg6Ye113ODG6PZ2m98oSmnsjixDy4GfIJjy+8HBbkwS6iH+fsNk86QtAgFNMjBl+9YvEzNRBzcyCqdOkZFvvZvV2oYA7I15il4ln62PDPKjEIS3YPhZPSwc6GhrlsFTnIG56NF/93IhF7R/FA== JuiceSSH"
         config.krebs.users.lass-uriel.pubkey
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDQ8DJhHAqmdrB2+qkV/OuKjR4QDXUww2TWItyDrs+/6F58WacMozgaZr2goA5JQJ5d19nC3LzYb4yLGguADsp987I6cAu5iXPT5PHKc0eRWDN+AGlpTgUtN1BvVrnJZaUJrR9WlHhFYlkOkzAsB15fKYciVWsyxBCVZ+3oiTEjs2L/sfbrgailWqHIUWDftUnJx8EFmSUVZ2GZWklMcgBo0FJD1i0x5u2dQGguNY+28DzQmKgUMS+xD/uUZvrFIWr9I6CBqhsuHJo8n85BT3B3QdG8ARLt5FKPr5L3My6UjlxOkKrDNLjJFjERFCsuIxnrO3tQhvKXQYlOyskHokocYSdcIq8svghJLA3kmRYIjHjZ4y1BNENsk79WyYNMAi5y+A0Evmu+g3ks/DiW3vI/Sw/D3Uc7ilbImpaoL5qUC4+WZM3J2b3Z1AU5D1QiojpKkB9Qt1bokCm8hrRCG9ZDKqAD6IqmI1ARRjfgA4zKwKUhmMqG4p55YGGVf9OeK0rXgX0Z2InyFXeBaU2aBcDfdKD/65w5MnC9CsJnjELdd4r9u2ugTPExzOo3WUlNuOTB1WoZ8CiY2OVGle/E/MzKUDfGuIFhUsFeX0YcLHPbo+mesISNUPaeadSuMuHE8W4FOeEq51toBo/gkxgjtqqWMOd9SxnDQTMBKq3L/w7nEQ== lass@mors"
       ];
     }
     {
@@ -174,6 +153,7 @@ in {
       imports = [
         ../2configs/websites/wohnprojekt-rhh.de.nix
         ../2configs/websites/domsen.nix
+        ../2configs/websites/lassulus.nix
       ];
       krebs.iptables.tables.filter.INPUT.rules = [
          { predicate = "-p tcp --dport http"; target = "ACCEPT"; }
@@ -186,34 +166,6 @@ in {
       };
     }
     {
-      security.acme = {
-        certs."lassul.us" = {
-          email = "lass@lassul.us";
-          webroot = "/var/lib/acme/challenges/lassul.us";
-          plugins = [
-            "account_key.json"
-            "key.pem"
-            "fullchain.pem"
-            "full.pem"
-          ];
-          allowKeysForGroup = true;
-          group = "lasscert";
-        };
-      };
-      users.groups.lasscert.members = [
-        "dovecot2"
-        "ejabberd"
-        "exim"
-        "nginx"
-      ];
-      krebs.nginx.servers."lassul.us" = {
-        server-names = [ "lassul.us" ];
-        locations = [
-          (lib.nameValuePair "/.well-known/acme-challenge" ''
-            root /var/lib/acme/challenges/lassul.us/;
-          '')
-        ];
-      };
       lass.ejabberd = {
         enable = true;
         hosts = [ "lassul.us" ];

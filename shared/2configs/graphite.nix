@@ -12,7 +12,7 @@ with config.krebs.lib;
   services.graphite = {
     web = {
       enable = true;
-      host = "0.0.0.0";
+      listenAddress = "0.0.0.0";
     };
     carbon = {
       enableCache = true;

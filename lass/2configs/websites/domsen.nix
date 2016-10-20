@@ -191,7 +191,7 @@ in {
       server_set_id = $auth1
     '';
     internet-aliases = [
-      { from = "dominik@apanowicz.de"; to = "dma@ubikmedia.eu"; }
+      { from = "dominik@apanowicz.de"; to = "dominik_a@gmx.de"; }
       { from = "mail@jla-trading.com"; to = "jla-trading"; }
       { from = "testuser@lassul.us"; to = "testuser"; }
     ];
