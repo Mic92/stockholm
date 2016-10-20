@@ -9,6 +9,7 @@ with config.krebs.lib;
     ../2configs/exim-retiolum.nix
     {
       # locke config
+      i18n.defaultLocale ="de_DE.UTF-8";
       time.timeZone = "Europe/Berlin";
       services.xserver.enable = true;
       users.users.locke = {
@@ -28,6 +29,7 @@ with config.krebs.lib;
         systemWide = true;
       };
       environment.systemPackages = with pkgs; [
+        pavucontrol
         firefox
         hexchat
         networkmanagerapplet
@@ -51,8 +53,8 @@ with config.krebs.lib;
     #loader.grub.version = 2;
     #loader.grub.device = "/dev/sda";
 
-    loader.gummiboot.enable = true;
-    loader.gummiboot.timeout = 5;
+    loader.systemd-boot.enable = true;
+    loader.timeout = 5;
 
     initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; } ];
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
