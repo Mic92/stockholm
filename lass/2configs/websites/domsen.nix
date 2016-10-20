@@ -22,25 +22,6 @@ let
     exec ${pkgs.msmtp}/bin/msmtp --read-envelope-from -C ${msmtprc} "$@"
   '';
 
-  check-password = pkgs.writeDash "check-password" ''
-    read pw
-
-    file="/home/$PAM_USER/.shadow"
-
-    #check if shadow file exists
-    test -e "$file" || exit 123
-
-    hash="$(${pkgs.coreutils}/bin/head -1 $file)"
-    salt="$(echo $hash | ${pkgs.gnused}/bin/sed 's/.*\$\(.*\)\$.*/\1/')"
-
-    calc_hash="$(echo "$pw" | ${pkgs.mkpasswd}/bin/mkpasswd -m sha-512 -S $salt)"
-    if [ "$calc_hash" == $hash ]; then
-      exit 0
-    else
-      exit 1
-    fi
-  '';
-
 in {
   imports = [
     ./sqlBackup.nix
@@ -163,19 +144,6 @@ in {
     { predicate = "-p tcp --dport imaps"; target = "ACCEPT"; }
     { predicate = "-p tcp --dport 465"; target = "ACCEPT"; }
   ];
-
-  security.pam.services.exim.text = ''
-    auth        required      pam_env.so
-    auth        sufficient    pam_exec.so debug expose_authtok ${check-password}
-    auth        sufficient    pam_unix.so likeauth nullok
-    auth        required      pam_deny.so
-    account     required      pam_unix.so
-    password    required      pam_cracklib.so retry=3 type=
-    password    sufficient    pam_unix.so nullok use_authtok md5shadow
-    password    required      pam_deny.so
-    session     required      pam_limits.so
-    session     required      pam_unix.so
-  '';
 
   krebs.exim-smarthost = {
     authenticators.PLAIN = ''
