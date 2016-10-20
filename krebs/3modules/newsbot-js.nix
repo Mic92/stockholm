@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
-with builtins;
-with lib;
+with import <stockholm/lib>;
 
 let
-  inherit (config.krebs.lib) genid;
 
   cfg = config.krebs.newsbot-js;
 
