@@ -16,6 +16,10 @@ in {
 
   users.extraGroups.cbasevpn.gid = genid "cbasevpn";
 
+  environment.systemPackages = [
+    pkgs.cifs-utils
+  ];
+
   services.openvpn.servers = {
     c-base = {
       config = ''
