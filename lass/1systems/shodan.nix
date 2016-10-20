@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 
-with builtins;
+with import <stockholm/lib>;
 {
   imports = [
     ../.

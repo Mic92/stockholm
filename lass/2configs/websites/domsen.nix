@@ -2,7 +2,7 @@
 
 let
 
-  inherit (import <stockholm/krebs/4lib> { config = {}; inherit lib; })
+  inherit (import <stockholm/lib>)
     genid
     genid_signed
   ;
