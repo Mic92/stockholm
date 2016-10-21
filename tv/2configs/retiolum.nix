@@ -10,7 +10,6 @@ with import <stockholm/lib>;
       "prism"
       "echelon"
       "cd"
-      "ire"
     ];
     tincPackage = pkgs.tinc_pre;
   };
