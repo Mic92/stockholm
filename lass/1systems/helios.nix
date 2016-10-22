@@ -41,7 +41,7 @@ with import <stockholm/lib>;
       environment.systemPackages = with pkgs; [
         firefox
         chromium
-        oraclejre8
+        jre
         maven
         arandr
         libreoffice
