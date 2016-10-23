@@ -34,10 +34,14 @@ let
     load-env = {};
     make-snapshot = {};
     much = {};
-    netcup.desc = "netcup command line interface";
+    netcup = {
+      cgit.desc = "netcup command line interface";
+    };
     newsbot-js = {};
     nixpkgs = {};
-    populate.desc = "source code installer";
+    populate = {
+      cgit.desc = "source code installer";
+    };
     push = {};
     regfish = {};
     soundcloud = {
