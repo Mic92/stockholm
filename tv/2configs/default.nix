@@ -14,7 +14,7 @@ with import <stockholm/lib>;
       stockholm.file = "/home/tv/stockholm";
       nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
-        ref = "cd41bfeeb1aaa10e4d412f2bd90dc2844a7c5df8";
+        ref = "e4fb65a3627f8c17a2f92c08bf302dc30f0a8db9";
       };
     } // optionalAttrs host.secure {
       secrets-master.file = "/home/tv/secrets/master";
@@ -111,6 +111,14 @@ with import <stockholm/lib>;
         NIX_PATH = mkForce "secrets=/var/src/stockholm/null:/var/src";
       };
     }
+
+    (let ca-bundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"; in {
+      environment.variables = {
+        CURL_CA_BUNDLE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+      };
+    })
 
     {
       services.cron.enable = false;

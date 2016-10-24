@@ -389,6 +389,12 @@ let
           mapAttrsToList repo-to-cgitrc cfg.repos
         ));
 
+    environment.systemPackages = [
+      (pkgs.writeDashBin "cgit-clear-cache" ''
+        ${pkgs.coreutils}/bin/rm -f ${cfg.cgit.settings.cache-root}/*
+      '')
+    ];
+
     system.activationScripts.cgit = ''
       mkdir -m 0700 -p ${cfg.cgit.settings.cache-root}
       chown ${toString cfg.cgit.fcgiwrap.user.uid}:${toString cfg.cgit.fcgiwrap.group.gid} ${cfg.cgit.settings.cache-root}
