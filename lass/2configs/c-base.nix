@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (config.krebs.lib) genid;
+  inherit (import <stockholm/lib>) genid;
 
 in {
 
@@ -15,6 +15,10 @@ in {
   };
 
   users.extraGroups.cbasevpn.gid = genid "cbasevpn";
+
+  environment.systemPackages = [
+    pkgs.cifs-utils
+  ];
 
   services.openvpn.servers = {
     c-base = {

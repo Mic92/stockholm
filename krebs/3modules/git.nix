@@ -6,7 +6,7 @@
 # TODO when authorized_keys changes, then restart ssh
 #       (or kill already connected users somehow)
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 let
   cfg = config.krebs.git;
 
@@ -97,7 +97,7 @@ let
         singleton {
           user = [ config.krebs.users.tv ];
           repo = [ testing ]; # see literal example of repos
-          perm = push "refs/*" (with config.krebs.lib.git; [
+          perm = push "refs/*" (with git; [
             non-fast-forward create delete merge
           ]);
         }
@@ -388,6 +388,12 @@ let
           ++
           mapAttrsToList repo-to-cgitrc cfg.repos
         ));
+
+    environment.systemPackages = [
+      (pkgs.writeDashBin "cgit-clear-cache" ''
+        ${pkgs.coreutils}/bin/rm -f ${cfg.cgit.settings.cache-root}/*
+      '')
+    ];
 
     system.activationScripts.cgit = ''
       mkdir -m 0700 -p ${cfg.cgit.settings.cache-root}

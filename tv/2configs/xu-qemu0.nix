@@ -15,7 +15,7 @@ in
 #
 #   make [install] system=xu-qemu0 target_host=10.56.0.101
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 
 {
   networking.dhcpcd.denyInterfaces = [ "qemubr0" ];

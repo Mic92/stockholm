@@ -1,6 +1,6 @@
 { lib, config, pkgs, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 
 let
   sshHostConfig = pkgs.writeText "ssh-config" ''

@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 let
   buildbot-slave-init = pkgs.writeText "buildbot-slave.tac" ''
     import os

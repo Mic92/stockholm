@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 
 let
 
@@ -34,9 +34,14 @@ let
     load-env = {};
     make-snapshot = {};
     much = {};
+    netcup = {
+      cgit.desc = "netcup command line interface";
+    };
     newsbot-js = {};
     nixpkgs = {};
-    populate.desc = "source code installer";
+    populate = {
+      cgit.desc = "source code installer";
+    };
     push = {};
     regfish = {};
     soundcloud = {

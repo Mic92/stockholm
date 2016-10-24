@@ -1,6 +1,6 @@
 { config, lib, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 let
   cfg = config.krebs;
 
@@ -21,7 +21,6 @@ let
       ./git.nix
       ./go.nix
       ./iptables.nix
-      ./lib.nix
       ./newsbot-js.nix
       ./nginx.nix
       ./nixpkgs.nix

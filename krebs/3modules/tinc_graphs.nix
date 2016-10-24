@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 let
   cfg = config.krebs.tinc_graphs;
   internal_dir = "${cfg.workingDir}/internal";

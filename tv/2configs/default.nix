@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 
 {
   krebs.enable = true;
@@ -14,7 +14,7 @@ with config.krebs.lib;
       stockholm.file = "/home/tv/stockholm";
       nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
-        ref = "354fd3728952c229fee4f2924737c601d7ab4725";
+        ref = "e4fb65a3627f8c17a2f92c08bf302dc30f0a8db9";
       };
     } // optionalAttrs host.secure {
       secrets-master.file = "/home/tv/secrets/master";
@@ -111,6 +111,14 @@ with config.krebs.lib;
         NIX_PATH = mkForce "secrets=/var/src/stockholm/null:/var/src";
       };
     }
+
+    (let ca-bundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"; in {
+      environment.variables = {
+        CURL_CA_BUNDLE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+      };
+    })
 
     {
       services.cron.enable = false;

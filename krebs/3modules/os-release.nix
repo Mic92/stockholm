@@ -1,5 +1,5 @@
 { config, ... }:
-with config.krebs.lib;
+with import <stockholm/lib>;
 let
   nixos-version-id = "${config.system.nixosVersion}";
   nixos-version = "${nixos-version-id} (${config.system.nixosCodeName})";

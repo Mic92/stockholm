@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 let
   indent = replaceChars ["\n"] ["\n  "];
   cfg = config.krebs.exim-smarthost;

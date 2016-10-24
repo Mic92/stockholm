@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (import <stockholm/krebs/4lib> { config = {}; inherit lib; })
+  inherit (import <stockholm/lib>)
     genid
   ;
   inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})

@@ -1,10 +1,16 @@
 { lib, ... }:
 
-with builtins;
-with lib;
-with types;
+let
+  inherit (lib)
+    all any concatMapStringsSep concatStringsSep const filter flip genid
+    hasSuffix head isInt isString length match mergeOneOption mkOption
+    mkOptionType optional optionalAttrs optionals range splitString
+    stringLength tail typeOf;
+  inherit (lib.types)
+    attrsOf bool either enum int listOf nullOr path str string submodule;
+in
 
-types // rec {
+rec {
 
   host = submodule ({ config, ... }: {
     options = {
@@ -20,6 +26,11 @@ types // rec {
         default = {};
       };
 
+      binary-cache.pubkey = mkOption {
+        type = nullOr binary-cache-pubkey;
+        default = null;
+      };
+
       owner = mkOption {
         type = user;
       };
@@ -27,7 +38,7 @@ types // rec {
       extraZones = mkOption {
         default = {};
         # TODO: string is either MX, NS, A or AAAA
-        type = with types; attrsOf string;
+        type = attrsOf string;
       };
 
       secure = mkOption {
@@ -331,6 +342,8 @@ types // rec {
     merge = mergeOneOption;
   };
 
+  binary-cache-pubkey = str;
+
   pgp-pubkey = str;
 
   ssh-pubkey = str;
@@ -356,7 +369,7 @@ types // rec {
 
   tinc-pubkey = str;
 
-  krebs.file-location = types.submodule {
+  krebs.file-location = submodule {
     options = {
       # TODO user
       host = mkOption {
@@ -364,7 +377,7 @@ types // rec {
       };
       # TODO merge with ssl.privkey.path
       path = mkOption {
-        type = types.either types.path types.str;
+        type = either path str;
         apply = x: {
           path = toString x;
           string = x;

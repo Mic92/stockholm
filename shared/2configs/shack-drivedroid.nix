@@ -1,5 +1,5 @@
 { pkgs, lib, config, ... }:
-with config.krebs.lib;
+with import <stockholm/lib>;
 let
   repodir = "/var/srv/drivedroid";
   srepodir = shell.escape repodir;

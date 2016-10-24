@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: with config.krebs.lib; let
+{ config, lib, pkgs, ... }: with import <stockholm/lib>; let
   cfg = config.krebs.exim;
 in {
   options.krebs.exim = {

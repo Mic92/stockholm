@@ -1,5 +1,5 @@
 { config, pkgs, ... }:
-with config.krebs.lib;
+with import <stockholm/lib>;
 {
   krebs.urlwatch = {
     enable = true;

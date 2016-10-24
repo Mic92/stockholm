@@ -1,4 +1,4 @@
-{ config, ... }: with config.krebs.lib; let
+{ config, ... }: with import <stockholm/lib>; let
   cfg = config.lass.ejabberd;
 
   # XXX this is a placeholder that happens to work the default strings.

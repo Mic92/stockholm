@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with config.krebs.lib;
+with import <stockholm/lib>;
 
 {
   krebs.tinc.retiolum = {
@@ -10,7 +10,6 @@ with config.krebs.lib;
       "prism"
       "echelon"
       "cd"
-      "ire"
     ];
     tincPackage = pkgs.tinc_pre;
   };
