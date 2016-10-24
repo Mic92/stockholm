@@ -112,13 +112,14 @@ with import <stockholm/lib>;
       };
     }
 
-    (let ca-bundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"; in {
-      environment.variables = {
-        CURL_CA_BUNDLE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-        GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-        SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-      };
-    })
+    {
+      environment.variables =
+        flip genAttrs (_: "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt") [
+          "CURL_CA_BUNDLE"
+          "GIT_SSL_CAINFO"
+          "SSL_CERT_FILE"
+        ];
+    }
 
     {
       services.cron.enable = false;
