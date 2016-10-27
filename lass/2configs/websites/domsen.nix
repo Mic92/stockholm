@@ -22,25 +22,6 @@ let
     exec ${pkgs.msmtp}/bin/msmtp --read-envelope-from -C ${msmtprc} "$@"
   '';
 
-  check-password = pkgs.writeDash "check-password" ''
-    read pw
-
-    file="/home/$PAM_USER/.shadow"
-
-    #check if shadow file exists
-    test -e "$file" || exit 123
-
-    hash="$(${pkgs.coreutils}/bin/head -1 $file)"
-    salt="$(echo $hash | ${pkgs.gnused}/bin/sed 's/.*\$\(.*\)\$.*/\1/')"
-
-    calc_hash="$(echo "$pw" | ${pkgs.mkpasswd}/bin/mkpasswd -m sha-512 -S $salt)"
-    if [ "$calc_hash" == $hash ]; then
-      exit 0
-    else
-      exit 1
-    fi
-  '';
-
 in {
   imports = [
     ./sqlBackup.nix
@@ -161,41 +142,26 @@ in {
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp --dport pop3s"; target = "ACCEPT"; }
     { predicate = "-p tcp --dport imaps"; target = "ACCEPT"; }
-    { predicate = "-p tcp --dport 465"; target = "ACCEPT"; }
   ];
-
-  security.pam.services.exim.text = ''
-    auth        required      pam_env.so
-    auth        sufficient    pam_exec.so debug expose_authtok ${check-password}
-    auth        sufficient    pam_unix.so likeauth nullok
-    auth        required      pam_deny.so
-    account     required      pam_unix.so
-    password    required      pam_cracklib.so retry=3 type=
-    password    sufficient    pam_unix.so nullok use_authtok md5shadow
-    password    required      pam_deny.so
-    session     required      pam_limits.so
-    session     required      pam_unix.so
-  '';
 
   krebs.exim-smarthost = {
     authenticators.PLAIN = ''
       driver = plaintext
-      server_prompts = :
-      server_condition = "''${if pam{$auth2:$auth3}{yes}{no}}"
-      server_set_id = $auth2
+      public_name = PLAIN
+      server_condition = ''${run{${config.lass.usershadow.path}/bin/verify_arg ${config.lass.usershadow.pattern} $auth2 $auth3}{yes}{no}}
     '';
     authenticators.LOGIN = ''
       driver = plaintext
+      public_name = LOGIN
       server_prompts = "Username:: : Password::"
-      server_condition = "''${if pam{$auth1:$auth2}{yes}{no}}"
-      server_set_id = $auth1
+      server_condition = ''${run{${config.lass.usershadow.path}/bin/verify_arg ${config.lass.usershadow.pattern} $auth1 $auth2}{yes}{no}}
     '';
     internet-aliases = [
       { from = "dominik@apanowicz.de"; to = "dominik_a@gmx.de"; }
       { from = "mail@jla-trading.com"; to = "jla-trading"; }
-      { from = "testuser@lassul.us"; to = "testuser"; }
     ];
-    system-aliases = [
+    sender_domains = [
+      "jla-trading.com"
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";
