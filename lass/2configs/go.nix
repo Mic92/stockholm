@@ -3,7 +3,7 @@
 with import <stockholm/lib>;
 {
   environment.systemPackages = [
-    pkgs.go
+    pkgs.go-shortener
   ];
   krebs.go = {
     enable = true;
