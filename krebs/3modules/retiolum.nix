@@ -79,6 +79,15 @@ let
           '';
         };
 
+        hostsArchive = mkOption {
+          type = types.package;
+          default = pkgs.runCommand "retiolum-hosts.tar.bz2" {} ''
+            ${pkgs.coreutils}/bin/ln -s ${tinc.config.hostsPackage} hosts
+            ${pkgs.gnutar}/bin/tar -hcjf $out hosts
+          '';
+          readOnly = true;
+        };
+
         hostsPackage = mkOption {
           type = types.package;
           default = pkgs.stdenv.mkDerivation {
