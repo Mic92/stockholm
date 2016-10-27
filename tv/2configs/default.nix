@@ -14,7 +14,7 @@ with import <stockholm/lib>;
       stockholm.file = "/home/tv/stockholm";
       nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
-        ref = "e4fb65a3627f8c17a2f92c08bf302dc30f0a8db9";
+        ref = "0195ab84607ac3a3aa07a79d2d6c2781b1bb6731";
       };
     } // optionalAttrs host.secure {
       secrets-master.file = "/home/tv/secrets/master";
