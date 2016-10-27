@@ -224,6 +224,11 @@ in {
         OnCalendar = "*:0/5";
       };
     }
+    {
+      lass.usershadow = {
+        enable = true;
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
