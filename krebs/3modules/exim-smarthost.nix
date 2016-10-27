@@ -246,12 +246,12 @@ let
 
         remote_smtp:
           driver = smtp
-          ${optionalString (cfg.dkim != []) ''
+          ${optionalString (cfg.dkim != []) (indent ''
             dkim_canon = relaxed
             dkim_domain = $sender_address_domain
             dkim_private_key = ''${lookup{$sender_address_domain}lsearch{${lsearch.dkim_private_key}}}
             dkim_selector = ''${lookup{$sender_address_domain}lsearch{${lsearch.dkim_selector}}}
-          ''}
+          '')}
           helo_data = ''${if eq{$acl_m_special_dom}{}  \
                                {$primary_hostname}   \
                                {$acl_m_special_dom} }

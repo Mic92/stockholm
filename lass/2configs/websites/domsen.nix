@@ -142,28 +142,26 @@ in {
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp --dport pop3s"; target = "ACCEPT"; }
     { predicate = "-p tcp --dport imaps"; target = "ACCEPT"; }
-    { predicate = "-p tcp --dport 465"; target = "ACCEPT"; }
   ];
 
   krebs.exim-smarthost = {
     authenticators.PLAIN = ''
       driver = plaintext
-      server_prompts = :
-      server_condition = "''${if pam{$auth2:$auth3}{yes}{no}}"
-      server_set_id = $auth2
+      public_name = PLAIN
+      server_condition = ''${run{${config.lass.usershadow.path}/bin/verify_arg ${config.lass.usershadow.pattern} $auth2 $auth3}{yes}{no}}
     '';
     authenticators.LOGIN = ''
       driver = plaintext
+      public_name = LOGIN
       server_prompts = "Username:: : Password::"
-      server_condition = "''${if pam{$auth1:$auth2}{yes}{no}}"
-      server_set_id = $auth1
+      server_condition = ''${run{${config.lass.usershadow.path}/bin/verify_arg ${config.lass.usershadow.pattern} $auth1 $auth2}{yes}{no}}
     '';
     internet-aliases = [
       { from = "dominik@apanowicz.de"; to = "dominik_a@gmx.de"; }
       { from = "mail@jla-trading.com"; to = "jla-trading"; }
-      { from = "testuser@lassul.us"; to = "testuser"; }
     ];
-    system-aliases = [
+    sender_domains = [
+      "jla-trading.com"
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";
