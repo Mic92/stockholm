@@ -44,7 +44,7 @@ let
       wantedBy = [ "multi-user.target" ];
 
       path = with pkgs; [
-        go
+        go-shortener
       ];
 
       environment = {
@@ -57,7 +57,7 @@ let
       serviceConfig = {
         User = "go";
         Restart = "always";
-        ExecStart = "${pkgs.go}/bin/go";
+        ExecStart = "${pkgs.go-shortener}/bin/go";
       };
     };
   };

@@ -54,7 +54,7 @@ with import <stockholm/lib>;
         enable = true;
         package = pkgs.postgresql;
       };
-      #virtualisation.docker.enable = true;
+      virtualisation.docker.enable = true;
       #users.users.mainUser.extraGroups = [ "docker" ];
     }
     {

@@ -19,7 +19,7 @@ let
   };
 
 in np.buildNodePackage {
-  name = "go";
+  name = "go-shortener";
 
   src = fetchgit {
     url = "http://cgit.lassul.us/go/";
