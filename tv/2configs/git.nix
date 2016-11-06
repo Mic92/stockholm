@@ -32,6 +32,9 @@ let
     get = {};
     hack = {};
     load-env = {};
+    loldns = {
+      cgit.desc = "toy DNS server";
+    };
     make-snapshot = {};
     much = {};
     netcup = {
