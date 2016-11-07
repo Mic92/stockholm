@@ -62,6 +62,21 @@ let
     fi
   '';
 
+  q-intel_backlight = ''
+    cd /sys/class/backlight/intel_backlight
+    </dev/null exec ${pkgs.gawk}/bin/awk '
+      END {
+        getline actual_brightness < "actual_brightness"
+        getline max_brightness < "max_brightness"
+        getline brightness < "brightness"
+        printf "intel_backlight %d%% %d/%d\n" \
+            , actual_brightness / max_brightness * 100 \
+            , actual_brightness \
+            , max_brightness
+      }
+    '
+  '';
+
   q-power_supply = let
     power_supply = pkgs.writeBash "power_supply" ''
       set -efu
@@ -218,6 +233,7 @@ pkgs.writeBashBin "q" ''
   ${q-isodate}
   ${q-sgtdate}
   (${q-gitdir}) &
+  (${q-intel_backlight}) &
   (${q-power_supply}) &
   (${q-virtualization}) &
   (${q-wireless}) &
