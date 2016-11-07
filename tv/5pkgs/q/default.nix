@@ -62,47 +62,77 @@ let
     fi
   '';
 
-  q-power_supply = ''
-    for uevent in /sys/class/power_supply/*/uevent; do
-      if test -f $uevent; then
-        eval "$(${pkgs.gnused}/bin/sed -n '
-          s/^\([A-Z_]\+=\)\(.*\)/\1'\'''\2'\'''/p
-        ' $uevent)"
-
-        if test "x''${POWER_SUPPLY_CHARGE_NOW-}" = x; then
-          continue
-        fi
-
-        charge_percentage=$(echo "
-          scale=2
-          $POWER_SUPPLY_CHARGE_NOW / $POWER_SUPPLY_CHARGE_FULL
-        " | ${pkgs.bc}/bin/bc)
-
-        lfc=$POWER_SUPPLY_CHARGE_FULL
-        rc=$POWER_SUPPLY_CHARGE_NOW
-        #rc=2800
-        N=78; N=76
-        N=10
-        n=$(echo $N-1 | ${pkgs.bc}/bin/bc)
-        centi=$(echo "$rc*100/$lfc" | ${pkgs.bc}/bin/bc)
-        deci=$(echo "$rc*$N/$lfc" | ${pkgs.bc}/bin/bc)
-        energy_evel=$(
-          echo -n '☳ ' # TRIGRAM FOR THUNDER
-          if   test $centi -ge 42; then echo -n '[1;32m'
-          elif test $centi -ge 23; then echo -n '[1;33m'
-          elif test $centi -ge 11; then echo -n '[1;31m'
-          else                        echo -n '[5;1;31m'; fi
-          for i in $(${pkgs.coreutils}/bin/seq 1 $deci); do
-            echo -n ■
-          done
-          echo -n '[;30m'
-          for i in $(${pkgs.coreutils}/bin/seq $deci $n); do
-            echo -n ■
-          done
-          echo '[m' $rc #/ $lfc
-        )
-        echo "$energy_evel $charge_percentage"
+  q-power_supply = let
+    power_supply = pkgs.writeBash "power_supply" ''
+      set -efu
+      uevent=$1
+      eval "$(${pkgs.gnused}/bin/sed -n '
+        s/^\([A-Z_]\+=[0-9A-Za-z_-]*\)$/export \1/p
+      ' $uevent)"
+      if test "x''${POWER_SUPPLY_CHARGE_NOW-}" = x; then
+        exit # not battery
       fi
+      exec </dev/null
+      exec ${pkgs.gawk}/bin/awk '
+        function print_hm(h, m) {
+          m = (h - int(h)) * 60
+          return sprintf("%dh%dm", h, m)
+        }
+
+        function print_bar(n, r, t1, t2, t_col) {
+          t1 = int(r * n)
+          t2 = n - t1
+          if (r >= .42)     t_col = "1;32"
+          else if (r >= 23) t_col = "1;33"
+          else if (r >= 11) t_col = "1;31"
+          else              t_col = "5;1;31"
+          return sgr(t_col) strdup("■", t1) sgr(";30") strdup("■", t2) sgr()
+        }
+
+        function sgr(p) {
+          return "\x1b[" p "m"
+        }
+
+        function strdup(s,n,t) {
+          t = sprintf("%"n"s","")
+          gsub(/ /,s,t)
+          return t
+        }
+
+        END {
+          voltage_unit = "V"
+          voltage_now = ENVIRON["POWER_SUPPLY_VOLTAGE_NOW"] / 10^6
+          voltage_min_design = ENVIRON["POWER_SUPPLY_VOLTAGE_MIN_DESIGN"] / 10^6
+
+          current_unit = "A"
+          current_now = ENVIRON["POWER_SUPPLY_CURRENT_NOW"] / 10^6
+
+          power_unit = "W"
+          power_now = current_now * voltage_now
+
+          charge_unit = "Ah"
+          charge_now = ENVIRON["POWER_SUPPLY_CHARGE_NOW"] / 10^6
+          charge_full = ENVIRON["POWER_SUPPLY_CHARGE_FULL"] / 10^6
+          charge_ratio = charge_now / charge_full
+
+          energy_unit = "Wh"
+          energy_full = charge_full * voltage_min_design
+
+          printf "%s %s %d%% %.2f%s/%.2f%s %d%s/%.1f%s %s\n" \
+            , ENVIRON["POWER_SUPPLY_NAME"] \
+            , print_bar(10, charge_ratio) \
+            , charge_ratio * 100 \
+            , charge_now, charge_unit \
+            , current_now, current_unit \
+            , energy_full, energy_unit \
+            , power_now, power_unit \
+            , print_hm(charge_now / current_now)
+        }
+      '
+    '';
+  in ''
+    for uevent in /sys/class/power_supply/*/uevent; do
+      ${power_supply} "$uevent"
     done
   '';
 
