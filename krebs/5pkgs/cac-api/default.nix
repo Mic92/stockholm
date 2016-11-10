@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "cac-api-1.1.2";
 
   src = fetchgit {
-    url = http://cgit.cd.krebsco.de/cac-api;
+    url = http://cgit.ni.krebsco.de/cac-api;
     rev = "67e93510e7742acae44db30275abbfe671aa9b7b";
     sha256 = "1vxh57j7vrq5sg9j1sam0538kkkhqpgf230vvdz2ifzgkj01z27l";
   };

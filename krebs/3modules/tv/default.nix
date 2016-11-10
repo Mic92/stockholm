@@ -222,6 +222,7 @@ with import <stockholm/lib>;
       extraZones = {
         "krebsco.de" = ''
           ni          60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
+          cgit.ni     60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
         '';
       };
       nets = {
