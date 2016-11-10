@@ -5,7 +5,7 @@ mkDerivation {
   pname = "xmonad-stockholm";
   version = "1.1.0";
   src = fetchgit {
-    url = http://cgit.cd.krebsco.de/xmonad-stockholm;
+    url = http://cgit.ni.krebsco.de/xmonad-stockholm;
     rev = "179d29fd4c765dee698058ef63295331ac603639";
     sha256 = "0c6mj68xsxxr4j8adkzhjszi7bg6cpisrsmqn587a16sblpbrnkj";
   };

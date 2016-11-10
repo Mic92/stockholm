@@ -222,12 +222,14 @@ with import <stockholm/lib>;
       extraZones = {
         "krebsco.de" = ''
           ni          60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
+          cgit.ni     60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
         '';
       };
       nets = {
         internet = {
           ip4.addr = "188.68.36.196";
           aliases = [
+            "cgit.ni.i"
             "ni.i"
           ];
           ssh.port = 11423;
