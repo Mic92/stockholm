@@ -90,11 +90,11 @@ let
   };
 
   imp = lib.mkMerge [
-    { krebs = import ./lass   { inherit config lib; }; }
-    { krebs = import ./makefu { inherit config lib; }; }
-    { krebs = import ./mv     { inherit config lib; }; }
-    { krebs = import ./shared { inherit config lib; }; }
-    { krebs = import ./tv     { inherit config lib; }; }
+    { krebs = import ./lass   { inherit config; }; }
+    { krebs = import ./makefu { inherit config; }; }
+    { krebs = import ./mv     { inherit config; }; }
+    { krebs = import ./shared { inherit config; }; }
+    { krebs = import ./tv     { inherit config; }; }
     {
       krebs.dns.providers = {
         "krebsco.de" = "zones";
