@@ -229,6 +229,7 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "188.68.36.196";
           aliases = [
+            "cgit.ni.i"
             "ni.i"
           ];
           ssh.port = 11423;
