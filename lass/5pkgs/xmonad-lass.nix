@@ -119,6 +119,7 @@ myKeyMap =
     , ("<XF86AudioMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-mute 0 toggle")
     , ("<XF86AudioMicMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-source-mute 1 toggle")
     , ("<XF86Launch1>", gridselectWorkspace gridConfig W.view)
+    , ("M4-C-k", spawn "${pkgs.xorg.xkill}/bin/xkill")
 
     , ("M4-a", focusUrgent)
     , ("M4-S-r", renameWorkspace    def)
