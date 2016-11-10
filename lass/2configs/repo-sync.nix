@@ -41,7 +41,7 @@ let
           mirror.url = "${mirror}${name}";
         };
         tv = {
-          origin.url = "http://cgit.cd/${name}";
+          origin.url = "http://cgit.ni.i/${name}";
           mirror.url = "${mirror}${name}";
         };
         lassulus = {
