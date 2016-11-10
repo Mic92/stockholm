@@ -218,6 +218,49 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1vJsAddvxMA84u9iJEOrIkKn7pQiemMbfW5cfK1d7g root@mu";
     };
+    ni = {
+      extraZones = {
+        "krebsco.de" = ''
+          ni          60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
+        '';
+      };
+      nets = {
+        internet = {
+          ip4.addr = "188.68.36.196";
+          aliases = [
+            "ni.i"
+          ];
+          ssh.port = 11423;
+        };
+        retiolum = {
+          via = config.krebs.hosts.ni.nets.internet;
+          ip4.addr = "10.243.113.223";
+          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af4";
+          aliases = [
+            "ni.r"
+            "ni.retiolum"
+            "cgit.ni.r"
+            "cgit.ni.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEA7NHuW8eLVhpBfL70WwcSGVmv4dijKLJs5cH/BmqK8zN2lpiLKt12
+            bhaE1YEhGoGma7Kef1Fa0V9xUkJy6C1+sVlfWp/LeY8VRSX5E3u36TEl6kl/4zu6
+            Ea/44BoGUSOC9ImxVEX51czA10PFjUSrGFyK0oaRlKNsTwwpNiBOY7/6i74bhn59
+            OIsySRUBd2QPjYhJkiuc7gltVfwt6wteZh8R4w2rluVGYLQPsmN/XEWgJbhzI4im
+            W+3/bdewHVF1soZWtdocPLeXTn5HETX5g8p2V3bwYL37oIwkCcYxOeQtT7W+lNJ2
+            NvIiVh4Phojl4dBUgUQGT0NApMnsaG/4LJpSC4AGiqbsznBdSPhepob7zJggPnWY
+            nfAs+YrUUZp1wovhSgWfYTRglRuyYvWkoGbq411H1efawyZ0gcMr+HQlSn2keQOv
+            lbcvdgOAxQiEcPVixPq3mTeKaSxWyIJGFceuqtnILGifRNvViX0uo9g5rLQ41PrJ
+            9F3azz3gD2Uh73j5pvLU72cge7p1a7epPYWTJYf8oc5JcI3nYTKpSqH8IYaWUjv9
+            q0NwOYFDhYtUcTwdbUNl/tUWKyBcovIe7f40723pHSijiPV2WDZC2M/mOc3dvWKF
+            Mf00uin+7uMuKtnG6+1z5nKb/AWrqN1RZu0rnG/IkZPKwa19HYsYcOkCAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILGDdcKwFm6udU0/x6XGGb87k9py0VlrxF54HeYu9Izb";
+    };
     nomic = {
       cores = 2;
       nets = {
