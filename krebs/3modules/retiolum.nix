@@ -134,7 +134,11 @@ let
 
         connectTo = mkOption {
           type = types.listOf types.str;
-          default = [ "fastpoke" "cd" "prism" "gum" ];
+          ${if tinc.config.netname == "retiolum" then "default" else null} = [
+            "gum"
+            "ni"
+            "prism"
+          ];
           description = ''
             The list of hosts in the network which the client will try to connect
             to.  These hosts should have an 'Address' configured which points to a
