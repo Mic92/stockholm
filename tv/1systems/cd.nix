@@ -30,7 +30,6 @@ with import <stockholm/lib>;
     iotop
     iptables
     nethogs
-    rxvt_unicode.terminfo
     tcpdump
   ];
 }
