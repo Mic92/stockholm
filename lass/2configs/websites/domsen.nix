@@ -103,27 +103,6 @@ in {
     "o_ubikmedia_de"
   ];
 
-  krebs.backup.plans = {
-    prism-sql-domsen = {
-      method = "push";
-      src = { host = config.krebs.hosts.prism;      path = "/bku/sql_dumps"; };
-      dst = { host = config.krebs.hosts.domsen-nas; path = "/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES/prism-sql"; };
-      startAt = "00:01";
-    };
-    prism-http-domsen = {
-      method = "push";
-      src = { host = config.krebs.hosts.prism;      path = "/srv/http"; };
-      dst = { host = config.krebs.hosts.domsen-nas; path = "/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES/prism-http"; };
-      startAt = "00:10";
-    };
-    prism-o-ubikmedia-domsen = {
-      method = "push";
-      src = { host = config.krebs.hosts.prism;      path = "/srv/o.ubikmedia.de-data"; };
-      dst = { host = config.krebs.hosts.domsen-nas; path = "/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES/prism-owncloud"; };
-      startAt = "00:30";
-    };
-  };
-
   services.phpfpm.phpOptions = ''
     sendmail_path = ${sendmail} -t
     upload_max_filesize = 100M
@@ -142,28 +121,26 @@ in {
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp --dport pop3s"; target = "ACCEPT"; }
     { predicate = "-p tcp --dport imaps"; target = "ACCEPT"; }
-    { predicate = "-p tcp --dport 465"; target = "ACCEPT"; }
   ];
 
   krebs.exim-smarthost = {
     authenticators.PLAIN = ''
       driver = plaintext
-      server_prompts = :
-      server_condition = "''${if pam{$auth2:$auth3}{yes}{no}}"
-      server_set_id = $auth2
+      public_name = PLAIN
+      server_condition = ''${run{${config.lass.usershadow.path}/bin/verify_arg ${config.lass.usershadow.pattern} $auth2 $auth3}{yes}{no}}
     '';
     authenticators.LOGIN = ''
       driver = plaintext
+      public_name = LOGIN
       server_prompts = "Username:: : Password::"
-      server_condition = "''${if pam{$auth1:$auth2}{yes}{no}}"
-      server_set_id = $auth1
+      server_condition = ''${run{${config.lass.usershadow.path}/bin/verify_arg ${config.lass.usershadow.pattern} $auth1 $auth2}{yes}{no}}
     '';
     internet-aliases = [
       { from = "dominik@apanowicz.de"; to = "dominik_a@gmx.de"; }
       { from = "mail@jla-trading.com"; to = "jla-trading"; }
-      { from = "testuser@lassul.us"; to = "testuser"; }
     ];
-    system-aliases = [
+    sender_domains = [
+      "jla-trading.com"
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";

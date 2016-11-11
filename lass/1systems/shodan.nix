@@ -75,6 +75,10 @@ with import <stockholm/lib>;
       fsType = "tmpfs";
       options = ["nosuid" "nodev" "noatime"];
     };
+    "/bku" = {
+      device = "/dev/pool/bku";
+      fsType = "ext4";
+    };
   };
 
   services.udev.extraRules = ''

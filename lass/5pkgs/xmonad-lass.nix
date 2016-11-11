@@ -112,14 +112,14 @@ displaySomeException = displayException
 myKeyMap :: [([Char], X ())]
 myKeyMap =
     [ ("M4-<F11>", spawn "${pkgs.i3lock}/bin/i3lock -i /var/lib/wallpaper/wallpaper -f")
+    , ("M4-C-p", spawn "${pkgs.scrot}/bin/scrot ~/public_html/scrot.png")
     , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
     , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume 0 +4%")
     , ("<XF86AudioLowerVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume 0 -4%")
     , ("<XF86AudioMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-mute 0 toggle")
     , ("<XF86AudioMicMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-source-mute 1 toggle")
     , ("<XF86Launch1>", gridselectWorkspace gridConfig W.view)
-    , ("<XF86MonBrightnessUp>", spawn "xbacklight -steps 1 -time 1 -inc 10")
-    , ("<XF86MonBrightnessDown>", spawn "xbacklight -steps 1 -time 1 -dec 10")
+    , ("M4-C-k", spawn "${pkgs.xorg.xkill}/bin/xkill")
 
     , ("M4-a", focusUrgent)
     , ("M4-S-r", renameWorkspace    def)
@@ -129,6 +129,7 @@ myKeyMap =
     , ("M4-<Esc>", toggleWS)
     , ("M4-S-<Enter>", spawn urxvtcPath)
     , ("M4-x", floatNext True >> spawn urxvtcPath)
+    , ("M4-z", floatNext True >> spawn "${pkgs.termite}/bin/termite")
     , ("M4-f", floatNext True)
     , ("M4-b", sendMessage ToggleStruts)
 

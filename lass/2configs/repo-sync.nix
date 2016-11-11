@@ -41,7 +41,7 @@ let
           mirror.url = "${mirror}${name}";
         };
         tv = {
-          origin.url = "http://cgit.ni.r/${name}";
+          origin.url = "http://cgit.ni.i/${name}";
           mirror.url = "${mirror}${name}";
         };
         lassulus = {
@@ -93,6 +93,7 @@ in {
     (sync-remote "xintmap" "https://github.com/4z3/xintmap")
     (sync-remote "realwallpaper" "https://github.com/lassulus/realwallpaper")
     (sync-remote "lassulus-blog" "https://github.com/lassulus/lassulus-blog")
+    (sync-remote "painload" "https://github.com/krebscode/painload")
     (sync-remote-silent "nixpkgs" "https://github.com/nixos/nixpkgs")
     (sync-retiolum "go")
     (sync-retiolum "much")

@@ -224,6 +224,14 @@ in {
         OnCalendar = "*:0/5";
       };
     }
+    {
+      lass.usershadow = {
+        enable = true;
+      };
+    }
+    {
+      virtualisation.libvirtd.enable = true;
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
