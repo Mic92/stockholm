@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "1.2.0";
 
   src = fetchgit {
-    url = http://cgit.cd.krebsco.de/populate;
+    url = http://cgit.ni.krebsco.de/populate;
     rev = "refs/tags/v${version}";
     sha256 = "0q3110hkkxn9bc3a63xbx1hyd1fpzz4wrck4lng3j5a9i1y1jm07";
   };

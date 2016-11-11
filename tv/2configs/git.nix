@@ -32,6 +32,9 @@ let
     get = {};
     hack = {};
     load-env = {};
+    loldns = {
+      cgit.desc = "toy DNS server";
+    };
     make-snapshot = {};
     much = {};
     netcup = {
@@ -81,12 +84,12 @@ let
   make-public-repo = name: { cgit ? {}, ... }: {
     inherit cgit name;
     public = true;
-    hooks = optionalAttrs (config.krebs.build.host.name == "cd") {
+    hooks = optionalAttrs (config.krebs.build.host.name == "ni") {
       post-receive = pkgs.git-hooks.irc-announce {
         # TODO make nick = config.krebs.build.host.name the default
         nick = config.krebs.build.host.name;
         channel = "#retiolum";
-        server = "cd.retiolum";
+        server = "ni.r";
         verbose = true;
       };
     };

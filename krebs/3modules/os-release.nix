@@ -13,7 +13,7 @@ let
   version-id = "${stockholm-version-id}/${nixos-version-id}";
   pretty-name = "${stockholm-pretty-name} / ${nixos-pretty-name}";
 
-  home-url = http://cgit.cd.krebsco.de/stockholm;
+  home-url = http://cgit.ni.krebsco.de/stockholm;
 in
 {
   # http://0pointer.de/public/systemd-man/os-release.html

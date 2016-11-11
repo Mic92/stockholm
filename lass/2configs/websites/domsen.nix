@@ -103,27 +103,6 @@ in {
     "o_ubikmedia_de"
   ];
 
-  krebs.backup.plans = {
-    prism-sql-domsen = {
-      method = "push";
-      src = { host = config.krebs.hosts.prism;      path = "/bku/sql_dumps"; };
-      dst = { host = config.krebs.hosts.domsen-nas; path = "/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES/prism-sql"; };
-      startAt = "00:01";
-    };
-    prism-http-domsen = {
-      method = "push";
-      src = { host = config.krebs.hosts.prism;      path = "/srv/http"; };
-      dst = { host = config.krebs.hosts.domsen-nas; path = "/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES/prism-http"; };
-      startAt = "00:10";
-    };
-    prism-o-ubikmedia-domsen = {
-      method = "push";
-      src = { host = config.krebs.hosts.prism;      path = "/srv/o.ubikmedia.de-data"; };
-      dst = { host = config.krebs.hosts.domsen-nas; path = "/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES/prism-owncloud"; };
-      startAt = "00:30";
-    };
-  };
-
   services.phpfpm.phpOptions = ''
     sendmail_path = ${sendmail} -t
     upload_max_filesize = 100M

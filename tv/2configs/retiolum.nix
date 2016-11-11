@@ -7,9 +7,8 @@ with import <stockholm/lib>;
     enable = true;
     connectTo = filter (ne config.krebs.build.host.name) [
       "gum"
+      "ni"
       "prism"
-      "echelon"
-      "cd"
     ];
     tincPackage = pkgs.tinc_pre;
   };

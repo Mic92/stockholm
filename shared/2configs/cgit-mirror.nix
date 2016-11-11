@@ -17,7 +17,7 @@ let
         nick = config.networking.hostName;
         verbose = false;
         channel = "#retiolum";
-        server = "cd.retiolum";
+        server = "ni.r";
       };
     };
   };

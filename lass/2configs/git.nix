@@ -54,7 +54,7 @@ let
         # TODO make nick = config.krebs.build.host.name the default
         nick = config.krebs.build.host.name;
         channel = "#retiolum";
-        server = "cd.retiolum";
+        server = "ni.r";
         verbose = config.krebs.build.host.name == "prism";
         branches = [ "master" ];
       };

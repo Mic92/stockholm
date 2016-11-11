@@ -90,11 +90,11 @@ let
   };
 
   imp = lib.mkMerge [
-    { krebs = import ./lass   { inherit config lib; }; }
-    { krebs = import ./makefu { inherit config lib; }; }
-    { krebs = import ./mv     { inherit config lib; }; }
-    { krebs = import ./shared { inherit config lib; }; }
-    { krebs = import ./tv     { inherit config lib; }; }
+    { krebs = import ./lass   { inherit config; }; }
+    { krebs = import ./makefu { inherit config; }; }
+    { krebs = import ./mv     { inherit config; }; }
+    { krebs = import ./shared { inherit config; }; }
+    { krebs = import ./tv     { inherit config; }; }
     {
       krebs.dns.providers = {
         "krebsco.de" = "zones";
@@ -130,7 +130,9 @@ let
               shorts = let s = ".${cfg.search-domain}"; in
                 map (removeSuffix s) (filter (hasSuffix s) longs);
             in
-              map (addr: "${addr} ${toString aliases}") net.addrs
+              optionals
+                (aliases != [])
+                (map (addr: "${addr} ${toString aliases}") net.addrs)
           ) (filterAttrs (name: host: host.aliases != []) host.nets)
         ) cfg.hosts
       ));

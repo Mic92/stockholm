@@ -25,20 +25,6 @@ in {
               pollinterval=120))
     '';
     scheduler = {
-      force-scheduler = ''
-        sched.append(schedulers.ForceScheduler(
-                                    name="force",
-                                    builderNames=["fast-tests"]))
-      '';
-      fast-tests-scheduler = ''
-        # test everything real quick
-        sched.append(schedulers.SingleBranchScheduler(
-                                    ## all branches
-                                    change_filter=util.ChangeFilter(branch_re=".*"),
-                                    treeStableTimer=10,
-                                    name="fast-all-branches",
-                                    builderNames=["fast-tests"]))
-      '';
       build-scheduler = ''
         # build all hosts
         sched.append(schedulers.SingleBranchScheduler(
@@ -113,43 +99,6 @@ in {
 
       '';
 
-      fast-tests = ''
-        f = util.BuildFactory()
-        f.addStep(grab_repo)
-        for i in [ "mors", "uriel", "shodan", "helios", "cloudkrebs", "echelon", "dishfire", "prism" ]:
-          addShell(f,name="build-{}".format(i),env=env_lass,
-                  command=nixshell + \
-                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-                        make \
-                            test \
-                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                            method=eval \
-                            system={}".format(i)])
-
-        for i in [ "x", "wry", "vbob", "wbob", "shoney" ]:
-          addShell(f,name="build-{}".format(i),env=env_makefu,
-                  command=nixshell + \
-                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-                        make \
-                            test \
-                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                            method=eval \
-                            system={}".format(i)])
-
-        for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf" ]:
-          addShell(f,name="build-{}".format(i),env=env_shared,
-                  command=nixshell + \
-                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-                        make \
-                            test \
-                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                            method=eval \
-                            system={}".format(i)])
-
-        bu.append(util.BuilderConfig(name="fast-tests",
-              slavenames=slavenames,
-              factory=f))
-      '';
       build-pkgs = ''
         f = util.BuildFactory()
         f.addStep(grab_repo)
@@ -212,7 +161,7 @@ in {
     irc = {
       enable = true;
       nick = "buildbot-lass";
-      server = "cd.retiolum";
+      server = "ni.r";
       channels = [ { channels = "retiolum"; } ];
       allowForce = true;
     };

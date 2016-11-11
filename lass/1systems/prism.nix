@@ -229,6 +229,9 @@ in {
         enable = true;
       };
     }
+    {
+      virtualisation.libvirtd.enable = true;
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;

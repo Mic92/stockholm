@@ -14,7 +14,7 @@ with import <stockholm/lib>;
       stockholm.file = "/home/tv/stockholm";
       nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
-        ref = "e4fb65a3627f8c17a2f92c08bf302dc30f0a8db9";
+        ref = "1e1112edc57e93046f35707b874d2a4f3ff321e6";
       };
     } // optionalAttrs host.secure {
       secrets-master.file = "/home/tv/secrets/master";
@@ -112,13 +112,14 @@ with import <stockholm/lib>;
       };
     }
 
-    (let ca-bundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"; in {
-      environment.variables = {
-        CURL_CA_BUNDLE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-        GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-        SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-      };
-    })
+    {
+      environment.variables =
+        flip genAttrs (_: "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt") [
+          "CURL_CA_BUNDLE"
+          "GIT_SSL_CAINFO"
+          "SSL_CERT_FILE"
+        ];
+    }
 
     {
       services.cron.enable = false;

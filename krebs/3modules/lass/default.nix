@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, ... }:
 
 with import <stockholm/lib>;
 
