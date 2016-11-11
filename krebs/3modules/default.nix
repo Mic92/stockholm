@@ -130,7 +130,9 @@ let
               shorts = let s = ".${cfg.search-domain}"; in
                 map (removeSuffix s) (filter (hasSuffix s) longs);
             in
-              map (addr: "${addr} ${toString aliases}") net.addrs
+              optionals
+                (aliases != [])
+                (map (addr: "${addr} ${toString aliases}") net.addrs)
           ) (filterAttrs (name: host: host.aliases != []) host.nets)
         ) cfg.hosts
       ));
