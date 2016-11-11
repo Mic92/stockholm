@@ -159,7 +159,7 @@
     irc = {
       enable = true;
       nick = "wolfbot";
-      server = "cd.retiolum";
+      server = "ni.r";
       channels = [ "retiolum" ];
       allowForce = true;
     };

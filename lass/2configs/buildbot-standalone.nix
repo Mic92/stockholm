@@ -212,7 +212,7 @@ in {
     irc = {
       enable = true;
       nick = "buildbot-lass";
-      server = "cd.retiolum";
+      server = "ni.r";
       channels = [ "retiolum" ];
       allowForce = true;
     };

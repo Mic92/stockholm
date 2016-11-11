@@ -11,26 +11,6 @@ with import <stockholm/lib>;
     ../2configs/fs/CAC-CentOS-7-64bit.nix
     ../2configs/exim-smarthost.nix
     ../2configs/retiolum.nix
-    {
-      tv.charybdis = {
-        enable = true;
-        ssl_cert = ../Zcerts/charybdis_cd.crt.pem;
-      };
-      tv.iptables.input-retiolum-accept-tcp = [
-        config.tv.charybdis.port
-        config.tv.charybdis.sslport
-      ];
-    }
-    {
-      tv.ejabberd = {
-        enable = true;
-        hosts = [ "jabber.viljetic.de" ];
-      };
-      tv.iptables.input-internet-accept-tcp = [
-        "xmpp-client"
-        "xmpp-server"
-      ];
-    }
   ];
 
   networking = {

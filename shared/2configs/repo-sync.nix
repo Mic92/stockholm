@@ -13,7 +13,7 @@ with lib;
         mirror.url = mirror;
       };
       tv = {
-        origin.url = http://cgit.cd/stockholm ;
+        origin.url = http://cgit.ni.r/stockholm;
         mirror.url = mirror;
       };
       lassulus = {
