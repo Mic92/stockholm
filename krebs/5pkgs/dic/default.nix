@@ -4,9 +4,9 @@ stdenv.mkDerivation {
   name = "dic";
 
   src = fetchgit {
-    url = https://github.com/krebscode/painload;
-    rev = "35ccac73d563ad30d2851b9aeed4cfef69ff74e3";
-    sha256 = "0arsfcd8qdrqafw7cxiag7f0kn95nwxxwrs0kdzxxdryfr6l1h07";
+    url = http://cgit.ni.krebsco.de/dic;
+    rev = "refs/tags/v1.0.0";
+    sha256 = "0f3f5dqpw5y79p2k68qw6jdlkrnapqs3nvnc41zwacyhgppiww0k";
   };
 
   phases = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
       sed \
         's,^main() {$,&\n  PATH=${path}; export PATH,' \
-        < ./util/bin/dic \
+        < ./dic \
         > $out/bin/dic
 
       chmod +x $out/bin/dic
