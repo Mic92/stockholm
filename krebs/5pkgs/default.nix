@@ -38,6 +38,12 @@ with import <stockholm/lib>;
 
     ReaktorPlugins = callPackage ./Reaktor/plugins.nix {};
 
+    buildbot = callPackage ./buildbot {};
+    buildbot-full = callPackage ./buildbot {
+      plugins = with pkgs.buildbot-plugins; [ www console-view waterfall-view ];
+    };
+    buildbot-worker = callPackage ./buildbot/worker.nix {};
+
     # XXX symlinkJoin changed arguments somewhere around nixpkgs d541e0d
     symlinkJoin = { name, paths, ... }@args: let
       x = pkgs.symlinkJoin args;
