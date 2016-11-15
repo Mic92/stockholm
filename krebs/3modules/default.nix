@@ -164,6 +164,7 @@ let
         ciko.mail = "wieczorek.stefan@gmail.com";
         Mic92.mail = "joerg@higgsboson.tk";
       in {
+        "anmeldung@eloop.org" = eloop-ml;
         "cfp@eloop.org" = eloop-ml;
         "kontakt@eloop.org" = eloop-ml;
         "root@eloop.org" = eloop-ml;

@@ -60,7 +60,6 @@ with import <stockholm/lib>;
       esac
     '')
     gnupg
-    rxvt_unicode.terminfo
     tmux
   ];
 }
