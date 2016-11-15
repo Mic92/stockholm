@@ -39,9 +39,7 @@
         '';
         fast-tests-scheduler = ''
   # test everything real quick
-  sched.append(schedulers.SingleBranchScheduler(
-                              ## all branches
-                              change_filter=util.ChangeFilter(branch_re=".*"),
+  sched.append(schedulers.AnyBranchScheduler(
                               treeStableTimer=10,
                               name="fast-all-branches",
                               builderNames=["fast-tests"]))
@@ -118,15 +116,6 @@
   f = util.BuildFactory()
   f.addStep(grab_repo)
 
-  for i in [ "test-all-krebs-modules", "wolf" ]:
-    addShell(f,name="build-{}".format(i),env=env,
-            command=nixshell + \
-                ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-                  make \
-                      test \
-                      target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                      method=build \
-                      system={}".format(i)])
 
   bu.append(util.BuilderConfig(name="build-local",
         workernames=workernames,
