@@ -16,7 +16,7 @@ in {
     # FIXME fast-tests / instantiate-test-all-modules fails at wolfbot
     # http://wolf:8010/builders/fast-tests/builds/442
     #buildbot.master.enable = true;
-    buildbot.slave = {
+    buildbot.worker = {
       enable = true;
       username = "lol";
       password = "wut";
