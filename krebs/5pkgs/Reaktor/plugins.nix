@@ -59,7 +59,7 @@ rec {
   };
 
   sed-plugin = buildSimpleReaktorPlugin "sed-plugin" {
-    path = [ pkgs.gnused pkgs.python3 ];
+    path = [ pkgs.gnused pkgs.proot pkgs.python3 ];
     # only support s///gi the plugin needs to see every msg
     # TODO: this will eat up the last regex, fix Reaktor to support fallthru
     append_rule = true;

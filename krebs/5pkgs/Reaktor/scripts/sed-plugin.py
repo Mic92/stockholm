@@ -34,9 +34,22 @@ if m:
         flagstr = ''
     last = d.get(usr,None)
     if last:
-        #print(re.sub(fn,tn,last,count=count,flags=flags))
         from subprocess import Popen,PIPE
-        p = Popen(['sed','s/{}/{}/{}'.format(f,t,flagstr)],stdin=PIPE,stdout=PIPE )
+        import shutil
+        from os.path import realpath
+        # sed only needs stdin/stdout, we protect state_dir with this
+        # input to read/write arbitrary files:
+        #   s/.\/\/; w /tmp/i       (props to waldi)
+        # conclusion: sed is untrusted and we handle it like this
+        p = Popen(['proot',
+            # '-v','1',
+            '-w','/', # cwd is root
+            '-b','/nix/store', # mount important folders
+            '-b','/usr',
+            '-b','/bin',
+            '-r','/var/empty', # chroot to /var/empty
+            realpath(shutil.which('sed')),
+            's/{}/{}/{}'.format(f,t,flagstr)],stdin=PIPE,stdout=PIPE )
         so,se = p.communicate(bytes("{}\n".format(last),"UTF-8"))
         if p.returncode:
             print("something went wrong when trying to process your regex: {}".format(se.decode()))

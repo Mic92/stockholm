@@ -11,14 +11,13 @@
   # /nix/store should be cleaned up automatically as well
   nix.gc.automatic = true;
   nix.gc.dates = "05:23";
-
   networking.firewall.allowedTCPPorts = [ 8010 9989 ];
   krebs.buildbot.master = let
     stockholm-mirror-url = http://cgit.wolf/stockholm-mirror ;
   in {
     secrets = [ "retiolum-ci.rsa_key.priv" "cac.json" ];
-    slaves = {
-      testslave =  "krebspass";
+    workers = {
+      testworker =  "krebspass";
     };
     change_source.stockholm = ''
   stockholm_repo = '${stockholm-mirror-url}'
@@ -40,9 +39,7 @@
         '';
         fast-tests-scheduler = ''
   # test everything real quick
-  sched.append(schedulers.SingleBranchScheduler(
-                              ## all branches
-                              change_filter=util.ChangeFilter(branch_re=".*"),
+  sched.append(schedulers.AnyBranchScheduler(
                               treeStableTimer=10,
                               name="fast-all-branches",
                               builderNames=["fast-tests"]))
@@ -109,7 +106,7 @@
                             system={}".format(i)])
 
         bu.append(util.BuilderConfig(name="fast-tests",
-              slavenames=slavenames,
+              workernames=workernames,
               factory=f))
 
             '';
@@ -119,36 +116,27 @@
   f = util.BuildFactory()
   f.addStep(grab_repo)
 
-  for i in [ "test-all-krebs-modules", "wolf" ]:
-    addShell(f,name="build-{}".format(i),env=env,
-            command=nixshell + \
-                ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-                  make \
-                      test \
-                      target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                      method=build \
-                      system={}".format(i)])
 
   bu.append(util.BuilderConfig(name="build-local",
-        slavenames=slavenames,
+        workernames=workernames,
         factory=f))
       '';
 #      slow-tests = ''
 #  s = util.BuildFactory()
 #  s.addStep(grab_repo)
 #
-#  # slave needs 2 files:
+#  # worker needs 2 files:
 #  # * cac.json
 #  # * retiolum
-#  s.addStep(steps.FileDownload(mastersrc="${config.krebs.buildbot.master.workDir}/cac.json", slavedest="cac.json"))
-#  s.addStep(steps.FileDownload(mastersrc="${config.krebs.buildbot.master.workDir}/retiolum-ci.rsa_key.priv", slavedest="retiolum.rsa_key.priv"))
+#  s.addStep(steps.FileDownload(mastersrc="${config.krebs.buildbot.master.workDir}/cac.json", workerdest="cac.json"))
+#  s.addStep(steps.FileDownload(mastersrc="${config.krebs.buildbot.master.workDir}/retiolum-ci.rsa_key.priv", workerdest="retiolum.rsa_key.priv"))
 #  addShell(s, name="infest-cac-centos7",env=env,
 #              sigtermTime=60,           # SIGTERM 1 minute before SIGKILL
 #              timeout=10800,             # 3h
 #              command=nixshell + ["infest-cac-centos7"])
 #
 #  bu.append(util.BuilderConfig(name="full-tests",
-#        slavenames=slavenames,
+#        workernames=workernames,
 #        factory=s))
 #      '';
     };
@@ -160,15 +148,15 @@
       enable = true;
       nick = "wolfbot";
       server = "ni.r";
-      channels = [ "retiolum" ];
+      channels = [ { channel = "retiolum"; } ];
       allowForce = true;
     };
   };
 
-  krebs.buildbot.slave = {
+  krebs.buildbot.worker = {
     enable = true;
     masterhost = "localhost";
-    username = "testslave";
+    username = "testworker";
     password = "krebspass";
     packages = with pkgs; [ gnumake jq nix populate ];
     # all nix commands will need a working nixpkgs installation

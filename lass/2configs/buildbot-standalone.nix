@@ -162,7 +162,7 @@ in {
       enable = true;
       nick = "buildbot-lass";
       server = "ni.r";
-      channels = [ "retiolum" ];
+      channels = [ { channels = "retiolum"; } ];
       allowForce = true;
     };
   };

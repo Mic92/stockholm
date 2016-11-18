@@ -1,0 +1,11 @@
+--- ./buildbot_worker/scripts/logwatcher.py  2016-11-10 23:25:46.956000000 +0100
++++ ./buildbot_worker/scripts/logwatcher.py.fix  2016-11-10 23:24:33.225000000 +0100
+@@ -76,7 +76,7 @@
+         if platform.system().lower() == 'sunos' and os.path.exists('/usr/xpg4/bin/tail'):
+             tailBin = "/usr/xpg4/bin/tail"
+         else:
+-            tailBin = "/usr/bin/tail"
++            tailBin = "tail"
+         self.p = reactor.spawnProcess(self.pp, tailBin,
+                                       ("tail", "-f", "-n", "0", self.logfile),
+                                       env=os.environ,
