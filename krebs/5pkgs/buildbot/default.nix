@@ -55,6 +55,9 @@ pythonPackages.buildPythonApplication (rec {
 
   ] ++ plugins;
 
+  patchPhase = ''
+    patch -p1 < ${./irc_messages.patch}
+  '';
   preInstall = ''
     # writes out a file that can't be read properly
     sed -i.bak -e '69,84d' buildbot/test/unit/test_www_config.py
