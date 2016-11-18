@@ -66,7 +66,7 @@ in
       PULSE_RUNTIME_PATH = "${runDir}/home";
     };
     serviceConfig = {
-      ExecStart = "${pkg}/bin/pulseaudio";
+      ExecStart = "${pkg}/bin/pulseaudio --exit-idle-time=-1";
       ExecStartPre = pkgs.writeDash "pulse-start" ''
         install -o pulse -g pulse -m 0750 -d ${runDir}
         install -o pulse -g pulse -m 0700 -d ${runDir}/home
