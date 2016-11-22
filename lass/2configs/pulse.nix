@@ -26,7 +26,7 @@ let
   '';
 
   daemonConf = pkgs.writeText "daemon.conf" ''
-    exit-idle-time=0
+    exit-idle-time=-1
     flat-volumes = no
     default-fragments = 4
     default-fragment-size-msec = 25
