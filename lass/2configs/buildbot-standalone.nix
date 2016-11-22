@@ -13,8 +13,8 @@ in {
   config.krebs.buildbot.master = let
     stockholm-mirror-url = http://cgit.prism/stockholm ;
   in {
-    slaves = {
-      testslave = "lasspass";
+    workers = {
+      testworker = "lasspass";
     };
     change_source.stockholm = ''
       stockholm_repo = '${stockholm-mirror-url}'
@@ -36,7 +36,7 @@ in {
     };
     builder_pre = ''
       # prepare grab_repo step for stockholm
-      grab_repo = steps.Git(repourl=stockholm_repo, mode='incremental')
+      grab_repo = steps.Git(repourl=stockholm_repo, mode='incremental', alwaysUseLatest=True)
 
       # TODO: get nixpkgs/stockholm paths from krebs
       env_lass = {
@@ -94,7 +94,7 @@ in {
                             system={}".format(i)])
 
         bu.append(util.BuilderConfig(name="build-all",
-              slavenames=slavenames,
+              workernames=workernames,
               factory=f))
 
       '';
@@ -152,7 +152,7 @@ in {
                         make system=prism pkgs.{}".format(i)])
 
         bu.append(util.BuilderConfig(name="build-pkgs",
-              slavenames=slavenames,
+              workernames=workernames,
               factory=f))
             '';
     };
@@ -162,15 +162,15 @@ in {
       enable = true;
       nick = "buildbot-lass";
       server = "ni.r";
-      channels = [ { channels = "retiolum"; } ];
+      channels = [ { channel = "retiolum"; } ];
       allowForce = true;
     };
   };
 
-  config.krebs.buildbot.slave = {
+  config.krebs.buildbot.worker = {
     enable = true;
     masterhost = "localhost";
-    username = "testslave";
+    username = "testworker";
     password = "lasspass";
     packages = with pkgs; [ gnumake jq nix populate ];
     extraEnviron = {
@@ -190,8 +190,8 @@ in {
   options.lass.build-ssh-privkey = mkOption {
     type = types.secret-file;
     default = {
-      path = "${config.users.users.buildbotSlave.home}/ssh.privkey";
-      owner = { inherit (config.users.users.buildbotSlave ) name uid;};
+      path = "${config.users.users.buildbotworker.home}/ssh.privkey";
+      owner = { inherit (config.users.users.buildbotworker ) name uid;};
       source-path = toString <secrets> + "/build.ssh.key";
     };
   };

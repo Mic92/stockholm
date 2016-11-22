@@ -142,8 +142,7 @@ in {
     }
     {
       users.users.chat.openssh.authorizedKeys.keys = [
-        "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAHF9tijlMoEevRZCG1AggukxWggfxPHUwg6Ye113ODG6PZ2m98oSmnsjixDy4GfIJjy+8HBbkwS6iH+fsNk86QtAgFNMjBl+9YvEzNRBzcyCqdOkZFvvZvV2oYA7I15il4ln62PDPKjEIS3YPhZPSwc6GhrlsFTnIG56NF/93IhF7R/FA== JuiceSSH"
-        config.krebs.users.lass-uriel.pubkey
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDiupmvj8gmiqIUTk9t4AOZ6bYvIpMMuNZULwIu/lbq8epK+FyvjRtCxqkLgFw0BfNYHzT9fxJ3kZY+nf/pnpI0j8TRwLAyPnfKuBfehrtzjdNbf1jCB9BQAaLoBHkLUFLJxskIC11nHx5KJVJvZBZZ6Odq1WIb4RZXjtEreQfvF8+YyFgHQ/epmQupKK6agHGkjtqvH+hz//dwDqHU9orj8MCWxNaa2wUgn+5laAvpLS15MQeCDIz8GJtJWToETY6bvldiLp2hIAJmgx8LIecV1h7YPR81Rk80gIk3f0PDfsLnnM6ibkI5p8NGh7nRKAdf+W90HpBIHKMRpRkMYvgL3ejVuKJZyzhYKUArA6egNRAN2d67eOpR/yKV5LjRxv+JBCOln5ynDbAmP4Hq98h+0K9Md7VavrRJzzPRTH3MPx+OKqsnRBRjhKsRFIUaO6/TBjZF4RCbbSSbvBW1u+qbTWX1MGUJNB5huL/OIBdHHcTb6GI3W4Svtgq4in2KI4COBhUJogm5UmaXRHtgqvn8byxutIsXMOTFjjdDK6r7mmOj1mzlu5wEHAV6FRsII92pf4WO2GYEUxz1ABu4HvRsVKlvYoEwwBhpXecTve6nogAiDvuxHjUX1eup3If3s4SvNirNPPUQuzNriYJ4JXiU6pGCJcBgxhl+NQ7ajxCdaw== JuiceSSH"
       ];
     }
     {
