@@ -91,6 +91,7 @@ rec {
 
     writers.text =
       { path
+      , check ? null
       , executable ? false
       , mode ? if executable then "0755" else "0644"
       , text
@@ -102,6 +103,9 @@ rec {
         var = "file_${hashString "sha1" path}";
         val = text;
         install = /* sh */ ''
+          ${optionalString (check != null) /* sh */ ''
+            ${check} ''$${var}Path
+          ''}
           ${pkgs.coreutils}/bin/install -m ${mode} -D ''$${var}Path $out${path}
         '';
       };
