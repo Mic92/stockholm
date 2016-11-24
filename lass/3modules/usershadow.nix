@@ -70,9 +70,7 @@
         extra-depends = deps;
         text = ''
           import Data.Monoid
-          import System.IO
-          import Data.Char (chr)
-          import System.Environment (getEnv, getArgs)
+          import System.Environment (getArgs)
           import Crypto.PasswordStore (verifyPasswordWith, pbkdf2)
           import qualified Data.ByteString.Char8 as BS8
           import System.Exit (exitFailure, exitSuccess)
@@ -96,16 +94,29 @@
           import System.Environment (getEnv)
           import Crypto.PasswordStore (makePasswordWith, pbkdf2)
           import qualified Data.ByteString.Char8 as BS8
-          import System.IO (stdin, hSetEcho, putStrLn)
+          import System.IO (stdin, stdout, hSetEcho, hFlush, putStr, putStrLn)
+          import Control.Exception (bracket_)
 
           main :: IO ()
           main = do
             home <- getEnv "HOME"
-            putStrLn "password:"
-            hSetEcho stdin False
-            password <- BS8.hGetLine stdin
-            hash <- makePasswordWith pbkdf2 password 10
-            BS8.writeFile (home ++ "/.shadow") hash
+            mb_password <- bracket_ (hSetEcho stdin False) (hSetEcho stdin True) $ do
+              putStr "Enter new UNIX password: "
+              hFlush stdout
+              password <- BS8.hGetLine stdin
+              putStrLn ""
+              putStr "Retype new UNIX password: "
+              hFlush stdout
+              password2 <- BS8.hGetLine stdin
+              return $ if password == password2
+                then Just password
+                else Nothing
+            case mb_password of
+              Just password -> do
+                hash <- makePasswordWith pbkdf2 password 10
+                BS8.writeFile (home ++ "/.shadow") hash
+                putStrLn "passwd: all authentication tokens updated successfully."
+              Nothing -> putStrLn "Sorry, passwords do not match"
         '';
       };
     };
