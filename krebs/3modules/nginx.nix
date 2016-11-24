@@ -53,9 +53,22 @@ let
             default = "";
           };
           ssl = mkOption {
-            type = with types; submodule ({
+            type = with types; submodule ({ config, ... }: {
               options = {
                 enable = mkEnableOption "ssl";
+                acmeEnable = mkOption {
+                  type = bool;
+                  apply = x:
+                    if x && config.enable
+                      #conflicts because of certificate/certificate_key location
+                      then throw "can't use ssl.enable and ssl.acmeEnable together"
+                      else x;
+                  default = false;
+                  description = ''
+                    enables automatical generation of lets-encrypt certificates and setting them as certificate
+                    conflicts with ssl.enable
+                  '';
+                };
                 certificate = mkOption {
                   type = str;
                 };
@@ -95,6 +108,7 @@ let
   };
 
   imp = {
+    security.acme.certs = mapAttrs (_: to-acme) (filterAttrs (_: server: server.ssl.acmeEnable) cfg.servers);
     services.nginx = {
       enable = true;
       httpConfig = ''
@@ -117,13 +131,24 @@ let
 
   indent = replaceChars ["\n"] ["\n  "];
 
+  to-acme = { server-names, ssl, ... }:
+    optionalAttrs ssl.acmeEnable {
+      email = "lassulus@gmail.com";
+      webroot = "${config.security.acme.directory}/${head server-names}";
+    };
+
   to-location = { name, value }: ''
     location ${name} {
       ${indent value}
     }
   '';
 
-  to-server = { server-names, listen, locations, extraConfig, ssl, ... }: ''
+  to-server = { server-names, listen, locations, extraConfig, ssl, ... }: let
+    domain = head server-names;
+    acmeLocation = optionalAttrs ssl.acmeEnable (nameValuePair "/.well-known/acme-challenge" ''
+      root ${config.security.acme.certs.${domain}.webroot};
+    '');
+  in ''
     server {
       server_name ${toString (unique server-names)};
       ${concatMapStringsSep "\n" (x: indent "listen ${x};") listen}
@@ -142,7 +167,23 @@ let
         ssl_ciphers ${ssl.ciphers};
         ssl_protocols ${toString ssl.protocols};
       '')}
+      ${optionalString ssl.acmeEnable (indent ''
+        ${optionalString ssl.force_encryption ''
+          if ($scheme = http){
+            return 301 https://$server_name$request_uri;
+          }
+        ''}
+        listen 443 ssl;
+        ssl_certificate ${config.security.acme.directory}/${domain}/fullchain.pem;
+        ssl_certificate_key ${config.security.acme.directory}/${domain}/key.pem;
+        ${optionalString ssl.prefer_server_ciphers ''
+          ssl_prefer_server_ciphers On;
+        ''}
+        ssl_ciphers ${ssl.ciphers};
+        ssl_protocols ${toString ssl.protocols};
+      '')}
       ${indent extraConfig}
+      ${optionalString ssl.acmeEnable (indent (to-location acmeLocation))}
       ${indent (concatMapStrings to-location locations)}
     }
   '';
