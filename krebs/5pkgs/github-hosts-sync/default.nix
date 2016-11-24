@@ -19,6 +19,7 @@ stdenv.mkDerivation {
         git
         gnugrep
         gnused
+        nettools
         openssh
         socat
       ]);
