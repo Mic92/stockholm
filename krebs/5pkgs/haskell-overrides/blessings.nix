@@ -1,11 +1,11 @@
 { mkDerivation, base, fetchgit, stdenv }:
-mkDerivation {
+mkDerivation rec {
   pname = "blessings";
-  version = "1.0.0";
+  version = "1.1.0";
   src = fetchgit {
     url = http://cgit.ni.krebsco.de/blessings;
-    rev = "25a510dcb38ea9158e9969d56eb66cb1b860ab5f";
-    sha256 = "0xg329h1y68ndg4w3m1jp38pkg3gqg7r19q70gqqj4mswb6qcrqc";
+    rev = "refs/tags/v${version}";
+    sha256 = "1k908zap3694fcxdk4bb29s54b0lhdh557y10ybjskfwnym7szn1";
   };
   libraryHaskellDepends = [ base ];
   doHaddock = false;

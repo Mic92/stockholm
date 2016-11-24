@@ -2,6 +2,6 @@
 
 fetchgit {
   url = https://github.com/krebscode/painload;
-  rev = "8df031f810a2776d8c43b03a9793cb49398bd33b";
-  sha256 = "03md5k6fmz0j1ny22iw96dzq7cvijbz24ii85i0h2dhcychdp650";
+  rev = "c113487f73713a03b1a139b22bb34b86234d0495";
+  sha256 = "1irxklnmvm8wsa70ypjahkr8rfqq7357vcy8r0x1sfncs1hy6gr6";
 }
