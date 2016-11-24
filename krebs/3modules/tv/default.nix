@@ -78,7 +78,9 @@ with import <stockholm/lib>;
       extraZones = {
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
         "krebsco.de" = ''
+          krebsco.de. 60 IN MX 5 mx23
           cd          60 IN A ${config.krebs.hosts.cd.nets.internet.ip4.addr}
+          mx23        60 IN A ${config.krebs.hosts.cd.nets.internet.ip4.addr}
         '';
       };
       nets = {
@@ -213,7 +215,6 @@ with import <stockholm/lib>;
     ni = {
       extraZones = {
         "krebsco.de" = ''
-          krebsco.de. 60 IN MX 5 ni
           ni          60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
           cgit        60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
           cgit.ni     60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
