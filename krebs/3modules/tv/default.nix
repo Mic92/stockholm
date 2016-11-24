@@ -351,11 +351,17 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcJvu8JDVzObLUtlAQg9qVugthKSfitwCljuJ5liyHa";
     };
     xu = {
+      binary-cache = {
+        pubkey = "xu-1:pYRENvaxZqGeImwLA9qHmRwHV4jfKaYx4u1VcZ31x0s=";
+      };
       cores = 4;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.38";
-          aliases = ["xu.gg23"];
+          aliases = [
+            "cache.xu.gg23"
+            "xu.gg23"
+          ];
           ssh.port = 11423;
         };
         retiolum = {

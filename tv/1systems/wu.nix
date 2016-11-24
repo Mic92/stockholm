@@ -16,7 +16,6 @@ with import <stockholm/lib>;
     ../2configs/nginx/public_html.nix
     ../2configs/pulse.nix
     ../2configs/retiolum.nix
-    ../2configs/wu-binary-cache
     ../2configs/xserver
     {
       environment.systemPackages = with pkgs; [
