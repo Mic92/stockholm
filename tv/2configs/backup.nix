@@ -58,6 +58,18 @@ with import <stockholm/lib>;
       dst = { host = config.krebs.hosts.xu; path = "/bku/cd-home"; };
       startAt = "07:00";
     };
+    xu-pull-ni-ejabberd = {
+      method = "pull";
+      src = { host = config.krebs.hosts.ni; path = "/var/ejabberd"; };
+      dst = { host = config.krebs.hosts.xu; path = "/bku/ni-ejabberd"; };
+      startAt = "07:00";
+    };
+    xu-pull-ni-home = {
+      method = "pull";
+      src = { host = config.krebs.hosts.ni; path = "/home"; };
+      dst = { host = config.krebs.hosts.xu; path = "/bku/ni-home"; };
+      startAt = "07:00";
+    };
     zu-home-xu = {
       method = "push";
       src = { host = config.krebs.hosts.zu; path = "/home"; };
@@ -74,6 +86,18 @@ with import <stockholm/lib>;
       method = "pull";
       src = { host = config.krebs.hosts.cd; path = "/home"; };
       dst = { host = config.krebs.hosts.zu; path = "/bku/cd-home"; };
+      startAt = "06:30";
+    };
+    zu-pull-ni-ejabberd = {
+      method = "pull";
+      src = { host = config.krebs.hosts.ni; path = "/var/ejabberd"; };
+      dst = { host = config.krebs.hosts.zu; path = "/bku/ni-ejabberd"; };
+      startAt = "06:00";
+    };
+    zu-pull-ni-home = {
+      method = "pull";
+      src = { host = config.krebs.hosts.ni; path = "/home"; };
+      dst = { host = config.krebs.hosts.zu; path = "/bku/ni-home"; };
       startAt = "06:30";
     };
   } // mapAttrs (_: recursiveUpdate {
