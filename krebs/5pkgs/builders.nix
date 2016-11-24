@@ -37,7 +37,17 @@ rec {
       };
     };
 
-  writeBash = makeScriptWriter "${pkgs.bash}/bin/bash";
+  writeBash = name: text:
+    assert (with types; either absolute-pathname filename).check name;
+    pkgs.writeOut (baseNameOf name) {
+      ${optionalString (types.absolute-pathname.check name) name} = {
+        check = pkgs.writeDash "shellcheck.sh" ''
+          ${pkgs.haskellPackages.ShellCheck}/bin/shellcheck "$1" || :
+        '';
+        executable = true;
+        text = "#! ${pkgs.bash}/bin/bash\n${text}";
+      };
+    };
 
   writeBashBin = name:
     assert types.filename.check name;
