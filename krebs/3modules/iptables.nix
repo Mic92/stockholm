@@ -46,6 +46,14 @@ let
                   type = int;
                   default = 0;
                 };
+                v4 = mkOption {
+                  type = bool;
+                  default = true;
+                };
+                v6 = mkOption {
+                  type = bool;
+                  default = true;
+                };
               };
             })));
             default = null;
@@ -90,7 +98,8 @@ let
 
       buildChain = tn: cn:
         let
-          sortedRules = sort (a: b: a.precedence > b.precedence) ts."${tn}"."${cn}".rules;
+          filteredRules = filter (r: r."${v}") ts."${tn}"."${cn}".rules;
+          sortedRules = sort (a: b: a.precedence > b.precedence) filteredRules;
 
         in
           #TODO: double check should be unneccessary, refactor!
