@@ -31,6 +31,7 @@ in {
   environment.systemPackages = with pkgs; [
 
     acpi
+    dic
     dmenu
     gitAndTools.qgit
     lm_sensors
