@@ -12,7 +12,7 @@ let
 
   msmtp = pkgs.writeBashBin "msmtp" ''
     ${pkgs.coreutils}/bin/tee >(${pkgs.notmuch}/bin/notmuch insert +sent) | \
-      ${pkgs.msmtp}/bin/msmtp -C ${msmtprc} $@
+      ${pkgs.msmtp}/bin/msmtp -C ${msmtprc} "$@"
   '';
 
   muttrc = pkgs.writeText "muttrc" ''

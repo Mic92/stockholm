@@ -29,8 +29,10 @@ let
     cac-api = {
       cgit.desc = "CloudAtCost API command line interface";
     };
+    dic = {
+      cgit.desc = "dict.leo.org command line interface";
+    };
     get = {};
-    hack = {};
     load-env = {};
     loldns = {
       cgit.desc = "toy DNS server";
@@ -40,12 +42,9 @@ let
     netcup = {
       cgit.desc = "netcup command line interface";
     };
-    newsbot-js = {};
-    nixpkgs = {};
     populate = {
       cgit.desc = "source code installer";
     };
-    push = {};
     regfish = {};
     soundcloud = {
       cgit.desc = "SoundCloud command line interface";
@@ -53,8 +52,10 @@ let
     stockholm = {
       cgit.desc = "NixOS configuration";
     };
-    with-tmpdir = {};
-  } // mapAttrs (_: recursiveUpdate { cgit.section = "2. Haskell libraries"; }) {
+  } // mapAttrs (_: recursiveUpdate { cgit.section = "2. Host configurations"; }) {
+    ni = {
+    };
+  } // mapAttrs (_: recursiveUpdate { cgit.section = "3. Haskell libraries"; }) {
     blessings = {};
     mime = {};
     quipper = {};
@@ -63,12 +64,15 @@ let
     web-routes-wai-custom = {};
     xintmap = {};
     xmonad-stockholm = {};
-  } // mapAttrs (_: recursiveUpdate { cgit.section = "3. museum"; }) {
+  } // mapAttrs (_: recursiveUpdate { cgit.section = "4. museum"; }) {
     cgserver = {};
     crude-mail-setup = {};
     dot-xmonad = {};
+    make-snapshot = {};
     nixos-infest = {};
     painload = {};
+    push = {};
+    with-tmpdir = {};
   });
 
   restricted-repos = mapAttrs make-restricted-repo (

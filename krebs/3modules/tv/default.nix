@@ -78,7 +78,9 @@ with import <stockholm/lib>;
       extraZones = {
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
         "krebsco.de" = ''
+          krebsco.de. 60 IN MX 5 mx23
           cd          60 IN A ${config.krebs.hosts.cd.nets.internet.ip4.addr}
+          mx23        60 IN A ${config.krebs.hosts.cd.nets.internet.ip4.addr}
         '';
       };
       nets = {
@@ -213,7 +215,6 @@ with import <stockholm/lib>;
     ni = {
       extraZones = {
         "krebsco.de" = ''
-          krebsco.de. 60 IN MX 5 ni
           ni          60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
           cgit        60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
           cgit.ni     60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
@@ -351,11 +352,17 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcJvu8JDVzObLUtlAQg9qVugthKSfitwCljuJ5liyHa";
     };
     xu = {
+      binary-cache = {
+        pubkey = "xu-1:pYRENvaxZqGeImwLA9qHmRwHV4jfKaYx4u1VcZ31x0s=";
+      };
       cores = 4;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.38";
-          aliases = ["xu.gg23"];
+          aliases = [
+            "cache.xu.gg23"
+            "xu.gg23"
+          ];
           ssh.port = 11423;
         };
         retiolum = {

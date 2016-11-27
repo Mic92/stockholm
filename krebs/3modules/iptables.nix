@@ -1,31 +1,12 @@
 { config, lib, pkgs, ... }:
 
+with import <stockholm/lib>;
+
 let
   inherit (pkgs) writeText;
 
   inherit (builtins)
     elem
-  ;
-
-  inherit (lib)
-    concatMapStringsSep
-    concatStringsSep
-    attrNames
-    unique
-    fold
-    any
-    attrValues
-    catAttrs
-    filter
-    flatten
-    length
-    hasAttr
-    hasPrefix
-    mkEnableOption
-    mkOption
-    mkIf
-    types
-    sort
   ;
 
   cfg = config.krebs.iptables;
@@ -65,6 +46,14 @@ let
                   type = int;
                   default = 0;
                 };
+                v4 = mkOption {
+                  type = bool;
+                  default = true;
+                };
+                v6 = mkOption {
+                  type = bool;
+                  default = true;
+                };
               };
             })));
             default = null;
@@ -93,7 +82,7 @@ let
         Type = "simple";
         RemainAfterExit = true;
         Restart = "always";
-        ExecStart = "@${startScript} krebs-iptables_start";
+        ExecStart = startScript;
       };
     };
   };
@@ -109,7 +98,8 @@ let
 
       buildChain = tn: cn:
         let
-          sortedRules = sort (a: b: a.precedence > b.precedence) ts."${tn}"."${cn}".rules;
+          filteredRules = filter (r: r."${v}") ts."${tn}"."${cn}".rules;
+          sortedRules = sort (a: b: a.precedence > b.precedence) filteredRules;
 
         in
           #TODO: double check should be unneccessary, refactor!
@@ -123,13 +113,6 @@ let
 
 
       buildRule = tn: cn: rule:
-        #target validation test:
-        assert (elem rule.target ([ "ACCEPT" "REJECT" "DROP" "QUEUE" "LOG" "RETURN" ] ++ (attrNames ts."${tn}"))) || hasPrefix "REDIRECT" rule.target || hasPrefix "DNAT" rule.target;
-
-        #predicate validation test:
-        #maybe use iptables-test
-        #TODO: howto exit with evaluation error by shellscript?
-          #apperantly not possible from nix because evalatution wouldn't be deterministic.
         "${rule.predicate} -j ${rule.target}";
 
       buildTable = tn:
@@ -149,7 +132,7 @@ let
 
 #=====
 
-  rules4 = iptables-version:
+  rules = iptables-version:
     let
       #TODO: find out good defaults.
       tables-defaults = {
@@ -171,14 +154,14 @@ let
       tables = tables-defaults // cfg.tables;
 
     in
-      writeText "krebs-iptables-rules${toString iptables-version}" ''
+      pkgs.writeText "krebs-iptables-rules${iptables-version}" ''
         ${buildTables iptables-version tables}
       '';
 
   startScript = pkgs.writeDash "krebs-iptables_start" ''
     set -euf
-    iptables-restore < ${rules4 4}
-    ip6tables-restore < ${rules4 6}
+    iptables-restore < ${rules "v4"}
+    ip6tables-restore < ${rules "v6"}
   '';
 
 in

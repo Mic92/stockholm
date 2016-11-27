@@ -8,28 +8,29 @@ rec {
     let
       domain = head domains;
     in {
-      security.acme = {
-        certs."${domain}" = {
-          email = "lassulus@gmail.com";
-          webroot = "/var/lib/acme/challenges/${domain}";
-          plugins = [
-            "account_key.json"
-            "key.pem"
-            "fullchain.pem"
-          ];
-          group = "nginx";
-          allowKeysForGroup = true;
-          extraDomains = genAttrs domains (_: null);
-        };
-      };
+      #security.acme = {
+      #  certs."${domain}" = {
+      #    email = "lassulus@gmail.com";
+      #    webroot = "/var/lib/acme/challenges/${domain}";
+      #    plugins = [
+      #      "account_key.json"
+      #      "key.pem"
+      #      "fullchain.pem"
+      #    ];
+      #    group = "nginx";
+      #    allowKeysForGroup = true;
+      #    extraDomains = genAttrs domains (_: null);
+      #  };
+      #};
 
       krebs.nginx.servers."${domain}" = {
+        ssl.acmeEnable = true;
         server-names = domains;
-        locations = [
-          (nameValuePair "/.well-known/acme-challenge" ''
-            root /var/lib/acme/challenges/${domain}/;
-          '')
-        ];
+        #locations = [
+        #  (nameValuePair "/.well-known/acme-challenge" ''
+        #    root /var/lib/acme/challenges/${domain}/;
+        #  '')
+        #];
       };
     };
 
@@ -37,7 +38,7 @@ rec {
     {
       imports = [
         ( manageCerts domains )
-        ( activateACME (head domains) )
+        #( activateACME (head domains) )
       ];
     };
 
