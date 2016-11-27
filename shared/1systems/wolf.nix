@@ -25,10 +25,10 @@ in
   services.grafana = {
     enable = true;
     addr = "0.0.0.0";
-    extraOptions = { "AUTH_ANONYMOUS_ENABLED" = "true"; };
     users.allowSignUp = true;
     users.allowOrgCreate = true;
     users.autoAssignOrg = true;
+    auth.anonymous.enable = true;
     security = import <secrets/grafana_security.nix>;
   };
 
