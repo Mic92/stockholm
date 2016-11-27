@@ -88,6 +88,7 @@ rec {
           # set max upload size
           client_max_body_size 10G;
           fastcgi_buffers 64 4K;
+          fastcgi_read_timeout 120;
 
           # Disable gzip to avoid the removal of the ETag header
           gzip off;
@@ -164,10 +165,11 @@ rec {
         user = nginx
         group = nginx
         pm = dynamic
-        pm.max_children = 5
+        pm.max_children = 32
+        pm.max_requests = 500
         pm.start_servers = 2
-        pm.min_spare_servers = 1
-        pm.max_spare_servers = 3
+        pm.min_spare_servers = 2
+        pm.max_spare_servers = 5
         listen.owner = nginx
         listen.group = nginx
         php_admin_value[error_log] = 'stderr'
