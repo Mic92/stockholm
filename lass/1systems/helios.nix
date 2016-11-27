@@ -28,6 +28,9 @@ with import <stockholm/lib>;
       services.xserver.enable = true;
       services.xserver.desktopManager.xfce.enable = true;
       networking.wireless.enable = true;
+      hardware.pulseaudio = {
+        enable = true;
+      };
       users.users.ferret = {
         uid = genid "ferret";
         home = "/home/ferret";
