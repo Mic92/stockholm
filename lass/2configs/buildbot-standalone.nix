@@ -36,7 +36,7 @@ in {
     };
     builder_pre = ''
       # prepare grab_repo step for stockholm
-      grab_repo = steps.Git(repourl=stockholm_repo, mode='incremental', alwaysUseLatest=True)
+      grab_repo = steps.Git(repourl=stockholm_repo, mode='full')
 
       # TODO: get nixpkgs/stockholm paths from krebs
       env_lass = {

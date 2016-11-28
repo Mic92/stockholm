@@ -17,7 +17,6 @@ with import <stockholm/lib>;
     ../2configs/elster.nix
     ../2configs/steam.nix
     ../2configs/wine.nix
-    ../2configs/chromium-patched.nix
     ../2configs/git.nix
     ../2configs/skype.nix
     ../2configs/teamviewer.nix
