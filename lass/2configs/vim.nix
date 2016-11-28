@@ -175,8 +175,8 @@ let
     "Syntastic config
     let g:syntastic_python_checkers=['flake8']
 
-    nmap <esc>q :buffer
-    nmap <M-q> :buffer
+    nmap <esc>q :buffer 
+    nmap <M-q> :buffer 
 
     cnoremap <C-A> <Home>
 
