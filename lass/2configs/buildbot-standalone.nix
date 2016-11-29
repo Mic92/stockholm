@@ -35,7 +35,7 @@ in {
                   change_filter=util.ChangeFilter(branch_re=".*"),
                   treeStableTimer=10,
                   name="build-all-branches",
-                  builderNames=["build-all", "build-pkgs"]
+                  builderNames=["build-hosts", "build-pkgs"]
               )
         )
       '';
@@ -87,7 +87,7 @@ in {
         factory.addStep(steps.ShellCommand(**kwargs))
     '';
     builder = {
-      build-all = ''
+      build-hosts = ''
         f = util.BuildFactory()
         f.addStep(grab_repo)
         for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" ]:
@@ -128,7 +128,7 @@ in {
 
         bu.append(
             util.BuilderConfig(
-                name="build-all",
+                name="build-hosts",
                 workernames=workernames,
                 factory=f
             )
