@@ -90,6 +90,17 @@ in {
       build-all = ''
         f = util.BuildFactory()
         f.addStep(grab_repo)
+        for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" ]:
+            addShell(f,name="build-{}".format(i),env=env_shared,
+                command=nixshell + \
+                    ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+                        make \
+                            test \
+                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
+                            method=build \
+                            system={}".format(i)
+                    ]
+            )
 
         for i in [ "mors", "uriel", "shodan", "helios", "cloudkrebs", "echelon", "dishfire", "prism" ]:
             addShell(f,name="build-{}".format(i),env=env_lass,
