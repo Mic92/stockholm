@@ -36,6 +36,7 @@ in {
     gitAndTools.qgit
     lm_sensors
     much
+    ncdu
     nmap
     pavucontrol
     powertop
