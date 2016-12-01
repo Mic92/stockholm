@@ -29,9 +29,10 @@ let
     tables = mkOption {
       type = with types; attrsOf (attrsOf (submodule ({
         options = {
+          #TODO: find out good defaults.
           policy = mkOption {
             type = str;
-            default = "-";
+            default = "ACCEPT";
           };
           rules = mkOption {
             type = nullOr (listOf (submodule ({
@@ -133,30 +134,9 @@ let
 #=====
 
   rules = iptables-version:
-    let
-      #TODO: find out good defaults.
-      tables-defaults = {
-        nat.PREROUTING.policy = "ACCEPT";
-        nat.INPUT.policy = "ACCEPT";
-        nat.OUTPUT.policy = "ACCEPT";
-        nat.POSTROUTING.policy = "ACCEPT";
-        filter.INPUT.policy = "ACCEPT";
-        filter.FORWARD.policy = "ACCEPT";
-        filter.OUTPUT.policy = "ACCEPT";
-
-        #if someone specifies any other rules on this chain, the default rules get lost.
-        #is this wanted beahiviour or a bug?
-        #TODO: implement abstraction of rules
-        filter.INPUT.rules = [
-          { predicate = "-m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; }
-        ];
-      };
-      tables = tables-defaults // cfg.tables;
-
-    in
-      pkgs.writeText "krebs-iptables-rules${iptables-version}" ''
-        ${buildTables iptables-version tables}
-      '';
+    pkgs.writeText "krebs-iptables-rules${iptables-version}" ''
+      ${buildTables iptables-version cfg.tables}
+    '';
 
   startScript = pkgs.writeDash "krebs-iptables_start" ''
     set -euf
