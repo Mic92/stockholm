@@ -25,6 +25,16 @@ with import <stockholm/lib>;
     ];
   };
 
+  # Don't use UEFI because current disk was partitioned/formatted for AO753.
+  # TODO remove following bool.loader section after repartitioning/reformatting
+  boot.loader = {
+    grub = {
+      device = "/dev/sda";
+      splashImage = null;
+    };
+    systemd-boot.enable = mkForce false;
+  };
+
   fileSystems."/" =
     { device = "/dev/mapper/nomic1-root";
       fsType = "btrfs";
