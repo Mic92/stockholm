@@ -7,11 +7,8 @@ in {
     ./xserver
     ./mpv.nix
     ./power-action.nix
+    ./pulse.nix
   ];
-  hardware.pulseaudio = {
-    enable = true;
-    systemWide = true;
-  };
 
   users.extraUsers.mainUser.extraGroups = [ "audio" "video" ];
 
