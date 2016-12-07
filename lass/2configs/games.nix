@@ -3,7 +3,7 @@
 let
   mainUser = config.users.extraUsers.mainUser;
   vdoom = pkgs.writeDash "vdoom" ''
-    ${pkgs.zandronum}/bin/zandronum \
+    ${pkgs.zandronum-bin}/bin/zandronum \
       -fov 120 \
       "$@"
   '';
