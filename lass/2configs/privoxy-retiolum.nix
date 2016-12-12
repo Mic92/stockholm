@@ -14,6 +14,7 @@ in {
     tables = {
       filter.INPUT.rules = [
         { predicate = "-i retiolum -p tcp --dport 8118"; target = "ACCEPT"; }
+        { predicate = "-i dns0 -p tcp --dport 8118"; target = "ACCEPT"; }
       ];
     };
   };

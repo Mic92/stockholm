@@ -155,14 +155,13 @@ let
           to = concatMapStringsSep "," (getAttr "mail") (toList to);
         };
       in mapAttrsToList format (with config.krebs.users; let
-        eloop-ml = spam-ml ++ [ ciko Mic92 ];
+        eloop-ml = spam-ml ++ [ ciko ];
         spam-ml = [
           lass
           makefu
           tv
         ];
         ciko.mail = "wieczorek.stefan@gmail.com";
-        Mic92.mail = "joerg@higgsboson.tk";
       in {
         "anmeldung@eloop.org" = eloop-ml;
         "cfp@eloop.org" = eloop-ml;

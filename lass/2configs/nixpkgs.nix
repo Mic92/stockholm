@@ -3,6 +3,6 @@
 {
   krebs.build.source.nixpkgs.git = {
     url = https://github.com/nixos/nixpkgs;
-    ref = "ece0cea127f0a8799a6bd3b12c368193491f9058";
+    ref = "76f346d61d537f5bbe4f365f9f659df7024602b4";
   };
 }

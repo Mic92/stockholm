@@ -15,10 +15,6 @@ python3Packages.buildPythonPackage rec {
     requests2
   ];
 
-  postFixup = ''
-    wrapProgram "$out/bin/urlwatch" --prefix "PYTHONPATH" : "$PYTHONPATH"
-  '';
-
   meta = {
     description = "A tool for monitoring webpages for updates";
     homepage = https://thp.io/2008/urlwatch/;

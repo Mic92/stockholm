@@ -18,25 +18,34 @@ in {
     };
     change_source.stockholm = ''
       stockholm_repo = '${stockholm-mirror-url}'
-      cs.append(changes.GitPoller(
+      cs.append(
+          changes.GitPoller(
               stockholm_repo,
               workdir='stockholm-poller', branches=True,
               project='stockholm',
-              pollinterval=120))
+              pollinterval=120
+          )
+      )
     '';
     scheduler = {
       build-scheduler = ''
         # build all hosts
-        sched.append(schedulers.SingleBranchScheduler(
-                                    change_filter=util.ChangeFilter(branch_re=".*"),
-                                    treeStableTimer=10,
-                                    name="build-all-branches",
-                                    builderNames=["build-all", "build-pkgs"]))
+        sched.append(
+              schedulers.SingleBranchScheduler(
+                  change_filter=util.ChangeFilter(branch_re=".*"),
+                  treeStableTimer=10,
+                  name="build-all-branches",
+                  builderNames=["build-hosts", "build-pkgs"]
+              )
+        )
       '';
     };
     builder_pre = ''
       # prepare grab_repo step for stockholm
-      grab_repo = steps.Git(repourl=stockholm_repo, mode='full')
+      grab_repo = steps.Git(
+          repourl=stockholm_repo,
+          mode='full'
+      )
 
       # TODO: get nixpkgs/stockholm paths from krebs
       env_lass = {
@@ -57,45 +66,73 @@ in {
 
       # prepare nix-shell
       # the dependencies which are used by the test script
-      deps = [ "gnumake", "jq", "nix", "(import <stockholm>).pkgs.populate", "openssh" ]
+      deps = [
+        "gnumake",
+        "jq",
+        "nix",
+        "(import <stockholm>).pkgs.populate",
+        "openssh"
+      ]
       # TODO: --pure , prepare ENV in nix-shell command:
       #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
-      nixshell = ["nix-shell",
-                    "-I", "stockholm=.",
-                    "-I", "nixpkgs=/var/src/nixpkgs",
-                    "-p" ] + deps + [ "--run" ]
+      nixshell = [
+        "nix-shell",
+        "-I", "stockholm=.",
+        "-I", "nixpkgs=/var/src/nixpkgs",
+        "-p"
+      ] + deps + [ "--run" ]
 
       # prepare addShell function
       def addShell(factory,**kwargs):
         factory.addStep(steps.ShellCommand(**kwargs))
     '';
     builder = {
-      build-all = ''
+      build-hosts = ''
         f = util.BuildFactory()
         f.addStep(grab_repo)
-        for i in [ "mors", "uriel", "shodan", "helios", "cloudkrebs", "echelon", "dishfire", "prism" ]:
-          addShell(f,name="build-{}".format(i),env=env_lass,
-                  command=nixshell + \
-                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+        for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" ]:
+            addShell(f,name="build-{}".format(i),env=env_shared,
+                command=nixshell + \
+                    ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
                         make \
                             test \
                             target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
                             method=build \
-                            system={}".format(i)])
+                            system={}".format(i)
+                    ]
+            )
+
+        for i in [ "mors", "uriel", "shodan", "helios", "cloudkrebs", "echelon", "dishfire", "prism" ]:
+            addShell(f,name="build-{}".format(i),env=env_lass,
+                command=nixshell + \
+                    ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+                        make \
+                            test \
+                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
+                            method=build \
+                            system={}".format(i)
+                    ]
+            )
 
         for i in [ "x", "wry", "vbob", "wbob", "shoney" ]:
-          addShell(f,name="build-{}".format(i),env=env_makefu,
-                  command=nixshell + \
-                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+            addShell(f,name="build-{}".format(i),env=env_makefu,
+                command=nixshell + \
+                    ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
                         make \
                             test \
                             target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
                             method=build \
-                            system={}".format(i)])
+                            system={}".format(i)
+                    ]
+            )
 
-        bu.append(util.BuilderConfig(name="build-all",
-              workernames=workernames,
-              factory=f))
+        bu.append(
+            util.BuilderConfig(
+                name="build-hosts",
+                workernames=workernames,
+                factory=f
+            )
+        )
 
       '';
 

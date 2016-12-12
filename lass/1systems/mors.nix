@@ -13,7 +13,6 @@ with import <stockholm/lib>;
     ../2configs/browsers.nix
     ../2configs/games.nix
     ../2configs/pass.nix
-    ../2configs/virtualbox.nix
     ../2configs/elster.nix
     ../2configs/steam.nix
     ../2configs/wine.nix
@@ -78,6 +77,9 @@ with import <stockholm/lib>;
     }
     {
       services.redis.enable = true;
+    }
+    {
+      virtualisation.libvirtd.enable = true;
     }
   ];
 

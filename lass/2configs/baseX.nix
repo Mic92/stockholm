@@ -7,11 +7,8 @@ in {
     ./xserver
     ./mpv.nix
     ./power-action.nix
+    ./pulse.nix
   ];
-  hardware.pulseaudio = {
-    enable = true;
-    systemWide = true;
-  };
 
   users.extraUsers.mainUser.extraGroups = [ "audio" "video" ];
 
@@ -36,6 +33,7 @@ in {
     gitAndTools.qgit
     lm_sensors
     much
+    ncdu
     nmap
     pavucontrol
     powertop
@@ -52,6 +50,9 @@ in {
     yt-next
 
     youtube-tools
+
+    rxvt_unicode
+    termite
   #window manager stuff
     #haskellPackages.xmobar
     #haskellPackages.yeganesh
