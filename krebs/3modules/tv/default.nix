@@ -391,11 +391,13 @@ with import <stockholm/lib>;
     zu = {
       cores = 4;
       nets = {
-        #gg23 = {
-        #  ip4.addr = "";
-        #  aliases = ["zu.gg23"];
-        #  ssh.port = 11423;
-        #};
+        gg23 = {
+          ip4.addr = "10.23.1.39";
+          aliases = [
+            "zu.gg23"
+          ];
+          ssh.port = 11423;
+        };
         retiolum = {
           ip4.addr = "10.243.13.40";
           ip6.addr = "42:0:0:0:0:0:0:1340";
