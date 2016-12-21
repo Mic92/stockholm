@@ -7,7 +7,7 @@ with import <stockholm/lib>;
 
   imports = [
     ../.
-    ../2configs/hw/AO753.nix
+    ../2configs/hw/x220.nix
     ../2configs/exim-retiolum.nix
     ../2configs/git.nix
     ../2configs/im.nix
@@ -23,6 +23,16 @@ with import <stockholm/lib>;
     devices = [
       { name = "luks1"; device = "/dev/sda2"; }
     ];
+  };
+
+  # Don't use UEFI because current disk was partitioned/formatted for AO753.
+  # TODO remove following bool.loader section after repartitioning/reformatting
+  boot.loader = {
+    grub = {
+      device = "/dev/sda";
+      splashImage = null;
+    };
+    systemd-boot.enable = mkForce false;
   };
 
   fileSystems."/" =

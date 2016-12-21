@@ -18,13 +18,13 @@ with import <stockholm/lib>;
     ../2configs/wine.nix
     ../2configs/git.nix
     ../2configs/skype.nix
-    ../2configs/teamviewer.nix
     ../2configs/libvirt.nix
     ../2configs/fetchWallpaper.nix
     #../2configs/c-base.nix
     ../2configs/mail.nix
     ../2configs/krebs-pass.nix
     ../2configs/repo-sync.nix
+    ../2configs/ircd.nix
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
