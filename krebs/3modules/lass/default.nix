@@ -273,6 +273,33 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC9vup68R0I+62FK+8LNtwM90V9P4ukBmU7G7d54wf4C";
     };
+    icarus = {
+      cores = 2;
+      nets = rec {
+        retiolum = {
+          ip4.addr = "10.243.133.114";
+          ip6.addr = "42:0000:0000:0000:0000:0000:d15f:1214";
+          aliases = [
+            "icarus.retiolum"
+            "icarus.r"
+            "cgit.icarus.retiolum"
+            "cgit.icarus.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAydCY+IWzF8DocCNzPiUM+xccbiDTWS/+r2le812+O4r+sUojXuzr
+            Q4CeN+pi2SZHEOiRm3jO8sOkGlv4I1WGs/nOu5Beb4/8wFH6wbm4cqXTqH/qFwCK
+            7+9Bke8TUaoDj9E4ol9eyOx6u8Cto3ZRAUi6m1ilrfs1szFGS5ZX7mxI73uhki6t
+            k6Zb5sa9G8WLcLPIN7tk3Nd0kofd/smwxSN0mXoTgbAf1DZ3Fnkgox/M5VnwpPW7
+            zLzbWNFyLIgDGbQ5vZBlJW7c4O0KrMlftvEQ80GeZXaKNt6UK7LSAQ4Njn+8sXTt
+            gl0Dx29bSPU3L8udj0Vu6ul7CiQ5bZzUCQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOPgQIMYiyD4/Co+nlOQWEzCKssemOEXAY/lbIZZaMhj";
+    };
 
   };
   users = {
@@ -293,6 +320,10 @@ with import <stockholm/lib>;
       mail = "lass@shodan.retiolum";
       pubkey = builtins.readFile ./ssh/shodan.rsa;
       pgp.pubkeys.default = builtins.readFile ./pgp/shodan.pgp;
+    };
+    lass-icarus = {
+      mail = "lass@icarus.retiolum";
+      pubkey = builtins.readFile ./ssh/icarus.rsa;
     };
     fritz = {
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCz34435NSXgj72YAOL4cIlRq/4yInKEyL9no+gymURoW5x1nkYpP0EK331e7UyQQSOdWOogRo6d7YHcFqNlYWv5xlYcHucIhgJwC4Zda1liVA+v7tSOJz2BjmFvOT3/qlcPS69f3zdLHZooz2C33uHX1FgGRXlxiA8dpqGnSr8o76QLZjuQkuDqr8reOspjO/RHCo2Moq0Xm5q9OgN1WLAZzupqt9A5lx567mRzYsRAr23pUxVN8T/tSCgDlPe4ktEjYX9CXLKfMyh9WuBVi+AuH4GFEWBT+AMpsHeF45w+w956x56mz0F5nYOQNK87gFr+Jr+mh2AF1ot2CxzrfTb fritz@scriptkiddiT540";
