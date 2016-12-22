@@ -26,6 +26,31 @@ with import <stockholm/lib>;
             };
         };
     };
+    fileleech = rec {
+        cores = 4;
+        ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+jB5QdPsAJc90alYDhAEP3sPDJb6eIj9bebj+rTBEJ fileleech";
+        nets = {
+          retiolum = {
+            ip4.addr = "10.243.113.98";
+            ip6.addr  = "42:5cf1:e7f2:3fd:cd4c:a1ee:ec71:7096";
+            aliases = [
+                "fileleech.retiolum"
+            ];
+            tinc.pubkey = ''
+                -----BEGIN RSA PUBLIC KEY-----
+                MIIBCgKCAQEA2W20+jYvuFUjPQ+E+7Xlabf8fW/XSnTTelfo2uRcJ3FMLYQ9H3rF
+                8L8StPmxn8Q20FFH/MvRmgW8pU9z4RQ3nAi+utVYqAJQtOYA9FPMxssC08w82r0K
+                YC6sgc9MeRjnCjQxQrQs4fqA6KpqSLxRf2c6kfNwYRgCxFMns2ncxOiPOoGLZait
+                nJR3m0cSRm8yCTMbznlGH99+5+3HgvuBE/UYXmmGBs7w8DevaX76butzprZ8fm4z
+                e5C7R9ofdVW70GGksfSI81y5xODWMbfjTRHKm4OBX7NOCiOTwx1wu8bYDN3EzN6V
+                UM5PJfU42sViPEZmVuC8cDcP1xemHTkh9QIDAQAB
+                -----END RSA PUBLIC KEY-----
+              '';
+            };
+        };
+    };
+
     pnp = {
       cores = 1;
       nets = {
