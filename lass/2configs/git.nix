@@ -75,7 +75,7 @@ let
     with git // config.krebs.users;
     repo:
       singleton {
-        user = [ lass lass-uriel ];
+        user = [ lass lass-shodan ];
         repo = [ repo ];
         perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++
