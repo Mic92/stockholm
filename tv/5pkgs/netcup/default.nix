@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   name = "netcup-1.0.0";
   src = fetchgit {
     url = "http://cgit.ni.krebsco.de/netcup";
-    rev = "tags/v1.0.0";
-    sha256 = "0m6mk16pblvnapxykxdccvphslbv1gjfziyr86bnqin1xb1g99bq";
+    rev = "refs/tags/v1.0.0";
+    sha256 = "1rn7bncfhjw0bqjbvj38m7lks4nyf5qcvkj9dg0zr99ba6dylzx5";
   };
   phases = [ "unpackPhase" "patchPhase" "installPhase" ];
   patchPhase = ''
