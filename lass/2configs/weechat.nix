@@ -16,6 +16,7 @@ in {
     openssh.authorizedKeys.keys = [
       config.krebs.users.lass.pubkey
       config.krebs.users.lass-shodan.pubkey
+      config.krebs.users.lass-icarus.pubkey
     ];
   };
 
