@@ -73,22 +73,23 @@ let
       # authentication also applies to rtorrent.rutorrent
       enable = mkEnableOption "rtorrent nginx web RPC";
 
-      listenAddress = mkOption {
-        type = types.str;
+      port = mkOption {
+        type = types.nullOr types.int;
         description =''
-          nginx listen address for rtorrent web
+          nginx listen port for rtorrent
         '';
-        default = "localhost:8006";
+        default = 8006;
       };
 
-      enableAuth = mkEnableOption "rutorrent authentication";
-      authfile = mkOption {
-        type = types.path;
+      basicAuth = mkOption {
+        type = types.attrsOf types.str ;
         description = ''
-          basic authentication file to be used.
-          Use `${pkgs.apacheHttpd}/bin/htpasswd -c <file> <username>` to create the file.
-          Only in use if authentication is enabled.
+          basic authentication to be used. If unset, no authentication will be
+          enabled.
+
+          Refer to `services.nginx.virtualHosts.<name>.basicAuth`
         '';
+        default = {};
       };
     };
 
@@ -103,7 +104,6 @@ let
         '';
         default = pkgs.rutorrent;
       };
-
 
       webdir = mkOption {
         type = types.path;
@@ -286,36 +286,28 @@ let
   };
 
   rpcweb-imp = {
-    krebs.nginx.enable = mkDefault true;
-    krebs.nginx.servers.rtorrent = {
-      listen = [ webcfg.listenAddress ];
-      server-names = [ "default" ];
-      extraConfig = ''
-        ${optionalString webcfg.enableAuth ''
-          auth_basic "rtorrent";
-          auth_basic_user_file ${webcfg.authfile};
-        ''}
-        ${optionalString rucfg.enable ''
-          root ${webdir};
-        ''}
-      '';
-      locations = [
-        (nameValuePair "/RPC2" ''
+    services.nginx.enable = mkDefault true;
+    services.nginx.virtualHosts.rtorrent = {
+      default = mkDefault true;
+      inherit (webcfg) basicAuth port;
+      root = optionalString rucfg.enable webdir;
+
+      locations = {
+        "/RPC2".extraConfig = ''
           include ${pkgs.nginx}/conf/scgi_params;
           scgi_param    SCRIPT_NAME  /RPC2;
           scgi_pass unix:${cfg.xmlrpc-socket};
-        '')
-      ] ++ (optional rucfg.enable
-        (nameValuePair "~ \.php$" ''
+        '';
+      } // (optionalAttrs rucfg.enable {
+        "~ \.php$".extraConfig = ''
           client_max_body_size 200M;
-          root ${webdir};
           fastcgi_split_path_info ^(.+\.php)(/.+)$;
           fastcgi_pass unix:${fpm-socket};
           try_files $uri =404;
           fastcgi_index  index.php;
           include ${pkgs.nginx}/conf/fastcgi_params;
           include ${pkgs.nginx}/conf/fastcgi.conf;
-        '')
+        ''; }
       );
     };
   };
