@@ -118,4 +118,5 @@
       fi
     '';
   };
+  users.users.${config.krebs.build.user.name}.shell = "/run/current-system/sw/bin/zsh";
 }
