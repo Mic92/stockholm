@@ -151,7 +151,7 @@ in {
     description = "maintenance acc for domsen";
     home = "/home/domsen";
     useDefaultShell = true;
-    extraGroups = [ "nginx" ];
+    extraGroups = [ "nginx" "download" ];
     createHome = true;
   };
 

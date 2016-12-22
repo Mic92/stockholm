@@ -7,11 +7,8 @@ in {
     ./xserver
     ./mpv.nix
     ./power-action.nix
+    ./pulse.nix
   ];
-  hardware.pulseaudio = {
-    enable = true;
-    systemWide = true;
-  };
 
   users.extraUsers.mainUser.extraGroups = [ "audio" "video" ];
 
@@ -53,6 +50,9 @@ in {
     yt-next
 
     youtube-tools
+
+    rxvt_unicode
+    termite
   #window manager stuff
     #haskellPackages.xmobar
     #haskellPackages.yeganesh
