@@ -202,6 +202,7 @@ with import <stockholm/lib>;
             "mors.retiolum"
             "mors.r"
             "cgit.mors.retiolum"
+            "cgit.mors.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
