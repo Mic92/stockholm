@@ -1,11 +1,11 @@
 { pkgs, ... }:
 pkgs.stdenv.mkDerivation {
-  name = "rutorrent-src-3.7";
+  name = "rutorrent-src_2016-12-09";
   src = pkgs.fetchFromGitHub {
     owner = "Novik";
     repo = "rutorrent";
-    rev = "b727523a153454d4976f04b0c47336ae57cc50d5";
-    sha256 = "0s5wa0jnck781amln9c2p4pc0i5mq3j5693ra151lnwhz63aii4a";
+    rev = "580bba8c538b55c1f75f3ad65310ff4ff2a153f7";
+    sha256 = "1d9lgrzipy58dnx88z393p152kx6lki0x4aw40k8w9awsci4cx7p";
   };
 
   phases = [ "installPhase" ];
