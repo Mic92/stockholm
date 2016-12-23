@@ -4,6 +4,10 @@ with import <stockholm/lib>;
 
 {
   services.nginx = {
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    recommendedTlsSettings = true;
+
     virtualHosts._http = {
       default = true;
       extraConfig = ''
