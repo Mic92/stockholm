@@ -19,15 +19,15 @@
     source-path = toString <secrets> + "/nix-serve.key";
   };
 
-  krebs.nginx = {
+  services.nginx = {
     enable = true;
-    servers.nix-serve = {
-      server-names = [
+    virtualHosts.nix-serve = {
+      serverAliases = [
         "cache.${config.krebs.build.host.name}.gg23"
       ];
-      locations = singleton (nameValuePair "/" ''
+      locations."/".extraConfig = ''
         proxy_pass http://localhost:${toString config.services.nix-serve.port};
-      '');
+      '';
     };
   };
 }

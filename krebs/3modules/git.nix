@@ -400,29 +400,24 @@ let
       chown ${toString cfg.cgit.fcgiwrap.user.uid}:${toString cfg.cgit.fcgiwrap.group.gid} ${cfg.cgit.settings.cache-root}
     '';
 
-    krebs.nginx = {
-      enable = true;
-      servers.cgit = {
-        server-names = [
-          "cgit.${config.networking.hostName}"
-          "cgit.${config.networking.hostName}.r"
-          "cgit.${config.networking.hostName}.retiolum"
-        ];
-        locations = [
-          (nameValuePair "/" ''
-            include             ${pkgs.nginx}/conf/fastcgi_params;
-            fastcgi_param       SCRIPT_FILENAME ${pkgs.cgit}/cgit/cgit.cgi;
-            fastcgi_param       PATH_INFO       $uri;
-            fastcgi_param       QUERY_STRING    $args;
-            fastcgi_param       HTTP_HOST       $server_name;
-            fastcgi_pass        unix:${config.services.fcgiwrap.socketAddress};
-          '')
-          (nameValuePair "/static/" ''
-            root ${pkgs.cgit}/cgit;
-            rewrite ^/static(/.*)$ $1 break;
-          '')
-        ];
-      };
+    services.nginx.virtualHosts.cgit = {
+      serverAliases = [
+        "cgit.${config.networking.hostName}"
+        "cgit.${config.networking.hostName}.r"
+        "cgit.${config.networking.hostName}.retiolum"
+      ];
+      locations."/".extraConfig = ''
+        include             ${pkgs.nginx}/conf/fastcgi_params;
+        fastcgi_param       SCRIPT_FILENAME ${pkgs.cgit}/cgit/cgit.cgi;
+        fastcgi_param       PATH_INFO       $uri;
+        fastcgi_param       QUERY_STRING    $args;
+        fastcgi_param       HTTP_HOST       $server_name;
+        fastcgi_pass        unix:${config.services.fcgiwrap.socketAddress};
+      '';
+      locations."/static/".extraConfig = ''
+        root ${pkgs.cgit}/cgit;
+        rewrite ^/static(/.*)$ $1 break;
+      '';
     };
   };
 
