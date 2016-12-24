@@ -48,6 +48,7 @@ let
           default = "";
         };
 
+
         # we create a wsgi socket in $workDir/gunicorn-${name}.wsgi
         workDir = mkOption {
           type = types.str;
@@ -155,21 +156,22 @@ let
     assertions = [{ assertion = config.services.nginx.enable;
                      message = "services.nginx.enable must be true"; }];
 
-    services.nginx.virtualHosts = mapAttrs ( server:
-      (mkMerge [ server.nginx  {
-        extraConfig = ''
-          client_max_body_size 32M;
-          '';
-        locations = {
-          "/" = ''
-            proxy_set_header Host $http_host;
-            proxy_pass http://unix:${server.workDir}/gunicorn-${name}.sock;
-           '';
-          "/static/" = ''
-            alias ${bepasty}/lib/${python.libPrefix}/site-packages/bepasty/static/;
-          '';
-        };
-      }])) cfg.servers ;
+    services.nginx.virtualHosts = mapAttrs ( name: server:
+      (mkMerge [
+        server.nginx
+        {
+          extraConfig = ''
+            client_max_body_size 32M;
+            '';
+          locations = {
+            "/".extraConfig = "proxy_set_header Host $http_host;";
+            "/".proxyPass = "http://unix:${server.workDir}/gunicorn-${name}.sock";
+            "/static/".extraConfig = ''
+              alias ${bepasty}/lib/${python.libPrefix}/site-packages/bepasty/static/;
+            '';
+          };
+        }])
+      ) cfg.servers ;
   };
 in
 out
