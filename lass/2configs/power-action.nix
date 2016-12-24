@@ -14,8 +14,8 @@ in {
   krebs.power-action = {
     enable = true;
     plans.low-battery = {
-      upperLimit = 30;
-      lowerLimit = 25;
+      upperLimit = 10;
+      lowerLimit = 15;
       charging = false;
       action = pkgs.writeDash "warn-low-battery" ''
         ${speak "power level low"}

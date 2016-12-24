@@ -32,6 +32,7 @@ with import <stockholm/lib>;
           createHome = true;
           useDefaultShell = true;
           extraGroups = [
+            "audio"
             "fuse"
           ];
           openssh.authorizedKeys.keys = [

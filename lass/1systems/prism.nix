@@ -230,6 +230,7 @@ in {
     }
     {
       virtualisation.libvirtd.enable = true;
+      users.users.mainUser.extraGroups = [ "libvirtd" ];
     }
   ];
 

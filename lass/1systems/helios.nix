@@ -30,6 +30,7 @@ with import <stockholm/lib>;
       networking.wireless.enable = true;
       hardware.pulseaudio = {
         enable = true;
+        systemWide = true;
       };
       users.users.ferret = {
         uid = genid "ferret";
