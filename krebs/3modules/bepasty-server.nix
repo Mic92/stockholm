@@ -22,6 +22,16 @@ let
 
     servers = mkOption {
       type = with types; attrsOf optionSet;
+      example = ''
+        {
+          "paste.r" = {
+            defaultPermissions = "read,delete,create";
+          };
+          "paste.krebsco.de" = {
+            defaultPermissions = "read";
+          };
+        }
+      '';
       options = singleton {
         nginx = mkOption {
           # TODO use the correct type
@@ -30,7 +40,6 @@ let
             additional nginx configuration. see krebs.nginx for all options
           '';
         };
-
         secretKey = mkOption {
           type = types.str;
           description = ''
@@ -143,24 +152,23 @@ let
   };
 
   nginx-imp = {
-    assertions = [{ assertion = config.krebs.nginx.enable;
-                     message = "krebs.nginx.enable must be true"; }];
+    assertions = [{ assertion = config.services.nginx.enable;
+                     message = "services.nginx.enable must be true"; }];
 
-    krebs.nginx.servers = mapAttrs' (name: server:
-      nameValuePair("bepasty-server-${name}")
+    services.nginx.virtualHosts = mapAttrs ( server:
       (mkMerge [ server.nginx  {
         extraConfig = ''
           client_max_body_size 32M;
           '';
-        locations = [
-          (nameValuePair "/" ''
+        locations = {
+          "/" = ''
             proxy_set_header Host $http_host;
             proxy_pass http://unix:${server.workDir}/gunicorn-${name}.sock;
-           '')
-          (nameValuePair "/static/" ''
+           '';
+          "/static/" = ''
             alias ${bepasty}/lib/${python.libPrefix}/site-packages/bepasty/static/;
-          '')
-          ];
+          '';
+        };
       }])) cfg.servers ;
   };
 in
