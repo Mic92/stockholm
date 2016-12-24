@@ -3,15 +3,26 @@
 with import <stockholm/lib>;
 
 {
-  krebs.nginx = {
-    servers.default.locations = [
-      (nameValuePair "= /etc/os-release" ''
+  services.nginx = {
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    recommendedTlsSettings = true;
+
+    virtualHosts._http = {
+      default = true;
+      extraConfig = ''
+        return 404;
+      '';
+    };
+
+    virtualHosts.default = {
+      locations."= /etc/os-release".extraConfig = ''
         default_type text/plain;
         alias /etc/os-release;
-      '')
-    ];
+      '';
+    };
   };
-  tv.iptables = optionalAttrs config.krebs.nginx.enable {
+  tv.iptables = {
     input-retiolum-accept-tcp = singleton "http";
   };
 }

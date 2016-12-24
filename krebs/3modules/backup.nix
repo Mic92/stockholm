@@ -137,6 +137,9 @@ let
         echo >&2 "update snapshot current; $rsync_dst <- $rsync_src"
       '';
     }}
+    # In `dst-rsync`'s `mkdir m 0700 -p` above, we care only about permission
+    # of the deepest directory:
+    # shellcheck disable=SC2174
     ${local.rsync} >&2 \
         -aAXF --delete \
         --rsh=${shell.escape ssh} \

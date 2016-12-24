@@ -17,7 +17,6 @@ with import <stockholm/lib>;
     ../2configs/retiolum.nix
     ../2configs/binary-cache
     ../2configs/xserver
-    ../2configs/xu-qemu0.nix
     {
       environment.systemPackages = with pkgs; [
 
