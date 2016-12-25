@@ -35,35 +35,28 @@ let
     nginx = {
       enable = mkEnableOption "enable tinc_graphs to be served with nginx";
 
-      anonymous = {
-        server-names = mkOption {
-          type = with types; listOf str;
-          description = "hostnames which serve anonymous graphs";
-          default = [ "graphs.${config.krebs.build.host.name}" ];
-        };
-
-        listen = mkOption {
-          # use the type of the nginx listen option
-          type = with types; listOf str;
-          description = "listen address for anonymous graphs";
-          default = [ "80" ];
-        };
-
+      anonymous = mkOption {
+        type = types.attrsOf types.unspecified;
+        description = ''
+          nginx virtualHost options to be merged into the anonymous graphs
+          vhost entry.
+        '';
+      };
+      anonymous-domain = mkOption {
+        type = types.str;
+        description = ''
+          external domainname to be used for anonymous graphs
+          it will be used if you want to enable ACME
+        '';
+        default = "graphs.krebsco.de";
       };
 
-      complete = {
-        server-names = mkOption {
-          type = with types; listOf str;
-          description = "hostname which serves complete graphs";
-          default = [ "graphs.${config.krebs.build.host.name}" ];
-        };
-
-        listen = mkOption {
-          type = with types; listOf str;
-          description = "listen address for complete graphs";
-          default = [ "127.0.0.1:80" ];
-        };
-
+      complete = mkOption {
+        type = types.attrsOf types.unspecified;
+        description = ''
+          nginx virtualHost options to be merged into the complete graphs
+          vhost entry.
+        '';
       };
     };
 
@@ -134,24 +127,20 @@ let
       uid = genid "tinc_graphs";
       home = "/var/spool/tinc_graphs";
     };
-    krebs.nginx = mkIf cfg.nginx.enable {
+    services.nginx = mkIf cfg.nginx.enable {
       enable = mkDefault true;
-      servers = {
+      virtualHosts = {
         tinc_graphs_complete = mkMerge [ cfg.nginx.complete  {
-          locations = [
-            (nameValuePair "/" ''
-              autoindex on;
-              root ${internal_dir};
-            '')
-          ];
-        }] ;
-        tinc_graphs_anonymous = mkMerge [ cfg.nginx.anonymous {
-          locations = [
-            (nameValuePair "/" ''
-              autoindex on;
-              root ${external_dir};
-            '')
-          ];
+          locations = {
+            "/".extraConfig = "autoindex on;";
+            "/".root = internal_dir;
+          };
+        }];
+        "${cfg.nginx.anonymous-domain}" = mkMerge [ cfg.nginx.anonymous {
+          locations = {
+            "/".extraConfig = "autoindex on;";
+            "/".root = external_dir;
+          };
         }];
       };
     };
