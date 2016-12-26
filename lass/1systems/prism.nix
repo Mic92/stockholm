@@ -24,6 +24,7 @@ in {
     ../2configs/repo-sync.nix
     ../2configs/binary-cache/server.nix
     ../2configs/iodined.nix
+    ../2configs/libvirt.nix
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
@@ -227,10 +228,6 @@ in {
       lass.usershadow = {
         enable = true;
       };
-    }
-    {
-      virtualisation.libvirtd.enable = true;
-      users.users.mainUser.extraGroups = [ "libvirtd" ];
     }
   ];
 
