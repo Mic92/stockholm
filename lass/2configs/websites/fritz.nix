@@ -26,8 +26,6 @@ let
 in {
   imports = [
     ./sqlBackup.nix
-    (ssl [ "biostase.de" "www.biostase.de" ])
-    (serveWordpress [ "biostase.de" "www.biostase.de" ])
 
     (ssl [ "radical-dreamers.de" "www.radical-dreamers.de" ])
     (serveWordpress [ "radical-dreamers.de" "www.radical-dreamers.de" ])
@@ -55,7 +53,6 @@ in {
   ];
 
   lass.mysqlBackup.config.all.databases = [
-    "biostase_de"
     "eastuttgart_de"
     "radical_dreamers_de"
     "spielwaren_kern_de"
