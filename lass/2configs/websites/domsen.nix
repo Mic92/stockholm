@@ -35,10 +35,10 @@ in {
     (servePage [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
 
     (ssl [ "pixelpocket.de" ])
-    (servePage [ "pixelpocket.de" "www.pixelpocket.de" ])
+    (servePage [ "pixelpocket.de" ])
 
     (ssl [ "o.ubikmedia.de" ])
-    (serveOwncloud [ "o.ubikmedia.de" "www.o.ubikmedia.de" ])
+    (serveOwncloud [ "o.ubikmedia.de" ])
 
     (ssl [
       "ubikmedia.de"
@@ -92,11 +92,9 @@ in {
     ])
   ];
 
-  krebs.nginx.servers."ubikmedia.de".locations = [
-    (lib.nameValuePair "/piwik" ''
-      try_files $uri $uri/ /index.php?$args;
-    '')
-  ];
+  services.nginx.virtualHosts."ubikmedia.de".locations."/piwika".extraConfig = ''
+    try_files $uri $uri/ /index.php?$args;
+  '';
 
   lass.mysqlBackup.config.all.databases = [
     "ubikmedia_de"

@@ -9,15 +9,13 @@ let
 in {
   krebs.realwallpaper.enable = true;
 
-  krebs.nginx.servers.wallpaper = {
-    server-names = [
+  services.nginx.virtualHosts.wallpaper = {
+    serverAliases = [
       hostname
     ];
-    locations = [
-      (nameValuePair "/wallpaper.png" ''
-        root /tmp/;
-      '')
-    ];
+    locations."/wallpaper.png".extraConfig = ''
+      root /tmp/;
+    '';
   };
 
   krebs.iptables = {

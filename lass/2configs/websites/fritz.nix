@@ -62,18 +62,6 @@ in {
     "ttf_kleinaspach_de"
   ];
 
-  #password protect some dirs
-  krebs.nginx.servers."biostase.de".locations = [
-    (nameValuePair "/old_biostase.de" ''
-      auth_basic "Administrator Login";
-      auth_basic_user_file /srv/http/biostase.de/old_biostase.de/.htpasswd;
-    '')
-    (nameValuePair "/mysqldumper" ''
-      auth_basic "Administrator Login";
-      auth_basic_user_file /srv/http/biostase.de/mysqldumper/.htpasswd;
-    '')
-  ];
-
   users.users.root.openssh.authorizedKeys.keys = [
     config.krebs.users.fritz.pubkey
   ];
