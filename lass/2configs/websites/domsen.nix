@@ -88,7 +88,6 @@ in {
       "www.illucloud.eu"
       "www.illucloud.de"
       "www.illucloud.com"
-      "*.ubikmedia.de"
     ])
   ];
 
