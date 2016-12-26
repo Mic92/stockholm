@@ -24,7 +24,7 @@ let
 
     daymap = mkOption {
       type = types.str;
-      default = "http://www.nnvl.noaa.gov/images/globaldata/SnowIceCover_Daily.png";
+      default = "https://www.nnvl.noaa.gov/images/globaldata/SnowIceCover_Daily.png";
     };
 
     cloudmap = mkOption {
