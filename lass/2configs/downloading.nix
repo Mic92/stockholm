@@ -40,9 +40,8 @@ with import <stockholm/lib>;
     enable = true;
     web = {
       enable = true;
-      enableAuth = true;
-      listenAddress = "9091";
-      authfile = <secrets/torrent-authfile>;
+      port = 9091;
+      basicAuth = import <secrets/torrent-auth>;
     };
     rutorrent.enable = true;
     enableXMLRPC = true;
