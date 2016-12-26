@@ -14,7 +14,7 @@ in {
   security.acme = {
     certs."lassul.us" = {
       email = "lass@lassul.us";
-      webroot = "/var/lib/acme/challenges/lassul.us";
+      webroot = "/var/lib/acme/acme-challenges";
       plugins = [
         "account_key.json"
         "key.pem"
@@ -26,7 +26,7 @@ in {
     };
     certs."cgit.lassul.us" = {
       email = "lassulus@gmail.com";
-      webroot = "/var/lib/acme/challenges/cgit.lassul.us";
+      webroot = "/var/lib/acme/acme-challenges";
       plugins = [
         "account_key.json"
         "key.pem"
