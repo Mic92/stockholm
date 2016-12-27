@@ -21,13 +21,13 @@ with import <stockholm/lib>;
 
   krebs.iptables.tables.nat.PREROUTING.rules = [
     { v6 = false; precedence = 1000; predicate = "-d 213.239.205.246 -p tcp --dport 22"; target = "DNAT --to-destination 192.168.122.208:22"; }
-    { v6 = false; precedence = 1000; predicate = "-d 213.239.205.246 -p tcp --dport 80"; target = "DNAT --to-destination 192.168.122.208:80"; }
+    { v6 = false; precedence = 1000; predicate = "-d 213.239.205.246 -p tcp --dport 80"; target = "DNAT --to-destination 192.168.122.208:1080"; }
     { v6 = false; precedence = 1000; predicate = "-d 213.239.205.246 -p tcp --dport 443"; target = "DNAT --to-destination 192.168.122.208:1443"; }
   ];
 
   krebs.iptables.tables.filter.FORWARD.rules = [
     { v6 = false; precedence = 1000; predicate = "-d 192.168.122.208 -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED"; target = "ACCEPT"; }
-    { v6 = false; precedence = 1000; predicate = "-d 192.168.122.208 -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED"; target = "ACCEPT"; }
+    { v6 = false; precedence = 1000; predicate = "-d 192.168.122.208 -p tcp --dport 1080 -m state --state NEW,ESTABLISHED,RELATED"; target = "ACCEPT"; }
     { v6 = false; precedence = 1000; predicate = "-d 192.168.122.208 -p tcp --dport 1443 -m state --state NEW,ESTABLISHED,RELATED"; target = "ACCEPT"; }
   ];
 }
