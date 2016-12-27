@@ -235,8 +235,4 @@ with import <stockholm/lib>;
   krebs.repo-sync.timerConfig = {
     OnCalendar = "00:37";
   };
-
-  services.mongodb = {
-    enable = true;
-  };
 }
