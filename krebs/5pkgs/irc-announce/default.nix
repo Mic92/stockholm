@@ -32,7 +32,7 @@ pkgs.writeDashBin "irc-announce" ''
   # ircin is used to feed the output of netcat back to the "irc client"
   # so we can implement expect-like behavior with sed^_^
   # XXX mkselfdestructingtmpfifo would be nice instead of this cruft
-  tmpdir="$(mktemp -d irc-announce_XXXXXXXX)"
+  tmpdir=$(mktemp --tmpdir -d irc-announce_XXXXXXXX)
   cd "$tmpdir"
   mkfifo ircin
   trap "
