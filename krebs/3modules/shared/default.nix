@@ -15,10 +15,6 @@ let
       retiolum = {
         ip4.addr = "10.243.73.57";
         ip6.addr = "42:0:0:0:0:0:0:7357";
-        aliases = [
-          "test.r"
-          "test.retiolum"
-        ];
         tinc.pubkey = ''
           -----BEGIN RSA PUBLIC KEY-----
           MIIBCgKCAQEAy41YKF/wpHLnN370MSdnAo63QUW30aw+6O79cnaJyxoL6ZQkk4Nd
