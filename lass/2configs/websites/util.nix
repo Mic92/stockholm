@@ -4,66 +4,24 @@ with lib;
 
 rec {
 
-  manageCerts = domains:
+  ssl = domains :
     let
       domain = head domains;
     in {
-      #security.acme = {
-      #  certs."${domain}" = {
-      #    email = "lassulus@gmail.com";
-      #    webroot = "/var/lib/acme/challenges/${domain}";
-      #    plugins = [
-      #      "account_key.json"
-      #      "key.pem"
-      #      "fullchain.pem"
-      #    ];
-      #    group = "nginx";
-      #    allowKeysForGroup = true;
-      #    extraDomains = genAttrs domains (_: null);
-      #  };
-      #};
-
-      krebs.nginx.servers."${domain}" = {
-        ssl.acmeEnable = true;
-        server-names = domains;
-        #locations = [
-        #  (nameValuePair "/.well-known/acme-challenge" ''
-        #    root /var/lib/acme/challenges/${domain}/;
-        #  '')
-        #];
-      };
-    };
-
-  ssl = domains:
-    {
-      imports = [
-        ( manageCerts domains )
-        #( activateACME (head domains) )
-      ];
-    };
-
-  activateACME = domain:
-    {
-      krebs.nginx.servers.${domain} = {
-        ssl = {
-          enable = true;
-          certificate = "/var/lib/acme/${domain}/fullchain.pem";
-          certificate_key = "/var/lib/acme/${domain}/key.pem";
-        };
-      };
     };
 
   servePage = domains:
     let
       domain = head domains;
     in {
-      krebs.nginx.servers.${domain} = {
-        server-names = domains;
-        locations = [
-          (nameValuePair "/" ''
-            root /srv/http/${domain};
-          '')
-        ];
+      services.nginx.virtualHosts.${domain} = {
+        enableACME = true;
+        enableSSL = true;
+        extraConfig = "listen 80;";
+        serverAliases = domains;
+        locations."/".extraConfig = ''
+          root /srv/http/${domain};
+        '';
       };
     };
 
@@ -71,9 +29,13 @@ rec {
     let
       domain = head domains;
     in {
-      krebs.nginx.servers."${domain}" = {
-        server-names = domains;
+      services.nginx.virtualHosts."${domain}" = {
+        enableACME = true;
+        enableSSL = true;
+        serverAliases = domains;
         extraConfig = ''
+          listen 80;
+
           # Add headers to serve security related headers
           add_header Strict-Transport-Security "max-age=15768000; includeSubDomains; preload;";
           add_header X-Content-Type-Options nosniff;
@@ -109,56 +71,53 @@ rec {
           rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
           rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
         '';
-        locations = [
-          (nameValuePair "/robots.txt" ''
-            allow all;
-            log_not_found off;
-            access_log off;
-          '')
-          (nameValuePair "~ ^/(build|tests|config|lib|3rdparty|templates|data)/" ''
-            deny all;
-          '')
+        locations."/robots.txt".extraConfig = ''
+          allow all;
+          log_not_found off;
+          access_log off;
+        '';
+        locations."~ ^/(build|tests|config|lib|3rdparty|templates|data)/".extraConfig = ''
+          deny all;
+        '';
 
-          (nameValuePair "~ ^/(?:autotest|occ|issue|indie|db_|console)" ''
-            deny all;
-          '')
+        locations."~ ^/(?:autotest|occ|issue|indie|db_|console)".extraConfig =  ''
+          deny all;
+        '';
 
-          (nameValuePair "/" ''
-            rewrite ^/remote/(.*) /remote.php last;
-            rewrite ^(/core/doc/[^\/]+/)$ $1/index.html;
-            try_files $uri $uri/ =404;
-          '')
+        locations."/".extraConfig = ''
+          rewrite ^/remote/(.*) /remote.php last;
+          rewrite ^(/core/doc/[^\/]+/)$ $1/index.html;
+          try_files $uri $uri/ =404;
+        '';
 
-          (nameValuePair "~ \.php(?:$|/)" ''
-            fastcgi_split_path_info ^(.+\.php)(/.+)$;
-            include ${pkgs.nginx}/conf/fastcgi_params;
-            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-            fastcgi_param PATH_INFO $fastcgi_path_info;
-            fastcgi_param HTTPS on;
-            fastcgi_param modHeadersAvailable true; #Avoid sending the security headers twice
-            fastcgi_pass unix:/srv/http/${domain}/phpfpm.pool;
-            fastcgi_intercept_errors on;
-          '')
+        locations."~ \.php(?:$|/)".extraConfig =  ''
+          fastcgi_split_path_info ^(.+\.php)(/.+)$;
+          include ${pkgs.nginx}/conf/fastcgi_params;
+          fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+          fastcgi_param PATH_INFO $fastcgi_path_info;
+          fastcgi_param HTTPS on;
+          fastcgi_param modHeadersAvailable true; #Avoid sending the security headers twice
+          fastcgi_pass unix:/srv/http/${domain}/phpfpm.pool;
+          fastcgi_intercept_errors on;
+        '';
 
-          # Adding the cache control header for js and css files
-          # Make sure it is BELOW the location ~ \.php(?:$|/) { block
-          (nameValuePair "~* \.(?:css|js)$" ''
-            add_header Cache-Control "public, max-age=7200";
-            # Add headers to serve security related headers
-            add_header Strict-Transport-Security "max-age=15768000; includeSubDomains; preload;";
-            add_header X-Content-Type-Options nosniff;
-            add_header X-Frame-Options "SAMEORIGIN";
-            add_header X-XSS-Protection "1; mode=block";
-            add_header X-Robots-Tag none;
-            # Optional: Don't log access to assets
-            access_log off;
-          '')
-
-          # Optional: Don't log access to other assets
-          (nameValuePair "~* \.(?:jpg|jpeg|gif|bmp|ico|png|swf)$" ''
-            access_log off;
-          '')
-        ];
+        # Adding the cache control header for js and css files
+        # Make sure it is BELOW the location ~ \.php(?:$|/) { block
+        locations."~* \.(?:css|js)$".extraConfig = ''
+          add_header Cache-Control "public, max-age=7200";
+          # Add headers to serve security related headers
+          add_header Strict-Transport-Security "max-age=15768000; includeSubDomains; preload;";
+          add_header X-Content-Type-Options nosniff;
+          add_header X-Frame-Options "SAMEORIGIN";
+          add_header X-XSS-Protection "1; mode=block";
+          add_header X-Robots-Tag none;
+          # Optional: Don't log access to assets
+          access_log off;
+        '';
+        # Optional: Don't log access to other assets
+        locations."~* \.(?:jpg|jpeg|gif|bmp|ico|png|swf)$".extraConfig = ''
+          access_log off;
+        '';
       };
       services.phpfpm.poolConfigs."${domain}" = ''
         listen = /srv/http/${domain}/phpfpm.pool
@@ -183,9 +142,12 @@ rec {
       domain = head domains;
 
     in {
-      krebs.nginx.servers."${domain}" = {
-        server-names = domains;
+      services.nginx.virtualHosts."${domain}" = {
+        enableACME = true;
+        enableSSL = true;
+        serverAliases = domains;
         extraConfig = ''
+          listen 80;
           root /srv/http/${domain}/;
           index index.php;
           access_log /tmp/nginx_acc.log;
@@ -194,24 +156,19 @@ rec {
           error_page 500 502 503 504 /50x.html;
           client_max_body_size 100m;
         '';
-        locations = [
-          (nameValuePair "/" ''
-            try_files $uri $uri/ /index.php?$args;
-          '')
-          (nameValuePair "~ \.php$" ''
-            fastcgi_pass unix:/srv/http/${domain}/phpfpm.pool;
-            include ${pkgs.nginx}/conf/fastcgi.conf;
-          '')
-          #(nameValuePair "~ /\\." ''
-          #  deny all;
-          #'')
-          #Directives to send expires headers and turn off 404 error logging.
-          (nameValuePair "~* ^.+\.(xml|ogg|ogv|svg|svgz|eot|otf|woff|mp4|ttf|css|rss|atom|js|jpg|jpeg|gif|png|ico|zip|tgz|gz|rar|bz2|doc|xls|exe|ppt|tar|mid|midi|wav|bmp|rtf)$" ''
-            access_log off;
-            log_not_found off;
-            expires max;
-          '')
-        ];
+        locations."/".extraConfig = ''
+          try_files $uri $uri/ /index.php?$args;
+        '';
+        locations."~ \.php$".extraConfig = ''
+          fastcgi_pass unix:/srv/http/${domain}/phpfpm.pool;
+          include ${pkgs.nginx}/conf/fastcgi.conf;
+        '';
+        #Directives to send expires headers and turn off 404 error logging.
+        locations."~* ^.+\.(xml|ogg|ogv|svg|svgz|eot|otf|woff|mp4|ttf|css|rss|atom|js|jpg|jpeg|gif|png|ico|zip|tgz|gz|rar|bz2|doc|xls|exe|ppt|tar|mid|midi|wav|bmp|rtf)$".extraConfig = ''
+          access_log off;
+          log_not_found off;
+          expires max;
+        '';
       };
       services.phpfpm.poolConfigs."${domain}" = ''
         listen = /srv/http/${domain}/phpfpm.pool

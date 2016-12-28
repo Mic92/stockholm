@@ -8,7 +8,6 @@ _:
     ./umts.nix
     ./urxvtd.nix
     ./usershadow.nix
-    ./wordpress_nginx.nix
     ./xresources.nix
   ];
 }

@@ -24,6 +24,8 @@ in {
     ../2configs/repo-sync.nix
     ../2configs/binary-cache/server.nix
     ../2configs/iodined.nix
+    ../2configs/libvirt.nix
+    ../2configs/hfos.nix
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
@@ -178,11 +180,9 @@ in {
       imports = [
         ../2configs/realwallpaper.nix
       ];
-      krebs.nginx.servers."lassul.us".locations = [
-        (lib.nameValuePair "/wallpaper.png" ''
-          alias /tmp/wallpaper.png;
-        '')
-      ];
+      services.nginx.virtualHosts."lassul.us".locations."/wallpaper.png".extraConfig = ''
+        alias /tmp/wallpaper.png;
+      '';
     }
     {
       environment.systemPackages = with pkgs; [
@@ -202,16 +202,13 @@ in {
       };
     }
     {
-      krebs.nginx = {
+      services.nginx = {
         enable = true;
-        servers.public = {
-          listen = [ "8088" ];
-          server-names = [ "default" ];
-          locations = [
-            (nameValuePair "~ ^/~(.+?)(/.*)?\$" ''
-              alias /home/$1/public_html$2;
-            '')
-          ];
+        virtualHosts.public = {
+          port = 8088;
+          locations."~ ^/~(.+?)(/.*)?\$".extraConfig = ''
+            alias /home/$1/public_html$2;
+          '';
         };
       };
       krebs.iptables.tables.filter.INPUT.rules = [
@@ -227,10 +224,6 @@ in {
       lass.usershadow = {
         enable = true;
       };
-    }
-    {
-      virtualisation.libvirtd.enable = true;
-      users.users.mainUser.extraGroups = [ "libvirtd" ];
     }
   ];
 

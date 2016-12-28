@@ -7,7 +7,6 @@ let
     head
   ;
   inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
-    manageCerts
     ssl
     servePage
     serveWordpress
@@ -26,8 +25,6 @@ let
 in {
   imports = [
     ./sqlBackup.nix
-    (ssl [ "biostase.de" "www.biostase.de" ])
-    (serveWordpress [ "biostase.de" "www.biostase.de" ])
 
     (ssl [ "radical-dreamers.de" "www.radical-dreamers.de" ])
     (serveWordpress [ "radical-dreamers.de" "www.radical-dreamers.de" ])
@@ -50,28 +47,15 @@ in {
     (ssl [ "habsys.de" "www.habsys.de" "habsys.eu" "www.habsys.eu" ])
     (servePage [ "habsys.de" "www.habsys.de" "habsys.eu" "www.habsys.eu" ])
 
-    (manageCerts [ "goldbarrendiebstahl.radical-dreamers.de" ])
+    (ssl [ "goldbarrendiebstahl.radical-dreamers.de" ])
     (serveWordpress [ "goldbarrendiebstahl.radical-dreamers.de" ])
   ];
 
   lass.mysqlBackup.config.all.databases = [
-    "biostase_de"
     "eastuttgart_de"
     "radical_dreamers_de"
     "spielwaren_kern_de"
     "ttf_kleinaspach_de"
-  ];
-
-  #password protect some dirs
-  krebs.nginx.servers."biostase.de".locations = [
-    (nameValuePair "/old_biostase.de" ''
-      auth_basic "Administrator Login";
-      auth_basic_user_file /srv/http/biostase.de/old_biostase.de/.htpasswd;
-    '')
-    (nameValuePair "/mysqldumper" ''
-      auth_basic "Administrator Login";
-      auth_basic_user_file /srv/http/biostase.de/mysqldumper/.htpasswd;
-    '')
   ];
 
   users.users.root.openssh.authorizedKeys.keys = [

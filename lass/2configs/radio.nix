@@ -156,7 +156,7 @@ in {
       })
     ];
   };
-  krebs.nginx.servers."lassul.us".locations = let
+  services.nginx.virtualHosts."lassul.us".locations."/the_playlist".extraConfig = let
     html = pkgs.writeText "index.html" ''
       <!DOCTYPE html>
       <html lang="en">
@@ -175,10 +175,8 @@ in {
         </body>
       </html>
     '';
-  in [
-    (nameValuePair "/the_playlist" ''
-      default_type "text/html";
-      alias ${html};
-    '')
-  ];
+  in ''
+    default_type "text/html";
+    alias ${html};
+  '';
 }

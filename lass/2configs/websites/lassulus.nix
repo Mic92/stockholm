@@ -14,7 +14,7 @@ in {
   security.acme = {
     certs."lassul.us" = {
       email = "lass@lassul.us";
-      webroot = "/var/lib/acme/challenges/lassul.us";
+      webroot = "/var/lib/acme/acme-challenges";
       plugins = [
         "account_key.json"
         "key.pem"
@@ -26,7 +26,7 @@ in {
     };
     certs."cgit.lassul.us" = {
       email = "lassulus@gmail.com";
-      webroot = "/var/lib/acme/challenges/cgit.lassul.us";
+      webroot = "/var/lib/acme/acme-challenges";
       plugins = [
         "account_key.json"
         "key.pem"
@@ -69,59 +69,54 @@ in {
     "nginx"
   ];
 
-  krebs.nginx.servers."lassul.us" = {
-    server-names = [ "lassul.us" ];
-    locations = [
-      (nameValuePair "/" ''
-        root /srv/http/lassul.us;
-      '')
-      (nameValuePair "/.well-known/acme-challenge" ''
-        root /var/lib/acme/challenges/lassul.us/;
-      '')
-      (nameValuePair "= /retiolum-hosts.tar.bz2" ''
-        alias ${config.krebs.tinc.retiolum.hostsArchive};
-      '')
-      (nameValuePair "/tinc" ''
-        alias ${config.krebs.tinc_graphs.workingDir}/external;
-      '')
-      (let
-        script = pkgs.writeBash "test" ''
-          echo "hello world"
-        '';
-        #script = pkgs.execve "ddate-wrapper" {
-        #  filename = "${pkgs.ddate}/bin/ddate";
-        #  argv = [];
-        #};
-      in nameValuePair "= /ddate" ''
-        gzip off;
-        fastcgi_pass unix:/var/run/lass-stuff.socket;
-        include ${pkgs.nginx}/conf/fastcgi_params;
-        fastcgi_param DOCUMENT_ROOT /var/empty;
-        fastcgi_param SCRIPT_FILENAME ${script};
-        fastcgi_param SCRIPT_NAME ${script};
-      '')
-    ];
-    ssl = {
-      enable = true;
-      certificate = "/var/lib/acme/lassul.us/fullchain.pem";
-      certificate_key = "/var/lib/acme/lassul.us/key.pem";
-    };
+  services.nginx.virtualHosts."lassul.us" = {
+    serverAliases = [ "lassul.us" ];
+    locations."/".extraConfig = ''
+      root /srv/http/lassul.us;
+    '';
+    locations."/.well-known/acme-challenge".extraConfig = ''
+      root /var/lib/acme/challenges/lassul.us/;
+    '';
+    locations."= /retiolum-hosts.tar.bz2".extraConfig = ''
+      alias ${config.krebs.tinc.retiolum.hostsArchive};
+    '';
+    locations."/tinc".extraConfig = ''
+      alias ${config.krebs.tinc_graphs.workingDir}/external;
+    '';
+    locations."= /ddate".extraConfig = let
+      script = pkgs.writeBash "test" ''
+        echo "hello world"
+      '';
+      #script = pkgs.execve "ddate-wrapper" {
+      #  filename = "${pkgs.ddate}/bin/ddate";
+      #  argv = [];
+      #};
+    in ''
+      gzip off;
+      fastcgi_pass unix:/var/run/lass-stuff.socket;
+      include ${pkgs.nginx}/conf/fastcgi_params;
+      fastcgi_param DOCUMENT_ROOT /var/empty;
+      fastcgi_param SCRIPT_FILENAME ${script};
+      fastcgi_param SCRIPT_NAME ${script};
+    '';
+
+    enableSSL = true;
+    extraConfig = "listen 80;";
+    sslCertificate = "/var/lib/acme/lassul.us/fullchain.pem";
+    sslCertificateKey = "/var/lib/acme/lassul.us/key.pem";
   };
 
-  krebs.nginx.servers.cgit = {
-    server-names = [
+  services.nginx.virtualHosts.cgit = {
+    serverAliases = [
       "cgit.lassul.us"
     ];
-    locations = [
-      (nameValuePair "/.well-known/acme-challenge" ''
-        root /var/lib/acme/challenges/cgit.lassul.us/;
-      '')
-    ];
-    ssl = {
-      enable = true;
-      certificate = "/var/lib/acme/cgit.lassul.us/fullchain.pem";
-      certificate_key = "/var/lib/acme/cgit.lassul.us/key.pem";
-    };
+    locations."/.well-known/acme-challenge".extraConfig = ''
+      root /var/lib/acme/acme-challenges;
+    '';
+    enableSSL = true;
+    extraConfig = "listen 80;";
+    sslCertificate = "/var/lib/acme/cgit.lassul.us/fullchain.pem";
+    sslCertificateKey = "/var/lib/acme/cgit.lassul.us/key.pem";
   };
 
   users.users.blog = {

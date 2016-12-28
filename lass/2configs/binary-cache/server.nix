@@ -17,13 +17,13 @@
     owner.name = "nix-serve";
     source-path = toString <secrets> + "/nix-serve.key";
   };
-  krebs.nginx = {
+  services.nginx = {
     enable = true;
-    servers.nix-serve = {
-      server-names = [ "cache.prism.r" ];
-      locations = lib.singleton (lib.nameValuePair "/" ''
+    virtualHosts.nix-serve = {
+      serverAliases = [ "cache.prism.r" ];
+      locations."/".extraConfig = ''
         proxy_pass http://localhost:${toString config.services.nix-serve.port};
-      '');
+      '';
     };
   };
 }
