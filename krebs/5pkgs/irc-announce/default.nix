@@ -29,8 +29,6 @@ pkgs.writeDashBin "irc-announce" ''
   # privmsg_cat transforms stdin to a privmsg
   privmsg_cat() { awk '{ print "PRIVMSG "ENVIRON["IRC_CHANNEL"]" :"$0 }'; }
 
-  # we cd to /tmp here to be able to create a tmpdir in the first place
-  cd /tmp
   # ircin is used to feed the output of netcat back to the "irc client"
   # so we can implement expect-like behavior with sed^_^
   # XXX mkselfdestructingtmpfifo would be nice instead of this cruft
