@@ -13,7 +13,7 @@ let
     cores = 1;
     nets = {
       retiolum = {
-        ip4.addr = "10.243.111.111";
+        ip4.addr = "10.243.73.57";
         ip6.addr = "42:0:0:0:0:0:0:7357";
         aliases = [
           "test.r"
