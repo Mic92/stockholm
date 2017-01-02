@@ -51,6 +51,8 @@ in {
     };
   };
 
+  hardware.pulseaudio.support32Bit = true;
+
   security.sudo.extraConfig = ''
     ${mainUser.name} ALL=(games) NOPASSWD: ALL
   '';
