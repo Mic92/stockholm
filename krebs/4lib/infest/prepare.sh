@@ -159,6 +159,8 @@ prepare_common() {(
 
   mkdir -p /mnt/etc/nixos
   mkdir -m 0555 -p /mnt/var/empty
+  mkdir -p /mnt/var/src
+  touch /mnt/var/src/.populate
 
   if ! mount | grep -Fq "$rootpart on /mnt/root type "; then
     mkdir -p /mnt/root
