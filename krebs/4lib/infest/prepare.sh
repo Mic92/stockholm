@@ -143,10 +143,10 @@ prepare_common() {(
     mkdir -p /mnt/boot
 
     if mount | grep -Fq ' on /boot type '; then
-      bootdev=$(mount | grep " on /boot type " | sed 's/ .*//')
-      mount $bootdev /mnt/boot
+      bootpart=$(mount | grep ' on /boot type ' | sed 's/ .*//')
+      mount $bootpart /mnt/boot
     else
-      mount --bind /boot/ /mnt/boot
+      mount --bind /boot /mnt/boot
     fi
 
   fi
@@ -155,7 +155,7 @@ prepare_common() {(
   # prepare install directory
   #
 
-  rootpart=$(mount | grep " on / type" | sed 's/ .*//')
+  rootpart=$(mount | grep ' on / type ' | sed 's/ .*//')
 
   mkdir -p /mnt/etc/nixos
   mkdir -m 0555 -p /mnt/var/empty
