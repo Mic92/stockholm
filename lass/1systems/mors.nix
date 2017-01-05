@@ -307,20 +307,16 @@ with import <stockholm/lib>;
 
     #Runtime PMs
     echo 'auto' > '/sys/bus/pci/devices/0000:00:02.0/power/control'
-    echo 'auto' > '/sys/bus/pci/devices/0000:00:16.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:00.0/power/control'
-    echo 'auto' > '/sys/bus/pci/devices/0000:03:00.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1f.3/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1f.2/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1f.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1d.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1c.3/power/control'
-    echo 'auto' > '/sys/bus/pci/devices/0000:0d:00.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1c.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1b.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1a.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:19.0/power/control'
-    echo 'auto' > '/sys/bus/pci/devices/0000:00:16.3/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1c.1/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1c.4/power/control'
   '';
