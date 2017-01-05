@@ -23,6 +23,9 @@ let
   '';
 
 in {
+
+  services.nginx.enable = true;
+
   imports = [
     ./sqlBackup.nix
 

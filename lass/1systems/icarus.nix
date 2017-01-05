@@ -13,6 +13,7 @@ with import <stockholm/lib>;
     ../2configs/programs.nix
     ../2configs/fetchWallpaper.nix
     ../2configs/backups.nix
+    ../2configs/games.nix
     #{
     #  users.extraUsers = {
     #    root = {
