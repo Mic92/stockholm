@@ -22,10 +22,6 @@ with import <stockholm/lib>;
         devices = [ { name = "luksroot"; device = "/dev/sda2"; } ];
       };
     };
-    loader = {
-      efi.canTouchEfiVariables = true;
-      gummiboot.enable = true;
-    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -62,7 +58,7 @@ with import <stockholm/lib>;
   krebs.build = {
     host = config.krebs.hosts.alnus;
     user = mkForce config.krebs.users.dv;
-    source.nixpkgs.git.ref = mkForce "d7450443c42228832c68fba203a7c15cfcfb264e";
+    source.nixpkgs.git.ref = mkForce "e924319cb6c74aa2a9c943eddeb0caef79db01bc";
   };
 
   networking.networkmanager.enable = true;
