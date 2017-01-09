@@ -2,9 +2,9 @@
 
 with import <stockholm/lib>;
 
-let
+let {
 
-  out = {
+  body = {
     krebs.git = {
       enable = true;
       cgit = {
@@ -123,4 +123,4 @@ let
         perm = fetch;
       };
 
-in out
+}

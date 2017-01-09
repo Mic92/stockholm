@@ -339,9 +339,11 @@ let
       description = "Git repository hosting user";
       shell = "/bin/sh";
       openssh.authorizedKeys.keys =
-        mapAttrsToList (_: makeAuthorizedKey git-ssh-command)
-                       (filterAttrs (_: user: isString user.pubkey)
-                                    config.krebs.users);
+        unique
+          (sort lessThan
+                (map (makeAuthorizedKey git-ssh-command)
+                     (filter (user: isString user.pubkey)
+                             (concatMap (getAttr "user") cfg.rules))));
     };
   };
 
