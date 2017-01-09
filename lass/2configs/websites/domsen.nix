@@ -56,6 +56,14 @@ in {
       "www.illucloud.eu"
       "www.illucloud.de"
       "www.illucloud.com"
+      "apanowicz.ubikmedia.de"
+      "karlaskop.ubikmedia.de"
+      "nb.ubikmedia.de"
+      "cinevita.ubikmedia.de"
+      "factscloud.ubikmedia.de"
+      "youthtube.ubikmedia.de"
+      "aldona2.ubikmedia.de"
+      "illucloud.ubikmedia.de"
     ])
   ];
 
