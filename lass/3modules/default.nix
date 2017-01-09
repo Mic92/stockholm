@@ -9,5 +9,6 @@ _:
     ./urxvtd.nix
     ./usershadow.nix
     ./xresources.nix
+    ./telegraf.nix
   ];
 }
