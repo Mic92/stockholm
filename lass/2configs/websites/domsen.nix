@@ -7,7 +7,6 @@ let
     genid_signed
   ;
   inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
-    ssl
     servePage
     serveOwncloud
     serveWordpress;
@@ -25,47 +24,16 @@ let
 in {
   imports = [
     ./sqlBackup.nix
-    (ssl [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
 
-    (ssl [ "karlaskop.de" "www.karlaskop.de" ])
     (servePage [ "karlaskop.de" "www.karlaskop.de" ])
 
-    (ssl [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
     (servePage [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
 
-    (ssl [ "pixelpocket.de" ])
     (servePage [ "pixelpocket.de" ])
 
-    (ssl [ "o.ubikmedia.de" ])
     (serveOwncloud [ "o.ubikmedia.de" ])
 
-    (ssl [
-      "ubikmedia.de"
-      "aldona.ubikmedia.de"
-      "apanowicz.de"
-      "nirwanabluete.de"
-      "aldonasiech.com"
-      "360gradvideo.tv"
-      "ubikmedia.eu"
-      "facts.cloud"
-      "youthtube.xyz"
-      "illucloud.eu"
-      "illucloud.de"
-      "illucloud.com"
-      "www.ubikmedia.de"
-      "www.aldona.ubikmedia.de"
-      "www.apanowicz.de"
-      "www.nirwanabluete.de"
-      "www.aldonasiech.com"
-      "www.360gradvideo.tv"
-      "www.ubikmedia.eu"
-      "www.facts.cloud"
-      "www.youthtube.xyz"
-      "www.illucloud.eu"
-      "www.illucloud.de"
-      "www.illucloud.com"
-    ])
     (serveWordpress [
       "ubikmedia.de"
       "apanowicz.de"
