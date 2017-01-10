@@ -144,6 +144,8 @@ myKeyMap =
     , ("M4-C-q", windowPromptBringCopy infixAutoXPConfig)
 
     , ("M4-S-q", return ())
+
+    , ("M4-w", floatNext True >> spawn "${pkgs.copyq}/bin/copyq show")
     ]
 
 forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()
