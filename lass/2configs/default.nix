@@ -56,6 +56,12 @@ with import <stockholm/lib>;
         SSL_CERT_FILE = ca-bundle;
       };
     })
+    {
+      #for sshuttle
+      environment.systemPackages = [
+        pkgs.pythonPackages.python
+      ];
+    }
   ];
 
   networking.hostName = config.krebs.build.host.name;
