@@ -453,6 +453,8 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
           git.euer          IN A      ${nets.internet.ip4.addr}
           gum               IN A      ${nets.internet.ip4.addr}
           cgit.euer         IN A      ${nets.internet.ip4.addr}
+          o.euer            IN A      ${nets.internet.ip4.addr}
+          dl.euer           IN A      ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
@@ -470,6 +472,8 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
             "gum.r"
             "gum.retiolum"
             "cgit.gum.retiolum"
+            "o.gum.r"
+            "o.gum.retiolum"
             "tracker.makefu.r"
             "tracker.makefu.retiolum"
           ];
