@@ -5,6 +5,7 @@ let
   out = {
     environment.systemPackages = [
       vim
+      pkgs.pythonPackages.flake8
     ];
 
     environment.etc.vimrc.source = vimrc;
