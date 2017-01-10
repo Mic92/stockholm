@@ -12,6 +12,22 @@ let
 in {
   imports = [
     ../.
+    {
+      networking.interfaces.et0.ip4 = [
+        {
+          address = ip;
+          prefixLength = 24;
+        }
+      ];
+      networking.defaultGateway = "213.239.205.225";
+      networking.nameservers = [
+        "8.8.8.8"
+      ];
+      services.udev.extraRules = ''
+        SUBSYSTEM=="net", ATTR{address}=="54:04:a6:7e:f4:06", NAME="et0"
+      '';
+
+    }
     ../2configs/retiolum.nix
     ../2configs/exim-smarthost.nix
     ../2configs/downloading.nix
@@ -47,22 +63,6 @@ in {
         # warning: error(s) occured while switching to the new configuration
         lock.gid = 10001;
       };
-    }
-    {
-      networking.interfaces.et0.ip4 = [
-        {
-          address = ip;
-          prefixLength = 24;
-        }
-      ];
-      networking.defaultGateway = "213.239.205.225";
-      networking.nameservers = [
-        "8.8.8.8"
-      ];
-      services.udev.extraRules = ''
-        SUBSYSTEM=="net", ATTR{address}=="54:04:a6:7e:f4:06", NAME="et0"
-      '';
-
     }
     {
       boot.loader.grub = {
