@@ -56,6 +56,7 @@ in {
       "www.illucloud.eu"
       "www.illucloud.de"
       "www.illucloud.com"
+      "www.ubikmedia.de"
       "apanowicz.ubikmedia.de"
       "karlaskop.ubikmedia.de"
       "nb.ubikmedia.de"
