@@ -16,9 +16,9 @@
     enable = true;
     connectTo = [
       "prism"
-      "pigstarter"
       "gum"
-      "flap"
+      "ni"
+      "dishfire"
     ];
   };
 
