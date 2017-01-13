@@ -57,14 +57,15 @@ in {
       "www.illucloud.de"
       "www.illucloud.com"
       "www.ubikmedia.de"
+      "aldona2.ubikmedia.de"
       "apanowicz.ubikmedia.de"
-      "karlaskop.ubikmedia.de"
-      "nb.ubikmedia.de"
       "cinevita.ubikmedia.de"
       "factscloud.ubikmedia.de"
-      "youthtube.ubikmedia.de"
-      "aldona2.ubikmedia.de"
       "illucloud.ubikmedia.de"
+      "joemisch.ubikmedia.de"
+      "karlaskop.ubikmedia.de"
+      "nb.ubikmedia.de"
+      "youthtube.ubikmedia.de"
     ])
   ];
 
