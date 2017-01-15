@@ -74,12 +74,6 @@ with lib;
 
   #nixpkgs.config.steam.java = true;
 
-  environment.variables.EDITOR = mkForce "vim";
-  environment.variables.VIMINIT = ":so /etc/vimrc";
-  environment.etc.vimrc.source = pkgs.writeText "vimrc" ''
-    set nocp
-  '';
-
   environment.systemPackages = with pkgs; [
     firefox
     steam
