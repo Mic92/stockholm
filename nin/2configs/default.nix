@@ -65,6 +65,8 @@ with import <stockholm/lib>;
 
   nix.useSandbox = true;
 
+  users.mutableUsers = false;
+
   services.timesyncd.enable = true;
 
   #why is this on in the first place?
