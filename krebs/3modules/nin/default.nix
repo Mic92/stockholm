@@ -3,7 +3,7 @@
 with import <stockholm/lib>;
 
 {
-  hosts = mapAttrs (_: setAttr "owner" config.krebs.users.lass) {
+  hosts = mapAttrs (_: setAttr "owner" config.krebs.users.nin) {
     hiawatha = {
       cores = 2;
       nets = {
