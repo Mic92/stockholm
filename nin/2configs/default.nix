@@ -10,7 +10,7 @@ with import <stockholm/lib>;
                  (import <secrets/hashedPasswords.nix>);
     }
     {
-      users.extraUsers = {
+      users.users = {
         root = {
           openssh.authorizedKeys.keys = [
             config.krebs.users.nin.pubkey
