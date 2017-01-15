@@ -4,6 +4,7 @@ with import <stockholm/lib>;
 {
   imports = [
     ../2configs/nixpkgs.nix
+    ../2configs/vim.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
