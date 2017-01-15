@@ -289,7 +289,7 @@ with import <stockholm/lib>;
 
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="00:24:d7:f0:a0:0c", NAME="wl0"
-    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:8f:85:c9", NAME="et0"
+    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:71:cb:35", NAME="et0"
   '';
 
   #TODO activationScripts seem broken, fix them!
