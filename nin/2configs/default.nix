@@ -17,7 +17,7 @@ with import <stockholm/lib>;
             config.krebs.users.nin.pubkey
           ];
         };
-        mainUser = {
+        nin = {
           name = "nin";
           uid = 1337;
           home = "/home/nin";
