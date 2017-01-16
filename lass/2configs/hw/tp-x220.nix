@@ -36,6 +36,7 @@ with import <stockholm/lib>;
   boot = {
     kernelModules = [ "kvm-intel" "acpi_call" "tpm-rng" ];
     extraModulePackages = [ config.boot.kernelPackages.tp_smapi ];
+    kernelParams = [ "acpi_backlight=none" ];
   };
 
   hardware.opengl.extraPackages = [
