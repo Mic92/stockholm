@@ -14,6 +14,87 @@ let
     environment.variables.VIMINIT = ":so /etc/vimrc";
   };
 
+  vimrc = pkgs.writeText "vimrc" ''
+    set nocompatible
+
+    set autoindent
+    set backspace=indent,eol,start
+    set backup
+    set backupdir=${dirs.backupdir}/
+    set directory=${dirs.swapdir}//
+    set hlsearch
+    set incsearch
+    set mouse=a
+    set noruler
+    set pastetoggle=<INS>
+    set runtimepath=${extra-runtimepath},$VIMRUNTIME
+    set shortmess+=I
+    set showcmd
+    set showmatch
+    set ttimeoutlen=0
+    set undodir=${dirs.undodir}
+    set undofile
+    set undolevels=1000000
+    set undoreload=1000000
+    set viminfo='20,<1000,s100,h,n${files.viminfo}
+    set visualbell
+    set wildignore+=*.o,*.class,*.hi,*.dyn_hi,*.dyn_o
+    set wildmenu
+    set wildmode=longest,full
+
+    set et ts=2 sts=2 sw=2
+
+    filetype plugin indent on
+
+    set t_Co=256
+    colorscheme hack
+    syntax on
+
+    au Syntax * syn match Garbage containedin=ALL /\s\+$/
+            \ | syn match TabStop containedin=ALL /\t\+/
+            \ | syn keyword Todo containedin=ALL TODO
+
+    au BufRead,BufNewFile *.hs so ${hs.vim}
+
+    au BufRead,BufNewFile *.nix so ${nix.vim}
+
+    au BufRead,BufNewFile /dev/shm/* set nobackup nowritebackup noswapfile
+
+    "Syntastic config
+    let g:syntastic_python_checkers=['flake8']
+
+    nmap <esc>q :buffer 
+    nmap <M-q> :buffer 
+
+    cnoremap <C-A> <Home>
+
+    noremap  <C-c> :q<cr>
+    vnoremap < <gv
+    vnoremap > >gv
+
+    nnoremap <esc>[5^  :tabp<cr>
+    nnoremap <esc>[6^  :tabn<cr>
+    nnoremap <esc>[5@  :tabm -1<cr>
+    nnoremap <esc>[6@  :tabm +1<cr>
+
+    nnoremap <f1> :tabp<cr>
+    nnoremap <f2> :tabn<cr>
+    inoremap <f1> <esc>:tabp<cr>
+    inoremap <f2> <esc>:tabn<cr>
+
+    " <C-{Up,Down,Right,Left>
+    noremap <esc>Oa <nop> | noremap! <esc>Oa <nop>
+    noremap <esc>Ob <nop> | noremap! <esc>Ob <nop>
+    noremap <esc>Oc <nop> | noremap! <esc>Oc <nop>
+    noremap <esc>Od <nop> | noremap! <esc>Od <nop>
+    " <[C]S-{Up,Down,Right,Left>
+    noremap <esc>[a <nop> | noremap! <esc>[a <nop>
+    noremap <esc>[b <nop> | noremap! <esc>[b <nop>
+    noremap <esc>[c <nop> | noremap! <esc>[c <nop>
+    noremap <esc>[d <nop> | noremap! <esc>[d <nop>
+    vnoremap u <nop>
+  '';
+
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
     pkgs.vimPlugins.Gundo
     pkgs.vimPlugins.Syntastic
@@ -125,87 +206,6 @@ let
     set -efu
     (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
     exec ${pkgs.vim}/bin/vim "$@"
-  '';
-
-  vimrc = pkgs.writeText "vimrc" ''
-    set nocompatible
-
-    set autoindent
-    set backspace=indent,eol,start
-    set backup
-    set backupdir=${dirs.backupdir}/
-    set directory=${dirs.swapdir}//
-    set hlsearch
-    set incsearch
-    set mouse=a
-    set noruler
-    set pastetoggle=<INS>
-    set runtimepath=${extra-runtimepath},$VIMRUNTIME
-    set shortmess+=I
-    set showcmd
-    set showmatch
-    set ttimeoutlen=0
-    set undodir=${dirs.undodir}
-    set undofile
-    set undolevels=1000000
-    set undoreload=1000000
-    set viminfo='20,<1000,s100,h,n${files.viminfo}
-    set visualbell
-    set wildignore+=*.o,*.class,*.hi,*.dyn_hi,*.dyn_o
-    set wildmenu
-    set wildmode=longest,full
-
-    set et ts=2 sts=2 sw=2
-
-    filetype plugin indent on
-
-    set t_Co=256
-    colorscheme hack
-    syntax on
-
-    au Syntax * syn match Garbage containedin=ALL /\s\+$/
-            \ | syn match TabStop containedin=ALL /\t\+/
-            \ | syn keyword Todo containedin=ALL TODO
-
-    au BufRead,BufNewFile *.hs so ${hs.vim}
-
-    au BufRead,BufNewFile *.nix so ${nix.vim}
-
-    au BufRead,BufNewFile /dev/shm/* set nobackup nowritebackup noswapfile
-
-    "Syntastic config
-    let g:syntastic_python_checkers=['flake8']
-
-    nmap <esc>q :buffer 
-    nmap <M-q> :buffer 
-
-    cnoremap <C-A> <Home>
-
-    noremap  <C-c> :q<cr>
-    vnoremap < <gv
-    vnoremap > >gv
-
-    nnoremap <esc>[5^  :tabp<cr>
-    nnoremap <esc>[6^  :tabn<cr>
-    nnoremap <esc>[5@  :tabm -1<cr>
-    nnoremap <esc>[6@  :tabm +1<cr>
-
-    nnoremap <f1> :tabp<cr>
-    nnoremap <f2> :tabn<cr>
-    inoremap <f1> <esc>:tabp<cr>
-    inoremap <f2> <esc>:tabn<cr>
-
-    " <C-{Up,Down,Right,Left>
-    noremap <esc>Oa <nop> | noremap! <esc>Oa <nop>
-    noremap <esc>Ob <nop> | noremap! <esc>Ob <nop>
-    noremap <esc>Oc <nop> | noremap! <esc>Oc <nop>
-    noremap <esc>Od <nop> | noremap! <esc>Od <nop>
-    " <[C]S-{Up,Down,Right,Left>
-    noremap <esc>[a <nop> | noremap! <esc>[a <nop>
-    noremap <esc>[b <nop> | noremap! <esc>[b <nop>
-    noremap <esc>[c <nop> | noremap! <esc>[c <nop>
-    noremap <esc>[d <nop> | noremap! <esc>[d <nop>
-    vnoremap u <nop>
   '';
 
   hs.vim = pkgs.writeText "hs.vim" ''
