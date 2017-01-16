@@ -12,8 +12,10 @@
   boot.initrd.availableKernelModules = [ "ahci" ];
   boot.kernelModules = [ "kvm-intel" ];
 
-  boot.loader.gummiboot.enable = true;
+  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
 
   networking.wireless.enable = true;
 
@@ -30,10 +32,6 @@
     HandlePowerKey=ignore
     HandleSuspendKey=ignore
   '';
-
-  services.xserver = {
-    vaapiDrivers = [ pkgs.vaapiIntel ];
-  };
 
   system.activationScripts.powertopTunables = ''
     echo 1 > /sys/module/snd_hda_intel/parameters/power_save
