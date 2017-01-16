@@ -226,6 +226,33 @@ in {
         enable = true;
       };
     }
+    {
+      users.users.nin = {
+        uid = genid "nin";
+        inherit (config.krebs.users.nin) home;
+        group = "users";
+        createHome = true;
+        useDefaultShell = true;
+        openssh.authorizedKeys.keys = [
+          config.krebs.users.nin.pubkey
+        ];
+        extraGroups = [
+          "libvirtd"
+        ];
+      };
+      krebs.git.rules = [
+        {
+          user = [ config.krebs.users.nin ];
+          repo = [ config.krebs.git.repos.stockholm ];
+          perm = with git; push "refs/heads/nin" [ fast-forward non-fast-forward create delete merge ];
+        }
+      ];
+      krebs.repo-sync.repos.stockholm.nin = {
+        origin.url = "http://cgit.prism/stockholm";
+        origin.ref = "heads/nin";
+        mirror.url = "git@${config.networking.hostName}:stockholm";
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
