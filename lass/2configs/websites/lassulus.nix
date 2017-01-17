@@ -5,7 +5,6 @@ let
   inherit (import <stockholm/lib>)
     genid
   ;
-  inherit (import ../../4lib { inherit lib; }) initscript;
 
 in {
   imports = [
@@ -102,8 +101,12 @@ in {
       fastcgi_param SCRIPT_NAME ${script};
     '';
 
-    locations."/init".extraConfig = ''
-      alias ${pkgs.writeText "init" (initscript { pubkey = config.krebs.users.lass.pubkey; })};
+    locations."/init".extraConfig = let
+      initscript = pkgs.init.override {
+        pubkey = config.krebs.users.lass.pubkey;
+      };
+    in ''
+      alias ${initscript};
     '';
 
     enableSSL = true;
