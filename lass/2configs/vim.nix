@@ -42,6 +42,10 @@ let
     set wildmenu
     set wildmode=longest,full
 
+    set title
+    set titleold=
+    set titlestring=(vim)\ %t%(\ %M%)%(\ (%{expand(\"%:p:h\")})%)%(\ %a%)\ -\ %{v:servername}
+
     set et ts=2 sts=2 sw=2
 
     filetype plugin indent on
