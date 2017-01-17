@@ -162,13 +162,17 @@ with import <stockholm/lib>;
     promptInit = ''
       if test $UID = 0; then
         PS1='\[\033[1;31m\]\w\[\033[0m\] '
+        PROMPT_COMMAND='echo -ne "\033]0;$USER@$PWD\007"'
       elif test $UID = 1337; then
         PS1='\[\033[1;32m\]\w\[\033[0m\] '
+        PROMPT_COMMAND='echo -ne "\033]0;$PWD\007"'
       else
         PS1='\[\033[1;33m\]\u@\w\[\033[0m\] '
+        PROMPT_COMMAND='echo -ne "\033]0;$USER@$PWD\007"'
       fi
       if test -n "$SSH_CLIENT"; then
         PS1='\[\033[35m\]\h'" $PS1"
+        PROMPT_COMMAND='echo -ne "\033]0;$HOSTNAME $USER@$PWD\007"'
       fi
     '';
   };
