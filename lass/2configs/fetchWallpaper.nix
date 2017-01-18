@@ -8,5 +8,9 @@ in {
     unitConfig.ConditionPathExists = "!/var/run/ppp0.pid";
     url = "prism/wallpaper.png";
   };
+  systemd.services.fetchWallpaper = {
+    after = [ "xserver.service" ];
+    wantedBy = [ "xserver.service" ];
+  };
 }
 
