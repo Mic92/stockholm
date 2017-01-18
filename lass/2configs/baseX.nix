@@ -7,6 +7,7 @@ in {
     ./xserver
     ./mpv.nix
     ./power-action.nix
+    ./screenlock.nix
     {
       hardware.pulseaudio = {
         enable = true;
