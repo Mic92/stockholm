@@ -9,6 +9,7 @@
     ../.
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
     ../2configs/retiolum.nix
+    ../2configs/weechat.nix
   ];
 
   krebs.build.host = config.krebs.hosts.onondaga;
