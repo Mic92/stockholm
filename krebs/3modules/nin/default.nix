@@ -29,6 +29,31 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFizK5kauDlnjm/IzyzLi+W4hLKqjSWMkfuxzLwg6egx";
     };
+    onondaga = {
+      cores = 1;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.132.55";
+          ip6.addr = "42:0000:0000:0000:0000:0000:0000:1357";
+          aliases = [
+            "onondaga.retiolum"
+            "onondaga.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAqj6NPhRVsr8abz9FFx9+ld3amfxN7SRNccbksUOqkufGS0vaupFR
+            OWsgj4Qmt3lQ82YVt5yjx0FZHkAsenCEKM3kYoIb4nipT0e1MWkQ7plVveMfGkiu
+            htaJ1aCbI2Adxfmk4YbyAr8k3G+Zl9t7gTikBRh7cf5PMiu2JhGUZHzx9urR0ieH
+            xyashZFjl4TtIy4q6QTiyST9kfzteh8k7CJ72zfYkdHl9dPlr5Nk22zH9xPkyzmO
+            kCNeknuDqKeTT9erNtRLk6pjEcyutt0y2/Uq6iZ38z5qq9k4JzcMuQ3YPpNy8bxn
+            hVuk2qBu6kBTUW3iLchoh0d4cfFLWLx1SQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGmQk7AXsYLzjUrOjsuhZ3+gT7FjhPtjwxv5XnuU8GJO";
+    };
 
   };
   users = {

@@ -82,6 +82,9 @@ with lib;
     git
     hexchat
     networkmanagerapplet
+    python
+    virtmanager
+    libvirt
   ];
 
   nixpkgs.config = {
