@@ -11,7 +11,7 @@
     ../2configs/retiolum.nix
   ];
 
-  krebs.build.host = config.krebs.hosts.hiawatha;
+  krebs.build.host = config.krebs.hosts.onondaga;
 
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
