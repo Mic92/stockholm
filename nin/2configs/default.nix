@@ -97,6 +97,7 @@ with import <stockholm/lib>;
     p7zip
     unzip
     unrar
+    hashPassword
   ];
 
   programs.bash = {
