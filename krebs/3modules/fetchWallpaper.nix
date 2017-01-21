@@ -45,7 +45,7 @@ let
 
     mkdir -p ${shell.escape cfg.stateDir}
     cd ${shell.escape cfg.stateDir}
-    curl -s -o wallpaper.tmp -z wallpaper ${shell.escape cfg.url} && mv wallpaper.tmp wallpaper
+    (curl -s -o wallpaper.tmp -z wallpaper ${shell.escape cfg.url} && mv wallpaper.tmp wallpaper) || :
     feh --no-fehbg --bg-scale ${shell.escape cfg.stateDir}/wallpaper
   '';
 
