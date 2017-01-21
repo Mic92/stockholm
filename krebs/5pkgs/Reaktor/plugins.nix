@@ -116,4 +116,16 @@ rec {
       commands.insert(0,titlebot_cmd('clear'))
     '';
   };
+
+  url-title = (buildSimpleReaktorPlugin "url-title" {
+    pattern = "^.*(?P<args>http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)$$";
+    path = with pkgs; [ wget perl ];
+    script = pkgs.writeDash "lambda-pl" ''
+      if [ "$#" -gt 0 ]; then
+        exec wget -qO- "$1" |
+          perl -l -0777 -ne 'print $1 if /<title.*?>\s*(.*?)(?: - youtube)?\s*<\/title/si'
+      fi
+    '';
+  });
+
 }
