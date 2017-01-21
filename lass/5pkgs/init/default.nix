@@ -1,4 +1,4 @@
-{ pkgs, lib, pubkey ? "", disk ? "/dev/sda", vgname ? "vga", luksmap ? "ca", ... }:
+{ pkgs, lib, pubkey ? "", disk ? "/dev/sda", vgname ? "pool", luksmap ? "luksmap", keyfile ? "/root/keyfile", ... }:
 
 with lib;
 
@@ -15,11 +15,13 @@ pkgs.writeText "init" ''
      *) echo Error: unknown operating system >&2; exit 1;;
   esac
 
+  keyfile=${keyfile}
+
   disk=${disk}
 
-  bootdev=${disk}1
+  bootdev=${disk}2
 
-  luksdev=${disk}2
+  luksdev=${disk}3
   luksmap=/dev/mapper/${luksmap}
 
   vgname=${vgname}
@@ -27,6 +29,14 @@ pkgs.writeText "init" ''
   rootdev=/dev/mapper/${vgname}-root
   homedev=/dev/mapper/${vgname}-home
   bkudev=/dev/mapper/${vgname}-bku
+
+  #
+  #generate keyfile
+  #
+
+  if ! test -e "$keyfile"; then
+    dd if=/dev/urandom bs=512 count=2048 of=$keyfile
+  fi
 
   #
   # partitioning
@@ -37,13 +47,15 @@ pkgs.writeText "init" ''
   #   dd if=/dev/zero bs=512 count=34 of=/dev/sda
   # TODO zero last 34 blocks (lsblk -bno SIZE /dev/sda)
   if ! test "$(blkid -o value -s PTTYPE "$disk")" = gpt; then
-    parted "$disk" \
+    parted -a optimal "$disk" \
         mklabel gpt \
-        mkpart ESP fat32 1MiB 1024MiB  set 1 boot on \
+        mkpart no-fs 0 1024KiB \
+        set 1 bios_grub on \
+        mkpart ext2 1025KiB 1024MiB \
         mkpart primary 1024MiB 100%
   fi
 
-  if ! test "$(blkid -o value -s PARTLABEL "$bootdev")" = ESP; then
+  if ! test "$(blkid -o value -s PARTLABEL "$bootdev")" = ext2; then
     echo zonk
     exit 23
   fi
@@ -55,13 +67,14 @@ pkgs.writeText "init" ''
 
   if ! cryptsetup isLuks "$luksdev"; then
     # aes xts-plain64
-    cryptsetup luksFormat "$luksdev" \
+    cryptsetup luksFormat "$luksdev" "$keyfile" \
         -h sha512 \
         --iter-time 5000
   fi
 
   if ! test -e "$luksmap"; then
-    cryptsetup luksOpen "$luksdev" "$(basename "$luksmap")"
+    cryptsetup luksOpen "$luksdev" "$(basename "$luksmap")" \
+        --key-file "$keyfile"
   fi
   # cryptsetup close
 
@@ -84,8 +97,8 @@ pkgs.writeText "init" ''
   # formatting
   #
 
-  if ! test "$(blkid -o value -s TYPE "$bootdev")" = vfat; then
-    mkfs.vfat "$bootdev"
+  if ! test "$(blkid -o value -s TYPE "$bootdev")" = ext2; then
+    mkfs.ext2 "$bootdev"
   fi
 
   if ! test "$(blkid -o value -s TYPE "$rootdev")" = btrfs; then
@@ -119,6 +132,18 @@ pkgs.writeText "init" ''
 
   # umount -R /mnt
 
+  #
+  # dependencies for stockholm
+  #
+
+  nix-env -iA nixos.git
+
+  mkdir -p /mnt/var/src
+  touch /mnt/var/src/.populate
+
+  #
+  # print all the infos
+  #
 
   parted "$disk" print
   lsblk "$disk"
