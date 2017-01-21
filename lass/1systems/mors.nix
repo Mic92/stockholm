@@ -256,11 +256,6 @@ with import <stockholm/lib>;
       fsType = "ext4";
     };
 
-    "/bku" = {
-      device = "/dev/big/backups";
-      fsType = "ext4";
-    };
-
     "/home/games/.local/share/Steam" = {
       device = "/dev/big/steam";
       fsType = "ext4";
