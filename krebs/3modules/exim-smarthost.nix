@@ -2,7 +2,6 @@
 
 with import <stockholm/lib>;
 let
-  indent = replaceChars ["\n"] ["\n  "];
   cfg = config.krebs.exim-smarthost;
 
   out = {

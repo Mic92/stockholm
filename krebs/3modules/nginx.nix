@@ -129,8 +129,6 @@ let
     };
   };
 
-  indent = replaceChars ["\n"] ["\n  "];
-
   to-acme = { server-names, ssl, ... }:
     optionalAttrs ssl.acmeEnable {
       email = "lassulus@gmail.com";

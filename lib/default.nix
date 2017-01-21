@@ -39,6 +39,8 @@ let
       string = toJSON x; # close enough
     }.${type} or reject;
 
+    indent = replaceChars ["\n"] ["\n  "];
+
   };
 in
 
