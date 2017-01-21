@@ -138,8 +138,7 @@ in {
     };
   };
 
-  krebs.Reaktor = {
-    enable = true;
+  krebs.Reaktor.playlist = {
     nickname = "the_playlist|r";
     channels = [ "#the_playlist" ];
     extraEnviron = {
