@@ -259,6 +259,49 @@ in {
         { v6 = false; precedence = 1000; predicate = "-d 192.168.122.24 -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED"; target = "ACCEPT"; }
       ];
     }
+    {
+      krebs.Reaktor.coders = {
+        nickname = "reaktor-lass";
+        channels = [ "#coders" ];
+        extraEnviron = {
+          REAKTOR_HOST = "irc.hackint.org";
+        };
+        plugins = with pkgs.ReaktorPlugins; [
+          sed-plugin
+          url-title
+          (buildSimpleReaktorPlugin "lambdabot-pl" {
+            pattern = "^@pl(?P<args>.*)$$";
+            script = pkgs.writeDash "lambda-pl" ''
+              exec ${pkgs.lambdabot}/bin/lambdabot -e "@pl $1"
+            '';
+          })
+          (buildSimpleReaktorPlugin "lambdabot-type" {
+            pattern = "^@type(?P<args>.*)$$";
+            script = pkgs.writeDash "lambda-type" ''
+              exec ${pkgs.lambdabot}/bin/lambdabot -e "@type $1"
+            '';
+          })
+          (buildSimpleReaktorPlugin "lambdabot-let" {
+            pattern = "^@let(?P<args>.*)$$";
+            script = pkgs.writeDash "lambda-let" ''
+              exec ${pkgs.lambdabot}/bin/lambdabot -e "@let $1"
+            '';
+          })
+          (buildSimpleReaktorPlugin "lambdabot-run" {
+            pattern = "^@run(?P<args>.*)$$";
+            script = pkgs.writeDash "lambda-run" ''
+              exec ${pkgs.lambdabot}/bin/lambdabot -e "@run $1"
+            '';
+          })
+          (buildSimpleReaktorPlugin "lambdabot-kind" {
+            pattern = "^@kind(?P<args>.*)$$";
+            script = pkgs.writeDash "lambda-kind" ''
+              exec ${pkgs.lambdabot}/bin/lambdabot -e "@kind $1"
+            '';
+          })
+        ];
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
