@@ -91,8 +91,6 @@ with import <stockholm/lib>;
   #why is this on in the first place?
   services.nscd.enable = false;
 
-  boot.tmpOnTmpfs = true;
-  # see tmpfiles.d(5)
   systemd.tmpfiles.rules = [
     "d /tmp 1777 root root - -"
   ];
