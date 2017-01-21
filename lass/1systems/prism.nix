@@ -266,37 +266,52 @@ in {
         extraEnviron = {
           REAKTOR_HOST = "irc.hackint.org";
         };
-        plugins = with pkgs.ReaktorPlugins; [
+        plugins = with pkgs.ReaktorPlugins; let
+          lambdabotflags = ''
+            -XStandaloneDeriving -XGADTs -XFlexibleContexts \
+            -XFlexibleInstances -XMultiParamTypeClasses \
+            -XOverloadedStrings -XFunctionalDependencies \'';
+        in [
           sed-plugin
           url-title
           (buildSimpleReaktorPlugin "lambdabot-pl" {
             pattern = "^@pl(?P<args>.*)$$";
             script = pkgs.writeDash "lambda-pl" ''
-              exec ${pkgs.lambdabot}/bin/lambdabot -e "@pl $1"
+              exec ${pkgs.lambdabot}/bin/lambdabot \
+                ${indent lambdabotflags}
+                -e "@pl $1"
             '';
           })
           (buildSimpleReaktorPlugin "lambdabot-type" {
             pattern = "^@type(?P<args>.*)$$";
             script = pkgs.writeDash "lambda-type" ''
-              exec ${pkgs.lambdabot}/bin/lambdabot -e "@type $1"
+              exec ${pkgs.lambdabot}/bin/lambdabot \
+                ${indent lambdabotflags}
+                -e "@type $1"
             '';
           })
           (buildSimpleReaktorPlugin "lambdabot-let" {
             pattern = "^@let(?P<args>.*)$$";
             script = pkgs.writeDash "lambda-let" ''
-              exec ${pkgs.lambdabot}/bin/lambdabot -e "@let $1"
+              exec ${pkgs.lambdabot}/bin/lambdabot \
+                ${indent lambdabotflags}
+                -e "@let $1"
             '';
           })
           (buildSimpleReaktorPlugin "lambdabot-run" {
             pattern = "^@run(?P<args>.*)$$";
             script = pkgs.writeDash "lambda-run" ''
-              exec ${pkgs.lambdabot}/bin/lambdabot -e "@run $1"
+              exec ${pkgs.lambdabot}/bin/lambdabot \
+                ${indent lambdabotflags}
+                -e "@run $1"
             '';
           })
           (buildSimpleReaktorPlugin "lambdabot-kind" {
             pattern = "^@kind(?P<args>.*)$$";
             script = pkgs.writeDash "lambda-kind" ''
-              exec ${pkgs.lambdabot}/bin/lambdabot -e "@kind $1"
+              exec ${pkgs.lambdabot}/bin/lambdabot \
+                ${indent lambdabotflags}
+                -e "@kind $1"
             '';
           })
         ];
