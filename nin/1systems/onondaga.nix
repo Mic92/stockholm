@@ -9,9 +9,10 @@
     ../.
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
     ../2configs/retiolum.nix
+    ../2configs/weechat.nix
   ];
 
-  krebs.build.host = config.krebs.hosts.hiawatha;
+  krebs.build.host = config.krebs.hosts.onondaga;
 
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
@@ -21,7 +22,6 @@
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda";
 
-  networking.hostName = "onondaga";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Select internationalisation properties.
