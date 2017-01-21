@@ -112,17 +112,26 @@ in {
     '';
     internet-aliases = [
       { from = "dominik@apanowicz.de"; to = "dominik_a@gmx.de"; }
+      { from = "dma@ubikmedia.de"; to = "domsen"; }
+      { from = "dma@ubikmedia.eu"; to = "domsen"; }
       { from = "mail@jla-trading.com"; to = "jla-trading"; }
+      { from = "jms@ubikmedia.eu"; to = "jms"; }
+      { from = "ms@ubikmedia.eu"; to = "ms"; }
+      { from = "nrg@ubikmedia.eu"; to = "nrg"; }
+      { from = "ubik@ubikmedia.eu"; to = "domsen, jms, ms, nrg"; }
+
+      { from = "testuser@lassul.us"; to = "testuser"; }
     ];
     sender_domains = [
       "jla-trading.com"
+      "ubikmedia.eu"
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";
   };
 
   users.users.domsen = {
-    uid = genid "domsen";
+    uid = genid_signed "domsen";
     description = "maintenance acc for domsen";
     home = "/home/domsen";
     useDefaultShell = true;
@@ -131,8 +140,36 @@ in {
   };
 
   users.users.jla-trading = {
-    uid = genid "jla-trading";
+    uid = genid_signed "jla-trading";
     home = "/home/jla-trading";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
+  users.users.jms = {
+    uid = genid_signed "jms";
+    home = "/home/jms";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
+  users.users.ms = {
+    uid = genid_signed "ms";
+    home = "/home/ms";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
+  users.users.nrg = {
+    uid = genid_signed "nrg";
+    home = "/home/nrg";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
+  users.users.testuser = {
+    uid = genid_signed "testuser";
+    home = "/home/testuser";
     useDefaultShell = true;
     createHome = true;
   };
