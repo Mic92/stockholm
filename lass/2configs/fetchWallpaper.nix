@@ -9,8 +9,8 @@ in {
     url = "prism/wallpaper.png";
   };
   systemd.services.fetchWallpaper = {
-    after = [ "xserver.service" ];
-    wantedBy = [ "xserver.service" ];
+    after = [ "xmonad.service" ];
+    wantedBy = [ "xmonad.service" ];
   };
 }
 
