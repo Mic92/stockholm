@@ -19,9 +19,7 @@ pkgs.writeText "init" ''
 
   disk=${disk}
 
-  bootdev=${disk}2
-
-  luksdev=${disk}3
+  luksdev=${disk}2
   luksmap=/dev/mapper/${luksmap}
 
   vgname=${vgname}
@@ -51,13 +49,7 @@ pkgs.writeText "init" ''
         mklabel gpt \
         mkpart no-fs 0 1024KiB \
         set 1 bios_grub on \
-        mkpart ext2 1025KiB 1024MiB \
-        mkpart primary 1024MiB 100%
-  fi
-
-  if ! test "$(blkid -o value -s PARTLABEL "$bootdev")" = ext2; then
-    echo zonk
-    exit 23
+        mkpart primary 1025KiB 100%
   fi
 
   if ! test "$(blkid -o value -s PARTLABEL "$luksdev")" = primary; then
@@ -97,10 +89,6 @@ pkgs.writeText "init" ''
   # formatting
   #
 
-  if ! test "$(blkid -o value -s TYPE "$bootdev")" = ext2; then
-    mkfs.ext2 "$bootdev"
-  fi
-
   if ! test "$(blkid -o value -s TYPE "$rootdev")" = btrfs; then
     mkfs.btrfs "$rootdev"
   fi
@@ -116,10 +104,6 @@ pkgs.writeText "init" ''
 
   if ! test "$(lsblk -n -o MOUNTPOINT "$rootdev")" = /mnt; then
     mount "$rootdev" /mnt
-  fi
-  if ! test "$(lsblk -n -o MOUNTPOINT "$bootdev")" = /mnt/boot; then
-    mkdir -m 0000 -p /mnt/boot
-    mount "$bootdev" /mnt/boot
   fi
   if ! test "$(lsblk -n -o MOUNTPOINT "$homedev")" = /mnt/home; then
     mkdir -m 0000 -p /mnt/home
