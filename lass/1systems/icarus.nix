@@ -22,8 +22,9 @@ with import <stockholm/lib>;
     loader.grub.enable = true;
     loader.grub.version = 2;
     loader.grub.device = "/dev/sda";
+    loader.grub.enableCryptodisk = true;
 
-    initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda3"; } ];
+    initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; } ];
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
   };
@@ -42,9 +43,6 @@ with import <stockholm/lib>;
       device = "/dev/mapper/pool-home";
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
-    };
-    "/boot" = {
-      device = "/dev/sda2";
     };
     "/tmp" = {
       device = "tmpfs";
