@@ -22,10 +22,13 @@
     environment.systemPackages = [ usershadow ];
     lass.usershadow.path = "${usershadow}";
     security.pam.services.sshd.text = ''
-      auth required pam_exec.so expose_authtok ${usershadow}/bin/verify_pam ${cfg.pattern}
-      auth required pam_permit.so
       account required pam_permit.so
+      auth required pam_env.so envfile=${config.system.build.pamEnvironment}
+      auth sufficient pam_exec.so quiet expose_authtok ${usershadow}/bin/verify_pam ${cfg.pattern}
+      auth sufficient pam_unix.so likeauth try_first_pass
+      session required pam_env.so envfile=${config.system.build.pamEnvironment}
       session required pam_permit.so
+      session required pam_loginuid.so
     '';
 
     security.pam.services.dovecot2.text = ''
