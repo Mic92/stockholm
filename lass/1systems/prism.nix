@@ -275,7 +275,7 @@ in {
           sed-plugin
           url-title
           (buildSimpleReaktorPlugin "lambdabot-pl" {
-            pattern = "^@pl(?P<args>.*)$$";
+            pattern = "^@pl (?P<args>.*)$$";
             script = pkgs.writeDash "lambda-pl" ''
               exec ${pkgs.lambdabot}/bin/lambdabot \
                 ${indent lambdabotflags}
@@ -283,7 +283,7 @@ in {
             '';
           })
           (buildSimpleReaktorPlugin "lambdabot-type" {
-            pattern = "^@type(?P<args>.*)$$";
+            pattern = "^@type (?P<args>.*)$$";
             script = pkgs.writeDash "lambda-type" ''
               exec ${pkgs.lambdabot}/bin/lambdabot \
                 ${indent lambdabotflags}
@@ -291,7 +291,7 @@ in {
             '';
           })
           (buildSimpleReaktorPlugin "lambdabot-let" {
-            pattern = "^@let(?P<args>.*)$$";
+            pattern = "^@let (?P<args>.*)$$";
             script = pkgs.writeDash "lambda-let" ''
               exec ${pkgs.lambdabot}/bin/lambdabot \
                 ${indent lambdabotflags}
@@ -299,7 +299,7 @@ in {
             '';
           })
           (buildSimpleReaktorPlugin "lambdabot-run" {
-            pattern = "^@run(?P<args>.*)$$";
+            pattern = "^@run (?P<args>.*)$$";
             script = pkgs.writeDash "lambda-run" ''
               exec ${pkgs.lambdabot}/bin/lambdabot \
                 ${indent lambdabotflags}
@@ -307,11 +307,44 @@ in {
             '';
           })
           (buildSimpleReaktorPlugin "lambdabot-kind" {
-            pattern = "^@kind(?P<args>.*)$$";
+            pattern = "^@kind (?P<args>.*)$$";
             script = pkgs.writeDash "lambda-kind" ''
               exec ${pkgs.lambdabot}/bin/lambdabot \
                 ${indent lambdabotflags}
                 -e "@kind $1"
+            '';
+          })
+          (buildSimpleReaktorPlugin "lambdabot-kind" {
+            pattern = "^@kind (?P<args>.*)$$";
+            script = pkgs.writeDash "lambda-kind" ''
+              exec ${pkgs.lambdabot}/bin/lambdabot \
+                ${indent lambdabotflags}
+                -e "@kind $1"
+            '';
+          })
+          (buildSimpleReaktorPlugin "random-unicorn-porn" {
+            pattern = "^!rup$$";
+            script = pkgs.writePython2 "rup" ''
+              #!${pkgs.python2}/bin/python
+              t1 = """
+                                    _.
+                                 ;=',_ ()
+                       8===D~~  S" .--`||
+                               sS  \__ ||
+                            __.' ( \-->||
+                         _=/    _./-\/ ||
+                8===D~~ ((\( /-'   -'l ||
+                         ) |/ \\      (_))
+                            \\  \\
+                             '~ '~
+              """
+              print(t1)
+            '';
+          })
+          (buildSimpleReaktorPlugin "ping" {
+            pattern = "^!ping (?P<args>.*)$$";
+            script = pkgs.writeDash "ping" ''
+              exec /var/setuid-wrappers/ping -q -c1 "$1" 2>&1 | tail -1
             '';
           })
         ];
