@@ -93,6 +93,7 @@ let
     { krebs = import ./lass   { inherit config; }; }
     { krebs = import ./makefu { inherit config; }; }
     { krebs = import ./mv     { inherit config; }; }
+    { krebs = import ./nin    { inherit config; }; }
     { krebs = import ./shared { inherit config; }; }
     { krebs = import ./tv     { inherit config; }; }
     {
@@ -200,7 +201,7 @@ let
           })
         //
         # GitHub's IPv4 address range is 192.30.252.0/22
-        # Refs https://help.github.com/articles/what-ip-addresses-does-github-use-that-i-should-whitelist/
+        # Refs https://help.github.com/articles/github-s-ip-addresses/
         # 192.30.252.0/22 = 192.30.252.0-192.30.255.255 (1024 addresses)
         # Because line length is limited by OPENSSH_LINE_MAX (= 8192),
         # we split each /24 into its own entry.

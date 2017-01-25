@@ -7,7 +7,6 @@ let
     head
   ;
   inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
-    ssl
     servePage
     serveWordpress
   ;
@@ -29,28 +28,20 @@ in {
   imports = [
     ./sqlBackup.nix
 
-    (ssl [ "radical-dreamers.de" "www.radical-dreamers.de" ])
     (serveWordpress [ "radical-dreamers.de" "www.radical-dreamers.de" ])
 
-    (ssl [ "gs-maubach.de" "www.gs-maubach.de" ])
     (serveWordpress [ "gs-maubach.de" "www.gs-maubach.de" ])
 
-    (ssl [ "spielwaren-kern.de" "www.spielwaren-kern.de" ])
     (serveWordpress [ "spielwaren-kern.de" "www.spielwaren-kern.de" ])
 
-    (ssl [ "familienpraxis-korntal.de" "www.familienpraxis-korntal.de" ])
     (servePage [ "familienpraxis-korntal.de" "www.familienpraxis-korntal.de" ])
 
-    (ssl [ "ttf-kleinaspach.de" "www.ttf-kleinaspach.de" ])
     (serveWordpress [ "ttf-kleinaspach.de" "www.ttf-kleinaspach.de" ])
 
-    (ssl [ "eastuttgart.de" "www.eastuttgart.de" ])
     (serveWordpress [ "eastuttgart.de" "www.eastuttgart.de" ])
 
-    (ssl [ "habsys.de" "www.habsys.de" "habsys.eu" "www.habsys.eu" ])
     (servePage [ "habsys.de" "www.habsys.de" "habsys.eu" "www.habsys.eu" ])
 
-    (ssl [ "goldbarrendiebstahl.radical-dreamers.de" ])
     (serveWordpress [ "goldbarrendiebstahl.radical-dreamers.de" ])
   ];
 

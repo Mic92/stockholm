@@ -7,7 +7,6 @@ let
     genid_signed
   ;
   inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
-    ssl
     servePage
     serveOwncloud
     serveWordpress;
@@ -25,47 +24,16 @@ let
 in {
   imports = [
     ./sqlBackup.nix
-    (ssl [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
 
-    (ssl [ "karlaskop.de" "www.karlaskop.de" ])
     (servePage [ "karlaskop.de" "www.karlaskop.de" ])
 
-    (ssl [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
     (servePage [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
 
-    (ssl [ "pixelpocket.de" ])
     (servePage [ "pixelpocket.de" ])
 
-    (ssl [ "o.ubikmedia.de" ])
     (serveOwncloud [ "o.ubikmedia.de" ])
 
-    (ssl [
-      "ubikmedia.de"
-      "aldona.ubikmedia.de"
-      "apanowicz.de"
-      "nirwanabluete.de"
-      "aldonasiech.com"
-      "360gradvideo.tv"
-      "ubikmedia.eu"
-      "facts.cloud"
-      "youthtube.xyz"
-      "illucloud.eu"
-      "illucloud.de"
-      "illucloud.com"
-      "www.ubikmedia.de"
-      "www.aldona.ubikmedia.de"
-      "www.apanowicz.de"
-      "www.nirwanabluete.de"
-      "www.aldonasiech.com"
-      "www.360gradvideo.tv"
-      "www.ubikmedia.eu"
-      "www.facts.cloud"
-      "www.youthtube.xyz"
-      "www.illucloud.eu"
-      "www.illucloud.de"
-      "www.illucloud.com"
-    ])
     (serveWordpress [
       "ubikmedia.de"
       "apanowicz.de"
@@ -88,6 +56,16 @@ in {
       "www.illucloud.eu"
       "www.illucloud.de"
       "www.illucloud.com"
+      "www.ubikmedia.de"
+      "aldona2.ubikmedia.de"
+      "apanowicz.ubikmedia.de"
+      "cinevita.ubikmedia.de"
+      "factscloud.ubikmedia.de"
+      "illucloud.ubikmedia.de"
+      "joemisch.ubikmedia.de"
+      "karlaskop.ubikmedia.de"
+      "nb.ubikmedia.de"
+      "youthtube.ubikmedia.de"
     ])
   ];
 
@@ -134,17 +112,26 @@ in {
     '';
     internet-aliases = [
       { from = "dominik@apanowicz.de"; to = "dominik_a@gmx.de"; }
+      { from = "dma@ubikmedia.de"; to = "domsen"; }
+      { from = "dma@ubikmedia.eu"; to = "domsen"; }
       { from = "mail@jla-trading.com"; to = "jla-trading"; }
+      { from = "jms@ubikmedia.eu"; to = "jms"; }
+      { from = "ms@ubikmedia.eu"; to = "ms"; }
+      { from = "nrg@ubikmedia.eu"; to = "nrg"; }
+      { from = "ubik@ubikmedia.eu"; to = "domsen, jms, ms, nrg"; }
+
+      { from = "testuser@lassul.us"; to = "testuser"; }
     ];
     sender_domains = [
       "jla-trading.com"
+      "ubikmedia.eu"
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";
   };
 
   users.users.domsen = {
-    uid = genid "domsen";
+    uid = genid_signed "domsen";
     description = "maintenance acc for domsen";
     home = "/home/domsen";
     useDefaultShell = true;
@@ -153,8 +140,36 @@ in {
   };
 
   users.users.jla-trading = {
-    uid = genid "jla-trading";
+    uid = genid_signed "jla-trading";
     home = "/home/jla-trading";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
+  users.users.jms = {
+    uid = genid_signed "jms";
+    home = "/home/jms";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
+  users.users.ms = {
+    uid = genid_signed "ms";
+    home = "/home/ms";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
+  users.users.nrg = {
+    uid = genid_signed "nrg";
+    home = "/home/nrg";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
+  users.users.testuser = {
+    uid = genid_signed "testuser";
+    home = "/home/testuser";
     useDefaultShell = true;
     createHome = true;
   };

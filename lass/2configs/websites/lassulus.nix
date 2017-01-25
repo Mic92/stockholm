@@ -83,6 +83,7 @@ in {
     locations."/tinc".extraConfig = ''
       alias ${config.krebs.tinc_graphs.workingDir}/external;
     '';
+    # TODO make this work!
     locations."= /ddate".extraConfig = let
       script = pkgs.writeBash "test" ''
         echo "hello world"
@@ -98,6 +99,14 @@ in {
       fastcgi_param DOCUMENT_ROOT /var/empty;
       fastcgi_param SCRIPT_FILENAME ${script};
       fastcgi_param SCRIPT_NAME ${script};
+    '';
+
+    locations."/init".extraConfig = let
+      initscript = pkgs.init.override {
+        pubkey = config.krebs.users.lass.pubkey;
+      };
+    in ''
+      alias ${initscript};
     '';
 
     enableSSL = true;

@@ -60,28 +60,20 @@ in {
     musicDirectory = "/home/radio/the_playlist/music";
     extraConfig = ''
       audio_output {
-          type        "shout"
-          encoding    "ogg"
-          name        "the_playlist"
-          host        "localhost"
-          port        "8000"
-          mount       "/radio.ogg"
+        type        "shout"
+        encoding    "ogg"
+        name        "the_playlist"
+        host        "localhost"
+        port        "8000"
+        mount       "/radio.ogg"
+        password    "${source-password}"
+        bitrate     "128"
 
-      # This is the source password in icecast.xml
-          password    "${source-password}"
+        format      "44100:16:2"
 
-      # Set either quality or bit rate
-      #   quality     "5.0"
-          bitrate     "128"
-
-          format      "44100:16:1"
-
-      # Optional Parameters
-          user        "source"
-      #   description "here is my long description"
-         genre       "good music"
-      } # end of audio_output
-
+        user        "source"
+        genre       "good music"
+      }
     '';
   };
 
@@ -138,8 +130,7 @@ in {
     };
   };
 
-  krebs.Reaktor = {
-    enable = true;
+  krebs.Reaktor.playlist = {
     nickname = "the_playlist|r";
     channels = [ "#the_playlist" ];
     extraEnviron = {

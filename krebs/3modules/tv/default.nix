@@ -85,7 +85,7 @@ with import <stockholm/lib>;
       };
       nets = {
         internet = {
-          ip4.addr = "45.62.237.203";
+          ip4.addr = "64.137.177.226";
           aliases = [
             "cd.i"
             "cd.krebsco.de"

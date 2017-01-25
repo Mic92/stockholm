@@ -12,6 +12,22 @@ let
 in {
   imports = [
     ../.
+    {
+      networking.interfaces.et0.ip4 = [
+        {
+          address = ip;
+          prefixLength = 24;
+        }
+      ];
+      networking.defaultGateway = "213.239.205.225";
+      networking.nameservers = [
+        "8.8.8.8"
+      ];
+      services.udev.extraRules = ''
+        SUBSYSTEM=="net", ATTR{address}=="54:04:a6:7e:f4:06", NAME="et0"
+      '';
+
+    }
     ../2configs/retiolum.nix
     ../2configs/exim-smarthost.nix
     ../2configs/downloading.nix
@@ -47,22 +63,6 @@ in {
         # warning: error(s) occured while switching to the new configuration
         lock.gid = 10001;
       };
-    }
-    {
-      networking.interfaces.et0.ip4 = [
-        {
-          address = ip;
-          prefixLength = 24;
-        }
-      ];
-      networking.defaultGateway = "213.239.205.225";
-      networking.nameservers = [
-        "8.8.8.8"
-      ];
-      services.udev.extraRules = ''
-        SUBSYSTEM=="net", ATTR{address}=="54:04:a6:7e:f4:06", NAME="et0"
-      '';
-
     }
     {
       boot.loader.grub = {
@@ -224,6 +224,130 @@ in {
     {
       lass.usershadow = {
         enable = true;
+      };
+    }
+    {
+      users.users.nin = {
+        uid = genid "nin";
+        inherit (config.krebs.users.nin) home;
+        group = "users";
+        createHome = true;
+        useDefaultShell = true;
+        openssh.authorizedKeys.keys = [
+          config.krebs.users.nin.pubkey
+        ];
+        extraGroups = [
+          "libvirtd"
+        ];
+      };
+      krebs.git.rules = [
+        {
+          user = [ config.krebs.users.nin ];
+          repo = [ config.krebs.git.repos.stockholm ];
+          perm = with git; push "refs/heads/nin" [ fast-forward non-fast-forward create delete merge ];
+        }
+      ];
+      krebs.repo-sync.repos.stockholm.nin = {
+        origin.url = "http://cgit.prism/stockholm";
+        origin.ref = "heads/nin";
+        mirror.url = "git@${config.networking.hostName}:stockholm";
+      };
+      krebs.iptables.tables.nat.PREROUTING.rules = [
+        { v6 = false; precedence = 1000; predicate = "-d 213.239.205.240 -p tcp --dport 1337"; target = "DNAT --to-destination 192.168.122.24:22"; }
+      ];
+      krebs.iptables.tables.filter.FORWARD.rules = [
+        { v6 = false; precedence = 1000; predicate = "-d 192.168.122.24 -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED"; target = "ACCEPT"; }
+      ];
+    }
+    {
+      krebs.Reaktor.coders = {
+        nickname = "reaktor-lass";
+        channels = [ "#coders" ];
+        extraEnviron = {
+          REAKTOR_HOST = "irc.hackint.org";
+        };
+        plugins = with pkgs.ReaktorPlugins; let
+          lambdabotflags = ''
+            -XStandaloneDeriving -XGADTs -XFlexibleContexts \
+            -XFlexibleInstances -XMultiParamTypeClasses \
+            -XOverloadedStrings -XFunctionalDependencies \'';
+        in [
+          sed-plugin
+          url-title
+          (buildSimpleReaktorPlugin "lambdabot-pl" {
+            pattern = "^@pl (?P<args>.*)$$";
+            script = pkgs.writeDash "lambda-pl" ''
+              exec ${pkgs.lambdabot}/bin/lambdabot \
+                ${indent lambdabotflags}
+                -e "@pl $1"
+            '';
+          })
+          (buildSimpleReaktorPlugin "lambdabot-type" {
+            pattern = "^@type (?P<args>.*)$$";
+            script = pkgs.writeDash "lambda-type" ''
+              exec ${pkgs.lambdabot}/bin/lambdabot \
+                ${indent lambdabotflags}
+                -e "@type $1"
+            '';
+          })
+          (buildSimpleReaktorPlugin "lambdabot-let" {
+            pattern = "^@let (?P<args>.*)$$";
+            script = pkgs.writeDash "lambda-let" ''
+              exec ${pkgs.lambdabot}/bin/lambdabot \
+                ${indent lambdabotflags}
+                -e "@let $1"
+            '';
+          })
+          (buildSimpleReaktorPlugin "lambdabot-run" {
+            pattern = "^@run (?P<args>.*)$$";
+            script = pkgs.writeDash "lambda-run" ''
+              exec ${pkgs.lambdabot}/bin/lambdabot \
+                ${indent lambdabotflags}
+                -e "@run $1"
+            '';
+          })
+          (buildSimpleReaktorPlugin "lambdabot-kind" {
+            pattern = "^@kind (?P<args>.*)$$";
+            script = pkgs.writeDash "lambda-kind" ''
+              exec ${pkgs.lambdabot}/bin/lambdabot \
+                ${indent lambdabotflags}
+                -e "@kind $1"
+            '';
+          })
+          (buildSimpleReaktorPlugin "lambdabot-kind" {
+            pattern = "^@kind (?P<args>.*)$$";
+            script = pkgs.writeDash "lambda-kind" ''
+              exec ${pkgs.lambdabot}/bin/lambdabot \
+                ${indent lambdabotflags}
+                -e "@kind $1"
+            '';
+          })
+          (buildSimpleReaktorPlugin "random-unicorn-porn" {
+            pattern = "^!rup$$";
+            script = pkgs.writePython2 "rup" ''
+              #!${pkgs.python2}/bin/python
+              t1 = """
+                                    _.
+                                 ;=',_ ()
+                       8===D~~  S" .--`||
+                               sS  \__ ||
+                            __.' ( \-->||
+                         _=/    _./-\/ ||
+                8===D~~ ((\( /-'   -'l ||
+                         ) |/ \\      (_))
+                            \\  \\
+                             '~ '~
+              """
+              print(t1)
+            '';
+          })
+          (buildSimpleReaktorPlugin "ping" {
+            pattern = "^!ping (?P<args>.*)$$";
+            script = pkgs.writeDash "ping" ''
+              exec /var/setuid-wrappers/ping -q -c1 "$1" 2>&1 | tail -1
+            '';
+          })
+        ];
       };
     }
   ];

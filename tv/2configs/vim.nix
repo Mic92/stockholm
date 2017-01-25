@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
 with import <stockholm/lib>;
-let
-  out = {
+let {
+  body = {
     environment.systemPackages = [
       vim
     ];
@@ -411,5 +411,4 @@ let
     catch /^Vim\%((\a\+)\)\=:E484/
     endtry
   '';
-in
-out
+}

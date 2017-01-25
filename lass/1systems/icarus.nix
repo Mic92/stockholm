@@ -14,15 +14,6 @@ with import <stockholm/lib>;
     ../2configs/fetchWallpaper.nix
     ../2configs/backups.nix
     ../2configs/games.nix
-    #{
-    #  users.extraUsers = {
-    #    root = {
-    #      openssh.authorizedKeys.keys = map readFile [
-    #        ../../krebs/Zpubkeys/uriel.ssh.pub
-    #      ];
-    #    };
-    #  };
-    #}
   ];
 
   krebs.build.host = config.krebs.hosts.icarus;
@@ -31,20 +22,27 @@ with import <stockholm/lib>;
     loader.grub.enable = true;
     loader.grub.version = 2;
     loader.grub.device = "/dev/sda";
+    loader.grub.enableCryptodisk = true;
 
     initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; } ];
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
-    #kernelModules = [ "kvm-intel" "msr" ];
   };
   fileSystems = {
     "/" = {
-      device = "/dev/pool/nix";
+      device = "/dev/mapper/pool-root";
       fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
-
-    "/boot" = {
-      device = "/dev/sda1";
+    "/bku" = {
+      device = "/dev/mapper/pool-bku";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+    };
+    "/home" = {
+      device = "/dev/mapper/pool-home";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
     "/tmp" = {
       device = "tmpfs";
@@ -54,7 +52,7 @@ with import <stockholm/lib>;
   };
 
   services.udev.extraRules = ''
-    SUBSYSTEM=="net", ATTR{address}=="a0:88:b4:29:26:bc", NAME="wl0"
-    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:0c:a7:63", NAME="et0"
+    SUBSYSTEM=="net", ATTR{address}=="08:11:96:0a:5d:6c", NAME="wl0"
+    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:71:cb:35", NAME="et0"
   '';
 }

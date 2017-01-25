@@ -56,7 +56,8 @@ let
         channel = "#retiolum";
         server = "ni.r";
         verbose = config.krebs.build.host.name == "prism";
-        branches = [ "master" ];
+        # TODO define branches in some kind of option per repo
+        branches = [ "master" "newest" "nin" ];
       };
     };
   };

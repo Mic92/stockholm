@@ -16,11 +16,11 @@ with import <stockholm/lib>;
   networking = {
     interfaces.enp2s1.ip4 = singleton {
       address = let
-        addr = "45.62.237.203";
+        addr = "64.137.177.226";
       in assert config.krebs.build.host.nets.internet.ip4.addr == addr; addr;
       prefixLength = 24;
     };
-    defaultGateway = "45.62.237.1";
+    defaultGateway = "64.137.177.1";
     nameservers = ["8.8.8.8"];
   };
 

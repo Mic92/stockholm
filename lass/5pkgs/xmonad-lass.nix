@@ -114,10 +114,10 @@ myKeyMap =
     [ ("M4-<F11>", spawn "${pkgs.i3lock}/bin/i3lock -i /var/lib/wallpaper/wallpaper -f")
     , ("M4-C-p", spawn "${pkgs.scrot}/bin/scrot ~/public_html/scrot.png")
     , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
-    , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume 0 +4%")
-    , ("<XF86AudioLowerVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume 0 -4%")
-    , ("<XF86AudioMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-mute 0 toggle")
-    , ("<XF86AudioMicMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-source-mute 1 toggle")
+    , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ +4%")
+    , ("<XF86AudioLowerVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ -4%")
+    , ("<XF86MonBrightnessDown>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -time 0 -dec 1%")
+    , ("<XF86MonBrightnessUp>",   spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -time 0 -inc 1")
     , ("<XF86Launch1>", gridselectWorkspace gridConfig W.view)
     , ("M4-C-k", spawn "${pkgs.xorg.xkill}/bin/xkill")
 
@@ -144,6 +144,8 @@ myKeyMap =
     , ("M4-C-q", windowPromptBringCopy infixAutoXPConfig)
 
     , ("M4-S-q", return ())
+
+    , ("M4-w", floatNext True >> spawn "${pkgs.copyq}/bin/copyq show")
     ]
 
 forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()

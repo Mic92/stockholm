@@ -59,17 +59,13 @@ with import <stockholm/lib>;
   fileSystems = {
     "/" = {
       device = "/dev/pool/nix";
-      fsType = "ext4";
+      fsType = "btrfs";
     };
 
     "/boot" = {
       device = "/dev/sda1";
     };
 
-    "/home/lass" = {
-      device = "/dev/pool/home-lass";
-      fsType = "ext4";
-    };
     "/tmp" = {
       device = "tmpfs";
       fsType = "tmpfs";
@@ -77,7 +73,7 @@ with import <stockholm/lib>;
     };
     "/bku" = {
       device = "/dev/pool/bku";
-      fsType = "ext4";
+      fsType = "btrfs";
     };
   };
 

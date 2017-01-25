@@ -23,7 +23,6 @@ with import <stockholm/lib>;
         # stockholm
         gnumake
         hashPassword
-        haskellPackages.lentil
         parallel
 
         # root
@@ -47,7 +46,6 @@ with import <stockholm/lib>;
         p7zip
         push
         qrencode
-        texLive
         tmux
 
         #ack
@@ -116,18 +114,23 @@ with import <stockholm/lib>;
   boot.initrd.luks = {
     cryptoModules = [ "aes" "sha512" "xts" ];
     devices = [
-      { name = "home"; device = "/dev/vg840/enchome"; preLVM = false; }
+      { name = "wuca"; device = "/dev/sda2"; }
     ];
   };
 
   fileSystems = {
     "/" = {
-      device = "/dev/mapper/vg840-wuroot";
+      device = "/dev/mapper/wuvga-root";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+    };
+    "/bku" = {
+      device = "/dev/mapper/wuvga-bku";
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
     "/home" = {
-      device = "/dev/mapper/home";
+      device = "/dev/mapper/wuvga-home";
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
@@ -174,5 +177,5 @@ with import <stockholm/lib>;
     KERNEL=="hpet", GROUP="audio"
   '';
 
-  services.virtualboxHost.enable = true;
+  virtualisation.virtualbox.host.enable = true;
 }

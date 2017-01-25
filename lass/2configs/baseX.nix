@@ -7,11 +7,20 @@ in {
     ./xserver
     ./mpv.nix
     ./power-action.nix
+    ./screenlock.nix
     {
       hardware.pulseaudio = {
         enable = true;
         systemWide = true;
       };
+    }
+    {
+      krebs.per-user.lass.packages = [
+        pkgs.sshuttle
+      ];
+      security.sudo.extraConfig = ''
+        lass ALL= (root) NOPASSWD:SETENV: ${pkgs.sshuttle}/bin/.sshuttle-wrapped
+      '';
     }
   ];
 
