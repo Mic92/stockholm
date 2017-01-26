@@ -44,6 +44,10 @@ let
           origin.url = "http://cgit.ni.r/${name}";
           mirror.url = "${mirror}${name}";
         };
+        nin = {
+          origin.url = "http://cgit.onondaga.r/${name}";
+          mirror.url = "${mirror}${name}";
+        };
         lassulus = {
           origin.url = "http://cgit.prism/${name}";
           mirror.url = "${mirror}${name}";
