@@ -58,7 +58,10 @@ with import <stockholm/lib>;
       user = config.krebs.users.nin;
       source = let inherit (config.krebs.build) host; in {
         nixos-config.symlink = "stockholm/nin/1systems/${host.name}.nix";
-        secrets.file = "/home/nin/secrets/${host.name}";
+        secrets.file =
+        if getEnv "dummy_secrets" == "true"
+          then toString <stockholm/nin/6tests/dummysecrets>
+          else "/home/nin/secrets/${host.name}";
         stockholm.file = getEnv "PWD";
       };
     };
