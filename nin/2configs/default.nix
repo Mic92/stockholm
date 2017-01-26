@@ -82,7 +82,6 @@ with import <stockholm/lib>;
   # multiple-definition-problem when defining environment.variables.EDITOR
   environment.extraInit = ''
     EDITOR=vim
-    MANPAGER=most
   '';
 
   nixpkgs.config.allowUnfree = true;
