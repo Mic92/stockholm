@@ -11,6 +11,7 @@ with lib;
     ../.
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ../2configs/retiolum.nix
+    ../2configs/git.nix
   ];
 
   krebs.build.host = config.krebs.hosts.hiawatha;
