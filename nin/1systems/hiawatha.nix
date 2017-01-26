@@ -80,7 +80,6 @@ with lib;
     networkmanagerapplet
     python
     steam
-    termite
     thunderbird
     vim
     virtmanager

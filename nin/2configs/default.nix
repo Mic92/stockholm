@@ -107,6 +107,7 @@ with import <stockholm/lib>;
     proot
     populate
     p7zip
+    termite
     unzip
     unrar
     hashPassword
