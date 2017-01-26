@@ -57,7 +57,7 @@ let
         server = "ni.r";
         verbose = config.krebs.build.host.name == "prism";
         # TODO define branches in some kind of option per repo
-        branches = [ "master" "newest" "nin" ];
+        branches = [ "master" "newest" ];
       };
     };
   };
