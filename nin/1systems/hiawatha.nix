@@ -76,15 +76,14 @@ with lib;
 
   environment.systemPackages = with pkgs; [
     firefox
-    steam
-    thunderbird
-    vim
     git
-    hexchat
     networkmanagerapplet
     python
+    steam
+    termite
+    thunderbird
+    vim
     virtmanager
-    libvirt
   ];
 
   nixpkgs.config = {
