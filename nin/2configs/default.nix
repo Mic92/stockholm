@@ -86,6 +86,10 @@ with import <stockholm/lib>;
 
   nixpkgs.config.allowUnfree = true;
 
+  environment.shellAliases = {
+    gs = "git status";
+  };
+
   environment.systemPackages = with pkgs; [
   #stockholm
     git
