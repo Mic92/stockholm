@@ -227,6 +227,7 @@ in {
       };
     }
     {
+      # Nin stuff
       users.users.nin = {
         uid = genid "nin";
         inherit (config.krebs.users.nin) home;
@@ -239,18 +240,6 @@ in {
         extraGroups = [
           "libvirtd"
         ];
-      };
-      krebs.git.rules = [
-        {
-          user = [ config.krebs.users.nin ];
-          repo = [ config.krebs.git.repos.stockholm ];
-          perm = with git; push "refs/heads/nin" [ fast-forward non-fast-forward create delete merge ];
-        }
-      ];
-      krebs.repo-sync.repos.stockholm.nin = {
-        origin.url = "http://cgit.prism/stockholm";
-        origin.ref = "heads/nin";
-        mirror.url = "git@${config.networking.hostName}:stockholm";
       };
       krebs.iptables.tables.nat.PREROUTING.rules = [
         { v6 = false; precedence = 1000; predicate = "-d 213.239.205.240 -p tcp --dport 1337"; target = "DNAT --to-destination 192.168.122.24:22"; }
