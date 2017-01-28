@@ -21,6 +21,14 @@ let
       type = types.str;
       default = "kapacitor";
     };
+    alarms = mkOption {
+      type = with types; attrsOf str;
+      default = {};
+    };
+    check_db = mkOption {
+      type = types.str;
+      default = "kapacitor_example";
+    };
     config = mkOption {
       type = types.str;
       #TODO: find a good default
@@ -216,6 +224,29 @@ let
         ExecStart = "${pkgs.kapacitor}/bin/kapacitord -config ${configFile}";
       };
     };
+
+    systemd.services.kapacitor-alarms = {
+      description = "kapacitor-alarms";
+      after = [ "kapacitor.service" ];
+      wantedBy = [ "multi-user.target" ];
+
+      restartIfChanged = true;
+
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = pkgs.writeDash "add_alarms" ''
+          ${pkgs.kapacitor}/bin/kapacitor delete tasks \*
+          ${concatStrings (mapAttrsToList (name: alarm: ''
+            ${pkgs.kapacitor}/bin/kapacitor define ${name} \
+              -type batch \
+              -tick ${pkgs.writeText "${name}.tick" alarm} \
+              -dbrp ${cfg.check_db}.default
+            ${pkgs.kapacitor}/bin/kapacitor enable ${name}
+          '') cfg.alarms)}
+        '';
+      };
+    };
+
   };
 
 in out
