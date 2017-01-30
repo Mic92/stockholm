@@ -203,20 +203,6 @@ in {
       };
     }
     {
-      services.nginx = {
-        enable = true;
-        virtualHosts.public = {
-          port = 8088;
-          locations."~ ^/~(.+?)(/.*)?\$".extraConfig = ''
-            alias /home/$1/public_html$2;
-          '';
-        };
-      };
-      krebs.iptables.tables.filter.INPUT.rules = [
-       { predicate = "-p tcp --dport 8088"; target = "ACCEPT"; }
-      ];
-    }
-    {
       krebs.repo-sync.timerConfig = {
         OnCalendar = "*:0/5";
       };
