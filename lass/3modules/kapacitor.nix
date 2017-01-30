@@ -27,7 +27,7 @@ let
     };
     check_db = mkOption {
       type = types.str;
-      default = "kapacitor_example";
+      default = "all_data";
     };
     config = mkOption {
       type = types.str;
@@ -82,115 +82,7 @@ let
 
         [logging]
           file = "STDERR"
-          level = "INFO"
-
-        [collectd]
-          enabled = false
-          bind-address = ":25826"
-          database = "collectd"
-          retention-policy = ""
-          batch-size = 5000
-          batch-pending = 10
-          batch-timeout = "10s"
-          read-buffer = 0
-          typesdb = "/usr/share/collectd/types.db"
-
-        [opentsdb]
-          enabled = false
-          bind-address = ":4242"
-          database = "opentsdb"
-          retention-policy = ""
-          consistency-level = "one"
-          tls-enabled = false
-          certificate = "/etc/ssl/influxdb.pem"
-          batch-size = 1000
-          batch-pending = 5
-          batch-timeout = "1s"
-          log-point-errors = true
-
-        [smtp]
-          enabled = false
-          host = "localhost"
-          port = 25
-          username = ""
-          password = ""
-          no-verify = false
-          global = false
-          state-changes-only = false
-          from = ""
-          idle-timeout = "30s"
-
-        [opsgenie]
-          enabled = false
-          api-key = ""
-          url = "https://api.opsgenie.com/v1/json/alert"
-          recovery_url = "https://api.opsgenie.com/v1/json/alert/note"
-          global = false
-
-        [victorops]
-          enabled = false
-          api-key = ""
-          routing-key = ""
-          url = "https://alert.victorops.com/integrations/generic/20131114/alert"
-          global = false
-
-        [pagerduty]
-          enabled = false
-          url = "https://events.pagerduty.com/generic/2010-04-15/create_event.json"
-          service-key = ""
-          global = false
-
-        [sensu]
-          enabled = false
-          addr = ""
-          source = "Kapacitor"
-
-        [slack]
-          enabled = false
-          url = ""
-          channel = ""
-          global = false
-          state-changes-only = false
-
-        [telegram]
-          enabled = false
-          url = "https://api.telegram.org/bot"
-          token = ""
-          chat-id = ""
-          parse-mode = ""
-          disable-web-page-preview = false
-          disable-notification = false
-          global = false
-          state-changes-only = false
-
-        [hipchat]
-          enabled = false
-          url = ""
-          token = ""
-          room = ""
-          global = false
-          state-changes-only = false
-
-        [alerta]
-          enabled = false
-          url = ""
-          token = ""
-          environment = ""
-          origin = ""
-
-        [reporting]
-          enabled = true
-          url = "https://usage.influxdata.com"
-
-        [stats]
-          enabled = true
-          stats-interval = "10s"
-          database = "_kapacitor"
-          retention-policy = "autogen"
-          timing-sample-rate = 0.1
-          timing-movavg-size = 1000
-
-        [udf]
+          level = "DEBUG"
 
         [deadman]
           interval = "10s"
@@ -198,11 +90,6 @@ let
           id = "{{ .Group }}:NODE_NAME for task '{{ .TaskName }}'"
           message = "{{ .ID }} is {{ if eq .Level \"OK\" }}alive{{ else }}dead{{ end }}: {{ index .Fields \"emitted\" | printf \"%0.3f\" }} points/INTERVAL."
           global = false
-
-        [talk]
-          enabled = false
-          url = ""
-          author_name = ""
       '';
       description = "configuration kapacitor is started with";
     };
