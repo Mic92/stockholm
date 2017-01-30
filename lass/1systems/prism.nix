@@ -43,6 +43,7 @@ in {
     ../2configs/libvirt.nix
     ../2configs/hfos.nix
     ../2configs/makefu-sip.nix
+    ../2configs/monitoring/server.nix
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
