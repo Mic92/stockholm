@@ -44,7 +44,16 @@ in {
     ../2configs/hfos.nix
     ../2configs/makefu-sip.nix
     ../2configs/monitoring/server.nix
-    ../2configs/bepasty.nix
+    {
+      imports = [
+        ../2configs/bepasty.nix
+      ];
+      krebs.bepasty.servers."paste.r".nginx.extraConfig = ''
+        if ( $server_addr = "${config.krebs.build.host.nets.internet.ip4.addr}" ) {
+          return 403;
+        }
+      '';
+    }
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
