@@ -3,10 +3,13 @@ with import <stockholm/lib>;
 {
   lass.telegraf = {
     enable = true;
+    interval = "1s";
+
+
     outputs = ''
       [outputs.influxdb]
         urls = ["http://prism:8086"]
-        database = "all_data"
+        database = "telegraf_db"
         user_agent = "telegraf"
     '';
     inputs = [
