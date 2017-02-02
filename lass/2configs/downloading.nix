@@ -16,6 +16,7 @@ with import <stockholm/lib>;
         lass.pubkey
         lass-shodan.pubkey
         lass-helios.pubkey
+        lass-icarus.pubkey
         makefu.pubkey
       ];
     };
