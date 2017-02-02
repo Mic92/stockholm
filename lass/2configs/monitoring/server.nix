@@ -14,6 +14,12 @@ with import <stockholm/lib>;
       enabled = false;
       # write-interval = "24h";
     };
+    collectd = [{
+      enabled = true;
+      typesdb = "${pkgs.collectd}/share/collectd/types.db";
+      database = "collectd_db";
+      port = 25826;
+    }];
   };
 
   lass.kapacitor =
@@ -49,6 +55,7 @@ with import <stockholm/lib>;
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp -i retiolum --dport 8086"; target = "ACCEPT"; }
     { predicate = "-p tcp -i retiolum --dport 3000"; target = "ACCEPT"; }
+    { predicate = "-p udp -i retiolum --dport 25826"; target = "ACCEPT"; }
   ];
   services.grafana = {
     enable = true;
