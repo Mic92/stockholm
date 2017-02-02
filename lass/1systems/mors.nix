@@ -174,11 +174,6 @@ with import <stockholm/lib>;
       fsType = "ext4";
     };
 
-    "/mnt/public" = {
-      device = "/dev/big/public";
-      fsType = "ext4";
-    };
-
     "/mnt/conf" = {
       device = "/dev/big/conf";
       fsType = "ext4";
