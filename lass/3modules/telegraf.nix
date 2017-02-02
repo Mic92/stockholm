@@ -26,7 +26,7 @@ let
       default = ''
         [outputs.influxdb]
           urls = ["http://localhost:8086"]
-          database = "all_data"
+          database = "telegraf_db"
           user_agent = "telegraf"
       '';
     };
