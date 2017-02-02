@@ -41,12 +41,16 @@ let
         ''
       ];
     };
+    interval = mkOption {
+      type = types.str;
+      default = "10s";
+    };
     config = mkOption {
       type = types.str;
       #TODO: find a good default
       default = ''
         [agent]
-            interval = "1s"
+            interval = "${cfg.interval}"
 
         [outputs]
 
