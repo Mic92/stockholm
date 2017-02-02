@@ -258,7 +258,6 @@ in {
             -XFlexibleInstances -XMultiParamTypeClasses \
             -XOverloadedStrings -XFunctionalDependencies \'';
         in [
-          sed-plugin
           url-title
           (buildSimpleReaktorPlugin "lambdabot-pl" {
             pattern = "^@pl (?P<args>.*)$$";
