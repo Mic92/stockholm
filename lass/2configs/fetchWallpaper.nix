@@ -7,6 +7,7 @@ in {
     enable = true;
     unitConfig.ConditionPathExists = "!/var/run/ppp0.pid";
     url = "prism/wallpaper.png";
+    maxTime = 10;
   };
   systemd.services.fetchWallpaper = {
     after = [ "xmonad.service" ];

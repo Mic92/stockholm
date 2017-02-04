@@ -11,6 +11,7 @@ with lib;
     ../.
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ../2configs/retiolum.nix
+    ../2configs/git.nix
   ];
 
   krebs.build.host = config.krebs.hosts.hiawatha;
@@ -76,15 +77,13 @@ with lib;
 
   environment.systemPackages = with pkgs; [
     firefox
+    git
+    networkmanagerapplet
+    python
     steam
     thunderbird
     vim
-    git
-    hexchat
-    networkmanagerapplet
-    python
     virtmanager
-    libvirt
   ];
 
   nixpkgs.config = {

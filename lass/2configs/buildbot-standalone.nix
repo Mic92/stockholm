@@ -58,6 +58,11 @@ in {
         "NIX_REMOTE": "daemon",
         "dummy_secrets": "true",
       }
+      env_nin = {
+        "LOGNAME": "nin",
+        "NIX_REMOTE": "daemon",
+        "dummy_secrets": "true",
+      }
       env_shared = {
         "LOGNAME": "shared",
         "NIX_REMOTE": "daemon",
@@ -116,6 +121,18 @@ in {
 
         for i in [ "x", "wry", "vbob", "wbob", "shoney" ]:
             addShell(f,name="build-{}".format(i),env=env_makefu,
+                command=nixshell + \
+                    ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+                        make \
+                            test \
+                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
+                            method=build \
+                            system={}".format(i)
+                    ]
+            )
+
+        for i in [ "hiawatha", "onondaga" ]:
+            addShell(f,name="build-{}".format(i),env=env_nin,
                 command=nixshell + \
                     ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
                         make \

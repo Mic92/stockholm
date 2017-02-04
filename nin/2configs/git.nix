@@ -22,9 +22,7 @@ let
     ];
   };
 
-  repos =
-    public-repos //
-    optionalAttrs config.krebs.build.host.secure restricted-repos;
+  repos = public-repos;
 
   rules = concatMap make-rules (attrValues repos);
 
@@ -32,19 +30,7 @@ let
     stockholm = {
       cgit.desc = "take all the computers hostage, they'll love you!";
     };
-    kimsufi-check = {};
-  } // mapAttrs make-public-repo-silent {
-    the_playlist = {};
   };
-
-  restricted-repos = mapAttrs make-restricted-repo (
-    {
-      brain = {
-        collaborators = with config.krebs.users; [ tv makefu ];
-      };
-    } //
-    import <secrets/repos.nix> { inherit config lib pkgs; }
-  );
 
   make-public-repo = name: { cgit ? {}, ... }: {
     inherit cgit name;
@@ -55,28 +41,18 @@ let
         nick = config.krebs.build.host.name;
         channel = "#retiolum";
         server = "ni.r";
-        verbose = config.krebs.build.host.name == "prism";
+        verbose = config.krebs.build.host.name == "onondaga";
         # TODO define branches in some kind of option per repo
-        branches = [ "master" "newest" ];
+        branches = [ "master" ];
       };
     };
-  };
-
-  make-public-repo-silent = name: { cgit ? {}, ... }: {
-    inherit cgit name;
-    public = true;
-  };
-
-  make-restricted-repo = name: { collaborators ? [], ... }: {
-    inherit collaborators name;
-    public = false;
   };
 
   make-rules =
     with git // config.krebs.users;
     repo:
       singleton {
-        user = [ lass lass-shodan ];
+        user = [ nin ];
         repo = [ repo ];
         perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++

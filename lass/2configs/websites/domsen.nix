@@ -66,6 +66,7 @@ in {
       "karlaskop.ubikmedia.de"
       "nb.ubikmedia.de"
       "youthtube.ubikmedia.de"
+      "joemisch.com"
     ])
   ];
 

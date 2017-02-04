@@ -9,6 +9,7 @@ with import <stockholm/lib>;
     ../2configs/mc.nix
     ../2configs/nixpkgs.nix
     ../2configs/vim.nix
+    ../2configs/monitoring/client.nix
     ./backups.nix
     {
       users.extraUsers =
@@ -98,7 +99,6 @@ with import <stockholm/lib>;
   # multiple-definition-problem when defining environment.variables.EDITOR
   environment.extraInit = ''
     EDITOR=vim
-    MANPAGER=most
   '';
 
   nixpkgs.config.allowUnfree = true;

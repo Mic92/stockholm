@@ -47,12 +47,5 @@ with import <stockholm/lib>;
     pkgs.vaapiVdpau
   ];
 
-  services.xserver = {
-    videoDriver = "intel";
-    deviceSection = ''
-      Option "AccelMethod" "sna"
-    '';
-  };
-
   security.rngd.enable = true;
 }

@@ -31,13 +31,6 @@ with import <stockholm/lib>;
       ];
     }
     #{
-    #  services.mysql = {
-    #    enable = true;
-    #    package = pkgs.mariadb;
-    #    rootPassword = "<secrets>/mysql_rootPassword";
-    #  };
-    #}
-    #{
     #  services.elasticsearch = {
     #    enable = true;
     #    plugins = [
@@ -83,140 +76,56 @@ with import <stockholm/lib>;
     {
       services.redis.enable = true;
     }
-    {
-      virtualisation.libvirtd.enable = true;
-    }
-    {
-      services.nginx = {
-        enable = mkDefault true;
-        virtualHosts = {
-          "stats.mors" = {
-            locations = {
-              "/"  = {
-                proxyPass  = "http://localhost:3000/";
-                extraConfig = ''
-                  proxy_set_header   Host             $host;
-                  proxy_set_header   X-Real-IP        $remote_addr;
-                  proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
-                '';
-              };
-            };
-          };
-        };
-      };
-
-      services.grafana = {
-        enable = true;
-        addr = "127.0.0.1";
-        users.allowSignUp = false;
-        users.allowOrgCreate = false;
-        users.autoAssignOrg = false;
-        auth.anonymous.enable = true;
-        security = import <secrets/grafana_security.nix>; # { AdminUser = ""; adminPassword = ""}
-      };
-
-      services.graphite = {
-        api = {
-          enable = true;
-          listenAddress = "127.0.0.1";
-          port = 18080;
-        };
-        carbon = {
-          enableCache = true;
-          # save disk usage by restricting to 1 bulk update per second
-          config = ''
-            [cache]
-            MAX_CACHE_SIZE = inf
-            MAX_UPDATES_PER_SECOND = 1
-            MAX_CREATES_PER_MINUTE = 500
-            '';
-          storageSchemas = ''
-            [carbon]
-            pattern = ^carbon\.
-            retentions = 60:90d
-
-            [elchos]
-            patterhn = ^elchos\.
-            retentions = 10s:30d,60s:3y
-
-            [default]
-            pattern = .*
-            retentions = 30s:30d,300s:1y
-            '';
-        };
-      };
-
-      services.collectd = {
-        enable = true;
-        include = [ (toString (pkgs.writeText "collectd-graphite-cfg" ''
-          LoadPlugin write_graphite
-          <Plugin "write_graphite">
-            <Carbon>
-              Host "localhost"
-              Port "2003"
-              EscapeCharacter "_"
-              StoreRates false
-              AlwaysAppendDS false
-            </Carbon>
-          </Plugin>
-        ''))
-        ];
-        extraConfig = ''
-          LoadPlugin interface
-          LoadPlugin battery
-          LoadPlugin load
-          LoadPlugin cpu
-          LoadPlugin entropy
-          LoadPlugin write_graphite
-          <Plugin "interface">
-            Interface "et0"
-            Interface "wl0"
-            Interface "retiolum"
-          </Plugin>
-        '';
-      };
-      services.graphite.beacon = {
-        enable = true;
-        config = {
-          graphite_url = "http://localhost:18080";
-          cli = {
-            command = ''${pkgs.irc-announce}/bin/irc-announce irc.freenode.org 6667 mors-beacon-alert \#krebs ' ''${level} ''${name} ''${value}' '';
-          };
-          smtp = {
-            from = "beacon@mors.r";
-            to = [
-              "lass@mors.r"
-            ];
-          };
-          normal_handlers = [
-            "smtp"
-            "cli"
-          ];
-          warning_handlers = [
-            "smtp"
-            "cli"
-          ];
-          critical_handlers = [
-            "smtp"
-            "cli"
-          ];
-          alerts = [
-            {
-              name = "testbattery";
-              query = "*.battery-0.capacity";
-              method = "last_value";
-              interval = "1minute";
-              logging = "info";
-              repeat_interval = "5minute";
-              rules = [
-                "warning: < 30.0"
-                "critical: < 10.0"
-              ];
-            }
-          ];
-        };
-      };
-    }
+    #{
+    #  #gitit magic
+    #  imports = [ <nixpkgs/nixos/modules/services/misc/gitit.nix> ];
+    #  services.gitit = {
+    #    enable = true;
+    #    haskellPackages = pkgs.haskell.packages.ghc7103;
+    #  };
+    #}
+    #{
+    #  lass.icinga2 = {
+    #    enable = true;
+    #    configFiles = [
+    #      ''
+    #        template Service "generic-service" {
+    #          max_check_attempts = 3
+    #          check_interval = 5m
+    #          retry_interval = 1m
+    #          enable_perfdata = true
+    #        }
+    #        apply Service "ping4" {
+    #        }
+    #      ''
+    #    ];
+    #  };
+    #  services.mysql = {
+    #    enable = true;
+    #    package = pkgs.mariadb;
+    #    rootPassword = "<secrets>/mysql_rootPassword";
+    #  };
+    #  lass.icingaweb2 = {
+    #    enable = true;
+    #    initialRootPasswordHash = "$1$HpWDCehI$ITbAoyfOB6HEN1ftooxZq0";
+    #    resources = {
+    #      icinga2db = {
+    #        type = "mysql";
+    #        host = "localhost";
+    #        user = "icingaweb2";
+    #        db = "icinga";
+    #        passfile = <secrets/icinga2-pw>;
+    #      };
+    #      icingaweb2db = {
+    #        type = "mysql";
+    #        host = "localhost";
+    #        user = "icingaweb2";
+    #        db = "icingaweb2";
+    #        passfile = <secrets/icinga2-pw>;
+    #      };
+    #    };
+    #  };
+    #}
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
@@ -229,7 +138,6 @@ with import <stockholm/lib>;
     initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; } ];
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
-    #kernelModules = [ "kvm-intel" "msr" ];
   };
   fileSystems = {
     "/" = {
@@ -263,11 +171,6 @@ with import <stockholm/lib>;
 
     "/home/virtual/virtual" = {
       device = "/dev/big/virtual";
-      fsType = "ext4";
-    };
-
-    "/mnt/public" = {
-      device = "/dev/big/public";
       fsType = "ext4";
     };
 

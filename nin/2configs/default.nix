@@ -46,6 +46,12 @@ with import <stockholm/lib>;
         SSL_CERT_FILE = ca-bundle;
       };
     })
+    {
+      nix = {
+        binaryCaches = ["http://cache.prism.r"];
+        binaryCachePublicKeys = ["cache.prism-1:+S+6Lo/n27XEtvdlQKuJIcb1yO5NUqUCE2lolmTgNJU="];
+      };
+    }
   ];
 
   networking.hostName = config.krebs.build.host.name;
@@ -58,7 +64,10 @@ with import <stockholm/lib>;
       user = config.krebs.users.nin;
       source = let inherit (config.krebs.build) host; in {
         nixos-config.symlink = "stockholm/nin/1systems/${host.name}.nix";
-        secrets.file = "/home/nin/secrets/${host.name}";
+        secrets.file =
+        if getEnv "dummy_secrets" == "true"
+          then toString <stockholm/nin/6tests/dummysecrets>
+          else "/home/nin/secrets/${host.name}";
         stockholm.file = getEnv "PWD";
       };
     };
@@ -82,10 +91,13 @@ with import <stockholm/lib>;
   # multiple-definition-problem when defining environment.variables.EDITOR
   environment.extraInit = ''
     EDITOR=vim
-    MANPAGER=most
   '';
 
   nixpkgs.config.allowUnfree = true;
+
+  environment.shellAliases = {
+    gs = "git status";
+  };
 
   environment.systemPackages = with pkgs; [
   #stockholm
@@ -95,6 +107,7 @@ with import <stockholm/lib>;
     proot
     populate
     p7zip
+    termite
     unzip
     unrar
     hashPassword

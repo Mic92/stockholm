@@ -43,6 +43,17 @@ in {
     ../2configs/libvirt.nix
     ../2configs/hfos.nix
     ../2configs/makefu-sip.nix
+    ../2configs/monitoring/server.nix
+    {
+      imports = [
+        ../2configs/bepasty.nix
+      ];
+      krebs.bepasty.servers."paste.r".nginx.extraConfig = ''
+        if ( $server_addr = "${config.krebs.build.host.nets.internet.ip4.addr}" ) {
+          return 403;
+        }
+      '';
+    }
     {
       users.extraGroups = {
         # ● systemd-tmpfiles-setup.service - Create Volatile Files and Directories
@@ -203,20 +214,6 @@ in {
       };
     }
     {
-      services.nginx = {
-        enable = true;
-        virtualHosts.public = {
-          port = 8088;
-          locations."~ ^/~(.+?)(/.*)?\$".extraConfig = ''
-            alias /home/$1/public_html$2;
-          '';
-        };
-      };
-      krebs.iptables.tables.filter.INPUT.rules = [
-       { predicate = "-p tcp --dport 8088"; target = "ACCEPT"; }
-      ];
-    }
-    {
       krebs.repo-sync.timerConfig = {
         OnCalendar = "*:0/5";
       };
@@ -227,6 +224,7 @@ in {
       };
     }
     {
+      # Nin stuff
       users.users.nin = {
         uid = genid "nin";
         inherit (config.krebs.users.nin) home;
@@ -239,18 +237,6 @@ in {
         extraGroups = [
           "libvirtd"
         ];
-      };
-      krebs.git.rules = [
-        {
-          user = [ config.krebs.users.nin ];
-          repo = [ config.krebs.git.repos.stockholm ];
-          perm = with git; push "refs/heads/nin" [ fast-forward non-fast-forward create delete merge ];
-        }
-      ];
-      krebs.repo-sync.repos.stockholm.nin = {
-        origin.url = "http://cgit.prism/stockholm";
-        origin.ref = "heads/nin";
-        mirror.url = "git@${config.networking.hostName}:stockholm";
       };
       krebs.iptables.tables.nat.PREROUTING.rules = [
         { v6 = false; precedence = 1000; predicate = "-d 213.239.205.240 -p tcp --dport 1337"; target = "DNAT --to-destination 192.168.122.24:22"; }
@@ -272,7 +258,6 @@ in {
             -XFlexibleInstances -XMultiParamTypeClasses \
             -XOverloadedStrings -XFunctionalDependencies \'';
         in [
-          sed-plugin
           url-title
           (buildSimpleReaktorPlugin "lambdabot-pl" {
             pattern = "^@pl (?P<args>.*)$$";
@@ -327,16 +312,16 @@ in {
             script = pkgs.writePython2 "rup" ''
               #!${pkgs.python2}/bin/python
               t1 = """
-                                    _.
-                                 ;=',_ ()
-                       8===D~~  S" .--`||
-                               sS  \__ ||
-                            __.' ( \-->||
-                         _=/    _./-\/ ||
-                8===D~~ ((\( /-'   -'l ||
-                         ) |/ \\      (_))
-                            \\  \\
-                             '~ '~
+                                  _.
+                               ;=',_ ()
+                     8===D~~  S" .--`||
+                             sS  \__ ||
+                          __.' ( \-->||
+                       _=/    _./-\/ ||
+              8===D~~ ((\( /-'   -'l ||
+                       ) |/ \\      (_))
+                          \\  \\
+                           '~ '~
               """
               print(t1)
             '';

@@ -313,7 +313,6 @@ with import <stockholm/lib>;
             "graphs.wry.retiolum"
             "graphs.r" "graphs.retiolum"
             "paste.wry.retiolum"
-            "paste.r" "paste.retiolum"
             "wry.r" "wry.retiolum"
             "wiki.makefu.retiolum"
             "wiki.wry.retiolum"

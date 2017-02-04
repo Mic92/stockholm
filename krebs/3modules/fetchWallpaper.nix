@@ -38,6 +38,11 @@ let
       '';
       default = {};
     };
+    maxTime = mkOption {
+      type = types.int;
+      default = 0;
+      description = "Time to wait before download is aborted";
+    };
   };
 
   fetchWallpaperScript = pkgs.writeDash "fetchWallpaper" ''
@@ -45,7 +50,7 @@ let
 
     mkdir -p ${shell.escape cfg.stateDir}
     cd ${shell.escape cfg.stateDir}
-    (curl -s -o wallpaper.tmp -z wallpaper ${shell.escape cfg.url} && mv wallpaper.tmp wallpaper) || :
+    (curl --max-time ${toString cfg.maxTime} -s -o wallpaper.tmp -z wallpaper ${shell.escape cfg.url} && mv wallpaper.tmp wallpaper) || :
     feh --no-fehbg --bg-scale ${shell.escape cfg.stateDir}/wallpaper
   '';
 
