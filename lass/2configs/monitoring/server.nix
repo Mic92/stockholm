@@ -1,9 +1,7 @@
 {pkgs, config, ...}:
 with import <stockholm/lib>;
 {
-  services.influxdb = {
-    enable = true;
-  };
+  services.influxdb.enable = true;
 
   services.influxdb.extraConfig = {
     meta.hostname = config.krebs.build.host.name;
@@ -29,24 +27,39 @@ with import <stockholm/lib>;
         data="$(${pkgs.jq}/bin/jq -r .message)"
         export LOGNAME=prism-alarm
         ${pkgs.irc-announce}/bin/irc-announce \
-          irc.freenode.org 6667 prism-alarm \#krebs-bots "$data" >/dev/null
+          ni.r 6667 prism-alarm \#retiolum "$data" >/dev/null
       '';
     in {
       enable = true;
+      check_db = "telegraf_db";
       alarms = {
-        test2 = ''
-          batch
+        cpu = ''
+          var data = batch
             |query(${"'''"}
               SELECT mean("usage_user") AS mean
               FROM "${config.lass.kapacitor.check_db}"."default"."cpu"
             ${"'''"})
-            .every(3m)
-            .period(1m)
+            .period(10m)
+            .every(1m)
             .groupBy('host')
-            |alert()
-              .crit(lambda: "mean" >  90)
-              // Whenever we get an alert write it to a file.
-              .log('/tmp/alerts.log')
+            data |alert()
+              .crit(lambda: "mean" > 90)
+              .exec('${echoToIrc}')
+            data |deadman(1.0,5m)
+              .stateChangesOnly()
+              .exec('${echoToIrc}')
+        '';
+        ram = ''
+          var data = batch
+            |query(${"'''"}
+              SELECT mean("used_percent") AS mean
+              FROM "${config.lass.kapacitor.check_db}"."default"."mem"
+            ${"'''"})
+            .period(10m)
+            .every(1m)
+            .groupBy('host')
+            data |alert()
+              .crit(lambda: "mean" > 90)
               .exec('${echoToIrc}')
         '';
       };
