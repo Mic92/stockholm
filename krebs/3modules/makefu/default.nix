@@ -914,6 +914,10 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       inherit (makefu) mail pgp;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCiKvLKaRQPL/Y/4EWx3rNhrY5YGKK4AeqDOFTLgJ7djwJnMo7FP+OIH/4pFxS6Ri2TZwS9QsR3hsycA4n8Z15jXAOXuK52kP65Ei3lLyz9mF+/s1mJsV0Ui/UKF3jE7PEAVky7zXuyYirJpMK8LhXydpFvH95aGrL1Dk30R9/vNkE9rc1XylBfNpT0X0GXmldI+r5OPOtiKLA5BHJdlV8qDYhQsU2fH8S0tmAHF/ir2bh7+PtLE2hmRT+b8I7y1ZagkJsC0sn9GT1AS8ys5s65V2xTTIfQO1zQ4sUH0LczuRuY8MLaO33GAzhyoSQdbdRAmwZQpY/JRJ3C/UROgHYt makefu@vbob";
     };
+    makefu-tempx = {
+      inherit (makefu) mail pgp;
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDOXG6iwvm6zUVk+OE9ZviO+WNosAHSZw4ku0RxWbXSlSG0RfzvV4IfByF3Dw+4a8yZQmjwNkQalUURh2fEqhBLBI9XNEIL7qIu17zheguyXzpE3Smy4pbI+fjdsnfFrw+WE2n/IO8N6ojdH6sMmnWwfkFZYqqofWyLB3WUN9wy2b2z0w/jc56+HxxyTl3rD7CttTs9ak67HqIn3/pNeHoOM+JQ/te8t4ageIlPi8yJJpqZgww1RUWCgPPwZ9DP6gQjo85he76x0h9jvhnFd7m9N1aGdRDcK55QyoY/9x07R24GRutohAB/KDWSkDWQv5BW7M1LCawpJcF3DDslD1i7 makefu@gum";
+    };
     ciko = {
       mail = "wieczorek.stefan@googlemail.com";
     };
