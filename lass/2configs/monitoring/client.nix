@@ -29,10 +29,6 @@ with import <stockholm/lib>;
       ''
         [[inputs.net]]
       ''
-      ''
-        [[inputs.dns_query]]
-          servers = ["8.8.8.8"]
-      ''
     ];
   };
   systemd.services.telegraf.path = with pkgs; [
