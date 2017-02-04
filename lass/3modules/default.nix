@@ -6,7 +6,6 @@ _:
     ./hosts.nix
     ./mysql-backup.nix
     ./umts.nix
-    ./urxvtd.nix
     ./usershadow.nix
     ./xresources.nix
     ./kapacitor.nix
