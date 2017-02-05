@@ -5,7 +5,7 @@ with import <stockholm/lib>;
     enable = true;
 
     extraConfig = {
-      interval = "1s";
+      agent.interval = "1s";
       outputs = {
         influxdb = {
           urls = ["http://prism:8086"];
