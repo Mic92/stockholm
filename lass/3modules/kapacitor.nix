@@ -21,6 +21,10 @@ let
       type = types.str;
       default = "kapacitor";
     };
+    logLevel = mkOption {
+      type = types.enum ["DEBUG" "INFO" "WARN" "ERROR" "OFF"];
+      default = "INFO";
+    };
     alarms = mkOption {
       type = with types; attrsOf str;
       default = {};
@@ -82,7 +86,7 @@ let
 
         [logging]
           file = "STDERR"
-          level = "DEBUG"
+          level = "${cfg.logLevel}"
 
         [deadman]
           interval = "10s"

@@ -385,6 +385,8 @@ with import <stockholm/lib>;
           aliases = [
             "omo.retiolum"
             "omo.r"
+            "logs.makefu.r"
+            "stats.makefu.r"
           ];
           tinc.pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
