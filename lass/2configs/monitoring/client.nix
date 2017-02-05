@@ -19,9 +19,6 @@ with import <stockholm/lib>;
           totalcpu = true;
         };
         mem = {};
-        ping = {
-          urls = ["8.8.8.8"];
-        };
         net = {};
       };
     };
