@@ -66,7 +66,6 @@ in {
     youtube-tools
 
     rxvt_unicode
-    termite
   #window manager stuff
     #haskellPackages.xmobar
     #haskellPackages.yeganesh
