@@ -9,6 +9,5 @@ _:
     ./usershadow.nix
     ./xresources.nix
     ./kapacitor.nix
-    ./telegraf.nix
   ];
 }
