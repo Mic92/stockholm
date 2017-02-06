@@ -49,7 +49,7 @@ let
           mirror.url = "${mirror}${name}";
         };
         lassulus = {
-          origin.url = "http://cgit.prism/${name}";
+          origin.url = "http://cgit.lassul.us/${name}";
           mirror.url = "${mirror}${name}";
         };
         "@latest" = {
