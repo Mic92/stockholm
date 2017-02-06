@@ -17,7 +17,7 @@ let
 
   muttrc = pkgs.writeText "muttrc" ''
     # gpg
-    source ${pkgs.neomutt}/share/doc/neomutt/samples/gpg.rc
+    source ${pkgs.neomutt}/share/doc/mutt/samples/gpg.rc
     set pgp_use_gpg_agent = yes
     set pgp_sign_as = 0x976A7E4D
     set crypt_autosign = yes
