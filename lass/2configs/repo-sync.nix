@@ -102,6 +102,7 @@ in {
     (sync-retiolum "go")
     (sync-retiolum "much")
     (sync-retiolum "newsbot-js")
+    (sync-retiolum "populate")
     (sync-retiolum "stockholm")
     (sync-retiolum "wai-middleware-time")
     (sync-retiolum "web-routes-wai-custom")
