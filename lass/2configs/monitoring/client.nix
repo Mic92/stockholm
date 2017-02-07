@@ -23,4 +23,13 @@ with import <stockholm/lib>;
       };
     };
   };
+
+  services.journalbeat = {
+    enable = true;
+    extraConfig = ''
+      output.elasticsearch:
+        hosts: ["prism:9200"]
+        template.enabled: false
+    '';
+  };
 }
