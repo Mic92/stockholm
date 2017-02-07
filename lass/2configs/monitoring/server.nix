@@ -72,15 +72,28 @@ with import <stockholm/lib>;
       };
   };
 
-  krebs.iptables.tables.filter.INPUT.rules = [
-    { predicate = "-p tcp -i retiolum --dport 8086"; target = "ACCEPT"; }
-    { predicate = "-p tcp -i retiolum --dport 3000"; target = "ACCEPT"; }
-    { predicate = "-p udp -i retiolum --dport 25826"; target = "ACCEPT"; }
-  ];
   services.grafana = {
     enable = true;
     addr = "0.0.0.0";
     auth.anonymous.enable = true;
     security = import <secrets/grafana_security.nix>; # { AdminUser = ""; adminPassword = ""}
   };
+
+  services.elasticsearch = {
+    enable = true;
+    listenAddress = "0.0.0.0";
+  };
+
+  services.kibana = {
+    enable = true;
+    listenAddress = "0.0.0.0";
+  };
+
+  krebs.iptables.tables.filter.INPUT.rules = [
+    { predicate = "-p tcp -i retiolum --dport 8086"; target = "ACCEPT"; }
+    { predicate = "-p tcp -i retiolum --dport 3000"; target = "ACCEPT"; }
+    { predicate = "-p udp -i retiolum --dport 25826"; target = "ACCEPT"; }
+    { predicate = "-p tcp -i retiolum --dport 9200"; target = "ACCEPT"; }
+    { predicate = "-p tcp -i retiolum --dport 5601"; target = "ACCEPT"; }
+  ];
 }
