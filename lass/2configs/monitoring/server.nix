@@ -22,6 +22,7 @@ with import <stockholm/lib>;
 
   lass.kapacitor =
     let
+      db = "telegraf_db";
       echoToIrc = pkgs.writeDash "echo_irc" ''
         set -euf
         data="$(${pkgs.jq}/bin/jq -r .message)"
@@ -31,37 +32,42 @@ with import <stockholm/lib>;
       '';
     in {
       enable = true;
-      check_db = "telegraf_db";
       alarms = {
-        cpu = ''
-          var data = batch
-            |query(${"'''"}
-              SELECT mean("usage_user") AS mean
-              FROM "${config.lass.kapacitor.check_db}"."default"."cpu"
-            ${"'''"})
-            .period(10m)
-            .every(1m)
-            .groupBy('host')
-            data |alert()
-              .crit(lambda: "mean" > 90)
-              .exec('${echoToIrc}')
-            data |deadman(1.0,5m)
-              .stateChangesOnly()
-              .exec('${echoToIrc}')
-        '';
-        ram = ''
-          var data = batch
-            |query(${"'''"}
-              SELECT mean("used_percent") AS mean
-              FROM "${config.lass.kapacitor.check_db}"."default"."mem"
-            ${"'''"})
-            .period(10m)
-            .every(1m)
-            .groupBy('host')
-            data |alert()
-              .crit(lambda: "mean" > 90)
-              .exec('${echoToIrc}')
-        '';
+        cpu = {
+          database = db;
+          text = ''
+            var data = batch
+              |query(${"'''"}
+                SELECT mean("usage_user") AS mean
+                FROM "${db}"."default"."cpu"
+              ${"'''"})
+              .period(10m)
+              .every(1m)
+              .groupBy('host')
+              data |alert()
+                .crit(lambda: "mean" > 90)
+                .exec('${echoToIrc}')
+              data |deadman(1.0,5m)
+                .stateChangesOnly()
+                .exec('${echoToIrc}')
+          '';
+        };
+        ram = {
+          database = db;
+          text = ''
+            var data = batch
+              |query(${"'''"}
+                SELECT mean("used_percent") AS mean
+                FROM "${db}"."default"."mem"
+              ${"'''"})
+              .period(10m)
+              .every(1m)
+              .groupBy('host')
+              data |alert()
+                .crit(lambda: "mean" > 90)
+                .exec('${echoToIrc}')
+          '';
+        };
       };
   };
 
