@@ -8,6 +8,7 @@ with import <stockholm/lib>;
     # meta.logging-enabled = true;
     http.bind-address = ":8086";
     admin.bind-address = ":8083";
+    http.log-enabled = false;
     monitoring = {
       enabled = false;
       # write-interval = "24h";
