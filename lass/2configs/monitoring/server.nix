@@ -21,7 +21,7 @@ with import <stockholm/lib>;
     }];
   };
 
-  lass.kapacitor =
+  krebs.kapacitor =
     let
       db = "telegraf_db";
       echoToIrc = pkgs.writeDash "echo_irc" ''
