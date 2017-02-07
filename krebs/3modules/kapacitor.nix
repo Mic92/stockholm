@@ -4,10 +4,10 @@ with builtins;
 with import <stockholm/lib>;
 
 let
-  cfg = config.lass.kapacitor;
+  cfg = config.krebs.kapacitor;
 
   out = {
-    options.lass.kapacitor = api;
+    options.krebs.kapacitor = api;
     config = mkIf cfg.enable imp;
   };
 

@@ -21,6 +21,7 @@ let
       ./git.nix
       ./go.nix
       ./iptables.nix
+      ./kapacitor.nix
       ./newsbot-js.nix
       ./nginx.nix
       ./nixpkgs.nix

@@ -8,6 +8,5 @@ _:
     ./umts.nix
     ./usershadow.nix
     ./xresources.nix
-    ./kapacitor.nix
   ];
 }
