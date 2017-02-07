@@ -10,10 +10,6 @@ let
     arbor|http://feeds2.feedburner.com/asert/|#news
     archlinux|http://www.archlinux.org/feeds/news/|#news
     ars|http://feeds.arstechnica.com/arstechnica/index?format=xml|#news
-    asiaone_asia|http://news.asiaone.com/rss/asia|#news
-    asiaone_business|http://business.asiaone.com/rss.xml|#news
-    asiaone_sci|http://news.asiaone.com/rss/science-and-tech|#news
-    asiaone_world|http://news.asiaone.com/rss/world|#news
     augustl|http://augustl.com/atom.xml|#news
     bbc|http://feeds.bbci.co.uk/news/rss.xml|#news
     bdt_drucksachen|http://www.bundestag.de/dip21rss/bundestag_drucksachen.rss|#news #bundestag
@@ -78,7 +74,6 @@ let
     heise|http://heise.de.feedsportal.com/c/35207/f/653902/index.rss|#news
     hindu_business|http://www.thehindubusinessline.com/?service=rss|#news #financial
     hindu|http://www.thehindu.com/?service=rss|#news
-    hintergrund|http://www.hintergrund.de/index.php?option=com_bca-rss-syndicator&feed_id=8|#news
     ign|http://feeds.ign.com/ign/all|#news
     independent|http://www.independent.com/rss/headlines/|#news
     indymedia|http://de.indymedia.org/RSS/newswire.xml|#news
