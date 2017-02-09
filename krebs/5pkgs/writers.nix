@@ -252,17 +252,16 @@ with import <stockholm/lib>;
           '';
         };
 
-    writeJq = name: text: pkgs.runCommand name {
-      inherit text;
-      passAsFile = [ "text" ];
-    } /* sh */ ''
-      name=${assert types.filename.check name; name}
-
-      # syntax check
-      ${pkgs.jq}/bin/jq -f "$textPath" -n
-
-      cp "$textPath" "$out"
-    '';
+    writeJq = name: text:
+      assert (with types; either absolute-pathname filename).check name;
+      pkgs.writeOut (baseNameOf name) {
+        ${optionalString (types.absolute-pathname.check name) name} = {
+          check = pkgs.writeDash "jqcheck.sh" ''
+            exec ${pkgs.jq}/bin/jq -f "$1" -n
+          '';
+          inherit text;
+        };
+      };
 
     writeJSON = name: value: pkgs.writeText name (toJSON value);
 
@@ -275,29 +274,27 @@ with import <stockholm/lib>;
         ${pkgs.cabal2nix}/bin/cabal2nix ${path} > $out
       '');
 
-    writePython2 = name: text: pkgs.runCommand name {
-      inherit text;
-      passAsFile = [ "text" ];
-    } /* sh */ ''
-      name=${assert types.filename.check name; name}
+    writePython2 = name: text:
+      assert (with types; either absolute-pathname filename).check name;
+      pkgs.writeOut (baseNameOf name) {
+        ${optionalString (types.absolute-pathname.check name) name} = {
+          check = pkgs.writeDash "python2check.sh" ''
+            exec ${pkgs.python2}/bin/python -m py_compile "$1"
+          '';
+          inherit text;
+        };
+      };
 
-      # syntax check
-      ${pkgs.python2}/bin/python -m py_compile "$textPath"
-
-      cp "$textPath" "$out"
-    '';
-
-    writePython3 = name: text: pkgs.runCommand name {
-      inherit text;
-      passAsFile = [ "text" ];
-    } /* sh */ ''
-      name=${assert types.filename.check name; name}
-
-      # syntax check
-      ${pkgs.python3}/bin/python -m py_compile "$textPath"
-
-      cp "$textPath" "$out"
-    '';
+    writePython3 = name: text:
+      assert (with types; either absolute-pathname filename).check name;
+      pkgs.writeOut (baseNameOf name) {
+        ${optionalString (types.absolute-pathname.check name) name} = {
+          check = pkgs.writeDash "python3check.sh" ''
+            exec ${pkgs.python3}/bin/python -m py_compile "$textPath"
+          '';
+          inherit text;
+        };
+      };
 
     writeSed = pkgs.makeScriptWriter "${pkgs.gnused}/bin/sed -f";
   };
