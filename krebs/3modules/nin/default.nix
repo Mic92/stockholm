@@ -38,6 +38,8 @@ with import <stockholm/lib>;
           aliases = [
             "onondaga.retiolum"
             "onondaga.r"
+            "cgit.onondaga.r"
+            "cgit.onondaga.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
