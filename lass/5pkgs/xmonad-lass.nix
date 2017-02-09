@@ -129,7 +129,6 @@ myKeyMap =
     , ("M4-<Esc>", toggleWS)
     , ("M4-S-<Enter>", spawn urxvtcPath)
     , ("M4-x", floatNext True >> spawn urxvtcPath)
-    , ("M4-z", floatNext True >> spawn "${pkgs.termite}/bin/termite")
     , ("M4-f", floatNext True)
     , ("M4-b", sendMessage ToggleStruts)
 

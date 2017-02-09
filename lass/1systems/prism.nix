@@ -215,7 +215,8 @@ in {
     }
     {
       krebs.repo-sync.timerConfig = {
-        OnCalendar = "*:0/5";
+        OnUnitInactiveSec = "5min";
+        RandomizedDelaySec = "2min";
       };
     }
     {

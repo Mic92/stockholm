@@ -118,8 +118,7 @@ in {
       { from = "mail@jla-trading.com"; to = "jla-trading"; }
       { from = "jms@ubikmedia.eu"; to = "jms"; }
       { from = "ms@ubikmedia.eu"; to = "ms"; }
-      { from = "nrg@ubikmedia.eu"; to = "nrg"; }
-      { from = "ubik@ubikmedia.eu"; to = "domsen, jms, ms, nrg"; }
+      { from = "ubik@ubikmedia.eu"; to = "domsen, jms, ms"; }
 
       { from = "testuser@lassul.us"; to = "testuser"; }
     ];
@@ -157,13 +156,6 @@ in {
   users.users.ms = {
     uid = genid_signed "ms";
     home = "/home/ms";
-    useDefaultShell = true;
-    createHome = true;
-  };
-
-  users.users.nrg = {
-    uid = genid_signed "nrg";
-    home = "/home/nrg";
     useDefaultShell = true;
     createHome = true;
   };
