@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }@args:
 with import <stockholm/lib>;
 {
+  imports = [
+    ./writers.nix
+  ];
   nixpkgs.config.packageOverrides = oldpkgs: let
 
     # This callPackage will try to detect obsolete overrides.
@@ -15,7 +18,6 @@ with import <stockholm/lib>;
       else override;
 
   in {}
-  // import ./builders.nix args
   // mapAttrs (_: flip callPackage {})
               (filterAttrs (_: dir: pathExists (dir + "/default.nix"))
                            (subdirsOf ./.))
