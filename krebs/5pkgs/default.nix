@@ -2,7 +2,7 @@
 with import <stockholm/lib>;
 {
   imports = [
-    ./builders.nix
+    ./writers.nix
   ];
   nixpkgs.config.packageOverrides = oldpkgs: let
 
