@@ -55,16 +55,18 @@ with import <stockholm/lib>;
       assert types.filename.check name;
       pkgs.writeBash "/bin/${name}";
 
-    writeC = name: { destination ? "" }: src: pkgs.runCommand name {} /* sh */ ''
+    writeC = name: { destination ? "" }: text: pkgs.runCommand name {
+      inherit text;
+      passAsFile = [ "text" ];
+    } /* sh */ ''
       PATH=${makeBinPath (with pkgs; [
         binutils
         coreutils
         gcc
       ])}
-      src=${pkgs.writeText "${name}.c" src}
       exe=$out${destination}
       mkdir -p "$(dirname "$exe")"
-      gcc -O -Wall -o "$exe" $src
+      gcc -O -Wall -o "$exe" -x c "$textPath"
       strip --strip-unneeded "$exe"
     '';
 
@@ -118,7 +120,10 @@ with import <stockholm/lib>;
             ${optionalString (check != null) /* sh */ ''
               ${check} ''$${var}Path
             ''}
-            ${pkgs.coreutils}/bin/install -m ${mode} -D ''$${var}Path $out${path}
+            ${pkgs.coreutils}/bin/install \
+                -m ${mode} \
+                -D \
+                ''$${var}Path $out${path}
           '';
         };
 
@@ -247,15 +252,16 @@ with import <stockholm/lib>;
           '';
         };
 
-    writeJq = name: src: pkgs.runCommand name {} /* sh */ ''
+    writeJq = name: text: pkgs.runCommand name {
+      inherit text;
+      passAsFile = [ "text" ];
+    } /* sh */ ''
       name=${assert types.filename.check name; name}
-      src=${shell.escape src}
 
       # syntax check
-      printf '%s' "$src" > src.jq
-      ${pkgs.jq}/bin/jq -f src.jq < /dev/null
+      ${pkgs.jq}/bin/jq -f "$textPath" -n
 
-      cp src.jq "$out"
+      cp "$textPath" "$out"
     '';
 
     writeJSON = name: value: pkgs.writeText name (toJSON value);
@@ -269,26 +275,28 @@ with import <stockholm/lib>;
         ${pkgs.cabal2nix}/bin/cabal2nix ${path} > $out
       '');
 
-    writePython2 = name: src: pkgs.runCommand name {} /* sh */ ''
+    writePython2 = name: text: pkgs.runCommand name {
+      inherit text;
+      passAsFile = [ "text" ];
+    } /* sh */ ''
       name=${assert types.filename.check name; name}
-      src=${shell.escape src}
 
       # syntax check
-      printf '%s' "$src" > src.py
-      ${pkgs.python2}/bin/python -m py_compile src.py
+      ${pkgs.python2}/bin/python -m py_compile "$textPath"
 
-      cp src.py "$out"
+      cp "$textPath" "$out"
     '';
 
-    writePython3 = name: src: pkgs.runCommand name {} /* sh */ ''
+    writePython3 = name: text: pkgs.runCommand name {
+      inherit text;
+      passAsFile = [ "text" ];
+    } /* sh */ ''
       name=${assert types.filename.check name; name}
-      src=${shell.escape src}
 
       # syntax check
-      printf '%s' "$src" > src.py
-      ${pkgs.python3}/bin/python -m py_compile src.py
+      ${pkgs.python3}/bin/python -m py_compile "$textPath"
 
-      cp src.py "$out"
+      cp "$textPath" "$out"
     '';
 
     writeSed = pkgs.makeScriptWriter "${pkgs.gnused}/bin/sed -f";
