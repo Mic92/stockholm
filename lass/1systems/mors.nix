@@ -126,6 +126,10 @@ with import <stockholm/lib>;
     #    };
     #  };
     #}
+    {
+      #ipfs-testing
+      services.ipfs.enable = true;
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
