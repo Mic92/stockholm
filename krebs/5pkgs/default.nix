@@ -44,6 +44,14 @@ with import <stockholm/lib>;
     };
     buildbot-worker = callPackage ./buildbot/worker.nix {};
 
+    # https://github.com/proot-me/PRoot/issues/106
+    proot = overrideDerivation pkgs.proot (oldAttrs: {
+      patches = singleton (pkgs.fetchurl {
+        url = https://github.com/openmole/PRoot/commit/10119a1f1fd7dea012464ae176c2b5fc3eb18928.diff;
+        sha256 = "0cmd95mz8p5ifjvfvi4g9zzyxqddbscxin2j3a9zbmbjl2wi458g";
+      });
+    });
+
     # XXX symlinkJoin changed arguments somewhere around nixpkgs d541e0d
     symlinkJoin = { name, paths, ... }@args: let
       x = pkgs.symlinkJoin args;
