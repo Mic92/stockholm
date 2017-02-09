@@ -202,6 +202,7 @@ with import <stockholm/lib>;
       filter.INPUT.rules = [
         { predicate = "-m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; precedence = 10001; }
         { predicate = "-p icmp"; target = "ACCEPT"; precedence = 10000; }
+        { predicate = "-p ipv6-icmp"; target = "ACCEPT"; v4 = false;  precedence = 10000; }
         { predicate = "-i lo"; target = "ACCEPT"; precedence = 9999; }
         { predicate = "-p tcp --dport 22"; target = "ACCEPT"; precedence = 9998; }
         { predicate = "-p tcp -i retiolum"; target = "REJECT --reject-with tcp-reset"; precedence = -10000; }
