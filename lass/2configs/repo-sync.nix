@@ -49,7 +49,7 @@ let
           mirror.url = "${mirror}${name}";
         };
         lassulus = {
-          origin.url = "http://cgit.prism/${name}";
+          origin.url = "http://cgit.lassul.us/${name}";
           mirror.url = "${mirror}${name}";
         };
         "@latest" = {
@@ -102,6 +102,7 @@ in {
     (sync-retiolum "go")
     (sync-retiolum "much")
     (sync-retiolum "newsbot-js")
+    (sync-retiolum "populate")
     (sync-retiolum "stockholm")
     (sync-retiolum "wai-middleware-time")
     (sync-retiolum "web-routes-wai-custom")

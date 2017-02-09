@@ -1,15 +1,14 @@
 {pkgs, config, ...}:
 with import <stockholm/lib>;
 {
-  services.influxdb = {
-    enable = true;
-  };
+  services.influxdb.enable = true;
 
   services.influxdb.extraConfig = {
     meta.hostname = config.krebs.build.host.name;
     # meta.logging-enabled = true;
     http.bind-address = ":8086";
     admin.bind-address = ":8083";
+    http.log-enabled = false;
     monitoring = {
       enabled = false;
       # write-interval = "24h";
@@ -22,45 +21,79 @@ with import <stockholm/lib>;
     }];
   };
 
-  lass.kapacitor =
+  krebs.kapacitor =
     let
+      db = "telegraf_db";
       echoToIrc = pkgs.writeDash "echo_irc" ''
         set -euf
         data="$(${pkgs.jq}/bin/jq -r .message)"
         export LOGNAME=prism-alarm
         ${pkgs.irc-announce}/bin/irc-announce \
-          irc.freenode.org 6667 prism-alarm \#krebs-bots "$data" >/dev/null
+          ni.r 6667 prism-alarm \#retiolum "$data" >/dev/null
       '';
     in {
       enable = true;
       alarms = {
-        test2 = ''
-          batch
-            |query(${"'''"}
-              SELECT mean("usage_user") AS mean
-              FROM "${config.lass.kapacitor.check_db}"."default"."cpu"
-            ${"'''"})
-            .every(3m)
-            .period(1m)
-            .groupBy('host')
-            |alert()
-              .crit(lambda: "mean" >  90)
-              // Whenever we get an alert write it to a file.
-              .log('/tmp/alerts.log')
-              .exec('${echoToIrc}')
-        '';
+        cpu = {
+          database = db;
+          text = ''
+            var data = batch
+              |query(${"'''"}
+                SELECT mean("usage_user") AS mean
+                FROM "${db}"."default"."cpu"
+              ${"'''"})
+              .period(10m)
+              .every(1m)
+              .groupBy('host')
+              data |alert()
+                .crit(lambda: "mean" > 90)
+                .exec('${echoToIrc}')
+              data |deadman(1.0,5m)
+                .stateChangesOnly()
+                .exec('${echoToIrc}')
+          '';
+        };
+        ram = {
+          database = db;
+          text = ''
+            var data = batch
+              |query(${"'''"}
+                SELECT mean("used_percent") AS mean
+                FROM "${db}"."default"."mem"
+              ${"'''"})
+              .period(10m)
+              .every(1m)
+              .groupBy('host')
+              data |alert()
+                .crit(lambda: "mean" > 90)
+                .exec('${echoToIrc}')
+          '';
+        };
       };
   };
 
-  krebs.iptables.tables.filter.INPUT.rules = [
-    { predicate = "-p tcp -i retiolum --dport 8086"; target = "ACCEPT"; }
-    { predicate = "-p tcp -i retiolum --dport 3000"; target = "ACCEPT"; }
-    { predicate = "-p udp -i retiolum --dport 25826"; target = "ACCEPT"; }
-  ];
   services.grafana = {
     enable = true;
     addr = "0.0.0.0";
     auth.anonymous.enable = true;
     security = import <secrets/grafana_security.nix>; # { AdminUser = ""; adminPassword = ""}
   };
+
+  services.elasticsearch = {
+    enable = true;
+    listenAddress = "0.0.0.0";
+  };
+
+  services.kibana = {
+    enable = true;
+    listenAddress = "0.0.0.0";
+  };
+
+  krebs.iptables.tables.filter.INPUT.rules = [
+    { predicate = "-p tcp -i retiolum --dport 8086"; target = "ACCEPT"; }
+    { predicate = "-p tcp -i retiolum --dport 3000"; target = "ACCEPT"; }
+    { predicate = "-p udp -i retiolum --dport 25826"; target = "ACCEPT"; }
+    { predicate = "-p tcp -i retiolum --dport 9200"; target = "ACCEPT"; }
+    { predicate = "-p tcp -i retiolum --dport 5601"; target = "ACCEPT"; }
+  ];
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, gtk, glib, libSM, gdk_pixbuf, libX11, libXinerama, iproute,
+{ stdenv, lib, fetchurl, gnome3, glib, libSM, gdk_pixbuf, libX11, libXinerama, iproute,
   makeWrapper, libredirect, ppp, coreutils, gawk, pango }:
 stdenv.mkDerivation rec {
   name = "forticlientsslvpn";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   guiLibPath = lib.makeLibraryPath [
-    gtk
+    gnome3.gtk
     glib
     libSM
     gdk_pixbuf

@@ -17,7 +17,7 @@ let
 
   muttrc = pkgs.writeText "muttrc" ''
     # gpg
-    source ${pkgs.mutt-kz}/share/doc/mutt-kz/samples/gpg.rc
+    source ${pkgs.neomutt}/share/doc/mutt/samples/gpg.rc
     set pgp_use_gpg_agent = yes
     set pgp_sign_as = 0x976A7E4D
     set crypt_autosign = yes
@@ -99,7 +99,7 @@ let
   '';
 
   mutt = pkgs.writeDashBin "mutt" ''
-    exec ${pkgs.mutt-kz}/bin/mutt -F ${muttrc} $@
+    exec ${pkgs.neomutt}/bin/mutt -F ${muttrc} $@
   '';
 
 in {
