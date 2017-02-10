@@ -257,7 +257,7 @@ with import <stockholm/lib>;
       pkgs.writeOut (baseNameOf name) {
         ${optionalString (types.absolute-pathname.check name) name} = {
           check = pkgs.writeDash "jqcheck.sh" ''
-            exec ${pkgs.jq}/bin/jq -f "$1" -n
+            exec ${pkgs.jq}/bin/jq -f "$1" < /dev/null
           '';
           inherit text;
         };
