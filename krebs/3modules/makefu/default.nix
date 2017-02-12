@@ -5,50 +5,50 @@ with import <stockholm/lib>;
 {
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.makefu) {
     drop = rec {
-        cores = 1;
-        nets = {
-            retiolum = {
-                ip4.addr = "10.243.177.9";
-                ip6.addr = "42:f63:ddf8:7520:cfec:9b61:d807:1dce";
-                aliases = [
-                    "drop.retiolum"
-                ];
-                tinc.pubkey = ''
-    -----BEGIN RSA PUBLIC KEY-----
-    MIIBCgKCAQEA1QxukdeDqI47nm7/gd5Y9dZZbJULA02ak0A2cB4lmysJjgMFAfbl
-    6qpH7HCZk6s+4eI7H+UHUF177W7Z1qq3bqGLmlgdMMAzuDNz9UvNLhrthZMp3tCI
-    GIFD28O1bKgDAYgsF/X21CRqEvgk3vRDp9yqIVIzQDmerOrZUx62Rx9Fssl/7ooW
-    0319fxcTw6GZEp7RXNzgIobnWPydakh+/I0inP0rC6It/vM5Hi2bV71QPZUyJ78C
-    Szh4S8TznW7yMzTQaOENeaUKfqEyN+CW2OomVdWIBOvTJVpvfAut/kg1dyUGgHlT
-    F8OlAoNAyxCSxqbM0fY0wtqKD7FaYY9cbQIDAQAB
-    -----END RSA PUBLIC KEY-----
-    '';
-            };
+      cores = 1;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.177.9";
+          ip6.addr = "42:f63:ddf8:7520:cfec:9b61:d807:1dce";
+          aliases = [
+            "drop.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA1QxukdeDqI47nm7/gd5Y9dZZbJULA02ak0A2cB4lmysJjgMFAfbl
+            6qpH7HCZk6s+4eI7H+UHUF177W7Z1qq3bqGLmlgdMMAzuDNz9UvNLhrthZMp3tCI
+            GIFD28O1bKgDAYgsF/X21CRqEvgk3vRDp9yqIVIzQDmerOrZUx62Rx9Fssl/7ooW
+            0319fxcTw6GZEp7RXNzgIobnWPydakh+/I0inP0rC6It/vM5Hi2bV71QPZUyJ78C
+            Szh4S8TznW7yMzTQaOENeaUKfqEyN+CW2OomVdWIBOvTJVpvfAut/kg1dyUGgHlT
+            F8OlAoNAyxCSxqbM0fY0wtqKD7FaYY9cbQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
         };
+      };
     };
     fileleech = rec {
-        cores = 4;
-        ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
-        ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+jB5QdPsAJc90alYDhAEP3sPDJb6eIj9bebj+rTBEJ fileleech";
-        nets = {
-          retiolum = {
-            ip4.addr = "10.243.113.98";
-            ip6.addr  = "42:5cf1:e7f2:3fd:cd4c:a1ee:ec71:7096";
-            aliases = [
-                "fileleech.retiolum"
-            ];
-            tinc.pubkey = ''
-                -----BEGIN RSA PUBLIC KEY-----
-                MIIBCgKCAQEA2W20+jYvuFUjPQ+E+7Xlabf8fW/XSnTTelfo2uRcJ3FMLYQ9H3rF
-                8L8StPmxn8Q20FFH/MvRmgW8pU9z4RQ3nAi+utVYqAJQtOYA9FPMxssC08w82r0K
-                YC6sgc9MeRjnCjQxQrQs4fqA6KpqSLxRf2c6kfNwYRgCxFMns2ncxOiPOoGLZait
-                nJR3m0cSRm8yCTMbznlGH99+5+3HgvuBE/UYXmmGBs7w8DevaX76butzprZ8fm4z
-                e5C7R9ofdVW70GGksfSI81y5xODWMbfjTRHKm4OBX7NOCiOTwx1wu8bYDN3EzN6V
-                UM5PJfU42sViPEZmVuC8cDcP1xemHTkh9QIDAQAB
-                -----END RSA PUBLIC KEY-----
-              '';
-            };
+      cores = 4;
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+jB5QdPsAJc90alYDhAEP3sPDJb6eIj9bebj+rTBEJ fileleech";
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.113.98";
+          ip6.addr  = "42:5cf1:e7f2:3fd:cd4c:a1ee:ec71:7096";
+          aliases = [
+            "fileleech.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA2W20+jYvuFUjPQ+E+7Xlabf8fW/XSnTTelfo2uRcJ3FMLYQ9H3rF
+            8L8StPmxn8Q20FFH/MvRmgW8pU9z4RQ3nAi+utVYqAJQtOYA9FPMxssC08w82r0K
+            YC6sgc9MeRjnCjQxQrQs4fqA6KpqSLxRf2c6kfNwYRgCxFMns2ncxOiPOoGLZait
+            nJR3m0cSRm8yCTMbznlGH99+5+3HgvuBE/UYXmmGBs7w8DevaX76butzprZ8fm4z
+            e5C7R9ofdVW70GGksfSI81y5xODWMbfjTRHKm4OBX7NOCiOTwx1wu8bYDN3EzN6V
+            UM5PJfU42sViPEZmVuC8cDcP1xemHTkh9QIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
         };
+      };
     };
 
     pnp = {
@@ -123,16 +123,16 @@ with import <stockholm/lib>;
           aliases = [
             "ossim.siem"
           ];
-        tinc.pubkey = ''
-          -----BEGIN RSA PUBLIC KEY-----
-          MIIBCgKCAQEAv5qv9R3E1AHJOhTnHJ2E5zWjItRdXSw/inpz/W+KcBeM/HSG0XEl
-          RyGAwty7VP4CiLp7CagWmtVsz/5ytnXJzLDeRLn5t+KzO6am0aOpvAt6ZggZXPhL
-          cQkn4IGi1TJE5tw+lzabBkUZm3zD1KEXpqJeZ6spA4e9lB/+T3Tx23g9WDEOKand
-          mAJrsdsvTCIiVJefidOAmgeZVVOV3ltBonNP1nqEy+5v4B3EBT/Uj7ImL2aRj/pd
-          dPs6dGV2LqSQvnrSbFZzuKVXKpD1M+wgT/5NQk/hVJJxBQC6rxvpg1XyQkepcLWL
-          WjvogOl4NjXStmKDX2+gPPFx6XTmwDenOwIDAQAB
-          -----END RSA PUBLIC KEY-----
-        '';
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAv5qv9R3E1AHJOhTnHJ2E5zWjItRdXSw/inpz/W+KcBeM/HSG0XEl
+            RyGAwty7VP4CiLp7CagWmtVsz/5ytnXJzLDeRLn5t+KzO6am0aOpvAt6ZggZXPhL
+            cQkn4IGi1TJE5tw+lzabBkUZm3zD1KEXpqJeZ6spA4e9lB/+T3Tx23g9WDEOKand
+            mAJrsdsvTCIiVJefidOAmgeZVVOV3ltBonNP1nqEy+5v4B3EBT/Uj7ImL2aRj/pd
+            dPs6dGV2LqSQvnrSbFZzuKVXKpD1M+wgT/5NQk/hVJJxBQC6rxvpg1XyQkepcLWL
+            WjvogOl4NjXStmKDX2+gPPFx6XTmwDenOwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
         };
       };
     };
@@ -169,7 +169,7 @@ with import <stockholm/lib>;
             XGzTT4TJpBGnq0jfhFwhVjfCjLuGj29MCkvg0nqObQ07qYrjdQI4W1GnGOuyXkvQ
             teyxjUXYbp0doTGxKvQaTWp+JapeEaJPN2MDOhrRFjPrzgo3aW9+97UCAwEAAQ==
             -----END RSA PUBLIC KEY-----
-            '';
+          '';
         };
       };
     };
@@ -228,16 +228,15 @@ with import <stockholm/lib>;
             "vbob.retiolum"
           ];
           tinc.pubkey = ''
-          -----BEGIN RSA PUBLIC KEY-----
-          MIIBCgKCAQEA+0TIo0dS9LtSdrmH0ClPHLO7dHtV9Dj7gaBAsbyuwxAI5cQgYKwr
-          4G6t7IcJW+Gu2bh+LKtPP91+zYXq4Qr1nAaKw4ajsify6kpxsCBzknmwi6ibIJMI
-          AK114dr/XSk/Pc6hOSA8kqDP4c0MZXwitRBiNjrWbTrQh6GJ3CXhmpZ2lJkoAyNP
-          hjdPerbTUrhQlNW8FanyQQzOgN5I7/PXsZShmb3iNKz1Ban5yWKFCVpn8fjWQs5o
-          Un2AKowH4Y+/g8faGemL8uy/k5xrHSrn05L92TPDUpAXrcZXzo6ao1OBiwJJVl7s
-          AVduOY18FU82GUw7edR0e/b2UC6hUONflwIDAQAB
-          -----END RSA PUBLIC KEY-----
-
-            '';
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA+0TIo0dS9LtSdrmH0ClPHLO7dHtV9Dj7gaBAsbyuwxAI5cQgYKwr
+            4G6t7IcJW+Gu2bh+LKtPP91+zYXq4Qr1nAaKw4ajsify6kpxsCBzknmwi6ibIJMI
+            AK114dr/XSk/Pc6hOSA8kqDP4c0MZXwitRBiNjrWbTrQh6GJ3CXhmpZ2lJkoAyNP
+            hjdPerbTUrhQlNW8FanyQQzOgN5I7/PXsZShmb3iNKz1Ban5yWKFCVpn8fjWQs5o
+            Un2AKowH4Y+/g8faGemL8uy/k5xrHSrn05L92TPDUpAXrcZXzo6ao1OBiwJJVl7s
+            AVduOY18FU82GUw7edR0e/b2UC6hUONflwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
         };
       };
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
@@ -278,7 +277,7 @@ with import <stockholm/lib>;
             DdJadpzOcEgFatzXP3SoKVV9loRHz5HhV4WtAqBIkDvgjj2j+NnXolAUY25Ix+kv
             sfqfIw5aNLoIX4kDhuDEVBIyoc7/ofSbkQIDAQAB
             -----END RSA PUBLIC KEY-----
-            '';
+          '';
         };
       };
     };
@@ -291,7 +290,6 @@ with import <stockholm/lib>;
           wry            IN A  ${nets.internet.ip4.addr}
           io             IN NS wry.krebsco.de.
           graphs         IN A  ${nets.internet.ip4.addr}
-          paste       60 IN A  ${nets.internet.ip4.addr}
           tinc           IN A  ${nets.internet.ip4.addr}
         '';
       };
@@ -300,9 +298,7 @@ with import <stockholm/lib>;
           ip4.addr = "104.233.87.86";
           aliases = [
             "wry.i"
-            "paste.i"
             "wry.internet"
-            "paste.internet"
           ];
         };
         retiolum = {
@@ -353,7 +349,7 @@ with import <stockholm/lib>;
           ip6.addr = "42:4b0b:d990:55ba:8da8:630f:dc0e:aae0";
           aliases = [
             "filepimp.retiolum"
-            "filepimp.r"
+              "filepimp.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -364,7 +360,7 @@ with import <stockholm/lib>;
             UN0duBz/faRcl6IRytZOuHaIp30eJ4850ZK8RPz/Dqqj+USMFq60i0oMsuAi/ljB
             8b+eQBt6OXu4MSntxoR8Ja7ht+EOTDnBOwIDAQAB
             -----END RSA PUBLIC KEY-----
-            '';
+          '';
         };
       };
     };
@@ -389,15 +385,15 @@ with import <stockholm/lib>;
             "stats.makefu.r"
           ];
           tinc.pubkey = ''
-              -----BEGIN RSA PUBLIC KEY-----
-              MIIBCgKCAQEAuHQEeowvxRkoHJUw6cUp431pnoIy4MVv7kTLgWEK46nzgZtld9LM
-              ZdNMJB9CuOVVMHEaiY6Q5YchUmapGxwEObc0y+8zQxTPw3I4q0GkSJqKLPrsTpkn
-              sgEkHPfs2GVdtIBXDn9I8i5JsY2+U8QF8fbIQSOO08/Vpa3nknDAMege9yEa3NFm
-              s/+x+2pS+xV6uzf/H21XNv0oufInXwZH1NCNXAy5I2V6pz7BmAHilVOGCT7g2zn6
-              GasmofiYEnro4V5s8gDlQkb7bCZEIA9EgX/HP6fZJQezSUHcDCQFI0vg26xywbr6
-              5+9tTn8fN2mWS5+Pdmx3haX1qFcBP5HglwIDAQAB
-              -----END RSA PUBLIC KEY-----
-            '';
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAuHQEeowvxRkoHJUw6cUp431pnoIy4MVv7kTLgWEK46nzgZtld9LM
+            ZdNMJB9CuOVVMHEaiY6Q5YchUmapGxwEObc0y+8zQxTPw3I4q0GkSJqKLPrsTpkn
+            sgEkHPfs2GVdtIBXDn9I8i5JsY2+U8QF8fbIQSOO08/Vpa3nknDAMege9yEa3NFm
+            s/+x+2pS+xV6uzf/H21XNv0oufInXwZH1NCNXAy5I2V6pz7BmAHilVOGCT7g2zn6
+            GasmofiYEnro4V5s8gDlQkb7bCZEIA9EgX/HP6fZJQezSUHcDCQFI0vg26xywbr6
+            5+9tTn8fN2mWS5+Pdmx3haX1qFcBP5HglwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
         };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
@@ -428,18 +424,18 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.214.15";
           ip6.addr = "42:5a02:2c30:c1b1:3f2e:7c19:2496:a732";
           aliases = [
-              "wbob.retiolum"
+            "wbob.retiolum"
           ];
           tinc.pubkey = ''
------BEGIN RSA PUBLIC KEY-----
-MIIBCgKCAQEAqLTJx91OdR0FlJAc2JGh+AJde95oMzzh8o36JBFpsaN7styNfD3e
-QGM/bDXFjk4ieIe5At0Z63P2KWxRp3cz8LWKJsn5cGsX2074YWMAGmKX+ZZJNlal
-cJ994xX+8MJ6L2tVKpY7Ace7gqDN+l650PrEzV2SLisIqOdxoBlbAupdwHieUBt8
-khm4NLNUCxPYUx2RtHn4iGdgSgUD/SnyHEFdyDA17lWAGfEi4yFFjFMYQce/TFrs
-rQV9t5hGaofu483Epo6mEfcBcsR4GIHI4a4WKYANsIyvFvzyGFEHOMusG6nRRqE9
-TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
------END RSA PUBLIC KEY-----
-'';
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAqLTJx91OdR0FlJAc2JGh+AJde95oMzzh8o36JBFpsaN7styNfD3e
+            QGM/bDXFjk4ieIe5At0Z63P2KWxRp3cz8LWKJsn5cGsX2074YWMAGmKX+ZZJNlal
+            cJ994xX+8MJ6L2tVKpY7Ace7gqDN+l650PrEzV2SLisIqOdxoBlbAupdwHieUBt8
+            khm4NLNUCxPYUx2RtHn4iGdgSgUD/SnyHEFdyDA17lWAGfEi4yFFjFMYQce/TFrs
+            rQV9t5hGaofu483Epo6mEfcBcsR4GIHI4a4WKYANsIyvFvzyGFEHOMusG6nRRqE9
+            TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
         };
       };
     };
@@ -487,7 +483,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
             u5l+G8wX+UbDI85VSDAtOP4QaSFzLL+U0aaDAmq0NO1QiODJoCo0iPhULZQTFZUa
             OMDYHHfqzluEI7n8ENI4WwchDXH+MstsgwIDAQAB
             -----END RSA PUBLIC KEY-----
-            '';
+          '';
         };
       };
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
@@ -538,7 +534,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
             +DAH8t1YusYi7ICHcYt5J1p0ZGizcs8oEnZLBy4D+bJX86g7zbix1lZ37LxDCpQ5
             uCoAYFes7QqLVDYhucZ5ElRWdATM2mBtZwIDAQAB
             -----END RSA PUBLIC KEY-----
-            '';
+          '';
         };
       };
     };
@@ -551,8 +547,8 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
           ip4.addr = "10.243.83.237";
           ip6.addr  = "42:af50:99cf:c185:f1a8:14d5:acb:8101";
           aliases = [
-              "sdev.retiolum"
-              "sdev.r"
+            "sdev.retiolum"
+            "sdev.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -569,7 +565,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
     };
 
 
-    # non-stockholm
+# non-stockholm
 
     flap = rec {
       cores = 1;
@@ -602,7 +598,7 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
             hGgQMjHFOdKaLyatZOx6Pq4jAna+kiJoq3mVDsB4rcjLuz8XkAUZmVpe5fXAG4hr
             Ig8l/SI6ilu0zCWNSJ/v3wUzksm0P9AJkwIDAQAB
             -----END RSA PUBLIC KEY-----
-            '';
+          '';
         };
       };
     };
@@ -819,32 +815,30 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
       };
     };
     tcac-0-1 = rec {
-        cores = 1;
-    ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
-    ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcX7rlGmGp1zCStrERXZ3XuT/j69FDBXV4ceLn9RXsG tcac-0-1
-    ";
-        nets = {
-          retiolum = {
-            ip4.addr = "10.243.144.142";
-            ip6.addr  = "42:4bf8:94b:eec5:69e2:c837:686e:f278";
-            aliases = [
-                "tcac-0-1.retiolum"
-            ];
-            tinc.pubkey = ''
-              -----BEGIN RSA PUBLIC KEY-----
-              MIIBCgKCAQEA+3zuZa8FhFBcUNdNGyTQph6Jes0WDQB4CDcEcnK9okP60Z0ONq8j
-              7sKmxzQ43WFm04fd992Aa/KLbYBbXmGtYuu68DQwQGwk3HVNksp6ha7uVK1ibgNs
-              zJIKizpFqK4NAYit0OfAy7ugVSvtyIxg9CDhnASDZ5NRq8/OLhvo5M4c3r3lGOlO
-              Hv1nf4Tl2IYRln3c+AJEiw2369K46mRlt28yHeKUw1ur6hrbahnkYW+bjeliROIs
-              QLp8J8Jl6evtPOyZpgyGHLQ/WPsQRK5svVA9ou17R//m4KNL1kBjTfxs7GaJWHLl
-              HpSZTqRKsuK6K9R6kzu7NU81Wz0HXxw/qwIDAQAB
-              -----END RSA PUBLIC KEY-----
-            '';
-          };
+      cores = 1;
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcX7rlGmGp1zCStrERXZ3XuT/j69FDBXV4ceLn9RXsG tcac-0-1
+        ";
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.144.142";
+          ip6.addr  = "42:4bf8:94b:eec5:69e2:c837:686e:f278";
+          aliases = [
+            "tcac-0-1.retiolum"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA+3zuZa8FhFBcUNdNGyTQph6Jes0WDQB4CDcEcnK9okP60Z0ONq8j
+            7sKmxzQ43WFm04fd992Aa/KLbYBbXmGtYuu68DQwQGwk3HVNksp6ha7uVK1ibgNs
+            zJIKizpFqK4NAYit0OfAy7ugVSvtyIxg9CDhnASDZ5NRq8/OLhvo5M4c3r3lGOlO
+            Hv1nf4Tl2IYRln3c+AJEiw2369K46mRlt28yHeKUw1ur6hrbahnkYW+bjeliROIs
+            QLp8J8Jl6evtPOyZpgyGHLQ/WPsQRK5svVA9ou17R//m4KNL1kBjTfxs7GaJWHLl
+            HpSZTqRKsuK6K9R6kzu7NU81Wz0HXxw/qwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
         };
+      };
     };
-
-
   } // { # hosts only maintained in stockholm, not owned by me
     muhbaasu = rec {
       owner = config.krebs.users.root;
@@ -878,23 +872,23 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
     tpsw = {
       cores = 2;
       owner = config.krebs.users.ciko; # main laptop
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.183.236";
-          ip6.addr = "42:8ca8:d2e4:adf6:5c0f:38cb:e9ef:eb3c";
-          aliases = [ "tpsw.r" "tpsw.retiolum" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAvwYPFAINwV0EH0myFpNzRjVbqXdAmJP616C5JvODklhZWJxFxlKJ
-            Poczl57j2Z+4bonkTrJmsNtSaQLPKYH4H1qfo/lwz7nqEpPi3Xp4Fgts23w36eML
-            WBvbw0fQO9R8zZJIIdRkJ2qqlhZiTlor1Gtlm8Z1RmpKkhL9O6Yzj94VhGLhABVl
-            OsaF2M3PgXJMiLry67jzbAs3+mVaT3iBTzWOaOyREjKQEUg9B9IDxrmZMSWqdXZM
-            0wfzaCjS40jD73m7tqi7W3tXzAUP4mEeUqkC+NC2Zgm/lJ5B1KPx7AyNqtRLsBLd
-            pIdJs6ng63WV1fyHYUWMYqZk9zB/tQ0b0wIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
+        nets = {
+          retiolum = {
+            ip4.addr = "10.243.183.236";
+            ip6.addr = "42:8ca8:d2e4:adf6:5c0f:38cb:e9ef:eb3c";
+            aliases = [ "tpsw.r" "tpsw.retiolum" ];
+            tinc.pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIIBCgKCAQEAvwYPFAINwV0EH0myFpNzRjVbqXdAmJP616C5JvODklhZWJxFxlKJ
+              Poczl57j2Z+4bonkTrJmsNtSaQLPKYH4H1qfo/lwz7nqEpPi3Xp4Fgts23w36eML
+              WBvbw0fQO9R8zZJIIdRkJ2qqlhZiTlor1Gtlm8Z1RmpKkhL9O6Yzj94VhGLhABVl
+              OsaF2M3PgXJMiLry67jzbAs3+mVaT3iBTzWOaOyREjKQEUg9B9IDxrmZMSWqdXZM
+              0wfzaCjS40jD73m7tqi7W3tXzAUP4mEeUqkC+NC2Zgm/lJ5B1KPx7AyNqtRLsBLd
+              pIdJs6ng63WV1fyHYUWMYqZk9zB/tQ0b0wIDAQAB
+              -----END RSA PUBLIC KEY-----
+            '';
+          };
         };
-      };
     };
   };
   users = rec {
@@ -919,6 +913,10 @@ TNs2RYfwDy/r6H/hDeB/BSngPouedEVcPwIDAQAB
     makefu-tempx = {
       inherit (makefu) mail pgp;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDOXG6iwvm6zUVk+OE9ZviO+WNosAHSZw4ku0RxWbXSlSG0RfzvV4IfByF3Dw+4a8yZQmjwNkQalUURh2fEqhBLBI9XNEIL7qIu17zheguyXzpE3Smy4pbI+fjdsnfFrw+WE2n/IO8N6ojdH6sMmnWwfkFZYqqofWyLB3WUN9wy2b2z0w/jc56+HxxyTl3rD7CttTs9ak67HqIn3/pNeHoOM+JQ/te8t4ageIlPi8yJJpqZgww1RUWCgPPwZ9DP6gQjo85he76x0h9jvhnFd7m9N1aGdRDcK55QyoY/9x07R24GRutohAB/KDWSkDWQv5BW7M1LCawpJcF3DDslD1i7 makefu@gum";
+    };
+    makefu-bob = {
+      inherit (makefu) mail pgp;
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+fEK1bCB8cdDiBzXBXEWLFQyp/7xjNGQ5GyqHOtgxxe6Ypb0kAaWJaG3Ak/qI/nToGKwkQJLsuYNA3lZj2rFyBdoxnNO3kRFTc7NoaU5mC2BlHbpmn9dzvgiBoRAKAlzj/022u65SI19AFciKXtwqQfjuB3mPVOFOfCFB2SYjjWb8ffPnHp6PB5KKNLxaVPCbZgOdSju25/wB2lY00W8WIDOTqfbNClQnjkLsUZpTuRnvpHTemKtt1FH+WBZiMwMXRt19rm9LFSO7pvrZjdJz0l1TZVsODkbKZzQzSixoCPmdpPPAYaqrGUQpmukXk0xQtR3E2jEsk+FJv4AkIKqD";
     };
     ciko = {
       mail = "wieczorek.stefan@googlemail.com";
