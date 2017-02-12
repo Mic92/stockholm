@@ -73,13 +73,21 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL21QDOEFdODFh6WAfNp6odrXo15pEsDQuGJfMu/cKzK";
     };
-    prism = {
+    prism = rec {
       cores = 4;
+      extraZones = {
+        "krebsco.de" = ''
+          prism     IN A ${nets.internet.ip4.addr}
+          paste     IN A ${nets.internet.ip4.addr}
+        '';
+      };
       nets = rec {
         internet = {
           ip4.addr = "213.239.205.240";
           aliases = [
             "prism.internet"
+            "paste.i"
+            "paste.internet"
           ];
           ssh.port = 45621;
         };

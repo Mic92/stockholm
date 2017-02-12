@@ -290,7 +290,6 @@ with import <stockholm/lib>;
           wry            IN A  ${nets.internet.ip4.addr}
           io             IN NS wry.krebsco.de.
           graphs         IN A  ${nets.internet.ip4.addr}
-          paste       60 IN A  ${nets.internet.ip4.addr}
           tinc           IN A  ${nets.internet.ip4.addr}
         '';
       };
@@ -299,9 +298,7 @@ with import <stockholm/lib>;
           ip4.addr = "104.233.87.86";
           aliases = [
             "wry.i"
-            "paste.i"
             "wry.internet"
-            "paste.internet"
           ];
         };
         retiolum = {
