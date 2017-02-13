@@ -164,7 +164,6 @@ in {
     }
     {
       imports = [
-        ../2configs/websites/wohnprojekt-rhh.de.nix
         ../2configs/websites/domsen.nix
         ../2configs/websites/lassulus.nix
       ];
