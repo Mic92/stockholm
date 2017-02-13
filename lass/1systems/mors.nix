@@ -130,6 +130,11 @@ with import <stockholm/lib>;
       #ipfs-testing
       services.ipfs.enable = true;
     }
+    {
+      environment.systemPackages = [
+        pkgs.krebszones
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
