@@ -73,7 +73,7 @@ let
 
       ${concatStringsSep "\n" (mapAttrsToList (name: alarm: ''
         check program ${name} with path "${alarm.test}"
-          every 10 cycles
+          every ${alarm.interval} cycles
           if status != 0 then exec "${alarm.alarm}"
       '') cfg.alarms)}
     '';
