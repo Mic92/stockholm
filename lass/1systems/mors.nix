@@ -76,56 +76,6 @@ with import <stockholm/lib>;
     {
       services.redis.enable = true;
     }
-    #{
-    #  #gitit magic
-    #  imports = [ <nixpkgs/nixos/modules/services/misc/gitit.nix> ];
-    #  services.gitit = {
-    #    enable = true;
-    #    haskellPackages = pkgs.haskell.packages.ghc7103;
-    #  };
-    #}
-    #{
-    #  lass.icinga2 = {
-    #    enable = true;
-    #    configFiles = [
-    #      ''
-    #        template Service "generic-service" {
-    #          max_check_attempts = 3
-    #          check_interval = 5m
-    #          retry_interval = 1m
-    #          enable_perfdata = true
-    #        }
-    #        apply Service "ping4" {
-    #        }
-    #      ''
-    #    ];
-    #  };
-    #  services.mysql = {
-    #    enable = true;
-    #    package = pkgs.mariadb;
-    #    rootPassword = "<secrets>/mysql_rootPassword";
-    #  };
-    #  lass.icingaweb2 = {
-    #    enable = true;
-    #    initialRootPasswordHash = "$1$HpWDCehI$ITbAoyfOB6HEN1ftooxZq0";
-    #    resources = {
-    #      icinga2db = {
-    #        type = "mysql";
-    #        host = "localhost";
-    #        user = "icingaweb2";
-    #        db = "icinga";
-    #        passfile = <secrets/icinga2-pw>;
-    #      };
-    #      icingaweb2db = {
-    #        type = "mysql";
-    #        host = "localhost";
-    #        user = "icingaweb2";
-    #        db = "icingaweb2";
-    #        passfile = <secrets/icinga2-pw>;
-    #      };
-    #    };
-    #  };
-    #}
     {
       #ipfs-testing
       services.ipfs.enable = true;
