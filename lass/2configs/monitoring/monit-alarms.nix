@@ -13,21 +13,31 @@ in {
   krebs.monit = {
     enable = true;
     http.enable = true;
-    alarms.nirwanabluete = {
-      test = "${pkgs.curl}/bin/curl -sf 'https://nirwanabluete.de/'";
-      alarm = echoToIrc "test nirwanabluete failed";
-    };
-    alarms.ubik = {
-      test = "${pkgs.curl}/bin/curl -sf 'https://ubikmedia.de'";
-      alarm = echoToIrc "test ubik failed";
-    };
-    alarms.hfos = {
-      test = "${pkgs.curl}/bin/curl -sf --insecure 'https://hfos.hackerfleet.de'";
-      alarm = echoToIrc "test hfos failed";
-    };
-    alarms.cac-panel = {
-      test = "${pkgs.curl}/bin/curl -sf 'https://panel.cloudatcost.com/login.php'";
-      alarm = echoToIrc "test cac-panel failed";
+    alarms = {
+      nirwanabluete = {
+        test = "${pkgs.curl}/bin/curl -sf 'https://nirwanabluete.de/'";
+        alarm = echoToIrc "test nirwanabluete failed";
+      };
+      ubik = {
+        test = "${pkgs.curl}/bin/curl -sf 'https://ubikmedia.de'";
+        alarm = echoToIrc "test ubik failed";
+      };
+      hfos = {
+        test = "${pkgs.curl}/bin/curl -sf --insecure 'https://hfos.hackerfleet.de'";
+        alarm = echoToIrc "test hfos failed";
+      };
+      cac-panel = {
+        test = "${pkgs.curl}/bin/curl -sf 'https://panel.cloudatcost.com/login.php'";
+        alarm = echoToIrc "test cac-panel failed";
+      };
+      radio = {
+        test = pkgs.writeBash "check_stream" ''
+          ${pkgs.curl}/bin/curl -sif http://lassul.us:8000/radio.ogg \
+          | ${pkgs.gawk}/bin/awk '/^\r$/{exit}{print $0}' \
+          | ${pkgs.gnugrep}/bin/grep -q "200 OK" || exit "''${PIPESTATUS[0]}"
+        '';
+        alarm = echoToIrc "test radio failed";
+      };
     };
   };
 }
