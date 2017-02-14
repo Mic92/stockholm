@@ -32,4 +32,8 @@ with import <stockholm/lib>;
     { v6 = false; precedence = 1000; predicate = "-d 192.168.122.208 -p tcp --dport 1080 -m state --state NEW,ESTABLISHED,RELATED"; target = "ACCEPT"; }
     { v6 = false; precedence = 1000; predicate = "-d 192.168.122.208 -p tcp --dport 1443 -m state --state NEW,ESTABLISHED,RELATED"; target = "ACCEPT"; }
   ];
+
+  krebs.iptables.tables.nat.OUTPUT.rules = [
+    { v6 = false; precedence = 1000; predicate = "-d 213.239.205.246 -p tcp --dport 443"; target = "DNAT --to-destination 192.168.122.208:1443"; }
+  ];
 }
