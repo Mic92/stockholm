@@ -48,4 +48,9 @@ with import <stockholm/lib>;
   ];
 
   security.rngd.enable = true;
+
+  services.xserver.synaptics = {
+    enable = true;
+    additionalOptions = ''Option "TouchpadOff" "1"'';
+  };
 }
