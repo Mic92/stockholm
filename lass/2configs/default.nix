@@ -161,6 +161,7 @@ with import <stockholm/lib>;
       shopt -s histappend histreedit histverify
       shopt -s no_empty_cmd_completion
       complete -d cd
+      LS_COLORS=$LS_COLORS:'di=1;31:' ; export LS_COLORS
     '';
     promptInit = ''
       if test $UID = 0; then
