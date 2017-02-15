@@ -1,13 +1,13 @@
 { config, pkgs, ... }:
-
+with import <stockholm/lib>;
 let
-  mainUser = config.users.extraUsers.mainUser;
+  user = config.krebs.build.user;
 in {
   imports = [
-    ./xserver
     ./mpv.nix
     ./power-action.nix
     ./screenlock.nix
+    ./copyq.nix
     {
       hardware.pulseaudio = {
         enable = true;
@@ -66,37 +66,31 @@ in {
     youtube-tools
 
     rxvt_unicode
-  #window manager stuff
-    #haskellPackages.xmobar
-    #haskellPackages.yeganesh
-    #dmenu2
-    #xlibs.fontschumachermisc
   ];
 
-  #fonts.fonts = [
-  #  pkgs.xlibs.fontschumachermisc
-  #];
+  fonts.fonts = [
+    pkgs.xlibs.fontschumachermisc
+  ];
 
-  #services.xserver = {
-  #  enable = true;
+  services.xserver = {
+    enable = true;
 
-  #  windowManager.xmonad.extraPackages = hspkgs: with hspkgs; [
-  #    X11-xshape
-  #  ];
-  #  windowManager.xmonad.enable = true;
-  #  windowManager.xmonad.enableContribAndExtras = true;
-  #  windowManager.default = "xmonad";
-  #  desktopManager.default = "none";
-  #  desktopManager.xterm.enable = false;
-  #  displayManager.slim.enable = true;
-  #  displayManager.auto.enable = true;
-  #  displayManager.auto.user = mainUser.name;
+    desktopManager.xterm.enable = false;
+    displayManager.slim.enable = true;
+    windowManager.session = [{
+      name = "xmonad";
+      start = ''
+        ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
+        ${pkgs.xmonad-lass}/bin/xmonad &
+        waitPID=$!
+      '';
+    }];
 
-  #  layout = "us";
-  #  xkbModel = "evdev";
-  #  xkbVariant = "altgr-intl";
-  #  xkbOptions = "caps:backspace";
-  #};
+    layout = "us";
+    xkbModel = "evdev";
+    xkbVariant = "altgr-intl";
+    xkbOptions = "caps:backspace";
+  };
 
   services.logind.extraConfig = ''
     HandleLidSwitch=ignore
@@ -107,4 +101,6 @@ in {
     twoFingerScroll = true;
     accelFactor = "0.035";
   };
+
+  services.urxvtd.enable = true;
 }
