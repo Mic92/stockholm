@@ -5,7 +5,7 @@
     before = [ "sleep.target" ];
     wantedBy = [ "sleep.target" ];
     environment = {
-      DISPLAY = ":${toString config.services.xserver.display}";
+      DISPLAY = ":0";
     };
     serviceConfig = {
       SyslogIdentifier = "screenlock";
