@@ -24,7 +24,7 @@ let
     # TODO find a better default stateDir
     stateDir = mkOption {
       type = types.str;
-      default = "./wallpaper";
+      default = "$HOME/wallpaper";
     };
     display = mkOption {
       type = types.str;
@@ -49,8 +49,8 @@ let
   fetchWallpaperScript = pkgs.writeDash "fetchWallpaper" ''
     set -euf
 
-    mkdir -p ${shell.escape cfg.stateDir}
-    cd ${shell.escape cfg.stateDir}
+    mkdir -p ${cfg.stateDir}
+    cd ${cfg.stateDir}
     (curl --max-time ${toString cfg.maxTime} -s -o wallpaper.tmp -z wallpaper ${shell.escape cfg.url} && mv wallpaper.tmp wallpaper) || :
     feh --no-fehbg --bg-scale wallpaper
   '';
