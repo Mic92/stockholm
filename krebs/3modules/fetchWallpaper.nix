@@ -64,7 +64,7 @@ let
     };
     systemd.user.services.fetchWallpaper = {
       description = "fetch wallpaper";
-      after = [ "network.target" "graphical.target" ];
+      after = [ "graphical.target" ];
       wants = [ "graphical.target" ];
       wantedBy = [ "default.target" ];
 
