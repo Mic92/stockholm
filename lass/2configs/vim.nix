@@ -25,7 +25,7 @@ let
     set hlsearch
     set incsearch
     set mouse=a
-    set noruler
+    set ruler
     set pastetoggle=<INS>
     set runtimepath=${extra-runtimepath},$VIMRUNTIME
     set shortmess+=I
