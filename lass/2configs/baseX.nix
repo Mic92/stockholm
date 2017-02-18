@@ -33,8 +33,6 @@ in {
 
   programs.ssh.startAgent = false;
 
-  security.setuidPrograms = [ "slock" ];
-
   services.printing = {
     enable = true;
     drivers = [ pkgs.foomatic_filters ];
