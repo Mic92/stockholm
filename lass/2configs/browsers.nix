@@ -20,7 +20,7 @@ let
   createChromiumUser = name: extraGroups:
     let
       bin = pkgs.writeScriptBin name ''
-        /var/setuid-wrappers/sudo -u ${name} -i ${pkgs.chromium}/bin/chromium $@
+        /var/run/wrappers/bin/sudo -u ${name} -i ${pkgs.chromium}/bin/chromium $@
       '';
     in {
       users.extraUsers.${name} = {
@@ -43,7 +43,7 @@ let
   createFirefoxUser = name: extraGroups:
     let
       bin = pkgs.writeScriptBin name ''
-        /var/setuid-wrappers/sudo -u ${name} -i ${pkgs.firefox}/bin/firefox $@
+        /var/run/wrappers/bin/sudo -u ${name} -i ${pkgs.firefox}/bin/firefox $@
       '';
     in {
       users.extraUsers.${name} = {
