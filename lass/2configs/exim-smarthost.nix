@@ -12,7 +12,7 @@ with import <stockholm/lib>;
       "lassul.us"
       "aidsballs.de"
     ];
-    relay_from_hosts = map (host: host.nets.retiolum.ip4.addr) [
+    relay_from_hosts = map (host: host.nets.retiolum.ip6.addr) [
       config.krebs.hosts.mors
       config.krebs.hosts.uriel
       config.krebs.hosts.helios
