@@ -247,7 +247,13 @@ in {
       ];
     }
     {
-      krebs.Reaktor.coders = {
+      krebs.Reaktor.coders = let
+        lambdabot = (import (pkgs.fetchFromGitHub {
+          owner = "NixOS"; repo = "nixpkgs";
+          rev = "a4ec1841da14fc98c5c35cc72242c23bb698d4ac";
+          sha256 = "148fpw31s922hxrf28yhrci296f7c7zd81hf0k6zs05rq0i3szgy";
+        }) {}).lambdabot;
+      in {
         nickname = "reaktor-lass";
         channels = [ "#coders" ];
         extraEnviron = {
@@ -263,7 +269,7 @@ in {
           (buildSimpleReaktorPlugin "lambdabot-pl" {
             pattern = "^@pl (?P<args>.*)$$";
             script = pkgs.writeDash "lambda-pl" ''
-              exec ${pkgs.lambdabot}/bin/lambdabot \
+              exec ${lambdabot}/bin/lambdabot \
                 ${indent lambdabotflags}
                 -e "@pl $1"
             '';
@@ -271,7 +277,7 @@ in {
           (buildSimpleReaktorPlugin "lambdabot-type" {
             pattern = "^@type (?P<args>.*)$$";
             script = pkgs.writeDash "lambda-type" ''
-              exec ${pkgs.lambdabot}/bin/lambdabot \
+              exec ${lambdabot}/bin/lambdabot \
                 ${indent lambdabotflags}
                 -e "@type $1"
             '';
@@ -279,7 +285,7 @@ in {
           (buildSimpleReaktorPlugin "lambdabot-let" {
             pattern = "^@let (?P<args>.*)$$";
             script = pkgs.writeDash "lambda-let" ''
-              exec ${pkgs.lambdabot}/bin/lambdabot \
+              exec ${lambdabot}/bin/lambdabot \
                 ${indent lambdabotflags}
                 -e "@let $1"
             '';
@@ -287,7 +293,7 @@ in {
           (buildSimpleReaktorPlugin "lambdabot-run" {
             pattern = "^@run (?P<args>.*)$$";
             script = pkgs.writeDash "lambda-run" ''
-              exec ${pkgs.lambdabot}/bin/lambdabot \
+              exec ${lambdabot}/bin/lambdabot \
                 ${indent lambdabotflags}
                 -e "@run $1"
             '';
@@ -295,7 +301,7 @@ in {
           (buildSimpleReaktorPlugin "lambdabot-kind" {
             pattern = "^@kind (?P<args>.*)$$";
             script = pkgs.writeDash "lambda-kind" ''
-              exec ${pkgs.lambdabot}/bin/lambdabot \
+              exec ${lambdabot}/bin/lambdabot \
                 ${indent lambdabotflags}
                 -e "@kind $1"
             '';
@@ -303,7 +309,7 @@ in {
           (buildSimpleReaktorPlugin "lambdabot-kind" {
             pattern = "^@kind (?P<args>.*)$$";
             script = pkgs.writeDash "lambda-kind" ''
-              exec ${pkgs.lambdabot}/bin/lambdabot \
+              exec ${lambdabot}/bin/lambdabot \
                 ${indent lambdabotflags}
                 -e "@kind $1"
             '';
