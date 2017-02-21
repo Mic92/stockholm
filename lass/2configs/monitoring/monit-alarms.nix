@@ -22,10 +22,6 @@ in {
         test = "${pkgs.curl}/bin/curl -sf 'https://ubikmedia.de'";
         alarm = echoToIrc "test ubik failed";
       };
-      hfos = {
-        test = "${pkgs.curl}/bin/curl -sf --insecure 'https://hfos.hackerfleet.de'";
-        alarm = echoToIrc "test hfos failed";
-      };
       cac-panel = {
         test = "${pkgs.curl}/bin/curl -sf 'https://panel.cloudatcost.com/login.php'";
         alarm = echoToIrc "test cac-panel failed";
