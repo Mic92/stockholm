@@ -36,4 +36,6 @@ with import <stockholm/lib>;
   krebs.iptables.tables.nat.OUTPUT.rules = [
     { v6 = false; precedence = 1000; predicate = "-d 213.239.205.246 -p tcp --dport 443"; target = "DNAT --to-destination 192.168.122.208:1443"; }
   ];
+
+  systemd.services.krebs-iptables.after = [ "libvirtd.service" ];
 }
