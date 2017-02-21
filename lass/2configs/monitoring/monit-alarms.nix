@@ -6,7 +6,7 @@ let
       set -euf
       export LOGNAME=prism-alarm
       ${pkgs.irc-announce}/bin/irc-announce \
-        ni.r 6667 prism-alarm \#noise "${msg}" >/dev/null
+        ni.r 6667 ${config.networking.hostName}-alarm \#noise "${msg}" >/dev/null
     '';
 
 in {
