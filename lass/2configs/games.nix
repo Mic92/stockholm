@@ -11,7 +11,6 @@ let
     DOOM_DIR=''${DOOM_DIR:-~/doom/}
     ${vdoom} \
       -file $DOOM_DIR/lib/brutalv20.pk3 \
-      -file $DOOM_DIR/lib/RebotStarcraftMarines.pk3 \
       "$@"
   '';
   doom1 = pkgs.writeDashBin "doom1" ''
