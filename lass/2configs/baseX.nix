@@ -8,6 +8,7 @@ in {
     ./power-action.nix
     ./screenlock.nix
     ./copyq.nix
+    ./xresources.nix
     {
       hardware.pulseaudio = {
         enable = true;
