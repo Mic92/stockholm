@@ -81,4 +81,8 @@ in {
   security.sudo.extraConfig = ''
     ${mainUser.name} ALL=(games) NOPASSWD: ALL
   '';
+
+  krebs.iptables.tables.filter.INPUT.rules = [
+    { predicate = "-p tcp --dport 10666"; target = "ACCEPT"; }
+  ];
 }
