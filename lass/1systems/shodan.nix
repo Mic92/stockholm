@@ -61,6 +61,9 @@ with import <stockholm/lib>;
           };
         };
       };
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp -i retiolum --dport 9093"; target = "ACCEPT"; }
+      ];
     }
   ];
 
