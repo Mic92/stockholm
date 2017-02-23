@@ -49,6 +49,7 @@ in {
     serviceConfig = {
       Type = "simple";
       ExecStart = "${pkgs.xorg.xrdb}/bin/xrdb -merge ${xresources}";
+      Restart = "on-failure";
     };
   };
 }
