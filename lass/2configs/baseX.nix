@@ -77,7 +77,13 @@ in {
     enable = true;
 
     desktopManager.xterm.enable = false;
-    displayManager.slim.enable = true;
+    desktopManager.default = "none";
+    displayManager.lightdm.enable = true;
+    displayManager.lightdm.autoLogin = {
+      enable = true;
+      user = "lass";
+    };
+    windowManager.default = "xmonad";
     windowManager.session = [{
       name = "xmonad";
       start = ''
