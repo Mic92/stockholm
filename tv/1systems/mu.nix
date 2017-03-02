@@ -99,10 +99,10 @@ with import <stockholm/lib>;
 
   programs.ssh.startAgent = false;
 
-  security.setuidPrograms = [
-    "sendmail"  # for cron
-    "slock"
-  ];
+  security.wrappers = {
+    sendmail.source = "${pkgs.exim}/bin/sendmail"; # for cron
+    slock.slock = "${pkgs.slock}/bin/slock";
+  };
 
   security.pam.loginLimits = [
     # for jack
