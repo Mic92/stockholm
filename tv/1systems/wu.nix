@@ -157,9 +157,9 @@ with import <stockholm/lib>;
     #jack2
   ];
 
-  security.setuidPrograms = [
-    "sendmail"  # for cron
-  ];
+  security.wrappers = {
+    sendmail.source = "${pkgs.exim}/bin/sendmail"; # for cron
+  };
 
   services.printing.enable = true;
 

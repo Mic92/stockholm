@@ -143,9 +143,9 @@ with import <stockholm/lib>;
     };
   };
 
-  security.setuidPrograms = [
-    "sendmail"
-  ];
+  security.wrappers = {
+    sendmail.source = "${pkgs.exim}/bin/sendmail"; # for cron
+  };
 
   security.sudo.extraConfig = ''
     Defaults env_keep+="SSH_CLIENT"
