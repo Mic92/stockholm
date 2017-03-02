@@ -35,7 +35,10 @@ in {
 
   services.printing = {
     enable = true;
-    drivers = [ pkgs.foomatic_filters ];
+    drivers = [
+      pkgs.foomatic_filters
+      pkgs.gutenprint
+    ];
   };
 
   environment.systemPackages = with pkgs; [
