@@ -73,7 +73,7 @@ let
   };
 
   imp = {
-    system.activationScripts."krebs.setuid" = stringAfter [ "setuid" ]
+    system.activationScripts."krebs.setuid" = stringAfter [ "wrappers" ]
       (concatMapStringsSep "\n" (getAttr "activate") (attrValues cfg));
   };
 
