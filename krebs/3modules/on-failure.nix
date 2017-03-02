@@ -58,7 +58,7 @@
     };
     sendmail = mkOption {
       type = types.str;
-      default = "/var/setuid-wrappers/sendmail";
+      default = "/run/wrappers/bin/sendmail";
     };
   };
 

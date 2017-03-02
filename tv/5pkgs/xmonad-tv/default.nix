@@ -132,7 +132,7 @@ spawnRootTerm :: X ()
 spawnRootTerm =
     forkFile
         urxvtcPath
-        ["-name", "root-urxvt", "-e", "/var/setuid-wrappers/su", "-"]
+        ["-name", "root-urxvt", "-e", "/run/wrappers/bin/su", "-"]
         Nothing
 
 spawnTermAt :: String -> X ()
@@ -143,7 +143,7 @@ spawnTermAt ws = do
 
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf = Map.fromList $
-    [ ((_4  , xK_Escape ), forkFile "/var/setuid-wrappers/slock" [] Nothing)
+    [ ((_4  , xK_Escape ), forkFile "/run/wrappers/bin/slock" [] Nothing)
     , ((_4S , xK_c      ), kill)
 
     , ((_4  , xK_x      ), chooseAction spawnTermAt)
