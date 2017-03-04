@@ -11,7 +11,7 @@ with import <stockholm/lib>;
     nixos-config.symlink = "stockholm/${user.name}/1systems/${host.name}.nix";
     nixpkgs.git = {
       url = https://github.com/NixOS/nixpkgs;
-      ref = "b8ede35d2efa96490857c22c751e75d600bea44f"; # nixos-16.09 @ 2016-10-19
+      ref = "5b0c9d4f92f15f171afa65caf13a29ac1c068a10"; # nixos-17.03 @ 2017-03-04
     };
     secrets.file =
       if getEnv "dummy_secrets" == "true"
