@@ -9,6 +9,7 @@ in {
     ./screenlock.nix
     ./copyq.nix
     ./xresources.nix
+    ./livestream.nix
     {
       hardware.pulseaudio = {
         enable = true;
@@ -42,7 +43,6 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-
     acpi
     dic
     dmenu
