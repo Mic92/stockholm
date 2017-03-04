@@ -135,6 +135,7 @@ with import <stockholm/lib>;
 
   #neat utils
     krebspaste
+    mosh
     pciutils
     pop
     psmisc
