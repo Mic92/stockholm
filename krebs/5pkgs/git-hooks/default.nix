@@ -1,13 +1,10 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 
-with lib;
+with import <stockholm/lib>;
 
-let
-  out = {
-    inherit irc-announce;
-  };
-
+{
   # TODO irc-announce should return a derivation
+  #      but it cannot because krebs.git.repos.*.hooks :: attrsOf str
   irc-announce = { nick, channel, server, port ? 6667, verbose ? false, branches ? [] }: ''
     #! /bin/sh
     set -euf
@@ -99,7 +96,7 @@ let
     done
 
     if test -n "''${message-}"; then
-      exec ${irc-announce-script} \
+      exec ${pkgs.irc-announce}/bin/irc-announce \
         "$server" \
         "$port" \
         "$nick" \
@@ -107,6 +104,4 @@ let
         "$message"
     fi
   '';
-
-  irc-announce-script = "${pkgs.irc-announce}/bin/irc-announce";
-in out
+}
