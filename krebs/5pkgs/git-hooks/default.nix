@@ -34,7 +34,7 @@ with import <stockholm/lib>;
     port=${toString port}
 
     host=$nick
-    cgit_endpoint=http://cgit.$host
+    cgit_endpoint=http://cgit.$host.r
 
     empty=0000000000000000000000000000000000000000
 
