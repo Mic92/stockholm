@@ -11,7 +11,7 @@ with import <stockholm/lib>;
     nixos-config.symlink = "stockholm/${user.name}/1systems/${host.name}.nix";
     nixpkgs.git = {
       url = https://github.com/NixOS/nixpkgs;
-      ref = "5b0c9d4f92f15f171afa65caf13a29ac1c068a10"; # nixos-17.03 @ 2017-03-04
+      ref = "5b0c9d4f92f15f171afa65caf13a29ac1c068a10"; # nixos-17.03 @ 2017-03-03
     };
     secrets.file =
       if getEnv "dummy_secrets" == "true"
@@ -29,10 +29,6 @@ with import <stockholm/lib>;
     "http://hydra.nixos.org"
   ];
   nix.useSandbox = true;
-
-  nixpkgs.config.packageOverrides = pkgs: {
-    nano = pkgs.vim;
-  };
 
   environment.systemPackages = with pkgs; [
     git
