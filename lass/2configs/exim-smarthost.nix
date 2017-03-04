@@ -8,6 +8,7 @@ with import <stockholm/lib>;
     dkim = [
       { domain = "lassul.us"; }
     ];
+    primary_hostname = "lassul.us";
     sender_domains = [
       "lassul.us"
       "aidsballs.de"
