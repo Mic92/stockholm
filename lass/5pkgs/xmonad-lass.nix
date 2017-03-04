@@ -22,7 +22,7 @@ import XMonad
 import qualified XMonad.StackSet as W
 import Control.Exception
 import Data.List (isInfixOf)
-import System.Environment (getArgs, withArgs, getEnv)
+import System.Environment (getArgs, withArgs)
 import System.IO (hPutStrLn, stderr)
 import System.Posix.Process (executeFile)
 import Text.Read (readEither)
@@ -60,21 +60,17 @@ main = getArgs >>= \case
 
 mainNoArgs :: IO ()
 mainNoArgs = do
-    workspaces0 <- getWorkspaces0
     xmonad'
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
             { terminal          = urxvtcPath
             , modMask           = mod4Mask
-            , workspaces        = workspaces0
             , layoutHook = smartBorders $ myLayoutHook
             , manageHook        = placeHook (smart (1,0)) <+> floatNextHook
-            , startupHook = do
-                path <- liftIO (getEnv "XMONAD_STARTUP_HOOK")
-                forkFile path [] Nothing
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
             , handleEventHook = handleShutdownEvent
+            , workspaces        = [ "dashboard" ]
             } `additionalKeysP` myKeyMap
 
 myLayoutHook = defLayout
@@ -84,7 +80,7 @@ myLayoutHook = defLayout
 
 xmonad' :: (LayoutClass l Window, Read (l Window)) => XConfig l -> IO ()
 xmonad' conf = do
-    path <- getEnv "XMONAD_STATE"
+    let path = "/tmp/xmonad.state"
     try (readFile path) >>= \case
         Right content -> do
             hPutStrLn stderr ("resuming from " ++ path)
@@ -93,25 +89,13 @@ xmonad' conf = do
             hPutStrLn stderr (displaySomeException e)
             xmonad conf
 
-getWorkspaces0 :: IO [String]
-getWorkspaces0 =
-    try (getEnv "XMONAD_WORKSPACES0_FILE") >>= \case
-      Left e -> warn (displaySomeException e)
-      Right p -> try (readFile p) >>= \case
-        Left e -> warn (displaySomeException e)
-        Right x -> case readEither x of
-          Left e -> warn e
-          Right y -> return y
-  where
-    warn msg = hPutStrLn stderr ("getWorkspaces0: " ++ msg) >> return []
-
 displaySomeException :: SomeException -> String
 displaySomeException = displayException
 
 
 myKeyMap :: [([Char], X ())]
 myKeyMap =
-    [ ("M4-<F11>", spawn "${pkgs.i3lock}/bin/i3lock -i /var/lib/wallpaper/wallpaper -f")
+    [ ("M4-<F11>", spawn "${pkgs.i3lock}/bin/i3lock -i $HOME/wallpaper -f")
     , ("M4-C-p", spawn "${pkgs.scrot}/bin/scrot ~/public_html/scrot.png")
     , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
     , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ +4%")

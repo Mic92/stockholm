@@ -1,5 +1,4 @@
-{ config, lib, pkgs, ... }:
-
+{ config, pkgs, ... }:
 with import <stockholm/lib>;
 {
   imports = [
@@ -11,6 +10,7 @@ with import <stockholm/lib>;
     ../2configs/vim.nix
     ../2configs/monitoring/client.nix
     ./backups.nix
+    ./security-workarounds.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
@@ -61,6 +61,12 @@ with import <stockholm/lib>;
       environment.systemPackages = [
         pkgs.pythonPackages.python
       ];
+    }
+    {
+      services.dnscrypt-proxy.enable = true;
+      networking.extraResolvconfConf = ''
+        name_servers='127.0.0.1'
+      '';
     }
   ];
 
@@ -129,6 +135,7 @@ with import <stockholm/lib>;
 
   #neat utils
     krebspaste
+    mosh
     pciutils
     pop
     psmisc
@@ -155,6 +162,7 @@ with import <stockholm/lib>;
       shopt -s histappend histreedit histverify
       shopt -s no_empty_cmd_completion
       complete -d cd
+      LS_COLORS=$LS_COLORS:'di=1;31:' ; export LS_COLORS
     '';
     promptInit = ''
       if test $UID = 0; then
@@ -202,6 +210,7 @@ with import <stockholm/lib>;
       filter.INPUT.rules = [
         { predicate = "-m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; precedence = 10001; }
         { predicate = "-p icmp"; target = "ACCEPT"; precedence = 10000; }
+        { predicate = "-p ipv6-icmp"; target = "ACCEPT"; v4 = false;  precedence = 10000; }
         { predicate = "-i lo"; target = "ACCEPT"; precedence = 9999; }
         { predicate = "-p tcp --dport 22"; target = "ACCEPT"; precedence = 9998; }
         { predicate = "-p tcp -i retiolum"; target = "REJECT --reject-with tcp-reset"; precedence = -10000; }

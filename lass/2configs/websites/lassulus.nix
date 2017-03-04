@@ -110,7 +110,10 @@ in {
     '';
 
     enableSSL = true;
-    extraConfig = "listen 80;";
+    extraConfig = ''
+      listen 80;
+      listen [::]:80;
+    '';
     sslCertificate = "/var/lib/acme/lassul.us/fullchain.pem";
     sslCertificateKey = "/var/lib/acme/lassul.us/key.pem";
   };
@@ -123,7 +126,10 @@ in {
       root /var/lib/acme/acme-challenges;
     '';
     enableSSL = true;
-    extraConfig = "listen 80;";
+    extraConfig = ''
+      listen 80;
+      listen [::]:80;
+    '';
     sslCertificate = "/var/lib/acme/cgit.lassul.us/fullchain.pem";
     sslCertificateKey = "/var/lib/acme/cgit.lassul.us/key.pem";
   };

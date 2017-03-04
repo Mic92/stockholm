@@ -3,10 +3,10 @@
 pythonPackages.buildPythonApplication (rec {
   name = "${pname}-${version}";
   pname = "buildbot";
-  version = "0.9.1";
+  version = "0.9.4";
   src = fetchurl {
     url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-    sha256 = "1kk4dlkk4rznwid9xykq2lbzksvkcr4r5kmz9hgh5hswdzv8bwx9";
+    sha256 = "0wklrn4fszac9wi8zw3vbsznwyff6y57cz0i81zvh46skb6n3086";
   };
   doCheck = false;
   buildInputs = with pythonPackages; [
@@ -22,6 +22,7 @@ pythonPackages.buildPythonApplication (rec {
     pylint
     astroid
     pyflakes
+    pyjwt
   ];
 
   propagatedBuildInputs = with pythonPackages; [
@@ -55,9 +56,6 @@ pythonPackages.buildPythonApplication (rec {
 
   ] ++ plugins;
 
-  patchPhase = ''
-    patch -p1 < ${./irc_messages.patch}
-  '';
   preInstall = ''
     # writes out a file that can't be read properly
     sed -i.bak -e '69,84d' buildbot/test/unit/test_www_config.py

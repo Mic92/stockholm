@@ -25,7 +25,7 @@ let
     set hlsearch
     set incsearch
     set mouse=a
-    set noruler
+    set ruler
     set pastetoggle=<INS>
     set runtimepath=${extra-runtimepath},$VIMRUNTIME
     set shortmess+=I
@@ -66,6 +66,7 @@ let
 
     "Syntastic config
     let g:syntastic_python_checkers=['flake8']
+    let g:syntastic_python_flake8_post_args='--ignore=E501'
 
     nmap <esc>q :buffer 
     nmap <M-q> :buffer 

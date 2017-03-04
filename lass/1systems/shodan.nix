@@ -42,6 +42,29 @@ with import <stockholm/lib>;
         pkgs.python27Packages.python
       ];
     }
+    {
+      krebs.monit = let
+        echoToIrc = msg:
+          pkgs.writeDash "echo_irc" ''
+            set -euf
+            export LOGNAME=prism-alarm
+            ${pkgs.irc-announce}/bin/irc-announce \
+              ni.r 6667 ${config.networking.hostName}-alarm \#noise "${msg}" >/dev/null
+          '';
+      in {
+        enable = true;
+        http.enable = true;
+        alarms = {
+          hfos = {
+            test = "${pkgs.curl}/bin/curl -sf --insecure 'https://hfos.hackerfleet.de'";
+            alarm = echoToIrc "test hfos failed";
+          };
+        };
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp -i retiolum --dport 9093"; target = "ACCEPT"; }
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.shodan;

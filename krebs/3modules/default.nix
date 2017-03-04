@@ -22,6 +22,7 @@ let
       ./go.nix
       ./iptables.nix
       ./kapacitor.nix
+      ./monit.nix
       ./newsbot-js.nix
       ./nginx.nix
       ./nixpkgs.nix

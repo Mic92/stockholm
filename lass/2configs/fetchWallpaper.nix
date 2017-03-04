@@ -9,9 +9,5 @@ in {
     url = "prism/wallpaper.png";
     maxTime = 10;
   };
-  systemd.services.fetchWallpaper = {
-    after = [ "xmonad.service" ];
-    wantedBy = [ "xmonad.service" ];
-  };
 }
 

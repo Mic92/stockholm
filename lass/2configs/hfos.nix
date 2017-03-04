@@ -8,7 +8,6 @@ with import <stockholm/lib>;
     extraGroups = [ "libvirtd" ];
     openssh.authorizedKeys.keys = [
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMkyCwdwBrsbs3qrNQcy/SqQpex4aaQoAMuT+NDefFc8KVHOMfmkDccEyAggDTgQhUrEVIvo/fFUmGBd9sm1vN1IthO2Qh5nX+qiK/A2R7sxci0Ry6piU03R27JfpZqi6g8TSPNi1C9rC8eBqOfO3OB8oQOkFmM48Q9cmS8AV3ERLR0LaHoEqUbs86JELbtHrMdKk4Hzo8zTM/isP3GO8iDHRt4dBS/03Ve7+WVxgNwWU2HW3a3jJd3tWHrqGmS/ZfCEC/47eIj4WSW+JiH9Q0BarNEbkkMV1Mvm32MX52stGPd5FaIIUtFqD4745iVSiw8esUGFUxJ1RjWgUHr99h riot@vortex"
-      config.krebs.users.lass.pubkey
     ];
   };
 
@@ -32,4 +31,10 @@ with import <stockholm/lib>;
     { v6 = false; precedence = 1000; predicate = "-d 192.168.122.208 -p tcp --dport 1080 -m state --state NEW,ESTABLISHED,RELATED"; target = "ACCEPT"; }
     { v6 = false; precedence = 1000; predicate = "-d 192.168.122.208 -p tcp --dport 1443 -m state --state NEW,ESTABLISHED,RELATED"; target = "ACCEPT"; }
   ];
+
+  krebs.iptables.tables.nat.OUTPUT.rules = [
+    { v6 = false; precedence = 1000; predicate = "-d 213.239.205.246 -p tcp --dport 443"; target = "DNAT --to-destination 192.168.122.208:1443"; }
+  ];
+
+  systemd.services.krebs-iptables.after = [ "libvirtd.service" ];
 }

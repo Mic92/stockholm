@@ -55,7 +55,7 @@ let
 
     local_domains = mkOption {
       type = with types; listOf hostname;
-      default = ["localhost"] ++ config.krebs.build.host.nets.retiolum.aliases;
+      default = unique (["localhost" cfg.primary_hostname] ++ config.krebs.build.host.nets.retiolum.aliases);
     };
 
     relay_from_hosts = mkOption {

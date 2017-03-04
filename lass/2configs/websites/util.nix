@@ -17,7 +17,10 @@ rec {
       services.nginx.virtualHosts.${domain} = {
         enableACME = true;
         enableSSL = true;
-        extraConfig = "listen 80;";
+        extraConfig = ''
+          listen 80;
+          listen [::]:80;
+        '';
         serverAliases = domains;
         locations."/".extraConfig = ''
           root /srv/http/${domain};
@@ -29,12 +32,14 @@ rec {
     let
       domain = head domains;
     in {
+      services.phpfpm.phpPackage = pkgs.php56;
       services.nginx.virtualHosts."${domain}" = {
         enableACME = true;
         enableSSL = true;
         serverAliases = domains;
         extraConfig = ''
           listen 80;
+          listen [::]:80;
 
           # Add headers to serve security related headers
           add_header Strict-Transport-Security "max-age=15768000; includeSubDomains; preload;";
@@ -148,6 +153,8 @@ rec {
         serverAliases = domains;
         extraConfig = ''
           listen 80;
+          listen [::]:80;
+
           root /srv/http/${domain}/;
           index index.php;
           access_log /tmp/nginx_acc.log;
@@ -175,10 +182,10 @@ rec {
         user = nginx
         group = nginx
         pm = dynamic
-        pm.max_children = 5
-        pm.start_servers = 2
+        pm.max_children = 15
+        pm.start_servers = 3
         pm.min_spare_servers = 1
-        pm.max_spare_servers = 3
+        pm.max_spare_servers = 10
         listen.owner = nginx
         listen.group = nginx
         php_admin_value[error_log] = 'stderr'
