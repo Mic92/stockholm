@@ -30,10 +30,6 @@ with import <stockholm/lib>;
   ];
   nix.useSandbox = true;
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    nano = pkgs.vim;
-  };
-
   environment.systemPackages = with pkgs; [
     git
     rxvt_unicode.terminfo
