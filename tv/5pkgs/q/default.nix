@@ -1,7 +1,19 @@
 { pkgs, ... }:
+with import <stockholm/lib>;
 let
   q-cal = let
-    # XXX 23 is the longest line of cal's output
+
+    # Maximum width of cal's output.
+    calwidth = 23;
+
+    # Number of space characters between two calendars.
+    hspace = 2;
+
+    # Return number of columns required to print n calenders side by side.
+    need_width = n:
+      assert n >= 1;
+      n * calwidth + (n - 1) * hspace;
+
     pad = ''{
       ${pkgs.gnused}/bin/sed '
             # rtrim
@@ -10,7 +22,7 @@ let
             # delete last empty line
             ''${/^$/d}
           ' \
-        | ${pkgs.gawk}/bin/awk '{printf "%-23s\n", $0}' \
+        | ${pkgs.gawk}/bin/awk '{printf "%-${toString calwidth}s\n", $0}' \
         | ${pkgs.gnused}/bin/sed '
               # colorize header
               1,2s/.*/[38;5;238;1m&[39;22m/
@@ -20,23 +32,31 @@ let
             '
     }'';
   in ''
+    cols=$(${pkgs.ncurses}/bin/tput cols)
     ${pkgs.coreutils}/bin/paste \
-        <(${pkgs.utillinux}/bin/cal -mw \
+        <(if test $cols -ge ${toString (need_width 3)}; then
+          ${pkgs.utillinux}/bin/cal -mw \
               $(${pkgs.coreutils}/bin/date +'%m %Y' -d 'last month') \
             | ${pad}
-        ) \
-        <(${pkgs.utillinux}/bin/cal -mw \
+        fi) \
+        <(if test $cols -ge ${toString (need_width 1)}; then
+          ${pkgs.utillinux}/bin/cal -mw \
             | ${pkgs.gnused}/bin/sed '
                 # colorize day of month
                 s/\(^\| \)'"$(${pkgs.coreutils}/bin/date +%e)"'\>/[31;1m&[39;22m/
               ' \
             | ${pad}
-        ) \
-        <(${pkgs.utillinux}/bin/cal -mw \
+        fi) \
+        <(if test $cols -ge ${toString (need_width 2)}; then
+          ${pkgs.utillinux}/bin/cal -mw \
               $(${pkgs.coreutils}/bin/date +'%m %Y' -d 'next month') \
             | ${pad}
-        ) \
-      | ${pkgs.gnused}/bin/sed 's/\t/  /g'
+        fi) \
+      | ${pkgs.gnused}/bin/sed '
+          s/^\t//
+          s/\t$//
+          s/\t/${lpad hspace " " ""}/g
+        '
   '';
 
   q-isodate = ''
