@@ -15,6 +15,7 @@ in {
         enable = true;
         systemWide = true;
       };
+      security.rtkit.enable = true;
     }
     {
       krebs.per-user.lass.packages = [
