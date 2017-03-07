@@ -28,6 +28,7 @@ with import <stockholm/lib>;
     ./audit.nix
     ./backup.nix
     ./bash.nix
+    ./htop.nix
     ./nginx
     ./ssh.nix
     ./sshd.nix
