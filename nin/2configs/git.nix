@@ -5,6 +5,7 @@ with import <stockholm/lib>;
 let
 
   out = {
+    services.nginx.enable = true;
     krebs.git = {
       enable = true;
       cgit = {
