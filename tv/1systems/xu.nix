@@ -20,11 +20,6 @@ with import <stockholm/lib>;
     {
       environment.systemPackages = with pkgs; [
 
-        # stockholm
-        gnumake
-        hashPassword
-        #haskellPackages.lentil
-        parallel
 
         # root
         cryptsetup
