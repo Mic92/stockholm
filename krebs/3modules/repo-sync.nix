@@ -12,7 +12,34 @@ let
   api = {
     enable = mkEnableOption "repo-sync";
     repos = mkOption {
-      type = with types;attrsOf (attrsOf (attrsOf (attrsOf str)));
+      type = types.attrsOf (types.submodule {
+        options = {
+          branches = mkOption {
+            type = types.attrsOf (types.submodule ({ config, ... }: {
+              options = {
+                origin = mkOption {
+                  type = types.git-source;
+                };
+                mirror = mkOption {
+                  type = types.git-source;
+                };
+              };
+              config = {
+                origin.ref = mkDefault "heads/master";
+                mirror.ref = mkDefault "heads/${config._module.args.name}";
+              };
+            }));
+          };
+          latest = mkOption {
+            type = types.nullOr types.git-source;
+            default = null;
+          };
+          timerConfig = mkOption {
+            type = types.attrsOf types.str;
+            default = cfg.timerConfig;
+          };
+        };
+      });
       example = literalExample ''
         # see `repo-sync --help`
         #   `ref` provides sane defaults and can be omitted
@@ -23,53 +50,53 @@ let
         # each attrset defines a group of repos for syncing
 
         { nxpkgs = {
-            makefu = {
-              origin = {
-                url = http://github.com/makefu/nixpkgs;
-                ref = "heads/dev" ;
+            branches = {
+              makefu = {
+                origin = {
+                  url = http://github.com/makefu/nixpkgs;
+                  ref = "heads/dev" ;
+                };
+                mirror = {
+                  url = "git@internal:nixpkgs-mirror" ;
+                  ref = "heads/github-mirror-dev" ;
+                };
               };
-              mirror = {
-                url = "git@internal:nixpkgs-mirror" ;
-                ref = "heads/github-mirror-dev" ;
+              lass = {
+                origin = {
+                  url = http://github.com/lass/nixpkgs;
+                };
+                mirror = {
+                  url = "git@internal:nixpkgs-mirror" ;
+                };
               };
             };
-            lass = {
-              origin = {
-                url = http://github.com/lass/nixpkgs;
-              };
-              mirror = {
-                url = "git@internal:nixpkgs-mirror" ;
-              };
-            };
-            "@latest" = {
-              mirror = {
-                url = "git@internal:nixpkgs-mirror";
-                ref = "heads/master";
-              };
+            latest = {
+              url = "git@internal:nixpkgs-mirror";
+              ref = "heads/master";
             };
           };
           stockholm = {
-            lass = {
-              origin = {
-                url = http://cgit.prism.r/stockholm;
+            branches = {
+              lass = {
+                origin = {
+                  url = http://cgit.prism.r/stockholm;
+                };
+                mirror = {
+                  url = "git@internal:stockholm-mirror" ;
+                };
               };
-              mirror = {
-                url = "git@internal:stockholm-mirror" ;
+              makefu = {
+                origin = {
+                  url = http://gum.krebsco.de/stockholm;
+                };
+                mirror = {
+                  url = "git@internal:stockholm-mirror" ;
+                };
               };
             };
-            makefu = {
-              origin = {
-                url = http://gum.krebsco.de/stockholm;
-              };
-              mirror = {
-                url = "git@internal:stockholm-mirror" ;
-              };
-            };
-            "@latest" = {
-              mirror = {
-                url = "git@internal:stockholm-mirror";
-                ref = "heads/master";
-              };
+            latest = {
+              url = "git@internal:stockholm-mirror";
+              ref = "heads/master";
             };
           };
         };
@@ -127,15 +154,16 @@ let
       nameValuePair "repo-sync-${name}" {
         description = "repo-sync timer";
         wantedBy = [ "timers.target" ];
-
-        timerConfig = cfg.timerConfig;
+        timerConfig = repo.timerConfig;
       }
     ) cfg.repos;
 
     systemd.services = mapAttrs' (name: repo:
       let
-        repo-sync-config = pkgs.writeText "repo-sync-config-${name}.json"
-          (builtins.toJSON repo);
+        repo-sync-config = pkgs.writeJSON "repo-sync-config-${name}.json"
+          (repo.branches // optionalAttrs (repo.latest != null) {
+            "@latest".mirror = repo.latest;
+          });
       in nameValuePair "repo-sync-${name}" {
         description = "repo-sync";
         after = [ "network.target" "secret.service" ];
