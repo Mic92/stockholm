@@ -122,7 +122,7 @@ with import <stockholm/lib>;
         assert types.package.check link;
         {
           install = /* sh */ ''
-            ${optionalString (dirOf path != "/") /* sh */ ''
+            ${optionalString (path != "") /* sh */ ''
               ${pkgs.coreutils}/bin/mkdir -p $out${dirOf path}
             ''}
             ${pkgs.coreutils}/bin/ln -s ${link} $out${path}
