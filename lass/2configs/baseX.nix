@@ -16,6 +16,7 @@ in {
         systemWide = true;
       };
       security.rtkit.enable = true;
+      sound.enableOSSEmulation = false;
     }
     {
       krebs.per-user.lass.packages = [
