@@ -8,6 +8,8 @@ in {
     ./power-action.nix
     ./screenlock.nix
     ./copyq.nix
+    ./xresources.nix
+    ./livestream.nix
     {
       hardware.pulseaudio = {
         enable = true;
@@ -32,15 +34,15 @@ in {
 
   programs.ssh.startAgent = false;
 
-  security.setuidPrograms = [ "slock" ];
-
   services.printing = {
     enable = true;
-    drivers = [ pkgs.foomatic_filters ];
+    drivers = [
+      pkgs.foomatic_filters
+      pkgs.gutenprint
+    ];
   };
 
   environment.systemPackages = with pkgs; [
-
     acpi
     dic
     dmenu
@@ -76,7 +78,13 @@ in {
     enable = true;
 
     desktopManager.xterm.enable = false;
-    displayManager.slim.enable = true;
+    desktopManager.default = "none";
+    displayManager.lightdm.enable = true;
+    displayManager.lightdm.autoLogin = {
+      enable = true;
+      user = "lass";
+    };
+    windowManager.default = "xmonad";
     windowManager.session = [{
       name = "xmonad";
       start = ''

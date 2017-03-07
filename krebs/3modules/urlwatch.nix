@@ -178,7 +178,7 @@ let
               echo To: ${shell.escape cfg.mailto}
               echo
               cat changes
-            } | /var/setuid-wrappers/sendmail -t
+            } | /run/wrappers/bin/sendmail -t
           fi
         '';
       };

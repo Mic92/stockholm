@@ -32,6 +32,7 @@ rec {
     let
       domain = head domains;
     in {
+      services.phpfpm.phpPackage = pkgs.php56;
       services.nginx.virtualHosts."${domain}" = {
         enableACME = true;
         enableSSL = true;
@@ -181,10 +182,10 @@ rec {
         user = nginx
         group = nginx
         pm = dynamic
-        pm.max_children = 5
-        pm.start_servers = 2
+        pm.max_children = 15
+        pm.start_servers = 3
         pm.min_spare_servers = 1
-        pm.max_spare_servers = 3
+        pm.max_spare_servers = 10
         listen.owner = nginx
         listen.group = nginx
         php_admin_value[error_log] = 'stderr'

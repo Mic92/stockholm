@@ -1,5 +1,4 @@
-{ config, lib, pkgs, ... }:
-
+{ config, pkgs, ... }:
 with import <stockholm/lib>;
 {
   imports = [
@@ -11,6 +10,7 @@ with import <stockholm/lib>;
     ../2configs/vim.nix
     ../2configs/monitoring/client.nix
     ./backups.nix
+    ./security-workarounds.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
@@ -135,6 +135,7 @@ with import <stockholm/lib>;
 
   #neat utils
     krebspaste
+    mosh
     pciutils
     pop
     psmisc

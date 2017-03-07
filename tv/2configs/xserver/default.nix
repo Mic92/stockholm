@@ -18,7 +18,7 @@ in {
   ];
 
   # TODO dedicated group, i.e. with a single user [per-user-setuid]
-  # TODO krebs.setuid.slock.path vs /var/setuid-wrappers
+  # TODO krebs.setuid.slock.path vs /run/wrappers/bin
   krebs.setuid.slock = {
     filename = "${pkgs.slock}/bin/slock";
     group = "wheel";

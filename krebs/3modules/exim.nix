@@ -40,7 +40,7 @@ in {
       etc."exim.conf".source = pkgs.writeEximConfig "exim.conf" ''
         exim_user = ${cfg.user.name}
         exim_group = ${cfg.group.name}
-        exim_path = /var/setuid-wrappers/exim
+        exim_path = /run/wrappers/bin/exim
         spool_directory = ${cfg.user.home}
         ${cfg.config}
       '';

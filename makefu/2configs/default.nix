@@ -22,7 +22,7 @@ with import <stockholm/lib>;
       user = config.krebs.users.makefu;
       source = let
           inherit (config.krebs.build) host user;
-          ref = "f66d782"; # unstable @ 2017-02-04
+          ref = "53a2baa"; # unstable @ 2017-02-28
       in {
         nixpkgs = if config.makefu.full-populate || (getEnv "dummy_secrets" == "true") then
           {
@@ -145,21 +145,21 @@ with import <stockholm/lib>;
     tinc = pkgs.tinc_pre;
   };
 
-  services.cron.enable = false;
-  services.nscd.enable = false;
-  services.ntp.enable = false;
-  services.timesyncd.enable = true;
-  services.ntp.servers = [
+   networking.timeServers = [
     "pool.ntp.org"
     "time.windows.com"
     "time.apple.com"
     "time.nist.gov"
   ];
+
   nix.extraOptions = ''
     auto-optimise-store = true
   '';
 
-  security.setuidPrograms = [ "sendmail" ];
+  security.wrappers.sendmail = {
+    source = "${pkgs.exim}/bin/sendmail";
+    setuid = true;
+  };
   services.journald.extraConfig = ''
     SystemMaxUse=1G
     RuntimeMaxUse=128M
