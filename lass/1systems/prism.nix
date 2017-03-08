@@ -215,8 +215,13 @@ in {
     }
     {
       krebs.repo-sync.timerConfig = {
+        OnBootSec = "15min";
+        OnUnitInactiveSec = "90min";
+        RandomizedDelaySec = "30min";
+      };
+      krebs.repo-sync.repos.stockholm.timerConfig = {
         OnBootSec = "5min";
-        OnUnitInactiveSec = "3min";
+        OnUnitInactiveSec = "2min";
         RandomizedDelaySec = "2min";
       };
     }
