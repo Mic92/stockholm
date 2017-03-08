@@ -76,6 +76,9 @@ in
     };
   };
 
+  # TODO assert that pulse is the only user with "audio" in group/extraGroups
+  # otherwise the audio device can be hijacked while the pulse service restarts
+  # (e.g. when mpv is running) and then the service will fail.
   users = {
     groups.pulse.gid = config.users.users.pulse.uid;
     users.pulse = {

@@ -49,10 +49,10 @@ let
       type = with types; attrsOf (submodule {
         options = {
           test = mkOption {
-            type = path;
+            type = either path str;
           };
           alarm = mkOption {
-            type = path;
+            type = either path str;
           };
           interval = mkOption {
             type = str;

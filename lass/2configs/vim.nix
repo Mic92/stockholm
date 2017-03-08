@@ -207,11 +207,14 @@ let
     alldirs = attrValues dirs ++ map dirOf (attrValues files);
   in unique (sort lessThan alldirs);
 
-  vim = pkgs.writeDashBin "vim" ''
-    set -efu
-    (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
-    exec ${pkgs.vim}/bin/vim "$@"
-  '';
+  vim = pkgs.concat "vim" [
+    pkgs.vim
+    (pkgs.writeDashBin "vim" ''
+      set -efu
+      (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
+      exec ${pkgs.vim}/bin/vim "$@"
+    '')
+  ];
 
   hs.vim = pkgs.writeText "hs.vim" ''
     syn region String start=+\[[[:alnum:]]*|+ end=+|]+

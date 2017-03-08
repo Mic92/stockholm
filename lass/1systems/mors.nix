@@ -24,6 +24,7 @@ with import <stockholm/lib>;
     ../2configs/krebs-pass.nix
     ../2configs/repo-sync.nix
     ../2configs/ircd.nix
+    ../2configs/logf.nix
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
@@ -192,7 +193,6 @@ with import <stockholm/lib>;
     remmina
     thunderbird
 
-    logf
     iodine
 
     macchanger

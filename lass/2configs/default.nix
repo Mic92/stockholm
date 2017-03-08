@@ -9,6 +9,7 @@ with import <stockholm/lib>;
     ../2configs/nixpkgs.nix
     ../2configs/vim.nix
     ../2configs/monitoring/client.nix
+    ./htop.nix
     ./backups.nix
     ./security-workarounds.nix
     {

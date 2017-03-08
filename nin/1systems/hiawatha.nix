@@ -10,8 +10,11 @@ with lib;
   imports = [
     ../.
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    ../2configs/retiolum.nix
+    ../2configs/copyq.nix
+    ../2configs/games.nix
     ../2configs/git.nix
+    ../2configs/retiolum.nix
+    ../2configs/termite.nix
   ];
 
   krebs.build.host = config.krebs.hosts.hiawatha;

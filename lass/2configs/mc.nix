@@ -322,13 +322,19 @@ let
 
 in {
   environment.systemPackages = [
-    (pkgs.lib.overrideDerivation pkgs.mc (original : {
-      postInstall = ''
-        rm -f $out/etc/mc/mc.ext
-        ln -s ${mcExt} $out/etc/mc/mc.ext
-        cp $out/share/mc/skins/nicedark.ini $out/share/mc/skins/default.ini
-      '';
-    }))
+    (pkgs.concat "mc" [
+      pkgs.mc
+      (pkgs.writeDashBin "mc" ''
+        export MC_DATADIR=${pkgs.concat "mc-datadir" [
+          (pkgs.writeOut "mc-ext" {
+            "/mc.ext".link = mcExt;
+            "/sfs.ini".text = "";
+          })
+        ]}
+        export TERM=xterm-256color
+        exec ${pkgs.mc}/bin/mc -S xoria256 "$@"
+      '')
+    ])
   ];
 }
 

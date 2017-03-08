@@ -12,7 +12,6 @@
     pavucontrol
     pv
     pwgen
-    python34Packages.livestreamer
     remmina
     silver-searcher
     wget
