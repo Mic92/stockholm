@@ -32,7 +32,17 @@ in
     security = import <secrets/grafana_security.nix>;
   };
 
-  nix.binaryCaches = [ "http://localhost:3142/nixos" "https://cache.nixos.org" ];
+  nix = {
+    binaryCaches = [
+      "http://localhost:3142/nixos"
+      "http://cache.prism.r"
+      "https://cache.nixos.org/"
+    ];
+    binaryCachePublicKeys = [
+      "cache.prism-1:+S+6Lo/n27XEtvdlQKuJIcb1yO5NUqUCE2lolmTgNJU="
+      "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
+    ];
+  };
 
   networking = {
     firewall.enable = false;

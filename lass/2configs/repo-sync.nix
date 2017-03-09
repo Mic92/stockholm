@@ -36,25 +36,27 @@ let
   sync-retiolum = name:
     {
       krebs.repo-sync.repos.${name} = {
-        makefu = {
-          origin.url = "http://cgit.gum/${name}";
-          mirror.url = "${mirror}${name}";
+        branches = {
+          makefu = {
+            origin.url = "http://cgit.gum/${name}";
+            mirror.url = "${mirror}${name}";
+          };
+          tv = {
+            origin.url = "http://cgit.ni.r/${name}";
+            mirror.url = "${mirror}${name}";
+          };
+          nin = {
+            origin.url = "http://cgit.onondaga.r/${name}";
+            mirror.url = "${mirror}${name}";
+          };
+          lassulus = {
+            origin.url = "http://cgit.lassul.us/${name}";
+            mirror.url = "${mirror}${name}";
+          };
         };
-        tv = {
-          origin.url = "http://cgit.ni.r/${name}";
-          mirror.url = "${mirror}${name}";
-        };
-        nin = {
-          origin.url = "http://cgit.onondaga.r/${name}";
-          mirror.url = "${mirror}${name}";
-        };
-        lassulus = {
-          origin.url = "http://cgit.lassul.us/${name}";
-          mirror.url = "${mirror}${name}";
-        };
-        "@latest" = {
-          mirror.url = "${mirror}${name}";
-          mirror.ref = "heads/newest";
+        latest = {
+          url = "${mirror}${name}";
+          ref = "heads/newest";
         };
       };
       krebs.git = defineRepo name (config.networking.hostName == "prism");
@@ -63,9 +65,11 @@ let
   sync-remote = name: url:
     {
       krebs.repo-sync.repos.${name} = {
-        remote = {
-          origin.url = url;
-          mirror.url = "${mirror}${name}";
+        branches = {
+          remote = {
+            origin.url = url;
+            mirror.url = "${mirror}${name}";
+          };
         };
       };
       krebs.git = defineRepo name (config.networking.hostName == "prism");
@@ -74,9 +78,11 @@ let
   sync-remote-silent = name: url:
     {
       krebs.repo-sync.repos.${name} = {
-        remote = {
-          origin.url = url;
-          mirror.url = "${mirror}${name}";
+        branches = {
+          remote = {
+            origin.url = url;
+            mirror.url = "${mirror}${name}";
+          };
         };
       };
       krebs.git = defineRepo name false;
@@ -109,4 +115,3 @@ in {
     (sync-retiolum "xmonad-stockholm")
   ];
 }
-
