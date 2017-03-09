@@ -38,6 +38,8 @@ with import <stockholm/lib>;
       # stockholm dependencies
       environment.systemPackages = with pkgs; [
         git
+        gnumake
+        hashPassword
         populate
       ];
     }
