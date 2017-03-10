@@ -86,6 +86,10 @@ with import <stockholm/lib>;
         pkgs.krebszones
       ];
     }
+    {
+      #ps vita stuff
+      boot.extraModulePackages = [ config.boot.kernelPackages.exfat-nofuse ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
@@ -180,8 +184,6 @@ with import <stockholm/lib>;
   '';
 
   environment.systemPackages = with pkgs; [
-    exfat
-
     acronym
     cac-api
     sshpass
