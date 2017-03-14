@@ -9,7 +9,7 @@ let
 
     ${pkgs.copyq}/bin/copyq config activate_closes true
     ${pkgs.copyq}/bin/copyq config clipboard_notification_lines 0
-    ${pkgs.copyq}/bin/copyq config clipboard_tab clipboard
+    ${pkgs.copyq}/bin/copyq config clipboard_tab \&clipboard
     ${pkgs.copyq}/bin/copyq config disable_tray true
     ${pkgs.copyq}/bin/copyq config hide_tabs true
     ${pkgs.copyq}/bin/copyq config hide_toolbar true
