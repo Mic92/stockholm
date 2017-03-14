@@ -36,9 +36,10 @@ let
   '';
 
 in {
-  systemd.user.services.xresources = {
+  systemd.services.xresources = {
     description = "xresources";
-    wantedBy = [ "default.target" ];
+    wantedBy = [ "multi-user.target" ];
+    after = [ "display-manager.service" ];
 
     environment = {
       DISPLAY = ":0";
@@ -50,6 +51,7 @@ in {
       Type = "simple";
       ExecStart = "${pkgs.xorg.xrdb}/bin/xrdb -merge ${xresources}";
       Restart = "on-failure";
+      User = "lass";
     };
   };
 }
