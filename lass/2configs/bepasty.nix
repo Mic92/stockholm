@@ -9,7 +9,10 @@ with import <stockholm/lib>;
 with import <stockholm/lib>;
 let
   secKey = import <secrets/bepasty-secret.nix>;
-  ext-dom = "paste.lassul.us" ;
+  ext-doms = [
+    "paste.lassul.us"
+    "paste.krebsco.de"
+  ];
 in {
 
   services.nginx.enable = mkDefault true;
@@ -25,16 +28,15 @@ in {
         defaultPermissions = "admin,list,create,read,delete";
         secretKey = secKey;
       };
-
-      "${ext-dom}" = {
-        nginx = {
-          enableSSL = true;
-          forceSSL = true;
-          enableACME = true;
-        };
-        defaultPermissions = "read";
-        secretKey = secKey;
+    } //
+    genAttrs ext-doms (ext-dom: {
+      nginx = {
+        enableSSL = true;
+        forceSSL = true;
+        enableACME = true;
       };
-    };
+      defaultPermissions = "read";
+      secretKey = secKey;
+    });
   };
 }
