@@ -57,8 +57,8 @@ let {
     networking.firewall.enable = false;
 
     systemd.services.tv-iptables = {
-      description = "tv-iptables";
-      wantedBy = [ "network-pre.target" ];
+      wantedBy = [ "sysinit.target" ];
+      wants = [ "network-pre.target" ];
       before = [ "network-pre.target" ];
       after = [ "systemd-modules-load.service" ];
 
@@ -79,6 +79,8 @@ let {
           ip6tables-restore < ${rules 6}
         '';
       };
+
+      unitConfig.DefaultDependencies = false;
     };
   };
 
