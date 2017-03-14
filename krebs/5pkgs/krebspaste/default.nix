@@ -2,5 +2,5 @@
 
 # TODO use `execve` instead?
 writeDashBin "krebspaste" ''
-  exec ${bepasty-client-cli}/bin/bepasty-cli --url http://paste.retiolum "$@"
+  exec ${bepasty-client-cli}/bin/bepasty-cli --url http://paste.r "$@"
 ''
