@@ -68,8 +68,8 @@ let
     networking.firewall.enable = false;
 
     systemd.services.krebs-iptables = {
-      description = "krebs-iptables";
-      wantedBy = [ "network-pre.target" ];
+      wantedBy = [ "sysinit.target" ];
+      wants = [ "network-pre.target" ];
       before = [ "network-pre.target" ];
       after = [ "systemd-modules-load.service" ];
 
@@ -85,6 +85,8 @@ let
         Restart = "always";
         ExecStart = startScript;
       };
+
+      unitConfig.DefaultDependencies = false;
     };
   };
 
