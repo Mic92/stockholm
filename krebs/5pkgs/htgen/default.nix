@@ -1,18 +1,17 @@
-{ bash, coreutils, gnused, stdenv, fetchgit, script ? "", ucspi-tcp }:
+{ bash, coreutils, gnused, stdenv, fetchgit, ucspi-tcp }:
 with import <stockholm/lib>;
 let
-  version = "1.0";
+  version = "1.1";
 in stdenv.mkDerivation {
   name = "htgen-${version}";
 
   src = fetchgit {
     url = "http://cgit.krebsco.de/htgen";
-    rev = "refs/v1.0";
-    sha256 = "15z451f57ddaxm21dlqqx2kavzyqx4sgnnzz4ql6vl237979g09s";
+    rev = "refs/tags/v${version}";
+    sha256 = "1zxj0fv9vdrqyl3x2hgq7a6xdlzpclf93akygysrzsqk9wjapp4z";
   };
 
   installPhase = ''
-    find
     mkdir -p $out/bin
     {
       echo '#! ${bash}/bin/bash'
@@ -20,11 +19,10 @@ in stdenv.mkDerivation {
         ucspi-tcp
         coreutils
         gnused
-      ]}'
-      sed -n '/^reply_404$/q;p' < htgen
-      printf '%s' ${shell.escape script}
-      echo 'reply_404'
+      ]}''${PATH+":$PATH"}'
+      cat htgen
     } > $out/bin/htgen
     chmod +x $out/bin/htgen
+    cp -r examples $out
   '';
 }
