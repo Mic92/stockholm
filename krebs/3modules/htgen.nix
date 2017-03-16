@@ -10,6 +10,7 @@ let
   };
 
   api = mkOption {
+    default = {};
     type = types.attrsOf (types.submodule ({ config, ... }: {
       options = {
         enable = mkEnableOption "krebs.htgen-${config.name}";
