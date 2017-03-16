@@ -44,15 +44,14 @@ let
         after = [ "network.target" ];
         environment = {
           HTGEN_PORT = toString htgen.port;
+          HTGEN_SCRIPT = htgen.script;
         };
         serviceConfig = {
           SyslogIdentifier = "htgen";
           User = htgen.user.name;
           PrivateTmp = true;
           Restart = "always";
-          ExecStart = "${pkgs.htgen.override {
-            inherit (htgen) script;
-          }}/bin/htgen --serve";
+          ExecStart = "${pkgs.htgen}/bin/htgen --serve";
         };
       }
     ) cfg;
