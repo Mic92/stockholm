@@ -32,10 +32,13 @@ let
   public-repos = mapAttrs make-public-repo {
     stockholm = {
       cgit.desc = "take all the computers hostage, they'll love you!";
+      cgit.section = "configuration";
     };
-    kimsufi-check = {};
   } // mapAttrs make-public-repo-silent {
-    the_playlist = {};
+    the_playlist = {
+      cgit.desc = "Good Music collection + tools";
+      cgit.section  = "art";
+    };
   };
 
   restricted-repos = mapAttrs make-restricted-repo (
@@ -58,7 +61,7 @@ let
         server = "ni.r";
         verbose = config.krebs.build.host.name == "prism";
         # TODO define branches in some kind of option per repo
-        branches = [ "master" "newest" ];
+        branches = [ "master" ];
       };
     };
   };

@@ -120,6 +120,7 @@ in {
     sender_domains = [
       "jla-trading.com"
       "ubikmedia.eu"
+      "ubikmedia.de"
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";

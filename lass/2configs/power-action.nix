@@ -26,7 +26,7 @@ in {
       lowerLimit = 0;
       charging = false;
       action = pkgs.writeDash "suspend-wrapper" ''
-        /var/setuid-wrappers/sudo ${suspend}
+        /run/wrappers/bin/sudo ${suspend}
       '';
     };
     user = "lass";

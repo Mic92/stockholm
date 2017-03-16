@@ -23,7 +23,8 @@ with lib;
         };
       };
       latest = {
-        mirror.url = mirror;
+        url = mirror;
+        ref = "heads/master";
       };
     };
   };

@@ -38,6 +38,8 @@ with import <stockholm/lib>;
       # stockholm dependencies
       environment.systemPackages = with pkgs; [
         git
+        gnumake
+        hashPassword
         populate
       ];
     }
@@ -152,6 +154,7 @@ with import <stockholm/lib>;
     {
       environment.systemPackages = [
         pkgs.get
+        pkgs.krebspaste
         pkgs.krebszones
         pkgs.nix-prefetch-scripts
         pkgs.push

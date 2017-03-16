@@ -3,6 +3,7 @@
 with import <stockholm/lib>;
 
 {
+  security.hideProcessInformation = true;
   nixpkgs.config.packageOverrides = super: {
     htop = pkgs.concat "htop" [
       super.htop

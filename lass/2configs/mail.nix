@@ -66,7 +66,6 @@ let
 
     # notmuch bindings
     macro index \\\\ "<vfolder-from-query>"                   # looks up a hand made query
-    macro index A "<modify-labels>+archive -unread -inbox\n"  # tag as Archived
     macro index + "<modify-labels>+*\n<sync-mailbox>"         # tag as starred
     macro index - "<modify-labels>-*\n<sync-mailbox>"         # tag as unstarred
 
@@ -75,9 +74,25 @@ let
     bind index d noop
     bind pager d noop
 
+    bind index S noop
+    bind index s noop
     bind pager S noop
+    bind pager s noop
     macro index S "<modify-labels-then-hide>-inbox -unread +junk\n" # tag as Junk mail
+    macro index s "<modify-labels>-junk\n" # tag as Junk mail
     macro pager S "<modify-labels-then-hide>-inbox -unread +junk\n" # tag as Junk mail
+    macro pager s "<modify-labels>-junk\n" # tag as Junk mail
+
+
+    bind index A noop
+    bind index a noop
+    bind pager A noop
+    bind pager a noop
+    macro index A "<modify-labels>+archive -unread -inbox\n"  # tag as Archived
+    macro index a "<modify-labels>-archive\n"  # tag as Archived
+    macro pager A "<modify-labels>+archive -unread -inbox\n"  # tag as Archived
+    macro pager a "<modify-labels>-archive\n"  # tag as Archived
+
 
     bind index t noop
     bind pager t noop

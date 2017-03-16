@@ -224,8 +224,8 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "188.68.36.196";
           aliases = [
-            "cgit.ni.i"
             "ni.i"
+            "cgit.ni.i"
           ];
           ssh.port = 11423;
         };
@@ -360,8 +360,8 @@ with import <stockholm/lib>;
         gg23 = {
           ip4.addr = "10.23.1.38";
           aliases = [
-            "cache.xu.gg23"
             "xu.gg23"
+            "cache.xu.gg23"
           ];
           ssh.port = 11423;
         };

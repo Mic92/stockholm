@@ -64,7 +64,10 @@ with import <stockholm/lib>;
       ];
     }
     {
-      services.dnscrypt-proxy.enable = true;
+      services.dnscrypt-proxy = {
+        enable = true;
+        resolverName = "d0wn-nl-ns3";
+      };
       networking.extraResolvconfConf = ''
         name_servers='127.0.0.1'
       '';

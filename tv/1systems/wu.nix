@@ -19,12 +19,6 @@ with import <stockholm/lib>;
     ../2configs/xserver
     {
       environment.systemPackages = with pkgs; [
-
-        # stockholm
-        gnumake
-        hashPassword
-        parallel
-
         # root
         cryptsetup
 
