@@ -297,14 +297,18 @@ let {
     alldirs = attrValues dirs ++ map dirOf (attrValues files);
   in unique (sort lessThan alldirs);
 
-  vim = pkgs.writeDashBin "vim" ''
-    set -efu
-    (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
-    if test $# = 0 && test -e "$PWD/.ctrlpignore"; then
-      set -- +CtrlP
-    fi
-    exec ${pkgs.vim}/bin/vim "$@"
-  '';
+  vim = pkgs.concat "vim" [
+    pkgs.vim_configurable
+    (pkgs.writeDashBin "vim" ''
+      set -efu
+      (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
+      if test $# = 0 && test -e "$PWD/.ctrlpignore"; then
+        set -- +CtrlP
+      fi
+      # vim-orgmode needs Python, thus vim_configurable instead of just vim
+      exec ${pkgs.vim_configurable}/bin/vim "$@"
+    '')
+  ];
 
   vimrc = pkgs.writeText "vimrc" ''
     set nocompatible
