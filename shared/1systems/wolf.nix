@@ -15,6 +15,7 @@ in
     ../2configs/cgit-mirror.nix
     ../2configs/repo-sync.nix
     ../2configs/graphite.nix
+    ../2configs/share-shack.nix
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
   # apt-cacher-ng in first place)
