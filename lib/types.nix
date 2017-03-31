@@ -5,7 +5,7 @@ let
     all any concatMapStringsSep concatStringsSep const filter flip genid
     hasSuffix head isInt isString length match mergeOneOption mkOption
     mkOptionType optional optionalAttrs optionals range splitString
-    stringLength tail typeOf;
+    stringLength substring typeOf;
   inherit (lib.types)
     attrsOf bool either enum int listOf nullOr path str string submodule;
 in
@@ -430,23 +430,23 @@ rec {
   };
 
   # POSIX.1‐2013, 3.2 Absolute Pathname
-  # TODO normalize slashes
-  # TODO two slashes
   absolute-pathname = mkOptionType {
     name = "POSIX absolute pathname";
-    check = x: let xs = splitString "/" x; xa = head xs; in
-         isString x
-      && stringLength x > 0
-      && (xa == "/" || (xa == "" && all filename.check (tail xs)));
+    check = x: isString x && substring 0 1 x == "/" && pathname.check x;
     merge = mergeOneOption;
   };
 
   # POSIX.1‐2013, 3.267 Pathname
-  # TODO normalize slashes
   pathname = mkOptionType {
     name = "POSIX pathname";
-    check = x: let xs = splitString "/" x; in
-      isString x && all filename.check (if head xs == "" then tail xs else xs);
+    check = x:
+      let
+        # The filter is used to normalize paths, i.e. to remove duplicated and
+        # trailing slashes.  It also removes leading slashes, thus we have to
+        # check for "/" explicitly below.
+        xs = filter (s: stringLength s > 0) (splitString "/" x);
+      in
+        isString x && (x == "/" || (length xs > 0 && all filename.check xs));
     merge = mergeOneOption;
   };
 
