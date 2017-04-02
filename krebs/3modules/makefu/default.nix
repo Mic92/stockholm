@@ -464,7 +464,7 @@ with import <stockholm/lib>;
         retiolum = {
           via = internet;
           ip4.addr = "10.243.0.211";
-          ip6.addr = "42:f9f0:0000:0000:0000:0000:0000:70d2";
+          # ip6.addr = "42:f9f0:0000:0000:0000:0000:0000:70d2";
           aliases = [
             "gum.r"
             "gum.retiolum"
