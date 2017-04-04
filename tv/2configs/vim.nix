@@ -4,7 +4,7 @@ with import <stockholm/lib>;
 let {
   body = {
     environment.systemPackages = [
-      vim
+      vim-wrapper
     ];
 
     environment.etc.vimrc.source = vimrc;
@@ -297,7 +297,7 @@ let {
     alldirs = attrValues dirs ++ map dirOf (attrValues files);
   in unique (sort lessThan alldirs);
 
-  vim = pkgs.concat "vim" [
+  vim-wrapper = pkgs.concat "vim" [
     pkgs.vim_configurable
     (pkgs.writeDashBin "vim" ''
       set -efu
