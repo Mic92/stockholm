@@ -135,6 +135,7 @@ with import <stockholm/lib>;
     aria2
 
   #neat utils
+    kpaste
     krebspaste
     mosh
     pciutils
