@@ -45,6 +45,7 @@ in {
     ../2configs/makefu-sip.nix
     ../2configs/monitoring/server.nix
     ../2configs/monitoring/monit-alarms.nix
+    ../2configs/paste.nix
     {
       imports = [
         ../2configs/bepasty.nix
