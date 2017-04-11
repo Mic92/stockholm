@@ -132,6 +132,7 @@ in {
       { from = "ubik@ubikmedia.eu"; to = "domsen, jms, ms"; }
 
       { from = "testuser@lassul.us"; to = "testuser"; }
+      { from = "testuser@ubikmedia.eu"; to = "testuser"; }
     ];
     sender_domains = [
       "jla-trading.com"
