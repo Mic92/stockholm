@@ -285,12 +285,9 @@ with import <stockholm/lib>;
       cores = 1;
       extraZones = {
         "krebsco.de" = ''
-          euer           IN A  ${nets.internet.ip4.addr}
-          wiki.euer      IN A  ${nets.internet.ip4.addr}
-          wry            IN A  ${nets.internet.ip4.addr}
-          io             IN NS wry.krebsco.de.
-          graphs         IN A  ${nets.internet.ip4.addr}
-          tinc           IN A  ${nets.internet.ip4.addr}
+          wry               IN A      ${nets.internet.ip4.addr}
+          io                IN NS     wry.krebsco.de.
+          tinc              IN A      ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
@@ -307,13 +304,8 @@ with import <stockholm/lib>;
           ip6.addr = "42:6e1e:cc8a:7cef:827:f938:8c64:baad";
           aliases = [
             "graphs.wry.retiolum"
-            "graphs.r" "graphs.retiolum"
             "paste.wry.retiolum"
             "wry.r" "wry.retiolum"
-            "wiki.makefu.retiolum"
-            "wiki.wry.retiolum"
-            "blog.makefu.retiolum"
-            "blog.wry.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -452,6 +444,9 @@ with import <stockholm/lib>;
           cgit.euer         IN A      ${nets.internet.ip4.addr}
           o.euer            IN A      ${nets.internet.ip4.addr}
           dl.euer           IN A      ${nets.internet.ip4.addr}
+          euer              IN A      ${nets.internet.ip4.addr}
+          wiki.euer         IN A      ${nets.internet.ip4.addr}
+          graphs            IN A      ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
@@ -473,6 +468,12 @@ with import <stockholm/lib>;
             "o.gum.retiolum"
             "tracker.makefu.r"
             "tracker.makefu.retiolum"
+
+            "graphs.r" "graphs.retiolum"
+            "wiki.makefu.retiolum"
+            "wiki.wry.retiolum"
+            "blog.makefu.retiolum"
+            "blog.wry.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
