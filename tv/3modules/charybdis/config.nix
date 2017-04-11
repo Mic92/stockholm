@@ -501,8 +501,8 @@ in toFile "charybdis.conf" ''
     reject_ban_time = 1 minute;
     reject_after_count = 3;
     reject_duration = 5 minutes;
-    throttle_duration = 60;
-    throttle_count = 4;
+    throttle_duration = 1;
+    throttle_count = 1000;
     max_ratelimit_tokens = 30;
     away_interval = 30;
     disable_auth = yes;
