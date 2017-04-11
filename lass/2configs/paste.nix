@@ -5,6 +5,7 @@ with import <stockholm/lib>;
   services.nginx.virtualHosts.paste = {
     serverAliases = [ "p.r" ];
     locations."/".extraConfig = ''
+      client_max_body_size 4G;
       proxy_set_header Host $host;
       proxy_pass http://localhost:9081;
     '';
