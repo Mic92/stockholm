@@ -33,6 +33,9 @@ let {
       cgit.desc = "dict.leo.org command line interface";
     };
     get = {};
+    irc = {
+      cgit.desc = "toy IRC client";
+    };
     load-env = {};
     loldns = {
       cgit.desc = "toy DNS server";
