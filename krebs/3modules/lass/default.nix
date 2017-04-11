@@ -102,6 +102,7 @@ with import <stockholm/lib>;
             "cgit.prism.r"
             "cache.prism.r"
             "paste.r" "paste.retiolum"
+            "p.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
