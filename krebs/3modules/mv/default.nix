@@ -13,8 +13,6 @@ with import <stockholm/lib>;
           aliases = [
             "stro.r"
             "cgit.stro.r"
-            "stro.retiolum"
-            "cgit.stro.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
