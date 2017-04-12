@@ -56,7 +56,6 @@ with import <stockholm/lib>;
           ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af6";
           aliases = [
             "caxi.r"
-            "caxi.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -98,9 +97,7 @@ with import <stockholm/lib>;
           ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af3";
           aliases = [
             "cd.r"
-            "cd.retiolum"
             "cgit.cd.r"
-            "cgit.cd.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -135,7 +132,6 @@ with import <stockholm/lib>;
           ip6.addr = "42:0:0:0:0:0:0:1339";
           aliases = [
             "ju.r"
-            "ju.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -171,7 +167,6 @@ with import <stockholm/lib>;
           ip6.addr = "42:0b9d:6660:d07c:2bb7:4e91:1a01:2e7d";
           aliases = [
             "kaepsele.r"
-            "kaepsele.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -195,7 +190,6 @@ with import <stockholm/lib>;
           ip6.addr = "42:0:0:0:0:0:0:2001";
           aliases = [
             "mu.r"
-            "mu.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -235,9 +229,7 @@ with import <stockholm/lib>;
           ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af4";
           aliases = [
             "ni.r"
-            "ni.retiolum"
             "cgit.ni.r"
-            "cgit.ni.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -271,9 +263,7 @@ with import <stockholm/lib>;
           ip6.addr = "42:02d5:733f:d6da:c0f5:2bb7:2b18:09ec";
           aliases = [
             "nomic.r"
-            "nomic.retiolum"
             "cgit.nomic.r"
-            "cgit.nomic.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -331,9 +321,7 @@ with import <stockholm/lib>;
           ip6.addr = "42:0:0:0:0:0:0:1337";
           aliases = [
             "wu.r"
-            "wu.retiolum"
             "cgit.wu.r"
-            "cgit.wu.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -370,7 +358,6 @@ with import <stockholm/lib>;
           ip6.addr = "42:0:0:0:0:0:0:1338";
           aliases = [
             "xu.r"
-            "xu.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -403,7 +390,6 @@ with import <stockholm/lib>;
           ip6.addr = "42:0:0:0:0:0:0:1340";
           aliases = [
             "zu.r"
-            "zu.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
