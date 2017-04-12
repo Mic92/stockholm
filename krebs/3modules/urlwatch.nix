@@ -26,7 +26,7 @@ let
     };
     from = mkOption {
       type = types.str;
-      default = "${user.name}@${config.networking.hostName}.retiolum";
+      default = "${user.name}@${config.networking.hostName}.r";
       description = ''
         Content of the From: header of the generated mails.
       '';
