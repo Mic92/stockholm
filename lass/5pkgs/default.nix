@@ -12,6 +12,7 @@
       vimperator = pkgs.callPackage ./firefoxPlugins/vimperator.nix {};
     };
     init = pkgs.callPackage ./init/default.nix args;
+    logify = pkgs.callPackage ./logify/default.nix {};
     mk_sql_pair = pkgs.callPackage ./mk_sql_pair/default.nix {};
     mpv-poll = pkgs.callPackage ./mpv-poll/default.nix {};
     pop = pkgs.callPackage ./pop/default.nix {};
