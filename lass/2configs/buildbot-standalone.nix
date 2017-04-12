@@ -219,6 +219,9 @@ in {
       channels = [ { channel = "retiolum"; } { channel = "noise"; } ];
       allowForce = true;
     };
+    extraConfig = ''
+      c['buildbotURL'] = "http://${config.networking.hostName}.r:${toString config.krebs.buildbot.master.web.port}/"
+    '';
   };
 
   config.krebs.buildbot.worker = {
