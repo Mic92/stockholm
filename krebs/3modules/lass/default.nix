@@ -19,7 +19,6 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.133.99";
           ip6.addr = "42:0000:0000:0000:0000:0000:d15f:1233";
           aliases = [
-            "dishfire.retiolum"
             "dishfire.r"
           ];
           tinc.pubkey = ''
@@ -52,10 +51,8 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.206.103";
           ip6.addr = "42:941e:2816:35f4:5c5e:206b:3f0b:f763";
           aliases = [
-            "echelon.retiolum"
             "echelon.r"
-            "cgit.echelon.retiolum"
-            "go.retiolum"
+            "cgit.echelon.r"
             "go.r"
           ];
           tinc.pubkey = ''
@@ -96,12 +93,10 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.0.103";
           ip6.addr = "42:0000:0000:0000:0000:0000:0000:15ab";
           aliases = [
-            "prism.retiolum"
             "prism.r"
-            "cgit.prism.retiolum"
             "cgit.prism.r"
             "cache.prism.r"
-            "paste.r" "paste.retiolum"
+            "paste.r"
             "p.r"
           ];
           tinc.pubkey = ''
@@ -145,9 +140,8 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.206.102";
           ip6.addr = "42:941e:2816:35f4:5c5e:206b:3f0b:f762";
           aliases = [
-            "cloudkrebs.retiolum"
             "cloudkrebs.r"
-            "cgit.cloudkrebs.retiolum"
+            "cgit.cloudkrebs.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -176,9 +170,8 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.81.176";
           ip6.addr = "42:dc25:60cf:94ef:759b:d2b6:98a9:2e56";
           aliases = [
-            "uriel.retiolum"
             "uriel.r"
-            "cgit.uriel.retiolum"
+            "cgit.uriel.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -208,9 +201,7 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.0.2";
           ip6.addr = "42:0:0:0:0:0:0:dea7";
           aliases = [
-            "mors.retiolum"
             "mors.r"
-            "cgit.mors.retiolum"
             "cgit.mors.r"
           ];
           tinc.pubkey = ''
@@ -236,9 +227,8 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.0.3";
           ip6.addr = "42:0:0:0:0:0:0:7105";
           aliases = [
-            "helios.retiolum"
             "helios.r"
-            "cgit.helios.retiolum"
+            "cgit.helios.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -263,9 +253,8 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.0.4";
           ip6.addr = "42:0:0:0:0:0:0:50d4";
           aliases = [
-            "shodan.retiolum"
             "shodan.r"
-            "cgit.shodan.retiolum"
+            "cgit.shodan.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -290,9 +279,7 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.133.114";
           ip6.addr = "42:0000:0000:0000:0000:0000:d15f:1214";
           aliases = [
-            "icarus.retiolum"
             "icarus.r"
-            "cgit.icarus.retiolum"
             "cgit.icarus.r"
           ];
           tinc.pubkey = ''
@@ -317,25 +304,25 @@ with import <stockholm/lib>;
   };
   users = {
     lass = {
-      mail = "lass@mors.retiolum";
+      mail = "lass@mors.r";
       pubkey = builtins.readFile ./ssh/mors.rsa;
       pgp.pubkeys.default = builtins.readFile ./pgp/mors.pgp;
     };
     lass-uriel = {
-      mail = "lass@uriel.retiolum";
+      mail = "lass@uriel.r";
       pubkey = builtins.readFile ./ssh/uriel.rsa;
     };
     lass-helios = {
-      mail = "lass@helios.retiolum";
+      mail = "lass@helios.r";
       pubkey = builtins.readFile ./ssh/helios.rsa;
     };
     lass-shodan = {
-      mail = "lass@shodan.retiolum";
+      mail = "lass@shodan.r";
       pubkey = builtins.readFile ./ssh/shodan.rsa;
       pgp.pubkeys.default = builtins.readFile ./pgp/shodan.pgp;
     };
     lass-icarus = {
-      mail = "lass@icarus.retiolum";
+      mail = "lass@icarus.r";
       pubkey = builtins.readFile ./ssh/icarus.rsa;
     };
     fritz = {
