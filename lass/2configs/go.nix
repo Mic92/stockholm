@@ -17,7 +17,7 @@ with import <stockholm/lib>;
       '';
       serverAliases = [
         "go"
-        "go.retiolum"
+        "go.r"
       ];
     };
   };

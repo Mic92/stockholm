@@ -45,6 +45,7 @@ in {
     ../2configs/makefu-sip.nix
     ../2configs/monitoring/server.nix
     ../2configs/monitoring/monit-alarms.nix
+    ../2configs/paste.nix
     {
       imports = [
         ../2configs/bepasty.nix
@@ -157,7 +158,7 @@ in {
     }
     {
       users.users.chat.openssh.authorizedKeys.keys = [
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDiupmvj8gmiqIUTk9t4AOZ6bYvIpMMuNZULwIu/lbq8epK+FyvjRtCxqkLgFw0BfNYHzT9fxJ3kZY+nf/pnpI0j8TRwLAyPnfKuBfehrtzjdNbf1jCB9BQAaLoBHkLUFLJxskIC11nHx5KJVJvZBZZ6Odq1WIb4RZXjtEreQfvF8+YyFgHQ/epmQupKK6agHGkjtqvH+hz//dwDqHU9orj8MCWxNaa2wUgn+5laAvpLS15MQeCDIz8GJtJWToETY6bvldiLp2hIAJmgx8LIecV1h7YPR81Rk80gIk3f0PDfsLnnM6ibkI5p8NGh7nRKAdf+W90HpBIHKMRpRkMYvgL3ejVuKJZyzhYKUArA6egNRAN2d67eOpR/yKV5LjRxv+JBCOln5ynDbAmP4Hq98h+0K9Md7VavrRJzzPRTH3MPx+OKqsnRBRjhKsRFIUaO6/TBjZF4RCbbSSbvBW1u+qbTWX1MGUJNB5huL/OIBdHHcTb6GI3W4Svtgq4in2KI4COBhUJogm5UmaXRHtgqvn8byxutIsXMOTFjjdDK6r7mmOj1mzlu5wEHAV6FRsII92pf4WO2GYEUxz1ABu4HvRsVKlvYoEwwBhpXecTve6nogAiDvuxHjUX1eup3If3s4SvNirNPPUQuzNriYJ4JXiU6pGCJcBgxhl+NQ7ajxCdaw== JuiceSSH"
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCkmIvB8BekIE2W24+I0gnzkvkEoeulz/zQkDUVJK4oScbIvgTYmcHzQuHJyPueTm67bJCOcYaTwEDNhcR/ZvcyiCQ7Jwa5cLDTkCkcR9LQq8ry5jMNEanvTgrnBIEcwfS7jFpyFb/PRVG6hh2bPOfP+ksFplkq1BTzKt/UTaCBwVEZqi5XuFIlq/MqJg+FIjh+wyeNR5jHtqgAhVjR+YLVNXLgtVPE+dlSfbyRQHuA9FTkUj8BxxnTdwM5Sx33S61ddik1XvRn++IYqFl68fZhzyTME7t/Mvjdz8J7ew2bF2IbJrXt37yQCAOEEp9/RC5OloA7dd/5ZJjZxSzT2HnYROILsYr3S0WV4e+H2G66ZN0ftdUCYh1o5rtY7IrSes6yHsKYbpoij1IAkRkyt2XgEH5EZCk1Omx8AY3ekW1KFIEhz2DZEfnCEjPf4AGCYZ0uy4XEztxzTDkh25TVs/tym1+96qCJ1yAxwWZDbVhS/Z6aSBpsyeDRKcak8qoWVC2dEPdYuTUmwvmo3pmGn/a4UfOLNJTn0jSRjy3kSv1hYzosN4NSYZqEylFB0ABnlqoLpX3tmWtrkiKv19S+djVGxbaaYm3hjPJfds3qCWTJWPvxPPeCE8wGXVLYqOQxa5ZPYeoTwRof5YNSbj5RFYy9sDLTlHl+U4ASTHZM5S3akQ== JuiceSSH"
       ];
     }
     {

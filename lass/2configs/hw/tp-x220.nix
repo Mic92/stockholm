@@ -51,6 +51,11 @@ with import <stockholm/lib>;
 
   services.xserver.synaptics = {
     enable = true;
-    additionalOptions = ''Option "TouchpadOff" "1"'';
+    horizEdgeScroll = false;
+    horizontalScroll = false;
+    vertEdgeScroll = false;
+    maxSpeed = "0.1";
+    minSpeed = "0.01";
+    tapButtons = false;
   };
 }

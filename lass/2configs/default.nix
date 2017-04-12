@@ -64,10 +64,7 @@ with import <stockholm/lib>;
       ];
     }
     {
-      services.dnscrypt-proxy = {
-        enable = true;
-        resolverName = "d0wn-nl-ns3";
-      };
+      services.dnscrypt-proxy.enable = true;
       networking.extraResolvconfConf = ''
         name_servers='127.0.0.1'
       '';
@@ -138,6 +135,7 @@ with import <stockholm/lib>;
     aria2
 
   #neat utils
+    kpaste
     krebspaste
     mosh
     pciutils

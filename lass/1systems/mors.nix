@@ -66,7 +66,6 @@ with import <stockholm/lib>;
             "localhost"
             "${config.krebs.build.host.name}"
             "${config.krebs.build.host.name}.r"
-            "${config.krebs.build.host.name}.retiolum"
           ];
           locations."~ ^/~(.+?)(/.*)?\$".extraConfig = ''
             alias /home/$1/public_html$2;
