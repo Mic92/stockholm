@@ -49,7 +49,7 @@ in toFile "charybdis.conf" ''
     name = ${toJSON (head config.krebs.build.host.nets.retiolum.aliases)};
     sid = "4z3";
     description = "miep!";
-    network_name = "irc.retiolum";
+    network_name = "irc.r";
     #network_desc = "Retiolum IRC Network";
     hub = yes;
 
