@@ -11,7 +11,7 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.177.9";
           ip6.addr = "42:f63:ddf8:7520:cfec:9b61:d807:1dce";
           aliases = [
-            "drop.retiolum"
+            "drop.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -35,7 +35,7 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.113.98";
           ip6.addr  = "42:5cf1:e7f2:3fd:cd4c:a1ee:ec71:7096";
           aliases = [
-            "fileleech.retiolum"
+            "fileleech.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -58,8 +58,8 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.0.210";
           ip6.addr = "42:f9f1:0000:0000:0000:0000:0000:0001";
           aliases = [
-            "pnp.retiolum"
-            "cgit.pnp.retiolum"
+            "pnp.r"
+            "cgit.pnp.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -81,7 +81,6 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.0.84";
           ip6.addr = "42:ff6b:5f0b:460d:2cee:4d05:73f7:5566";
           aliases = [
-            "darth.retiolum"
             "darth.r"
           ];
           tinc.pubkey = ''
@@ -153,7 +152,7 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.0.212";
           ip6.addr = "42:f9f1:0000:0000:0000:0000:0000:0002";
           aliases = [
-            "tsp.retiolum"
+            "tsp.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -180,7 +179,6 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.0.91";
           ip6.addr = "42:0b2c:d90e:e717:03dc:9ac1:7c30:a4db";
           aliases = [
-            "x.retiolum"
             "x.r"
           ];
           tinc.pubkey = ''
@@ -225,7 +223,7 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.1.91";
           ip6.addr = "42:0b2c:d90e:e717:03dd:9ac1:0000:a400";
           aliases = [
-            "vbob.retiolum"
+            "vbob.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -259,14 +257,14 @@ with import <stockholm/lib>;
           ip4.addr = "192.40.56.122";
           ip6.addr = "2604:2880::841f:72c";
           aliases = [
-            "pigstarter.internet"
+            "pigstarter.i"
           ];
         };
         retiolum = {
           ip4.addr = "10.243.0.153";
           ip6.addr = "42:9143:b4c0:f981:6030:7aa2:8bc5:4110";
           aliases = [
-            "pigstarter.retiolum"
+            "pigstarter.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -295,7 +293,6 @@ with import <stockholm/lib>;
           ip4.addr = "104.233.87.86";
           aliases = [
             "wry.i"
-            "wry.internet"
           ];
         };
         retiolum = {
@@ -303,9 +300,9 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.29.169";
           ip6.addr = "42:6e1e:cc8a:7cef:827:f938:8c64:baad";
           aliases = [
-            "graphs.wry.retiolum"
-            "paste.wry.retiolum"
-            "wry.r" "wry.retiolum"
+            "wry.r"
+            "graphs.wry.r"
+            "paste.wry.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -340,8 +337,7 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.153.102";
           ip6.addr = "42:4b0b:d990:55ba:8da8:630f:dc0e:aae0";
           aliases = [
-            "filepimp.retiolum"
-              "filepimp.r"
+            "filepimp.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -371,7 +367,6 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.0.89";
           ip6.addr = "42:f9f0::10";
           aliases = [
-            "omo.retiolum"
             "omo.r"
             "logs.makefu.r"
             "stats.makefu.r"
@@ -416,7 +411,7 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.214.15";
           ip6.addr = "42:5a02:2c30:c1b1:3f2e:7c19:2496:a732";
           aliases = [
-            "wbob.retiolum"
+            "wbob.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -453,7 +448,7 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "195.154.108.70";
           aliases = [
-            "gum.internet"
+            "gum.i"
           ];
         };
         retiolum = {
@@ -462,18 +457,15 @@ with import <stockholm/lib>;
           # ip6.addr = "42:f9f0:0000:0000:0000:0000:0000:70d2";
           aliases = [
             "gum.r"
-            "gum.retiolum"
-            "cgit.gum.retiolum"
+            "cgit.gum.r"
             "o.gum.r"
-            "o.gum.retiolum"
             "tracker.makefu.r"
-            "tracker.makefu.retiolum"
 
-            "graphs.r" "graphs.retiolum"
-            "wiki.makefu.retiolum"
-            "wiki.wry.retiolum"
-            "blog.makefu.retiolum"
-            "blog.wry.retiolum"
+            "graphs.r"
+            "wiki.makefu.r"
+            "wiki.gum.r"
+            "blog.makefu.r"
+            "blog.gum.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -523,7 +515,6 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.205.131";
           ip6.addr = "42:490d:cd82:d2bb:56d5:abd1:b88b:e8b4";
           aliases = [
-            "shoney.retiolum"
             "shoney.r"
           ];
           tinc.pubkey = ''
@@ -548,7 +539,6 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.83.237";
           ip6.addr  = "42:af50:99cf:c185:f1a8:14d5:acb:8101";
           aliases = [
-            "sdev.retiolum"
             "sdev.r"
           ];
           tinc.pubkey = ''
@@ -580,14 +570,13 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "162.248.11.162";
           aliases = [
-            "flap.internet"
+            "flap.i"
           ];
         };
         retiolum = {
           ip4.addr = "10.243.211.172";
           ip6.addr = "42:472a:3d01:bbe4:4425:567e:592b:065d";
           aliases = [
-            "flap.retiolum"
             "flap.r"
           ];
           tinc.pubkey = ''
@@ -635,7 +624,6 @@ with import <stockholm/lib>;
           ip6.addr = "42:9898:a8be:ce56:0ee3:b99c:42c5:109e";
           aliases = [
             "heidi.r"
-            "heidi.retiolum"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -770,7 +758,7 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "148.251.47.69";
           aliases = [
-            "wooki.internet"
+            "wooki.i"
           ];
         };
         retiolum = {
@@ -825,7 +813,7 @@ with import <stockholm/lib>;
           ip4.addr = "10.243.144.142";
           ip6.addr  = "42:4bf8:94b:eec5:69e2:c837:686e:f278";
           aliases = [
-            "tcac-0-1.retiolum"
+            "tcac-0-1.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -848,7 +836,7 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "217.160.206.154";
           aliases = [
-            "muhbaasu.internet"
+            "muhbaasu.i"
           ];
         };
         retiolum = {
@@ -877,7 +865,9 @@ with import <stockholm/lib>;
           retiolum = {
             ip4.addr = "10.243.183.236";
             ip6.addr = "42:8ca8:d2e4:adf6:5c0f:38cb:e9ef:eb3c";
-            aliases = [ "tpsw.r" "tpsw.retiolum" ];
+            aliases = [
+              "tpsw.r"
+            ];
             tinc.pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
               MIIBCgKCAQEAvwYPFAINwV0EH0myFpNzRjVbqXdAmJP616C5JvODklhZWJxFxlKJ
@@ -894,7 +884,7 @@ with import <stockholm/lib>;
   };
   users = rec {
     makefu = {
-      mail = "makefu@x.retiolum";
+      mail = "makefu@x.r";
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl3RTOHd5DLiVeUbUr/GSiKoRWknXQnbkIf+uNiFO+XxiqZVojPlumQUVhasY8UzDzj9tSDruUKXpjut50FhIO5UFAgsBeMJyoZbgY/+R+QKU00Q19+IiUtxeFol/9dCO+F4o937MC0OpAC10LbOXN/9SYIXueYk3pJxIycXwUqhYmyEqtDdVh9Rx32LBVqlBoXRHpNGPLiswV2qNe0b5p919IGcslzf1XoUzfE3a3yjk/XbWh/59xnl4V7Oe7+iQheFxOT6rFA30WYwEygs5As//ZYtxvnn0gA02gOnXJsNjOW9irlxOUeP7IOU6Ye3WRKFRR0+7PS+w8IJLag2xb makefu@x";
       pgp.pubkeys.default = builtins.readFile ./pgp/default.asc;
       pgp.pubkeys.brain = builtins.readFile ./pgp/brain.asc;
