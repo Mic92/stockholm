@@ -10,6 +10,7 @@ let
       public = true;
       name = mkDefault "${name}";
       cgit.desc = mkDefault "mirror for ${name}";
+      cgit.section = mkDefault "mirror";
       hooks = mkIf announce (mkDefault {
         post-receive = pkgs.git-hooks.irc-announce {
           nick = config.networking.hostName;

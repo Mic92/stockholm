@@ -41,7 +41,7 @@ in
   fonts = {
     enableCoreFonts = true;
     enableFontDir = true;
-    enableGhostscriptFonts = false;
+    enableGhostscriptFonts = true;
     fonts = [ pkgs.terminus_font ];
   };
 
@@ -62,7 +62,7 @@ in
       cat |derp <<EOF
       XTerm*background: black
       XTerm*foreground: white
-      XTerm*FaceName  : Terminus:pixelsize=14
+      XTerm*FaceName  : xft:xos4 Terminus:pixelsize=14
 
       URxvt*termName:         rxvt
       URxvt*saveLines:            10000
@@ -74,7 +74,8 @@ in
       URxvt.background: black
       URxvt.urgentOnBell: true
       URxvt.visualBell: false
-      URxvt.font : xft:Terminus
+      URxvt.font : xft:xos4 Terminus:size=12
+
 
       ! blue
       URxvt*color4:                         #268bd2

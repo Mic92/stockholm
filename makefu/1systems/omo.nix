@@ -43,7 +43,6 @@ in {
       # TODO: unlock home partition via ssh
       ../2configs/fs/sda-crypto-root.nix
       ../2configs/zsh-user.nix
-      ../2configs/urlwatch.nix
       ../2configs/backup.nix
       ../2configs/exim-retiolum.nix
       ../2configs/smart-monitor.nix
@@ -181,6 +180,18 @@ in {
   hardware.cpu.intel.updateMicrocode = true;
 
   zramSwap.enable = true;
+
+  krebs.Reaktor.reaktor = {
+    nickname = "Reaktor|bot";
+    channels = [ "#krebs" "#shackspace" "#binaergewitter" ];
+    plugins = with pkgs.ReaktorPlugins;[
+                               titlebot
+                               # stockholm-issue
+                               nixos-version
+                               shack-correct
+                               sed-plugin
+                               random-emoji ];
+  };
 
   krebs.build.host = config.krebs.hosts.omo;
 }
