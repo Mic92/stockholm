@@ -406,7 +406,6 @@ let
       serverAliases = [
         "cgit.${config.networking.hostName}"
         "cgit.${config.networking.hostName}.r"
-        "cgit.${config.networking.hostName}.retiolum"
       ];
       locations."/".extraConfig = ''
         include             ${pkgs.nginx}/conf/fastcgi_params;
