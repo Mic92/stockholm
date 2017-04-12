@@ -69,7 +69,6 @@ let
       type = with types; listOf str;
       default = [
         "*.r"
-        "*.retiolum"
       ];
     };
 

@@ -26,7 +26,6 @@ let
       type = with types; listOf str;
       default = [
         "*.r"
-        "*.retiolum"
       ];
     };
   };
@@ -77,8 +76,8 @@ let
                     domains       = +local_domains
 
             #accept
-            #  hosts = *.retiolum
-            #  domains = *.retiolum
+            #  hosts = *.r
+            #  domains = *.r
             #  control = dkim_disable_verify
 
             #require verify        = sender
