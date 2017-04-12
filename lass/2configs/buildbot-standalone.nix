@@ -10,6 +10,15 @@ let
   '';
 
 in {
+  config.services.nginx.virtualHosts.build = {
+    serverAliases = [ "build.prism.r" ];
+    locations."/".extraConfig = ''
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_pass http://localhost:${toString config.krebs.buildbot.master.web.port};
+    '';
+  };
+
   config.krebs.buildbot.master = let
     stockholm-mirror-url = http://cgit.lassul.us/stockholm ;
   in {
@@ -220,7 +229,7 @@ in {
       allowForce = true;
     };
     extraConfig = ''
-      c['buildbotURL'] = "http://${config.networking.hostName}.r:${toString config.krebs.buildbot.master.web.port}/"
+      c['buildbotURL'] = "http://build.prism.r/"
     '';
   };
 
@@ -237,7 +246,6 @@ in {
   config.krebs.iptables = {
     tables = {
       filter.INPUT.rules = [
-        { predicate = "-p tcp --dport 8010"; target = "ACCEPT"; }
         { predicate = "-p tcp --dport 9989"; target = "ACCEPT"; }
       ];
     };
