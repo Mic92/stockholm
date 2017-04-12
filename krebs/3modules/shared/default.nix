@@ -46,8 +46,8 @@ in {
           ip4.addr = "10.243.77.1";
           ip6.addr = "42:0:0:0:0:0:77:1";
           aliases = [
-            "wolf.retiolum"
-            "cgit.wolf.retiolum"
+            "wolf.r"
+            "cgit.wolf.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
