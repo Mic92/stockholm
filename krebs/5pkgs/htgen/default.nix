@@ -1,14 +1,14 @@
 { bash, coreutils, gnused, stdenv, fetchgit, ucspi-tcp }:
 with import <stockholm/lib>;
 let
-  version = "1.2";
+  version = "1.2.1";
 in stdenv.mkDerivation {
   name = "htgen-${version}";
 
   src = fetchgit {
     url = "http://cgit.krebsco.de/htgen";
     rev = "refs/tags/v${version}";
-    sha256 = "0y7gi4r32dvc18a4nnkr74sbq4glqcmf1q6lfj8fpgj82lg16zc6";
+    sha256 = "0mh8n9hf4jmkcxwdw3rimwdlhslrnpsdg1cp2vq3h9j2jkrsq6ba";
   };
 
   installPhase = ''
