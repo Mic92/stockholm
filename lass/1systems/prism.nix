@@ -350,6 +350,18 @@ in {
         ];
       };
     }
+    {
+      krebs.Reaktor.prism = {
+        nickname = "Reaktor|lass";
+        channels = [ "#retiolum" ];
+        extraEnviron = {
+          REAKTOR_HOST = "ni.r";
+        };
+        plugins = with pkgs.ReaktorPlugins; [
+          sed-plugin
+        ];
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
