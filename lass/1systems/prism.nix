@@ -254,19 +254,20 @@ in {
       ];
     }
     {
-      krebs.Reaktor.coders = let
-        lambdabot = (import (pkgs.fetchFromGitHub {
-          owner = "NixOS"; repo = "nixpkgs";
-          rev = "a4ec1841da14fc98c5c35cc72242c23bb698d4ac";
-          sha256 = "148fpw31s922hxrf28yhrci296f7c7zd81hf0k6zs05rq0i3szgy";
-        }) {}).lambdabot;
-      in {
-        nickname = "reaktor-lass";
+      krebs.Reaktor.coders = {
+        nickname = "Reaktor|lass";
         channels = [ "#coders" ];
         extraEnviron = {
           REAKTOR_HOST = "irc.hackint.org";
         };
         plugins = with pkgs.ReaktorPlugins; let
+
+          lambdabot = (import (pkgs.fetchFromGitHub {
+            owner = "NixOS"; repo = "nixpkgs";
+            rev = "a4ec1841da14fc98c5c35cc72242c23bb698d4ac";
+            sha256 = "148fpw31s922hxrf28yhrci296f7c7zd81hf0k6zs05rq0i3szgy";
+          }) {}).lambdabot;
+
           lambdabotflags = ''
             -XStandaloneDeriving -XGADTs -XFlexibleContexts \
             -XFlexibleInstances -XMultiParamTypeClasses \
