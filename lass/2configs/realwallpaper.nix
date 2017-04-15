@@ -17,6 +17,7 @@ in {
     '';
     serverAliases = [
       hostname
+      "${hostname}.r"
     ];
     locations."/realwallpaper.png".extraConfig = ''
       root /var/realwallpaper/;
