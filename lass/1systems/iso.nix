@@ -148,5 +148,8 @@ with import <stockholm/lib>;
         };
       };
     }
+    {
+      krebs.hidden-ssh.enable = true;
+    }
   ];
 }
