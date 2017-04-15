@@ -20,6 +20,7 @@ let
       ./github-hosts-sync.nix
       ./git.nix
       ./go.nix
+      ./hidden-ssh.nix
       ./htgen.nix
       ./iptables.nix
       ./kapacitor.nix
