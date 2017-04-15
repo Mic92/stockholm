@@ -13,8 +13,14 @@ in {
     serverAliases = [
       hostname
     ];
-    locations."/wallpaper.png".extraConfig = ''
-      root /tmp/;
+    locations."/realwallpaper.png".extraConfig = ''
+      root /var/realwallpaper/;
+    '';
+    locations."/realwallpaper-sat.png".extraConfig = ''
+      root /var/realwallpaper/;
+    '';
+    locations."/realwallpaper-sat-krebs.png".extraConfig = ''
+      root /var/realwallpaper/;
     '';
   };
 

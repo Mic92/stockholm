@@ -194,7 +194,7 @@ in {
         ../2configs/realwallpaper.nix
       ];
       services.nginx.virtualHosts."lassul.us".locations."/wallpaper.png".extraConfig = ''
-        alias /tmp/wallpaper.png;
+        alias /var/realwallpaper/realwallpaper.png;
       '';
     }
     {
