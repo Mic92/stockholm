@@ -33,7 +33,7 @@ with import <stockholm/lib>;
       nets = {
         retiolum = {
           ip4.addr = "10.243.113.98";
-          ip6.addr  = "42:5cf1:e7f2:3fd:cd4c:a1ee:ec71:7096";
+          # ip6.addr  = "42:5cf1:e7f2:3fd:cd4c:a1ee:ec71:7096";
           aliases = [
             "fileleech.r"
           ];
@@ -247,7 +247,6 @@ with import <stockholm/lib>;
         "krebsco.de" = ''
           euer              IN MX 1   aspmx.l.google.com.
           nixos.unstable    IN CNAME  krebscode.github.io.
-          pigstarter        IN A      ${nets.internet.ip4.addr}
           gold              IN A      ${nets.internet.ip4.addr}
           boot              IN A      ${nets.internet.ip4.addr}
         '';
@@ -301,7 +300,7 @@ with import <stockholm/lib>;
           ip6.addr = "42:6e1e:cc8a:7cef:827:f938:8c64:baad";
           aliases = [
             "wry.r"
-            "graphs.wry.r"
+            "graph.wry.r"
             "paste.wry.r"
           ];
           tinc.pubkey = ''
@@ -436,12 +435,13 @@ with import <stockholm/lib>;
           mattermost.euer   IN A      ${nets.internet.ip4.addr}
           git.euer          IN A      ${nets.internet.ip4.addr}
           gum               IN A      ${nets.internet.ip4.addr}
+          pigstarter        IN A      ${nets.internet.ip4.addr}
           cgit.euer         IN A      ${nets.internet.ip4.addr}
           o.euer            IN A      ${nets.internet.ip4.addr}
           dl.euer           IN A      ${nets.internet.ip4.addr}
           euer              IN A      ${nets.internet.ip4.addr}
           wiki.euer         IN A      ${nets.internet.ip4.addr}
-          graphs            IN A      ${nets.internet.ip4.addr}
+          graph             IN A      ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
@@ -461,7 +461,7 @@ with import <stockholm/lib>;
             "o.gum.r"
             "tracker.makefu.r"
 
-            "graphs.r"
+            "graph.r"
             "wiki.makefu.r"
             "wiki.gum.r"
             "blog.makefu.r"
@@ -491,7 +491,7 @@ with import <stockholm/lib>;
           ip4.prefix = "10.8.10.0/24";
           aliases = [
             "shoney.siem"
-            "graphs.siem"
+            "graph.siem"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
