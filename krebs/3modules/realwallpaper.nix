@@ -32,9 +32,9 @@ let
       default = "http://xplanetclouds.com/free/local/clouds_2048.jpg";
     };
 
-    outFile = mkOption {
+    marker = mkOption {
       type = types.str;
-      default = "/tmp/wallpaper.png";
+      default = "http://graphs.r/marker.json";
     };
 
     timerConfig = mkOption {
@@ -43,7 +43,6 @@ let
         OnCalendar = "*:0/15";
       };
     };
-
   };
 
   imp = {
@@ -63,6 +62,7 @@ let
         imagemagick
         curl
         file
+        jq
       ];
 
       environment = {
@@ -70,7 +70,7 @@ let
         nightmap_url = cfg.nightmap;
         daymap_url = cfg.daymap;
         cloudmap_url = cfg.cloudmap;
-        out_file = cfg.outFile;
+        marker_url = cfg.marker;
       };
 
       restartIfChanged = true;

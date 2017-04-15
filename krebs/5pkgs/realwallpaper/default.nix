@@ -5,8 +5,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = https://github.com/Lassulus/realwallpaper;
-    rev = "c2778c3c235fc32edc8115d533a0d0853ab101c5";
-    sha256 = "0yhbjz19zk8sj5dsvccm6skkqq2vardn1yi70qmd5li7qvp17mvs";
+    rev = "b8408cfb295b6ce5b965309b30358ca6c6409efd";
+    sha256 = "0yyl8hhqshw9bx04xs8glvir3c0qzvfrwzmbvyg318mnz5xalcl0";
   };
 
   phases = [
@@ -15,10 +15,6 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    xplanet
-    imagemagick
-    curl
-    file
   ];
 
   installPhase = ''
