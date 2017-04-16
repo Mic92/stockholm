@@ -25,6 +25,7 @@ with import <stockholm/lib>;
     ../2configs/repo-sync.nix
     ../2configs/ircd.nix
     ../2configs/logf.nix
+    ../2configs/syncthing.nix
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
