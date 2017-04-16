@@ -27,7 +27,7 @@ let
     };
     systemd.services.hidden-ssh-announce = {
       description = "irc announce hidden ssh";
-      after = [ "tor.service" ];
+      after = [ "tor.service" "network-online.target" ];
       wants = [ "tor.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
