@@ -77,10 +77,6 @@ with import <stockholm/lib>;
       services.redis.enable = true;
     }
     {
-      #ipfs-testing
-      services.ipfs.enable = true;
-    }
-    {
       environment.systemPackages = [
         pkgs.krebszones
       ];
