@@ -46,6 +46,7 @@ in {
     ../2configs/monitoring/server.nix
     ../2configs/monitoring/monit-alarms.nix
     ../2configs/paste.nix
+    ../2configs/syncthing.nix
     {
       imports = [
         ../2configs/bepasty.nix
