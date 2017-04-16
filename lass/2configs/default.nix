@@ -151,6 +151,10 @@ with import <stockholm/lib>;
     p7zip
     unzip
     unrar
+
+    (pkgs.writeDashBin "sshn" ''
+      ${pkgs.openssh}/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$@"
+    '')
   ];
 
   programs.bash = {
