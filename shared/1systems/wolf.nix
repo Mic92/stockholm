@@ -1,20 +1,18 @@
-{ config, lib, pkgs, ... }:
-
+{ config, pkgs, ... }:
 let
   shack-ip = config.krebs.build.host.nets.shack.ip4.addr;
-  internal-ip = config.krebs.build.host.nets.retiolum.ip4.addr;
 in
 {
   imports = [
     ../.
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
-    ../2configs/collectd-base.nix
-    ../2configs/shack-nix-cacher.nix
-    ../2configs/shack-drivedroid.nix
-    ../2configs/shared-buildbot.nix
     ../2configs/cgit-mirror.nix
-    ../2configs/repo-sync.nix
+    ../2configs/collectd-base.nix
     ../2configs/graphite.nix
+    ../2configs/repo-sync.nix
+    ../2configs/shack-drivedroid.nix
+    ../2configs/shack-nix-cacher.nix
+    ../2configs/shared-buildbot.nix
     ../2configs/share-shack.nix
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
