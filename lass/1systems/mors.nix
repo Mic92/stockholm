@@ -25,6 +25,7 @@ with import <stockholm/lib>;
     ../2configs/repo-sync.nix
     ../2configs/ircd.nix
     ../2configs/logf.nix
+    ../2configs/syncthing.nix
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
@@ -77,10 +78,6 @@ with import <stockholm/lib>;
       services.redis.enable = true;
     }
     {
-      #ipfs-testing
-      services.ipfs.enable = true;
-    }
-    {
       environment.systemPackages = [
         pkgs.krebszones
       ];
@@ -88,6 +85,12 @@ with import <stockholm/lib>;
     {
       #ps vita stuff
       boot.extraModulePackages = [ config.boot.kernelPackages.exfat-nofuse ];
+    }
+    {
+      services.tor = {
+        enable = true;
+        client.enable = true;
+      };
     }
   ];
 

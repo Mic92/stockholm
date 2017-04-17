@@ -41,6 +41,52 @@ let
 
     indent = replaceChars ["\n"] ["\n  "];
 
+    # https://tools.ietf.org/html/rfc5952
+    normalize-ip6-addr =
+      let
+        max-run-0 =
+          let
+            both = v: { off = v; pos = v; };
+            gt = a: b: a.pos - a.off > b.pos - b.off;
+
+            chkmax = ctx: {
+              cur = both (ctx.cur.pos + 1);
+              max = if gt ctx.cur ctx.max then ctx.cur else ctx.max;
+            };
+
+            incpos = ctx: recursiveUpdate ctx {
+              cur.pos = ctx.cur.pos + 1;
+            };
+
+            f = ctx: blk: (if blk == "0" then incpos else chkmax) ctx;
+            z = { cur = both 0; max = both 0; };
+          in
+            blks: (chkmax (foldl' f z blks)).max;
+
+        group-zeros = a:
+          let
+            blks = splitString ":" a;
+            max = max-run-0 blks;
+            lhs = take max.off blks;
+            rhs = drop max.pos blks;
+          in
+            if max.pos == 0
+              then a
+              else "${concatStringsSep ":" lhs}::${concatStringsSep ":" rhs}";
+
+        drop-leading-zeros =
+          let
+            f = block:
+              let
+                res = match "0*(.+)" block;
+              in
+                if res == null
+                  then block # empty block
+                  else elemAt res 0;
+          in
+            a: concatStringsSep ":" (map f (splitString ":" a));
+      in
+        a: toLower (group-zeros (drop-leading-zeros a));
   };
 in
 

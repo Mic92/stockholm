@@ -10,11 +10,23 @@ in {
   krebs.realwallpaper.enable = true;
 
   services.nginx.virtualHosts.wallpaper = {
+    extraConfig = ''
+      if ( $server_addr = "${config.krebs.build.host.nets.internet.ip4.addr}" ) {
+        return 403;
+      }
+    '';
     serverAliases = [
       hostname
+      "${hostname}.r"
     ];
-    locations."/wallpaper.png".extraConfig = ''
-      root /tmp/;
+    locations."/realwallpaper.png".extraConfig = ''
+      root /var/realwallpaper/;
+    '';
+    locations."/realwallpaper-sat.png".extraConfig = ''
+      root /var/realwallpaper/;
+    '';
+    locations."/realwallpaper-sat-krebs.png".extraConfig = ''
+      root /var/realwallpaper/;
     '';
   };
 

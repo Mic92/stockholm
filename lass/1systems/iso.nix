@@ -15,7 +15,6 @@ with import <stockholm/lib>;
       krebs.enable = true;
       krebs.build.user = config.krebs.users.lass;
       krebs.build.host = config.krebs.hosts.iso;
-      krebs.build.source.nixos-config.symlink = "stockholm/lass/1systems/${config.krebs.buil.host.name}.nix";
     }
     {
       nixpkgs.config.allowUnfree = true;
@@ -122,18 +121,12 @@ with import <stockholm/lib>;
           { bits = 8192; type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
         ];
       };
+      systemd.services.sshd.wantedBy = mkForce [ "multi-user.target" ];
     }
     {
       krebs.iptables = {
         enable = true;
         tables = {
-          nat.PREROUTING.rules = [
-            { predicate = "! -i retiolum -p tcp -m tcp --dport 22"; target = "REDIRECT --to-ports 0"; precedence = 100; }
-            { predicate = "-p tcp -m tcp --dport 45621"; target = "REDIRECT --to-ports 22"; precedence = 99; }
-          ];
-          nat.OUTPUT.rules = [
-            { predicate = "-o lo -p tcp -m tcp --dport 45621"; target = "REDIRECT --to-ports 22"; precedence = 100; }
-          ];
           filter.INPUT.policy = "DROP";
           filter.FORWARD.policy = "DROP";
           filter.INPUT.rules = [
@@ -147,6 +140,9 @@ with import <stockholm/lib>;
           ];
         };
       };
+    }
+    {
+      krebs.hidden-ssh.enable = true;
     }
   ];
 }

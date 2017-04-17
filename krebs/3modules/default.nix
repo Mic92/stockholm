@@ -68,7 +68,7 @@ let
     # TODO search-domains :: listOf hostname
     search-domain = mkOption {
       type = types.hostname;
-      default = "retiolum";
+      default = "r";
     };
     zone-head-config  = mkOption {
       type = with types; attrsOf str;

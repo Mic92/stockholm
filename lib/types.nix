@@ -103,6 +103,7 @@ rec {
           options = {
             addr = mkOption {
               type = addr6;
+              apply = lib.normalize-ip6-addr;
             };
             prefix = mkOption ({
               type = str; # TODO routing prefix (CIDR)

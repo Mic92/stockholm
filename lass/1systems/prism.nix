@@ -46,6 +46,7 @@ in {
     ../2configs/monitoring/server.nix
     ../2configs/monitoring/monit-alarms.nix
     ../2configs/paste.nix
+    ../2configs/syncthing.nix
     {
       imports = [
         ../2configs/bepasty.nix
@@ -158,7 +159,7 @@ in {
     }
     {
       users.users.chat.openssh.authorizedKeys.keys = [
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCkmIvB8BekIE2W24+I0gnzkvkEoeulz/zQkDUVJK4oScbIvgTYmcHzQuHJyPueTm67bJCOcYaTwEDNhcR/ZvcyiCQ7Jwa5cLDTkCkcR9LQq8ry5jMNEanvTgrnBIEcwfS7jFpyFb/PRVG6hh2bPOfP+ksFplkq1BTzKt/UTaCBwVEZqi5XuFIlq/MqJg+FIjh+wyeNR5jHtqgAhVjR+YLVNXLgtVPE+dlSfbyRQHuA9FTkUj8BxxnTdwM5Sx33S61ddik1XvRn++IYqFl68fZhzyTME7t/Mvjdz8J7ew2bF2IbJrXt37yQCAOEEp9/RC5OloA7dd/5ZJjZxSzT2HnYROILsYr3S0WV4e+H2G66ZN0ftdUCYh1o5rtY7IrSes6yHsKYbpoij1IAkRkyt2XgEH5EZCk1Omx8AY3ekW1KFIEhz2DZEfnCEjPf4AGCYZ0uy4XEztxzTDkh25TVs/tym1+96qCJ1yAxwWZDbVhS/Z6aSBpsyeDRKcak8qoWVC2dEPdYuTUmwvmo3pmGn/a4UfOLNJTn0jSRjy3kSv1hYzosN4NSYZqEylFB0ABnlqoLpX3tmWtrkiKv19S+djVGxbaaYm3hjPJfds3qCWTJWPvxPPeCE8wGXVLYqOQxa5ZPYeoTwRof5YNSbj5RFYy9sDLTlHl+U4ASTHZM5S3akQ== JuiceSSH"
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDjesiOnhpT9XgWZqw/64M5lVQg3q0k22BtMyCv+33sGX8VmfTyD11GuwSjNGf5WiswKLqFvYBQsHfDDtS3k0ZNTDncGw3Pbilm6QoCuHEyDPaQYin0P+JmkocrL/6QF5uhZVFnsXCH5wntwOa00VFGwpMgQYSfRlReRx42Pu9Jk+iJduZMRBbOMvJI68Z7iJ4DgW/1U9J4MQdCsk7QlFgUstQQfV1zk4VfVfXuxDP3hjx6Q05nDChjpmzJbFunzb7aiy/1/Sl0QhROTpvxrQLksg7yYLw4BRs9ptjehX45A2Sxi8WKOb/g5u3xJNy0X07rE+N+o5v2hS7wF0DLQdK5+4TGtO+Y+ABUCqqA+T1ynAjNBWvsgY5uD4PZjuPgCMSw0JBmIy/P0THi3v5/8Cohvfnspl7Jpf80qENMu3unvvE9EePzgSRZY1PvDjPQfkWy0yBX1yQMhHuVGke9QgaletitwuahRujml37waeUuOl8Rpz+2iV+6OIS4tfO368uLFHKWbobXTbTDXODBgxZ/IyvO7vxM2uDX/kIWaeYKrip3nSyWBYnixwrcS4vm6ZQcoejwp2KCfGQwIE4MnGYRlwcOEYjvyjLkZHDiZEivUQ0rThMYBzec8bQ08QW8oxF+NXkFKG3awt3f7TKTRkYqQcOMpFKmV24KDiwgwm0miQ== JuiceSSH"
       ];
     }
     {
@@ -194,7 +195,7 @@ in {
         ../2configs/realwallpaper.nix
       ];
       services.nginx.virtualHosts."lassul.us".locations."/wallpaper.png".extraConfig = ''
-        alias /tmp/wallpaper.png;
+        alias /var/realwallpaper/realwallpaper.png;
       '';
     }
     {
@@ -254,19 +255,20 @@ in {
       ];
     }
     {
-      krebs.Reaktor.coders = let
-        lambdabot = (import (pkgs.fetchFromGitHub {
-          owner = "NixOS"; repo = "nixpkgs";
-          rev = "a4ec1841da14fc98c5c35cc72242c23bb698d4ac";
-          sha256 = "148fpw31s922hxrf28yhrci296f7c7zd81hf0k6zs05rq0i3szgy";
-        }) {}).lambdabot;
-      in {
-        nickname = "reaktor-lass";
+      krebs.Reaktor.coders = {
+        nickname = "Reaktor|lass";
         channels = [ "#coders" ];
         extraEnviron = {
           REAKTOR_HOST = "irc.hackint.org";
         };
         plugins = with pkgs.ReaktorPlugins; let
+
+          lambdabot = (import (pkgs.fetchFromGitHub {
+            owner = "NixOS"; repo = "nixpkgs";
+            rev = "a4ec1841da14fc98c5c35cc72242c23bb698d4ac";
+            sha256 = "148fpw31s922hxrf28yhrci296f7c7zd81hf0k6zs05rq0i3szgy";
+          }) {}).lambdabot;
+
           lambdabotflags = ''
             -XStandaloneDeriving -XGADTs -XFlexibleContexts \
             -XFlexibleInstances -XMultiParamTypeClasses \
@@ -346,6 +348,18 @@ in {
               exec /var/setuid-wrappers/ping -q -c1 "$1" 2>&1 | tail -1
             '';
           })
+        ];
+      };
+    }
+    {
+      krebs.Reaktor.prism = {
+        nickname = "Reaktor|lass";
+        channels = [ "#retiolum" ];
+        extraEnviron = {
+          REAKTOR_HOST = "ni.r";
+        };
+        plugins = with pkgs.ReaktorPlugins; [
+          sed-plugin
         ];
       };
     }

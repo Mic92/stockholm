@@ -12,7 +12,7 @@ with import <stockholm/lib>;
       nets = {
         retiolum = {
           ip4.addr = "10.243.21.1";
-          ip6.addr = "42:0:0:0:0:0:0:2101";
+          ip6.addr = "42::2101";
           aliases = [
             "alnus.r"
           ];
@@ -53,7 +53,7 @@ with import <stockholm/lib>;
         retiolum = {
           via = config.krebs.hosts.caxi.nets.internet;
           ip4.addr = "10.243.113.226";
-          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af6";
+          ip6.addr = "42:4522:25f8:36bb:8ccb:150:231a:2af6";
           aliases = [
             "caxi.r"
           ];
@@ -94,7 +94,7 @@ with import <stockholm/lib>;
         retiolum = {
           via = config.krebs.hosts.cd.nets.internet;
           ip4.addr = "10.243.113.222";
-          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af3";
+          ip6.addr = "42:4522:25f8:36bb:8ccb:150:231a:2af3";
           aliases = [
             "cd.r"
             "cgit.cd.r"
@@ -129,7 +129,7 @@ with import <stockholm/lib>;
         };
         retiolum = {
           ip4.addr = "10.243.13.39";
-          ip6.addr = "42:0:0:0:0:0:0:1339";
+          ip6.addr = "42::1339";
           aliases = [
             "ju.r"
           ];
@@ -164,7 +164,7 @@ with import <stockholm/lib>;
         };
         retiolum = {
           ip4.addr = "10.243.166.2";
-          ip6.addr = "42:0b9d:6660:d07c:2bb7:4e91:1a01:2e7d";
+          ip6.addr = "42:b9d:6660:d07c:2bb7:4e91:1a01:2e7d";
           aliases = [
             "kaepsele.r"
           ];
@@ -187,7 +187,7 @@ with import <stockholm/lib>;
       nets = {
         retiolum = {
           ip4.addr = "10.243.20.1";
-          ip6.addr = "42:0:0:0:0:0:0:2001";
+          ip6.addr = "42::2001";
           aliases = [
             "mu.r"
           ];
@@ -226,7 +226,7 @@ with import <stockholm/lib>;
         retiolum = {
           via = config.krebs.hosts.ni.nets.internet;
           ip4.addr = "10.243.113.223";
-          ip6.addr = "42:4522:25f8:36bb:8ccb:0150:231a:2af4";
+          ip6.addr = "42:4522:25f8:36bb:8ccb:150:231a:2af4";
           aliases = [
             "ni.r"
             "cgit.ni.r"
@@ -260,7 +260,7 @@ with import <stockholm/lib>;
         };
         retiolum = {
           ip4.addr = "10.243.0.110";
-          ip6.addr = "42:02d5:733f:d6da:c0f5:2bb7:2b18:09ec";
+          ip6.addr = "42:2d5:733f:d6da:c0f5:2bb7:2b18:9ec";
           aliases = [
             "nomic.r"
             "cgit.nomic.r"
@@ -318,7 +318,7 @@ with import <stockholm/lib>;
         };
         retiolum = {
           ip4.addr = "10.243.13.37";
-          ip6.addr = "42:0:0:0:0:0:0:1337";
+          ip6.addr = "42::1337";
           aliases = [
             "wu.r"
             "cgit.wu.r"
@@ -355,7 +355,7 @@ with import <stockholm/lib>;
         };
         retiolum = {
           ip4.addr = "10.243.13.38";
-          ip6.addr = "42:0:0:0:0:0:0:1338";
+          ip6.addr = "42::1338";
           aliases = [
             "xu.r"
           ];
@@ -387,7 +387,7 @@ with import <stockholm/lib>;
         };
         retiolum = {
           ip4.addr = "10.243.13.40";
-          ip6.addr = "42:0:0:0:0:0:0:1340";
+          ip6.addr = "42::1340";
           aliases = [
             "zu.r"
           ];

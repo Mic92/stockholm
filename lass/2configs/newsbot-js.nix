@@ -163,7 +163,6 @@ let
     us_math_society|http://www.ams.org/cgi-bin/content/news_items.cgi?rss=1|#news
     vimperator|https://sites.google.com/a/vimperator.org/www/blog/posts.xml|#news
     weechat|http://dev.weechat.org/feed/atom|#news
-    wired_sci|http://www.wired.com/category/science/feed/|#news
     wp_world|http://feeds.washingtonpost.com/rss/rss_blogpost|#news
     xkcd|https://xkcd.com/rss.xml|#news
     zdnet|http://www.zdnet.com/news/rss.xml|#news
