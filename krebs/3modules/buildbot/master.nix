@@ -78,7 +78,6 @@ let
       #    stopAllBuilds = 'auth',
       #    cancelPendingBuild = 'auth'
       #)
-      # TODO: configure krebs.nginx
       c['www'] = dict(
         port = ${toString cfg.web.port},
         plugins = { 'waterfall_view':{}, 'console_view':{} }

@@ -36,7 +36,6 @@ in {
       enable = true;
       tables = {};
     };
-    nginx.enable = true;
     realwallpaper.enable = true;
     tinc.retiolum.enable = true;
     retiolum-bootstrap.enable = true;
