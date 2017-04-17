@@ -1,8 +1,7 @@
 { config, pkgs, ... }:
 with import <stockholm/lib>;
 let
-  repodir = "/var/srv/drivedroid";
-  srepodir = shell.escape repodir;
+  root = "/var/srv/drivedroid";
 in
 {
   environment.systemPackages = [ pkgs.drivedroid-gen-repo ];
@@ -15,28 +14,34 @@ in
       ];
       # TODO: prepare this somehow
       locations."/".extraConfig = ''
-        root ${repodir};
+        root ${root};
         index main.json;
       '';
     };
   };
 
-  systemd.services.drivedroid = {
+  systemd.services.drivedroid-gen-repo = {
     description = "generates drivedroid repo file";
-    restartIfChanged = true;
+    path = [
+      pkgs.coreutils
+      pkgs.drivedroid-gen-repo
+      pkgs.inotify-tools
+    ];
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
       Type = "simple";
       Restart = "always";
-      ExecStartPre = pkgs.writeScript "prepare-drivedroid-gen-repo" ''
-        #!/bin/sh
-        mkdir -p ${srepodir}/repos
+      ExecStartPre = pkgs.writeDash "prepare-drivedroid-gen-repo" ''
+        mkdir -p ${root}/repos
       '';
-      ExecStart = pkgs.writeScript "start-drivedroid-gen-repo" ''
-        #!/bin/sh
+      ExecStart = pkgs.writeDash "start-drivedroid-gen-repo" ''
+        set -efu
+        cd ${root}
         while sleep 60; do
-          ${pkgs.inotify-tools}/bin/inotifywait -r ${srepodir} && ${pkgs.drivedroid-gen-repo}/bin/drivedroid-gen-repo --chdir "${srepodir}" repos/ > "${srepodir}/main.json"
+          if inotifywait -r .; then
+            drivedroid-gen-repo repos > main.json
+          fi
         done
       '';
     };
