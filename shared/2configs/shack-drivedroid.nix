@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ config, pkgs, ... }:
 with import <stockholm/lib>;
 let
   repodir = "/var/srv/drivedroid";
@@ -6,6 +6,20 @@ let
 in
 {
   environment.systemPackages = [ pkgs.drivedroid-gen-repo ];
+
+  services.nginx = {
+    enable = mkDefault true;
+    virtualHosts.shack-drivedroid = {
+      serverAliases = [
+        "drivedroid.shack"
+      ];
+      # TODO: prepare this somehow
+      locations."/".extraConfig = ''
+        root ${repodir};
+        index main.json;
+      '';
+    };
+  };
 
   systemd.services.drivedroid = {
     description = "generates drivedroid repo file";
@@ -25,20 +39,6 @@ in
           ${pkgs.inotify-tools}/bin/inotifywait -r ${srepodir} && ${pkgs.drivedroid-gen-repo}/bin/drivedroid-gen-repo --chdir "${srepodir}" repos/ > "${srepodir}/main.json"
         done
       '';
-    };
-  };
-
-  krebs.nginx = {
-    enable = lib.mkDefault true;
-    servers = {
-      drivedroid-repo = {
-        server-names = [ "drivedroid.shack" ];
-        # TODO: prepare this somehow
-        locations = lib.singleton (lib.nameValuePair "/" ''
-          root ${repodir};
-          index main.json;
-        '');
-      };
     };
   };
 }
