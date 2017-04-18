@@ -51,6 +51,7 @@ let {
     populate = {
       cgit.desc = "source code installer";
     };
+    q = {};
     regfish = {};
     soundcloud = {
       cgit.desc = "SoundCloud command line interface";
