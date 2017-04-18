@@ -71,6 +71,7 @@ let {
     cgserver = {};
     crude-mail-setup = {};
     dot-xmonad = {};
+    hirc = {};
     make-snapshot = {};
     nixos-infest = {};
     painload = {};
