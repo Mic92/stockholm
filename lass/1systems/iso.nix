@@ -12,6 +12,9 @@ with import <stockholm/lib>;
     ../2configs/nixpkgs.nix
     ../2configs/vim.nix
     {
+      boot.kernelParams = [ "copytoram" ];
+    }
+    {
       krebs.enable = true;
       krebs.build.user = config.krebs.users.lass;
       krebs.build.host = config.krebs.hosts.iso;
