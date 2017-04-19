@@ -34,7 +34,7 @@ let
 
     marker = mkOption {
       type = types.str;
-      default = "http://graphs.r/marker.json";
+      default = "http://graph.r/marker.json";
     };
 
     timerConfig = mkOption {
