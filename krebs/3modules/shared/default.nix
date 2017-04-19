@@ -47,6 +47,7 @@ in {
           ip6.addr = "42:0:0:0:0:0:77:1";
           aliases = [
             "wolf.r"
+            "build.wolf.r"
             "cgit.wolf.r"
           ];
           tinc.pubkey = ''

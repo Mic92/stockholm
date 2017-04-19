@@ -9,11 +9,20 @@
 {
   # due to the fact that we actually build stuff on the box via the daemon,
   # /nix/store should be cleaned up automatically as well
+  services.nginx.virtualHosts.build = {
+    serverAliases = [ "build.wolf.r" ];
+    locations."/".extraConfig = ''
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_pass http://localhost:${toString config.krebs.buildbot.master.web.port};
+    '';
+  };
+
   nix.gc.automatic = true;
   nix.gc.dates = "05:23";
   networking.firewall.allowedTCPPorts = [ 8010 9989 ];
   krebs.buildbot.master = let
-    stockholm-mirror-url = http://cgit.wolf/stockholm-mirror ;
+    stockholm-mirror-url = http://cgit.wolf.r/stockholm-mirror ;
   in {
     secrets = [ "retiolum-ci.rsa_key.priv" "cac.json" ];
     workers = {
@@ -151,6 +160,9 @@
       channels = [ { channel = "retiolum"; } ];
       allowForce = true;
     };
+    extraConfig = ''
+      c['buildbotURL'] = "http://build.wolf.r/"
+    '';
   };
 
   krebs.buildbot.worker = {
