@@ -37,7 +37,7 @@ let
           # TODO use the correct type
           type = with types; attrsOf unspecified;
           description = ''
-            additional nginx configuration. see krebs.nginx for all options
+            Additional nginx configuration.
           '';
         };
         secretKey = mkOption {

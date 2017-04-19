@@ -26,7 +26,6 @@ let
       ./kapacitor.nix
       ./monit.nix
       ./newsbot-js.nix
-      ./nginx.nix
       ./nixpkgs.nix
       ./on-failure.nix
       ./os-release.nix

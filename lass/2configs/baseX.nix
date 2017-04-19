@@ -32,8 +32,6 @@ in {
 
   time.timeZone = "Europe/Berlin";
 
-  virtualisation.libvirtd.enable = true;
-
   programs.ssh.startAgent = false;
 
   services.printing = {

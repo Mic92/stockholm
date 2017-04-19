@@ -12,6 +12,30 @@ with import <stockholm/lib>;
     ../2configs/nixpkgs.nix
     ../2configs/vim.nix
     {
+      # /dev/stderr doesn't work. I don't know why
+      # /proc/self doesn't seem to work correctly
+      # /dev/pts is empty except for 1 file
+      # my life sucks
+      nixpkgs.config.packageOverrides = super: {
+        irc-announce = super.callPackage <stockholm/krebs/5pkgs/irc-announce> {
+          pkgs = pkgs // { coreutils = pkgs.concat "coreutils-hack" [
+            pkgs.coreutils
+            (pkgs.writeDashBin "tee" ''
+              if test "$1" = /dev/stderr; then
+                while read -r line; do
+                  echo "$line"
+                  echo "$line" >&2
+                done
+              else
+                ${super.coreutils}/bin/tee "$@"
+              fi
+            '')
+          ];};
+        };
+      };
+      boot.kernelParams = [ "copytoram" ];
+    }
+    {
       krebs.enable = true;
       krebs.build.user = config.krebs.users.lass;
       krebs.build.host = config.krebs.hosts.iso;
