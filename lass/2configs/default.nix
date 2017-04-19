@@ -64,7 +64,10 @@ with import <stockholm/lib>;
       ];
     }
     {
-      services.dnscrypt-proxy.enable = true;
+      services.dnscrypt-proxy = {
+        enable = true;
+        resolverName = "cs-de";
+      };
       networking.extraResolvconfConf = ''
         name_servers='127.0.0.1'
       '';
@@ -151,6 +154,10 @@ with import <stockholm/lib>;
     p7zip
     unzip
     unrar
+
+    (pkgs.writeDashBin "sshn" ''
+      ${pkgs.openssh}/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$@"
+    '')
   ];
 
   programs.bash = {

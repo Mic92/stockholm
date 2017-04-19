@@ -14,6 +14,7 @@ in
     ../2configs/shack-nix-cacher.nix
     ../2configs/shared-buildbot.nix
     ../2configs/share-shack.nix
+    ../2configs/central-stats-client.nix
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
   # apt-cacher-ng in first place)

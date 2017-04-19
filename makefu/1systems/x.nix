@@ -2,6 +2,7 @@
 #
 #
 { config, pkgs, ... }:
+with import <stockholm/lib>;
 
 {
   imports =
@@ -71,14 +72,9 @@
   makefu.umts.apn = "web.vodafone.de";
 
   nixpkgs.config.allowUnfree = true;
-  krebs.nginx = {
-    default404 = false;
-    servers.default.listen = [ "80 default_server" ];
-    servers.default.server-names = [ "_" ];
-  };
 
   boot.extraModulePackages = [ config.boot.kernelPackages.exfat-nofuse ];
-  environment.systemPackages = [ pkgs.passwdqc-utils pkgs.bintray-upload ];
+  environment.systemPackages = [ pkgs.passwdqc-utils ];
 
   virtualisation.docker.enable = true;
 

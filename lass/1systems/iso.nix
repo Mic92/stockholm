@@ -12,10 +12,33 @@ with import <stockholm/lib>;
     ../2configs/nixpkgs.nix
     ../2configs/vim.nix
     {
+      # /dev/stderr doesn't work. I don't know why
+      # /proc/self doesn't seem to work correctly
+      # /dev/pts is empty except for 1 file
+      # my life sucks
+      nixpkgs.config.packageOverrides = super: {
+        irc-announce = super.callPackage <stockholm/krebs/5pkgs/irc-announce> {
+          pkgs = pkgs // { coreutils = pkgs.concat "coreutils-hack" [
+            pkgs.coreutils
+            (pkgs.writeDashBin "tee" ''
+              if test "$1" = /dev/stderr; then
+                while read -r line; do
+                  echo "$line"
+                  echo "$line" >&2
+                done
+              else
+                ${super.coreutils}/bin/tee "$@"
+              fi
+            '')
+          ];};
+        };
+      };
+      boot.kernelParams = [ "copytoram" ];
+    }
+    {
       krebs.enable = true;
       krebs.build.user = config.krebs.users.lass;
       krebs.build.host = config.krebs.hosts.iso;
-      krebs.build.source.nixos-config.symlink = "stockholm/lass/1systems/${config.krebs.buil.host.name}.nix";
     }
     {
       nixpkgs.config.allowUnfree = true;
@@ -122,18 +145,12 @@ with import <stockholm/lib>;
           { bits = 8192; type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
         ];
       };
+      systemd.services.sshd.wantedBy = mkForce [ "multi-user.target" ];
     }
     {
       krebs.iptables = {
         enable = true;
         tables = {
-          nat.PREROUTING.rules = [
-            { predicate = "! -i retiolum -p tcp -m tcp --dport 22"; target = "REDIRECT --to-ports 0"; precedence = 100; }
-            { predicate = "-p tcp -m tcp --dport 45621"; target = "REDIRECT --to-ports 22"; precedence = 99; }
-          ];
-          nat.OUTPUT.rules = [
-            { predicate = "-o lo -p tcp -m tcp --dport 45621"; target = "REDIRECT --to-ports 22"; precedence = 100; }
-          ];
           filter.INPUT.policy = "DROP";
           filter.FORWARD.policy = "DROP";
           filter.INPUT.rules = [
@@ -147,6 +164,9 @@ with import <stockholm/lib>;
           ];
         };
       };
+    }
+    {
+      krebs.hidden-ssh.enable = true;
     }
   ];
 }

@@ -20,7 +20,7 @@ in {
   };
 
   config.krebs.buildbot.master = let
-    stockholm-mirror-url = http://cgit.lassul.us/stockholm ;
+    stockholm-mirror-url = http://cgit.prism.r/stockholm ;
   in {
     workers = {
       testworker = "lasspass";
