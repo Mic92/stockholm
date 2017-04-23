@@ -168,6 +168,7 @@ rec {
         '';
         locations."~ \.php$".extraConfig = ''
           fastcgi_pass unix:/srv/http/${domain}/phpfpm.pool;
+          fastcgi_read_timeout 120;
           include ${pkgs.nginx}/conf/fastcgi.conf;
         '';
         #Directives to send expires headers and turn off 404 error logging.
@@ -182,10 +183,10 @@ rec {
         user = nginx
         group = nginx
         pm = dynamic
-        pm.max_children = 15
-        pm.start_servers = 3
-        pm.min_spare_servers = 1
-        pm.max_spare_servers = 10
+        pm.max_children = 25
+        pm.start_servers = 5
+        pm.min_spare_servers = 3
+        pm.max_spare_servers = 20
         listen.owner = nginx
         listen.group = nginx
         php_admin_value[error_log] = 'stderr'
