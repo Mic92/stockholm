@@ -4,7 +4,7 @@ with import <stockholm/lib>;
 let
   out = {
     environment.systemPackages = [
-      vim
+      (hiPrio vim)
       pkgs.pythonPackages.flake8
     ];
 
