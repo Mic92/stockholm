@@ -38,7 +38,8 @@ let
             echo "still waiting for ${hiddenServiceDir}/hostname"
             sleep 1
           done
-          ${pkgs.irc-announce}/bin/irc-announce \
+          ${pkgs.untilport}/bin/untilport irc.freenode.org 6667 && \
+            ${pkgs.irc-announce}/bin/irc-announce \
             irc.freenode.org 6667 ${config.krebs.build.host.name}-ssh \
             \#krebs-announce \
             "SSH Hidden Service at $(cat ${hiddenServiceDir}/hostname)"
