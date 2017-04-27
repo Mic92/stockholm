@@ -149,6 +149,7 @@ with import <stockholm/lib>;
     tmux
     untilport
     usbutils
+    logify
 
   #unpack stuff
     p7zip
