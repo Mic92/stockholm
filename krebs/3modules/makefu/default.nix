@@ -173,7 +173,7 @@ with import <stockholm/lib>;
       };
     };
     x = {
-      cores = 2;
+      cores = 4;
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.91";
