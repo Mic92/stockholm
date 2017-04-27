@@ -43,7 +43,7 @@ with import <stockholm/lib>;
         pass
         q
         qrencode
-        #texLive
+        texlive.combined.scheme-full
         tmux
 
         #ack
