@@ -21,22 +21,6 @@ let
     exec ${pkgs.msmtp}/bin/msmtp --read-envelope-from -C ${msmtprc} "$@"
   '';
 
-  restartPhpfpm_o.ubikmedia = pkgs.writeDash "restartPhpfpm_o.ubikmedia.org" ''
-    ${pkgs.systemd}/bin/systemctl restart phpfpm-o.ubikmedia.de.service
-  '';
-
-  restartPhpfpm_o.ubikmedia_wrapper = pkgs.writeDashBin "restartPhpfpm_o.ubikmedia" ''
-    /run/wrappers/bin/sudo ${restartPhpfpm_o.ubikmedia}
-  '';
-
-  restartPhpfpm_ubikmedia = pkgs.writeDash "restartPhpfpm_ubikmedia.org" ''
-    ${pkgs.systemd}/bin/systemctl restart phpfpm-ubikmedia.de.service
-  '';
-
-  restartPhpfpm_ubikmedia_wrapper = pkgs.writeDashBin "restartPhpfpm_ubikmedia" ''
-    /run/wrappers/bin/sudo ${restartPhpfpm_ubikmedia}
-  '';
-
 in {
   imports = [
     ./sqlBackup.nix
@@ -179,17 +163,6 @@ in {
     useDefaultShell = true;
     createHome = true;
   };
-
-  #sudo restart wrappers
-  security.sudo.extraConfig = ''
-    domsen ALL= (root) NOPASSWD: ${restartPhpfpm_o.ubikmedia}
-    domsen ALL= (root) NOPASSWD: ${restartPhpfpm_ubikmedia}
-  '';
-
-  krebs.per-user.domsen.packages = [
-    restartPhpfpm_ubikmedia_wrapper
-    restartPhpfpm_o.ubikmedia_wrapper
-  ];
 
 }
 
