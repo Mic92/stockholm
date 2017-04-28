@@ -433,15 +433,17 @@ with import <stockholm/lib>;
         "krebsco.de" = ''
           share.euer        IN A      ${nets.internet.ip4.addr}
           mattermost.euer   IN A      ${nets.internet.ip4.addr}
-          git.euer          IN A      ${nets.internet.ip4.addr}
           gum               IN A      ${nets.internet.ip4.addr}
           pigstarter        IN A      ${nets.internet.ip4.addr}
           cgit.euer         IN A      ${nets.internet.ip4.addr}
-          o.euer            IN A      ${nets.internet.ip4.addr}
-          dl.euer           IN A      ${nets.internet.ip4.addr}
           euer              IN A      ${nets.internet.ip4.addr}
+          o.euer            IN A      ${nets.internet.ip4.addr}
+          git.euer          IN A      ${nets.internet.ip4.addr}
+          dl.euer           IN A      ${nets.internet.ip4.addr}
+          boot.euer         IN A      ${nets.internet.ip4.addr}
           wiki.euer         IN A      ${nets.internet.ip4.addr}
           graph             IN A      ${nets.internet.ip4.addr}
+          ghook             IN A      ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
