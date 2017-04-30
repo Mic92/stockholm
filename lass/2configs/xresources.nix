@@ -33,6 +33,8 @@ let
     URxvt*.pointerBlankDelay: 987654321
     URxvt*.pointerColor: #f042b0
     URxvt*.pointerColor2: #050505
+
+    URxvt*color0:        #232342
   '';
 
 in {
