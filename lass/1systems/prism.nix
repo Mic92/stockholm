@@ -26,7 +26,6 @@ in {
       services.udev.extraRules = ''
         SUBSYSTEM=="net", ATTR{address}=="54:04:a6:7e:f4:06", NAME="et0"
       '';
-
     }
     ../2configs/retiolum.nix
     ../2configs/exim-smarthost.nix
@@ -360,6 +359,23 @@ in {
         };
         plugins = with pkgs.ReaktorPlugins; [
           sed-plugin
+        ];
+      };
+    }
+    {
+      #stuff for dritter
+      users.extraUsers.dritter = {
+        name = "dritter";
+        uid = genid "dritter";
+        home = "/home/dritter";
+        group = "users";
+        createHome = true;
+        useDefaultShell = true;
+        extraGroups = [
+          "download"
+        ];
+        openssh.authorizedKeys.keys = [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDnqOWDDk7QkSAvrSLkEoz7dY22+xPyv5JDn2zlfUndfavmTMfZvPx9REMjgULbcCSM4m3Ncf40yUjciDpVleGoEz82+p/ObHAkVWPQyXRS3ZRM2IJJultBHEFc61+61Pi8k3p5pBhPPaig6VncJ4uUuuNqen9jqLesSTVXNtdntU2IvnC8B8k1Kq6fu9q1T2yEOMxkD31D5hVHlqAly0LdRiYvtsRIoCSmRvlpGl70uvPprhQxhtoiEUeDqmIL7BG9x7gU0Swdl7R0/HtFXlFuOwSlNYDmOf/Zrb1jhOpj4AlCliGUkM0iKIJhgH0tnJna6kfkGKHDwuzITGIh6SpZ dritter@Janeway"
         ];
       };
     }
