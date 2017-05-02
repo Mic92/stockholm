@@ -427,7 +427,7 @@ with import <stockholm/lib>;
     };
 
     gum = rec {
-      cores = 1;
+      cores = 2;
 
       extraZones = {
         "krebsco.de" = ''
@@ -448,7 +448,7 @@ with import <stockholm/lib>;
       };
       nets = rec {
         internet = {
-          ip4.addr = "195.154.108.70";
+          ip4.addr = "188.68.40.19";
           aliases = [
             "gum.i"
           ];
@@ -456,7 +456,7 @@ with import <stockholm/lib>;
         retiolum = {
           via = internet;
           ip4.addr = "10.243.0.211";
-          # ip6.addr = "42:f9f0:0000:0000:0000:0000:0000:70d2";
+          ip6.addr = "42:f9f0:0000:0000:0000:0000:0000:70d2";
           aliases = [
             "gum.r"
             "cgit.gum.r"
