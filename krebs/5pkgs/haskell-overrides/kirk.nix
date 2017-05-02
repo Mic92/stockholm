@@ -2,12 +2,12 @@
 , optparse-applicative, stdenv, text
 }:
 mkDerivation {
-  pname = "irc";
+  pname = "kirk";
   version = "1.0.0";
   src = fetchgit {
-    url = "http://cgit.krebsco.de/irc";
-    sha256 = "174ywhvidybg49m4b43q2304izwbx3s7bvipk9g399zjyb392r8f";
-    rev = "7225d47e9c1f4c7032ad55fbe1d9f33ff205549c";
+    url = "http://cgit.krebsco.de/kirk";
+    sha256 = "0w4drg2lyyw45abfn3g55zd6m7pl7yqxql5rpyy6qqdbvnyak94w";
+    rev = "c78f3c62c0ba76465e39d1570073f867aa2d4240";
   };
   isLibrary = false;
   isExecutable = true;
