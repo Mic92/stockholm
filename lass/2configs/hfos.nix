@@ -40,7 +40,7 @@ with import <stockholm/lib>;
   systemd.services.libvirtd.serviceConfig.ExecStartPost = let
     restart-iptables = pkgs.writeDash "restart-iptables" ''
       #soo hacky
-      ${pkgs.coreutils}/bin/sleep 1s
+      ${pkgs.coreutils}/bin/sleep 5s
       ${pkgs.systemd}/bin/systemctl restart krebs-iptables.service
     '';
   in restart-iptables;

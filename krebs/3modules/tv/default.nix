@@ -358,6 +358,7 @@ with import <stockholm/lib>;
           ip6.addr = "42::1338";
           aliases = [
             "xu.r"
+            "cgit.xu.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----

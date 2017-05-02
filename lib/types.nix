@@ -284,8 +284,8 @@ rec {
         default = "/home/${config.name}";
       };
       mail = mkOption {
-        type = str; # TODO retiolum mail address
-        default = "${config._module.args.name}@${config.networking.hostName}.r";
+        type = nullOr str;
+        default = null;
       };
       name = mkOption {
         type = username;

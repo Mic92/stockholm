@@ -34,11 +34,11 @@ let
       cgit.desc = "take all the computers hostage, they'll love you!";
       cgit.section = "configuration";
     };
-  } // mapAttrs make-public-repo-silent {
     the_playlist = {
       cgit.desc = "Good Music collection + tools";
       cgit.section  = "art";
     };
+  } // mapAttrs make-public-repo-silent {
   };
 
   restricted-repos = mapAttrs make-restricted-repo (
