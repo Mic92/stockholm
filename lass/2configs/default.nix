@@ -150,6 +150,7 @@ with import <stockholm/lib>;
     untilport
     usbutils
     logify
+    goify
 
   #unpack stuff
     p7zip
