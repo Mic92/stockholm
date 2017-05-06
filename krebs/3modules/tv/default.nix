@@ -413,8 +413,8 @@ with import <stockholm/lib>;
     dv = {
       mail = "dv@alnus.r";
     };
-    mv-cd = {
-      mail = "mv@cd.r";
+    mv-ni = {
+      mail = "mv@ni.r";
       pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGer9e2+Lew7vnisgBbsFNECEIkpNJgEaqQqgb9inWkQ mv@vod";
     };
     tv = {
