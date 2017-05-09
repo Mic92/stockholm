@@ -105,9 +105,7 @@ let
         gg23 = "hosts";
         shack = "hosts";
         i = "hosts";
-        internet = "hosts";
         r = "hosts";
-        retiolum = "hosts";
       };
 
       krebs.users = {
