@@ -36,8 +36,8 @@ let {
     htgen = {
       cgit.desc = "toy HTTP server";
     };
-    irc = {
-      cgit.desc = "toy IRC client";
+    kirk = {
+      cgit.desc = "IRC tools";
     };
     load-env = {};
     loldns = {

@@ -256,7 +256,7 @@ in {
     {
       krebs.Reaktor.coders = {
         nickname = "Reaktor|lass";
-        channels = [ "#coders" ];
+        channels = [ "#coders" "#germany" ];
         extraEnviron = {
           REAKTOR_HOST = "irc.hackint.org";
         };

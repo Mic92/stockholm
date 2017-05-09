@@ -3,19 +3,17 @@
 let
   newsfile = pkgs.writeText "feeds" ''
     aje|http://www.aljazeera.com/Services/Rss/?PostingId=2007731105943979989|#news
-    aktuelle_themen|http://bundestag.de/service/rss/Bundestag_Aktuelle_Themen.rss|#news #bundestag
     allafrica|http://allafrica.com/tools/headlines/rdf/latest/headlines.rdf|#news
-    anon|http://anoninsiders.net/feed/|#news
     antirez|http://antirez.com/rss|#news
     arbor|http://feeds2.feedburner.com/asert/|#news
     archlinux|http://www.archlinux.org/feeds/news/|#news
     ars|http://feeds.arstechnica.com/arstechnica/index?format=xml|#news
     augustl|http://augustl.com/atom.xml|#news
     bbc|http://feeds.bbci.co.uk/news/rss.xml|#news
+    bdt_aktuelle_themen|http://www.bundestag.de/blueprint/servlet/service/de/14154/asFeed/index.rss|#news
     bdt_drucksachen|http://www.bundestag.de/dip21rss/bundestag_drucksachen.rss|#news #bundestag
     bdt_plenarproto|http://www.bundestag.de/rss_feeds/plenarprotokolle.rss|#news #bundestag
-    bdt_pressemitteilungen|http://bundestag.de/service/rss/Bundestag_Presse.rss|#news #bundestag
-    bdt_wd|http://bundestag.de/service/rss/Bundestag_WD.rss|#news #bundestag
+    bdt_pressemitteilungen|http://www.bundestag.de/blueprint/servlet/service/de/273112/asFeed/index.rss|#news
     bitcoinpakistan|https://bitcoinspakistan.com/feed/|#news #financial
     c|http://www.tempolimit-lichtgeschwindigkeit.de/news.xml|#news
     cancer|http://feeds.feedburner.com/ncinewsreleases?format=xml|#news
@@ -30,9 +28,7 @@ let
     chan_b|https://boards.4chan.org/b/index.rss|#brainfuck
     chan_biz|https://boards.4chan.org/biz/index.rss|#news #brainfuck
     chan_int|https://boards.4chan.org/int/index.rss|#news #brainfuck
-    cna|http://www.channelnewsasia.com/starterkit/servlet/cna/rss/home.xml|#news
     coinspotting|http://coinspotting.com/rss|#news #financial
-    cryptanalysis|https://cryptanalys.is/rss.php|#news
     cryptocoinsnews|http://www.cryptocoinsnews.com/feed/|#news #financial
     cryptogon|http://www.cryptogon.com/?feed=rss2|#news
     csm|http://rss.csmonitor.com/feeds/csm|#news
@@ -52,12 +48,9 @@ let
     fars|http://www.farsnews.com/rss.php|#news #test
     faz_feui|http://www.faz.net/rss/aktuell/feuilleton/|#news
     faz_politik|http://www.faz.net/rss/aktuell/politik/|#news
-    faz_wirtschaft|http://www.faz.net/rss/aktuell/wirtschaft/|#news #financial
-    fbi|http://www.fbi.gov/homepage/RSS|#news #bullerei
-    fbi_news|http://www.fbi.gov/news/news_blog/rss.xml|#news
-    fbi_press|http://www.fbi.gov/news/current/rss.xml|#news #bullerei
-    fbi_stories|http://www.fbi.gov/news/stories/all-stories/rss.xml|#news #bullerei
-    fedreserve|http://www.federalreserve.gov/feeds/press_all.xml|#news #financial
+    faz_wirtschaft|http://www.faz.net/rss/aktuell/wirtschaft/|#news
+    fbi|https://www.fbi.gov/news/rss.xml|#news
+    fedreserve|http://www.federalreserve.gov/feeds/press_all.xml|#news
     fefe|http://blog.fefe.de/rss.xml|#news
     forbes|http://www.forbes.com/forbes/feed2/|#news
     forbes_realtime|http://www.forbes.com/real-time/feed2/|#news
@@ -65,18 +58,18 @@ let
     geheimorganisation|http://geheimorganisation.org/feed/|#news
     GerForPol|http://www.german-foreign-policy.com/de/news/rss-2.0|#news
     gmanet|http://www.gmanetwork.com/news/rss/news|#news
-    golem|http://www.golem.de/rss.php?feed=RSS1.0|#news
+    golem|https://rss.golem.de/rss.php|#news
     google|http://news.google.com/?output=rss|#news
     greenpeace|http://feeds.feedburner.com/GreenpeaceNews|#news
     guardian_uk|http://feeds.theguardian.com/theguardian/uk-news/rss|#news
     gulli|http://ticker.gulli.com/rss/|#news
     handelsblatt|http://www.handelsblatt.com/contentexport/feed/schlagzeilen|#news #financial
-    heise|http://heise.de.feedsportal.com/c/35207/f/653902/index.rss|#news
+    heise|https://www.heise.de/newsticker/heise-atom.xml|#news
     hindu_business|http://www.thehindubusinessline.com/?service=rss|#news #financial
     hindu|http://www.thehindu.com/?service=rss|#news
     ign|http://feeds.ign.com/ign/all|#news
     independent|http://www.independent.com/rss/headlines/|#news
-    indymedia|http://de.indymedia.org/RSS/newswire.xml|#news
+    indymedia|https://de.indymedia.org/rss.xml|#news
     info_libera|http://www.informationliberation.com/rss.xml|#news
     klagen-gegen-rundfuckbeitrag|http://klagen-gegen-rundfunkbeitrag.blogspot.com/feeds/posts/default|#news
     korea_herald|http://www.koreaherald.com/rss_xml.php|#news
@@ -123,11 +116,11 @@ let
     sec-db|http://feeds.security-database.com/SecurityDatabaseToolsWatch|#news
     shackspace|http://shackspace.de/?feed=rss2|#news
     shz_news|http://www.shz.de/nachrichten/newsticker/rss|#news
-    sky_busi|http://news.sky.com/feeds/rss/business.xml|#news
-    sky_pol|http://news.sky.com/feeds/rss/politics.xml|#news
-    sky_strange|http://news.sky.com/feeds/rss/strange.xml|#news
-    sky_tech|http://news.sky.com/feeds/rss/technology.xml|#news
-    sky_world|http://news.sky.com/feeds/rss/world.xml|#news
+    sky_busi|http://feeds.skynews.com/feeds/rss/business.xml|#news
+    sky_pol|http://feeds.skynews.com/feeds/rss/politics.xml|#news
+    sky_strange|http://feeds.skynews.com/feeds/rss/strange.xml|#news
+    sky_tech|http://feeds.skynews.com/feeds/rss/technology.xml|#news
+    sky_world|http://feeds.skynews.com/feeds/rss/world.xml|#news
     slashdot|http://rss.slashdot.org/Slashdot/slashdot|#news
     slate|http://feeds.slate.com/slate|#news
     spiegel_eil|http://www.spiegel.de/schlagzeilen/eilmeldungen/index.rss|#news
@@ -138,7 +131,7 @@ let
     stz|http://www.stuttgarter-zeitung.de/rss/topthemen.rss.feed|#news
     sz_politik|http://rss.sueddeutsche.de/rss/Politik|#news
     sz_wirtschaft|http://rss.sueddeutsche.de/rss/Wirtschaft|#news #financial
-    sz_wissen|http://suche.sueddeutsche.de/rss/Wissen|#news
+    sz_wissen|http://rss.sueddeutsche.de/rss/Wissen|#news
     tagesschau|http://www.tagesschau.de/newsticker.rdf|#news
     taz|http://taz.de/Themen-des-Tages/!p15;rss/|#news
     telegraph_finance|http://www.telegraph.co.uk/finance/rss|#news #financial
