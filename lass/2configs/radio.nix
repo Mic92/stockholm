@@ -145,6 +145,12 @@ in {
         script = "${print_current}/bin/print_current";
         pattern = "^current$";
       })
+      (buildSimpleReaktorPlugin "suggest" {
+        script = "${pkgs.writeDash "suggest" ''
+          echo "$@" >> $HOME/playlist_suggest
+        ''}";
+        pattern = "^suggest: (?P<args>.*)$";
+      })
     ];
   };
   services.nginx.virtualHosts."lassul.us".locations."/the_playlist".extraConfig = let
