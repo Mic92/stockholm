@@ -94,6 +94,8 @@
       general {
         #maybe we want ident someday?
         disable_auth = yes;
+        throttle_duration = 1;
+        throttle_count = 1000;
       };
     '';
   };
