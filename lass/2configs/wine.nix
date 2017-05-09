@@ -4,7 +4,7 @@ let
   mainUser = config.users.extraUsers.mainUser;
 
 in {
-  environment.systemPackages = with pkgs; [
+  krebs.per-user.wine.packages = with pkgs; [
     wineUnstable
   ];
   users.users= {
