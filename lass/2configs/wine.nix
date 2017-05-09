@@ -7,7 +7,7 @@ in {
   environment.systemPackages = with pkgs; [
     wineUnstable
   ];
-  users.extraUsers = {
+  users.users= {
     wine = {
       name = "wine";
       description = "user for running wine";
