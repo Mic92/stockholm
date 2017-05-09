@@ -302,6 +302,27 @@ with import <stockholm/lib>;
     iso = {
       cores = 1;
     };
+    sokrateslaptop = {
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.142.104";
+          ip6.addr = "42:f8a1:044d:0f75:9d73:56d8:f432:c6cc";
+          aliases = [
+            "sokrateslaptop.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA0EMbBv5NCSns4V/VR/NJHhwe2qNLUYjWWtCDY4zDuoiJdm3JNZJ2
+            t0iKNxFwd6Mmg3ahAlndsH4FOjOBGBQCgBG25VRnQgli1sypI/gYTsSgIWHVIRoZ
+            rgrng0K3oyJ6FuTP+nH1rd7UAYkrOQolXQBY+LqAbxOVjiJl+DpbAXIxCIs5TBeW
+            egtBiXZ1S53Lv5EGFXug716XlgZLHjw7PzRLJXSlvUAIRZj0Sjq4UD9VrhazM9s5
+            aDuxJIdknccEEXm6NK7a51hU/o8L+T0IUpZxhaXOdi6fvO/y3TbffKb1yRTbN0/V
+            VBjBh18Le7h0SmAEED5tz7NOCrAjMZQtJQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
   };
   users = {
     lass = {
