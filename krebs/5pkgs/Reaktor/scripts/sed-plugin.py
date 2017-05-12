@@ -29,7 +29,7 @@ if is_regex(line):
         if p.returncode:
             print("something went wrong when trying to process your regex: {}".format(se.decode()))
         ret = so.decode()
-        print("\x1b[1m{}\x1b[0m meinte: {}".format(usr,ret.strip()))
+        print("\x1b[1m{}\x1b[0m meant: {}".format(usr, ret.strip()))
         if ret:
             d[usr] = ret
 
