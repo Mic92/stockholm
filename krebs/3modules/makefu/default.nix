@@ -26,6 +26,31 @@ with import <stockholm/lib>;
         };
       };
     };
+    studio = rec {
+      cores = 4;
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIqBR5gjJkR1TEIs2yx6JRoIOA7+/LJA6kjju8yCauFa studio";
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.227.163";
+          ip6.addr  = "42:e23f:ae0e:ea25:72ff:4ab8:9bd9:38a6";
+          aliases = [
+            "studio.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAwAdSac8Oy5tPu7ejwojY5YqaNOfd7i0NToE+oaRJ1yxzmUpj8Fti
+            cGpcgBYhFXMVYoYfzLdkAlSYjWKAoShCq/ZEfIM67okXegXvL68zGksfXrmpdUuk
+            GCCy2/Ul5urvYEis9UeUpbe6tUxU0zXUWCkhMQgHeO2xQEizfIfWsUn5sYtFFoKI
+            jYbAcLbRtw+Islfih8G7ydPBh78WPGz6Xx79A5nmfI1VZDAToEqpqUoaqfzsTGd1
+            78GZssE3o4veTmBFvLV3Fm/ltfXpzhAIcsi89V3RjrzFM7UMD8aV153OAzhddxIu
+            8x6FibmMSzBXQDFuAac2+kp9mU0F0W4G1wIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+
     fileleech = rec {
       cores = 4;
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
@@ -449,6 +474,7 @@ with import <stockholm/lib>;
       nets = rec {
         internet = {
           ip4.addr = "188.68.40.19";
+          ip6.addr = "2a03:4000:17:2df::1";
           aliases = [
             "gum.i"
           ];
