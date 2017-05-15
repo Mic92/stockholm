@@ -10,7 +10,7 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "144.76.172.188";
           aliases = [
-            "dishfire.internet"
+            "dishfire.i"
           ];
           ssh.port = 45621;
         };
@@ -42,7 +42,7 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "104.233.79.118";
           aliases = [
-            "echelon.internet"
+            "echelon.i"
           ];
           ssh.port = 45621;
         };
@@ -82,9 +82,8 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "213.239.205.240";
           aliases = [
-            "prism.internet"
+            "prism.i"
             "paste.i"
-            "paste.internet"
           ];
           ssh.port = 45621;
         };
@@ -132,7 +131,7 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "104.167.113.104";
           aliases = [
-            "cloudkrebs.internet"
+            "cloudkrebs.i"
           ];
           ssh.port = 45621;
         };
