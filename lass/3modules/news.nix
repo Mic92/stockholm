@@ -11,7 +11,7 @@ let
   };
 
   api = {
-    enable = mkEnableOption "umts";
+    enable = mkEnableOption "news";
     feeds = mkOption {
       type = types.listOf (types.submodule { options = {
         nick = mkOption {
