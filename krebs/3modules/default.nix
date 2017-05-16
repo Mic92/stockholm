@@ -34,10 +34,10 @@ let
       ./Reaktor.nix
       ./realwallpaper.nix
       ./retiolum-bootstrap.nix
-      ./retiolum.nix
       ./rtorrent.nix
       ./secret.nix
       ./setuid.nix
+      ./tinc.nix
       ./tinc_graphs.nix
       ./urlwatch.nix
       ./repo-sync.nix
