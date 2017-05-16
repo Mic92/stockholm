@@ -18,6 +18,26 @@ let
 
         enable = mkEnableOption "krebs.tinc.${netname}" // { default = true; };
 
+        confDir = mkOption {
+          type = types.package;
+          default = pkgs.linkFarm "${netname}-etc-tinc"
+            (mapAttrsToList (name: path: { inherit name path; }) {
+              "hosts" = tinc.config.hostsPackage;
+              "tinc.conf" = pkgs.writeText "${netname}-tinc.conf" ''
+                Name = ${tinc.config.host.name}
+                Interface = ${netname}
+                ${concatMapStrings (c: "ConnectTo = ${c}\n") tinc.config.connectTo}
+                PrivateKeyFile = ${tinc.config.privkey.path}
+                Port = ${toString tinc.config.host.nets.${netname}.tinc.port}
+                ${tinc.config.extraConfig}
+              '';
+              "tinc-up" = pkgs.writeDash "${netname}-tinc-up" ''
+                ${tinc.config.iproutePackage}/sbin/ip link set ${netname} up
+                ${tinc.config.tincUp}
+              '';
+            });
+        };
+
         host = mkOption {
           type = types.host;
           default = config.krebs.build.host;
@@ -179,25 +199,6 @@ let
       let
         tinc = cfg.tincPackage;
         iproute = cfg.iproutePackage;
-
-        confDir = let
-          namePathPair = name: path: { inherit name path; };
-        in pkgs.linkFarm "${netname}-etc-tinc" (mapAttrsToList namePathPair {
-            "hosts" = cfg.hostsPackage;
-            "tinc.conf" = pkgs.writeText "${cfg.netname}-tinc.conf" ''
-              Name = ${cfg.host.name}
-              Interface = ${netname}
-              ${concatStrings (map (c: "ConnectTo = ${c}\n") cfg.connectTo)}
-              PrivateKeyFile = ${cfg.privkey.path}
-              Port = ${toString cfg.host.nets.${cfg.netname}.tinc.port}
-              ${cfg.extraConfig}
-            '';
-            "tinc-up" = pkgs.writeDash "${netname}-tinc-up" ''
-              ${iproute}/sbin/ip link set ${netname} up
-              ${cfg.tincUp}
-            '';
-          }
-        );
       in {
         description = "Tinc daemon for ${netname}";
         after = [ "network.target" ];
@@ -206,7 +207,7 @@ let
         path = [ tinc iproute ];
         serviceConfig = rec {
           Restart = "always";
-          ExecStart = "${tinc}/sbin/tincd -c ${confDir} -d 0 -U ${cfg.user.name} -D --pidfile=/var/run/tinc.${SyslogIdentifier}.pid";
+          ExecStart = "${tinc}/sbin/tincd -c ${cfg.confDir} -d 0 -U ${cfg.user.name} -D --pidfile=/var/run/tinc.${SyslogIdentifier}.pid";
           SyslogIdentifier = netname;
         };
       }
