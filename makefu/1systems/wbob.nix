@@ -1,20 +1,28 @@
 { config, pkgs, lib, ... }:
-let 
+let
   rootdisk = "/dev/disk/by-id/ata-TS256GMTS800_C613840115";
   datadisk = "/dev/disk/by-id/ata-HGST_HTS721010A9E630_JR10006PH3A02F";
+  user = config.makefu.gui.user;
 in {
 
   imports =
     [ # Include the results of the hardware scan.
       ../.
       ../2configs/zsh-user.nix
-      ../2configs/base-gui.nix
       ../2configs/tools/core.nix
       ../2configs/tools/core-gui.nix
       ../2configs/tools/extra-gui.nix
       ../2configs/tools/media.nix
       ../2configs/virtualization.nix
       ../2configs/tinc/retiolum.nix
+      ../2configs/mqtt.nix
+      ../2configs/deployment/led-fader.nix
+      # ../2configs/gui/wbob-kiosk.nix
+
+      ../2configs/gui/studio.nix
+      ../2configs/audio/jack-on-pulse.nix
+      ../2configs/audio/realtime-audio.nix
+      ../2configs/vncserver.nix
     ];
 
   krebs = {
@@ -24,25 +32,10 @@ in {
 
   swapDevices = [ { device = "/var/swap"; } ];
 
-  services.xserver = {
-    layout = lib.mkForce "de";
-
-    windowManager = lib.mkForce {
-      awesome.enable = false;
-      default = "none";
-    };
-    desktopManager.xfce.enable = true;
-
-    # xrandrHeads = [ "HDMI1" "HDMI2" ];
-    # prevent screen from turning off, disable dpms
-    displayManager.sessionCommands = ''
-      xset s off -dpms
-      xrandr --output HDMI2 --right-of HDMI1
-    '';
-  };
 
   networking.firewall.allowedUDPPorts = [ 655 ];
   networking.firewall.allowedTCPPorts = [ 655 49152 ];
+  networking.firewall.trustedInterfaces = [ "enp0s25" ];
   #services.tinc.networks.siem = {
   #  name = "display";
   #  extraConfig = ''
@@ -85,7 +78,7 @@ in {
   # TODO: add crypto layer
   systemd.services."synergy-client" = {
     environment.DISPLAY = ":0";
-    serviceConfig.User = "makefu";
+    serviceConfig.User = user;
   };
 
   services.synergy = {

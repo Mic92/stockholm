@@ -7,7 +7,6 @@ with import <stockholm/lib>;
     ../../krebs
     ../3modules
     ../5pkgs
-    ../2configs/binary-cache/client.nix
     ../2configs/mc.nix
     ../2configs/nixpkgs.nix
     ../2configs/vim.nix

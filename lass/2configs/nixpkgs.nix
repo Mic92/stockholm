@@ -3,6 +3,6 @@
 {
   krebs.build.source.nixpkgs.git = {
     url = https://cgit.lassul.us/nixpkgs;
-    ref = "aa03833";
+    ref = "2bb9c1c";
   };
 }

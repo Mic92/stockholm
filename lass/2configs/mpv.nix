@@ -34,7 +34,7 @@ let
   down = moveToDir "Y" "./down";
 
 in {
-  krebs.per-user.lass.packages = [
+  environment.systemPackages = [
     mpv
   ];
 }

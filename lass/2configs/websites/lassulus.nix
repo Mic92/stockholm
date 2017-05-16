@@ -80,6 +80,9 @@ in {
     locations."= /retiolum-hosts.tar.bz2".extraConfig = ''
       alias ${config.krebs.tinc.retiolum.hostsArchive};
     '';
+    locations."= /retiolum.hosts".extraConfig = ''
+      alias ${pkgs.retiolum-hosts};
+    '';
     locations."/tinc".extraConfig = ''
       alias ${config.krebs.tinc_graphs.workingDir}/external;
     '';

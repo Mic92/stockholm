@@ -48,6 +48,7 @@ with import <stockholm/lib>;
         maven
         arandr
         libreoffice
+        mpv
       ];
     }
     #{

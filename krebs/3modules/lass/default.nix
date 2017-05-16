@@ -10,7 +10,7 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "144.76.172.188";
           aliases = [
-            "dishfire.internet"
+            "dishfire.i"
           ];
           ssh.port = 45621;
         };
@@ -42,7 +42,7 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "104.233.79.118";
           aliases = [
-            "echelon.internet"
+            "echelon.i"
           ];
           ssh.port = 45621;
         };
@@ -82,9 +82,8 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "213.239.205.240";
           aliases = [
-            "prism.internet"
+            "prism.i"
             "paste.i"
-            "paste.internet"
           ];
           ssh.port = 45621;
         };
@@ -132,7 +131,7 @@ with import <stockholm/lib>;
         internet = {
           ip4.addr = "104.167.113.104";
           aliases = [
-            "cloudkrebs.internet"
+            "cloudkrebs.i"
           ];
           ssh.port = 45621;
         };
@@ -301,6 +300,27 @@ with import <stockholm/lib>;
     };
     iso = {
       cores = 1;
+    };
+    sokrateslaptop = {
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.142.104";
+          ip6.addr = "42:f8a1:044d:0f75:9d73:56d8:f432:c6cc";
+          aliases = [
+            "sokrateslaptop.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA0EMbBv5NCSns4V/VR/NJHhwe2qNLUYjWWtCDY4zDuoiJdm3JNZJ2
+            t0iKNxFwd6Mmg3ahAlndsH4FOjOBGBQCgBG25VRnQgli1sypI/gYTsSgIWHVIRoZ
+            rgrng0K3oyJ6FuTP+nH1rd7UAYkrOQolXQBY+LqAbxOVjiJl+DpbAXIxCIs5TBeW
+            egtBiXZ1S53Lv5EGFXug716XlgZLHjw7PzRLJXSlvUAIRZj0Sjq4UD9VrhazM9s5
+            aDuxJIdknccEEXm6NK7a51hU/o8L+T0IUpZxhaXOdi6fvO/y3TbffKb1yRTbN0/V
+            VBjBh18Le7h0SmAEED5tz7NOCrAjMZQtJQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
     };
   };
   users = {
