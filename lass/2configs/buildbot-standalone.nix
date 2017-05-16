@@ -246,7 +246,7 @@ in {
   options.lass.build-ssh-privkey = mkOption {
     type = types.secret-file;
     default = {
-      path = "${config.users.users.buildbotworker.home}/ssh.privkey";
+      path = "${config.users.users.buildbotworker.home}/.ssh/id_rsa";
       owner = { inherit (config.users.users.buildbotworker ) name uid;};
       source-path = toString <secrets> + "/build.ssh.key";
     };
@@ -254,16 +254,10 @@ in {
   config.krebs.secret.files = {
     build-ssh-privkey = config.lass.build-ssh-privkey;
   };
-  config.users.users = {
-    build = {
-      name = "build";
-      uid = genid "build";
-      home = "/home/build";
-      useDefaultShell = true;
-      createHome = true;
-      openssh.authorizedKeys.keys = [
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiV0Xn60aVLHC/jGJknlrcxSvKd/MVeh2tjBpxSBT3II9XQGZhID2Gdh84eAtoWyxGVFQx96zCHSuc7tfE2YP2LhXnwaxHTeDc8nlMsdww53lRkxihZIEV7QHc/3LRcFMkFyxdszeUfhWz8PbJGL2GYT+s6CqoPwwa68zF33U1wrMOAPsf/NdpSN4alsqmjFc2STBjnOd9dXNQn1VEJQqGLG3kR3WkCuwMcTLS5eu0KLwG4i89Twjy+TGp2QsF5K6pNE+ZepwaycRgfYzGcPTn5d6YQXBgcKgHMoSJsK8wqpr0+eFPCDiEA3HDnf76E4mX4t6/9QkMXCLmvs0IO/WP lass@mors"
-      ];
-    };
+  config.users.users.buildbotworker = {
+    useDefaultShell = true;
+    openssh.authorizedKeys.keys = [
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiV0Xn60aVLHC/jGJknlrcxSvKd/MVeh2tjBpxSBT3II9XQGZhID2Gdh84eAtoWyxGVFQx96zCHSuc7tfE2YP2LhXnwaxHTeDc8nlMsdww53lRkxihZIEV7QHc/3LRcFMkFyxdszeUfhWz8PbJGL2GYT+s6CqoPwwa68zF33U1wrMOAPsf/NdpSN4alsqmjFc2STBjnOd9dXNQn1VEJQqGLG3kR3WkCuwMcTLS5eu0KLwG4i89Twjy+TGp2QsF5K6pNE+ZepwaycRgfYzGcPTn5d6YQXBgcKgHMoSJsK8wqpr0+eFPCDiEA3HDnf76E4mX4t6/9QkMXCLmvs0IO/WP"
+    ];
   };
 }
