@@ -92,7 +92,6 @@ in {
       nixshell = [
         "nix-shell",
         "-I", "stockholm=.",
-        "-I", "nixpkgs=/var/src/nixpkgs",
         "-p"
       ] + deps + [ "--run" ]
 
@@ -107,11 +106,9 @@ in {
         for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" ]:
             addShell(f,name="build-{}".format(i),env=env_shared,
                 command=nixshell + \
-                    ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-                        make \
-                            test \
-                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                            method=build \
+                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
+                        make NIX_PATH=$HOME/$LOGNAME test method=build \
+                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
                             system={}".format(i)
                     ]
             )
@@ -119,11 +116,9 @@ in {
         for i in [ "mors", "uriel", "shodan", "helios", "icarus", "cloudkrebs", "echelon", "dishfire", "prism" ]:
             addShell(f,name="build-{}".format(i),env=env_lass,
                 command=nixshell + \
-                    ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-                        make \
-                            test \
-                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                            method=build \
+                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
+                        make NIX_PATH=$HOME/$LOGNAME test method=build \
+                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
                             system={}".format(i)
                     ]
             )
@@ -131,11 +126,9 @@ in {
         for i in [ "x", "wry", "vbob", "wbob", "shoney" ]:
             addShell(f,name="build-{}".format(i),env=env_makefu,
                 command=nixshell + \
-                    ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-                        make \
-                            test \
-                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                            method=build \
+                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
+                        make NIX_PATH=$HOME/$LOGNAME test method=build \
+                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
                             system={}".format(i)
                     ]
             )
@@ -143,11 +136,9 @@ in {
         for i in [ "hiawatha", "onondaga" ]:
             addShell(f,name="build-{}".format(i),env=env_nin,
                 command=nixshell + \
-                    ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-                        make \
-                            test \
-                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                            method=build \
+                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
+                        make NIX_PATH=$HOME/$LOGNAME test method=build \
+                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
                             system={}".format(i)
                     ]
             )
@@ -211,7 +202,7 @@ in {
         ]:
           addShell(f,name="build-{}".format(i),env=env_lass,
                   command=nixshell + \
-                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+                      ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
                         make system=prism pkgs.{}".format(i)])
 
         bu.append(util.BuilderConfig(name="build-pkgs",
