@@ -92,7 +92,6 @@ in {
       nixshell = [
         "nix-shell",
         "-I", "stockholm=.",
-        "-I", "nixpkgs=/var/src/nixpkgs",
         "-p"
       ] + deps + [ "--run" ]
 
@@ -107,11 +106,9 @@ in {
         for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" ]:
             addShell(f,name="build-{}".format(i),env=env_shared,
                 command=nixshell + \
-                    ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-                        make \
-                            test \
-                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                            method=build \
+                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
+                        make NIX_PATH=$HOME/$LOGNAME test method=build \
+                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
                             system={}".format(i)
                     ]
             )
@@ -119,11 +116,9 @@ in {
         for i in [ "mors", "uriel", "shodan", "helios", "icarus", "cloudkrebs", "echelon", "dishfire", "prism" ]:
             addShell(f,name="build-{}".format(i),env=env_lass,
                 command=nixshell + \
-                    ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-                        make \
-                            test \
-                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                            method=build \
+                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
+                        make NIX_PATH=$HOME/$LOGNAME test method=build \
+                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
                             system={}".format(i)
                     ]
             )
@@ -131,11 +126,9 @@ in {
         for i in [ "x", "wry", "vbob", "wbob", "shoney" ]:
             addShell(f,name="build-{}".format(i),env=env_makefu,
                 command=nixshell + \
-                    ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-                        make \
-                            test \
-                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                            method=build \
+                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
+                        make NIX_PATH=$HOME/$LOGNAME test method=build \
+                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
                             system={}".format(i)
                     ]
             )
@@ -143,11 +136,9 @@ in {
         for i in [ "hiawatha", "onondaga" ]:
             addShell(f,name="build-{}".format(i),env=env_nin,
                 command=nixshell + \
-                    ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
-                        make \
-                            test \
-                            target=$LOGNAME@${config.krebs.build.host.name}/tmp/testbuild/$LOGNAME \
-                            method=build \
+                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
+                        make NIX_PATH=$HOME/$LOGNAME test method=build \
+                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
                             system={}".format(i)
                     ]
             )
@@ -211,7 +202,7 @@ in {
         ]:
           addShell(f,name="build-{}".format(i),env=env_lass,
                   command=nixshell + \
-                      ["mkdir -p /tmp/testbuild/$LOGNAME && touch /tmp/testbuild/$LOGNAME/.populate; \
+                      ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
                         make system=prism pkgs.{}".format(i)])
 
         bu.append(util.BuilderConfig(name="build-pkgs",
@@ -255,7 +246,7 @@ in {
   options.lass.build-ssh-privkey = mkOption {
     type = types.secret-file;
     default = {
-      path = "${config.users.users.buildbotworker.home}/ssh.privkey";
+      path = "${config.users.users.buildbotworker.home}/.ssh/id_rsa";
       owner = { inherit (config.users.users.buildbotworker ) name uid;};
       source-path = toString <secrets> + "/build.ssh.key";
     };
@@ -263,16 +254,10 @@ in {
   config.krebs.secret.files = {
     build-ssh-privkey = config.lass.build-ssh-privkey;
   };
-  config.users.users = {
-    build = {
-      name = "build";
-      uid = genid "build";
-      home = "/home/build";
-      useDefaultShell = true;
-      createHome = true;
-      openssh.authorizedKeys.keys = [
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiV0Xn60aVLHC/jGJknlrcxSvKd/MVeh2tjBpxSBT3II9XQGZhID2Gdh84eAtoWyxGVFQx96zCHSuc7tfE2YP2LhXnwaxHTeDc8nlMsdww53lRkxihZIEV7QHc/3LRcFMkFyxdszeUfhWz8PbJGL2GYT+s6CqoPwwa68zF33U1wrMOAPsf/NdpSN4alsqmjFc2STBjnOd9dXNQn1VEJQqGLG3kR3WkCuwMcTLS5eu0KLwG4i89Twjy+TGp2QsF5K6pNE+ZepwaycRgfYzGcPTn5d6YQXBgcKgHMoSJsK8wqpr0+eFPCDiEA3HDnf76E4mX4t6/9QkMXCLmvs0IO/WP lass@mors"
-      ];
-    };
+  config.users.users.buildbotworker = {
+    useDefaultShell = true;
+    openssh.authorizedKeys.keys = [
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiV0Xn60aVLHC/jGJknlrcxSvKd/MVeh2tjBpxSBT3II9XQGZhID2Gdh84eAtoWyxGVFQx96zCHSuc7tfE2YP2LhXnwaxHTeDc8nlMsdww53lRkxihZIEV7QHc/3LRcFMkFyxdszeUfhWz8PbJGL2GYT+s6CqoPwwa68zF33U1wrMOAPsf/NdpSN4alsqmjFc2STBjnOd9dXNQn1VEJQqGLG3kR3WkCuwMcTLS5eu0KLwG4i89Twjy+TGp2QsF5K6pNE+ZepwaycRgfYzGcPTn5d6YQXBgcKgHMoSJsK8wqpr0+eFPCDiEA3HDnf76E4mX4t6/9QkMXCLmvs0IO/WP"
+    ];
   };
 }
