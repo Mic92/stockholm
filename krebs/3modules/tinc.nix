@@ -17,6 +17,7 @@ let
       in {
 
         enable = mkEnableOption "krebs.tinc.${netname}" // { default = true; };
+        enableLegacy = mkEnableOption "/etc/tinc/${netname}";
 
         confDir = mkOption {
           type = types.package;
@@ -193,6 +194,12 @@ let
         inherit (cfg.user) home name uid;
         createHome = true;
       }
+    ) config.krebs.tinc;
+
+    environment.etc = mapAttrs' (netname: cfg:
+      nameValuePair "tinc/${netname}" (mkIf cfg.enableLegacy {
+        source = cfg.confDir;
+      })
     ) config.krebs.tinc;
 
     systemd.services = mapAttrs (netname: cfg:
