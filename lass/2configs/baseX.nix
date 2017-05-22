@@ -10,6 +10,7 @@ in {
     ./copyq.nix
     ./xresources.nix
     ./livestream.nix
+    ./dns-stuff.nix
     {
       hardware.pulseaudio = {
         enable = true;
