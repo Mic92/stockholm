@@ -33,6 +33,7 @@ in {
   time.timeZone = "Europe/Berlin";
 
   programs.ssh.startAgent = false;
+  services.openssh.forwardX11 = true;
 
   services.printing = {
     enable = true;
