@@ -25,8 +25,8 @@ in {
   imports = [
     ./sqlBackup.nix
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
-    (servePage [ "karlaskop.de" "www.karlaskop.de" ])
-    (servePage [ "makeup.apanowicz.de" "www.makeup.apanowicz.de" ])
+    (servePage [ "karlaskop.de" ])
+    (servePage [ "makeup.apanowicz.de" ])
     (servePage [ "pixelpocket.de" ])
     (serveOwncloud [ "o.ubikmedia.de" ])
     (serveWordpress [
