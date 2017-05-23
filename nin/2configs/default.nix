@@ -59,7 +59,7 @@ with import <stockholm/lib>;
 
   krebs = {
     enable = true;
-    search-domain = "retiolum";
+    search-domain = "r";
     build = {
       user = config.krebs.users.nin;
       source = let inherit (config.krebs.build) host; in {
