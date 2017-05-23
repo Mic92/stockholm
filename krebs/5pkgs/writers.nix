@@ -1,7 +1,6 @@
-{ pkgs, ... }:
+pkgs: oldpkgs:
 with import <stockholm/lib>;
-{
-  nixpkgs.config.packageOverrides = _: {
+  {
 
     # Combine a list of derivations using symlinks.  Paths in later derivations
     # take precedence over earlier ones.
@@ -323,5 +322,4 @@ with import <stockholm/lib>;
       };
 
     writeSed = pkgs.makeScriptWriter "${pkgs.gnused}/bin/sed -f";
-  };
-}
+  }
