@@ -12,23 +12,10 @@ with import <stockholm/lib>;
       then trace "Upstream `${upstream.name}' gets overridden by `${override.name}'." override
       else override;
   in {}
+  // import ./haskell pkgs oldpkgs
   // import ./simple pkgs oldpkgs
   // import ./writers.nix pkgs oldpkgs
   // {
-    haskellPackages = oldpkgs.haskellPackages.override {
-      overrides = self: super:
-        mapAttrs (name: path: self.callPackage path {})
-          (mapAttrs'
-            (name: type:
-              if hasSuffix ".nix" name
-                then {
-                  name = removeSuffix ".nix" name;
-                  value = ./haskell-overrides + "/${name}";
-                }
-                else null)
-            (builtins.readDir ./haskell-overrides));
-    };
-
     ReaktorPlugins = callPackage ./simple/Reaktor/plugins.nix {};
 
     buildbot-full = callPackage ./simple/buildbot {
