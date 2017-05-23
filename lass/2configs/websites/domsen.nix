@@ -28,6 +28,7 @@ in {
     (servePage [ "karlaskop.de" ])
     (servePage [ "makeup.apanowicz.de" ])
     (servePage [ "pixelpocket.de" ])
+    (servePage [ "habsys.de" "habsys.eu" ])
     (serveOwncloud [ "o.ubikmedia.de" ])
     (serveWordpress [
       "ubikmedia.de"
