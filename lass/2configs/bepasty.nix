@@ -35,7 +35,7 @@ in {
         forceSSL = true;
         enableACME = true;
       };
-      defaultPermissions = "read";
+      defaultPermissions = "read,create";
       secretKey = secKey;
     });
   };
