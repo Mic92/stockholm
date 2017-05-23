@@ -3,16 +3,19 @@
 }:
 mkDerivation {
   pname = "kirk";
-  version = "1.0.0";
+  version = "1.0.1";
   src = fetchgit {
     url = "http://cgit.krebsco.de/kirk";
-    sha256 = "0w4drg2lyyw45abfn3g55zd6m7pl7yqxql5rpyy6qqdbvnyak94w";
-    rev = "c78f3c62c0ba76465e39d1570073f867aa2d4240";
+    sha256 = "1acsmmc485c54axpy9bd0320j18hs261vl1vdxns4n04sxzqd7k0";
+    rev = "cdf3cb373af8f9b03a9487a63eb32e0226913589";
   };
-  isLibrary = false;
+  isLibrary = true;
   isExecutable = true;
+  libraryHaskellDepends = [
+    base bytestring network optparse-applicative text
+  ];
   executableHaskellDepends = [
-    async base bytestring network optparse-applicative text
+    async base network optparse-applicative text
   ];
   license = stdenv.lib.licenses.mit;
 }
