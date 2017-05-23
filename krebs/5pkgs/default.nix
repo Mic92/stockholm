@@ -12,10 +12,8 @@ with import <stockholm/lib>;
       then trace "Upstream `${upstream.name}' gets overridden by `${override.name}'." override
       else override;
   in {}
+  // import ./simple pkgs oldpkgs
   // import ./writers.nix pkgs oldpkgs
-  // mapAttrs (_: flip callPackage {})
-              (filterAttrs (_: dir: pathExists (dir + "/default.nix"))
-                           (subdirsOf ./.))
   // {
     empty = pkgs.runCommand "empty-1.0.0" {} "mkdir $out";
 
@@ -33,13 +31,12 @@ with import <stockholm/lib>;
             (builtins.readDir ./haskell-overrides));
     };
 
-    ReaktorPlugins = callPackage ./Reaktor/plugins.nix {};
+    ReaktorPlugins = callPackage ./simple/Reaktor/plugins.nix {};
 
-    buildbot = callPackage ./buildbot {};
-    buildbot-full = callPackage ./buildbot {
+    buildbot-full = callPackage ./simple/buildbot {
       plugins = with pkgs.buildbot-plugins; [ www console-view waterfall-view ];
     };
-    buildbot-worker = callPackage ./buildbot/worker.nix {};
+    buildbot-worker = callPackage ./simple/buildbot/worker.nix {};
 
     # https://github.com/proot-me/PRoot/issues/106
     proot = pkgs.writeDashBin "proot" ''
