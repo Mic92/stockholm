@@ -1,11 +1,6 @@
-{ config, lib, pkgs, ... }@args:
+pkgs: oldpkgs:
 with import <stockholm/lib>;
-{
-  imports = [
-    ./writers.nix
-  ];
-  nixpkgs.config.packageOverrides = oldpkgs: let
-
+  let
     # This callPackage will try to detect obsolete overrides.
     callPackage = path: args: let
       override = pkgs.callPackage path args;
@@ -16,8 +11,8 @@ with import <stockholm/lib>;
           compareVersions upstream.name override.name != -1
       then trace "Upstream `${upstream.name}' gets overridden by `${override.name}'." override
       else override;
-
   in {}
+  // import ./writers.nix pkgs oldpkgs
   // mapAttrs (_: flip callPackage {})
               (filterAttrs (_: dir: pathExists (dir + "/default.nix"))
                            (subdirsOf ./.))
@@ -60,5 +55,4 @@ with import <stockholm/lib>;
     test = {
       infest-cac-centos7 = callPackage ./test/infest-cac-centos7 {};
     };
-  };
-}
+  }

@@ -3,6 +3,6 @@ with import <stockholm/lib>;
 {
   imports = [
     ./3modules
-    ./5pkgs
   ];
+  nixpkgs.config.packageOverrides = import ./5pkgs pkgs;
 }
