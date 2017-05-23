@@ -31,6 +31,13 @@ rec {
         default = null;
       };
 
+      managed = mkOption {
+        description = ''
+          If true, then the host's configuration is defined in stockholm.
+        '';
+        type = bool;
+      };
+
       owner = mkOption {
         type = user;
       };

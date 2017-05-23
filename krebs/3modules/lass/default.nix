@@ -3,7 +3,10 @@
 with import <stockholm/lib>;
 
 {
-  hosts = mapAttrs (_: setAttr "owner" config.krebs.users.lass) {
+  hosts = mapAttrs (_: recursiveUpdate {
+    owner = config.krebs.users.lass;
+    managed = true;
+  }) {
     dishfire = {
       cores = 4;
       nets = rec {
@@ -124,6 +127,7 @@ with import <stockholm/lib>;
           ssh.port = 2223;
         };
       };
+      managed = false;
     };
     cloudkrebs = {
       cores = 1;
@@ -300,6 +304,7 @@ with import <stockholm/lib>;
     };
     iso = {
       cores = 1;
+      managed = false;
     };
     sokrateslaptop = {
       nets = {
@@ -321,6 +326,7 @@ with import <stockholm/lib>;
           '';
         };
       };
+      managed = false;
     };
   };
   users = {
