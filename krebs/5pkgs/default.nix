@@ -15,8 +15,6 @@ with import <stockholm/lib>;
   // import ./simple pkgs oldpkgs
   // import ./writers.nix pkgs oldpkgs
   // {
-    empty = pkgs.runCommand "empty-1.0.0" {} "mkdir $out";
-
     haskellPackages = oldpkgs.haskellPackages.override {
       overrides = self: super:
         mapAttrs (name: path: self.callPackage path {})
