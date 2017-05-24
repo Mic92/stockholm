@@ -1,29 +1,33 @@
-pkgs: oldpkgs:
 with import <stockholm/lib>;
 
-  foldl' mergeAttrs {}
-    (map
-      (name: import (./. + "/${name}") pkgs oldpkgs)
-      (filter
-        (name: name != "default.nix" && !hasPrefix "." name)
-        (attrNames (readDir ./.))))
+self: super:
 
-  // {
-    ReaktorPlugins = pkgs.callPackage ./simple/Reaktor/plugins.nix {};
+# Import files and subdirectories like they are overlays.
+foldl' mergeAttrs {}
+  (map
+    (name: import (./. + "/${name}") self super)
+    (filter
+      (name: name != "default.nix" && !hasPrefix "." name)
+      (attrNames (readDir ./.))))
 
-    buildbot-full = pkgs.callPackage ./simple/buildbot {
-      plugins = with pkgs.buildbot-plugins; [ www console-view waterfall-view ];
-    };
-    buildbot-worker = pkgs.callPackage ./simple/buildbot/worker.nix {};
+//
 
-    # https://github.com/proot-me/PRoot/issues/106
-    proot = pkgs.writeDashBin "proot" ''
-      export PROOT_NO_SECCOMP=1
-      exec ${oldpkgs.proot}/bin/proot "$@"
-    '';
+{
+  ReaktorPlugins = self.callPackage ./simple/Reaktor/plugins.nix {};
 
-    # XXX symlinkJoin changed arguments somewhere around nixpkgs d541e0d
-    symlinkJoin = { name, paths, ... }@args: let
-      x = oldpkgs.symlinkJoin args;
-    in if typeOf x != "lambda" then x else oldpkgs.symlinkJoin name paths;
-  }
+  buildbot-full = self.callPackage ./simple/buildbot {
+    plugins = with self.buildbot-plugins; [ www console-view waterfall-view ];
+  };
+  buildbot-worker = self.callPackage ./simple/buildbot/worker.nix {};
+
+  # https://github.com/proot-me/PRoot/issues/106
+  proot = self.writeDashBin "proot" ''
+    export PROOT_NO_SECCOMP=1
+    exec ${super.proot}/bin/proot "$@"
+  '';
+
+  # XXX symlinkJoin changed arguments somewhere around nixpkgs d541e0d
+  symlinkJoin = { name, paths, ... }@args: let
+    x = super.symlinkJoin args;
+  in if typeOf x != "lambda" then x else super.symlinkJoin name paths;
+}
