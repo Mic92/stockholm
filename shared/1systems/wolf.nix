@@ -19,6 +19,8 @@ in
   # use your own binary cache, fallback use cache.nixos.org (which is used by
   # apt-cacher-ng in first place)
 
+  services.influxdb.enable = true;
+
   # local discovery in shackspace
   nixpkgs.config.packageOverrides = pkgs: { tinc = pkgs.tinc_pre; };
   krebs.tinc.retiolum.extraConfig = "TCPOnly = yes";
@@ -46,6 +48,7 @@ in
 
   networking = {
     firewall.enable = false;
+    firewall.allowedTCPPorts = [ 8088 8086 8083 ];
     interfaces.enp0s3.ip4 = [{
       address = shack-ip;
       prefixLength = 20;
