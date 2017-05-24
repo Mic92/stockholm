@@ -1,10 +1,13 @@
 pkgs: oldpkgs:
 with import <stockholm/lib>;
-  {}
-  // import ./haskell pkgs oldpkgs
-  // import ./simple pkgs oldpkgs
-  // import ./test pkgs oldpkgs
-  // import ./writers.nix pkgs oldpkgs
+
+  foldl' mergeAttrs {}
+    (map
+      (name: import (./. + "/${name}") pkgs oldpkgs)
+      (filter
+        (name: name != "default.nix" && !hasPrefix "." name)
+        (attrNames (readDir ./.))))
+
   // {
     ReaktorPlugins = pkgs.callPackage ./simple/Reaktor/plugins.nix {};
 
