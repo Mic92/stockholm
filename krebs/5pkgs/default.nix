@@ -3,6 +3,7 @@ with import <stockholm/lib>;
   {}
   // import ./haskell pkgs oldpkgs
   // import ./simple pkgs oldpkgs
+  // import ./test pkgs oldpkgs
   // import ./writers.nix pkgs oldpkgs
   // {
     ReaktorPlugins = pkgs.callPackage ./simple/Reaktor/plugins.nix {};
@@ -22,8 +23,4 @@ with import <stockholm/lib>;
     symlinkJoin = { name, paths, ... }@args: let
       x = oldpkgs.symlinkJoin args;
     in if typeOf x != "lambda" then x else oldpkgs.symlinkJoin name paths;
-
-    test = {
-      infest-cac-centos7 = pkgs.callPackage ./test/infest-cac-centos7 {};
-    };
   }
