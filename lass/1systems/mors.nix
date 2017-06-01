@@ -32,14 +32,11 @@ with import <stockholm/lib>;
         { predicate = "-p tcp --dport 11100"; target = "ACCEPT"; }
       ];
     }
-    #{
-    #  services.elasticsearch = {
-    #    enable = true;
-    #    plugins = [
-    #    #  pkgs.elasticsearchPlugins.elasticsearch_kopf
-    #    ];
-    #  };
-    #}
+    {
+      services.elasticsearch = {
+        enable = true;
+      };
+    }
     {
       #zalando project
       services.postgresql = {

@@ -40,8 +40,6 @@ in {
 
     (serveWordpress [ "eastuttgart.de" "www.eastuttgart.de" ])
 
-    (servePage [ "habsys.de" "www.habsys.de" "habsys.eu" "www.habsys.eu" ])
-
     (serveWordpress [ "goldbarrendiebstahl.radical-dreamers.de" ])
   ];
 

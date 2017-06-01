@@ -16,7 +16,7 @@ with import <stockholm/lib>;
       # /dev/pts is empty except for 1 file
       # my life sucks
       nixpkgs.config.packageOverrides = super: {
-        irc-announce = super.callPackage <stockholm/krebs/5pkgs/irc-announce> {
+        irc-announce = super.callPackage <stockholm/krebs/5pkgs/simple/irc-announce> {
           pkgs = pkgs // { coreutils = pkgs.concat "coreutils-hack" [
             pkgs.coreutils
             (pkgs.writeDashBin "tee" ''

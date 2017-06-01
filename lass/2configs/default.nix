@@ -63,15 +63,6 @@ with import <stockholm/lib>;
         pkgs.pythonPackages.python
       ];
     }
-    {
-      services.dnscrypt-proxy = {
-        enable = true;
-        resolverName = "cs-de";
-      };
-      networking.extraResolvconfConf = ''
-        name_servers='127.0.0.1'
-      '';
-    }
   ];
 
   networking.hostName = config.krebs.build.host.name;
