@@ -7,12 +7,12 @@ let
     src = pkgs.fetchgit {
       url = "https://github.com/shackspace/muell_caller/";
       rev = "bbd4009";
-      sha256 = "06xaa1j6sfyvvdxg0366fcslhn478anqh4m5hljyf0z29knvz7pg";
+      sha256 = "1bfnfl2vdh0p5wzyz5p48qh04vvsg2445avg86fzhzragx25fqv0";
     };
     buildInputs = [
       (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
         docopt
-        requests
+        requests2
         paramiko
         python
       ]))
@@ -23,12 +23,12 @@ let
   };
   cfg = "${toString <secrets>}/tell.json";
 in {
-  systemd.services.mqtt_sub  = {
+  systemd.services.call_muell = {
     description = "call muell";
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       User = "nobody"; # TODO separate user
-      ExecStartPre = writeDash "call-muell-pre" ''
+      ExecStartPre = pkgs.writeDash "call-muell-pre" ''
         cp ${cfg} /tmp/tell.json
         chown nobody /tmp/tell.json
       '';
