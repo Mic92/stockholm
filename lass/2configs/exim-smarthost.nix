@@ -16,7 +16,6 @@ with import <stockholm/lib>;
     relay_from_hosts = map (host: host.nets.retiolum.ip6.addr) [
       config.krebs.hosts.mors
       config.krebs.hosts.uriel
-      config.krebs.hosts.helios
     ];
     internet-aliases = with config.krebs.users; [
       { from = "postmaster@lassul.us"; to = lass.mail; } # RFC 822

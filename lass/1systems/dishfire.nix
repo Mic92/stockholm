@@ -70,7 +70,6 @@
         relay_from_hosts = map (host: host.nets.retiolum.ip4.addr) [
           config.krebs.hosts.mors
           config.krebs.hosts.uriel
-          config.krebs.hosts.helios
         ];
         system-aliases = [
           { from = "mailer-daemon"; to = "postmaster"; }
