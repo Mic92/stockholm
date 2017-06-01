@@ -32,7 +32,7 @@ in {
       ../2configs/tools/sec.nix
 
       # services
-      ../2configs/gum-share.nix
+      ../2configs/share/gum.nix
       ../2configs/sabnzbd.nix
       ../2configs/torrent.nix
       ../2configs/iodined.nix
@@ -48,14 +48,25 @@ in {
       ../2configs/deployment/mycube.connector.one.nix
       ../2configs/deployment/graphs.nix
       ../2configs/deployment/owncloud.nix
-      ../2configs/deployment/wiki-irc.nix
+      ../2configs/deployment/wiki-irc-bot
       ../2configs/deployment/boot-euer.nix
+      ../2configs/deployment/hound
+      {
+        services.taskserver.enable = true;
+        services.taskserver.fqdn = config.krebs.build.host.name;
+        services.taskserver.listenHost = "::";
+        services.taskserver.organisations.home.users = [ "makefu" ];
+        networking.firewall.extraCommands = ''
+          iptables -A INPUT -i retiolum -p tcp --dport 53589 -j ACCEPT
+          ip6tables -A INPUT -i retiolum -p tcp --dport 53589 -j ACCEPT
+        '';
+      }
       # ../2configs/ipfs.nix
       ../2configs/syncthing.nix
 
       # ../2configs/opentracker.nix
-      ../2configs/logging/central-stats-client.nix
-      # ../2configs/logging/central-logging-client.nix
+      ../2configs/stats/client.nix
+      # ../2configs/logging/client.nix
 
   ];
   makefu.dl-dir = "/var/download";
@@ -78,7 +89,6 @@ in {
     ];
   };
 
-  makefu.taskserver.enable = true;
 
 
   # access
@@ -122,6 +132,8 @@ in {
           21031
           # taskserver
           53589
+          # temp vnc
+          18001
         ];
         allowedUDPPorts = [
           # tinc
