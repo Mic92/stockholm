@@ -459,6 +459,7 @@ with import <stockholm/lib>;
           share.euer        IN A      ${nets.internet.ip4.addr}
           mattermost.euer   IN A      ${nets.internet.ip4.addr}
           gum               IN A      ${nets.internet.ip4.addr}
+          wikisearch        IN A      ${nets.internet.ip4.addr}
           pigstarter        IN A      ${nets.internet.ip4.addr}
           cgit.euer         IN A      ${nets.internet.ip4.addr}
           euer              IN A      ${nets.internet.ip4.addr}
@@ -490,6 +491,7 @@ with import <stockholm/lib>;
             "tracker.makefu.r"
 
             "graph.r"
+            "search.makefu.r"
             "wiki.makefu.r"
             "wiki.gum.r"
             "blog.makefu.r"
