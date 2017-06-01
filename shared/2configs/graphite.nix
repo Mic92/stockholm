@@ -22,11 +22,49 @@ with import <stockholm/lib>;
         MAX_CACHE_SIZE = inf
         MAX_UPDATES_PER_SECOND = 1
         MAX_CREATES_PER_MINUTE = 50
+        MAX_UPDATES_PER_SECOND_ONSHUTDOWN = 9001
         '';
       storageSchemas = ''
         [carbon]
         pattern = ^carbon\.
         retentions = 60:90d
+
+
+        [radiation_sensor]
+        pattern = ^sensors\.radiation\.
+        retentions = 1m:30d,5m:180d,10m:3y
+
+        [motion_sensors]
+        pattern = ^sensors\.motion\.
+        retentions = 1s:1h,60s:30d,300s:1y
+
+        [motion_sensors]
+        pattern = ^retiolum\.
+        retentions = 10s:1h,30s:30d,300s:1y
+
+        [homeassistant]
+        pattern = ^homeassistant\.
+        retentions = 10s:24h,30s:30d,300s:1y,3600s:5y
+
+        [ara]
+        pattern = ^ara\.
+        retentions = 60s:30d,300s:1y
+
+        [openweathermap]
+        pattern = ^weather\.openweathermap
+        retentions = 30m:30d,1h:5y
+
+        [stadtklima]
+        pattern = ^weather\.stadtklima-stuttgart
+        retentions = 15m:30d,30m:5y
+
+        [sensebox]
+        pattern = ^weather\.sensebox
+        retentions = 1m:90d,30m:5y
+
+        [elchos]
+        pattern = ^elchos\.
+        retentions = 10s:14d,1m:90d,10m:5y
 
         [default]
         pattern = .*
