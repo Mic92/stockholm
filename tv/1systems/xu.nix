@@ -9,6 +9,7 @@ with import <stockholm/lib>;
     ../.
     ../2configs/hw/x220.nix
     ../2configs/exim-retiolum.nix
+    ../2configs/gitconfig.nix
     ../2configs/gitrepos.nix
     ../2configs/mail-client.nix
     ../2configs/man.nix
