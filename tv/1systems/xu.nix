@@ -46,6 +46,18 @@ with import <stockholm/lib>;
         texlive.combined.scheme-full
         tmux
 
+        (pkgs.writeDashBin "krebszones" ''
+          set -efu
+          export OVH_ZONE_CONFIG=$HOME/.secrets/krebs/ovh-zone.conf
+          case $* in
+            import)
+              set -- import /etc/zones/krebsco.de krebsco.de
+              echo "+ krebszones $*" >&2
+              ;;
+          esac
+          exec ${pkgs.krebszones}/bin/ovh-zone "$@"
+        '')
+
         #ack
         #apache-httpd
         #ascii
