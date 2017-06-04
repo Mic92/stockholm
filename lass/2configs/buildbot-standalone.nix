@@ -113,7 +113,7 @@ in {
                     ]
             )
 
-        for i in [ "mors", "uriel", "shodan", "helios", "icarus", "cloudkrebs", "echelon", "dishfire", "prism" ]:
+        for i in [ "mors", "uriel", "shodan", "icarus", "cloudkrebs", "echelon", "dishfire", "prism" ]:
             addShell(f,name="build-{}".format(i),env=env_lass,
                 command=nixshell + \
                     ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \

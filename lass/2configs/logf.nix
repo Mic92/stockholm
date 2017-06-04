@@ -8,7 +8,6 @@ let
     shodan = "51";
     icarus = "53";
     echelon = "197";
-    helios = "199";
     cloudkrebs = "119";
   };
 in {

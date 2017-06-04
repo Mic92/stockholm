@@ -6,18 +6,26 @@ in
   imports = [
     ../.
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
-    ../2configs/cgit-mirror.nix
     ../2configs/collectd-base.nix
+    ../2configs/shack/share.nix
+    ../2configs/central-stats-client.nix
+    ../2configs/save-diskspace.nix
+
+    ../2configs/cgit-mirror.nix
     ../2configs/graphite.nix
     ../2configs/repo-sync.nix
-    ../2configs/shack-drivedroid.nix
-    ../2configs/shack-nix-cacher.nix
     ../2configs/shared-buildbot.nix
-    ../2configs/share-shack.nix
-    ../2configs/central-stats-client.nix
+    ../2configs/shack/drivedroid.nix
+    ../2configs/shack/nix-cacher.nix
+
+    ../2configs/shack/mqtt_sub.nix
+    ../2configs/shack/muell_caller.nix
+
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
   # apt-cacher-ng in first place)
+
+  services.influxdb.enable = true;
 
   # local discovery in shackspace
   nixpkgs.config.packageOverrides = pkgs: { tinc = pkgs.tinc_pre; };
@@ -46,6 +54,7 @@ in
 
   networking = {
     firewall.enable = false;
+    firewall.allowedTCPPorts = [ 8088 8086 8083 ];
     interfaces.enp0s3.ip4 = [{
       address = shack-ip;
       prefixLength = 20;
@@ -83,4 +92,5 @@ in
   ];
 
   time.timeZone = "Europe/Berlin";
+  sound.enable = false;
 }
