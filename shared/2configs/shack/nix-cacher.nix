@@ -4,6 +4,9 @@ let
   cfg = config.krebs.apt-cacher-ng;
 in
 {
+  imports = [
+    ./bincache.nix
+  ];
   krebs.apt-cacher-ng = {
     enable = true;
     port = 3142;
