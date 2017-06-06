@@ -9,7 +9,8 @@ with import <stockholm/lib>;
     ../.
     ../2configs/hw/x220.nix
     ../2configs/exim-retiolum.nix
-    ../2configs/git.nix
+    ../2configs/gitconfig.nix
+    ../2configs/gitrepos.nix
     ../2configs/mail-client.nix
     ../2configs/man.nix
     ../2configs/nginx/public_html.nix
@@ -45,6 +46,18 @@ with import <stockholm/lib>;
         qrencode
         texlive.combined.scheme-full
         tmux
+
+        (pkgs.writeDashBin "krebszones" ''
+          set -efu
+          export OVH_ZONE_CONFIG=$HOME/.secrets/krebs/ovh-zone.conf
+          case $* in
+            import)
+              set -- import /etc/zones/krebsco.de krebsco.de
+              echo "+ krebszones $*" >&2
+              ;;
+          esac
+          exec ${pkgs.krebszones}/bin/ovh-zone "$@"
+        '')
 
         #ack
         #apache-httpd

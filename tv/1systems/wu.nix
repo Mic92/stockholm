@@ -9,7 +9,7 @@ with import <stockholm/lib>;
     ../.
     ../2configs/hw/w110er.nix
     ../2configs/exim-retiolum.nix
-    ../2configs/git.nix
+    ../2configs/gitrepos.nix
     ../2configs/im.nix
     ../2configs/mail-client.nix
     ../2configs/man.nix

@@ -15,7 +15,6 @@ with import <stockholm/lib>;
       openssh.authorizedKeys.keys = with config.krebs.users; [
         lass.pubkey
         lass-shodan.pubkey
-        lass-helios.pubkey
         lass-icarus.pubkey
         makefu.pubkey
       ];

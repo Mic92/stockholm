@@ -107,29 +107,5 @@ with import <stockholm/lib>;
       dst = { host = config.krebs.hosts.shodan; path = "/bku/mors-home"; };
       startAt = "05:00";
     };
-    dishfire-http-helios = {
-      method = "pull";
-      src = { host = config.krebs.hosts.dishfire; path = "/srv/http"; };
-      dst = { host = config.krebs.hosts.helios;   path = "/bku/dishfire-http"; };
-      startAt = "12:00";
-    };
-    dishfire-sql-helios = {
-      method = "pull";
-      src = { host = config.krebs.hosts.dishfire; path = "/bku/sql_dumps"; };
-      dst = { host = config.krebs.hosts.helios;   path = "/bku/dishfire-sql"; };
-      startAt = "12:15";
-    };
-    prism-sql-helios = {
-      method = "pull";
-      src = { host = config.krebs.hosts.prism;  path = "/bku/sql_dumps"; };
-      dst = { host = config.krebs.hosts.helios; path = "/bku/prism-sql_dumps"; };
-      startAt = "12:30";
-    };
-    prism-http-helios = {
-      method = "pull";
-      src = { host = config.krebs.hosts.prism;  path = "/srv/http"; };
-      dst = { host = config.krebs.hosts.helios; path = "/bku/prism-http"; };
-      startAt = "12:45";
-    };
   };
 }

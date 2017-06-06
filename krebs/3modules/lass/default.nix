@@ -224,32 +224,6 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINAMPlIG+6u75GJ3kvsPF6OoIZsU+u8ZQ+rdviv5fNMD";
     };
-    helios = {
-      cores = 2;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.0.3";
-          ip6.addr = "42:0:0:0:0:0:0:7105";
-          aliases = [
-            "helios.r"
-            "cgit.helios.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEA9SItL2mhQpTl95gjSWRstrDajUnI5YbrVCuaDKfw9gRwMyPNiO/y
-            Xwv/w4Ri8NCJZLZGkj2vG3X0EfJFBEPTJPTCbF9fP7PqqVs38BD41txLp+NrFxEq
-            5fmFk65/eg8ujrNQoOSUGmky/BKqQhWjvxdAWuwjN933wJCcNCxyaUwljHLYEK/I
-            oIJX+spnFmPwmhW9hsOj8K06eHixT13+0W48GG/ZNcV3x5vWxcKUvZ4Qtzz2iMNB
-            hud5kae7xMUfFAzCeKF/zsjuyt2d/xQg1WgR8MXGNgYhNJFSXz94r/bivNO6H4vP
-            Pfjndnh8cD46ADo8woS1nQ19WId+sMbipwIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      secure = true;
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDWlIxkX41V55Yker8n4gErx2xcKpXFNKthhbP3+bTJ7";
-    };
     shodan = {
       cores = 2;
       nets = {
@@ -338,10 +312,6 @@ with import <stockholm/lib>;
     lass-uriel = {
       mail = "lass@uriel.r";
       pubkey = builtins.readFile ./ssh/uriel.rsa;
-    };
-    lass-helios = {
-      mail = "lass@helios.r";
-      pubkey = builtins.readFile ./ssh/helios.rsa;
     };
     lass-shodan = {
       mail = "lass@shodan.r";
