@@ -6,8 +6,8 @@ let
     name = "mqtt2graphite-2017-05-29";
     src = pkgs.fetchgit {
       url = "https://github.com/shackspace/mqtt2graphite/";
-      rev = "8c060e6";
-      sha256 = "06x7a1j6sfyvvdxg0366fcslhn478anqh4m5hljyf0z29knvz7pg";
+      rev = "117179d";
+      sha256 = "1334jbbzlqizyp7zcn4hdswhhrnkj1p4p435n5nph82lzffrsi44";
     };
     buildInputs = [
       (pkgs.python35.withPackages (pythonPackages: with pythonPackages; [
