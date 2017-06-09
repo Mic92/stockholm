@@ -26,11 +26,11 @@ let
     };
   };
   pkg = pkgs.stdenv.mkDerivation {
-    name = "worlddomination-2017-06-01";
+    name = "worlddomination-2017-06-08";
     src = pkgs.fetchgit {
       url = "https://github.com/shackspace/worlddomination/";
-      rev = "e6a2df4";
-      sha256 = "1zwv18v47lzj8yslip876n46f50822ycx0d6zbhp72h8hw0ar46f";
+      rev = "39344a4";
+      sha256 = "07alvdgz1vyww6nlay4qx4l7hnfqw0sqcdd9syhsjhqv3ciigwcp";
     };
     buildInputs = [
       (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
