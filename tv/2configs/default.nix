@@ -27,7 +27,7 @@ with import <stockholm/lib>;
     <secrets>
     ./audit.nix
     ./backup.nix
-    ./bash.nix
+    ./bash
     ./htop.nix
     ./nginx
     ./ssh.nix

@@ -1,4 +1,4 @@
-{ bash, coreutils, gawk, nix, makeWrapper, stdenv }:
+{ bash, coreutils, gawk, makeWrapper, nix, openssh, stdenv }:
 
 stdenv.mkDerivation {
   name = "whatsupnix";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cat - ${./whatsupnix.bash} > $out/bin/whatsupnix <<\EOF
     #! ${bash}/bin/bash
-    export PATH=${stdenv.lib.makeBinPath [ coreutils gawk nix ]}
+    export PATH=${stdenv.lib.makeBinPath [ coreutils gawk nix openssh ]}
     EOF
     chmod +x $out/bin/whatsupnix
   '';
