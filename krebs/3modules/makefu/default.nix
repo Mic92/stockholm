@@ -782,6 +782,29 @@ with import <stockholm/lib>;
       };
     };
 
+    horisa = rec {
+      cores = 2;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.226.213";
+          ip6.addr = "42:432e:2379:0cd2:8486:f3b5:335a:5d83";
+          aliases = [
+            "horisa.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA1hhBqCku98gimv0yXr6DFwE2HUemigyqX8o7IsPOW5XT/K8o+V40
+            Oxk3r0+c7IYREvug/raxoullf5TMJFzTzqzX4njgsiTs25V8D7hVT4jcRKTcXmBn
+            XpjtD+tIeDW1E6dIMMDbxKCyfd/qaeg83G7gPobeFYr4JNqQLXrnotlWMO9S13UT
+            +EgSP2pixv/dGIqX8WRg23YumO8jZKbso/sKKFMIEOJvnh/5EcWb24+q2sDRCitP
+            sWJ5j/9M1Naec/Zl27Ac2HyMWRk39F9Oo+iSbc47QvjKTEmn37P4bBg3hY9FSSFo
+            M90wG/NRbw1Voz6BgGlwOAoA+Ln0rVKqDQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+
     tahoe = rec {
       cores = 1;
       nets = {

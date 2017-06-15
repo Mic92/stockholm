@@ -7,7 +7,6 @@ in
     ../.
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
     ../2configs/collectd-base.nix
-    ../2configs/shack/share.nix
     ../2configs/central-stats-client.nix
     ../2configs/save-diskspace.nix
 
@@ -15,11 +14,13 @@ in
     ../2configs/graphite.nix
     ../2configs/repo-sync.nix
     ../2configs/shared-buildbot.nix
-    ../2configs/shack/drivedroid.nix
-    ../2configs/shack/nix-cacher.nix
 
+    ../2configs/shack/drivedroid.nix
+    # ../2configs/shack/nix-cacher.nix
     ../2configs/shack/mqtt_sub.nix
     ../2configs/shack/muell_caller.nix
+    ../2configs/shack/radioactive.nix
+    ../2configs/shack/share.nix
 
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
@@ -42,7 +43,6 @@ in
 
   nix = {
     binaryCaches = [
-      "http://localhost:3142/nixos"
       "http://cache.prism.r"
       "https://cache.nixos.org/"
     ];

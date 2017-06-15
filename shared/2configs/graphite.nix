@@ -10,7 +10,7 @@ with import <stockholm/lib>;
   imports = [ ];
 
   services.graphite = {
-    web = {
+    api = {
       enable = true;
       listenAddress = "0.0.0.0";
     };
@@ -23,7 +23,15 @@ with import <stockholm/lib>;
         MAX_UPDATES_PER_SECOND = 1
         MAX_CREATES_PER_MINUTE = 50
         MAX_UPDATES_PER_SECOND_ONSHUTDOWN = 9001
+
+        LOG_CACHE_HITS = False
+        LOG_CACHE_QUEUE_SORTS = False
+        LOG_UPDATES = False
+        LOG_LISTENER_CONNECTIONS = False
+        LOG_CREATES = True
         '';
+      storageAggregation = ''
+      '';
       storageSchemas = ''
         [carbon]
         pattern = ^carbon\.
@@ -66,10 +74,20 @@ with import <stockholm/lib>;
         pattern = ^elchos\.
         retentions = 10s:14d,1m:90d,10m:5y
 
+        [icinga_default]
+        pattern = ^icinga
+        retentions = 10s:14d,5m:90d,10m:5y
+
+        [icinga_internals]
+        pattern = ^icinga.*\.(max_check_attempts|reachable|current_attempt|execution_time|latency|state|state_type)
+        retentions = 5m:7d
+
         [default]
         pattern = .*
         retentions = 60s:30d,300s:1y
         '';
     };
   };
+  systemd.services.carbonCache.serviceConfig.Restart="always";
+  systemd.services.graphiteApi.serviceConfig.Restart="always";
 }
