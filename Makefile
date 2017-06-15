@@ -83,7 +83,12 @@ deploy:
 	$(MAKE) populate debug=false
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		env STOCKHOLM_VERSION="$$STOCKHOLM_VERSION" \
-			nixos-rebuild $(rebuild-command) --show-trace -I $(target_path)
+			nixos-rebuild -Q $(rebuild-command) --show-trace -I $(target_path) \
+		|& if type whatsupnix 2>/dev/null; then \
+		     whatsupnix $(target_user)@$(target_host):$(target_port); \
+		   else \
+		     cat; \
+		   fi
 
 # usage: make populate system=foo
 populate: populate-target = \
