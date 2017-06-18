@@ -15,6 +15,7 @@ in
     ../2configs/repo-sync.nix
     ../2configs/shared-buildbot.nix
 
+    ../2configs/shack/worlddomination.nix
     ../2configs/shack/drivedroid.nix
     # ../2configs/shack/nix-cacher.nix
     ../2configs/shack/mqtt_sub.nix
@@ -89,6 +90,15 @@ in
 
   swapDevices = [
     { device = "/dev/disk/by-label/swap";  }
+  ];
+  # fallout of ipv6calypse
+  networking.extraHosts = ''
+    hass.shack    10.42.2.191
+    heidi.shack   10.42.2.135
+  '';
+
+  users.extraUsers.root.openssh.authorizedKeys.keys = [
+    config.krebs.users.ulrich.pubkey
   ];
 
   time.timeZone = "Europe/Berlin";
