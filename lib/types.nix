@@ -2,10 +2,10 @@
 
 let
   inherit (lib)
-    all any concatMapStringsSep concatStringsSep const filter flip genid
-    hasSuffix head isInt isString length match mergeOneOption mkOption
+    all any concatMapStringsSep concatStringsSep const filter flip
+    genid hasSuffix head isInt isString length mergeOneOption mkOption
     mkOptionType optional optionalAttrs optionals range splitString
-    stringLength substring typeOf;
+    stringLength substring test typeOf;
   inherit (lib.types)
     attrsOf bool either enum int listOf nullOr path str string submodule;
 in
@@ -338,7 +338,8 @@ rec {
     check = let
       IPv4address = let d = "([1-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])"; in
         concatMapStringsSep "." (const d) (range 1 4);
-    in x: isString x && match IPv4address x != null;
+    in
+      test IPv4address;
     merge = mergeOneOption;
   };
   addr6 = mkOptionType {
@@ -346,7 +347,8 @@ rec {
     check = let
       # TODO check IPv6 address harder
       IPv6address = "[0-9a-f.:]+";
-    in x: isString x && match IPv6address x != null;
+    in
+      test IPv6address;
     merge = mergeOneOption;
   };
 
@@ -396,14 +398,13 @@ rec {
 
   file-mode = mkOptionType {
     name = "file mode";
-    check = x: isString x && match "[0-7]{4}" x != null;
+    check = test "[0-7]{4}";
     merge = mergeOneOption;
   };
 
   haskell.conid = mkOptionType {
     name = "Haskell constructor identifier";
-    check = x:
-      isString x && match "[[:upper:]][[:lower:]_[:upper:]0-9']*" x != null;
+    check = test "[[:upper:]][[:lower:]_[:upper:]0-9']*";
     merge = mergeOneOption;
   };
 
@@ -426,14 +427,14 @@ rec {
     name = "label";
     # TODO case-insensitive labels
     check = x: isString x
-            && match "[0-9A-Za-z]([0-9A-Za-z-]*[0-9A-Za-z])?" x != null;
+            && test "[0-9A-Za-z]([0-9A-Za-z-]*[0-9A-Za-z])?" x;
     merge = mergeOneOption;
   };
 
   # POSIX.1‐2013, 3.278 Portable Filename Character Set
   filename = mkOptionType {
     name = "POSIX filename";
-    check = x: isString x && match "([0-9A-Za-z._])[0-9A-Za-z._-]*" x != null;
+    check = test "([0-9A-Za-z._])[0-9A-Za-z._-]*";
     merge = mergeOneOption;
   };
 
