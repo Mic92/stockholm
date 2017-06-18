@@ -28,6 +28,7 @@ with import <stockholm/lib>;
         # tv
         bc
         bind # dig
+        brain
         cac-api
         dic
         file
