@@ -20,14 +20,14 @@
 GAWK=${GAWK:-gawk}
 NIX_STORE=${NIX_STORE:-nix-store}
 
-broken=$(mktemp)
-trap 'rm -f -- "$broken"' EXIT
+failed_drvs=$(mktemp --tmpdir whatsupnix.XXXXXXXX)
+trap 'rm -f -- "$failed_drvs"' EXIT
 
 exec >&2
 
-$GAWK -v broken="$broken" '
+$GAWK -v failed_drvs="$failed_drvs" '
   match($0, /^builder for ‘(\/nix\/store\/[^’]+\.drv)’ failed/, m) {
-    print m[1] >> broken
+    print m[1] >> failed_drvs
   }
   { print $0 }
 '
@@ -74,9 +74,9 @@ while read -r drv; do
   print_log "$drv"
 
   echo
-done < "$broken"
+done < "$failed_drvs"
 
-if test -s "$broken"; then
+if test -s "$failed_drvs"; then
   exit 2
 else
   exit 0
