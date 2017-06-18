@@ -28,7 +28,7 @@ $GAWK -v broken="$broken" '
 case $# in
   0)
     print_log() {
-      $NIX_STORE -l "$1"
+      NIX_PAGER= $NIX_STORE -l "$1"
     }
     ;;
   1)
@@ -47,7 +47,7 @@ case $# in
     remote_host=$1
     print_log() {
       ssh "$remote_user@$remote_host" -p "$remote_port" \
-          nix-store -l "$1"
+          env NIX_PAGER= nix-store -l "$1"
     }
     ;;
   *)
@@ -55,7 +55,6 @@ case $# in
     exit 1
 esac
 
-export NIX_PAGER='' # for nix-store
 while read -r drv; do
   title="** FAILED $drv LOG **"
   frame=${title//?/*}
