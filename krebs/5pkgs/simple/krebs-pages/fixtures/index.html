@@ -1,0 +1,42 @@
+<!doctype html>
+<title>krebscode</title>
+<style>
+  html {
+    background: black url(krebs-v2.png) fixed no-repeat 50% 0%;
+    background-size: 423px;
+  }
+  a:visited {
+        color: white;
+  }
+  a:link {
+      color: lightgrey;
+    }
+</style>
+<script>
+  var html;
+  window.onload = function () {
+    html = document.getElementsByTagName('html')[0];
+    window.onresize();
+  }
+  window.onresize = function () {
+    html.style.backgroundSize =
+        Math.min(document.height - 23, document.width - 23) + 'px';
+  }
+</script>
+<body>
+  <p>
+    <a href="http://krebscode.github.io/minikrebs/linuxtag">
+      Linuxtag Heckenkrebs Presentation
+    </a>
+  </p>
+  <p>
+    <a href="http://krebscode.github.io/writeups">
+      CTF Writeups
+    </a>
+  </p>
+  <p>
+    <a href="thesauron.html">
+      Thesauron
+    </a>
+  </p>
+</body>
