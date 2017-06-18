@@ -5,7 +5,7 @@
 #
 # Usage:
 #
-#    nix-build ... -Q ... | whatsupnix [user@target[:port]]
+#    nix-build ... -Q ... 2>&1 | whatsupnix [user@target[:port]]
 #
 # Exit Codes:
 #
