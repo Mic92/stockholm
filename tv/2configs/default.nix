@@ -9,7 +9,10 @@ with import <stockholm/lib>;
     user = config.krebs.users.tv;
     source = let inherit (config.krebs.build) host; in {
       nixos-config.symlink = "stockholm/tv/1systems/${host.name}.nix";
-      secrets.file = "/home/tv/secrets/${host.name}";
+      secrets.file =
+        if getEnv "dummy_secrets" == "true"
+          then toString <stockholm/null>
+          else "/home/tv/secrets/${host.name}";
       secrets-common.file = "/home/tv/secrets/common";
       stockholm.file = "/home/tv/stockholm";
       nixpkgs.git = {
