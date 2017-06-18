@@ -426,8 +426,7 @@ rec {
   label = mkOptionType {
     name = "label";
     # TODO case-insensitive labels
-    check = x: isString x
-            && test "[0-9A-Za-z]([0-9A-Za-z-]*[0-9A-Za-z])?" x;
+    check = test "[0-9A-Za-z]([0-9A-Za-z-]*[0-9A-Za-z])?";
     merge = mergeOneOption;
   };
 
