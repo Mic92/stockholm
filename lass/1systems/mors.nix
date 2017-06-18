@@ -21,7 +21,6 @@ with import <stockholm/lib>;
     ../2configs/fetchWallpaper.nix
     #../2configs/c-base.nix
     ../2configs/mail.nix
-    ../2configs/krebs-pass.nix
     ../2configs/repo-sync.nix
     ../2configs/ircd.nix
     ../2configs/logf.nix
