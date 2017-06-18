@@ -76,7 +76,7 @@ with import <stockholm/lib>;
     }
     {
       environment.systemPackages = [
-        pkgs.krebszones
+        pkgs.ovh-zone
       ];
     }
     {

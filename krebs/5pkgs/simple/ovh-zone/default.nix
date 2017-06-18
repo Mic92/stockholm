@@ -6,7 +6,7 @@
 ## diff future.sorted current.sorted
 
 python3Packages.buildPythonPackage rec {
-  name = "krebszones-${version}";
+  name = "ovh-zone-${version}";
   version = "0.4.4";
   propagatedBuildInputs = with pkgs.python3Packages;[
     d2to1 # for setup to work
