@@ -965,6 +965,10 @@ with import <stockholm/lib>;
     ciko = {
       mail = "wieczorek.stefan@googlemail.com";
     };
+    ulrich = {
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC1sobyfvUu/G2Ms+T0cI4CSgtjCoO2qEYVK1jkqC2A9mLJfNoPsToLowfGszpOAM9S4Rtn+OJ+vPMvs2E4pkZmXcmJZFAKKPNadmzwqCQyskBdoyszkj7DXngX56ZQ+ZEf+vPp2tu/IN0CFNVUllUcWP2TD2ECH5qkBODBHLyGf4PvV35yGpuYNFhFSWkTxwXZ7d5eat2kmwTfryX91Z+M901t6MK0ADyUwBkbotwSn/B6xUEZzExlGhRziRlIM0MrmSMvUA1mcmMJWVfHbb5Sw8yVstUuaU98C3EzDPNlVTbu5al2sDk4+jjireMMMVHC0j8aj7DlhvcF2t7ZpAKy+HN/PFuV7+RgN3DmIMLwbSRfykH3ATVdBzoL0/XmGBRXht6M22igAMFt9o/oHtwWt2JYcNX5poS8kLcjPzGHcx7KOslZ7VZev4BTpFAZIeMYhlzsNCI88bxUqdFxIcofNIQMy4Ep4qJXlgMduQbYtPDRpclDe82yiblhz48+HF/j8+0ZBx4w3jb4XBtgeTfwM2nARsD7MRzokfMfbGf6cZ8AU0/h69ECdsy2KYCKzgFxV/SHN2fDk6SZWLHmxDZ8N02VqgXMTvkYHvDBiaNxM0/iNMKqYCfuxjQPSusBENSgwhUnBGgoGYZuz0r2oMdtzqrkC/VbDxi5gSKl+ZoaMQ== shackspace.de@myvdr.de";
+      mail = "shackspace.de@myvdr.de";
+    };
     exco = {
       mail = "dickbutt@excogitation.de";
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC7HCK+TzelJp7atCbvCbvZZnXFr3cE35ioactgpIJL7BOyQM6lJ/7y24WbbrstClTuV7n0rWolDgfjx/8kVQExP3HXEAgCwV6tIcX/Ep84EXSok7QguN0ozZMCwX9CYXOEyLmqpe2KAx3ggXDyyDUr2mWs04J95CFjiR/YgOhIfM4+gVBxGtLSTyegyR3Fk7O0KFwYDjBRLi7a5TIub3UYuOvw3Dxo7bUkdhtf38Kff8LEK8PKtIku/AyDlwZ0mZT4Z7gnihSG2ezR5mLD6QXVuGhG6gW/gsqfPVRF4aZbrtJWZCp2G21wBRafpEZJ8KFHtR18JNcvsuWA1HJmFOj2K0mAY5hBvzCbXGhSzBtcGxKOmTBDTRlZ7FIFgukP/ckSgDduydFUpsv07ZRj+qY07zKp3Nhh3RuN7ZcveCo2WpaAzTuWCMPB0BMhEQvsO8I/p5YtTaw2T1poOPorBbURQwEgNrZ92kB1lL5t1t1ZB4oNeDJX5fddKLkgnLqQZWOZBTKtoq0EAVXojTDLZaA+5z20h8DU7sicDQ/VG4LWtqm9fh8iDpvt/3IHUn/HJEEnlfE1Gd+F2Q+R80yu4e1PClmuzfWjCtkPc4aY7oDxfcJqyeuRW6husAufPqNs31W6X9qXwoaBh9vRQ1erZUo46iicxbzujXIy/Hwg67X8dw== dickbutt@excogitation.de";
