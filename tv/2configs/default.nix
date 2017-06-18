@@ -44,6 +44,7 @@ with import <stockholm/lib>;
         gnumake
         hashPassword
         populate
+        whatsupnix
       ];
     }
     {
