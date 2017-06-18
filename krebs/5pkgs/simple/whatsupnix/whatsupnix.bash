@@ -1,14 +1,21 @@
 #!/usr/bin/env bash
-
+#
 # Prints build logs for failed derivations in quiet build mode (-Q).
 # See https://github.com/NixOS/nix/issues/443
 #
 # Usage:
 #
-#    set -o pipefail
 #    nix-build ... -Q ... | whatsupnix [user@target[:port]]
 #
-
+# Exit Codes:
+#
+#   0     No failed derivations could be found.  This either means there where
+#         no build errors, or stdin wasn't nix-build output.
+#
+#   1     Usage error; arguments couldn't be parsed.
+#
+#   2     Build error; at least one failed derivation could be found.
+#
 
 GAWK=${GAWK:-gawk}
 NIX_STORE=${NIX_STORE:-nix-store}
@@ -69,4 +76,8 @@ while read -r drv; do
   echo
 done < "$broken"
 
-exit 0
+if test -s "$broken"; then
+  exit 2
+else
+  exit 0
+fi
