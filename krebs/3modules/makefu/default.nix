@@ -782,6 +782,29 @@ with import <stockholm/lib>;
       };
     };
 
+    horisa = rec {
+      cores = 2;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.226.213";
+          ip6.addr = "42:432e:2379:0cd2:8486:f3b5:335a:5d83";
+          aliases = [
+            "horisa.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA1hhBqCku98gimv0yXr6DFwE2HUemigyqX8o7IsPOW5XT/K8o+V40
+            Oxk3r0+c7IYREvug/raxoullf5TMJFzTzqzX4njgsiTs25V8D7hVT4jcRKTcXmBn
+            XpjtD+tIeDW1E6dIMMDbxKCyfd/qaeg83G7gPobeFYr4JNqQLXrnotlWMO9S13UT
+            +EgSP2pixv/dGIqX8WRg23YumO8jZKbso/sKKFMIEOJvnh/5EcWb24+q2sDRCitP
+            sWJ5j/9M1Naec/Zl27Ac2HyMWRk39F9Oo+iSbc47QvjKTEmn37P4bBg3hY9FSSFo
+            M90wG/NRbw1Voz6BgGlwOAoA+Ln0rVKqDQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+
     tahoe = rec {
       cores = 1;
       nets = {
@@ -941,6 +964,10 @@ with import <stockholm/lib>;
     };
     ciko = {
       mail = "wieczorek.stefan@googlemail.com";
+    };
+    ulrich = {
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC1sobyfvUu/G2Ms+T0cI4CSgtjCoO2qEYVK1jkqC2A9mLJfNoPsToLowfGszpOAM9S4Rtn+OJ+vPMvs2E4pkZmXcmJZFAKKPNadmzwqCQyskBdoyszkj7DXngX56ZQ+ZEf+vPp2tu/IN0CFNVUllUcWP2TD2ECH5qkBODBHLyGf4PvV35yGpuYNFhFSWkTxwXZ7d5eat2kmwTfryX91Z+M901t6MK0ADyUwBkbotwSn/B6xUEZzExlGhRziRlIM0MrmSMvUA1mcmMJWVfHbb5Sw8yVstUuaU98C3EzDPNlVTbu5al2sDk4+jjireMMMVHC0j8aj7DlhvcF2t7ZpAKy+HN/PFuV7+RgN3DmIMLwbSRfykH3ATVdBzoL0/XmGBRXht6M22igAMFt9o/oHtwWt2JYcNX5poS8kLcjPzGHcx7KOslZ7VZev4BTpFAZIeMYhlzsNCI88bxUqdFxIcofNIQMy4Ep4qJXlgMduQbYtPDRpclDe82yiblhz48+HF/j8+0ZBx4w3jb4XBtgeTfwM2nARsD7MRzokfMfbGf6cZ8AU0/h69ECdsy2KYCKzgFxV/SHN2fDk6SZWLHmxDZ8N02VqgXMTvkYHvDBiaNxM0/iNMKqYCfuxjQPSusBENSgwhUnBGgoGYZuz0r2oMdtzqrkC/VbDxi5gSKl+ZoaMQ== shackspace.de@myvdr.de";
+      mail = "shackspace.de@myvdr.de";
     };
     exco = {
       mail = "dickbutt@excogitation.de";

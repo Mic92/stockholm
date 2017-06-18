@@ -48,7 +48,7 @@ let
           external domainname to be used for anonymous graphs
           it will be used if you want to enable ACME
         '';
-        default = "graphs.krebsco.de";
+        default = "graph.krebsco.de";
       };
 
       complete = mkOption {

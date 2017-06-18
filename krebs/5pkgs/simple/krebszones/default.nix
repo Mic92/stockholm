@@ -1,25 +1,13 @@
-{ lib, pkgs,python3Packages,fetchurl, ... }:
+{ pkgs, ... }:
 
-# TODO: Prepare a diff of future and current
-## ovh-zone export krebsco.de --config ~/secrets/krebs/cfg.json |sed 's/[ ]\+/ /g' | sort current
-## sed 's/[ ]\+/ /g'/etc/zones/krebsco.de | sort > future
-## diff future.sorted current.sorted
-
-python3Packages.buildPythonPackage rec {
-  name = "krebszones-${version}";
-  version = "0.4.4";
-  propagatedBuildInputs = with pkgs.python3Packages;[
-    d2to1 # for setup to work
-    ovh
-    docopt
-  ];
-  src = fetchurl {
-    url = "https://pypi.python.org/packages/source/k/krebszones/krebszones-${version}.tar.gz";
-    sha256 = "1bzfc2b9468769j1yj93j12zdlccqbjiqfhql2larximh491sg4d";
-  };
-  meta = {
-    homepage = http://krebsco.de/;
-    description = "OVH Zone Upload";
-    license = lib.licenses.wtfpl;
-  };
-}
+pkgs.writeDashBin "krebszones" ''
+  set -efu
+  export OVH_ZONE_CONFIG=$HOME/.secrets/krebs/ovh-zone.conf
+  case $* in
+    import)
+      set -- import /etc/zones/krebsco.de krebsco.de
+      echo "+ krebszones $*" >&2
+      ;;
+  esac
+  exec ${pkgs.ovh-zone}/bin/ovh-zone "$@"
+''
