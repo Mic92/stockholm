@@ -77,6 +77,11 @@ in {
         "NIX_REMOTE": "daemon",
         "dummy_secrets": "true",
       }
+      env_tv = {
+        "LOGNAME": "tv",
+        "NIX_REMOTE": "daemon",
+        "dummy_secrets": "true",
+      }
 
       # prepare nix-shell
       # the dependencies which are used by the test script
@@ -113,6 +118,9 @@ in {
                           target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
                           system={}".format(host)]
             )
+
+        for i in [ "alnus", "mu", "nomic", "wu", "xu", "zu" ]:
+            build_host(env_tv, i)
 
         for i in [ "mors", "uriel", "shodan", "icarus", "cloudkrebs", "echelon", "dishfire", "prism" ]:
             build_host(env_lass, i)
