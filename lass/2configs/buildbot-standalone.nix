@@ -96,6 +96,7 @@ in {
       #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
       nixshell = [
         "nix-shell",
+        "-I", "/var/src",
         "-I", "stockholm=.",
         "-p"
       ] + deps + [ "--run" ]
@@ -164,9 +165,6 @@ in {
     username = "testworker";
     password = "lasspass";
     packages = with pkgs; [ gnumake jq nix populate ];
-    extraEnviron = {
-      NIX_PATH="/var/src";
-    };
   };
   config.krebs.iptables = {
     tables = {
