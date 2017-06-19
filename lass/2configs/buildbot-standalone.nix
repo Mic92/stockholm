@@ -32,7 +32,7 @@ in {
               stockholm_repo,
               workdir='stockholm-poller', branches=True,
               project='stockholm',
-              pollinterval=120
+              pollinterval=10
           )
       )
     '';
