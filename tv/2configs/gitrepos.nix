@@ -90,26 +90,28 @@ let {
     {
       brain = {
         collaborators = with config.krebs.users; [ lass makefu ];
-        hooks.post-receive = irc-announce-retiolum;
+        hooks.post-receive = irc-announce {
+          cgit_endpoint = null;
+        };
       };
     } //
     # TODO don't put secrets/repos.nix into the store
     import <secrets/repos.nix> { inherit config lib pkgs; }
   );
 
-  irc-announce-retiolum = pkgs.git-hooks.irc-announce {
+  irc-announce = args: pkgs.git-hooks.irc-announce (recursiveUpdate {
+    channel = "#retiolum";
     # TODO make nick = config.krebs.build.host.name the default
     nick = config.krebs.build.host.name;
-    channel = "#retiolum";
     server = "ni.r";
     verbose = true;
-  };
+  } args);
 
   make-public-repo = name: { cgit ? {}, ... }: {
     inherit cgit name;
     public = true;
     hooks = optionalAttrs (config.krebs.build.host.name == "ni") {
-      post-receive = irc-announce-retiolum;
+      post-receive = irc-announce {};
     };
   };
 
