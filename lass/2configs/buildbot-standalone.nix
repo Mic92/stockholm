@@ -103,45 +103,28 @@ in {
       build-hosts = ''
         f = util.BuildFactory()
         f.addStep(grab_repo)
-        for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" ]:
-            addShell(f,name="build-{}".format(i),env=env_shared,
-                command=nixshell + \
-                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
-                        make NIX_PATH=$HOME/$LOGNAME test method=build \
-                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
-                            system={}".format(i)
-                    ]
+
+        def build_host(env, host):
+            addShell(f,name="build-{}".format(i),env=env,
+                command=nixshell + ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
+                      echo $HOME; echo $LOGNAME; \
+                      test -e $HOME/$LOGNAME/nixpkgs || cp -r /var/src/nixpkgs $HOME/$LOGNAME/; \
+                      make NIX_PATH=$HOME/$LOGNAME:secrets=/var/src/stockholm/null test method=build \
+                          target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
+                          system={}".format(host)]
             )
 
         for i in [ "mors", "uriel", "shodan", "icarus", "cloudkrebs", "echelon", "dishfire", "prism" ]:
-            addShell(f,name="build-{}".format(i),env=env_lass,
-                command=nixshell + \
-                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
-                        make NIX_PATH=$HOME/$LOGNAME test method=build \
-                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
-                            system={}".format(i)
-                    ]
-            )
+            build_host(env_lass, i)
 
         for i in [ "x", "wry", "vbob", "wbob", "shoney" ]:
-            addShell(f,name="build-{}".format(i),env=env_makefu,
-                command=nixshell + \
-                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
-                        make NIX_PATH=$HOME/$LOGNAME test method=build \
-                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
-                            system={}".format(i)
-                    ]
-            )
+            build_host(env_makefu, i)
 
         for i in [ "hiawatha", "onondaga" ]:
-            addShell(f,name="build-{}".format(i),env=env_nin,
-                command=nixshell + \
-                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
-                        make NIX_PATH=$HOME/$LOGNAME test method=build \
-                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
-                            system={}".format(i)
-                    ]
-            )
+            build_host(env_nin, i)
+
+        for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" ]:
+            build_host(env_shared, i)
 
         bu.append(
             util.BuilderConfig(
