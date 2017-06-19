@@ -11,7 +11,7 @@ with import <stockholm/lib>;
       nixos-config.symlink = "stockholm/tv/1systems/${host.name}.nix";
       secrets.file =
         if getEnv "dummy_secrets" == "true"
-          then toString <stockholm/null>
+          then toString <stockholm/tv/dummy_secrets>
           else "/home/tv/secrets/${host.name}";
       secrets-common.file = "/home/tv/secrets/common";
       stockholm.file = "/home/tv/stockholm";
