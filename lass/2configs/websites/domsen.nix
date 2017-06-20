@@ -35,17 +35,16 @@ in {
       "apanowicz.de"
       "nirwanabluete.de"
       "aldonasiech.com"
-      "360gradvideo.tv"
       "ubikmedia.eu"
       "facts.cloud"
       "youthtube.xyz"
       "illucloud.eu"
       "illucloud.de"
       "illucloud.com"
+      "joemisch.com"
       "www.apanowicz.de"
       "www.nirwanabluete.de"
       "www.aldonasiech.com"
-      "www.360gradvideo.tv"
       "www.ubikmedia.eu"
       "www.facts.cloud"
       "www.youthtube.xyz"
@@ -62,7 +61,6 @@ in {
       "karlaskop.ubikmedia.de"
       "nb.ubikmedia.de"
       "youthtube.ubikmedia.de"
-      "joemisch.com"
     ])
   ];
 
