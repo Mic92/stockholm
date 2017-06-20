@@ -174,6 +174,7 @@ with import <stockholm/lib>;
 
   environment.systemPackages = with pkgs; [
     acronym
+    brain
     cac-api
     sshpass
     get
