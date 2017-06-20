@@ -47,9 +47,7 @@ let
           type = mkOptionType {
             # TODO admit symbolic mode
             name = "octal mode";
-            check = x:
-              isString x &&
-              match "[0-7][0-7][0-7][0-7]" x != null;
+            check = test "[0-7][0-7][0-7][0-7]";
             merge = mergeOneOption;
           };
         };

@@ -1,26 +1,33 @@
 #!/usr/bin/env bash
-
+#
 # Prints build logs for failed derivations in quiet build mode (-Q).
 # See https://github.com/NixOS/nix/issues/443
 #
 # Usage:
 #
-#    set -o pipefail
-#    nix-build ... -Q ... | whatsupnix [user@target[:port]]
+#    nix-build ... -Q ... 2>&1 | whatsupnix [user@target[:port]]
 #
-
+# Exit Codes:
+#
+#   0     No failed derivations could be found.  This either means there where
+#         no build errors, or stdin wasn't nix-build output.
+#
+#   1     Usage error; arguments couldn't be parsed.
+#
+#   2     Build error; at least one failed derivation could be found.
+#
 
 GAWK=${GAWK:-gawk}
 NIX_STORE=${NIX_STORE:-nix-store}
 
-broken=$(mktemp)
-trap 'rm -f -- "$broken"' EXIT
+failed_drvs=$(mktemp --tmpdir whatsupnix.XXXXXXXX)
+trap 'rm -f -- "$failed_drvs"' EXIT
 
 exec >&2
 
-$GAWK -v broken="$broken" '
+$GAWK -v failed_drvs="$failed_drvs" '
   match($0, /^builder for ‘(\/nix\/store\/[^’]+\.drv)’ failed/, m) {
-    print m[1] >> broken
+    print m[1] >> failed_drvs
   }
   { print $0 }
 '
@@ -28,7 +35,7 @@ $GAWK -v broken="$broken" '
 case $# in
   0)
     print_log() {
-      $NIX_STORE -l "$1"
+      NIX_PAGER= $NIX_STORE -l "$1"
     }
     ;;
   1)
@@ -47,7 +54,7 @@ case $# in
     remote_host=$1
     print_log() {
       ssh "$remote_user@$remote_host" -p "$remote_port" \
-          nix-store -l "$1"
+          env NIX_PAGER= nix-store -l "$1"
     }
     ;;
   *)
@@ -55,7 +62,6 @@ case $# in
     exit 1
 esac
 
-export NIX_PAGER='' # for nix-store
 while read -r drv; do
   title="** FAILED $drv LOG **"
   frame=${title//?/*}
@@ -68,6 +74,10 @@ while read -r drv; do
   print_log "$drv"
 
   echo
-done < "$broken"
+done < "$failed_drvs"
 
-exit 0
+if test -s "$failed_drvs"; then
+  exit 2
+else
+  exit 0
+fi

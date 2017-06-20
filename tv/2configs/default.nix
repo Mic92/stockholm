@@ -9,12 +9,15 @@ with import <stockholm/lib>;
     user = config.krebs.users.tv;
     source = let inherit (config.krebs.build) host; in {
       nixos-config.symlink = "stockholm/tv/1systems/${host.name}.nix";
-      secrets.file = "/home/tv/secrets/${host.name}";
+      secrets.file =
+        if getEnv "dummy_secrets" == "true"
+          then toString <stockholm/tv/dummy_secrets>
+          else "/home/tv/secrets/${host.name}";
       secrets-common.file = "/home/tv/secrets/common";
       stockholm.file = "/home/tv/stockholm";
       nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
-        ref = "99dfb6dce37edcd1db7cb85c2db97089d9d5f442"; # nixos-17.03
+        ref = "412b0a17aa2975e092c7ab95a38561c5f82908d4"; # nixos-17.03
       };
     } // optionalAttrs host.secure {
       secrets-master.file = "/home/tv/secrets/master";
@@ -41,6 +44,7 @@ with import <stockholm/lib>;
         gnumake
         hashPassword
         populate
+        whatsupnix
       ];
     }
     {

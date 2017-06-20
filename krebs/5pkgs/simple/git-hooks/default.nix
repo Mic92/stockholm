@@ -5,7 +5,15 @@ with import <stockholm/lib>;
 {
   # TODO irc-announce should return a derivation
   #      but it cannot because krebs.git.repos.*.hooks :: attrsOf str
-  irc-announce = { nick, channel, server, port ? 6667, verbose ? false, branches ? [] }: ''
+  irc-announce =
+  { branches ? []
+  , cgit_endpoint ? "http://cgit.${nick}.r"
+  , channel
+  , nick
+  , port ? 6667
+  , server
+  , verbose ? false
+  }: /* sh */ ''
     #! /bin/sh
     set -euf
 
@@ -34,7 +42,6 @@ with import <stockholm/lib>;
     port=${toString port}
 
     host=$nick
-    cgit_endpoint=http://cgit.$host.r
 
     empty=0000000000000000000000000000000000000000
 
@@ -66,22 +73,27 @@ with import <stockholm/lib>;
       if [ $newrev = $empty ]; then id=$empty_tree; fi
       if [ $oldrev = $empty ]; then id2=$empty_tree; fi
 
-      case $receive_mode in
-        create)
-          link="$cgit_endpoint/$GIT_SSH_REPO/?h=$h"
-          ;;
-        delete)
-          link="$cgit_endpoint/$GIT_SSH_REPO/ ($h)"
-          ;;
-        fast-forward|non-fast-forward)
-          link="$cgit_endpoint/$GIT_SSH_REPO/diff/?h=$h&id=$id&id2=$id2"
-          ;;
-      esac
+      ${if cgit_endpoint != null then /* sh */ ''
+        cgit_endpoint=${escapeShellArg cgit_endpoint}
+        case $receive_mode in
+          create)
+            link="$cgit_endpoint/$GIT_SSH_REPO/?h=$h"
+            ;;
+          delete)
+            link="$cgit_endpoint/$GIT_SSH_REPO/ ($h)"
+            ;;
+          fast-forward|non-fast-forward)
+            link="$cgit_endpoint/$GIT_SSH_REPO/diff/?h=$h&id=$id&id2=$id2"
+            ;;
+        esac
+      '' else /* sh */ ''
+        link="$GIT_SSH_REPO $h"
+      ''}
 
       #$host $GIT_SSH_REPO $ref $link
       add_message $(pink push) $link $(gray "($receive_mode)")
 
-      ${optionalString verbose ''
+      ${optionalString verbose /* sh */ ''
         add_message "$(
           git log \
               --format="$(orange %h) %s $(gray '(%ar)')" \

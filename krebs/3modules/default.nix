@@ -186,7 +186,7 @@ let
           makefu
           tv
         ];
-        ciko.mail = "wieczorek.stefan@gmail.com";
+        ciko.mail = "ciko@slash16.net";
       in {
         "anmeldung@eloop.org" = eloop-ml;
         "cfp@eloop.org" = eloop-ml;

@@ -5,7 +5,7 @@ with lib;
 rec {
   escape =
     let
-      isSafeChar = c: match "[-+./0-9:=A-Z_a-z]" c != null;
+      isSafeChar = testString "[-+./0-9:=A-Z_a-z]";
     in
     stringAsChars (c:
       if isSafeChar c then c

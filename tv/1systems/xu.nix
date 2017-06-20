@@ -28,6 +28,7 @@ with import <stockholm/lib>;
         # tv
         bc
         bind # dig
+        brain
         cac-api
         dic
         file
@@ -35,6 +36,7 @@ with import <stockholm/lib>;
         haskellPackages.hledger
         htop
         jq
+        krebszones
         mkpasswd
         netcat
         netcup
@@ -46,18 +48,6 @@ with import <stockholm/lib>;
         qrencode
         texlive.combined.scheme-full
         tmux
-
-        (pkgs.writeDashBin "krebszones" ''
-          set -efu
-          export OVH_ZONE_CONFIG=$HOME/.secrets/krebs/ovh-zone.conf
-          case $* in
-            import)
-              set -- import /etc/zones/krebsco.de krebsco.de
-              echo "+ krebszones $*" >&2
-              ;;
-          esac
-          exec ${pkgs.krebszones}/bin/ovh-zone "$@"
-        '')
 
         #ack
         #apache-httpd
