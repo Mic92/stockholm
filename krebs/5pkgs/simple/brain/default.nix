@@ -1,11 +1,11 @@
 { pass, writeOut, writeDash, ... }:
 
 writeOut "brain" {
-  "/bin/brain-pass".link = writeDash "brain-pass" ''
+  "/bin/brain".link = writeDash "brain" ''
     PASSWORD_STORE_DIR=$HOME/brain \
     exec ${pass}/bin/pass $@
   '';
-  "/bin/brain-passmenu".link = writeDash "brain-passmenu" ''
+  "/bin/brainmenu".link = writeDash "brainmenu" ''
     PASSWORD_STORE_DIR=$HOME/brain \
     exec ${pass}/bin/passmenu $@
   '';
