@@ -132,7 +132,10 @@ in {
 
   krebs.Reaktor.playlist = {
     nickname = "the_playlist|r";
-    channels = [ "#the_playlist" ];
+    channels = [
+      "#the_playlist"
+      "#krebs"
+    ];
     extraEnviron = {
       REAKTOR_HOST = "irc.freenode.org";
     };
