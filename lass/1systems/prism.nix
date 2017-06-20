@@ -46,6 +46,7 @@ in {
     ../2configs/paste.nix
     ../2configs/syncthing.nix
     ../2configs/coders-irc.nix
+    ../2configs/ciko.nix
     {
       imports = [
         ../2configs/bepasty.nix
