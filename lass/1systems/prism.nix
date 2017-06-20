@@ -48,6 +48,9 @@ in {
     ../2configs/coders-irc.nix
     ../2configs/ciko.nix
     {
+      lass.pyload.enable = true;
+    }
+    {
       imports = [
         ../2configs/bepasty.nix
       ];
