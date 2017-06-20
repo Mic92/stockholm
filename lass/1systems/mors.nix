@@ -156,15 +156,6 @@ with import <stockholm/lib>;
   #activationScripts
   #split up and move into base
   system.activationScripts.powertopTunables = ''
-    #Enable Audio codec power management
-    echo '1' > '/sys/module/snd_hda_intel/parameters/power_save'
-    #VM writeback timeout
-    echo '1500' > '/proc/sys/vm/dirty_writeback_centisecs'
-    #Autosuspend for USB device Broadcom Bluetooth Device [Broadcom Corp]
-    #echo 'auto' > '/sys/bus/usb/devices/1-1.4/power/control'
-    #Autosuspend for USB device Biometric Coprocessor
-    #echo 'auto' > '/sys/bus/usb/devices/1-1.3/power/control'
-
     #Runtime PMs
     echo 'auto' > '/sys/bus/pci/devices/0000:00:02.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:00.0/power/control'
