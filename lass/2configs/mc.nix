@@ -322,17 +322,20 @@ let
 
 in {
   environment.systemPackages = [
-    (pkgs.concat "mc" [
-      pkgs.mc
-      (pkgs.writeDashBin "mc" ''
-        export MC_DATADIR=${pkgs.writeOut "mc-ext" {
-            "/mc.ext".link = mcExt;
-            "/sfs.ini".text = "";
-        }};
-        export TERM=xterm-256color
-        exec ${pkgs.mc}/bin/mc -S xoria256 "$@"
-      '')
-    ])
+    (pkgs.symlinkJoin {
+      name = "mc";
+      paths = [
+        pkgs.mc
+        (pkgs.writeDashBin "mc" ''
+          export MC_DATADIR=${pkgs.writeOut "mc-ext" {
+              "/mc.ext".link = mcExt;
+              "/sfs.ini".text = "";
+          }};
+          export TERM=xterm-256color
+          exec ${pkgs.mc}/bin/mc -S xoria256 "$@"
+        '')
+      ];
+    })
   ];
 }
 

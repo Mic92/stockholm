@@ -17,19 +17,24 @@ with import <stockholm/lib>;
       # my life sucks
       nixpkgs.config.packageOverrides = super: {
         irc-announce = super.callPackage <stockholm/krebs/5pkgs/simple/irc-announce> {
-          pkgs = pkgs // { coreutils = pkgs.concat "coreutils-hack" [
-            pkgs.coreutils
-            (pkgs.writeDashBin "tee" ''
-              if test "$1" = /dev/stderr; then
-                while read -r line; do
-                  echo "$line"
-                  echo "$line" >&2
-                done
-              else
-                ${super.coreutils}/bin/tee "$@"
-              fi
-            '')
-          ];};
+          pkgs = pkgs // {
+            coreutils = pkgs.symlinkJoin {
+              name = "coreutils-hack";
+              paths = [
+                pkgs.coreutils
+                (pkgs.writeDashBin "tee" ''
+                  if test "$1" = /dev/stderr; then
+                    while read -r line; do
+                      echo "$line"
+                      echo "$line" >&2
+                    done
+                  else
+                    ${super.coreutils}/bin/tee "$@"
+                  fi
+                '')
+              ];
+            };
+          };
         };
       };
       boot.kernelParams = [ "copytoram" ];

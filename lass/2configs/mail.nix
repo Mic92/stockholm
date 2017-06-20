@@ -113,12 +113,15 @@ let
     macro index ~ ,@( 'Toggle sidebar'      # toggle the sidebar
   '';
 
-  mutt = pkgs.concat "mutt" [
-    pkgs.neomutt
-    (pkgs.writeDashBin "mutt" ''
-      exec ${pkgs.neomutt}/bin/mutt -F ${muttrc} $@
-    '')
-  ];
+  mutt = pkgs.symlinkJoin {
+    name = "mutt";
+    paths = [
+      pkgs.neomutt
+      (pkgs.writeDashBin "mutt" ''
+        exec ${pkgs.neomutt}/bin/mutt -F ${muttrc} $@
+      '')
+    ];
+  };
 
 in {
   environment.systemPackages = [
