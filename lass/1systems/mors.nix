@@ -17,7 +17,7 @@ with import <stockholm/lib>;
     ../2configs/steam.nix
     ../2configs/wine.nix
     ../2configs/git.nix
-    ../2configs/libvirt.nix
+    ../2configs/virtualbox.nix
     ../2configs/fetchWallpaper.nix
     #../2configs/c-base.nix
     ../2configs/mail.nix
