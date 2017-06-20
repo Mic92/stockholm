@@ -7,12 +7,15 @@ let
     delete
   ];
 
-  mpv = pkgs.concat "mpv" [
-    pkgs.mpv
-    (pkgs.writeDashBin "mpv" ''
-      exec ${pkgs.mpv}/bin/mpv --no-config --script=${scripts} "$@"
-    '')
-  ];
+  mpv = pkgs.symlinkJoin {
+    name = "mpv";
+    paths = [
+      pkgs.mpv
+      (pkgs.writeDashBin "mpv" ''
+        exec ${pkgs.mpv}/bin/mpv --no-config --script=${scripts} "$@"
+      '')
+    ];
+  };
 
   moveToDir = key: dir: pkgs.writeText "move-with-${key}.lua" ''
     tmp_dir = "${dir}"

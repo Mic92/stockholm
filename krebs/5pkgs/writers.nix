@@ -1,32 +1,6 @@
 pkgs: oldpkgs:
 with import <stockholm/lib>;
   {
-
-    # Combine a list of derivations using symlinks.  Paths in later derivations
-    # take precedence over earlier ones.
-    #
-    # Example: create wrapper but retain all other files (man pages etc.)
-    #
-    # {
-    #   nixpkgs.config.packageOverrides = super: {
-    #     hello = pkgs.concat "hello" [
-    #       super.hello
-    #       (pkgs.writeDashBin "hello" ''
-    #         echo OMG
-    #         echo exec ${super.hello}/bin/hello "$@"
-    #       '')
-    #     ];
-    #   };
-    # }
-    #
-    concat = name: xs: pkgs.runCommand name {} ''
-      mkdir $out
-      ${flip concatMapStrings xs (x: ''
-        cp --remove-destination -vrs ${x}/* $out
-        find $out -type d -exec chmod -v u+rwx {} +
-      '')}
-    '';
-
     execve = name: { filename, argv ? null, envp ? {}, destination ? "" }: let
     in pkgs.writeC name { inherit destination; } /* c */ ''
       #include <unistd.h>
