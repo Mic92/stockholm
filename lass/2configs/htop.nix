@@ -8,7 +8,6 @@ with import <stockholm/lib>;
     htop = pkgs.symlinkJoin {
       name = "htop";
       paths = [
-        super.htop
         (pkgs.writeDashBin "htop" ''
           export HTOPRC=${pkgs.writeText "htoprc" ''
             fields=0 48 17 18 38 39 40 2 46 47 49 1
@@ -38,6 +37,7 @@ with import <stockholm/lib>;
           ''}
           exec ${super.htop}/bin/htop "$@"
         '')
+        super.htop
       ];
     };
   };
