@@ -43,6 +43,13 @@ prepare() {(
             exit
         esac
         ;;
+      stockholm)
+        case $(cat /proc/cmdline) in
+          *' root=LABEL=NIXOS_ISO '*)
+            prepare_nixos_iso "$@"
+            exit
+        esac
+        ;;
     esac
   elif test -e /etc/centos-release; then
     case $(cat /etc/centos-release) in
