@@ -5,7 +5,7 @@ let
 
   out = {
     options.krebs.setuid = api;
-    config = imp;
+    config = mkIf (cfg != {}) imp;
   };
 
   api = mkOption {
