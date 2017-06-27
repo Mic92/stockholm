@@ -25,7 +25,6 @@ with import <stockholm/lib>;
   };
 
   environment.systemPackages = with pkgs; [
-    htop
     iftop
     iotop
     iptables
