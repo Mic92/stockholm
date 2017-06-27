@@ -46,6 +46,10 @@ in {
     ../2configs/paste.nix
     ../2configs/syncthing.nix
     ../2configs/coders-irc.nix
+    ../2configs/ciko.nix
+    {
+      lass.pyload.enable = true;
+    }
     {
       imports = [
         ../2configs/bepasty.nix

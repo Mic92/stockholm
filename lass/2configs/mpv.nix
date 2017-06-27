@@ -10,10 +10,10 @@ let
   mpv = pkgs.symlinkJoin {
     name = "mpv";
     paths = [
-      pkgs.mpv
       (pkgs.writeDashBin "mpv" ''
         exec ${pkgs.mpv}/bin/mpv --no-config --script=${scripts} "$@"
       '')
+      pkgs.mpv
     ];
   };
 

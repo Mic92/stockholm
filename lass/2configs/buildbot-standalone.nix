@@ -32,7 +32,7 @@ in {
               stockholm_repo,
               workdir='stockholm-poller', branches=True,
               project='stockholm',
-              pollinterval=120
+              pollinterval=10
           )
       )
     '';
@@ -44,7 +44,7 @@ in {
                   change_filter=util.ChangeFilter(branch_re=".*"),
                   treeStableTimer=10,
                   name="build-all-branches",
-                  builderNames=["build-hosts", "build-pkgs"]
+                  builderNames=["build-hosts"]
               )
         )
       '';
@@ -77,6 +77,11 @@ in {
         "NIX_REMOTE": "daemon",
         "dummy_secrets": "true",
       }
+      env_tv = {
+        "LOGNAME": "tv",
+        "NIX_REMOTE": "daemon",
+        "dummy_secrets": "true",
+      }
 
       # prepare nix-shell
       # the dependencies which are used by the test script
@@ -91,6 +96,7 @@ in {
       #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
       nixshell = [
         "nix-shell",
+        "-I", "/var/src",
         "-I", "stockholm=.",
         "-p"
       ] + deps + [ "--run" ]
@@ -103,45 +109,31 @@ in {
       build-hosts = ''
         f = util.BuildFactory()
         f.addStep(grab_repo)
-        for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" ]:
-            addShell(f,name="build-{}".format(i),env=env_shared,
-                command=nixshell + \
-                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
-                        make NIX_PATH=$HOME/$LOGNAME test method=build \
-                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
-                            system={}".format(i)
-                    ]
+
+        def build_host(env, host):
+            addShell(f,name="build-{}".format(i),env=env,
+                command=nixshell + ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
+                      echo $HOME; echo $LOGNAME; \
+                      test -e $HOME/$LOGNAME/nixpkgs || cp -r /var/src/nixpkgs $HOME/$LOGNAME/; \
+                      make NIX_PATH=$HOME/$LOGNAME:secrets=/var/src/stockholm/null test method=build \
+                          target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
+                          system={}".format(host)]
             )
+
+        for i in [ "alnus", "mu", "nomic", "wu", "xu", "zu" ]:
+            build_host(env_tv, i)
 
         for i in [ "mors", "uriel", "shodan", "icarus", "cloudkrebs", "echelon", "dishfire", "prism" ]:
-            addShell(f,name="build-{}".format(i),env=env_lass,
-                command=nixshell + \
-                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
-                        make NIX_PATH=$HOME/$LOGNAME test method=build \
-                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
-                            system={}".format(i)
-                    ]
-            )
+            build_host(env_lass, i)
 
         for i in [ "x", "wry", "vbob", "wbob", "shoney" ]:
-            addShell(f,name="build-{}".format(i),env=env_makefu,
-                command=nixshell + \
-                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
-                        make NIX_PATH=$HOME/$LOGNAME test method=build \
-                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
-                            system={}".format(i)
-                    ]
-            )
+            build_host(env_makefu, i)
 
         for i in [ "hiawatha", "onondaga" ]:
-            addShell(f,name="build-{}".format(i),env=env_nin,
-                command=nixshell + \
-                    ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
-                        make NIX_PATH=$HOME/$LOGNAME test method=build \
-                            target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
-                            system={}".format(i)
-                    ]
-            )
+            build_host(env_nin, i)
+
+        for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" ]:
+            build_host(env_shared, i)
 
         bu.append(
             util.BuilderConfig(
@@ -152,63 +144,6 @@ in {
         )
 
       '';
-
-      build-pkgs = ''
-        f = util.BuildFactory()
-        f.addStep(grab_repo)
-        for i in [
-          "apt-cacher-ng",
-          "bepasty-client-cli",
-          "cac-api",
-          "cac-cert",
-          "cac-panel",
-          "charybdis",
-          "collectd-connect-time",
-          "dic",
-          "drivedroid-gen-repo",
-          "exim",
-          "fortclientsslvpn",
-          "get",
-          "git-hooks",
-          "github-hosts-sync",
-          "go",
-          "hashPassword",
-          "haskellPackages.blessings",
-          "haskellPackages.email-header",
-          "haskellPackages.scanner",
-          "haskellPackages.xmonad-stockholm",
-          "krebspaste",
-          "logf",
-          "much",
-          "newsbot-js",
-          "noVNC",
-          "ovh-zone",
-          "passwdqc-utils",
-          "populate",
-          "posix-array",
-          "pssh",
-          "push",
-          "Reaktor",
-          "realwallpaper",
-          "repo-sync",
-          "retiolum-bootstrap",
-          "tarantool",
-          "test",
-          "tinc_graphs",
-          "translate-shell",
-          "urlwatch",
-          "with-tmpdir",
-          "youtube-tools",
-        ]:
-          addShell(f,name="build-{}".format(i),env=env_lass,
-                  command=nixshell + \
-                      ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
-                        make system=prism pkgs.{}".format(i)])
-
-        bu.append(util.BuilderConfig(name="build-pkgs",
-              workernames=workernames,
-              factory=f))
-            '';
     };
     enable = true;
     web.enable = true;
@@ -230,9 +165,6 @@ in {
     username = "testworker";
     password = "lasspass";
     packages = with pkgs; [ gnumake jq nix populate ];
-    extraEnviron = {
-      NIX_PATH="/var/src";
-    };
   };
   config.krebs.iptables = {
     tables = {

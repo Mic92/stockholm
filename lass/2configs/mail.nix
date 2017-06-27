@@ -116,10 +116,10 @@ let
   mutt = pkgs.symlinkJoin {
     name = "mutt";
     paths = [
-      pkgs.neomutt
       (pkgs.writeDashBin "mutt" ''
         exec ${pkgs.neomutt}/bin/mutt -F ${muttrc} $@
       '')
+      pkgs.neomutt
     ];
   };
 

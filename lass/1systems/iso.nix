@@ -21,7 +21,6 @@ with import <stockholm/lib>;
             coreutils = pkgs.symlinkJoin {
               name = "coreutils-hack";
               paths = [
-                pkgs.coreutils
                 (pkgs.writeDashBin "tee" ''
                   if test "$1" = /dev/stderr; then
                     while read -r line; do
@@ -32,6 +31,7 @@ with import <stockholm/lib>;
                     ${super.coreutils}/bin/tee "$@"
                   fi
                 '')
+                pkgs.coreutils
               ];
             };
           };
