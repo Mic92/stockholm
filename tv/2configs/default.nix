@@ -15,7 +15,6 @@ in {
         tv = "/home/tv/secrets/${host.name}";
       };
       secrets-common.file = "/home/tv/secrets/common";
-      stockholm.file = toString <stockholm>;
       nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
         ref = "412b0a17aa2975e092c7ab95a38561c5f82908d4"; # nixos-17.03
