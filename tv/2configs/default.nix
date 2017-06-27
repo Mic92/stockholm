@@ -158,9 +158,10 @@ with import <stockholm/lib>;
     {
       environment.systemPackages = [
         pkgs.get
+        pkgs.htop
         pkgs.krebspaste
-        pkgs.ovh-zone
         pkgs.nix-prefetch-scripts
+        pkgs.ovh-zone
         pkgs.push
       ];
     }

@@ -300,7 +300,6 @@ let {
   vim-wrapper = pkgs.symlinkJoin {
     name = "vim";
     paths = [
-      pkgs.vim_configurable
       (pkgs.writeDashBin "vim" ''
         set -efu
         (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
@@ -310,6 +309,7 @@ let {
         # vim-orgmode needs Python, thus vim_configurable instead of just vim
         exec ${pkgs.vim_configurable}/bin/vim "$@"
       '')
+      pkgs.vim_configurable
     ];
   };
 
