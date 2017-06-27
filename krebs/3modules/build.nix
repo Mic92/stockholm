@@ -24,4 +24,6 @@ with import <stockholm/lib>;
       type = types.user;
     };
   };
+
+  config.krebs.build.source.stockholm.file = mkDefault (toString <stockholm>);
 }

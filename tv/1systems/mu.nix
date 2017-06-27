@@ -79,7 +79,7 @@ with import <stockholm/lib>;
     gimp
     xsane
     firefoxWrapper
-    chromiumDev
+    chromium
     skype
     libreoffice
     pidgin-with-plugins
