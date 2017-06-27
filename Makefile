@@ -76,7 +76,8 @@ evaluate = \
 		--show-trace \
 		-I nixos-config=$(nixos-config) \
 		-I stockholm=$(stockholm) \
-		-E "let eval = import <stockholm>; in with eval; $(1)"
+		-E "let eval = import <stockholm>; in with eval; $(1)" \
+		$(2)
 
 ifeq ($(MAKECMDGOALS),)
 $(error No goals specified)
@@ -132,10 +133,10 @@ install:
 # usage: make test system=foo [target=bar] [method={eval,build}]
 method ?= eval
 ifeq ($(method),build)
-test: command = nix-build --no-out-link
+test: test = $(call build,$(1),$(2))
 else
 ifeq ($(method),eval)
-test: command ?= nix-instantiate --eval --json --readonly-mode --strict
+test: test ?= $(call evaluate,$(1),$(2)) --json --strict | jq -r .
 else
 $(error bad method: $(method))
 endif
@@ -147,6 +148,4 @@ else
 test: wrapper = $(ssh) $(target_user)@$(target_host) -p $(target_port)
 endif
 test: populate
-	$(wrapper) \
-		$(command) --show-trace -I $(target_path) \
-			-A config.system.build.toplevel $(target_path)/stockholm
+	$(wrapper) $(call test,config.system.build.toplevel,-I $(target_path))
