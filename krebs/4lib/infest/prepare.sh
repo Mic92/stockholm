@@ -36,14 +36,7 @@ prepare() {(
             ;;
         esac
         ;;
-      nixos)
-        case $(cat /proc/cmdline) in
-          *' root=LABEL=NIXOS_ISO '*)
-            prepare_nixos_iso "$@"
-            exit
-        esac
-        ;;
-      stockholm)
+      nixos|stockholm)
         case $(cat /proc/cmdline) in
           *' root=LABEL=NIXOS_ISO '*)
             prepare_nixos_iso "$@"
@@ -102,7 +95,8 @@ prepare_nixos_iso() {
   mkdir -p bin
   rm -f bin/nixos-install
   cp "$(type -p nixos-install)" bin/nixos-install
-  sed -i "s@^NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
+  sed -i 's@^\(\(export \|\)NIX_PATH\)=\"[^\"]*\"@\1=$target_path@' bin/nixos-install
+
 }
 
 get_nixos_install() {
@@ -217,7 +211,7 @@ prepare_common() {(
   mkdir -p bin
   rm -f bin/nixos-install
   cp "$(type -p nixos-install)" bin/nixos-install
-  sed -i "s@^NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
+  sed -i 's@^\(\(export \|\)NIX_PATH\)=\"[^\"]*\"@\1=$target_path@' bin/nixos-install
 
   if ! grep -q '^PATH.*#krebs' .bashrc; then
     echo '. /root/.nix-profile/etc/profile.d/nix.sh' >> .bashrc
