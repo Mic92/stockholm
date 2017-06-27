@@ -31,7 +31,6 @@ with import <stockholm/lib>;
         get
         gnupg1compat
         haskellPackages.hledger
-        htop
         jq
         mkpasswd
         netcat
