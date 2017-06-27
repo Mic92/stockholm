@@ -51,13 +51,23 @@ $(if $(target_user),,$(error unbound variable: target_user))
 $(if $(target_port),,$(error unbound variable: target_port))
 $(if $(target_path),,$(error unbound variable: target_path))
 
+whatsupnix = \
+	if type whatsupnix >/dev/null 2>&1; then \
+	  whatsupnix $(1); \
+	else \
+	  cat; \
+	fi
+
 build = \
 	nix-build \
+		-Q \
 		--no-out-link \
 		--show-trace \
 		-I nixos-config=$(nixos-config) \
 		-I stockholm=$(stockholm) \
-		-E "with import <stockholm>; $(1)"
+		-E "with import <stockholm>; $(1)" \
+		$(2) \
+	|& $(call whatsupnix)
 
 evaluate = \
 	nix-instantiate \
@@ -84,11 +94,7 @@ deploy:
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		env STOCKHOLM_VERSION="$$STOCKHOLM_VERSION" \
 			nixos-rebuild -Q $(rebuild-command) --show-trace -I $(target_path) \
-		|& if type whatsupnix 2>/dev/null; then \
-		     whatsupnix $(target_user)@$(target_host):$(target_port); \
-		   else \
-		     cat; \
-		   fi
+	|& $(call whatsupnix,$(target_user)@$(target_host):$(target_port))
 
 # usage: make populate system=foo
 populate: populate-target = \
