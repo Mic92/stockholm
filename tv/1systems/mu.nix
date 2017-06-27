@@ -82,12 +82,9 @@ with import <stockholm/lib>;
     chromiumDev
     skype
     libreoffice
-    kde4.l10n.de
-    kde4.plasma-nm
     pidgin-with-plugins
     pidginotr
 
-    kde4.print_manager
     #foomatic_filters
     #gutenprint
     #cups_pdf_filter
@@ -101,7 +98,7 @@ with import <stockholm/lib>;
 
   security.wrappers = {
     sendmail.source = "${pkgs.exim}/bin/sendmail"; # for cron
-    slock.slock = "${pkgs.slock}/bin/slock";
+    slock.source = "${pkgs.slock}/bin/slock";
   };
 
   security.pam.loginLimits = [
@@ -138,7 +135,9 @@ with import <stockholm/lib>;
     twoFingerScroll = true;
   };
 
-  services.xserver.desktopManager.kde4.enable = true;
+  services.xserver.desktopManager.plasma5 = {
+    enable = true;
+  };
   services.xserver.displayManager.auto = {
     enable = true;
     user = "vv";
