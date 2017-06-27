@@ -101,7 +101,7 @@ with import <stockholm/lib>;
 
   security.wrappers = {
     sendmail.source = "${pkgs.exim}/bin/sendmail"; # for cron
-    slock.slock = "${pkgs.slock}/bin/slock";
+    slock.source = "${pkgs.slock}/bin/slock";
   };
 
   security.pam.loginLimits = [
