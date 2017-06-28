@@ -1,20 +1,20 @@
-{ config, lib, pkgs, ... }:
-
 with import <stockholm/lib>;
-
-{
+{ config, lib, pkgs, ... }: let
+  builder = if getEnv "dummy_secrets" == "true"
+              then "buildbot"
+              else "tv";
+in {
   krebs.enable = true;
 
   krebs.build = {
     user = config.krebs.users.tv;
     source = let inherit (config.krebs.build) host; in {
       nixos-config.symlink = "stockholm/tv/1systems/${host.name}.nix";
-      secrets.file =
-        if getEnv "dummy_secrets" == "true"
-          then toString <stockholm/tv/dummy_secrets>
-          else "/home/tv/secrets/${host.name}";
+      secrets.file = getAttr builder {
+        buildbot = toString <stockholm/tv/dummy_secrets>;
+        tv = "/home/tv/secrets/${host.name}";
+      };
       secrets-common.file = "/home/tv/secrets/common";
-      stockholm.file = "/home/tv/stockholm";
       nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
         ref = "412b0a17aa2975e092c7ab95a38561c5f82908d4"; # nixos-17.03

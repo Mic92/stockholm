@@ -51,13 +51,23 @@ $(if $(target_user),,$(error unbound variable: target_user))
 $(if $(target_port),,$(error unbound variable: target_port))
 $(if $(target_path),,$(error unbound variable: target_path))
 
+whatsupnix = \
+	if type whatsupnix >/dev/null 2>&1; then \
+	  whatsupnix $(1); \
+	else \
+	  cat; \
+	fi
+
 build = \
 	nix-build \
+		-Q \
 		--no-out-link \
 		--show-trace \
 		-I nixos-config=$(nixos-config) \
 		-I stockholm=$(stockholm) \
-		-E "with import <stockholm>; $(1)"
+		-E "with import <stockholm>; $(1)" \
+		$(2) \
+	|& $(call whatsupnix)
 
 evaluate = \
 	nix-instantiate \
@@ -66,7 +76,8 @@ evaluate = \
 		--show-trace \
 		-I nixos-config=$(nixos-config) \
 		-I stockholm=$(stockholm) \
-		-E "let eval = import <stockholm>; in with eval; $(1)"
+		-E "let eval = import <stockholm>; in with eval; $(1)" \
+		$(2)
 
 ifeq ($(MAKECMDGOALS),)
 $(error No goals specified)
@@ -84,11 +95,7 @@ deploy:
 	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
 		env STOCKHOLM_VERSION="$$STOCKHOLM_VERSION" \
 			nixos-rebuild -Q $(rebuild-command) --show-trace -I $(target_path) \
-		|& if type whatsupnix 2>/dev/null; then \
-		     whatsupnix $(target_user)@$(target_host):$(target_port); \
-		   else \
-		     cat; \
-		   fi
+	|& $(call whatsupnix,$(target_user)@$(target_host):$(target_port))
 
 # usage: make populate system=foo
 populate: populate-target = \
@@ -126,10 +133,10 @@ install:
 # usage: make test system=foo [target=bar] [method={eval,build}]
 method ?= eval
 ifeq ($(method),build)
-test: command = nix-build --no-out-link
+test: test = $(call build,$(1),$(2))
 else
 ifeq ($(method),eval)
-test: command ?= nix-instantiate --eval --json --readonly-mode --strict
+test: test ?= $(call evaluate,$(1),$(2)) --json --strict | jq -r .
 else
 $(error bad method: $(method))
 endif
@@ -141,6 +148,4 @@ else
 test: wrapper = $(ssh) $(target_user)@$(target_host) -p $(target_port)
 endif
 test: populate
-	$(wrapper) \
-		$(command) --show-trace -I $(target_path) \
-			-A config.system.build.toplevel $(target_path)/stockholm
+	$(wrapper) $(call test,config.system.build.toplevel,-I $(target_path))
