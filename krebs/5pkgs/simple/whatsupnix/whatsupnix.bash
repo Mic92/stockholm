@@ -17,15 +17,12 @@
 #   2     Build error; at least one failed derivation could be found.
 #
 
-GAWK=${GAWK:-gawk}
-NIX_STORE=${NIX_STORE:-nix-store}
-
 failed_drvs=$(mktemp --tmpdir whatsupnix.XXXXXXXX)
 trap 'rm -f -- "$failed_drvs"' EXIT
 
 exec >&2
 
-$GAWK -v failed_drvs="$failed_drvs" '
+gawk -v failed_drvs="$failed_drvs" '
   match($0, /^builder for ‘(\/nix\/store\/[^’]+\.drv)’ failed/, m) {
     print m[1] >> failed_drvs
   }
@@ -35,7 +32,7 @@ $GAWK -v failed_drvs="$failed_drvs" '
 case $# in
   0)
     print_log() {
-      NIX_PAGER= $NIX_STORE -l "$1"
+      NIX_PAGER= nix-store -l "$1"
     }
     ;;
   1)
