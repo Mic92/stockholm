@@ -9,13 +9,21 @@
       (toString <nixpkgs/nixos/modules/virtualisation/virtualbox-guest.nix>)
       ../2configs/main-laptop.nix #< base-gui
 
+      # Tools
+      ../2configs/tools/core.nix
+      ../2configs/tools/core-gui.nix
+      ../2configs/tools/dev.nix
+      ../2configs/tools/extra-gui.nix
+      ../2configs/tools/sec.nix
+
       # environment
       ../2configs/tinc/retiolum.nix
 
+      ../2configs/audio/jack-on-pulse.nix
+      ../2configs/audio/realtime-audio.nix
+
     ];
   networking.extraHosts = import (toString <secrets/extra-hosts.nix>);
-  # workaround for https://github.com/NixOS/nixpkgs/issues/16641
-  services.xserver.videoDrivers = lib.mkOverride 45 [ "virtualbox" "modesetting" ];
 
   nixpkgs.config.allowUnfree = true;
   fileSystems."/nix" = {
