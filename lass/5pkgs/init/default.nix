@@ -19,14 +19,15 @@ pkgs.writeText "init" ''
 
   disk=${disk}
 
-  luksdev=${disk}2
+  luksdev=${disk}3
   luksmap=/dev/mapper/${luksmap}
 
   vgname=${vgname}
 
+  bootdev=/dev/sda2
+
   rootdev=/dev/mapper/${vgname}-root
   homedev=/dev/mapper/${vgname}-home
-  bkudev=/dev/mapper/${vgname}-bku
 
   #
   #generate keyfile
@@ -49,7 +50,8 @@ pkgs.writeText "init" ''
         mklabel gpt \
         mkpart no-fs 0 1024KiB \
         set 1 bios_grub on \
-        mkpart primary 1025KiB 100%
+        mkpart ESP fat32 1025KiB 1024MiB  set 2 boot on \
+        mkpart primary 1025MiB 100%
   fi
 
   if ! test "$(blkid -o value -s PARTLABEL "$luksdev")" = primary; then
@@ -78,9 +80,8 @@ pkgs.writeText "init" ''
 
   lvchange -a y /dev/mapper/"$vgname"
 
-  if ! test -e "$rootdev"; then lvcreate -L 100G -n root "$vgname"; fi
-  if ! test -e "$homedev"; then lvcreate -L 100G -n home "$vgname"; fi
-  if ! test -e "$bkudev"; then lvcreate -L 200G -n bku "$vgname"; fi
+  if ! test -e "$rootdev"; then lvcreate -L 7G -n root "$vgname"; fi
+  if ! test -e "$homedev"; then lvcreate -L 100M -n home "$vgname"; fi
 
   # lvchange -a n "$vgname"
 
@@ -88,6 +89,10 @@ pkgs.writeText "init" ''
   #
   # formatting
   #
+
+  if ! test "$(blkid -o value -s TYPE "$bootdev")" = vfat; then
+    mkfs.vfat "$bootdev"
+  fi
 
   if ! test "$(blkid -o value -s TYPE "$rootdev")" = btrfs; then
     mkfs.btrfs "$rootdev"
@@ -97,21 +102,17 @@ pkgs.writeText "init" ''
     mkfs.btrfs "$homedev"
   fi
 
-  if ! test "$(blkid -o value -s TYPE "$bkudev")" = btrfs; then
-    mkfs.btrfs "$bkudev"
-  fi
-
 
   if ! test "$(lsblk -n -o MOUNTPOINT "$rootdev")" = /mnt; then
     mount "$rootdev" /mnt
   fi
+  if ! test "$(lsblk -n -o MOUNTPOINT "$bootdev")" = /mnt/boot; then
+    mkdir -m 0000 -p /mnt/boot
+    mount "$bootdev" /mnt/boot
+  fi
   if ! test "$(lsblk -n -o MOUNTPOINT "$homedev")" = /mnt/home; then
     mkdir -m 0000 -p /mnt/home
     mount "$homedev" /mnt/home
-  fi
-  if ! test "$(lsblk -n -o MOUNTPOINT "$bkudev")" = /mnt/bku; then
-    mkdir -m 0000 -p /mnt/bku
-    mount "$bkudev" /mnt/bku
   fi
 
   # umount -R /mnt
@@ -122,6 +123,7 @@ pkgs.writeText "init" ''
 
   nix-env -iA nixos.git
 
+  # TODO: get sentinal file from target_path
   mkdir -p /mnt/var/src
   touch /mnt/var/src/.populate
 
