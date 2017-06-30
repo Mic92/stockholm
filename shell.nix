@@ -1,7 +1,6 @@
-{ nixpkgs ? import <nixpkgs> { overlays = [(import ./krebs/5pkgs)]; } }: let
-
-  inherit (nixpkgs) lib pkgs;
-  slib = import ./lib;
+let
+  lib = import ./lib;
+  pkgs = import <nixpkgs> { overlays = [(import ./krebs/5pkgs)]; };
 
   # usage: deploy --system=SYSTEM [--target=TARGET]
   cmds.deploy = pkgs.writeDash "cmds.deploy" ''
