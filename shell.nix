@@ -121,32 +121,27 @@
 
   utils.build = pkgs.writeDash "utils.build" ''
     set -efu
-    expr=$1
-    shift
     ${pkgs.nix}/bin/nix-build \
         -Q \
         --no-out-link \
         --show-trace \
-        -E "with import <stockholm>; $expr" \
+        -E "with import <stockholm>; $1" \
         -I "$target_path" \
-        "$@" \
       2>&1 |
     ${pkgs.whatsupnix}/bin/whatsupnix
   '';
 
   utils.deploy = pkgs.writeDash "utils.deploy" ''
     set -efu
-    PATH=/run/current-system/sw/bin nixos-rebuild \
-        switch \
+    PATH=/run/current-system/sw/bin nixos-rebuild switch \
         -Q \
         --show-trace \
         -I "$target_path" \
-        "$@" \
       2>&1 |
     ${pkgs.whatsupnix}/bin/whatsupnix
   '';
 
-  hook.get-version = pkgs.writeDash "hook.get-version" ''
+  shell.get-version = pkgs.writeDash "shell.get-version" ''
     set -efu
     version=git.$(${pkgs.git}/bin/git describe --always --dirty)
     case $version in (*-dirty)
@@ -156,7 +151,7 @@
     echo "$date.$version"
   '';
 
-  hook.pkg = pkgs.runCommand "hook.pkg" {} /* sh */ ''
+  shell.cmdspkg = pkgs.runCommand "shell.cmdspkg" {} /* sh */ ''
     mkdir -p $out/bin
     ${lib.concatStrings (lib.mapAttrsToList (name: path: /* sh */ ''
       ln -s ${path} $out/bin/${name}
@@ -168,7 +163,7 @@ in pkgs.stdenv.mkDerivation {
   shellHook = /* sh */ ''
     export NIX_PATH="stockholm=$PWD''${NIX_PATH+:$NIX_PATH}"
     export PATH=${lib.makeBinPath [
-      hook.pkg
+      shell.cmdspkg
     ]}
 
     eval "$(declare -F | ${pkgs.gnused}/bin/sed s/declare/unset/)"
@@ -187,7 +182,7 @@ in pkgs.stdenv.mkDerivation {
     }
 
     export HOSTNAME="$(${pkgs.nettools}/bin/hostname)"
-    export STOCKHOLM_VERSION="''${STOCKHOLM_VERSION-$(${hook.get-version})}"
+    export STOCKHOLM_VERSION="''${STOCKHOLM_VERSION-$(${shell.get-version})}"
 
     PS1='\[\e[38;5;162m\]\w\[\e[0m\] '
   '';
