@@ -120,9 +120,6 @@ in {
                           system={}".format(host)]
             )
 
-        for i in [ "alnus", "mu", "nomic", "wu", "xu", "zu" ]:
-            build_host(env_tv, i)
-
         for i in [ "mors", "uriel", "shodan", "icarus", "cloudkrebs", "echelon", "dishfire", "prism" ]:
             build_host(env_lass, i)
 
@@ -134,6 +131,9 @@ in {
 
         for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" ]:
             build_host(env_shared, i)
+
+        for i in [ "alnus", "mu", "nomic", "wu", "xu", "zu" ]:
+            build_host(env_tv, i)
 
         bu.append(
             util.BuilderConfig(
