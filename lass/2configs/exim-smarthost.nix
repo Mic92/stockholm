@@ -32,6 +32,8 @@ with import <stockholm/lib>;
       { from = "feed@lassul.us"; to = lass.mail; }
       { from = "art@lassul.us"; to = lass.mail; }
       { from = "irgendwas@lassul.us"; to = lass.mail; }
+      { from = "polo@lassul.us"; to = lass.mail; }
+      { from = "shack@lassul.us"; to = lass.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }
