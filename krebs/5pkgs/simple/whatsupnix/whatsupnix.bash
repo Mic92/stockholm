@@ -26,7 +26,7 @@ gawk -v failed_drvs="$failed_drvs" '
   match($0, /^builder for ‘(\/nix\/store\/[^’]+\.drv)’ failed/, m) {
     print m[1] >> failed_drvs
   }
-  { print $0 }
+  { print $0; fflush("/dev/stdout") }
 '
 
 case $# in

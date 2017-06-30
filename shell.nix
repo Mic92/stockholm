@@ -137,7 +137,7 @@
         -I "$target_path" \
         "$@" \
       2>&1 |
-    ${pkgs.coreutils}/bin/stdbuf -oL ${pkgs.whatsupnix}/bin/whatsupnix
+    ${pkgs.whatsupnix}/bin/whatsupnix
   '';
 
   utils.deploy = pkgs.writeScript "utils.deploy" /* sh */ ''
@@ -150,7 +150,7 @@
         -I "$target_path" \
         "$@" \
       2>&1 |
-    ${pkgs.coreutils}/bin/stdbuf -oL ${pkgs.whatsupnix}/bin/whatsupnix
+    ${pkgs.whatsupnix}/bin/whatsupnix
   '';
 
   hook.get-version = pkgs.writeScript "hook.get-version" /* sh */ ''
