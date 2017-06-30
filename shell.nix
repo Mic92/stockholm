@@ -151,12 +151,9 @@
     echo "$date.$version"
   '';
 
-  shell.cmdspkg = pkgs.runCommand "shell.cmdspkg" {} /* sh */ ''
-    mkdir -p $out/bin
-    ${lib.concatStrings (lib.mapAttrsToList (name: path: /* sh */ ''
-      ln -s ${path} $out/bin/${name}
-    '') cmds)}
-  '';
+  shell.cmdspkg = pkgs.writeOut "shell.cmdspkg" (lib.mapAttrs' (name: link:
+    lib.nameValuePair "/bin/${name}" { inherit link; }
+  ) cmds);
 
 in pkgs.stdenv.mkDerivation {
   name = "stockholm";
