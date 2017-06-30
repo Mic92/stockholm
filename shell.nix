@@ -4,8 +4,7 @@
   slib = import ./lib;
 
   # usage: deploy system=SYSTEM [target=TARGET]
-  cmds.deploy = pkgs.writeScript "cmds.deploy" /* sh */ ''
-    #! ${pkgs.dash}/bin/dash
+  cmds.deploy = pkgs.writeDash "cmds.deploy" ''
     set -efu
 
     command=deploy
@@ -17,8 +16,7 @@
   '';
 
   # usage: test system=SYSTEM target=TARGET
-  cmds.test = pkgs.writeScript "cmds.test" /* sh */ ''
-    #! ${pkgs.dash}/bin/dash
+  cmds.test = pkgs.writeDash "cmds.test" /* sh */ ''
     set -efu
 
     command=test
@@ -65,8 +63,7 @@
       fi
     fi
   '' // {
-    parsetarget = pkgs.writeScript "init.env.parsetarget" /* sh */ ''
-      #! ${pkgs.dash}/bin/dash
+    parsetarget = pkgs.writeDash "init.env.parsetarget" ''
       set -efu
       exec ${pkgs.jq}/bin/jq \
           -enr \
@@ -86,8 +83,7 @@
         }
       '';
     };
-    populate = pkgs.writeScript "init.env.populate" /* sh */ ''
-      #! ${pkgs.dash}/bin/dash
+    populate = pkgs.writeDash "init.env.populate" ''
       set -efu
       ${pkgs.nix}/bin/nix-instantiate \
           --eval \
@@ -102,8 +98,7 @@
           "$target_user@$target_host:$target_port$target_path" \
         >&2
     '';
-    proxy = pkgs.writeScript "init.env.proxy" /* sh */ ''
-      #! ${pkgs.dash}/bin/dash
+    proxy = pkgs.writeDash "init.env.proxy" ''
       set -efu
       q() {
         ${pkgs.jq}/bin/jq -nr --arg x "$*" '$x | @sh "\(.)"'
@@ -124,8 +119,7 @@
     '';
   };
 
-  utils.build = pkgs.writeScript "utils.build" /* sh */ ''
-    #! ${pkgs.dash}/bin/dash
+  utils.build = pkgs.writeDash "utils.build" ''
     set -efu
     expr=$1
     shift
@@ -140,8 +134,7 @@
     ${pkgs.whatsupnix}/bin/whatsupnix
   '';
 
-  utils.deploy = pkgs.writeScript "utils.deploy" /* sh */ ''
-    #! ${pkgs.dash}/bin/dash
+  utils.deploy = pkgs.writeDash "utils.deploy" ''
     set -efu
     PATH=/run/current-system/sw/bin nixos-rebuild \
         switch \
@@ -153,8 +146,7 @@
     ${pkgs.whatsupnix}/bin/whatsupnix
   '';
 
-  hook.get-version = pkgs.writeScript "hook.get-version" /* sh */ ''
-    #! ${pkgs.dash}/bin/dash
+  hook.get-version = pkgs.writeDash "hook.get-version" ''
     set -efu
     version=git.$(${pkgs.git}/bin/git describe --always --dirty)
     case $version in (*-dirty)
