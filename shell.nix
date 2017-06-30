@@ -1,11 +1,7 @@
-{ nixpkgs ? import <nixpkgs> {} }: let
+{ nixpkgs ? import <nixpkgs> { overlays = [(import ./krebs/5pkgs)]; } }: let
 
   inherit (nixpkgs) lib pkgs;
   slib = import ./lib;
-  spkgs = {
-    populate = pkgs.callPackage ./krebs/5pkgs/simple/populate {};
-    whatsupnix = pkgs.callPackage ./krebs/5pkgs/simple/whatsupnix {};
-  };
 
   # usage: deploy system=SYSTEM [target=TARGET]
   cmds.deploy = pkgs.writeScript "cmds.deploy" /* sh */ ''
@@ -102,7 +98,7 @@
           -I nixos-config="$config" \
           -E 'with import <stockholm>; config.krebs.build.source' \
         |
-      ${spkgs.populate}/bin/populate \
+      ${pkgs.populate}/bin/populate \
           "$target_user@$target_host:$target_port$target_path" \
         >&2
     '';
@@ -141,7 +137,7 @@
         -I "$target_path" \
         "$@" \
       2>&1 |
-    ${pkgs.coreutils}/bin/stdbuf -oL ${spkgs.whatsupnix}/bin/whatsupnix
+    ${pkgs.coreutils}/bin/stdbuf -oL ${pkgs.whatsupnix}/bin/whatsupnix
   '';
 
   utils.deploy = pkgs.writeScript "utils.deploy" /* sh */ ''
@@ -154,7 +150,7 @@
         -I "$target_path" \
         "$@" \
       2>&1 |
-    ${pkgs.coreutils}/bin/stdbuf -oL ${spkgs.whatsupnix}/bin/whatsupnix
+    ${pkgs.coreutils}/bin/stdbuf -oL ${pkgs.whatsupnix}/bin/whatsupnix
   '';
 
   hook.get-version = pkgs.writeScript "hook.get-version" /* sh */ ''
