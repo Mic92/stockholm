@@ -64,10 +64,11 @@
 
     export qtarget="$target_user@$target_host:$target_port$target_path"
 
-    ${init.env.populate}
-
-    if \test "$target_local" != true && \test "''${DISABLE_PROXY-}" != 1; then
-      exec ${init.env.proxy} "$command" "$@"
+    if \test "''${using_proxy-}" != true; then
+      ${init.env.populate}
+      if \test "$target_local" != true; then
+        exec ${init.env.proxy} "$command" "$@"
+      fi
     fi
   '' // {
     parsetarget = pkgs.writeScript "init.env.parsetarget" /* sh */ ''
@@ -94,10 +95,6 @@
     populate = pkgs.writeScript "init.env.populate" /* sh */ ''
       #! ${pkgs.dash}/bin/dash
       set -efu
-      if \test "''${DISABLE_POPULATE-}" = 1; then
-        exit
-      fi
-      set -x
       ${pkgs.nix}/bin/nix-instantiate \
           --eval \
           --json \
@@ -125,8 +122,7 @@
                 config=$config \
                 system=$system \
                 target=$target \
-                DISABLE_POPULATE=1 \
-                DISABLE_PROXY=1 \
+                using_proxy=true \
                 "$*"
             )
     '';
