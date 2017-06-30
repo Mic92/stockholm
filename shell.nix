@@ -3,7 +3,7 @@
   inherit (nixpkgs) lib pkgs;
   slib = import ./lib;
 
-  # usage: deploy system=SYSTEM [target=TARGET]
+  # usage: deploy --system=SYSTEM [--target=TARGET]
   cmds.deploy = pkgs.writeDash "cmds.deploy" ''
     set -efu
 
@@ -15,7 +15,7 @@
     exec ${utils.deploy}
   '';
 
-  # usage: test system=SYSTEM target=TARGET
+  # usage: test --system=SYSTEM --target=TARGET
   cmds.test = pkgs.writeDash "cmds.test" /* sh */ ''
     set -efu
 
@@ -28,18 +28,19 @@
   '';
 
   init.args = pkgs.writeText "init.args" /* sh */ ''
-    fail=
-    for arg; do
-      case $arg in
-        system=*) system=''${arg#*=};;
-        target=*) target=''${arg#*=};;
-        *) echo "$command: bad argument: $arg" >&2; fail=1
-      esac
-    done
-    if \test -n "$fail"; then  
-      exit 1
-    fi
-    unset fail
+    args=$(${pkgs.utillinux}/bin/getopt -n "$command" -s sh \
+        -o s:t: \
+        -l system:,target: \
+        -- "$@")
+    if \test $? != 0; then exit 1; fi
+    eval set -- "$args"
+    while :; do case $1 in
+      -s|--system) system=$2; shift 2;;
+      -t|--target) target=$2; shift 2;;
+      --) shift; break;;
+    esac; done
+    for arg; do echo "$command: bad argument: $arg" >&2; done
+    if \test $# != 0; then exit 2; fi
   '';
 
   init.env = pkgs.writeText "init.env" /* sh */ ''
