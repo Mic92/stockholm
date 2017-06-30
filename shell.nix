@@ -62,8 +62,6 @@
     export target_path="$(echo $target_object | ${pkgs.jq}/bin/jq -r .path)"
     export target_local="$(echo $target_object | ${pkgs.jq}/bin/jq -r .local)"
 
-    export qtarget="$target_user@$target_host:$target_port$target_path"
-
     if \test "''${using_proxy-}" != true; then
       ${init.env.populate}
       if \test "$target_local" != true; then
@@ -104,7 +102,9 @@
           -I nixos-config="$config" \
           -E 'with import <stockholm>; config.krebs.build.source' \
         |
-      ${spkgs.populate}/bin/populate "$qtarget" >&2
+      ${spkgs.populate}/bin/populate \
+          "$target_user@$target_host:$target_port$target_path" \
+        >&2
     '';
     proxy = pkgs.writeScript "init.env.proxy" /* sh */ ''
       #! ${pkgs.dash}/bin/dash
