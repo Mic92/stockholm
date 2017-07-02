@@ -142,17 +142,6 @@ let
         PrivateTmp = "true";
         SyslogIdentifier = "urlwatch";
         Type = "oneshot";
-        ExecStartPre =
-          pkgs.writeDash "urlwatch-prestart" ''
-            set -euf
-
-            dataDir=$HOME
-
-            if ! test -e "$dataDir"; then
-              mkdir -m 0700 -p "$dataDir"
-              chown ${user.name}: "$dataDir"
-            fi
-          '';
         ExecStart = pkgs.writeDash "urlwatch" ''
           set -euf
 
@@ -185,6 +174,8 @@ let
     };
     users.extraUsers = singleton {
       inherit (user) name uid;
+      home = cfg.dataDir;
+      createHome = true;
     };
   };
 
