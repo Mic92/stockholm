@@ -60,6 +60,7 @@ let
       description = "URL to watch.";
       example = [
         https://nixos.org/channels/nixos-unstable/git-revision
+        { url = http://localhost ; filter = "grep:important.*stuff"; }
       ];
       apply = map (x: getAttr (typeOf x) {
         set = x;
@@ -79,7 +80,8 @@ let
   };
 
   urlsFile = pkgs.writeText "urls"
-    (concatMapStringsSep "\n---\n" toJSON cfg.urls);
+    (concatMapStringsSep "\n---\n"
+      (x: toJSON (filterAttrs (n: v: n != "_module") x)) cfg.urls);
 
   hooksFile = cfg.hooksFile;
 
