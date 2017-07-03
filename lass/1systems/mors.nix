@@ -96,49 +96,30 @@ with import <stockholm/lib>;
     loader.grub.enable = true;
     loader.grub.version = 2;
     loader.grub.device = "/dev/sda";
+    loader.grub.efiSupport = true;
 
-    initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; } ];
+    initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda3"; } ];
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
   };
   fileSystems = {
     "/" = {
-      device = "/dev/big/nix";
-      fsType = "ext4";
+      device = "/dev/mapper/pool-root";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
-
     "/boot" = {
-      device = "/dev/sda1";
+      device = "/dev/sda2";
     };
-
-    "/mnt/loot" = {
-      device = "/dev/big/loot";
-      fsType = "ext4";
-    };
-
+    #"/bku" = {
+    #  device = "/dev/mapper/pool-bku";
+    #  fsType = "btrfs";
+    #  options = ["defaults" "noatime" "ssd" "compress=lzo"];
+    #};
     "/home" = {
-      device = "/dev/big/home";
-      fsType = "ext4";
-    };
-
-    "/home/lass" = {
-      device = "/dev/big/home-lass";
-      fsType = "ext4";
-    };
-
-    "/home/games/.local/share/Steam" = {
-      device = "/dev/big/steam";
-      fsType = "ext4";
-    };
-
-    "/home/virtual/virtual" = {
-      device = "/dev/big/virtual";
-      fsType = "ext4";
-    };
-
-    "/mnt/conf" = {
-      device = "/dev/big/conf";
-      fsType = "ext4";
+      device = "/dev/mapper/pool-home";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
     "/tmp" = {
       device = "tmpfs";

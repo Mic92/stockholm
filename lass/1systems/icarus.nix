@@ -6,9 +6,9 @@ with import <stockholm/lib>;
     ../.
     ../2configs/retiolum.nix
     ../2configs/hw/tp-x220.nix
-    ../2configs/baseX.nix
     ../2configs/git.nix
     ../2configs/exim-retiolum.nix
+    ../2configs/baseX.nix
     ../2configs/browsers.nix
     ../2configs/programs.nix
     ../2configs/fetchWallpaper.nix
@@ -22,9 +22,9 @@ with import <stockholm/lib>;
     loader.grub.enable = true;
     loader.grub.version = 2;
     loader.grub.device = "/dev/sda";
-    loader.grub.enableCryptodisk = true;
+    loader.grub.efiSupport = true;
 
-    initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; } ];
+    initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda3"; } ];
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
   };
@@ -34,11 +34,14 @@ with import <stockholm/lib>;
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
-    "/bku" = {
-      device = "/dev/mapper/pool-bku";
-      fsType = "btrfs";
-      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+    "/boot" = {
+      device = "/dev/sda2";
     };
+    #"/bku" = {
+    #  device = "/dev/mapper/pool-bku";
+    #  fsType = "btrfs";
+    #  options = ["defaults" "noatime" "ssd" "compress=lzo"];
+    #};
     "/home" = {
       device = "/dev/mapper/pool-home";
       fsType = "btrfs";
