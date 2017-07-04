@@ -79,7 +79,6 @@ with import <stockholm/lib>;
           if getEnv "dummy_secrets" == "true"
             then toString <stockholm/lass/2configs/tests/dummy-secrets>
             else "/home/lass/secrets/${host.name}";
-        stockholm.file = getEnv "PWD";
       };
     };
   };
