@@ -17,7 +17,7 @@ in {
       secrets-common.file = "/home/tv/secrets/common";
       nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
-        ref = "412b0a17aa2975e092c7ab95a38561c5f82908d4"; # nixos-17.03
+        ref = "057f89b9344e5341796046f25ae4f269be6d4529"; # nixos-17.03
       };
     } // optionalAttrs host.secure {
       secrets-master.file = "/home/tv/secrets/master";
