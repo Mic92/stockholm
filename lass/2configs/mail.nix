@@ -48,6 +48,8 @@ let
     set use_from=yes
     set envelope_from=yes
 
+    set sort=threads
+
     set index_format="%4C %Z %?GI?%GI& ? %[%d/%b]  %-16.15F %?M?(%3M)&     ? %s %> %?g?%g?"
 
     virtual-mailboxes \
