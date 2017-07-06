@@ -61,6 +61,11 @@ in {
       "karlaskop.ubikmedia.de"
       "nb.ubikmedia.de"
       "youthtube.ubikmedia.de"
+      "weirdwednesday.ubikmedia.de"
+      "weirdwednesday.de"
+      "www.weirdwednesday.de"
+      "freemonkey.ubikmedia.de"
+      "jarugadesign.ubikmedia.de"
     ])
   ];
 

@@ -56,51 +56,6 @@ in {
           mode='full'
       )
 
-      # TODO: get nixpkgs/stockholm paths from krebs
-      env_lass = {
-        "LOGNAME": "lass",
-        "NIX_REMOTE": "daemon",
-        "dummy_secrets": "true",
-      }
-      env_makefu = {
-        "LOGNAME": "makefu",
-        "NIX_REMOTE": "daemon",
-        "dummy_secrets": "true",
-      }
-      env_nin = {
-        "LOGNAME": "nin",
-        "NIX_REMOTE": "daemon",
-        "dummy_secrets": "true",
-      }
-      env_shared = {
-        "LOGNAME": "shared",
-        "NIX_REMOTE": "daemon",
-        "dummy_secrets": "true",
-      }
-      env_tv = {
-        "LOGNAME": "tv",
-        "NIX_REMOTE": "daemon",
-        "dummy_secrets": "true",
-      }
-
-      # prepare nix-shell
-      # the dependencies which are used by the test script
-      deps = [
-        "gnumake",
-        "jq",
-        "nix",
-        "(import <stockholm>).pkgs.populate",
-        "openssh"
-      ]
-      # TODO: --pure , prepare ENV in nix-shell command:
-      #                   SSL_CERT_FILE,LOGNAME,NIX_REMOTE
-      nixshell = [
-        "nix-shell",
-        "-I", "/var/src",
-        "-I", "stockholm=.",
-        "-p"
-      ] + deps + [ "--run" ]
-
       # prepare addShell function
       def addShell(factory,**kwargs):
         factory.addStep(steps.ShellCommand(**kwargs))
@@ -110,30 +65,35 @@ in {
         f = util.BuildFactory()
         f.addStep(grab_repo)
 
-        def build_host(env, host):
-            addShell(f,name="build-{}".format(i),env=env,
-                command=nixshell + ["mkdir -p $HOME/$LOGNAME && touch $HOME/$LOGNAME/.populate; \
-                      echo $HOME; echo $LOGNAME; \
-                      test -e $HOME/$LOGNAME/nixpkgs || cp -r /var/src/nixpkgs $HOME/$LOGNAME/; \
-                      make NIX_PATH=$HOME/$LOGNAME:secrets=/var/src/stockholm/null test method=build \
-                          target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME \
-                          system={}".format(host)]
+        def build_host(user, host):
+            addShell(f,
+                name="{}".format(i),
+                env={
+                  "LOGNAME": user,
+                  "NIX_PATH": "secrets=/var/src/stockholm/null:/var/src",
+                  "NIX_REMOTE": "daemon",
+                  "dummy_secrets": "true",
+                },
+                command=[
+                  "nix-shell", "--run",
+                  "test --system={} --target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME".format(host)
+                ]
             )
 
-        for i in [ "alnus", "mu", "nomic", "wu", "xu", "zu" ]:
-            build_host(env_tv, i)
-
         for i in [ "mors", "uriel", "shodan", "icarus", "cloudkrebs", "echelon", "dishfire", "prism" ]:
-            build_host(env_lass, i)
+            build_host("lass", i)
 
         for i in [ "x", "wry", "vbob", "wbob", "shoney" ]:
-            build_host(env_makefu, i)
+            build_host("makefu", i)
 
         for i in [ "hiawatha", "onondaga" ]:
-            build_host(env_nin, i)
+            build_host("nin", i)
 
         for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" ]:
-            build_host(env_shared, i)
+            build_host("shared", i)
+
+        for i in [ "alnus", "mu", "nomic", "wu", "xu", "zu" ]:
+            build_host("tv", i)
 
         bu.append(
             util.BuilderConfig(

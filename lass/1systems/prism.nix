@@ -229,6 +229,10 @@ in {
         OnUnitInactiveSec = "2min";
         RandomizedDelaySec = "2min";
       };
+      krebs.repo-sync.repos.nixpkgs.timerConfig = {
+        OnBootSec = "90min";
+        OnUnitInactiveSec = "24h";
+      };
     }
     {
       lass.usershadow = {

@@ -12,5 +12,8 @@
     cac-api
     cac-panel
     ovh-zone
+    whatsupnix
+    brain
+    gen-oath-safe
   ];
 }

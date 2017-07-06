@@ -60,6 +60,7 @@ let
       description = "URL to watch.";
       example = [
         https://nixos.org/channels/nixos-unstable/git-revision
+        { url = http://localhost ; filter = "grep:important.*stuff"; }
       ];
       apply = map (x: getAttr (typeOf x) {
         set = x;
@@ -79,7 +80,8 @@ let
   };
 
   urlsFile = pkgs.writeText "urls"
-    (concatMapStringsSep "\n---\n" toJSON cfg.urls);
+    (concatMapStringsSep "\n---\n"
+      (x: toJSON (filterAttrs (n: v: n != "_module") x)) cfg.urls);
 
   hooksFile = cfg.hooksFile;
 
@@ -142,17 +144,6 @@ let
         PrivateTmp = "true";
         SyslogIdentifier = "urlwatch";
         Type = "oneshot";
-        ExecStartPre =
-          pkgs.writeDash "urlwatch-prestart" ''
-            set -euf
-
-            dataDir=$HOME
-
-            if ! test -e "$dataDir"; then
-              mkdir -m 0700 -p "$dataDir"
-              chown ${user.name}: "$dataDir"
-            fi
-          '';
         ExecStart = pkgs.writeDash "urlwatch" ''
           set -euf
 
@@ -185,6 +176,8 @@ let
     };
     users.extraUsers = singleton {
       inherit (user) name uid;
+      home = cfg.dataDir;
+      createHome = true;
     };
   };
 

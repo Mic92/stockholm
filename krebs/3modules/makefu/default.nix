@@ -308,7 +308,6 @@ with import <stockholm/lib>;
       extraZones = {
         "krebsco.de" = ''
           wry               IN A      ${nets.internet.ip4.addr}
-          io                IN NS     wry.krebsco.de.
           tinc              IN A      ${nets.internet.ip4.addr}
         '';
       };
@@ -470,6 +469,7 @@ with import <stockholm/lib>;
           wiki.euer         IN A      ${nets.internet.ip4.addr}
           graph             IN A      ${nets.internet.ip4.addr}
           ghook             IN A      ${nets.internet.ip4.addr}
+          io                IN NS     gum.krebsco.de.
         '';
       };
       nets = rec {
