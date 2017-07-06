@@ -12,7 +12,7 @@ export STOCKHOLM_VERSION ?= $(shell \
 system ?= $(HOSTNAME)
 $(if $(system),,$(error unbound variable: system))
 
-nixos-config ?= $(stockholm)/$(LOGNAME)/1systems/$(system).nix
+nixos-config ?= $(stockholm)/$(LOGNAME)/1systems/$(system)/config.nix
 ifneq ($(words $(wildcard $(nixos-config))),1)
 $(error bad nixos-config: $(nixos-config))
 endif

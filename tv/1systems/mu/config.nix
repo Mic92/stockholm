@@ -4,11 +4,11 @@ with import <stockholm/lib>;
 
 {
   imports = [
-    ../../krebs
-    ../2configs
-    ../3modules
-    ../2configs/exim-retiolum.nix
-    ../2configs/retiolum.nix
+    <stockholm/krebs>
+    <stockholm/tv/2configs>
+    <stockholm/tv/3modules>
+    <stockholm/tv/2configs/exim-retiolum.nix>
+    <stockholm/tv/2configs/retiolum.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.mu;

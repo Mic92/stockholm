@@ -3,28 +3,22 @@
 with import <stockholm/lib>;
 
 {
-  krebs.build.host = config.krebs.hosts.zu;
+  krebs.build.host = config.krebs.hosts.wu;
 
   imports = [
-    {
-      options.tv.test.sercret-file = mkOption {
-        type = types.secret-file;
-        default = {};
-      };
-    }
-    ../.
-    ../2configs/hw/x220.nix
-    ../2configs/exim-retiolum.nix
-    ../2configs/gitrepos.nix
-    ../2configs/mail-client.nix
-    ../2configs/man.nix
-    ../2configs/nginx/public_html.nix
-    ../2configs/pulse.nix
-    ../2configs/retiolum.nix
-    ../2configs/xserver
+    <stockholm/tv>
+    <stockholm/tv/2configs/hw/w110er.nix>
+    <stockholm/tv/2configs/exim-retiolum.nix>
+    <stockholm/tv/2configs/gitrepos.nix>
+    <stockholm/tv/2configs/im.nix>
+    <stockholm/tv/2configs/mail-client.nix>
+    <stockholm/tv/2configs/man.nix>
+    <stockholm/tv/2configs/nginx/public_html.nix>
+    <stockholm/tv/2configs/pulse.nix>
+    <stockholm/tv/2configs/retiolum.nix>
+    <stockholm/tv/2configs/xserver>
     {
       environment.systemPackages = with pkgs; [
-
         # root
         cryptsetup
 
@@ -34,6 +28,7 @@ with import <stockholm/lib>;
         cac-api
         dic
         file
+        get
         gnupg1compat
         haskellPackages.hledger
         jq
@@ -42,11 +37,8 @@ with import <stockholm/lib>;
         nix-repl
         nmap
         p7zip
-        pass
-        q
+        push
         qrencode
-        # XXX fails at systemd.services.dbus.unitConfig
-        #texlive
         tmux
 
         #ack
@@ -73,6 +65,7 @@ with import <stockholm/lib>;
         #minicom
         #mtools
         #ncmpc
+        #neovim
         #nethogs
         #nix-prefetch-scripts #cvs bug
         #openssl
@@ -114,18 +107,23 @@ with import <stockholm/lib>;
   boot.initrd.luks = {
     cryptoModules = [ "aes" "sha512" "xts" ];
     devices = [
-      { name = "zuca"; device = "/dev/sda2"; }
+      { name = "wuca"; device = "/dev/sda2"; }
     ];
   };
 
   fileSystems = {
     "/" = {
-      device = "/dev/mapper/zuvga-root";
+      device = "/dev/mapper/wuvga-root";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+    };
+    "/bku" = {
+      device = "/dev/mapper/wuvga-bku";
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
     "/home" = {
-      device = "/dev/mapper/zuvga-home";
+      device = "/dev/mapper/wuvga-home";
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
@@ -139,13 +137,17 @@ with import <stockholm/lib>;
     };
   };
 
+  krebs.nixpkgs.allowUnfreePredicate = pkg: hasPrefix "nvidia-x11-" pkg.name;
+  hardware.bumblebee.enable = true;
+  hardware.bumblebee.group = "video";
+  hardware.enableAllFirmware = true;
+  hardware.opengl.driSupport32Bit = true;
+
   environment.systemPackages = with pkgs; [
     ethtool
     tinc_pre
     iptables
     #jack2
-
-    gptfdisk
   ];
 
   security.wrappers = {
@@ -159,12 +161,14 @@ with import <stockholm/lib>;
     "d /tmp 1777 root root - -" # does this work with mounted /tmp?
   ];
 
-  #services.bitlbee.enable = true;
-  #services.tor.client.enable = true;
-  #services.tor.enable = true;
-  #services.virtualboxHost.enable = true;
+  services.udev.extraRules = ''
+    SUBSYSTEM=="net", ATTR{address}=="00:90:f5:da:aa:c3", NAME="en0"
+    SUBSYSTEM=="net", ATTR{address}=="a0:88:b4:1b:ae:6c", NAME="wl0"
 
+    # for jack
+    KERNEL=="rtc0", GROUP="audio"
+    KERNEL=="hpet", GROUP="audio"
+  '';
 
-  # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "15.09";
+  virtualisation.virtualbox.host.enable = true;
 }

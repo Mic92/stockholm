@@ -4,10 +4,10 @@ with import <stockholm/lib>;
 
 {
   imports = [
-    ../.
-    ../2configs/hw/x220.nix
-    ../2configs/exim-retiolum.nix
-    ../2configs/retiolum.nix
+    <stockholm/tv>
+    <stockholm/tv/2configs/hw/x220.nix>
+    <stockholm/tv/2configs/exim-retiolum.nix>
+    <stockholm/tv/2configs/retiolum.nix>
   ];
 
   # TODO remove non-hardware stuff from ../2configs/hw/x220.nix

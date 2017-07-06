@@ -1,6 +1,9 @@
 let
   nixpkgs-lib = import <nixpkgs/lib>;
   lib = with lib; nixpkgs-lib // builtins // {
+
+    evalSource = import ./eval-source.nix;
+
     git = import ./git.nix { inherit lib; };
     shell = import ./shell.nix { inherit lib; };
     types = nixpkgs-lib.types // import ./types.nix { inherit lib; };

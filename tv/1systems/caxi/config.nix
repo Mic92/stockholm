@@ -6,10 +6,10 @@ with import <stockholm/lib>;
   krebs.build.host = config.krebs.hosts.caxi;
 
   imports = [
-    ../.
-    ../2configs/hw/CAC-Developer-1.nix
-    ../2configs/fs/CAC-CentOS-7-64bit.nix
-    ../2configs/retiolum.nix
+    <stockholm/tv>
+    <stockholm/tv/2configs/hw/CAC-Developer-1.nix>
+    <stockholm/tv/2configs/fs/CAC-CentOS-7-64bit.nix>
+    <stockholm/tv/2configs/retiolum.nix>
   ];
 
   networking = let

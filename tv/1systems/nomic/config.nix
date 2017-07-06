@@ -6,16 +6,16 @@ with import <stockholm/lib>;
   krebs.build.host = config.krebs.hosts.nomic;
 
   imports = [
-    ../.
-    ../2configs/hw/x220.nix
-    ../2configs/exim-retiolum.nix
-    ../2configs/gitrepos.nix
-    ../2configs/im.nix
-    ../2configs/mail-client.nix
-    ../2configs/nginx/public_html.nix
-    ../2configs/pulse.nix
-    ../2configs/retiolum.nix
-    ../2configs/xserver
+    <stockholm/tv>
+    <stockholm/tv/2configs/hw/x220.nix>
+    <stockholm/tv/2configs/exim-retiolum.nix>
+    <stockholm/tv/2configs/gitrepos.nix>
+    <stockholm/tv/2configs/im.nix>
+    <stockholm/tv/2configs/mail-client.nix>
+    <stockholm/tv/2configs/nginx/public_html.nix>
+    <stockholm/tv/2configs/pulse.nix>
+    <stockholm/tv/2configs/retiolum.nix>
+    <stockholm/tv/2configs/xserver>
   ];
 
   boot.initrd.luks = {

@@ -14,16 +14,9 @@ with import <stockholm/lib>;
       default = "/nix/var/nix/profiles/system";
     };
 
-    source = mkOption {
-      type = types.attrsOf types.source;
-      default = {};
-    };
-
     # TODO deprecate krebs.build.user
     user = mkOption {
       type = types.user;
     };
   };
-
-  config.krebs.build.source.stockholm.file = mkDefault (toString <stockholm>);
 }

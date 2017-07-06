@@ -3,24 +3,27 @@
 with import <stockholm/lib>;
 
 {
-  krebs.build.host = config.krebs.hosts.xu;
+  krebs.build.host = config.krebs.hosts.zu;
 
   imports = [
-    ../.
-    ../2configs/hw/x220.nix
-    ../2configs/exim-retiolum.nix
-    ../2configs/gitconfig.nix
-    ../2configs/gitrepos.nix
-    ../2configs/mail-client.nix
-    ../2configs/man.nix
-    ../2configs/nginx/public_html.nix
-    ../2configs/pulse.nix
-    ../2configs/retiolum.nix
-    ../2configs/binary-cache
-    ../2configs/xserver
+    {
+      options.tv.test.sercret-file = mkOption {
+        type = types.secret-file;
+        default = {};
+      };
+    }
+    <stockholm/tv>
+    <stockholm/tv/2configs/hw/x220.nix>
+    <stockholm/tv/2configs/exim-retiolum.nix>
+    <stockholm/tv/2configs/gitrepos.nix>
+    <stockholm/tv/2configs/mail-client.nix>
+    <stockholm/tv/2configs/man.nix>
+    <stockholm/tv/2configs/nginx/public_html.nix>
+    <stockholm/tv/2configs/pulse.nix>
+    <stockholm/tv/2configs/retiolum.nix>
+    <stockholm/tv/2configs/xserver>
     {
       environment.systemPackages = with pkgs; [
-
 
         # root
         cryptsetup
@@ -28,24 +31,22 @@ with import <stockholm/lib>;
         # tv
         bc
         bind # dig
-        brain
         cac-api
         dic
         file
         gnupg1compat
         haskellPackages.hledger
         jq
-        krebszones
         mkpasswd
         netcat
-        netcup
         nix-repl
         nmap
         p7zip
         pass
         q
         qrencode
-        texlive.combined.scheme-full
+        # XXX fails at systemd.services.dbus.unitConfig
+        #texlive
         tmux
 
         #ack
@@ -113,23 +114,18 @@ with import <stockholm/lib>;
   boot.initrd.luks = {
     cryptoModules = [ "aes" "sha512" "xts" ];
     devices = [
-      { name = "xuca"; device = "/dev/sda2"; }
+      { name = "zuca"; device = "/dev/sda2"; }
     ];
   };
 
   fileSystems = {
     "/" = {
-      device = "/dev/mapper/xuvga-root";
-      fsType = "btrfs";
-      options = ["defaults" "noatime" "ssd" "compress=lzo"];
-    };
-    "/bku" = {
-      device = "/dev/mapper/xuvga-bku";
+      device = "/dev/mapper/zuvga-root";
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
     "/home" = {
-      device = "/dev/mapper/xuvga-home";
+      device = "/dev/mapper/zuvga-home";
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };

@@ -43,9 +43,11 @@ let
   '';
 
   init.env = pkgs.writeText "init.env" /* sh */ ''
-    config=''${config-$LOGNAME/1systems/$system.nix}
+    config=''${config-$LOGNAME/1systems/$system/config.nix}
+    source=''${source-$LOGNAME/1systems/$system/source.nix}
 
     export config
+    export source
     export system
     export target
 
@@ -92,7 +94,7 @@ let
           --show-trace \
           --strict \
           -I nixos-config="$config" \
-          -E 'with import <stockholm>; config.krebs.build.source')
+          "$source")
       echo $_source |
       ${pkgs.populate}/bin/populate \
           "$target_user@$target_host:$target_port$target_path" \
