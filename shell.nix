@@ -109,7 +109,7 @@ let
         NIX_PATH=$(q "$target_path") \
         STOCKHOLM_VERSION=$STOCKHOLM_VERSION \
         nix-shell \
-            --command $(q \
+            --run $(q \
                 config=$config \
                 system=$system \
                 target=$target \
