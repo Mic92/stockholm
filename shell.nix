@@ -85,18 +85,19 @@ let
     };
     populate = pkgs.writeDash "init.env.populate" ''
       set -efu
-      ${pkgs.nix}/bin/nix-instantiate \
+      _source=$(${pkgs.nix}/bin/nix-instantiate \
           --eval \
           --json \
           --readonly-mode \
           --show-trace \
           --strict \
           -I nixos-config="$config" \
-          -E 'with import <stockholm>; config.krebs.build.source' \
-        |
+          -E 'with import <stockholm>; config.krebs.build.source')
+      echo $_source |
       ${pkgs.populate}/bin/populate \
           "$target_user@$target_host:$target_port$target_path" \
         >&2
+      unset _source
     '';
     proxy = pkgs.writeDash "init.env.proxy" ''
       set -efu
