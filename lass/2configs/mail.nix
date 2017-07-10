@@ -43,10 +43,14 @@ let
     set nm_record = yes
     set nm_record_tags = "-inbox me archive"
     set virtual_spoolfile=yes                    # enable virtual folders
-    set sendmail="${msmtp}/bin/msmtp"                         # enables parsing of outgoing mail
+
+
+    set sendmail="${msmtp}/bin/msmtp"            # enables parsing of outgoing mail
     set from="lassulus@lassul.us"
+    alternates ^.*@lassul\.us$ ^.*@.*\.r$
     set use_from=yes
     set envelope_from=yes
+    set reverse_name
 
     set sort=threads
 
