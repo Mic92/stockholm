@@ -54,7 +54,15 @@ let
 
     set sort=threads
 
-    set index_format="%4C %Z %?GI?%GI& ? %[%d/%b]  %-16.15F %?M?(%3M)&     ? %s %> %?g?%g?"
+    set index_format="${pkgs.writeDash "mutt-index" ''
+      # http://www.mutt.org/doc/manual/#formatstrings
+      recipent="$(echo $1 | sed 's/.*<\([^>]*\).*/\1/')"
+      #     output to mutt
+      #           V
+      echo "%4C %Z %?GI?%GI& ? %[%d/%b] %-20.20a %?M?(%3M)& ? %s %> $recipent %?g?%g?%"
+      # args to mutt-index dash script
+      # V
+    ''} %r |"
 
     virtual-mailboxes \
         "INBOX"     "notmuch://?query=tag:inbox and NOT tag:killed"\
