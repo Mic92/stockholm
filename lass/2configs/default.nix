@@ -36,6 +36,7 @@ with import <stockholm/lib>;
           extraGroups = [
             "audio"
             "fuse"
+            "wheel"
           ];
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
