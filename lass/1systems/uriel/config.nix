@@ -4,9 +4,9 @@ with builtins;
 with import <stockholm/lib>;
 {
   imports = [
-    ../.
-    ../2configs/retiolum.nix
-    ../2configs/exim-retiolum.nix
+    <stockholm/lass>
+    <stockholm/lass/2configs/retiolum.nix>
+    <stockholm/lass/2configs/exim-retiolum.nix>
     {
       # locke config
       i18n.defaultLocale ="de_DE.UTF-8";

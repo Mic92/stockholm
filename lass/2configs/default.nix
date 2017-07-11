@@ -6,7 +6,6 @@ with import <stockholm/lib>;
     ../2configs/binary-cache/client.nix
     ../2configs/gc.nix
     ../2configs/mc.nix
-    ../2configs/nixpkgs.nix
     ../2configs/vim.nix
     ../2configs/monitoring/client.nix
     ./htop.nix
@@ -71,16 +70,7 @@ with import <stockholm/lib>;
   krebs = {
     enable = true;
     search-domain = "r";
-    build = {
-      user = config.krebs.users.lass;
-      source = let inherit (config.krebs.build) host; in {
-        nixos-config.symlink = "stockholm/lass/1systems/${host.name}.nix";
-        secrets.file =
-          if getEnv "dummy_secrets" == "true"
-            then toString <stockholm/lass/2configs/tests/dummy-secrets>
-            else "/home/lass/secrets/${host.name}";
-      };
-    };
+    build.user = config.krebs.users.lass;
   };
 
   nix.useSandbox = true;

@@ -4,13 +4,9 @@ with import <stockholm/lib>;
 let
   ip = config.krebs.build.host.nets.internet.ip4.addr;
 
-  inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
-    manageCerts
-  ;
-
 in {
   imports = [
-    ../.
+    <stockholm/lass>
     {
       networking.interfaces.et0.ip4 = [
         {
@@ -26,33 +22,33 @@ in {
         SUBSYSTEM=="net", ATTR{address}=="54:04:a6:7e:f4:06", NAME="et0"
       '';
     }
-    ../2configs/retiolum.nix
-    ../2configs/exim-smarthost.nix
-    ../2configs/downloading.nix
-    ../2configs/ts3.nix
-    ../2configs/bitlbee.nix
-    ../2configs/weechat.nix
-    ../2configs/privoxy-retiolum.nix
-    ../2configs/radio.nix
-    ../2configs/buildbot-standalone.nix
-    ../2configs/repo-sync.nix
-    ../2configs/binary-cache/server.nix
-    ../2configs/iodined.nix
-    ../2configs/libvirt.nix
-    ../2configs/hfos.nix
-    ../2configs/makefu-sip.nix
-    ../2configs/monitoring/server.nix
-    ../2configs/monitoring/monit-alarms.nix
-    ../2configs/paste.nix
-    ../2configs/syncthing.nix
-    ../2configs/coders-irc.nix
-    ../2configs/ciko.nix
+    <stockholm/lass/2configs/retiolum.nix>
+    <stockholm/lass/2configs/exim-smarthost.nix>
+    <stockholm/lass/2configs/downloading.nix>
+    <stockholm/lass/2configs/ts3.nix>
+    <stockholm/lass/2configs/bitlbee.nix>
+    <stockholm/lass/2configs/weechat.nix>
+    <stockholm/lass/2configs/privoxy-retiolum.nix>
+    <stockholm/lass/2configs/radio.nix>
+    <stockholm/lass/2configs/buildbot-standalone.nix>
+    <stockholm/lass/2configs/repo-sync.nix>
+    <stockholm/lass/2configs/binary-cache/server.nix>
+    <stockholm/lass/2configs/iodined.nix>
+    <stockholm/lass/2configs/libvirt.nix>
+    <stockholm/lass/2configs/hfos.nix>
+    <stockholm/lass/2configs/makefu-sip.nix>
+    <stockholm/lass/2configs/monitoring/server.nix>
+    <stockholm/lass/2configs/monitoring/monit-alarms.nix>
+    <stockholm/lass/2configs/paste.nix>
+    <stockholm/lass/2configs/syncthing.nix>
+    <stockholm/lass/2configs/coders-irc.nix>
+    <stockholm/lass/2configs/ciko.nix>
     {
       lass.pyload.enable = true;
     }
     {
       imports = [
-        ../2configs/bepasty.nix
+        <stockholm/lass/2configs/bepasty.nix>
       ];
       krebs.bepasty.servers."paste.r".nginx.extraConfig = ''
         if ( $server_addr = "${config.krebs.build.host.nets.internet.ip4.addr}" ) {
@@ -170,8 +166,8 @@ in {
     }
     {
       imports = [
-        ../2configs/websites/domsen.nix
-        ../2configs/websites/lassulus.nix
+        <stockholm/lass/2configs/websites/domsen.nix>
+        <stockholm/lass/2configs/websites/lassulus.nix>
       ];
       krebs.iptables.tables.filter.INPUT.rules = [
          { predicate = "-p tcp --dport http"; target = "ACCEPT"; }
@@ -195,7 +191,7 @@ in {
     }
     {
       imports = [
-        ../2configs/realwallpaper.nix
+        <stockholm/lass/2configs/realwallpaper.nix>
       ];
       services.nginx.virtualHosts."lassul.us".locations."/wallpaper.png".extraConfig = ''
         alias /var/realwallpaper/realwallpaper.png;

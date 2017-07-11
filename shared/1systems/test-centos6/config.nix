@@ -7,8 +7,8 @@ let
   gw = "168.235.148.1";
 in {
   imports = [
-    ../.
-    ../2configs/os-templates/CAC-CentOS-6.5-64bit.nix
+    <stockholm/shared>
+    <stockholm/shared/2configs/os-templates/CAC-CentOS-6.5-64bit.nix>
     {
       networking.interfaces.enp11s0.ip4 = [
         {
