@@ -56,7 +56,7 @@ let
 
     set index_format="${pkgs.writeDash "mutt-index" ''
       # http://www.mutt.org/doc/manual/#formatstrings
-      recipent="$(echo $1 | sed 's/.*<\([^>]*\).*/\1/')"
+      recipent="$(echo $1 | sed 's/[^,]*<\([^>]*\)[^,]*/ \1/g')"
       #     output to mutt
       #           V
       echo "%4C %Z %?GI?%GI& ? %[%d/%b] %-20.20a %?M?(%3M)& ? %s %> $recipent %?g?%g?%"
