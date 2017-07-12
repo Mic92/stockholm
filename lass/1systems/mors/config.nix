@@ -3,28 +3,27 @@
 with import <stockholm/lib>;
 {
   imports = [
-    ../.
-    ../2configs/retiolum.nix
-    ../2configs/hw/tp-x220.nix
-    ../2configs/baseX.nix
-    ../2configs/exim-retiolum.nix
-    ../2configs/programs.nix
-    ../2configs/bitcoin.nix
-    ../2configs/browsers.nix
-    ../2configs/games.nix
-    ../2configs/pass.nix
-    ../2configs/elster.nix
-    ../2configs/steam.nix
-    ../2configs/wine.nix
-    ../2configs/git.nix
-    ../2configs/virtualbox.nix
-    ../2configs/fetchWallpaper.nix
-    #../2configs/c-base.nix
-    ../2configs/mail.nix
-    ../2configs/repo-sync.nix
-    ../2configs/ircd.nix
-    ../2configs/logf.nix
-    ../2configs/syncthing.nix
+    <stockholm/lass>
+    <stockholm/lass/2configs/retiolum.nix>
+    <stockholm/lass/2configs/hw/tp-x220.nix>
+    <stockholm/lass/2configs/baseX.nix>
+    <stockholm/lass/2configs/exim-retiolum.nix>
+    <stockholm/lass/2configs/programs.nix>
+    <stockholm/lass/2configs/bitcoin.nix>
+    <stockholm/lass/2configs/browsers.nix>
+    <stockholm/lass/2configs/games.nix>
+    <stockholm/lass/2configs/pass.nix>
+    <stockholm/lass/2configs/elster.nix>
+    <stockholm/lass/2configs/steam.nix>
+    <stockholm/lass/2configs/wine.nix>
+    <stockholm/lass/2configs/git.nix>
+    <stockholm/lass/2configs/virtualbox.nix>
+    <stockholm/lass/2configs/fetchWallpaper.nix>
+    <stockholm/lass/2configs/mail.nix>
+    <stockholm/lass/2configs/repo-sync.nix>
+    <stockholm/lass/2configs/ircd.nix>
+    <stockholm/lass/2configs/logf.nix>
+    <stockholm/lass/2configs/syncthing.nix>
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
@@ -48,7 +47,7 @@ with import <stockholm/lib>;
     {
       lass.umts = {
         enable = true;
-        modem = "/dev/serial/by-id/usb-Lenovo_F5521gw_38214921FBBBC7B0-if09";
+        modem = "/dev/serial/by-id/usb-Lenovo_F5521gw_C12AD95CB7B78F90-if09";
         initstrings = ''
           Init1 = AT+CFUN=1
           Init2 = AT+CGDCONT=1,"IP","pinternet.interkom.de","",0,0
@@ -129,7 +128,7 @@ with import <stockholm/lib>;
   };
 
   services.udev.extraRules = ''
-    SUBSYSTEM=="net", ATTR{address}=="00:24:d7:f0:a0:0c", NAME="wl0"
+    SUBSYSTEM=="net", ATTR{address}=="08:11:96:0a:5d:6c", NAME="wl0"
     SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:71:cb:35", NAME="et0"
   '';
 

@@ -4,24 +4,24 @@ let
 in
 {
   imports = [
-    ../.
+    <stockholm/shared>
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
-    ../2configs/collectd-base.nix
-    ../2configs/central-stats-client.nix
-    ../2configs/save-diskspace.nix
+    <stockholm/shared/2configs/collectd-base.nix>
+    <stockholm/shared/2configs/central-stats-client.nix>
+    <stockholm/shared/2configs/save-diskspace.nix>
 
-    ../2configs/cgit-mirror.nix
-    ../2configs/graphite.nix
-    ../2configs/repo-sync.nix
-    ../2configs/shared-buildbot.nix
+    <stockholm/shared/2configs/cgit-mirror.nix>
+    <stockholm/shared/2configs/graphite.nix>
+    <stockholm/shared/2configs/repo-sync.nix>
+    <stockholm/shared/2configs/shared-buildbot.nix>
 
-    ../2configs/shack/worlddomination.nix
-    ../2configs/shack/drivedroid.nix
-    # ../2configs/shack/nix-cacher.nix
-    ../2configs/shack/mqtt_sub.nix
-    ../2configs/shack/muell_caller.nix
-    ../2configs/shack/radioactive.nix
-    ../2configs/shack/share.nix
+    <stockholm/shared/2configs/shack/worlddomination.nix>
+    <stockholm/shared/2configs/shack/drivedroid.nix>
+    # <stockholm/shared/2configs/shack/nix-cacher.nix>
+    <stockholm/shared/2configs/shack/mqtt_sub.nix>
+    <stockholm/shared/2configs/shack/muell_caller.nix>
+    <stockholm/shared/2configs/shack/radioactive.nix>
+    <stockholm/shared/2configs/shack/share.nix>
 
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
@@ -43,6 +43,7 @@ in
   };
 
   nix = {
+    # use the up to date prism cache
     binaryCaches = [
       "http://cache.prism.r"
       "https://cache.nixos.org/"

@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 {
   imports = [
-    ../.
+    <stockholm/shared>
   ];
   krebs = {
     enable = true;

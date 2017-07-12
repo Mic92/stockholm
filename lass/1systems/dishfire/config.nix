@@ -2,11 +2,10 @@
 
 {
   imports = [
-    ../.
-    ../2configs/retiolum.nix
+    <stockholm/lass>
+    <stockholm/lass/2configs/retiolum.nix>
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
-    #../2configs/exim-retiolum.nix
-    ../2configs/git.nix
+    <stockholm/lass/2configs/git.nix>
     {
       boot.loader.grub = {
         device = "/dev/vda";
@@ -56,7 +55,7 @@
     }
     {
       imports = [
-        ../2configs/websites/fritz.nix
+        <stockholm/lass/2configs/websites/fritz.nix>
       ];
       krebs.iptables.tables.filter.INPUT.rules = [
          { predicate = "-p tcp --dport http"; target = "ACCEPT"; }

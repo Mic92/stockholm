@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../.
+    <stockholm/shared>
     {
       boot.loader.grub = {
         device = "/dev/sda";

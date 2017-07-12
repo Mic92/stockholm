@@ -43,14 +43,26 @@ let
     set nm_record = yes
     set nm_record_tags = "-inbox me archive"
     set virtual_spoolfile=yes                    # enable virtual folders
-    set sendmail="${msmtp}/bin/msmtp"                         # enables parsing of outgoing mail
+
+
+    set sendmail="${msmtp}/bin/msmtp"            # enables parsing of outgoing mail
     set from="lassulus@lassul.us"
+    alternates ^.*@lassul\.us$ ^.*@.*\.r$
     set use_from=yes
     set envelope_from=yes
+    set reverse_name
 
     set sort=threads
 
-    set index_format="%4C %Z %?GI?%GI& ? %[%d/%b]  %-16.15F %?M?(%3M)&     ? %s %> %?g?%g?"
+    set index_format="${pkgs.writeDash "mutt-index" ''
+      # http://www.mutt.org/doc/manual/#formatstrings
+      recipent="$(echo $1 | sed 's/[^,]*<\([^>]*\)[^,]*/ \1/g')"
+      #     output to mutt
+      #           V
+      echo "%4C %Z %?GI?%GI& ? %[%d/%b] %-20.20a %?M?(%3M)& ? %s %> $recipent %?g?%g?%"
+      # args to mutt-index dash script
+      # V
+    ''} %r |"
 
     virtual-mailboxes \
         "INBOX"     "notmuch://?query=tag:inbox and NOT tag:killed"\

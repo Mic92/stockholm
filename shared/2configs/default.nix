@@ -7,18 +7,6 @@ with import <stockholm/lib>;
 
   # TODO rename shared user to "krebs"
   krebs.build.user = mkDefault config.krebs.users.shared;
-  krebs.build.source = let inherit (config.krebs.build) host user; in {
-    nixos-config.symlink = "stockholm/${user.name}/1systems/${host.name}.nix";
-    nixpkgs.git = {
-      url = https://github.com/NixOS/nixpkgs;
-      ref = "72c9ed78d0b1d9d5f531805ddf5bf06bfd447614"; # nixos-17.03 @ 2017-06-17
-    };
-    secrets.file =
-      if getEnv "dummy_secrets" == "true"
-        then toString <stockholm/shared/6tests/data/secrets>
-        else "${getEnv "HOME"}/secrets/krebs/${host.name}";
-    stockholm.file = getEnv "PWD";
-  };
 
   networking.hostName = config.krebs.build.host.name;
 

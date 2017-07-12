@@ -1,22 +1,20 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (import ../4lib { inherit pkgs lib; }) getDefaultGateway;
-
+  inherit (import <stockholm/lass/4lib> { inherit pkgs lib; }) getDefaultGateway;
   ip = config.krebs.build.host.nets.internet.ip4.addr;
 in {
   imports = [
-    ../.
-    ../2configs/retiolum.nix
-    ../2configs/os-templates/CAC-CentOS-7-64bit.nix
-    ../2configs/exim-retiolum.nix
-    ../2configs/realwallpaper.nix
-    ../2configs/privoxy-retiolum.nix
-    ../2configs/git.nix
-    #../2configs/redis.nix
-    ../2configs/go.nix
-    ../2configs/ircd.nix
-    ../2configs/newsbot-js.nix
+    <stockholm/lass>
+    <stockholm/lass/2configs/retiolum.nix>
+    <stockholm/lass/2configs/os-templates/CAC-CentOS-7-64bit.nix>
+    <stockholm/lass/2configs/exim-retiolum.nix>
+    <stockholm/lass/2configs/realwallpaper.nix>
+    <stockholm/lass/2configs/privoxy-retiolum.nix>
+    <stockholm/lass/2configs/git.nix>
+    <stockholm/lass/2configs/go.nix>
+    <stockholm/lass/2configs/ircd.nix>
+    <stockholm/lass/2configs/newsbot-js.nix>
     {
       networking.interfaces.enp2s1.ip4 = [
         {
@@ -34,9 +32,6 @@ in {
       sound.enable = false;
     }
     {
-      imports = [
-        ../3modules/dnsmasq.nix
-      ];
       lass.dnsmasq = {
         enable = true;
         config = ''

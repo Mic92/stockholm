@@ -3,7 +3,7 @@ let
   en = { enable = true;};
 in {
   imports = [
-    ../.
+    <stockholm/shared>
   ];
   krebs = {
     enable = true;
