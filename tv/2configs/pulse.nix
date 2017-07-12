@@ -1,16 +1,25 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, pkgs_i686, ... }:
 
 with import <stockholm/lib>;
 let
   pkg = pkgs.pulseaudioLight;
   runDir = "/run/pulse";
 
+  support32Bit =
+    pkgs.stdenv.isx86_64 &&
+    pkgs_i686.alsaLib != null &&
+    pkgs_i686.libpulseaudio != null;
+
   alsaConf = pkgs.writeText "asound.conf" ''
     ctl_type.pulse {
       libs.native = ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so;
+      ${optionalString support32Bit
+        "libs.32Bit = ${pkgs_i686.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so;"}
     }
     pcm_type.pulse {
       libs.native = ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so;
+      ${optionalString support32Bit
+        "libs.32Bit = ${pkgs_i686.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so;"}
     }
     ctl.!default {
       type pulse
@@ -50,6 +59,10 @@ in
     ] ++ optionals config.services.xserver.enable [
       pkgs.pavucontrol
     ];
+  };
+
+  hardware.pulseaudio = {
+    inherit support32Bit;
   };
 
   # Allow PulseAudio to get realtime priority using rtkit.
