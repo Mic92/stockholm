@@ -3,12 +3,10 @@ let
   eval = _file: source: evalModules {
     modules = singleton {
       inherit _file;
+      imports = map (source: { inherit source; }) (toList source);
       options.source = mkOption {
         type = types.attrsOf types.source;
         default = {};
-      };
-      config = {
-        inherit source;
       };
     };
   };
