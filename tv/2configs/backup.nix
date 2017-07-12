@@ -34,6 +34,12 @@ with import <stockholm/lib>;
       dst = { host = config.krebs.hosts.zu; path = "/bku/wu-home"; };
       startAt = "05:20";
     };
+    xu-home-nomic = {
+      method = "push";
+      src = { host = config.krebs.hosts.xu; path = "/home"; };
+      dst = { host = config.krebs.hosts.nomic; path = "/fs/cis3hG/bku/xu-home"; };
+      startAt = "05:20";
+    };
     xu-home-wu = {
       method = "push";
       src = { host = config.krebs.hosts.xu; path = "/home"; };
