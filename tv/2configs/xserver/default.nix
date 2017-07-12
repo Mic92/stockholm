@@ -9,6 +9,7 @@ in {
     pkgs.gitAndTools.qgit
     pkgs.mpv
     pkgs.sxiv
+    pkgs.xdotool
     pkgs.xsel
     pkgs.zathura
   ];
