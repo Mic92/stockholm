@@ -83,19 +83,14 @@ ifeq ($(MAKECMDGOALS),)
 $(error No goals specified)
 endif
 
-# usage: make deploy system=foo [target_host=bar]
-ifeq ($(debug),true)
-deploy: rebuild-command = dry-activate
+# usage: make deploy system=foo [target=bar]
+# usage: make test system=foo target=bar
+deploy test:
+ifdef target
+	nix-shell --run '$@ --system=$(system) --target=$(target)'
 else
-deploy: rebuild-command = switch
+	nix-shell --run '$@ --system=$(system)'
 endif
-deploy: ssh ?= ssh
-deploy:
-	$(MAKE) populate debug=false
-	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
-		env STOCKHOLM_VERSION="$$STOCKHOLM_VERSION" \
-			nixos-rebuild -Q $(rebuild-command) --show-trace -I $(target_path) \
-	|& $(call whatsupnix,$(target_user)@$(target_host):$(target_port))
 
 # usage: make populate system=foo
 populate: populate-target = \
@@ -129,23 +124,3 @@ install:
 		env NIXOS_CONFIG=$(target_path)/nixos-config \
 				STOCKHOLM_VERSION="$$STOCKHOLM_VERSION" \
 			nixos-install
-
-# usage: make test system=foo [target=bar] [method={eval,build}]
-method ?= eval
-ifeq ($(method),build)
-test: test = $(call build,$(1),$(2))
-else
-ifeq ($(method),eval)
-test: test ?= $(call evaluate,$(1),$(2)) --json --strict | jq -r .
-else
-$(error bad method: $(method))
-endif
-endif
-test: ssh ?= ssh
-ifeq ($(target_user)@$(target_host),$(LOGNAME)@$(HOSTNAME))
-test: wrapper = exec
-else
-test: wrapper = $(ssh) $(target_user)@$(target_host) -p $(target_port)
-endif
-test: populate
-	$(wrapper) $(call test,config.system.build.toplevel,-I $(target_path))
