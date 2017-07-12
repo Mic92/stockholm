@@ -43,9 +43,11 @@ let
   '';
 
   init.env = pkgs.writeText "init.env" /* sh */ ''
-    config=''${config-$LOGNAME/1systems/$system.nix}
+    config=''${config-$LOGNAME/1systems/$system/config.nix}
+    source=''${source-$LOGNAME/1systems/$system/source.nix}
 
     export config
+    export source
     export system
     export target
 
@@ -85,18 +87,19 @@ let
     };
     populate = pkgs.writeDash "init.env.populate" ''
       set -efu
-      ${pkgs.nix}/bin/nix-instantiate \
+      _source=$(${pkgs.nix}/bin/nix-instantiate \
           --eval \
           --json \
           --readonly-mode \
           --show-trace \
           --strict \
           -I nixos-config="$config" \
-          -E 'with import <stockholm>; config.krebs.build.source' \
-        |
+          "$source")
+      echo $_source |
       ${pkgs.populate}/bin/populate \
           "$target_user@$target_host:$target_port$target_path" \
         >&2
+      unset _source
     '';
     proxy = pkgs.writeDash "init.env.proxy" ''
       set -efu
@@ -109,7 +112,7 @@ let
         NIX_PATH=$(q "$target_path") \
         STOCKHOLM_VERSION=$STOCKHOLM_VERSION \
         nix-shell \
-            --command $(q \
+            --run $(q \
                 config=$config \
                 system=$system \
                 target=$target \

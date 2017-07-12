@@ -6,23 +6,7 @@ with import <stockholm/lib>;
 in {
   krebs.enable = true;
 
-  krebs.build = {
-    user = config.krebs.users.tv;
-    source = let inherit (config.krebs.build) host; in {
-      nixos-config.symlink = "stockholm/tv/1systems/${host.name}.nix";
-      secrets.file = getAttr builder {
-        buildbot = toString <stockholm/tv/dummy_secrets>;
-        tv = "/home/tv/secrets/${host.name}";
-      };
-      secrets-common.file = "/home/tv/secrets/common";
-      nixpkgs.git = {
-        url = https://github.com/NixOS/nixpkgs;
-        ref = "057f89b9344e5341796046f25ae4f269be6d4529"; # nixos-17.03
-      };
-    } // optionalAttrs host.secure {
-      secrets-master.file = "/home/tv/secrets/master";
-    };
-  };
+  krebs.build.user = config.krebs.users.tv;
 
   networking.hostName = config.krebs.build.host.name;
 

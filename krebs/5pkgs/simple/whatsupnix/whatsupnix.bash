@@ -14,15 +14,30 @@
 #
 #   1     Usage error; arguments couldn't be parsed.
 #
-#   2     Build error; at least one failed derivation could be found.
+#   2     Nix error; input looks like Nix failed.
+#
+#   3     Build error; at least one failed derivation could be found.
 #
 
-failed_drvs=$(mktemp --tmpdir whatsupnix.XXXXXXXX)
-trap 'rm -f -- "$failed_drvs"' EXIT
+tmpdir=$(mktemp -d --tmpdir whatsupnix.XXXXXXXX)
+failed_drvs=$tmpdir/failed_drvs; touch "$failed_drvs"
+nix_errors=$tmpdir/nix_errors; touch "$nix_errors"
+cleanup() {
+  rm "$failed_drvs"
+  rm "$nix_errors"
+  rmdir "$tmpdir"
+}
+trap cleanup EXIT
 
 exec >&2
 
-gawk -v failed_drvs="$failed_drvs" '
+gawk \
+    -v failed_drvs="$failed_drvs" \
+    -v nix_errors="$nix_errors" \
+'
+  /^(\033\[31;1m)?error:/ {
+    print $0 >> nix_errors
+  }
   match($0, /^builder for ‘(\/nix\/store\/[^’]+\.drv)’ failed/, m) {
     print m[1] >> failed_drvs
   }
@@ -73,8 +88,10 @@ while read -r drv; do
   echo
 done < "$failed_drvs"
 
-if test -s "$failed_drvs"; then
+if test -s "$nix_errors"; then
   exit 2
+elif test -s "$failed_drvs"; then
+  exit 3
 else
   exit 0
 fi

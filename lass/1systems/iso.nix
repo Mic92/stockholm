@@ -4,12 +4,11 @@ with import <stockholm/lib>;
 {
   imports = [
     <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix>
-    ../../krebs
-    ../3modules
-    ../5pkgs
-    ../2configs/mc.nix
-    ../2configs/nixpkgs.nix
-    ../2configs/vim.nix
+    <stockholm/krebs>
+    <stockholm/lass/3modules>
+    <stockholm/lass/5pkgs>
+    <stockholm/lass/2configs/mc.nix>
+    <stockholm/lass/2configs/vim.nix>
     {
       # /dev/stderr doesn't work. I don't know why
       # /proc/self doesn't seem to work correctly

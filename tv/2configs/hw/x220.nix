@@ -11,7 +11,7 @@
   networking.wireless.enable = true;
 
   # Required for Centrino.
-  hardware.enableAllFirmware = true;
+  hardware.enableRedistributableFirmware = true;
 
   hardware.opengl.extraPackages = [ pkgs.vaapiIntel pkgs.vaapiVdpau ];
 
