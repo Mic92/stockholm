@@ -58,7 +58,6 @@ with import <stockholm/lib>;
   krebs.build = {
     host = config.krebs.hosts.alnus;
     user = mkForce config.krebs.users.dv;
-    source.nixpkgs.git.ref = mkForce "9b948ea439ddbaa26740ce35543e7e35d2aa6d18";
   };
 
   networking.networkmanager.enable = true;
