@@ -143,6 +143,7 @@ in {
       environment.systemPackages = [
         pkgs.get
         pkgs.htop
+        pkgs.kpaste
         pkgs.krebspaste
         pkgs.nix-prefetch-scripts
         pkgs.ovh-zone
