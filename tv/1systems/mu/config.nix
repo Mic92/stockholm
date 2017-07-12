@@ -64,7 +64,7 @@ with import <stockholm/lib>;
 
   hardware.pulseaudio.enable = true;
 
-  hardware.enableAllFirmware = true;
+  hardware.enableRedistributableFirmware = true;
 
   boot.loader.gummiboot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
