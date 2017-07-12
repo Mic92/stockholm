@@ -10,7 +10,6 @@ with import <stockholm/lib>;
     enable = true;
     extraConfig = ''
       server=127.1.0.1
-      server=/dn42/172.23.75.6
       #no-resolv
       cache-size=1000
       min-cache-ttl=3600
