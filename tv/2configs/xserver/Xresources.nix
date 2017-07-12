@@ -44,7 +44,7 @@ pkgs.writeText "Xresources" /* xdefaults */ ''
   URxvt*url-select.underline: true
   URxvt*colorUL: #4682B4
   URxvt.perl-lib: ${pkgs.urxvt_perls}/lib/urxvt/perl
-  URxvt.saveLines: 4096
+  URxvt*saveLines: 10000
 
   root-urxvt*background: #230000
   root-urxvt*foreground: #e0c0c0
