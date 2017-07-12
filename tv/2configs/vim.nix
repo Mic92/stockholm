@@ -14,7 +14,6 @@ let {
   };
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
-    pkgs.vimPlugins.ctrlp
     pkgs.vimPlugins.undotree
     (pkgs.vimUtils.buildVimPlugin {
       name = "vim-syntax-jq";
@@ -303,13 +302,9 @@ let {
       (pkgs.writeDashBin "vim" ''
         set -efu
         (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
-        if test $# = 0 && test -e "$PWD/.ctrlpignore"; then
-          set -- +CtrlP
-        fi
-        # vim-orgmode needs Python, thus vim_configurable instead of just vim
-        exec ${pkgs.vim_configurable}/bin/vim "$@"
+        exec ${pkgs.vim}/bin/vim "$@"
       '')
-      pkgs.vim_configurable
+      pkgs.vim
     ];
   };
 
@@ -382,40 +377,5 @@ let {
     noremap <esc>[c <nop> | noremap! <esc>[c <nop>
     noremap <esc>[d <nop> | noremap! <esc>[d <nop>
     vnoremap u <nop>
-
-    "
-    " CtrlP-related configuration
-    "
-    hi CtrlPPrtCursor ctermbg=199
-    hi CtrlPMatch     ctermfg=226
-    set showtabline=0
-    let g:ctrlp_cmd = 'CtrlPMixed'
-    let g:ctrlp_map = '<esc>q'
-    let g:ctrlp_working_path_mode = 'a'
-    " Cannot use autoignore extension because it fails to initialize properly:
-    " when started the first time, e.g. using `vim +CtrlP`, then it won't use
-    " patterns from .ctrlpignore until CtrlP gets reopened and F5 pressed...
-    fu s:gen_ctrlp_custom_ignore()
-      let l:prefix = getcwd()
-      let l:pats = readfile(l:prefix . "/.ctrlpignore")
-      let l:pats = filter(l:pats, 's:ctrlpignore_filter(v:val)')
-      let l:pats = map(l:pats, 's:ctrlpignore_rewrite(v:val)')
-      return l:prefix . "\\(" . join(l:pats, "\\|") . "\\)"
-    endfu
-    fu s:ctrlpignore_filter(s)
-      " filter comments and blank lines
-      return match(a:s, '^\s*\(#.*\)''$') == -1
-    endfu
-    fu s:ctrlpignore_rewrite(s)
-      if a:s[0:0] == "^"
-        return "/" . a:s[1:]
-      else
-        return "/.*" . a:s
-      endif
-    endfu
-    try
-      let g:ctrlp_custom_ignore = s:gen_ctrlp_custom_ignore()
-    catch /^Vim\%((\a\+)\)\=:E484/
-    endtry
   '';
 }
