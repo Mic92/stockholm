@@ -6,11 +6,11 @@
 
 {
   imports = [
-    ../.
+    <stockholm/nin>
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
-    ../2configs/retiolum.nix
-    ../2configs/weechat.nix
-    ../2configs/git.nix
+    <stockholm/nin/2configs/retiolum.nix>
+    <stockholm/nin/2configs/weechat.nix>
+    <stockholm/nin/2configs/git.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.onondaga;

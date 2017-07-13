@@ -8,13 +8,13 @@ with lib;
 
 {
   imports = [
-    ../.
+    <stockholm/nin>
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    ../2configs/copyq.nix
-    ../2configs/games.nix
-    ../2configs/git.nix
-    ../2configs/retiolum.nix
-    ../2configs/termite.nix
+    #../2configs/copyq.nix
+    <stockholm/nin/2configs/games.nix>
+    <stockholm/nin/2configs/git.nix>
+    <stockholm/nin/2configs/retiolum.nix>
+    <stockholm/nin/2configs/termite.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.hiawatha;
@@ -32,6 +32,11 @@ with lib;
     { device = "tmpfs";
       fsType = "tmpfs";
     };
+
+  fileSystems."/home" =
+    { device = "/dev/fam/home";
+    };
+
 
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/2f319b08-2560-401d-b53c-2abd28f1a010";

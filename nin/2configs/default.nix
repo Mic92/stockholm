@@ -3,7 +3,6 @@
 with import <stockholm/lib>;
 {
   imports = [
-    ../2configs/nixpkgs.nix
     ../2configs/vim.nix
     {
       users.extraUsers =
@@ -62,14 +61,6 @@ with import <stockholm/lib>;
     search-domain = "r";
     build = {
       user = config.krebs.users.nin;
-      source = let inherit (config.krebs.build) host; in {
-        nixos-config.symlink = "stockholm/nin/1systems/${host.name}.nix";
-        secrets.file =
-        if getEnv "dummy_secrets" == "true"
-          then toString <stockholm/nin/6tests/dummysecrets>
-          else "/home/nin/secrets/${host.name}";
-        stockholm.file = getEnv "PWD";
-      };
     };
   };
 
