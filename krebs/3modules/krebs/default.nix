@@ -8,7 +8,7 @@ let
     "test-centos7"
     "test-all-krebs-modules"
   ] (name: {
-    owner = config.krebs.users.shared;
+    owner = config.krebs.users.krebs;
     inherit name;
     cores = 1;
     nets = {
@@ -31,7 +31,7 @@ let
 in {
   hosts = {
     wolf = {
-      owner = config.krebs.users.shared;
+      owner = config.krebs.users.krebs;
       nets = {
         shack = {
           ip4.addr =  "10.42.2.150" ;
@@ -67,9 +67,9 @@ in {
     };
   } // testHosts;
   users = {
-    shared = {
+    krebs = {
       mail = "spam@krebsco.de";
-      pubkey = "lol"; # TODO krebs.users.shared.pubkey should be unnecessary
+      pubkey = "lol"; # TODO krebs.users.krebs.pubkey should be unnecessary
     };
   };
 }

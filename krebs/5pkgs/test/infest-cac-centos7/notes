@@ -15,7 +15,7 @@ krebs_cred=${krebs_cred-./cac.json}
 #   tinc retiolum key for host
 retiolum_key=${retiolum_key-./retiolum.rsa_key.priv}
 # build this host
-user=${user:-shared}
+user=${user:-krebs}
 system=${target_system:-test-centos7}
 
 log(){
@@ -125,9 +125,9 @@ done
 clear_defer >/dev/null
 defer "cac-api delete $id;$old_trapstr"
 
-mkdir -p shared/2configs/temp
+mkdir -p krebs/2configs/temp
 cac-api generatenetworking $id > \
-  shared/2configs/temp/networking.nix
+  krebs/2configs/temp/networking.nix
 # new temporary ssh key we will use to log in after install
 ssh-keygen -f $krebs_ssh -N ""
 cp "$retiolum_key" $krebs_secrets/retiolum.rsa_key.priv
@@ -135,7 +135,7 @@ cp "$retiolum_key" $krebs_secrets/retiolum.rsa_key.priv
 # additionally we set the ssh key we generated
 ip=$(cac-api getserver $id | jq -r .ip)
 
-cat > shared/2configs/temp/dirs.nix <<EOF
+cat > krebs/2configs/temp/dirs.nix <<EOF
 _: {
   krebs.build.source = {
     secrets.file = "$krebs_secrets";

@@ -3,11 +3,12 @@ let
   en = { enable = true;};
 in {
   imports = [
-    <stockholm/shared>
+    <stockholm/krebs>
+    <stockholm/krebs/2configs>
   ];
   krebs = {
     enable = true;
-    build.user = config.krebs.users.shared;
+    build.user = config.krebs.users.krebs;
     build.host = config.krebs.hosts.test-all-krebs-modules;
     Reaktor.test = {};
     apt-cacher-ng.enable = true;

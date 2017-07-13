@@ -2,7 +2,8 @@
 
 {
   imports = [
-    <stockholm/shared>
+    <stockholm/krebs>
+    <stockholm/krebs/2configs>
     {
       boot.loader.grub = {
         device = "/dev/sda";

@@ -5,8 +5,7 @@ with import <stockholm/lib>;
   krebs.enable = true;
   krebs.tinc.retiolum.enable = true;
 
-  # TODO rename shared user to "krebs"
-  krebs.build.user = mkDefault config.krebs.users.shared;
+  krebs.build.user = mkDefault config.krebs.users.krebs;
 
   networking.hostName = config.krebs.build.host.name;
 

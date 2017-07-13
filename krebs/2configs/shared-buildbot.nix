@@ -1,9 +1,9 @@
 { lib, config, pkgs, ... }:
 # The buildbot config is self-contained and currently provides a way 
-# to test "shared" configuration (infrastructure to be used by every krebsminister).
+# to test "krebs" configuration (infrastructure to be used by every krebsminister).
 
 # You can add your own test, test steps as required. Deploy the config on a
-# shared host like wolf and everything should be fine.
+# krebs host like wolf and everything should be fine.
 
 # TODO for all users schedule a build for fast tests
 {
@@ -56,7 +56,7 @@
         test-cac-infest-master = ''
   # files everyone depends on or are part of the share branch
   def shared_files(change):
-    r =re.compile("^((krebs|shared)/.*|Makefile|default.nix)")
+    r =re.compile("^(krebs/.*|Makefile|default.nix|shell.nix)")
     for file in change.files:
       if r.match(file):
         return True
@@ -78,7 +78,7 @@
   grab_repo = steps.Git(repourl=stockholm_repo, mode='incremental')
 
   env = {
-    "LOGNAME": "shared",
+    "LOGNAME": "krebs",
     "NIX_REMOTE": "daemon",
     "dummy_secrets": "true",
   }
@@ -173,6 +173,6 @@
     packages = with pkgs; [ gnumake jq nix populate ];
     # all nix commands will need a working nixpkgs installation
     extraEnviron = {
-      NIX_PATH="nixpkgs=/var/src/nixpkgs:nixos-config=./shared/1systems/wolf.nix"; };
+      NIX_PATH="nixpkgs=/var/src/nixpkgs:nixos-config=./krebs/1systems/wolf.nix"; };
   };
 }
