@@ -4,24 +4,25 @@ let
 in
 {
   imports = [
-    <stockholm/shared>
+    <stockholm/krebs>
+    <stockholm/krebs/2configs>
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
-    <stockholm/shared/2configs/collectd-base.nix>
-    <stockholm/shared/2configs/central-stats-client.nix>
-    <stockholm/shared/2configs/save-diskspace.nix>
+    <stockholm/krebs/2configs/collectd-base.nix>
+    <stockholm/krebs/2configs/central-stats-client.nix>
+    <stockholm/krebs/2configs/save-diskspace.nix>
 
-    <stockholm/shared/2configs/cgit-mirror.nix>
-    <stockholm/shared/2configs/graphite.nix>
-    <stockholm/shared/2configs/repo-sync.nix>
-    <stockholm/shared/2configs/shared-buildbot.nix>
+    <stockholm/krebs/2configs/cgit-mirror.nix>
+    <stockholm/krebs/2configs/graphite.nix>
+    <stockholm/krebs/2configs/repo-sync.nix>
+    <stockholm/krebs/2configs/shared-buildbot.nix>
 
-    <stockholm/shared/2configs/shack/worlddomination.nix>
-    <stockholm/shared/2configs/shack/drivedroid.nix>
-    # <stockholm/shared/2configs/shack/nix-cacher.nix>
-    <stockholm/shared/2configs/shack/mqtt_sub.nix>
-    <stockholm/shared/2configs/shack/muell_caller.nix>
-    <stockholm/shared/2configs/shack/radioactive.nix>
-    <stockholm/shared/2configs/shack/share.nix>
+    <stockholm/krebs/2configs/shack/worlddomination.nix>
+    <stockholm/krebs/2configs/shack/drivedroid.nix>
+    # <stockholm/krebs/2configs/shack/nix-cacher.nix>
+    <stockholm/krebs/2configs/shack/mqtt_sub.nix>
+    <stockholm/krebs/2configs/shack/muell_caller.nix>
+    <stockholm/krebs/2configs/shack/radioactive.nix>
+    <stockholm/krebs/2configs/shack/share.nix>
 
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by

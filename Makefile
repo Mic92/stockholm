@@ -109,7 +109,7 @@ populate:
 pkgs:;@$(error no package selected)
 pkgs.%:;@$(call build,$@)
 
-# usage: make LOGNAME=shared system=wolf eval.config.krebs.build.host.name
+# usage: make LOGNAME=krebs system=wolf eval.config.krebs.build.host.name
 eval eval.:;@$(call evaluate,$${expr-eval})
 eval.%:;@$(call evaluate,$@)
 

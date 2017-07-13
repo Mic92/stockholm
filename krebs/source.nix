@@ -2,14 +2,14 @@ with import <stockholm/lib>;
 host@{ name, secure ? false }: let
   builder = if getEnv "dummy_secrets" == "true"
               then "buildbot"
-              else "shared";
-  _file = <stockholm> + "/shared/1systems/${name}/source.nix";
+              else "krebs";
+  _file = <stockholm> + "/krebs/1systems/${name}/source.nix";
 in
   evalSource (toString _file) {
-    nixos-config.symlink = "stockholm/shared/1systems/${name}/config.nix";
+    nixos-config.symlink = "stockholm/krebs/1systems/${name}/config.nix";
     secrets.file = getAttr builder {
-      buildbot = toString <stockholm/shared/6tests/data/secrets>;
-      shared = "${getEnv "HOME"}/secrets/krebs/${host.name}";
+      buildbot = toString <stockholm/krebs/6tests/data/secrets>;
+      krebs = "${getEnv "HOME"}/secrets/krebs/${host.name}";
     };
     stockholm.file = toString <stockholm>;
     nixpkgs.git = {

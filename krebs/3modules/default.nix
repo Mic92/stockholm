@@ -94,10 +94,10 @@ let
 
   imp = lib.mkMerge [
     { krebs = import ./lass   { inherit config; }; }
+    { krebs = import ./krebs  { inherit config; }; }
     { krebs = import ./makefu { inherit config; }; }
     { krebs = import ./mv     { inherit config; }; }
     { krebs = import ./nin    { inherit config; }; }
-    { krebs = import ./shared { inherit config; }; }
     { krebs = import ./tv     { inherit config; }; }
     {
       krebs.dns.providers = {
