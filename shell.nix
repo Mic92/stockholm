@@ -2,24 +2,26 @@ let
   lib = import ./lib;
   pkgs = import <nixpkgs> { overlays = [(import ./krebs/5pkgs)]; };
 
-  # usage: deploy --system=SYSTEM [--target=TARGET]
+  # usage: deploy [--user=USER] --system=SYSTEM [--target=TARGET]
   cmds.deploy = pkgs.writeDash "cmds.deploy" ''
     set -efu
 
     command=deploy
     . ${init.args}
     \test -n "''${target-}" || target=$system
+    \test -n "''${user-}" || user=$LOGNAME
     . ${init.env}
 
     exec ${utils.deploy}
   '';
 
-  # usage: test --system=SYSTEM --target=TARGET
+  # usage: test [--user=USER] --system=SYSTEM --target=TARGET
   cmds.test = pkgs.writeDash "cmds.test" /* sh */ ''
     set -efu
 
     command=test
     . ${init.args}
+    \test -n "''${user-}" || user=$LOGNAME
     . ${init.env}
 
     export dummy_secrets=true
@@ -28,14 +30,15 @@ let
 
   init.args = pkgs.writeText "init.args" /* sh */ ''
     args=$(${pkgs.utillinux}/bin/getopt -n "$command" -s sh \
-        -o s:t: \
-        -l system:,target: \
+        -o s:t:u: \
+        -l system:,target:,user: \
         -- "$@")
     if \test $? != 0; then exit 1; fi
     eval set -- "$args"
     while :; do case $1 in
       -s|--system) system=$2; shift 2;;
       -t|--target) target=$2; shift 2;;
+      -u|--user) user=$2; shift 2;;
       --) shift; break;;
     esac; done
     for arg; do echo "$command: bad argument: $arg" >&2; done
@@ -43,13 +46,14 @@ let
   '';
 
   init.env = pkgs.writeText "init.env" /* sh */ ''
-    config=''${config-$LOGNAME/1systems/$system/config.nix}
-    source=''${source-$LOGNAME/1systems/$system/source.nix}
+    config=''${config-$user/1systems/$system/config.nix}
+    source=''${source-$user/1systems/$system/source.nix}
 
     export config
     export source
     export system
     export target
+    export user
 
     export target_object="$(${init.env.parsetarget} $target)"
     export target_user="$(echo $target_object | ${pkgs.jq}/bin/jq -r .user)"

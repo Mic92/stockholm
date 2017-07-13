@@ -9,7 +9,7 @@ in
     nixos-config.symlink = "stockholm/shared/1systems/${name}/config.nix";
     secrets.file = getAttr builder {
       buildbot = toString <stockholm/shared/6tests/data/secrets>;
-      lass = "${getEnv "HOME"}/secrets/krebs/${host.name}";
+      shared = "${getEnv "HOME"}/secrets/krebs/${host.name}";
     };
     stockholm.file = toString <stockholm>;
     nixpkgs.git = {
