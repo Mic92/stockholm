@@ -8,7 +8,7 @@ in
   evalSource (toString _file) {
     nixos-config.symlink = "stockholm/nin/1systems/${name}/config.nix";
     secrets.file = getAttr builder {
-      buildbot = toString <stockholm/nin/2configs/tests/dummy-secrets>;
+      buildbot = toString <stockholm/nin/6tests/dummysecrets>;
       nin = "/home/nin/secrets/${name}";
     };
     stockholm.file = toString <stockholm>;
