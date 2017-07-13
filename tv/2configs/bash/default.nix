@@ -32,6 +32,12 @@ with import <stockholm/lib>;
       if test -n "$SSH_AGENT_PID"; then
         PS1="ssh-agent[$SSH_AGENT_PID] $PS1"
       fi
+
+      case ''${XMONAD_SPAWN_WORKSPACE-} in
+        stockholm)
+          cd ~/stockholm
+        ;;
+      esac
     '';
   };
 }
