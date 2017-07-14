@@ -4,7 +4,7 @@ with import <stockholm/lib>;
 
 {
   programs.bash = {
-    interactiveShellInit = ''
+    interactiveShellInit = /* sh */ ''
       HISTCONTROL='erasedups:ignorespace'
       HISTSIZE=65536
       HISTFILESIZE=$HISTSIZE
@@ -14,7 +14,7 @@ with import <stockholm/lib>;
       shopt -s no_empty_cmd_completion
       complete -d cd
     '';
-    promptInit = ''
+    promptInit = /* sh */ ''
       case $UID in
         0)
           PS1='\[\e[1;31m\]\w\[\e[0m\] '
@@ -32,6 +32,12 @@ with import <stockholm/lib>;
       if test -n "$SSH_AGENT_PID"; then
         PS1="ssh-agent[$SSH_AGENT_PID] $PS1"
       fi
+
+      case ''${XMONAD_SPAWN_WORKSPACE-} in
+        stockholm)
+          cd ~/stockholm
+        ;;
+      esac
     '';
   };
 }

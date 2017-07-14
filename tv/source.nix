@@ -17,10 +17,12 @@ in
         buildbot = toString <stockholm/tv/dummy_secrets>;
         tv = "/home/tv/secrets/${name}";
       };
-      secrets-common.file = "/home/tv/secrets/common";
       stockholm.file = toString <stockholm>;
     }
-    (mkIf secure {
+    (mkIf (builder == "tv") {
+      secrets-common.file = "/home/tv/secrets/common";
+    })
+    (mkIf (builder == "tv" && secure) {
       secrets-master.file = "/home/tv/secrets/master";
     })
     override

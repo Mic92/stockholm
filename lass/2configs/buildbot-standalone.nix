@@ -80,6 +80,9 @@ in {
                 ]
             )
 
+        for i in [ "test-all-krebs-modules", "test-centos7", "test-minimal-deploy", "wolf" ]:
+            build_host("krebs", i)
+
         for i in [ "mors", "uriel", "shodan", "icarus", "cloudkrebs", "echelon", "dishfire", "prism" ]:
             build_host("lass", i)
 
@@ -88,9 +91,6 @@ in {
 
         for i in [ "hiawatha", "onondaga" ]:
             build_host("nin", i)
-
-        for i in [ "test-minimal-deploy", "test-all-krebs-modules", "wolf", "test-centos7" ]:
-            build_host("shared", i)
 
         for i in [ "alnus", "mu", "nomic", "wu", "xu", "zu" ]:
             build_host("tv", i)
