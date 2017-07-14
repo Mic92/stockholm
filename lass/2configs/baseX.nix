@@ -50,6 +50,7 @@ in {
     dmenu
     gitAndTools.qgit
     lm_sensors
+    haskellPackages.hledger
     much
     ncdu
     nmap
