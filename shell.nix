@@ -19,12 +19,13 @@ let
   cmds.test = pkgs.writeDash "cmds.test" /* sh */ ''
     set -efu
 
+    export dummy_secrets=true
+
     command=test
     . ${init.args}
     \test -n "''${user-}" || user=$LOGNAME
     . ${init.env}
 
-    export dummy_secrets=true
     exec ${utils.build} config.system.build.toplevel
   '';
 
