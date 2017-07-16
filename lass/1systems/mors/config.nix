@@ -110,11 +110,11 @@ with import <stockholm/lib>;
     "/boot" = {
       device = "/dev/sda2";
     };
-    #"/bku" = {
-    #  device = "/dev/mapper/pool-bku";
-    #  fsType = "btrfs";
-    #  options = ["defaults" "noatime" "ssd" "compress=lzo"];
-    #};
+    "/bku" = {
+      device = "/dev/mapper/pool-bku";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+    };
     "/home" = {
       device = "/dev/mapper/pool-home";
       fsType = "btrfs";
