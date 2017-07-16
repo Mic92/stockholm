@@ -68,7 +68,6 @@ in {
   } // testHosts;
   users = {
     krebs = {
-      mail = "spam@krebsco.de";
       pubkey = "lol"; # TODO krebs.users.krebs.pubkey should be unnecessary
     };
   };
