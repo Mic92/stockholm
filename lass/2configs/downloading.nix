@@ -17,6 +17,7 @@ with import <stockholm/lib>;
         lass-shodan.pubkey
         lass-icarus.pubkey
         makefu.pubkey
+        wine-mors.pubkey
       ];
     };
 
