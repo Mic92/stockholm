@@ -5,7 +5,8 @@ let
 
 in {
   krebs.per-user.wine.packages = with pkgs; [
-    wineUnstable
+    wineFull
+    #(wineFull.override { wineBuild = "wine64"; })
   ];
   users.users= {
     wine = {
