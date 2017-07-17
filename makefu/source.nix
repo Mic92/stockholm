@@ -1,10 +1,10 @@
 with import <stockholm/lib>;
-host@{ name, secure ? false, override ? {}, full ? false }: let
+host@{ name, secure ? false, override ? {}, full ? false, torrent ? false }: let
   builder = if getEnv "dummy_secrets" == "true"
               then "buildbot"
               else "makefu";
   _file = <stockholm> + "/makefu/1systems/${name}/source.nix";
-  ref = "06734d1"; # unstable @ 2017-07-03 + graceful requests2 (a772c3aa)
+  ref = "0751450"; # unstable @ 2017-07-16 + graceful requests2 (a772c3aa)
 
 in
   evalSource (toString _file) [
@@ -29,10 +29,14 @@ in
         buildbot = toString <stockholm/makefu/6tests/data/secrets>;
         makefu = "/home/makefu/secrets/${name}";
       };
+
       stockholm.file = toString <stockholm>;
     }
-    (mkIf (builder == "makefu") {
-      secrets-common.file = "/home/makefu/secrets/common";
+    (mkIf ( torrent ) {
+      torrent-secrets.file = getAttr builder {
+        buildbot = toString <stockholm/makefu/6tests/data/secrets>;
+        makefu = "/home/makefu/secrets/torrent" ;
+      };
     })
     override
   ]
