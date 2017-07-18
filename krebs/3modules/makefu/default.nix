@@ -410,7 +410,7 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPTBGboU/P00yYiwYje53G0oqDFWmcSJ+hIpMsl4f/HH";
     };
     wbob = rec {
-      cores = 1;
+      cores = 4;
       nets = {
         siem = {
           ip4.addr = "10.8.10.7";
