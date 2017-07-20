@@ -36,7 +36,6 @@ in {
     <stockholm/lass/2configs/iodined.nix>
     <stockholm/lass/2configs/libvirt.nix>
     <stockholm/lass/2configs/hfos.nix>
-    <stockholm/lass/2configs/makefu-sip.nix>
     <stockholm/lass/2configs/monitoring/server.nix>
     <stockholm/lass/2configs/monitoring/monit-alarms.nix>
     <stockholm/lass/2configs/paste.nix>
