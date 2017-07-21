@@ -173,6 +173,6 @@
     packages = with pkgs; [ gnumake jq nix populate ];
     # all nix commands will need a working nixpkgs installation
     extraEnviron = {
-      NIX_PATH="nixpkgs=/var/src/nixpkgs:nixos-config=./krebs/1systems/wolf.nix"; };
+      NIX_PATH="nixpkgs=/var/src/nixpkgs:nixos-config=./krebs/1systems/wolf/config.nix:stockholm=./"; };
   };
 }
