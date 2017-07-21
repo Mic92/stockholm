@@ -53,14 +53,20 @@ in {
       <stockholm/makefu/2configs/share/omo.nix>
       <stockholm/makefu/2configs/tinc/retiolum.nix>
 
+
       # Logging
-      <stockholm/makefu/2configs/stats/server.nix #influx + grafana>
+      #influx + grafana
+      <stockholm/makefu/2configs/stats/server.nix>
       <stockholm/makefu/2configs/stats/client.nix>
-      <stockholm/makefu/2configs/stats/external/aralast.nix # logs to influx>
+      # logs to influx
+      <stockholm/makefu/2configs/stats/external/aralast.nix>
 
       # services
       <stockholm/makefu/2configs/syncthing.nix>
       <stockholm/makefu/2configs/mqtt.nix>
+
+      # security
+      <stockholm/makefu/2configs/sshd-totp.nix>
       # <stockholm/makefu/2configs/logging/central-logging-client.nix>
 
       # <stockholm/makefu/2configs/torrent.nix>
@@ -189,8 +195,29 @@ in {
   zramSwap.enable = true;
 
   krebs.Reaktor.reaktor = {
-    nickname = "Reaktor|bot";
-    channels = [ "#krebs" "#shackspace" "#binaergewitter" ];
+    nickname = "Reaktor|krebs";
+    workdir = "/var/lib/Reaktor/krebs";
+    channels = [ "#krebs" ];
+    plugins = with pkgs.ReaktorPlugins;[
+                               stockholm-issue
+                               nixos-version
+                               sed-plugin
+                               random-emoji ];
+  };
+  krebs.Reaktor.reaktor-shack = {
+    nickname = "Reaktor|shack";
+    workdir = "/var/lib/Reaktor/shack";
+    channels = [ "#shackspace" ];
+    plugins = with pkgs.ReaktorPlugins;[
+                               shack-correct
+                               # stockholm-issue
+                               sed-plugin
+                               random-emoji ];
+  };
+  krebs.Reaktor.reaktor-bgt = {
+    nickname = "Reaktor|bgt";
+    workdir = "/var/lib/Reaktor/bgt";
+    channels = [ "#binaergewitter" ];
     plugins = with pkgs.ReaktorPlugins;[
                                titlebot
                                # stockholm-issue
