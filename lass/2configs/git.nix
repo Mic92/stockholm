@@ -49,6 +49,7 @@ let
     {
       brain = {
         collaborators = with config.krebs.users; [ tv makefu ];
+        announce = true;
       };
     } //
     import <secrets/repos.nix> { inherit config lib pkgs; }
@@ -75,9 +76,20 @@ let
     public = true;
   };
 
-  make-restricted-repo = name: { collaborators ? [], ... }: {
+  make-restricted-repo = name: { collaborators ? [], announce ? false, ... }: {
     inherit collaborators name;
     public = false;
+    hooks = optionalAttrs announce {
+      post-receive = pkgs.git-hooks.irc-announce {
+        # TODO make nick = config.krebs.build.host.name the default
+        nick = config.krebs.build.host.name;
+        channel = "#retiolum";
+        server = "ni.r";
+        verbose = true;
+        # TODO define branches in some kind of option per repo
+        branches = [ "master" "staging*" ];
+      };
+    };
   };
 
   make-rules =

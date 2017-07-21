@@ -36,7 +36,6 @@ in {
     <stockholm/lass/2configs/iodined.nix>
     <stockholm/lass/2configs/libvirt.nix>
     <stockholm/lass/2configs/hfos.nix>
-    <stockholm/lass/2configs/makefu-sip.nix>
     <stockholm/lass/2configs/monitoring/server.nix>
     <stockholm/lass/2configs/monitoring/monit-alarms.nix>
     <stockholm/lass/2configs/paste.nix>
@@ -213,6 +212,26 @@ in {
           config.krebs.users.tv.pubkey
         ];
       };
+      users.users.makefu = {
+        uid = genid "makefu";
+        isNormalUser = true;
+        openssh.authorizedKeys.keys = [
+          config.krebs.users.makefu.pubkey
+        ];
+      };
+      users.users.nin = {
+        uid = genid "nin";
+        inherit (config.krebs.users.nin) home;
+        group = "users";
+        createHome = true;
+        useDefaultShell = true;
+        openssh.authorizedKeys.keys = [
+          config.krebs.users.nin.pubkey
+        ];
+        extraGroups = [
+          "libvirtd"
+        ];
+      };
     }
     {
       krebs.repo-sync.timerConfig = {
@@ -234,28 +253,6 @@ in {
       lass.usershadow = {
         enable = true;
       };
-    }
-    {
-      # Nin stuff
-      users.users.nin = {
-        uid = genid "nin";
-        inherit (config.krebs.users.nin) home;
-        group = "users";
-        createHome = true;
-        useDefaultShell = true;
-        openssh.authorizedKeys.keys = [
-          config.krebs.users.nin.pubkey
-        ];
-        extraGroups = [
-          "libvirtd"
-        ];
-      };
-      krebs.iptables.tables.nat.PREROUTING.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d 213.239.205.240 -p tcp --dport 1337"; target = "DNAT --to-destination 192.168.122.24:22"; }
-      ];
-      krebs.iptables.tables.filter.FORWARD.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d 192.168.122.24 -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED"; target = "ACCEPT"; }
-      ];
     }
     {
       krebs.Reaktor.prism = {

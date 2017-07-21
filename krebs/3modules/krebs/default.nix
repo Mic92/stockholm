@@ -30,6 +30,30 @@ let
   });
 in {
   hosts = {
+    puyak = {
+      owner = config.krebs.users.krebs;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.77.2";
+          ip6.addr = "42:0:0:0:0:0:77:2";
+          aliases = [
+            "puyak.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAwwDvaVKSJmAi1fpbsmjLz1DQVTgqnx56GkHKbz5sHwAfPVQej955
+            SwotAPBrOT5P3pZ52Pu326SR5nj9XWfN6GD0CkcDQddtRG5OOtUWlvkYzZraNh33
+            p9l8TBgHJKogGe6umbs+4v7pWfbS0k708L2ttwY0ceju6RL6UqShIYB6qhDzwalU
+            p8s7pypl7BwrsTwYkUGleIptiN78cYv/NHvXhvXBuVGz4J0tCH4GMvdTHCah1l1r
+            zwEpKlAq0FD6bgYTJL94Tvxe2xzyr8c+xn1+XbJtMudGmrRjIHS6YupzO/Y2MO7w
+            UkbMKDhYVhSPFEyk6PMm0SU9uAh4I1+8BQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPpVwKv9mQGfcn5oFwuitq+b6Dz4jBG9sGhVoCYFw5RY";
+    };
     wolf = {
       owner = config.krebs.users.krebs;
       nets = {

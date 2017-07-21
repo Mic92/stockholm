@@ -335,5 +335,8 @@ with import <stockholm/lib>;
     };
     sokratess = {
     };
+    wine-mors = {
+      pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEKfTIKmbe1RjX1fjAn//08363zAsI0CijWnaYyAC842";
+    };
   };
 }

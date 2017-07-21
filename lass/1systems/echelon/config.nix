@@ -32,17 +32,6 @@ in {
       sound.enable = false;
     }
     {
-      lass.dnsmasq = {
-        enable = true;
-        config = ''
-          interface=retiolum
-        '';
-      };
-      krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-i retiolum -p udp --dport 53"; target = "ACCEPT"; }
-      ];
-    }
-    {
       users.extraUsers = {
         satan = {
           name = "satan";

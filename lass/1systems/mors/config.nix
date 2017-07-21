@@ -24,6 +24,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/ircd.nix>
     <stockholm/lass/2configs/logf.nix>
     <stockholm/lass/2configs/syncthing.nix>
+    <stockholm/lass/2configs/otp-ssh.nix>
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
@@ -110,11 +111,11 @@ with import <stockholm/lib>;
     "/boot" = {
       device = "/dev/sda2";
     };
-    #"/bku" = {
-    #  device = "/dev/mapper/pool-bku";
-    #  fsType = "btrfs";
-    #  options = ["defaults" "noatime" "ssd" "compress=lzo"];
-    #};
+    "/bku" = {
+      device = "/dev/mapper/pool-bku";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+    };
     "/home" = {
       device = "/dev/mapper/pool-home";
       fsType = "btrfs";
