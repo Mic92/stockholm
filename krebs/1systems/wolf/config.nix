@@ -101,6 +101,7 @@ in
 
   users.extraUsers.root.openssh.authorizedKeys.keys = [
     config.krebs.users.ulrich.pubkey
+    config.krebs.users.makefu-omo.pubkey
   ];
 
   time.timeZone = "Europe/Berlin";
