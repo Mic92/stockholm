@@ -80,7 +80,7 @@ in {
                 ]
             )
 
-        for i in [ "test-all-krebs-modules", "test-centos7", "test-minimal-deploy", "wolf" ]:
+        for i in [ "puyak", "test-all-krebs-modules", "test-centos7", "test-minimal-deploy", "wolf" ]:
             build_host("krebs", i)
 
         for i in [ "mors", "uriel", "shodan", "icarus", "cloudkrebs", "echelon", "dishfire", "prism" ]:
