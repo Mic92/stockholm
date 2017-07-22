@@ -1,31 +1,71 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-{
-  krebs.repo-sync = let
-    # TODO addMirrorURL function
-    mirror = "git@wolf:stockholm-mirror";
-  in {
-    enable = true;
-    repos.stockholm = {
-      branches = {
-        makefu = {
-          origin.url = http://cgit.gum/stockholm ;
-          mirror.url = mirror;
+with import <stockholm/lib>;
+
+let
+  mirror = "git@${config.networking.hostName}:";
+
+  defineRepo = name: announce: let
+    repo = {
+      public = true;
+      name = mkDefault "${name}";
+      cgit.desc = mkDefault "mirror for ${name}";
+      cgit.section = mkDefault "mirror";
+      hooks = mkIf announce (mkDefault {
+        post-receive = pkgs.git-hooks.irc-announce {
+          nick = config.networking.hostName;
+          verbose = false;
+          channel = "#retiolum";
+          server = "ni.r";
+          branches = [ "newest" ];
         };
-        tv = {
-          origin.url = http://cgit.ni.r/stockholm;
-          mirror.url = mirror;
-        };
-        lassulus = {
-          origin.url = http://cgit.prism/stockholm ;
-          mirror.url = mirror;
-        };
-      };
-      latest = {
-        url = mirror;
-        ref = "heads/master";
-      };
+      });
     };
+  in {
+    rules = with git; singleton {
+      user = with config.krebs.users; [
+        config.krebs.users."${config.networking.hostName}-repo-sync"
+      ];
+      repo = [ repo ];
+      perm = push ''refs/*'' [ non-fast-forward create delete merge ];
+    };
+    repos."${name}" = repo;
   };
+
+  sync-retiolum = name:
+    {
+      krebs.repo-sync.repos.${name} = {
+        branches = {
+          makefu = {
+            origin.url = "http://cgit.gum/${name}";
+            mirror.url = "${mirror}${name}";
+          };
+          tv = {
+            origin.url = "http://cgit.ni.r/${name}";
+            mirror.url = "${mirror}${name}";
+          };
+          nin = {
+            origin.url = "http://cgit.onondaga.r/${name}";
+            mirror.url = "${mirror}${name}";
+          };
+          lassulus = {
+            origin.url = "http://cgit.lassul.us/${name}";
+            mirror.url = "${mirror}${name}";
+          };
+        };
+        latest = {
+          url = "${mirror}${name}";
+          ref = "heads/newest";
+        };
+      };
+      krebs.git = defineRepo name true;
+    };
+
+in {
+  krebs.repo-sync = {
+    enable = true;
+  };
+  imports = [
+    (sync-retiolum "stockholm")
+  ];
 }
