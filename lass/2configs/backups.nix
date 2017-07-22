@@ -134,7 +134,7 @@ with import <stockholm/lib>;
       startAt = "03:55";
     };
     icarus-home-mors = {
-      method = "push";
+      method = "pull";
       src = { host = config.krebs.hosts.icarus; path = "/home"; };
       dst = { host = config.krebs.hosts.mors;   path = "/bku/icarus-home"; };
       startAt = "05:00";
