@@ -29,7 +29,6 @@ in {
   krebs.buildbot.master = let
     stockholm-mirror-url = "http://cgit.${hostname}.r/stockholm" ;
   in {
-    secrets = [ "retiolum-ci.rsa_key.priv" "cac.json" ];
     workers = {
       testworker =  "krebspass";
     };
