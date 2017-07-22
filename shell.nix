@@ -67,6 +67,18 @@ let
     exec ${pkgs.jq}/bin/jq -enrf "$script" --arg target "$1" \
   '';
 
+  # usage: quote [ARGS...]
+  cmds.quote = pkgs.writeDash "cmds.quote" ''
+    set -efu
+    prefix=
+    for x; do
+      y=$(${pkgs.jq}/bin/jq -nr --arg x "$x" '$x | @sh "\(.)"')
+      echo -n "$prefix$y"
+      prefix=' '
+    done
+    echo
+  '';
+
   init.args = pkgs.writeText "init.args" /* sh */ ''
     args=$(${pkgs.utillinux}/bin/getopt -n "$command" -s sh \
         -o s:t:u: \
@@ -117,21 +129,17 @@ let
     '';
     proxy = pkgs.writeDash "init.env.proxy" ''
       set -efu
-      q() {
-        ${pkgs.jq}/bin/jq -nr --arg x "$*" '$x | @sh "\(.)"'
-      }
       exec ${pkgs.openssh}/bin/ssh \
         "$target_user@$target_host" -p "$target_port" \
         cd "$target_path/stockholm" \; \
-        NIX_PATH=$(q "$target_path") \
-        STOCKHOLM_VERSION=$STOCKHOLM_VERSION \
-        nix-shell \
-            --run $(q \
-                system=$system \
-                target=$target \
-                using_proxy=true \
-                "$*"
-            )
+        NIX_PATH=$(quote "$target_path") \
+        STOCKHOLM_VERSION=$(quote "$STOCKHOLM_VERSION") \
+        nix-shell --run "$(quote "
+          system=$(quote "$system") \
+          target=$(quote "$target") \
+          using_proxy=true \
+          $(quote "$@")
+        ")"
     '';
   };
 
