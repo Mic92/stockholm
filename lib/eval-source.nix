@@ -10,6 +10,12 @@ let
       };
     };
   };
+  sanitize = x: getAttr (typeOf x) {
+    set = mapAttrs
+            (const sanitize)
+            (filterAttrs (name: value: name != "_module" && value != null) x);
+    string = x;
+  };
 in
   # This function's return value can be used as pkgs.populate input.
-  _file: source: (eval _file source).config.source
+  _file: source: sanitize (eval _file source).config.source
