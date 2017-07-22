@@ -49,22 +49,39 @@ let
         "$1"
   '';
 
-  # usage: parse-target [USER@]HOST[:PORT][/PATH]
+  # usage: parse-target [--default=TARGET] TARGET
+  # TARGET = [USER@]HOST[:PORT][/PATH]
   cmds.parse-target = pkgs.writeDash "cmds.parse-target" ''
     set -efu
-    script=${pkgs.writeText "cmds.parse-target.jq" ''
-      def when(c; f): if c then f else . end;
-      def capturesDef(i; v): .captures[i].string | when(. == null; v);
-      $target | match("^(?:([^@]+)@)?([^:/]+)?(?::([0-9]+))?(/.*)?$") | {
-        user: capturesDef(0; "root"),
-        host: capturesDef(1; env.system),
-        port: capturesDef(2; "22"),
-        path: capturesDef(3; "/var/src"),
-      } | . + {
-        local: (.user == env.LOGNAME and .host == env.HOSTNAME),
-      }
-    ''}
-    exec ${pkgs.jq}/bin/jq -enrf "$script" --arg target "$1" \
+    args=$(${pkgs.utillinux}/bin/getopt -n "$0" -s sh \
+        -o d: \
+        -l default: \
+        -- "$@")
+    if \test $? != 0; then exit 1; fi
+    eval set -- "$args"
+    default_target=
+    while :; do case $1 in
+      -d|--default) default_target=$2; shift 2;;
+      --) shift; break;;
+    esac; done
+    target=$1; shift
+    for arg; do echo "$0: bad argument: $arg" >&2; done
+    if \test $# != 0; then exit 2; fi
+    exec ${pkgs.jq}/bin/jq \
+        -enr \
+        --arg default_target "$default_target" \
+        --arg target "$target" \
+        -f ${pkgs.writeText "cmds.parse-target.jq" ''
+          def parse: match("^(?:([^@]+)@)?([^:/]+)?(?::([0-9]+))?(/.*)?$") | {
+            user: .captures[0].string,
+            host: .captures[1].string,
+            port: .captures[2].string,
+            path: .captures[3].string,
+          };
+          def sanitize: with_entries(select(.value != null));
+          ($default_target | parse) + ($target | parse | sanitize) |
+          . + { local: (.user == env.LOGNAME and .host == env.HOSTNAME) }
+        ''}
   '';
 
   # usage: quote [ARGS...]
@@ -104,7 +121,9 @@ let
     export target
     export user
 
-    export target_object="$(parse-target "$target")"
+    default_target=root@$system:22/var/src
+
+    export target_object="$(parse-target "$target" -d "$default_target")"
     export target_user="$(echo $target_object | ${pkgs.jq}/bin/jq -r .user)"
     export target_host="$(echo $target_object | ${pkgs.jq}/bin/jq -r .host)"
     export target_port="$(echo $target_object | ${pkgs.jq}/bin/jq -r .port)"
