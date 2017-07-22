@@ -2,6 +2,9 @@
 
 with import <stockholm/lib>;
 {
+  imports = [
+    ./backup.nix
+  ];
   krebs.enable = true;
   krebs.tinc.retiolum.enable = true;
 
