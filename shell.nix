@@ -2,6 +2,10 @@ let
   lib = import ./lib;
   pkgs = import <nixpkgs> { overlays = [(import ./krebs/5pkgs)]; };
 
+  #
+  # high level commands
+  #
+
   # usage: deploy [--user=USER] --system=SYSTEM [--target=TARGET]
   cmds.deploy = pkgs.writeDash "cmds.deploy" ''
     set -efu
@@ -27,6 +31,22 @@ let
     . ${init.env}
 
     exec ${utils.build} config.system.build.toplevel
+  '';
+
+  #
+  # low level commands
+  #
+
+  # usage: get-source SOURCE_FILE
+  cmds.get-source = pkgs.writeDash "cmds.get-source" ''
+    set -efu
+    exec ${pkgs.nix}/bin/nix-instantiate \
+        --eval \
+        --json \
+        --readonly-mode \
+        --show-trace \
+        --strict \
+        "$1"
   '';
 
   init.args = pkgs.writeText "init.args" /* sh */ ''
@@ -90,13 +110,7 @@ let
     };
     populate = pkgs.writeDash "init.env.populate" ''
       set -efu
-      _source=$(${pkgs.nix}/bin/nix-instantiate \
-          --eval \
-          --json \
-          --readonly-mode \
-          --show-trace \
-          --strict \
-          "$source")
+      _source=$(get-source "$source")
       echo $_source |
       ${pkgs.populate}/bin/populate \
           "$target_user@$target_host:$target_port$target_path" \
