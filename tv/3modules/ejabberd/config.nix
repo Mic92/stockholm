@@ -1,93 +1,129 @@
-{ config, ... }: with import <stockholm/lib>; let
-  cfg = config.tv.ejabberd;
+with import <stockholm/lib>;
+{ config, ... }: let
 
-  # XXX this is a placeholder that happens to work the default strings.
-  toErlang = builtins.toJSON;
-in toFile "ejabberd.conf" ''
-  {loglevel, 3}.
-  {hosts, ${toErlang cfg.hosts}}.
-  {listen,
-   [
-    {5222, ejabberd_c2s, [
-        starttls,
-        {certfile, ${toErlang cfg.certfile.path}},
-        {access, c2s},
-        {shaper, c2s_shaper},
-        {max_stanza_size, 65536}
-             ]},
-    {5269, ejabberd_s2s_in, [
-           {shaper, s2s_shaper},
-           {max_stanza_size, 131072}
-          ]},
-    {5280, ejabberd_http, [
-         captcha,
-         http_bind,
-         http_poll,
-         web_admin
-        ]}
-   ]}.
-  {s2s_use_starttls, required}.
-  {s2s_certfile, ${toErlang cfg.s2s_certfile.path}}.
-  {auth_method, internal}.
-  {shaper, normal, {maxrate, 1000}}.
-  {shaper, fast, {maxrate, 50000}}.
-  {max_fsm_queue, 1000}.
-  {acl, local, {user_regexp, ""}}.
-  {access, max_user_sessions, [{10, all}]}.
-  {access, max_user_offline_messages, [{5000, admin}, {100, all}]}.
-  {access, local, [{allow, local}]}.
-  {access, c2s, [{deny, blocked},
-           {allow, all}]}.
-  {access, c2s_shaper, [{none, admin},
-            {normal, all}]}.
-  {access, s2s_shaper, [{fast, all}]}.
-  {access, announce, [{allow, admin}]}.
-  {access, configure, [{allow, admin}]}.
-  {access, muc_admin, [{allow, admin}]}.
-  {access, muc_create, [{allow, local}]}.
-  {access, muc, [{allow, all}]}.
-  {access, pubsub_createnode, [{allow, local}]}.
-  {access, register, [{allow, all}]}.
-  {language, "en"}.
-  {modules,
-   [
-    {mod_adhoc,    []},
-    {mod_announce, [{access, announce}]},
-    {mod_blocking,[]},
-    {mod_caps,     []},
-    {mod_configure,[]},
-    {mod_disco,    []},
-    {mod_irc,      []},
-    {mod_http_bind, []},
-    {mod_last,     []},
-    {mod_muc,      [
-        {access, muc},
-        {access_create, muc_create},
-        {access_persistent, muc_create},
-        {access_admin, muc_admin}
-       ]},
-    {mod_offline,  [{access_max_user_messages, max_user_offline_messages}]},
-    {mod_ping,     []},
-    {mod_privacy,  []},
-    {mod_private,  []},
-    {mod_pubsub,   [
-        {access_createnode, pubsub_createnode},
-        {ignore_pep_from_offline, true},
-        {last_item_cache, false},
-        {plugins, ["flat", "hometree", "pep"]}
-       ]},
-    {mod_register, [
-        {welcome_message, {"Welcome!",
-               "Hi.\nWelcome to this XMPP server."}},
-        {ip_access, [{allow, "127.0.0.0/8"},
-               {deny, "0.0.0.0/0"}]},
-        {access, register}
-       ]},
-    {mod_roster,   []},
-    {mod_shared_roster,[]},
-    {mod_stats,    []},
-    {mod_time,     []},
-    {mod_vcard,    []},
-    {mod_version,  []}
-   ]}.
+  # See https://github.com/processone/ejabberd/blob/master/ejabberd.yml.example
+
+  ciphers = concatStringsSep ":" [
+    "ECDHE-ECDSA-AES256-GCM-SHA384"
+    "ECDHE-RSA-AES256-GCM-SHA384"
+    "ECDHE-ECDSA-CHACHA20-POLY1305"
+    "ECDHE-RSA-CHACHA20-POLY1305"
+    "ECDHE-ECDSA-AES128-GCM-SHA256"
+    "ECDHE-RSA-AES128-GCM-SHA256"
+    "ECDHE-ECDSA-AES256-SHA384"
+    "ECDHE-RSA-AES256-SHA384"
+    "ECDHE-ECDSA-AES128-SHA256"
+    "ECDHE-RSA-AES128-SHA256"
+  ];
+
+  protocol_options = [
+    "no_sslv2"
+    "no_sslv3"
+    "no_tlsv1"
+    "no_tlsv1_10"
+  ];
+
+in /* yaml */ ''
+
+  access_rules:
+    announce:
+      - allow: admin
+    local:
+      - allow: local
+    configure:
+      - allow: admin
+    register:
+      - allow
+    s2s:
+      - allow
+    trusted_network:
+      - allow: loopback
+
+  acl:
+    local:
+      user_regexp: ""
+    loopback:
+      ip:
+        - "127.0.0.0/8"
+        - "::1/128"
+        - "::FFFF:127.0.0.1/128"
+
+  hosts: ${toJSON config.hosts}
+
+  language: "en"
+
+  listen:
+    -
+      port: 5222
+      ip: "::"
+      module: ejabberd_c2s
+      shaper: c2s_shaper
+      certfile: ${toJSON config.certfile.path}
+      ciphers: ${toJSON ciphers}
+      dhfile: ${toJSON config.dhfile.path}
+      protocol_options: ${toJSON protocol_options}
+      starttls: true
+      starttls_required: true
+      tls: false
+      tls_compression: false
+      max_stanza_size: 65536
+    -
+      port: 5269
+      ip: "::"
+      module: ejabberd_s2s_in
+      shaper: s2s_shaper
+      max_stanza_size: 131072
+
+  loglevel: 4
+
+  modules:
+    mod_adhoc: {}
+    mod_admin_extra: {}
+    mod_announce:
+      access: announce
+    mod_caps: {}
+    mod_carboncopy: {}
+    mod_client_state: {}
+    mod_configure: {}
+    mod_disco: {}
+    mod_echo: {}
+    mod_irc: {}
+    mod_bosh: {}
+    mod_last: {}
+    mod_offline:
+      access_max_user_messages: max_user_offline_messages
+    mod_ping: {}
+    mod_privacy: {}
+    mod_private: {}
+    mod_register:
+      access_from: deny
+      access: register
+      ip_access: trusted_network
+      registration_watchers: ${toJSON config.registration_watchers}
+    mod_roster: {}
+    mod_shared_roster: {}
+    mod_stats: {}
+    mod_time: {}
+    mod_vcard:
+      search: false
+    mod_version: {}
+    mod_http_api: {}
+
+  s2s_access: s2s
+  s2s_certfile: ${toJSON config.s2s_certfile.path}
+  s2s_ciphers: ${toJSON ciphers}
+  s2s_dhfile: ${toJSON config.dhfile.path}
+  s2s_protocol_options: ${toJSON protocol_options}
+  s2s_tls_compression: false
+  s2s_use_starttls: required
+
+  shaper_rules:
+    max_user_offline_messages:
+      - 5000: admin
+      - 100
+    max_user_sessions: 10
+    c2s_shaper:
+      - none: admin
+      - normal
+    s2s_shaper: fast
 ''
