@@ -11,18 +11,21 @@ let
 in {
   # due to the fact that we actually build stuff on the box via the daemon,
   # /nix/store should be cleaned up automatically as well
-  services.nginx.virtualHosts.build = {
-    serverAliases = [ "build.${hostname}.r" ];
-    locations."/".extraConfig = ''
-      proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection "upgrade";
-      proxy_pass http://127.0.0.1:${toString config.krebs.buildbot.master.web.port};
-    '';
+  services.nginx = {
+    enable = true;
+    virtualHosts.build = {
+      serverAliases = [ "build.${hostname}.r" ];
+      locations."/".extraConfig = ''
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_pass http://127.0.0.1:${toString config.krebs.buildbot.master.web.port};
+      '';
+    };
   };
 
   nix.gc.automatic = true;
   nix.gc.dates = "05:23";
-  networking.firewall.allowedTCPPorts = [ 8010 9989 ];
+  networking.firewall.allowedTCPPorts = [ 80 8010 9989 ];
   krebs.buildbot.master = let
     stockholm-mirror-url = "http://cgit.${hostname}.r/stockholm" ;
   in {
