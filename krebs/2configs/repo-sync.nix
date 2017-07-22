@@ -65,6 +65,15 @@ in {
   krebs.repo-sync = {
     enable = true;
   };
+  krebs.git = {
+    enable = mkDefault true;
+    cgit = {
+      settings = {
+        root-title = "Shared Repos";
+        root-desc = "keep on krebsing";
+      };
+    };
+  };
   imports = [
     (sync-retiolum "stockholm")
   ];
