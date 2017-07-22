@@ -47,10 +47,8 @@ let
   '';
 
   init.env = pkgs.writeText "init.env" /* sh */ ''
-    config=''${config-$user/1systems/$system/config.nix}
     source=''${source-$user/1systems/$system/source.nix}
 
-    export config
     export source
     export system
     export target
@@ -98,7 +96,6 @@ let
           --readonly-mode \
           --show-trace \
           --strict \
-          -I nixos-config="$config" \
           "$source")
       echo $_source |
       ${pkgs.populate}/bin/populate \
@@ -118,7 +115,6 @@ let
         STOCKHOLM_VERSION=$STOCKHOLM_VERSION \
         nix-shell \
             --run $(q \
-                config=$config \
                 system=$system \
                 target=$target \
                 using_proxy=true \
