@@ -49,6 +49,24 @@ let
         "$1"
   '';
 
+  # usage: parse-target [USER@]HOST[:PORT][/PATH]
+  cmds.parse-target = pkgs.writeDash "cmds.parse-target" ''
+    set -efu
+    script=${pkgs.writeText "cmds.parse-target.jq" ''
+      def when(c; f): if c then f else . end;
+      def capturesDef(i; v): .captures[i].string | when(. == null; v);
+      $target | match("^(?:([^@]+)@)?([^:/]+)?(?::([0-9]+))?(/.*)?$") | {
+        user: capturesDef(0; "root"),
+        host: capturesDef(1; env.system),
+        port: capturesDef(2; "22"),
+        path: capturesDef(3; "/var/src"),
+      } | . + {
+        local: (.user == env.LOGNAME and .host == env.HOSTNAME),
+      }
+    ''}
+    exec ${pkgs.jq}/bin/jq -enrf "$script" --arg target "$1" \
+  '';
+
   init.args = pkgs.writeText "init.args" /* sh */ ''
     args=$(${pkgs.utillinux}/bin/getopt -n "$command" -s sh \
         -o s:t:u: \
@@ -74,7 +92,7 @@ let
     export target
     export user
 
-    export target_object="$(${init.env.parsetarget} $target)"
+    export target_object="$(parse-target "$target")"
     export target_user="$(echo $target_object | ${pkgs.jq}/bin/jq -r .user)"
     export target_host="$(echo $target_object | ${pkgs.jq}/bin/jq -r .host)"
     export target_port="$(echo $target_object | ${pkgs.jq}/bin/jq -r .port)"
@@ -88,26 +106,6 @@ let
       fi
     fi
   '' // {
-    parsetarget = pkgs.writeDash "init.env.parsetarget" ''
-      set -efu
-      exec ${pkgs.jq}/bin/jq \
-          -enr \
-          --arg target "$1" \
-          -f ${init.env.parsetarget.jq}
-    '' // {
-      jq = pkgs.writeText "init.env.parsetarget.jq" ''
-        def when(c; f): if c then f else . end;
-        def capturesDef(i; v): .captures[i].string | when(. == null; v);
-        $target | match("^(?:([^@]+)@)?([^:/]+)?(?::([0-9]+))?(/.*)?$") | {
-          user: capturesDef(0; "root"),
-          host: capturesDef(1; env.system),
-          port: capturesDef(2; "22"),
-          path: capturesDef(3; "/var/src"),
-        } | . + {
-          local: (.user == env.LOGNAME and .host == env.HOSTNAME),
-        }
-      '';
-    };
     populate = pkgs.writeDash "init.env.populate" ''
       set -efu
       _source=$(get-source "$source")
