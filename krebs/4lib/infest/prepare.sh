@@ -102,7 +102,7 @@ prepare_nixos_iso() {
   mkdir -p bin
   rm -f bin/nixos-install
   cp "$(type -p nixos-install)" bin/nixos-install
-  sed -i "s@^NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
+  sed -i "s@NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
 }
 
 get_nixos_install() {

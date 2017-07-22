@@ -102,7 +102,13 @@ ifneq ($(ssh),)
 populate: populate-flags += --ssh=$(ssh)
 endif
 populate:
-	$(call evaluate,config.krebs.build.source) --json --strict | \
+	nix-instantiate \
+		--eval \
+		--json \
+		--readonly-mode \
+		--show-trace \
+		--strict \
+		$(LOGNAME)/1systems/$(system)/source.nix | \
 	populate $(populate-target) $(populate-flags)
 
 # usage: make pkgs.populate
