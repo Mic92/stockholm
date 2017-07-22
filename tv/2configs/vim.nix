@@ -230,6 +230,7 @@ let {
             ''write\(Ba\|Da\)sh[^ \t\r\n]*[ \t\r\n]*"[^"]*"''
             ''[a-z]*Phase[ \t\r\n]*=''
           ];
+          yaml = {};
           vim.extraStart =
             ''write[^ \t\r\n]*[ \t\r\n]*"\(\([^"]*\.\)\?vimrc\|[^"]*\.vim\)"'';
           xdefaults = {};
