@@ -39,6 +39,7 @@ in {
           aliases = [
             "puyak.r"
             "build.puyak.r"
+            "cgit.puyak.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
