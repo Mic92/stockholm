@@ -174,7 +174,8 @@ let
 in pkgs.stdenv.mkDerivation {
   name = "stockholm";
   shellHook = /* sh */ ''
-    export NIX_PATH="stockholm=$PWD''${NIX_PATH+:$NIX_PATH}"
+    export NIX_PATH=stockholm=$PWD:nixpkgs=${toString <nixpkgs>}
+    export NIX_REMOTE=daemon
     export PATH=${lib.makeBinPath [
       shell.cmdspkg
     ]}
