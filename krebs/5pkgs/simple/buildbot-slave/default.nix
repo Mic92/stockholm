@@ -1,19 +1,18 @@
-{ stdenv, buildPythonApplication, fetchurl, coreutils, twisted }:
+{ stdenv, python2Packages, fetchFromGitHub, coreutils }:
 
-buildPythonApplication (rec {
-  name = "buildbot-slave-0.8.10";
-  namePrefix = "";
+python2Packages.buildPythonApplication (rec {
+  name = "buildbot-slave-classic-2017-07-23";
 
-  src = fetchurl {
-    url = "https://pypi.python.org/packages/source/b/buildbot-slave/${name}.tar.gz";
-    sha256 = "09pncw44c7vqrl7zyn1nvfismiqi9s51axk9cqxn9gq7jhj38mpg";
+  src = fetchFromGitHub {
+    owner = "krebscode";
+    repo = "buildbot-classic";
+    rev = "7c2826756a00ade7a1d6d20b4e9430710d2bc29e";
+    sha256 = "0za2k5kap6zky304rjknlvm3gyvw0q0p52c3jjmkf708s9gmyfyg";
   };
 
-  patchPhase = ''
-    substituteInPlace buildslave/scripts/logwatcher.py --replace /usr/bin/tail ${coreutils}/bin/tail
-  '';
+  postUnpack = "sourceRoot=\${sourceRoot}/slave";
 
-  propagatedBuildInputs = [ twisted ];
+  propagatedBuildInputs = with python2Packages; [ twisted pathlib ];
 
   # What's up with this?! 'trial' should be 'test', no?
   #
