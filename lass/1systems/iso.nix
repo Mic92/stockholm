@@ -151,25 +151,41 @@ with import <stockholm/lib>;
       systemd.services.sshd.wantedBy = mkForce [ "multi-user.target" ];
     }
     {
-      krebs.iptables = {
+      networking.firewall = {
         enable = true;
-        tables = {
-          filter.INPUT.policy = "DROP";
-          filter.FORWARD.policy = "DROP";
-          filter.INPUT.rules = [
-            { predicate = "-m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; precedence = 10001; }
-            { predicate = "-p icmp"; target = "ACCEPT"; precedence = 10000; }
-            { predicate = "-i lo"; target = "ACCEPT"; precedence = 9999; }
-            { predicate = "-p tcp --dport 22"; target = "ACCEPT"; precedence = 9998; }
-            { predicate = "-p tcp -i retiolum"; target = "REJECT --reject-with tcp-reset"; precedence = -10000; }
-            { predicate = "-p udp -i retiolum"; target = "REJECT --reject-with icmp-port-unreachable"; v6 = false; precedence = -10000; }
-            { predicate = "-i retiolum"; target = "REJECT --reject-with icmp-proto-unreachable"; v6 = false; precedence = -10000; }
-          ];
-        };
+        allowedTCPPorts = [ 22 ];
       };
     }
     {
       krebs.hidden-ssh.enable = true;
+    }
+    {
+      services.xserver = {
+        enable = true;
+        #videoDrivers = mkForce [ "ati_unfree" ];
+
+        desktopManager.xterm.enable = false;
+        desktopManager.default = "none";
+        displayManager.lightdm.enable = true;
+        displayManager.lightdm.autoLogin = {
+          enable = true;
+          user = "lass";
+        };
+        windowManager.default = "xmonad";
+        windowManager.session = [{
+          name = "xmonad";
+          start = ''
+            ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
+            ${pkgs.xmonad-lass}/bin/xmonad &
+            waitPID=$!
+          '';
+        }];
+
+        layout = "us";
+        xkbModel = "evdev";
+        xkbVariant = "altgr-intl";
+        xkbOptions = "caps:backspace";
+      };
     }
   ];
 }

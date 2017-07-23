@@ -5,6 +5,7 @@
     <stockholm/krebs>
     <stockholm/krebs/2configs>
     <stockholm/krebs/2configs/secret-passwords.nix>
+    <stockholm/krebs/2configs/hw/x220.nix>
 
     <stockholm/krebs/2configs/repo-sync.nix>
     <stockholm/krebs/2configs/shared-buildbot.nix>
@@ -47,10 +48,6 @@
       options = ["nosuid" "nodev" "noatime"];
     };
   };
-
-  hardware.enableAllFirmware = true;
-  networking.wireless.enable = true;
-  nixpkgs.config.allowUnfree = true;
 
   services.logind.extraConfig = ''
     HandleLidSwitch=ignore
