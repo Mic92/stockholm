@@ -1,38 +1,26 @@
-{ stdenv, buildPythonApplication, fetchurl, twisted, dateutil, jinja2
-, sqlalchemy_migrate_0_7
-, enableDebugClient ? false, pygobject ? null, pyGtkGlade ? null
+{ stdenv, python2Packages, fetchFromGitHub
+, enableDebugClient ? false
 }:
 
 # enableDebugClient enables "buildbot debugclient", a Gtk-based debug control
 # panel. Its mostly for developers.
 
-assert enableDebugClient -> pygobject != null && pyGtkGlade != null;
+assert enableDebugClient -> python2Packages.pygobject != null && python2Packages.pyGtkGlade != null;
 
-buildPythonApplication (rec {
-  name = "buildbot-0.8.12";
-  namePrefix = "";
+with python2Packages; buildPythonApplication (rec {
+  name = "buildbot-classic-2017-07-23";
 
-  src = fetchurl {
-    url = "https://pypi.python.org/packages/source/b/buildbot/${name}.tar.gz";
-    sha256 = "1mn4h04sp6smr3ahqfflys15cpn13q9mfkapcs2jc4ppvxv6kdn6";
+  src = fetchFromGitHub {
+    owner = "krebscode";
+    repo = "buildbot-classic";
+    rev = "2ef3315e0ac8f387ab751d02ee68d166909283aa";
+    sha256 = "00amqarknbh1p141h14jw4r8d23ih0xgf1h4jscp76ba340drjfj";
   };
 
-  patchPhase =
-    # The code insists on /usr/bin/tail, /usr/bin/make, etc.
-    '' echo "patching erroneous absolute path references..."
-       for i in $(find -name \*.py)
-       do
-         sed -i "$i" \
-             -e "s|/usr/bin/python|$(type -P python)|g ; s|/usr/bin/||g"
-       done
-
-      sed -i 's/==/>=/' setup.py
-    '';
-
   propagatedBuildInputs =
-    [ twisted dateutil jinja2 sqlalchemy_migrate_0_7
+    [ twisted dateutil jinja2 sqlalchemy_migrate pathlib
     ] ++ stdenv.lib.optional enableDebugClient [ pygobject pyGtkGlade ];
-
+  postUnpack = "sourceRoot=\${sourceRoot}/master";
   # What's up with this?! 'trial' should be 'test', no?
   #
   # running tests
