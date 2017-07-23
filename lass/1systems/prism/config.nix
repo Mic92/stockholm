@@ -42,6 +42,7 @@ in {
     <stockholm/lass/2configs/syncthing.nix>
     <stockholm/lass/2configs/coders-irc.nix>
     <stockholm/lass/2configs/ciko.nix>
+    <stockholm/lass/2configs/container-networking.nix>
     {
       lass.pyload.enable = true;
     }
