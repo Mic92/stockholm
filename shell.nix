@@ -20,6 +20,47 @@ let
     exec ${utils.deploy}
   '';
 
+  # usage: install [--user=USER] --system=SYSTEM --target=TARGET
+  cmds.install = pkgs.writeBash "cmds.install" ''
+    set -efu
+
+    command=install
+    . ${init.args}
+    \test -n "''${user-}" || user=$LOGNAME
+    . ${init.env}
+
+    if \test "''${using_proxy-}" != true; then
+      ${pkgs.openssh}/bin/ssh \
+          -o StrictHostKeyChecking=no \
+          -o UserKnownHostsFile=/dev/null \
+          "$target_user@$target_host" -p "$target_port" \
+          env target_path=$(quote "$target_path") \
+              sh -s prepare < ${./krebs/4lib/infest/prepare.sh}
+              # TODO inline prepare.sh?
+    fi
+
+    . ${init.proxy}
+
+    # Reset PATH because we need access to nixos-install.
+    # TODO provide nixos-install instead of relying on prepare.sh
+    export PATH="$OLD_PATH"
+
+    # these variables get defined by nix-shell (i.e. nix-build) from
+    # XDG_RUNTIME_DIR and reference the wrong directory (/run/user/0),
+    # which only exists on / and not at /mnt.
+    export NIX_BUILD_TOP=/tmp
+    export TEMPDIR=/tmp
+    export TEMP=/tmp
+    export TMPDIR=/tmp
+    export TMP=/tmp
+    export XDG_RUNTIME_DIR=/tmp
+
+    export NIXOS_CONFIG="$target_path/nixos-config"
+
+    cd
+    exec nixos-install
+  '';
+
   # usage: test [--user=USER] --system=SYSTEM --target=TARGET
   cmds.test = pkgs.writeDash "cmds.test" /* sh */ ''
     set -efu
@@ -193,6 +234,7 @@ let
 in pkgs.stdenv.mkDerivation {
   name = "stockholm";
   shellHook = /* sh */ ''
+    export OLD_PATH="$PATH"
     export NIX_PATH=stockholm=$PWD:nixpkgs=${toString <nixpkgs>}
     export NIX_REMOTE=daemon
     export PATH=${lib.makeBinPath [
