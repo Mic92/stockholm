@@ -569,7 +569,8 @@ let
         if ! test -d "$repodir"; then
           mkdir -m "$mode" "$repodir"
           git init --bare --template=/var/empty "$repodir"
-          chown -R git:nogroup "$repodir"
+          # TODO fix correctly with stringAfter
+          chown -R ${toString config.users.users.git.uid}:nogroup "$repodir"
         fi
         ln -s ${hooks} "$repodir/hooks"
       ''

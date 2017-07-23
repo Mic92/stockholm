@@ -11,7 +11,6 @@ in
     <stockholm/krebs/2configs/central-stats-client.nix>
     <stockholm/krebs/2configs/save-diskspace.nix>
 
-    <stockholm/krebs/2configs/cgit-mirror.nix>
     <stockholm/krebs/2configs/graphite.nix>
     <stockholm/krebs/2configs/repo-sync.nix>
     <stockholm/krebs/2configs/shared-buildbot.nix>

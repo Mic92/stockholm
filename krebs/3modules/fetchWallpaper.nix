@@ -49,6 +49,7 @@ let
     set -euf
 
     mkdir -p ${cfg.stateDir}
+    chmod o+rx ${cfg.stateDir}
     cd ${cfg.stateDir}
     (curl --max-time ${toString cfg.maxTime} -s -o wallpaper.tmp -z wallpaper ${shell.escape cfg.url} && mv wallpaper.tmp wallpaper) || :
     feh --no-fehbg --bg-scale ${shell.escape cfg.stateDir}/wallpaper

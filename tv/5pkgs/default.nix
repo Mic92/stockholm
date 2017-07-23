@@ -28,10 +28,6 @@ in {
         "$@"
   '';
 
-  ejabberd = callPackage ./ejabberd {
-    erlang = self.erlangR16;
-  };
-
   ff = self.writeDashBin "ff" ''
     exec ${self.firefoxWrapper}/bin/firefox "$@"
   '';

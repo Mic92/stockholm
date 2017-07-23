@@ -54,6 +54,12 @@ let
               };
             });
           };
+          timerConfig = mkOption {
+            type = with types; attrsOf str;
+            default = optionalAttrs (config.startAt != null) {
+              OnCalendar = config.startAt;
+            };
+          };
         };
       }));
     };
@@ -82,9 +88,17 @@ let
           SyslogIdentifier = ExecStart.name;
           Type = "oneshot";
         };
-        startAt = mkIf (plan.startAt != null) plan.startAt;
       }) (filter (plan: build-host-is "pull" "dst" plan ||
                         build-host-is "push" "src" plan)
+                 enabled-plans));
+
+    systemd.timers =
+      listToAttrs (map (plan: nameValuePair "backup.${plan.name}" {
+        wantedBy = [ "timers.target" ];
+        timerConfig = plan.timerConfig;
+      }) (filter (plan: plan.timerConfig != {} && (
+                        build-host-is "pull" "dst" plan ||
+                        build-host-is "push" "src" plan))
                  enabled-plans));
 
     users.groups.backup.gid = genid "backup";

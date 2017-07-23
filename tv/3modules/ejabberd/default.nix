@@ -1,5 +1,17 @@
 { config, lib, pkgs, ... }@args: with import <stockholm/lib>; let
+
   cfg = config.tv.ejabberd;
+
+  gen-dhparam = pkgs.writeDash "gen-dhparam" ''
+    set -efu
+    path=$1
+    bits=2048
+    # TODO regenerate dhfile after some time?
+    if ! test -e "$path"; then
+      ${pkgs.openssl}/bin/openssl dhparam "$bits" > "$path"
+    fi
+  '';
+
 in {
   options.tv.ejabberd = {
     enable = mkEnableOption "tv.ejabberd";
@@ -11,19 +23,35 @@ in {
         source-path = toString <secrets> + "/ejabberd.pem";
       };
     };
+    dhfile = mkOption {
+      type = types.secret-file;
+      default = {
+        path = "${cfg.user.home}/dhparams.pem";
+        owner = cfg.user;
+        source-path = "/dev/null";
+      };
+    };
     hosts = mkOption {
       type = with types; listOf str;
     };
     pkgs.ejabberdctl = mkOption {
       type = types.package;
       default = pkgs.writeDashBin "ejabberdctl" ''
-        set -efu
-        export SPOOLDIR=${shell.escape cfg.user.home}
-        export EJABBERD_CONFIG_PATH=${shell.escape (import ./config.nix args)}
         exec ${pkgs.ejabberd}/bin/ejabberdctl \
+            --config ${toFile "ejabberd.yaml" (import ./config.nix {
+              inherit pkgs;
+              config = cfg;
+            })} \
             --logs ${shell.escape cfg.user.home} \
+            --spool ${shell.escape cfg.user.home} \
             "$@"
       '';
+    };
+    registration_watchers = mkOption {
+      type = types.listOf types.str;
+      default = [
+        config.krebs.users.tv.mail
+      ];
     };
     s2s_certfile = mkOption {
       type = types.secret-file;
@@ -50,12 +78,12 @@ in {
       requires = [ "secret.service" ];
       after = [ "network.target" "secret.service" ];
       serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = "yes";
-        PermissionsStartOnly = "true";
+        ExecStartPre = "${gen-dhparam} ${cfg.dhfile.path}";
+        ExecStart = "${cfg.pkgs.ejabberdctl}/bin/ejabberdctl foreground";
+        PermissionsStartOnly = true;
         SyslogIdentifier = "ejabberd";
         User = cfg.user.name;
-        ExecStart = "${cfg.pkgs.ejabberdctl}/bin/ejabberdctl start";
+        TimeoutStartSec = 60;
       };
     };
 

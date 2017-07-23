@@ -1,30 +1,34 @@
 { lib, config, pkgs, ... }:
-# The buildbot config is self-contained and currently provides a way 
+# The buildbot config is self-contained and currently provides a way
 # to test "krebs" configuration (infrastructure to be used by every krebsminister).
 
 # You can add your own test, test steps as required. Deploy the config on a
 # krebs host like wolf and everything should be fine.
 
 # TODO for all users schedule a build for fast tests
-{
+let
+  hostname = config.networking.hostName;
+in {
   # due to the fact that we actually build stuff on the box via the daemon,
   # /nix/store should be cleaned up automatically as well
-  services.nginx.virtualHosts.build = {
-    serverAliases = [ "build.wolf.r" ];
-    locations."/".extraConfig = ''
-      proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection "upgrade";
-      proxy_pass http://127.0.0.1:${toString config.krebs.buildbot.master.web.port};
-    '';
+  services.nginx = {
+    enable = true;
+    virtualHosts.build = {
+      serverAliases = [ "build.${hostname}.r" ];
+      locations."/".extraConfig = ''
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_pass http://127.0.0.1:${toString config.krebs.buildbot.master.web.port};
+      '';
+    };
   };
 
   nix.gc.automatic = true;
   nix.gc.dates = "05:23";
-  networking.firewall.allowedTCPPorts = [ 8010 9989 ];
+  networking.firewall.allowedTCPPorts = [ 80 8010 9989 ];
   krebs.buildbot.master = let
-    stockholm-mirror-url = http://cgit.wolf.r/stockholm-mirror ;
+    stockholm-mirror-url = "http://cgit.${hostname}.r/stockholm" ;
   in {
-    secrets = [ "retiolum-ci.rsa_key.priv" "cac.json" ];
     workers = {
       testworker =  "krebspass";
     };
@@ -155,13 +159,13 @@
     };
     irc = {
       enable = true;
-      nick = "wolfbot";
+      nick = "${hostname}bot";
       server = "ni.r";
       channels = [ { channel = "retiolum"; } ];
       allowForce = true;
     };
     extraConfig = ''
-      c['buildbotURL'] = "http://build.wolf.r/"
+      c['buildbotURL'] = "http://build.${hostname}.r/"
     '';
   };
 
@@ -173,6 +177,6 @@
     packages = with pkgs; [ gnumake jq nix populate ];
     # all nix commands will need a working nixpkgs installation
     extraEnviron = {
-      NIX_PATH="nixpkgs=/var/src/nixpkgs:nixos-config=./krebs/1systems/wolf/config.nix:stockholm=./"; };
+      NIX_PATH="nixpkgs=/var/src/nixpkgs:nixos-config=./krebs/1systems/${hostname}/config.nix:stockholm=./"; };
   };
 }

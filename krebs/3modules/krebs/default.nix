@@ -38,6 +38,8 @@ in {
           ip6.addr = "42:0:0:0:0:0:77:2";
           aliases = [
             "puyak.r"
+            "build.puyak.r"
+            "cgit.puyak.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -93,6 +95,16 @@ in {
   users = {
     krebs = {
       pubkey = "lol"; # TODO krebs.users.krebs.pubkey should be unnecessary
+    };
+    puyak-repo-sync = {
+      name = "puyak-repo-sync";
+      mail = "spam@krebsco.de";
+      pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ+18mG/cV1YbR9PXzuu3ScyV9kENy08OXUntpmgh9H2";
+    };
+    wolf-repo-sync = {
+      name = "wolf-repo-sync";
+      mail = "spam@krebsco.de";
+      pubkey = ''ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwuAZB3wtAvBJFYh+gWdyGaZU4mtqM2dFXmh2rORlbXeh02msu1uv07ck1VKkQ4LgvCBcBsAOeVa1NTz99eLqutwgcqMCytvRNUCibcoEWwHObsK53KhDJj+zotwlFhnPPeK9+EpOP4ngh/tprJikttos5BwBwe2K+lfiid3fmVPZcTTYa77nCwijimMvWEx6CEjq1wiXMUc4+qcEn8Swbwomz/EEQdNE2hgoC3iMW9RqduTFdIJWnjVi0KaxenX9CvQRGbVK5SSu2gwzN59D/okQOCP6+p1gL5r3QRHSLSSRiEHctVQTkpKOifrtLZGSr5zArEmLd/cOVyssHQPCX repo-sync@wolf'';
     };
   };
 }

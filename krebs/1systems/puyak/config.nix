@@ -5,6 +5,9 @@
     <stockholm/krebs>
     <stockholm/krebs/2configs>
     <stockholm/krebs/2configs/secret-passwords.nix>
+
+    <stockholm/krebs/2configs/repo-sync.nix>
+    <stockholm/krebs/2configs/shared-buildbot.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;
@@ -26,6 +29,11 @@
     };
     "/boot" = {
       device = "/dev/sda2";
+    };
+    "/bku" = {
+      device = "/dev/mapper/pool-bku";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
     "/home" = {
       device = "/dev/mapper/pool-home";
