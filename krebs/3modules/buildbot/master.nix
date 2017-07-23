@@ -3,14 +3,7 @@
 with import <stockholm/lib>;
 let
 
-  # https://github.com/NixOS/nixpkgs/issues/14026
-  nixpkgs-fix = import (pkgs.fetchgit {
-    url = https://github.com/nixos/nixpkgs;
-    rev = "e026b5c243ea39810826e68362718f5d703fb5d0";
-    sha256 = "11lqd480bi6xbi7xbh4krrxmbp6a6iafv1d0q3sj461al0x0has8";
-  }) {};
-
-  buildbot = nixpkgs-fix.buildbot;
+  buildbot = pkgs.buildbot;
   buildbot-master-config = pkgs.writeText "buildbot-master.cfg" ''
     # -*- python -*-
     from buildbot.plugins import *
