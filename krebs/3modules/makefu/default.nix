@@ -6,6 +6,7 @@ with import <stockholm/lib>;
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.makefu) {
     drop = rec {
       cores = 1;
+      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.177.9";
@@ -28,6 +29,7 @@ with import <stockholm/lib>;
     };
     studio = rec {
       cores = 4;
+      managed = true;
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIqBR5gjJkR1TEIs2yx6JRoIOA7+/LJA6kjju8yCauFa studio";
       nets = {
@@ -53,6 +55,7 @@ with import <stockholm/lib>;
 
     fileleech = rec {
       cores = 4;
+      managed = true;
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+jB5QdPsAJc90alYDhAEP3sPDJb6eIj9bebj+rTBEJ fileleech";
       nets = {
@@ -78,6 +81,7 @@ with import <stockholm/lib>;
 
     pnp = {
       cores = 1;
+      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.210";
@@ -101,6 +105,7 @@ with import <stockholm/lib>;
     };
     darth = {
       cores = 4;
+      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.84";
@@ -171,6 +176,7 @@ with import <stockholm/lib>;
       };
     };
     tsp = {
+      managed = true;
       cores = 1;
       nets = {
         retiolum = {
@@ -198,6 +204,7 @@ with import <stockholm/lib>;
       };
     };
     x = {
+      managed = true;
       cores = 4;
       nets = {
         retiolum = {
@@ -243,6 +250,7 @@ with import <stockholm/lib>;
 
     vbob = {
       cores = 2;
+      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.1.91";
@@ -305,6 +313,7 @@ with import <stockholm/lib>;
     };
     wry = rec {
       cores = 1;
+      managed = true;
       extraZones = {
         "krebsco.de" = ''
           wry               IN A      ${nets.internet.ip4.addr}
@@ -349,6 +358,7 @@ with import <stockholm/lib>;
     };
     filepimp = rec {
       cores = 1;
+      managed = true;
       nets = {
         lan = {
           ip4.addr = "192.168.1.12";
@@ -378,6 +388,7 @@ with import <stockholm/lib>;
 
     omo = rec {
       cores = 2;
+      managed = true;
 
       nets = {
         lan = {
@@ -411,6 +422,7 @@ with import <stockholm/lib>;
     };
     wbob = rec {
       cores = 4;
+      managed = true;
       nets = {
         siem = {
           ip4.addr = "10.8.10.7";
@@ -452,6 +464,7 @@ with import <stockholm/lib>;
 
     gum = rec {
       cores = 2;
+      managed = true;
 
       extraZones = {
         "krebsco.de" = ''
@@ -514,6 +527,7 @@ with import <stockholm/lib>;
     };
     shoney = rec {
       cores = 1;
+      managed = true;
       nets = rec {
         siem = {
           via = internet;
@@ -562,6 +576,7 @@ with import <stockholm/lib>;
     };
     sdev = rec {
       cores = 1;
+      managed = true;
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILtm6ETzNgLcXNkrKs2VUEiGsTKBmOFpW2fazbzdUfOg sdev";
       nets = {

@@ -1,17 +1,19 @@
-{ lib, pkgs, python3Packages, fetchurl, ... }:
+{ lib, pkgs, python3Packages, fetchFromGitHub, ... }:
 
 with python3Packages; buildPythonPackage rec {
   name = "repo-sync-${version}";
-  version = "0.2.6";
+  version = "0.2.7";
   disabled = isPy26 || isPy27;
   propagatedBuildInputs = [
     docopt
     GitPython
     pkgs.git
   ];
-  src = fetchurl {
-    url = "https://pypi.python.org/packages/source/r/repo-sync/repo-sync-${version}.tar.gz";
-    sha256 = "1hqa9qw9qg7mxgniqzys9szycs05llg4yik8a9wz94a437zzarsk";
+  src = fetchFromGitHub {
+    owner = "krebscode";
+    repo = "repo-sync";
+    rev = version;
+    sha256 = "1qjf1jmxf7xzwskybdys4vqncnwj9f3xwk1gv354zrla68s533cw";
   };
   meta = {
     homepage = http://github.com/makefu/repo-sync;
