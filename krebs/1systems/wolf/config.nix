@@ -8,7 +8,7 @@ in
     <stockholm/krebs/2configs>
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
     <stockholm/krebs/2configs/collectd-base.nix>
-    <stockholm/krebs/2configs/central-stats-client.nix>
+    <stockholm/krebs/2configs/stats/wolf-client.nix>
     <stockholm/krebs/2configs/save-diskspace.nix>
 
     <stockholm/krebs/2configs/graphite.nix>
