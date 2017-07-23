@@ -8,6 +8,7 @@
 
     <stockholm/krebs/2configs/repo-sync.nix>
     <stockholm/krebs/2configs/shared-buildbot.nix>
+    <stockholm/krebs/2configs/stats/puyak-client.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;
