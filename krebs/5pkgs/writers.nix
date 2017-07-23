@@ -262,7 +262,12 @@ with import <stockholm/lib>;
         };
       };
 
-    writeJSON = name: value: pkgs.writeText name (toJSON value);
+    writeJSON = name: value: pkgs.runCommand name {
+      json = toJSON value;
+      passAsFile = [ "json" ];
+    } /* sh */ ''
+      ${pkgs.jq}/bin/jq . "$jsonPath" > "$out"
+    '';
 
     writeNixFromCabal =
       trace (toString [

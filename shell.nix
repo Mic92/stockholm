@@ -2,6 +2,10 @@ let
   lib = import ./lib;
   pkgs = import <nixpkgs> { overlays = [(import ./krebs/5pkgs)]; };
 
+  #
+  # high level commands
+  #
+
   # usage: deploy [--user=USER] --system=SYSTEM [--target=TARGET]
   cmds.deploy = pkgs.writeDash "cmds.deploy" ''
     set -efu
@@ -29,6 +33,69 @@ let
     exec ${utils.build} config.system.build.toplevel
   '';
 
+  #
+  # low level commands
+  #
+
+  # usage: get-source SOURCE_FILE
+  cmds.get-source = pkgs.writeDash "cmds.get-source" ''
+    set -efu
+    exec ${pkgs.nix}/bin/nix-instantiate \
+        --eval \
+        --json \
+        --readonly-mode \
+        --show-trace \
+        --strict \
+        "$1"
+  '';
+
+  # usage: parse-target [--default=TARGET] TARGET
+  # TARGET = [USER@]HOST[:PORT][/PATH]
+  cmds.parse-target = pkgs.writeDash "cmds.parse-target" ''
+    set -efu
+    args=$(${pkgs.utillinux}/bin/getopt -n "$0" -s sh \
+        -o d: \
+        -l default: \
+        -- "$@")
+    if \test $? != 0; then exit 1; fi
+    eval set -- "$args"
+    default_target=
+    while :; do case $1 in
+      -d|--default) default_target=$2; shift 2;;
+      --) shift; break;;
+    esac; done
+    target=$1; shift
+    for arg; do echo "$0: bad argument: $arg" >&2; done
+    if \test $# != 0; then exit 2; fi
+    exec ${pkgs.jq}/bin/jq \
+        -enr \
+        --arg default_target "$default_target" \
+        --arg target "$target" \
+        -f ${pkgs.writeText "cmds.parse-target.jq" ''
+          def parse: match("^(?:([^@]+)@)?([^:/]+)?(?::([0-9]+))?(/.*)?$") | {
+            user: .captures[0].string,
+            host: .captures[1].string,
+            port: .captures[2].string,
+            path: .captures[3].string,
+          };
+          def sanitize: with_entries(select(.value != null));
+          ($default_target | parse) + ($target | parse | sanitize) |
+          . + { local: (.user == env.LOGNAME and .host == env.HOSTNAME) }
+        ''}
+  '';
+
+  # usage: quote [ARGS...]
+  cmds.quote = pkgs.writeDash "cmds.quote" ''
+    set -efu
+    prefix=
+    for x; do
+      y=$(${pkgs.jq}/bin/jq -nr --arg x "$x" '$x | @sh "\(.)"')
+      echo -n "$prefix$y"
+      prefix=' '
+    done
+    echo
+  '';
+
   init.args = pkgs.writeText "init.args" /* sh */ ''
     args=$(${pkgs.utillinux}/bin/getopt -n "$command" -s sh \
         -o s:t:u: \
@@ -54,7 +121,9 @@ let
     export target
     export user
 
-    export target_object="$(${init.env.parsetarget} $target)"
+    default_target=root@$system:22/var/src
+
+    export target_object="$(parse-target "$target" -d "$default_target")"
     export target_user="$(echo $target_object | ${pkgs.jq}/bin/jq -r .user)"
     export target_host="$(echo $target_object | ${pkgs.jq}/bin/jq -r .host)"
     export target_port="$(echo $target_object | ${pkgs.jq}/bin/jq -r .port)"
@@ -68,35 +137,9 @@ let
       fi
     fi
   '' // {
-    parsetarget = pkgs.writeDash "init.env.parsetarget" ''
-      set -efu
-      exec ${pkgs.jq}/bin/jq \
-          -enr \
-          --arg target "$1" \
-          -f ${init.env.parsetarget.jq}
-    '' // {
-      jq = pkgs.writeText "init.env.parsetarget.jq" ''
-        def when(c; f): if c then f else . end;
-        def capturesDef(i; v): .captures[i].string | when(. == null; v);
-        $target | match("^(?:([^@]+)@)?([^:/]+)?(?::([0-9]+))?(/.*)?$") | {
-          user: capturesDef(0; "root"),
-          host: capturesDef(1; env.system),
-          port: capturesDef(2; "22"),
-          path: capturesDef(3; "/var/src"),
-        } | . + {
-          local: (.user == env.LOGNAME and .host == env.HOSTNAME),
-        }
-      '';
-    };
     populate = pkgs.writeDash "init.env.populate" ''
       set -efu
-      _source=$(${pkgs.nix}/bin/nix-instantiate \
-          --eval \
-          --json \
-          --readonly-mode \
-          --show-trace \
-          --strict \
-          "$source")
+      _source=$(get-source "$source")
       echo $_source |
       ${pkgs.populate}/bin/populate \
           "$target_user@$target_host:$target_port$target_path" \
@@ -105,21 +148,17 @@ let
     '';
     proxy = pkgs.writeDash "init.env.proxy" ''
       set -efu
-      q() {
-        ${pkgs.jq}/bin/jq -nr --arg x "$*" '$x | @sh "\(.)"'
-      }
       exec ${pkgs.openssh}/bin/ssh \
         "$target_user@$target_host" -p "$target_port" \
         cd "$target_path/stockholm" \; \
-        NIX_PATH=$(q "$target_path") \
-        STOCKHOLM_VERSION=$STOCKHOLM_VERSION \
-        nix-shell \
-            --run $(q \
-                system=$system \
-                target=$target \
-                using_proxy=true \
-                "$*"
-            )
+        NIX_PATH=$(quote "$target_path") \
+        STOCKHOLM_VERSION=$(quote "$STOCKHOLM_VERSION") \
+        nix-shell --run "$(quote "
+          system=$(quote "$system") \
+          target=$(quote "$target") \
+          using_proxy=true \
+          $(quote "$@")
+        ")"
     '';
   };
 
@@ -162,7 +201,8 @@ let
 in pkgs.stdenv.mkDerivation {
   name = "stockholm";
   shellHook = /* sh */ ''
-    export NIX_PATH="stockholm=$PWD''${NIX_PATH+:$NIX_PATH}"
+    export NIX_PATH=stockholm=$PWD:nixpkgs=${toString <nixpkgs>}
+    export NIX_REMOTE=daemon
     export PATH=${lib.makeBinPath [
       shell.cmdspkg
     ]}
