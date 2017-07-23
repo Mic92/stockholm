@@ -217,7 +217,7 @@ prepare_common() {(
   mkdir -p bin
   rm -f bin/nixos-install
   cp "$(type -p nixos-install)" bin/nixos-install
-  sed -i "s@^NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
+  sed -i "s@NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
 
   if ! grep -q '^PATH.*#krebs' .bashrc; then
     echo '. /root/.nix-profile/etc/profile.d/nix.sh' >> .bashrc
