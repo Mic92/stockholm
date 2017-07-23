@@ -22,8 +22,8 @@ in {
   config.krebs.buildbot.master = let
     stockholm-mirror-url = http://cgit.prism.r/stockholm ;
   in {
-    workers = {
-      testworker = "lasspass";
+    slaves = {
+      testslave = "lasspass";
     };
     change_source.stockholm = ''
       stockholm_repo = '${stockholm-mirror-url}'
@@ -76,7 +76,7 @@ in {
                 },
                 command=[
                   "nix-shell", "--run",
-                  "test --system={} --target=buildbotworker@${config.krebs.build.host.name}$HOME/$LOGNAME".format(host)
+                  "test --system={} --target=buildbotSlave@${config.krebs.build.host.name}$HOME/$LOGNAME".format(host)
                 ]
             )
 
@@ -98,7 +98,7 @@ in {
         bu.append(
             util.BuilderConfig(
                 name="build-hosts",
-                workernames=workernames,
+                slavenames=slavenames,
                 factory=f
             )
         )
@@ -111,7 +111,7 @@ in {
       enable = true;
       nick = "buildbot-lass";
       server = "ni.r";
-      channels = [ { channel = "retiolum"; } { channel = "noise"; } ];
+      channels = [ "retiolum" "noise" ];
       allowForce = true;
     };
     extraConfig = ''
@@ -119,10 +119,10 @@ in {
     '';
   };
 
-  config.krebs.buildbot.worker = {
+  config.krebs.buildbot.slave = {
     enable = true;
     masterhost = "localhost";
-    username = "testworker";
+    username = "testslave";
     password = "lasspass";
     packages = with pkgs; [ gnumake jq nix populate ];
   };
@@ -138,15 +138,15 @@ in {
   options.lass.build-ssh-privkey = mkOption {
     type = types.secret-file;
     default = {
-      path = "${config.users.users.buildbotworker.home}/.ssh/id_rsa";
-      owner = { inherit (config.users.users.buildbotworker ) name uid;};
+      path = "${config.users.users.buildbotSlave.home}/.ssh/id_rsa";
+      owner = { inherit (config.users.users.buildbotSlave ) name uid;};
       source-path = toString <secrets> + "/build.ssh.key";
     };
   };
   config.krebs.secret.files = {
     build-ssh-privkey = config.lass.build-ssh-privkey;
   };
-  config.users.users.buildbotworker = {
+  config.users.users.buildbotSlave = {
     useDefaultShell = true;
     openssh.authorizedKeys.keys = [
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiV0Xn60aVLHC/jGJknlrcxSvKd/MVeh2tjBpxSBT3II9XQGZhID2Gdh84eAtoWyxGVFQx96zCHSuc7tfE2YP2LhXnwaxHTeDc8nlMsdww53lRkxihZIEV7QHc/3LRcFMkFyxdszeUfhWz8PbJGL2GYT+s6CqoPwwa68zF33U1wrMOAPsf/NdpSN4alsqmjFc2STBjnOd9dXNQn1VEJQqGLG3kR3WkCuwMcTLS5eu0KLwG4i89Twjy+TGp2QsF5K6pNE+ZepwaycRgfYzGcPTn5d6YQXBgcKgHMoSJsK8wqpr0+eFPCDiEA3HDnf76E4mX4t6/9QkMXCLmvs0IO/WP"

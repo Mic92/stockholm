@@ -3,10 +3,14 @@
 with import <stockholm/lib>;
 let
 
-  buildbot = pkgs.stdenv.lib.overrideDerivation pkgs.buildbot-full (old:{
-    patches = [ ./buildbot.patch ];
-    propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.coreutils ];
-  });
+  # https://github.com/NixOS/nixpkgs/issues/14026
+  nixpkgs-fix = import (pkgs.fetchgit {
+    url = https://github.com/nixos/nixpkgs;
+    rev = "e026b5c243ea39810826e68362718f5d703fb5d0";
+    sha256 = "11lqd480bi6xbi7xbh4krrxmbp6a6iafv1d0q3sj461al0x0has8";
+  }) {};
+
+  buildbot = nixpkgs-fix.buildbot;
   buildbot-master-config = pkgs.writeText "buildbot-master.cfg" ''
     # -*- python -*-
     from buildbot.plugins import *
@@ -14,11 +18,11 @@ let
     import json
     c = BuildmasterConfig = {}
 
-    c['workers'] = []
-    workers = json.loads('${builtins.toJSON cfg.workers}')
-    workernames = [ s for s in workers ]
-    for k,v in workers.items():
-      c['workers'].append(worker.Worker(k, v))
+    c['slaves'] = []
+    slaves = json.loads('${builtins.toJSON cfg.slaves}')
+    slavenames = [ s for s in slaves ]
+    for k,v in slaves.items():
+      c['slaves'].append(buildslave.BuildSlave(k, v))
 
     # TODO: configure protocols?
     c['protocols'] = {'pb': {'port': 9989}}
@@ -59,45 +63,32 @@ let
 
 
     ####### Status
-    c['services'] = []
+    c['status'] = st = []
 
     # If you want to configure this url, override with extraConfig
     c['buildbotURL'] = "http://${config.networking.hostName}:${toString cfg.web.port}/"
 
     ${optionalString (cfg.web.enable) ''
-      from buildbot.plugins import util
-
-      #authz_cfg=authz.Authz(
-      #    auth=auth.BasicAuth([  ]),
-      #    # TODO: configure harder
-      #    gracefulShutdown = False,
-      #    forceBuild = 'auth',
-      #    forceAllBuilds = 'auth',
-      #    pingBuilder = False,
-      #    stopBuild = 'auth',
-      #    stopAllBuilds = 'auth',
-      #    cancelPendingBuild = 'auth'
-      #)
-      c['www'] = dict(
-        port = ${toString cfg.web.port},
-        plugins = { 'waterfall_view':{}, 'console_view':{} }
+      from buildbot.status import html
+      from buildbot.status.web import authz, auth
+      authz_cfg=authz.Authz(
+          auth=auth.BasicAuth([ ("${cfg.web.username}","${cfg.web.password}") ]),
+          # TODO: configure harder
+          gracefulShutdown = False,
+          forceBuild = 'auth',
+          forceAllBuilds = 'auth',
+          pingBuilder = False,
+          stopBuild = 'auth',
+          stopAllBuilds = 'auth',
+          cancelPendingBuild = 'auth'
       )
-      c['www']['auth'] = util.UserPasswordAuth({"${cfg.web.username}":"${cfg.web.password}"})
-      c['www']['authz'] = util.Authz(
-        allowRules = [
-          util.StopBuildEndpointMatcher(role="admins"),
-          util.ForceBuildEndpointMatcher(role="admins"),
-          util.RebuildBuildEndpointMatcher(role="admins")
-        ],
-        roleMatchers = [
-          util.RolesFromEmails(admins=["${cfg.web.username}"])
-        ]
-      )
+      # TODO: configure krebs.nginx
+      st.append(html.WebStatus(http_port=${toString cfg.web.port}, authz=authz_cfg))
       ''}
 
     ${optionalString (cfg.irc.enable) ''
-      from buildbot.plugins import reporters
-      irc = reporters.IRC("${cfg.irc.server}", "${cfg.irc.nick}",
+      from buildbot.status import words
+      irc = words.IRC("${cfg.irc.server}", "${cfg.irc.nick}",
                       channels=${builtins.toJSON cfg.irc.channels},
                       notify_events={
                         'success': 1,
@@ -106,7 +97,7 @@ let
                         'successToFailure': 1,
                         'failureToSuccess': 1,
                       }${optionalString cfg.irc.allowForce ",allowForce=True"})
-      c['services'].append(irc)
+      c['status'].append(irc)
       ''}
 
     ${ concatStringsSep "\n"
@@ -159,12 +150,12 @@ let
       '';
     };
 
-    workers = mkOption {
+    slaves = mkOption {
       default = {};
       type = types.attrsOf types.str;
       description = ''
-        Attrset of workernames with their passwords
-        workername = workerpassword
+        Attrset of slavenames with their passwords
+        slavename = slavepassword
       '';
     };
 
@@ -292,12 +283,8 @@ let
         options = {
           enable = mkEnableOption "Buildbot Master IRC Status";
           channels = mkOption {
-            default = [ { channel = "nix-buildbot-meetup";} ];
-            example = literalExample ''[
-              {channel = "nix-buildbot-meetup";}
-              {channel = "nix-buildbot-lol"; "password" = "lol";}
-            ]'';
-            type = with types; listOf (attrsOf str);
+            default = [ "nix-buildbot-meetup" ];
+            type = with types; listOf str;
             description = ''
               irc channels the bot should connect to
             '';
@@ -346,7 +333,7 @@ let
     };
 
     users.extraGroups.buildbotMaster = {
-      gid = genid "buildbotMaster";
+      gid = 672626386;
     };
 
     systemd.services.buildbotMaster = {
@@ -363,6 +350,8 @@ let
         secretsdir = shell.escape (toString <secrets>);
       in {
         PermissionsStartOnly = true;
+        Type = "forking";
+        PIDFile = "${workdir}/twistd.pid";
         # TODO: maybe also prepare buildbot.tac?
         ExecStartPre = pkgs.writeDash "buildbot-master-init" ''
           set -efux
@@ -386,8 +375,9 @@ let
           chmod 700 -R ${workdir}
           chown buildbotMaster:buildbotMaster -R ${workdir}
         '';
-        ExecStart = "${buildbot}/bin/buildbot start --nodaemon ${workdir}";
-        # ExecReload = "${buildbot}/bin/buildbot reconfig ${workdir}";
+        ExecStart = "${buildbot}/bin/buildbot start ${workdir}";
+        ExecStop = "${buildbot}/bin/buildbot stop ${workdir}";
+        ExecReload = "${buildbot}/bin/buildbot reconfig ${workdir}";
         PrivateTmp = "true";
         User = "buildbotMaster";
         Restart = "always";

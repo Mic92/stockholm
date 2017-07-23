@@ -26,11 +26,12 @@ in {
   nix.gc.automatic = true;
   nix.gc.dates = "05:23";
   networking.firewall.allowedTCPPorts = [ 80 8010 9989 ];
+
   krebs.buildbot.master = let
     stockholm-mirror-url = "http://cgit.${hostname}.r/stockholm" ;
   in {
-    workers = {
-      testworker =  "krebspass";
+    slaves = {
+      testslave =  "krebspass";
     };
     change_source.stockholm = ''
   stockholm_repo = '${stockholm-mirror-url}'
@@ -119,7 +120,7 @@ in {
                             system={}".format(i)])
 
         bu.append(util.BuilderConfig(name="fast-tests",
-              workernames=workernames,
+              slavenames=slavenames,
               factory=f))
 
             '';
@@ -131,25 +132,25 @@ in {
 
 
   bu.append(util.BuilderConfig(name="build-local",
-        workernames=workernames,
+        slavenames=slavenames,
         factory=f))
       '';
 #      slow-tests = ''
 #  s = util.BuildFactory()
 #  s.addStep(grab_repo)
 #
-#  # worker needs 2 files:
+#  # slave needs 2 files:
 #  # * cac.json
 #  # * retiolum
-#  s.addStep(steps.FileDownload(mastersrc="${config.krebs.buildbot.master.workDir}/cac.json", workerdest="cac.json"))
-#  s.addStep(steps.FileDownload(mastersrc="${config.krebs.buildbot.master.workDir}/retiolum-ci.rsa_key.priv", workerdest="retiolum.rsa_key.priv"))
+#  s.addStep(steps.FileDownload(mastersrc="${config.krebs.buildbot.master.workDir}/cac.json", slavedest="cac.json"))
+#  s.addStep(steps.FileDownload(mastersrc="${config.krebs.buildbot.master.workDir}/retiolum-ci.rsa_key.priv", slavedest="retiolum.rsa_key.priv"))
 #  addShell(s, name="infest-cac-centos7",env=env,
 #              sigtermTime=60,           # SIGTERM 1 minute before SIGKILL
 #              timeout=10800,             # 3h
 #              command=nixshell + ["infest-cac-centos7"])
 #
 #  bu.append(util.BuilderConfig(name="full-tests",
-#        workernames=workernames,
+#        slavenames=slavenames,
 #        factory=s))
 #      '';
     };
@@ -161,7 +162,7 @@ in {
       enable = true;
       nick = "${hostname}bot";
       server = "ni.r";
-      channels = [ { channel = "retiolum"; } ];
+      channels = [ "retiolum" ];
       allowForce = true;
     };
     extraConfig = ''
@@ -169,10 +170,10 @@ in {
     '';
   };
 
-  krebs.buildbot.worker = {
+  krebs.buildbot.slave = {
     enable = true;
     masterhost = "localhost";
-    username = "testworker";
+    username = "testslave";
     password = "krebspass";
     packages = with pkgs; [ gnumake jq nix populate ];
     # all nix commands will need a working nixpkgs installation

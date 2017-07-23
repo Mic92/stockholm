@@ -2,21 +2,59 @@
 
 with import <stockholm/lib>;
 let
+  nixpkgs-fix = import (pkgs.fetchgit {
+    url = https://github.com/nixos/nixpkgs;
+    rev = "e026b5c243ea39810826e68362718f5d703fb5d0";
+    sha256 = "11lqd480bi6xbi7xbh4krrxmbp6a6iafv1d0q3sj461al0x0has8";
+  }) {};
+
+  buildbot-slave-init = pkgs.writeText "buildbot-slave.tac" ''
+    import os
+
+    from buildslave.bot import BuildSlave
+    from twisted.application import service
+
+    basedir = '${cfg.workDir}'
+    rotateLength = 10000000
+    maxRotatedFiles = 10
+
+    application = service.Application('buildslave')
+
+    from twisted.python.logfile import LogFile
+    from twisted.python.log import ILogObserver, FileLogObserver
+    logfile = LogFile.fromFullPath(os.path.join(basedir, "twistd.log"), rotateLength=rotateLength,
+                                  maxRotatedFiles=maxRotatedFiles)
+    application.setComponent(ILogObserver, FileLogObserver(logfile).emit)
+
+    buildmaster_host = '${cfg.masterhost}'
+    # TODO: masterport?
+    port = 9989
+    slavename = '${cfg.username}'
+    passwd = '${cfg.password}'
+    keepalive = 600
+    usepty = 0
+    umask = None
+    maxdelay = 300
+    allow_shutdown = None
+
+    ${cfg.extraConfig}
+
+    s = BuildSlave(buildmaster_host, port, slavename, passwd, basedir,
+                  keepalive, usepty, umask=umask, maxdelay=maxdelay,
+                  allow_shutdown=allow_shutdown)
+    s.setServiceParent(application)
+    '';
   default-packages = [ pkgs.git pkgs.bash ];
-  buildbot = pkgs.stdenv.lib.overrideDerivation pkgs.buildbot-worker (old:{
-    patches = [ ./buildbot-worker.patch ];
-    propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.coreutils ];
-  });
-  cfg = config.krebs.buildbot.worker;
+  cfg = config.krebs.buildbot.slave;
 
   api = {
-    enable = mkEnableOption "Buildbot worker";
+    enable = mkEnableOption "Buildbot Slave";
 
     workDir = mkOption {
-      default = "/var/lib/buildbot/worker";
+      default = "/var/lib/buildbot/slave";
       type = types.str;
       description = ''
-        Path to build bot worker directory.
+        Path to build bot slave directory.
         Will be created on startup.
       '';
     };
@@ -32,30 +70,30 @@ let
     username = mkOption {
       type = types.str;
       description = ''
-        workername used to authenticate with master
+        slavename used to authenticate with master
       '';
     };
 
     password = mkOption {
       type = types.str;
       description = ''
-        worker password used to authenticate with master
+        slave password used to authenticate with master
       '';
     };
 
     contact = mkOption {
-      default = "nix worker <buildworker@${config.networking.hostName}>";
+      default = "nix slave <buildslave@${config.networking.hostName}>";
       type = types.str;
       description = ''
-        contact to be announced by buildworker
+        contact to be announced by buildslave
       '';
     };
 
     description = mkOption {
-      default = "Nix Generated Buildworker";
+      default = "Nix Generated BuildSlave";
       type = types.str;
       description = ''
-        description for hostto be announced by buildworker
+        description for hostto be announced by buildslave
       '';
     };
 
@@ -63,7 +101,7 @@ let
       default = [ pkgs.git ];
       type = with types; listOf package;
       description = ''
-        packages which should be in path for buildworker
+        packages which should be in path for buildslave
       '';
     };
 
@@ -74,7 +112,7 @@ let
       };
       type = types.attrsOf types.str;
       description = ''
-        extra environment variables to be provided to the buildworker service
+        extra environment variables to be provided to the buildslave service
         if you need nixpkgs, e.g. for running nix-shell you can set NIX_PATH here.
       '';
     };
@@ -87,26 +125,26 @@ let
         keepalive = 600
       '';
       description = ''
-        extra config evaluated before calling Buildworker init in .tac file
+        extra config evaluated before calling BuildSlave init in .tac file
       '';
     };
   };
 
   imp = {
 
-    users.extraUsers.buildbotworker = {
-      uid = genid "buildbotworker";
-      description = "Buildbot worker";
+    users.extraUsers.buildbotSlave = {
+      uid = genid "buildbotSlave";
+      description = "Buildbot Slave";
       home = cfg.workDir;
       createHome = false;
     };
 
-    users.extraGroups.buildbotworker = {
-      gid = genid "buildbotworker";
+    users.extraGroups.buildbotSlave = {
+      gid = 1408105834;
     };
 
-    systemd.services."buildbotworker-${cfg.username}-${cfg.masterhost}" = {
-      description = "Buildbot worker for ${cfg.username}@${cfg.masterhost}";
+    systemd.services."buildbotSlave-${cfg.username}-${cfg.masterhost}" = {
+      description = "Buildbot Slave for ${cfg.username}@${cfg.masterhost}";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = default-packages ++ cfg.packages;
@@ -120,28 +158,27 @@ let
         workdir = shell.escape cfg.workDir;
         contact = shell.escape cfg.contact;
         description = shell.escape cfg.description;
-        masterhost = shell.escape cfg.masterhost;
-        username = shell.escape cfg.username;
-        password = shell.escape cfg.password;
+        buildbot = nixpkgs-fix.buildbot-slave;
+        # TODO:make this
       in {
         PermissionsStartOnly = true;
         Type = "forking";
         PIDFile = "${workdir}/twistd.pid";
-        ExecStartPre = pkgs.writeDash "buildbot-slave-init" ''
+        # TODO: maybe also prepare buildbot.tac?
+        ExecStartPre = pkgs.writeDash "buildbot-master-init" ''
           set -efux
           mkdir -p ${workdir}/info
-          # TODO: cleanup .tac file?
-          ${buildbot}/bin/buildbot-worker create-worker ${workdir} ${masterhost} ${username} ${password}
+          cp ${buildbot-slave-init} ${workdir}/buildbot.tac
           echo ${contact} > ${workdir}/info/admin
           echo ${description} > ${workdir}/info/host
 
-          chown buildbotworker:buildbotworker -R ${workdir}
+          chown buildbotSlave:buildbotSlave -R ${workdir}
           chmod 700 -R ${workdir}
         '';
-        ExecStart = "${buildbot}/bin/buildbot-worker start ${workdir}";
-        ExecStop = "${buildbot}/bin/buildbot-worker stop ${workdir}";
+        ExecStart = "${buildbot}/bin/buildslave start ${workdir}";
+        ExecStop = "${buildbot}/bin/buildslave stop ${workdir}";
         PrivateTmp = "true";
-        User = "buildbotworker";
+        User = "buildbotSlave";
         Restart = "always";
         RestartSec = "10";
       };
@@ -149,6 +186,6 @@ let
   };
 in
 {
-  options.krebs.buildbot.worker = api;
+  options.krebs.buildbot.slave = api;
   config = lib.mkIf cfg.enable imp;
 }
