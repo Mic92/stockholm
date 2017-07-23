@@ -15,6 +15,7 @@ let
     \test -n "''${target-}" || target=$system
     \test -n "''${user-}" || user=$LOGNAME
     . ${init.env}
+    . ${init.proxy}
 
     exec ${utils.deploy}
   '';
@@ -29,6 +30,7 @@ let
     . ${init.args}
     \test -n "''${user-}" || user=$LOGNAME
     . ${init.env}
+    . ${init.proxy}
 
     exec ${utils.build} config.system.build.toplevel
   '';
@@ -114,9 +116,6 @@ let
   '';
 
   init.env = pkgs.writeText "init.env" /* sh */ ''
-    source=''${source-$user/1systems/$system/source.nix}
-
-    export source
     export system
     export target
     export user
@@ -129,38 +128,31 @@ let
     export target_port="$(echo $target_object | ${pkgs.jq}/bin/jq -r .port)"
     export target_path="$(echo $target_object | ${pkgs.jq}/bin/jq -r .path)"
     export target_local="$(echo $target_object | ${pkgs.jq}/bin/jq -r .local)"
+  '';
 
+  init.proxy = pkgs.writeText "init.proxy" /* sh */ ''
     if \test "''${using_proxy-}" != true; then
-      ${init.env.populate}
+
+      source_file=$user/1systems/$system/source.nix
+      source=$(get-source "$source_file")
+      qualified_target=$target_user@$target_host:$target_port$target_path
+      echo "$source" | populate "$qualified_target"
+
       if \test "$target_local" != true; then
-        exec ${init.env.proxy} "$command" "$@"
+        exec ${pkgs.openssh}/bin/ssh \
+            "$target_user@$target_host" -p "$target_port" \
+            cd "$target_path/stockholm" \; \
+            NIX_PATH=$(quote "$target_path") \
+            STOCKHOLM_VERSION=$(quote "$STOCKHOLM_VERSION") \
+            nix-shell --run "$(quote "
+              system=$(quote "$system") \
+              target=$(quote "$target") \
+              using_proxy=true \
+              $(quote "$command" "$@")
+            ")"
       fi
     fi
-  '' // {
-    populate = pkgs.writeDash "init.env.populate" ''
-      set -efu
-      _source=$(get-source "$source")
-      echo $_source |
-      ${pkgs.populate}/bin/populate \
-          "$target_user@$target_host:$target_port$target_path" \
-        >&2
-      unset _source
-    '';
-    proxy = pkgs.writeDash "init.env.proxy" ''
-      set -efu
-      exec ${pkgs.openssh}/bin/ssh \
-        "$target_user@$target_host" -p "$target_port" \
-        cd "$target_path/stockholm" \; \
-        NIX_PATH=$(quote "$target_path") \
-        STOCKHOLM_VERSION=$(quote "$STOCKHOLM_VERSION") \
-        nix-shell --run "$(quote "
-          system=$(quote "$system") \
-          target=$(quote "$target") \
-          using_proxy=true \
-          $(quote "$@")
-        ")"
-    '';
-  };
+  '';
 
   utils.build = pkgs.writeDash "utils.build" ''
     set -efu
@@ -204,6 +196,7 @@ in pkgs.stdenv.mkDerivation {
     export NIX_PATH=stockholm=$PWD:nixpkgs=${toString <nixpkgs>}
     export NIX_REMOTE=daemon
     export PATH=${lib.makeBinPath [
+      pkgs.populate
       shell.cmdspkg
     ]}
 
