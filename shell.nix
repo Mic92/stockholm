@@ -236,7 +236,9 @@ in pkgs.stdenv.mkDerivation {
   shellHook = /* sh */ ''
     export OLD_PATH="$PATH"
     export NIX_PATH=stockholm=$PWD:nixpkgs=${toString <nixpkgs>}
-    export NIX_REMOTE=daemon
+    if test -e /nix/var/nix/daemon-socket/socket; then
+      export NIX_REMOTE=daemon
+    fi
     export PATH=${lib.makeBinPath [
       pkgs.populate
       shell.cmdspkg
