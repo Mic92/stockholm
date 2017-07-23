@@ -84,8 +84,9 @@ $(error No goals specified)
 endif
 
 # usage: make deploy system=foo [target=bar]
+# usage: make install system=foo target=bar
 # usage: make test system=foo target=bar
-deploy test:
+deploy install test:
 ifdef target
 	nix-shell --run '$@ --system=$(system) --target=$(target)'
 else
@@ -112,15 +113,3 @@ pkgs.%:;@$(call build,$@)
 # usage: make LOGNAME=krebs system=wolf eval.config.krebs.build.host.name
 eval eval.:;@$(call evaluate,$${expr-eval})
 eval.%:;@$(call evaluate,$@)
-
-# usage: make install system=foo [target_host=bar]
-install: ssh ?= ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
-install:
-	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
-		env target_path=$(target_path) \
-			sh -s prepare < krebs/4lib/infest/prepare.sh
-	$(MAKE) populate target_path=/mnt$(target_path)
-	$(ssh) $(target_user)@$(target_host) -p $(target_port) \
-		env NIXOS_CONFIG=$(target_path)/nixos-config \
-				STOCKHOLM_VERSION="$$STOCKHOLM_VERSION" \
-			nixos-install
