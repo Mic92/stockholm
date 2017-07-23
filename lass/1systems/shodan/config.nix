@@ -4,8 +4,11 @@ with import <stockholm/lib>;
 {
   imports = [
     <stockholm/lass>
+    #TODO reinstall with correct layout and use lass/hw/x220
+    <stockholm/krebs/2configs/hw/x220.nix>
+
+    <stockholm/lass/2configs/mouse.nix>
     <stockholm/lass/2configs/retiolum.nix>
-    <stockholm/lass/2configs/hw/tp-x220.nix>
     <stockholm/lass/2configs/baseX.nix>
     <stockholm/lass/2configs/git.nix>
     <stockholm/lass/2configs/exim-retiolum.nix>
@@ -14,58 +17,6 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/backups.nix>
     <stockholm/lass/2configs/wine.nix>
-    #{
-    #  users.extraUsers = {
-    #    root = {
-    #      openssh.authorizedKeys.keys = map readFile [
-    #        ../../krebs/Zpubkeys/uriel.ssh.pub
-    #      ];
-    #    };
-    #  };
-    #}
-    {
-      users.users.sokratess = {
-        uid = genid "sokratess";
-        home = "/home/sokratess";
-        group = "users";
-        createHome = true;
-        extraGroups = [
-         "audio"
-          "networkmanager"
-        ];
-        useDefaultShell = true;
-        password = "aidsballs";
-      };
-      krebs.per-user.sokratess.packages = [
-        pkgs.firefox
-        pkgs.python27Packages.virtualenv
-        pkgs.python27Packages.ipython
-        pkgs.python27Packages.python
-      ];
-    }
-    {
-      krebs.monit = let
-        echoToIrc = msg:
-          pkgs.writeDash "echo_irc" ''
-            set -euf
-            export LOGNAME=prism-alarm
-            ${pkgs.irc-announce}/bin/irc-announce \
-              ni.r 6667 ${config.networking.hostName}-alarm \#noise "${msg}" >/dev/null
-          '';
-      in {
-        enable = true;
-        http.enable = true;
-        alarms = {
-          hfos = {
-            test = "${pkgs.curl}/bin/curl -sf --insecure 'https://hfos.hackerfleet.de'";
-            alarm = echoToIrc "test hfos failed";
-          };
-        };
-      };
-      krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-p tcp -i retiolum --dport 9093"; target = "ACCEPT"; }
-      ];
-    }
   ];
 
   krebs.build.host = config.krebs.hosts.shodan;

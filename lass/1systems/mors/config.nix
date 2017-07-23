@@ -4,8 +4,11 @@ with import <stockholm/lib>;
 {
   imports = [
     <stockholm/lass>
+    <stockholm/lass/2configs/hw/x220.nix>
+    <stockholm/lass/2configs/boot/coreboot.nix>
+
+    <stockholm/lass/2configs/mouse.nix>
     <stockholm/lass/2configs/retiolum.nix>
-    <stockholm/lass/2configs/hw/tp-x220.nix>
     <stockholm/lass/2configs/baseX.nix>
     <stockholm/lass/2configs/exim-retiolum.nix>
     <stockholm/lass/2configs/programs.nix>
@@ -92,39 +95,11 @@ with import <stockholm/lib>;
 
   krebs.build.host = config.krebs.hosts.mors;
 
-  boot = {
-    loader.grub.enable = true;
-    loader.grub.version = 2;
-    loader.grub.device = "/dev/sda";
-    loader.grub.efiSupport = true;
-
-    initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda3"; } ];
-    initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
-    initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
-  };
   fileSystems = {
-    "/" = {
-      device = "/dev/mapper/pool-root";
-      fsType = "btrfs";
-      options = ["defaults" "noatime" "ssd" "compress=lzo"];
-    };
-    "/boot" = {
-      device = "/dev/sda2";
-    };
     "/bku" = {
       device = "/dev/mapper/pool-bku";
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
-    };
-    "/home" = {
-      device = "/dev/mapper/pool-home";
-      fsType = "btrfs";
-      options = ["defaults" "noatime" "ssd" "compress=lzo"];
-    };
-    "/tmp" = {
-      device = "tmpfs";
-      fsType = "tmpfs";
-      options = ["nosuid" "nodev" "noatime"];
     };
   };
 
