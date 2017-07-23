@@ -283,6 +283,21 @@ in {
         ];
       };
     }
+    {
+      #hotdog
+      containers.hotdog = {
+        config = { ... }: {
+          services.openssh.enable = true;
+          users.users.root.openssh.authorizedKeys.keys = [
+            config.krebs.users.lass.pubkey
+          ];
+        };
+        enableTun = true;
+        privateNetwork = true;
+        hostAddress = "10.233.2.1";
+        localAddress = "10.233.2.2";
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
