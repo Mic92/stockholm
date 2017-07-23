@@ -13,8 +13,8 @@ with python2Packages; buildPythonApplication (rec {
   src = fetchFromGitHub {
     owner = "krebscode";
     repo = "buildbot-classic";
-    rev = "2ef3315e0ac8f387ab751d02ee68d166909283aa";
-    sha256 = "00amqarknbh1p141h14jw4r8d23ih0xgf1h4jscp76ba340drjfj";
+    rev = "38b780ee6ceee346686f76eba363d98204b73d24";
+    sha256 = "0sn0clrbkdnryyiwhrm8an53k3awwbj6m9cz8zj1jz8qdggd9fff";
   };
 
   propagatedBuildInputs =
