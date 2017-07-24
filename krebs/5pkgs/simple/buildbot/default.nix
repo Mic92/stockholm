@@ -13,23 +13,18 @@ with python2Packages; buildPythonApplication (rec {
   src = fetchFromGitHub {
     owner = "krebscode";
     repo = "buildbot-classic";
-    rev = "38b780ee6ceee346686f76eba363d98204b73d24";
-    sha256 = "0sn0clrbkdnryyiwhrm8an53k3awwbj6m9cz8zj1jz8qdggd9fff";
+    rev = "5b4f5f6f1";
+    sha256 = "1j3xn1gjzvsf90jvfmyln71fzlhjx642ivrqf47zfxpkacljja93";
   };
 
   propagatedBuildInputs =
-    [ twisted dateutil jinja2 sqlalchemy_migrate pathlib
+    [ twisted dateutil jinja2 sqlalchemy_migrate
     ] ++ stdenv.lib.optional enableDebugClient [ pygobject pyGtkGlade ];
   postUnpack = "sourceRoot=\${sourceRoot}/master";
-  # What's up with this?! 'trial' should be 'test', no?
-  #
-  # running tests
-  # usage: setup.py [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
-  #    or: setup.py --help [cmd1 cmd2 ...]
-  #    or: setup.py --help-commands
-  #    or: setup.py cmd --help
-  #
-  # error: invalid command 'trial'
+
+  # checkPhase = "trial buildbot";
+  #doCheck = true;
+
   doCheck = false;
 
   postInstall = ''
