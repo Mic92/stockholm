@@ -3,7 +3,7 @@
 with import <stockholm/lib>;
 let
 
-  buildbot = pkgs.buildbot;
+  buildbot = pkgs.buildbot-classic;
   buildbot-master-config = pkgs.writeText "buildbot-master.cfg" ''
     # -*- python -*-
     from buildbot.plugins import *

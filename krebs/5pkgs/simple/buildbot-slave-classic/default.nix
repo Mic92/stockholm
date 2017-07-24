@@ -1,14 +1,9 @@
-{ stdenv, python2Packages, fetchFromGitHub, coreutils }:
+{ stdenv, pkgs, python2Packages, fetchFromGitHub, coreutils }:
 
 python2Packages.buildPythonApplication (rec {
   name = "buildbot-slave-classic-2017-07-23";
 
-  src = fetchFromGitHub {
-    owner = "krebscode";
-    repo = "buildbot-classic";
-    rev = "5b4f5f6f1";
-    sha256 = "1j3xn1gjzvsf90jvfmyln71fzlhjx642ivrqf47zfxpkacljja93";
-  };
+  src = pkgs.buildbot-classic.src;
 
   postUnpack = "sourceRoot=\${sourceRoot}/slave";
 

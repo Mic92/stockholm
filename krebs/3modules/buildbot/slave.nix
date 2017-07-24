@@ -2,7 +2,7 @@
 
 with import <stockholm/lib>;
 let
-
+  pkg = pkgs.buildbot-classic-slave;
   buildbot-slave-init = pkgs.writeText "buildbot-slave.tac" ''
     import os
 
@@ -153,7 +153,7 @@ let
         workdir = shell.escape cfg.workDir;
         contact = shell.escape cfg.contact;
         description = shell.escape cfg.description;
-        buildbot = pkgs.buildbot-slave;
+        buildbot = pkg;
         # TODO:make this
       in {
         PermissionsStartOnly = true;
