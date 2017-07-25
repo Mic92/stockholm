@@ -8,7 +8,7 @@ let
   }) {};
 
 in nixpkgs-fix.buildPythonApplication {
-  name = "buildbot-0.8.12";
+  name = "buildbot-classic-0.8.12";
   namePrefix = "";
   patches = [];
 

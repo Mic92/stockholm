@@ -1,7 +1,7 @@
 { coreutils, fetchgit, fetchFromGitHub, buildbot-classic, python2Packages, ... }:
 
 python2Packages.buildPythonApplication {
-  name = "buildbot-slave-0.8.12";
+  name = "buildbot-classic-slave-0.8.12";
   namePrefix = "";
 
   src = buildbot-classic.src;
