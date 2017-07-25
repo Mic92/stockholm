@@ -144,9 +144,14 @@ with import <stockholm/lib>;
 
       env = filevars // { passAsFile = attrNames filevars; };
     in
+      # Use a subshell because <nixpkgs/stdenv/generic/setup.sh>'s genericBuild
+      # sources (or evaluates) the buildCommand and we don't want to modify its
+      # shell.  In particular, exitHandler breaks in multiple ways with set -u.
       pkgs.runCommand name env /* sh */ ''
-        set -efu
-        ${concatMapStringsSep "\n" (getAttr "install") files}
+        (
+          set -efu
+          ${concatMapStringsSep "\n" (getAttr "install") files}
+        )
       '';
 
     writeHaskell =
