@@ -160,7 +160,7 @@ in {
     };
     irc = {
       enable = true;
-      nick = "${hostname}bot";
+      nick = "build|${hostname}";
       server = "ni.r";
       channels = [ "retiolum" ];
       allowForce = true;
