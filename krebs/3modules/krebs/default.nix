@@ -120,6 +120,11 @@ in {
     krebs = {
       pubkey = "lol"; # TODO krebs.users.krebs.pubkey should be unnecessary
     };
+    hotdog-repo-sync = {
+      name = "hotdog-repo-sync";
+      mail = "spam@krebsco.de";
+      pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILzTvaR3QqOD3oEEGHQzg/sRnNbKJnZYcV9htDvXmu53";
+    };
     puyak-repo-sync = {
       name = "puyak-repo-sync";
       mail = "spam@krebsco.de";
