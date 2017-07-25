@@ -8,6 +8,9 @@
   imports = [
     <stockholm/krebs>
     <stockholm/krebs/2configs>
+
+    <stockholm/krebs/2configs/repo-sync.nix>
+    <stockholm/krebs/2configs/shared-buildbot.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.hotdog;
