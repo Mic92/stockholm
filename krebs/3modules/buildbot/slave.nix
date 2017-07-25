@@ -2,7 +2,20 @@
 
 with import <stockholm/lib>;
 let
-
+  # https://github.com/NixOS/nixpkgs/issues/14026
+  nixpkgs-fix = import (pkgs.fetchgit {
+    url = https://github.com/nixos/nixpkgs;
+    rev = "e026b5c243ea39810826e68362718f5d703fb5d0";
+    sha256 = "11lqd480bi6xbi7xbh4krrxmbp6a6iafv1d0q3sj461al0x0has8";
+  }) {};
+  pkg = nixpkgs-fix.buildbot-slave.overrideDerivation (old: { 
+  postUnpack = "sourceRoot=\${sourceRoot}/slave";
+  patches = [];
+  src = pkgs.fetchFromGitHub { 
+    owner = "krebscode";
+    repo = "buildbot-classic";
+    rev = "5b4f5f6f1";
+    sha256 = "1j3xn1gjzvsf90jvfmyln71fzlhjx642ivrqf47zfxpkacljja93"; };});
   buildbot-slave-init = pkgs.writeText "buildbot-slave.tac" ''
     import os
 
@@ -153,7 +166,7 @@ let
         workdir = shell.escape cfg.workDir;
         contact = shell.escape cfg.contact;
         description = shell.escape cfg.description;
-        buildbot = pkgs.buildbot-slave;
+        buildbot = pkg;
         # TODO:make this
       in {
         PermissionsStartOnly = true;
