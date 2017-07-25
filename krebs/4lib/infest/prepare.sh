@@ -14,10 +14,6 @@ prepare() {(
         ;;
       centos)
         case $VERSION_ID in
-          6)
-            prepare_centos "$@"
-            exit
-            ;;
           7)
             prepare_centos "$@"
             exit
@@ -49,13 +45,6 @@ prepare() {(
             prepare_nixos_iso "$@"
             exit
         esac
-        ;;
-    esac
-  elif test -e /etc/centos-release; then
-    case $(cat /etc/centos-release) in
-      'CentOS release 6.5 (Final)')
-        prepare_centos "$@"
-        exit
         ;;
     esac
   fi
