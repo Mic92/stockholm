@@ -6,7 +6,8 @@ let
   # high level commands
   #
 
-  # usage: deploy [--user=USER] --system=SYSTEM [--target=TARGET]
+  # usage: deploy [--force-populate] [--user=USER]
+  #               --system=SYSTEM [--target=TARGET]
   cmds.deploy = pkgs.writeDash "cmds.deploy" ''
     set -efu
 
@@ -20,7 +21,8 @@ let
     exec ${utils.deploy}
   '';
 
-  # usage: install [--user=USER] --system=SYSTEM --target=TARGET
+  # usage: install [--force-populate] [--user=USER]
+  #                --system=SYSTEM --target=TARGET
   cmds.install = pkgs.writeBash "cmds.install" ''
     set -efu
 
@@ -61,7 +63,8 @@ let
     exec nixos-install
   '';
 
-  # usage: test [--user=USER] --system=SYSTEM --target=TARGET
+  # usage: test [--force-populate] [--user=USER]
+  #             --system=SYSTEM --target=TARGET
   cmds.test = pkgs.writeDash "cmds.test" /* sh */ ''
     set -efu
 
@@ -142,11 +145,13 @@ let
   init.args = pkgs.writeText "init.args" /* sh */ ''
     args=$(${pkgs.utillinux}/bin/getopt -n "$command" -s sh \
         -o s:t:u: \
-        -l system:,target:,user: \
+        -l force-populate,system:,target:,user: \
         -- "$@")
     if \test $? != 0; then exit 1; fi
     eval set -- "$args"
+    force_populate=false;
     while :; do case $1 in
+      --force-populate) force_populate=true; shift;;
       -s|--system) system=$2; shift 2;;
       -t|--target) target=$2; shift 2;;
       -u|--user) user=$2; shift 2;;
@@ -177,7 +182,11 @@ let
       source_file=$user/1systems/$system/source.nix
       source=$(get-source "$source_file")
       qualified_target=$target_user@$target_host:$target_port$target_path
-      echo "$source" | populate "$qualified_target"
+      if test "$force_populate" = true; then
+        echo "$source" | populate --force "$qualified_target"
+      else
+        echo "$source" | populate "$qualified_target"
+      fi
 
       if \test "$target_local" != true; then
         exec ${pkgs.openssh}/bin/ssh \
