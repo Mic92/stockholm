@@ -32,6 +32,7 @@ in {
   hosts = {
     hotdog = {
       owner = config.krebs.users.krebs;
+      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.77.3";
@@ -58,6 +59,7 @@ in {
     };
     puyak = {
       owner = config.krebs.users.krebs;
+      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.77.2";
@@ -84,6 +86,7 @@ in {
     };
     wolf = {
       owner = config.krebs.users.krebs;
+      managed = true;
       nets = {
         shack = {
           ip4.addr =  "10.42.2.150" ;
