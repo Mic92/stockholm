@@ -9,9 +9,11 @@ let
     ControlPersist 4h
   '';
 
+  hostname = config.networking.hostName;
+
 in {
   config.services.nginx.virtualHosts.build = {
-    serverAliases = [ "build.prism.r" ];
+    serverAliases = [ "build.${hostname}.r" ];
     locations."/".extraConfig = ''
       proxy_set_header Upgrade $http_upgrade;
       proxy_set_header Connection "upgrade";
@@ -20,7 +22,7 @@ in {
   };
 
   config.krebs.buildbot.master = let
-    stockholm-mirror-url = http://cgit.prism.r/stockholm ;
+    stockholm-mirror-url = "http://cgit.${hostname}.r/stockholm";
   in {
     slaves = {
       testslave = "lasspass";
@@ -109,13 +111,13 @@ in {
     web.enable = true;
     irc = {
       enable = true;
-      nick = "buildbot-lass";
+      nick = "build|${hostname}";
       server = "ni.r";
       channels = [ "retiolum" "noise" ];
       allowForce = true;
     };
     extraConfig = ''
-      c['buildbotURL'] = "http://build.prism.r/"
+      c['buildbotURL'] = "http://build.${hostname}.r/"
     '';
   };
 

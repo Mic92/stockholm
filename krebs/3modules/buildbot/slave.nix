@@ -2,12 +2,6 @@
 
 with import <stockholm/lib>;
 let
-  nixpkgs-fix = import (pkgs.fetchgit {
-    url = https://github.com/nixos/nixpkgs;
-    rev = "e026b5c243ea39810826e68362718f5d703fb5d0";
-    sha256 = "11lqd480bi6xbi7xbh4krrxmbp6a6iafv1d0q3sj461al0x0has8";
-  }) {};
-
   buildbot-slave-init = pkgs.writeText "buildbot-slave.tac" ''
     import os
 
@@ -158,7 +152,6 @@ let
         workdir = shell.escape cfg.workDir;
         contact = shell.escape cfg.contact;
         description = shell.escape cfg.description;
-        buildbot = nixpkgs-fix.buildbot-slave;
         # TODO:make this
       in {
         PermissionsStartOnly = true;
@@ -175,8 +168,8 @@ let
           chown buildbotSlave:buildbotSlave -R ${workdir}
           chmod 700 -R ${workdir}
         '';
-        ExecStart = "${buildbot}/bin/buildslave start ${workdir}";
-        ExecStop = "${buildbot}/bin/buildslave stop ${workdir}";
+        ExecStart = "${pkgs.buildbot-classic-slave}/bin/buildslave start ${workdir}";
+        ExecStop = "${pkgs.buildbot-classic-slave}/bin/buildslave stop ${workdir}";
         PrivateTmp = "true";
         User = "buildbotSlave";
         Restart = "always";

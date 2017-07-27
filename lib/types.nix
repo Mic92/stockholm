@@ -36,6 +36,7 @@ rec {
           If true, then the host's configuration is defined in stockholm.
         '';
         type = bool;
+        default = false;
       };
 
       owner = mkOption {
