@@ -12,7 +12,7 @@ in
     <stockholm/krebs/2configs/save-diskspace.nix>
 
     <stockholm/krebs/2configs/graphite.nix>
-    <stockholm/krebs/2configs/shared-buildbot.nix>
+    <stockholm/krebs/2configs/buildbot-krebs.nix>
 
     <stockholm/krebs/2configs/shack/worlddomination.nix>
     <stockholm/krebs/2configs/shack/drivedroid.nix>
