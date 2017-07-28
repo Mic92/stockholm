@@ -30,7 +30,6 @@ in {
     <stockholm/lass/2configs/weechat.nix>
     <stockholm/lass/2configs/privoxy-retiolum.nix>
     <stockholm/lass/2configs/radio.nix>
-    <stockholm/lass/2configs/buildbot-standalone.nix>
     <stockholm/lass/2configs/repo-sync.nix>
     <stockholm/lass/2configs/binary-cache/server.nix>
     <stockholm/lass/2configs/iodined.nix>
