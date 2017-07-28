@@ -9,7 +9,7 @@
     <stockholm/krebs>
     <stockholm/krebs/2configs>
 
-    <stockholm/krebs/2configs/buildbot-krebs.nix>
+    <stockholm/krebs/2configs/buildbot-all.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.hotdog;
