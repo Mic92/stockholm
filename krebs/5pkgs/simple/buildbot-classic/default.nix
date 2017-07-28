@@ -15,7 +15,7 @@ in nixpkgs-fix.buildPythonApplication {
   src = fetchgit {
     url = "https://github.com/krebscode/buildbot-classic";
     rev = "211ec7815";
-    sha256 = "09q8wyci7p07lrngjblwnpyxk0wddf8jzabwf598a7yiam6yc4cm";
+    sha256 = "0cyn406r31qdqhpsih7w83x47b443svpgfhxqd6w3iryv0y1z95i";
     leaveDotGit = true;
 
   };
