@@ -7,7 +7,7 @@
     <stockholm/krebs/2configs/secret-passwords.nix>
     <stockholm/krebs/2configs/hw/x220.nix>
 
-    <stockholm/krebs/2configs/shared-buildbot.nix>
+    <stockholm/krebs/2configs/buildbot-krebs.nix>
     <stockholm/krebs/2configs/stats/puyak-client.nix>
   ];
 
