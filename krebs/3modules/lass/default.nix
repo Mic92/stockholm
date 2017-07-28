@@ -255,7 +255,7 @@ with import <stockholm/lib>;
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.133.114";
-          ip6.addr = "42:0000:0000:0000:0000:0000:d15f:1214";
+          ip6.addr = "42:0:0:0:0:0:1ca0:1205";
           aliases = [
             "icarus.r"
             "cgit.icarus.r"
