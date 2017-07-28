@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
-
 with import <stockholm/lib>;
+{ config, pkgs, ... }: let
 
-{
+  bestGuessGateway = addr: elemAt (match "(.*)(\.[^.])" addr) 0 + ".1";
+
+in {
   krebs.build.host = config.krebs.hosts.cd;
 
   imports = [
@@ -13,14 +14,14 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/retiolum.nix>
   ];
 
-  networking = {
+  networking = let
+    address = config.krebs.build.host.nets.internet.ip4.addr;
+  in {
+    defaultGateway = bestGuessGateway address;
     interfaces.enp2s1.ip4 = singleton {
-      address = let
-        addr = "45.62.237.203";
-      in assert config.krebs.build.host.nets.internet.ip4.addr == addr; addr;
+      inherit address;
       prefixLength = 24;
     };
-    defaultGateway = "45.62.237.1";
     nameservers = ["8.8.8.8"];
   };
 
