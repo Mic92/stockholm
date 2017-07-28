@@ -1,4 +1,4 @@
-{ fetchgit, fetchFromGitHub, python2Packages, ... }:
+{ fetchgit, fetchFromGitHub, python2Packages, git, ... }:
 let
   # https://github.com/NixOS/nixpkgs/issues/14026
   nixpkgs-fix = import (fetchgit {
@@ -8,7 +8,7 @@ let
   }) {};
 
 in nixpkgs-fix.buildPythonApplication {
-  name = "buildbot-classic-0.8.12";
+  name = "buildbot-classic-0.8.13";
   namePrefix = "";
   patches = [];
 
@@ -19,7 +19,7 @@ in nixpkgs-fix.buildPythonApplication {
     sha256 = "1j3xn1gjzvsf90jvfmyln71fzlhjx642ivrqf47zfxpkacljja93";
   };
   postUnpack = "sourceRoot=\${sourceRoot}/master";
-
+  nativeBuildInputs = [ nixpkgs-fix.git ];
   patchPhase =
     # The code insists on /usr/bin/tail, /usr/bin/make, etc.
     '' echo "patching erroneous absolute path references..."
@@ -32,11 +32,11 @@ in nixpkgs-fix.buildPythonApplication {
       sed -i 's/==/>=/' setup.py
     '';
 
-  propagatedBuildInputs = [
-    python2Packages.jinja2
-    python2Packages.twisted
-    nixpkgs-fix.pythonPackages.dateutil_1_5
-    nixpkgs-fix.pythonPackages.sqlalchemy_migrate_0_7
+  propagatedBuildInputs = with nixpkgs-fix.pythonPackages; [
+    jinja2
+    twisted
+    dateutil_1_5
+    sqlalchemy_migrate_0_7
   ];
   doCheck = false;
   postInstall = ''
