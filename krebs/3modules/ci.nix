@@ -116,8 +116,12 @@ in
                     "dummy_secrets": "true",
                   },
                   command=[
-                    "nix-shell", "--run",
-                    "test --user={} --system={} --target=$LOGNAME@${config.krebs.build.host.name}$HOME/{}".format(user, host, user)
+                    "nix-shell", "--run", " ".join(["test",
+                      "--user={}".format(user),
+                      "--system={}".format(host),
+                      "--force-populate",
+                      "--target=$LOGNAME@${config.krebs.build.host.name}$HOME/{}".format(user),
+                    ])
                   ]
               )
 
