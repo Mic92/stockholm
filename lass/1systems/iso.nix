@@ -88,6 +88,7 @@ with import <stockholm/lib>;
         aria2
 
       #neat utils
+        hashPassword
         krebspaste
         pciutils
         pop
