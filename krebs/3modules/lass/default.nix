@@ -97,7 +97,6 @@ with import <stockholm/lib>;
           aliases = [
             "prism.r"
             "build.prism.r"
-            "cgit.prism.r"
             "cache.prism.r"
             "paste.r"
             "p.r"
