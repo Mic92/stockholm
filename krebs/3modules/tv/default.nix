@@ -9,6 +9,7 @@ with import <stockholm/lib>;
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.tv) {
     alnus = {
       cores = 2;
+      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.21.1";
@@ -39,6 +40,7 @@ with import <stockholm/lib>;
           cd          60 IN A ${config.krebs.hosts.cd.nets.internet.ip4.addr}
         '';
       };
+      managed = true;
       nets = {
         internet = {
           ip4.addr = "45.62.237.203";
@@ -141,6 +143,7 @@ with import <stockholm/lib>;
     };
     mu = {
       cores = 2;
+      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.20.1";
@@ -210,6 +213,7 @@ with import <stockholm/lib>;
     };
     nomic = {
       cores = 2;
+      managed = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.110";
@@ -265,6 +269,7 @@ with import <stockholm/lib>;
     };
     wu = {
       cores = 4;
+      managed = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.37";
@@ -302,6 +307,7 @@ with import <stockholm/lib>;
         pubkey = "xu-1:pYRENvaxZqGeImwLA9qHmRwHV4jfKaYx4u1VcZ31x0s=";
       };
       cores = 4;
+      managed = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.38";
@@ -336,6 +342,7 @@ with import <stockholm/lib>;
     };
     zu = {
       cores = 4;
+      managed = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.39";
