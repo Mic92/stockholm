@@ -1,8 +1,8 @@
 #! /bin/sh
 set -efu
 
-nix_url=https://nixos.org/releases/nix/nix-1.10/nix-1.10-x86_64-linux.tar.bz2
-nix_sha256=504f7a3a85fceffb8766ae5e1005de9e02e489742f5a63cc3e7552120b138bf4
+nix_url=https://nixos.org/releases/nix/nix-1.11.13/nix-1.11.13-x86_64-linux.tar.bz2
+nix_sha256=c11411d52d8ad1ce3a68410015487282fd4651d3abefbbb13fa1f7803a2f60de
 
 prepare() {(
   if test -e /etc/os-release; then
@@ -14,10 +14,6 @@ prepare() {(
         ;;
       centos)
         case $VERSION_ID in
-          6)
-            prepare_centos "$@"
-            exit
-            ;;
           7)
             prepare_centos "$@"
             exit
@@ -49,13 +45,6 @@ prepare() {(
             prepare_nixos_iso "$@"
             exit
         esac
-        ;;
-    esac
-  elif test -e /etc/centos-release; then
-    case $(cat /etc/centos-release) in
-      'CentOS release 6.5 (Final)')
-        prepare_centos "$@"
-        exit
         ;;
     esac
   fi
@@ -217,7 +206,7 @@ prepare_common() {(
   mkdir -p bin
   rm -f bin/nixos-install
   cp "$(type -p nixos-install)" bin/nixos-install
-  sed -i "s@^NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
+  sed -i "s@NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
 
   if ! grep -q '^PATH.*#krebs' .bashrc; then
     echo '. /root/.nix-profile/etc/profile.d/nix.sh' >> .bashrc

@@ -17,7 +17,7 @@ let
           verbose = false;
           channel = "#retiolum";
           server = "ni.r";
-          branches = [ "newest" ];
+          branches = [ "master" ];
         };
       });
     };
@@ -55,7 +55,7 @@ let
         };
         latest = {
           url = "${mirror}${name}";
-          ref = "heads/newest";
+          ref = "heads/master";
         };
       };
       krebs.git = defineRepo name true;

@@ -32,12 +32,15 @@ in {
   hosts = {
     hotdog = {
       owner = config.krebs.users.krebs;
+      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.77.3";
           ip6.addr = "42:0:0:0:0:0:77:3";
           aliases = [
             "hotdog.r"
+            "build.hotdog.r"
+            "cgit.hotdog.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -56,6 +59,7 @@ in {
     };
     puyak = {
       owner = config.krebs.users.krebs;
+      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.77.2";
@@ -82,6 +86,7 @@ in {
     };
     wolf = {
       owner = config.krebs.users.krebs;
+      managed = true;
       nets = {
         shack = {
           ip4.addr =  "10.42.2.150" ;
@@ -119,6 +124,11 @@ in {
   users = {
     krebs = {
       pubkey = "lol"; # TODO krebs.users.krebs.pubkey should be unnecessary
+    };
+    hotdog-repo-sync = {
+      name = "hotdog-repo-sync";
+      mail = "spam@krebsco.de";
+      pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILzTvaR3QqOD3oEEGHQzg/sRnNbKJnZYcV9htDvXmu53";
     };
     puyak-repo-sync = {
       name = "puyak-repo-sync";

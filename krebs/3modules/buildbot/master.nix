@@ -2,22 +2,6 @@
 
 with import <stockholm/lib>;
 let
-  # https://github.com/NixOS/nixpkgs/issues/14026
-  nixpkgs-fix = import (pkgs.fetchgit {
-    url = https://github.com/nixos/nixpkgs;
-    rev = "e026b5c243ea39810826e68362718f5d703fb5d0";
-    sha256 = "11lqd480bi6xbi7xbh4krrxmbp6a6iafv1d0q3sj461al0x0has8";
-  }) {};
-
-  buildbot = nixpkgs-fix.buildbot.overrideDerivation (old: { 
-  postUnpack = "sourceRoot=\${sourceRoot}/master";
-  patches = [];
-  src = pkgs.fetchFromGitHub { 
-    owner = "krebscode";
-    repo = "buildbot-classic";
-    rev = "5b4f5f6f1";
-    sha256 = "1j3xn1gjzvsf90jvfmyln71fzlhjx642ivrqf47zfxpkacljja93"; };});
-
   buildbot-master-config = pkgs.writeText "buildbot-master.cfg" ''
     # -*- python -*-
     from buildbot.plugins import *
@@ -364,7 +348,7 @@ let
           set -efux
           if [ ! -e ${workdir} ];then
             mkdir -p ${workdir}
-            ${buildbot}/bin/buildbot create-master -r -l 10 -f ${workdir}
+            ${pkgs.buildbot-classic}/bin/buildbot create-master -r -l 10 -f ${workdir}
           fi
           # always override the master.cfg
           cp ${buildbot-master-config} ${workdir}/master.cfg
@@ -373,18 +357,18 @@ let
           ${ concatMapStringsSep "\n"
             (f: "cp ${secretsdir}/${f} ${workdir}/${f}" ) cfg.secrets }
           # sanity
-          ${buildbot}/bin/buildbot checkconfig ${workdir}
+          ${pkgs.buildbot-classic}/bin/buildbot checkconfig ${workdir}
 
           # TODO: maybe upgrade? not sure about this
           #       normally we should write buildbot.tac by our own
-          # ${buildbot}/bin/buildbot upgrade-master ${workdir}
+          # ${pkgs.buildbot-classic}/bin/buildbot upgrade-master ${workdir}
 
           chmod 700 -R ${workdir}
           chown buildbotMaster:buildbotMaster -R ${workdir}
         '';
-        ExecStart = "${buildbot}/bin/buildbot start ${workdir}";
-        ExecStop = "${buildbot}/bin/buildbot stop ${workdir}";
-        ExecReload = "${buildbot}/bin/buildbot reconfig ${workdir}";
+        ExecStart = "${pkgs.buildbot-classic}/bin/buildbot start ${workdir}";
+        ExecStop = "${pkgs.buildbot-classic}/bin/buildbot stop ${workdir}";
+        ExecReload = "${pkgs.buildbot-classic}/bin/buildbot reconfig ${workdir}";
         PrivateTmp = "true";
         User = "buildbotMaster";
         Restart = "always";
