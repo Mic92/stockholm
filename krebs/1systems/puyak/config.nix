@@ -12,6 +12,7 @@
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;
+  sound.enable = false;
 
   boot = {
     loader.systemd-boot.enable = true;
