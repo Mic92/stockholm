@@ -4,8 +4,7 @@ with import <stockholm/lib>;
 let
 
   cfg = config.krebs.Reaktor;
-
-  workdir = "/var/lib/Reaktor";
+  homedir = "/var/lib/Reaktor";
 
   out = {
     options.krebs.Reaktor = api;
@@ -36,6 +35,14 @@ let
 
       plugins = mkOption {
         default = [pkgs.ReaktorPlugins.nixos-version];
+      };
+
+      workdir = mkOption {
+        default = "/var/lib/Reaktor";
+        type = types.path;
+        description = ''
+          path to be used as workdir (home dir is still /var/lib/Reaktor)
+        '';
       };
 
       extraConfig = mkOption {
@@ -84,7 +91,7 @@ let
       name = "Reaktor";
       uid = genid name;
       description = "Reaktor user";
-      home = workdir;
+      home = homedir;
       createHome = true;
     };
 
@@ -118,7 +125,7 @@ let
           REAKTOR_NICKNAME = botcfg.nickname;
           REAKTOR_DEBUG = (if botcfg.debug  then "True" else "False");
           REAKTOR_CHANNELS = lib.concatStringsSep "," botcfg.channels;
-          state_dir = workdir;
+          state_dir = botcfg.workdir;
 
         } // botcfg.extraEnviron;
         serviceConfig= {
@@ -129,6 +136,7 @@ let
             else
               ''(${pkgs.Reaktor}/bin/reaktor get-config;cat "${ReaktorConfig}" ) > /tmp/reaktor-${name}-config.py''
             }
+            mkdir -p ${botcfg.workdir}
           '';
           ExecStart = "${pkgs.Reaktor}/bin/reaktor run /tmp/reaktor-${name}-config.py";
           PrivateTmp = "true";
