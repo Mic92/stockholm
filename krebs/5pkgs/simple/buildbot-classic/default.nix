@@ -12,14 +12,15 @@ in nixpkgs-fix.buildPythonApplication {
   namePrefix = "";
   patches = [];
 
-  src = fetchFromGitHub {
-    owner = "krebscode";
-    repo = "buildbot-classic";
-    rev = "5b4f5f6f1";
-    sha256 = "1j3xn1gjzvsf90jvfmyln71fzlhjx642ivrqf47zfxpkacljja93";
+  src = fetchgit {
+    url = "https://github.com/krebscode/buildbot-classic";
+    rev = "211ec7815";
+    sha256 = "09q8wyci7p07lrngjblwnpyxk0wddf8jzabwf598a7yiam6yc4cm";
+    leaveDotGit = true;
+
   };
   postUnpack = "sourceRoot=\${sourceRoot}/master";
-  nativeBuildInputs = [ nixpkgs-fix.git ];
+  buildInputs = [ git ];
   patchPhase =
     # The code insists on /usr/bin/tail, /usr/bin/make, etc.
     '' echo "patching erroneous absolute path references..."
