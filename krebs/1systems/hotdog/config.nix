@@ -16,4 +16,9 @@
 
   boot.isContainer = true;
   networking.useDHCP = false;
+  krebs.repo-sync.repos.stockholm.timerConfig = {
+    OnBootSec = "5min";
+    OnUnitInactiveSec = "2min";
+    RandomizedDelaySec = "2min";
+  };
 }
