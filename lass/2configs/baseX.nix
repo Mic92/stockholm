@@ -53,6 +53,7 @@ in {
     haskellPackages.hledger
     much
     ncdu
+    nix-repl
     nmap
     pavucontrol
     powertop
