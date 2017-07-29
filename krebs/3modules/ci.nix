@@ -13,7 +13,7 @@ in
         options = {
           all = mkOption {
             type = bool;
-            default = true;
+            default = false;
           };
           hosts = mkOption {
             type = listOf str;
