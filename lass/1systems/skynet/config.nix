@@ -11,7 +11,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/backups.nix>
     {
-      # locke config
+      # discordius config
       services.xserver.enable = true;
       users.users.discordius = {
         uid = genid "discordius";
@@ -25,6 +25,7 @@ with import <stockholm/lib>;
         useDefaultShell = true;
       };
       networking.networkmanager.enable = true;
+      networking.wireless.enable = mkForce false;
       hardware.pulseaudio = {
         enable = true;
         systemWide = true;
