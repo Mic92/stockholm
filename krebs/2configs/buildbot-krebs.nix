@@ -6,10 +6,7 @@
 
   networking.firewall.allowedTCPPorts = [ 80 8010 9989 ];
   krebs.ci.enable = true;
-  krebs.ci.users.krebs ={
-    hosts = [
-      "test-all-krebs-modules"
-      config.networking.hostName
-    ];
-  };
+  krebs.ci.users.krebs.hosts = [
+    config.networking.hostName
+  ];
 }
