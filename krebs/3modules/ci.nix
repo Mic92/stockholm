@@ -48,9 +48,6 @@ in
       };
     };
 
-    nix.gc.automatic = true;
-    nix.gc.dates = "05:23";
-
     krebs.buildbot.master = {
       slaves = {
         testslave = "lasspass";
