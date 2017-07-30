@@ -6,6 +6,7 @@
 
   networking.firewall.allowedTCPPorts = [ 80 8010 9989 ];
   krebs.ci.enable = true;
+  krebs.ci.treeStableTimer = 1;
   krebs.ci.users.krebs.all = true;
   krebs.ci.users.lass.all = true;
   krebs.ci.users.makefu.all = true;

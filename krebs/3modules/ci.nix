@@ -8,6 +8,11 @@ in
 {
   options.krebs.ci = {
     enable = mkEnableOption "krebs continous integration";
+    treeStableTimer = mkOption {
+      type = types.int;
+      default = 10;
+      description = "how long to wait until we test changes (in minutes)";
+    };
     users = mkOption {
       type = with types; attrsOf (submodule {
         options = {
@@ -69,7 +74,7 @@ in
           sched.append(
                 schedulers.SingleBranchScheduler(
                     change_filter=util.ChangeFilter(branch_re=".*"),
-                    treeStableTimer=10,
+                    treeStableTimer=${toString cfg.treeStableTimer}*60,
                     name="build-all-branches",
                     builderNames=[
                         "build-hosts"
