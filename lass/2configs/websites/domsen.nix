@@ -125,6 +125,7 @@ in {
       { from = "dominik@apanowicz.de"; to = "dominik_a@gmx.de"; }
       { from = "dma@ubikmedia.de"; to = "domsen"; }
       { from = "dma@ubikmedia.eu"; to = "domsen"; }
+      { from = "bruno@apanowicz.de"; to = "bruno"; }
       { from = "mail@jla-trading.com"; to = "jla-trading"; }
       { from = "jms@ubikmedia.eu"; to = "jms"; }
       { from = "ms@ubikmedia.eu"; to = "ms"; }
@@ -148,6 +149,13 @@ in {
     home = "/home/domsen";
     useDefaultShell = true;
     extraGroups = [ "nginx" "download" ];
+    createHome = true;
+  };
+
+  users.users.bruno = {
+    uid = genid_signed "bruno";
+    home = "/home/bruno";
+    useDefaultShell = true;
     createHome = true;
   };
 

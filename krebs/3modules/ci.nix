@@ -8,12 +8,17 @@ in
 {
   options.krebs.ci = {
     enable = mkEnableOption "krebs continous integration";
+    treeStableTimer = mkOption {
+      type = types.int;
+      default = 10;
+      description = "how long to wait until we test changes (in minutes)";
+    };
     users = mkOption {
       type = with types; attrsOf (submodule {
         options = {
           all = mkOption {
             type = bool;
-            default = true;
+            default = false;
           };
           hosts = mkOption {
             type = listOf str;
@@ -48,9 +53,6 @@ in
       };
     };
 
-    nix.gc.automatic = true;
-    nix.gc.dates = "05:23";
-
     krebs.buildbot.master = {
       slaves = {
         testslave = "lasspass";
@@ -72,7 +74,7 @@ in
           sched.append(
                 schedulers.SingleBranchScheduler(
                     change_filter=util.ChangeFilter(branch_re=".*"),
-                    treeStableTimer=10,
+                    treeStableTimer=${toString cfg.treeStableTimer}*60,
                     name="build-all-branches",
                     builderNames=[
                         "build-hosts"
@@ -122,7 +124,8 @@ in
                       "--force-populate",
                       "--target=$LOGNAME@${config.krebs.build.host.name}$HOME/{}".format(user),
                     ])
-                  ]
+                  ],
+                  timeout=90001
               )
 
           ${let

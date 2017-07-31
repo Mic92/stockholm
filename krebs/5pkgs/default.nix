@@ -15,11 +15,6 @@ foldl' mergeAttrs {}
 {
   ReaktorPlugins = self.callPackage ./simple/Reaktor/plugins.nix {};
 
-  buildbot-full = self.callPackage ./simple/buildbot {
-    plugins = with self.buildbot-plugins; [ www console-view waterfall-view ];
-  };
-  buildbot-worker = self.callPackage ./simple/buildbot/worker.nix {};
-
   # https://github.com/proot-me/PRoot/issues/106
   proot = self.writeDashBin "proot" ''
     export PROOT_NO_SECCOMP=1
