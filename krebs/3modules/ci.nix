@@ -124,7 +124,8 @@ in
                       "--force-populate",
                       "--target=$LOGNAME@${config.krebs.build.host.name}$HOME/{}".format(user),
                     ])
-                  ]
+                  ],
+                  timeout=90001
               )
 
           ${let
