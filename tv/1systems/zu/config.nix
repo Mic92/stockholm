@@ -29,6 +29,11 @@ with import <stockholm/lib>;
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
+    "/bku" = {
+      device = "/dev/mapper/zuvga-bku";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+    };
     "/home" = {
       device = "/dev/mapper/zuvga-home";
       fsType = "btrfs";
