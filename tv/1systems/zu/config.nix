@@ -162,8 +162,6 @@ with import <stockholm/lib>;
   #services.bitlbee.enable = true;
   #services.tor.client.enable = true;
   #services.tor.enable = true;
-  #services.virtualboxHost.enable = true;
-
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "15.09";

@@ -169,6 +169,4 @@ with import <stockholm/lib>;
     KERNEL=="rtc0", GROUP="audio"
     KERNEL=="hpet", GROUP="audio"
   '';
-
-  virtualisation.virtualbox.host.enable = true;
 }
