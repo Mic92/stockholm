@@ -146,10 +146,6 @@ with import <stockholm/lib>;
     gptfdisk
   ];
 
-  security.wrappers = {
-    sendmail.source = "${pkgs.exim}/bin/sendmail"; # for cron
-  };
-
   services.printing.enable = true;
 
   #services.bitlbee.enable = true;

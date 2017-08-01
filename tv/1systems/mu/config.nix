@@ -88,7 +88,6 @@ with import <stockholm/lib>;
   programs.ssh.startAgent = false;
 
   security.wrappers = {
-    sendmail.source = "${pkgs.exim}/bin/sendmail"; # for cron
     slock.source = "${pkgs.slock}/bin/slock";
   };
 
