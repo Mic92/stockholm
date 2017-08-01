@@ -6,12 +6,6 @@ with import <stockholm/lib>;
   krebs.build.host = config.krebs.hosts.zu;
 
   imports = [
-    {
-      options.tv.test.sercret-file = mkOption {
-        type = types.secret-file;
-        default = {};
-      };
-    }
     <stockholm/tv>
     <stockholm/tv/2configs/hw/x220.nix>
     <stockholm/tv/2configs/exim-retiolum.nix>
