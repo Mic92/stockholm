@@ -31,10 +31,6 @@ with import <stockholm/lib>;
   boot.kernelModules = [ "fbcon" "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  boot.extraModprobeConfig = ''
-    options kvm_intel nested=1
-  '';
-
   fileSystems = {
     "/" = {
       device = "/dev/vgmu1/nixroot";
