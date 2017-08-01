@@ -16,93 +16,6 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/pulse.nix>
     <stockholm/tv/2configs/retiolum.nix>
     <stockholm/tv/2configs/xserver>
-    {
-      environment.systemPackages = with pkgs; [
-
-        # root
-        cryptsetup
-
-        # tv
-        bc
-        bind # dig
-        cac-api
-        dic
-        file
-        gnupg1compat
-        haskellPackages.hledger
-        jq
-        mkpasswd
-        netcat
-        nix-repl
-        nmap
-        p7zip
-        pass
-        q
-        qrencode
-        # XXX fails at systemd.services.dbus.unitConfig
-        #texlive
-        tmux
-
-        #ack
-        #apache-httpd
-        #ascii
-        #emacs
-        #es
-        #esniper
-        #gcc
-        #gptfdisk
-        #graphviz
-        #haskellPackages.cabal2nix
-        #haskellPackages.ghc
-        #haskellPackages.shake
-        #hdparm
-        #i7z
-        #iftop
-        #imagemagick
-        #inotifyTools
-        #iodine
-        #iotop
-        #lshw
-        #lsof
-        #minicom
-        #mtools
-        #ncmpc
-        #nethogs
-        #nix-prefetch-scripts #cvs bug
-        #openssl
-        #openswan
-        #parted
-        #perl
-        #powertop
-        #ppp
-        #proot
-        #pythonPackages.arandr
-        #pythonPackages.youtube-dl
-        #racket
-        #rxvt_unicode-with-plugins
-        #scrot
-        #sec
-        #silver-searcher
-        #sloccount
-        #smartmontools
-        #socat
-        #sshpass
-        #strongswan
-        #sysdig
-        #sysstat
-        #tcpdump
-        #tlsdate
-        #unetbootin
-        #utillinuxCurses
-        #wvdial
-        #xdotool
-        #xkill
-        #xl2tpd
-        #xsel
-
-        unison
-      ];
-    }
   ];
 
   boot.initrd.luks = {
@@ -132,15 +45,6 @@ with import <stockholm/lib>;
       options = ["nosuid" "nodev" "noatime"];
     };
   };
-
-  environment.systemPackages = with pkgs; [
-    ethtool
-    tinc_pre
-    iptables
-    #jack2
-
-    gptfdisk
-  ];
 
   security.wrappers = {
     sendmail.source = "${pkgs.exim}/bin/sendmail"; # for cron
