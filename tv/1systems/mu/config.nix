@@ -50,11 +50,6 @@ with import <stockholm/lib>;
     "/boot" = {
       device = "/dev/sda1";
     };
-    "/tmp" = {
-      device = "tmpfs";
-      fsType = "tmpfs";
-      options = [ "nosuid" "nodev" "noatime" ];
-    };
   };
 
   swapDevices =[ ];
@@ -152,9 +147,4 @@ with import <stockholm/lib>;
       "networkmanager"
     ];
   };
-
-  # see tmpfiles.d(5)
-  systemd.tmpfiles.rules = [
-    "d /tmp 1777 root root - -" # does this work with mounted /tmp?
-  ];
 }

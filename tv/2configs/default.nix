@@ -4,6 +4,8 @@ with import <stockholm/lib>;
               then "buildbot"
               else "tv";
 in {
+  boot.tmpOnTmpfs = true;
+
   krebs.enable = true;
 
   krebs.build.user = config.krebs.users.tv;

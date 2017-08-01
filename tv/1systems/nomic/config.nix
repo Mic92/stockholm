@@ -52,9 +52,6 @@ with import <stockholm/lib>;
 
   swapDevices = [ ];
 
-  # TODO base
-  boot.tmpOnTmpfs = true;
-
   environment.systemPackages = with pkgs; [
     (writeDashBin "play" ''
       set -euf

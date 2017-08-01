@@ -45,11 +45,6 @@ with import <stockholm/lib>;
     "/boot" = {
       device = "/dev/sda1";
     };
-    "/tmp" = {
-      device = "tmpfs";
-      fsType = "tmpfs";
-      options = ["nosuid" "nodev" "noatime"];
-    };
   };
 
   krebs.nixpkgs.allowUnfreePredicate = pkg: hasPrefix "nvidia-x11-" pkg.name;
@@ -63,11 +58,6 @@ with import <stockholm/lib>;
   };
 
   services.printing.enable = true;
-
-  # see tmpfiles.d(5)
-  systemd.tmpfiles.rules = [
-    "d /tmp 1777 root root - -" # does this work with mounted /tmp?
-  ];
 
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="00:90:f5:da:aa:c3", NAME="en0"

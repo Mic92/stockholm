@@ -137,11 +137,6 @@ with import <stockholm/lib>;
     "/boot" = {
       device = "/dev/sda1";
     };
-    "/tmp" = {
-      device = "tmpfs";
-      fsType = "tmpfs";
-      options = ["nosuid" "nodev" "noatime"];
-    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -158,11 +153,6 @@ with import <stockholm/lib>;
   };
 
   services.printing.enable = true;
-
-  # see tmpfiles.d(5)
-  systemd.tmpfiles.rules = [
-    "d /tmp 1777 root root - -" # does this work with mounted /tmp?
-  ];
 
   #services.bitlbee.enable = true;
   #services.tor.client.enable = true;
