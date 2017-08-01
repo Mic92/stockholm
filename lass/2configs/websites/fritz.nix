@@ -26,6 +26,7 @@ in {
   services.nginx.enable = true;
 
   imports = [
+    ./default.nix
     ./sqlBackup.nix
 
     (serveWordpress [ "radical-dreamers.de" "www.radical-dreamers.de" ])
