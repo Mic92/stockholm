@@ -47,7 +47,7 @@ in {
     {
       security.hideProcessInformation = true;
       security.sudo.extraConfig = ''
-        Defaults env_keep+="SSH_CLIENT"
+        Defaults env_keep+="SSH_CLIENT XMONAD_SPAWN_WORKSPACE"
         Defaults mailto="${config.krebs.users.tv.mail}"
         Defaults !lecture
       '';
