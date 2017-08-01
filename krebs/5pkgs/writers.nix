@@ -29,10 +29,11 @@ with import <stockholm/lib>;
     execveBin = name: cfg:
       pkgs.execve name (cfg // { destination = "/bin/${name}"; });
 
-    makeScriptWriter = interpreter: name: text:
+    makeScriptWriter = { interpreter, check ? null }: name: text:
       assert (with types; either absolute-pathname filename).check name;
       pkgs.writeOut (baseNameOf name) {
         ${optionalString (types.absolute-pathname.check name) name} = {
+          inherit check;
           executable = true;
           text = "#! ${interpreter}\n${text}";
         };
@@ -69,7 +70,9 @@ with import <stockholm/lib>;
       strip --strip-unneeded "$exe"
     '';
 
-    writeDash = pkgs.makeScriptWriter "${pkgs.dash}/bin/dash";
+    writeDash = pkgs.makeScriptWriter {
+      interpreter = "${pkgs.dash}/bin/dash";
+    };
 
     writeDashBin = name:
       assert types.filename.check name;
@@ -305,5 +308,7 @@ with import <stockholm/lib>;
         };
       };
 
-    writeSed = pkgs.makeScriptWriter "${pkgs.gnused}/bin/sed -f";
+    writeSed = pkgs.makeScriptWriter {
+      interpreter = "${pkgs.gnused}/bin/sed -f";
+    };
   }

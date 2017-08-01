@@ -10,6 +10,9 @@ with import <stockholm/lib>;
       "ni"
       "prism"
     ];
+    extraConfig = ''
+      LocalDiscovery = yes
+    '';
     tincPackage = pkgs.tinc_pre;
   };
   tv.iptables.input-internet-accept-tcp = singleton "tinc";
