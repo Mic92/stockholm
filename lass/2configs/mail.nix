@@ -126,6 +126,8 @@ let
     bind pager t noop
     macro index t "<modify-labels>+TODO\n"        # tag as Archived
 
+    # top index bar in email view
+    set pager_index_lines=7
 
     # sidebar
     set sidebar_width   = 20
