@@ -1,9 +1,6 @@
 with import <stockholm/lib>;
-{ config, lib, pkgs, ... }: let
-  builder = if getEnv "dummy_secrets" == "true"
-              then "buildbot"
-              else "tv";
-in {
+{ config, pkgs, ... }: {
+
   boot.tmpOnTmpfs = true;
 
   krebs.enable = true;
