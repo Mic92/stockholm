@@ -15,6 +15,10 @@ let
       ${pkgs.msmtp}/bin/msmtp -C ${msmtprc} "$@"
   '';
 
+  mailcap = pkgs.writeText "mailcap" ''
+    text/html; ${pkgs.elinks}/bin/elinks -dump ; copiousoutput;
+  '';
+
   muttrc = pkgs.writeText "muttrc" ''
     # gpg
     source ${pkgs.neomutt}/share/doc/mutt/samples/gpg.rc
@@ -37,6 +41,9 @@ let
     <display-message><enter-command> set crypt_verify_sig=\$my_crypt_verify_sig<enter>" \
      'Verify PGP signature'
 
+    # read html mails
+    auto_view text/html
+    set mailcap_path = ${mailcap}
 
     # notmuch
     set nm_default_uri="notmuch://$HOME/Maildir" # path to the maildir
