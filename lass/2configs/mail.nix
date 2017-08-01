@@ -66,7 +66,7 @@ let
       recipent="$(echo $1 | sed 's/[^,]*<\([^>]*\)[^,]*/ \1/g')"
       #     output to mutt
       #           V
-      echo "%4C %Z %?GI?%GI& ? %[%d/%b] %-20.20a %?M?(%3M)& ? %s %> $recipent %?g?%g?%"
+      echo "%4C %Z %?GI?%GI& ? %[%y-%m-%d] %-20.20a %?M?(%3M)& ? %s %> $recipent %?g?%g?%"
       # args to mutt-index dash script
       # V
     ''} %r |"
