@@ -9,6 +9,7 @@ with import <stockholm/lib>;
       serverAliases = [
         "localhost"
         "${config.krebs.build.host.name}"
+        "${config.krebs.build.host.name}.gg23"
         "${config.krebs.build.host.name}.r"
       ];
       locations."~ ^/~(.+?)(/.*)?\$".extraConfig = ''
