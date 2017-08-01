@@ -22,16 +22,6 @@ in {
     ./vim.nix
     ./xdg.nix
     {
-      # stockholm dependencies
-      environment.systemPackages = with pkgs; [
-        git
-        gnumake
-        hashPassword
-        populate
-        whatsupnix
-      ];
-    }
-    {
       users = {
         defaultUserShell = "/run/current-system/sw/bin/bash";
         mutableUsers = false;
@@ -142,6 +132,8 @@ in {
     {
       environment.systemPackages = [
         pkgs.get
+        pkgs.git
+        pkgs.hashPassword
         pkgs.htop
         pkgs.kpaste
         pkgs.krebspaste
