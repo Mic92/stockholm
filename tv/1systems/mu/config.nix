@@ -1,8 +1,6 @@
-{ config, pkgs, ... }:
-
 with import <stockholm/lib>;
+{ config, pkgs, ... }: {
 
-{
   imports = [
     <stockholm/krebs>
     <stockholm/tv/2configs>

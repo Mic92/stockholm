@@ -1,8 +1,6 @@
-{ config, lib, pkgs, ... }:
-
 with import <stockholm/lib>;
+{ config, pkgs, ... }: {
 
-{
   krebs.build.host = config.krebs.hosts.wu;
 
   imports = [

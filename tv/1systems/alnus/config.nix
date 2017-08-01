@@ -1,8 +1,6 @@
-{ config, pkgs, ... }:
-
 with import <stockholm/lib>;
+{ config, pkgs, ... }: {
 
-{
   imports = [
     <stockholm/tv>
     <stockholm/tv/2configs/hw/x220.nix>
