@@ -79,8 +79,6 @@ with import <stockholm/lib>;
     };
   };
 
-  swapDevices =[ ];
-
   users.users.dv = {
     inherit (config.krebs.users.dv) home uid;
     isNormalUser = true;

@@ -48,8 +48,6 @@ with import <stockholm/lib>;
       fsType = "btrfs";
     };
 
-  swapDevices = [ ];
-
   environment.systemPackages = with pkgs; [
     (writeDashBin "play" ''
       set -euf

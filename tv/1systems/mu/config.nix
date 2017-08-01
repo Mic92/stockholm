@@ -50,8 +50,6 @@ with import <stockholm/lib>;
     };
   };
 
-  swapDevices =[ ];
-
   nixpkgs.config.allowUnfree = true;
   hardware.opengl.driSupport32Bit = true;
 
