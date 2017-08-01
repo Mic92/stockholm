@@ -323,6 +323,7 @@ with import <stockholm/lib>;
           aliases = [
             "xu.r"
             "cgit.xu.r"
+            "krebs.xu.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----

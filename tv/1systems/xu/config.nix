@@ -13,6 +13,7 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/gitrepos.nix>
     <stockholm/tv/2configs/mail-client.nix>
     <stockholm/tv/2configs/man.nix>
+    <stockholm/tv/2configs/nginx/krebs-pages.nix>
     <stockholm/tv/2configs/nginx/public_html.nix>
     <stockholm/tv/2configs/pulse.nix>
     <stockholm/tv/2configs/retiolum.nix>
