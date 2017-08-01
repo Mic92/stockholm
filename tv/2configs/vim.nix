@@ -70,6 +70,8 @@ let {
         hi diffSubname  ctermfg=207
         hi diffAdded    ctermfg=010
         hi diffRemoved  ctermfg=009
+
+        hi Search       cterm=NONE ctermbg=216
       '';
     })))
     ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
