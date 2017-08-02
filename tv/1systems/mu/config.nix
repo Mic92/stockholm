@@ -43,8 +43,8 @@ with import <stockholm/lib>;
 
   hardware.enableRedistributableFirmware = true;
 
-  boot.loader.gummiboot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.enable = true;
 
   networking.networkmanager.enable = true;
 
