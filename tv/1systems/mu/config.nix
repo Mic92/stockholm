@@ -12,6 +12,8 @@ with import <stockholm/lib>;
   krebs.build.host = config.krebs.hosts.mu;
   krebs.build.user = mkForce config.krebs.users.vv;
 
+  tv.x0vncserver.enable = true;
+
   # hardware configuration
   boot.initrd.luks.devices = [
     { name = "vgmu1"; device = "/dev/sda2"; }
