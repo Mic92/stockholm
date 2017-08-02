@@ -12,16 +12,6 @@ with import <stockholm/lib>;
   krebs.build.host = config.krebs.hosts.mu;
   krebs.build.user = mkForce config.krebs.users.vv;
 
-  services.udev.extraRules = ''
-    SUBSYSTEM=="net", ATTR{address}=="00:90:f5:da:aa:c3", NAME="en0"
-    SUBSYSTEM=="net", ATTR{address}=="a0:88:b4:1b:ae:6c", NAME="wl0"
-
-    # for jack
-    KERNEL=="rtc0", GROUP="audio"
-    KERNEL=="hpet", GROUP="audio"
-  '';
-
-
   # hardware configuration
   boot.initrd.luks.devices = [
     { name = "vgmu1"; device = "/dev/sda2"; }
