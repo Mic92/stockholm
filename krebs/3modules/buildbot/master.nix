@@ -341,8 +341,6 @@ let
         secretsdir = shell.escape (toString <secrets>);
       in {
         PermissionsStartOnly = true;
-        Type = "forking";
-        PIDFile = "${workdir}/twistd.pid";
         # TODO: maybe also prepare buildbot.tac?
         ExecStartPre = pkgs.writeDash "buildbot-master-init" ''
           set -efux
@@ -366,9 +364,7 @@ let
           chmod 700 -R ${workdir}
           chown buildbotMaster:buildbotMaster -R ${workdir}
         '';
-        ExecStart = "${pkgs.buildbot-classic}/bin/buildbot start ${workdir}";
-        ExecStop = "${pkgs.buildbot-classic}/bin/buildbot stop ${workdir}";
-        ExecReload = "${pkgs.buildbot-classic}/bin/buildbot reconfig ${workdir}";
+        ExecStart = "${pkgs.buildbot-classic}/bin/buildbot start --nodaemon ${workdir}";
         PrivateTmp = "true";
         User = "buildbotMaster";
         Restart = "always";
