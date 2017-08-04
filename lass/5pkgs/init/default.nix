@@ -46,7 +46,7 @@ pkgs.writeText "init" ''
   #   dd if=/dev/zero bs=512 count=34 of=/dev/sda
   # TODO zero last 34 blocks (lsblk -bno SIZE /dev/sda)
   if ! test "$(blkid -o value -s PTTYPE "$disk")" = gpt; then
-    parted -a optimal "$disk" \
+    parted -s -a optimal "$disk" \
         mklabel gpt \
         mkpart no-fs 0 1024KiB \
         set 1 bios_grub on \
