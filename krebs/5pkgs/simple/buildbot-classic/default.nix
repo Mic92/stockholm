@@ -1,21 +1,14 @@
-{ fetchgit, fetchFromGitHub, python2Packages, git, ... }:
-let
-  # https://github.com/NixOS/nixpkgs/issues/14026
-  nixpkgs-fix = import (fetchgit {
-    url = https://github.com/nixos/nixpkgs;
-    rev = "e026b5c243ea39810826e68362718f5d703fb5d0";
-    sha256 = "11lqd480bi6xbi7xbh4krrxmbp6a6iafv1d0q3sj461al0x0has8";
-  }) {};
+{ pkgs, fetchgit, fetchFromGitHub, python2Packages, git, ... }:
 
-in nixpkgs-fix.buildPythonApplication {
+python2Packages.buildPythonApplication {
   name = "buildbot-classic-0.8.13";
   namePrefix = "";
   patches = [];
 
   src = fetchgit {
     url = "https://github.com/krebscode/buildbot-classic";
-    rev = "211ec7815";
-    sha256 = "0cyn406r31qdqhpsih7w83x47b443svpgfhxqd6w3iryv0y1z95i";
+    rev = "da5c0204e";
+    sha256 = "12aaq8ir9k7n2x9m2jnpcs4rr3pcixncbd3bm36ndh93n80q1z3j";
     leaveDotGit = true;
 
   };
@@ -33,11 +26,13 @@ in nixpkgs-fix.buildPythonApplication {
       sed -i 's/==/>=/' setup.py
     '';
 
-  propagatedBuildInputs = with nixpkgs-fix.pythonPackages; [
-    jinja2
-    twisted
-    dateutil_1_5
-    sqlalchemy_migrate_0_7
+  propagatedBuildInputs = [
+    python2Packages.jinja2
+    python2Packages.twisted
+    python2Packages.dateutil_1_5
+    python2Packages.sqlalchemy_migrate
+    python2Packages.pysqlite
+    pkgs.coreutils
   ];
   doCheck = false;
   postInstall = ''
