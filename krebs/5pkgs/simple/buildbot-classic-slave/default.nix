@@ -1,13 +1,11 @@
 { coreutils, fetchgit, git, buildbot-classic, python2Packages, ... }:
 
 python2Packages.buildPythonApplication {
-  name = "buildbot-classic-slave-0.8.13";
+  name = "buildbot-classic-slave-${buildbot-classic.version}";
   namePrefix = "";
 
   src = buildbot-classic.src;
   postUnpack = "sourceRoot=\${sourceRoot}/slave";
-
-  patchPhase = ":";
 
   nativeBuildInputs = [ git ];
   propagatedBuildInputs = [ python2Packages.twisted ];

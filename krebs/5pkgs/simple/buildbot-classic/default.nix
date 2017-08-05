@@ -1,4 +1,4 @@
-{ pkgs, fetchgit, fetchFromGitHub, python2Packages, git, ... }:
+{ pkgs, fetchFromGitHub, python2Packages, git, ... }:
 
 python2Packages.buildPythonApplication rec {
   name = "buildbot-classic-${version}";
@@ -6,26 +6,13 @@ python2Packages.buildPythonApplication rec {
   namePrefix = "";
   patches = [];
 
-  src = fetchgit {
-    url = "https://github.com/krebscode/buildbot-classic";
-    rev = "f26147d17";
-    sha256 = "096fzcg36qbvfqc3nx3g4608khlkwx81myl1dww1q2i1sa6bgzzh";
-    leaveDotGit = true;
-
+  src = fetchFromGitHub {
+    owner = "krebscode";
+    repo = "buildbot-classic";
+    rev = "v${version}";
+    sha256 = "0j3mb3g3pgx9nar798igfva7pc5hzcg845gwz8lw7dxr504fky30";
   };
   postUnpack = "sourceRoot=\${sourceRoot}/master";
-  buildInputs = [ git ];
-  patchPhase =
-    # The code insists on /usr/bin/tail, /usr/bin/make, etc.
-    '' echo "patching erroneous absolute path references..."
-       for i in $(find -name \*.py)
-       do
-         sed -i "$i" \
-             -e "s|/usr/bin/python|$(type -P python)|g ; s|/usr/bin/||g"
-       done
-
-      sed -i 's/==/>=/' setup.py
-    '';
 
   propagatedBuildInputs = [
     python2Packages.jinja2
