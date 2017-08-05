@@ -9,8 +9,9 @@ python2Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "krebscode";
     repo = "buildbot-classic";
-    rev = "v${version}";
-    sha256 = "0j3mb3g3pgx9nar798igfva7pc5hzcg845gwz8lw7dxr504fky30";
+    # rev = "v${version}";
+    rev = "5e36c0ee8707dca8a24688d0b17f1047b0bf5bb5";
+    sha256 = "13wc0cw5p50npc1skhf22lcdirxp41y08bnhrp10n76l6wg0r4ma";
   };
   postUnpack = "sourceRoot=\${sourceRoot}/master";
 
