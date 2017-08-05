@@ -9,6 +9,7 @@
 
     <stockholm/krebs/2configs/buildbot-krebs.nix>
     <stockholm/krebs/2configs/stats/puyak-client.nix>
+    <stockholm/krebs/2configs/binary-cache/nixos.nix>
     <stockholm/krebs/2configs/binary-cache/prism.nix>
   ];
 
