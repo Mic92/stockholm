@@ -1,9 +1,8 @@
 with import <stockholm/lib>;
-{ config, lib, pkgs, ... }: let
-  builder = if getEnv "dummy_secrets" == "true"
-              then "buildbot"
-              else "tv";
-in {
+{ config, pkgs, ... }: {
+
+  boot.tmpOnTmpfs = true;
+
   krebs.enable = true;
 
   krebs.build.user = config.krebs.users.tv;
@@ -22,16 +21,6 @@ in {
     ./vim.nix
     ./xdg.nix
     {
-      # stockholm dependencies
-      environment.systemPackages = with pkgs; [
-        git
-        gnumake
-        hashPassword
-        populate
-        whatsupnix
-      ];
-    }
-    {
       users = {
         defaultUserShell = "/run/current-system/sw/bin/bash";
         mutableUsers = false;
@@ -47,7 +36,7 @@ in {
     {
       security.hideProcessInformation = true;
       security.sudo.extraConfig = ''
-        Defaults env_keep+="SSH_CLIENT"
+        Defaults env_keep+="SSH_CLIENT XMONAD_SPAWN_WORKSPACE"
         Defaults mailto="${config.krebs.users.tv.mail}"
         Defaults !lecture
       '';
@@ -142,6 +131,8 @@ in {
     {
       environment.systemPackages = [
         pkgs.get
+        pkgs.git
+        pkgs.hashPassword
         pkgs.htop
         pkgs.kpaste
         pkgs.krebspaste

@@ -1,8 +1,6 @@
-{ config, pkgs, ... }:
-
 with import <stockholm/lib>;
+{ config, pkgs, ... }: {
 
-{
   imports = [
     <stockholm/tv>
     <stockholm/tv/2configs/hw/x220.nix>
@@ -80,8 +78,6 @@ with import <stockholm/lib>;
       user = "dv";
     };
   };
-
-  swapDevices =[ ];
 
   users.users.dv = {
     inherit (config.krebs.users.dv) home uid;

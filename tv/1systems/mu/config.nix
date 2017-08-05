@@ -1,8 +1,6 @@
-{ config, pkgs, ... }:
-
 with import <stockholm/lib>;
+{ config, pkgs, ... }: {
 
-{
   imports = [
     <stockholm/krebs>
     <stockholm/tv/2configs>
@@ -14,15 +12,7 @@ with import <stockholm/lib>;
   krebs.build.host = config.krebs.hosts.mu;
   krebs.build.user = mkForce config.krebs.users.vv;
 
-  services.udev.extraRules = ''
-    SUBSYSTEM=="net", ATTR{address}=="00:90:f5:da:aa:c3", NAME="en0"
-    SUBSYSTEM=="net", ATTR{address}=="a0:88:b4:1b:ae:6c", NAME="wl0"
-
-    # for jack
-    KERNEL=="rtc0", GROUP="audio"
-    KERNEL=="hpet", GROUP="audio"
-  '';
-
+  tv.x0vncserver.enable = true;
 
   # hardware configuration
   boot.initrd.luks.devices = [
@@ -32,10 +22,6 @@ with import <stockholm/lib>;
   boot.initrd.availableKernelModules = [ "ahci" ];
   boot.kernelModules = [ "fbcon" "kvm-intel" ];
   boot.extraModulePackages = [ ];
-
-  boot.extraModprobeConfig = ''
-    options kvm_intel nested=1
-  '';
 
   fileSystems = {
     "/" = {
@@ -50,14 +36,7 @@ with import <stockholm/lib>;
     "/boot" = {
       device = "/dev/sda1";
     };
-    "/tmp" = {
-      device = "tmpfs";
-      fsType = "tmpfs";
-      options = [ "nosuid" "nodev" "noatime" ];
-    };
   };
-
-  swapDevices =[ ];
 
   nixpkgs.config.allowUnfree = true;
   hardware.opengl.driSupport32Bit = true;
@@ -66,8 +45,8 @@ with import <stockholm/lib>;
 
   hardware.enableRedistributableFirmware = true;
 
-  boot.loader.gummiboot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.enable = true;
 
   networking.networkmanager.enable = true;
 
@@ -97,7 +76,6 @@ with import <stockholm/lib>;
   programs.ssh.startAgent = false;
 
   security.wrappers = {
-    sendmail.source = "${pkgs.exim}/bin/sendmail"; # for cron
     slock.source = "${pkgs.slock}/bin/slock";
   };
 
@@ -152,9 +130,4 @@ with import <stockholm/lib>;
       "networkmanager"
     ];
   };
-
-  # see tmpfiles.d(5)
-  systemd.tmpfiles.rules = [
-    "d /tmp 1777 root root - -" # does this work with mounted /tmp?
-  ];
 }

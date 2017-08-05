@@ -15,6 +15,10 @@ let
       ${pkgs.msmtp}/bin/msmtp -C ${msmtprc} "$@"
   '';
 
+  mailcap = pkgs.writeText "mailcap" ''
+    text/html; ${pkgs.elinks}/bin/elinks -dump ; copiousoutput;
+  '';
+
   muttrc = pkgs.writeText "muttrc" ''
     # gpg
     source ${pkgs.neomutt}/share/doc/mutt/samples/gpg.rc
@@ -37,6 +41,9 @@ let
     <display-message><enter-command> set crypt_verify_sig=\$my_crypt_verify_sig<enter>" \
      'Verify PGP signature'
 
+    # read html mails
+    auto_view text/html
+    set mailcap_path = ${mailcap}
 
     # notmuch
     set nm_default_uri="notmuch://$HOME/Maildir" # path to the maildir
@@ -59,7 +66,7 @@ let
       recipent="$(echo $1 | sed 's/[^,]*<\([^>]*\)[^,]*/ \1/g')"
       #     output to mutt
       #           V
-      echo "%4C %Z %?GI?%GI& ? %[%d/%b] %-20.20a %?M?(%3M)& ? %s %> $recipent %?g?%g?%"
+      echo "%4C %Z %?GI?%GI& ? %[%y-%m-%d] %-20.20a %?M?(%3M)& ? %s %> $recipent %?g?%g?%"
       # args to mutt-index dash script
       # V
     ''} %r |"
@@ -119,6 +126,8 @@ let
     bind pager t noop
     macro index t "<modify-labels>+TODO\n"        # tag as Archived
 
+    # top index bar in email view
+    set pager_index_lines=7
 
     # sidebar
     set sidebar_width   = 20

@@ -70,6 +70,8 @@ let {
         hi diffSubname  ctermfg=207
         hi diffAdded    ctermfg=010
         hi diffRemoved  ctermfg=009
+
+        hi Search       cterm=NONE ctermbg=216
       '';
     })))
     ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
@@ -227,7 +229,7 @@ let {
           lua = {};
           sed.extraStart = ''writeSed[^ \t\r\n]*[ \t\r\n]*"[^"]*"'';
           sh.extraStart = concatStringsSep ''\|'' [
-            ''write\(Ba\|Da\)sh[^ \t\r\n]*[ \t\r\n]*"[^"]*"''
+            ''write\(Ba\|Da\)sh[^ \t\r\n]*[ \t\r\n]*\("[^"]*"\|[a-z]\+\)''
             ''[a-z]*Phase[ \t\r\n]*=''
           ];
           yaml = {};

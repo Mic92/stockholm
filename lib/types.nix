@@ -5,7 +5,7 @@ let
     all any concatMapStringsSep concatStringsSep const filter flip
     genid hasSuffix head isInt isString length mergeOneOption mkOption
     mkOptionType optional optionalAttrs optionals range splitString
-    stringLength substring test typeOf;
+    stringLength substring test testString typeOf;
   inherit (lib.types)
     attrsOf bool either enum int listOf nullOr path str string submodule;
 in
@@ -356,6 +356,20 @@ rec {
   binary-cache-pubkey = str;
 
   pgp-pubkey = str;
+
+  sitemap.entry = submodule ({ config, ... }: {
+    options = {
+      desc = mkOption {
+        default = null;
+        type = nullOr str;
+      };
+      href = mkOption {
+        ${if testString "https?://.*" config._module.args.name
+          then "default" else null} = config._module.args.name;
+        type = nullOr str; # TODO nullOr uri?
+      };
+    };
+  });
 
   ssh-pubkey = str;
   ssh-privkey = submodule {

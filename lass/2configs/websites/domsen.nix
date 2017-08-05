@@ -23,6 +23,7 @@ let
 
 in {
   imports = [
+    ./default.nix
     ./sqlBackup.nix
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
     (servePage [

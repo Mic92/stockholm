@@ -20,10 +20,6 @@ let
         then lib.lpad n c (c + s)
         else s;
 
-    subdirsOf = path:
-      lib.mapAttrs (name: _: path + "/${name}")
-                   (filterAttrs (_: eq "directory") (readDir path));
-
     genAttrs' = names: f: listToAttrs (map f names);
 
     getAttrs = names: set:

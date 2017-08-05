@@ -1,8 +1,6 @@
-{ config, lib, pkgs, ... }:
-
 with import <stockholm/lib>;
+{ config, pkgs, ... }: {
 
-{
   krebs.build.host = config.krebs.hosts.wu;
 
   imports = [
@@ -17,91 +15,6 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/pulse.nix>
     <stockholm/tv/2configs/retiolum.nix>
     <stockholm/tv/2configs/xserver>
-    {
-      environment.systemPackages = with pkgs; [
-        # root
-        cryptsetup
-
-        # tv
-        bc
-        bind # dig
-        cac-api
-        dic
-        file
-        get
-        gnupg1compat
-        haskellPackages.hledger
-        jq
-        mkpasswd
-        netcat
-        nix-repl
-        nmap
-        p7zip
-        push
-        qrencode
-        tmux
-
-        #ack
-        #apache-httpd
-        #ascii
-        #emacs
-        #es
-        #esniper
-        #gcc
-        #gptfdisk
-        #graphviz
-        #haskellPackages.cabal2nix
-        #haskellPackages.ghc
-        #haskellPackages.shake
-        #hdparm
-        #i7z
-        #iftop
-        #imagemagick
-        #inotifyTools
-        #iodine
-        #iotop
-        #lshw
-        #lsof
-        #minicom
-        #mtools
-        #ncmpc
-        #neovim
-        #nethogs
-        #nix-prefetch-scripts #cvs bug
-        #openssl
-        #openswan
-        #parted
-        #perl
-        #powertop
-        #ppp
-        #proot
-        #pythonPackages.arandr
-        #pythonPackages.youtube-dl
-        #racket
-        #rxvt_unicode-with-plugins
-        #scrot
-        #sec
-        #silver-searcher
-        #sloccount
-        #smartmontools
-        #socat
-        #sshpass
-        #strongswan
-        #sysdig
-        #sysstat
-        #tcpdump
-        #tlsdate
-        #unetbootin
-        #utillinuxCurses
-        #wvdial
-        #xdotool
-        #xkill
-        #xl2tpd
-        #xsel
-
-        unison
-      ];
-    }
   ];
 
   boot.initrd.luks = {
@@ -130,11 +43,6 @@ with import <stockholm/lib>;
     "/boot" = {
       device = "/dev/sda1";
     };
-    "/tmp" = {
-      device = "tmpfs";
-      fsType = "tmpfs";
-      options = ["nosuid" "nodev" "noatime"];
-    };
   };
 
   krebs.nixpkgs.allowUnfreePredicate = pkg: hasPrefix "nvidia-x11-" pkg.name;
@@ -143,23 +51,7 @@ with import <stockholm/lib>;
   hardware.enableRedistributableFirmware= true;
   hardware.opengl.driSupport32Bit = true;
 
-  environment.systemPackages = with pkgs; [
-    ethtool
-    tinc_pre
-    iptables
-    #jack2
-  ];
-
-  security.wrappers = {
-    sendmail.source = "${pkgs.exim}/bin/sendmail"; # for cron
-  };
-
   services.printing.enable = true;
-
-  # see tmpfiles.d(5)
-  systemd.tmpfiles.rules = [
-    "d /tmp 1777 root root - -" # does this work with mounted /tmp?
-  ];
 
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="00:90:f5:da:aa:c3", NAME="en0"
@@ -169,6 +61,4 @@ with import <stockholm/lib>;
     KERNEL=="rtc0", GROUP="audio"
     KERNEL=="hpet", GROUP="audio"
   '';
-
-  virtualisation.virtualbox.host.enable = true;
 }

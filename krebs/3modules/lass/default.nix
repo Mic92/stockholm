@@ -96,8 +96,8 @@ with import <stockholm/lib>;
           ip6.addr = "42:0000:0000:0000:0000:0000:0000:15ab";
           aliases = [
             "prism.r"
-            "build.prism.r"
             "cache.prism.r"
+            "cgit.prism.r"
             "paste.r"
             "p.r"
           ];

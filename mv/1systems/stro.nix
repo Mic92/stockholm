@@ -143,10 +143,6 @@ with import <stockholm/lib>;
     };
   };
 
-  security.wrappers = {
-    sendmail.source = "${pkgs.exim}/bin/sendmail"; # for cron
-  };
-
   security.sudo.extraConfig = ''
     Defaults env_keep+="SSH_CLIENT"
     Defaults mailto="${config.krebs.users.mv.mail}"

@@ -1,8 +1,6 @@
-{ config, lib, pkgs, ... }:
-
 with import <stockholm/lib>;
+{ config, pkgs, ... }: {
 
-{
   krebs.build.host = config.krebs.hosts.nomic;
 
   imports = [
@@ -49,11 +47,6 @@ with import <stockholm/lib>;
     { device = "/dev/mapper/nomic1-home";
       fsType = "btrfs";
     };
-
-  swapDevices = [ ];
-
-  # TODO base
-  boot.tmpOnTmpfs = true;
 
   environment.systemPackages = with pkgs; [
     (writeDashBin "play" ''

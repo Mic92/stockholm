@@ -70,6 +70,12 @@ let
       type = types.hostname;
       default = "r";
     };
+
+    sitemap = mkOption {
+      default = {};
+      type = types.attrsOf types.sitemap.entry;
+    };
+
     zone-head-config  = mkOption {
       type = with types; attrsOf str;
       description = ''

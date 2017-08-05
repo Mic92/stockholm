@@ -1,8 +1,6 @@
-{ config, lib, pkgs, ... }:
-
 with import <stockholm/lib>;
+{ config, pkgs, ... }: {
 
-{
   krebs.build.host = config.krebs.hosts.xu;
 
   imports = [
@@ -13,6 +11,7 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/gitrepos.nix>
     <stockholm/tv/2configs/mail-client.nix>
     <stockholm/tv/2configs/man.nix>
+    <stockholm/tv/2configs/nginx/krebs-pages.nix>
     <stockholm/tv/2configs/nginx/public_html.nix>
     <stockholm/tv/2configs/pulse.nix>
     <stockholm/tv/2configs/retiolum.nix>
@@ -136,11 +135,6 @@ with import <stockholm/lib>;
     "/boot" = {
       device = "/dev/sda1";
     };
-    "/tmp" = {
-      device = "tmpfs";
-      fsType = "tmpfs";
-      options = ["nosuid" "nodev" "noatime"];
-    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -152,23 +146,14 @@ with import <stockholm/lib>;
     gptfdisk
   ];
 
-  security.wrappers = {
-    sendmail.source = "${pkgs.exim}/bin/sendmail"; # for cron
-  };
-
   services.printing.enable = true;
-
-  # see tmpfiles.d(5)
-  systemd.tmpfiles.rules = [
-    "d /tmp 1777 root root - -" # does this work with mounted /tmp?
-  ];
 
   #services.bitlbee.enable = true;
   #services.tor.client.enable = true;
   #services.tor.enable = true;
-  #services.virtualboxHost.enable = true;
-
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "15.09";
+
+  virtualisation.virtualbox.host.enable = true;
 }
