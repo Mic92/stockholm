@@ -1,14 +1,15 @@
 { pkgs, fetchgit, fetchFromGitHub, python2Packages, git, ... }:
 
-python2Packages.buildPythonApplication {
-  name = "buildbot-classic-0.8.13";
+python2Packages.buildPythonApplication rec {
+  name = "buildbot-classic-${version}";
+  version = "0.8.14";
   namePrefix = "";
   patches = [];
 
   src = fetchgit {
     url = "https://github.com/krebscode/buildbot-classic";
-    rev = "da5c0204e";
-    sha256 = "12aaq8ir9k7n2x9m2jnpcs4rr3pcixncbd3bm36ndh93n80q1z3j";
+    rev = "f26147d17";
+    sha256 = "096fzcg36qbvfqc3nx3g4608khlkwx81myl1dww1q2i1sa6bgzzh";
     leaveDotGit = true;
 
   };
