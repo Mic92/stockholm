@@ -16,6 +16,7 @@
     <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/backups.nix>
     <stockholm/lass/2configs/games.nix>
+    <stockholm/lass/2configs/bitcoin.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.icarus;
