@@ -38,6 +38,10 @@ let
       cgit.desc = "take all the computers hostage, they'll love you!";
       cgit.section = "configuration";
     };
+    stockholm-issues = {
+      cgit.desc = "stockholm issues";
+      cgit.section = "issues";
+    };
     the_playlist = {
       cgit.desc = "Good Music collection + tools";
       cgit.section  = "art";
