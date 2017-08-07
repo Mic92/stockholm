@@ -210,12 +210,12 @@ let
   vim = pkgs.symlinkJoin {
     name = "vim";
     paths = [
-      pkgs.vim
       (pkgs.writeDashBin "vim" ''
         set -efu
         (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
         exec ${pkgs.vim}/bin/vim "$@"
       '')
+      pkgs.vim
     ];
   };
 
