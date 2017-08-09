@@ -22,4 +22,5 @@
     OnUnitInactiveSec = "2min";
     RandomizedDelaySec = "2min";
   };
+  krebs.ci.stockholmSrc = "http://cgit.prism.r/stockholm";
 }
