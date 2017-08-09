@@ -10,8 +10,8 @@ python2Packages.buildPythonApplication rec {
     owner = "krebscode";
     repo = "buildbot-classic";
     # rev = "v${version}";
-    rev = "f40159404";
-    sha256 = "0zyjn0bs3vbz89h1vbmn4f27vzl4zkxwnp5kdxnkczdsvpsdycks";
+    rev = "843463911";
+    sha256 = "1ybl52ybjw5p09yik6bck9i1pvnvg94i0d32zqrwy67s77yx1mfd";
   };
   postUnpack = "sourceRoot=\${sourceRoot}/master";
 
