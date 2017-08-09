@@ -8,6 +8,10 @@ in
 {
   options.krebs.ci = {
     enable = mkEnableOption "krebs continous integration";
+    stockholmSrc = mkOption {
+      type = types.str;
+      default = "http://cgit.${hostname}.r/stockholm";
+    };
     treeStableTimer = mkOption {
       type = types.int;
       default = 10;
@@ -58,7 +62,7 @@ in
         testslave = "lasspass";
       };
       change_source.stockholm = ''
-        stockholm_repo = 'http://cgit.${hostname}.r/stockholm'
+        stockholm_repo = '${cfg.stockholmSrc}'
         cs.append(
             changes.GitPoller(
                 stockholm_repo,
