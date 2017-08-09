@@ -15,7 +15,6 @@ python2Packages.buildPythonApplication rec {
     ecdsa
     jsonrpclib
     pbkdf2
-    protobuf3_0
     pyaes
     pycrypto
     pyqt4
