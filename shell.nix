@@ -149,7 +149,7 @@ let
         -- "$@")
     if \test $? != 0; then exit 1; fi
     eval set -- "$args"
-    force_populate=false;
+    force_populate=false
     while :; do case $1 in
       --force-populate) force_populate=true; shift;;
       -s|--system) system=$2; shift 2;;
@@ -182,7 +182,7 @@ let
       source_file=$user/1systems/$system/source.nix
       source=$(get-source "$source_file")
       qualified_target=$target_user@$target_host:$target_port$target_path
-      if test "$force_populate" = true; then
+      if \test "$force_populate" = true; then
         echo "$source" | populate --force "$qualified_target"
       else
         echo "$source" | populate "$qualified_target"
