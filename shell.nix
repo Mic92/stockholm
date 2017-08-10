@@ -6,13 +6,18 @@ let
   # high level commands
   #
 
-  # usage: deploy [--force-populate] [--user=USER]
-  #               --system=SYSTEM [--target=TARGET]
+  # usage: deploy
+  #         [--force-populate]
+  #         [--quiet]
+  #         --system=SYSTEM
+  #         [--target=TARGET]
+  #         [--user=USER]
   cmds.deploy = pkgs.writeDash "cmds.deploy" ''
     set -efu
 
     command=deploy
     . ${init.args}
+    \test -n "''${quiet-}" || quiet=false
     \test -n "''${target-}" || target=$system
     \test -n "''${user-}" || user=$LOGNAME
     . ${init.env}
@@ -21,13 +26,18 @@ let
     exec ${utils.deploy}
   '';
 
-  # usage: install [--force-populate] [--user=USER]
-  #                --system=SYSTEM --target=TARGET
+  # usage: install
+  #         [--force-populate]
+  #         [--quiet]
+  #         --system=SYSTEM
+  #         --target=TARGET
+  #         [--user=USER]
   cmds.install = pkgs.writeBash "cmds.install" ''
     set -efu
 
     command=install
     . ${init.args}
+    \test -n "''${quiet-}" || quiet=false
     \test -n "''${user-}" || user=$LOGNAME
     . ${init.env}
 
@@ -63,8 +73,12 @@ let
     exec nixos-install
   '';
 
-  # usage: test [--force-populate] [--user=USER]
-  #             --system=SYSTEM --target=TARGET
+  # usage: test
+  #         [--force-populate]
+  #         [--quiet]
+  #         --system=SYSTEM
+  #         --target=TARGET
+  #         [--user=USER]
   cmds.test = pkgs.writeDash "cmds.test" /* sh */ ''
     set -efu
 
@@ -72,6 +86,7 @@ let
 
     command=test
     . ${init.args}
+    \test -n "''${quiet-}" || quiet=false
     \test -n "''${user-}" || user=$LOGNAME
     . ${init.env}
     . ${init.proxy}
@@ -144,14 +159,15 @@ let
 
   init.args = pkgs.writeText "init.args" /* sh */ ''
     args=$(${pkgs.utillinux}/bin/getopt -n "$command" -s sh \
-        -o s:t:u: \
-        -l force-populate,system:,target:,user: \
+        -o Qs:t:u: \
+        -l force-populate,quiet,system:,target:,user: \
         -- "$@")
     if \test $? != 0; then exit 1; fi
     eval set -- "$args"
-    force_populate=false;
+    force_populate=false
     while :; do case $1 in
       --force-populate) force_populate=true; shift;;
+      -Q|--quiet) quiet=true; shift;;
       -s|--system) system=$2; shift 2;;
       -t|--target) target=$2; shift 2;;
       -u|--user) user=$2; shift 2;;
@@ -162,6 +178,7 @@ let
   '';
 
   init.env = pkgs.writeText "init.env" /* sh */ ''
+    export quiet
     export system
     export target
     export user
@@ -182,7 +199,7 @@ let
       source_file=$user/1systems/$system/source.nix
       source=$(get-source "$source_file")
       qualified_target=$target_user@$target_host:$target_port$target_path
-      if test "$force_populate" = true; then
+      if \test "$force_populate" = true; then
         echo "$source" | populate --force "$qualified_target"
       else
         echo "$source" | populate "$qualified_target"
@@ -195,6 +212,7 @@ let
             NIX_PATH=$(quote "$target_path") \
             STOCKHOLM_VERSION=$(quote "$STOCKHOLM_VERSION") \
             nix-shell --run "$(quote "
+              quiet=$(quote "$quiet") \
               system=$(quote "$system") \
               target=$(quote "$target") \
               using_proxy=true \
@@ -206,24 +224,31 @@ let
 
   utils.build = pkgs.writeDash "utils.build" ''
     set -efu
+    ${utils.with-whatsupnix} \
     ${pkgs.nix}/bin/nix-build \
-        -Q \
         --no-out-link \
         --show-trace \
         -E "with import <stockholm>; $1" \
         -I "$target_path" \
-      2>&1 |
-    ${pkgs.whatsupnix}/bin/whatsupnix
   '';
 
   utils.deploy = pkgs.writeDash "utils.deploy" ''
     set -efu
-    PATH=/run/current-system/sw/bin nixos-rebuild switch \
-        -Q \
+    # Use system's nixos-rebuild, which is not self-contained
+    export PATH=/run/current-system/sw/bin
+    ${utils.with-whatsupnix} \
+    nixos-rebuild switch \
         --show-trace \
-        -I "$target_path" \
-      2>&1 |
-    ${pkgs.whatsupnix}/bin/whatsupnix
+        -I "$target_path"
+  '';
+
+  utils.with-whatsupnix = pkgs.writeDash "utils.with-whatsupnix" ''
+    set -efu
+    if \test "$quiet" = true; then
+      "$@" -Q 2>&1 | ${pkgs.whatsupnix}/bin/whatsupnix
+    else
+      exec "$@"
+    fi
   '';
 
   shell.get-version = pkgs.writeDash "shell.get-version" ''
