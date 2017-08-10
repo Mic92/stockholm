@@ -11,9 +11,13 @@ let
 in
 self: super:
 {
-  haskell.packages = mapAttrs (_: pkgs: pkgs.override {
-    inherit overrides;
-  }) super.haskell.packages;
+  haskell = super.haskell // {
+    packages = mapAttrs (name: value:
+      if hasAttr "override" value
+        then value.override { inherit overrides; }
+        else value
+    ) super.haskell.packages;
+  };
   haskellPackages = super.haskellPackages.override {
     inherit overrides;
   };
