@@ -128,39 +128,6 @@ with import <stockholm/lib>;
       };
       managed = false;
     };
-    cloudkrebs = {
-      cores = 1;
-      nets = rec {
-        internet = {
-          ip4.addr = "104.167.113.104";
-          aliases = [
-            "cloudkrebs.i"
-          ];
-          ssh.port = 45621;
-        };
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.206.102";
-          ip6.addr = "42:941e:2816:35f4:5c5e:206b:3f0b:f762";
-          aliases = [
-            "cloudkrebs.r"
-            "cgit.cloudkrebs.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAttUygCu7G6lIA9y+9rfTpLKIy2UgNDglUVoKZYLs8JPjtAtQVbtA
-            OcWwwPc8ijLQvwJWa8e/shqSzSIrtOe+HJbRGdXLdBLtOuLKpz+ZFHcS+95RS5aF
-            QTehg+QY7pvhbrrwKX936tkMR568suTQG6C8qNC/5jWYO/wIxFMhnQ2iRRKQOq1v
-            3aGGPC16KeXKVioY9KoV98S3n1rZW1JK07CIsZU4qb5txtLlW6FplJ7UmhVku1WC
-            sgOOj9yi6Zk1t8R2Pwv9gxa3Hc270voj5U+I2hgLV/LjheE8yhQgYHEA4vXerPdO
-            TGSATlSmMtE2NYGrKsLM7pKn286aSpXinwIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN7oYx7Lbkc0wPYNp92LQF93DCtxsGzOkVD91FJQzVZl";
-    };
     uriel = {
       cores = 1;
       nets = {
