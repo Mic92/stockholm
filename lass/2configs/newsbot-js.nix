@@ -28,8 +28,6 @@ let
     chan_b|https://boards.4chan.org/b/index.rss|#brainfuck
     chan_biz|https://boards.4chan.org/biz/index.rss|#news #brainfuck
     chan_int|https://boards.4chan.org/int/index.rss|#news #brainfuck
-    coinspotting|http://coinspotting.com/rss|#news #financial
-    cryptocoinsnews|http://www.cryptocoinsnews.com/feed/|#news #financial
     cryptogon|http://www.cryptogon.com/?feed=rss2|#news
     csm|http://rss.csmonitor.com/feeds/csm|#news
     csm_world|http://rss.csmonitor.com/feeds/world|#news
@@ -98,7 +96,6 @@ let
     presse_polizei|http://www.presseportal.de/rss/polizei.rss2|#news #bullerei
     presseportal|http://www.presseportal.de/rss/presseportal.rss2|#news
     prisonplanet|http://prisonplanet.com/feed.rss|#news
-    proofmarket|https://proofmarket.org/feed_problem|#news
     rawstory|http://www.rawstory.com/rs/feed/|#news
     reddit_4chan|http://www.reddit.com/r/4chan/new/.rss|#news #brainfuck
     reddit_anticonsum|http://www.reddit.com/r/Anticonsumption/new/.rss|#news
@@ -114,7 +111,7 @@ let
     sciencemag|http://news.sciencemag.org/rss/current.xml|#news
     scmp|http://www.scmp.com/rss/91/feed|#news
     sec-db|http://feeds.security-database.com/SecurityDatabaseToolsWatch|#news
-    shackspace|http://shackspace.de/?feed=rss2|#news
+    shackspace|http://blog.shackspace.de/?feed=rss2|#news
     shz_news|http://www.shz.de/nachrichten/newsticker/rss|#news
     sky_busi|http://feeds.skynews.com/feeds/rss/business.xml|#news
     sky_pol|http://feeds.skynews.com/feeds/rss/politics.xml|#news
