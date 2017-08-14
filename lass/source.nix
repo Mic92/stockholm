@@ -13,12 +13,12 @@ in
     };
     stockholm.file = toString <stockholm>;
     nixpkgs.git = {
-      url = https://cgit.lassul.us/nixpkgs;
+      url = http://cgit.lassul.us/nixpkgs;
       # nixos-17.03
       # + copytoram:
       #   87a4615 & 334ac4f
       # + acme permissions for groups
       #   fd7a8f1
-      ref = "ac13f30";
+      ref = "60dc02d";
     };
   }
