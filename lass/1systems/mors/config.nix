@@ -139,7 +139,6 @@ with import <stockholm/lib>;
     urban
     mk_sql_pair
     remmina
-    thunderbird
 
     iodine
 
