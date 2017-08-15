@@ -113,14 +113,6 @@ with import <stockholm/lib>;
     };
     kaepsele = {
       nets = {
-        internet = {
-          ip4.addr = "92.222.10.169";
-          aliases = [
-            "kaepsele.i"
-            "kaepsele.internet"
-            # TODO "kaepsele.org"
-          ];
-        };
         retiolum = {
           ip4.addr = "10.243.166.2";
           ip6.addr = "42:b9d:6660:d07c:2bb7:4e91:1a01:2e7d";
@@ -129,17 +121,18 @@ with import <stockholm/lib>;
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAxj7kaye4pGLou7mVRTVgtcWFjuEosJlxVg24gM7nU1EaoRnBD93/
-            Y3Je7BSUbz5xMXr5SFTPSkitInL7vU+jDOf2bEpqv+uUJAJIz85494oPS9xocdWo
-            rQsrQRAtOg4MLD+YIoAxQm2Mc4nt2CSE1+UP4uXGxpuh0c051b+9Kmwv1bTyHB9y
-            y01VSkDvNyHk5eA+RGDiujBAzhi35hzTlQgCJ3REOBiq4YmE1d3qpk3oNiYUcrcu
-            yFzQrSRIfhXjuzIR+wxqS95HDUsewSwt9HgkjJzYF5sQZSea0/XsroFqZyTJ8iB5
-            FQx2emBqB525cWKOt0f5jgyjklhozhJyiwIDAQAB
+            MIIBCgKCAQEA4+kDaKhCBNlpHqRCA2R6c4UEFk0OaiPwHvjmBBjpihTJVyffIEYm
+            QFZ5ZNkaVumSOAgKk9ygppO9WsNasl1ag+IRWik9oupdzEkNjgvOMBVJGhcwGZGF
+            6UEY5sdA1n0qg74og5BGSiXUBiaahVM0rAfCNk8gV3qrot5kWJMQLb9BKabJ56eb
+            JrgWepxuVaw3BoEhz6uusuvw5i1IF382L8R11hlvyefifXONFOAUjCrCr0bCb4uK
+            ZZcRUU35pbHLDXXTOrOarOO1tuVGu85VXo3S1sLaaouHYjhTVT8bxqbwcNhxBXYf
+            ONLv0f7G5XwecgUNbE6ZTfjV5PQKaww3lwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
         };
       };
-      ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDA9cDUg7qm37uOhQpdKSgpnJPWao9VZR6LFNphVcJQ++gYvVgWu6WMhigiy7DcGQSStUlXkZc4HZBBugwwNWcf7aAF6ijBuG5rVwb9AFQmSexpTOfWap33iA5f+LXYFHe7iv4Pt9TYO1ga1Ryl4EGKb7ol2h5vbKC+JiGaDejB0WqhBAyrTg4tTWO8k2JT11CrlTjNVctqV0IVAMtTc/hcJcNusnoGD4ic0QGSzEMYxcIGRNvIgWmxhI6GHeaHxXWH5fv4b0OpLlDfVUsIvEo9KVozoLGm/wgLBG/tQXKaF9qVMVgOYi9sX/hDLwhRrcD2cyAlq9djo2pMARYiriXF";
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC5Wr36T0MmB8pnSO5/pw9/Dfe5+IMgVHOhm6EUa55jj";
     };
     mu = {
       cores = 2;
