@@ -166,7 +166,7 @@ let
     eval set -- "$args"
     force_populate=false
     while :; do case $1 in
-      --force-populate) force_populate=true; shift;;
+         --force-populate) force_populate=true; shift;;
       -Q|--quiet) quiet=true; shift;;
       -s|--system) system=$2; shift 2;;
       -t|--target) target=$2; shift 2;;
