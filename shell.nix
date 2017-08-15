@@ -9,6 +9,7 @@ let
   # usage: deploy
   #         [--force-populate]
   #         [--quiet]
+  #         [--source=PATH]
   #         --system=SYSTEM
   #         [--target=TARGET]
   #         [--user=USER]
@@ -20,6 +21,7 @@ let
     \test -n "''${quiet-}" || quiet=false
     \test -n "''${target-}" || target=$system
     \test -n "''${user-}" || user=$LOGNAME
+    \test -n "''${source_file}" || source_file=$user/1systems/$system/source.nix
     . ${init.env}
     . ${init.proxy}
 
@@ -29,6 +31,7 @@ let
   # usage: install
   #         [--force-populate]
   #         [--quiet]
+  #         [--source=PATH]
   #         --system=SYSTEM
   #         --target=TARGET
   #         [--user=USER]
@@ -39,6 +42,7 @@ let
     . ${init.args}
     \test -n "''${quiet-}" || quiet=false
     \test -n "''${user-}" || user=$LOGNAME
+    \test -n "''${source_file}" || source_file=$user/1systems/$system/source.nix
     . ${init.env}
 
     if \test "''${using_proxy-}" != true; then
@@ -76,6 +80,7 @@ let
   # usage: test
   #         [--force-populate]
   #         [--quiet]
+  #         [--source=PATH]
   #         --system=SYSTEM
   #         --target=TARGET
   #         [--user=USER]
@@ -88,6 +93,7 @@ let
     . ${init.args}
     \test -n "''${quiet-}" || quiet=false
     \test -n "''${user-}" || user=$LOGNAME
+    \test -n "''${source_file}" || source_file=$user/1systems/$system/source.nix
     . ${init.env}
     . ${init.proxy}
 
@@ -160,14 +166,16 @@ let
   init.args = pkgs.writeText "init.args" /* sh */ ''
     args=$(${pkgs.utillinux}/bin/getopt -n "$command" -s sh \
         -o Qs:t:u: \
-        -l force-populate,quiet,system:,target:,user: \
+        -l force-populate,quiet,source:,system:,target:,user: \
         -- "$@")
     if \test $? != 0; then exit 1; fi
     eval set -- "$args"
     force_populate=false
+    source_file=
     while :; do case $1 in
          --force-populate) force_populate=true; shift;;
       -Q|--quiet) quiet=true; shift;;
+         --source) source_file=$2; shift 2;;
       -s|--system) system=$2; shift 2;;
       -t|--target) target=$2; shift 2;;
       -u|--user) user=$2; shift 2;;
@@ -196,7 +204,6 @@ let
   init.proxy = pkgs.writeText "init.proxy" /* sh */ ''
     if \test "''${using_proxy-}" != true; then
 
-      source_file=$user/1systems/$system/source.nix
       source=$(get-source "$source_file")
       qualified_target=$target_user@$target_host:$target_port$target_path
       if \test "$force_populate" = true; then
