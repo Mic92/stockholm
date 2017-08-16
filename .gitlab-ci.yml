@@ -1,0 +1,4 @@
+nix-shell test:
+  script:
+    - nix-shell --pure --command 'true' -p stdenv && echo success
+    - nix-shell --pure --command 'false' -p stdenv || echo success
