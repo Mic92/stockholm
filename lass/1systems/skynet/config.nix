@@ -44,6 +44,10 @@ with import <stockholm/lib>;
 
   krebs.build.host = config.krebs.hosts.skynet;
 
+  services.logind.extraConfig = ''
+    HandleLidSwitch=ignore
+  '';
+
   #fileSystems = {
   #  "/bku" = {
   #    device = "/dev/mapper/pool-bku";
