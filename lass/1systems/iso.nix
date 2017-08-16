@@ -37,6 +37,7 @@ with import <stockholm/lib>;
         };
       };
       boot.kernelParams = [ "copytoram" ];
+      networking.hostName = "lass-iso";
     }
     {
       krebs.enable = true;
