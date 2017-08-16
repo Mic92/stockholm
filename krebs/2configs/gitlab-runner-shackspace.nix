@@ -10,6 +10,7 @@ in {
     "/run/wrappers" # /run/wrappers/bin/su
     "/" # /bin/sh
   ];
+  systemd.services.gitlab-runner.serviceConfig.PrivateTmp = true;
   virtualisation.docker.enable = true;
   services.gitlab-runner = {
     enable = true;
