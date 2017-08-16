@@ -298,6 +298,22 @@ in {
         localAddress = "10.233.2.2";
       };
     }
+    {
+      #kaepsele
+      containers.kaepsele = {
+        config = { ... }: {
+          services.openssh.enable = true;
+          users.users.root.openssh.authorizedKeys.keys = with config.krebs.users; [
+            lass.pubkey
+            tv.pubkey
+          ];
+        };
+        enableTun = true;
+        privateNetwork = true;
+        hostAddress = "10.233.2.3";
+        localAddress = "10.233.2.4";
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
