@@ -72,13 +72,13 @@ let
     ''} %r |"
 
     virtual-mailboxes \
+        "Unread"    "notmuch://?query=tag:unread"\
         "INBOX"     "notmuch://?query=tag:inbox \
                      and NOT tag:killed \
                      and NOT to:shackspace \
                      and NOT to:c-base \
                      and NOT from:security-alert@hpe.com \
                      and NOT to:nix-devel"\
-        "Unread"    "notmuch://?query=tag:unread"\
         "shack"     "notmuch://?query=to:shackspace"\
         "c-base"    "notmuch://?query=to:c-base"\
         "security"  "notmuch://?query=to:securityfocus or from:security-alert@hpe.com"\
