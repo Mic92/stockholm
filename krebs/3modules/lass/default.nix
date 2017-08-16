@@ -43,7 +43,7 @@ with import <stockholm/lib>;
       cores = 2;
       nets = rec {
         internet = {
-          ip4.addr = "104.233.79.118";
+          ip4.addr = "45.62.226.163";
           aliases = [
             "echelon.i"
           ];
