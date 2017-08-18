@@ -15,9 +15,9 @@ with import <stockholm/lib>;
   tv.x0vncserver.enable = true;
 
   # hardware configuration
-  boot.initrd.luks.devices = [
-    { name = "vgmu1"; device = "/dev/sda2"; }
-  ];
+  boot.initrd.luks.devices.muca = {
+    device = "/dev/disk/by-uuid/a8796bb3-6c03-4ddf-b2e4-c2e44c51d352";
+  };
   boot.initrd.luks.cryptoModules = [ "aes" "sha512" "xts" ];
   boot.initrd.availableKernelModules = [ "ahci" ];
   boot.kernelModules = [ "fbcon" "kvm-intel" ];
@@ -25,16 +25,17 @@ with import <stockholm/lib>;
 
   fileSystems = {
     "/" = {
-      device = "/dev/vgmu1/nixroot";
-      fsType = "ext4";
-      options = [ "defaults" "noatime" ];
+      device = "/dev/mapper/muvga-root";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
     "/home" = {
-      device = "/dev/vgmu1/home";
-      options = [ "defaults" "noatime" ];
+      device = "/dev/mapper/muvga-home";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
     "/boot" = {
-      device = "/dev/sda1";
+      device = "/dev/disk/by-uuid/DC38-F165";
     };
   };
 
