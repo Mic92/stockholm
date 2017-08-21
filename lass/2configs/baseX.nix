@@ -48,6 +48,7 @@ in {
     acpi
     dic
     dmenu
+    gi
     gitAndTools.qgit
     lm_sensors
     haskellPackages.hledger
