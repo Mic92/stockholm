@@ -32,6 +32,7 @@ in np.buildNodePackage {
 
   phases = [
     "unpackPhase"
+    "patchPhase"
     "installPhase"
   ];
 
