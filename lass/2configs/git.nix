@@ -80,7 +80,7 @@ let
     public = true;
   };
 
-  make-restricted-repo = name: { collaborators ? [], announce ? false, ... }: {
+  make-restricted-repo = name: { collaborators ? [], announce ? false, hooks ? {}, ... }: {
     inherit collaborators name;
     public = false;
     hooks = optionalAttrs announce {
@@ -93,7 +93,7 @@ let
         # TODO define branches in some kind of option per repo
         branches = [ "master" "staging*" ];
       };
-    };
+    } // hooks;
   };
 
   make-rules =

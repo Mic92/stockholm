@@ -22,6 +22,7 @@ with import <stockholm/lib>;
 
   environment.systemPackages = with pkgs; [
     git
+    vim
     rxvt_unicode.terminfo
   ];
 

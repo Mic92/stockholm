@@ -15,7 +15,6 @@ let
     bdt_plenarproto|http://www.bundestag.de/rss_feeds/plenarprotokolle.rss|#news #bundestag
     bdt_pressemitteilungen|http://www.bundestag.de/blueprint/servlet/service/de/273112/asFeed/index.rss|#news
     bitcoinpakistan|https://bitcoinspakistan.com/feed/|#news #financial
-    c|http://www.tempolimit-lichtgeschwindigkeit.de/news.xml|#news
     cancer|http://feeds.feedburner.com/ncinewsreleases?format=xml|#news
     carta|http://feeds2.feedburner.com/carta-standard-rss|#news
     catholic_news|http://feeds.feedburner.com/catholicnewsagency/dailynews|#news
@@ -27,7 +26,11 @@ let
     ccc|http://www.ccc.de/rss/updates.rdf|#news
     chan_b|https://boards.4chan.org/b/index.rss|#brainfuck
     chan_biz|https://boards.4chan.org/biz/index.rss|#news #brainfuck
+    chan_g|https://boards.4chan.org/g/index.rss|#news
     chan_int|https://boards.4chan.org/int/index.rss|#news #brainfuck
+    chan_sci|https://boards.4chan.org/sci/index.rss|#news
+    chan_x|https://boards.4chan.org/x/index.rss|#news
+    c|http://www.tempolimit-lichtgeschwindigkeit.de/news.xml|#news
     cryptogon|http://www.cryptogon.com/?feed=rss2|#news
     csm|http://rss.csmonitor.com/feeds/csm|#news
     csm_world|http://rss.csmonitor.com/feeds/world|#news
@@ -61,6 +64,7 @@ let
     greenpeace|http://feeds.feedburner.com/GreenpeaceNews|#news
     guardian_uk|http://feeds.theguardian.com/theguardian/uk-news/rss|#news
     gulli|http://ticker.gulli.com/rss/|#news
+    hackernews|https://news.ycombinator.com/rss|#news
     handelsblatt|http://www.handelsblatt.com/contentexport/feed/schlagzeilen|#news #financial
     heise|https://www.heise.de/newsticker/heise-atom.xml|#news
     hindu_business|http://www.thehindubusinessline.com/?service=rss|#news #financial
@@ -100,7 +104,12 @@ let
     reddit_4chan|http://www.reddit.com/r/4chan/new/.rss|#news #brainfuck
     reddit_anticonsum|http://www.reddit.com/r/Anticonsumption/new/.rss|#news
     reddit_btc|http://www.reddit.com/r/Bitcoin/new/.rss|#news #financial
+    reddit_consp|http://reddit.com/r/conspiracy/.rss|#news
+    reddit_haskell|http://www.reddit.com/r/haskell/.rss|#news
+    reddit_nix|http://www.reddit.com/r/nixos/.rss|#news
     reddit_prog|http://www.reddit.com/r/programming/new/.rss|#news
+    reddit_sci|http://www.reddit.com/r/science/.rss|#news
+    reddit_tech|http://www.reddit.com/r/technology/.rss|#news
     reddit_tpp|http://www.reddit.com/r/twitchplayspokemon/.rss|#news #tpp
     reddit_world|http://www.reddit.com/r/worldnews/.rss|#news
     r-ethereum|http://www.reddit.com/r/ethereum/.rss|#news
@@ -156,16 +165,6 @@ let
     wp_world|http://feeds.washingtonpost.com/rss/rss_blogpost|#news
     xkcd|https://xkcd.com/rss.xml|#news
     zdnet|http://www.zdnet.com/news/rss.xml|#news
-
-    chan_g|https://boards.4chan.org/g/index.rss|#news
-    chan_x|https://boards.4chan.org/x/index.rss|#news
-    chan_sci|https://boards.4chan.org/sci/index.rss|#news
-    reddit_consp|http://reddit.com/r/conspiracy/.rss|#news
-    reddit_sci|http://www.reddit.com/r/science/.rss|#news
-    reddit_tech|http://www.reddit.com/r/technology/.rss|#news
-    reddit_nix|http://www.reddit.com/r/nixos/.rss|#news
-    reddit_haskell|http://www.reddit.com/r/haskell/.rss|#news
-    hackernews|https://news.ycombinator.com/rss|#news
   '';
 in {
   environment.systemPackages = [

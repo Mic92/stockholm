@@ -98,6 +98,7 @@ myKeyMap =
     [ ("M4-<F11>", spawn "${pkgs.i3lock}/bin/i3lock -i /var/lib/wallpaper/wallpaper -f")
     , ("M4-C-p", spawn "${pkgs.scrot}/bin/scrot ~/public_html/scrot.png")
     , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
+    , ("M4-o", spawn "${pkgs.brain}/bin/brainmenu --type")
     , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ +4%")
     , ("<XF86AudioLowerVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ -4%")
     , ("<XF86MonBrightnessDown>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -time 0 -dec 1%")
