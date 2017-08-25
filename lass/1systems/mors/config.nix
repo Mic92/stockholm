@@ -82,6 +82,9 @@ with import <stockholm/lib>;
         client.enable = true;
       };
     }
+    {
+      services.mongodb.enable = true;
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
