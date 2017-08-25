@@ -128,7 +128,7 @@ let
 
     bind index t noop
     bind pager t noop
-    macro index t "<modify-labels>+TODO\n"        # tag as Archived
+    macro index t "<modify-labels>"        # tag as Archived
 
     # top index bar in email view
     set pager_index_lines=7
