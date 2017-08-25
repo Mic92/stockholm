@@ -40,15 +40,6 @@ with import <stockholm/lib>;
       };
     }
     {
-      #zalando project
-      services.postgresql = {
-        enable = true;
-        package = pkgs.postgresql;
-      };
-      virtualisation.docker.enable = true;
-      #users.users.mainUser.extraGroups = [ "docker" ];
-    }
-    {
       lass.umts = {
         enable = true;
         modem = "/dev/serial/by-id/usb-Lenovo_F5521gw_C12AD95CB7B78F90-if09";
