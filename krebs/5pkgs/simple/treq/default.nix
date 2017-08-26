@@ -11,7 +11,7 @@ pythonPackages.buildPythonPackage rec {
   propagatedBuildInputs = with pythonPackages; [
     twisted
     pyopenssl
-    requests2
+    requests
     service-identity
   ];
 }
