@@ -8,18 +8,6 @@ with import <stockholm/lib>;
     build = {
       user = config.krebs.users.mv;
       host = config.krebs.hosts.stro;
-      source = let
-        HOME = getEnv "HOME";
-        host = config.krebs.build.host;
-      in {
-        nixos-config.symlink = "stockholm/mv/1systems/${host.name}.nix";
-        secrets.file = "${HOME}/secrets/${host.name}";
-        stockholm.file = "${HOME}/stockholm";
-        nixpkgs.git = {
-          url = https://github.com/NixOS/nixpkgs;
-          ref = "8bf31d7d27cae435d7c1e9e0ccb0a320b424066f";
-        };
-      };
     };
   };
 
@@ -27,7 +15,7 @@ with import <stockholm/lib>;
     <secrets>
     <stockholm/krebs>
     <stockholm/tv/2configs/audit.nix>
-    <stockholm/tv/2configs/bash.nix>
+    <stockholm/tv/2configs/bash>
     <stockholm/tv/2configs/exim-retiolum.nix>
     <stockholm/tv/2configs/hw/x220.nix>
     <stockholm/tv/2configs/im.nix>
@@ -40,7 +28,6 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/xdg.nix>
     <stockholm/tv/2configs/xserver>
     <stockholm/tv/3modules>
-    <stockholm/tv/5pkgs>
   ];
 
   boot.kernel.sysctl = {
@@ -124,13 +111,13 @@ with import <stockholm/lib>;
 
   nix = {
     binaryCaches = ["https://cache.nixos.org"];
-    # TODO check if both are required:
-    chrootDirs = [ "/etc/protocols" pkgs.iana_etc.outPath ];
     requireSignedBinaryCaches = true;
-    useChroot = true;
+    # TODO check if both are required:
+    sandboxPaths = [ "/etc/protocols" pkgs.iana_etc.outPath ];
+    useSandbox = true;
   };
 
-  nixpkgs.config.allowUnfree = false;
+  nixpkgs.config.packageOverrides = import <stockholm/tv/5pkgs> pkgs;
 
   users = {
     defaultUserShell = "/run/current-system/sw/bin/bash";
