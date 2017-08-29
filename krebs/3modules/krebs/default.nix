@@ -30,6 +30,38 @@ let
   });
 in {
   hosts = {
+    hope = {
+      owner = config.krebs.users.krebs;
+      managed = true;
+      nets = {
+        internet = {
+          ip4.addr = "45.62.225.18";
+          aliases = [
+            "hope.i"
+          ];
+          ssh.port = 45621;
+        };
+        retiolum = {
+          ip4.addr = "10.243.77.4";
+          ip6.addr = "42:0:0:0:0:0:77:4";
+          aliases = [
+            "hope.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAsQVWCoNZZd77tYw1qEDlUsfcF0ld+jVorq2uR5il1D8sqER644l5
+            uaWxPQjSl27xdq5kvzIH24Ab6/xF2EDgE2fUTwpO5coBYafeiGyi5AwURQmYMp2a
+            2CV7uUAagFQaSzD0Aj796r1BXPn1IeE+uRSBmmc/+/7L0hweRGLiha34NOMZkq+4
+            A0pwI/CjnyRXdV4AqfORHXkelykJPATm+m3bC+KYogPBeNMP2AV2aYgY8a0UJPMK
+            fjAJCzxYJjiYxm8faJlm2U1bWytZODQa8pRZOrYQa4he2UoU6x78CNcrQkYLPOFC
+            K2Q7+B5WJNKV6CqYztXuU/6LTHJRmV0FiwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOdLHRI29xJj1jmfSidE2Dh7EsDNszm+WH3Kj4zYBkP/";
+    };
     hotdog = {
       owner = config.krebs.users.krebs;
       managed = true;

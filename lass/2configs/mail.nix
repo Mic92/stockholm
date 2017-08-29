@@ -78,11 +78,13 @@ let
                      and NOT to:shackspace \
                      and NOT to:c-base \
                      and NOT from:security-alert@hpe.com \
-                     and NOT to:nix-devel"\
+                     and NOT to:nix-devel\
+                     and NOT to:radio"\
         "shack"     "notmuch://?query=to:shackspace"\
         "c-base"    "notmuch://?query=to:c-base"\
         "security"  "notmuch://?query=to:securityfocus or from:security-alert@hpe.com"\
         "nix"       "notmuch://?query=to:nix-devel"\
+        "radio"     "notmuch://?query=to:radio or tag:radio"\
         "TODO"      "notmuch://?query=tag:TODO"\
         "Starred"   "notmuch://?query=tag:*"\
         "Archive"   "notmuch://?query=tag:archive"\
@@ -126,7 +128,7 @@ let
 
     bind index t noop
     bind pager t noop
-    macro index t "<modify-labels>+TODO\n"        # tag as Archived
+    macro index t "<modify-labels>"        # tag as Archived
 
     # top index bar in email view
     set pager_index_lines=7

@@ -200,6 +200,7 @@ with import <stockholm/lib>;
       filter.INPUT.policy = "DROP";
       filter.FORWARD.policy = "DROP";
       filter.INPUT.rules = [
+        { predicate = "-i retiolum -p udp --dport 60000:61000"; target = "ACCEPT";}
         { predicate = "-m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; precedence = 10001; }
         { predicate = "-p icmp"; target = "ACCEPT"; precedence = 10000; }
         { predicate = "-p ipv6-icmp"; target = "ACCEPT"; v4 = false;  precedence = 10000; }

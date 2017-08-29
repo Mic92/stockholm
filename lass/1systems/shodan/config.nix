@@ -41,7 +41,11 @@ with import <stockholm/lib>;
     "/boot" = {
       device = "/dev/sda1";
     };
-
+    "/home" = {
+      device = "/dev/mapper/pool-home";
+      fsType = "btrfs";
+      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+    };
     "/tmp" = {
       device = "tmpfs";
       fsType = "tmpfs";
