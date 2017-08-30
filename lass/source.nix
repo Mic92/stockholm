@@ -19,6 +19,6 @@ in
       #   87a4615 & 334ac4f
       # + acme permissions for groups
       #   fd7a8f1
-      ref = "60dc02d";
+      ref = "fe46ffc";
     };
   }
