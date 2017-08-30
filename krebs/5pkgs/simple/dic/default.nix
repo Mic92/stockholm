@@ -1,12 +1,12 @@
-{ stdenv, fetchgit, coreutils, curl, gnused, gnugrep, ... }:
+{ coreutils, curl, fetchgit, gnugrep, gnused, stdenv, utillinux }:
 
 stdenv.mkDerivation {
   name = "dic";
 
   src = fetchgit {
     url = http://cgit.ni.krebsco.de/dic;
-    rev = "refs/tags/v1.0.2";
-    sha256 = "133x2z3dr5synckdvgnyc9fa7jdca43vj0973v148i13x4dqgr36";
+    rev = "refs/tags/v1.1.0";
+    sha256 = "1xzn20b9kfz96nvjli8grpi11v80jbl0dmifksmirwcj5v81ndav";
   };
 
   phases = [
@@ -21,6 +21,7 @@ stdenv.mkDerivation {
         curl
         gnused
         gnugrep
+        utillinux
       ];
     in
     ''
