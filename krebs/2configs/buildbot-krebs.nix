@@ -1,3 +1,4 @@
+with import <stockholm/lib>;
 { lib, config, pkgs, ... }:
 {
   imports = [
@@ -7,7 +8,5 @@
   networking.firewall.allowedTCPPorts = [ 80 8010 9989 ];
   krebs.ci.enable = true;
   krebs.ci.treeStableTimer = 120;
-  krebs.ci.users.krebs.hosts = [
-    config.networking.hostName
-  ];
+  krebs.ci.hosts = [ config.krebs.build.host ];
 }
