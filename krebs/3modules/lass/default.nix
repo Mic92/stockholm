@@ -5,7 +5,7 @@ with import <stockholm/lib>;
 {
   hosts = mapAttrs (_: recursiveUpdate {
     owner = config.krebs.users.lass;
-    managed = true;
+    ci = true;
   }) {
     dishfire = {
       cores = 4;
@@ -117,6 +117,8 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQChm4sqQ2bUZj+2YnTf6G5HHRTpSe1jTUhJRnwcYPYZKF+CBqBncipRpuGlGXEsptNa+7ZMcQC0ySsz5SUOMt3Ih+NehVe/qt3VtRz0l0MgOWmH2qBwKK9Y4IuxrJQzUmP4UGlOGlFj9DORssSMOyFIG4eZ9k2qMn3xal0NVRfGTShKlouWsiUILZ8I+sDNE00z8DAYesgc1yazvRnjzvLkRxdNdpYiAFBbmXMpPKK95McRJaWsuNSeal9kd5p5PagWcgN4DZ6+ebzz3NKnmzk4j+vuHX0U9lTXBqKMlzzmM2YNLRtDPfrtJNyHqLpZUpFhJKqZCD+4/0zdrzRfC7Th+5czzUCSvHiKPVsqw5eOdiQX6EyzNAF5zpkpRp//QdUNNXC5/Ku6GKCO491+TuA8VCha0fOwBONccTLUI/hGNmCh88mLbukVoeGJrbYNCOA/6kEz7ZLEveU4i+TT7okhDElMsNk+AWCZ8/NdJQNX3/K6+JJ9qAn+/yC8LdjgYYJ2oU/aw5/HyOgiQ0z4n9UfQ7j+nHysY9CQb1b3guX7yjJoc3KpNXCXEztuIRHjFD1EP8NRTSmGjsa/VjLmTLSsqjD+7IE5mT0tO5RJvmagDgdJSr/iR5D9zjW7hx7ttvektrlp9g0v3CiCFVaW4l95hGYT0HaNBLJ5R0YHm0lD+Q==";
     };
     domsen-nas = {
+      ci = false;
+      external = true;
       nets = rec {
         internet = {
           aliases = [
@@ -126,7 +128,6 @@ with import <stockholm/lib>;
           ssh.port = 2223;
         };
       };
-      managed = false;
     };
     uriel = {
       cores = 1;
@@ -295,10 +296,12 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEB/MmASvx3i09DY1xFVM5jOhZRZA8rMRqtf8bCIkC+t";
     };
     iso = {
+      ci = false;
       cores = 1;
-      managed = false;
     };
     sokrateslaptop = {
+      ci = false;
+      external = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.142.104";
@@ -318,7 +321,6 @@ with import <stockholm/lib>;
           '';
         };
       };
-      managed = false;
     };
   };
   users = {

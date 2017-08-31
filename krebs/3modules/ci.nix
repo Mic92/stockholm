@@ -17,30 +17,12 @@ in
       default = 10;
       description = "how long to wait until we test changes (in minutes)";
     };
-    users = mkOption {
-      type = with types; attrsOf (submodule {
-        options = {
-          all = mkOption {
-            type = bool;
-            default = false;
-          };
-          hosts = mkOption {
-            type = listOf str;
-            default = [];
-          };
-        };
-      });
-      example = {
-        lass.all = true;
-        krebs = {
-          all = true;
-          hosts = [
-            "test-all-krebs-modules"
-            "test-arch"
-          ];
-        };
-      };
-      default = {};
+    hosts = mkOption {
+      type = types.listOf types.host;
+      default = [];
+      description = ''
+        List of hosts that should be build
+      '';
     };
   };
 
@@ -132,23 +114,9 @@ in
                   timeout=90001
               )
 
-          ${let
-            user-hosts = mapAttrs (user: a: let
-              managed-hosts = attrNames (filterAttrs (_: h: (h.owner.name == user) && h.managed) config.krebs.hosts);
-              defined-hosts = a.hosts;
-            in
-              defined-hosts ++ (optionals a.all managed-hosts)
-            ) cfg.users;
-
-          in
-            concatStringsSep "\n" (
-              (mapAttrsToList (user: hosts:
-                concatMapStringsSep "\n" (host:
-                  "build_host(\"${user}\", \"${host}\")"
-                ) hosts
-              ) user-hosts)
-            )
-          }
+          ${concatMapStringsSep "\n" (host:
+             "build_host(\"${host.owner.name}\", \"${host.name}\")"
+          ) cfg.hosts}
 
           bu.append(
               util.BuilderConfig(

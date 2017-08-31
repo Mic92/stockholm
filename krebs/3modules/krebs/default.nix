@@ -31,8 +31,8 @@ let
 in {
   hosts = {
     hope = {
+      ci = true;
       owner = config.krebs.users.krebs;
-      managed = true;
       nets = {
         internet = {
           ip4.addr = "45.62.225.18";
@@ -63,8 +63,8 @@ in {
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOdLHRI29xJj1jmfSidE2Dh7EsDNszm+WH3Kj4zYBkP/";
     };
     hotdog = {
+      ci = true;
       owner = config.krebs.users.krebs;
-      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.77.3";
@@ -90,8 +90,8 @@ in {
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxFkBln23wUxt4RhIHE3GvdKeBpJbjn++6maupHqUHp";
     };
     puyak = {
+      ci = true;
       owner = config.krebs.users.krebs;
-      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.77.2";
@@ -117,8 +117,8 @@ in {
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPpVwKv9mQGfcn5oFwuitq+b6Dz4jBG9sGhVoCYFw5RY";
     };
     wolf = {
+      ci = true;
       owner = config.krebs.users.krebs;
-      managed = true;
       nets = {
         shack = {
           ip4.addr =  "10.42.2.150" ;
