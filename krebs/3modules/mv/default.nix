@@ -5,6 +5,7 @@ with import <stockholm/lib>;
 {
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.mv) {
     stro = {
+      ci = true;
       cores = 4;
       nets = {
         retiolum = {
