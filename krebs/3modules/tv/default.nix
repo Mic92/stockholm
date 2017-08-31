@@ -8,8 +8,8 @@ with import <stockholm/lib>;
   };
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.tv) {
     alnus = {
+      ci = true;
       cores = 2;
-      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.21.1";
@@ -33,6 +33,7 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDP9JS2Nyjx4Pn+/4MrFi1EvBBYVKkGm2Q4lhgaAiSuiGLol53OSsL2KIo01mbcSSBWow9QpQpn8KDoRnT2aMLDrdTFqL20ztDLOXmtrSsz3flgCjmW4f6uOaoZF0RNjAybd1coqwSJ7EINugwoqOsg1zzN2qeIGKYFvqFIKibYFAnQ8hcksmkvPdIO5O8CbdIiP9sZSrSDp0ZyLK2T0PML2jensVZOeqSPulQDFqLsbmavpVLkpDjdzzPRwbZWNB4++YeipbYNOkX4GR1EB4wMZ93IbBV7kpJtib2Zb2AnUf7UW37hxWBjILdstj9ClwNOQggn8kD9ub7YxBzH1dz0Xd8a0mPOAWIDJz9MypXgFRc3vdvPB/W1I4Se0CLbgOkORun9CkgijKr9oEY8JNt8HFd6viZcAaQxOyIm6PNHZTnHfdSc7bIBS2n3e3IZBv0fTd77knGLXg402aTuu2bm/kxsKivxsILXIaGbeXe4ceN3Fynr3FzSM2bUkzHb0mAHu1BQ9YaX0xzCwjVueA5nzGls7ODSFkXsiBfg2FvMN/sTLFca6tnwyqcnD6nujoiS5+BxjDWPgnZYqCaW3B/IkpTsRMsX6QrfhOFcsP8qlJ2Cp82orWoDK/D0vZ9pdzAc6PFGga0RofuJKY2yiq+SRZ7/e9E6VncIVCYZ1OfN0Q==";
     };
     cd = {
+      ci = true;
       cores = 2;
       extraZones = {
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
@@ -40,7 +41,6 @@ with import <stockholm/lib>;
           cd          60 IN A ${config.krebs.hosts.cd.nets.internet.ip4.addr}
         '';
       };
-      managed = true;
       nets = {
         internet = {
           ip4.addr = "45.62.237.203";
@@ -135,8 +135,8 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC5Wr36T0MmB8pnSO5/pw9/Dfe5+IMgVHOhm6EUa55jj";
     };
     mu = {
+      ci = true;
       cores = 2;
-      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.20.1";
@@ -205,8 +205,8 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILGDdcKwFm6udU0/x6XGGb87k9py0VlrxF54HeYu9Izb";
     };
     nomic = {
+      ci = true;
       cores = 2;
-      managed = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.110";
@@ -261,8 +261,8 @@ with import <stockholm/lib>;
       };
     };
     wu = {
+      ci = true;
       cores = 4;
-      managed = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.37";
@@ -299,8 +299,8 @@ with import <stockholm/lib>;
       binary-cache = {
         pubkey = "xu-1:pYRENvaxZqGeImwLA9qHmRwHV4jfKaYx4u1VcZ31x0s=";
       };
+      ci = true;
       cores = 4;
-      managed = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.38";
@@ -335,8 +335,8 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPnjfceKuHNQu7S4eYFN1FqgzMqiL7haNZMh2ZLhvuhK root@xu";
     };
     zu = {
+      ci = true;
       cores = 4;
-      managed = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.39";

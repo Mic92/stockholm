@@ -31,9 +31,10 @@ rec {
         default = null;
       };
 
-      managed = mkOption {
+      ci = mkOption {
         description = ''
-          If true, then the host's configuration is defined in stockholm.
+          If true, then the host wants to be tested by some CI system.
+          See <stockholm/krebs/2configs/buildbot-all.nix>
         '';
         type = bool;
         default = false;

@@ -5,7 +5,7 @@ with import <stockholm/lib>;
 {
   hosts = mapAttrs (_: recursiveUpdate {
     owner = config.krebs.users.lass;
-    managed = true;
+    ci = true;
   }) {
     dishfire = {
       cores = 4;
@@ -126,7 +126,7 @@ with import <stockholm/lib>;
           ssh.port = 2223;
         };
       };
-      managed = false;
+      ci = false;
     };
     uriel = {
       cores = 1;
@@ -296,7 +296,7 @@ with import <stockholm/lib>;
     };
     iso = {
       cores = 1;
-      managed = false;
+      ci = false;
     };
     sokrateslaptop = {
       nets = {
@@ -318,7 +318,7 @@ with import <stockholm/lib>;
           '';
         };
       };
-      managed = false;
+      ci = false;
     };
   };
   users = {
