@@ -52,18 +52,18 @@ with import <stockholm/lib>;
   networking.networkmanager.enable = true;
 
   environment.systemPackages = with pkgs; [
+    chromium
+    firefoxWrapper
+    gimp
+    iptables
+    libreoffice
+    pidginotr
+    pidgin-with-plugins
+    skype
     slock
     tinc_pre
-    iptables
     vim
-    gimp
     xsane
-    firefoxWrapper
-    chromium
-    skype
-    libreoffice
-    pidgin-with-plugins
-    pidginotr
 
     #foomatic_filters
     #gutenprint
