@@ -40,6 +40,16 @@ rec {
         default = false;
       };
 
+      external = mkOption {
+        description = ''
+          Whether the host is defined externally (in contrast to being defined
+          in <stockholm>).  This is useful e.g. when legacy and/or adopted
+          hosts should be part of retiolum or some other component.
+        '';
+        type = bool;
+        default = false;
+      };
+
       owner = mkOption {
         type = user;
       };
