@@ -79,6 +79,7 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOd/HqZIO9Trn3eycl23GZAz21HQCISaVNfNyaLSQvJ6";
     };
     ju = {
+      external = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.144";
@@ -112,6 +113,7 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHM6dL0fQ8Bd0hER0Xa3I2pAWVHdnwOBaAZhbDlLJmUu";
     };
     kaepsele = {
+      external = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.166.2";
@@ -237,6 +239,7 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMIHmwXHV7E9UGuk4voVCADjlLkyygqNw054jvrsPn5t root@nomic";
     };
     ok = {
+      external = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.1";
@@ -245,6 +248,7 @@ with import <stockholm/lib>;
       };
     };
     schnabeldrucker = {
+      external = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.21";
@@ -253,6 +257,7 @@ with import <stockholm/lib>;
       };
     };
     schnabelscanner = {
+      external = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.22";
