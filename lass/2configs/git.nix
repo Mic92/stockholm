@@ -34,6 +34,10 @@ let
       cgit.desc = "take a rss feed and a timeout and print it to stdout";
       cgit.section = "software";
     };
+    nixpkgs = {
+      cgit.desc = "nixpkgs fork";
+      cgit.section = "configuration";
+    };
     stockholm = {
       cgit.desc = "take all the computers hostage, they'll love you!";
       cgit.section = "configuration";
