@@ -57,6 +57,15 @@ with import <stockholm/lib>;
         bubsy ALL=(bitcoin) NOPASSWD: ALL
       '';
     }
+    {
+      #remote control
+      environment.systemPackages = with pkgs; [
+        x11vnc
+      ];
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp -i retiolum --dport 5900"; target = "ACCEPT"; }
+      ];
+    }
   ];
 
   time.timeZone = "Europe/Berlin";
