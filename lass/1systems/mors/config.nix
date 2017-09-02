@@ -35,11 +35,6 @@ with import <stockholm/lib>;
       ];
     }
     {
-      services.elasticsearch = {
-        enable = true;
-      };
-    }
-    {
       lass.umts = {
         enable = true;
         modem = "/dev/serial/by-id/usb-Lenovo_F5521gw_C12AD95CB7B78F90-if09";
