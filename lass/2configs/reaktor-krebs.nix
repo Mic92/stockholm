@@ -18,4 +18,8 @@ with import <stockholm/lib>;
       wiki-todo-show
     ];
   };
+  services.nginx.virtualHosts."lassul.us".locations."/wiki-todo".extraConfig = ''
+    default_type "text/plain";
+    alias /var/lib/Reaktor/state/wiki-todo;
+  '';
 }
