@@ -37,6 +37,7 @@ with import <stockholm/lib>;
       services.xserver.enable = true;
       services.xserver.displayManager.lightdm.enable = true;
       services.xserver.desktopManager.plasma5.enable = true;
+      services.xserver.layout = "de";
     }
     {
       krebs.per-user.bitcoin.packages = [
