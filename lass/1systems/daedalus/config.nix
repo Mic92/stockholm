@@ -33,6 +33,7 @@ with import <stockholm/lib>;
         firefox
         hexchat
         networkmanagerapplet
+        libreoffice
       ];
       services.xserver.enable = true;
       services.xserver.displayManager.lightdm.enable = true;
