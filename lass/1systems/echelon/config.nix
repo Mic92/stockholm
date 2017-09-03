@@ -9,7 +9,6 @@ in {
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/os-templates/CAC-CentOS-7-64bit.nix>
     <stockholm/lass/2configs/exim-retiolum.nix>
-    <stockholm/lass/2configs/realwallpaper.nix>
     <stockholm/lass/2configs/privoxy-retiolum.nix>
     <stockholm/lass/2configs/git.nix>
     {
