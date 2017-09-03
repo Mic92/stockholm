@@ -149,10 +149,7 @@ in {
       sz_wissen|http://rss.sueddeutsche.de/rss/Wissen|#news
       tagesschau|http://www.tagesschau.de/newsticker.rdf|#news
       taz|http://taz.de/Themen-des-Tages/!p15;rss/|#news
-      telegraph_finance|http://www.telegraph.co.uk/finance/rss|#news #financial
-      telegraph_pol|http://www.telegraph.co.uk/news/politics/rss|#news
-      telegraph_uk|http://www.telegraph.co.uk/news/uknews/rss|#news
-      telegraph_world|http://www.telegraph.co.uk/news/worldnews/rss|#news
+      telegraph|http://www.telegraph.co.uk/rss.xml|#news
       telepolis|http://www.heise.de/tp/rss/news-atom.xml|#news
       the_insider|http://www.theinsider.org/rss/news/headlines-xml.asp|#news
       tigsource|http://www.tigsource.com/feed/|#news
