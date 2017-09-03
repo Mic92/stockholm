@@ -24,7 +24,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/mail.nix>
     <stockholm/lass/2configs/repo-sync.nix>
-    <stockholm/lass/2configs/ircd.nix>
+    <stockholm/krebs/2configs/ircd.nix>
     <stockholm/lass/2configs/logf.nix>
     <stockholm/lass/2configs/syncthing.nix>
     <stockholm/lass/2configs/otp-ssh.nix>
