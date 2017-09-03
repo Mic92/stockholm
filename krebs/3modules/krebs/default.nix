@@ -71,6 +71,7 @@ in {
           ip6.addr = "42:0:0:0:0:0:77:3";
           aliases = [
             "hotdog.r"
+            "build.r"
             "build.hotdog.r"
             "cgit.hotdog.r"
           ];
