@@ -132,14 +132,15 @@ rec {
     pattern = "^wiki-todo: (?P<args>.*)$$";
     script = pkgs.writeDash "wiki-todo-add" ''
       echo "$*" >> wiki-todo
-      echo "added todo"
+      echo "added todo. check on http://lassul.us/wiki-todo"
     '';
   };
   wiki-todo-done = buildSimpleReaktorPlugin "wiki-todo-done" {
-    pattern = "^wiki-todo-done: (?P<args>.*)$$";
+    pattern = "^wiki-done: (?P<args>.*)$$";
     script = pkgs.writeDash "wiki-todo-done" ''
       ${pkgs.gnugrep}/bin/grep -Fvxe "$*" wiki-todo > wiki-todo.tmp
       ${pkgs.coreutils}/bin/mv wiki-todo.tmp wiki-todo
+      echo "thank you for resolving todo: $*"
     '';
   };
   wiki-todo-show = buildSimpleReaktorPlugin "wiki-todo" {
