@@ -5,7 +5,7 @@ with import <stockholm/lib>;
 {
   hosts = mapAttrs (_: recursiveUpdate {
     owner = config.krebs.users.lass;
-    managed = true;
+    ci = true;
   }) {
     dishfire = {
       cores = 4;
@@ -43,7 +43,7 @@ with import <stockholm/lib>;
       cores = 2;
       nets = rec {
         internet = {
-          ip4.addr = "104.233.79.118";
+          ip4.addr = "45.62.226.163";
           aliases = [
             "echelon.i"
           ];
@@ -56,7 +56,6 @@ with import <stockholm/lib>;
           aliases = [
             "echelon.r"
             "cgit.echelon.r"
-            "go.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -117,6 +116,8 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQChm4sqQ2bUZj+2YnTf6G5HHRTpSe1jTUhJRnwcYPYZKF+CBqBncipRpuGlGXEsptNa+7ZMcQC0ySsz5SUOMt3Ih+NehVe/qt3VtRz0l0MgOWmH2qBwKK9Y4IuxrJQzUmP4UGlOGlFj9DORssSMOyFIG4eZ9k2qMn3xal0NVRfGTShKlouWsiUILZ8I+sDNE00z8DAYesgc1yazvRnjzvLkRxdNdpYiAFBbmXMpPKK95McRJaWsuNSeal9kd5p5PagWcgN4DZ6+ebzz3NKnmzk4j+vuHX0U9lTXBqKMlzzmM2YNLRtDPfrtJNyHqLpZUpFhJKqZCD+4/0zdrzRfC7Th+5czzUCSvHiKPVsqw5eOdiQX6EyzNAF5zpkpRp//QdUNNXC5/Ku6GKCO491+TuA8VCha0fOwBONccTLUI/hGNmCh88mLbukVoeGJrbYNCOA/6kEz7ZLEveU4i+TT7okhDElMsNk+AWCZ8/NdJQNX3/K6+JJ9qAn+/yC8LdjgYYJ2oU/aw5/HyOgiQ0z4n9UfQ7j+nHysY9CQb1b3guX7yjJoc3KpNXCXEztuIRHjFD1EP8NRTSmGjsa/VjLmTLSsqjD+7IE5mT0tO5RJvmagDgdJSr/iR5D9zjW7hx7ttvektrlp9g0v3CiCFVaW4l95hGYT0HaNBLJ5R0YHm0lD+Q==";
     };
     domsen-nas = {
+      ci = false;
+      external = true;
       nets = rec {
         internet = {
           aliases = [
@@ -126,40 +127,6 @@ with import <stockholm/lib>;
           ssh.port = 2223;
         };
       };
-      managed = false;
-    };
-    cloudkrebs = {
-      cores = 1;
-      nets = rec {
-        internet = {
-          ip4.addr = "104.167.113.104";
-          aliases = [
-            "cloudkrebs.i"
-          ];
-          ssh.port = 45621;
-        };
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.206.102";
-          ip6.addr = "42:941e:2816:35f4:5c5e:206b:3f0b:f762";
-          aliases = [
-            "cloudkrebs.r"
-            "cgit.cloudkrebs.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAttUygCu7G6lIA9y+9rfTpLKIy2UgNDglUVoKZYLs8JPjtAtQVbtA
-            OcWwwPc8ijLQvwJWa8e/shqSzSIrtOe+HJbRGdXLdBLtOuLKpz+ZFHcS+95RS5aF
-            QTehg+QY7pvhbrrwKX936tkMR568suTQG6C8qNC/5jWYO/wIxFMhnQ2iRRKQOq1v
-            3aGGPC16KeXKVioY9KoV98S3n1rZW1JK07CIsZU4qb5txtLlW6FplJ7UmhVku1WC
-            sgOOj9yi6Zk1t8R2Pwv9gxa3Hc270voj5U+I2hgLV/LjheE8yhQgYHEA4vXerPdO
-            TGSATlSmMtE2NYGrKsLM7pKn286aSpXinwIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN7oYx7Lbkc0wPYNp92LQF93DCtxsGzOkVD91FJQzVZl";
     };
     uriel = {
       cores = 1;
@@ -328,10 +295,12 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEB/MmASvx3i09DY1xFVM5jOhZRZA8rMRqtf8bCIkC+t";
     };
     iso = {
+      ci = false;
       cores = 1;
-      managed = false;
     };
     sokrateslaptop = {
+      ci = false;
+      external = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.142.104";
@@ -351,7 +320,6 @@ with import <stockholm/lib>;
           '';
         };
       };
-      managed = false;
     };
   };
   users = {

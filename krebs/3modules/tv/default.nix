@@ -8,8 +8,8 @@ with import <stockholm/lib>;
   };
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.tv) {
     alnus = {
+      ci = true;
       cores = 2;
-      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.21.1";
@@ -33,6 +33,7 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDP9JS2Nyjx4Pn+/4MrFi1EvBBYVKkGm2Q4lhgaAiSuiGLol53OSsL2KIo01mbcSSBWow9QpQpn8KDoRnT2aMLDrdTFqL20ztDLOXmtrSsz3flgCjmW4f6uOaoZF0RNjAybd1coqwSJ7EINugwoqOsg1zzN2qeIGKYFvqFIKibYFAnQ8hcksmkvPdIO5O8CbdIiP9sZSrSDp0ZyLK2T0PML2jensVZOeqSPulQDFqLsbmavpVLkpDjdzzPRwbZWNB4++YeipbYNOkX4GR1EB4wMZ93IbBV7kpJtib2Zb2AnUf7UW37hxWBjILdstj9ClwNOQggn8kD9ub7YxBzH1dz0Xd8a0mPOAWIDJz9MypXgFRc3vdvPB/W1I4Se0CLbgOkORun9CkgijKr9oEY8JNt8HFd6viZcAaQxOyIm6PNHZTnHfdSc7bIBS2n3e3IZBv0fTd77knGLXg402aTuu2bm/kxsKivxsILXIaGbeXe4ceN3Fynr3FzSM2bUkzHb0mAHu1BQ9YaX0xzCwjVueA5nzGls7ODSFkXsiBfg2FvMN/sTLFca6tnwyqcnD6nujoiS5+BxjDWPgnZYqCaW3B/IkpTsRMsX6QrfhOFcsP8qlJ2Cp82orWoDK/D0vZ9pdzAc6PFGga0RofuJKY2yiq+SRZ7/e9E6VncIVCYZ1OfN0Q==";
     };
     cd = {
+      ci = true;
       cores = 2;
       extraZones = {
         # TODO generate krebsco.de zone from nets and don't use extraZones at all
@@ -40,7 +41,6 @@ with import <stockholm/lib>;
           cd          60 IN A ${config.krebs.hosts.cd.nets.internet.ip4.addr}
         '';
       };
-      managed = true;
       nets = {
         internet = {
           ip4.addr = "45.62.237.203";
@@ -79,6 +79,7 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOd/HqZIO9Trn3eycl23GZAz21HQCISaVNfNyaLSQvJ6";
     };
     ju = {
+      external = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.144";
@@ -112,15 +113,8 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHM6dL0fQ8Bd0hER0Xa3I2pAWVHdnwOBaAZhbDlLJmUu";
     };
     kaepsele = {
+      external = true;
       nets = {
-        internet = {
-          ip4.addr = "92.222.10.169";
-          aliases = [
-            "kaepsele.i"
-            "kaepsele.internet"
-            # TODO "kaepsele.org"
-          ];
-        };
         retiolum = {
           ip4.addr = "10.243.166.2";
           ip6.addr = "42:b9d:6660:d07c:2bb7:4e91:1a01:2e7d";
@@ -129,21 +123,22 @@ with import <stockholm/lib>;
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAxj7kaye4pGLou7mVRTVgtcWFjuEosJlxVg24gM7nU1EaoRnBD93/
-            Y3Je7BSUbz5xMXr5SFTPSkitInL7vU+jDOf2bEpqv+uUJAJIz85494oPS9xocdWo
-            rQsrQRAtOg4MLD+YIoAxQm2Mc4nt2CSE1+UP4uXGxpuh0c051b+9Kmwv1bTyHB9y
-            y01VSkDvNyHk5eA+RGDiujBAzhi35hzTlQgCJ3REOBiq4YmE1d3qpk3oNiYUcrcu
-            yFzQrSRIfhXjuzIR+wxqS95HDUsewSwt9HgkjJzYF5sQZSea0/XsroFqZyTJ8iB5
-            FQx2emBqB525cWKOt0f5jgyjklhozhJyiwIDAQAB
+            MIIBCgKCAQEA4+kDaKhCBNlpHqRCA2R6c4UEFk0OaiPwHvjmBBjpihTJVyffIEYm
+            QFZ5ZNkaVumSOAgKk9ygppO9WsNasl1ag+IRWik9oupdzEkNjgvOMBVJGhcwGZGF
+            6UEY5sdA1n0qg74og5BGSiXUBiaahVM0rAfCNk8gV3qrot5kWJMQLb9BKabJ56eb
+            JrgWepxuVaw3BoEhz6uusuvw5i1IF382L8R11hlvyefifXONFOAUjCrCr0bCb4uK
+            ZZcRUU35pbHLDXXTOrOarOO1tuVGu85VXo3S1sLaaouHYjhTVT8bxqbwcNhxBXYf
+            ONLv0f7G5XwecgUNbE6ZTfjV5PQKaww3lwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
         };
       };
-      ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDA9cDUg7qm37uOhQpdKSgpnJPWao9VZR6LFNphVcJQ++gYvVgWu6WMhigiy7DcGQSStUlXkZc4HZBBugwwNWcf7aAF6ijBuG5rVwb9AFQmSexpTOfWap33iA5f+LXYFHe7iv4Pt9TYO1ga1Ryl4EGKb7ol2h5vbKC+JiGaDejB0WqhBAyrTg4tTWO8k2JT11CrlTjNVctqV0IVAMtTc/hcJcNusnoGD4ic0QGSzEMYxcIGRNvIgWmxhI6GHeaHxXWH5fv4b0OpLlDfVUsIvEo9KVozoLGm/wgLBG/tQXKaF9qVMVgOYi9sX/hDLwhRrcD2cyAlq9djo2pMARYiriXF";
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC5Wr36T0MmB8pnSO5/pw9/Dfe5+IMgVHOhm6EUa55jj";
     };
     mu = {
+      ci = true;
       cores = 2;
-      managed = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.20.1";
@@ -212,8 +207,8 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILGDdcKwFm6udU0/x6XGGb87k9py0VlrxF54HeYu9Izb";
     };
     nomic = {
+      ci = true;
       cores = 2;
-      managed = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.110";
@@ -244,6 +239,7 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMIHmwXHV7E9UGuk4voVCADjlLkyygqNw054jvrsPn5t root@nomic";
     };
     ok = {
+      external = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.1";
@@ -252,6 +248,7 @@ with import <stockholm/lib>;
       };
     };
     schnabeldrucker = {
+      external = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.21";
@@ -260,6 +257,7 @@ with import <stockholm/lib>;
       };
     };
     schnabelscanner = {
+      external = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.22";
@@ -268,8 +266,8 @@ with import <stockholm/lib>;
       };
     };
     wu = {
+      ci = true;
       cores = 4;
-      managed = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.37";
@@ -306,8 +304,8 @@ with import <stockholm/lib>;
       binary-cache = {
         pubkey = "xu-1:pYRENvaxZqGeImwLA9qHmRwHV4jfKaYx4u1VcZ31x0s=";
       };
+      ci = true;
       cores = 4;
-      managed = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.38";
@@ -342,8 +340,8 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPnjfceKuHNQu7S4eYFN1FqgzMqiL7haNZMh2ZLhvuhK root@xu";
     };
     zu = {
+      ci = true;
       cores = 4;
-      managed = true;
       nets = {
         gg23 = {
           ip4.addr = "10.23.1.39";

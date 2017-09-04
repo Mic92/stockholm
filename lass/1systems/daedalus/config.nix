@@ -1,22 +1,85 @@
+with import <stockholm/lib>;
 { config, pkgs, ... }:
 
 {
   imports = [
     <stockholm/lass>
     <stockholm/lass/2configs/hw/x220.nix>
-    <stockholm/lass/2configs/boot/stock-x220.nix>
+    <stockholm/lass/2configs/boot/coreboot.nix>
 
-    <stockholm/lass/2configs/mouse.nix>
     <stockholm/lass/2configs/retiolum.nix>
-    <stockholm/lass/2configs/git.nix>
-    <stockholm/lass/2configs/exim-retiolum.nix>
-    <stockholm/lass/2configs/baseX.nix>
-    <stockholm/lass/2configs/browsers.nix>
-    <stockholm/lass/2configs/programs.nix>
-    <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/backups.nix>
-    <stockholm/lass/2configs/games.nix>
+    {
+      # bubsy config
+      users.users.bubsy = {
+        uid = genid "bubsy";
+        home = "/home/bubsy";
+        group = "users";
+        createHome = true;
+        extraGroups = [
+          "audio"
+          "networkmanager"
+        ];
+        useDefaultShell = true;
+      };
+      networking.networkmanager.enable = true;
+      networking.wireless.enable = mkForce false;
+      hardware.pulseaudio = {
+        enable = true;
+        systemWide = true;
+      };
+      environment.systemPackages = with pkgs; [
+        pavucontrol
+        firefox
+        hexchat
+        networkmanagerapplet
+        libreoffice
+      ];
+      services.xserver.enable = true;
+      services.xserver.displayManager.lightdm.enable = true;
+      services.xserver.desktopManager.plasma5.enable = true;
+      services.xserver.layout = "de";
+    }
+    {
+      krebs.per-user.bitcoin.packages = [
+        pkgs.electrum
+      ];
+      users.extraUsers = {
+        bitcoin = {
+          name = "bitcoin";
+          description = "user for bitcoin stuff";
+          home = "/home/bitcoin";
+          useDefaultShell = true;
+          createHome = true;
+        };
+      };
+      security.sudo.extraConfig = ''
+        bubsy ALL=(bitcoin) NOPASSWD: ALL
+      '';
+    }
+    {
+      #remote control
+      environment.systemPackages = with pkgs; [
+        x11vnc
+      ];
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp -i retiolum --dport 5900"; target = "ACCEPT"; }
+      ];
+    }
   ];
+
+  time.timeZone = "Europe/Berlin";
+
+  hardware.trackpoint = {
+    enable = true;
+    sensitivity = 220;
+    speed = 0;
+    emulateWheel = true;
+  };
+
+  services.logind.extraConfig = ''
+    HandleLidSwitch=ignore
+  '';
 
   krebs.build.host = config.krebs.hosts.daedalus;
 
@@ -29,7 +92,7 @@
   };
 
   services.udev.extraRules = ''
-    SUBSYSTEM=="net", ATTR{address}=="00:24:d7:f0:e8:c8", NAME="wl0"
-    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:8f:8a:78", NAME="et0"
+    SUBSYSTEM=="net", ATTR{address}=="08:11:96:0a:5d:6c", NAME="wl0"
+    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:71:cb:35", NAME="et0"
   '';
 }

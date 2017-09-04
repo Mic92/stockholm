@@ -39,9 +39,10 @@ in {
     <stockholm/lass/2configs/monitoring/monit-alarms.nix>
     <stockholm/lass/2configs/paste.nix>
     <stockholm/lass/2configs/syncthing.nix>
-    <stockholm/lass/2configs/coders-irc.nix>
+    <stockholm/lass/2configs/reaktor-coders.nix>
     <stockholm/lass/2configs/ciko.nix>
     <stockholm/lass/2configs/container-networking.nix>
+    <stockholm/lass/2configs/reaktor-krebs.nix>
     {
       lass.pyload.enable = true;
     }
@@ -244,10 +245,6 @@ in {
         OnUnitInactiveSec = "2min";
         RandomizedDelaySec = "2min";
       };
-      krebs.repo-sync.repos.nixpkgs.timerConfig = {
-        OnBootSec = "90min";
-        OnUnitInactiveSec = "24h";
-      };
     }
     {
       lass.usershadow = {
@@ -296,6 +293,22 @@ in {
         privateNetwork = true;
         hostAddress = "10.233.2.1";
         localAddress = "10.233.2.2";
+      };
+    }
+    {
+      #kaepsele
+      containers.kaepsele = {
+        config = { ... }: {
+          services.openssh.enable = true;
+          users.users.root.openssh.authorizedKeys.keys = with config.krebs.users; [
+            lass.pubkey
+            tv.pubkey
+          ];
+        };
+        enableTun = true;
+        privateNetwork = true;
+        hostAddress = "10.233.2.3";
+        localAddress = "10.233.2.4";
       };
     }
   ];

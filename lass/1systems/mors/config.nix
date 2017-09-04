@@ -5,7 +5,7 @@ with import <stockholm/lib>;
   imports = [
     <stockholm/lass>
     <stockholm/lass/2configs/hw/x220.nix>
-    <stockholm/lass/2configs/boot/coreboot.nix>
+    <stockholm/lass/2configs/boot/stock-x220.nix>
 
     <stockholm/lass/2configs/mouse.nix>
     <stockholm/lass/2configs/retiolum.nix>
@@ -24,29 +24,16 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/mail.nix>
     <stockholm/lass/2configs/repo-sync.nix>
-    <stockholm/lass/2configs/ircd.nix>
+    <stockholm/krebs/2configs/ircd.nix>
     <stockholm/lass/2configs/logf.nix>
     <stockholm/lass/2configs/syncthing.nix>
     <stockholm/lass/2configs/otp-ssh.nix>
+    <stockholm/lass/2configs/c-base.nix>
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp --dport 11100"; target = "ACCEPT"; }
       ];
-    }
-    {
-      services.elasticsearch = {
-        enable = true;
-      };
-    }
-    {
-      #zalando project
-      services.postgresql = {
-        enable = true;
-        package = pkgs.postgresql;
-      };
-      virtualisation.docker.enable = true;
-      #users.users.mainUser.extraGroups = [ "docker" ];
     }
     {
       lass.umts = {
@@ -91,6 +78,9 @@ with import <stockholm/lib>;
         client.enable = true;
       };
     }
+    {
+      services.mongodb.enable = true;
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.mors;
@@ -104,8 +94,8 @@ with import <stockholm/lib>;
   };
 
   services.udev.extraRules = ''
-    SUBSYSTEM=="net", ATTR{address}=="08:11:96:0a:5d:6c", NAME="wl0"
-    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:71:cb:35", NAME="et0"
+    SUBSYSTEM=="net", ATTR{address}=="00:24:d7:f0:e8:c8", NAME="wl0"
+    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:8f:8a:78", NAME="et0"
   '';
 
   #TODO activationScripts seem broken, fix them!
@@ -139,7 +129,6 @@ with import <stockholm/lib>;
     urban
     mk_sql_pair
     remmina
-    thunderbird
 
     iodine
 

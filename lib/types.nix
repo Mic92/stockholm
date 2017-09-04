@@ -31,9 +31,20 @@ rec {
         default = null;
       };
 
-      managed = mkOption {
+      ci = mkOption {
         description = ''
-          If true, then the host's configuration is defined in stockholm.
+          If true, then the host wants to be tested by some CI system.
+          See <stockholm/krebs/2configs/buildbot-all.nix>
+        '';
+        type = bool;
+        default = false;
+      };
+
+      external = mkOption {
+        description = ''
+          Whether the host is defined externally (in contrast to being defined
+          in <stockholm>).  This is useful e.g. when legacy and/or adopted
+          hosts should be part of retiolum or some other component.
         '';
         type = bool;
         default = false;

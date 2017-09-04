@@ -1,8 +1,8 @@
 { config, pkgs, ... }:
 
 {
-  krebs.iptables.tables.filter.INPUT.rules = [
-    { predicate = "-i retiolum -p tcp --dport 6667"; target = "ACCEPT"; }
+  networking.firewall.allowedTCPPorts = [
+    6667 6669
   ];
 
   services.charybdis = {
@@ -13,7 +13,6 @@
         sid = "1as";
         description = "miep!";
         network_name = "irc.retiolum";
-        network_desc = "Retiolum IRC Network";
         hub = yes;
 
         vhost = "0.0.0.0";

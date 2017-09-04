@@ -31,6 +31,16 @@ let
       type = types.str;
       default = "default";
     };
+    pppDefaults = mkOption {
+      type = types.str;
+      default = ''
+        noipdefault
+        usepeerdns
+        defaultroute
+        persist
+        noauth
+      '';
+    };
   };
 
   nixpkgs-1509 = import (pkgs.fetchFromGitHub {
@@ -71,7 +81,16 @@ let
       lass ALL= (root) NOPASSWD: ${umts-bin}/bin/umts
     '';
 
-    environment.wvdial.dialerDefaults = wvdial-defaults;
+    environment.etc = [
+      {
+        source = pkgs.writeText "wvdial.conf" wvdial-defaults;
+        target = "wvdial.conf";
+      }
+      {
+        source = pkgs.writeText "wvdial" cfg.pppDefaults;
+        target = "ppp/peers/wvdial";
+      }
+    ];
 
     systemd.services.umts = {
       description = "UMTS wvdial Service";

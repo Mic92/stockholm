@@ -98,6 +98,7 @@ myKeyMap =
     [ ("M4-<F11>", spawn "${pkgs.i3lock}/bin/i3lock -i /var/lib/wallpaper/wallpaper -f")
     , ("M4-C-p", spawn "${pkgs.scrot}/bin/scrot ~/public_html/scrot.png")
     , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
+    , ("M4-o", spawn "${pkgs.brain}/bin/brainmenu --type")
     , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ +4%")
     , ("<XF86AudioLowerVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ -4%")
     , ("<XF86MonBrightnessDown>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -time 0 -dec 1%")
@@ -129,6 +130,11 @@ myKeyMap =
     , ("M4-S-q", return ())
 
     , ("M4-w", floatNext True >> spawn "${pkgs.copyq}/bin/copyq show")
+
+    , ("M4-<F1>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 1")
+    , ("M4-<F2>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 10")
+    , ("M4-<F3>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 33")
+    , ("M4-<F4>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 100")
     ]
 
 forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()
