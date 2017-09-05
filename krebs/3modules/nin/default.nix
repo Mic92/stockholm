@@ -3,7 +3,10 @@
 with import <stockholm/lib>;
 
 {
-  hosts = mapAttrs (_: setAttr "owner" config.krebs.users.nin) {
+  hosts = mapAttrs (_: recursiveUpdate {
+    owner = config.krebs.users.nin;
+    ci = true;
+  }) {
     hiawatha = {
       cores = 2;
       nets = {
