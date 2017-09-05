@@ -56,7 +56,6 @@ with import <stockholm/lib>;
           aliases = [
             "echelon.r"
             "cgit.echelon.r"
-            "go.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----

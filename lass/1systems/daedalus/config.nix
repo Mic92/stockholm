@@ -33,10 +33,12 @@ with import <stockholm/lib>;
         firefox
         hexchat
         networkmanagerapplet
+        libreoffice
       ];
       services.xserver.enable = true;
       services.xserver.displayManager.lightdm.enable = true;
       services.xserver.desktopManager.plasma5.enable = true;
+      services.xserver.layout = "de";
     }
     {
       krebs.per-user.bitcoin.packages = [
@@ -54,6 +56,15 @@ with import <stockholm/lib>;
       security.sudo.extraConfig = ''
         bubsy ALL=(bitcoin) NOPASSWD: ALL
       '';
+    }
+    {
+      #remote control
+      environment.systemPackages = with pkgs; [
+        x11vnc
+      ];
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp -i retiolum --dport 5900"; target = "ACCEPT"; }
+      ];
     }
   ];
 

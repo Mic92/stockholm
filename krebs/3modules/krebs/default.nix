@@ -71,6 +71,7 @@ in {
           ip6.addr = "42:0:0:0:0:0:77:3";
           aliases = [
             "hotdog.r"
+            "build.r"
             "build.hotdog.r"
             "cgit.hotdog.r"
           ];
@@ -100,6 +101,7 @@ in {
             "puyak.r"
             "build.puyak.r"
             "cgit.puyak.r"
+            "go.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----

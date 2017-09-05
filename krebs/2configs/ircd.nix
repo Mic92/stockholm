@@ -1,8 +1,8 @@
 { config, pkgs, ... }:
 
 {
-  krebs.iptables.tables.filter.INPUT.rules = [
-    { predicate = "-i retiolum -p tcp --dport 6667"; target = "ACCEPT"; }
+  networking.firewall.allowedTCPPorts = [
+    6667 6669
   ];
 
   services.charybdis = {

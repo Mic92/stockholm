@@ -107,7 +107,6 @@ in {
     (sync-remote "painload" "https://github.com/krebscode/painload")
     (sync-remote "Reaktor" "https://github.com/krebscode/Reaktor")
     (sync-remote "nixos-wiki" "https://github.com/Mic92/nixos-wiki.wiki.git")
-    (sync-remote-silent "nixpkgs" "https://github.com/nixos/nixpkgs")
     (sync-retiolum "go")
     (sync-retiolum "much")
     (sync-retiolum "newsbot-js")

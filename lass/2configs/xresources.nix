@@ -14,7 +14,9 @@ let
     ! ref https://github.com/muennich/urxvt-perls
     URxvt.perl-lib: ${pkgs.urxvt_perls}/lib/urxvt/perl
     URxvt.perl-ext-common:      default,clipboard,url-select,keyboard-select
-    URxvt.url-select.launcher:  ${config.lass.browser.select}/bin/browser-select
+    ${optionalString (hasAttr "browser" config.lass)
+      "URxvt.url-select.launcher:  ${config.lass.browser.select}/bin/browser-select"
+    }
     URxvt.url-select.underline: true
     URxvt.keysym.M-u:           perl:url-select:select_next
     URxvt.keysym.M-Escape:      perl:keyboard-select:activate
