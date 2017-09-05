@@ -6,6 +6,7 @@ let
 
   out = {
     imports = [
+      ./announce-activation.nix
       ./apt-cacher-ng.nix
       ./backup.nix
       ./bepasty-server.nix
