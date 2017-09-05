@@ -20,10 +20,10 @@ in {
       augustl|http://augustl.com/atom.xml|#news
       bbc|http://feeds.bbci.co.uk/news/rss.xml|#news
       bdt_aktuelle_themen|http://www.bundestag.de/blueprint/servlet/service/de/14154/asFeed/index.rss|#news
-      bdt_drucksachen|http://www.bundestag.de/dip21rss/bundestag_drucksachen.rss|#news #bundestag
-      bdt_plenarproto|http://www.bundestag.de/rss_feeds/plenarprotokolle.rss|#news #bundestag
+      bdt_drucksachen|http://www.bundestag.de/dip21rss/bundestag_drucksachen.rss|#news
+      bdt_plenarproto|http://www.bundestag.de/rss_feeds/plenarprotokolle.rss|#news
       bdt_pressemitteilungen|http://www.bundestag.de/blueprint/servlet/service/de/273112/asFeed/index.rss|#news
-      bitcoinpakistan|https://bitcoinspakistan.com/feed/|#news #financial
+      bitcoinpakistan|https://bitcoinspakistan.com/feed/|#news
       cancer|http://feeds.feedburner.com/ncinewsreleases?format=xml|#news
       carta|http://feeds2.feedburner.com/carta-standard-rss|#news
       catholic_news|http://feeds.feedburner.com/catholicnewsagency/dailynews|#news
@@ -33,12 +33,11 @@ in {
       cbc_tech|http://rss.cbc.ca/lineup/technology.xml|#news
       cbc_top|http://rss.cbc.ca/lineup/topstories.xml|#news
       ccc|http://www.ccc.de/rss/updates.rdf|#news
-      chan_b|https://boards.4chan.org/b/index.rss|#brainfuck
-      chan_biz|https://boards.4chan.org/biz/index.rss|#news #brainfuck
-      chan_g|https://boards.4chan.org/g/index.rss|#news
-      chan_int|https://boards.4chan.org/int/index.rss|#news #brainfuck
-      chan_sci|https://boards.4chan.org/sci/index.rss|#news
-      chan_x|https://boards.4chan.org/x/index.rss|#news
+      chan_biz|http://boards.4chan.org/biz/index.rss|#news
+      chan_g|http://boards.4chan.org/g/index.rss|#news
+      chan_int|http://boards.4chan.org/int/index.rss|#news
+      chan_sci|http://boards.4chan.org/sci/index.rss|#news
+      chan_x|http://boards.4chan.org/x/index.rss|#news
       c|http://www.tempolimit-lichtgeschwindigkeit.de/news.xml|#news
       cryptogon|http://www.cryptogon.com/?feed=rss2|#news
       csm|http://rss.csmonitor.com/feeds/csm|#news
@@ -68,15 +67,15 @@ in {
       geheimorganisation|http://geheimorganisation.org/feed/|#news
       GerForPol|http://www.german-foreign-policy.com/de/news/rss-2.0|#news
       gmanet|http://www.gmanetwork.com/news/rss/news|#news
-      golem|https://rss.golem.de/rss.php|#news
+      golem|http://rss.golem.de/rss.php|#news
       google|http://news.google.com/?output=rss|#news
       greenpeace|http://feeds.feedburner.com/GreenpeaceNews|#news
       guardian_uk|http://feeds.theguardian.com/theguardian/uk-news/rss|#news
       gulli|http://ticker.gulli.com/rss/|#news
       hackernews|https://news.ycombinator.com/rss|#news
-      handelsblatt|http://www.handelsblatt.com/contentexport/feed/schlagzeilen|#news #financial
+      handelsblatt|http://www.handelsblatt.com/contentexport/feed/schlagzeilen|#news
       heise|https://www.heise.de/newsticker/heise-atom.xml|#news
-      hindu_business|http://www.thehindubusinessline.com/?service=rss|#news #financial
+      hindu_business|http://www.thehindubusinessline.com/?service=rss|#news
       hindu|http://www.thehindu.com/?service=rss|#news
       ign|http://feeds.ign.com/ign/all|#news
       independent|http://www.independent.com/rss/headlines/|#news
@@ -94,7 +93,7 @@ in {
       mongrel2_master|https://github.com/zedshaw/mongrel2/commits/master.atom|#news
       nds|http://www.nachdenkseiten.de/?feed=atom|#news
       netzpolitik|https://netzpolitik.org/feed/|#news
-      newsbtc|http://newsbtc.com/feed/|#news #financial
+      newsbtc|http://newsbtc.com/feed/|#news
       nnewsg|http://www.net-news-global.net/rss/rssfeed.xml|#news
       npr_busi|http://www.npr.org/rss/rss.php?id=1006|#news
       npr_headlines|http://www.npr.org/rss/rss.php?id=1001|#news
@@ -105,21 +104,21 @@ in {
       painload|https://github.com/krebscode/painload/commits/master.atom|#news
       phys|http://phys.org/rss-feed/|#news
       piraten|https://www.piratenpartei.de/feed/|#news
-      polizei_berlin|http://www.berlin.de/polizei/presse-fahndung/_rss_presse.xml|#news #bullerei
-      presse_polizei|http://www.presseportal.de/rss/polizei.rss2|#news #bullerei
+      polizei_berlin|http://www.berlin.de/polizei/presse-fahndung/_rss_presse.xml|#news
+      presse_polizei|http://www.presseportal.de/rss/polizei.rss2|#news
       presseportal|http://www.presseportal.de/rss/presseportal.rss2|#news
       prisonplanet|http://prisonplanet.com/feed.rss|#news
       rawstory|http://www.rawstory.com/rs/feed/|#news
-      reddit_4chan|http://www.reddit.com/r/4chan/new/.rss|#news #brainfuck
+      reddit_4chan|http://www.reddit.com/r/4chan/new/.rss|#news
       reddit_anticonsum|http://www.reddit.com/r/Anticonsumption/new/.rss|#news
-      reddit_btc|http://www.reddit.com/r/Bitcoin/new/.rss|#news #financial
+      reddit_btc|http://www.reddit.com/r/Bitcoin/new/.rss|#news
       reddit_consp|http://reddit.com/r/conspiracy/.rss|#news
       reddit_haskell|http://www.reddit.com/r/haskell/.rss|#news
       reddit_nix|http://www.reddit.com/r/nixos/.rss|#news
       reddit_prog|http://www.reddit.com/r/programming/new/.rss|#news
       reddit_sci|http://www.reddit.com/r/science/.rss|#news
       reddit_tech|http://www.reddit.com/r/technology/.rss|#news
-      reddit_tpp|http://www.reddit.com/r/twitchplayspokemon/.rss|#news #tpp
+      reddit_tpp|http://www.reddit.com/r/twitchplayspokemon/.rss|#news
       reddit_world|http://www.reddit.com/r/worldnews/.rss|#news
       r-ethereum|http://www.reddit.com/r/ethereum/.rss|#news
       reuters|http://feeds.reuters.com/Reuters/worldNews|#news
@@ -145,7 +144,7 @@ in {
       stern|http://www.stern.de/feed/standard/all/|#news
       stz|http://www.stuttgarter-zeitung.de/rss/topthemen.rss.feed|#news
       sz_politik|http://rss.sueddeutsche.de/rss/Politik|#news
-      sz_wirtschaft|http://rss.sueddeutsche.de/rss/Wirtschaft|#news #financial
+      sz_wirtschaft|http://rss.sueddeutsche.de/rss/Wirtschaft|#news
       sz_wissen|http://rss.sueddeutsche.de/rss/Wissen|#news
       tagesschau|http://www.tagesschau.de/newsticker.rdf|#news
       taz|http://taz.de/Themen-des-Tages/!p15;rss/|#news
