@@ -13,6 +13,11 @@ let
 
   api = {
     enable = mkEnableOption "Enable krebs newsbot";
+    package = mkOption {
+      type = types.package;
+      default = pkgs.newsbot-js;
+      description = "newsbot package to use";
+    };
     ircServer = mkOption {
       type = types.str;
       default = "echelon.retiolum";
@@ -79,7 +84,7 @@ let
       serviceConfig = {
         User = "newsbot-js";
         Restart = "always";
-        ExecStart = "${pkgs.newsbot-js}/bin/newsbot";
+        ExecStart = "${cfg.package}/bin/newsbot";
       };
     };
   };

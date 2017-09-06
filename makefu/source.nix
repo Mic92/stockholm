@@ -11,10 +11,10 @@ let
               then "buildbot"
               else "makefu";
   _file = <stockholm> + "/makefu/1systems/${name}/source.nix";
-  ref = "9d4bd6b"; # unstable @ 2017-07-31
+  ref = "c91346e"; # unstable @ 2017-09-04
                    # + graceful requests2 (a772c3aa)
-                   # + libpurple bitlbee ( ce6fe1a, 65e38b7 )
-                   # + buildbot-runner ( f3cecc5 )
+                   # + mitmproxy fix      (eee2d174)
+                   # + tpm-tools fix      (5cb9987)
 
 in
   evalSource (toString _file) [
