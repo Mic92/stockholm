@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, options, ... }:
 
 with import <stockholm/lib>;
 let
@@ -72,6 +72,15 @@ let
       # configure NGINX to provide /RPC2 for listen address
       # authentication also applies to rtorrent.rutorrent
       enable = mkEnableOption "rtorrent nginx web RPC";
+
+      addr = mkOption {
+        type = types.addr4;
+        default = "0.0.0.0";
+        description = ''
+          the address to listen on
+          default is 0.0.0.0
+        '';
+      };
 
       port = mkOption {
         type = types.nullOr types.int;
@@ -290,7 +299,7 @@ let
     services.nginx.enable = mkDefault true;
     services.nginx.virtualHosts.rtorrent = {
       default = mkDefault true;
-      inherit (webcfg) basicAuth port;
+      inherit (webcfg) basicAuth;
       root = optionalString rucfg.enable webdir;
 
       locations = {
@@ -310,7 +319,15 @@ let
           include ${pkgs.nginx}/conf/fastcgi.conf;
         ''; }
       );
-    };
+    # workaround because upstream nginx api changed
+    # TODO remove when nobody uses 17.03 anymore
+    } // (if hasAttr "port" (head options.services.nginx.virtualHosts.type.getSubModules).submodule.options then {
+      port = webcfg.port;
+    } else {
+      listen = [
+        { inherit (webcfg) addr port; }
+      ];
+    });
   };
 
   rutorrent-imp = {

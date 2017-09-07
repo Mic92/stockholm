@@ -12,7 +12,7 @@ with import <stockholm/lib>;
       <stockholm/makefu/2configs/extra-fonts.nix>
       <stockholm/makefu/2configs/tools/all.nix>
       <stockholm/makefu/2configs/laptop-backup.nix>
-      <stockholm/makefu/2configs/dnscrypt.nix>
+      <stockholm/makefu/2configs/dnscrypt/client.nix>
       <stockholm/makefu/2configs/avahi.nix>
 
       # Debugging
@@ -20,6 +20,7 @@ with import <stockholm/lib>;
 
       # Testing
       # <stockholm/makefu/2configs/deployment/gitlab.nix>
+      # <stockholm/makefu/2configs/deployment/wiki-irc-bot>
 
       # <stockholm/makefu/2configs/torrent.nix>
       # <stockholm/makefu/2configs/lanparty/lancache.nix>
@@ -54,6 +55,7 @@ with import <stockholm/lib>;
       # Services
       <stockholm/makefu/2configs/git/brain-retiolum.nix>
       <stockholm/makefu/2configs/tor.nix>
+      <stockholm/makefu/2configs/vpn/vpngate.nix>
       <stockholm/makefu/2configs/steam.nix>
       # <stockholm/makefu/2configs/buildbot-standalone.nix>
 
