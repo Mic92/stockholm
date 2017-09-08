@@ -64,4 +64,5 @@
     SUBSYSTEM=="net", ATTR{address}=="3c:97:0e:07:b9:14", NAME="et0"
   '';
 
+  users.extraUsers.root.openssh.authorizedKeys.keys = [ config.krebs.users.Mic92.pubkey ];
 }
