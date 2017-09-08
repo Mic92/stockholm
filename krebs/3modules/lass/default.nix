@@ -357,5 +357,9 @@ with import <stockholm/lib>;
     wine-mors = {
       pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEKfTIKmbe1RjX1fjAn//08363zAsI0CijWnaYyAC842";
     };
+    Mic92 = {
+      pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKbBp2dH2X3dcU1zh+xW3ZsdYROKpJd3n13ssOP092qE";
+      mail = "joerg@higgsboson.tk";
+    };
   };
 }
