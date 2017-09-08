@@ -65,4 +65,9 @@
   '';
 
   users.extraUsers.root.openssh.authorizedKeys.keys = [ config.krebs.users.Mic92.pubkey ];
+  users.users.joerg = {
+    openssh.authorizedKeys.keys = [ config.krebs.users.Mic92.pubkey ];
+    isNormalUser = true;
+    shell = "/run/current-system/sw/bin/zsh";
+  };
 }
