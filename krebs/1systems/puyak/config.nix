@@ -14,6 +14,7 @@
     <stockholm/krebs/2configs/go.nix>
     <stockholm/krebs/2configs/ircd.nix>
     <stockholm/krebs/2configs/news.nix>
+    <stockholm/krebs/2configs/news-spam.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;
