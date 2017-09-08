@@ -65,6 +65,7 @@
   '';
 
   users.extraUsers.root.openssh.authorizedKeys.keys = [ config.krebs.users.Mic92.pubkey ];
+  boot.kernelModules = [ "kvm-intel" ];
   users.users.joerg = {
     openssh.authorizedKeys.keys = [ config.krebs.users.Mic92.pubkey ];
     isNormalUser = true;
