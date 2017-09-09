@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 let
   shack-ip = config.krebs.build.host.nets.shack.ip4.addr;
+  influx-host = "127.0.0.1";
 in
 {
   imports = [
@@ -23,6 +24,58 @@ in
     <stockholm/krebs/2configs/shack/muell_caller.nix>
     <stockholm/krebs/2configs/shack/radioactive.nix>
     <stockholm/krebs/2configs/shack/share.nix>
+    {
+      systemd.services.telegraf.path = [ pkgs.net_snmp ]; # for snmptranslate
+      #systemd.services.telegraf.environment = {
+      #  "MIBDIRS" : ""; # extra mibs like ADSL
+      #};
+      services.telegraf = {
+        enable = true;
+        extraConfig = {
+          inputs = {
+            snmp = {
+              agents = [ "10.0.1.3:161" ];
+              version = 2;
+              community = "shack";
+              name = "snmp";
+              field = [
+                {
+                  name = "hostname";
+                  oid = "RFC1213-MIB::sysName.0";
+                  is_tag = true;
+                }
+                {
+                  name = "load-percent"; #cisco
+                  oid = ".1.3.6.1.4.1.9.9.109.1.1.1.1.4.9";
+                }
+                {
+                  name = "uptime";
+                  oid = "DISMAN-EVENT-MIB::sysUpTimeInstance";
+                }
+              ];
+              table = [{
+                name = "snmp";
+                inherit_tags = [ "hostname" ];
+                oid = "IF-MIB::ifXTable";
+                field = [{
+                  name = "ifName";
+                  oid = "IF-MIB::ifName";
+                  is_tag = true;
+                }];
+              }];
+            };
+          };
+          outputs = {
+            influxdb = {
+              urls = [ "http://${influx-host}:8086" ];
+              database = "telegraf";
+              write_consistency = "any";
+              timeout = "5s";
+            };
+          };
+        };
+      };
+    }
 
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
