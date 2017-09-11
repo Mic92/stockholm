@@ -71,4 +71,5 @@
     isNormalUser = true;
     shell = "/run/current-system/sw/bin/zsh";
   };
+  networking.firewall.allowedTCPPorts = [ 5901 ];
 }
