@@ -139,6 +139,9 @@ in
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/vda";
 
+  # without it `/nix/store` is not added grub paths
+  boot.loader.grub.copyKernels = true;
+
   fileSystems."/" = { device = "/dev/disk/by-label/nixos"; fsType = "ext4"; };
 
   swapDevices = [
