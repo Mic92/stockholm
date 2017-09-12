@@ -52,7 +52,7 @@ in {
     systemd.services.charybdis = {
       wantedBy = [ "multi-user.target" ];
       requires = [ "secret.service" ];
-      after = [ "network.target" "secret.service" ];
+      after = [ "network-online.target" "secret.service" ];
       environment = {
         BANDB_DBPATH = "${cfg.user.home}/ban.db";
       };
