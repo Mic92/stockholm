@@ -39,10 +39,10 @@ with import <stockholm/lib>;
   };
 
   networking.hostName = config.krebs.build.host.name;
-  nix.maxJobs = config.krebs.build.host.cores;
+  nix.maxJobs = 2;
+  nix.buildCores = config.krebs.build.host.cores;
 
   time.timeZone = "Europe/Berlin";
-  #nix.maxJobs = 1;
 
   programs.ssh = {
     startAgent = false;
@@ -144,15 +144,6 @@ with import <stockholm/lib>;
     "net.ipv6.conf.all.use_tempaddr" = 2;
     "net.ipv6.conf.default.use_tempaddr" = 2;
   };
-
-  system.activationScripts.nix-defexpr = ''
-    (set -euf
-     for i in /home/makefu /root/;do
-       f="$i/.nix-defexpr"
-       rm -fr "$f"
-       ln -s /var/src/nixpkgs "$f"
-     done)
-  '';
 
   i18n = {
     consoleKeyMap = "us";

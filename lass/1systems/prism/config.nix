@@ -311,6 +311,22 @@ in {
         localAddress = "10.233.2.4";
       };
     }
+    {
+      #onondaga
+      containers.onondaga = {
+        config = { ... }: {
+          services.openssh.enable = true;
+          users.users.root.openssh.authorizedKeys.keys = [
+            config.krebs.users.lass.pubkey
+            config.krebs.users.nin.pubkey
+          ];
+        };
+        enableTun = true;
+        privateNetwork = true;
+        hostAddress = "10.233.2.4";
+        localAddress = "10.233.2.5";
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;

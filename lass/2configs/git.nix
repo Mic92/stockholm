@@ -38,6 +38,9 @@ let
       cgit.desc = "nixpkgs fork";
       cgit.section = "configuration";
     };
+    populate = {
+      cgit.section = "software";
+    };
     stockholm = {
       cgit.desc = "take all the computers hostage, they'll love you!";
       cgit.section = "configuration";
