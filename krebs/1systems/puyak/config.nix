@@ -14,6 +14,7 @@
     <stockholm/krebs/2configs/go.nix>
     <stockholm/krebs/2configs/ircd.nix>
     <stockholm/krebs/2configs/news.nix>
+    <stockholm/krebs/2configs/news-spam.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;
@@ -63,4 +64,12 @@
     SUBSYSTEM=="net", ATTR{address}=="3c:97:0e:07:b9:14", NAME="et0"
   '';
 
+  environment.systemPackages = [ pkgs.zsh ];
+  boot.kernelModules = [ "kvm-intel" ];
+  users.users.joerg = {
+    openssh.authorizedKeys.keys = [ config.krebs.users.Mic92.pubkey ];
+    isNormalUser = true;
+    shell = "/run/current-system/sw/bin/zsh";
+  };
+  networking.firewall.allowedTCPPorts = [ 5901 ];
 }
