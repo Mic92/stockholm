@@ -32,7 +32,6 @@ with import <stockholm/lib>;
         };
 
       nix.maxJobs = lib.mkDefault 8;
-      powerManagement.cpuFreqGovernor = "powersave";
     }
     { # crypto stuff
       boot.initrd.luks = {
@@ -84,4 +83,5 @@ with import <stockholm/lib>;
 
   programs.ssh.startAgent = lib.mkForce true;
 
+  services.tlp.enable = true;
 }
