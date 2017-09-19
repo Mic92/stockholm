@@ -11,6 +11,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/otp-ssh.nix>
     <stockholm/lass/2configs/git.nix>
+    <stockholm/lass/2configs/fetchWallpaper.nix>
     { # automatic hardware detection
       boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
       boot.kernelModules = [ "kvm-intel" ];
