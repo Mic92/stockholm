@@ -3,6 +3,7 @@
 {
   nixpkgs.config.packageOverrides = rec {
     acronym = pkgs.callPackage ./acronym/default.nix {};
+    dpass = pkgs.callPackage ./dpass {};
     ejabberd = pkgs.callPackage ./ejabberd {
       erlang = pkgs.erlangR16;
     };
