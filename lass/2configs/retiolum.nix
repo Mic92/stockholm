@@ -1,12 +1,14 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
 
   krebs.iptables = {
     tables = {
-      filter.INPUT.rules = [
-        { predicate = "-p tcp --dport tinc"; target = "ACCEPT"; }
-        { predicate = "-p udp --dport tinc"; target = "ACCEPT"; }
+      filter.INPUT.rules = let
+        tincport = toString config.krebs.build.host.nets.retiolum.tinc.port;
+      in [
+        { predicate = "-p tcp --dport ${tincport}"; target = "ACCEPT"; }
+        { predicate = "-p udp --dport ${tincport}"; target = "ACCEPT"; }
       ];
     };
   };
