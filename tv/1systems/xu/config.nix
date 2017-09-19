@@ -16,6 +16,7 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/pulse.nix>
     <stockholm/tv/2configs/retiolum.nix>
     <stockholm/tv/2configs/binary-cache>
+    <stockholm/tv/2configs/br.nix>
     <stockholm/tv/2configs/xserver>
     {
       environment.systemPackages = with pkgs; [
