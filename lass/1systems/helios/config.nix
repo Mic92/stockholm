@@ -45,7 +45,7 @@ with import <stockholm/lib>;
     {
       services.xserver.dpi = 200;
       fonts.fontconfig.dpi = 200;
-      lass.myFont = "-schumacher-clean-*-*-*-*-26-*-*-*-*-*-iso10646-1";
+      lass.myFont = "-schumacher-clean-*-*-*-*-25-*-*-*-*-*-iso10646-1";
     }
   ];
   krebs.build.host = config.krebs.hosts.helios;
