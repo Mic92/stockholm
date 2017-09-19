@@ -34,6 +34,7 @@ with import <stockholm/lib>;
             HwgPw5pstabyrsDWXybSYUb+8LcZf+unGwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
+          tinc.port = 993;
         };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
