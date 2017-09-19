@@ -45,9 +45,11 @@ in writeDash wrapper-name ''
   args=$(${utillinux}/bin/getopt \
       -n "$wrapper_name" \
       -o "" \
-      -l ${concatMapStringsSep ","
-            (opt: opt.long + optionalString (!opt.switch) ":")
-            (attrValues opts)} \
+      -l ${shell.escape
+            (concatMapStringsSep ","
+              (opt: opt.long + optionalString (!opt.switch) ":")
+              (filter (opt: opt.long != null)
+                      (attrValues opts)))} \
       -s sh \
       -- "$@")
   if \test $? != 0; then exit 1; fi
@@ -65,7 +67,9 @@ in writeDash wrapper-name ''
           shift 2
         ''}
       ;;
-    '') opts)}
+    '') (filterAttrs
+          (_: opt: opt.long != null)
+          opts))}
     --)
       shift
       break
