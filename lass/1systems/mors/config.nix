@@ -133,6 +133,7 @@ with import <stockholm/lib>;
     iodine
 
     macchanger
+    dpass
   ];
 
   #TODO: fix this shit
