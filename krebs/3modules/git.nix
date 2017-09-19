@@ -186,6 +186,17 @@ let
     };
     repo = types.submodule ({ config, ... }: {
       options = {
+        admins = mkOption {
+          type = types.listOf types.user;
+          default = [];
+          description = ''
+            List of users that should be able to do everything with this repo.
+
+            This option is currently not used by krebs.git but instead can be
+            used to create rules.  See e.g. <stockholm/lass/2configs/git.nix> for
+            an example.
+          '';
+        };
         cgit = {
           desc = mkOption {
             type = types.nullOr types.str;
