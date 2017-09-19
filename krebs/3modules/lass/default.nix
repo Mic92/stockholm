@@ -34,6 +34,7 @@ with import <stockholm/lib>;
             HwgPw5pstabyrsDWXybSYUb+8LcZf+unGwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
+          tinc.port = 993;
         };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
@@ -294,6 +295,37 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEB/MmASvx3i09DY1xFVM5jOhZRZA8rMRqtf8bCIkC+t";
     };
+    helios = {
+      cores = 8;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.133.117";
+          ip6.addr = "42:0:0:0:0:0:3:7105";
+          aliases = [
+            "helios.r"
+            "cgit.helios.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAp+SRmP5MoCSYInx4Dm5MLZzNyXVgfo/CDoeUlUT35X0yE7WHGWsG
+            wHPCu+3RWfBUjuqNdb0qiGtRi3Q/LwznwBROPOX8gMXia/DgCLbIjn5Rx081pTIo
+            3epbUCFtNgyDWg8IHF87ZnVBXTYAy5g4tz9u8kw82D8mR18o595TuZ9t5pDc/Kvi
+            fPHZenT6cd6FtL9uankX/jan1PRP9xTrhpE8dAQ6g+7XH7knMK3cno/Ztis5YzHt
+            Ith0bsIjk5of7hhITj0MXtTikjDqWxkpF5mfOK1cG/rC1goTmB9AfcENUBnu9iAM
+            I/alzqk3CEczznLyaOckfx2fRuar912LAdiJ5v7VPztfvN1p3gIxq5M0Rgkq+98B
+            H/s32xNRBPvqoIleKnhwE9gfrCLaAVqpaMkgKRvgsTkSDNYNhh4smQ3eAKKwwDH/
+            QG3sfP8xyNyDFhBtCiDGkf9hNqBBMaKjZoh8DasZNtcfOop3fGw7jmUUbB6cG8cp
+            +EfYbcb5mVpmrIyXgOTwwYcp7tn+zkd4Wa8C9Q98eFTs0HGVGxGX9Hj6PM/kXK4C
+            aIqIQVNpnJ/9cOwT8JFIriG1MWTOXbamUusKTLs8SRp3ZkyM7XUEcLL5HMh09rUw
+            rzEAmE7TywXVhd7j2IaEy+bx2dfGQH2bFoh6Drm6Olo+ySi1utB5dGkCAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      secure = true;
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIqpx9jJnn4QMGO8BOrGOLRN1rgpIkR14sQb8S+otWEL";
+    };
     iso = {
       ci = false;
       cores = 1;
@@ -355,6 +387,10 @@ with import <stockholm/lib>;
       mail = "lass@mors.r";
       pubkey = builtins.readFile ./ssh/mors.rsa;
       pgp.pubkeys.default = builtins.readFile ./pgp/mors.pgp;
+    };
+    lass-helios = {
+      mail = "lass@helios.r";
+      pubkey = builtins.readFile ./ssh/helios.rsa;
     };
     lass-uriel = {
       mail = "lass@uriel.r";

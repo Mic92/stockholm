@@ -14,14 +14,6 @@ in {
 
   security.acme = {
     certs."lassul.us" = {
-      email = "lass@lassul.us";
-      webroot = "/var/lib/acme/acme-challenges";
-      plugins = [
-        "account_key.json"
-        "key.pem"
-        "fullchain.pem"
-        "full.pem"
-      ];
       allowKeysForGroup = true;
       group = "lasscert";
     };
@@ -71,12 +63,10 @@ in {
   ];
 
   services.nginx.virtualHosts."lassul.us" = {
+    enableACME = true;
     serverAliases = [ "lassul.us" ];
     locations."/".extraConfig = ''
       root /srv/http/lassul.us;
-    '';
-    locations."/.well-known/acme-challenge".extraConfig = ''
-      root /var/lib/acme/challenges/lassul.us/;
     '';
     locations."= /retiolum-hosts.tar.bz2".extraConfig = ''
       alias ${config.krebs.tinc.retiolum.hostsArchive};

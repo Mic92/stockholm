@@ -1,8 +1,9 @@
-{ pkgs, ... }@args:
+{ config, pkgs, ... }@args:
 
 {
   nixpkgs.config.packageOverrides = rec {
     acronym = pkgs.callPackage ./acronym/default.nix {};
+    dpass = pkgs.callPackage ./dpass {};
     ejabberd = pkgs.callPackage ./ejabberd {
       erlang = pkgs.erlangR16;
     };
@@ -20,7 +21,7 @@
     rs = pkgs.callPackage ./rs/default.nix {};
     urban = pkgs.callPackage ./urban/default.nix {};
     xml2json = pkgs.callPackage ./xml2json/default.nix {};
-    xmonad-lass = import ./xmonad-lass.nix { inherit pkgs; };
+    xmonad-lass = import ./xmonad-lass.nix { inherit config pkgs; };
     yt-next = pkgs.callPackage ./yt-next/default.nix {};
   };
 }
