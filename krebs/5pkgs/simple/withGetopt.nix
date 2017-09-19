@@ -38,18 +38,31 @@ in writeDash wrapper-name ''
 
   wrapper_name=${shell.escape wrapper-name}
 
+  # TODO
+  for i in "$@"; do
+    case $i in
+      -h|--help)
+        ${concatStringsSep "\n" (mapAttrsToList (name: opt: /* sh */ ''
+          printf '  %-16s  %s\n' \
+              --${shell.escape opt.long} \
+              ${shell.escape (opt.description or "undocumented flag")}
+        '') opts)}
+        exit
+    esac
+  done
+
   ${concatStringsSep "\n" (mapAttrsToList (name: opt: /* sh */ ''
     unset ${opt.varname}
   '') opts)}
 
   args=$(${utillinux}/bin/getopt \
-      -n "$wrapper_name" \
-      -o "" \
       -l ${shell.escape
             (concatMapStringsSep ","
               (opt: opt.long + optionalString (!opt.switch) ":")
               (filter (opt: opt.long != null)
                       (attrValues opts)))} \
+      -n "$wrapper_name" \
+      -o "" \
       -s sh \
       -- "$@")
   if \test $? != 0; then exit 1; fi
