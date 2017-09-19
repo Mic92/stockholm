@@ -13,6 +13,7 @@ opt-spec: cmd-spec: let
   opts = mapAttrs (name: value: value // rec {
     long = value.long or (replaceStrings ["_"] ["-"] name);
     ref = value.ref or "\"\$${varname}\"";
+    short = value.short or null;
     switch = value.switch or false;
     varname = value.varname or (replaceStrings ["-"] ["_"] name);
   }) opt-spec;
@@ -38,19 +39,6 @@ in writeDash wrapper-name ''
 
   wrapper_name=${shell.escape wrapper-name}
 
-  # TODO
-  for i in "$@"; do
-    case $i in
-      -h|--help)
-        ${concatStringsSep "\n" (mapAttrsToList (name: opt: /* sh */ ''
-          printf '  %-16s  %s\n' \
-              --${shell.escape opt.long} \
-              ${shell.escape (opt.description or "undocumented flag")}
-        '') opts)}
-        exit
-    esac
-  done
-
   ${concatStringsSep "\n" (mapAttrsToList (name: opt: /* sh */ ''
     unset ${opt.varname}
   '') opts)}
@@ -62,7 +50,11 @@ in writeDash wrapper-name ''
               (filter (opt: opt.long != null)
                       (attrValues opts)))} \
       -n "$wrapper_name" \
-      -o "" \
+      -o ${shell.escape
+            (concatMapStringsSep ""
+              (opt: opt.short + optionalString (!opt.switch) ":")
+              (filter (opt: opt.short != null)
+                      (attrValues opts)))} \
       -s sh \
       -- "$@")
   if \test $? != 0; then exit 1; fi
@@ -71,7 +63,10 @@ in writeDash wrapper-name ''
   while :; do
     case $1 in
     ${concatStringsSep "\n" (mapAttrsToList (name: opt: /* sh */ ''
-      --${opt.long})
+      (${concatMapStringsSep "|" shell.escape (filter (x: x != "") [
+        (optionalString (opt.long != null) "--${opt.long}")
+        (optionalString (opt.short != null) "-${opt.short}")
+      ])})
         ${if opt.switch then /* sh */ ''
           ${opt.varname}=true
           shift
@@ -81,7 +76,7 @@ in writeDash wrapper-name ''
         ''}
       ;;
     '') (filterAttrs
-          (_: opt: opt.long != null)
+          (_: opt: opt.long != null || opt.short != null)
           opts))}
     --)
       shift
