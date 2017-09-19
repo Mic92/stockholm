@@ -13,6 +13,7 @@ opt-spec: cmd-spec: let
   opts = mapAttrs (name: value: value // rec {
     long = value.long or (replaceStrings ["_"] ["-"] name);
     ref = value.ref or "\"\$${varname}\"";
+    short = value.short or null;
     switch = value.switch or false;
     varname = value.varname or (replaceStrings ["-"] ["_"] name);
   }) opt-spec;
@@ -43,11 +44,17 @@ in writeDash wrapper-name ''
   '') opts)}
 
   args=$(${utillinux}/bin/getopt \
+      -l ${shell.escape
+            (concatMapStringsSep ","
+              (opt: opt.long + optionalString (!opt.switch) ":")
+              (filter (opt: opt.long != null)
+                      (attrValues opts)))} \
       -n "$wrapper_name" \
-      -o "" \
-      -l ${concatMapStringsSep ","
-            (opt: opt.long + optionalString (!opt.switch) ":")
-            (attrValues opts)} \
+      -o ${shell.escape
+            (concatMapStringsSep ""
+              (opt: opt.short + optionalString (!opt.switch) ":")
+              (filter (opt: opt.short != null)
+                      (attrValues opts)))} \
       -s sh \
       -- "$@")
   if \test $? != 0; then exit 1; fi
@@ -56,7 +63,10 @@ in writeDash wrapper-name ''
   while :; do
     case $1 in
     ${concatStringsSep "\n" (mapAttrsToList (name: opt: /* sh */ ''
-      --${opt.long})
+      (${concatMapStringsSep "|" shell.escape (filter (x: x != "") [
+        (optionalString (opt.long != null) "--${opt.long}")
+        (optionalString (opt.short != null) "-${opt.short}")
+      ])})
         ${if opt.switch then /* sh */ ''
           ${opt.varname}=true
           shift
@@ -65,7 +75,9 @@ in writeDash wrapper-name ''
           shift 2
         ''}
       ;;
-    '') opts)}
+    '') (filterAttrs
+          (_: opt: opt.long != null || opt.short != null)
+          opts))}
     --)
       shift
       break
@@ -102,5 +114,5 @@ in writeDash wrapper-name ''
     export ${opt.varname}
   '') opts)}
 
-  ${cmd-script}
+  ${cmd-script} "$@"
 ''

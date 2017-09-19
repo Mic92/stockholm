@@ -111,19 +111,13 @@ let
 
   # usage: parse-target [--default=TARGET] TARGET
   # TARGET = [USER@]HOST[:PORT][/PATH]
-  cmds.parse-target = pkgs.writeDash "cmds.parse-target" ''
+  cmds.parse-target = pkgs.withGetopt {
+    default_target = {
+      long = "default";
+      short = "d";
+    };
+  } (opts: pkgs.writeDash "cmds.parse-target" ''
     set -efu
-    args=$(${pkgs.utillinux}/bin/getopt -n "$0" -s sh \
-        -o d: \
-        -l default: \
-        -- "$@")
-    if \test $? != 0; then exit 1; fi
-    eval set -- "$args"
-    default_target=
-    while :; do case $1 in
-      -d|--default) default_target=$2; shift 2;;
-      --) shift; break;;
-    esac; done
     target=$1; shift
     for arg; do echo "$0: bad argument: $arg" >&2; done
     if \test $# != 0; then exit 2; fi
@@ -142,7 +136,7 @@ let
           ($default_target | parse) + ($target | parse | sanitize) |
           . + { local: (.user == env.LOGNAME and .host == env.HOSTNAME) }
         ''}
-  '';
+  '');
 
   # usage: quote [ARGS...]
   cmds.quote = pkgs.writeDash "cmds.quote" ''
