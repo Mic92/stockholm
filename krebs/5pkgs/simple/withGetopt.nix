@@ -102,5 +102,5 @@ in writeDash wrapper-name ''
     export ${opt.varname}
   '') opts)}
 
-  ${cmd-script}
+  ${cmd-script} "$@"
 ''
