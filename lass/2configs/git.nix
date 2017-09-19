@@ -14,7 +14,7 @@ let
           root-desc = "keep calm and engage";
         };
       };
-      repos = mapAttrs (_: s: removeAttrs s ["collaborators"]) repos;
+      repos = repos;
       rules = rules;
     };
 
@@ -87,8 +87,8 @@ let
     public = true;
   };
 
-  make-restricted-repo = name: { collaborators ? [], announce ? false, hooks ? {}, ... }: {
-    inherit collaborators name;
+  make-restricted-repo = name: { admins ? [], collaborators ? [], announce ? false, hooks ? {}, ... }: {
+    inherit admins collaborators name;
     public = false;
     hooks = optionalAttrs announce {
       post-receive = pkgs.git-hooks.irc-announce {
@@ -111,13 +111,18 @@ let
         repo = [ repo ];
         perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++
-      optional repo.public {
-        user = attrValues config.krebs.users;
+      optional (length (repo.admins or []) > 0) {
+        user = repo.admins;
         repo = [ repo ];
-        perm = fetch;
+        perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++
       optional (length (repo.collaborators or []) > 0) {
         user = repo.collaborators;
+        repo = [ repo ];
+        perm = fetch;
+      } ++
+      optional repo.public {
+        user = attrValues config.krebs.users;
         repo = [ repo ];
         perm = fetch;
       };
