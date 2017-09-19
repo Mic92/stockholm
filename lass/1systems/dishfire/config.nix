@@ -88,6 +88,7 @@
       };
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp --dport smtp"; target = "ACCEPT"; }
+        { predicate = "-p tcp --dport 993"; target = "ACCEPT"; }
       ];
     }
   ];
