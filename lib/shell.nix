@@ -7,10 +7,13 @@ rec {
     let
       isSafeChar = testString "[-+./0-9:=A-Z_a-z]";
     in
-    stringAsChars (c:
-      if isSafeChar c then c
-      else if c == "\n" then "'\n'"
-      else "\\${c}");
+      x:
+        if x == "" then "''"
+        else stringAsChars (c:
+          if isSafeChar c then c
+          else if c == "\n" then "'\n'"
+          else "\\${c}"
+        ) x;
 
   #
   # shell script generators
