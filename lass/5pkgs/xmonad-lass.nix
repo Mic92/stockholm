@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 pkgs.writeHaskell "xmonad-lass" {
   executables.xmonad = {
     extra-depends = [
@@ -40,7 +40,7 @@ import XMonad.Hooks.UrgencyHook (SpawnUrgencyHook(..), withUrgencyHook)
 import XMonad.Layout.FixedColumn (FixedColumn(..))
 import XMonad.Layout.Minimize (minimize, minimizeWindow, MinimizeMsg(RestoreNextMinimizedWin))
 import XMonad.Layout.NoBorders (smartBorders)
-import XMonad.Prompt (autoComplete, searchPredicate, XPConfig)
+import XMonad.Prompt (autoComplete, font, searchPredicate, XPConfig)
 import XMonad.Prompt.Window (windowPromptGoto, windowPromptBringCopy)
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Layout.SimpleFloat (simpleFloat)
@@ -51,7 +51,7 @@ urxvtcPath :: FilePath
 urxvtcPath = "${pkgs.rxvt_unicode}/bin/urxvtc"
 
 myFont :: String
-myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
+myFont = "${config.lass.myFont}"
 
 main :: IO ()
 main = getArgs >>= \case
@@ -107,8 +107,8 @@ myKeyMap =
     , ("M4-C-k", spawn "${pkgs.xorg.xkill}/bin/xkill")
 
     , ("M4-a", focusUrgent)
-    , ("M4-S-r", renameWorkspace    def)
-    , ("M4-S-a", addWorkspacePrompt def)
+    , ("M4-S-r", renameWorkspace    myXPConfig)
+    , ("M4-S-a", addWorkspacePrompt myXPConfig)
     , ("M4-S-<Backspace>", removeEmptyWorkspace)
     , ("M4-S-c", kill1)
     , ("M4-<Esc>", toggleWS)
@@ -141,8 +141,13 @@ forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()
 forkFile path args env =
     xfork (executeFile path False args env) >> return ()
 
+myXPConfig :: XPConfig
+myXPConfig = def
+    { font = myFont
+    }
+
 autoXPConfig :: XPConfig
-autoXPConfig = def
+autoXPConfig = myXPConfig
     { autoComplete = Just 5000
     }
 
