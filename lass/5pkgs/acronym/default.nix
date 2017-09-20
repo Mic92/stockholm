@@ -6,7 +6,7 @@ pkgs.writeScriptBin "acronym" ''
 
   acro=$1
 
-  curl -s http://www.acronymfinder.com/$acro.html \
+  curl -L -s http://www.acronymfinder.com/$acro.html \
     | grep 'class="result-list__body__rank"' \
     | sed '
       s/.*title="\([^"]*\)".*/\1/
