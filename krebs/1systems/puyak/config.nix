@@ -71,6 +71,10 @@
       options thinkpad_acpi fan_control=1
     '';
   }
+
+  system.activationScripts."disengage fancontrol" = ''
+    echo level disengaged > /proc/acpi/ibm/fan
+  '';
   users.users.joerg = {
     openssh.authorizedKeys.keys = [ config.krebs.users.Mic92.pubkey ];
     isNormalUser = true;
