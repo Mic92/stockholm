@@ -381,6 +381,59 @@ with import <stockholm/lib>;
         };
       };
     };
+    eddie = {
+      ci = false;
+      external = true;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.29.170";
+          ip6.addr = "42:4992:6a6d:700::1";
+          aliases = [ "eddie.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAuRQphRlSIC/aqRTfvStPdJOJCx1ACeFIDEjRdgoxuu32qoBl7i6d
+            j7Voh+Msditf2a5+f0fVsNDaPnjPGfk0NkZBjmn+RZQDRXk0krpTNj2Vb6W5quTm
+            3yrjJMFJR9CU5khfppc47X+ir8bjn7RusWTFNEuDvUswHmRmnJHLS3Y+utOaRbCF
+            2hxpyxCn423gpsaBfORPEK8X90nPbuNpFDugWPnC+R45TpNmIf4qyKvfhd9OKrua
+            KNanGHG30xhBW/DclUwwWi8D44d94xFnIRVcG1O+Uto93WoUWZn90lI1qywSj5Aq
+            iWstBK4tc7VwvAj0UzPlaRYYPfFjOEkPQzj8xC6l/leJcgxkup252uo6m1njMx3t
+            6QWMgevjqosY22OZReZfIwb14aDWFKLTWs30J+zmWK4TjlRITdsOEKxlpODMbJAD
+            kfSoPwuwkWIzFhNOrFiD/NtKaRYmV8bTBCT3a9cvvObshJx13BP+IUFzBS1N1n/u
+            hJWYH5WFsQZn/8rHDwZGkS1zKPEaNoydjqCZNyJpJ5nhggyl6gpuD7wpXM/8tFay
+            pAjRP40+qRQLUWXmswV0hsZTOX1tvZs4f68y3WJ+GwCWw9HvvwmzYes5ayJrPsbJ
+            lyK301Jb42wGEsVWxu3Eo/PLtp8OdD+Wdh6o/ELcc0k/YCUGFMujUM8CAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+    borg = {
+      ci = false;
+      external = true;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.29.171";
+          ip6.addr = "42:4992:6a6d:700::2";
+          aliases = [ "borg.r" ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA0bHZApTM7Hl4qqNakSwq
+            bt7zJoTVK9ePoC3Mue1VmJ1mCKMaxKdzlO31kPeHtkilAzgyIJdgikyKFlApGsQL
+            aIuU9h55X7TbikoDD6ghbSrAe3Pgc+sJ3OZ7wO7Qb8CKgJvEbkk/u68YiJgyTjYD
+            HNjIQzlsGdpoSke9vwC8qWanfgN7c2MMGtakqfXDjYjCgp7O43i+SMupkMSXIXMA
+            5XUFh/vVp6xgPxBofcw0uQIyZ5v4PPFjnGPm4rnMbFzbhubntHjDadwGd5Niyw4O
+            zNNKNchTLfNiuNGqTZeYd0kJ5fNMKykhpSs+ou34MvexvpuyPlFuotnPXN/nOMml
+            3nwiqzthzPuBZRLswxT0WvlA8wlbeTOKJ0wTIR4dDuAF+euDtoNocVEN5PJNc7yN
+            fmwAV6geESoJbZQMSCtAp1NioaBlRPp1pFfoM/GotHywuFrTIxyoIBiYhkpWyQvq
+            WYw5j13IKqkL7jDchhoBmcardmh+AP5bL3uQ84BgaYNwFzHp04qIRrrdpF0eMaHB
+            /8zaqsNLn4/zQJB5ffkelwoIqfvLPQeCMLzHGHgP5xUnWgmZZGiiDLvhuaMeNq4U
+            EpCKoTL178sPOgNfHfd8mEqx0qKYuPrNQEdlpa5xOZqwx56pfYpGWY+KtF2FHLhS
+            iO64GCJqCi1MKBYx/NhaxKMCAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+      };
+    };
   };
   users = {
     lass = {
