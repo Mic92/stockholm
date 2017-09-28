@@ -440,7 +440,7 @@ with import <stockholm/lib>;
       nets = {
         retiolum = {
           ip4.addr = "10.243.29.172";
-          ip6.addr = "fd42:4992:6a6d:800::1";
+          ip6.addr = "42:4992:6a6d:800::1";
           aliases = [ "inspector.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
