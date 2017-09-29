@@ -8,6 +8,8 @@ with import <stockholm/lib>;
 
   hardware.cpu.intel.updateMicrocode = true;
 
+  hardware.opengl.enable = true;
+
   services.tlp.enable = true;
 
   boot = {
