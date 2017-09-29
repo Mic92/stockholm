@@ -52,12 +52,6 @@ with import <stockholm/lib>;
       dst = { host = config.krebs.hosts.zu; path = "/bku/xu-home"; };
       startAt = "06:20";
     };
-    xu-pull-cd-home = {
-      method = "pull";
-      src = { host = config.krebs.hosts.cd; path = "/home"; };
-      dst = { host = config.krebs.hosts.xu; path = "/bku/cd-home"; };
-      startAt = "07:00";
-    };
     xu-pull-ni-ejabberd = {
       method = "pull";
       src = { host = config.krebs.hosts.ni; path = "/var/ejabberd"; };
@@ -75,12 +69,6 @@ with import <stockholm/lib>;
       src = { host = config.krebs.hosts.zu; path = "/home"; };
       dst = { host = config.krebs.hosts.xu; path = "/bku/zu-home"; };
       startAt = "05:00";
-    };
-    zu-pull-cd-home = {
-      method = "pull";
-      src = { host = config.krebs.hosts.cd; path = "/home"; };
-      dst = { host = config.krebs.hosts.zu; path = "/bku/cd-home"; };
-      startAt = "06:30";
     };
     zu-pull-ni-ejabberd = {
       method = "pull";

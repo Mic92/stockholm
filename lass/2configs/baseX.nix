@@ -27,6 +27,12 @@ in {
         lass ALL= (root) NOPASSWD:SETENV: ${pkgs.sshuttle}/bin/.sshuttle-wrapped
       '';
     }
+    { #font magic
+      options.lass.myFont = mkOption {
+        type = types.str;
+        default = "-schumacher-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1";
+      };
+    }
   ];
 
   users.extraUsers.mainUser.extraGroups = [ "audio" "video" ];
@@ -73,6 +79,7 @@ in {
     youtube-tools
 
     rxvt_unicode
+    termite
   ];
 
   fonts.fonts = [

@@ -262,7 +262,7 @@ let
   '';
 
   q-todo = ''
-    TODO_file=$HOME/TODO
+    TODO_file=$PWD/TODO
     if test -e "$TODO_file"; then
       ${pkgs.coreutils}/bin/cat "$TODO_file" \
         | ${pkgs.gawk}/bin/gawk -v now=$(${pkgs.coreutils}/bin/date +%s) '
@@ -294,13 +294,7 @@ in
 pkgs.writeBashBin "q" ''
   set -eu
   export PATH=/var/empty
-  (${q-todo}) || :
-  if [ "$PWD" != "$HOME" ]; then
-    (HOME=$PWD; ${q-todo}) || :
-  fi
-  echo
   ${q-cal}
-  echo
   ${q-isodate}
   ${q-sgtdate}
   (${q-gitdir}) &
@@ -311,4 +305,14 @@ pkgs.writeBashBin "q" ''
   (${q-online}) &
   (${q-thermal_zone}) &
   wait
+  if test "$PWD" != "$HOME" && test -e "$HOME/TODO"; then
+    TODO_home_entries=$(cd; (${q-todo}) | ${pkgs.coreutils}/bin/wc -l)
+    if test "$TODO_home_entries" = 1; then
+      TODO_format='There is %d entry in ~/TODO'
+    else
+      TODO_format='There are %d entries in ~/TODO'
+    fi
+    printf "\x1b[38;5;238m$TODO_format\x1b[m\n" "$TODO_home_entries"
+  fi
+  (${q-todo}) || :
 ''

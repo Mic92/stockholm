@@ -106,9 +106,10 @@ let
     pkgs.vimPlugins.undotree
     (pkgs.vimUtils.buildVimPlugin {
       name = "file-line-1.0";
-      src = pkgs.fetchgit {
-        url = git://github.com/bogado/file-line;
-        rev = "refs/tags/1.0";
+      src = pkgs.fetchFromGitHub {
+        owner = "bogado";
+        repo = "file-line";
+        rev = "1.0";
         sha256 = "0z47zq9rqh06ny0q8lpcdsraf3lyzn9xvb59nywnarf3nxrk6hx0";
       };
     })

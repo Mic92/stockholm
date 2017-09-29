@@ -8,8 +8,8 @@ let
     URxvt*scrollBar: false
     URxvt*urgentOnBell: true
     URxvt*SaveLines: 4096
-    URxvt*font: -*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1
-    URxvt*boldFont: -*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1
+    URxvt*font: ${config.lass.myFont}
+    URxvt*boldFont: ${config.lass.myFont}
 
     ! ref https://github.com/muennich/urxvt-perls
     URxvt.perl-lib: ${pkgs.urxvt_perls}/lib/urxvt/perl

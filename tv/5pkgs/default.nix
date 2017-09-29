@@ -24,6 +24,10 @@ foldl' mergeAttrs {}
         "$@"
   '';
 
+  gitAndTools = super.gitAndTools // {
+    inherit (self) diff-so-fancy;
+  };
+
   ff = self.writeDashBin "ff" ''
     exec ${self.firefoxWrapper}/bin/firefox "$@"
   '';

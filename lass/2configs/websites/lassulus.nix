@@ -6,22 +6,70 @@ let
     genid
   ;
 
+  servephpBB = domains:
+    let
+      domain = head domains;
+
+    in {
+      services.nginx.virtualHosts."${domain}" = {
+        enableACME = true;
+        forceSSL = true;
+        serverAliases = domains;
+        extraConfig = ''
+          index index.php;
+          root /srv/http/${domain}/;
+          access_log /tmp/nginx_acc.log;
+          error_log /tmp/nginx_err.log;
+          error_page 404 /404.html;
+          error_page 500 502 503 504 /50x.html;
+          client_max_body_size 100m;
+        '';
+        locations."/".extraConfig = ''
+          try_files $uri $uri/ /index.php?$args;
+        '';
+        locations."~ \.php(?:$|/)".extraConfig =  ''
+          fastcgi_split_path_info ^(.+\.php)(/.+)$;
+          include ${pkgs.nginx}/conf/fastcgi_params;
+          fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+          fastcgi_param PATH_INFO $fastcgi_path_info;
+          fastcgi_param HTTPS on;
+          fastcgi_param modHeadersAvailable true; #Avoid sending the security headers twice
+          fastcgi_pass unix:/srv/http/${domain}/phpfpm.pool;
+          fastcgi_intercept_errors on;
+        '';
+        #Directives to send expires headers and turn off 404 error logging.
+        locations."~* ^.+\.(xml|ogg|ogv|svg|svgz|eot|otf|woff|mp4|ttf|css|rss|atom|js|jpg|jpeg|gif|png|ico|zip|tgz|gz|rar|bz2|doc|xls|exe|ppt|tar|mid|midi|wav|bmp|rtf)$".extraConfig = ''
+          access_log off;
+          log_not_found off;
+          expires max;
+        '';
+      };
+      services.phpfpm.poolConfigs."${domain}" = ''
+        listen = /srv/http/${domain}/phpfpm.pool
+        user = nginx
+        group = nginx
+        pm = dynamic
+        pm.max_children = 25
+        pm.start_servers = 5
+        pm.min_spare_servers = 3
+        pm.max_spare_servers = 20
+        listen.owner = nginx
+        listen.group = nginx
+        php_admin_value[error_log] = 'stderr'
+        php_admin_flag[log_errors] = on
+        catch_workers_output = yes
+      '';
+    };
+
 in {
   imports = [
     ./default.nix
     ../git.nix
+    (servephpBB [ "rote-allez-fraktion.de" ])
   ];
 
   security.acme = {
     certs."lassul.us" = {
-      email = "lass@lassul.us";
-      webroot = "/var/lib/acme/acme-challenges";
-      plugins = [
-        "account_key.json"
-        "key.pem"
-        "fullchain.pem"
-        "full.pem"
-      ];
       allowKeysForGroup = true;
       group = "lasscert";
     };
@@ -71,12 +119,10 @@ in {
   ];
 
   services.nginx.virtualHosts."lassul.us" = {
+    enableACME = true;
     serverAliases = [ "lassul.us" ];
     locations."/".extraConfig = ''
       root /srv/http/lassul.us;
-    '';
-    locations."/.well-known/acme-challenge".extraConfig = ''
-      root /var/lib/acme/challenges/lassul.us/;
     '';
     locations."= /retiolum-hosts.tar.bz2".extraConfig = ''
       alias ${config.krebs.tinc.retiolum.hostsArchive};

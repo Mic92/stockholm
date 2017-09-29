@@ -6,43 +6,38 @@ let
   # high level commands
   #
 
-  # usage: deploy
-  #         [--force-populate]
-  #         [--quiet]
-  #         [--source=PATH]
-  #         --system=SYSTEM
-  #         [--target=TARGET]
-  #         [--user=USER]
-  cmds.deploy = pkgs.writeDash "cmds.deploy" ''
+  cmds.deploy = pkgs.withGetopt {
+    force-populate = { default = /* sh */ "false"; switch = true; };
+    quiet = { default = /* sh */ "false"; switch = true; };
+    source_file = {
+      default = /* sh */ "$user/1systems/$system/source.nix";
+      long = "source";
+    };
+    system = {};
+    target.default = /* sh */ "$system";
+    user.default = /* sh */ "$LOGNAME";
+  } (opts: pkgs.writeDash "cmds.deploy" ''
     set -efu
 
-    command=deploy
-    . ${init.args}
-    \test -n "''${quiet-}" || quiet=false
-    \test -n "''${target-}" || target=$system
-    \test -n "''${user-}" || user=$LOGNAME
-    \test -n "''${source_file}" || source_file=$user/1systems/$system/source.nix
     . ${init.env}
-    . ${init.proxy}
+    . ${init.proxy opts}
 
     exec ${utils.deploy}
-  '';
+  '');
 
-  # usage: install
-  #         [--force-populate]
-  #         [--quiet]
-  #         [--source=PATH]
-  #         --system=SYSTEM
-  #         --target=TARGET
-  #         [--user=USER]
-  cmds.install = pkgs.writeBash "cmds.install" ''
+  cmds.install = pkgs.withGetopt {
+    force-populate = { default = /* sh */ "false"; switch = true; };
+    quiet = { default = /* sh */ "false"; switch = true; };
+    source_file = {
+      default = /* sh */ "$user/1systems/$system/source.nix";
+      long = "source";
+    };
+    system = {};
+    target = {};
+    user.default = /* sh */ "$LOGNAME";
+  } (opts: pkgs.writeBash "cmds.install" ''
     set -efu
 
-    command=install
-    . ${init.args}
-    \test -n "''${quiet-}" || quiet=false
-    \test -n "''${user-}" || user=$LOGNAME
-    \test -n "''${source_file}" || source_file=$user/1systems/$system/source.nix
     . ${init.env}
 
     if \test "''${using_proxy-}" != true; then
@@ -55,7 +50,7 @@ let
               # TODO inline prepare.sh?
     fi
 
-    . ${init.proxy}
+    . ${init.proxy opts}
 
     # Reset PATH because we need access to nixos-install.
     # TODO provide nixos-install instead of relying on prepare.sh
@@ -75,30 +70,28 @@ let
 
     cd
     exec nixos-install
-  '';
+  '');
 
-  # usage: test
-  #         [--force-populate]
-  #         [--quiet]
-  #         [--source=PATH]
-  #         --system=SYSTEM
-  #         --target=TARGET
-  #         [--user=USER]
-  cmds.test = pkgs.writeDash "cmds.test" /* sh */ ''
+  cmds.test = pkgs.withGetopt {
+    force-populate = { default = /* sh */ "false"; switch = true; };
+    quiet = { default = /* sh */ "false"; switch = true; };
+    source_file = {
+      default = /* sh */ "$user/1systems/$system/source.nix";
+      long = "source";
+    };
+    system = {};
+    target = {};
+    user.default = /* sh */ "$LOGNAME";
+  } (opts: pkgs.writeDash "cmds.test" /* sh */ ''
     set -efu
 
     export dummy_secrets=true
 
-    command=test
-    . ${init.args}
-    \test -n "''${quiet-}" || quiet=false
-    \test -n "''${user-}" || user=$LOGNAME
-    \test -n "''${source_file}" || source_file=$user/1systems/$system/source.nix
     . ${init.env}
-    . ${init.proxy}
+    . ${init.proxy opts}
 
     exec ${utils.build} config.system.build.toplevel
-  '';
+  '');
 
   #
   # low level commands
@@ -118,19 +111,13 @@ let
 
   # usage: parse-target [--default=TARGET] TARGET
   # TARGET = [USER@]HOST[:PORT][/PATH]
-  cmds.parse-target = pkgs.writeDash "cmds.parse-target" ''
+  cmds.parse-target = pkgs.withGetopt {
+    default_target = {
+      long = "default";
+      short = "d";
+    };
+  } (opts: pkgs.writeDash "cmds.parse-target" ''
     set -efu
-    args=$(${pkgs.utillinux}/bin/getopt -n "$0" -s sh \
-        -o d: \
-        -l default: \
-        -- "$@")
-    if \test $? != 0; then exit 1; fi
-    eval set -- "$args"
-    default_target=
-    while :; do case $1 in
-      -d|--default) default_target=$2; shift 2;;
-      --) shift; break;;
-    esac; done
     target=$1; shift
     for arg; do echo "$0: bad argument: $arg" >&2; done
     if \test $# != 0; then exit 2; fi
@@ -149,7 +136,7 @@ let
           ($default_target | parse) + ($target | parse | sanitize) |
           . + { local: (.user == env.LOGNAME and .host == env.HOSTNAME) }
         ''}
-  '';
+  '');
 
   # usage: quote [ARGS...]
   cmds.quote = pkgs.writeDash "cmds.quote" ''
@@ -161,28 +148,6 @@ let
       prefix=' '
     done
     echo
-  '';
-
-  init.args = pkgs.writeText "init.args" /* sh */ ''
-    args=$(${pkgs.utillinux}/bin/getopt -n "$command" -s sh \
-        -o Qs:t:u: \
-        -l force-populate,quiet,source:,system:,target:,user: \
-        -- "$@")
-    if \test $? != 0; then exit 1; fi
-    eval set -- "$args"
-    force_populate=false
-    source_file=
-    while :; do case $1 in
-         --force-populate) force_populate=true; shift;;
-      -Q|--quiet) quiet=true; shift;;
-         --source) source_file=$2; shift 2;;
-      -s|--system) system=$2; shift 2;;
-      -t|--target) target=$2; shift 2;;
-      -u|--user) user=$2; shift 2;;
-      --) shift; break;;
-    esac; done
-    for arg; do echo "$command: bad argument: $arg" >&2; done
-    if \test $# != 0; then exit 2; fi
   '';
 
   init.env = pkgs.writeText "init.env" /* sh */ ''
@@ -201,7 +166,7 @@ let
     export target_local="$(echo $target_object | ${pkgs.jq}/bin/jq -r .local)"
   '';
 
-  init.proxy = pkgs.writeText "init.proxy" /* sh */ ''
+  init.proxy = opts: pkgs.writeText "init.proxy" /* sh */ ''
     if \test "''${using_proxy-}" != true; then
 
       source=$(get-source "$source_file")
@@ -219,11 +184,12 @@ let
             NIX_PATH=$(quote "$target_path") \
             STOCKHOLM_VERSION=$(quote "$STOCKHOLM_VERSION") \
             nix-shell --run "$(quote "
-              quiet=$(quote "$quiet") \
-              system=$(quote "$system") \
-              target=$(quote "$target") \
+              ${lib.concatStringsSep " " (lib.mapAttrsToList
+                (name: opt: /* sh */ "${opt.varname}=\$(quote ${opt.ref})")
+                opts
+              )} \
               using_proxy=true \
-              $(quote "$command" "$@")
+              $(quote "$0" "$@")
             ")"
       fi
     fi
