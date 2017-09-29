@@ -78,6 +78,37 @@ with import <stockholm/lib>;
         };
       };
     };
+    latte = rec {
+      ci = true;
+      cores = 1;
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIrkK1mWfPvfZ9ALC1irGLuzOtMefaGAmGY1VD4dj7K1 latte";
+      nets = {
+        internet = {
+          ip4.addr = "185.215.224.160";
+          aliases = [
+            "latte.i"
+          ];
+        };
+        retiolum = {
+          ip4.addr = "10.243.80.249";
+          ip6.addr  = "42:ecb0:376:b37d:cf47:1ecf:f32b:a3b9";
+          aliases = [
+            "latte.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAx70gmNoP4RYeF3ShddEMsbNad9L5ezegwxJTZA7XTfF+/cwr/QwU
+            5BL0QXTwBnKzS0gun5NXmhwPzvOdvfczAxtJLk8/NjVHFeE39CiTHGgIxkZFgnbo
+            r2Rj6jJb89ZPaTr+hl0+0WQQVpl9NI7MTCUimvFBaD6IPmBh5wTySu6mYBs0mqmf
+            43RrvS42ieqQJAvVPkIzxxJeTS/M3NXmjbJ3bdx/2Yzd7INdfPkMhOONHcQhTKS4
+            GSXJRTytLYZEah8lp8F4ONggN6ixlhlcQAotToFP4s8c+KqYfIZrtP+pRj7W72Y6
+            vhnobLDJwBbAsW1RQ6FHcw10TrP2H+haewIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
 
     pnp = {
       ci = true;
@@ -460,6 +491,8 @@ with import <stockholm/lib>;
           '';
         };
       };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN5ZmJSypW3LXIJ67DdbxMxCfLtORFkl5jEuD131S5Tr";
     };
 
     gum = rec {
