@@ -11,6 +11,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/otp-ssh.nix>
     <stockholm/lass/2configs/git.nix>
+    <stockholm/lass/2configs/fetchWallpaper.nix>
     { # automatic hardware detection
       boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
       boot.kernelModules = [ "kvm-intel" ];
@@ -31,7 +32,6 @@ with import <stockholm/lib>;
         };
 
       nix.maxJobs = lib.mkDefault 8;
-      powerManagement.cpuFreqGovernor = "powersave";
     }
     { # crypto stuff
       boot.initrd.luks = {
@@ -45,7 +45,7 @@ with import <stockholm/lib>;
     {
       services.xserver.dpi = 200;
       fonts.fontconfig.dpi = 200;
-      lass.myFont = "-schumacher-clean-*-*-*-*-26-*-*-*-*-*-iso10646-1";
+      lass.myFont = "-schumacher-clean-*-*-*-*-25-*-*-*-*-*-iso10646-1";
     }
   ];
   krebs.build.host = config.krebs.hosts.helios;
@@ -83,4 +83,5 @@ with import <stockholm/lib>;
 
   programs.ssh.startAgent = lib.mkForce true;
 
+  services.tlp.enable = true;
 }

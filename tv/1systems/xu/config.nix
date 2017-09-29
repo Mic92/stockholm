@@ -16,6 +16,7 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/pulse.nix>
     <stockholm/tv/2configs/retiolum.nix>
     <stockholm/tv/2configs/binary-cache>
+    <stockholm/tv/2configs/br.nix>
     <stockholm/tv/2configs/xserver>
     {
       environment.systemPackages = with pkgs; [
@@ -154,6 +155,11 @@ with import <stockholm/lib>;
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "15.09";
+
+  tv.nixpkgs-overlays = {
+    krebs = "/home/tv/stockholm/krebs/5pkgs";
+    tv = "/home/tv/stockholm/tv/5pkgs";
+  };
 
   virtualisation.virtualbox.host.enable = true;
 }

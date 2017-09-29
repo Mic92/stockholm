@@ -15,7 +15,7 @@ in
         #   87a4615 & 334ac4f
         # + acme permissions for groups
         #   fd7a8f1
-        ref = "d151161";
+        ref = "2d3b4fe";
       };
       secrets.file = getAttr builder {
         buildbot = toString <stockholm/lass/2configs/tests/dummy-secrets>;

@@ -61,6 +61,7 @@ let
   '';
 
   wvdial-defaults = ''
+    [Dialer Defaults]
     Modem = ${cfg.modem}
     ${cfg.initstrings}
     Modem Type = Analog Modem
@@ -70,12 +71,17 @@ let
     Password = ${cfg.password}
     Stupid Mode = 1
     Idle Seconds = 0
+    PPPD Path = ${pkgs.ppp}/bin/pppd
   '';
 
   imp = {
     environment.shellAliases = {
       umts = "sudo ${umts-bin}/bin/umts";
     };
+
+    environment.systemPackages = [
+      pkgs.ppp
+    ];
 
     security.sudo.extraConfig = ''
       lass ALL= (root) NOPASSWD: ${umts-bin}/bin/umts
