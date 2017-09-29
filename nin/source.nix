@@ -14,6 +14,6 @@ in
     stockholm.file = toString <stockholm>;
     nixpkgs.git = {
       url = https://github.com/nixos/nixpkgs;
-      ref = "9e7db9a";
+      ref = "9824ca6";
     };
   }
