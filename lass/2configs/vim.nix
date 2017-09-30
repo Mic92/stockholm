@@ -5,7 +5,7 @@ let
   out = {
     environment.systemPackages = [
       (hiPrio vim)
-      pkgs.pythonPackages.flake8
+      pkgs.python35Packages.flake8
     ];
 
     environment.etc.vimrc.source = vimrc;
