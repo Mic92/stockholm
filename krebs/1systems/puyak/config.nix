@@ -70,7 +70,7 @@
     extraModprobeConfig = ''
       options thinkpad_acpi fan_control=1
     '';
-  }
+  };
 
   system.activationScripts."disengage fancontrol" = ''
     echo level disengaged > /proc/acpi/ibm/fan
