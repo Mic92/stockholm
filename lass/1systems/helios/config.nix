@@ -75,6 +75,7 @@ with import <stockholm/lib>;
   hardware.enableRedistributableFirmware = true;
 
   environment.systemPackages = with pkgs; [
+    ag
     vim
     rxvt_unicode
     git
