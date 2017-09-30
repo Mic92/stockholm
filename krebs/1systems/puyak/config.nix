@@ -27,6 +27,11 @@
     initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda3"; } ];
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
+
+    kernelModules = [ "kvm-intel" ];
+    extraModprobeConfig = ''
+      options thinkpad_acpi fan_control=1
+    '';
   };
 
   fileSystems = {
@@ -65,12 +70,6 @@
   '';
 
   environment.systemPackages = [ pkgs.zsh ];
-  boot = {
-    kernelModules = [ "kvm-intel" ];
-    extraModprobeConfig = ''
-      options thinkpad_acpi fan_control=1
-    '';
-  };
 
   system.activationScripts."disengage fancontrol" = ''
     echo level disengaged > /proc/acpi/ibm/fan
