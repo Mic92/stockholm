@@ -224,8 +224,9 @@ in {
     <stockholm/lass/2configs/monitoring/monit-alarms.nix>
     <stockholm/lass/2configs/paste.nix>
     <stockholm/lass/2configs/syncthing.nix>
-    #<stockholm/lass/2configs/reaktor-coders.nix>
-    #<stockholm/lass/2configs/reaktor-krebs.nix>
+    <stockholm/lass/2configs/reaktor-coders.nix>
+    <stockholm/lass/2configs/reaktor-krebs.nix>
+    <stockholm/lass/2configs/reaktor-retiolum.nix>
     <stockholm/lass/2configs/ciko.nix>
     <stockholm/lass/2configs/container-networking.nix>
     { # quasi bepasty.nix
