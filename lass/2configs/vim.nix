@@ -104,6 +104,7 @@ let
     pkgs.vimPlugins.Gundo
     pkgs.vimPlugins.Syntastic
     pkgs.vimPlugins.undotree
+    pkgs.vimPlugins.vim-go
     (pkgs.vimUtils.buildVimPlugin {
       name = "file-line-1.0";
       src = pkgs.fetchFromGitHub {
