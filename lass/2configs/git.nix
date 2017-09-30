@@ -53,6 +53,10 @@ let
       cgit.desc = "Good Music collection + tools";
       cgit.section  = "art";
     };
+    nix-user-chroot = {
+      cgit.desc = "Fork of nix-user-chroot my lethalman";
+      cgit.section = "software";
+    };
   } // mapAttrs make-public-repo-silent {
   };
 
