@@ -22,7 +22,12 @@ let
     . ${init.env}
     . ${init.proxy opts}
 
-    exec ${utils.deploy}
+    # Use system's nixos-rebuild, which is not self-contained
+    export PATH=/run/current-system/sw/bin
+    exec ${utils.with-whatsupnix} \
+    nixos-rebuild switch \
+        --show-trace \
+        -I "$target_path"
   '');
 
   cmds.install = pkgs.withGetopt {
@@ -203,16 +208,6 @@ let
         --show-trace \
         -E "with import <stockholm>; $1" \
         -I "$target_path" \
-  '';
-
-  utils.deploy = pkgs.writeDash "utils.deploy" ''
-    set -efu
-    # Use system's nixos-rebuild, which is not self-contained
-    export PATH=/run/current-system/sw/bin
-    ${utils.with-whatsupnix} \
-    nixos-rebuild switch \
-        --show-trace \
-        -I "$target_path"
   '';
 
   utils.with-whatsupnix = pkgs.writeDash "utils.with-whatsupnix" ''
