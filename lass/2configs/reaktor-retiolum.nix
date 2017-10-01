@@ -4,9 +4,9 @@ with import <stockholm/lib>;
 {
   krebs.Reaktor.retiolum = {
     nickname = "Reaktor|lass";
-    channels = [ "#retiolum" ];
+    channels = [ "#krebs" ];
     extraEnviron = {
-      REAKTOR_HOST = "ni.r";
+      REAKTOR_HOST = "irc.r";
     };
     plugins = with pkgs.ReaktorPlugins; [
       sed-plugin

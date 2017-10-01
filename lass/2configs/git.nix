@@ -77,8 +77,8 @@ let
       post-receive = pkgs.git-hooks.irc-announce {
         # TODO make nick = config.krebs.build.host.name the default
         nick = config.krebs.build.host.name;
-        channel = "#retiolum";
-        server = "ni.r";
+        channel = "#krebs";
+        server = "irc.r";
         verbose = config.krebs.build.host.name == "prism";
         # TODO define branches in some kind of option per repo
         branches = [ "master" "staging*" ];
@@ -98,8 +98,8 @@ let
       post-receive = pkgs.git-hooks.irc-announce {
         # TODO make nick = config.krebs.build.host.name the default
         nick = config.krebs.build.host.name;
-        channel = "#retiolum";
-        server = "ni.r";
+        channel = "#krebs";
+        server = "irc.r";
         verbose = true;
         # TODO define branches in some kind of option per repo
         branches = [ "master" "staging*" ];
