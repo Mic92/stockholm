@@ -4,6 +4,31 @@ with import <stockholm/lib>;
 
 {
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.makefu) {
+    cake = rec {
+      cores = 1;
+      ci = false;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.136.236";
+          ip6.addr  = "42:b3b2:9552:eef0:ee67:f3b3:8d33:eee1";
+          aliases = [
+            "cake.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA0khdelSrOV/ZI9vvbV5aT1wVn2IfUfIdDCQIOnF2mZsrnIcuaedu
+            jRfZnJST1vOfL7JksF1+8pYwSn34CjJCGhyFf25lc6mARXmZe/araNrVpTntCy2+
+            MqG8KZe4mIda/WPTXRYGtFVQZeClM5SCZ7EECtw8sEkwt2QtOv43p/hiMXAkOQsq
+            6xc9/b4Bry7d+IjJs3waKfFQllF+C+GuK8yF0YnCEb6GZw7xkxHIO1QV4KSQ4CH7
+            36kEAdCSQ5rgaygRanUlUl+duQn1MLQ+lRlerAEcFfKrr3MKNz2jmGth8iUURdyP
+            MHjSWe+RkLQ6zzBaVgoKKuI9MbIbhenJWwIDAQAB
+            -----END RSA PUBLIC KEY-----
+            '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGyJlI0YpIh/LiiPMseD2IBHg+uVGrkSy0MPNeD+Jv8Y cake";
+    };
     drop = rec {
       ci = true;
       cores = 1;
