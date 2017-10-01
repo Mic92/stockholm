@@ -133,8 +133,8 @@ in
       irc = {
         enable = true;
         nick = "build|${hostname}";
-        server = "ni.r";
-        channels = [ "retiolum" "noise" ];
+        server = "irc.r";
+        channels = [ "krebs" "noise" ];
         allowForce = true;
       };
       extraConfig = ''
