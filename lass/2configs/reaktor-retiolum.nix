@@ -4,7 +4,7 @@ with import <stockholm/lib>;
 {
   krebs.Reaktor.retiolum = {
     nickname = "Reaktor|lass";
-    channels = [ "#krebs" ];
+    channels = [ "#xxx" ];
     extraEnviron = {
       REAKTOR_HOST = "irc.r";
     };

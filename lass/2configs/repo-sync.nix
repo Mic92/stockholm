@@ -15,7 +15,7 @@ let
         post-receive = pkgs.git-hooks.irc-announce {
           nick = config.networking.hostName;
           verbose = false;
-          channel = "#krebs";
+          channel = "#xxx";
           server = "irc.r";
           branches = [ "newest" ];
         };
