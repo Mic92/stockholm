@@ -12,6 +12,7 @@
     <stockholm/krebs/2configs/buildbot-all.nix>
     <stockholm/krebs/2configs/gitlab-runner-shackspace.nix>
     <stockholm/krebs/2configs/binary-cache/nixos.nix>
+    <stockholm/krebs/2configs/ircd.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.hotdog;

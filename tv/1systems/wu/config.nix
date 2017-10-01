@@ -8,7 +8,6 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/hw/w110er.nix>
     <stockholm/tv/2configs/exim-retiolum.nix>
     <stockholm/tv/2configs/gitrepos.nix>
-    <stockholm/tv/2configs/im.nix>
     <stockholm/tv/2configs/mail-client.nix>
     <stockholm/tv/2configs/man.nix>
     <stockholm/tv/2configs/nginx/public_html.nix>

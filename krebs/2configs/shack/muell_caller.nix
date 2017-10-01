@@ -6,8 +6,8 @@ let
     name = "muell_caller-2017-06-01";
     src = pkgs.fetchgit {
       url = "https://github.com/shackspace/muell_caller/";
-      rev = "bbd4009";
-      sha256 = "1bfnfl2vdh0p5wzyz5p48qh04vvsg2445avg86fzhzragx25fqv0";
+      rev = "ee4e499";
+      sha256 = "0q1v07q633sbqg4wkgf0zya2bnqrikpyjhzp05iwn2vcs8rvsi3k";
     };
     buildInputs = [
       (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [

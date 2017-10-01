@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 let
   shack-ip = config.krebs.build.host.nets.shack.ip4.addr;
+  influx-host = "127.0.0.1";
 in
 {
   imports = [
@@ -23,6 +24,58 @@ in
     <stockholm/krebs/2configs/shack/muell_caller.nix>
     <stockholm/krebs/2configs/shack/radioactive.nix>
     <stockholm/krebs/2configs/shack/share.nix>
+    {
+      systemd.services.telegraf.path = [ pkgs.net_snmp ]; # for snmptranslate
+      #systemd.services.telegraf.environment = {
+      #  "MIBDIRS" : ""; # extra mibs like ADSL
+      #};
+      services.telegraf = {
+        enable = true;
+        extraConfig = {
+          inputs = {
+            snmp = {
+              agents = [ "10.0.1.3:161" ];
+              version = 2;
+              community = "shack";
+              name = "snmp";
+              field = [
+                {
+                  name = "hostname";
+                  oid = "RFC1213-MIB::sysName.0";
+                  is_tag = true;
+                }
+                {
+                  name = "load-percent"; #cisco
+                  oid = ".1.3.6.1.4.1.9.9.109.1.1.1.1.4.9";
+                }
+                {
+                  name = "uptime";
+                  oid = "DISMAN-EVENT-MIB::sysUpTimeInstance";
+                }
+              ];
+              table = [{
+                name = "snmp";
+                inherit_tags = [ "hostname" ];
+                oid = "IF-MIB::ifXTable";
+                field = [{
+                  name = "ifName";
+                  oid = "IF-MIB::ifName";
+                  is_tag = true;
+                }];
+              }];
+            };
+          };
+          outputs = {
+            influxdb = {
+              urls = [ "http://${influx-host}:8086" ];
+              database = "telegraf";
+              write_consistency = "any";
+              timeout = "5s";
+            };
+          };
+        };
+      };
+    }
 
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
@@ -86,6 +139,9 @@ in
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/vda";
 
+  # without it `/nix/store` is not added grub paths
+  boot.loader.grub.copyKernels = true;
+
   fileSystems."/" = { device = "/dev/disk/by-label/nixos"; fsType = "ext4"; };
 
   swapDevices = [
@@ -100,6 +156,7 @@ in
   users.extraUsers.root.openssh.authorizedKeys.keys = [
     config.krebs.users.ulrich.pubkey
     config.krebs.users.makefu-omo.pubkey
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAEAQDb9NPa2Hf51afcG1H13UPbE5E02J8aC9a1sGCRls592wAVlQbmojYR1jWDPA2m32Bsyv0ztqi81zDyndWWZPQVJVBk00VjYBcgk6D5ifqoAuWLzfuHJPWZGOvBf/U74/LNFNUkj1ywjneK7HYTRPXrRBBfBSQNmQzkvue7s599L2vdueZKyjNsMpx2m6nm2SchaMuDskSQut/168JgU1l4M8BeT68Bo4WdelhBYnhSI1a59FGkgdu2SCjyighLQRy2sOH3ksnkHWENPkA+wwQOlKl7R3DsEybrNd4NU9FSwFDyDmdhfv5gJp8UGSFdjAwx43+8zM5t5ruZ25J0LnVb0PuTuRA00UsW83MkLxFpDQLrQV08tlsY6iGrqxP67C3VJ6t4v6oTp7/vaRLhEFc1PhOLh+sZ18o8MLO+e2rGmHGHQnSKfBOLUvDMGa4jb01XBGjdnIXLOkVo79YR5jZn7jJb2gTZ95OD6bWSDADoURSuwuLa7kh4ti1ItAKuhkIvbuky3rRVvQEc92kJ6aNUswIUXJa0K2ibbIY6ycKAA3Ljksl3Mm9KzOn6yc/i/lSF+SOrTGhabPJigKkIoqKIwnV5IU3gkfsxPQJOBMPqHDGAOeYQe3WpWedEPYuhQEczw4exMb9TkNE96F71PzuQPJDl5sPAWyPLeMKpy5XbfRiF2by4nxN3ZIQvjtoyVkjNV+qM0q0yKBzLxuRAEQOZ2yCEaBudZQkQiwHD97H2vu4SRQ/2aOie1XiOnmdbQRDZSO3BsoDK569K1w+gDfSnqY7zVUMj6tw+uKx6Gstck5lbvYMtdWKsfPv/pDM8eyIVFLL93dKTX+ertcQj6xDwLfOiNubE5ayFXhYkjwImV6NgfBuq+3hLK0URP2rPlOZbbZTQ0WlKD6CCRZPMSZCU9oD2zYfqpvRArBUcdkAwGePezORkfJQLE6mYEJp6pdFkJ/IeFLbO6M0lZVlfnpzAC9kjjkMCRofZUETcFSppyTImCbgo3+ok59/PkNU5oavBXyW80ue2tWHr08HX/QALNte3UITmIIlU6SFMCPMWJqadK1eDPWfJ4H4iDXRNn3D5wqN++iMloKvpaj0wieqXLY4+YfvNTNr177OU48GEWW8DnoEkbpwsCbjPxznGDQhdDqdYyMY/fDgRQReKITvKYGHRzesGysw5cKsp9LEfXD0R6WE2TeiiENla5AWzTgXJB0AyZEcOiIfqOgT9Nr9S8q5gc/BdA7P+jhGGJgEHhV3dVlfIZ7pmZc27Yu7UTQ0lbAKWqcMSTOdne+QL6ILzbvLrQwdvax4tQdm5opfU16SrOox1AMwAbkdq84z6uJqYVx3cUXfMJgTyDNrVv3or root@plattenschwein" # for backup
   ];
 
   time.timeZone = "Europe/Berlin";

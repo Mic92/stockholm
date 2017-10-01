@@ -4,6 +4,31 @@ with import <stockholm/lib>;
 
 {
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.makefu) {
+    cake = rec {
+      cores = 1;
+      ci = false;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.136.236";
+          ip6.addr  = "42:b3b2:9552:eef0:ee67:f3b3:8d33:eee1";
+          aliases = [
+            "cake.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA0khdelSrOV/ZI9vvbV5aT1wVn2IfUfIdDCQIOnF2mZsrnIcuaedu
+            jRfZnJST1vOfL7JksF1+8pYwSn34CjJCGhyFf25lc6mARXmZe/araNrVpTntCy2+
+            MqG8KZe4mIda/WPTXRYGtFVQZeClM5SCZ7EECtw8sEkwt2QtOv43p/hiMXAkOQsq
+            6xc9/b4Bry7d+IjJs3waKfFQllF+C+GuK8yF0YnCEb6GZw7xkxHIO1QV4KSQ4CH7
+            36kEAdCSQ5rgaygRanUlUl+duQn1MLQ+lRlerAEcFfKrr3MKNz2jmGth8iUURdyP
+            MHjSWe+RkLQ6zzBaVgoKKuI9MbIbhenJWwIDAQAB
+            -----END RSA PUBLIC KEY-----
+            '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGyJlI0YpIh/LiiPMseD2IBHg+uVGrkSy0MPNeD+Jv8Y cake";
+    };
     drop = rec {
       ci = true;
       cores = 1;
@@ -73,6 +98,37 @@ with import <stockholm/lib>;
             nJR3m0cSRm8yCTMbznlGH99+5+3HgvuBE/UYXmmGBs7w8DevaX76butzprZ8fm4z
             e5C7R9ofdVW70GGksfSI81y5xODWMbfjTRHKm4OBX7NOCiOTwx1wu8bYDN3EzN6V
             UM5PJfU42sViPEZmVuC8cDcP1xemHTkh9QIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+    latte = rec {
+      ci = true;
+      cores = 1;
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIrkK1mWfPvfZ9ALC1irGLuzOtMefaGAmGY1VD4dj7K1 latte";
+      nets = {
+        internet = {
+          ip4.addr = "185.215.224.160";
+          aliases = [
+            "latte.i"
+          ];
+        };
+        retiolum = {
+          ip4.addr = "10.243.80.249";
+          ip6.addr  = "42:ecb0:376:b37d:cf47:1ecf:f32b:a3b9";
+          aliases = [
+            "latte.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAx70gmNoP4RYeF3ShddEMsbNad9L5ezegwxJTZA7XTfF+/cwr/QwU
+            5BL0QXTwBnKzS0gun5NXmhwPzvOdvfczAxtJLk8/NjVHFeE39CiTHGgIxkZFgnbo
+            r2Rj6jJb89ZPaTr+hl0+0WQQVpl9NI7MTCUimvFBaD6IPmBh5wTySu6mYBs0mqmf
+            43RrvS42ieqQJAvVPkIzxxJeTS/M3NXmjbJ3bdx/2Yzd7INdfPkMhOONHcQhTKS4
+            GSXJRTytLYZEah8lp8F4ONggN6ixlhlcQAotToFP4s8c+KqYfIZrtP+pRj7W72Y6
+            vhnobLDJwBbAsW1RQ6FHcw10TrP2H+haewIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
         };
@@ -460,6 +516,8 @@ with import <stockholm/lib>;
           '';
         };
       };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN5ZmJSypW3LXIJ67DdbxMxCfLtORFkl5jEuD131S5Tr";
     };
 
     gum = rec {

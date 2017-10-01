@@ -11,7 +11,6 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/otp-ssh.nix>
     <stockholm/lass/2configs/git.nix>
-    <stockholm/lass/2configs/fetchWallpaper.nix>
     { # automatic hardware detection
       boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
       boot.kernelModules = [ "kvm-intel" ];
@@ -47,6 +46,16 @@ with import <stockholm/lib>;
       fonts.fontconfig.dpi = 200;
       lass.myFont = "-schumacher-clean-*-*-*-*-25-*-*-*-*-*-iso10646-1";
     }
+    { #TAPIR, AGATIS, sentral, a3 - foo
+      services.redis.enable = true;
+    }
+    {
+      krebs.fetchWallpaper = {
+        enable = true;
+        url = "http://i.imgur.com/0ktqxSg.png";
+        maxTime = 9001;
+      };
+    }
   ];
   krebs.build.host = config.krebs.hosts.helios;
 
@@ -66,6 +75,7 @@ with import <stockholm/lib>;
   hardware.enableRedistributableFirmware = true;
 
   environment.systemPackages = with pkgs; [
+    ag
     vim
     rxvt_unicode
     git

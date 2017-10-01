@@ -5,7 +5,7 @@ let
   out = {
     environment.systemPackages = [
       (hiPrio vim)
-      pkgs.pythonPackages.flake8
+      pkgs.python35Packages.flake8
     ];
 
     environment.etc.vimrc.source = vimrc;
@@ -104,6 +104,7 @@ let
     pkgs.vimPlugins.Gundo
     pkgs.vimPlugins.Syntastic
     pkgs.vimPlugins.undotree
+    pkgs.vimPlugins.vim-go
     (pkgs.vimUtils.buildVimPlugin {
       name = "file-line-1.0";
       src = pkgs.fetchFromGitHub {

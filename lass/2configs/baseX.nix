@@ -79,6 +79,7 @@ in {
     youtube-tools
 
     rxvt_unicode
+    termite
   ];
 
   fonts.fonts = [

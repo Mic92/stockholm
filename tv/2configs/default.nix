@@ -90,11 +90,7 @@ with import <stockholm/lib>;
       environment.variables = {
         NIX_PATH = mkForce (concatStringsSep ":" [
           "secrets=/var/src/stockholm/null"
-          "nixpkgs-overlays=${pkgs.runCommand "nixpkgs-overlays" {} ''
-            mkdir $out
-            ln -s /home/tv/stockholm/krebs/5pkgs $out/krebs
-            ln -s /home/tv/stockholm/tv/5pkgs $out/tv
-          ''}"
+          "nixpkgs-overlays=${config.tv.nixpkgs-overlays}"
           "/var/src"
         ]);
       };

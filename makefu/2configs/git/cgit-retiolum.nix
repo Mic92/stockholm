@@ -24,6 +24,7 @@ let
     cac-api = { };
     euer_blog = { };
     ampel = { };
+    europastats = { };
     init-stockholm = {
       cgit.desc = "Init stuff for stockholm";
     };
@@ -56,9 +57,9 @@ let
       post-receive = pkgs.git-hooks.irc-announce {
         nick = config.networking.hostName;
         verbose = config.krebs.build.host.name == "gum";
-        channel = "#retiolum";
+        channel = "#xxx";
         # TODO remove the hardcoded hostname
-        server = "ni.r";
+        server = "irc.r";
       };
     };
   };
