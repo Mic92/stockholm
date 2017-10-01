@@ -35,7 +35,7 @@ in {
     irc = {
       # TODO rename channel to target?
       channel = mkOption {
-        default = "#krebs";
+        default = "#xxx";
         type = types.str; # TODO types.irc-channel
       };
       nick = mkOption {

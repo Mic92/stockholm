@@ -134,7 +134,7 @@ in
         enable = true;
         nick = "build|${hostname}";
         server = "irc.r";
-        channels = [ "krebs" "noise" ];
+        channels = [ "xxx" "noise" ];
         allowForce = true;
       };
       extraConfig = ''
