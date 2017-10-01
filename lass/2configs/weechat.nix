@@ -13,10 +13,11 @@ in {
     uid = genid "chat";
     useDefaultShell = true;
     createHome = true;
-    openssh.authorizedKeys.keys = [
-      config.krebs.users.lass.pubkey
-      config.krebs.users.lass-shodan.pubkey
-      config.krebs.users.lass-icarus.pubkey
+    openssh.authorizedKeys.keys = with config.krebs.users; [
+      lass.pubkey
+      lass-shodan.pubkey
+      lass-icarus.pubkey
+      lass-android.pubkey
     ];
   };
 
