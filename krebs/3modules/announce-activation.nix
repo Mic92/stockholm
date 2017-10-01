@@ -35,7 +35,7 @@ in {
     irc = {
       # TODO rename channel to target?
       channel = mkOption {
-        default = "#retiolum";
+        default = "#xxx";
         type = types.str; # TODO types.irc-channel
       };
       nick = mkOption {
@@ -47,7 +47,7 @@ in {
         type = types.int;
       };
       server = mkOption {
-        default = "ni.r";
+        default = "irc.r";
         type = types.hostname;
       };
     };
