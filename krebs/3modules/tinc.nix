@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 with import <stockholm/lib>;
 let
+  inherit (import <stockholm/lib>) types;
   out = {
     options.krebs.tinc = api;
     config = imp;
