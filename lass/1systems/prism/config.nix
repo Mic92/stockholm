@@ -115,7 +115,12 @@ in {
       };
       services.nginx.virtualHosts."hackerfleet.de-s" = {
         serverName = "hackerfleet.de";
-        port = 443;
+        listen = [
+          {
+            addr = "0.0.0.0";
+            port = 443;
+          }
+        ];
         serverAliases = [
           "*.hackerfleet.de"
         ];
