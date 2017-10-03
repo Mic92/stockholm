@@ -72,7 +72,21 @@ in {
     };
   };
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.pkgs.ejabberd ];
+    environment.systemPackages = [
+      (pkgs.symlinkJoin {
+        name = "ejabberd-sudo-wrapper";
+        paths = [
+          (pkgs.writeDashBin "ejabberdctl" ''
+            set -efu
+            cd ${shell.escape cfg.user.home}
+            exec /run/wrappers/bin/sudo \
+                -u ${shell.escape cfg.user.name} \
+                ${cfg.pkgs.ejabberd}/bin/ejabberdctl "$@"
+          '')
+          cfg.pkgs.ejabberd
+        ];
+      })
+    ];
 
     krebs.secret.files = {
       ejabberd-certfile = cfg.certfile;
