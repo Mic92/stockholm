@@ -45,5 +45,4 @@ with import <stockholm/lib>;
     ];
   };
 
-  systemd.services.cups.serviceConfig.PrivateTmp = true;
 }
