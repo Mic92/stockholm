@@ -34,18 +34,24 @@ in {
     hosts = mkOption {
       type = with types; listOf str;
     };
-    pkgs.ejabberdctl = mkOption {
+    pkgs.ejabberd = mkOption {
       type = types.package;
-      default = pkgs.writeDashBin "ejabberdctl" ''
-        exec ${pkgs.ejabberd}/bin/ejabberdctl \
-            --config ${toFile "ejabberd.yaml" (import ./config.nix {
-              inherit pkgs;
-              config = cfg;
-            })} \
-            --logs ${shell.escape cfg.user.home} \
-            --spool ${shell.escape cfg.user.home} \
-            "$@"
-      '';
+      default = pkgs.symlinkJoin {
+        name = "ejabberd-wrapper";
+        paths = [
+          (pkgs.writeDashBin "ejabberdctl" ''
+            exec ${pkgs.ejabberd}/bin/ejabberdctl \
+                --config ${toFile "ejabberd.yaml" (import ./config.nix {
+                  inherit pkgs;
+                  config = cfg;
+                })} \
+                --logs ${shell.escape cfg.user.home} \
+                --spool ${shell.escape cfg.user.home} \
+                "$@"
+          '')
+          pkgs.ejabberd
+        ];
+      };
     };
     registration_watchers = mkOption {
       type = types.listOf types.str;
@@ -66,7 +72,7 @@ in {
     };
   };
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.pkgs.ejabberdctl ];
+    environment.systemPackages = [ cfg.pkgs.ejabberd ];
 
     krebs.secret.files = {
       ejabberd-certfile = cfg.certfile;
@@ -79,7 +85,7 @@ in {
       after = [ "network.target" "secret.service" ];
       serviceConfig = {
         ExecStartPre = "${gen-dhparam} ${cfg.dhfile.path}";
-        ExecStart = "${cfg.pkgs.ejabberdctl}/bin/ejabberdctl foreground";
+        ExecStart = "${cfg.pkgs.ejabberd}/bin/ejabberdctl foreground";
         PermissionsStartOnly = true;
         SyslogIdentifier = "ejabberd";
         User = cfg.user.name;
