@@ -100,7 +100,7 @@ let {
   );
 
   irc-announce = args: pkgs.git-hooks.irc-announce (recursiveUpdate {
-    channel = "#krebs";
+    channel = "#xxx";
     # TODO make nick = config.krebs.build.host.name the default
     nick = config.krebs.build.host.name;
     server = "irc.r";
