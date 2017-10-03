@@ -1,7 +1,6 @@
-{ config, pkgs, lib, ... }:
 with import <stockholm/lib>;
+{ config, pkgs, ... }:
 let
-  inherit (import <stockholm/lib>) types;
   out = {
     options.krebs.tinc = api;
     config = imp;
@@ -12,7 +11,7 @@ let
     description = ''
       define a tinc network
     '';
-    type = with types; attrsOf (submodule (tinc: {
+    type = types.attrsOf (types.submodule (tinc: {
       options = let
         netname = tinc.config._module.args.name;
       in {
@@ -117,7 +116,7 @@ let
             phases = [ "installPhase" ];
             installPhase = ''
               mkdir $out
-              ${concatStrings (lib.mapAttrsToList (_: host: ''
+              ${concatStrings (mapAttrsToList (_: host: ''
                 echo ${shell.escape host.nets."${tinc.config.netname}".tinc.config} \
                   > $out/${shell.escape host.name}
               '') tinc.config.hosts)}
