@@ -32,7 +32,7 @@ foldl' mergeAttrs {}
     exec ${self.firefoxWrapper}/bin/firefox "$@"
   '';
 
-  gnupg = self.gnupg21;
+  gnupg = self.gnupg22;
 
   # https://github.com/NixOS/nixpkgs/issues/16113
   wvdial = let
