@@ -9,13 +9,8 @@ in
     {
       nixos-config.symlink = "stockholm/lass/1systems/${name}/config.nix";
       nixpkgs.git = {
-        url = http://cgit.lassul.us/nixpkgs;
-        # nixos-17.03
-        # + copytoram:
-        #   87a4615 & 334ac4f
-        # + acme permissions for groups
-        #   fd7a8f1
-        ref = "2d3b4fe";
+        url = https://github.com/nixos/nixpkgs;
+        ref = "07ca7b6";
       };
       secrets.file = getAttr builder {
         buildbot = toString <stockholm/lass/2configs/tests/dummy-secrets>;

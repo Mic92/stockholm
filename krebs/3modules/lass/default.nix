@@ -515,6 +515,10 @@ with import <stockholm/lib>;
       pubkey = builtins.readFile ./ssh/mors.rsa;
       pgp.pubkeys.default = builtins.readFile ./pgp/mors.pgp;
     };
+    lass-android = {
+      mail = "lassulus@gmail.com";
+      pubkey = builtins.readFile ./ssh/android.rsa;
+    };
     lass-helios = {
       mail = "lass@helios.r";
       pubkey = builtins.readFile ./ssh/helios.rsa;

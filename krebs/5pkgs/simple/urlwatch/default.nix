@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage rec {
     minidb
     pycodestyle
     pyyaml
-    requests2
+    requests
   ];
 
   meta = {
