@@ -110,7 +110,6 @@ in {
   services.nginx.virtualHosts."lassul.us" = {
     addSSL = true;
     enableACME = true;
-    serverAliases = [ "lassul.us" ];
     locations."/".extraConfig = ''
       root /srv/http/lassul.us;
     '';
@@ -151,11 +150,9 @@ in {
   };
 
   services.nginx.virtualHosts.cgit = {
+    serverName = "cgit.lassul.us";
     addSSL = true;
     enableACME = true;
-    serverAliases = [
-      "cgit.lassul.us"
-    ];
   };
 
   users.users.blog = {
