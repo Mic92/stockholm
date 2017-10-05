@@ -94,4 +94,6 @@ with import <stockholm/lib>;
   programs.ssh.startAgent = lib.mkForce true;
 
   services.tlp.enable = true;
+
+  services.xserver.videoDrivers = [ "nvidia" ];
 }
