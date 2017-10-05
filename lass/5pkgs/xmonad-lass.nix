@@ -70,7 +70,7 @@ mainNoArgs = do
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
             , handleEventHook = handleShutdownEvent
-            , workspaces        = [ "dashboard" ]
+            , workspaces        = [ "dashboard", "sys", "wp" ]
             } `additionalKeysP` myKeyMap
 
 myLayoutHook = defLayout
