@@ -432,8 +432,13 @@ with import <stockholm/lib>;
     eddie = {
       ci = false;
       external = true;
-      nets = {
+      nets = rec {
+        internet = {
+          ip4.addr = "129.215.90.4";
+          aliases = [ "eddie.i" ];
+        };
         retiolum = {
+          via = internet;
           ip4.addr = "10.243.29.170";
           ip6.addr = "42:4992:6a6d:700::1";
           aliases = [ "eddie.r" ];
@@ -485,8 +490,13 @@ with import <stockholm/lib>;
     inspector = {
       ci = false;
       external = true;
-      nets = {
+      nets = rec {
+        internet = {
+          ip4.addr = "141.76.44.154";
+          aliases = [ "inspector.i" ];
+        };
         retiolum = {
+          via = internet;
           ip4.addr = "10.243.29.172";
           ip6.addr = "42:4992:6a6d:800::1";
           aliases = [ "inspector.r" ];
