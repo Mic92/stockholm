@@ -31,6 +31,7 @@ import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace, removeEmptyWorkspace)
 import XMonad.Actions.DynamicWorkspaces (withWorkspace)
 import XMonad.Actions.GridSelect (GSConfig(..), gridselectWorkspace, navNSearch)
+import XMonad.Actions.UpdatePointer (updatePointer)
 import XMonad.Hooks.FloatNext (floatNext)
 import XMonad.Hooks.FloatNext (floatNextHook)
 import XMonad.Hooks.ManageDocks (avoidStruts, ToggleStruts(ToggleStruts))
@@ -63,14 +64,15 @@ mainNoArgs = do
     xmonad'
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
-            { terminal          = urxvtcPath
-            , modMask           = mod4Mask
-            , layoutHook = smartBorders $ myLayoutHook
-            , manageHook        = placeHook (smart (1,0)) <+> floatNextHook
+            { terminal           = urxvtcPath
+            , modMask            = mod4Mask
+            , layoutHook         = smartBorders $ myLayoutHook
+            , logHook            = updatePointer (0.25, 0.25) (0.25, 0.25)
+            , manageHook         = placeHook (smart (1,0)) <+> floatNextHook
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
-            , handleEventHook = handleShutdownEvent
-            , workspaces        = [ "dashboard", "sys", "wp" ]
+            , handleEventHook    = handleShutdownEvent
+            , workspaces         = [ "dashboard", "sys", "wp" ]
             } `additionalKeysP` myKeyMap
 
 myLayoutHook = defLayout
