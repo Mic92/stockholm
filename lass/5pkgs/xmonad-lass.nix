@@ -119,7 +119,7 @@ myKeyMap =
     , ("M4-f", floatNext True)
     , ("M4-b", sendMessage ToggleStruts)
 
-    , ("M4-v", withWorkspace autoXPConfig (windows . W.view))
+    , ("M4-v", withWorkspace autoXPConfig (windows . W.greedyView))
     , ("M4-S-v", withWorkspace autoXPConfig (windows . W.shift))
     , ("M4-C-v", withWorkspace autoXPConfig (windows . copy))
 
