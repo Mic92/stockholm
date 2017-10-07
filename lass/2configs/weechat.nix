@@ -21,6 +21,11 @@ in {
     ];
   };
 
+  # mosh
+  krebs.iptables.tables.filter.INPUT.rules = [
+    { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
+  ];
+
   #systemd.services.chat = {
   #  description = "chat environment setup";
   #  after = [ "network.target" ];

@@ -73,17 +73,6 @@ in {
       allowKeysForGroup = true;
       group = "lasscert";
     };
-    certs."cgit.lassul.us" = {
-      email = "lassulus@gmail.com";
-      webroot = "/var/lib/acme/acme-challenges";
-      plugins = [
-        "account_key.json"
-        "key.pem"
-        "fullchain.pem"
-      ];
-      group = "nginx";
-      allowKeysForGroup = true;
-    };
   };
 
   krebs.tinc_graphs.enable = true;
@@ -119,8 +108,8 @@ in {
   ];
 
   services.nginx.virtualHosts."lassul.us" = {
+    addSSL = true;
     enableACME = true;
-    serverAliases = [ "lassul.us" ];
     locations."/".extraConfig = ''
       root /srv/http/lassul.us;
     '';
@@ -158,30 +147,12 @@ in {
     in ''
       alias ${initscript};
     '';
-
-    enableSSL = true;
-    extraConfig = ''
-      listen 80;
-      listen [::]:80;
-    '';
-    sslCertificate = "/var/lib/acme/lassul.us/fullchain.pem";
-    sslCertificateKey = "/var/lib/acme/lassul.us/key.pem";
   };
 
   services.nginx.virtualHosts.cgit = {
-    serverAliases = [
-      "cgit.lassul.us"
-    ];
-    locations."/.well-known/acme-challenge".extraConfig = ''
-      root /var/lib/acme/acme-challenges;
-    '';
-    enableSSL = true;
-    extraConfig = ''
-      listen 80;
-      listen [::]:80;
-    '';
-    sslCertificate = "/var/lib/acme/cgit.lassul.us/fullchain.pem";
-    sslCertificateKey = "/var/lib/acme/cgit.lassul.us/key.pem";
+    serverName = "cgit.lassul.us";
+    addSSL = true;
+    enableACME = true;
   };
 
   users.users.blog = {

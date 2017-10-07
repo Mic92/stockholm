@@ -12,7 +12,7 @@ let
     buildInputs = [
       (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
         docopt
-        requests2
+        requests
         paramiko
         python
       ]))

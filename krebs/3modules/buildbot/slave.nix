@@ -160,6 +160,8 @@ let
         # TODO: maybe also prepare buildbot.tac?
         ExecStartPre = pkgs.writeDash "buildbot-master-init" ''
           set -efux
+          #remove garbage from old versions
+          rm -r ${workdir}
           mkdir -p ${workdir}/info
           cp ${buildbot-slave-init} ${workdir}/buildbot.tac
           echo ${contact} > ${workdir}/info/admin

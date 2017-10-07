@@ -1,4 +1,4 @@
 import <stockholm/tv/source.nix> {
   name = "alnus";
-  override.nixpkgs.git.ref = "9b948ea439ddbaa26740ce35543e7e35d2aa6d18";
+  override.nixpkgs.git.ref = "d0f0657ca06cc8cb239cb94f430b53bcdf755887";
 }

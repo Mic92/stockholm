@@ -5,7 +5,7 @@ with pythonPackages; buildPythonPackage rec {
   propagatedBuildInputs = [
     python_magic
     click
-    requests2
+    requests
   ];
 
   src = fetchFromGitHub {

@@ -37,7 +37,7 @@ let
         docopt
         LinkHeader
         aiocoap
-        requests2
+        requests
         paramiko
         python
       ]))
