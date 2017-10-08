@@ -580,7 +580,8 @@ with import <stockholm/lib>;
           '';
         };
       };
-      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      # configured manually
+      # ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcxWFEPzke/Sdd9qNX6rSJgXal8NmINYajpFCxXfYdj root@gum";
     };
     shoney = rec {
