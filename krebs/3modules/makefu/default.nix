@@ -1031,6 +1031,10 @@ with import <stockholm/lib>;
       inherit (makefu) mail pgp;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDOXG6iwvm6zUVk+OE9ZviO+WNosAHSZw4ku0RxWbXSlSG0RfzvV4IfByF3Dw+4a8yZQmjwNkQalUURh2fEqhBLBI9XNEIL7qIu17zheguyXzpE3Smy4pbI+fjdsnfFrw+WE2n/IO8N6ojdH6sMmnWwfkFZYqqofWyLB3WUN9wy2b2z0w/jc56+HxxyTl3rD7CttTs9ak67HqIn3/pNeHoOM+JQ/te8t4ageIlPi8yJJpqZgww1RUWCgPPwZ9DP6gQjo85he76x0h9jvhnFd7m9N1aGdRDcK55QyoY/9x07R24GRutohAB/KDWSkDWQv5BW7M1LCawpJcF3DDslD1i7 makefu@gum";
     };
+    makefu-android = {
+      inherit (makefu) mail pgp;
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDoAtBa10AbiFXfYL4Za7e0CLeXJeH6FhMqVZFqElLkJBKmQ7c7WEMlnuRhEZWSFDXBpaS7p73s5MMOZA13uYv6fI2ipOOwE9Ej1EoMsrQGegBp2VDMo0wnr/sgTL1do+uGI85E/i0uFw0DYhXqlZQk1eK8SdgXYltiVL27IA3NG2kYuoTIvJgRnaPJjTbhLBWti3m586LuO+pBKtcTt1D9EV6wp+6Jum4owPtCgVPQaZfFGYWkEiINV83WX9HoIk4S3bTPLh8Kfp0je0xsioS4T9/cxSPgUie8MjSg0irvLJXRH0JOVuG5NvZTYhAAekwNkHll9CtypPrutjbrXPXf makefu@x";
+    };
     makefu-bob = {
       inherit (makefu) mail pgp;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+fEK1bCB8cdDiBzXBXEWLFQyp/7xjNGQ5GyqHOtgxxe6Ypb0kAaWJaG3Ak/qI/nToGKwkQJLsuYNA3lZj2rFyBdoxnNO3kRFTc7NoaU5mC2BlHbpmn9dzvgiBoRAKAlzj/022u65SI19AFciKXtwqQfjuB3mPVOFOfCFB2SYjjWb8ffPnHp6PB5KKNLxaVPCbZgOdSju25/wB2lY00W8WIDOTqfbNClQnjkLsUZpTuRnvpHTemKtt1FH+WBZiMwMXRt19rm9LFSO7pvrZjdJz0l1TZVsODkbKZzQzSixoCPmdpPPAYaqrGUQpmukXk0xQtR3E2jEsk+FJv4AkIKqD";
