@@ -48,8 +48,8 @@ import XMonad.Layout.SimpleFloat (simpleFloat)
 
 import XMonad.Stockholm.Shutdown
 
-urxvtcPath :: FilePath
-urxvtcPath = "${pkgs.rxvt_unicode}/bin/urxvtc"
+myTerm :: FilePath
+myTerm = "${pkgs.rxvt_unicode}/bin/urxvtc"
 
 myFont :: String
 myFont = "${config.lass.fonts.regular}"
@@ -64,7 +64,7 @@ mainNoArgs = do
     xmonad'
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
-            { terminal           = urxvtcPath
+            { terminal           = myTerm
             , modMask            = mod4Mask
             , layoutHook         = smartBorders $ myLayoutHook
             , logHook            = updatePointer (0.25, 0.25) (0.25, 0.25)
@@ -115,8 +115,8 @@ myKeyMap =
     , ("M4-S-<Backspace>", removeEmptyWorkspace)
     , ("M4-S-c", kill1)
     , ("M4-<Esc>", toggleWS)
-    , ("M4-S-<Enter>", spawn urxvtcPath)
-    , ("M4-x", floatNext True >> spawn urxvtcPath)
+    , ("M4-S-<Enter>", spawn myTerm)
+    , ("M4-x", floatNext True >> spawn myTerm)
     , ("M4-c", floatNext True >> spawn "${pkgs.termite}/bin/termite")
     , ("M4-f", floatNext True)
     , ("M4-b", sendMessage ToggleStruts)
