@@ -97,10 +97,13 @@ let
     noremap <esc>[b <nop> | noremap! <esc>[b <nop>
     noremap <esc>[c <nop> | noremap! <esc>[c <nop>
     noremap <esc>[d <nop> | noremap! <esc>[d <nop>
-    vnoremap u <nop>
+
+    let g:ackprg = 'ag --vimgrep'
+    cnoreabbrev Ack Ack!
   '';
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
+    pkgs.vimPlugins.ack-vim
     pkgs.vimPlugins.Gundo
     pkgs.vimPlugins.Syntastic
     pkgs.vimPlugins.undotree
