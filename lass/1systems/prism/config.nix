@@ -265,6 +265,13 @@ in {
         alias /var/realwallpaper/realwallpaper.png;
       '';
     }
+    {
+      services.minecraft-server.enable = true;
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 25565"; target = "ACCEPT"; }
+        { predicate = "-p udp --dport 25565"; target = "ACCEPT"; }
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
