@@ -52,7 +52,7 @@ urxvtcPath :: FilePath
 urxvtcPath = "${pkgs.rxvt_unicode}/bin/urxvtc"
 
 myFont :: String
-myFont = "${config.lass.myFont}"
+myFont = "${config.lass.fonts.regular}"
 
 main :: IO ()
 main = getArgs >>= \case

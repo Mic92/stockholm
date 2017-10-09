@@ -28,9 +28,19 @@ in {
       '';
     }
     { #font magic
-      options.lass.myFont = mkOption {
-        type = types.str;
-        default = "-schumacher-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1";
+      options.lass.fonts = {
+        regular = mkOption {
+          type = types.str;
+          default = "xft:Hack-Regular:pixelsize=11,xft:Symbola";
+        };
+        bold = mkOption {
+          type = types.str;
+          default = "xft:Hack-Bold:pixelsize=11,xft:Symbola";
+        };
+        italic = mkOption {
+          type = types.str;
+          default = "xft:Hack-RegularOblique:pixelsize=11,xft:Symbol";
+        };
       };
     }
   ];
@@ -82,8 +92,11 @@ in {
     termite
   ];
 
-  fonts.fonts = [
-    pkgs.xlibs.fontschumachermisc
+  fonts.fonts = with pkgs; [
+    hack-font
+    hasklig
+    symbola
+    xlibs.fontschumachermisc
   ];
 
   services.xserver = {

@@ -45,7 +45,9 @@ with import <stockholm/lib>;
     {
       services.xserver.dpi = 200;
       fonts.fontconfig.dpi = 200;
-      lass.myFont = "-schumacher-clean-*-*-*-*-25-*-*-*-*-*-iso10646-1";
+      lass.fonts.regular = "xft:Hack-Regular:pixelsize=22,xft:Symbola";
+      lass.fonts.bold =    "xft:Hack-Bold:pixelsize=22,xft:Symbola";
+      lass.fonts.italic =  "xft:Hack-RegularOblique:pixelsize=22,xft:Symbol";
     }
     { #TAPIR, AGATIS, sentral, a3 - foo
       services.redis.enable = true;
