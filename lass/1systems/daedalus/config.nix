@@ -36,6 +36,7 @@ with import <stockholm/lib>;
         hexchat
         networkmanagerapplet
         libreoffice
+        audacity
       ];
       services.xserver.enable = true;
       services.xserver.displayManager.lightdm.enable = true;
