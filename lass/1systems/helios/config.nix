@@ -97,6 +97,11 @@ with import <stockholm/lib>;
   services.tlp.enable = true;
 
   services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.xrandrHeads = [
+    { output = "DP-0.8"; }
+    { output = "DP-4"; monitorConfig = ''Option "Rotate" "right"''; }
+    { output = "DP-2"; primary = true; }
+  ];
 
   security.pki.certificateFiles = [
    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC1G1.pem"; sha256 = "14vz9c0fk6li0a26vx0s5ha6y3yivnshx9pjlh9vmnpkbph5a7rh"; })
