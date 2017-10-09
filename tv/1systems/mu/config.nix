@@ -52,9 +52,6 @@ with import <stockholm/lib>;
   networking.networkmanager.enable = true;
 
   environment.systemPackages = with pkgs; [
-    (pkgs.kdeApplications.callPackage
-      (import <nixpkgs/pkgs/applications/kde/kde-locale-5.nix> "de" {})
-      {})
     chromium
     firefoxWrapper
     gimp
