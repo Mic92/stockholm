@@ -157,39 +157,28 @@ let
         begin acl
 
         acl_check_rcpt:
-          accept  hosts = :
-                  control = dkim_disable_verify
-
-          deny    message       = Restricted characters in address
-                  domains       = +local_domains
-                  local_parts   = ^[.] : ^.*[@%!/|]
-
-          deny    message       = Restricted characters in address
-                  domains       = !+local_domains
-                  local_parts   = ^[./|] : ^.*[@%!] : ^.*/\\.\\./
-
-          accept  local_parts   = postmaster
-                  domains       = +local_domains
-
-          accept  hosts         = +relay_from_hosts
-                  control       = submission
-                  control       = dkim_disable_verify
-
-          accept  authenticated = *
-                  control       = submission
-                  control       = dkim_disable_verify
-
-          accept message = relay not permitted 2
-                  recipients = lsearch*@;${lsearch.internet-aliases}
-
-          require message = relay not permitted
-                  domains = +local_domains : +relay_to_domains
-
-          require
-            message = unknown user
-            verify = recipient/callout
+          deny
+            local_parts = ^[./|] : ^.*[@%!] : ^.*/\\.\\./
+            message = restricted characters in address
 
           accept
+            recipients = lsearch*@;${lsearch.internet-aliases}
+
+          accept
+            authenticated = *
+            control = dkim_disable_verify
+            control = submission
+
+          accept
+            control = dkim_disable_verify
+            control = submission
+            hosts = +relay_from_hosts
+
+          accept
+            domains = +local_domains : +relay_to_domains
+
+          deny
+            message = relay not permitted
 
 
         acl_check_data:
