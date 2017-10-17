@@ -143,18 +143,6 @@ let
         ''}
   '');
 
-  # usage: quote [ARGS...]
-  cmds.quote = pkgs.writeDash "cmds.quote" ''
-    set -efu
-    prefix=
-    for x; do
-      y=$(${pkgs.jq}/bin/jq -nr --arg x "$x" '$x | @sh "\(.)"')
-      echo -n "$prefix$y"
-      prefix=' '
-    done
-    echo
-  '';
-
   init.env = pkgs.writeText "init.env" /* sh */ ''
     export quiet
     export system
@@ -243,6 +231,7 @@ in pkgs.stdenv.mkDerivation {
     fi
     export PATH=${lib.makeBinPath [
       pkgs.populate
+      pkgs.quote
       shell.cmdspkg
     ]}
 
