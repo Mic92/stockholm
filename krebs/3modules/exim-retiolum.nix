@@ -43,7 +43,6 @@ let
           primary_hostname = ${cfg.primary_hostname}
           domainlist local_domains = ${concatStringsSep ":" cfg.local_domains}
           domainlist relay_to_domains = ${concatStringsSep ":" cfg.relay_to_domains}
-          hostlist   relay_from_hosts = <; 127.0.0.1 ; ::1
 
           acl_smtp_rcpt = acl_check_rcpt
           acl_smtp_data = acl_check_data
@@ -61,41 +60,15 @@ let
           begin acl
 
           acl_check_rcpt:
-            accept  hosts = :
-                    control = dkim_disable_verify
-
-            deny    message       = Restricted characters in address
-                    domains       = +local_domains
-                    local_parts   = ^[.] : ^.*[@%!/|]
-
-            deny    message       = Restricted characters in address
-                    domains       = !+local_domains
-                    local_parts   = ^[./|] : ^.*[@%!] : ^.*/\\.\\./
-
-            accept  local_parts   = postmaster
-                    domains       = +local_domains
-
-            #accept
-            #  hosts = *.r
-            #  domains = *.r
-            #  control = dkim_disable_verify
-
-            #require verify        = sender
-
-            accept  hosts         = +relay_from_hosts
-                    control       = submission
-                    control       = dkim_disable_verify
-
-            accept  authenticated = *
-                    control       = submission
-                    control       = dkim_disable_verify
-
-            require message = relay not permitted
-                    domains = +local_domains : +relay_to_domains
-
-            require verify = recipient
+            deny
+              local_parts = ^[./|] : ^.*[@%!] : ^.*/\\.\\./
+              message = restricted characters in address
 
             accept
+              domains = +local_domains : +relay_to_domains
+
+            deny
+              message = relay not permitted
 
 
           acl_check_data:
@@ -104,29 +77,19 @@ let
 
           begin routers
 
-          retiolum:
-            driver = manualroute
-            domains = ! +local_domains : +relay_to_domains
-            transport = remote_smtp
-            route_list = ^.* $0 byname
-            no_more
-
-          nonlocal:
-            debug_print = "R: nonlocal for $local_part@$domain"
-            driver = redirect
-            domains = ! +local_domains
-            allow_fail
-            data = :fail: Mailing to remote domains not supported
-            no_more
-
-          local_user:
-            # debug_print = "R: local_user for $local_part@$domain"
+          local:
             driver = accept
+            domains = +local_domains
             check_local_user
-          # local_part_suffix = +* : -*
+          # local_part_suffix = +*
           # local_part_suffix_optional
             transport = home_maildir
-            cannot_route_message = Unknown user
+
+          remote:
+            driver = manualroute
+            domains = +relay_to_domains
+            transport = remote_smtp
+            route_list = ^.* $0 byname
 
 
           begin transports
