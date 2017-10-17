@@ -420,7 +420,16 @@ let
       ];
       locations."/".extraConfig = ''
         include             ${pkgs.nginx}/conf/fastcgi_params;
-        fastcgi_param       SCRIPT_FILENAME ${pkgs.cgit}/cgit/cgit.cgi;
+        fastcgi_param       SCRIPT_FILENAME ${pkgs.writeDash "cgit-wrapper" ''
+          set -efu
+          exec 3>&1
+          ${pkgs.cgit}/cgit/cgit.cgi "$@" 2>&1 >&3 3>&- \
+            | ${pkgs.gnused}/bin/sed \
+                  '
+                    \|^${pkgs.cgit}/cgit/cgit.cgi: Relink |d
+                  '
+          exec 3>&-
+        ''};
         fastcgi_param       PATH_INFO       $uri;
         fastcgi_param       QUERY_STRING    $args;
         fastcgi_param       HTTP_HOST       $server_name;
