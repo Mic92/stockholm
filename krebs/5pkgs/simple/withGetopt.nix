@@ -1,5 +1,5 @@
 with import <stockholm/lib>;
-{ utillinux, writeDash }:
+{ coreutils, quote, utillinux, writeDash }:
 
 opt-spec: cmd-spec: let
 
@@ -42,6 +42,9 @@ in writeDash wrapper-name ''
   ${concatStringsSep "\n" (mapAttrsToList (name: opt: /* sh */ ''
     unset ${opt.varname}
   '') opts)}
+
+  WITHGETOPT_ORIG_ARGS=$(${quote}/bin/quote "$@")
+  export WITHGETOPT_ORIG_ARGS
 
   args=$(${utillinux}/bin/getopt \
       -l ${shell.escape

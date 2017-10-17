@@ -80,7 +80,7 @@ mainNoArgs = do
             , modMask           = mod4Mask
             , keys              = myKeys
             , workspaces        = workspaces0
-            , layoutHook        = smartBorders $ myLayout
+            , layoutHook        = smartBorders $ FixedColumn 1 20 80 10 ||| Full
             -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
             --, handleEventHook   = handleTimerEvent
             , manageHook        = placeHook (smart (1,0)) <+> floatNextHook
@@ -91,10 +91,6 @@ mainNoArgs = do
             , focusedBorderColor = "#f000b0"
             , handleEventHook = handleShutdownEvent
             }
-  where
-    myLayout =
-        (onWorkspace "im" $ reflectVert $ Mirror $ Tall 1 (3/100) (12/13))
-        (FixedColumn 1 20 80 10 ||| Full)
 
 
 xmonad' :: (LayoutClass l Window, Read (l Window)) => XConfig l -> IO ()
