@@ -20,7 +20,7 @@ let
     set -efu
 
     . ${init.env}
-    . ${init.proxy opts}
+    . ${init.proxy "deploy" opts}
 
     # Use system's nixos-rebuild, which is not self-contained
     export PATH=/run/current-system/sw/bin
@@ -55,7 +55,7 @@ let
               # TODO inline prepare.sh?
     fi
 
-    . ${init.proxy opts}
+    . ${init.proxy "install" opts}
 
     # Reset PATH because we need access to nixos-install.
     # TODO provide nixos-install instead of relying on prepare.sh
@@ -93,7 +93,7 @@ let
     export dummy_secrets=true
 
     . ${init.env}
-    . ${init.proxy opts}
+    . ${init.proxy "test" opts}
 
     exec ${utils.build} config.system.build.toplevel
   '');
@@ -159,7 +159,7 @@ let
     export target_local="$(echo $target_object | ${pkgs.jq}/bin/jq -r .local)"
   '';
 
-  init.proxy = opts: pkgs.writeText "init.proxy" /* sh */ ''
+  init.proxy = command: opts: pkgs.writeText "init.proxy" /* sh */ ''
     if \test "''${using_proxy-}" != true; then
 
       source=$(get-source "$source_file")
@@ -182,7 +182,8 @@ let
                 opts
               )} \
               using_proxy=true \
-              $(quote "$0" "$@")
+              ${lib.shell.escape command} \
+              $WITHGETOPT_ORIG_ARGS \
             ")"
       fi
     fi
