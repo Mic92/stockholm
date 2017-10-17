@@ -8,7 +8,7 @@ python3Packages.buildPythonPackage rec {
 
   propagatedBuildInputs = with pkgs;[
     python3Packages.docopt
-    python3Packages.requests2
+    python3Packages.requests
   ];
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/R/Reaktor/Reaktor-${version}.tar.gz";

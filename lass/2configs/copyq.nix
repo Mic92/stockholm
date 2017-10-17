@@ -25,12 +25,15 @@ in {
     environment = {
       DISPLAY = ":0";
     };
+    path = with pkgs; [
+      qt5.full
+    ];
     serviceConfig = {
       SyslogIdentifier = "copyq";
       ExecStart = "${pkgs.copyq}/bin/copyq";
       ExecStartPost = copyqConfig;
       Restart = "always";
-      RestartSec = "2s";
+      RestartSec = "15s";
       StartLimitBurst = 0;
       User = "lass";
     };

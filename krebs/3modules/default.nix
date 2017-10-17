@@ -24,6 +24,7 @@ let
       ./go.nix
       ./hidden-ssh.nix
       ./htgen.nix
+      ./iana-etc.nix
       ./iptables.nix
       ./kapacitor.nix
       ./monit.nix

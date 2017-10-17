@@ -29,7 +29,7 @@ with import <stockholm/lib>;
         data="$(${pkgs.jq}/bin/jq -r .message)"
         export LOGNAME=prism-alarm
         ${pkgs.irc-announce}/bin/irc-announce \
-          ni.r 6667 prism-alarm \#noise "$data" >/dev/null
+          irc.r 6667 prism-alarm \#noise "$data" >/dev/null
       '';
     in {
       enable = true;

@@ -53,6 +53,10 @@ let
       cgit.desc = "Good Music collection + tools";
       cgit.section  = "art";
     };
+    nix-user-chroot = {
+      cgit.desc = "Fork of nix-user-chroot my lethalman";
+      cgit.section = "software";
+    };
   } // mapAttrs make-public-repo-silent {
   };
 
@@ -73,8 +77,8 @@ let
       post-receive = pkgs.git-hooks.irc-announce {
         # TODO make nick = config.krebs.build.host.name the default
         nick = config.krebs.build.host.name;
-        channel = "#retiolum";
-        server = "ni.r";
+        channel = "#xxx";
+        server = "irc.r";
         verbose = config.krebs.build.host.name == "prism";
         # TODO define branches in some kind of option per repo
         branches = [ "master" "staging*" ];
@@ -94,8 +98,8 @@ let
       post-receive = pkgs.git-hooks.irc-announce {
         # TODO make nick = config.krebs.build.host.name the default
         nick = config.krebs.build.host.name;
-        channel = "#retiolum";
-        server = "ni.r";
+        channel = "#xxx";
+        server = "irc.r";
         verbose = true;
         # TODO define branches in some kind of option per repo
         branches = [ "master" "staging*" ];

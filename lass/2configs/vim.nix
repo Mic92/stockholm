@@ -5,7 +5,7 @@ let
   out = {
     environment.systemPackages = [
       (hiPrio vim)
-      pkgs.pythonPackages.flake8
+      pkgs.python35Packages.flake8
     ];
 
     environment.etc.vimrc.source = vimrc;
@@ -97,13 +97,17 @@ let
     noremap <esc>[b <nop> | noremap! <esc>[b <nop>
     noremap <esc>[c <nop> | noremap! <esc>[c <nop>
     noremap <esc>[d <nop> | noremap! <esc>[d <nop>
-    vnoremap u <nop>
+
+    let g:ackprg = 'ag --vimgrep'
+    cnoreabbrev Ack Ack!
   '';
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
+    pkgs.vimPlugins.ack-vim
     pkgs.vimPlugins.Gundo
     pkgs.vimPlugins.Syntastic
     pkgs.vimPlugins.undotree
+    pkgs.vimPlugins.vim-go
     (pkgs.vimUtils.buildVimPlugin {
       name = "file-line-1.0";
       src = pkgs.fetchFromGitHub {

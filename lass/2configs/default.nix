@@ -119,6 +119,7 @@ with import <stockholm/lib>;
     aria2
 
   #neat utils
+    file
     kpaste
     krebspaste
     mosh

@@ -31,6 +31,7 @@ import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace, removeEmptyWorkspace)
 import XMonad.Actions.DynamicWorkspaces (withWorkspace)
 import XMonad.Actions.GridSelect (GSConfig(..), gridselectWorkspace, navNSearch)
+import XMonad.Actions.UpdatePointer (updatePointer)
 import XMonad.Hooks.FloatNext (floatNext)
 import XMonad.Hooks.FloatNext (floatNextHook)
 import XMonad.Hooks.ManageDocks (avoidStruts, ToggleStruts(ToggleStruts))
@@ -47,11 +48,11 @@ import XMonad.Layout.SimpleFloat (simpleFloat)
 
 import XMonad.Stockholm.Shutdown
 
-urxvtcPath :: FilePath
-urxvtcPath = "${pkgs.rxvt_unicode}/bin/urxvtc"
+myTerm :: FilePath
+myTerm = "${pkgs.rxvt_unicode}/bin/urxvtc"
 
 myFont :: String
-myFont = "${config.lass.myFont}"
+myFont = "${config.lass.fonts.regular}"
 
 main :: IO ()
 main = getArgs >>= \case
@@ -63,14 +64,15 @@ mainNoArgs = do
     xmonad'
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
-            { terminal          = urxvtcPath
-            , modMask           = mod4Mask
-            , layoutHook = smartBorders $ myLayoutHook
-            , manageHook        = placeHook (smart (1,0)) <+> floatNextHook
+            { terminal           = myTerm
+            , modMask            = mod4Mask
+            , layoutHook         = smartBorders $ myLayoutHook
+            , logHook            = updatePointer (0.25, 0.25) (0.25, 0.25)
+            , manageHook         = placeHook (smart (1,0)) <+> floatNextHook
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
-            , handleEventHook = handleShutdownEvent
-            , workspaces        = [ "dashboard" ]
+            , handleEventHook    = handleShutdownEvent
+            , workspaces         = [ "dashboard", "sys", "wp" ]
             } `additionalKeysP` myKeyMap
 
 myLayoutHook = defLayout
@@ -113,13 +115,13 @@ myKeyMap =
     , ("M4-S-<Backspace>", removeEmptyWorkspace)
     , ("M4-S-c", kill1)
     , ("M4-<Esc>", toggleWS)
-    , ("M4-S-<Enter>", spawn urxvtcPath)
-    , ("M4-x", floatNext True >> spawn urxvtcPath)
+    , ("M4-S-<Enter>", spawn myTerm)
+    , ("M4-x", floatNext True >> spawn myTerm)
     , ("M4-c", floatNext True >> spawn "${pkgs.termite}/bin/termite")
     , ("M4-f", floatNext True)
     , ("M4-b", sendMessage ToggleStruts)
 
-    , ("M4-v", withWorkspace autoXPConfig (windows . W.view))
+    , ("M4-v", withWorkspace autoXPConfig (windows . W.greedyView))
     , ("M4-S-v", withWorkspace autoXPConfig (windows . W.shift))
     , ("M4-C-v", withWorkspace autoXPConfig (windows . copy))
 
@@ -131,12 +133,12 @@ myKeyMap =
 
     , ("M4-S-q", return ())
 
-    , ("M4-w", floatNext True >> spawn "${pkgs.copyq}/bin/copyq show")
+    , ("M4-d", floatNext True >> spawn "${pkgs.copyq}/bin/copyq show")
 
-    , ("M4-<F1>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 1")
-    , ("M4-<F2>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 10")
-    , ("M4-<F3>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 33")
-    , ("M4-<F4>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 100")
+    , ("M4-<F5>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 1")
+    , ("M4-<F6>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 10")
+    , ("M4-<F7>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 33")
+    , ("M4-<F8>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 100")
     ]
 
 forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()

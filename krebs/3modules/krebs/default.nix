@@ -74,6 +74,7 @@ in {
             "build.r"
             "build.hotdog.r"
             "cgit.hotdog.r"
+            "irc.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----

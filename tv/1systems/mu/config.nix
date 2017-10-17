@@ -56,7 +56,6 @@ with import <stockholm/lib>;
     firefoxWrapper
     gimp
     iptables
-    kdeApplications.l10n.de.qt5
     libreoffice
     pidginotr
     pidgin-with-plugins

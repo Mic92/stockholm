@@ -11,7 +11,7 @@ python3Packages.buildPythonPackage rec {
 
   propagatedBuildInputs = with python3Packages; [
     docopt
-    requests2
+    requests
     beautifulsoup4
   ];
 }

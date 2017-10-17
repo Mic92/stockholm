@@ -1,5 +1,6 @@
+# Global configuration for wvdial.
+
 { config, lib, pkgs, ... }:
-# from 17.03/nixos/modules/programs/wvdial.nix
 
 with lib;
 

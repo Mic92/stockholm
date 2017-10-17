@@ -4,6 +4,31 @@ with import <stockholm/lib>;
 
 {
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.makefu) {
+    cake = rec {
+      cores = 1;
+      ci = false;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.136.236";
+          ip6.addr  = "42:b3b2:9552:eef0:ee67:f3b3:8d33:eee1";
+          aliases = [
+            "cake.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA0khdelSrOV/ZI9vvbV5aT1wVn2IfUfIdDCQIOnF2mZsrnIcuaedu
+            jRfZnJST1vOfL7JksF1+8pYwSn34CjJCGhyFf25lc6mARXmZe/araNrVpTntCy2+
+            MqG8KZe4mIda/WPTXRYGtFVQZeClM5SCZ7EECtw8sEkwt2QtOv43p/hiMXAkOQsq
+            6xc9/b4Bry7d+IjJs3waKfFQllF+C+GuK8yF0YnCEb6GZw7xkxHIO1QV4KSQ4CH7
+            36kEAdCSQ5rgaygRanUlUl+duQn1MLQ+lRlerAEcFfKrr3MKNz2jmGth8iUURdyP
+            MHjSWe+RkLQ6zzBaVgoKKuI9MbIbhenJWwIDAQAB
+            -----END RSA PUBLIC KEY-----
+            '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGyJlI0YpIh/LiiPMseD2IBHg+uVGrkSy0MPNeD+Jv8Y cake";
+    };
     drop = rec {
       ci = true;
       cores = 1;
@@ -73,6 +98,37 @@ with import <stockholm/lib>;
             nJR3m0cSRm8yCTMbznlGH99+5+3HgvuBE/UYXmmGBs7w8DevaX76butzprZ8fm4z
             e5C7R9ofdVW70GGksfSI81y5xODWMbfjTRHKm4OBX7NOCiOTwx1wu8bYDN3EzN6V
             UM5PJfU42sViPEZmVuC8cDcP1xemHTkh9QIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+    latte = rec {
+      ci = true;
+      cores = 1;
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIrkK1mWfPvfZ9ALC1irGLuzOtMefaGAmGY1VD4dj7K1 latte";
+      nets = {
+        internet = {
+          ip4.addr = "185.215.224.160";
+          aliases = [
+            "latte.i"
+          ];
+        };
+        retiolum = {
+          ip4.addr = "10.243.80.249";
+          ip6.addr  = "42:ecb0:376:b37d:cf47:1ecf:f32b:a3b9";
+          aliases = [
+            "latte.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAx70gmNoP4RYeF3ShddEMsbNad9L5ezegwxJTZA7XTfF+/cwr/QwU
+            5BL0QXTwBnKzS0gun5NXmhwPzvOdvfczAxtJLk8/NjVHFeE39CiTHGgIxkZFgnbo
+            r2Rj6jJb89ZPaTr+hl0+0WQQVpl9NI7MTCUimvFBaD6IPmBh5wTySu6mYBs0mqmf
+            43RrvS42ieqQJAvVPkIzxxJeTS/M3NXmjbJ3bdx/2Yzd7INdfPkMhOONHcQhTKS4
+            GSXJRTytLYZEah8lp8F4ONggN6ixlhlcQAotToFP4s8c+KqYfIZrtP+pRj7W72Y6
+            vhnobLDJwBbAsW1RQ6FHcw10TrP2H+haewIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
         };
@@ -460,6 +516,8 @@ with import <stockholm/lib>;
           '';
         };
       };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN5ZmJSypW3LXIJ67DdbxMxCfLtORFkl5jEuD131S5Tr";
     };
 
     gum = rec {
@@ -522,7 +580,8 @@ with import <stockholm/lib>;
           '';
         };
       };
-      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      # configured manually
+      # ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcxWFEPzke/Sdd9qNX6rSJgXal8NmINYajpFCxXfYdj root@gum";
     };
     shoney = rec {
@@ -972,6 +1031,10 @@ with import <stockholm/lib>;
     makefu-tempx = {
       inherit (makefu) mail pgp;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDOXG6iwvm6zUVk+OE9ZviO+WNosAHSZw4ku0RxWbXSlSG0RfzvV4IfByF3Dw+4a8yZQmjwNkQalUURh2fEqhBLBI9XNEIL7qIu17zheguyXzpE3Smy4pbI+fjdsnfFrw+WE2n/IO8N6ojdH6sMmnWwfkFZYqqofWyLB3WUN9wy2b2z0w/jc56+HxxyTl3rD7CttTs9ak67HqIn3/pNeHoOM+JQ/te8t4ageIlPi8yJJpqZgww1RUWCgPPwZ9DP6gQjo85he76x0h9jvhnFd7m9N1aGdRDcK55QyoY/9x07R24GRutohAB/KDWSkDWQv5BW7M1LCawpJcF3DDslD1i7 makefu@gum";
+    };
+    makefu-android = {
+      inherit (makefu) mail pgp;
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDoAtBa10AbiFXfYL4Za7e0CLeXJeH6FhMqVZFqElLkJBKmQ7c7WEMlnuRhEZWSFDXBpaS7p73s5MMOZA13uYv6fI2ipOOwE9Ej1EoMsrQGegBp2VDMo0wnr/sgTL1do+uGI85E/i0uFw0DYhXqlZQk1eK8SdgXYltiVL27IA3NG2kYuoTIvJgRnaPJjTbhLBWti3m586LuO+pBKtcTt1D9EV6wp+6Jum4owPtCgVPQaZfFGYWkEiINV83WX9HoIk4S3bTPLh8Kfp0je0xsioS4T9/cxSPgUie8MjSg0irvLJXRH0JOVuG5NvZTYhAAekwNkHll9CtypPrutjbrXPXf makefu@x";
     };
     makefu-bob = {
       inherit (makefu) mail pgp;

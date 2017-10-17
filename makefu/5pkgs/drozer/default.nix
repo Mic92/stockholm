@@ -1,11 +1,11 @@
-{ pkgs, lib, fetchFromGitHub, pythonPackages, jre7, jdk7, ... }:
+{ pkgs, lib, fetchFromGitHub, pythonPackages, jre7, jdk7 }:
 
 pythonPackages.buildPythonApplication rec {
   name = "drozer-${version}";
   version = "2.4.3";
   buildInputs = [ jdk7 ];
   propagatedBuildInputs = with pythonPackages; [
-    protobuf3_2
+    protobuf
     pyopenssl
     pyyaml
   ] ++ [
