@@ -16,6 +16,7 @@
       vimperator|https://sites.google.com/a/vimperator.org/www/blog/posts.xml|#news
       weechat|http://dev.weechat.org/feed/atom|#news
       xkcd|https://xkcd.com/rss.xml|#news
+      painload|https://github.com/krebscode/painload/commits/master.atom|#news
     '';
   };
 }
