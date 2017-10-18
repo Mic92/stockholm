@@ -139,6 +139,8 @@ myKeyMap =
     , ("M4-<F6>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 10")
     , ("M4-<F7>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 33")
     , ("M4-<F8>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 100")
+
+    , ("<Pause>", spawn "${pkgs.xcalib}/bin/xcalib -invert -alter")
     ]
 
 forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()
