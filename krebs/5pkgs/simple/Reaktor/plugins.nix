@@ -144,7 +144,8 @@ rec {
     '';
   };
   wiki-todo-show = buildSimpleReaktorPlugin "wiki-todo" {
-    script = pkgs.writeDash "wiki-todo-add" ''
+    pattern = "^wiki-show$";
+    script = pkgs.writeDash "wiki-show" ''
       ${pkgs.coreutils}/bin/cat wiki-todo
     '';
   };
