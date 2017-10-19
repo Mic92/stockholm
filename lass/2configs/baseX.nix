@@ -6,7 +6,6 @@ in {
   imports = [
     ./mpv.nix
     ./power-action.nix
-    ./screenlock.nix
     ./copyq.nix
     ./xresources.nix
     ./livestream.nix
@@ -136,4 +135,5 @@ in {
   };
 
   services.urxvtd.enable = true;
+  lass.screenlock.enable = true;
 }

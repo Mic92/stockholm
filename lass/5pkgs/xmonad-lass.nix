@@ -97,7 +97,7 @@ displaySomeException = displayException
 
 myKeyMap :: [([Char], X ())]
 myKeyMap =
-    [ ("M4-<F11>", spawn "${pkgs.i3lock}/bin/i3lock -i /var/lib/wallpaper/wallpaper -f")
+    [ ("M4-<F11>", spawn "${config.lass.screenlock.command}")
     , ("M4-C-p", spawn "${pkgs.scrot}/bin/scrot ~/public_html/scrot.png")
     , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
     , ("M4-o", spawn "${pkgs.brain}/bin/brainmenu --type")
