@@ -50,7 +50,7 @@ with import <stockholm/lib>;
         NIX_PATH = mkForce "secrets=/var/src/stockholm/null:/var/src";
       };
     }
-    (let ca-bundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"; in {
+    (let ca-bundle = "/etc/ssl/certs/ca-bundle.crt"; in {
       environment.variables = {
         CURL_CA_BUNDLE = ca-bundle;
         GIT_SSL_CAINFO = ca-bundle;
