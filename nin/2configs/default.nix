@@ -91,6 +91,7 @@ with import <stockholm/lib>;
     gnumake
     jq
     proot
+    pavucontrol
     populate
     p7zip
     termite
