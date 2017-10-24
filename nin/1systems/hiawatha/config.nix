@@ -99,10 +99,6 @@ with lib;
 
     allowUnfree = true;
 
-    firefox = {
-      enableGoogleTalkPlugin = true;
-      enableAdobeFlash = true;
-    };
   };
 
   #services.logind.extraConfig = "HandleLidSwitch=ignore";
