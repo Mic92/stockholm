@@ -4,6 +4,7 @@ with import <stockholm/lib>;
 {
   imports = [
     ../2configs/vim.nix
+    <stockholm/krebs/2configs/binary-cache/prism.nix>
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
@@ -45,12 +46,6 @@ with import <stockholm/lib>;
         SSL_CERT_FILE = ca-bundle;
       };
     })
-    {
-      nix = {
-        binaryCaches = ["http://cache.prism.r"];
-        binaryCachePublicKeys = ["cache.prism-1:+S+6Lo/n27XEtvdlQKuJIcb1yO5NUqUCE2lolmTgNJU="];
-      };
-    }
   ];
 
   networking.hostName = config.krebs.build.host.name;
