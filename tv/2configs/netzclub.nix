@@ -1,6 +1,6 @@
 { pkgs, ... }: {
 
-  # usage: ppp dial netzclub
+  # usage: pppd call netzclub
 
   environment.etc."ppp/peers/netzclub".text = ''
     /dev/ttyACM2
