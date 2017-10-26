@@ -11,6 +11,7 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/gitrepos.nix>
     <stockholm/tv/2configs/mail-client.nix>
     <stockholm/tv/2configs/man.nix>
+    <stockholm/tv/2configs/netzclub.nix>
     <stockholm/tv/2configs/nginx/krebs-pages.nix>
     <stockholm/tv/2configs/nginx/public_html.nix>
     <stockholm/tv/2configs/pulse.nix>
@@ -99,7 +100,6 @@ with import <stockholm/lib>;
         #tlsdate
         #unetbootin
         #utillinuxCurses
-        #wvdial
         #xdotool
         #xkill
         #xl2tpd
@@ -159,15 +159,6 @@ with import <stockholm/lib>;
   tv.nixpkgs-overlays = {
     krebs = "/home/tv/stockholm/krebs/5pkgs";
     tv = "/home/tv/stockholm/tv/5pkgs";
-  };
-
-  tv.umts = {
-    enable = true;
-    modem = "/dev/serial/by-id/usb-Lenovo_F5521gw_097EAD658B094860-if09";
-    initstrings = ''
-      Init1 = AT+CFUN=1
-      Init2 = AT+CGDCONT=1,"IP","pinternet.interkom.de","",0,0
-    '';
   };
 
   virtualisation.virtualbox.host.enable = true;
