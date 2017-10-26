@@ -35,7 +35,7 @@
       'OK' 'ATDT*99***1#'
       TIMEOUT 30
       CONNECT '''
-    ''}
+    ''}"
   '';
 
   environment.systemPackages = [
