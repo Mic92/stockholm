@@ -39,7 +39,7 @@
   '';
 
   environment.systemPackages = [
-    ppp
+    pkgs.ppp
   ];
 
 }
