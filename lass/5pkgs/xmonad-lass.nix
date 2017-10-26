@@ -97,7 +97,7 @@ displaySomeException = displayException
 
 myKeyMap :: [([Char], X ())]
 myKeyMap =
-    [ ("M4-<F11>", spawn "${pkgs.i3lock}/bin/i3lock -i /var/lib/wallpaper/wallpaper -f")
+    [ ("M4-<F11>", spawn "${config.lass.screenlock.command}")
     , ("M4-C-p", spawn "${pkgs.scrot}/bin/scrot ~/public_html/scrot.png")
     , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
     , ("M4-o", spawn "${pkgs.brain}/bin/brainmenu --type")
@@ -139,6 +139,8 @@ myKeyMap =
     , ("M4-<F6>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 10")
     , ("M4-<F7>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 33")
     , ("M4-<F8>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 100")
+
+    , ("<Pause>", spawn "${pkgs.xcalib}/bin/xcalib -invert -alter")
     ]
 
 forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()

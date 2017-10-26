@@ -437,8 +437,14 @@ with import <stockholm/lib>;
           ip4.addr = "129.215.90.4";
           aliases = [ "eddie.i" ];
         };
-        retiolum = {
+        retiolum = rec {
           via = internet;
+          addrs = [
+            # edinburgh university
+            "129.215.0.0/16"
+            ip4.addr
+            ip6.addr
+          ];
           ip4.addr = "10.243.29.170";
           ip6.addr = "42:4992:6a6d:700::1";
           aliases = [ "eddie.r" ];

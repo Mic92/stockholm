@@ -8,6 +8,7 @@ _:
     ./mysql-backup.nix
     ./news.nix
     ./pyload.nix
+    ./screenlock.nix
     ./umts.nix
     ./usershadow.nix
     ./xresources.nix

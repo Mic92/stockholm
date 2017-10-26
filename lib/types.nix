@@ -92,7 +92,7 @@ rec {
         default = null;
       };
       addrs = mkOption {
-        type = listOf addr;
+        type = listOf cidr;
         default =
           optional (config.ip4 != null) config.ip4.addr ++
           optional (config.ip6 != null) config.ip6.addr;
@@ -109,7 +109,7 @@ rec {
               type = addr4;
             };
             prefix = mkOption ({
-              type = str; # TODO routing prefix (CIDR)
+              type = cidr4;
             } // optionalAttrs (config.name == "retiolum") {
               default = "10.243.0.0/16";
             });
@@ -125,7 +125,7 @@ rec {
               apply = lib.normalize-ip6-addr;
             };
             prefix = mkOption ({
-              type = str; # TODO routing prefix (CIDR)
+              type = cidr6;
             } // optionalAttrs (config.name == "retiolum") {
               default = "42::/16";
             });
@@ -361,6 +361,26 @@ rec {
       IPv6address = "[0-9a-f.:]+";
     in
       test IPv6address;
+    merge = mergeOneOption;
+  };
+
+  cidr = either cidr4 cidr6;
+  cidr4 = mkOptionType {
+    name = "CIDRv4 address";
+    check = let
+      CIDRv4address = let d = "([1-9]?[0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])"; in
+        concatMapStringsSep "." (const d) (range 1 4) + "(/([1-2]?[0-9]|3[0-2]))?";
+    in
+      test CIDRv4address;
+    merge = mergeOneOption;
+  };
+  cidr6 = mkOptionType {
+    name = "CIDRv6 address";
+    check = let
+      # TODO check IPv6 address harder
+      CIDRv6address = "[0-9a-f.:]+(/([0-9][0-9]?|1[0-2][0-8]))?";
+    in
+      test CIDRv6address;
     merge = mergeOneOption;
   };
 
