@@ -210,6 +210,7 @@ with import <stockholm/lib>;
         { predicate = "-p tcp -i retiolum"; target = "REJECT --reject-with tcp-reset"; precedence = -10000; }
         { predicate = "-p udp -i retiolum"; target = "REJECT --reject-with icmp-port-unreachable"; v6 = false; precedence = -10000; }
         { predicate = "-i retiolum"; target = "REJECT --reject-with icmp-proto-unreachable"; v6 = false; precedence = -10000; }
+        { predicate = "-i retiolum -p udp -m udp --dport 53"; target = "ACCEPT"; }
       ];
     };
   };
