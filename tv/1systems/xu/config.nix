@@ -161,14 +161,5 @@ with import <stockholm/lib>;
     tv = "/home/tv/stockholm/tv/5pkgs";
   };
 
-  tv.umts = {
-    enable = true;
-    modem = "/dev/serial/by-id/usb-Lenovo_F5521gw_097EAD658B094860-if09";
-    initstrings = ''
-      Init1 = AT+CFUN=1
-      Init2 = AT+CGDCONT=1,"IP","pinternet.interkom.de","",0,0
-    '';
-  };
-
   virtualisation.virtualbox.host.enable = true;
 }
