@@ -25,16 +25,8 @@
       ABORT 'NO ANSWER'
       ABORT 'DELAYED'
       REPORT CONNECT
-      TIMEOUT 6
-      ''' 'ATQ0'
-      'OK-AT-OK' 'ATZ'
-      TIMEOUT 3
-      'OK\d-AT-OK' 'ATI'
-      'OK' 'ATZ'
-      'OK' 'ATQ0 V1 E1 S0=0 &C1 &D2 +FCLASS=0'
-      'OK' 'ATDT*99***1#'
-      TIMEOUT 30
-      CONNECT '''
+      "" "ATDT*99#"
+      CONNECT ""
     ''}"
   '';
 
