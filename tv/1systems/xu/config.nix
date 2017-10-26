@@ -100,7 +100,6 @@ with import <stockholm/lib>;
         #tlsdate
         #unetbootin
         #utillinuxCurses
-        #wvdial
         #xdotool
         #xkill
         #xl2tpd
