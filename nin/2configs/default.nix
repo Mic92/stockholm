@@ -4,6 +4,7 @@ with import <stockholm/lib>;
 {
   imports = [
     ../2configs/vim.nix
+    <stockholm/krebs/2configs/binary-cache/prism.nix>
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
@@ -45,12 +46,6 @@ with import <stockholm/lib>;
         SSL_CERT_FILE = ca-bundle;
       };
     })
-    {
-      nix = {
-        binaryCaches = ["http://cache.prism.r"];
-        binaryCachePublicKeys = ["cache.prism-1:+S+6Lo/n27XEtvdlQKuJIcb1yO5NUqUCE2lolmTgNJU="];
-      };
-    }
   ];
 
   networking.hostName = config.krebs.build.host.name;
@@ -96,6 +91,7 @@ with import <stockholm/lib>;
     gnumake
     jq
     proot
+    pavucontrol
     populate
     p7zip
     termite
@@ -158,6 +154,7 @@ with import <stockholm/lib>;
       filter.INPUT.rules = [
         { predicate = "-m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; precedence = 10001; }
         { predicate = "-p icmp"; target = "ACCEPT"; precedence = 10000; }
+        { predicate = "-p ipv6-icmp"; target = "ACCEPT"; v4 = false;  precedence = 10000; }
         { predicate = "-i lo"; target = "ACCEPT"; precedence = 9999; }
         { predicate = "-p tcp --dport 22"; target = "ACCEPT"; precedence = 9998; }
         { predicate = "-p tcp -i retiolum"; target = "REJECT --reject-with tcp-reset"; precedence = -10000; }

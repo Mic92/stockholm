@@ -6,7 +6,6 @@ in {
   imports = [
     ./mpv.nix
     ./power-action.nix
-    ./screenlock.nix
     ./copyq.nix
     ./xresources.nix
     ./livestream.nix
@@ -31,15 +30,15 @@ in {
       options.lass.fonts = {
         regular = mkOption {
           type = types.str;
-          default = "xft:Hack-Regular:pixelsize=11,xft:Symbola";
+          default = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1";
         };
         bold = mkOption {
           type = types.str;
-          default = "xft:Hack-Bold:pixelsize=11,xft:Symbola";
+          default = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1";
         };
         italic = mkOption {
           type = types.str;
-          default = "xft:Hack-RegularOblique:pixelsize=11,xft:Symbol";
+          default = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1";
         };
       };
     }
@@ -136,4 +135,5 @@ in {
   };
 
   services.urxvtd.enable = true;
+  lass.screenlock.enable = true;
 }

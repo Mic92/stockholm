@@ -50,7 +50,7 @@ with import <stockholm/lib>;
         NIX_PATH = mkForce "secrets=/var/src/stockholm/null:/var/src";
       };
     }
-    (let ca-bundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"; in {
+    (let ca-bundle = "/etc/ssl/certs/ca-bundle.crt"; in {
       environment.variables = {
         CURL_CA_BUNDLE = ca-bundle;
         GIT_SSL_CAINFO = ca-bundle;
@@ -210,6 +210,7 @@ with import <stockholm/lib>;
         { predicate = "-p tcp -i retiolum"; target = "REJECT --reject-with tcp-reset"; precedence = -10000; }
         { predicate = "-p udp -i retiolum"; target = "REJECT --reject-with icmp-port-unreachable"; v6 = false; precedence = -10000; }
         { predicate = "-i retiolum"; target = "REJECT --reject-with icmp-proto-unreachable"; v6 = false; precedence = -10000; }
+        { predicate = "-i retiolum -p udp -m udp --dport 53"; target = "ACCEPT"; }
       ];
     };
   };

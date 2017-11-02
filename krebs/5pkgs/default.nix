@@ -13,6 +13,15 @@ foldl' mergeAttrs {}
 //
 
 {
+  # https://github.com/NixOS/nixpkgs/pull/30065
+  brscan4 = overrideDerivation super.brscan4 (original: rec {
+    name = "brscan4-0.4.4-4";
+    src = super.fetchurl {
+      url = "http://download.brother.com/welcome/dlf006645/${name}.amd64.deb";
+      sha256 = "0xy5px96y1saq9l80vwvfn6anr2q42qlxdhm6ci2a0diwib5q9fd";
+    };
+  });
+
   ReaktorPlugins = self.callPackage ./simple/Reaktor/plugins.nix {};
 
   # https://github.com/proot-me/PRoot/issues/106

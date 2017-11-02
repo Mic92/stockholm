@@ -13,6 +13,7 @@ with import <stockholm/lib>;
   };
   services.dnsmasq = {
     enable = true;
+    resolveLocalQueries = false;
     extraConfig = ''
       server=127.1.0.1
       #no-resolv
