@@ -126,6 +126,8 @@ in {
       { from = "dominik@apanowicz.de"; to = "dominik_a@gmx.de"; }
       { from = "dma@ubikmedia.de"; to = "domsen"; }
       { from = "dma@ubikmedia.eu"; to = "domsen"; }
+      { from = "mail@habsys.de"; to = "domsen"; }
+      { from = "mail@habsys.eu"; to = "domsen"; }
       { from = "bruno@apanowicz.de"; to = "bruno"; }
       { from = "mail@jla-trading.com"; to = "jla-trading"; }
       { from = "jms@ubikmedia.eu"; to = "jms"; }
