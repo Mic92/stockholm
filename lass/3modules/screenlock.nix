@@ -11,7 +11,7 @@ let
   };
 
   api = {
-    enable = mkEnableOption "news";
+    enable = mkEnableOption "screenlock";
     command = mkOption {
       type = types.str;
       default = "${pkgs.i3lock}/bin/i3lock -i /var/lib/wallpaper/wallpaper -f";
