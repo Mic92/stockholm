@@ -11,7 +11,6 @@ with import <stockholm/lib>;
 
   imports = [
     <secrets>
-    ./audit.nix
     ./backup.nix
     ./bash
     ./htop.nix
