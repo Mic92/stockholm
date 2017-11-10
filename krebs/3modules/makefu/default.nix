@@ -545,8 +545,8 @@ with import <stockholm/lib>;
       };
       nets = rec {
         internet = {
-          ip4.addr = "188.68.40.19";
-          ip6.addr = "2a03:4000:17:2df::1";
+          ip4.addr = "185.194.143.140";
+          ip6.addr = "2a03:4000:1c:43f::1";
           aliases = [
             "gum.i"
           ];

@@ -26,9 +26,13 @@ in
     <stockholm/krebs/2configs/shack/share.nix>
     {
       systemd.services.telegraf.path = [ pkgs.net_snmp ]; # for snmptranslate
-      #systemd.services.telegraf.environment = {
-      #  "MIBDIRS" : ""; # extra mibs like ADSL
-      #};
+      systemd.services.telegraf.environment = {
+        MIBDIRS = pkgs.fetchgit {
+          url = "http://git.shackspace.de/makefu/modem-mibs.git";
+          sha256 =
+          "a4244aa43ddd6e3ef9e64bb80f4ee952f68232aa008d3da9c78e3b627e5675c8";
+        }; # extra mibs like ADSL
+      };
       services.telegraf = {
         enable = true;
         extraConfig = {
