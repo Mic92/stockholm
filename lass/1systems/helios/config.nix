@@ -105,6 +105,8 @@ with import <stockholm/lib>;
     { output = "DP-2"; primary = true; }
   ];
 
+  networking.hostName = lib.mkForce "BLN02NB0162";
+
   security.pki.certificateFiles = [
    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC1G1.pem"; sha256 = "14vz9c0fk6li0a26vx0s5ha6y3yivnshx9pjlh9vmnpkbph5a7rh"; })
    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC2G1.pem"; sha256 = "0r1dd48a850cv7whk4g2maik550rd0vsrsl73r6x0ivzz7ap1xz5"; })
@@ -117,4 +119,12 @@ with import <stockholm/lib>;
   ];
 
   lass.screenlock.command = "${pkgs.i3lock}/bin/i3lock -i /home/lass/lock.png -t -f";
+
+  programs.adb.enable = true;
+  users.users.mainUser.extraGroups = [ "adbusers" ];
+
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.postscript-lexmark ];
+  };
 }
