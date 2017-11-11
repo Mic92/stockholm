@@ -3,6 +3,7 @@ pkgs.writeHaskell "xmonad-tv" {
   executables.xmonad = {
     extra-depends = [
       "containers"
+      "extra"
       "unix"
       "X11"
       "xmonad"
@@ -19,11 +20,12 @@ pkgs.writeHaskell "xmonad-tv" {
 module Main where
 
 import Control.Exception
+import Control.Monad.Extra (whenJustM)
 import Graphics.X11.ExtraTypes.XF86
 import Text.Read (readEither)
 import XMonad
 import System.IO (hPutStrLn, stderr)
-import System.Environment (getArgs, withArgs, getEnv, getEnvironment)
+import System.Environment (getArgs, withArgs, getEnv, getEnvironment, lookupEnv)
 import System.Posix.Process (executeFile)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
@@ -84,9 +86,9 @@ mainNoArgs = do
             -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
             --, handleEventHook   = handleTimerEvent
             , manageHook        = placeHook (smart (1,0)) <+> floatNextHook
-            , startupHook = do
-                path <- liftIO (getEnv "XMONAD_STARTUP_HOOK")
-                forkFile path [] Nothing
+            , startupHook =
+                whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
+                          (\path -> forkFile path [] Nothing)
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
             , handleEventHook = handleShutdownEvent
