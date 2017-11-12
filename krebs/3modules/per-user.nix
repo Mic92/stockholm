@@ -17,9 +17,12 @@ in {
     environment = {
       etc = flip mapAttrs' cfg (name: { packages, ... }: {
         name = "per-user/${name}";
-        value.source = pkgs.symlinkJoin {
+        value.source = pkgs.buildEnv {
           name = "per-user.${name}";
           paths = packages;
+          pathsToLink = [
+            "/bin"
+          ];
         };
       });
       profiles = ["/etc/per-user/$LOGNAME"];
