@@ -20,5 +20,7 @@
     xml2json = pkgs.callPackage ./xml2json/default.nix {};
     xmonad-lass = import ./xmonad-lass.nix { inherit config pkgs; };
     yt-next = pkgs.callPackage ./yt-next/default.nix {};
+
+    screengrab = pkgs.writeDashBin "screengrab" "${pkgs.ffmpeg}/bin/ffmpeg -f x11grab -r 25 -s 1024x768 -i :0.0 -c:v huffyuv $1";
   };
 }
