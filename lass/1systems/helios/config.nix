@@ -110,10 +110,15 @@ with import <stockholm/lib>;
 
   services.xserver.videoDrivers = [ "nvidia" ];
   services.xserver.xrandrHeads = [
-    { output = "DP-0.8"; }
-    { output = "DP-4"; monitorConfig = ''Option "Rotate" "right"''; }
     { output = "DP-2"; primary = true; }
+    { output = "DP-4"; monitorConfig = ''Option "Rotate" "left"''; }
+    { output = "DP-0"; }
   ];
+
+  services.xserver.displayManager.sessionCommands = ''
+    ${pkgs.xorg.xrandr}/bin/xrandr --output DP-6 --off --output DP-5 --off --output DP-4 --mode 2560x1440 --pos 3840x0 --rotate left --output DP-3 --off --output DP-2 --primary --mode 3840x2160 --pos 0x400 --rotate normal --output DP-1 --off --output DP-0 --mode 2560x1440 --pos 5280x1120 --rotate normal
+    ${pkgs.systemd}/bin/systemctl start xresources.service
+  '';
 
   networking.hostName = lib.mkForce "BLN02NB0162";
 
