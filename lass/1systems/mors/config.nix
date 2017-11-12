@@ -135,6 +135,8 @@ with import <stockholm/lib>;
 
     macchanger
     dpass
+
+    dnsutils
   ];
 
   #TODO: fix this shit
