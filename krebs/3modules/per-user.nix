@@ -15,16 +15,19 @@ in {
   };
   config = {
     environment = {
-      etc = flip mapAttrs' cfg (name: { packages, ... }: {
-        name = "per-user/${name}";
-        value.source = pkgs.buildEnv {
-          name = "per-user.${name}";
-          paths = packages;
-          pathsToLink = [
-            "/bin"
-          ];
-        };
-      });
+      etc =
+        mapAttrs'
+          (name: per-user: {
+            name = "per-user/${name}";
+            value.source = pkgs.buildEnv {
+              name = "per-user.${name}";
+              paths = per-user.packages;
+              pathsToLink = [
+                "/bin"
+              ];
+            };
+          })
+          (filterAttrs (_: per-user: per-user.packages != []) cfg);
       profiles = ["/etc/per-user/$LOGNAME"];
     };
   };
