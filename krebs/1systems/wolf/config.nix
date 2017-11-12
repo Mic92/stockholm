@@ -30,7 +30,7 @@ in
         MIBDIRS = pkgs.fetchgit {
           url = "http://git.shackspace.de/makefu/modem-mibs.git";
           sha256 =
-          "a4244aa43ddd6e3ef9e64bb80f4ee952f68232aa008d3da9c78e3b627e5675c8";
+          "1rhrpaascvj5p3dj29hrw79gm39rp0aa787x95m3r2jrcq83ln1k";
         }; # extra mibs like ADSL
       };
       services.telegraf = {
