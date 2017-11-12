@@ -147,6 +147,9 @@ in {
     in ''
       alias ${initscript};
     '';
+    locations."/pub".extraConfig = ''
+      alias ${pkgs.writeText "pub" config.krebs.users.lass.pubkey};
+    '';
   };
 
   services.nginx.virtualHosts.cgit = {
