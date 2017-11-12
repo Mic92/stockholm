@@ -194,4 +194,8 @@ with import <stockholm/lib>;
       exec nix-shell -I stockholm="$PWD" --run 'test --system="$SYSTEM" --target="$SYSTEM/var/test/" --force-populate'
     '';
   };
+
+  #nix.package = pkgs.nixUnstable;
+  programs.adb.enable = true;
+  users.users.mainUser.extraGroups = [ "adbusers" ];
 }
