@@ -68,6 +68,16 @@ with import <stockholm/lib>;
       repo = [ config.krebs.git.repos.stockholm ];
       perm = with git; push "refs/heads/*" [ fast-forward non-fast-forward create delete merge ];
     }
+    {
+      lass.umts = {
+        enable = true;
+        modem = "/dev/serial/by-id/usb-Lenovo_F5521gw_2C7D8D7C35FC7040-if09";
+        initstrings = ''
+          Init1 = AT+CFUN=1
+          Init2 = AT+CGDCONT=1,"IP","pinternet.interkom.de","",0,0
+        '';
+      };
+    }
   ];
 
   # Use the systemd-boot EFI boot loader.
