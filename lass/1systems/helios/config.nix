@@ -138,8 +138,6 @@ with import <stockholm/lib>;
   programs.adb.enable = true;
   users.users.mainUser.extraGroups = [ "adbusers" ];
 
-  services.printing = {
-    enable = true;
-    drivers = [ pkgs.postscript-lexmark ];
-  };
+  services.printing.drivers = [ pkgs.postscript-lexmark ];
+
 }
