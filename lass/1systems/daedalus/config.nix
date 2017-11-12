@@ -37,6 +37,9 @@ with import <stockholm/lib>;
         networkmanagerapplet
         libreoffice
         audacity
+        zathura
+        skype
+        wine
       ];
       services.xserver.enable = true;
       services.xserver.displayManager.lightdm.enable = true;
