@@ -1,28 +1,19 @@
-{ config, lib, pkgs, ... }:
-
 with import <stockholm/lib>;
-
-let
+{ config, pkgs, ... }: let
   cfg = config.krebs.per-user;
-
-  out = {
-    options.krebs.per-user = api;
-    config = imp;
-  };
-
-  api = mkOption {
-    type = with types; attrsOf (submodule {
+in {
+  options.krebs.per-user = mkOption {
+    type = types.attrsOf (types.submodule {
       options = {
         packages = mkOption {
-          type = listOf path;
+          type = types.listOf types.path;
           default = [];
         };
       };
     });
     default = {};
   };
-
-  imp = {
+  config = {
     environment = {
       etc = flip mapAttrs' cfg (name: { packages, ... }: {
         name = "per-user/${name}";
@@ -34,5 +25,4 @@ let
       profiles = ["/etc/per-user/$LOGNAME"];
     };
   };
-
-in out
+}
