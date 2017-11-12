@@ -29,7 +29,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/syncthing.nix>
     <stockholm/lass/2configs/otp-ssh.nix>
     <stockholm/lass/2configs/c-base.nix>
-    <stockholm/tv/2configs/br.nix>
+    <stockholm/lass/2configs/br.nix>
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
