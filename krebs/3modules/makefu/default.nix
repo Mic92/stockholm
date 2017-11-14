@@ -5,7 +5,7 @@ with import <stockholm/lib>;
 {
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.makefu) {
     cake = rec {
-      cores = 1;
+      cores = 4;
       ci = false;
       nets = {
         retiolum = {
