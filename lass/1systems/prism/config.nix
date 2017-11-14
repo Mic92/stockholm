@@ -67,6 +67,11 @@ in {
         fsType = "ext4";
       };
 
+      fileSystems."/bku" = {
+        device = "/dev/pool/bku";
+        fsType = "ext4";
+      };
+
       swapDevices = [
         { label = "swap1"; }
         { label = "swap2"; }
