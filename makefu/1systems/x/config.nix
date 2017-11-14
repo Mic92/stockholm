@@ -23,8 +23,6 @@ with import <stockholm/lib>;
       # <stockholm/makefu/2configs/deployment/wiki-irc-bot>
 
       # <stockholm/makefu/2configs/torrent.nix>
-      # <stockholm/makefu/2configs/lanparty/lancache.nix>
-      # <stockholm/makefu/2configs/lanparty/lancache-dns.nix>
       # <stockholm/makefu/2configs/deployment/dirctator.nix>
       # <stockholm/makefu/2configs/vncserver.nix>
       # <stockholm/makefu/2configs/deployment/led-fader>
@@ -64,7 +62,7 @@ with import <stockholm/lib>;
       <stockholm/makefu/2configs/hw/rtl8812au.nix>
       <stockholm/makefu/2configs/hw/exfat-nofuse.nix>
       <stockholm/makefu/2configs/hw/wwan.nix>
-      <stockholm/makefu/2configs/hw/stk1160.nix>
+      # <stockholm/makefu/2configs/hw/stk1160.nix>
       # <stockholm/makefu/2configs/rad1o.nix>
 
       # Filesystem
@@ -75,6 +73,11 @@ with import <stockholm/lib>;
       {
         programs.adb.enable = true;
       }
+      # temporary
+      # <stockholm/makefu/2configs/lanparty/lancache.nix>
+      # <stockholm/makefu/2configs/lanparty/lancache-dns.nix>
+      # <stockholm/makefu/2configs/lanparty/samba.nix>
+      # <stockholm/makefu/2configs/lanparty/mumble-server.nix>
 
     ];
 
@@ -84,7 +87,6 @@ with import <stockholm/lib>;
 
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = [ pkgs.passwdqc-utils ];
 
 
   # configure pulseAudio to provide a HDMI sink as well
@@ -102,4 +104,7 @@ with import <stockholm/lib>;
   '';
   # hard dependency because otherwise the device will not be unlocked
   boot.initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; allowDiscards=true; }];
+
+  nix.package = pkgs.nixUnstable;
+  environment.systemPackages = [ pkgs.passwdqc-utils pkgs.nixUnstable ];
 }
