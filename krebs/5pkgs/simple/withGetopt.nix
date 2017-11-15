@@ -20,7 +20,7 @@ opt-spec: cmd-spec: let
 
   # true if b requires a to define its default value
   opts-before = a: b:
-    test ".*[$]${stringAsChars (c: "[${c}]") a.varname}\\>.*" (b.default or "");
+    test ".*[$]${stringAsChars (c: "[${c}]") a.varname}([^0-9A-Za-z_].*)?" (b.default or "");
 
   opts-list = let
     sort-out = toposort opts-before (attrValues opts);
