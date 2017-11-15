@@ -14,7 +14,6 @@ with import <stockholm/lib>;
   imports = [
     <secrets>
     <stockholm/krebs>
-    <stockholm/tv/2configs/audit.nix>
     <stockholm/tv/2configs/bash>
     <stockholm/tv/2configs/exim-retiolum.nix>
     <stockholm/tv/2configs/hw/x220.nix>

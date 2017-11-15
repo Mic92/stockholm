@@ -26,8 +26,9 @@ with import <stockholm/lib>;
     chromium
     firefoxWrapper
     networkmanagerapplet
-    pidginotr
-    pidgin-with-plugins
+    (pkgs.pidgin-with-plugins.override {
+      plugins = [ pkgs.pidginotr ];
+    })
   ];
 
   fileSystems = {

@@ -173,9 +173,13 @@ let {
         syn cluster nix_ind_strings contains=NixIND_STRING
         syn cluster nix_strings contains=NixSTRING
 
-        ${concatStringsSep "\n" (mapAttrsToList (lang: { extraStart ? null }: let
+        ${concatStringsSep "\n" (mapAttrsToList (name: {
+          extraStart ? null,
+          lang ? name
+        }:
+        let
           startAlts = filter isString [
-            ''/\* ${lang} \*/''
+            ''/\* ${name} \*/''
             extraStart
           ];
           sigil = ''\(${concatStringsSep ''\|'' startAlts}\)[ \t\r\n]*'';
