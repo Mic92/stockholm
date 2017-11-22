@@ -540,6 +540,7 @@ with import <stockholm/lib>;
           wiki.euer         IN A      ${nets.internet.ip4.addr}
           graph             IN A      ${nets.internet.ip4.addr}
           ghook             IN A      ${nets.internet.ip4.addr}
+          dockerhub         IN A      ${nets.internet.ip4.addr}
           io                IN NS     gum.krebsco.de.
         '';
       };
