@@ -52,6 +52,8 @@ with import <stockholm/lib>;
       # <stockholm/tv/2configs/xserver/xserver.conf.nix>
       # is derived from `configFile` in:
       https://raw.githubusercontent.com/NixOS/nixpkgs/master/nixos/modules/services/x11/xserver.nix
+
+      https://www.rabbitmq.com/changelog.html
     ];
     hooksFile = toFile "hooks.py" ''
       import subprocess
