@@ -42,6 +42,10 @@ in {
         exim_group = ${cfg.group.name}
         exim_path = /run/wrappers/bin/exim
         spool_directory = ${cfg.user.home}
+
+        # https://lists.exim.org/lurker/message/20171125.034842.d1d75cac.en.html
+        chunking_advertise_hosts =
+
         ${cfg.config}
       '';
       systemPackages = [ pkgs.exim ];
