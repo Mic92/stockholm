@@ -67,6 +67,11 @@ in {
         fsType = "ext4";
       };
 
+      fileSystems."/bku" = {
+        device = "/dev/pool/bku";
+        fsType = "ext4";
+      };
+
       swapDevices = [
         { label = "swap1"; }
         { label = "swap2"; }
@@ -220,8 +225,8 @@ in {
         };
         enableTun = true;
         privateNetwork = true;
-        hostAddress = "10.233.2.4";
-        localAddress = "10.233.2.5";
+        hostAddress = "10.233.2.5";
+        localAddress = "10.233.2.6";
       };
     }
     <stockholm/lass/2configs/exim-smarthost.nix>

@@ -1,3 +1,4 @@
 import <stockholm/lass/source.nix> {
-  name = "archprism";
+  name = "littleT";
+  secure = true;
 }

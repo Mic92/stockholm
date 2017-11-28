@@ -98,8 +98,13 @@ let
     noremap <esc>[c <nop> | noremap! <esc>[c <nop>
     noremap <esc>[d <nop> | noremap! <esc>[d <nop>
 
+    " search with ack
     let g:ackprg = 'ag --vimgrep'
     cnoreabbrev Ack Ack!
+
+    " copy/paste from/to xclipboard
+    noremap x "_x
+    set clipboard=unnamedplus
   '';
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
