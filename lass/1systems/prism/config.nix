@@ -285,6 +285,7 @@ in {
         { predicate = "-p udp --dport 25565"; target = "ACCEPT"; }
       ];
     }
+    <stockholm/krebs/2configs/reaktor-krebs.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
