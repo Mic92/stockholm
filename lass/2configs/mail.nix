@@ -76,6 +76,7 @@ let
         "INBOX"     "notmuch://?query=tag:inbox \
                      and NOT to:nix-devel\
                      and NOT to:shackspace\
+                     and NOT to:security\
                      and NOT to:c-base" \
         "shack"     "notmuch://?query=to:shackspace"\
         "c-base"    "notmuch://?query=to:c-base"\
