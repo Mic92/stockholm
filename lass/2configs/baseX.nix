@@ -74,21 +74,20 @@ in {
     pavucontrol
     powertop
     push
+    rxvt_unicode
+    screengrab
     slock
     sxiv
+    termite
     xclip
     xorg.xbacklight
     xorg.xhost
     xsel
+    youtube-tools
+    yt-next
     zathura
 
-    mpv-poll
-    yt-next
-
-    youtube-tools
-
-    rxvt_unicode
-    termite
+    cabal2nix
   ];
 
   fonts.fonts = with pkgs; [

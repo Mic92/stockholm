@@ -10,8 +10,10 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/pass.nix>
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/otp-ssh.nix>
-    <stockholm/lass/2configs/git.nix>
+    # TODO fix krebs.git.rules.[definition 2-entry 2].lass not defined
+    #<stockholm/lass/2configs/git.nix>
     <stockholm/lass/2configs/dcso-vpn.nix>
+    <stockholm/lass/2configs/virtualbox.nix>
     { # automatic hardware detection
       boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
       boot.kernelModules = [ "kvm-intel" ];
@@ -68,6 +70,16 @@ with import <stockholm/lib>;
       repo = [ config.krebs.git.repos.stockholm ];
       perm = with git; push "refs/heads/*" [ fast-forward non-fast-forward create delete merge ];
     }
+    {
+      lass.umts = {
+        enable = true;
+        modem = "/dev/serial/by-id/usb-Lenovo_F5521gw_2C7D8D7C35FC7040-if09";
+        initstrings = ''
+          Init1 = AT+CFUN=1
+          Init2 = AT+CGDCONT=1,"IP","pinternet.interkom.de","",0,0
+        '';
+      };
+    }
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -100,10 +112,17 @@ with import <stockholm/lib>;
 
   services.xserver.videoDrivers = [ "nvidia" ];
   services.xserver.xrandrHeads = [
-    { output = "DP-0.8"; }
-    { output = "DP-4"; monitorConfig = ''Option "Rotate" "right"''; }
     { output = "DP-2"; primary = true; }
+    { output = "DP-4"; monitorConfig = ''Option "Rotate" "left"''; }
+    { output = "DP-0"; }
   ];
+
+  services.xserver.displayManager.sessionCommands = ''
+    ${pkgs.xorg.xrandr}/bin/xrandr --output DP-6 --off --output DP-5 --off --output DP-4 --mode 2560x1440 --pos 3840x0 --rotate left --output DP-3 --off --output DP-2 --primary --mode 3840x2160 --pos 0x400 --rotate normal --output DP-1 --off --output DP-0 --mode 2560x1440 --pos 5280x1120 --rotate normal
+    ${pkgs.systemd}/bin/systemctl start xresources.service
+  '';
+
+  networking.hostName = lib.mkForce "BLN02NB0162";
 
   security.pki.certificateFiles = [
    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC1G1.pem"; sha256 = "14vz9c0fk6li0a26vx0s5ha6y3yivnshx9pjlh9vmnpkbph5a7rh"; })
@@ -117,4 +136,10 @@ with import <stockholm/lib>;
   ];
 
   lass.screenlock.command = "${pkgs.i3lock}/bin/i3lock -i /home/lass/lock.png -t -f";
+
+  programs.adb.enable = true;
+  users.users.mainUser.extraGroups = [ "adbusers" ];
+
+  services.printing.drivers = [ pkgs.postscript-lexmark ];
+
 }

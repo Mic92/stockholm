@@ -2,7 +2,6 @@
 with import <stockholm/lib>;
 {
   imports = [
-    ../2configs/audit.nix
     ../2configs/binary-cache/client.nix
     ../2configs/gc.nix
     ../2configs/mc.nix

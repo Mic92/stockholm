@@ -38,12 +38,12 @@ let
     ${optionalString (cfg.enableXMLRPC ) ''
       # prepare socket and set permissions. rtorrent user is part of group nginx
       # TODO: configure a shared torrent group
-      execute_nothrow = rm,${cfg.xmlrpc-socket}
+      execute.nothrow = rm,${cfg.xmlrpc-socket}
       scgi_local = ${cfg.xmlrpc-socket}
       schedule = scgi_permission,0,0,"execute.nothrow=chmod,\"ug+w,o=\",${cfg.xmlrpc-socket}"
     ''}
 
-    system.file_allocate.set = ${if cfg.preAllocate then "yes" else "no"}
+    system.file.allocate.set = ${if cfg.preAllocate then "yes" else "no"}
 
     # Prepare systemd logging
     log.open_file = "rtorrent-systemd", ${systemd-logfile}

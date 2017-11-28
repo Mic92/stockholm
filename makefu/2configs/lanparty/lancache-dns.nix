@@ -1,6 +1,19 @@
 { pkgs, lib, config, ... }:
 with import <stockholm/lib>;
 let
+  upstream-server = "8.8.8.8";
+  # make sure the router pins the ip address to the deployed host
+  # and set it as dns server ( dhcp option 6,192.168.10.10 )
+  local_ip = "192.168.10.10";
+
+  extra-config = pkgs.writeText "local.conf" ''
+    server:
+    local-data: "piratebox. A ${local_ip}"
+    local-data: "store. A ${local_ip}"
+    local-data: "share. A ${local_ip}"
+  '';
+
+
   # see https://github.com/zeropingheroes/lancache for full docs
   lancache-dns = pkgs.stdenv.mkDerivation rec {
     name = "lancache-dns-2017-06-28";
@@ -11,8 +24,9 @@ let
       rev = "420aa62";
       sha256 = "0ik7by7ripdv2avyy5kk9jp1i7rz9ksc8xmg7n9iik365q9pv94m";
     };
+
     phases = [ "unpackPhase" "installPhase" ];
-    # here we can chance to edit `includes/proxy-cache-paths.conf`
+    # here we have the chance to edit `includes/proxy-cache-paths.conf`
     installPhase = ''
       mkdir -p $out
       cp -r * $out/
@@ -20,7 +34,6 @@ let
   };
   stateDir = "/var/lib/unbound";
   user = "unbound";
-  upstream-server = "8.8.8.8";
 in {
   services.unbound = {
     enable = true;
@@ -29,6 +42,7 @@ in {
     forwardAddresses = [ upstream-server ];
     extraConfig = ''
       include: "${stateDir}/lancache/*.conf"
+      include: "${extra-config}"
     '';
   };
   services.dnscrypt-proxy.enable = lib.mkForce false;
@@ -42,7 +56,8 @@ in {
       path = [ pkgs.gawk pkgs.iproute pkgs.gnused ];
       script = ''
         set -xeu
-        current_ip=$(ip route get 8.8.8.8 | awk '/8.8.8.8/ {print $NF}')
+        # current_ip=$(ip route get 8.8.8.8 | awk '/8.8.8.8/ {print $NF}')
+        current_ip=${local_ip}
         old_ip=10.1.1.250
         mkdir -p ${stateDir}
         rm -rvf ${stateDir}/lancache
