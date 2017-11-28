@@ -13,7 +13,6 @@
     <stockholm/krebs/2configs/gitlab-runner-shackspace.nix>
     <stockholm/krebs/2configs/binary-cache/nixos.nix>
     <stockholm/krebs/2configs/ircd.nix>
-    <stockholm/krebs/2configs/reaktor-krebs.nix>
     <stockholm/krebs/2configs/reaktor-retiolum.nix>
   ];
 
