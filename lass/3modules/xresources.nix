@@ -4,16 +4,13 @@
 #prefix with Attribute Name
 #ex: urxvt
 
-#
-#
 with builtins;
 with lib;
 
 
 let
 
-  inherit (import ../../tv/4lib { inherit pkgs lib; }) shell-escape;
-  inherit (pkgs) writeScript;
+  inherit (pkgs) writeScript writeText;
 
 in
 
@@ -46,12 +43,11 @@ in
   config =
     let
       cfg = config.services.xresources;
-      xres = concatStringsSep "\n" (attrValues cfg.resources);
+      xres = writeText "xresources" (concatStringsSep "\n" (attrValues cfg.resources));
 
     in mkIf cfg.enable {
         services.xserver.displayManager.sessionCommands = ''
-          echo ${shell-escape xres} | xrdb -merge
+          xrdb -merge ${xres}
         '';
       };
-
 }
