@@ -69,9 +69,11 @@ in {
     dic
     dmenu
     gi
+    git-preview
     gitAndTools.qgit
-    lm_sensors
     haskellPackages.hledger
+    lm_sensors
+    mpv-poll
     much
     ncdu
     nix-repl
