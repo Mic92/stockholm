@@ -104,26 +104,8 @@ in {
     xlibs.fontschumachermisc
   ];
 
+  lass.xserver.enable = true;
   services.xserver = {
-    enable = true;
-
-    desktopManager.xterm.enable = false;
-    desktopManager.default = "none";
-    displayManager.lightdm.enable = true;
-    displayManager.lightdm.autoLogin = {
-      enable = true;
-      user = "lass";
-    };
-    windowManager.default = "xmonad";
-    windowManager.session = [{
-      name = "xmonad";
-      start = ''
-        ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
-        ${pkgs.xmonad-lass}/bin/xmonad &
-        waitPID=$!
-      '';
-    }];
-
     layout = "us";
     xkbModel = "evdev";
     xkbVariant = "altgr-intl";
@@ -133,12 +115,6 @@ in {
   services.logind.extraConfig = ''
     HandleLidSwitch=ignore
   '';
-
-  services.xserver.synaptics = {
-    enable = true;
-    twoFingerScroll = true;
-    accelFactor = "0.035";
-  };
 
   services.urxvtd.enable = true;
   services.xresources.enable = true;
