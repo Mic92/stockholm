@@ -26,8 +26,8 @@ let
       default = "/var/lib/wallpaper";
     };
     display = mkOption {
-      type = types.int;
-      default = config.services.xserver.display;
+      type = types.str;
+      default = ":${toString config.services.xserver.display}";
     };
     unitConfig = mkOption {
       type = types.attrsOf types.str;
@@ -81,7 +81,7 @@ let
 
       environment = {
         URL = cfg.url;
-        DISPLAY = ":${toString cfg.display}";
+        DISPLAY = cfg.display;
       };
       restartIfChanged = true;
 
