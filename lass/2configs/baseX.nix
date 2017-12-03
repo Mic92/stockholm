@@ -81,7 +81,7 @@ in {
     pavucontrol
     powertop
     push
-    rxvt_unicode
+    rxvt_unicode_with-plugins
     screengrab
     slock
     sxiv
