@@ -286,6 +286,7 @@ in {
       ];
     }
     <stockholm/krebs/2configs/reaktor-krebs.nix>
+    <stockholm/lass/2configs/dcso-dev.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
