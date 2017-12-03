@@ -3,6 +3,7 @@ pkgs.writeHaskell "xmonad-lass" {
   executables.xmonad = {
     extra-depends = [
       "containers"
+      "extra"
       "unix"
       "X11"
       "xmonad"
@@ -20,17 +21,15 @@ module Main where
 import XMonad
 
 import qualified XMonad.StackSet as W
-import Control.Exception
+import Control.Monad.Extra (whenJustM)
 import Data.List (isInfixOf)
-import System.Environment (getArgs, withArgs)
-import System.IO (hPutStrLn, stderr)
+import System.Environment (getArgs, lookupEnv)
 import System.Posix.Process (executeFile)
 import XMonad.Actions.CopyWindow (copy, kill1)
 import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace, removeEmptyWorkspace)
 import XMonad.Actions.DynamicWorkspaces (withWorkspace)
 import XMonad.Actions.GridSelect (GSConfig(..), gridselectWorkspace, navNSearch)
-import XMonad.Actions.UpdatePointer (updatePointer)
 import XMonad.Hooks.FloatNext (floatNext)
 import XMonad.Hooks.FloatNext (floatNextHook)
 import XMonad.Hooks.ManageDocks (avoidStruts, ToggleStruts(ToggleStruts))
@@ -48,28 +47,30 @@ import XMonad.Layout.SimpleFloat (simpleFloat)
 import XMonad.Stockholm.Shutdown
 
 myTerm :: FilePath
-myTerm = "${pkgs.rxvt_unicode}/bin/urxvtc"
+myTerm = "${pkgs.rxvt_unicode_with-plugins}/bin/urxvtc"
 
 myFont :: String
 myFont = "${config.lass.fonts.regular}"
 
 main :: IO ()
 main = getArgs >>= \case
-    ["--shutdown"] -> sendShutdownEvent
-    _ -> mainNoArgs
+  ["--shutdown"] -> sendShutdownEvent
+  _ -> main'
 
-mainNoArgs :: IO ()
-mainNoArgs = do
-    xmonad'
+main' :: IO ()
+main' = do
+    xmonad
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
             { terminal           = myTerm
             , modMask            = mod4Mask
             , layoutHook         = smartBorders $ myLayoutHook
-            , logHook            = updatePointer (0.25, 0.25) (0.25, 0.25)
             , manageHook         = placeHook (smart (1,0)) <+> floatNextHook
+            , startupHook =
+                whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
+                          (\path -> forkFile path [] Nothing)
             , normalBorderColor  = "#1c1c1c"
-            , focusedBorderColor = "#f000b0"
+            , focusedBorderColor = "#ff0000"
             , handleEventHook    = handleShutdownEvent
             , workspaces         = [ "dashboard", "sys", "wp" ]
             } `additionalKeysP` myKeyMap
@@ -77,22 +78,6 @@ mainNoArgs = do
 myLayoutHook = defLayout
   where
     defLayout = minimize $ ((avoidStruts $ Tall 1 (3/100) (1/2) ||| Full ||| Mirror (Tall 1 (3/100) (1/2))) ||| FixedColumn 2 80 80 1) ||| simpleFloat
-
-
-xmonad' :: (LayoutClass l Window, Read (l Window)) => XConfig l -> IO ()
-xmonad' conf = do
-    let path = "/tmp/xmonad.state"
-    try (readFile path) >>= \case
-        Right content -> do
-            hPutStrLn stderr ("resuming from " ++ path)
-            withArgs ("--resume" : lines content) (xmonad conf)
-        Left e -> do
-            hPutStrLn stderr (displaySomeException e)
-            xmonad conf
-
-displaySomeException :: SomeException -> String
-displaySomeException = displayException
-
 
 myKeyMap :: [([Char], X ())]
 myKeyMap =
