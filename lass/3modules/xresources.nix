@@ -47,7 +47,7 @@ in
 
     in mkIf cfg.enable {
         services.xserver.displayManager.sessionCommands = ''
-          xrdb -merge ${xres}
+          ${pkgs.xorg.xrdb}/bin/xrdb -merge ${xres}
         '';
       };
 }
