@@ -49,5 +49,10 @@ in
         services.xserver.displayManager.sessionCommands = ''
           ${pkgs.xorg.xrdb}/bin/xrdb -merge ${xres}
         '';
+        environment.systemPackages = [
+          (pkgs.writeDashBin "updateXresources" ''
+            ${pkgs.xorg.xrdb}/bin/xrdb -merge ${xres}
+          '')
+        ];
       };
 }
