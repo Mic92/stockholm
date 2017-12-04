@@ -7,6 +7,9 @@
 
   services.charybdis = {
     enable = true;
+    motd = ''
+      hello
+    '';
     config = ''
       serverinfo {
         name = "${config.krebs.build.host.name}.irc.retiolum";
