@@ -10,6 +10,7 @@ let
   user = config.krebs.build.user;
 
   cfg = config.lass.xserver;
+  xcfg = config.services.xserver;
   api = {
     enable = mkEnableOption "lass xserver";
   };
@@ -31,11 +32,11 @@ let
       wantedBy = [ "multi-user.target" ];
       requires = [ "xserver.service" ];
       environment = {
-        DISPLAY = ":${toString config.services.xserver.display}";
+        DISPLAY = ":${toString xcfg.display}";
 
         XMONAD_STARTUP_HOOK = pkgs.writeDash "xmonad-startup-hook" ''
           ${pkgs.xorg.xhost}/bin/xhost +LOCAL: &
-          ${config.services.xserver.displayManager.sessionCommands}
+          ${xcfg.displayManager.sessionCommands}
           wait
         '';
 
@@ -62,22 +63,26 @@ let
         XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
         LD_LIBRARY_PATH = concatStringsSep ":" (
           [ "${pkgs.xorg.libX11}/lib" "${pkgs.xorg.libXext}/lib" ]
-          ++ concatLists (catAttrs "libPath" config.services.xserver.drivers));
+          ++ concatLists (catAttrs "libPath" xcfg.drivers));
       };
       serviceConfig = {
         SyslogIdentifier = "xserver";
         ExecReload = "${pkgs.coreutils}/bin/echo NOP";
         ExecStart = toString [
           "${pkgs.xorg.xorgserver}/bin/X"
-          ":${toString config.services.xserver.display}"
-          "vt${toString config.services.xserver.tty}"
+          ":${toString xcfg.display}"
+          "vt${toString xcfg.tty}"
           "-config ${import ./xserver.conf.nix args}"
           "-logfile /dev/null -logverbose 0 -verbose 3"
           "-nolisten tcp"
           "-xkbdir ${pkgs.xkeyboard_config}/etc/X11/xkb"
+          (optional (xcfg.dpi != null) "-dpi ${toString xcfg.dpi}")
         ];
       };
     };
+    services.xresources.resources.dpi = ''
+      ${optionalString (xcfg.dpi != null) "Xft.dpi: ${toString xcfg.dpi}"}
+    '';
     systemd.services.urxvtd = {
       wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
