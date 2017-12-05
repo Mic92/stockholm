@@ -2,16 +2,6 @@ let
   lib = import ./lib;
   pkgs = import <nixpkgs> { overlays = [(import ./krebs/5pkgs)]; };
 
-  get-version = pkgs.writeDash "get-version" ''
-    set -efu
-    version=git.$(${pkgs.git}/bin/git describe --always --dirty)
-    case $version in (*-dirty)
-      version=$version@$HOSTNAME
-    esac
-    date=$(${pkgs.coreutils}/bin/date +%y.%m)
-    echo "$date.$version"
-  '';
-
 in pkgs.stdenv.mkDerivation {
   name = "stockholm";
   shellHook = /* sh */ ''
@@ -38,9 +28,6 @@ in pkgs.stdenv.mkDerivation {
     exitHandler() {
       :
     }
-
-    export HOSTNAME="$(${pkgs.nettools}/bin/hostname)"
-    export STOCKHOLM_VERSION="''${STOCKHOLM_VERSION-$(${get-version})}"
 
     PS1='\[\e[38;5;162m\]\w\[\e[0m\] '
   '';
