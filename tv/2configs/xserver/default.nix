@@ -1,7 +1,9 @@
 { config, pkgs, ... }@args:
 with import <stockholm/lib>;
 let
-  user = config.krebs.build.user;
+  cfg = {
+    user = config.krebs.build.user;
+  };
 in {
 
   environment.systemPackages = [
@@ -25,7 +27,7 @@ in {
     group = "wheel";
     envp = {
       DISPLAY = ":${toString config.services.xserver.display}";
-      USER = user.name;
+      USER = cfg.user.name;
     };
   };
 
@@ -81,8 +83,8 @@ in {
       SyslogIdentifier = "xmonad";
       ExecStart = "${pkgs.xmonad-tv}/bin/xmonad";
       ExecStop = "${pkgs.xmonad-tv}/bin/xmonad --shutdown";
-      User = user.name;
-      WorkingDirectory = user.home;
+      User = cfg.user.name;
+      WorkingDirectory = cfg.user.home;
     };
   };
 
@@ -125,7 +127,7 @@ in {
       Restart = "always";
       RestartSec = "2s";
       StartLimitBurst = 0;
-      User = user.name;
+      User = cfg.user.name;
     };
   };
 }
