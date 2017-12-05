@@ -2,6 +2,9 @@
 with import <stockholm/lib>;
 let
   cfg = {
+    cacheDir = cfg.dataDir;
+    configDir = "/var/empty";
+    dataDir = "/run/xdg/${cfg.user.name}/xmonad";
     user = config.krebs.build.user;
   };
 in {
@@ -56,6 +59,10 @@ in {
     environment = {
       DISPLAY = ":${toString config.services.xserver.display}";
 
+      XMONAD_CACHE_DIR = cfg.cacheDir;
+      XMONAD_CONFIG_DIR = cfg.configDir;
+      XMONAD_DATA_DIR = cfg.dataDir;
+
       XMONAD_STARTUP_HOOK = pkgs.writeDash "xmonad-startup-hook" ''
         ${pkgs.xorg.xhost}/bin/xhost +LOCAL: &
         ${pkgs.xorg.xmodmap}/bin/xmodmap ${import ./Xmodmap.nix args} &
@@ -63,8 +70,6 @@ in {
         ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c' &
         wait
       '';
-
-      XMONAD_STATE = "/tmp/xmonad.state";
 
       # XXX JSON is close enough :)
       XMONAD_WORKSPACES0_FILE = pkgs.writeText "xmonad.workspaces0" (toJSON [
@@ -81,6 +86,11 @@ in {
     };
     serviceConfig = {
       SyslogIdentifier = "xmonad";
+      ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${toString [
+        "\${XMONAD_CACHE_DIR}"
+        "\${XMONAD_CONFIG_DIR}"
+        "\${XMONAD_DATA_DIR}"
+      ]}";
       ExecStart = "${pkgs.xmonad-tv}/bin/xmonad";
       ExecStop = "${pkgs.xmonad-tv}/bin/xmonad --shutdown";
       User = cfg.user.name;
