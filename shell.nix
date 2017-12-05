@@ -5,14 +5,13 @@ let
 in pkgs.stdenv.mkDerivation {
   name = "stockholm";
   shellHook = /* sh */ ''
-    export OLD_PATH="$PATH"
     export NIX_PATH=stockholm=${toString ./.}:nixpkgs=${toString <nixpkgs>}
     if test -e /nix/var/nix/daemon-socket/socket; then
       export NIX_REMOTE=daemon
     fi
     export PATH=${lib.makeBinPath [
       pkgs.stockholm
-    ]}
+    ]}''${PATH+:$PATH}
 
     eval "$(declare -F | ${pkgs.gnused}/bin/sed s/declare/unset/)"
     shopt -u no_empty_cmd_completion
