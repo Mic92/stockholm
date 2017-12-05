@@ -21,9 +21,9 @@ let
 in {
   systemd.services.copyq = {
     wantedBy = [ "multi-user.target" ];
-    requires = [ "display-manager.service" ];
+    requires = [ "xserver.service" ];
     environment = {
-      DISPLAY = ":0";
+      DISPLAY = ":${toString config.services.xserver.display}";
     };
     path = with pkgs; [
       qt5.full

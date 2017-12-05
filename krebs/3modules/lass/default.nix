@@ -449,8 +449,6 @@ with import <stockholm/lib>;
         retiolum = rec {
           via = internet;
           addrs = [
-            # edinburgh university
-            "129.215.0.0/16"
             ip4.addr
             ip6.addr
           ];
@@ -472,6 +470,10 @@ with import <stockholm/lib>;
             lyK301Jb42wGEsVWxu3Eo/PLtp8OdD+Wdh6o/ELcc0k/YCUGFMujUM8CAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
+          tinc.subnets = [
+            # edinburgh university
+            "129.215.0.0/16"
+          ];
         };
       };
     };

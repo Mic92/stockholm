@@ -27,7 +27,7 @@ let
     };
     display = mkOption {
       type = types.str;
-      default = ":0";
+      default = ":${toString config.services.xserver.display}";
     };
     unitConfig = mkOption {
       type = types.attrsOf types.str;
