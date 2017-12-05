@@ -120,10 +120,6 @@
 
     . ${init.proxy "install" opts}
 
-    # Reset PATH because we need access to nixos-install.
-    # TODO provide nixos-install instead of relying on prepare.sh
-    export PATH="$OLD_PATH"
-
     # these variables get defined by nix-shell (i.e. nix-build) from
     # XDG_RUNTIME_DIR and reference the wrong directory (/run/user/0),
     # which only exists on / and not at /mnt.
