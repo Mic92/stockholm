@@ -214,7 +214,9 @@
 
     default_target=root@$system:22/var/src
 
-    export target_object="$(parse-target "$target" -d "$default_target")"
+    export target_object="$(
+      ${cmds.parse-target} "$target" -d "$default_target"
+    )"
     export target_user="$(echo $target_object | ${pkgs.jq}/bin/jq -r .user)"
     export target_host="$(echo $target_object | ${pkgs.jq}/bin/jq -r .host)"
     export target_port="$(echo $target_object | ${pkgs.jq}/bin/jq -r .port)"
@@ -225,7 +227,7 @@
   init.proxy = command: opts: pkgs.writeText "init.proxy" /* sh */ ''
     if \test "''${using_proxy-}" != true; then
 
-      source=$(get-source "$source_file")
+      source=$(${cmds.get-source} "$source_file")
       qualified_target=$target_user@$target_host:$target_port$target_path
       if \test "$force_populate" = true; then
         echo "$source" | ${pkgs.populate}/bin/populate --force "$qualified_target"
