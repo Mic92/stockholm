@@ -22,15 +22,22 @@ let
       });
     };
   in {
-    rules = with git; singleton {
-      user = with config.krebs.users; [
-        config.krebs.users."${config.networking.hostName}-repo-sync"
-        lass
-        lass-shodan
-      ];
-      repo = [ repo ];
-      perm = push ''refs/*'' [ non-fast-forward create delete merge ];
-    };
+    rules = with git; [
+      {
+        user = with config.krebs.users; [
+          config.krebs.users."${config.networking.hostName}-repo-sync"
+          lass
+          lass-shodan
+        ];
+        repo = [ repo ];
+        perm = push ''refs/*'' [ non-fast-forward create delete merge ];
+      }
+      {
+        user = attrValues config.krebs.users;
+        repo = [ repo ];
+        perm = fetch;
+      }
+    ];
     repos."${name}" = repo;
   };
 
