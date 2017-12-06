@@ -7,8 +7,8 @@
 {
   imports =
     [ # Include the results of the hardware scan.
+      <stockholm/jeschli>
       ./hardware-configuration.nix
-      <stockholm/jeschli/2configs/vim.nix>
     ];
 
   # Use the GRUB 2 boot loader.
@@ -20,7 +20,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   # Define on which hard drive you want to install Grub.
 #  boot.loader.grub.device = "/dev/disk/by-id/wwn-0x5002538844584d30"; # or "nodev" for efi only
- 
+
   boot.initrd.luks.devices = [
     {
     name = "root";
@@ -64,7 +64,7 @@
     rxvt_unicode
   # editors
     emacs
-  # internet 
+  # internet
     thunderbird
     chromium
     google-chrome
@@ -85,7 +85,6 @@
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
-  programs.bash.enableCompletion = true;
   # programs.mtr.enable = true;
   # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
@@ -95,7 +94,7 @@
   services.openssh.enable = true;
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMPuFzd6p3zZETIjoV5mRxCTQgeZk9s/P374mEDbj58wDTT0uGWu2JRf7cL1QRTvd5238tYl0eSHXH65+oaFB/mIvmiRnuw6qQODOMHlSbJN5/J2hEw/3v5gveiP1xNLfKlFhj6mmMRF7Etvzns/kLGLCSjj1UTlfo4iHmtinPmU+iQ8J4foS4cZj4oZesF8gndkc2EFMfL6en7EuU8GK6U9GtwKNL9N4UoUZXu8Nf00pkn/jrpmsDdI4zdVVAxWeu/Lo4li43EVixLcfwQiwzf6S9FvYIv30xPdy92GJSJwxm/QkYuc48VZWUoE+qThf3IEPETtX+MRZrM8RTtY01 markus@reaganzglas"
-  ];  
+  ];
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -133,4 +132,13 @@
   # should.
   system.stateVersion = "18.03"; # Did you read the comment?
 
+  programs.bash = {
+    enableCompletion = true;
+    interactiveShellInit = ''
+      export GOPATH=$HOME/go
+      export PATH=$PATH:$GOPATH/bin
+    '';
+  };
+
+  krebs.build.host = config.krebs.hosts.reagenzglas;
 }
