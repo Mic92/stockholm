@@ -1,13 +1,13 @@
 { mkDerivation, base, containers, fetchgit, stdenv, X11, X11-xshape
 , xmonad, xmonad-contrib
 }:
-mkDerivation {
+mkDerivation rec {
   pname = "xmonad-stockholm";
-  version = "1.1.0";
+  version = "1.1.1";
   src = fetchgit {
     url = http://cgit.ni.krebsco.de/xmonad-stockholm;
-    rev = "179d29fd4c765dee698058ef63295331ac603639";
-    sha256 = "0c6mj68xsxxr4j8adkzhjszi7bg6cpisrsmqn587a16sblpbrnkj";
+    rev = "refs/tags/v${version}";
+    sha256 = "05nnfg6q35z3qgf507qa80bz32jl4k719dl5phlmchplp3769585";
   };
   libraryHaskellDepends = [
     base containers X11 X11-xshape xmonad xmonad-contrib

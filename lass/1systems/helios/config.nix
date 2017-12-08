@@ -13,6 +13,9 @@ with import <stockholm/lib>;
     # TODO fix krebs.git.rules.[definition 2-entry 2].lass not defined
     #<stockholm/lass/2configs/git.nix>
     <stockholm/lass/2configs/dcso-vpn.nix>
+    <stockholm/lass/2configs/virtualbox.nix>
+    <stockholm/lass/2configs/dcso-dev.nix>
+    <stockholm/lass/2configs/steam.nix>
     { # automatic hardware detection
       boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
       boot.kernelModules = [ "kvm-intel" ];
@@ -60,6 +63,13 @@ with import <stockholm/lib>;
         maxTime = 9001;
       };
     }
+    {
+      #urban terror port
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 27960"; target = "ACCEPT"; }
+        { predicate = "-p udp --dport 27960"; target = "ACCEPT"; }
+      ];
+    }
   ];
   krebs.build.host = config.krebs.hosts.helios;
 
@@ -91,7 +101,6 @@ with import <stockholm/lib>;
   environment.systemPackages = with pkgs; [
     ag
     vim
-    rxvt_unicode
     git
     rsync
     hashPassword

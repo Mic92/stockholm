@@ -23,7 +23,7 @@ let
       before = [ "sleep.target" ];
       wantedBy = [ "sleep.target" ];
       environment = {
-        DISPLAY = ":0";
+        DISPLAY = ":${toString config.services.xserver.display}";
       };
       serviceConfig = {
         SyslogIdentifier = "screenlock";

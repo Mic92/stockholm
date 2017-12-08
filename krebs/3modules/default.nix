@@ -44,6 +44,7 @@ let
       ./tinc_graphs.nix
       ./urlwatch.nix
       ./repo-sync.nix
+      ./zones.nix
     ];
     options.krebs = api;
     config = lib.mkIf cfg.enable imp;
@@ -60,6 +61,7 @@ let
 
     hosts = mkOption {
       type = with types; attrsOf host;
+      default = {};
     };
 
     users = mkOption {
@@ -170,17 +172,6 @@ let
                           (attrValues cfg.hosts))))}
             '';
           };
-
-      # Implements environment.etc."zones/<zone-name>"
-      environment.etc = let
-        stripEmptyLines = s: (concatStringsSep "\n"
-          (remove "\n" (remove "" (splitString "\n" s)))) + "\n";
-        all-zones = foldAttrs (sum: current: sum + "\n" +current ) ""
-          ([cfg.zone-head-config] ++ combined-hosts);
-        combined-hosts = (mapAttrsToList (name: value: value.extraZones)  cfg.hosts );
-      in lib.mapAttrs' (name: value: nameValuePair
-        ("zones/" + name)
-        { text=(stripEmptyLines value); }) all-zones;
 
       krebs.exim-smarthost.internet-aliases = let
         format = from: to: {

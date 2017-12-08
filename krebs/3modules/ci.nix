@@ -104,7 +104,7 @@ in
                     "dummy_secrets": "true",
                   },
                   command=[
-                    "nix-shell", "--run", " ".join(["test",
+                    "nix-shell", "-I", "stockholm=.", "--run", " ".join(["test",
                       "--user={}".format(user),
                       "--system={}".format(host),
                       "--force-populate",

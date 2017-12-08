@@ -21,6 +21,9 @@
     xmonad-lass = import ./xmonad-lass.nix { inherit config pkgs; };
     yt-next = pkgs.callPackage ./yt-next/default.nix {};
 
-    screengrab = pkgs.writeDashBin "screengrab" "${pkgs.ffmpeg}/bin/ffmpeg -f x11grab -r 25 -s 1024x768 -i :0.0 -c:v huffyuv $1";
+    screengrab = pkgs.writeDashBin "screengrab" ''
+      resolution="$(${pkgs.xorg.xrandr}/bin/xrandr | ${pkgs.gnugrep}/bin/grep '*' | ${pkgs.gawk}/bin/awk '{print $1}')"
+      ${pkgs.ffmpeg}/bin/ffmpeg -f x11grab -r 25 -i :0.0 -s $resolution -c:v huffyuv $1
+    '';
   };
 }

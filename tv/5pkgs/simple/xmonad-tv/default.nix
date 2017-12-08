@@ -71,7 +71,7 @@ main = getArgs >>= \case
 mainNoArgs :: IO ()
 mainNoArgs = do
     workspaces0 <- getWorkspaces0
-    xmonad'
+    xmonad
         -- $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "magenta", "-fg", "magenta", "-h", "2"], duration = 500000 }
         --                   urgencyConfig { remindWhen = Every 1 }
         -- $ withUrgencyHook borderUrgencyHook "magenta"
@@ -94,17 +94,6 @@ mainNoArgs = do
             , handleEventHook = handleShutdownEvent
             }
 
-
-xmonad' :: (LayoutClass l Window, Read (l Window)) => XConfig l -> IO ()
-xmonad' conf = do
-    path <- getEnv "XMONAD_STATE"
-    try (readFile path) >>= \case
-        Right content -> do
-            hPutStrLn stderr ("resuming from " ++ path)
-            withArgs ("--resume" : lines content) (xmonad conf)
-        Left e -> do
-            hPutStrLn stderr (displaySomeException e)
-            xmonad conf
 
 getWorkspaces0 :: IO [String]
 getWorkspaces0 =

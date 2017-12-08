@@ -7,9 +7,9 @@ in {
     ./mpv.nix
     ./power-action.nix
     ./copyq.nix
-    ./xresources.nix
     ./livestream.nix
     ./dns-stuff.nix
+    ./urxvt.nix
     {
       hardware.pulseaudio = {
         enable = true;
@@ -41,6 +41,11 @@ in {
           default = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1";
         };
       };
+      config.services.xresources.resources.X = ''
+        *.font:       ${config.lass.fonts.regular}
+        *.boldFont:   ${config.lass.fonts.bold}
+        *.italicFont: ${config.lass.fonts.italic}
+      '';
     }
   ];
 
@@ -64,9 +69,11 @@ in {
     dic
     dmenu
     gi
+    git-preview
     gitAndTools.qgit
-    lm_sensors
     haskellPackages.hledger
+    lm_sensors
+    mpv-poll
     much
     ncdu
     nix-repl
@@ -74,7 +81,7 @@ in {
     pavucontrol
     powertop
     push
-    rxvt_unicode
+    rxvt_unicode_with-plugins
     screengrab
     slock
     sxiv
@@ -97,26 +104,8 @@ in {
     xlibs.fontschumachermisc
   ];
 
+  lass.xserver.enable = true;
   services.xserver = {
-    enable = true;
-
-    desktopManager.xterm.enable = false;
-    desktopManager.default = "none";
-    displayManager.lightdm.enable = true;
-    displayManager.lightdm.autoLogin = {
-      enable = true;
-      user = "lass";
-    };
-    windowManager.default = "xmonad";
-    windowManager.session = [{
-      name = "xmonad";
-      start = ''
-        ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
-        ${pkgs.xmonad-lass}/bin/xmonad &
-        waitPID=$!
-      '';
-    }];
-
     layout = "us";
     xkbModel = "evdev";
     xkbVariant = "altgr-intl";
@@ -127,12 +116,7 @@ in {
     HandleLidSwitch=ignore
   '';
 
-  services.xserver.synaptics = {
-    enable = true;
-    twoFingerScroll = true;
-    accelFactor = "0.035";
-  };
-
   services.urxvtd.enable = true;
+  services.xresources.enable = true;
   lass.screenlock.enable = true;
 }

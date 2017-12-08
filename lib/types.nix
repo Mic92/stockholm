@@ -92,7 +92,7 @@ rec {
         default = null;
       };
       addrs = mkOption {
-        type = listOf cidr;
+        type = listOf addr;
         default =
           optional (config.ip4 != null) config.ip4.addr ++
           optional (config.ip6 != null) config.ip6.addr;
@@ -155,6 +155,8 @@ rec {
                 ++
                 (map (a: "Subnet = ${a}") net.addrs)
                 ++
+                (map (a: "Subnet = ${a}") config.subnets)
+                ++
                 [config.extraConfig]
                 ++
                 [config.pubkey]
@@ -172,6 +174,11 @@ rec {
               type = int;
               description = "tinc port to use to connect to host";
               default = 655;
+            };
+            subnets = mkOption {
+              type = listOf cidr;
+              description = "tinc subnets";
+              default = [];
             };
           };
         }));
