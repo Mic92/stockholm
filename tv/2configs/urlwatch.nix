@@ -47,7 +47,7 @@ with import <stockholm/lib>;
       #http://hackage.haskell.org/package/web-page
 
       # ref <stockholm/krebs/3modules>, services.openssh.knownHosts.github*
-      https://help.github.com/articles/github-s-ip-addresses/
+      https://api.github.com/meta
 
       # <stockholm/tv/2configs/xserver/xserver.conf.nix>
       # is derived from `configFile` in:
