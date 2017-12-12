@@ -179,7 +179,7 @@ with import <stockholm/lib>;
         echo 'secrets are crypted' >&2
         exit 23
       else
-        exec nix-shell -I stockholm="$PWD" --run 'deploy --system="$SYSTEM"'
+        exec nix-shell -I stockholm="$PWD" --run 'deploy --diff --system="$SYSTEM"'
       fi
     '';
     predeploy = pkgs.writeDash "predeploy" ''
