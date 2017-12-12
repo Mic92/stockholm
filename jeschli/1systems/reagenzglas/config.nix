@@ -141,4 +141,6 @@
   };
 
   krebs.build.host = config.krebs.hosts.reagenzglas;
+
+  hardware.bluetooth.enable = true;
 }
