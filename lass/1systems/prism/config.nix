@@ -287,6 +287,15 @@ in {
     }
     <stockholm/krebs/2configs/reaktor-krebs.nix>
     <stockholm/lass/2configs/dcso-dev.nix>
+    {
+      krebs.git.rules = [
+        {
+          user = [ config.krebs.users.jeschli ];
+          repo = [ config.krebs.git.repos.stockholm ];
+          perm = with git; push "refs/heads/staging/jeschli" [ fast-forward non-fast-forward create delete merge ];
+        }
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
