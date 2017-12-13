@@ -43,6 +43,10 @@ in {
     };
   };
 
+  krebs.per-user.dev.packages = [
+    pkgs.go
+  ];
+
   security.sudo.extraConfig = ''
     ${mainUser.name} ALL=(dev) NOPASSWD: ALL
   '';
