@@ -40,10 +40,10 @@ import XMonad.Hooks.UrgencyHook (SpawnUrgencyHook(..), withUrgencyHook)
 import XMonad.Layout.FixedColumn (FixedColumn(..))
 import XMonad.Layout.Minimize (minimize, minimizeWindow, MinimizeMsg(RestoreNextMinimizedWin))
 import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.SimplestFloat (simplestFloat)
 import XMonad.Prompt (autoComplete, font, searchPredicate, XPConfig)
 import XMonad.Prompt.Window (windowPromptGoto, windowPromptBringCopy)
 import XMonad.Util.EZConfig (additionalKeysP)
-import XMonad.Layout.SimpleFloat (simpleFloat)
 
 import XMonad.Stockholm.Shutdown
 
@@ -78,7 +78,7 @@ main' = do
 
 myLayoutHook = defLayout
   where
-    defLayout = minimize $ ((avoidStruts $ Tall 1 (3/100) (1/2) ||| Full ||| Mirror (Tall 1 (3/100) (1/2))) ||| FixedColumn 2 80 80 1) ||| simpleFloat
+    defLayout = minimize $ ((avoidStruts $ Tall 1 (3/100) (1/2) ||| Full ||| Mirror (Tall 1 (3/100) (1/2))) ||| FixedColumn 2 80 80 1 ||| simplestFloat)
 
 myKeyMap :: [([Char], X ())]
 myKeyMap =
