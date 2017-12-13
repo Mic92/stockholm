@@ -30,6 +30,7 @@ import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace, removeEmptyWorkspace)
 import XMonad.Actions.DynamicWorkspaces (withWorkspace)
 import XMonad.Actions.GridSelect (GSConfig(..), gridselectWorkspace, navNSearch)
+import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Hooks.FloatNext (floatNext)
 import XMonad.Hooks.FloatNext (floatNextHook)
 import XMonad.Hooks.ManageDocks (avoidStruts, ToggleStruts(ToggleStruts))
@@ -59,7 +60,7 @@ main = getArgs >>= \case
 
 main' :: IO ()
 main' = do
-    xmonad
+    xmonad $ ewmh
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
             { terminal           = myTerm
