@@ -13,8 +13,16 @@ with import <stockholm/lib>;
 
       http://www.exim.org/
 
+      {
+        url = https://api.github.com/repos/Gabriel439/nix-diff/git/refs/heads/master;
+        filter = "system:${pkgs.jq}/bin/jq -r .object.sha";
+      }
+
       # ref src/nixpkgs/pkgs/tools/admin/sec/default.nix
-      https://api.github.com/repos/simple-evcorr/sec/tags
+      {
+        url = https://api.github.com/repos/simple-evcorr/sec/tags;
+        filter = "system:${pkgs.jq}/bin/jq .";
+      }
 
       # ref src/nixpkgs/pkgs/tools/networking/urlwatch/default.nix
       https://thp.io/2008/urlwatch/
