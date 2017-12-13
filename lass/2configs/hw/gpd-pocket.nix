@@ -16,7 +16,6 @@ in {
   boot.kernelParams = [
     "fbcon=rotate:1"
   ];
-  services.tlp.enable = true;
   services.xserver.displayManager.sessionCommands = ''
     (sleep 2 && ${pkgs.xorg.xrandr}/bin/xrandr --output DSI1 --rotate right)
     (sleep 2 && ${pkgs.xorg.xinput}/bin/xinput set-prop 'Goodix Capacitive TouchScreen' 'Coordinate Transformation Matrix' 0 1 0 -1 0 1 0 0 1)
