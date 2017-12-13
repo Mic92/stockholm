@@ -87,6 +87,8 @@ myKeyMap =
     , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
     , ("M4-o", spawn "${pkgs.brain}/bin/brainmenu --type")
     , ("M4-i", spawn "${pkgs.dpass}/bin/dpassmenu --type")
+
+    , ("<XF86AudioMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-mute @DEFAULT_SINK@ toggle")
     , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ +4%")
     , ("<XF86AudioLowerVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ -4%")
     , ("<XF86MonBrightnessDown>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -time 0 -dec 1%")
