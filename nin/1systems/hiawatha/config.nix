@@ -86,6 +86,7 @@ with lib;
   environment.systemPackages = with pkgs; [
     firefox
     git
+    lmms
     networkmanagerapplet
     python
     steam
