@@ -15,7 +15,6 @@ with lib;
     <stockholm/nin/2configs/git.nix>
     <stockholm/nin/2configs/retiolum.nix>
     <stockholm/nin/2configs/termite.nix>
-    <stockholm/nin/2configs/skype.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.hiawatha;
