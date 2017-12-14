@@ -57,7 +57,7 @@ let
 
 in {
   environment.systemPackages = with pkgs; [
-    dwarf_fortress
+    (dwarf-fortress.override { theme = dwarf-fortress-packages.phoebus-theme; })
     doom1
     doom2
     vdoom1

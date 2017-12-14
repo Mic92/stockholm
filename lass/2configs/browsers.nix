@@ -5,19 +5,23 @@ let
 
   mainUser = config.users.extraUsers.mainUser;
 
-  browser-select = pkgs.writeScriptBin "browser-select" ''
-    BROWSER=$(echo -e "${concatStringsSep "\\n" (attrNames config.lass.browser.paths)}" | ${pkgs.dmenu}/bin/dmenu)
+  browser-select = let
+    sortedPaths = sort (a: b: a.value.precedence > b.value.precedence)
+                       (mapAttrsToList (name: value: { inherit name value; })
+                                       config.lass.browser.paths);
+  in pkgs.writeScriptBin "browser-select" ''
+    BROWSER=$(echo -e "${concatStringsSep "\\n" (map (getAttr "name") sortedPaths)}" | ${pkgs.dmenu}/bin/dmenu)
     case $BROWSER in
     ${concatMapStringsSep "\n" (n: ''
-      ${n})
-        export BIN=${config.lass.browser.paths.${n}}/bin/${n}
+      ${n.name})
+        export BIN=${n.value.path}/bin/${n.name}
         ;;
-    '') (attrNames config.lass.browser.paths)}
+    '') (sortedPaths)}
     esac
     $BIN "$@"
   '';
 
-  createChromiumUser = name: extraGroups:
+  createChromiumUser = name: extraGroups: precedence:
     let
       bin = pkgs.writeScriptBin name ''
         /var/run/wrappers/bin/sudo -u ${name} -i ${pkgs.chromium}/bin/chromium $@
@@ -31,7 +35,7 @@ let
         useDefaultShell = true;
         createHome = true;
       };
-      lass.browser.paths.${name} = bin;
+      lass.browser.paths.${name}.path = bin;
       security.sudo.extraConfig = ''
         ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
       '';
@@ -40,10 +44,10 @@ let
       ];
     };
 
-  createFirefoxUser = name: extraGroups:
+  createFirefoxUser = name: extraGroups: precedence:
     let
       bin = pkgs.writeScriptBin name ''
-        /var/run/wrappers/bin/sudo -u ${name} -i ${pkgs.firefox}/bin/firefox $@
+        /var/run/wrappers/bin/sudo -u ${name} -i ${pkgs.firefox-devedition-bin}/bin/firefox-devedition $@
       '';
     in {
       users.extraUsers.${name} = {
@@ -54,7 +58,10 @@ let
         useDefaultShell = true;
         createHome = true;
       };
-      lass.browser.paths.${name} = bin;
+      lass.browser.paths.${name} = {
+        path = bin;
+        inherit precedence;
+      };
       security.sudo.extraConfig = ''
         ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
       '';
@@ -79,14 +86,24 @@ in {
         type = types.path;
       };
       options.lass.browser.paths = mkOption {
-        type = with types; attrsOf path;
+        type = types.attrsOf (types.submodule ({
+          options = {
+            path = mkOption {
+              type = types.path;
+            };
+            precedence = mkOption {
+              type = types.int;
+              default = 0;
+            };
+          };
+        }));
       };
     }
-    ( createFirefoxUser "ff" [ "audio" ] )
-    ( createChromiumUser "cr" [ "video" "audio" ] )
+    ( createFirefoxUser "ff" [ "audio" ] 10 )
+    ( createChromiumUser "cr" [ "video" "audio" ] 9 )
+    ( createChromiumUser "gm" [ "video" "audio" ] 8 )
     ( createChromiumUser "wk" [ "video" "audio" ] )
     ( createChromiumUser "fb" [ "video" "audio" ] )
-    ( createChromiumUser "gm" [ "video" "audio" ] )
     ( createChromiumUser "com" [ "video" "audio" ] )
   ];
 }

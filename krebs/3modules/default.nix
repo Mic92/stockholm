@@ -61,6 +61,7 @@ let
 
     hosts = mkOption {
       type = with types; attrsOf host;
+      default = {};
     };
 
     users = mkOption {

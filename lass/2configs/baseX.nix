@@ -112,10 +112,6 @@ in {
     xkbOptions = "caps:backspace";
   };
 
-  services.logind.extraConfig = ''
-    HandleLidSwitch=ignore
-  '';
-
   services.urxvtd.enable = true;
   services.xresources.enable = true;
   lass.screenlock.enable = true;
