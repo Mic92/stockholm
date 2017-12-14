@@ -14,7 +14,7 @@ in
       };
       secrets.file = getAttr builder {
         buildbot = toString <stockholm/jeschli/2configs/tests/dummy-secrets>;
-        jeschli = "/home/jeschli/secrets/${name}";
+        jeschli = "${getEnv "HOME"}/secrets/${name}";
       };
       stockholm.file = toString <stockholm>;
     }
