@@ -61,6 +61,7 @@ in {
       # logs to influx
       <stockholm/makefu/2configs/stats/external/aralast.nix>
       <stockholm/makefu/2configs/stats/telegraf>
+      <stockholm/makefu/2configs/stats/telegraf/europastats.nix>
 
       # services
       <stockholm/makefu/2configs/syncthing.nix>
@@ -82,7 +83,7 @@ in {
       # docker run -d -v /var/lib/pyload:/opt/pyload/pyload-config -v /media/crypt0/pyload:/opt/pyload/Downloads --name pyload --restart=always -p 8112:8000 -P writl/pyload
 
       # Temporary:
-      <stockholm/makefu/2configs/temp/rst-issue.nix>
+      # <stockholm/makefu/2configs/temp/rst-issue.nix>
     ];
   makefu.full-populate = true;
   makefu.server.primary-itf = primaryInterface;

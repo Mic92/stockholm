@@ -2,7 +2,8 @@
 
 {
   users.users.makefu.packages = with pkgs;[
-    python35Packages.virtualenv
+    python3Packages.virtualenv
+    python3Packages.pyserial
     # embedded
     gi
     flashrom
@@ -12,10 +13,12 @@
     esptool
     cac-api
     cac-panel
+    krebszones
     ovh-zone
     whatsupnix
     brain
     gen-oath-safe
     cdrtools
+    stockholm
   ];
 }

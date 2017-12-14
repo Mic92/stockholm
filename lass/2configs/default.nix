@@ -2,7 +2,6 @@
 with import <stockholm/lib>;
 {
   imports = [
-    ../2configs/audit.nix
     ../2configs/binary-cache/client.nix
     ../2configs/gc.nix
     ../2configs/mc.nix
@@ -23,6 +22,7 @@ with import <stockholm/lib>;
             config.krebs.users.lass.pubkey
             config.krebs.users.lass-shodan.pubkey
             config.krebs.users.lass-icarus.pubkey
+            config.krebs.users.lass-xerxes.pubkey
           ];
         };
         mainUser = {

@@ -57,8 +57,9 @@ with import <stockholm/lib>;
     gimp
     iptables
     libreoffice
-    pidginotr
-    pidgin-with-plugins
+    (pkgs.pidgin-with-plugins.override {
+      plugins = [ pkgs.pidginotr ];
+    })
     skype
     slock
     tinc_pre

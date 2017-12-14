@@ -13,8 +13,16 @@ with import <stockholm/lib>;
 
       http://www.exim.org/
 
+      {
+        url = https://api.github.com/repos/Gabriel439/nix-diff/git/refs/heads/master;
+        filter = "system:${pkgs.jq}/bin/jq -r .object.sha";
+      }
+
       # ref src/nixpkgs/pkgs/tools/admin/sec/default.nix
-      https://api.github.com/repos/simple-evcorr/sec/tags
+      {
+        url = https://api.github.com/repos/simple-evcorr/sec/tags;
+        filter = "system:${pkgs.jq}/bin/jq .";
+      }
 
       # ref src/nixpkgs/pkgs/tools/networking/urlwatch/default.nix
       https://thp.io/2008/urlwatch/
@@ -47,11 +55,13 @@ with import <stockholm/lib>;
       #http://hackage.haskell.org/package/web-page
 
       # ref <stockholm/krebs/3modules>, services.openssh.knownHosts.github*
-      https://help.github.com/articles/github-s-ip-addresses/
+      https://api.github.com/meta
 
       # <stockholm/tv/2configs/xserver/xserver.conf.nix>
       # is derived from `configFile` in:
       https://raw.githubusercontent.com/NixOS/nixpkgs/master/nixos/modules/services/x11/xserver.nix
+
+      https://www.rabbitmq.com/changelog.html
     ];
     hooksFile = toFile "hooks.py" ''
       import subprocess

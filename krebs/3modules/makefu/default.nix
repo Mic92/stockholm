@@ -5,7 +5,7 @@ with import <stockholm/lib>;
 {
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.makefu) {
     cake = rec {
-      cores = 1;
+      cores = 4;
       ci = false;
       nets = {
         retiolum = {
@@ -107,7 +107,7 @@ with import <stockholm/lib>;
       ci = true;
       cores = 1;
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIrkK1mWfPvfZ9ALC1irGLuzOtMefaGAmGY1VD4dj7K1 latte";
+      # ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIrkK1mWfPvfZ9ALC1irGLuzOtMefaGAmGY1VD4dj7K1 latte";
       nets = {
         internet = {
           ip4.addr = "185.215.224.160";
@@ -500,7 +500,7 @@ with import <stockholm/lib>;
         };
         retiolum = {
           ip4.addr = "10.243.214.15";
-          ip6.addr = "42:5a02:2c30:c1b1:3f2e:7c19:2496:a732";
+          # ip6.addr = "42:5a02:2c30:c1b1:3f2e:7c19:2496:a732";
           aliases = [
             "wbob.r"
           ];
@@ -540,13 +540,14 @@ with import <stockholm/lib>;
           wiki.euer         IN A      ${nets.internet.ip4.addr}
           graph             IN A      ${nets.internet.ip4.addr}
           ghook             IN A      ${nets.internet.ip4.addr}
+          dockerhub         IN A      ${nets.internet.ip4.addr}
           io                IN NS     gum.krebsco.de.
         '';
       };
       nets = rec {
         internet = {
-          ip4.addr = "188.68.40.19";
-          ip6.addr = "2a03:4000:17:2df::1";
+          ip4.addr = "185.194.143.140";
+          ip6.addr = "2a03:4000:1c:43f::1";
           aliases = [
             "gum.i"
           ];

@@ -4,10 +4,6 @@ let
   mainUser = config.users.extraUsers.mainUser;
 
 in {
-  krebs.per-user.wine.packages = with pkgs; [
-    wine
-    #(wineFull.override { wineBuild = "wine64"; })
-  ];
   users.users= {
     wine = {
       name = "wine";
@@ -19,9 +15,27 @@ in {
         "video"
       ];
       createHome = true;
+      packages = [
+        pkgs.wine
+      ];
+    };
+    wine64 = {
+      name = "wine64";
+      description = "user for running wine in 64bit";
+      home = "/home/wine64";
+      useDefaultShell = true;
+      extraGroups = [
+        "audio"
+        "video"
+      ];
+      createHome = true;
+      packages = [
+        (pkgs.wine.override { wineBuild = "wineWow"; })
+      ];
     };
   };
   security.sudo.extraConfig = ''
     ${mainUser.name} ALL=(wine) NOPASSWD: ALL
+    ${mainUser.name} ALL=(wine64) NOPASSWD: ALL
   '';
 }

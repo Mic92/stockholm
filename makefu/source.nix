@@ -11,9 +11,8 @@ let
               then "buildbot"
               else "makefu";
   _file = <stockholm> + "/makefu/1systems/${name}/source.nix";
-  ref = "809cf38"; # unstable @ 2017-10-07
-                   # + ruby stuff (2f0b17e4be9,55a952be5b5)
-                   # + mitmproxy fix (360a5efd,ef52c95b)
+  ref = "3874de4"; # unstable @ 2017-12-08
+                   # + do_sqlite3 ruby: 55a952be5b5
 
 in
   evalSource (toString _file) [

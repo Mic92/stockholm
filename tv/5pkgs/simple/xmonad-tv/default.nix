@@ -3,6 +3,7 @@ pkgs.writeHaskell "xmonad-tv" {
   executables.xmonad = {
     extra-depends = [
       "containers"
+      "extra"
       "unix"
       "X11"
       "xmonad"
@@ -19,11 +20,12 @@ pkgs.writeHaskell "xmonad-tv" {
 module Main where
 
 import Control.Exception
+import Control.Monad.Extra (whenJustM)
 import Graphics.X11.ExtraTypes.XF86
 import Text.Read (readEither)
 import XMonad
 import System.IO (hPutStrLn, stderr)
-import System.Environment (getArgs, withArgs, getEnv, getEnvironment)
+import System.Environment (getArgs, withArgs, getEnv, getEnvironment, lookupEnv)
 import System.Posix.Process (executeFile)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
@@ -69,7 +71,7 @@ main = getArgs >>= \case
 mainNoArgs :: IO ()
 mainNoArgs = do
     workspaces0 <- getWorkspaces0
-    xmonad'
+    xmonad
         -- $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "magenta", "-fg", "magenta", "-h", "2"], duration = 500000 }
         --                   urgencyConfig { remindWhen = Every 1 }
         -- $ withUrgencyHook borderUrgencyHook "magenta"
@@ -84,25 +86,14 @@ mainNoArgs = do
             -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
             --, handleEventHook   = handleTimerEvent
             , manageHook        = placeHook (smart (1,0)) <+> floatNextHook
-            , startupHook = do
-                path <- liftIO (getEnv "XMONAD_STARTUP_HOOK")
-                forkFile path [] Nothing
+            , startupHook =
+                whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
+                          (\path -> forkFile path [] Nothing)
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
             , handleEventHook = handleShutdownEvent
             }
 
-
-xmonad' :: (LayoutClass l Window, Read (l Window)) => XConfig l -> IO ()
-xmonad' conf = do
-    path <- getEnv "XMONAD_STATE"
-    try (readFile path) >>= \case
-        Right content -> do
-            hPutStrLn stderr ("resuming from " ++ path)
-            withArgs ("--resume" : lines content) (xmonad conf)
-        Left e -> do
-            hPutStrLn stderr (displaySomeException e)
-            xmonad conf
 
 getWorkspaces0 :: IO [String]
 getWorkspaces0 =

@@ -147,12 +147,32 @@ in {
     in ''
       alias ${initscript};
     '';
+    locations."/pub".extraConfig = ''
+      alias ${pkgs.writeText "pub" config.krebs.users.lass.pubkey};
+    '';
   };
+
+  security.acme.certs."cgit.lassul.us" = {
+    email = "lassulus@lassul.us";
+    webroot = "/var/lib/acme/acme-challenge";
+    plugins = [
+      "account_key.json"
+      "fullchain.pem"
+      "key.pem"
+    ];
+    group = "nginx";
+    user = "nginx";
+  };
+
 
   services.nginx.virtualHosts.cgit = {
     serverName = "cgit.lassul.us";
     addSSL = true;
-    enableACME = true;
+    sslCertificate = "/var/lib/acme/cgit.lassul.us/fullchain.pem";
+    sslCertificateKey = "/var/lib/acme/cgit.lassul.us/key.pem";
+    locations."/.well-known/acme-challenge".extraConfig = ''
+      root /var/lib/acme/acme-challenge;
+    '';
   };
 
   users.users.blog = {

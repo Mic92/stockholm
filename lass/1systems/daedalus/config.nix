@@ -37,6 +37,9 @@ with import <stockholm/lib>;
         networkmanagerapplet
         libreoffice
         audacity
+        zathura
+        skype
+        wine
       ];
       services.xserver.enable = true;
       services.xserver.displayManager.lightdm.enable = true;
@@ -52,8 +55,10 @@ with import <stockholm/lib>;
           name = "bitcoin";
           description = "user for bitcoin stuff";
           home = "/home/bitcoin";
+          isNormalUser = true;
           useDefaultShell = true;
           createHome = true;
+          extraGroups = [ "audio" ];
         };
       };
       security.sudo.extraConfig = ''

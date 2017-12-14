@@ -1,38 +1,34 @@
-{ config, lib, pkgs, ... }:
-
 with import <stockholm/lib>;
-
-let
+{ config, pkgs, ... }: let
   cfg = config.krebs.per-user;
-
-  out = {
-    options.krebs.per-user = api;
-    config = imp;
-  };
-
-  api = mkOption {
-    type = with types; attrsOf (submodule {
+in {
+  options.krebs.per-user = mkOption {
+    type = types.attrsOf (types.submodule {
       options = {
         packages = mkOption {
-          type = listOf path;
+          type = types.listOf types.path;
           default = [];
         };
       };
     });
     default = {};
   };
-
-  imp = {
+  config = {
     environment = {
-      etc = flip mapAttrs' cfg (name: { packages, ... }: {
-        name = "per-user/${name}";
-        value.source = pkgs.symlinkJoin {
-          name = "per-user.${name}";
-          paths = packages;
-        };
-      });
+      etc =
+        mapAttrs'
+          (name: per-user: {
+            name = "per-user/${name}";
+            value.source = pkgs.buildEnv {
+              name = "per-user.${name}";
+              paths = per-user.packages;
+              pathsToLink = [
+                "/bin"
+              ];
+            };
+          })
+          (filterAttrs (_: per-user: per-user.packages != []) cfg);
       profiles = ["/etc/per-user/$LOGNAME"];
     };
   };
-
-in out
+}

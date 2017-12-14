@@ -18,7 +18,7 @@ with import <stockholm/lib>;
       netDevices = {
         bra = {
           model = "MFCL2700DN";
-          ip = "10.23.42.221";
+          ip = "10.42.23.221";
         };
       };
     };

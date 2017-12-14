@@ -2,7 +2,7 @@
 
 pkgs.writeDashBin "krebszones" ''
   set -efu
-  export OVH_ZONE_CONFIG=$HOME/.secrets/krebs/ovh-zone.conf
+  export OVH_ZONE_CONFIG=''${OVH_ZONE_CONFIG:-$HOME/.secrets/krebs/ovh-zone.conf}
   case $* in
     import)
       set -- import /etc/zones/krebsco.de krebsco.de

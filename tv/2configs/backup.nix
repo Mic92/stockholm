@@ -22,6 +22,12 @@ with import <stockholm/lib>;
       dst = { host = config.krebs.hosts.zu; path = "/bku/nomic-home"; };
       startAt = "04:20";
     };
+    nomic-pull-querel-home = {
+      method = "pull";
+      src = { host = config.krebs.hosts.querel; path = "/home"; };
+      dst = { host = config.krebs.hosts.nomic; path = "/fs/ponyhof/bku/querel-home"; };
+      startAt = "00:00";
+    };
     wu-home-xu = {
       method = "push";
       src = { host = config.krebs.hosts.wu; path = "/home"; };

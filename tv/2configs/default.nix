@@ -11,7 +11,6 @@ with import <stockholm/lib>;
 
   imports = [
     <secrets>
-    ./audit.nix
     ./backup.nix
     ./bash
     ./htop.nix
@@ -142,6 +141,7 @@ with import <stockholm/lib>;
       environment.systemPackages = [
         pkgs.get
         pkgs.git
+        pkgs.git-preview
         pkgs.hashPassword
         pkgs.htop
         pkgs.kpaste

@@ -83,6 +83,7 @@ let
           rsync
           utillinux
         ];
+        restartIfChanged = false;
         serviceConfig = rec {
           ExecStart = start plan;
           SyslogIdentifier = ExecStart.name;

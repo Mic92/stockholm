@@ -67,6 +67,11 @@ in {
         fsType = "ext4";
       };
 
+      fileSystems."/bku" = {
+        device = "/dev/pool/bku";
+        fsType = "ext4";
+      };
+
       swapDevices = [
         { label = "swap1"; }
         { label = "swap2"; }
@@ -220,8 +225,8 @@ in {
         };
         enableTun = true;
         privateNetwork = true;
-        hostAddress = "10.233.2.4";
-        localAddress = "10.233.2.5";
+        hostAddress = "10.233.2.5";
+        localAddress = "10.233.2.6";
       };
     }
     <stockholm/lass/2configs/exim-smarthost.nix>
@@ -278,6 +283,17 @@ in {
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp --dport 25565"; target = "ACCEPT"; }
         { predicate = "-p udp --dport 25565"; target = "ACCEPT"; }
+      ];
+    }
+    <stockholm/krebs/2configs/reaktor-krebs.nix>
+    <stockholm/lass/2configs/dcso-dev.nix>
+    {
+      krebs.git.rules = [
+        {
+          user = [ config.krebs.users.jeschli ];
+          repo = [ config.krebs.git.repos.stockholm ];
+          perm = with git; push "refs/heads/staging/jeschli" [ fast-forward non-fast-forward create delete merge ];
+        }
       ];
     }
   ];
