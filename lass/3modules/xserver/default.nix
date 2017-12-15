@@ -17,10 +17,6 @@ let
   imp = {
 
     services.xserver = {
-      # Don't install feh into systemPackages
-      # refs <nixpkgs/nixos/modules/services/x11/desktop-managers>
-      desktopManager.session = mkForce [];
-
       enable = true;
       display = 11;
       tty = 11;
