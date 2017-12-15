@@ -9,8 +9,6 @@ with import <stockholm/lib>;
   }) {
 
     bln = {
-      ci = false;
-      external = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.27.28";
@@ -48,8 +46,6 @@ with import <stockholm/lib>;
       };
     };
     reagenzglas = {
-      ci = false;
-      external = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.27.27";
