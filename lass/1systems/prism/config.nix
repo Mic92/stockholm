@@ -290,7 +290,11 @@ in {
     {
       krebs.git.rules = [
         {
-          user = [ config.krebs.users.jeschli ];
+          user = with config.krebs.users; [
+            jeschli
+            jeschli-bln
+            jeschli-brauerei
+          ];
           repo = [ config.krebs.git.repos.stockholm ];
           perm = with git; push "refs/heads/staging/jeschli" [ fast-forward non-fast-forward create delete merge ];
         }
