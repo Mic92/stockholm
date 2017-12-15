@@ -7,9 +7,12 @@ host@{ name, secure ? false }: let
 in
   evalSource (toString _file) {
     nixos-config.symlink = "stockholm/krebs/1systems/${name}/config.nix";
-    secrets.file = getAttr builder {
-      buildbot = toString <stockholm/krebs/6tests/data/secrets>;
-      krebs = "${getEnv "HOME"}/secrets/krebs/${host.name}";
+    secrets = getAttr builder {
+      buildbot.file = toString <stockholm/krebs/6tests/data/secrets>;
+      krebs.pass = {
+        dir = "${getEnv "HOME"}/brain";
+        name = "krebs-secrets/${name}";
+      };
     };
     stockholm.file = toString <stockholm>;
     nixpkgs.git = {
