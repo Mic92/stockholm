@@ -29,4 +29,9 @@
       options = ["nosuid" "nodev" "noatime"];
     };
   };
+
+  services.logind.extraConfig = ''
+    HandleLidSwitch=ignore
+  '';
+
 }

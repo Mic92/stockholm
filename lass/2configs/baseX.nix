@@ -41,7 +41,7 @@ in {
           default = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1";
         };
       };
-      config.services.xresources.resources.X = ''
+      config.krebs.xresources.resources.X = ''
         *.font:       ${config.lass.fonts.regular}
         *.boldFont:   ${config.lass.fonts.bold}
         *.italicFont: ${config.lass.fonts.italic}
@@ -112,11 +112,7 @@ in {
     xkbOptions = "caps:backspace";
   };
 
-  services.logind.extraConfig = ''
-    HandleLidSwitch=ignore
-  '';
-
   services.urxvtd.enable = true;
-  services.xresources.enable = true;
+  krebs.xresources.enable = true;
   lass.screenlock.enable = true;
 }

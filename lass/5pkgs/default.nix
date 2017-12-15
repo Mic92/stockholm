@@ -23,7 +23,7 @@
 
     screengrab = pkgs.writeDashBin "screengrab" ''
       resolution="$(${pkgs.xorg.xrandr}/bin/xrandr | ${pkgs.gnugrep}/bin/grep '*' | ${pkgs.gawk}/bin/awk '{print $1}')"
-      ${pkgs.ffmpeg}/bin/ffmpeg -f x11grab -r 25 -i :0.0 -s $resolution -c:v huffyuv $1
+      ${pkgs.ffmpeg}/bin/ffmpeg -f x11grab -r 25 -i :${toString config.services.xserver.display} -s $resolution -c:v huffyuv $1
     '';
   };
 }

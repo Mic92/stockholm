@@ -44,6 +44,7 @@ let
       ./tinc_graphs.nix
       ./urlwatch.nix
       ./repo-sync.nix
+      ./xresources.nix
       ./zones.nix
     ];
     options.krebs = api;
@@ -226,21 +227,26 @@ let
             };
           })
         //
-        # GitHub's IPv4 address range is 192.30.252.0/22
-        # Refs https://help.github.com/articles/github-s-ip-addresses/
-        # 192.30.252.0/22 = 192.30.252.0-192.30.255.255 (1024 addresses)
-        # Because line length is limited by OPENSSH_LINE_MAX (= 8192),
-        # we split each /24 into its own entry.
-        listToAttrs (map
-          (c: {
-            name = "github${toString c}";
-            value = {
-              hostNames = ["github.com"] ++
-                map (d: "192.30.${toString c}.${toString d}") (range 0 255);
-              publicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==";
-            };
-          })
-          (range 252 255))
+        {
+          github = {
+            hostNames = [
+              "github.com"
+              # List generated with
+              # curl -sS https://api.github.com/meta | jq -r .git[] | cidr2glob
+              "192.30.253.*"
+              "192.30.254.*"
+              "192.30.255.*"
+              "185.199.108.*"
+              "185.199.109.*"
+              "185.199.110.*"
+              "185.199.111.*"
+              "18.195.85.27"
+              "18.194.104.89"
+              "35.159.8.160"
+            ];
+            publicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==";
+          };
+        }
         //
         mapAttrs
           (name: host: {

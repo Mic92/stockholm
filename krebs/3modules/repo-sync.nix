@@ -173,6 +173,7 @@ let
           REPONAME = "${name}.git";
         };
 
+        restartIfChanged = false;
         serviceConfig = {
           Type = "simple";
           PermissionsStartOnly = true;

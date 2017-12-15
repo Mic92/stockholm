@@ -47,7 +47,7 @@ let
   createFirefoxUser = name: extraGroups: precedence:
     let
       bin = pkgs.writeScriptBin name ''
-        /var/run/wrappers/bin/sudo -u ${name} -i ${pkgs.firefox}/bin/firefox $@
+        /var/run/wrappers/bin/sudo -u ${name} -i ${pkgs.firefox-devedition-bin}/bin/firefox-devedition $@
       '';
     in {
       users.extraUsers.${name} = {

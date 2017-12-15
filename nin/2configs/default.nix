@@ -4,6 +4,7 @@ with import <stockholm/lib>;
 {
   imports = [
     ../2configs/vim.nix
+    <stockholm/krebs/2configs/binary-cache/nixos.nix>
     <stockholm/krebs/2configs/binary-cache/prism.nix>
     {
       users.extraUsers =

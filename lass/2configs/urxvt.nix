@@ -4,7 +4,7 @@ with import <stockholm/lib>;
 {
   services.urxvtd.enable = true;
 
-  services.xresources.resources.urxvt = ''
+  krebs.xresources.resources.urxvt = ''
     URxvt*SaveLines: 4096
     URxvt*scrollBar:            false
     URxvt*urgentOnBell:         true
