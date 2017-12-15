@@ -20,20 +20,26 @@ with import <stockholm/lib>;
       boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
       boot.kernelModules = [ "kvm-intel" ];
 
-      fileSystems."/" =
-        { device = "/dev/pool/root";
-          fsType = "btrfs";
-        };
+      fileSystems."/" = {
+        device = "/dev/pool/root";
+        fsType = "btrfs";
+      };
 
-      fileSystems."/boot" =
-        { device = "/dev/disk/by-uuid/1F60-17C6";
-          fsType = "vfat";
-        };
+      fileSystems."/boot" = {
+        device = "/dev/disk/by-uuid/1F60-17C6";
+        fsType = "vfat";
+      };
 
-      fileSystems."/home" =
-        { device = "/dev/pool/home";
-          fsType = "btrfs";
-        };
+      fileSystems."/home" = {
+        device = "/dev/pool/home";
+        fsType = "btrfs";
+      };
+
+      fileSystems."/tmp" = {
+        device = "tmpfs";
+        fsType = "tmpfs";
+        options = ["nosuid" "nodev" "noatime"];
+      };
 
       nix.maxJobs = lib.mkDefault 8;
     }
