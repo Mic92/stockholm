@@ -3,7 +3,7 @@ with import <stockholm/lib>;
 
 {
   services.urxvtd.enable = true;
-
+  krebs.xresources.enable = true;
   krebs.xresources.resources.urxvt = ''
   *foreground: rgb:a8/a8/a8
   *background: rgb:00/00/00
