@@ -44,6 +44,7 @@ let
       ./tinc_graphs.nix
       ./urlwatch.nix
       ./repo-sync.nix
+      ./xresources.nix
       ./zones.nix
     ];
     options.krebs = api;

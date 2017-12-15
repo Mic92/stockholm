@@ -76,7 +76,7 @@ let
         ];
       };
     };
-    services.xresources.resources.dpi = ''
+    krebs.xresources.resources.dpi = ''
       ${optionalString (xcfg.dpi != null) "Xft.dpi: ${toString xcfg.dpi}"}
     '';
     systemd.services.urxvtd = {
