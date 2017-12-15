@@ -231,7 +231,12 @@ rec {
   source = submodule ({ config, ... }: {
     options = {
       type = let
-        types = ["file" "git" "symlink"];
+        types = [
+          "file"
+          "git"
+          "pass"
+          "symlink"
+        ];
       in mkOption {
         type = enum types;
         default = let
@@ -253,6 +258,10 @@ rec {
       };
       git = mkOption {
         type = nullOr git-source;
+        default = null;
+      };
+      pass = mkOption {
+        type = nullOr pass-source;
         default = null;
       };
       symlink = let
@@ -283,6 +292,17 @@ rec {
       };
       url = mkOption {
         type = str; # TODO types.git.url
+      };
+    };
+  };
+
+  pass-source = submodule {
+    options = {
+      dir = mkOption {
+        type = absolute-pathname;
+      };
+      name = mkOption {
+        type = pathname; # TODO relative-pathname
       };
     };
   };
