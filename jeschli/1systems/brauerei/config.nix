@@ -67,6 +67,9 @@
     gotools
   # dev tools
     gnumake
+    jetbrains.pycharm-professional
+    jetbrains.webstorm
+    jetbrains.goland
   # document viewer
     zathura
   ];
