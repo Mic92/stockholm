@@ -12,6 +12,5 @@ _:
     ./umts.nix
     ./usershadow.nix
     ./xserver
-    ./xresources.nix
   ];
 }

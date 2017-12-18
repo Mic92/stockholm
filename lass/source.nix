@@ -10,11 +10,14 @@ in
       nixos-config.symlink = "stockholm/lass/1systems/${name}/config.nix";
       nixpkgs.git = {
         url = https://github.com/nixos/nixpkgs;
-        ref = "f9390d6";
+        ref = "af7e479";
       };
-      secrets.file = getAttr builder {
-        buildbot = toString <stockholm/lass/2configs/tests/dummy-secrets>;
-        lass = "/home/lass/secrets/${name}";
+      secrets = getAttr builder {
+        buildbot.file = toString <stockholm/lass/2configs/tests/dummy-secrets>;
+        lass.pass = {
+          dir = "${getEnv "HOME"}/.password-store";
+          name = "hosts/${name}";
+        };
       };
       stockholm.file = toString <stockholm>;
     }

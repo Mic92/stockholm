@@ -4,12 +4,15 @@
 }:
 mkDerivation {
   pname = "nix-diff";
-  version = "1.0.0";
+  version = "1.0.0-krebs1";
   src = fetchgit {
     url = "https://github.com/Gabriel439/nix-diff";
     sha256 = "1k00nx8pannqmpzadkwfrs6bf79yk22ynhd033z5rsyw0m8fcz9k";
     rev = "e32ffa2c7f38b47a71325a042c1d887fb46cdf7d";
   };
+  patches = [
+    ./nixos-system.patch
+  ];
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [

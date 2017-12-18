@@ -1,24 +1,27 @@
-{ coreutils, fetchgit, git, jq, openssh, proot, rsync, stdenv, ... }:
+{ coreutils, fetchgit, findutils, git, gnused, jq, openssh, pass, rsync, stdenv
+}:
 
 let
   PATH = stdenv.lib.makeBinPath [
     coreutils
+    findutils
     git
+    gnused
     jq
     openssh
-    proot
+    pass
     rsync
   ];
 in
 
 stdenv.mkDerivation rec {
   name = "populate";
-  version = "1.2.5";
+  version = "2.1.0";
 
   src = fetchgit {
     url = http://cgit.ni.krebsco.de/populate;
     rev = "refs/tags/v${version}";
-    sha256 = "10s4x117zp5whqq991xzw1i2jc1xhl580kx8hhzv8f1b4c9carx1";
+    sha256 = "0cr50y6h6nps0qgpmi01h0z9wzpv2704y5zgx2salk1grkmvcfmh";
   };
 
   phases = [

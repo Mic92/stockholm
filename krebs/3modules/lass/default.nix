@@ -44,7 +44,7 @@ with import <stockholm/lib>;
       cores = 2;
       nets = rec {
         internet = {
-          ip4.addr = "45.62.226.163";
+          ip4.addr = "64.137.242.41";
           aliases = [
             "echelon.i"
           ];
@@ -535,44 +535,46 @@ with import <stockholm/lib>;
         };
       };
     };
-    reagenzglas = {
-      ci = false;
-      external = true;
-      nets = {
+    xerxes = {
+      cores = 2;
+      nets = rec {
         retiolum = {
-          ip4.addr = "10.243.27.27";
-          ip6.addr = "42::27";
+          ip4.addr = "10.243.1.3";
+          ip6.addr = "42::1:3";
           aliases = [
-            "reagenzglas.r"
+            "xerxes.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            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
+            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
             -----END RSA PUBLIC KEY-----
           '';
         };
       };
+      secure = true;
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5HyLyaIvVH0qHIQ4ciKhDiElhSqsK+uXcA6lTvL+5n";
     };
   };
   users = {
@@ -602,6 +604,10 @@ with import <stockholm/lib>;
       mail = "lass@icarus.r";
       pubkey = builtins.readFile ./ssh/icarus.rsa;
     };
+    lass-xerxes = {
+      mail = "lass@xerxes.r";
+      pubkey = builtins.readFile ./ssh/xerxes.rsa;
+    };
     fritz = {
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCz34435NSXgj72YAOL4cIlRq/4yInKEyL9no+gymURoW5x1nkYpP0EK331e7UyQQSOdWOogRo6d7YHcFqNlYWv5xlYcHucIhgJwC4Zda1liVA+v7tSOJz2BjmFvOT3/qlcPS69f3zdLHZooz2C33uHX1FgGRXlxiA8dpqGnSr8o76QLZjuQkuDqr8reOspjO/RHCo2Moq0Xm5q9OgN1WLAZzupqt9A5lx567mRzYsRAr23pUxVN8T/tSCgDlPe4ktEjYX9CXLKfMyh9WuBVi+AuH4GFEWBT+AMpsHeF45w+w956x56mz0F5nYOQNK87gFr+Jr+mh2AF1ot2CxzrfTb fritz@scriptkiddiT540";
     };
@@ -621,9 +627,6 @@ with import <stockholm/lib>;
     Mic92 = {
       pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKbBp2dH2X3dcU1zh+xW3ZsdYROKpJd3n13ssOP092qE";
       mail = "joerg@higgsboson.tk";
-    };
-    jeschli = {
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMPuFzd6p3zZETIjoV5mRxCTQgeZk9s/P374mEDbj58wDTT0uGWu2JRf7cL1QRTvd5238tYl0eSHXH65+oaFB/mIvmiRnuw6qQODOMHlSbJN5/J2hEw/3v5gveiP1xNLfKlFhj6mmMRF7Etvzns/kLGLCSjj1UTlfo4iHmtinPmU+iQ8J4foS4cZj4oZesF8gndkc2EFMfL6en7EuU8GK6U9GtwKNL9N4UoUZXu8Nf00pkn/jrpmsDdI4zdVVAxWeu/Lo4li43EVixLcfwQiwzf6S9FvYIv30xPdy92GJSJwxm/QkYuc48VZWUoE+qThf3IEPETtX+MRZrM8RTtY01";
     };
   };
 }

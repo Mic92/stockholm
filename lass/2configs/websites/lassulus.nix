@@ -153,15 +153,15 @@ in {
   };
 
   security.acme.certs."cgit.lassul.us" = {
-    email = "lassulus@gmail.com";
-    webroot = "/var/lib/acme/acme-challenges";
+    email = "lassulus@lassul.us";
+    webroot = "/var/lib/acme/acme-challenge";
     plugins = [
       "account_key.json"
-      "key.pem"
       "fullchain.pem"
+      "key.pem"
     ];
     group = "nginx";
-    allowKeysForGroup = true;
+    user = "nginx";
   };
 
 
@@ -170,6 +170,9 @@ in {
     addSSL = true;
     sslCertificate = "/var/lib/acme/cgit.lassul.us/fullchain.pem";
     sslCertificateKey = "/var/lib/acme/cgit.lassul.us/key.pem";
+    locations."/.well-known/acme-challenge".extraConfig = ''
+      root /var/lib/acme/acme-challenge;
+    '';
   };
 
   users.users.blog = {
