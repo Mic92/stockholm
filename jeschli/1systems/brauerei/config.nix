@@ -67,6 +67,9 @@
     gotools
   # dev tools
     gnumake
+    jetbrains.pycharm-professional
+    jetbrains.webstorm
+    jetbrains.goland
   # document viewer
     zathura
   ];
@@ -110,6 +113,10 @@
   users.extraUsers.jeschli = {
     isNormalUser = true;
     uid = 1000;
+  };
+  users.extraUsers.jamie = {
+    isNormalUser = true;
+    uid = 1001;
   };
 
   users.users.root.openssh.authorizedKeys.keys = [
