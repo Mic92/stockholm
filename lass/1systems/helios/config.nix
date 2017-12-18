@@ -156,4 +156,7 @@ with import <stockholm/lib>;
 
   services.printing.drivers = [ pkgs.postscript-lexmark ];
 
+  services.logind.extraConfig = ''
+    HandleLidSwitch=ignore
+  '';
 }
