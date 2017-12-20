@@ -10,7 +10,7 @@ in
       nixos-config.symlink = "stockholm/lass/1systems/${name}/config.nix";
       nixpkgs.git = {
         url = https://github.com/nixos/nixpkgs;
-        ref = "af7e479";
+        ref = "ed3b1bc";
       };
       secrets = getAttr builder {
         buildbot.file = toString <stockholm/lass/2configs/tests/dummy-secrets>;
