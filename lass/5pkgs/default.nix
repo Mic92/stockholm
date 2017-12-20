@@ -21,6 +21,17 @@
     xmonad-lass = import ./xmonad-lass.nix { inherit config pkgs; };
     yt-next = pkgs.callPackage ./yt-next/default.nix {};
 
+    bank = pkgs.writeDashBin "bank" ''
+      tmp=$(mktemp)
+      ${pkgs.pass}/bin/pass show hledger > $tmp
+      ${pkgs.hledger}/bin/hledger --file=$tmp "$@"
+      ${pkgs.pass}/bin/pass show hledger | if ${pkgs.diffutils}/bin/diff $tmp -; then
+        exit 0
+      else
+        ${pkgs.coreutils}/bin/cat $tmp | ${pkgs.pass}/bin/pass insert -m hledger
+      fi
+      ${pkgs.coreutils}/bin/rm $tmp
+    '';
     screengrab = pkgs.writeDashBin "screengrab" ''
       resolution="$(${pkgs.xorg.xrandr}/bin/xrandr | ${pkgs.gnugrep}/bin/grep '*' | ${pkgs.gawk}/bin/awk '{print $1}')"
       ${pkgs.ffmpeg}/bin/ffmpeg -f x11grab -r 25 -i :${toString config.services.xserver.display} -s $resolution -c:v huffyuv $1

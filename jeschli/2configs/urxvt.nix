@@ -3,7 +3,7 @@ with import <stockholm/lib>;
 
 {
   services.urxvtd.enable = true;
-
+  krebs.xresources.enable = true;
   krebs.xresources.resources.urxvt = ''
   *foreground: rgb:a8/a8/a8
   *background: rgb:00/00/00
@@ -28,7 +28,7 @@ with import <stockholm/lib>;
   
   URxvt*scrollBar:                      false
   URxvt*urgentOnBell:                   true
-  URxvt*font: xft:DejaVu Sans Mono:pixelsize=22
+  URxvt*font: xft:DejaVu Sans Mono:pixelsize=20
   URXvt*faceSize: 12
   '';
 }
