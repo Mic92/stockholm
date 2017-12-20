@@ -72,6 +72,8 @@
     rxvt_unicode
   # editors
     emacs
+  # databases
+    sqlite
   # internet 
     thunderbird
     hipchat
@@ -91,6 +93,7 @@
     jetbrains.pycharm-professional
     jetbrains.webstorm
     jetbrains.goland
+    jetbrains.datagrip
     texlive.combined.scheme-full
     pandoc
     redis
