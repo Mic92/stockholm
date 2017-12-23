@@ -54,7 +54,11 @@
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   nixpkgs.config.allowUnfree = true;
-  environment.shellAliases = { n = "nix-shell"; };
+  environment.shellAliases = { 
+    n = "nix-shell"; 
+    gd = "cd /home/markus/go/src/gitlab.dcso.lolcat"; 
+    gh = "cd /home/markus/go/src/github.com"; 
+  };
   environment.variables = { GOROOT= [ "${pkgs.go.out}/share/go" ]; };
   environment.systemPackages = with pkgs; [
   # system helper
