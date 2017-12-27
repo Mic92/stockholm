@@ -37,8 +37,8 @@
   ];
 
   networking.hostName = "BLN02NB0154"; # Define your hostname.
-  networking.networkmanager.enable = true;
-   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # networking.networkmanager.enable = true;
+  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Select internationalisation properties.
   # i18n = {
