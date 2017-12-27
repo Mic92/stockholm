@@ -10,7 +10,7 @@ in
       nixos-config.symlink = "stockholm/tv/1systems/${name}/config.nix";
       nixpkgs.git = {
         # nixos-17.09
-        ref = mkDefault "d0f0657ca06cc8cb239cb94f430b53bcdf755887";
+        ref = mkDefault "53e6d671a9662922080635482b7e1c418d2cdc72";
         url = https://github.com/NixOS/nixpkgs;
       };
       secrets.file = getAttr builder {
