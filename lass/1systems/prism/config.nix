@@ -186,6 +186,7 @@ in {
       #hotdog
       containers.hotdog = {
         config = { ... }: {
+          environment.systemPackages = [ pkgs.git ];
           services.openssh.enable = true;
           users.users.root.openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
@@ -201,6 +202,7 @@ in {
       #kaepsele
       containers.kaepsele = {
         config = { ... }: {
+          environment.systemPackages = [ pkgs.git ];
           services.openssh.enable = true;
           users.users.root.openssh.authorizedKeys.keys = with config.krebs.users; [
             lass.pubkey
@@ -217,6 +219,7 @@ in {
       #onondaga
       containers.onondaga = {
         config = { ... }: {
+          environment.systemPackages = [ pkgs.git ];
           services.openssh.enable = true;
           users.users.root.openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
@@ -290,7 +293,11 @@ in {
     {
       krebs.git.rules = [
         {
-          user = [ config.krebs.users.jeschli ];
+          user = with config.krebs.users; [
+            jeschli
+            jeschli-bln
+            jeschli-brauerei
+          ];
           repo = [ config.krebs.git.repos.stockholm ];
           perm = with git; push "refs/heads/staging/jeschli" [ fast-forward non-fast-forward create delete merge ];
         }

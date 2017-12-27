@@ -44,7 +44,7 @@ with import <stockholm/lib>;
       cores = 2;
       nets = rec {
         internet = {
-          ip4.addr = "45.62.226.163";
+          ip4.addr = "64.137.242.41";
           aliases = [
             "echelon.i"
           ];
@@ -535,45 +535,6 @@ with import <stockholm/lib>;
         };
       };
     };
-    reagenzglas = {
-      ci = false;
-      external = true;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.27.27";
-          ip6.addr = "42::27";
-          aliases = [
-            "reagenzglas.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIECgKCBAEA4Tbq6aiMhPz55Of/WDEmESGmScRJedQSJoyRuDEDabEktdbP/m7P
-            bwpLp0lGYphx42+lutFcYOGoH/Lglfj39yhDcrpkYfTnzcGOWutXGuZ+iR5vmGj0
-            utJRf/4+a4sB5NboBVZ9Ke/RTjDNSov00C2hFCYTXz89Gd2ap1nDPQpnejOS+9aO
-            2W6P/WIKhRH7TfW6M7mUCrjVxWXZgdfSCQYxAXU/+1uAGmJ9qlGlQUIGUGv9Znv5
-            hurqwAHzSgEkKc2iUumosz6a8W9Oo3TAEC+jMEO2l/+GJ/8VysG1wtLWDX03GU3u
-            mBAtrJppEw4QNPTeFg6XSFIwV8Z0fWZ4lGsPJLbAkLUMxtKVWKbdrdpnmiQpLfBW
-            8BRbT1pjwEdw0hefA6NwCO3/Y5piEaUEz/gYz9xHFMDXUj9stHtaF0HaqonWyb06
-            aX3EEqRBxVsj6/Sgd33b77xqY4WBoOlbhfWj+EAD1Ova26lHELpAg0Z4AncpyOzw
-            pJcX81U8GgQp899YAc3EAldFfiu094CvM2NKd110K90VlTpos+sqFfNE87vpprMu
-            3d1NsYzf+FUM/aXASlqTNL+i8qBDAlODkLdj4+VZ2BjkSH+p2BLZouizSzu4X3I/
-            lfy554Dbb/98zlwmX9JrWzBRs2GxxFdIDZ1jK+Ci5qM7oTfujBwiE4jZA6wlK8u5
-            +IenSBdaJb0J8nS0Bziz/BLkuBCrl/YFelpZlY0pw6WYlraKbf/nsOpumOYh6zdz
-            9jiIPElGvso9FhwigX7xWCiYMK3ryAqm8CL0cTscQW3Yy2JKm1tNIQtAacwnNVli
-            PqdnPJSo942I+Fl6ZPjZ19ivJIqC+2TjGEY2Et8DkiL6YZfy4bM1zhoWMlXBIil0
-            ynnKR/h/CC67cq94JCbtRWKiYXIYtfHPQkS7S1Lk6aSYbIch/wROyh7XJ7EGE7nn
-            GAVMqI/P/qbW3rwEJGXzI4eJAHa2hwpP2Slimf6uUD/6L2bAnduhYoTsnNSjJmNE
-            hCC+MHohzk7+isZl0jwIEcMpsohMAwoa5BEhbuYJWeUesT/4PeddLIGYubTZAXp2
-            ZdYRepSNUEhSZV0H99MhlqeooDJxnWpsiba5Gb0s6p4gTReGy0jMtWnxI2P5RUFX
-            vEGt77v4MGrWYTzAL/ZRmESsOj7TXqpSK5YcMC2nr8PcV66LuMjOkRrGoVOV3fBe
-            G/9pNVb68SRwfPoGa5nGe6C7GPcgko9rgGLLcU1r/4L2bqFhdIQdSfaUX2Hscm44
-            5GdN2UvuwwVxOyU1uPqJcBNnr2yt3x3kw5+zDQ00z/pFntTXWm19m6BUtbkdwN2x
-            Bn1P3P/mRTEaHxQr9RGg8Zjnix/Q6G7I5QIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-    };
     xerxes = {
       cores = 2;
       nets = rec {
@@ -666,9 +627,6 @@ with import <stockholm/lib>;
     Mic92 = {
       pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKbBp2dH2X3dcU1zh+xW3ZsdYROKpJd3n13ssOP092qE";
       mail = "joerg@higgsboson.tk";
-    };
-    jeschli = {
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMPuFzd6p3zZETIjoV5mRxCTQgeZk9s/P374mEDbj58wDTT0uGWu2JRf7cL1QRTvd5238tYl0eSHXH65+oaFB/mIvmiRnuw6qQODOMHlSbJN5/J2hEw/3v5gveiP1xNLfKlFhj6mmMRF7Etvzns/kLGLCSjj1UTlfo4iHmtinPmU+iQ8J4foS4cZj4oZesF8gndkc2EFMfL6en7EuU8GK6U9GtwKNL9N4UoUZXu8Nf00pkn/jrpmsDdI4zdVVAxWeu/Lo4li43EVixLcfwQiwzf6S9FvYIv30xPdy92GJSJwxm/QkYuc48VZWUoE+qThf3IEPETtX+MRZrM8RTtY01";
     };
   };
 }

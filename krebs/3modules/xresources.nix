@@ -17,7 +17,7 @@ in
 {
 
   options = {
-    services.xresources.enable = mkOption {
+    krebs.xresources.enable = mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -25,7 +25,7 @@ in
       '';
     };
 
-    services.xresources.resources = mkOption {
+    krebs.xresources.resources = mkOption {
       default = {};
       type = types.attrsOf types.str;
       example = {
@@ -42,7 +42,7 @@ in
 
   config =
     let
-      cfg = config.services.xresources;
+      cfg = config.krebs.xresources;
       xres = writeText "xresources" (concatStringsSep "\n" (attrValues cfg.resources));
 
     in mkIf cfg.enable {

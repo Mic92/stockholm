@@ -27,15 +27,6 @@ in {
     ./sqlBackup.nix
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
     (servePage [
-      "karlaskop.de"
-      "www.karlaskop.de"
-    ])
-    (servePage [ "makeup.apanowicz.de" ])
-    (servePage [
-      "pixelpocket.de"
-      "www.pixelpocket.de"
-    ])
-    (servePage [
       "habsys.de"
       "habsys.eu"
       "www.habsys.de"
@@ -48,22 +39,18 @@ in {
       "nirwanabluete.de"
       "aldonasiech.com"
       "ubikmedia.eu"
-      "facts.cloud"
       "youthtube.xyz"
-      "illucloud.eu"
-      "illucloud.de"
-      "illucloud.com"
       "joemisch.com"
+      "weirdwednesday.de"
+
       "www.apanowicz.de"
       "www.nirwanabluete.de"
       "www.aldonasiech.com"
       "www.ubikmedia.eu"
-      "www.facts.cloud"
       "www.youthtube.xyz"
-      "www.illucloud.eu"
-      "www.illucloud.de"
-      "www.illucloud.com"
       "www.ubikmedia.de"
+      "www.weirdwednesday.de"
+
       "aldona2.ubikmedia.de"
       "apanowicz.ubikmedia.de"
       "cinevita.ubikmedia.de"
@@ -74,8 +61,6 @@ in {
       "nb.ubikmedia.de"
       "youthtube.ubikmedia.de"
       "weirdwednesday.ubikmedia.de"
-      "weirdwednesday.de"
-      "www.weirdwednesday.de"
       "freemonkey.ubikmedia.de"
       "jarugadesign.ubikmedia.de"
     ])
