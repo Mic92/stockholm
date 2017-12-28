@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     # archive.org mirror:
-    # https://archive.org/download/ForticlientsslvpnLinux4.4.23171.tar/forticlientsslvpn_linux_4.4.2317.tar.gz
-    url = http://www.zen.co.uk/userfiles/knowledgebase/FortigateSSLVPNClient/forticlientsslvpn_linux_4.4.2317.tar.gz;
+    url = https://archive.org/download/ForticlientsslvpnLinux4.4.23171.tar/forticlientsslvpn_linux_4.4.2317.tar.gz;
+    # url = http://www.zen.co.uk/userfiles/knowledgebase/FortigateSSLVPNClient/forticlientsslvpn_linux_4.4.2317.tar.gz;
     sha256 = "19clnf9rgrnwazlpah8zz5kvz6kc8lxawrgmksx25k5ywflmbcrr";
   };
   phases = [ "unpackPhase" "buildPhase" "installPhase" "fixupPhase" ];
