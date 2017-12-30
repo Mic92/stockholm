@@ -4,7 +4,9 @@ host@{ name,
   secure ? false,
   full ? false,
   torrent ? false,
-  musnix ? false
+  hw ? false,
+  musnix ? false,
+  python ? false
 }:
 let
   builder = if getEnv "dummy_secrets" == "true"
@@ -43,6 +45,20 @@ in
       musnix.git = {
         url = https://github.com/musnix/musnix.git;
         ref = "d8b989f";
+      };
+    })
+
+    (mkIf ( hw ) {
+      nixos-hardware.git = {
+        url = https://github.com/nixos/nixos-hardware.git;
+        ref = "8a05dc9";
+      };
+    })
+
+    (mkIf ( python ) {
+      python.git = {
+        url = https://github.com/garbas/nixpkgs-python;
+        ref = "cac319b";
       };
     })
     (mkIf ( torrent ) {
