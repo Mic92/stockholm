@@ -3,6 +3,9 @@
 with import <stockholm/lib>;
 
 {
+  environment.systemPackages = [
+    pkgs.eximlog
+  ];
   krebs.exim-smarthost = {
     enable = true;
     dkim = [
