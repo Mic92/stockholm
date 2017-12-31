@@ -38,7 +38,7 @@ let
     };
     ircServer = mkOption {
       type = types.str;
-      default = "echelon.r";
+      default = "localhost";
       description = "to which server the bot should connect";
     };
   };
