@@ -1,12 +1,24 @@
+with (import <stockholm/lib>);
 { config, lib, pkgs, ... }:
 
 let
-  inherit (import <stockholm/lib>) genid;
+  tmux = pkgs.writeDash "tmux" ''
+    exec ${pkgs.tmux}/bin/tmux -f ${pkgs.writeText "tmux.conf" ''
+      set-option -g prefix `
+      unbind-key C-b
+      bind ` send-prefix
+
+      set-option -g status off
+      set-option -g default-terminal screen-256color
+
+      #use session instead of windows
+      bind-key c new-session
+      bind-key p switch-client -p
+      bind-key n switch-client -n
+      bind-key C-s switch-client -l
+    ''} "$@"
+  '';
 in {
-  krebs.per-user.chat.packages = with pkgs; [
-    mosh
-    weechat
-  ];
 
   users.extraUsers.chat = {
     home = "/home/chat";
@@ -24,24 +36,22 @@ in {
   # mosh
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
+    { predicate = "-p tcp --dport 9999"; target = "ACCEPT";}
   ];
 
-  #systemd.services.chat = {
-  #  description = "chat environment setup";
-  #  after = [ "network.target" ];
-  #  wantedBy = [ "multi-user.target" ];
+  systemd.services.chat = {
+    description = "chat environment setup";
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
 
-  #  path = with pkgs; [
-  #    weechat
-  #    tmux
-  #  ];
+    restartIfChanged = false;
 
-  #  restartIfChanged = true;
-
-  #  serviceConfig = {
-  #    User = "chat";
-  #    Restart = "always";
-  #    ExecStart = "${pkgs.tmux}/bin/tmux new -s IM weechat";
-  #  };
-  #};
+    serviceConfig = {
+      User = "chat";
+      RemainAfterExit = true;
+      Type = "oneshot";
+      ExecStart = "${tmux} -2 new-session -d -s IM ${pkgs.weechat}/bin/weechat";
+      ExecStop = "${tmux} kill-session -t IM";
+    };
+  };
 }
