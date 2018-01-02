@@ -1,8 +1,10 @@
 with import <stockholm/lib>;
-host@{ name, secure ? false, override ? {} }: let
-  builder = if getEnv "dummy_secrets" == "true"
-              then "buildbot"
-              else "tv";
+{ name
+, dummy_secrets ? getEnv "dummy_secrets" == "true"
+, override ? {}
+, secure ? false
+}@host: let
+  builder = if dummy_secrets then "buildbot" else "tv";
   _file = <stockholm> + "/tv/1systems/${name}/source.nix";
 in
   evalSource (toString _file) [
