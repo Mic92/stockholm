@@ -1,4 +1,4 @@
-{ fetchurl, fetchFromGitHub, stdenv, bitlbee, autoconf, automake, libtool, pkgconfig, glib }:
+{ fetchurl, fetchFromGitHub, stdenv, bitlbee, autoreconfHook, pkgconfig, glib }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ci9a12c6zg8d6i9f95pq6dal79cp4klmmsyj8ag2gin90kl3x95";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ bitlbee autoconf automake libtool glib ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ bitlbee glib ];
 
   preConfigure = ''
     export BITLBEE_PLUGINDIR=$out/lib/bitlbee
