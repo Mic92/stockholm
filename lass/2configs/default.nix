@@ -1,5 +1,5 @@
-{ config, pkgs, ... }:
 with import <stockholm/lib>;
+{ config, pkgs, ... }:
 {
   imports = [
     ../2configs/binary-cache/client.nix
@@ -78,7 +78,7 @@ with import <stockholm/lib>;
 
   users.mutableUsers = false;
 
-  services.timesyncd.enable = true;
+  services.timesyncd.enable = mkForce true;
 
   #why is this on in the first place?
   services.nscd.enable = false;

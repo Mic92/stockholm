@@ -1,4 +1,5 @@
 { pkgs, ...}:
+
 let
   genTopic = name: topic: tags: {
       servers = [ "tcp://localhost:1883" ];
@@ -26,21 +27,6 @@ let
                  (bamStat "Humidity" host "dht11")];
   ds18 = host:  [(bamStat "Temperature" host "ds18")];
 in {
-  services.udev.extraRules = ''
-    SUBSYSTEMS=="usb", ATTRS{product}=="iAQ Stick", GROUP="input"
-  '';
-  users.users.telegraf.extraGroups = [ "input" ];
-  services.telegraf.extraConfig.inputs.exec =  [
-    {
-      commands = [ "${pkgs.airsensor-py}/bin/airsensor-py"];
-      timeout = "10s";
-      data_format = "value";
-      data_type = "integer";
-      name_override = "airquality";
-      interval = "10s";
-      tags.unit="VOC";
-    }
-  ];
   services.telegraf.extraConfig.inputs.mqtt_consumer =
        (dht22 "easy1")
     ++ (dht22 "easy2")

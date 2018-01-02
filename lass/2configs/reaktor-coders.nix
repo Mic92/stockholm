@@ -21,6 +21,7 @@ with import <stockholm/lib>;
         -XFlexibleInstances -XMultiParamTypeClasses \
         -XOverloadedStrings -XFunctionalDependencies \'';
     in [
+      sed-plugin
       url-title
       (buildSimpleReaktorPlugin "lambdabot-pl" {
         pattern = "^@pl (?P<args>.*)$$";
@@ -64,8 +65,7 @@ with import <stockholm/lib>;
       })
       (buildSimpleReaktorPlugin "random-unicorn-porn" {
         pattern = "^!rup$$";
-        script = pkgs.writePython2 "rup" ''
-          #!${pkgs.python2}/bin/python
+        script = pkgs.writePython2 [] "rup" ''
           t1 = """
                               _.
                            ;=',_ ()

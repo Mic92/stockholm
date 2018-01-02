@@ -24,6 +24,13 @@ in
         List of hosts that should be build
       '';
     };
+    tests = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = ''
+        List of tests that should be build
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -56,14 +63,14 @@ in
       '';
       scheduler = {
         build-scheduler = ''
-          # build all hosts
           sched.append(
                 schedulers.SingleBranchScheduler(
                     change_filter=util.ChangeFilter(branch_re=".*"),
                     treeStableTimer=${toString cfg.treeStableTimer}*60,
                     name="build-all-branches",
                     builderNames=[
-                        "build-hosts"
+                        ${optionalString (cfg.hosts != []) ''"hosts",''}
+                        ${optionalString (cfg.tests != []) ''"tests",''}
                     ]
                 )
           )
@@ -73,7 +80,8 @@ in
               schedulers.ForceScheduler(
                     name="force",
                     builderNames=[
-                        "build-hosts"
+                        ${optionalString (cfg.hosts != []) ''"hosts",''}
+                        ${optionalString (cfg.tests != []) ''"tests",''}
                     ]
               )
           )
@@ -91,7 +99,7 @@ in
           factory.addStep(steps.ShellCommand(**kwargs))
       '';
       builder = {
-        build-hosts = ''
+        hosts = mkIf (cfg.hosts != []) ''
           f = util.BuildFactory()
           f.addStep(grab_repo)
 
@@ -120,12 +128,42 @@ in
 
           bu.append(
               util.BuilderConfig(
-                  name="build-hosts",
+                  name="hosts",
                   slavenames=slavenames,
                   factory=f
               )
           )
+        '';
+        tests = mkIf (cfg.tests != []) ''
+          f = util.BuildFactory()
+          f.addStep(grab_repo)
 
+          def run_test(test):
+              addShell(f,
+                  name="{}".format(test),
+                  env={
+                    "NIX_PATH": "secrets=/var/src/stockholm/null:/var/src",
+                    "NIX_REMOTE": "daemon",
+                    "dummy_secrets": "true",
+                  },
+                  command=[
+                    "nix-build", "-I", "stockholm=.", "krebs/6tests",
+                    "-A", "{}".format(test)
+                  ],
+                  timeout=90001
+              )
+
+          ${concatMapStringsSep "\n" (test:
+             "run_test(\"${test}\")"
+          ) cfg.tests}
+
+          bu.append(
+              util.BuilderConfig(
+                  name="tests",
+                  slavenames=slavenames,
+                  factory=f
+              )
+          )
         '';
       };
       enable = true;
