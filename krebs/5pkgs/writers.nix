@@ -294,6 +294,9 @@ with import <stockholm/lib>;
       '';
     };
 
+    writePython2Bin = d: name:
+      pkgs.writePython2 d "/bin/${name}";
+
     writePython3 = deps:
     let
       py = pkgs.python3.withPackages(ps: attrVals deps ps);
@@ -304,6 +307,9 @@ with import <stockholm/lib>;
         exec ${pkgs.python3Packages.flake8}/bin/flake8 --show-source "$1"
       '';
     };
+
+    writePython3Bin = d: name:
+      pkgs.writePython3 d "/bin/${name}";
 
     writeSed = pkgs.makeScriptWriter {
       interpreter = "${pkgs.gnused}/bin/sed -f";
