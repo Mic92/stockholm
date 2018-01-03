@@ -66,7 +66,7 @@ main' = do
             { terminal           = myTerm
             , modMask            = mod4Mask
             , layoutHook         = smartBorders $ myLayoutHook
-            , manageHook         = placeHook (smart (1,0)) <+> floatNextHook
+            , manageHook         = placeHook (smart (1,0)) <+> floatNextHook <+> floatHooks
             , startupHook =
                 whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
                           (\path -> forkFile path [] Nothing)
@@ -79,6 +79,14 @@ main' = do
 myLayoutHook = defLayout
   where
     defLayout = minimize $ ((avoidStruts $ Tall 1 (3/100) (1/2) ||| Full ||| Mirror (Tall 1 (3/100) (1/2))) ||| FixedColumn 2 80 80 1 ||| simplestFloat)
+
+floatHooks = composeAll . concat $
+    [ [ title =? t --> doFloat | t <- myTitleFloats]
+    , [ className =? c --> doFloat | c <- myClassFloats ] ]
+  where
+      myTitleFloats = [] -- for the KDE "open link" popup from konsole
+      myClassFloats = ["Pinentry"] -- for gpg passphrase entry
+
 
 myKeyMap :: [([Char], X ())]
 myKeyMap =

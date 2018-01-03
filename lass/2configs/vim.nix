@@ -103,7 +103,6 @@ let
     cnoreabbrev Ack Ack!
 
     " copy/paste from/to xclipboard
-    noremap x "_x
     set clipboard=unnamedplus
   '';
 

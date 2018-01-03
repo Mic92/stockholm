@@ -1,7 +1,8 @@
 with import <stockholm/lib>;
-import <nixpkgs/nixos/tests/make-test.nix> ({ pkgs, ... }:
+import <nixpkgs/nixos/tests/make-test.nix> ({ ... }:
 
 let
+  pkgs = import <nixpkgs> { overlays = [(import ../5pkgs)]; };
   test-config = <stockholm/krebs/6tests/data/test-config.nix>;
   privKey = ''
     -----BEGIN OPENSSH PRIVATE KEY-----
@@ -41,15 +42,12 @@ let
     cd ${<stockholm>}
     export NIX_PATH=stockholm=${<stockholm>}:nixpkgs=${<nixpkgs>}:$NIX_PATH
     exec >&2
-    : ${minimalSystem}
     source=${pkgs.writeJSON "source.json" populate-source}
-    cat > /tmp/derp <<EOF
-      builtins.fromJSON (builtins.readFile "$source")
-    EOF
     LOGNAME=krebs ${pkgs.populate}/bin/populate --force root@server:22/var/src/ < "$source"
+    # TODO: make deploy work
     #LOGNAME=krebs ${pkgs.stockholm}/bin/deploy \
     #    --force-populate \
-    #    --source=/tmp/derp \
+    #    --source=${./data/test-source.nix} \
     #    --system=server \
   '';
   minimalSystem = (import <nixpkgs/nixos/lib/eval-config.nix> {
@@ -70,22 +68,20 @@ in {
         imports = [ test-config ];
         environment.variables = {
           NIX_PATH = mkForce "nixpkgs=${<nixpkgs>}";
-          #LOL = minimalSystem;
         };
         services.openssh.enable = true;
         users.extraUsers.root.openssh.authorizedKeys.keys = [
           pubKey
         ];
-        #virtualisation.writableStore = true;
         virtualisation.pathsInNixDB = [
           minimalSystem
-          pkgs.stockholm
         ];
+        environment.systemPackages = [ pkgs.git ];
       };
 
     client =
-      { config, pkgs, ... }: { };
-
+      { config, pkgs, ... }:
+      { };
   };
 
   testScript = ''

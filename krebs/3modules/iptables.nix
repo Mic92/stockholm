@@ -61,6 +61,15 @@ let
           };
         };
       })));
+      default = {
+        filter.INPUT.policy = "ACCEPT";
+        filter.FORWARD.policy = "ACCEPT";
+        filter.OUTPUT.policy = "ACCEPT";
+        nat.PREROUTING.policy = "ACCEPT";
+        nat.INPUT.policy = "ACCEPT";
+        nat.OUTPUT.policy = "ACCEPT";
+        nat.POSTROUTING.policy = "ACCEPT";
+      };
     };
   };
 
