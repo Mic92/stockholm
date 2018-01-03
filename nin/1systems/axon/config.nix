@@ -56,10 +56,6 @@ with lib;
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  fileSystems."/home/nin/.local/share/Steam" = {
-    device = "/dev/fam/steam";
-  };
-
   # nin config
   time.timeZone = "Europe/Berlin";
   services.xserver.enable = true;
