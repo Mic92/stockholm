@@ -201,24 +201,6 @@ with import <stockholm/lib>;
         };
       };
     };
-    schnabeldrucker = {
-      external = true;
-      nets = {
-        gg23 = {
-          ip4.addr = "10.23.1.21";
-          aliases = ["schnabeldrucker.gg23"];
-        };
-      };
-    };
-    schnabelscanner = {
-      external = true;
-      nets = {
-        gg23 = {
-          ip4.addr = "10.23.1.22";
-          aliases = ["schnabelscanner.gg23"];
-        };
-      };
-    };
     wu = {
       ci = true;
       cores = 4;
