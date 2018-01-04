@@ -44,12 +44,6 @@ with import <stockholm/lib>;
     };
   };
 
-  krebs.nixpkgs.allowUnfreePredicate = pkg: hasPrefix "nvidia-x11-" pkg.name;
-  hardware.bumblebee.enable = true;
-  hardware.bumblebee.group = "video";
-  hardware.enableRedistributableFirmware= true;
-  hardware.opengl.driSupport32Bit = true;
-
   services.printing.enable = true;
 
   services.udev.extraRules = ''

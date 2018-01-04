@@ -10,7 +10,6 @@ in
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
     <stockholm/krebs/2configs/collectd-base.nix>
     <stockholm/krebs/2configs/stats/wolf-client.nix>
-    <stockholm/krebs/2configs/save-diskspace.nix>
 
     <stockholm/krebs/2configs/graphite.nix>
     <stockholm/krebs/2configs/buildbot-krebs.nix>

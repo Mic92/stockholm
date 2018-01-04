@@ -233,7 +233,7 @@ let {
           lua = {};
           sed.extraStart = ''writeSed[^ \t\r\n]*[ \t\r\n]*"[^"]*"'';
           sh.extraStart = concatStringsSep ''\|'' [
-            ''write\(Ba\|Da\)sh[^ \t\r\n]*[ \t\r\n]*\("[^"]*"\|[a-z]\+\)''
+            ''write\(A\|Ba\|Da\)sh[^ \t\r\n]*[ \t\r\n]*\("[^"]*"\|[a-z]\+\)''
             ''[a-z]*Phase[ \t\r\n]*=''
           ];
           yaml = {};
