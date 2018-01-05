@@ -41,6 +41,7 @@ with import <stockholm/lib>;
         skype
         wine
       ];
+      nixpkgs.config.firefox.enableAdobeFlash = true;
       services.xserver.enable = true;
       services.xserver.displayManager.lightdm.enable = true;
       services.xserver.desktopManager.plasma5.enable = true;
