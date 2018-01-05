@@ -66,12 +66,12 @@ in {
 
   environment.systemPackages = with pkgs; [
     acpi
+    bank
     dic
     dmenu
     gi
     git-preview
     gitAndTools.qgit
-    haskellPackages.hledger
     lm_sensors
     mpv-poll
     much
