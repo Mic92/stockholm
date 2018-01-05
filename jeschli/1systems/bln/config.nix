@@ -66,6 +66,7 @@
     copyq
     dmenu
     git
+    tig
     i3lock
     keepass
     networkmanagerapplet
