@@ -302,6 +302,13 @@ in {
         }
       ];
     }
+    {
+      krebs.repo-sync.repos.stockholm.timerConfig = {
+        OnBootSec = "5min";
+        OnUnitInactiveSec = "2min";
+        RandomizedDelaySec = "2min";
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
