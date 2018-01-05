@@ -5,6 +5,11 @@ with import <stockholm/lib>;
   imports = [
     ./tpm.nix
   ];
+
+  boot.kernelModules = [
+    "kvm-intel"
+  ];
+
   networking.wireless.enable = lib.mkDefault true;
 
   hardware.enableAllFirmware = true;
@@ -17,6 +22,8 @@ with import <stockholm/lib>;
 
   # enable synaptics so we can easily disable the touchpad
   #   enable the touchpad with `synclient TouchpadOff=0`
+
+  services.xserver.libinput.enable = false;
   services.xserver.synaptics = {
     enable = true;
     additionalOptions = ''Option "TouchpadOff" "1"'';

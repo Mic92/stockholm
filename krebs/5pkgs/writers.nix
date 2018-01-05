@@ -283,27 +283,33 @@ with import <stockholm/lib>;
         ${pkgs.cabal2nix}/bin/cabal2nix ${path} > $out
       '');
 
-    writePython2 = name: text:
-      assert (with types; either absolute-pathname filename).check name;
-      pkgs.writeOut (baseNameOf name) {
-        ${optionalString (types.absolute-pathname.check name) name} = {
-          check = pkgs.writeDash "python2check.sh" ''
-            exec ${pkgs.python2}/bin/python -m py_compile "$1"
-          '';
-          inherit text;
-        };
-      };
+    writePython2 = deps:
+    let
+      py = pkgs.python2.withPackages(ps: attrVals deps ps);
+    in
+    pkgs.makeScriptWriter {
+      interpreter = "${py}/bin/python";
+      check = pkgs.writeDash "python2check.sh" ''
+        exec ${pkgs.python2Packages.flake8}/bin/flake8 --show-source "$1"
+      '';
+    };
 
-    writePython3 = name: text:
-      assert (with types; either absolute-pathname filename).check name;
-      pkgs.writeOut (baseNameOf name) {
-        ${optionalString (types.absolute-pathname.check name) name} = {
-          check = pkgs.writeDash "python3check.sh" ''
-            exec ${pkgs.python3}/bin/python -m py_compile "$textPath"
-          '';
-          inherit text;
-        };
-      };
+    writePython2Bin = d: name:
+      pkgs.writePython2 d "/bin/${name}";
+
+    writePython3 = deps:
+    let
+      py = pkgs.python3.withPackages(ps: attrVals deps ps);
+    in
+    pkgs.makeScriptWriter {
+      interpreter = "${py}/bin/python";
+      check = pkgs.writeDash "python3check.sh" ''
+        exec ${pkgs.python3Packages.flake8}/bin/flake8 --show-source "$1"
+      '';
+    };
+
+    writePython3Bin = d: name:
+      pkgs.writePython3 d "/bin/${name}";
 
     writeSed = pkgs.makeScriptWriter {
       interpreter = "${pkgs.gnused}/bin/sed -f";

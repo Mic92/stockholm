@@ -4,14 +4,16 @@ host@{ name,
   secure ? false,
   full ? false,
   torrent ? false,
-  musnix ? false
+  hw ? false,
+  musnix ? false,
+  python ? false
 }:
 let
   builder = if getEnv "dummy_secrets" == "true"
               then "buildbot"
               else "makefu";
   _file = <stockholm> + "/makefu/1systems/${name}/source.nix";
-  ref = "3874de4"; # unstable @ 2017-12-08
+  ref = "3e8d708"; # nixos-17.09 @ 2018-01-05
                    # + do_sqlite3 ruby: 55a952be5b5
 
 in
@@ -43,6 +45,20 @@ in
       musnix.git = {
         url = https://github.com/musnix/musnix.git;
         ref = "d8b989f";
+      };
+    })
+
+    (mkIf ( hw ) {
+      nixos-hardware.git = {
+        url = https://github.com/nixos/nixos-hardware.git;
+        ref = "8a05dc9";
+      };
+    })
+
+    (mkIf ( python ) {
+      python.git = {
+        url = https://github.com/garbas/nixpkgs-python;
+        ref = "cac319b";
       };
     })
     (mkIf ( torrent ) {

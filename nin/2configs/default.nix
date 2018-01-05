@@ -16,6 +16,7 @@ with import <stockholm/lib>;
         root = {
           openssh.authorizedKeys.keys = [
             config.krebs.users.nin.pubkey
+            config.krebs.users.nin_h.pubkey
           ];
         };
         nin = {
@@ -31,6 +32,7 @@ with import <stockholm/lib>;
           ];
           openssh.authorizedKeys.keys = [
             config.krebs.users.nin.pubkey
+            config.krebs.users.nin_h.pubkey
           ];
         };
       };
