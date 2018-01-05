@@ -20,6 +20,17 @@ let
   '';
 in {
 
+  services.bitlbee = {
+    enable = true;
+    portNumber = 6666;
+    plugins = [
+      pkgs.bitlbee-facebook
+      pkgs.bitlbee-steam
+      pkgs.bitlbee-discord
+    ];
+    libpurple_plugins = [ pkgs.telegram-purple ];
+  };
+
   users.extraUsers.chat = {
     home = "/home/chat";
     uid = genid "chat";
