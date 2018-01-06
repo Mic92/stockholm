@@ -161,7 +161,7 @@ let
         ExecStartPre = pkgs.writeDash "buildbot-master-init" ''
           set -efux
           #remove garbage from old versions
-          rm -r ${workdir}
+          rm -rf ${workdir}
           mkdir -p ${workdir}/info
           cp ${buildbot-slave-init} ${workdir}/buildbot.tac
           echo ${contact} > ${workdir}/info/admin

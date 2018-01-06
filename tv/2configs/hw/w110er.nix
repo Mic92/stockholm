@@ -1,8 +1,20 @@
+with import <stockholm/lib>;
 { pkgs, ... }:
 
 {
   imports = [
     ../smartd.nix
+    {
+      # nvidia doesn't build despite
+      #  https://github.com/NixOS/nixpkgs/issues/33284
+      #hardware.bumblebee.enable = true;
+      #hardware.bumblebee.group = "video";
+      #hardware.enableRedistributableFirmware= true;
+      #krebs.nixpkgs.allowUnfreePredicate = pkg:
+      #  hasPrefix "nvidia-x11-" pkg.name ||
+      #  hasPrefix "nvidia-persistenced-" pkg.name ||
+      #  hasPrefix "nvidia-settings-" pkg.name;
+    }
   ];
 
   boot.extraModprobeConfig = ''
@@ -15,6 +27,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  hardware.opengl.driSupport32Bit = true;
   hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
 
   networking.wireless.enable = true;
@@ -41,4 +54,8 @@
         echo auto > $i/power/control # defaults to 'on'
       done)
   '';
+
+  services.xserver = {
+    videoDriver = "intel";
+  };
 }
