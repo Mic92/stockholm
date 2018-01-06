@@ -57,6 +57,10 @@ in {
 
     restartIfChanged = false;
 
+    path = [
+      pkgs.rxvt_unicode.terminfo
+    ];
+
     serviceConfig = {
       User = "chat";
       RemainAfterExit = true;
