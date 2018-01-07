@@ -28,7 +28,7 @@ with import <stockholm/lib>;
   
   URxvt*scrollBar:                      false
   URxvt*urgentOnBell:                   true
-  URxvt*font: xft:DejaVu Sans Mono:pixelsize=20
+  URxvt*font: xft:DejaVu Sans Mono:pixelsize=12
   URXvt*faceSize: 12
   '';
 }
