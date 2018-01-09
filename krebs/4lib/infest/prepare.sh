@@ -194,7 +194,7 @@ prepare_common() {(
   _prepare_nixos_install
 )}
 
-_prepare_nix() {(
+_prepare_nix() {
   # install nix on host (cf. https://nixos.org/nix/install)
   if ! test -e /root/.nix-profile/etc/profile.d/nix.sh; then
     (
@@ -219,9 +219,9 @@ _prepare_nix() {(
   if ! mountpoint "$target_path"; then
     mount --rbind /mnt/"$target_path" "$target_path"
   fi
-)}
+}
 
-_prepare_nix_users() {(
+_prepare_nix_users() {
   if ! getent group nixbld >/dev/null; then
     groupadd -g 30000 -r nixbld
   fi
@@ -238,7 +238,7 @@ _prepare_nix_users() {(
         nixbld$i
     fi
   done
-)}
+}
 
 
 _prepare_nixos_install() {
