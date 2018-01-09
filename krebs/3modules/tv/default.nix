@@ -122,6 +122,7 @@ with import <stockholm/lib>;
           cgit        60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
           cgit.ni     60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
           krebsco.de. 60 IN MX 5 ni
+          krebsco.de. 60 IN TXT v=spf1 mx -all
         '';
       };
       nets = {
