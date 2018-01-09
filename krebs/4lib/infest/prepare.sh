@@ -94,11 +94,14 @@ prepare_nixos_iso() {
 
   mkdir -p bin
   rm -f bin/nixos-install
-  cp "$(type -p nixos-install)" bin/nixos-install
+  cp "$(_which nixos-install)" bin/nixos-install
   sed -i "s@NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
 }
 
 prepare_hetzner_rescue() {
+  _which() (
+    which "$1"
+  )
   mountpoint /mnt
 
   type bzip2 2>/dev/null || apt-get install bzip2
@@ -138,6 +141,9 @@ EOF
 }
 
 prepare_common() {(
+  _which() (
+    type -p "$1"
+  )
 
   _prepare_nix_users
 
@@ -245,7 +251,7 @@ _prepare_nixos_install() {
 
   mkdir -p bin
   rm -f bin/nixos-install
-  cp "$(type -p nixos-install)" bin/nixos-install
+  cp "$(_which nixos-install)" bin/nixos-install
   sed -i "s@NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
 
   if ! grep -q '^PATH.*#krebs' .bashrc; then
