@@ -116,11 +116,6 @@ prepare_hetzner_rescue() {
     mount --rbind /mnt/"$target_path" "$target_path"
   fi
 
-  mkdir -p bin
-  rm -f bin/nixos-install
-  cp "$(type -p nixos-install)" bin/nixos-install
-  sed -i "s@NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
-
   _prepare_nix_users
   _prepare_nix
   _prepare_nixos_install
