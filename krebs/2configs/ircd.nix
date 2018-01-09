@@ -12,10 +12,10 @@
     '';
     config = ''
       serverinfo {
-        name = "${config.krebs.build.host.name}.irc.retiolum";
+        name = "${config.krebs.build.host.name}.irc.r";
         sid = "1as";
         description = "miep!";
-        network_name = "irc.retiolum";
+        network_name = "irc.r";
         hub = yes;
 
         vhost = "0.0.0.0";
