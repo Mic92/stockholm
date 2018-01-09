@@ -184,14 +184,17 @@ in {
     }
     {
       #hotdog
+      systemd.services."container@hotdog".reloadIfChanged = mkForce false;
       containers.hotdog = {
         config = { ... }: {
+          imports = [ <stockholm/lass/2configs/rebuild-on-boot.nix> ];
           environment.systemPackages = [ pkgs.git ];
           services.openssh.enable = true;
           users.users.root.openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
           ];
         };
+        autoStart = true;
         enableTun = true;
         privateNetwork = true;
         hostAddress = "10.233.2.1";
@@ -200,8 +203,10 @@ in {
     }
     {
       #kaepsele
+      systemd.services."container@kaepsele".reloadIfChanged = mkForce false;
       containers.kaepsele = {
         config = { ... }: {
+          imports = [ <stockholm/lass/2configs/rebuild-on-boot.nix> ];
           environment.systemPackages = [ pkgs.git ];
           services.openssh.enable = true;
           users.users.root.openssh.authorizedKeys.keys = with config.krebs.users; [
@@ -209,6 +214,7 @@ in {
             tv.pubkey
           ];
         };
+        autoStart = true;
         enableTun = true;
         privateNetwork = true;
         hostAddress = "10.233.2.3";
@@ -217,8 +223,10 @@ in {
     }
     {
       #onondaga
+      systemd.services."container@onondaga".reloadIfChanged = mkForce false;
       containers.onondaga = {
         config = { ... }: {
+          imports = [ <stockholm/lass/2configs/rebuild-on-boot.nix> ];
           environment.systemPackages = [ pkgs.git ];
           services.openssh.enable = true;
           users.users.root.openssh.authorizedKeys.keys = [
@@ -226,6 +234,7 @@ in {
             config.krebs.users.nin.pubkey
           ];
         };
+        autoStart = true;
         enableTun = true;
         privateNetwork = true;
         hostAddress = "10.233.2.5";
@@ -301,6 +310,13 @@ in {
           perm = with git; push "refs/heads/staging/jeschli" [ fast-forward non-fast-forward create delete merge ];
         }
       ];
+    }
+    {
+      krebs.repo-sync.repos.stockholm.timerConfig = {
+        OnBootSec = "5min";
+        OnUnitInactiveSec = "2min";
+        RandomizedDelaySec = "2min";
+      };
     }
   ];
 

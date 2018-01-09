@@ -13,8 +13,9 @@ let
               then "buildbot"
               else "makefu";
   _file = <stockholm> + "/makefu/1systems/${name}/source.nix";
-  ref = "3874de4"; # unstable @ 2017-12-08
+  ref = "0f19bee"; # nixos-17.09 @ 2018-01-05
                    # + do_sqlite3 ruby: 55a952be5b5
+                   # + signal: 0f19beef3
 
 in
   evalSource (toString _file) [

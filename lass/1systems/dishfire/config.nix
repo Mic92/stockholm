@@ -43,6 +43,7 @@
       networking.dhcpcd.allowInterfaces = [
         "enp*"
         "eth*"
+        "ens*"
       ];
     }
     {
