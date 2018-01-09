@@ -4,6 +4,7 @@ with import <stockholm/lib>;
   imports = [
     ./vim.nix
     ./retiolum.nix
+    <stockholm/lass/2configs/security-workarounds.nix>
     {
       environment.variables = {
         NIX_PATH = mkForce "secrets=/var/src/stockholm/null:/var/src";
