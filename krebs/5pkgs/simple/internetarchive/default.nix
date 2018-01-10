@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchPypi, ... }:
+{ stdenv, pkgs, ... }:
 with pkgs.python3Packages;
 buildPythonPackage rec {
   pname = "internetarchive";
