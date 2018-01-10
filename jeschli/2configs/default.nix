@@ -64,4 +64,5 @@ with import <stockholm/lib>;
   ];
 
   krebs.enable = true;
+  networking.hostName = config.krebs.build.host.name;
 }
