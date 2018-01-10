@@ -118,6 +118,52 @@ with import <stockholm/lib>;
         };
       };
     };
+    enklave = {
+      nets = rec {
+        internet = {
+          ip4.addr = "88.198.164.182";
+          aliases = [
+            "enklave.i"
+          ];
+        };
+        retiolum = {
+          via = internet;
+          ip4.addr = "10.243.27.30";
+          ip6.addr = "42::30";
+          aliases = [
+            "enklave.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIID8gKCA+kAt8zRg/g0jRmqXn6rVul/tdjWtLPcu0aTjNJ5OYZh50i7WqWllGVz
+            +FfJicuq/Xd1l5qrgUN7MD+Wrfeov+G9lzSgacfPhXMujutXxX3JwW/9f7UN+yoN
+            Sw29Zj+NWb45HyI5WVwMQ332KbKjNcWdTRe+O39oE6bZWg54oEeZOad2UJ7/83sB
+            yNEV/B7bJ0+X9HR8XCKrHI/RkjixNauMDlquGzoVyqLKIWwUnBl9CwtNBCYHbvYD
+            G1rWeCewd9Z6KsqcKSePfa4mn5eOluWcXmbrD/sx8oII40oNUs3kI7a2HExB2Yle
+            P9Q5MQrXRZfI3bdrh1aHieBodZLtosHPNuJIpo8ZaCX88WLhGR3nhJa1vvM1vNwd
+            TSSAdobdZUcuIQJKnVxwP4rXQAKPkN2+ddy+tXCGvfFAsdGKDbgPy4FgT+Ed28vg
+            3W0fef/3sDNGPY1VAa58/pLz9Un3kNJKUjt00tWamo8daU/3mxZs83nIqDHLq86l
+            1+wCl37l+KHe7pUVZ3smoezPRCMoUThmc7VzupbQG+piiSSyiYQi0CuBusa44t76
+            1lMr3pOdRBBAoetZ745ZZVx8s+eYk+C1BmQbLJAfzQ9sbH3LAwXpuAH70mtrFqWl
+            C3LF89/5mZRbFxALZv9cVx3LqIZDjwpKlwPWorZwo14L+eAagdPCcnVNo6ZcVow2
+            mAdNnf7C33fvRsU+rUEIZVPsBHZfAv+f0jqQ65TMvl32VZ0FlxxahSZSj64n8iwr
+            Z+DOxKA9OcAaTrHQReYLpWUfNceVDLfOmQLeih8hNgClgqPgYJP/OtN+ox3NP6ZX
+            +Gkx9HO7a+agtyJxjh3NYbT/NkRW8HcjW8KgRN7jlE9sQi5/FoxKQOUdHmLTvjdk
+            YJXqdPWMYHj2xt4A8x2nzl/si6lwDsod+zdY5RGSdYhoybEOs4wZZIuArmm8GP+C
+            IbtgutknAuqvm2FOxyWCbLFTimgqC5BgrNUsXFJJLsHQ3bWFJtVpJlSa5Y0iypCP
+            Yr/cefbDrGfs3eCy7FlYDIkCcH06FPm1LTs6USisrtKFObRQN+zPSPln9FysNmpH
+            h0YUhrWdTO+wN78K5gc4ALPNUlyqmH61h8jS2qSdrRZLcZWIi4K4banG6EJcWRvV
+            kaVxghY1i/Z9x43bZRpBPvpM462IDx08vYX9AcFmF7JfjAXPwJO/EqZVsY1YPDzO
+            vdXWrtTORO8R8Pjq3X952yNqgHBcJQh7Q9TBcj+XBtkidOSnTt3Sp/RumsucUW19
+            0wMempDPiCOAadLmR4cW5XL1ednXurkd+5gHCmB1Sl7FueP5dgLB/mhXjmITE3zH
+            aQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+
+
   };
   users = {
     jeschli = {
