@@ -92,6 +92,17 @@
         -I "$target_path"
   '');
 
+  cmds.get-version = pkgs.writeDash "get-version" ''
+    set -efu
+    hostname=''${HOSTNAME-$(${pkgs.nettools}/bin/hostname)}
+    version=git.$(${pkgs.git}/bin/git describe --always --dirty)
+    case $version in (*-dirty)
+      version=$version@$hostname
+    esac
+    date=$(${pkgs.coreutils}/bin/date +%y.%m)
+    echo "$date.$version"
+  '';
+
   cmds.install = pkgs.withGetopt {
     force-populate = { default = /* sh */ "false"; switch = true; };
     quiet = { default = /* sh */ "false"; switch = true; };
@@ -205,7 +216,7 @@
   init.env = pkgs.writeText "init.env" /* sh */ ''
 
     export HOSTNAME="$(${pkgs.nettools}/bin/hostname)"
-    export STOCKHOLM_VERSION="''${STOCKHOLM_VERSION-$(${shell.get-version})}"
+    export STOCKHOLM_VERSION="''${STOCKHOLM_VERSION-$(${cmds.get-version})}"
 
     export quiet
     export system
@@ -272,16 +283,6 @@
     else
       exec "$@"
     fi
-  '';
-
-  shell.get-version = pkgs.writeDash "stockholm.get-version" ''
-    set -efu
-    version=git.$(${pkgs.git}/bin/git describe --always --dirty)
-    case $version in (*-dirty)
-      version=$version@$HOSTNAME
-    esac
-    date=$(${pkgs.coreutils}/bin/date +%y.%m)
-    echo "$date.$version"
   '';
 
 in

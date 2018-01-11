@@ -122,6 +122,7 @@ with import <stockholm/lib>;
           cgit        60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
           cgit.ni     60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
           krebsco.de. 60 IN MX 5 ni
+          krebsco.de. 60 IN TXT v=spf1 mx -all
         '';
       };
       nets = {
@@ -198,24 +199,6 @@ with import <stockholm/lib>;
         gg23 = {
           ip4.addr = "10.23.1.1";
           aliases = ["ok.gg23"];
-        };
-      };
-    };
-    schnabeldrucker = {
-      external = true;
-      nets = {
-        gg23 = {
-          ip4.addr = "10.23.1.21";
-          aliases = ["schnabeldrucker.gg23"];
-        };
-      };
-    };
-    schnabelscanner = {
-      external = true;
-      nets = {
-        gg23 = {
-          ip4.addr = "10.23.1.22";
-          aliases = ["schnabelscanner.gg23"];
         };
       };
     };

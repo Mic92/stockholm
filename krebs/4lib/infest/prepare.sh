@@ -21,6 +21,10 @@ prepare() {(
         esac
         ;;
       debian)
+        if grep -Fq Hetzner /etc/motd; then
+          prepare_hetzner_rescue "$@"
+          exit
+        fi
         case $VERSION_ID in
           7)
             prepare_debian "$@"
@@ -72,7 +76,7 @@ prepare_debian() {
   type bzip2 2>/dev/null || apt-get install bzip2
   type git   2>/dev/null || apt-get install git
   type rsync 2>/dev/null || apt-get install rsync
-  type curl 2>/dev/null || apt-get install curl
+  type curl  2>/dev/null || apt-get install curl
   prepare_common
 }
 
@@ -90,8 +94,31 @@ prepare_nixos_iso() {
 
   mkdir -p bin
   rm -f bin/nixos-install
-  cp "$(type -p nixos-install)" bin/nixos-install
+  cp "$(_which nixos-install)" bin/nixos-install
   sed -i "s@NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
+}
+
+prepare_hetzner_rescue() {
+  _which() (
+    which "$1"
+  )
+  mountpoint /mnt
+
+  type bzip2 2>/dev/null || apt-get install bzip2
+  type git   2>/dev/null || apt-get install git
+  type rsync 2>/dev/null || apt-get install rsync
+  type curl  2>/dev/null || apt-get install curl
+
+  mkdir -p /mnt/"$target_path"
+  mkdir -p "$target_path"
+
+  if ! mountpoint "$target_path"; then
+    mount --rbind /mnt/"$target_path" "$target_path"
+  fi
+
+  _prepare_nix_users
+  _prepare_nix
+  _prepare_nixos_install
 }
 
 get_nixos_install() {
@@ -107,24 +134,13 @@ EOF
   nix-env -i -A config.system.build.nixos-install -f "<nixpkgs/nixos>"
   rm -v $c
 }
-prepare_common() {(
 
-  if ! getent group nixbld >/dev/null; then
-    groupadd -g 30000 -r nixbld
-  fi
-  for i in `seq 1 10`; do
-    if ! getent passwd nixbld$i 2>/dev/null; then
-      useradd \
-        -d /var/empty \
-        -g 30000 \
-        -G 30000 \
-        -l \
-        -M \
-        -s /sbin/nologin \
-        -u $(expr 30000 + $i) \
-        nixbld$i
-    fi
-  done
+prepare_common() {(
+  _which() (
+    type -p "$1"
+  )
+
+  _prepare_nix_users
 
   #
   # mount install directory
@@ -173,10 +189,12 @@ prepare_common() {(
     mount --bind /nix /mnt/nix
   fi
 
-  #
-  # install nix
-  #
+  _prepare_nix
 
+  _prepare_nixos_install
+)}
+
+_prepare_nix() {
   # install nix on host (cf. https://nixos.org/nix/install)
   if ! test -e /root/.nix-profile/etc/profile.d/nix.sh; then
     (
@@ -201,17 +219,40 @@ prepare_common() {(
   if ! mountpoint "$target_path"; then
     mount --rbind /mnt/"$target_path" "$target_path"
   fi
+}
 
+_prepare_nix_users() {
+  if ! getent group nixbld >/dev/null; then
+    groupadd -g 30000 -r nixbld
+  fi
+  for i in `seq 1 10`; do
+    if ! getent passwd nixbld$i 2>/dev/null; then
+      useradd \
+        -d /var/empty \
+        -g 30000 \
+        -G 30000 \
+        -l \
+        -M \
+        -s /sbin/nologin \
+        -u $(expr 30000 + $i) \
+        nixbld$i
+    fi
+  done
+}
+
+
+_prepare_nixos_install() {
   get_nixos_install
+
   mkdir -p bin
   rm -f bin/nixos-install
-  cp "$(type -p nixos-install)" bin/nixos-install
+  cp "$(_which nixos-install)" bin/nixos-install
   sed -i "s@NIX_PATH=\"[^\"]*\"@NIX_PATH=$target_path@" bin/nixos-install
 
   if ! grep -q '^PATH.*#krebs' .bashrc; then
     echo '. /root/.nix-profile/etc/profile.d/nix.sh' >> .bashrc
     echo 'PATH=$HOME/bin:$PATH #krebs' >> .bashrc
   fi
-)}
+}
 
 prepare "$@"

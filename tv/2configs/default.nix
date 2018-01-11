@@ -1,6 +1,8 @@
 with import <stockholm/lib>;
 { config, pkgs, ... }: {
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   boot.tmpOnTmpfs = true;
 
   krebs.enable = true;

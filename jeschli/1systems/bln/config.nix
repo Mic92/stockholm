@@ -36,9 +36,9 @@
     }
   ];
 
-  networking.hostName = "BLN02NB0154"; # Define your hostname.
+  networking.hostName = lib.mkForce "BLN02NB0154"; # Define your hostname.
   networking.networkmanager.enable = true;
-   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Select internationalisation properties.
   # i18n = {
@@ -54,7 +54,11 @@
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   nixpkgs.config.allowUnfree = true;
-  environment.shellAliases = { n = "nix-shell"; };
+  environment.shellAliases = { 
+    n = "nix-shell"; 
+    gd = "cd /home/markus/go/src/gitlab.dcso.lolcat"; 
+    gh = "cd /home/markus/go/src/github.com"; 
+  };
   environment.variables = { GOROOT= [ "${pkgs.go.out}/share/go" ]; };
   environment.systemPackages = with pkgs; [
   # system helper
@@ -62,6 +66,7 @@
     copyq
     dmenu
     git
+    tig
     i3lock
     keepass
     networkmanagerapplet
@@ -72,6 +77,8 @@
     rxvt_unicode
   # editors
     emacs
+  # databases
+    sqlite
   # internet 
     thunderbird
     hipchat
@@ -91,6 +98,7 @@
     jetbrains.pycharm-professional
     jetbrains.webstorm
     jetbrains.goland
+    jetbrains.datagrip
     texlive.combined.scheme-full
     pandoc
     redis

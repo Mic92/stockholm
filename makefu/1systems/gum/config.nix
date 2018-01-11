@@ -67,7 +67,7 @@ in {
       <stockholm/makefu/2configs/nginx/public_html.nix>
       <stockholm/makefu/2configs/nginx/update.connector.one.nix>
 
-      <stockholm/makefu/2configs/deployment/mycube.connector.one.nix>
+      <stockholm/makefu/2configs/deployment/photostore.krebsco.de.nix>
       <stockholm/makefu/2configs/deployment/graphs.nix>
       <stockholm/makefu/2configs/deployment/owncloud.nix>
       <stockholm/makefu/2configs/deployment/boot-euer.nix>
@@ -108,16 +108,35 @@ in {
       #  };
       #}
       { # wireguard server
-        networking.firewall.allowedUDPPorts = [ 51820 ];
+
+        # TODO: networking.nat
+
+        # boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+        # conf.all.proxy_arp =1
+        networking.firewall = {
+          allowedUDPPorts = [ 51820 ];
+          extraCommands = ''
+            iptables -t nat -A POSTROUTING -s 10.244.0.0/24 -o ${ext-if} -j MASQUERADE
+          '';
+        };
+
         networking.wireguard.interfaces.wg0 = {
           ips = [ "10.244.0.1/24" ];
+          listenPort = 51820;
           privateKeyFile = (toString <secrets>) + "/wireguard.key";
           allowedIPsAsRoutes = true;
-          peers = [{
-            # allowedIPs = [ "0.0.0.0/0" "::/0" ];
+          peers = [
+          {
+            # x
             allowedIPs = [ "10.244.0.2/32" ];
             publicKey = "fe5smvKVy5GAn7EV4w4tav6mqIAKhGWQotm7dRuRt1g=";
-          }];
+          }
+          {
+            # vbob
+            allowedIPs = [ "10.244.0.3/32" ];
+            publicKey = "Lju7EsCu1OWXhkhdNR7c/uiN60nr0TUPHQ+s8ULPQTw=";
+          }
+          ];
         };
       }
 

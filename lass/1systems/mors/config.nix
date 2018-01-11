@@ -71,10 +71,6 @@ with import <stockholm/lib>;
       ];
     }
     {
-      #ps vita stuff
-      boot.extraModulePackages = [ config.boot.kernelPackages.exfat-nofuse ];
-    }
-    {
       services.tor = {
         enable = true;
         client.enable = true;
