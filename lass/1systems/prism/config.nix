@@ -289,13 +289,6 @@ in {
         alias /var/realwallpaper/realwallpaper.png;
       '';
     }
-    {
-      services.minecraft-server.enable = true;
-      krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-p tcp --dport 25565"; target = "ACCEPT"; }
-        { predicate = "-p udp --dport 25565"; target = "ACCEPT"; }
-      ];
-    }
     <stockholm/krebs/2configs/reaktor-krebs.nix>
     <stockholm/lass/2configs/dcso-dev.nix>
     {
@@ -318,6 +311,7 @@ in {
         RandomizedDelaySec = "2min";
       };
     }
+    <stockholm/lass/2configs/minecraft.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
