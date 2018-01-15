@@ -300,7 +300,7 @@ in {
             jeschli-brauerei
           ];
           repo = [ config.krebs.git.repos.stockholm ];
-          perm = with git; push "refs/heads/staging/jeschli" [ fast-forward non-fast-forward create delete merge ];
+          perm = with git; push "refs/heads/staging/jeschli*" [ fast-forward non-fast-forward create delete merge ];
         }
       ];
     }
