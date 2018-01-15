@@ -113,8 +113,9 @@ in {
     ( createFirefoxUser "ff" [ "audio" ] 10 )
     ( createChromiumUser "cr" [ "video" "audio" ] 9 )
     ( createChromiumUser "gm" [ "video" "audio" ] 8 )
-    ( createChromiumUser "wk" [ "video" "audio" ] )
-    ( createChromiumUser "fb" [ "video" "audio" ] )
-    ( createChromiumUser "com" [ "video" "audio" ] )
+    ( createChromiumUser "wk" [ "video" "audio" ] 0 )
+    ( createChromiumUser "fb" [ "video" "audio" ] 0 )
+    ( createChromiumUser "com" [ "video" "audio" ] 0 )
+    ( createChromiumUser "fin" [] (-1) )
   ];
 }
