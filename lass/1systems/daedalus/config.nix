@@ -40,6 +40,9 @@ with import <stockholm/lib>;
         zathura
         skype
         wine
+        geeqie
+        vlc
+        minecraft
       ];
       nixpkgs.config.firefox.enableAdobeFlash = true;
       services.xserver.enable = true;
