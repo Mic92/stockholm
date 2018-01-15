@@ -83,6 +83,14 @@ in {
     browser-select
   ];
 
+  programs.chromium = {
+    enable = true;
+    extensions = [
+      "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
+      "dbepggeogbaibhgnhhndojpepiihcmeb" # vimium
+    ];
+  };
+
   imports = [
     {
       options.lass.browser.select = mkOption {
