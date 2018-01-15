@@ -311,6 +311,7 @@ in {
         RandomizedDelaySec = "2min";
       };
     }
+    <stockholm/lass/2configs/downloading.nix>
     <stockholm/lass/2configs/minecraft.nix>
   ];
 
