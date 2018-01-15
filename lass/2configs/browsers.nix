@@ -35,7 +35,10 @@ let
         useDefaultShell = true;
         createHome = true;
       };
-      lass.browser.paths.${name}.path = bin;
+      lass.browser.paths.${name} = {
+        path = bin;
+        inherit precedence;
+      };
       security.sudo.extraConfig = ''
         ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
       '';
