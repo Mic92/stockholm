@@ -7,10 +7,8 @@
       zsh-newuser-install() { :; }
     '';
     interactiveShellInit = ''
-      #unsetopt nomatch
       setopt autocd extendedglob
       bindkey -e
-      zstyle :compinstall filename '/home/lass/.zshrc'
 
       #history magic
       bindkey "[A" up-line-or-local-history
@@ -40,7 +38,6 @@
       bindkey "^X^E" edit-command-line
 
       #completion magic
-      fpath=(~/.zsh/completions $fpath)
       autoload -Uz compinit
       compinit
       zstyle ':completion:*' menu select
@@ -48,14 +45,18 @@
       #enable automatic rehashing of $PATH
       zstyle ':completion:*' rehash true
 
-
-      #eval $( dircolors -b ~/.LS_COLORS )
+      eval $(dircolors -b ${pkgs.fetchFromGitHub {
+        owner = "trapd00r";
+        repo = "LS_COLORS";
+        rev = "master";
+        sha256="05lh5w3bgj9h8d8lrbbwbzw8788709cnzzkl8yh7m1dawkpf6nlp";
+      }}/LS_COLORS)
 
       # export MANPAGER='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | vim -R -c "set ft=man nonu nomod nolist" -'
 
       #beautiful colors
       alias ls='ls --color'
-      zstyle ':completion:*:default' list-colors ''${(s.:.)LS_COLORS}
+      # zstyle ':completion:*:default' list-colors ''${(s.:.)LS_COLORS}
 
       #emacs bindings
       bindkey "[7~" beginning-of-line
@@ -66,24 +67,24 @@
       #aliases
       alias ll='ls -l'
       alias la='ls -la'
-      alias pinginet='ping 8.8.8.8'
-      alias du='du -hd1'
-      alias qiv="qiv -f -m"
-      alias zshres="source ~/.zshrc"
 
       #fancy window title magic
       case $TERM in
         (*xterm* | *rxvt*)
-
-          # Write some info to terminal title.
-          # This is seen when the shell prompts for input.
           function precmd {
-            print -Pn "\e]0;%(1j,%j job%(2j|s|); ,)%~\a"
+            if test -n "$SSH_CLIENT"; then
+              echo -ne "\033]0;$$ $USER@$HOST $PWD\007"
+            else
+              echo -ne "\033]0;$$ $USER@$PWD\007"
+            fi
           }
-          # Write command and args to terminal title.
           # This is seen while the shell waits for a command to complete.
           function preexec {
-            printf "\033]0;%s\a" "$1"
+            if test -n "$SSH_CLIENT"; then
+              echo -ne "\033]0;$$ $USER@$HOST $PWD $1\007"
+            else
+              echo -ne "\033]0;$$ $USER@$PWD $1\007"
+            fi
           }
         ;;
       esac
@@ -119,4 +120,5 @@
     '';
   };
   users.users.mainUser.shell = "/run/current-system/sw/bin/zsh";
+  users.users.root.shell = "/run/current-system/sw/bin/zsh";
 }
