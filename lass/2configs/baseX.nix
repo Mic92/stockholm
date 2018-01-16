@@ -85,6 +85,8 @@ in {
     screengrab
     slock
     sxiv
+    timewarrior
+    taskwarrior
     termite
     xclip
     xorg.xbacklight

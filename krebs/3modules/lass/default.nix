@@ -3,6 +3,9 @@
 with import <stockholm/lib>;
 
 {
+  dns.providers = {
+    "lassul.us" = "zones";
+  };
   hosts = mapAttrs (_: recursiveUpdate {
     owner = config.krebs.users.lass;
     ci = true;
@@ -79,6 +82,18 @@ with import <stockholm/lib>;
         "krebsco.de" = ''
           prism     IN A ${nets.internet.ip4.addr}
           paste     IN A ${nets.internet.ip4.addr}
+        '';
+        "lassul.us" = ''
+          $TTL 3600
+          @ IN SOA dns16.ovh.net. tech.ovh.net. (2017093001 86400 3600 3600000 300)
+                          60 IN NS     ns16.ovh.net.
+                          60 IN NS     dns16.ovh.net.
+                          60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+                          60 IN TXT    v=spf1 mx -all
+          cgit            60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          io              60 IN NS     ions.lassul.us.
+          ions            60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          paste           60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
         '';
       };
       nets = rec {

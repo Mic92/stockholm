@@ -289,13 +289,6 @@ in {
         alias /var/realwallpaper/realwallpaper.png;
       '';
     }
-    {
-      services.minecraft-server.enable = true;
-      krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-p tcp --dport 25565"; target = "ACCEPT"; }
-        { predicate = "-p udp --dport 25565"; target = "ACCEPT"; }
-      ];
-    }
     <stockholm/krebs/2configs/reaktor-krebs.nix>
     <stockholm/lass/2configs/dcso-dev.nix>
     {
@@ -307,7 +300,7 @@ in {
             jeschli-brauerei
           ];
           repo = [ config.krebs.git.repos.stockholm ];
-          perm = with git; push "refs/heads/staging/jeschli" [ fast-forward non-fast-forward create delete merge ];
+          perm = with git; push "refs/heads/staging/jeschli*" [ fast-forward non-fast-forward create delete merge ];
         }
       ];
     }
@@ -318,6 +311,8 @@ in {
         RandomizedDelaySec = "2min";
       };
     }
+    <stockholm/lass/2configs/downloading.nix>
+    <stockholm/lass/2configs/minecraft.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
