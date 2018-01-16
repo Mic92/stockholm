@@ -2,11 +2,12 @@ with import <stockholm/lib>;
 { config, pkgs, ... }:
 {
   imports = [
-    ../2configs/binary-cache/client.nix
-    ../2configs/gc.nix
-    ../2configs/mc.nix
-    ../2configs/vim.nix
-    ../2configs/monitoring/client.nix
+    ./binary-cache/client.nix
+    ./gc.nix
+    ./mc.nix
+    ./vim.nix
+    ./monitoring/client.nix
+    ./zsh.nix
     ./htop.nix
     ./backups.nix
     ./security-workarounds.nix
