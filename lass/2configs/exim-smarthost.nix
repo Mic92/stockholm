@@ -54,6 +54,11 @@ with import <stockholm/lib>;
       { from = "bitstamp@lassul.us"; to = lass.mail; }
       { from = "bitcoin.de@lassul.us"; to = lass.mail; }
       { from = "ableton@lassul.us"; to = lass.mail; }
+      { from = "dhl@lassul.us"; to = lass.mail; }
+      { from = "sipgate@lassul.us"; to = lass.mail; }
+      { from = "coinexchange@lassul.us"; to = lass.mail; }
+      { from = "verwaltung@lassul.us"; to = lass.mail; }
+      { from = "gearbest@lassul.us"; to = lass.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }

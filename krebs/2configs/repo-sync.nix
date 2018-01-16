@@ -58,7 +58,7 @@ let
           ref = "heads/master";
         };
       };
-      krebs.git = defineRepo name true;
+      krebs.git = defineRepo name false;
     };
 
 in {
