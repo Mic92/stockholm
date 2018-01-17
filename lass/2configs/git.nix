@@ -79,7 +79,7 @@ let
         nick = config.krebs.build.host.name;
         channel = "#xxx";
         server = "irc.r";
-        verbose = config.krebs.build.host.name == "prism";
+        verbose = false;
         # TODO define branches in some kind of option per repo
         branches = [ "master" "staging*" ];
       };
@@ -100,7 +100,7 @@ let
         nick = config.krebs.build.host.name;
         channel = "#xxx";
         server = "irc.r";
-        verbose = true;
+        verbose = false;
         # TODO define branches in some kind of option per repo
         branches = [ "master" "staging*" ];
       };

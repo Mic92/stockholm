@@ -297,7 +297,7 @@ let {
     viminfo   = "$HOME/.cache/vim/info";
   };
 
-  mkdirs = let
+  need-dirs = let
     dirOf = s: let out = concatStringsSep "/" (init (splitString "/" s));
                in assert out != ""; out;
     alldirs = attrValues dirs ++ map dirOf (attrValues files);
@@ -308,7 +308,7 @@ let {
     paths = [
       (pkgs.writeDashBin "vim" ''
         set -efu
-        (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
+        (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString need-dirs})
         exec ${pkgs.vim}/bin/vim "$@"
       '')
       pkgs.vim
