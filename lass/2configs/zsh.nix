@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 {
+  environment.systemPackages = [ pkgs.fzf ];
   programs.zsh = {
     enable = true;
     shellInit = ''
@@ -37,6 +38,10 @@
       zle -N edit-command-line
       bindkey "^X^E" edit-command-line
 
+      #fzf inclusion
+      source ${pkgs.fzf}/share/fzf/completion.zsh
+      source ${pkgs.fzf}/share/fzf/key-bindings.zsh
+
       #completion magic
       autoload -Uz compinit
       compinit
@@ -51,8 +56,6 @@
         rev = "master";
         sha256="05lh5w3bgj9h8d8lrbbwbzw8788709cnzzkl8yh7m1dawkpf6nlp";
       }}/LS_COLORS)
-
-      # export MANPAGER='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | vim -R -c "set ft=man nonu nomod nolist" -'
 
       #beautiful colors
       alias ls='ls --color'
