@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       <stockholm/jeschli>
+      <stockholm/jeschli/2configs/virtualbox.nix>
       ./hardware-configuration.nix
       # ./dcso-vpn.nix
     ];
