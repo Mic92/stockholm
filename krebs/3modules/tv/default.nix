@@ -32,40 +32,6 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_rsa>;
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDP9JS2Nyjx4Pn+/4MrFi1EvBBYVKkGm2Q4lhgaAiSuiGLol53OSsL2KIo01mbcSSBWow9QpQpn8KDoRnT2aMLDrdTFqL20ztDLOXmtrSsz3flgCjmW4f6uOaoZF0RNjAybd1coqwSJ7EINugwoqOsg1zzN2qeIGKYFvqFIKibYFAnQ8hcksmkvPdIO5O8CbdIiP9sZSrSDp0ZyLK2T0PML2jensVZOeqSPulQDFqLsbmavpVLkpDjdzzPRwbZWNB4++YeipbYNOkX4GR1EB4wMZ93IbBV7kpJtib2Zb2AnUf7UW37hxWBjILdstj9ClwNOQggn8kD9ub7YxBzH1dz0Xd8a0mPOAWIDJz9MypXgFRc3vdvPB/W1I4Se0CLbgOkORun9CkgijKr9oEY8JNt8HFd6viZcAaQxOyIm6PNHZTnHfdSc7bIBS2n3e3IZBv0fTd77knGLXg402aTuu2bm/kxsKivxsILXIaGbeXe4ceN3Fynr3FzSM2bUkzHb0mAHu1BQ9YaX0xzCwjVueA5nzGls7ODSFkXsiBfg2FvMN/sTLFca6tnwyqcnD6nujoiS5+BxjDWPgnZYqCaW3B/IkpTsRMsX6QrfhOFcsP8qlJ2Cp82orWoDK/D0vZ9pdzAc6PFGga0RofuJKY2yiq+SRZ7/e9E6VncIVCYZ1OfN0Q==";
     };
-    ju = {
-      external = true;
-      nets = {
-        gg23 = {
-          ip4.addr = "10.23.1.144";
-          aliases = [
-            "ju.gg23"
-          ];
-        };
-        retiolum = {
-          ip4.addr = "10.243.13.39";
-          ip6.addr = "42::1339";
-          aliases = [
-            "ju.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAy2xyuOJ/G7uuXz8SfL8mkeX/YwAqnty98/h4BGHwd4ENLt2cUtim
-            BUjVFIWdIMRds+4H8UtveGSeuYgRs3CpQeNuAeq20YlwoxeZgsc8mA+FP/zeN10n
-            OAaP/+BTLKAHQ3Ixq41vLrFXU4Ah53YhOw1LqxQG80Tcr4J8Yehx+mrdGhcDnp2p
-            4QpMLtMoAn0dQ3K5muZUQzGMHamLIril8hDKkJPqBVN0DRQ2lAVcK70AcqyuFIUM
-            rWkG8gI7AT1bhZ3viIMX9wjpuA3BaitqIEyUCjWv2ZLy2HmTDGGfhEqNYdx/pXKt
-            HToZk1XPnNfopFFtOHiSh1P06VqPex6MIHpbgEf7cVlxxNUOH2qssPGbo6ulzGyo
-            YLeJZNP+1GxPLtyBBSiFApGdJBH8aMlQlz0vjFIdmJbIbUhSSi1TOtbQuB1SCvYO
-            rp9Hm9Ah0508kxLfGlmKdQ3zO3wKbmPqCjwqSGsgtHn3KZzhgr+pTwgHIKdur1VU
-            yW0vvj2ofyajgAb53cM77ScIHwbimkZ0/CbAVeM1z7OXOQ5ruXW/FVCZPe+clY2F
-            ah6UOM5FdI+AYWOhkbP1EP0DGugHs5YUgTxOMMwot1TkxD/y4CZ/ctukoWZrIHHR
-            vKpLhs9nWcnVXRP/trLtVl2okhs1vTYqgArgH6C0jbSXoNQbnZ+a860CAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHM6dL0fQ8Bd0hER0Xa3I2pAWVHdnwOBaAZhbDlLJmUu";
-    };
     kaepsele = {
       external = true;
       nets = {
