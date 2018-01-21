@@ -192,7 +192,7 @@ with import <stockholm/lib>;
     '';
   };
 
-  #nix.package = pkgs.nixUnstable;
+  nix.package = pkgs.nixUnstable;
   programs.adb.enable = true;
   users.users.mainUser.extraGroups = [ "adbusers" ];
 }

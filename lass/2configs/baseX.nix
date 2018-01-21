@@ -53,6 +53,7 @@ in {
 
   time.timeZone = "Europe/Berlin";
 
+  programs.ssh.agentTimeout = "10m";
   programs.ssh.startAgent = true;
   services.openssh.forwardX11 = true;
 
