@@ -72,25 +72,6 @@
       alias la='ls -la'
 
       #fancy window title magic
-      case $TERM in
-        (*xterm* | *rxvt*)
-          function precmd {
-            if test -n "$SSH_CLIENT"; then
-              echo -ne "\033]0;$$ $USER@$HOST $PWD\007"
-            else
-              echo -ne "\033]0;$$ $USER@$PWD\007"
-            fi
-          }
-          # This is seen while the shell waits for a command to complete.
-          function preexec {
-            if test -n "$SSH_CLIENT"; then
-              echo -ne "\033]0;$$ $USER@$HOST $PWD $1\007"
-            else
-              echo -ne "\033]0;$$ $USER@$PWD $1\007"
-            fi
-          }
-        ;;
-      esac
     '';
     promptInit = ''
       # TODO: figure out why we need to set this here
@@ -101,27 +82,60 @@
       autoload -U promptinit
       promptinit
 
-      error='%(?..%F{red}%?%f )'
+      p_error='%(?..%F{red}%?%f )'
+      t_error='%(?..%? )'
 
       case $UID in
         0)
-          username='%F{red}root%f '
+          p_username='%F{red}root%f'
+          t_username='root'
           ;;
         1337)
-          username=""
+          p_username=""
+          t_username=""
           ;;
         *)
-          username='%F{blue}%n%f '
+          p_username='%F{blue}%n%f'
+          t_username='%n'
           ;;
       esac
 
       if test -n "$SSH_CLIENT"; then
-        PROMPT="$error$username@%F{magenta}%M%f %~ "
+        p_hostname='@%F{magenta}%M%f '
+        t_hostname='@%M '
       else
-        PROMPT="$error$username%~ "
+        p_hostname=""
+        t_hostname=""
       fi
+
+      #check if in nix shell
+      if test -n "$buildInputs"; then
+        p_nixshell='%F{green}[s]%f '
+        t_nixshell='[s] '
+      else
+        p_nixshell=""
+        t_nixshell=""
+      fi
+
+      PROMPT="$p_error$p_username$p_hostname$p_nixshell%~ "
+      TITLE="$t_error$t_username$t_hostname$t_nixshell%~"
+      case $TERM in
+        (*xterm* | *rxvt*)
+          function precmd {
+            PROMPT_EVALED="$(print -P $TITLE)"
+            echo -ne "\033]0;$$ $PROMPT_EVALED\007"
+          }
+          # This is seen while the shell waits for a command to complete.
+          function preexec {
+            PROMPT_EVALED="$(print -P $TITLE)"
+            echo -ne "\033]0;$$ $PROMPT_EVALED $1\007"
+          }
+        ;;
+      esac
     '';
   };
+  environment.shellAliases.ns = "nix-shell --command zsh";
+
   users.users.mainUser.shell = "/run/current-system/sw/bin/zsh";
   users.users.root.shell = "/run/current-system/sw/bin/zsh";
 }
