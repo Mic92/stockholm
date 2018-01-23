@@ -20,13 +20,13 @@ let
     text/html; ${pkgs.elinks}/bin/elinks -dump ; copiousoutput;
   '';
 
-  inboxes = [
-    { l = "wireguard"; q = [ "wireguard@lists.zx2c4" ]; }
-    { l = "c-base"; q = [ "c-base.org" ]; }
-    { l = "security"; q = [ "seclists.org" "security" "bugtraq" ]; }
-    { l = "nix-devel"; q = [ "nix-devel@googlegroups.com" ]; }
-    { l = "shack"; q = [ "shackspace.de" ]; }
-  ];
+  mailboxes = {
+    wireguard = [ "wireguard@lists.zx2c4" ];
+    c-base = [ "c-base.org" ];
+    security = [ "seclists.org" "security" "bugtraq" ];
+    nix-devel = [ "nix-devel@googlegroups.com" ];
+    shack = [ "shackspace.de" ];
+  };
 
   muttrc = pkgs.writeText "muttrc" ''
     # gpg
@@ -82,9 +82,9 @@ let
 
     virtual-mailboxes \
       "Unread" "notmuch://?query=tag:unread"\
-      "INBOX" "notmuch://?query=tag:inbox ${concatMapStringsSep " " (f: "and NOT to:${f}") (concatMap (l: l.q) inboxes)}"\
-    ${concatMapStringsSep "\n" (i: ''${"  "}"${i.l}" "notmuch://?query=${concatMapStringsSep " or " (f: "to:${f}") i.q}"\'') inboxes}
-      "BOX" "notmuch://?query=${concatMapStringsSep " and " (f: "NOT to:${f}") (concatMap (l: l.q) inboxes)}"\
+      "INBOX" "notmuch://?query=tag:inbox ${concatMapStringsSep " " (f: "and NOT to:${f}") (flatten (attrValues mailboxes))}"\
+    ${concatMapStringsSep "\n" (i: ''${"  "}"${i.name}" "notmuch://?query=${concatMapStringsSep " or " (f: "to:${f}") i.value}"\'') (mapAttrsToList nameValuePair mailboxes)}
+      "BOX" "notmuch://?query=${concatMapStringsSep " and " (f: "NOT to:${f}") (flatten (attrValues mailboxes))}"\
       "TODO" "notmuch://?query=tag:TODO"\
       "Starred" "notmuch://?query=tag:*"\
       "Archive" "notmuch://?query=tag:archive"\
