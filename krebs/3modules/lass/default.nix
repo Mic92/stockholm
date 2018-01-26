@@ -458,7 +458,8 @@ with import <stockholm/lib>;
       external = true;
       nets = rec {
         internet = {
-          ip4.addr = "129.215.90.4";
+          # eddie.thalheim.io
+          ip4.addr = "129.215.197.11";
           aliases = [ "eddie.i" ];
         };
         retiolum = rec {
