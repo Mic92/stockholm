@@ -20,6 +20,7 @@ let
        sha256 = "1z3yhhbmbzfw68qjzyvpbmlyv2a1p814sy5q2knn04kcl30vx94a";
      };
    };
+
 in {
   environment.systemPackages = [
     (pkgs.vim_configurable.customize {
@@ -65,11 +66,17 @@ in {
           let g:molokai_original = 1
           let g:rehash256 = 1
         '';
-
+        settingsForElm = ''
+          let g:polyglot_disabled = ['elm']
+          let g:elm_detailed_complete = 1
+          let g:elm_format_autosave = 1
+          let g:elm_syntastic_show_warnings = 1
+        '';
       in ''
         ${colorscheme}
         ${remapStatements}
         ${setStatements}
+        ${settingsForElm}
         ${settingsForGo}
         " I dont know what this line is about
         autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
@@ -85,6 +92,7 @@ in {
             "surround"
             "Syntastic"
             "undotree"
+            "elm-vim"
            ];
          }
          { names = [ "vim-addon-nix" ]; ft_regex = "^nix\$"; }
