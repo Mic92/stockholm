@@ -26,7 +26,7 @@
     device = "/dev/disk/by-uuid/53f1eeaf-a7ac-456c-a2af-778dd8b8d5b0";
     preLVM = true;
     allowDiscards = true;
-  } ]; 
+  } ];
 #  networking.hostName = "bolide"; # Define your hostname.
   networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -42,93 +42,101 @@
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
-   nixpkgs.config.allowUnfree = true; 
-   environment.systemPackages = with pkgs; [
-     wget vim
-   # system helper
-     ag
-     curl
-     copyq
-     dmenu
-     git
-     i3lock
-     keepass
-     networkmanagerapplet
-     rsync
-     terminator
-     tmux
-     wget
-   #  rxvt_unicode
-   # editors
-     emacs
-   # internet
-     thunderbird
-     chromium
-     google-chrome
-   # programming languages
-     go
-     gcc
-     ghc
-     python35
-     python35Packages.pip
-   # go tools
-     golint
-     gotools
-   # dev tools
-     gnumake
-     jetbrains.pycharm-professional
-     jetbrains.webstorm
-     jetbrains.goland
-   # document viewer
-     zathura
-   ];
+  environment.shellAliases = {
+    n = "nix-shell";
+    stocki = pkgs.writeDash "deploy" ''
+      cd ~/stockholm
+      exec nix-shell -I stockholm="$PWD" --run 'deploy  --system="bolide"'
+    '';
+  };
+  nixpkgs.config.allowUnfree = true;
+  environment.systemPackages = with pkgs; [
+    wget vim
+  # system helper
+    ag
+    curl
+    copyq
+    dmenu
+    git
+    i3lock
+    keepass
+    networkmanagerapplet
+    rsync
+    terminator
+    tmux
+    wget
+  #  rxvt_unicode
+  # editors
+    emacs
+  # internet
+    thunderbird
+    chromium
+    google-chrome
+  # programming languages
+    go
+    gcc
+    ghc
+    python35
+    python35Packages.pip
+  # go tools
+    golint
+    gotools
+  # dev tools
+    elmPackages.elm
+    gnumake
+    jetbrains.pycharm-professional
+    jetbrains.webstorm
+    jetbrains.goland
+  # document viewer
+    zathura
+  ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.bash.enableCompletion = true;
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+ # Some programs need SUID wrappers, can be configured further or are
+ # started in user sessions.
+ # programs.bash.enableCompletion = true;
+ # programs.mtr.enable = true;
+ # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
-  # List services that you want to enable:
+ # List services that you want to enable:
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+ # Enable the OpenSSH daemon.
+ services.openssh.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+ # Open ports in the firewall.
+ # networking.firewall.allowedTCPPorts = [ ... ];
+ # networking.firewall.allowedUDPPorts = [ ... ];
+ # Or disable the firewall altogether.
+ # networking.firewall.enable = false;
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
+ # Enable CUPS to print documents.
+ # services.printing.enable = true;
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
+ # Enable the X11 windowing system.
+ services.xserver.enable = true;
+ # services.xserver.layout = "us";
+ # services.xserver.xkbOptions = "eurosign:e";
 
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.windowManager.xmonad.enable = true;
-  services.xserver.windowManager.xmonad.enableContribAndExtras = true;
-  # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
+ services.xserver.displayManager.sddm.enable = true;
+ services.xserver.windowManager.xmonad.enable = true;
+ services.xserver.windowManager.xmonad.enableContribAndExtras = true;
+ # Enable touchpad support.
+ # services.xserver.libinput.enable = true;
 
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
+ # Enable the KDE Desktop Environment.
+ # services.xserver.displayManager.sddm.enable = true;
+ # services.xserver.desktopManager.plasma5.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-   users.extraUsers.jeschli = {
-     isNormalUser = true;
-     uid = 1000;
-   };
+ # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.extraUsers.jeschli = {
+    isNormalUser = true;
+    uid = 1000;
+  };
 
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "17.09"; # Did you read the comment?
+ # This value determines the NixOS release with which your system is to be
+ # compatible, in order to avoid breaking some software such as database
+ # servers. You should change this only after NixOS release notes say you
+ # should.
+ system.stateVersion = "17.09"; # Did you read the comment?
 
 }
 
