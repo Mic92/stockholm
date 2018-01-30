@@ -123,7 +123,7 @@ rec {
     script = pkgs.writeDash "lambda-pl" ''
       if [ "$#" -gt 0 ]; then
         curl -SsL --max-time 5 "$1" |
-          perl -l -0777 -ne 'print $1 if /<title.*?>\s*(.*?)(?: - youtube)?\s*<\/title/si'
+          perl -l -0777 -ne 'print $1 if /<title.*?>\s*(.*?)\s*<\/title/si'
       fi
     '';
   });

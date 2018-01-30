@@ -35,6 +35,13 @@
   time.timeZone = "Europe/Amsterdam";
   nixpkgs.config.allowUnfree = true;
   # List packages installed in system profile. To search by name, run: # $ nix-env -qaP | grep wget
+  environment.shellAliases = {
+    n = "nix-shell";
+    stocki = pkgs.writeDash "deploy" ''
+      cd ~/stockholm
+      exec nix-shell -I stockholm="$PWD" --run 'deploy  --system="brauerei"'
+    '';
+  };
   environment.systemPackages = with pkgs; [
   # system helper
     ag

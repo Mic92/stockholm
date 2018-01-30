@@ -1,3 +1,4 @@
+with import <stockholm/lib>;
 { pkgs, ... }:
 
 let
@@ -18,6 +19,14 @@ let
   mailcap = pkgs.writeText "mailcap" ''
     text/html; ${pkgs.elinks}/bin/elinks -dump ; copiousoutput;
   '';
+
+  mailboxes = {
+    wireguard = [ "wireguard@lists.zx2c4" ];
+    c-base = [ "c-base.org" ];
+    security = [ "seclists.org" "security" "bugtraq" ];
+    nix-devel = [ "nix-devel@googlegroups.com" ];
+    shack = [ "shackspace.de" ];
+  };
 
   muttrc = pkgs.writeText "muttrc" ''
     # gpg
@@ -72,22 +81,15 @@ let
     ''} %r |"
 
     virtual-mailboxes \
-        "Unread"    "notmuch://?query=tag:unread"\
-        "INBOX"     "notmuch://?query=tag:inbox \
-                     and NOT to:nix-devel\
-                     and NOT to:shackspace\
-                     and NOT to:security\
-                     and NOT to:c-base" \
-        "shack"     "notmuch://?query=to:shackspace"\
-        "c-base"    "notmuch://?query=to:c-base"\
-        "security"  "notmuch://?query=to:securityfocus or from:security-alert@hpe.com"\
-        "nix"       "notmuch://?query=to:nix-devel"\
-        "radio"     "notmuch://?query=to:radio or tag:radio"\
-        "TODO"      "notmuch://?query=tag:TODO"\
-        "Starred"   "notmuch://?query=tag:*"\
-        "Archive"   "notmuch://?query=tag:archive"\
-        "Sent"      "notmuch://?query=tag:sent"\
-        "Junk"      "notmuch://?query=tag:junk"
+      "Unread" "notmuch://?query=tag:unread"\
+      "INBOX" "notmuch://?query=tag:inbox ${concatMapStringsSep " " (f: "and NOT to:${f}") (flatten (attrValues mailboxes))}"\
+    ${concatMapStringsSep "\n" (i: ''${"  "}"${i.name}" "notmuch://?query=${concatMapStringsSep " or " (f: "to:${f}") i.value}"\'') (mapAttrsToList nameValuePair mailboxes)}
+      "BOX" "notmuch://?query=${concatMapStringsSep " and " (f: "NOT to:${f}") (flatten (attrValues mailboxes))}"\
+      "TODO" "notmuch://?query=tag:TODO"\
+      "Starred" "notmuch://?query=tag:*"\
+      "Archive" "notmuch://?query=tag:archive"\
+      "Sent" "notmuch://?query=tag:sent"\
+      "Junk" "notmuch://?query=tag:junk"
 
     tag-transforms "junk"     "k" \
                    "unread"   "u" \

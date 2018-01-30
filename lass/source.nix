@@ -8,10 +8,7 @@ in
   evalSource (toString _file) [
     {
       nixos-config.symlink = "stockholm/lass/1systems/${name}/config.nix";
-      nixpkgs.git = {
-        url = https://github.com/nixos/nixpkgs;
-        ref = "d202e30";
-      };
+      nixpkgs = (import <stockholm/krebs/source.nix> host).nixpkgs;
       secrets = getAttr builder {
         buildbot.file = toString <stockholm/lass/2configs/tests/dummy-secrets>;
         lass.pass = {

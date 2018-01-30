@@ -53,6 +53,7 @@ in {
 
   time.timeZone = "Europe/Berlin";
 
+  programs.ssh.agentTimeout = "10m";
   programs.ssh.startAgent = true;
   services.openssh.forwardX11 = true;
 
@@ -85,6 +86,8 @@ in {
     screengrab
     slock
     sxiv
+    timewarrior
+    taskwarrior
     termite
     xclip
     xorg.xbacklight
@@ -104,15 +107,40 @@ in {
     xlibs.fontschumachermisc
   ];
 
-  lass.xserver.enable = true;
+  #lass.xserver.enable = true;
   services.xserver = {
+    enable = true;
     layout = "us";
+    display = mkForce 0;
     xkbModel = "evdev";
     xkbVariant = "altgr-intl";
     xkbOptions = "caps:backspace";
+    displayManager.lightdm.enable = true;
+    windowManager.default = "xmonad";
+    windowManager.session = [{
+      name = "xmonad";
+      start = ''
+        ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
+        ${pkgs.coreutils}/bin/sleep infinity
+      '';
+    }];
   };
 
-  services.urxvtd.enable = true;
+  systemd.user.services.xmonad = {
+    wantedBy = [ "graphical-session.target" ];
+    environment = {
+      DISPLAY = ":${toString config.services.xserver.display}";
+      RXVT_SOCKET = "%t/urxvtd-socket";
+      XMONAD_DATA_DIR = "/tmp";
+    };
+    serviceConfig = {
+      SyslogIdentifier = "xmonad";
+      ExecStart = "${pkgs.xmonad-lass}/bin/xmonad";
+      ExecStop = "${pkgs.xmonad-lass}/bin/xmonad --shutdown";
+    };
+    restartIfChanged = false;
+  };
+
   krebs.xresources.enable = true;
   lass.screenlock.enable = true;
 }

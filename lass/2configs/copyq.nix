@@ -19,9 +19,9 @@ let
     ${pkgs.copyq}/bin/copyq config text_wrap true
   '';
 in {
-  systemd.services.copyq = {
-    wantedBy = [ "multi-user.target" ];
-    requires = [ "xserver.service" ];
+  systemd.user.services.copyq = {
+    wantedBy = [ "graphical-session.target" ];
+    requires = [ "xmonad.service" ];
     environment = {
       DISPLAY = ":${toString config.services.xserver.display}";
     };
@@ -35,7 +35,6 @@ in {
       Restart = "always";
       RestartSec = "15s";
       StartLimitBurst = 0;
-      User = "lass";
     };
   };
 }

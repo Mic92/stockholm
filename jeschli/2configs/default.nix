@@ -23,6 +23,9 @@ with import <stockholm/lib>;
     proot
     populate
 
+  # aliases
+    (writeDashBin "irc" "ssh chat@enklave -t tmux a")
+
   #style
     most
     rxvt_unicode.terminfo
