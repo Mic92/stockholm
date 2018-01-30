@@ -73,6 +73,10 @@ in {
       extraGroups = [ "audio" "video" "input" "loot" ];
       createHome = true;
       useDefaultShell = true;
+      packages = with pkgs; [
+        ftb
+        minecraft
+      ];
     };
   };
 

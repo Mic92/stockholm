@@ -81,6 +81,9 @@ prepare_debian() {
 }
 
 prepare_nixos_iso() {
+  _which() (
+    type -p "$1"
+  )
   mountpoint /mnt
 
   type git 2>/dev/null || nix-env -iA nixos.git

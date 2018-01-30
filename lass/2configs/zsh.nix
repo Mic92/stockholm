@@ -136,6 +136,5 @@
   };
   environment.shellAliases.ns = "nix-shell --command zsh";
 
-  users.users.mainUser.shell = "/run/current-system/sw/bin/zsh";
-  users.users.root.shell = "/run/current-system/sw/bin/zsh";
+  users.defaultUserShell = "/run/current-system/sw/bin/zsh";
 }
