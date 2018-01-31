@@ -89,6 +89,7 @@
     chromium
     google-chrome
   # programming languages
+    elmPackages.elm
     go
     gcc
     ghc
