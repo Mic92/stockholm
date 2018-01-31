@@ -3,16 +3,17 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, lib, pkgs, ... }:
-
+# bln config file
 {
   imports =
     [ # Include the results of the hardware scan.
       <stockholm/jeschli>
       <stockholm/jeschli/2configs/virtualbox.nix>
+      <stockholm/jeschli/2configs/urxvt.nix>
       ./hardware-configuration.nix
       # ./dcso-vpn.nix
     ];
-
+  jeschliFontSize = 20;
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
