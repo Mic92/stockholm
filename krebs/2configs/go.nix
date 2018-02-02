@@ -8,6 +8,7 @@ with import <stockholm/lib>;
   krebs.go = {
     enable = true;
   };
+  networking.firewall.allowedTCPPorts = [ 80 ];
   services.nginx = {
     enable = true;
     virtualHosts.go = {
