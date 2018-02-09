@@ -45,6 +45,7 @@ in {
         remapStatements = ''
           imap jk <Esc>
           map gr :GoRun<Enter>         " Map gr to execute go run
+          map tt :GoTest<Enter>        " Map tt to execute go test
           map nf :NERDTreeToggle<CR>
           nnoremap <C-TAB> <c-w><c-w>
           nnoremap <S-TAB> :bnext<CR>
