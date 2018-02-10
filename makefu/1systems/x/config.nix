@@ -59,8 +59,9 @@ with import <stockholm/lib>;
 
       # Hardware
       <stockholm/makefu/2configs/hw/tp-x230.nix>
+      # <stockholm/makefu/2configs/hw/tpm.nix>
       <stockholm/makefu/2configs/hw/rtl8812au.nix>
-      <stockholm/makefu/2configs/hw/wwan.nix>
+      <stockholm/makefu/2configs/hw/network-manager.nix>
       <stockholm/makefu/2configs/hw/stk1160.nix>
       # <stockholm/makefu/2configs/rad1o.nix>
 
@@ -82,12 +83,8 @@ with import <stockholm/lib>;
 
   makefu.server.primary-itf = "wlp3s0";
   makefu.full-populate = true;
-  makefu.umts.apn = "web.vodafone.de";
 
   nixpkgs.config.allowUnfree = true;
-
-  environment.systemPackages = [ pkgs.passwdqc-utils ];
-
 
   # configure pulseAudio to provide a HDMI sink as well
   networking.firewall.enable = true;
@@ -100,8 +97,15 @@ with import <stockholm/lib>;
   krebs.tinc.retiolum.connectTo = [ "omo" "gum" "prism" ];
 
   networking.extraHosts = ''
-    192.168.1.11 omo.local
+    192.168.1.11  omo.local
   '';
   # hard dependency because otherwise the device will not be unlocked
   boot.initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; allowDiscards=true; }];
+
+  nix.package = pkgs.nixUnstable;
+  environment.systemPackages = [ pkgs.passwdqc-utils pkgs.nixUnstable ];
+  nixpkgs.overlays = [ (import <python/overlay.nix>) ];
+
+  # environment.variables = { GOROOT = [ "${pkgs.go.out}/share/go" ]; };
+
 }
