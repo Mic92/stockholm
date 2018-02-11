@@ -27,6 +27,9 @@ in {
       name = "vim";
       vimrcConfig.customRC = let
         colorscheme = ''colorscheme molokai'';
+        highlightTrailingWhiteSpaces = ''
+          au Syntax * syn match Garbage containedin=ALL /\s\+$/
+        '';
         setStatements = ''
           set autowrite
           set clipboard=unnamedplus
@@ -42,6 +45,7 @@ in {
         remapStatements = ''
           imap jk <Esc>
           map gr :GoRun<Enter>         " Map gr to execute go run
+          map tt :GoTest<Enter>        " Map tt to execute go test
           map nf :NERDTreeToggle<CR>
           nnoremap <C-TAB> <c-w><c-w>
           nnoremap <S-TAB> :bnext<CR>
@@ -74,11 +78,12 @@ in {
         '';
       in ''
         ${colorscheme}
+        ${highlightTrailingWhiteSpaces}
         ${remapStatements}
         ${setStatements}
         ${settingsForElm}
         ${settingsForGo}
-        " I dont know what this line is about
+        " dont expand tabs in go files and show it with four whitespaces.
         autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
       '';
        vimrcConfig.vam.knownPlugins = pkgs.vimPlugins // customPlugins;
