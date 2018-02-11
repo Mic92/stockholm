@@ -25,6 +25,7 @@ stdenv.mkDerivation {
     cat > $out/bin/ftb << EOF
     #!${stdenv.shell}
 
+    export _JAVA_AWT_WM_NONREPARENTING=1
     export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm mesa openal ]}
     ${if useAlsa then "${alsaOss}/bin/aoss" else "" } \
       ${jre}/bin/java -jar $out/ftb.jar
