@@ -149,11 +149,13 @@ with import <stockholm/lib>;
   lass.screenlock.command = "${pkgs.i3lock}/bin/i3lock -i /home/lass/lock.png -t -f";
 
   programs.adb.enable = true;
-  users.users.mainUser.extraGroups = [ "adbusers" ];
+  users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
 
   services.printing.drivers = [ pkgs.postscript-lexmark ];
 
   services.logind.extraConfig = ''
     HandleLidSwitch=ignore
   '';
+
+  virtualisation.docker.enable = true;
 }
