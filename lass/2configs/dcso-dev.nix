@@ -57,4 +57,6 @@ in {
   security.sudo.extraConfig = ''
     ${mainUser.name} ALL=(dev) NOPASSWD: ALL
   '';
+
+  services.minio.enable = true;
 }
