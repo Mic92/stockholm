@@ -198,5 +198,6 @@ with import <stockholm/lib>;
 
   nix.package = pkgs.nixUnstable;
   programs.adb.enable = true;
-  users.users.mainUser.extraGroups = [ "adbusers" ];
+  users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
+  virtualisation.docker.enable = true;
 }
