@@ -121,7 +121,7 @@ in {
       name = "xmonad";
       start = ''
         ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
-        ${pkgs.coreutils}/bin/sleep infinity
+        exec ${pkgs.coreutils}/bin/sleep infinity
       '';
     }];
   };
