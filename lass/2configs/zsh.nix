@@ -108,7 +108,7 @@
       fi
 
       #check if in nix shell
-      if test -n "$buildInputs"; then
+      if test -n "$IN_NIX_SHELL"; then
         p_nixshell='%F{green}[s]%f '
         t_nixshell='[s] '
       else
