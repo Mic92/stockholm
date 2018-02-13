@@ -50,16 +50,15 @@
       #enable automatic rehashing of $PATH
       zstyle ':completion:*' rehash true
 
+      #beautiful colors
       eval $(dircolors -b ${pkgs.fetchFromGitHub {
         owner = "trapd00r";
         repo = "LS_COLORS";
         rev = "master";
         sha256="05lh5w3bgj9h8d8lrbbwbzw8788709cnzzkl8yh7m1dawkpf6nlp";
       }}/LS_COLORS)
-
-      #beautiful colors
       alias ls='ls --color'
-      # zstyle ':completion:*:default' list-colors ''${(s.:.)LS_COLORS}
+      zstyle ':completion:*:default' list-colors ''${(s.:.)LS_COLORS}
 
       #emacs bindings
       bindkey "[7~" beginning-of-line
