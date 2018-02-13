@@ -23,6 +23,7 @@ import XMonad
 import qualified XMonad.StackSet as W
 import Control.Monad.Extra (whenJustM)
 import Data.List (isInfixOf)
+import Data.Monoid (Endo)
 import System.Environment (getArgs, lookupEnv)
 import System.Posix.Process (executeFile)
 import XMonad.Actions.CopyWindow (copy, kill1)
@@ -91,11 +92,12 @@ myLayoutHook = defLayout
   where
     defLayout = minimize $ ((avoidStruts $ Tall 1 (3/100) (1/2) ||| Full ||| Mirror (Tall 1 (3/100) (1/2))) ||| FixedColumn 2 80 80 1 ||| simplestFloat)
 
+floatHooks :: Query (Endo WindowSet)
 floatHooks = composeAll . concat $
     [ [ title =? t --> doFloat | t <- myTitleFloats]
     , [ className =? c --> doFloat | c <- myClassFloats ] ]
   where
-      myTitleFloats = [] -- for the KDE "open link" popup from konsole
+      myTitleFloats = []
       myClassFloats = ["Pinentry"] -- for gpg passphrase entry
 
 
