@@ -16,6 +16,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/virtualbox.nix>
     <stockholm/lass/2configs/dcso-dev.nix>
     <stockholm/lass/2configs/steam.nix>
+    <stockholm/lass/2configs/rtl-sdr.nix>
     { # automatic hardware detection
       boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
       boot.kernelModules = [ "kvm-intel" ];
