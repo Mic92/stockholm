@@ -45,6 +45,11 @@ in {
     };
   };
 
+  krebs.iptables.tables.filter.INPUT.rules = [
+    { predicate = "-p tcp --dport 8000"; target = "ACCEPT";}
+    { predicate = "-p tcp --dport 9000"; target = "ACCEPT";}
+  ];
+
   krebs.per-user.dev.packages = [
     pkgs.go
   ];
