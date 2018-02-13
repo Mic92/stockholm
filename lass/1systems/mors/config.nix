@@ -89,6 +89,10 @@ with import <stockholm/lib>;
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
+    "/home/virtual" = {
+      device = "/dev/mapper/pool-virtual";
+      fsType = "ext4";
+    };
   };
 
   services.udev.extraRules = ''
