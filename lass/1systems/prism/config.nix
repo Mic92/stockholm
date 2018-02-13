@@ -297,6 +297,7 @@ in {
           user = with config.krebs.users; [
             jeschli
             jeschli-bln
+            jeschli-bolide
             jeschli-brauerei
           ];
           repo = [ config.krebs.git.repos.stockholm ];
