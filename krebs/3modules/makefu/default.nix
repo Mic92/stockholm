@@ -1039,7 +1039,7 @@ with import <stockholm/lib>;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDoAtBa10AbiFXfYL4Za7e0CLeXJeH6FhMqVZFqElLkJBKmQ7c7WEMlnuRhEZWSFDXBpaS7p73s5MMOZA13uYv6fI2ipOOwE9Ej1EoMsrQGegBp2VDMo0wnr/sgTL1do+uGI85E/i0uFw0DYhXqlZQk1eK8SdgXYltiVL27IA3NG2kYuoTIvJgRnaPJjTbhLBWti3m586LuO+pBKtcTt1D9EV6wp+6Jum4owPtCgVPQaZfFGYWkEiINV83WX9HoIk4S3bTPLh8Kfp0je0xsioS4T9/cxSPgUie8MjSg0irvLJXRH0JOVuG5NvZTYhAAekwNkHll9CtypPrutjbrXPXf makefu@x";
     };
     makefu-remote-builder = {
-      inherit (makefu) mail gpg;
+      inherit (makefu) mail pgp;
       pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPlhb0TIBW9RN9T8Is4YRIc1RjOg+cxbZCaDjbM4zxrX nixBuild";
     };
     makefu-bob = {
