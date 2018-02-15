@@ -1038,6 +1038,10 @@ with import <stockholm/lib>;
       inherit (makefu) mail pgp;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDoAtBa10AbiFXfYL4Za7e0CLeXJeH6FhMqVZFqElLkJBKmQ7c7WEMlnuRhEZWSFDXBpaS7p73s5MMOZA13uYv6fI2ipOOwE9Ej1EoMsrQGegBp2VDMo0wnr/sgTL1do+uGI85E/i0uFw0DYhXqlZQk1eK8SdgXYltiVL27IA3NG2kYuoTIvJgRnaPJjTbhLBWti3m586LuO+pBKtcTt1D9EV6wp+6Jum4owPtCgVPQaZfFGYWkEiINV83WX9HoIk4S3bTPLh8Kfp0je0xsioS4T9/cxSPgUie8MjSg0irvLJXRH0JOVuG5NvZTYhAAekwNkHll9CtypPrutjbrXPXf makefu@x";
     };
+    makefu-remote-builder = {
+      inherit (makefu) mail pgp;
+      pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPlhb0TIBW9RN9T8Is4YRIc1RjOg+cxbZCaDjbM4zxrX nixBuild";
+    };
     makefu-bob = {
       inherit (makefu) mail pgp;
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+fEK1bCB8cdDiBzXBXEWLFQyp/7xjNGQ5GyqHOtgxxe6Ypb0kAaWJaG3Ak/qI/nToGKwkQJLsuYNA3lZj2rFyBdoxnNO3kRFTc7NoaU5mC2BlHbpmn9dzvgiBoRAKAlzj/022u65SI19AFciKXtwqQfjuB3mPVOFOfCFB2SYjjWb8ffPnHp6PB5KKNLxaVPCbZgOdSju25/wB2lY00W8WIDOTqfbNClQnjkLsUZpTuRnvpHTemKtt1FH+WBZiMwMXRt19rm9LFSO7pvrZjdJz0l1TZVsODkbKZzQzSixoCPmdpPPAYaqrGUQpmukXk0xQtR3E2jEsk+FJv4AkIKqD";
