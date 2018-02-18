@@ -137,14 +137,35 @@ with import <stockholm/lib>;
   networking.hostName = lib.mkForce "BLN02NB0162";
 
   security.pki.certificateFiles = [
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC1G1.pem"; sha256 = "14vz9c0fk6li0a26vx0s5ha6y3yivnshx9pjlh9vmnpkbph5a7rh"; })
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC2G1.pem"; sha256 = "0r1dd48a850cv7whk4g2maik550rd0vsrsl73r6x0ivzz7ap1xz5"; })
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC3G1.pem"; sha256 = "0b5cdchdkvllnr0kz35d8jrmrf9cjw0kd98mmvzr0x6nkc8hwpdy"; })
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC1G1.pem"; sha256 = "14vz9c0fk6li0a26vx0s5ha6y3yivnshx9pjlh9vmnpkbph5a7rh"; })
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC2G1.pem"; sha256 = "0r1dd48a850cv7whk4g2maik550rd0vsrsl73r6x0ivzz7ap1xz5"; })
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC3G1.pem"; sha256 = "0b5cdchdkvllnr0kz35d8jrmrf9cjw0kd98mmvzr0x6nkc8hwpdy"; })
 
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCACOMPC2G1.pem"; sha256 = "0rn57zv1ry9vj4p2248mxmafmqqmdhbrfx1plszrxsphshbk2hfz"; })
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCACOMPC3G1.pem"; sha256 = "0w88qaqhwxzvdkx40kzj2gka1yi85ipppjdkxah4mscwfhlryrnk"; })
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAIDENC2G1.pem"; sha256 = "1z2qkyhgjvri13bvi06ynkb7mjmpcznmc9yw8chx1lnwc3cxa7kf"; })
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAIDENC3G1.pem"; sha256 = "0smdjjvz95n652cb45yhzdb2lr83zg52najgbzf6lm3w71f8mv7f"; })
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCACOMPC2G1.pem"; sha256 = "0rn57zv1ry9vj4p2248mxmafmqqmdhbrfx1plszrxsphshbk2hfz"; })
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCACOMPC3G1.pem"; sha256 = "0w88qaqhwxzvdkx40kzj2gka1yi85ipppjdkxah4mscwfhlryrnk"; })
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAIDENC2G1.pem"; sha256 = "1z2qkyhgjvri13bvi06ynkb7mjmpcznmc9yw8chx1lnwc3cxa7kf"; })
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAIDENC3G1.pem"; sha256 = "0smdjjvz95n652cb45yhzdb2lr83zg52najgbzf6lm3w71f8mv7f"; })
+    (pkgs.writeText "minio.cert" ''
+      -----BEGIN CERTIFICATE-----
+      MIIDFDCCAfygAwIBAgIQBEKYm9VmbR6T/XNLP2P5kDANBgkqhkiG9w0BAQsFADAS
+      MRAwDgYDVQQKEwdBY21lIENvMB4XDTE4MDIxNDEyNTk1OVoXDTE5MDIxNDEyNTk1
+      OVowEjEQMA4GA1UEChMHQWNtZSBDbzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC
+      AQoCggEBAMmRGUTMDxOaoEZ3osG1ZpGj4enHl6ToWaoCXvRXvI6RB/99QOFlwLdL
+      8lGjIbXyovNkH686pVsfgCTOLRGzftWHmWgfmaSUv0TToBW8F9DN4ww9YgiLZjvV
+      YZunRyp1n0x9OrBXMs7xEBBa4q0AG1IvlRJTrd7CW519FlVq7T95LLB7P6t6K54C
+      ksG4kEzXLRPD/FMdU7LWbhWnQSOxPMCq8erTv3kW3A3Y9hSAKOFQKQHH/3O2HDrM
+      CbK5ldNklswg2rIHxx7kg1fteLD1lVCNPfCMfuwlLUaMeoRZ03HDof8wFlRz3pzw
+      hQRWPvfLfRvFCZ0LFNvfgAqXtmG/ywUCAwEAAaNmMGQwDgYDVR0PAQH/BAQDAgKk
+      MBMGA1UdJQQMMAoGCCsGAQUFBwMBMA8GA1UdEwEB/wQFMAMBAf8wLAYDVR0RBCUw
+      I4IJbG9jYWxob3N0ggZoZWxpb3OCCGhlbGlvcy5yhwR/AAABMA0GCSqGSIb3DQEB
+      CwUAA4IBAQBzrPb3NmAn60awoJG3d4BystaotaFKsO3iAnP4Lfve1bhKRELIjJ30
+      hX/mRYkEVRbfwKRgkkLab4zpJ/abjb3DjFNo8E4QPNeCqS+8xxeBOf7x61Kg/0Ox
+      jRQ95fTATyItiChwNkoxYjVIwosqxBVsbe3KxwhkmKPQ6wH/nvr6URX/IGUz2qWY
+      EqHdjsop83u4Rjn3C0u46U0P+W4U5IFiLfcE3RzFFYh67ko5YEhkyXP+tBNSgrTM
+      zFisVoQZdXpMCWWxBVWulB4FvvTx3jKUPRZVOrfexBfY4TA/PyhXLoz7FeEK9n2a
+      qFkrxy+GrHBXfSRZgCaHQFdKorg2fwwa
+      -----END CERTIFICATE-----
+    '')
   ];
 
   lass.screenlock.command = "${pkgs.i3lock}/bin/i3lock -i /home/lass/lock.png -t -f";
