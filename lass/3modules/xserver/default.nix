@@ -33,6 +33,11 @@ let
         XMONAD_STARTUP_HOOK = pkgs.writeDash "xmonad-startup-hook" ''
           ${pkgs.xorg.xhost}/bin/xhost +LOCAL: &
           ${xcfg.displayManager.sessionCommands}
+          if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+            exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" ""
+          fi
+          export DBUS_SESSION_BUS_ADDRESS
+          ${config.systemd.package}/bin/systemctl --user import-environment DISPLAY DBUS_SESSION_BUS_ADDRESS
           wait
         '';
 
@@ -74,6 +79,7 @@ let
           "-xkbdir ${pkgs.xkeyboard_config}/etc/X11/xkb"
           (optional (xcfg.dpi != null) "-dpi ${toString xcfg.dpi}")
         ];
+        User = user.name;
       };
     };
     krebs.xresources.resources.dpi = ''

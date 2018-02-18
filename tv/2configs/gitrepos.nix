@@ -128,11 +128,6 @@ let {
         repo = [ repo ];
         perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++
-      optional repo.public {
-        user = attrValues config.krebs.users;
-        repo = [ repo ];
-        perm = fetch;
-      } ++
       optional (repo.collaborators or [] != []) {
         user = repo.collaborators;
         repo = [ repo ];

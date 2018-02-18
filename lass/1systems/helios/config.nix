@@ -16,6 +16,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/virtualbox.nix>
     <stockholm/lass/2configs/dcso-dev.nix>
     <stockholm/lass/2configs/steam.nix>
+    <stockholm/lass/2configs/rtl-sdr.nix>
     { # automatic hardware detection
       boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
       boot.kernelModules = [ "kvm-intel" ];
@@ -149,11 +150,13 @@ with import <stockholm/lib>;
   lass.screenlock.command = "${pkgs.i3lock}/bin/i3lock -i /home/lass/lock.png -t -f";
 
   programs.adb.enable = true;
-  users.users.mainUser.extraGroups = [ "adbusers" ];
+  users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
 
   services.printing.drivers = [ pkgs.postscript-lexmark ];
 
   services.logind.extraConfig = ''
     HandleLidSwitch=ignore
   '';
+
+  virtualisation.docker.enable = true;
 }

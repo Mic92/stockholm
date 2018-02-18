@@ -41,6 +41,7 @@ in {
       lass-shodan.pubkey
       lass-icarus.pubkey
       lass-android.pubkey
+      lass-helios.pubkey
     ];
   };
 
