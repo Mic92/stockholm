@@ -32,7 +32,6 @@ rec {
     let
       domain = head domains;
     in {
-      services.phpfpm.phpPackage = pkgs.php56;
       services.nginx.virtualHosts."${domain}" = {
         enableACME = true;
         enableSSL = true;
