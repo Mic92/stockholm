@@ -10,6 +10,7 @@ in {
     ./livestream.nix
     ./dns-stuff.nix
     ./urxvt.nix
+    ./network-manager.nix
     {
       hardware.pulseaudio = {
         enable = true;
