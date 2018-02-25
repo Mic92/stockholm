@@ -21,11 +21,14 @@ let
   '';
 
   mailboxes = {
-    wireguard = [ "to:wireguard@lists.zx2c4" ];
     c-base = [ "to:c-base.org" ];
-    security = [ "to:seclists.org" "to:security" "to:bugtraq" ];
+    dezentrale = [ "to:dezentrale.space" ];
+    kaosstuff = [ "to:gearbest@lassul.us" "to:banggood@lassul.us" ];
     nix-devel = [ "to:nix-devel@googlegroups.com" ];
+    patreon = [ "to:patreon@lassul.us" ];
+    security = [ "to:seclists.org" "to:security" "to:bugtraq" ];
     shack = [ "to:shackspace.de" ];
+    wireguard = [ "to:wireguard@lists.zx2c4" ];
   };
 
   tag-mails = pkgs.writeDashBin "nm-init-tag" ''
