@@ -28,6 +28,11 @@ let
     shack = [ "to:shackspace.de" ];
   };
 
+  tag-mails = pkgs.writeDashBin "nm-init-tag" ''
+    ${pkgs.notmuch}/bin/notmuch new
+    ${concatMapStringsSep "\n" (i: ''${pkgs.notmuch}/bin/notmuch tag -inbox +${i.name} -- tag:inbox ${concatMapStringsSep " or " (f: "${f}") i.value}'') (mapAttrsToList nameValuePair mailboxes)}
+  '';
+
   muttrc = pkgs.writeText "muttrc" ''
     # gpg
     source ${pkgs.neomutt}/share/doc/mutt/samples/gpg.rc
@@ -80,10 +85,9 @@ let
       # V
     ''} %r |"
 
-    virtual-mailboxes "INBOX" "notmuch://?query=tag:inbox ${concatMapStringsSep " " (f: "and NOT ${f}") (flatten (attrValues mailboxes))}"
+    virtual-mailboxes "INBOX" "notmuch://?query=tag:inbox"
     virtual-mailboxes "Unread" "notmuch://?query=tag:unread"
-    ${concatMapStringsSep "\n" (i: ''${"  "}virtual-mailboxes "${i.name}" "notmuch://?query=${concatMapStringsSep " or " (f: "${f}") i.value}"'') (mapAttrsToList nameValuePair mailboxes)}
-    virtual-mailboxes "BOX" "notmuch://?query=${concatMapStringsSep " and " (f: "NOT ${f}") (flatten (attrValues mailboxes))}"
+    ${concatMapStringsSep "\n" (i: ''${"  "}virtual-mailboxes "${i.name}" "notmuch://?query=tag:${i.name}"'') (mapAttrsToList nameValuePair mailboxes)}
     virtual-mailboxes "TODO" "notmuch://?query=tag:TODO"
     virtual-mailboxes "Starred" "notmuch://?query=tag:*"
     virtual-mailboxes "Archive" "notmuch://?query=tag:archive"
@@ -163,5 +167,6 @@ in {
     mutt
     pkgs.much
     pkgs.notmuch
+    tag-mails
   ];
 }
