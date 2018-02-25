@@ -292,6 +292,16 @@ in {
     <stockholm/krebs/2configs/reaktor-krebs.nix>
     <stockholm/lass/2configs/dcso-dev.nix>
     {
+      users.users.jeschli = {
+        uid = genid "jeschli";
+        isNormalUser = true;
+        openssh.authorizedKeys.keys = with config.krebs.users; [
+          jeschli.pubkey
+          jeschli-bln.pubkey
+          jeschli-bolide.pubkey
+          jeschli-brauerei.pubkey
+        ];
+      };
       krebs.git.rules = [
         {
           user = with config.krebs.users; [
