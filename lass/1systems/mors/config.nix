@@ -31,6 +31,8 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/c-base.nix>
     <stockholm/lass/2configs/br.nix>
     <stockholm/lass/2configs/ableton.nix>
+    <stockholm/lass/2configs/dunst.nix>
+    <stockholm/lass/2configs/rtl-sdr.nix>
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
@@ -88,6 +90,10 @@ with import <stockholm/lib>;
       device = "/dev/mapper/pool-bku";
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
+    };
+    "/home/virtual" = {
+      device = "/dev/mapper/pool-virtual";
+      fsType = "ext4";
     };
   };
 
@@ -194,5 +200,6 @@ with import <stockholm/lib>;
 
   nix.package = pkgs.nixUnstable;
   programs.adb.enable = true;
-  users.users.mainUser.extraGroups = [ "adbusers" ];
+  users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
+  virtualisation.docker.enable = true;
 }

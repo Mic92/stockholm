@@ -551,6 +551,32 @@ with import <stockholm/lib>;
         };
       };
     };
+    dpdkm = {
+      ci = false;
+      external = true;
+      nets = rec {
+        retiolum = {
+          ip4.addr = "10.243.29.173";
+          ip6.addr = "42:4992:6a6d:900::1";
+          aliases = [ "dpdkm.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAuW31xGBdPMSS45KmsCX81yuTcDZv1z7wSpsGQiAw7RsApG0fbBDj
+            NvzWZaZpTTUueG7gtt7U9Gk8DhWYR1hNt8bLXxE5QlY+gxVjU8+caRvlv10Y9XYp
+            qZEr1n1O5R7jS1srvutPt74uiA8I3hBoeP5TXndu8tVcehjRWXPqJj4VCy9pT2gP
+            X880Z30cXm0jUIu9XKhzQU2UNaxbqRzhJTvFUG04M+0a9olsUoN7PnDV6MC5Dxzn
+            f0ZZZDgHkcx6vsSkN/C8Tik/UCXr3tS/VX6/3+PREz6Z3bPd2QfaWdowrlFQPeYa
+            bELPvuqYiq7zR/jw3vVsWX2e91goAfKH5LYKNmzJCj5yYq+knB7Wil3HgBn86zvL
+            Joj56VsuB8fQrrUxjrDetNgtdwci+yFeXkJouQRLM0r0W24liyCuBX4B6nqbj71T
+            B6rAMzhBbl1yixgf31EgiCYFSusk+jiT+hye5lAhes4gBW9GAWxGNU9zE4QeAc1w
+            tkPH/CxRIAeuPYNwmjvYI2eQH9UQkgSBa3/Kz7/KT9scbykbs8nhDHCXwT6oAp+n
+            dR5aHkuBrTQOCU3Xx5ZwU5A0T83oLExIeH8jR1h2mW1JoJDdO85dAOrIBHWnjLls
+            mqrJusBh2gbgvNqIrDaQ9J+o1vefw1QeSvcF71JjF1CEBUmTbUAp8KMCAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     xerxes = {
       cores = 2;
       nets = rec {
@@ -623,6 +649,10 @@ with import <stockholm/lib>;
     lass-xerxes = {
       mail = "lass@xerxes.r";
       pubkey = builtins.readFile ./ssh/xerxes.rsa;
+    };
+    lass-daedalus = {
+      mail = "lass@daedalus.r";
+      pubkey = builtins.readFile ./ssh/daedalus.rsa;
     };
     fritz = {
       pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCz34435NSXgj72YAOL4cIlRq/4yInKEyL9no+gymURoW5x1nkYpP0EK331e7UyQQSOdWOogRo6d7YHcFqNlYWv5xlYcHucIhgJwC4Zda1liVA+v7tSOJz2BjmFvOT3/qlcPS69f3zdLHZooz2C33uHX1FgGRXlxiA8dpqGnSr8o76QLZjuQkuDqr8reOspjO/RHCo2Moq0Xm5q9OgN1WLAZzupqt9A5lx567mRzYsRAr23pUxVN8T/tSCgDlPe4ktEjYX9CXLKfMyh9WuBVi+AuH4GFEWBT+AMpsHeF45w+w956x56mz0F5nYOQNK87gFr+Jr+mh2AF1ot2CxzrfTb fritz@scriptkiddiT540";

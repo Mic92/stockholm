@@ -292,11 +292,22 @@ in {
     <stockholm/krebs/2configs/reaktor-krebs.nix>
     <stockholm/lass/2configs/dcso-dev.nix>
     {
+      users.users.jeschli = {
+        uid = genid "jeschli";
+        isNormalUser = true;
+        openssh.authorizedKeys.keys = with config.krebs.users; [
+          jeschli.pubkey
+          jeschli-bln.pubkey
+          jeschli-bolide.pubkey
+          jeschli-brauerei.pubkey
+        ];
+      };
       krebs.git.rules = [
         {
           user = with config.krebs.users; [
             jeschli
             jeschli-bln
+            jeschli-bolide
             jeschli-brauerei
           ];
           repo = [ config.krebs.git.repos.stockholm ];
@@ -313,6 +324,18 @@ in {
     }
     <stockholm/lass/2configs/downloading.nix>
     <stockholm/lass/2configs/minecraft.nix>
+    {
+      services.taskserver = {
+        enable = true;
+        fqdn = "lassul.us";
+        listenHost = "::";
+        listenPort = 53589;
+        organisations.lass.users = [ "lass" "android" ];
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 53589"; target = "ACCEPT"; }
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;

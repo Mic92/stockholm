@@ -21,12 +21,20 @@ let
   '';
 
   mailboxes = {
-    wireguard = [ "wireguard@lists.zx2c4" ];
-    c-base = [ "c-base.org" ];
-    security = [ "seclists.org" "security" "bugtraq" ];
-    nix-devel = [ "nix-devel@googlegroups.com" ];
-    shack = [ "shackspace.de" ];
+    c-base = [ "to:c-base.org" ];
+    dezentrale = [ "to:dezentrale.space" ];
+    kaosstuff = [ "to:gearbest@lassul.us" "to:banggood@lassul.us" ];
+    nix-devel = [ "to:nix-devel@googlegroups.com" ];
+    patreon = [ "to:patreon@lassul.us" ];
+    security = [ "to:seclists.org" "to:security" "to:bugtraq" ];
+    shack = [ "to:shackspace.de" ];
+    wireguard = [ "to:wireguard@lists.zx2c4" ];
   };
+
+  tag-mails = pkgs.writeDashBin "nm-init-tag" ''
+    ${pkgs.notmuch}/bin/notmuch new
+    ${concatMapStringsSep "\n" (i: ''${pkgs.notmuch}/bin/notmuch tag -inbox +${i.name} -- tag:inbox ${concatMapStringsSep " or " (f: "${f}") i.value}'') (mapAttrsToList nameValuePair mailboxes)}
+  '';
 
   muttrc = pkgs.writeText "muttrc" ''
     # gpg
@@ -80,16 +88,15 @@ let
       # V
     ''} %r |"
 
-    virtual-mailboxes \
-      "Unread" "notmuch://?query=tag:unread"\
-      "INBOX" "notmuch://?query=tag:inbox ${concatMapStringsSep " " (f: "and NOT to:${f}") (flatten (attrValues mailboxes))}"\
-    ${concatMapStringsSep "\n" (i: ''${"  "}"${i.name}" "notmuch://?query=${concatMapStringsSep " or " (f: "to:${f}") i.value}"\'') (mapAttrsToList nameValuePair mailboxes)}
-      "BOX" "notmuch://?query=${concatMapStringsSep " and " (f: "NOT to:${f}") (flatten (attrValues mailboxes))}"\
-      "TODO" "notmuch://?query=tag:TODO"\
-      "Starred" "notmuch://?query=tag:*"\
-      "Archive" "notmuch://?query=tag:archive"\
-      "Sent" "notmuch://?query=tag:sent"\
-      "Junk" "notmuch://?query=tag:junk"
+    virtual-mailboxes "INBOX" "notmuch://?query=tag:inbox"
+    virtual-mailboxes "Unread" "notmuch://?query=tag:unread"
+    ${concatMapStringsSep "\n" (i: ''${"  "}virtual-mailboxes "${i.name}" "notmuch://?query=tag:${i.name}"'') (mapAttrsToList nameValuePair mailboxes)}
+    virtual-mailboxes "TODO" "notmuch://?query=tag:TODO"
+    virtual-mailboxes "Starred" "notmuch://?query=tag:*"
+    virtual-mailboxes "Archive" "notmuch://?query=tag:archive"
+    virtual-mailboxes "Sent" "notmuch://?query=tag:sent"
+    virtual-mailboxes "Junk" "notmuch://?query=tag:junk"
+    virtual-mailboxes "All" "notmuch://?query=*"
 
     tag-transforms "junk"     "k" \
                    "unread"   "u" \
@@ -163,5 +170,6 @@ in {
     mutt
     pkgs.much
     pkgs.notmuch
+    tag-mails
   ];
 }

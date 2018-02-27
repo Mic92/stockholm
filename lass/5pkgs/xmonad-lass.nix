@@ -23,6 +23,7 @@ import XMonad
 import qualified XMonad.StackSet as W
 import Control.Monad.Extra (whenJustM)
 import Data.List (isInfixOf)
+import Data.Monoid (Endo)
 import System.Environment (getArgs, lookupEnv)
 import System.Posix.Process (executeFile)
 import XMonad.Actions.CopyWindow (copy, kill1)
@@ -36,7 +37,7 @@ import XMonad.Hooks.FloatNext (floatNextHook)
 import XMonad.Hooks.ManageDocks (avoidStruts, ToggleStruts(ToggleStruts))
 import XMonad.Hooks.Place (placeHook, smart)
 import XMonad.Hooks.UrgencyHook (focusUrgent)
-import XMonad.Hooks.UrgencyHook (SpawnUrgencyHook(..), withUrgencyHook)
+import XMonad.Hooks.UrgencyHook (withUrgencyHook, UrgencyHook(..))
 import XMonad.Layout.FixedColumn (FixedColumn(..))
 import XMonad.Layout.Minimize (minimize, minimizeWindow, MinimizeMsg(RestoreNextMinimizedWin))
 import XMonad.Layout.NoBorders (smartBorders)
@@ -44,8 +45,19 @@ import XMonad.Layout.SimplestFloat (simplestFloat)
 import XMonad.Prompt (autoComplete, font, searchPredicate, XPConfig)
 import XMonad.Prompt.Window (windowPromptGoto, windowPromptBringCopy)
 import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.NamedWindows (getName)
+import XMonad.Util.Run (safeSpawn)
 
 import XMonad.Stockholm.Shutdown
+
+data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
+
+instance UrgencyHook LibNotifyUrgencyHook where
+    urgencyHook LibNotifyUrgencyHook w = do
+        name     <- getName w
+        Just idx <- fmap (W.findTag w) $ gets windowset
+
+        safeSpawn "${pkgs.libnotify}/bin/notify-send" [show name, "workspace " ++ idx]
 
 myTerm :: FilePath
 myTerm = "${pkgs.rxvt_unicode_with-plugins}/bin/urxvtc"
@@ -61,7 +73,7 @@ main = getArgs >>= \case
 main' :: IO ()
 main' = do
     xmonad $ ewmh
-        $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
+        $ withUrgencyHook LibNotifyUrgencyHook
         $ def
             { terminal           = myTerm
             , modMask            = mod4Mask
@@ -80,11 +92,12 @@ myLayoutHook = defLayout
   where
     defLayout = minimize $ ((avoidStruts $ Tall 1 (3/100) (1/2) ||| Full ||| Mirror (Tall 1 (3/100) (1/2))) ||| FixedColumn 2 80 80 1 ||| simplestFloat)
 
+floatHooks :: Query (Endo WindowSet)
 floatHooks = composeAll . concat $
     [ [ title =? t --> doFloat | t <- myTitleFloats]
     , [ className =? c --> doFloat | c <- myClassFloats ] ]
   where
-      myTitleFloats = [] -- for the KDE "open link" popup from konsole
+      myTitleFloats = []
       myClassFloats = ["Pinentry"] -- for gpg passphrase entry
 
 

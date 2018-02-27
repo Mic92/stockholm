@@ -59,6 +59,17 @@ with import <stockholm/lib>;
       { from = "coinexchange@lassul.us"; to = lass.mail; }
       { from = "verwaltung@lassul.us"; to = lass.mail; }
       { from = "gearbest@lassul.us"; to = lass.mail; }
+      { from = "binance@lassul.us"; to = lass.mail; }
+      { from = "bitfinex@lassul.us"; to = lass.mail; }
+      { from = "alternate@lassul.us"; to = lass.mail; }
+      { from = "redacted@lassul.us"; to = lass.mail; }
+      { from = "mytaxi@lassul.us"; to = lass.mail; }
+      { from = "pizza@lassul.us"; to = lass.mail; }
+      { from = "robinhood@lassul.us"; to = lass.mail; }
+      { from = "drivenow@lassul.us"; to = lass.mail; }
+      { from = "aws@lassul.us"; to = lass.mail; }
+      { from = "reddit@lassul.us"; to = lass.mail; }
+      { from = "banggood@lassul.us"; to = lass.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }

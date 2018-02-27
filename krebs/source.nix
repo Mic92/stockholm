@@ -18,7 +18,7 @@ in
       stockholm.file = toString <stockholm>;
       nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
-        ref = "2062ac5aa2dc0770322272e3d2b647cf431dd893"; # nixos-17.09 @ 2018-02-09
+        ref = "d09e425aea3e09b6cec5c7b05cc0603f6853748b"; # nixos-17.09 @ 2018-02-22
       };
     }
     override
