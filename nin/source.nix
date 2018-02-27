@@ -12,8 +12,5 @@ in
       nin = "/home/nin/secrets/${name}";
     };
     stockholm.file = toString <stockholm>;
-    nixpkgs.git = {
-      url = https://github.com/nixos/nixpkgs;
-      ref = "afe9649";
-    };
+    nixpkgs = (import <stockholm/krebs/source.nix> host).nixpkgs;
   }
