@@ -503,6 +503,7 @@ with import <stockholm/lib>;
           # ip6.addr = "42:5a02:2c30:c1b1:3f2e:7c19:2496:a732";
           aliases = [
             "wbob.r"
+            "hydra.wbob.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
