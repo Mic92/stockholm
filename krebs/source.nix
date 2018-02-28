@@ -4,6 +4,11 @@ host@{ name, secure ? false, override ? {} }: let
               then "buildbot"
               else "krebs";
   _file = <stockholm> + "/krebs/1systems/${name}/source.nix";
+  pkgs = import <nixpkgs> {
+    overlays = map import [
+      <stockholm/krebs/5pkgs>
+    ];
+  };
 in
   evalSource (toString _file) [
     {
@@ -16,6 +21,7 @@ in
         };
       };
       stockholm.file = toString <stockholm>;
+      stockholm-version.pipe = "${pkgs.stockholm}/bin/get-version";
       nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
         ref = "c831224528cd6bfd49bfc2c18b9c5d9015651077"; # nixos-17.09 @ 2018-02-15
