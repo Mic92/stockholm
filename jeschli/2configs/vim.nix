@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 
+with import <stockholm/lib>;
 let
   customPlugins.vim-javascript = pkgs.vimUtils.buildVimPlugin {
     name = "vim-javascript";
@@ -19,12 +20,16 @@ let
        sha256 = "1z3yhhbmbzfw68qjzyvpbmlyv2a1p814sy5q2knn04kcl30vx94a";
      };
    };
+
 in {
   environment.systemPackages = [
     (pkgs.vim_configurable.customize {
       name = "vim";
       vimrcConfig.customRC = let
         colorscheme = ''colorscheme molokai'';
+        highlightTrailingWhiteSpaces = ''
+          au Syntax * syn match Garbage containedin=ALL /\s\+$/
+        '';
         setStatements = ''
           set autowrite
           set clipboard=unnamedplus
@@ -40,6 +45,7 @@ in {
         remapStatements = ''
           imap jk <Esc>
           map gr :GoRun<Enter>         " Map gr to execute go run
+          map tt :GoTest<Enter>        " Map tt to execute go test
           map nf :NERDTreeToggle<CR>
           nnoremap <C-TAB> <c-w><c-w>
           nnoremap <S-TAB> :bnext<CR>
@@ -58,7 +64,6 @@ in {
           let g:go_list_type = "quickfix"
           let g:go_metalinter_autosave = 1
           let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
-          let g:syntastic_go_checkers = ['go', 'golint', 'errcheck']
           let g:go_snippet_case_type = "camelcase"
           let g:go_test_timeout = '10s'
           let g:jsx_ext_required = 0
@@ -71,11 +76,19 @@ in {
           let g:elm_format_autosave = 1
           let g:elm_syntastic_show_warnings = 1
         '';
-
+      in ''
+        ${colorscheme}
+        ${highlightTrailingWhiteSpaces}
+        ${remapStatements}
+        ${setStatements}
+        ${settingsForElm}
+        ${settingsForGo}
+        " dont expand tabs in go files and show it with four whitespaces.
+        autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+      '';
        vimrcConfig.vam.knownPlugins = pkgs.vimPlugins // customPlugins;
        vimrcConfig.vam.pluginDictionaries = [
-         {
-           names = [
+         { names = [
             "ctrlp"
             "easymotion"
             "molokai"
@@ -85,7 +98,6 @@ in {
             "Syntastic"
             "undotree"
             "elm-vim"
-            "youcompleteme"
            ];
          }
          { names = [ "vim-addon-nix" ]; ft_regex = "^nix\$"; }
@@ -95,4 +107,35 @@ in {
        ];
     })
   ];
+
+  # set up the directories up if they are not there.
+# Needs to be changed.
+#  vim = let
+#    dirs = {
+#      backupdir = "$HOME/.cache/vim/backup";
+#      swapdir   = "$HOME/.cache/vim/swap";
+#      undodir   = "$HOME/.cache/vim/undo";
+#    };
+#    files = {
+#      viminfo   = "$HOME/.cache/vim/info";
+#    };
+#
+#    mkdirs = let
+#      dirOf = s: let out = concatStringsSep "/" (init (splitString "/" s));
+#                 in assert out != ""; out;
+#      alldirs = attrValues dirs ++ map dirOf (attrValues files);
+#    in unique (sort lessThan alldirs);
+#  in
+#    pkgs.symlinkJoin {
+#      name = "vim";
+#      paths = [
+#        (pkgs.writeDashBin "vim" ''
+#          set -efu
+#          (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
+#          exec ${pkgs.vim}/bin/vim "$@"
+#        '')
+#        pkgs.vim
+#      ];
+#    };
+
 }

@@ -10,6 +10,7 @@ in {
     ./livestream.nix
     ./dns-stuff.nix
     ./urxvt.nix
+    ./network-manager.nix
     {
       hardware.pulseaudio = {
         enable = true;
@@ -53,6 +54,7 @@ in {
 
   time.timeZone = "Europe/Berlin";
 
+  programs.ssh.agentTimeout = "10m";
   programs.ssh.startAgent = true;
   services.openssh.forwardX11 = true;
 
@@ -120,13 +122,14 @@ in {
       name = "xmonad";
       start = ''
         ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
-        ${pkgs.coreutils}/bin/sleep infinity
+        ${pkgs.systemd}/bin/systemctl --user start xmonad
+        exec ${pkgs.coreutils}/bin/sleep infinity
       '';
     }];
   };
 
   systemd.user.services.xmonad = {
-    wantedBy = [ "graphical-session.target" ];
+    #wantedBy = [ "graphical-session.target" ];
     environment = {
       DISPLAY = ":${toString config.services.xserver.display}";
       RXVT_SOCKET = "%t/urxvtd-socket";

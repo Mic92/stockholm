@@ -1,3 +1,4 @@
+with import <stockholm/lib>;
 { pkgs, ... }:
 
 let
@@ -17,6 +18,22 @@ let
 
   mailcap = pkgs.writeText "mailcap" ''
     text/html; ${pkgs.elinks}/bin/elinks -dump ; copiousoutput;
+  '';
+
+  mailboxes = {
+    c-base = [ "to:c-base.org" ];
+    dezentrale = [ "to:dezentrale.space" ];
+    kaosstuff = [ "to:gearbest@lassul.us" "to:banggood@lassul.us" ];
+    nix-devel = [ "to:nix-devel@googlegroups.com" ];
+    patreon = [ "to:patreon@lassul.us" ];
+    security = [ "to:seclists.org" "to:security" "to:bugtraq" ];
+    shack = [ "to:shackspace.de" ];
+    wireguard = [ "to:wireguard@lists.zx2c4" ];
+  };
+
+  tag-mails = pkgs.writeDashBin "nm-init-tag" ''
+    ${pkgs.notmuch}/bin/notmuch new
+    ${concatMapStringsSep "\n" (i: ''${pkgs.notmuch}/bin/notmuch tag -inbox +${i.name} -- tag:inbox ${concatMapStringsSep " or " (f: "${f}") i.value}'') (mapAttrsToList nameValuePair mailboxes)}
   '';
 
   muttrc = pkgs.writeText "muttrc" ''
@@ -71,23 +88,15 @@ let
       # V
     ''} %r |"
 
-    virtual-mailboxes \
-        "Unread"    "notmuch://?query=tag:unread"\
-        "INBOX"     "notmuch://?query=tag:inbox \
-                     and NOT to:nix-devel\
-                     and NOT to:shackspace\
-                     and NOT to:security\
-                     and NOT to:c-base" \
-        "shack"     "notmuch://?query=to:shackspace"\
-        "c-base"    "notmuch://?query=to:c-base"\
-        "security"  "notmuch://?query=to:securityfocus or from:security-alert@hpe.com"\
-        "nix"       "notmuch://?query=to:nix-devel"\
-        "radio"     "notmuch://?query=to:radio or tag:radio"\
-        "TODO"      "notmuch://?query=tag:TODO"\
-        "Starred"   "notmuch://?query=tag:*"\
-        "Archive"   "notmuch://?query=tag:archive"\
-        "Sent"      "notmuch://?query=tag:sent"\
-        "Junk"      "notmuch://?query=tag:junk"
+    virtual-mailboxes "INBOX" "notmuch://?query=tag:inbox"
+    virtual-mailboxes "Unread" "notmuch://?query=tag:unread"
+    ${concatMapStringsSep "\n" (i: ''${"  "}virtual-mailboxes "${i.name}" "notmuch://?query=tag:${i.name}"'') (mapAttrsToList nameValuePair mailboxes)}
+    virtual-mailboxes "TODO" "notmuch://?query=tag:TODO"
+    virtual-mailboxes "Starred" "notmuch://?query=tag:*"
+    virtual-mailboxes "Archive" "notmuch://?query=tag:archive"
+    virtual-mailboxes "Sent" "notmuch://?query=tag:sent"
+    virtual-mailboxes "Junk" "notmuch://?query=tag:junk"
+    virtual-mailboxes "All" "notmuch://?query=*"
 
     tag-transforms "junk"     "k" \
                    "unread"   "u" \
@@ -161,5 +170,6 @@ in {
     mutt
     pkgs.much
     pkgs.notmuch
+    tag-mails
   ];
 }

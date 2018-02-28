@@ -4,6 +4,7 @@ with import <stockholm/lib>;
   imports = [
     ./vim.nix
     ./retiolum.nix
+    ./zsh.nix
     <stockholm/lass/2configs/security-workarounds.nix>
     {
       environment.variables = {
@@ -22,6 +23,9 @@ with import <stockholm/lib>;
     parallel
     proot
     populate
+
+  # aliases
+    (writeDashBin "irc" "ssh chat@enklave -t tmux a")
 
   #style
     most

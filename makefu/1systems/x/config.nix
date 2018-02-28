@@ -40,7 +40,7 @@ with import <stockholm/lib>;
       # Virtualization
       <stockholm/makefu/2configs/virtualisation/libvirt.nix>
       <stockholm/makefu/2configs/virtualisation/docker.nix>
-      <stockholm/makefu/2configs/virtualisation/virtualbox.nix>
+      # <stockholm/makefu/2configs/virtualisation/virtualbox.nix>
       {
         networking.firewall.allowedTCPPorts = [ 8080 ];
         networking.nat = {
@@ -59,9 +59,10 @@ with import <stockholm/lib>;
 
       # Hardware
       <stockholm/makefu/2configs/hw/tp-x230.nix>
-      <stockholm/makefu/2configs/hw/rtl8812au.nix>
-      <stockholm/makefu/2configs/hw/wwan.nix>
-      # <stockholm/makefu/2configs/hw/stk1160.nix>
+      # <stockholm/makefu/2configs/hw/tpm.nix>
+      # <stockholm/makefu/2configs/hw/rtl8812au.nix>
+      <stockholm/makefu/2configs/hw/network-manager.nix>
+      <stockholm/makefu/2configs/hw/stk1160.nix>
       # <stockholm/makefu/2configs/rad1o.nix>
 
       # Filesystem
@@ -77,16 +78,81 @@ with import <stockholm/lib>;
       # <stockholm/makefu/2configs/lanparty/lancache-dns.nix>
       # <stockholm/makefu/2configs/lanparty/samba.nix>
       # <stockholm/makefu/2configs/lanparty/mumble-server.nix>
+      # <stockholm/makefu/2configs/deployment/photostore.krebsco.de.nix>
+
+      {
+        networking.wireguard.interfaces.wg0 = {
+          ips = [ "10.244.0.2/24" ];
+          privateKeyFile = (toString <secrets>) + "/wireguard.key";
+          allowedIPsAsRoutes = true;
+          peers = [
+          {
+            # gum
+            endpoint = "${config.krebs.hosts.gum.nets.internet.ip4.addr}:51820";
+            allowedIPs = [ "10.244.0.0/24" ];
+            publicKey = "yAKvxTvcEVdn+MeKsmptZkR3XSEue+wSyLxwcjBYxxo=";
+          }
+          #{
+          #  # vbob
+          #  allowedIPs = [ "10.244.0.3/32" ];
+          #  publicKey = "Lju7EsCu1OWXhkhdNR7c/uiN60nr0TUPHQ+s8ULPQTw=";
+          #}
+          ];
+        };
+      }
+      { # bluetooth+pulse config
+        # for blueman-applet
+        users.users.makefu.packages = [
+          pkgs.blueman
+        ];
+        hardware.pulseaudio = {
+          enable = true;
+          package = pkgs.pulseaudioFull;
+          # systemWide = true;
+          support32Bit = true;
+          configFile = pkgs.writeText "default.pa" ''
+            load-module module-udev-detect
+            load-module module-bluetooth-policy
+            load-module module-bluetooth-discover
+            load-module module-native-protocol-unix
+            load-module module-always-sink
+            load-module module-console-kit
+            load-module module-systemd-login
+            load-module module-intended-roles
+            load-module module-position-event-sounds
+            load-module module-filter-heuristics
+            load-module module-filter-apply
+            load-module module-switch-on-connect
+            '';
+        };
+
+        # presumably a2dp Sink
+        # Enable profile:
+        ## pacmd set-card-profile "$(pactl list cards short | egrep -o bluez_card[[:alnum:]._]+)" a2dp_sink
+        hardware.bluetooth.extraConfig = '';
+          [general]
+          Enable=Source,Sink,Media,Socket
+        '';
+
+        # connect via https://nixos.wiki/wiki/Bluetooth#Using_Bluetooth_headsets_with_PulseAudio
+        hardware.bluetooth.enable = true;
+      }
+      { # auto-mounting
+        services.udisks2.enable = true;
+        services.devmon.enable = true;
+        # services.gnome3.gvfs.enable = true;
+        users.users.makefu.packages = with pkgs;[
+          gvfs pcmanfm lxmenu-data
+        ];
+        environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gvfs}/lib/gio/modules" ];
+      }
 
     ];
 
   makefu.server.primary-itf = "wlp3s0";
   makefu.full-populate = true;
-  makefu.umts.apn = "web.vodafone.de";
 
   nixpkgs.config.allowUnfree = true;
-
-
 
   # configure pulseAudio to provide a HDMI sink as well
   networking.firewall.enable = true;
@@ -99,11 +165,15 @@ with import <stockholm/lib>;
   krebs.tinc.retiolum.connectTo = [ "omo" "gum" "prism" ];
 
   networking.extraHosts = ''
-    192.168.1.11 omo.local
+    192.168.1.11  omo.local
   '';
   # hard dependency because otherwise the device will not be unlocked
   boot.initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; allowDiscards=true; }];
 
   nix.package = pkgs.nixUnstable;
   environment.systemPackages = [ pkgs.passwdqc-utils pkgs.nixUnstable ];
+  nixpkgs.overlays = [ (import <python/overlay.nix>) ];
+
+  # environment.variables = { GOROOT = [ "${pkgs.go.out}/share/go" ]; };
+
 }

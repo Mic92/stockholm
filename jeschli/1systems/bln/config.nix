@@ -3,15 +3,17 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, lib, pkgs, ... }:
-
+# bln config file
 {
   imports =
     [ # Include the results of the hardware scan.
       <stockholm/jeschli>
+      <stockholm/jeschli/2configs/virtualbox.nix>
+      <stockholm/jeschli/2configs/urxvt.nix>
       ./hardware-configuration.nix
       # ./dcso-vpn.nix
     ];
-
+  jeschliFontSize = 20;
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
@@ -35,7 +37,15 @@
       allowDiscards = true;
     }
   ];
-
+  environment.shellAliases = {
+    n = "nix-shell";
+    gd = "cd /home/markus/go/src/gitlab.dcso.lolcat";
+    gh = "cd /home/markus/go/src/github.com";
+    stocki = pkgs.writeDash "deploy" ''
+      cd ~/stockholm
+      LOGNAME=jeschli exec nix-shell -I stockholm="$PWD" --run 'deploy  --system="bln"'
+    '';
+  };
   networking.hostName = lib.mkForce "BLN02NB0154"; # Define your hostname.
   networking.networkmanager.enable = true;
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -54,13 +64,9 @@
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   nixpkgs.config.allowUnfree = true;
-  environment.shellAliases = { 
-    n = "nix-shell"; 
-    gd = "cd /home/markus/go/src/gitlab.dcso.lolcat"; 
-    gh = "cd /home/markus/go/src/github.com"; 
-  };
   environment.variables = { GOROOT= [ "${pkgs.go.out}/share/go" ]; };
   environment.systemPackages = with pkgs; [
+    termite
   # system helper
     ag
     copyq
@@ -85,6 +91,7 @@
     chromium
     google-chrome
   # programming languages
+    elmPackages.elm
     go
     gcc
     ghc

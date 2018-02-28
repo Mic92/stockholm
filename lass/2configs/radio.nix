@@ -118,6 +118,7 @@ in {
       if test $(timeLeft) -le $LIMIT; then
         ${add_random}/bin/add_random
       fi
+      ${pkgs.mpc_cli}/bin/mpc play > /dev/null
     '';
   in {
     description = "radio playlist autoadder";

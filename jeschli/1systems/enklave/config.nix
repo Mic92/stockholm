@@ -4,6 +4,7 @@
   imports = [
     <stockholm/jeschli>
     <stockholm/jeschli/2configs/retiolum.nix>
+    <stockholm/jeschli/2configs/IM.nix>
     <stockholm/jeschli/2configs/os-templates/CentOS-7-64bit.nix>
     {
       networking.dhcpcd.allowInterfaces = [
@@ -38,6 +39,16 @@
           ];
         };
       };
+    }
+    {
+      services.taskserver = {
+        enable = true;
+        fqdn = "enklave.r";
+        listenHost = "::";
+        listenPort = 53589;
+        organisations.lass.users = [ "jeschli" ];
+      };
+      networking.firewall.allowedTCPPorts = [ 53589 ];
     }
   ];
 
