@@ -42,6 +42,9 @@ let {
     kirk = {
       cgit.desc = "IRC tools";
     };
+    kops = {
+      cgit.desc = "deployment tools";
+    };
     load-env = {};
     loldns = {
       cgit.desc = "toy DNS server";
