@@ -255,6 +255,14 @@ rec {
         default = null;
         type = nullOr source-types.pass;
       };
+      pipe = mkOption {
+        apply = x:
+          if absolute-pathname.check x
+            then { command = x; }
+            else x;
+        default = null;
+        type = nullOr (either absolute-pathname source-types.pipe);
+      };
       symlink = mkOption {
         type = nullOr (either pathname source-types.symlink);
         default = null;
@@ -291,6 +299,13 @@ rec {
         };
         name = mkOption {
           type = pathname; # TODO relative-pathname
+        };
+      };
+    };
+    pipe = submodule {
+      options = {
+        command = mkOption {
+          type = absolute-pathname;
         };
       };
     };
