@@ -143,12 +143,21 @@ myKeyMap =
 
     , ("M4-d", floatNext True >> spawn "${pkgs.copyq}/bin/copyq show")
 
+    , ("M4-<F4>", spawn "${pkgs.writeDash "nm-dmenu" ''
+      export PATH=$PATH:${pkgs.dmenu}/bin:${pkgs.networkmanagerapplet}/bin
+      exec ${pkgs.networkmanager_dmenu}/bin/networkmanager_dmenu "$@"
+    ''}")
+
     , ("M4-<F5>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 1")
     , ("M4-<F6>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 10")
     , ("M4-<F7>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 33")
     , ("M4-<F8>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 100")
 
     , ("<Pause>", spawn "${pkgs.xcalib}/bin/xcalib -invert -alter")
+
+    --, ("M4-w", screenWorkspace 0 >>= (windows . W.greedyView))
+    --, ("M4-e", screenWorkspace 1 >>= (windows . W.greedyView))
+    --, ("M4-r", screenWorkspace 2 >>= (windows . W.greedyView))
     ]
 
 forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()

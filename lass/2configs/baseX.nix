@@ -2,6 +2,7 @@
 with import <stockholm/lib>;
 let
   user = config.krebs.build.user;
+  xmonad-lass = pkgs.callPackage <stockholm/lass/5pkgs/custom/xmonad-lass> { inherit config; };
 in {
   imports = [
     ./mpv.nix
@@ -84,7 +85,6 @@ in {
     powertop
     push
     rxvt_unicode_with-plugins
-    screengrab
     slock
     sxiv
     timewarrior
@@ -137,8 +137,8 @@ in {
     };
     serviceConfig = {
       SyslogIdentifier = "xmonad";
-      ExecStart = "${pkgs.xmonad-lass}/bin/xmonad";
-      ExecStop = "${pkgs.xmonad-lass}/bin/xmonad --shutdown";
+      ExecStart = "${xmonad-lass}/bin/xmonad";
+      ExecStop = "${xmonad-lass}/bin/xmonad --shutdown";
     };
     restartIfChanged = false;
   };
