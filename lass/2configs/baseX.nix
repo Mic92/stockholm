@@ -99,6 +99,7 @@ in {
     zathura
 
     cabal2nix
+    xephyrify
   ];
 
   fonts.fonts = with pkgs; [
@@ -129,7 +130,6 @@ in {
   };
 
   systemd.user.services.xmonad = {
-    #wantedBy = [ "graphical-session.target" ];
     environment = {
       DISPLAY = ":${toString config.services.xserver.display}";
       RXVT_SOCKET = "%t/urxvtd-socket";
