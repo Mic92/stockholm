@@ -22,18 +22,43 @@ let
 
   mailboxes = {
     c-base = [ "to:c-base.org" ];
+    coins = [
+      "to:btce@lassul.us"
+      "to:coinbase@lassul.us"
+      "to:polo@lassul.us"
+      "to:bitwala@lassul.us"
+      "to:payeer@lassul.us"
+      "to:gatehub@lassul.us"
+      "to:bitfinex@lassul.us"
+      "to:binance@lassul.us"
+      "to:bitcoin.de@lassul.us"
+      "to:robinhood@lassul.us"
+    ];
     dezentrale = [ "to:dezentrale.space" ];
-    kaosstuff = [ "to:gearbest@lassul.us" "to:banggood@lassul.us" ];
+    dhl = [ "to:dhl@lassul.us" ];
+    github = [ "to:github@lassul.us" ];
+    gmail = [ "to:gmail@lassul.us" "to:lassulus@gmail.com" "lassulus@googlemail.com" ];
+    kaosstuff = [ "to:gearbest@lassul.us" "to:banggood@lassul.us" "to:tomtop@lassul.us" ];
     nix-devel = [ "to:nix-devel@googlegroups.com" ];
     patreon = [ "to:patreon@lassul.us" ];
-    security = [ "to:seclists.org" "to:security" "to:bugtraq" ];
+    paypal = [ "to:paypal@lassul.us" ];
+    ptl = [ "to:ptl@posttenebraslab.ch" ];
+    retiolum = [ "to:lass@mors.r" ];
+    security = [ "to:seclists.org" "to:bugtraq" "to:securityfocus@lassul.us" ];
     shack = [ "to:shackspace.de" ];
+    steam = [ "to:steam@lassul.us" ];
+    tinc = [ "to:tinc@tinc-vpn.org" "to:tinc-devel@tinc-vpn.org" ];
     wireguard = [ "to:wireguard@lists.zx2c4" ];
+    zzz = [ "to:pizza@lassul.us" "to:spam@krebsco.de" ];
   };
 
-  tag-mails = pkgs.writeDashBin "nm-init-tag" ''
+  tag-new-mails = pkgs.writeDashBin "nm-tag-init" ''
     ${pkgs.notmuch}/bin/notmuch new
     ${concatMapStringsSep "\n" (i: ''${pkgs.notmuch}/bin/notmuch tag -inbox +${i.name} -- tag:inbox ${concatMapStringsSep " or " (f: "${f}") i.value}'') (mapAttrsToList nameValuePair mailboxes)}
+  '';
+
+  tag-old-mails = pkgs.writeDashBin "nm-tag-old" ''
+    ${concatMapStringsSep "\n" (i: ''${pkgs.notmuch}/bin/notmuch tag -inbox -archive +${i.name} -- ${concatMapStringsSep " or " (f: "${f}") i.value}'') (mapAttrsToList nameValuePair mailboxes)}
   '';
 
   muttrc = pkgs.writeText "muttrc" ''
@@ -170,6 +195,7 @@ in {
     mutt
     pkgs.much
     pkgs.notmuch
-    tag-mails
+    tag-new-mails
+    tag-old-mails
   ];
 }
