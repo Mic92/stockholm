@@ -17,5 +17,6 @@ in
       nin = "/home/nin/secrets/${name}";
     };
     stockholm.file = toString <stockholm>;
+    stockholm-version.pipe = "${pkgs.stockholm}/bin/get-version";
     nixpkgs = (import <stockholm/krebs/source.nix> host).nixpkgs;
   }
