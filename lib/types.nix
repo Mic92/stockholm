@@ -2,7 +2,7 @@
 
 let
   inherit (lib)
-    all any concatMapStringsSep concatStringsSep const filter flip
+    all any attrNames concatMapStringsSep concatStringsSep const filter flip
     genid hasSuffix head isInt isString length mergeOneOption mkOption
     mkOptionType optional optionalAttrs optionals range splitString
     stringLength substring test testString typeOf;
@@ -231,90 +231,93 @@ rec {
   source = submodule ({ config, ... }: {
     options = {
       type = let
-        types = [
-          "file"
-          "git"
-          "pass"
-          "symlink"
-        ];
+        known-types = attrNames source-types;
+        type-candidates = filter (k: config.${k} != null) known-types;
       in mkOption {
-        type = enum types;
-        default = let
-          cands = filter (k: config.${k} != null) types;
-        in
-          if length cands == 1
-            then head cands
-            else throw "cannot determine type";
+        default = if length type-candidates == 1
+                    then head type-candidates
+                    else throw "cannot determine type";
+        type = enum known-types;
       };
-      file = let
-        file-path = (file-source.getSubOptions "FIXME").path.type;
-      in mkOption {
-        type = nullOr (either file-source file-path);
-        default = null;
+      file = mkOption {
         apply = x:
-          if file-path.check x
+          if absolute-pathname.check x
             then { path = x; }
             else x;
+        default = null;
+        type = nullOr (either absolute-pathname source-types.file);
       };
       git = mkOption {
-        type = nullOr git-source;
         default = null;
+        type = nullOr source-types.git;
       };
       pass = mkOption {
-        type = nullOr pass-source;
         default = null;
+        type = nullOr source-types.pass;
       };
-      symlink = let
-        symlink-target = (symlink-source.getSubOptions "FIXME").target.type;
-      in mkOption {
-        type = nullOr (either symlink-source symlink-target);
+      pipe = mkOption {
+        apply = x:
+          if absolute-pathname.check x
+            then { command = x; }
+            else x;
+        default = null;
+        type = nullOr (either absolute-pathname source-types.pipe);
+      };
+      symlink = mkOption {
+        type = nullOr (either pathname source-types.symlink);
         default = null;
         apply = x:
-          if symlink-target.check x
+          if pathname.check x
             then { target = x; }
             else x;
       };
     };
   });
 
-  file-source = submodule {
-    options = {
-      path = mkOption {
-        type = absolute-pathname;
+  source-types = {
+    file = submodule {
+      options = {
+        path = mkOption {
+          type = absolute-pathname;
+        };
       };
     };
-  };
-
-  git-source = submodule {
-    options = {
-      ref = mkOption {
-        type = str; # TODO types.git.ref
-      };
-      url = mkOption {
-        type = str; # TODO types.git.url
-      };
-    };
-  };
-
-  pass-source = submodule {
-    options = {
-      dir = mkOption {
-        type = absolute-pathname;
-      };
-      name = mkOption {
-        type = pathname; # TODO relative-pathname
+    git = submodule {
+      options = {
+        ref = mkOption {
+          type = str; # TODO types.git.ref
+        };
+        url = mkOption {
+          type = str; # TODO types.git.url
+        };
       };
     };
-  };
-
-  symlink-source = submodule {
-    options = {
-      target = mkOption {
-        type = pathname; # TODO relative-pathname
+    pass = submodule {
+      options = {
+        dir = mkOption {
+          type = absolute-pathname;
+        };
+        name = mkOption {
+          type = pathname; # TODO relative-pathname
+        };
       };
     };
-  };
+    pipe = submodule {
+      options = {
+        command = mkOption {
+          type = absolute-pathname;
+        };
+      };
+    };
+    symlink = submodule {
+      options = {
+        target = mkOption {
+          type = pathname; # TODO relative-pathname
+        };
+      };
+    };
 
+  };
 
   suffixed-str = suffs:
     mkOptionType {

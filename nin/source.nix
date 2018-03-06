@@ -4,6 +4,11 @@ host@{ name, secure ? false }: let
               then "buildbot"
               else "nin";
   _file = <stockholm> + "/nin/1systems/${name}/source.nix";
+  pkgs = import <nixpkgs> {
+    overlays = map import [
+      <stockholm/krebs/5pkgs>
+    ];
+  };
 in
   evalSource (toString _file) {
     nixos-config.symlink = "stockholm/nin/1systems/${name}/config.nix";
