@@ -11,6 +11,7 @@ with lib;
     <stockholm/nin>
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     #../2configs/copyq.nix
+    <stockholm/nin/2configs/ableton.nix>
     <stockholm/nin/2configs/games.nix>
     <stockholm/nin/2configs/git.nix>
     <stockholm/nin/2configs/retiolum.nix>
@@ -98,6 +99,9 @@ with lib;
     enable = true;
   };
 
+  services.xserver.displayManager.sessionCommands = ''
+    ${pkgs.xorg.xhost}/bin/xhost + local:
+  '';
 
   services.xserver.desktopManager.xfce = let
     xbindConfig = pkgs.writeText "xbindkeysrc" ''

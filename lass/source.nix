@@ -4,6 +4,11 @@ host@{ name, secure ? false, override ? {} }: let
               then "buildbot"
               else "lass";
   _file = <stockholm> + "/lass/1systems/${name}/source.nix";
+  pkgs = import <nixpkgs> {
+    overlays = map import [
+      <stockholm/krebs/5pkgs>
+    ];
+  };
 in
   evalSource (toString _file) [
     {
@@ -17,6 +22,7 @@ in
         };
       };
       stockholm.file = toString <stockholm>;
+      stockholm-version.pipe = "${pkgs.stockholm}/bin/get-version";
     }
     override
   ]
