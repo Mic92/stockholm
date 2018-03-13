@@ -18,10 +18,10 @@ let
             type = types.attrsOf (types.submodule ({ config, ... }: {
               options = {
                 origin = mkOption {
-                  type = types.git-source;
+                  type = types.source-types.git;
                 };
                 mirror = mkOption {
-                  type = types.git-source;
+                  type = types.source-types.git;
                 };
               };
               config = {
@@ -31,7 +31,7 @@ let
             }));
           };
           latest = mkOption {
-            type = types.nullOr types.git-source;
+            type = types.nullOr types.source-types.git;
             default = null;
           };
           timerConfig = mkOption {

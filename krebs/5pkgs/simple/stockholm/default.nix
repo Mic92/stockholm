@@ -216,7 +216,6 @@
   init.env = pkgs.writeText "init.env" /* sh */ ''
 
     export HOSTNAME="$(${pkgs.nettools}/bin/hostname)"
-    export STOCKHOLM_VERSION="''${STOCKHOLM_VERSION-$(${cmds.get-version})}"
 
     export quiet
     export system
@@ -251,7 +250,6 @@
             "$target_user@$target_host" -p "$target_port" \
             cd "$target_path/stockholm" \; \
             NIX_PATH=$(${pkgs.quote}/bin/quote "$target_path") \
-            STOCKHOLM_VERSION=$(${pkgs.quote}/bin/quote "$STOCKHOLM_VERSION") \
             nix-shell --run "$(${pkgs.quote}/bin/quote "
               ${lib.concatStringsSep " " (lib.mapAttrsToList
                 (name: opt: /* sh */

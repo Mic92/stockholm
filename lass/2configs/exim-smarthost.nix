@@ -11,7 +11,6 @@ with import <stockholm/lib>;
     primary_hostname = "lassul.us";
     sender_domains = [
       "lassul.us"
-      "aidsballs.de"
     ];
     relay_from_hosts = map (host: host.nets.retiolum.ip6.addr) [
       config.krebs.hosts.mors
@@ -70,6 +69,15 @@ with import <stockholm/lib>;
       { from = "aws@lassul.us"; to = lass.mail; }
       { from = "reddit@lassul.us"; to = lass.mail; }
       { from = "banggood@lassul.us"; to = lass.mail; }
+      { from = "immoscout@lassul.us"; to = lass.mail; }
+      { from = "gmail@lassul.us"; to = lass.mail; }
+      { from = "amazon@lassul.us"; to = lass.mail; }
+      { from = "humblebundle@lassul.us"; to = lass.mail; }
+      { from = "meetup@lassul.us"; to = lass.mail; }
+      { from = "gebfrei@lassul.us"; to = lass.mail; }
+      { from = "github@lassul.us"; to = lass.mail; }
+      { from = "ovh@lassul.us"; to = lass.mail; }
+      { from = "hetzner@lassul.us"; to = lass.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }
