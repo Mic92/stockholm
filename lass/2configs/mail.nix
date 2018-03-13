@@ -8,6 +8,16 @@ let
       logfile ~/.msmtp.log
     account prism
       host prism.r
+    account c-base
+      from lassulus@c-base.org
+      host c-mail.c-base.org
+      port 465
+      tls on
+      tls_starttls off
+      tls_fingerprint 8C:10:A6:AB:1F:82:C4:8F:B1:B4:22:D5:8B:8B:49:9B:59:0B:22:A4
+      auth on
+      user lassulus
+      passwordeval pass show c-base/pass
     account default: prism
   '';
 
