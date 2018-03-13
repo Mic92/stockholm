@@ -46,9 +46,11 @@ let
     ];
     dezentrale = [ "to:dezentrale.space" ];
     dhl = [ "to:dhl@lassul.us" ];
+    eloop = [ "to:eloop.org" ];
     github = [ "to:github@lassul.us" ];
     gmail = [ "to:gmail@lassul.us" "to:lassulus@gmail.com" "lassulus@googlemail.com" ];
     kaosstuff = [ "to:gearbest@lassul.us" "to:banggood@lassul.us" "to:tomtop@lassul.us" ];
+    lugs = [ "to:lugs@lug-s.org" ];
     nix-devel = [ "to:nix-devel@googlegroups.com" ];
     patreon = [ "to:patreon@lassul.us" ];
     paypal = [ "to:paypal@lassul.us" ];
