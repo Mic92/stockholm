@@ -89,7 +89,7 @@ with import <stockholm/lib>;
                           60 IN NS     ns16.ovh.net.
                           60 IN NS     dns16.ovh.net.
                           60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-                          60 IN TXT    v=spf1 mx -all
+                          60 IN TXT    v=spf1 mx a:lassul.us -all
           cgit            60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           io              60 IN NS     ions.lassul.us.
           ions            60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
