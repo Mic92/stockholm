@@ -170,31 +170,11 @@ with import <stockholm/lib>;
       export PATH=${makeBinPath [
         pkgs.bash
         pkgs.coreutils
-        pkgs.nix
-        (pkgs.writeDashBin "is-git-crypt-locked" ''
-          magic=$(dd status=none if="$1" skip=1 bs=1 count=8)
-          test "$magic" = GITCRYPT
-        '')
+        pkgs.nixUnstable
       ]}
       cd ~/stockholm
       export SYSTEM="$1"
-      if is-git-crypt-locked ~/secrets/ready; then
-        echo 'secrets are crypted' >&2
-        exit 23
-      else
-        exec nix-shell -I stockholm="$PWD" --run 'deploy --system="$SYSTEM"'
-      fi
-    '';
-    predeploy = pkgs.writeDash "predeploy" ''
-      set -eu
-      export PATH=${makeBinPath [
-        pkgs.bash
-        pkgs.coreutils
-        pkgs.nix
-      ]}
-      cd ~/stockholm
-      export SYSTEM="$1"
-      exec nix-shell -I stockholm="$PWD" --run 'test --system="$SYSTEM" --target="$SYSTEM/var/test/" --force-populate'
+      exec nix-shell -I stockholm="$PWD" --run 'deploy --system="$SYSTEM"'
     '';
   };
 
