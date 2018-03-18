@@ -168,8 +168,6 @@ with import <stockholm/lib>;
     '')
   ];
 
-  lass.screenlock.command = "${pkgs.i3lock}/bin/i3lock -i /home/lass/lock.png -t -f";
-
   programs.adb.enable = true;
   users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
 
