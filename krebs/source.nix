@@ -24,7 +24,7 @@ in
       stockholm-version.pipe = "${pkgs.stockholm}/bin/get-version";
       nixpkgs.git = {
         url = https://github.com/NixOS/nixpkgs;
-        ref = "c665fcca9e7be8cd06c1f3c5bbe2b00d4c8f2a92"; # nixos-17.09 @ 2018-03-18
+        ref = "2a32f6bc0ccfbe8f158a40b96d828fbba921fd54"; # nixos-18.03 # 2018-03-16
       };
     }
     override
