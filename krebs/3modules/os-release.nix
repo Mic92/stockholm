@@ -5,7 +5,11 @@ let
   nixos-version = "${nixos-version-id} (${config.system.nixosCodeName})";
   nixos-pretty-name = "NixOS ${nixos-version}";
 
-  stockholm-version-id = maybeEnv "STOCKHOLM_VERSION" "unknown";
+  stockholm-version-id = let
+    eval = tryEval (removeSuffix "\n" (readFile <stockholm-version>));
+  in
+    if eval.success then eval.value else "unknown";
+
   stockholm-version = "${stockholm-version-id}";
   stockholm-pretty-name = "stockholm ${stockholm-version}";
 

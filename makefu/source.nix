@@ -13,7 +13,13 @@ let
               then "buildbot"
               else "makefu";
   _file = <stockholm> + "/makefu/1systems/${name}/source.nix";
-  ref = "0f19bee"; # nixos-17.09 @ 2018-01-05
+  pkgs = import <nixpkgs> {
+    overlays = map import [
+      <stockholm/krebs/5pkgs>
+    ];
+  };
+  # TODO: automate updating of this ref + cherry-picks
+  ref = "51810e0"; # nixos-17.09 @ 2018-02-14
                    # + do_sqlite3 ruby: 55a952be5b5
                    # + signal: 0f19beef3
 
@@ -41,6 +47,7 @@ in
       };
 
       stockholm.file = toString <stockholm>;
+      stockholm-version.pipe = "${pkgs.stockholm}/bin/get-version";
     }
     (mkIf ( musnix ) {
       musnix.git = {

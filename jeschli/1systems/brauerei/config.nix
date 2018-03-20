@@ -79,6 +79,8 @@
     jetbrains.goland
   # document viewer
     zathura
+  # xorg
+    xorg.xbacklight
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

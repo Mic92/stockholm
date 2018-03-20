@@ -21,12 +21,45 @@ let
   '';
 
   mailboxes = {
-    wireguard = [ "wireguard@lists.zx2c4" ];
-    c-base = [ "c-base.org" ];
-    security = [ "seclists.org" "security" "bugtraq" ];
-    nix-devel = [ "nix-devel@googlegroups.com" ];
-    shack = [ "shackspace.de" ];
+    c-base = [ "to:c-base.org" ];
+    coins = [
+      "to:btce@lassul.us"
+      "to:coinbase@lassul.us"
+      "to:polo@lassul.us"
+      "to:bitwala@lassul.us"
+      "to:payeer@lassul.us"
+      "to:gatehub@lassul.us"
+      "to:bitfinex@lassul.us"
+      "to:binance@lassul.us"
+      "to:bitcoin.de@lassul.us"
+      "to:robinhood@lassul.us"
+    ];
+    dezentrale = [ "to:dezentrale.space" ];
+    dhl = [ "to:dhl@lassul.us" ];
+    github = [ "to:github@lassul.us" ];
+    gmail = [ "to:gmail@lassul.us" "to:lassulus@gmail.com" "lassulus@googlemail.com" ];
+    kaosstuff = [ "to:gearbest@lassul.us" "to:banggood@lassul.us" "to:tomtop@lassul.us" ];
+    nix-devel = [ "to:nix-devel@googlegroups.com" ];
+    patreon = [ "to:patreon@lassul.us" ];
+    paypal = [ "to:paypal@lassul.us" ];
+    ptl = [ "to:ptl@posttenebraslab.ch" ];
+    retiolum = [ "to:lass@mors.r" ];
+    security = [ "to:seclists.org" "to:bugtraq" "to:securityfocus@lassul.us" ];
+    shack = [ "to:shackspace.de" ];
+    steam = [ "to:steam@lassul.us" ];
+    tinc = [ "to:tinc@tinc-vpn.org" "to:tinc-devel@tinc-vpn.org" ];
+    wireguard = [ "to:wireguard@lists.zx2c4" ];
+    zzz = [ "to:pizza@lassul.us" "to:spam@krebsco.de" ];
   };
+
+  tag-new-mails = pkgs.writeDashBin "nm-tag-init" ''
+    ${pkgs.notmuch}/bin/notmuch new
+    ${concatMapStringsSep "\n" (i: ''${pkgs.notmuch}/bin/notmuch tag -inbox +${i.name} -- tag:inbox ${concatMapStringsSep " or " (f: "${f}") i.value}'') (mapAttrsToList nameValuePair mailboxes)}
+  '';
+
+  tag-old-mails = pkgs.writeDashBin "nm-tag-old" ''
+    ${concatMapStringsSep "\n" (i: ''${pkgs.notmuch}/bin/notmuch tag -inbox -archive +${i.name} -- ${concatMapStringsSep " or " (f: "${f}") i.value}'') (mapAttrsToList nameValuePair mailboxes)}
+  '';
 
   muttrc = pkgs.writeText "muttrc" ''
     # gpg
@@ -80,16 +113,15 @@ let
       # V
     ''} %r |"
 
-    virtual-mailboxes \
-      "Unread" "notmuch://?query=tag:unread"\
-      "INBOX" "notmuch://?query=tag:inbox ${concatMapStringsSep " " (f: "and NOT to:${f}") (flatten (attrValues mailboxes))}"\
-    ${concatMapStringsSep "\n" (i: ''${"  "}"${i.name}" "notmuch://?query=${concatMapStringsSep " or " (f: "to:${f}") i.value}"\'') (mapAttrsToList nameValuePair mailboxes)}
-      "BOX" "notmuch://?query=${concatMapStringsSep " and " (f: "NOT to:${f}") (flatten (attrValues mailboxes))}"\
-      "TODO" "notmuch://?query=tag:TODO"\
-      "Starred" "notmuch://?query=tag:*"\
-      "Archive" "notmuch://?query=tag:archive"\
-      "Sent" "notmuch://?query=tag:sent"\
-      "Junk" "notmuch://?query=tag:junk"
+    virtual-mailboxes "INBOX" "notmuch://?query=tag:inbox"
+    virtual-mailboxes "Unread" "notmuch://?query=tag:unread"
+    ${concatMapStringsSep "\n" (i: ''${"  "}virtual-mailboxes "${i.name}" "notmuch://?query=tag:${i.name}"'') (mapAttrsToList nameValuePair mailboxes)}
+    virtual-mailboxes "TODO" "notmuch://?query=tag:TODO"
+    virtual-mailboxes "Starred" "notmuch://?query=tag:*"
+    virtual-mailboxes "Archive" "notmuch://?query=tag:archive"
+    virtual-mailboxes "Sent" "notmuch://?query=tag:sent"
+    virtual-mailboxes "Junk" "notmuch://?query=tag:junk"
+    virtual-mailboxes "All" "notmuch://?query=*"
 
     tag-transforms "junk"     "k" \
                    "unread"   "u" \
@@ -163,5 +195,7 @@ in {
     mutt
     pkgs.much
     pkgs.notmuch
+    tag-new-mails
+    tag-old-mails
   ];
 }

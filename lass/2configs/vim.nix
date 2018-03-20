@@ -6,6 +6,9 @@ let
     environment.systemPackages = [
       (hiPrio vim)
       pkgs.python35Packages.flake8
+      (pkgs.writeDashBin "govet" ''
+        go vet "$@"
+      '')
     ];
 
     environment.etc.vimrc.source = vimrc;
@@ -67,6 +70,9 @@ let
     "Syntastic config
     let g:syntastic_python_checkers=['flake8']
     let g:syntastic_python_flake8_post_args='--ignore=E501'
+
+    let g:go_metalinter_autosave = 1
+    let g:go_metalinter_deadline = "10s"
 
     nmap <esc>q :buffer 
     nmap <M-q> :buffer 

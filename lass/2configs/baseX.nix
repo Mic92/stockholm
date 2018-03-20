@@ -2,6 +2,7 @@
 with import <stockholm/lib>;
 let
   user = config.krebs.build.user;
+  xmonad-lass = pkgs.callPackage <stockholm/lass/5pkgs/custom/xmonad-lass> { inherit config; };
 in {
   imports = [
     ./mpv.nix
@@ -10,6 +11,7 @@ in {
     ./livestream.nix
     ./dns-stuff.nix
     ./urxvt.nix
+    ./network-manager.nix
     {
       hardware.pulseaudio = {
         enable = true;
@@ -83,7 +85,6 @@ in {
     powertop
     push
     rxvt_unicode_with-plugins
-    screengrab
     slock
     sxiv
     timewarrior
@@ -98,6 +99,7 @@ in {
     zathura
 
     cabal2nix
+    xephyrify
   ];
 
   fonts.fonts = with pkgs; [
@@ -121,13 +123,13 @@ in {
       name = "xmonad";
       start = ''
         ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
-        ${pkgs.coreutils}/bin/sleep infinity
+        ${pkgs.systemd}/bin/systemctl --user start xmonad
+        exec ${pkgs.coreutils}/bin/sleep infinity
       '';
     }];
   };
 
   systemd.user.services.xmonad = {
-    wantedBy = [ "graphical-session.target" ];
     environment = {
       DISPLAY = ":${toString config.services.xserver.display}";
       RXVT_SOCKET = "%t/urxvtd-socket";
@@ -135,8 +137,8 @@ in {
     };
     serviceConfig = {
       SyslogIdentifier = "xmonad";
-      ExecStart = "${pkgs.xmonad-lass}/bin/xmonad";
-      ExecStop = "${pkgs.xmonad-lass}/bin/xmonad --shutdown";
+      ExecStart = "${xmonad-lass}/bin/xmonad";
+      ExecStop = "${xmonad-lass}/bin/xmonad --shutdown";
     };
     restartIfChanged = false;
   };

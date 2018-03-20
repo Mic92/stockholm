@@ -6,6 +6,11 @@ with import <stockholm/lib>;
 }@host: let
   builder = if dummy_secrets then "buildbot" else "tv";
   _file = <stockholm> + "/tv/1systems/${name}/source.nix";
+  pkgs = import <nixpkgs> {
+    overlays = map import [
+      <stockholm/krebs/5pkgs>
+    ];
+  };
 in
   evalSource (toString _file) [
     {
@@ -20,6 +25,7 @@ in
         tv = "/home/tv/secrets/${name}";
       };
       stockholm.file = toString <stockholm>;
+      stockholm-version.pipe = "${pkgs.stockholm}/bin/get-version";
     }
     (mkIf (builder == "tv") {
       secrets-common.file = "/home/tv/secrets/common";
