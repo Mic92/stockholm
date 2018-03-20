@@ -50,7 +50,12 @@ let
 (setq ring-bell-function 'ignore)   ; Disable super annoying audio bell
   '';
   dotEmacs = pkgs.writeText "dot-emacs" emacsFile;
-  myEmacs = pkgs.writeDashBin "my-emacs" ''emacs -q -l ${dotEmacs}'';
+  emacs = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
+    magit
+  ]));
+  myEmacs = pkgs.writeDashBin "my-emacs" ''
+    exec ${emacs}/bin/emacs -q -l ${dotEmacs} "$@"
+  '';
 in {
   environment.systemPackages = [
     myEmacs
