@@ -5,6 +5,7 @@
     <stockholm/jeschli>
     ./hardware-configuration.nix
     <stockholm/jeschli/2configs/urxvt.nix>
+    <stockholm/jeschli/2configs/emacs.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.brauerei;
