@@ -5,6 +5,7 @@
     [ <stockholm/jeschli>
       <stockholm/jeschli/2configs/virtualbox.nix>
       <stockholm/jeschli/2configs/urxvt.nix>
+      <stockholm/jeschli/2configs/emacs.nix>
       ./hardware-configuration.nix
     ];
 
