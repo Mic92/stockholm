@@ -8,6 +8,16 @@ let
       logfile ~/.msmtp.log
     account prism
       host prism.r
+    account c-base
+      from lassulus@c-base.org
+      host c-mail.c-base.org
+      port 465
+      tls on
+      tls_starttls off
+      tls_fingerprint 8C:10:A6:AB:1F:82:C4:8F:B1:B4:22:D5:8B:8B:49:9B:59:0B:22:A4
+      auth on
+      user lassulus
+      passwordeval pass show c-base/pass
     account default: prism
   '';
 
@@ -36,9 +46,11 @@ let
     ];
     dezentrale = [ "to:dezentrale.space" ];
     dhl = [ "to:dhl@lassul.us" ];
+    eloop = [ "to:eloop.org" ];
     github = [ "to:github@lassul.us" ];
     gmail = [ "to:gmail@lassul.us" "to:lassulus@gmail.com" "lassulus@googlemail.com" ];
     kaosstuff = [ "to:gearbest@lassul.us" "to:banggood@lassul.us" "to:tomtop@lassul.us" ];
+    lugs = [ "to:lugs@lug-s.org" ];
     nix-devel = [ "to:nix-devel@googlegroups.com" ];
     patreon = [ "to:patreon@lassul.us" ];
     paypal = [ "to:paypal@lassul.us" ];
@@ -65,7 +77,7 @@ let
     # gpg
     source ${pkgs.neomutt}/share/doc/mutt/samples/gpg.rc
     set pgp_use_gpg_agent = yes
-    set pgp_sign_as = 0x976A7E4D
+    set pgp_sign_as = 0xDC2A43EF4F11E854B44D599A89E82952976A7E4D
     set crypt_autosign = yes
     set crypt_replyencrypt = yes
     set crypt_verify_sig = yes

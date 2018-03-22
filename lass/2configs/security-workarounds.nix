@@ -5,6 +5,4 @@ with import <stockholm/lib>;
   boot.extraModprobeConfig = ''
     install dccp /run/current-system/sw/bin/false
   '';
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
 }
