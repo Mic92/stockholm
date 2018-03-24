@@ -47,7 +47,6 @@ let
   '';
   emacsFile = ''
     ${packageRepos}
-    ${evilMode}
     ${windowCosmetics}
     (custom-set-variables
      ;; custom-set-variables was added by Custom.
@@ -66,6 +65,7 @@ let
     epkgs.melpaStablePackages.magit
     epkgs.melpaPackages.mmm-mode
     epkgs.melpaPackages.nix-mode
+    epkgs.melpaPackages.go-mode
   ]);
   myEmacs = pkgs.writeDashBin "my-emacs" ''
     exec ${emacs}/bin/emacs -q -l ${dotEmacs} "$@"
