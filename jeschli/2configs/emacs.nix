@@ -46,30 +46,26 @@ let
       (setq org-agenda-files (quote ("~/projects/notes")))
     )
   '';
-  emacsFile = ''
+  recentFiles = ''
+    (recentf-mode 1)
+    (setq recentf-max-menu-items 25)
+    (global-set-key "\C-x\ \C-r" 'recentf-open-files)
+  '';
+  dotEmacs = pkgs.writeText "dot-emacs" ''
     ${packageRepos}
     ${windowCosmetics}
-    (custom-set-variables
-     ;; custom-set-variables was added by Custom.
-     ;; If you edit it by hand, you could mess it up, so be careful.
-     ;; Your init file should contain only one such instance.
-     ;; If there is more than one, they won't work right.
-     '(inhibit-startup-screen t)
-     '(org-agenda-files nil)
-     '(package-selected-packages
-       (quote
-        (smex ox-jira org-plus-contrib org-mime org-jira neotree molokai-theme let-alist helm-fuzzy-find go-guru go-autocomplete flymake-go exec-path-from-shell evil-org cl-lib-highlight bbdb atom-one-dark-theme))))
-     ${orgMode}
+    ${orgMode}
+    ${recentFiles}
   '';
-  dotEmacs = pkgs.writeText "dot-emacs" emacsFile;
-  emacs = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: [
+  emacsWithCustomPackages = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: [
     epkgs.melpaStablePackages.magit
     epkgs.melpaPackages.mmm-mode
     epkgs.melpaPackages.nix-mode
     epkgs.melpaPackages.go-mode
+    epkgs.melpaPackages.google-this
   ]);
   myEmacs = pkgs.writeDashBin "my-emacs" ''
-    exec ${emacs}/bin/emacs -q -l ${dotEmacs} "$@"
+    exec ${emacsWithCustomPackages}/bin/emacs -q -l ${dotEmacs} "$@"
   '';
 in {
   environment.systemPackages = [
