@@ -31,6 +31,7 @@ let
     (scroll-bar-mode -1)                ; Disable scroll bar
     (setq inhibit-startup-screen t)     ; Disable startup screen with graphics
     (setq-default indent-tabs-mode nil) ; Use spaces instead of tabs
+    (setq default-tab-width 2)          ; Two spaces is a tab
     (setq tab-width 2)                  ; Four spaces is a tab
     (setq visible-bell nil)             ; Disable annoying visual bell graphic
     (setq ring-bell-function 'ignore)   ; Disable super annoying audio bell
