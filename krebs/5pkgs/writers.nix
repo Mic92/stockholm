@@ -57,7 +57,7 @@ with import <stockholm/lib>;
       passAsFile = [ "text" ];
     } /* sh */ ''
       PATH=${makeBinPath (with pkgs; [
-        binutils
+        binutils-unwrapped
         coreutils
         gcc
       ])}
