@@ -9,7 +9,6 @@
   #
 
   cmds.deploy = pkgs.withGetopt {
-    diff = { default = /* sh */ "false"; switch = true; };
     force-populate = { default = /* sh */ "false"; switch = true; };
     quiet = { default = /* sh */ "false"; switch = true; };
     source_file = {
@@ -24,65 +23,6 @@
 
     . ${init.env}
     . ${init.proxy "deploy" opts}
-
-    if \test ${opts.diff.ref} = true; then
-
-      system_profile=/nix/var/nix/profiles/system
-      system_drv_cur=/etc/system.drv
-
-      system_drv_new=$(
-        ${pkgs.nix}/bin/nix-instantiate \
-            -Q \
-            -I "$target_path" \
-            -E '
-              (import <nixpkgs/nixos/lib/eval-config.nix> {
-                modules = [ <nixos-config> ];
-              }).config.system.build.toplevel
-            '
-      )
-
-      if \test -e "$system_drv_cur"; then
-
-        system_drv_cur_c=$(${pkgs.coreutils}/bin/readlink -f "$system_drv_cur")
-        system_drv_new_c=$(${pkgs.coreutils}/bin/readlink -f "$system_drv_new")
-
-        if \test "$system_drv_cur_c" = "$system_drv_new_c"; then
-          echo "$0: system up to date" >&2
-          exit 0
-        fi
-
-        system_drv_cur=$system_drv_cur_c \
-        system_drv_new=$system_drv_new_c \
-        ${pkgs.utillinux}/bin/script \
-            --command '
-              ${pkgs.haskellPackages.nix-diff}/bin/nix-diff \
-                  "$system_drv_cur" "$system_drv_new"
-            ' \
-            --quiet \
-            --return \
-            /dev/null
-
-        printf 'deploy? [N/y] ' >&2
-        read -r REPLY
-        if \test "$REPLY" != y; then
-          echo "$0: abort!" >&2
-          exit 1
-        fi
-      else
-        echo "$0: --${opts.diff.long} has no effect because "$system_drv_cur" doesn't exist" >&2
-      fi
-
-      new_system=$(${pkgs.nix}/bin/nix-store --realize "$system_drv_new")
-
-      ${pkgs.nix}/bin/nix-env -p "$system_profile" --set "$new_system"
-      PATH=${lib.makeBinPath [
-        pkgs.systemd
-      ]} \
-      "$system_profile"/bin/switch-to-configuration switch
-
-      ${pkgs.coreutils}/bin/ln -fns "$system_drv_new" "$system_drv_cur"
-      exit
-    fi
 
     # Use system's nixos-rebuild, which is not self-contained
     export PATH=/run/current-system/sw/bin
