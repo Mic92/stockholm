@@ -50,9 +50,15 @@ in {
       '';
       systemPackages = [ pkgs.exim ];
     };
-    security.wrappers = {
-      exim.source = "${pkgs.exim}/bin/exim";
-      sendmail.source = "${pkgs.exim}/bin/exim";
+    krebs.setuid = {
+      exim = {
+        filename = "${pkgs.exim}/bin/exim";
+        mode = "4111";
+      };
+      sendmail = {
+        filename = "${pkgs.exim}/bin/exim";
+        mode = "4111";
+      };
     };
     systemd.services.exim = {
       restartTriggers = [
