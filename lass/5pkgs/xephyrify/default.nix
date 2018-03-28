@@ -43,13 +43,20 @@ let
   };
 
 in writeDashBin "xephyrify" ''
-  NDISPLAY=:$(${coreutils}/bin/shuf -i 100-65536 -n 1)
+  NDISPLAY=''${NDISPLAY:-$(${coreutils}/bin/shuf -i 100-65536 -n 1)}
   echo "using DISPLAY $NDISPLAY"
-  ${xorg.xorgserver}/bin/Xephyr -br -ac -reset -terminate -resizeable $NDISPLAY &
+  ${xorg.xorgserver}/bin/Xephyr -br -ac -reset -terminate -resizeable -dpi 60 -nolisten local :$NDISPLAY &
+  if test -n $DROP_TO_USER; then
+    sleep 1
+    ls /tmp/.X11-unix/
+    id
+    ${coreutils}/bin/chgrp "$DROP_TO_USER" "/tmp/.X11-unix/X$NDISPLAY"
+    ${coreutils}/bin/chmod 770 "/tmp/.X11-unix/X$NDISPLAY"
+  fi
   XEPHYR_PID=$!
-  DISPLAY=$NDISPLAY ${minimalXmonad}/bin/xmonad &
+  DISPLAY=:$NDISPLAY ${xephyrify-xmonad}/bin/xmonad &
   XMONAD_PID=$!
-  DISPLAY=$NDISPLAY ${virtualgl}/bin/vglrun "$@"
+  DISPLAY=:$NDISPLAY ${virtualgl}/bin/vglrun "$@"
   kill $XMONAD_PID
   kill $XEPHYR_PID
 ''
