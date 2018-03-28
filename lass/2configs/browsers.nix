@@ -107,6 +107,7 @@ in {
         }));
       };
     }
+    ( createQuteUser "qb" [ "audio" ] 20 )
     ( createFirefoxUser "ff" [ "audio" ] 10 )
     ( createChromiumUser "cr" [ "audio" ] 9 )
     ( createChromiumUser "gm" [ "video" "audio" ] 8 )
