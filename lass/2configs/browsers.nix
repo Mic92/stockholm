@@ -21,57 +21,54 @@ let
     $BIN "$@"
   '';
 
-  createChromiumUser = name: extraGroups: precedence:
-    let
-      bin = pkgs.writeScriptBin name ''
-        /var/run/wrappers/bin/sudo -u ${name} -i ${pkgs.chromium}/bin/chromium $@
-      '';
-    in {
-      users.extraUsers.${name} = {
-        inherit name;
-        inherit extraGroups;
-        home = "/home/${name}";
-        uid = genid name;
-        useDefaultShell = true;
-        createHome = true;
+  createChromiumUser = name: groups: precedence:
+    {
+      lass.xjail.${name} = {
+        user = name;
+        script = pkgs.writeDash name ''
+          ${pkgs.chromium}/bin/chromium "$@"
+        '';
+        inherit groups;
       };
+      environment.systemPackages = [ config.lass.xjail-bins.${name} ];
       lass.browser.paths.${name} = {
-        path = bin;
+        path = config.lass.xjail-bins.${name};
         inherit precedence;
       };
-      security.sudo.extraConfig = ''
-        ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
-      '';
-      environment.systemPackages = [
-        bin
-      ];
     };
 
-  createFirefoxUser = name: extraGroups: precedence:
-    let
-      bin = pkgs.writeScriptBin name ''
-        /var/run/wrappers/bin/sudo -u ${name} -i ${pkgs.firefox-devedition-bin}/bin/firefox-devedition $@
-      '';
-    in {
-      users.extraUsers.${name} = {
-        inherit name;
-        inherit extraGroups;
-        home = "/home/${name}";
-        uid = genid name;
-        useDefaultShell = true;
-        createHome = true;
+  createFirefoxUser = name: groups: precedence:
+    {
+      lass.xjail.${name} = {
+        user = name;
+        script = pkgs.writeDash name ''
+          ${pkgs.firefox-devedition-bin}/bin/firefox-devedition "$@"
+        '';
+        inherit groups;
       };
+      environment.systemPackages = [ config.lass.xjail-bins.${name} ];
       lass.browser.paths.${name} = {
-        path = bin;
+        path = config.lass.xjail-bins.${name};
         inherit precedence;
       };
-      security.sudo.extraConfig = ''
-        ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
-      '';
-      environment.systemPackages = [
-        bin
-      ];
     };
+
+  createQuteUser = name: groups: precedence:
+    {
+      lass.xjail.${name} = {
+        user = name;
+        script = pkgs.writeDash name ''
+          ${pkgs.qutebrowser}/bin/qutebrowser "$@"
+        '';
+        inherit groups;
+      };
+      environment.systemPackages = [ config.lass.xjail-bins.${name} ];
+      lass.browser.paths.${name} = {
+        path = config.lass.xjail-bins.${name};
+        inherit precedence;
+      };
+    };
+
 
   #TODO: abstract this
 
