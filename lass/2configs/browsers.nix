@@ -108,11 +108,11 @@ in {
       };
     }
     ( createFirefoxUser "ff" [ "audio" ] 10 )
-    ( createChromiumUser "cr" [ "video" "audio" ] 9 )
+    ( createChromiumUser "cr" [ "audio" ] 9 )
     ( createChromiumUser "gm" [ "video" "audio" ] 8 )
-    ( createChromiumUser "wk" [ "video" "audio" ] 0 )
-    ( createChromiumUser "fb" [ "video" "audio" ] 0 )
-    ( createChromiumUser "com" [ "video" "audio" ] 0 )
+    ( createChromiumUser "wk" [ "audio" ] 0 )
+    ( createChromiumUser "fb" [ "audio" ] 0 )
+    ( createChromiumUser "com" [ "audio" ] 0 )
     ( createChromiumUser "fin" [] (-1) )
   ];
 }
