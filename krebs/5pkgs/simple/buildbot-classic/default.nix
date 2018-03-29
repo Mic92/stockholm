@@ -2,16 +2,15 @@
 
 python2Packages.buildPythonApplication rec {
   name = "buildbot-classic-${version}";
-  version = "0.8.14";
+  version = "0.8.15";
   namePrefix = "";
   patches = [];
 
   src = fetchFromGitHub {
     owner = "krebscode";
     repo = "buildbot-classic";
-    # rev = "v${version}";
-    rev = "843463911";
-    sha256 = "1ybl52ybjw5p09yik6bck9i1pvnvg94i0d32zqrwy67s77yx1mfd";
+    rev = version;
+    sha256 = "0hmmpqxs1i3nvwj9681yi0q3qz0xdcbbm0774lkn1ic5fg3c68fm";
   };
   postUnpack = "sourceRoot=\${sourceRoot}/master";
 
