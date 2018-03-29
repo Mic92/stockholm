@@ -2,7 +2,7 @@
 
 python2Packages.buildPythonApplication rec {
   name = "buildbot-classic-${version}";
-  version = "0.8.15";
+  version = "0.8.16";
   namePrefix = "";
   patches = [];
 
@@ -10,7 +10,7 @@ python2Packages.buildPythonApplication rec {
     owner = "krebscode";
     repo = "buildbot-classic";
     rev = version;
-    sha256 = "0hmmpqxs1i3nvwj9681yi0q3qz0xdcbbm0774lkn1ic5fg3c68fm";
+    sha256 = "0g686n6m0cjfyympl0ksansllx503gby3hx9gmc8hiyx6x5fkjha";
   };
   postUnpack = "sourceRoot=\${sourceRoot}/master";
 
