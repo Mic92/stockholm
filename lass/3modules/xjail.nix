@@ -1,33 +1,88 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 with import <stockholm/lib>;
 {
   options.lass.xjail = mkOption {
     type = types.attrsOf (types.submodule ({ config, ...}: {
       options = {
+        name = mkOption {
+          type = types.string;
+          default = config._module.args.name;
+        };
         user = mkOption {
           type = types.string;
-          default = "nobody";
+          default = config.name;
         };
         groups = mkOption {
           type = types.listOf types.str;
           default = [];
         };
-        name = mkOption {
+        from = mkOption {
           type = types.string;
-          default = config._module.args.name;
+          default = "lass";
         };
         display = mkOption {
           type = types.string;
           default = toString (genid_signed config._module.args.name);
         };
+        dpi = mkOption {
+          type = types.int;
+          default = 90;
+        };
+        extraXephyrArgs = mkOption {
+          type = types.str;
+          default = "";
+        };
+        extraVglrunArgs = mkOption {
+          type = types.str;
+          default = "";
+        };
         script = mkOption {
           type = types.path;
           default = pkgs.writeScript "echo_lol" "echo lol";
         };
-        from = mkOption {
+        wm = mkOption {
+          #TODO find type
           type = types.string;
-          default = "lass";
+          default = "${pkgs.writeHaskell "xephyrify-xmonad" {
+            executables.xmonad = {
+              extra-depends = [
+                "containers"
+                "unix"
+                "xmonad"
+              ];
+              text = /* haskell */ ''
+                module Main where
+                import XMonad
+                import Data.Monoid
+                import System.Posix.Process (executeFile)
+                import qualified Data.Map as Map
+
+                main :: IO ()
+                main = do
+                  xmonad def
+                    { workspaces = [ "1" ]
+                    , layoutHook = myLayoutHook
+                    , keys = myKeys
+                    , normalBorderColor  = "#000000"
+                    , focusedBorderColor = "#000000"
+                    , handleEventHook = myEventHook
+                    }
+
+                myEventHook :: Event -> X All
+
+                myEventHook (ConfigureEvent { ev_event_type = 22 }) = do
+                  spawn "${pkgs.xorg.xrandr}/bin/xrandr >/dev/null 2>&1"
+                  return (All True)
+
+                myEventHook _ = do
+                  return (All True)
+
+                myLayoutHook = Full
+                myKeys _ = Map.fromList []
+              '';
+            };
+          }}/bin/xmonad";
         };
       };
     }));
@@ -39,7 +94,42 @@ with import <stockholm/lib>;
   };
 
   # implementation
-  config = {
+  config = let
+    scripts = mapAttrs' (name: cfg:
+      let
+        newOrExisting = pkgs.writeDash "${cfg.name}-existing" ''
+          DISPLAY=:${cfg.display} ${pkgs.xorg.xrandr}/bin/xrandr
+          if test $? -eq 0; then
+            echo using existing xephyr
+            ${sudo_} "$@"
+          else
+            echo starting new xephyr
+            ${xephyr_} "$@"
+          fi
+        '';
+        xephyr_ = pkgs.writeDash "${cfg.name}-xephyr" ''
+          ${pkgs.xorg.xorgserver}/bin/Xephyr -br -ac -reset -terminate -resizeable -nolisten local -dpi ${toString cfg.dpi} ${cfg.extraXephyrArgs} :${cfg.display} &
+          XEPHYR_PID=$!
+          DISPLAY=:${cfg.display} ${cfg.wm} &
+          WM_PID=$!
+          ${sudo_} "$@"
+          ${pkgs.coreutils}/bin/kill $WM_PID
+          ${pkgs.coreutils}/bin/kill $XEPHYR_PID
+        '';
+        sudo_ = pkgs.writeDash "${cfg.name}-sudo" ''
+          /var/run/wrappers/bin/sudo -u ${cfg.name} -i ${vglrun_} "$@"
+        '';
+        vglrun_ = pkgs.writeDash "${cfg.name}-vglrun" ''
+          DISPLAY=:${cfg.display} ${pkgs.virtualgl}/bin/vglrun ${cfg.extraVglrunArgs} ${cfg.script} "$@"
+        '';
+      in nameValuePair name {
+        existing = newOrExisting;
+        xephyr = xephyr_;
+        sudo = sudo_;
+        vglrun = vglrun_;
+      }
+    ) config.lass.xjail;
+  in {
 
     users.users = mapAttrs' (_: cfg:
       nameValuePair cfg.name {
@@ -66,21 +156,8 @@ with import <stockholm/lib>;
     ) config.lass.xjail));
 
     lass.xjail-bins = mapAttrs' (name: cfg:
-      let
-        sudo-wrapper = pkgs.writeScript name ''
-          /var/run/wrappers/bin/sudo -u ${cfg.name} -i ${cfg.script} "$@"
-        '';
-      in nameValuePair name (pkgs.writeScriptBin cfg.name ''
-        export NDISPLAY=${cfg.display}
-        DISPLAY=:$NDISPLAY ${pkgs.xorg.xrandr}/bin/xrandr
-        if test $? -eq 0; then
-          echo xephyr already running
-          export DISPLAY=:$NDISPLAY
-          ${sudo-wrapper} "$@"
-        else
-          echo xephyr not running
-          DROP_TO_USER=${cfg.name} ${pkgs.xephyrify}/bin/xephyrify ${sudo-wrapper} "$@"
-        fi
+      nameValuePair name (pkgs.writeScriptBin cfg.name ''
+        ${scripts.${name}.existing} "$@"
       '')
     ) config.lass.xjail;
   };
