@@ -21,14 +21,10 @@ let
     $BIN "$@"
   '';
 
-  createChromiumUser = name: groups: precedence:
+  createUser = script: name: groups: precedence: dpi:
     {
       lass.xjail.${name} = {
-        user = name;
-        script = pkgs.writeDash name ''
-          ${pkgs.chromium}/bin/chromium "$@"
-        '';
-        inherit groups;
+        inherit script groups dpi;
       };
       environment.systemPackages = [ config.lass.xjail-bins.${name} ];
       lass.browser.paths.${name} = {
@@ -36,41 +32,21 @@ let
         inherit precedence;
       };
     };
+
+  createChromiumUser = name: groups: precedence:
+    createUser (pkgs.writeDash name ''
+      ${pkgs.chromium}/bin/chromium "$@"
+    '') name groups precedence 80;
 
   createFirefoxUser = name: groups: precedence:
-    {
-      lass.xjail.${name} = {
-        user = name;
-        script = pkgs.writeDash name ''
-          ${pkgs.firefox-devedition-bin}/bin/firefox-devedition "$@"
-        '';
-        inherit groups;
-      };
-      environment.systemPackages = [ config.lass.xjail-bins.${name} ];
-      lass.browser.paths.${name} = {
-        path = config.lass.xjail-bins.${name};
-        inherit precedence;
-      };
-    };
+    createUser (pkgs.writeDash name ''
+      ${pkgs.firefox-devedition-bin}/bin/firefox-devedition "$@"
+    '') name groups precedence 80;
 
   createQuteUser = name: groups: precedence:
-    {
-      lass.xjail.${name} = {
-        user = name;
-        script = pkgs.writeDash name ''
-          ${pkgs.qutebrowser}/bin/qutebrowser "$@"
-        '';
-        inherit groups;
-      };
-      environment.systemPackages = [ config.lass.xjail-bins.${name} ];
-      lass.browser.paths.${name} = {
-        path = config.lass.xjail-bins.${name};
-        inherit precedence;
-      };
-    };
-
-
-  #TODO: abstract this
+    createUser (pkgs.writeDash name ''
+      ${pkgs.qutebrowser}/bin/qutebrowser "$@"
+    '') name groups precedence 60;
 
 in {
 
