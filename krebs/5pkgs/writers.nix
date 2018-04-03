@@ -57,7 +57,8 @@ with import <stockholm/lib>;
       passAsFile = [ "text" ];
     } /* sh */ ''
       PATH=${makeBinPath (with pkgs; [
-        binutils
+        # TODO remove if everyone migrated to 18.03
+        (if hasAttr "binutils-unwrapped" pkgs then binutils-unwrapped else binutils)
         coreutils
         gcc
       ])}

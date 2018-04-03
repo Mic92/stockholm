@@ -8,6 +8,16 @@ let
       logfile ~/.msmtp.log
     account prism
       host prism.r
+    account c-base
+      from lassulus@c-base.org
+      host c-mail.c-base.org
+      port 465
+      tls on
+      tls_starttls off
+      tls_fingerprint 8C:10:A6:AB:1F:82:C4:8F:B1:B4:22:D5:8B:8B:49:9B:59:0B:22:A4
+      auth on
+      user lassulus
+      passwordeval pass show c-base/pass
     account default: prism
   '';
 
@@ -22,25 +32,52 @@ let
 
   mailboxes = {
     c-base = [ "to:c-base.org" ];
+    coins = [
+      "to:btce@lassul.us"
+      "to:coinbase@lassul.us"
+      "to:polo@lassul.us"
+      "to:bitwala@lassul.us"
+      "to:payeer@lassul.us"
+      "to:gatehub@lassul.us"
+      "to:bitfinex@lassul.us"
+      "to:binance@lassul.us"
+      "to:bitcoin.de@lassul.us"
+      "to:robinhood@lassul.us"
+    ];
     dezentrale = [ "to:dezentrale.space" ];
-    kaosstuff = [ "to:gearbest@lassul.us" "to:banggood@lassul.us" ];
+    dhl = [ "to:dhl@lassul.us" ];
+    eloop = [ "to:eloop.org" ];
+    github = [ "to:github@lassul.us" ];
+    gmail = [ "to:gmail@lassul.us" "to:lassulus@gmail.com" "lassulus@googlemail.com" ];
+    kaosstuff = [ "to:gearbest@lassul.us" "to:banggood@lassul.us" "to:tomtop@lassul.us" ];
+    lugs = [ "to:lugs@lug-s.org" ];
     nix-devel = [ "to:nix-devel@googlegroups.com" ];
     patreon = [ "to:patreon@lassul.us" ];
-    security = [ "to:seclists.org" "to:security" "to:bugtraq" ];
+    paypal = [ "to:paypal@lassul.us" ];
+    ptl = [ "to:ptl@posttenebraslab.ch" ];
+    retiolum = [ "to:lass@mors.r" ];
+    security = [ "to:seclists.org" "to:bugtraq" "to:securityfocus@lassul.us" ];
     shack = [ "to:shackspace.de" ];
+    steam = [ "to:steam@lassul.us" ];
+    tinc = [ "to:tinc@tinc-vpn.org" "to:tinc-devel@tinc-vpn.org" ];
     wireguard = [ "to:wireguard@lists.zx2c4" ];
+    zzz = [ "to:pizza@lassul.us" "to:spam@krebsco.de" ];
   };
 
-  tag-mails = pkgs.writeDashBin "nm-init-tag" ''
+  tag-new-mails = pkgs.writeDashBin "nm-tag-init" ''
     ${pkgs.notmuch}/bin/notmuch new
     ${concatMapStringsSep "\n" (i: ''${pkgs.notmuch}/bin/notmuch tag -inbox +${i.name} -- tag:inbox ${concatMapStringsSep " or " (f: "${f}") i.value}'') (mapAttrsToList nameValuePair mailboxes)}
   '';
 
+  tag-old-mails = pkgs.writeDashBin "nm-tag-old" ''
+    ${concatMapStringsSep "\n" (i: ''${pkgs.notmuch}/bin/notmuch tag -inbox -archive +${i.name} -- ${concatMapStringsSep " or " (f: "${f}") i.value}'') (mapAttrsToList nameValuePair mailboxes)}
+  '';
+
   muttrc = pkgs.writeText "muttrc" ''
     # gpg
-    source ${pkgs.neomutt}/share/doc/mutt/samples/gpg.rc
+    source ${pkgs.neomutt}/share/doc/neomutt/samples/gpg.rc
     set pgp_use_gpg_agent = yes
-    set pgp_sign_as = 0x976A7E4D
+    set pgp_sign_as = 0xDC2A43EF4F11E854B44D599A89E82952976A7E4D
     set crypt_autosign = yes
     set crypt_replyencrypt = yes
     set crypt_verify_sig = yes
@@ -158,7 +195,7 @@ let
     name = "mutt";
     paths = [
       (pkgs.writeDashBin "mutt" ''
-        exec ${pkgs.neomutt}/bin/mutt -F ${muttrc} $@
+        exec ${pkgs.neomutt}/bin/neomutt -F ${muttrc} $@
       '')
       pkgs.neomutt
     ];
@@ -170,6 +207,7 @@ in {
     mutt
     pkgs.much
     pkgs.notmuch
-    tag-mails
+    tag-new-mails
+    tag-old-mails
   ];
 }

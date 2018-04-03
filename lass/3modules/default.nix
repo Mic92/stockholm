@@ -11,6 +11,7 @@ _:
     ./screenlock.nix
     ./umts.nix
     ./usershadow.nix
+    ./xjail.nix
     ./xserver
   ];
 }

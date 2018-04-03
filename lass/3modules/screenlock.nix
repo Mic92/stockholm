@@ -14,7 +14,7 @@ let
     enable = mkEnableOption "screenlock";
     command = mkOption {
       type = types.str;
-      default = "${pkgs.i3lock}/bin/i3lock -i /var/lib/wallpaper/wallpaper -f";
+      default = "${pkgs.xlockmore}/bin/xlock -mode life1d -size 1";
     };
   };
 
@@ -28,7 +28,7 @@ let
       serviceConfig = {
         SyslogIdentifier = "screenlock";
         ExecStart = cfg.command;
-        Type = "forking";
+        Type = "simple";
         User = "lass";
       };
     };
