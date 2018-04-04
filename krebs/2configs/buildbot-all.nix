@@ -5,6 +5,5 @@ with import <stockholm/lib>;
   krebs.ci.enable = true;
   krebs.ci.treeStableTimer = 1;
   krebs.ci.hosts = filter (getAttr "ci") (attrValues config.krebs.hosts);
-  krebs.ci.tests = [ "deploy" ];
 }
 

@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  mainUser = config.users.extraUsers.markus;
+  mainUser = config.users.extraUsers.jeschli;
 
 in {
   #services.virtualboxHost.enable = true;

@@ -13,10 +13,7 @@ in
   evalSource (toString _file) [
     {
       nixos-config.symlink = "stockholm/jeschli/1systems/${name}/config.nix";
-      nixpkgs.git = {
-        url = https://github.com/nixos/nixpkgs;
-        ref = "0653b73";
-      };
+      nixpkgs = (import <stockholm/krebs/source.nix> host).nixpkgs;
       secrets.file = getAttr builder {
         buildbot = toString <stockholm/jeschli/2configs/tests/dummy-secrets>;
         jeschli = "${getEnv "HOME"}/secrets/${name}";
