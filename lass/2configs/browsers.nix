@@ -26,7 +26,12 @@ let
       lass.xjail.${name} = {
         inherit script groups dpi;
       };
-      environment.systemPackages = [ config.lass.xjail-bins.${name} ];
+      environment.systemPackages = [
+        config.lass.xjail-bins.${name}
+        (pkgs.writeDashBin "cx-${name}" ''
+          DISPLAY=:${toString (genid_signed name)} ${pkgs.xclip}/bin/xclip -o | DISPLAY=:0 ${pkgs.xclip}/bin/xclip
+        '')
+      ];
       lass.browser.paths.${name} = {
         path = config.lass.xjail-bins.${name};
         inherit precedence;
