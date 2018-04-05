@@ -140,6 +140,7 @@ with import <stockholm/lib>;
     dpass
 
     dnsutils
+    generate-secrets
   ];
 
   #TODO: fix this shit
