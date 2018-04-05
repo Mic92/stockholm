@@ -147,6 +147,10 @@ myKeyMap =
       export PATH=$PATH:${pkgs.dmenu}/bin:${pkgs.networkmanagerapplet}/bin
       exec ${pkgs.networkmanager_dmenu}/bin/networkmanager_dmenu "$@"
     ''}")
+    , ("M4-<Insert>", spawn "${pkgs.writeDash "paste" ''
+      ${pkgs.coreutils}/bin/sleep 0.1
+      ${pkgs.xclip}/bin/xclip -o | ${pkgs.xdotool}/bin/xdotool type -f -
+    ''}")
 
     , ("M4-<F5>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 1")
     , ("M4-<F6>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 10")

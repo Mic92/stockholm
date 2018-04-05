@@ -1,25 +1,26 @@
-{ stdenv, makeWrapper, callPackage, lib, buildEnv, fetchgit, nodePackages, nodejs }:
+{ stdenv, makeWrapper, lib, buildEnv, fetchgit, nodejs-8_x, pkgs }:
 
 with lib;
 
 let
-  np = (callPackage <nixpkgs/pkgs/top-level/node-packages.nix>) {
-    generated = ./packages.nix;
-    self = np;
+  nodeEnv = import <nixpkgs/pkgs/development/node-packages/node-env.nix> {
+    inherit (pkgs) stdenv python2 utillinux runCommand writeTextFile;
+    nodejs = nodejs-8_x;
+    libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
   };
 
-  node_env = buildEnv {
-    name = "node_env";
-    paths = [
-      np.redis
-      np."formidable"
-    ];
-    pathsToLink = [ "/lib" ];
-    ignoreCollisions = true;
+  node_env = pkgs.buildEnv {
+    name = "go-node_env";
+    paths = attrValues (import ./node-packages.nix {
+      inherit (pkgs) fetchurl fetchgit;
+      inherit nodeEnv;
+    });
   };
 
-in np.buildNodePackage {
+in stdenv.mkDerivation {
+  packageName = "go";
   name = "go-shortener";
+  version = "0.0.0";
 
   src = fetchgit {
     url = "http://cgit.lassul.us/go/";
@@ -32,10 +33,8 @@ in np.buildNodePackage {
     "installPhase"
   ];
 
-  deps = (filter (v: nixType v == "derivation") (attrValues np));
-
   buildInputs = [
-    nodejs
+    nodejs-8_x
     makeWrapper
   ];
 
@@ -44,14 +43,14 @@ in np.buildNodePackage {
 
     cp index.js $out/
     cat > $out/go << EOF
-      ${nodejs}/bin/node $out/index.js
+      ${nodejs-8_x}/bin/node $out/index.js
     EOF
     chmod +x $out/go
 
     wrapProgram $out/go \
       --prefix NODE_PATH : ${node_env}/lib/node_modules
 
-     ln -s $out/go /$out/bin/go
+    ln -s $out/go /$out/bin/go
   '';
 
 }

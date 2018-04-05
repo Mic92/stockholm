@@ -140,6 +140,7 @@ with import <stockholm/lib>;
     dpass
 
     dnsutils
+    generate-secrets
   ];
 
   #TODO: fix this shit
@@ -167,14 +168,8 @@ with import <stockholm/lib>;
   environment.shellAliases = {
     deploy = pkgs.writeDash "deploy" ''
       set -eu
-      export PATH=${makeBinPath [
-        pkgs.bash
-        pkgs.coreutils
-        pkgs.nixUnstable
-      ]}
-      cd ~/stockholm
       export SYSTEM="$1"
-      exec nix-shell -I stockholm="$PWD" --run 'deploy --system="$SYSTEM"'
+      $(nix-build $HOME/stockholm/lass/kops.nix --no-out-link --argstr name "$SYSTEM" -A deploy)
     '';
   };
 
