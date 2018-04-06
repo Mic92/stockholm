@@ -16,7 +16,7 @@
       ref = "4b4bbce199d3b3a8001ee93495604289b01aaad3";
       url = https://github.com/NixOS/nixpkgs;
     };
-    stockholm.file = toString ~/stockholm;
+    stockholm.file = toString ../.;
     stockholm-version.pipe = toString (pkgs.writeDash "${name}-version" ''
       set -efu
       cd $HOME/stockholm
