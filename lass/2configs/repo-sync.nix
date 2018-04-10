@@ -61,6 +61,21 @@ let
             origin.url = "http://cgit.lassul.us/${name}";
             mirror.url = "${mirror}${name}";
           };
+          makefu-staging = {
+            origin.url = "http://cgit.gum/${name}";
+            origin.ref = "heads/staging";
+            mirror.url = "${mirror}${name}";
+          };
+          tv-staging = {
+            origin.url = "http://cgit.ni.r/${name}";
+            origin.ref = "heads/staging";
+            mirror.url = "${mirror}${name}";
+          };
+          nin-staging = {
+            origin.url = "http://cgit.onondaga.r/${name}";
+            origin.ref = "heads/staging";
+            mirror.url = "${mirror}${name}";
+          };
         };
         latest = {
           url = "${mirror}${name}";

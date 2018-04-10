@@ -21,59 +21,37 @@ let
     $BIN "$@"
   '';
 
-  createChromiumUser = name: extraGroups: precedence:
-    let
-      bin = pkgs.writeScriptBin name ''
-        /var/run/wrappers/bin/sudo -u ${name} -i ${pkgs.chromium}/bin/chromium $@
-      '';
-    in {
-      users.extraUsers.${name} = {
-        inherit name;
-        inherit extraGroups;
-        home = "/home/${name}";
-        uid = genid name;
-        useDefaultShell = true;
-        createHome = true;
+  createUser = script: name: groups: precedence: dpi:
+    {
+      lass.xjail.${name} = {
+        inherit script groups dpi;
       };
+      environment.systemPackages = [
+        config.lass.xjail-bins.${name}
+        (pkgs.writeDashBin "cx-${name}" ''
+          DISPLAY=:${toString (genid_signed name)} ${pkgs.xclip}/bin/xclip -o | DISPLAY=:0 ${pkgs.xclip}/bin/xclip
+        '')
+      ];
       lass.browser.paths.${name} = {
-        path = bin;
+        path = config.lass.xjail-bins.${name};
         inherit precedence;
       };
-      security.sudo.extraConfig = ''
-        ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
-      '';
-      environment.systemPackages = [
-        bin
-      ];
     };
 
-  createFirefoxUser = name: extraGroups: precedence:
-    let
-      bin = pkgs.writeScriptBin name ''
-        /var/run/wrappers/bin/sudo -u ${name} -i ${pkgs.firefox-devedition-bin}/bin/firefox-devedition $@
-      '';
-    in {
-      users.extraUsers.${name} = {
-        inherit name;
-        inherit extraGroups;
-        home = "/home/${name}";
-        uid = genid name;
-        useDefaultShell = true;
-        createHome = true;
-      };
-      lass.browser.paths.${name} = {
-        path = bin;
-        inherit precedence;
-      };
-      security.sudo.extraConfig = ''
-        ${mainUser.name} ALL=(${name}) NOPASSWD: ALL
-      '';
-      environment.systemPackages = [
-        bin
-      ];
-    };
+  createChromiumUser = name: groups: precedence:
+    createUser (pkgs.writeDash name ''
+      ${pkgs.chromium}/bin/chromium "$@"
+    '') name groups precedence 80;
 
-  #TODO: abstract this
+  createFirefoxUser = name: groups: precedence:
+    createUser (pkgs.writeDash name ''
+      ${pkgs.firefox-devedition-bin}/bin/firefox-devedition "$@"
+    '') name groups precedence 80;
+
+  createQuteUser = name: groups: precedence:
+    createUser (pkgs.writeDash name ''
+      ${pkgs.qutebrowser}/bin/qutebrowser "$@"
+    '') name groups precedence 60;
 
 in {
 
@@ -110,12 +88,13 @@ in {
         }));
       };
     }
+    ( createQuteUser "qb" [ "audio" ] 20 )
     ( createFirefoxUser "ff" [ "audio" ] 10 )
-    ( createChromiumUser "cr" [ "video" "audio" ] 9 )
+    ( createChromiumUser "cr" [ "audio" ] 9 )
     ( createChromiumUser "gm" [ "video" "audio" ] 8 )
-    ( createChromiumUser "wk" [ "video" "audio" ] 0 )
-    ( createChromiumUser "fb" [ "video" "audio" ] 0 )
-    ( createChromiumUser "com" [ "video" "audio" ] 0 )
+    ( createChromiumUser "wk" [ "audio" ] 0 )
+    ( createChromiumUser "fb" [ "audio" ] 0 )
+    ( createChromiumUser "com" [ "audio" ] 0 )
     ( createChromiumUser "fin" [] (-1) )
   ];
 }

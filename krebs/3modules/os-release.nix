@@ -1,8 +1,11 @@
 { config, ... }:
 with import <stockholm/lib>;
 let
-  nixos-version-id = "${config.system.nixosVersion}";
-  nixos-version = "${nixos-version-id} (${config.system.nixosCodeName})";
+  nixos-version-id = if (hasAttr "nixos" config.system) then
+    "${config.system.nixos.version}" else "${config.system.nixosVersion}";
+  nixos-codeName = if (hasAttr "nixos" config.system) then
+    "${config.system.nixos.codeName}" else "${config.system.nixosCodeName}";
+  nixos-version = "${nixos-version-id} (${nixos-codeName})";
   nixos-pretty-name = "NixOS ${nixos-version}";
 
   stockholm-version-id = let

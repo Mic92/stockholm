@@ -14,7 +14,13 @@
       RestartSec = "5";
     };
   };
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    unmanaged = [
+      "docker*"
+      "vboxnet*"
+    ];
+  };
   users.users.mainUser = {
     extraGroups = [ "networkmanager" ];
     packages = with pkgs; [

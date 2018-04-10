@@ -11,6 +11,7 @@ in {
 
   environment.systemPackages = [
     pkgs.ff
+    pkgs.font-size
     pkgs.gitAndTools.qgit
     pkgs.mpv
     pkgs.sxiv

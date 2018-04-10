@@ -84,7 +84,7 @@ with import <stockholm/lib>;
       (buildSimpleReaktorPlugin "ping" {
         pattern = "^!ping (?P<args>.*)$$";
         script = pkgs.writeDash "ping" ''
-          exec /var/setuid-wrappers/ping -q -c1 "$1" 2>&1 | tail -1
+          exec /run/wrappers/bin/ping -q -c1 "$1" 2>&1 | tail -1
         '';
       })
     ];
