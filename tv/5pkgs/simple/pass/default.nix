@@ -2,6 +2,8 @@
 , coreutils, gnused, getopt, git, tree, gnupg, which, procps, qrencode
 , makeWrapper
 
+, pass-otp
+
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin
 , tombPluginSupport ? false, tomb
@@ -34,7 +36,7 @@ let
 
 in stdenv.mkDerivation rec {
   version = "1.7.1";
-  name    = "password-store-${version}";
+  name    = "pass-${version}";
 
   src = fetchurl {
     url    = "http://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
@@ -55,6 +57,14 @@ in stdenv.mkDerivation rec {
       PREFIX=$out make install
       popd
     '') plugins)}
+
+    ln -s \
+        ${pass-otp}/lib/password-store/extensions/otp.bash \
+        $out/lib/password-store/extensions/
+
+    ln -s \
+        ${pass-otp}/share/man/man1/pass-otp.1.gz \
+        $out/share/man/man1/
 
     # Install Emacs Mode. NOTE: We can't install the necessary
     # dependencies (s.el and f.el) here. The user has to do this
