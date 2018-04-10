@@ -22,10 +22,7 @@ in
       };
       stockholm.file = toString <stockholm>;
       stockholm-version.pipe = "${pkgs.stockholm}/bin/get-version";
-      nixpkgs.git = {
-        url = https://github.com/NixOS/nixpkgs;
-        ref = "09bca91e3b5a18d7f37f7632175ac71f2bf369ff"; # nixos-18.03 # 2018-04-02
-      };
+      nixpkgs = (import ./kops.nix { name = ""; }).krebs-source.nixpkgs;
     }
     override
   ]

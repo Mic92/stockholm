@@ -1,27 +1,27 @@
-{ stdenv, makeWrapper, callPackage, lib, buildEnv, fetchgit, nodePackages, nodejs }:
+{ stdenv, makeWrapper, lib, buildEnv, fetchgit, nodejs-8_x, pkgs, icu }:
 
 with lib;
 
 let
-  np = (callPackage <nixpkgs/pkgs/top-level/node-packages.nix>) {
-    generated = ./packages.nix;
-    self = np;
+  nodeEnv = import <nixpkgs/pkgs/development/node-packages/node-env.nix> {
+    inherit (pkgs) stdenv python2 utillinux runCommand writeTextFile;
+    nodejs = nodejs-8_x;
+    libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
   };
 
-  node_env = buildEnv {
-    name = "node_env";
-    paths = [
-      np.feedparser
-      np.form-data
-      np.irc
-      np.request
-      np.shell-quote
-    ];
-    pathsToLink = [ "/lib" ];
-    ignoreCollisions = true;
+  node_env = pkgs.buildEnv {
+    name = "go-node_env";
+    paths = attrValues (import ./node-packages.nix {
+      inherit (pkgs) fetchurl fetchgit;
+      inherit nodeEnv;
+      globalBuildInputs = [
+        icu.dev
+      ];
+    });
   };
 
-in np.buildNodePackage {
+
+in stdenv.mkDerivation {
   name = "newsbot-js";
 
   src = fetchgit {
@@ -32,14 +32,11 @@ in np.buildNodePackage {
 
   phases = [
     "unpackPhase"
-    "patchPhase"
     "installPhase"
   ];
 
-  deps = (filter (v: nixType v == "derivation") (attrValues np));
-
   buildInputs = [
-    nodejs
+    nodejs-8_x
     makeWrapper
   ];
 
@@ -48,7 +45,7 @@ in np.buildNodePackage {
 
     cp newsbot.js $out/
     cat > $out/newsbot << EOF
-      ${nodejs}/bin/node $out/newsbot.js
+      ${nodejs-8_x}/bin/node $out/newsbot.js
     EOF
     chmod +x $out/newsbot
 
