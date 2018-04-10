@@ -57,7 +57,6 @@
     terminator
     tmux
     wget
-  #  rxvt_unicode
   # editors
     emacs
   # internet
@@ -65,6 +64,7 @@
     chromium
     google-chrome
   # programming languages
+    exercism
     go
     gcc
     ghc
@@ -73,6 +73,9 @@
   # go tools
     golint
     gotools
+  # rust
+    cargo
+    rustc
   # dev tools
     gnumake
     jetbrains.pycharm-professional
