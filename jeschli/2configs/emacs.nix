@@ -53,9 +53,9 @@ let
   '';
   dotEmacs = pkgs.writeText "dot-emacs" ''
     ${packageRepos}
-    ${windowCosmetics}
     ${orgMode}
     ${recentFiles}
+    ${windowCosmetics}
   '';
   emacsWithCustomPackages = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: [
     epkgs.melpaStablePackages.magit
