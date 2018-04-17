@@ -142,4 +142,11 @@
   # should.
   system.stateVersion = "17.09"; # Did you read the comment?
 
+  hardware.trackpoint = {
+    enable = true;
+    sensitivity = 220;
+    speed = 0;
+    emulateWheel = true;
+  };
+
 }
