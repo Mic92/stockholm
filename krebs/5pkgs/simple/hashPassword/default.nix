@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 
 pkgs.writeDashBin "hashPassword" ''
-  # usage: hashPassword
+  # usage: hashPassword [...]
   set -euf
 
   export PATH=${lib.makeBinPath (with pkgs; [
@@ -11,5 +11,5 @@ pkgs.writeDashBin "hashPassword" ''
   ])}
 
   salt=$(openssl rand -base64 16 | tr -d '+=' | head -c 16)
-  exec mkpasswd -m sha-512 -S "$salt"
+  exec mkpasswd -m sha-512 -S "$salt" "$@"
 ''
