@@ -87,6 +87,19 @@ with import <stockholm/lib>;
           exec /run/wrappers/bin/ping -q -c1 "$1" 2>&1 | tail -1
         '';
       })
+      (buildSimpleReaktorPlugin "google" {
+        pattern = "^!g (?P<args>.*)$$";
+        script = pkgs.writeDash "google" ''
+          exec ${pkgs.ddgr}/bin/ddgr -C -n1 --json "$@" | \
+            ${pkgs.jq}/bin/jq '@text "\(.[0].abstract) \(.[0].url)"'
+        '';
+      })
+      (buildSimpleReaktorPlugin "blockchain" {
+        pattern = ".*[Bb]lockchain.*$$";
+        script = pkgs.writeDash "blockchain" ''
+          exec echo 'DID SOMEBODY SAY BLOCKCHAIN? https://paste.krebsco.de/r99pMoQq/+inline'
+        '';
+      })
     ];
   };
 }
