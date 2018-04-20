@@ -4,7 +4,7 @@ with import <stockholm/lib>;
 {
   krebs.Reaktor.coders = {
     nickname = "Reaktor|lass";
-    channels = [ "#coders" "#germany" ];
+    channels = [ "#coders" "#germany" "#panthermoderns" ];
     extraEnviron = {
       REAKTOR_HOST = "irc.hackint.org";
     };
