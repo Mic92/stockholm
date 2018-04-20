@@ -8,9 +8,13 @@ in {
   imports = [
     <stockholm/lass>
     {
-      networking.interfaces.et0.ip4 = [
+      networking.interfaces.et0.ipv4.addresses = [
         {
           address = ip;
+          prefixLength = 27;
+        }
+        {
+          address = "46.4.114.243";
           prefixLength = 27;
         }
       ];
