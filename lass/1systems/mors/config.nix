@@ -141,6 +141,15 @@ with import <stockholm/lib>;
 
     dnsutils
     generate-secrets
+    (pkgs.writeDashBin "btc-coinbase" ''
+      ${pkgs.curl}/bin/curl -Ss 'https://api.coinbase.com/v2/prices/spot?currency=EUR' | ${pkgs.jq}/bin/jq '.data.amount'
+    '')
+    (pkgs.writeDashBin "btc-wex" ''
+      ${pkgs.curl}/bin/curl -Ss 'https://wex.nz/api/3/ticker/btc_eur' | ${pkgs.jq}/bin/jq '.btc_eur.avg'
+    '')
+    (pkgs.writeDashBin "btc-kraken" ''
+      ${pkgs.curl}/bin/curl -Ss  'https://api.kraken.com/0/public/Ticker?pair=BTCEUR' | ${pkgs.jq}/bin/jq '.result.XXBTZEUR.a[0]'
+    '')
   ];
 
   #TODO: fix this shit
