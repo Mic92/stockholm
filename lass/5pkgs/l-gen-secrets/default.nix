@@ -1,5 +1,5 @@
 { pkgs }:
-pkgs.writeDashBin "generate-secrets" ''
+pkgs.writeDashBin "l-gen-secrets" ''
   HOSTNAME="$1"
   TMPDIR=$(${pkgs.coreutils}/bin/mktemp -d)
   PASSWORD=$(${pkgs.pwgen}/bin/pwgen 25 1)
@@ -17,9 +17,9 @@ pkgs.writeDashBin "generate-secrets" ''
 
   cd $TMPDIR
   for x in *; do
-    ${pkgs.coreutils}/bin/cat $x | ${pkgs.pass}/bin/pass insert -m hosts/$HOSTNAME/$x > /dev/null
+    ${pkgs.coreutils}/bin/cat $x | ${pkgs.pass}/bin/pass insert -m krebs-secrets/$HOSTNAME/$x > /dev/null
   done
-  echo $PASSWORD | ${pkgs.pass}/bin/pass insert -m admin/hosts/$HOSTNAME/pass > /dev/null
+  echo $PASSWORD | ${pkgs.pass}/bin/pass insert -m hosts/$HOSTNAME/pass > /dev/null
 
   cat <<EOF
     $HOSTNAME = {
