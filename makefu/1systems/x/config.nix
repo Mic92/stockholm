@@ -141,15 +141,6 @@ with import <stockholm/lib>;
         # connect via https://nixos.wiki/wiki/Bluetooth#Using_Bluetooth_headsets_with_PulseAudio
         hardware.bluetooth.enable = true;
       }
-      { # auto-mounting
-        services.udisks2.enable = true;
-        services.devmon.enable = true;
-        # services.gnome3.gvfs.enable = true;
-        users.users.makefu.packages = with pkgs;[
-          gvfs pcmanfm lxmenu-data
-        ];
-        environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gvfs}/lib/gio/modules" ];
-      }
 
     ];
 
@@ -170,6 +161,7 @@ with import <stockholm/lib>;
 
   networking.extraHosts = ''
     192.168.1.11  omo.local
+    80.92.65.53 www.wifionice.de wifionice.de
   '';
   # hard dependency because otherwise the device will not be unlocked
   boot.initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; allowDiscards=true; }];
