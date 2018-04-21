@@ -29,4 +29,5 @@
   };
 
   swapDevices = [ { device = "/swapfile"; size = 1024; } ];
+  services.openssh.enable = true;
 }

@@ -1,11 +1,16 @@
+with import <stockholm/lib>;
 let
   pkgs = import <nixpkgs> {};
-in import <stockholm/krebs/source.nix> {
-  name = "onebutton";
-  nixpkgs.file = pkgs.fetchFromGitHub {
+  nixpkgs = pkgs.fetchFromGitHub {
     owner = "nixos";
     repo = "nixpkgs-channels";
     rev = "6c064e6b"; # only binary cache for unstable arm6
-    sha256 = "0ssaaaaaaaaaaaawkgjk8c75mvhgn5z7g1dkb78r8vrih9428bb8";
+    sha256 = "1rqzh475xn43phagrr30lb0fd292c1s8as53irihsnd5wcksnbyd";
   };
+in import <stockholm/krebs/source.nix> {
+  name = "onebutton";
+  override.nixpkgs = mkForce {
+    file = toString nixpkgs;
+  };
+
 }
