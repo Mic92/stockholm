@@ -2,7 +2,18 @@
 {
   imports = [
     <stockholm/krebs>
+    <stockholm/krebs/2configs>
+    { # minimal disk usage
+      environment.noXlibs = true;
+      nix.gc.automatic = true;
+      nix.gc.dates = "03:10";
+      programs.info.enable = false;
+      programs.man.enable = false;
+      services.journald.extraConfig = "SystemMaxUse=50M";
+      services.nixosManual.enable = false;
+    }
   ];
+  krebs.build.host = config.krebs.hosts.onebutton;
   # NixOS wants to enable GRUB by default
   boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
