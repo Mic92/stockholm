@@ -8,9 +8,13 @@ in {
   imports = [
     <stockholm/lass>
     {
-      networking.interfaces.et0.ip4 = [
+      networking.interfaces.et0.ipv4.addresses = [
         {
           address = ip;
+          prefixLength = 27;
+        }
+        {
+          address = "46.4.114.243";
           prefixLength = 27;
         }
       ];
@@ -110,29 +114,13 @@ in {
       };
 
       # TODO write function for proxy_pass (ssl/nonssl)
-      services.nginx.virtualHosts."hackerfleet.de" = {
-        serverAliases = [
-          "*.hackerfleet.de"
-        ];
-        locations."/".extraConfig = ''
-          proxy_pass http://192.168.122.92:80;
-        '';
-      };
-      services.nginx.virtualHosts."hackerfleet.de-s" = {
-        serverName = "hackerfleet.de";
-        listen = [
-          {
-            addr = "0.0.0.0";
-            port = 443;
-          }
-        ];
-        serverAliases = [
-          "*.hackerfleet.de"
-        ];
-        locations."/".extraConfig = ''
-          proxy_pass http://192.168.122.92:443;
-        '';
-      };
+
+      krebs.iptables.tables.filter.FORWARD.rules = [
+        { v6 = false; precedence = 1000; predicate = "-d 192.168.122.92"; target = "ACCEPT"; }
+      ];
+      krebs.iptables.tables.nat.PREROUTING.rules = [
+        { v6 = false; precedence = 1000; predicate = "-d 46.4.114.243"; target = "DNAT --to-destination 192.168.122.92"; }
+      ];
     }
     {
       users.users.tv = {

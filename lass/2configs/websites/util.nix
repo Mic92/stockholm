@@ -16,7 +16,7 @@ rec {
     in {
       services.nginx.virtualHosts.${domain} = {
         enableACME = true;
-        enableSSL = true;
+        onlySSL = true;
         extraConfig = ''
           listen 80;
           listen [::]:80;
@@ -34,7 +34,7 @@ rec {
     in {
       services.nginx.virtualHosts."${domain}" = {
         enableACME = true;
-        enableSSL = true;
+        onlySSL = true;
         serverAliases = domains;
         extraConfig = ''
           listen 80;
@@ -148,7 +148,7 @@ rec {
     in {
       services.nginx.virtualHosts."${domain}" = {
         enableACME = true;
-        enableSSL = true;
+        onlySSL = true;
         serverAliases = domains;
         extraConfig = ''
           listen 80;

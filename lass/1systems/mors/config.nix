@@ -141,6 +141,15 @@ with import <stockholm/lib>;
 
     dnsutils
     generate-secrets
+    (pkgs.writeDashBin "btc-coinbase" ''
+      ${pkgs.curl}/bin/curl -Ss 'https://api.coinbase.com/v2/prices/spot?currency=EUR' | ${pkgs.jq}/bin/jq '.data.amount'
+    '')
+    (pkgs.writeDashBin "btc-wex" ''
+      ${pkgs.curl}/bin/curl -Ss 'https://wex.nz/api/3/ticker/btc_eur' | ${pkgs.jq}/bin/jq '.btc_eur.avg'
+    '')
+    (pkgs.writeDashBin "btc-kraken" ''
+      ${pkgs.curl}/bin/curl -Ss  'https://api.kraken.com/0/public/Ticker?pair=BTCEUR' | ${pkgs.jq}/bin/jq '.result.XXBTZEUR.a[0]'
+    '')
   ];
 
   #TODO: fix this shit
@@ -177,4 +186,34 @@ with import <stockholm/lib>;
   programs.adb.enable = true;
   users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
   virtualisation.docker.enable = true;
+
+  lass.restic = genAttrs [
+    "daedalus"
+    "icarus"
+    "littleT"
+    "prism"
+    "shodan"
+    "skynet"
+  ] (dest: {
+    dirs = [
+      "/home/lass/src"
+      "/home/lass/work"
+      "/home/lass/.gnupg"
+      "/home/lass/Maildir"
+      "/home/lass/stockholm"
+      "/home/lass/.password-store"
+      "/home/bitcoin"
+      "/home/bch"
+    ];
+    passwordFile = (toString <secrets>) + "/restic/${dest}";
+    repo = "sftp:backup@${dest}.r:/backups/mors";
+    #sshPrivateKey = config.krebs.build.host.ssh.privkey.path;
+    extraArguments = [
+      "sftp.command='ssh backup@${dest}.r -i ${config.krebs.build.host.ssh.privkey.path} -s sftp'"
+    ];
+    timerConfig = {
+      OnCalendar = "00:05";
+      RandomizedDelaySec = "5h";
+    };
+  });
 }

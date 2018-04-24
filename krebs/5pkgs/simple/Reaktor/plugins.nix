@@ -120,11 +120,24 @@ rec {
   url-title = (buildSimpleReaktorPlugin "url-title" {
     pattern = "^.*(?P<args>http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+).*$$";
     path = with pkgs; [ curl perl ];
-    script = pkgs.writeDash "lambda-pl" ''
-      if [ "$#" -gt 0 ]; then
-        curl -SsL --max-time 5 "$1" |
-          perl -l -0777 -ne 'print $1 if /<title.*?>\s*(.*?)\s*<\/title/si'
-      fi
+    script = pkgs.writePython3 [ "beautifulsoup4" "lxml" ] "url-title" ''
+      import sys
+      import urllib.request
+      from bs4 import BeautifulSoup
+
+      try:
+          soup = BeautifulSoup(urllib.request.urlopen(sys.argv[1]), "lxml")
+          title = soup.find('title').string
+
+          if title:
+              if len(title) > 512:
+                  print('message to long, skipped')
+              elif len(title.split('\n')) > 5:
+                  print('to many lines, skipped')
+              else:
+                  print(title)
+      except:  # noqa: E722
+          pass
     '';
   });
 

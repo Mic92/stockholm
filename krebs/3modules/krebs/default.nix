@@ -91,6 +91,37 @@ in {
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxFkBln23wUxt4RhIHE3GvdKeBpJbjn++6maupHqUHp";
     };
+    onebutton = {
+      cores = 1;
+      owner = config.krebs.users.krebs;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.0.101";
+          ip6.addr = "42:0:0:0:0:0:0:101";
+          aliases = [
+            "onebutton.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA11w6votRExwE0ZEiQmPa
+            9WGNsMfNAZEd14iHaHCZH7UPQEH+cH/T6isGPpaysindroMnqFe9mUf/cdYChb6N
+            aaFreApwGBQaJPUcdy4cfphrFpzmOClpOFuFbnV7ZvAk/wefBad3kUzsq/lK4HvB
+            7nPKeOB9kljphLrkzuLL/h2yOenMpO2ZdvwxyWN8HKmUNgvpBQjIr+Hka6cgy7Gp
+            pBVFHfSnad/eHeEvq91O/bHxrAxzH5N5DVagPDpkbiWYGl+0XVGP/h0CApr15Ael
+            +j2pJYc0ZlaXIp4KmNRqbd/fLe52JLrWbnFX4rRuY/DhoMqK8kjECEZ7gLiNSpCC
+            KlnlJ2LXX9c+d79ubzl5yLAJ3d6T4IJqkbAWJDuCrj821M9ZDk/qZwerayhrrvkF
+            tMYkQoGSe8MvSOU0rTEoH5iSRwDC7M0XzUe4l8/yZLFyD4Prz/dq6coqANfk/tlE
+            DnH3vDu9lmFvYrLcd6yDWzFfI3mWDJoUa6AKKoScCOaCkRfIM4Aew0i73+h1nJLO
+            59AAbZIkDYyWs53QniIG4EQteI9y/9j/628nPAVj68V5oIN76RDXfFHWDWq4DxmU
+            PpGVmoIKcKZmnl7RrDomRVpuGMdyQ+kCzIGH3XYe12v8Y5beHZBrd3OajgHZ/Tfp
+            jP873cT6h0hsGm9glgOYho8CAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAcZg+iLaPZ0SpLM+nANxIjZC/RIsansjyutK0+gPhIe ";
+    };
     puyak = {
       ci = true;
       owner = config.krebs.users.krebs;
