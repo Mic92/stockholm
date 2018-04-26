@@ -93,6 +93,7 @@ let
           User = "newsbot-js";
           Restart = "always";
           ExecStart = "${newsbot.package}/bin/newsbot";
+          WatchdogSec = "86400";
         };
       }
     ) cfg;
