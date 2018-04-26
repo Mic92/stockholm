@@ -120,7 +120,7 @@
       [SPAM]sciencemag|http://news.sciencemag.org/rss/current.xml|#snews
       [SPAM]scmp|http://www.scmp.com/rss/91/feed|#snews
       [SPAM]sec-db|http://feeds.security-database.com/SecurityDatabaseToolsWatch|#snews
-      [SPAM]shackspace|http://blog.shackspace.de/?feed=rss2|#snews
+      [SPAM]shackspace|http://shackspace.de/atom.xml|#snews
       [SPAM]shz_news|http://www.shz.de/nachrichten/newsticker/rss|#snews
       [SPAM]sky_busi|http://feeds.skynews.com/feeds/rss/business.xml|#snews
       [SPAM]sky_pol|http://feeds.skynews.com/feeds/rss/politics.xml|#snews
