@@ -9,6 +9,7 @@ with import <stockholm/lib>;
   hosts = mapAttrs (_: recursiveUpdate {
     owner = config.krebs.users.lass;
     ci = true;
+    monitoring = true;
   }) {
     dishfire = {
       cores = 4;
@@ -149,6 +150,7 @@ with import <stockholm/lib>;
     };
     domsen-nas = {
       ci = false;
+      monitoring = false;
       external = true;
       nets = rec {
         internet = {
@@ -161,6 +163,7 @@ with import <stockholm/lib>;
       };
     };
     uriel = {
+      monitoring = false;
       cores = 1;
       nets = {
         gg23 = {
@@ -399,10 +402,12 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJzb9BPFClubs6wSOi/ivqPFVPlowXwAxBS0jHaB29hX";
     };
     iso = {
+      monitoring = false;
       ci = false;
       cores = 1;
     };
     sokrateslaptop = {
+      monitoring = false;
       ci = false;
       external = true;
       nets = {
@@ -426,6 +431,7 @@ with import <stockholm/lib>;
       };
     };
     turingmachine = {
+      monitoring = false;
       ci = false;
       external = true;
       nets = {
@@ -454,6 +460,7 @@ with import <stockholm/lib>;
       };
     };
     eddie = {
+      monitoring = false;
       ci = false;
       external = true;
       nets = rec {
@@ -494,6 +501,7 @@ with import <stockholm/lib>;
       };
     };
     borg = {
+      monitoring = false;
       ci = false;
       external = true;
       nets = {
@@ -521,6 +529,7 @@ with import <stockholm/lib>;
       };
     };
     inspector = {
+      monitoring = false;
       ci = false;
       external = true;
       nets = rec {
@@ -552,6 +561,7 @@ with import <stockholm/lib>;
       };
     };
     dpdkm = {
+      monitoring = false;
       ci = false;
       external = true;
       nets = rec {
