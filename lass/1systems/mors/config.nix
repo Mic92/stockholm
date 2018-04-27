@@ -141,6 +141,8 @@ with import <stockholm/lib>;
     dpass
 
     dnsutils
+    woeusb
+    l-gen-secrets
     generate-secrets
     (pkgs.writeDashBin "btc-coinbase" ''
       ${pkgs.curl}/bin/curl -Ss 'https://api.coinbase.com/v2/prices/spot?currency=EUR' | ${pkgs.jq}/bin/jq '.data.amount'
