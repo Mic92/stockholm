@@ -44,39 +44,6 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGv0JMp0y+E5433GRSFKVK3cQmP0AAlS9aH9fk49yFxy";
     };
-    echelon = {
-      cores = 2;
-      nets = rec {
-        internet = {
-          ip4.addr = "64.137.242.41";
-          aliases = [
-            "echelon.i"
-          ];
-          ssh.port = 45621;
-        };
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.206.103";
-          ip6.addr = "42:941e:2816:35f4:5c5e:206b:3f0b:f763";
-          aliases = [
-            "echelon.r"
-            "cgit.echelon.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAuscWOYdHu0bpWacvwTNd6bcmrAQ0YFxJWHZF8kPZr+bMKIhnXLkJ
-            oJheENIM6CA9lQQQFUxh2P2pxZavW5rgVlJxIKeiB+MB4v6ZO60LmZgpCsWGD/dX
-            MipM2tLtQxYhvLJIJxEBWn3rxIgeEnCtZsH1KLWyLczb+QpvTjMJ4TNh1nEBPE/f
-            4LUH1JHaGhcaHl2dLemR9wnnDIjmSj0ENJp2al+hWnIggcA/Zp0e4b86Oqbbs5wA
-            n++n5j971cTrBdA89nJDYOEtepisglScVRbgLqJG81lDA+n24RWFynn+U3oD/L8p
-            do+kxlwZUEDRbPU4AO5L+UeIbimsuIfXiQIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL21QDOEFdODFh6WAfNp6odrXo15pEsDQuGJfMu/cKzK";
-    };
     prism = rec {
       cores = 4;
       extraZones = {
