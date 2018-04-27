@@ -190,26 +190,6 @@ in {
       };
     }
     {
-      #kaepsele
-      systemd.services."container@kaepsele".reloadIfChanged = mkForce false;
-      containers.kaepsele = {
-        config = { ... }: {
-          imports = [ <stockholm/lass/2configs/rebuild-on-boot.nix> ];
-          environment.systemPackages = [ pkgs.git ];
-          services.openssh.enable = true;
-          users.users.root.openssh.authorizedKeys.keys = with config.krebs.users; [
-            lass.pubkey
-            tv.pubkey
-          ];
-        };
-        autoStart = true;
-        enableTun = true;
-        privateNetwork = true;
-        hostAddress = "10.233.2.3";
-        localAddress = "10.233.2.4";
-      };
-    }
-    {
       #onondaga
       systemd.services."container@onondaga".reloadIfChanged = mkForce false;
       containers.onondaga = {
