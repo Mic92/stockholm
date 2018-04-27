@@ -217,13 +217,12 @@ in {
     <stockholm/lass/2configs/repo-sync.nix>
     <stockholm/lass/2configs/binary-cache/server.nix>
     <stockholm/lass/2configs/iodined.nix>
-    <stockholm/lass/2configs/monitoring/server.nix>
-    <stockholm/lass/2configs/monitoring/monit-alarms.nix>
     <stockholm/lass/2configs/paste.nix>
     <stockholm/lass/2configs/syncthing.nix>
     <stockholm/lass/2configs/reaktor-coders.nix>
     <stockholm/lass/2configs/ciko.nix>
     <stockholm/lass/2configs/container-networking.nix>
+    <stockholm/lass/2configs/monitoring/prometheus-server.nix>
     { # quasi bepasty.nix
       imports = [
         <stockholm/lass/2configs/bepasty.nix>
