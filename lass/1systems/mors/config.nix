@@ -33,6 +33,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/ableton.nix>
     <stockholm/lass/2configs/dunst.nix>
     <stockholm/lass/2configs/rtl-sdr.nix>
+    <stockholm/lass/2configs/backup.nix>
     {
       #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [

@@ -17,6 +17,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/wine.nix>
     <stockholm/lass/2configs/bitcoin.nix>
+    <stockholm/lass/2configs/backup.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.shodan;
