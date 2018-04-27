@@ -8,7 +8,6 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/boot/stock-x220.nix>
 
     <stockholm/lass/2configs/retiolum.nix>
-    <stockholm/lass/2configs/backups.nix>
     <stockholm/lass/2configs/steam.nix>
     {
       users.users.blacky = {

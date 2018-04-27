@@ -15,7 +15,6 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/browsers.nix>
     <stockholm/lass/2configs/programs.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
-    <stockholm/lass/2configs/backups.nix>
     <stockholm/lass/2configs/wine.nix>
     <stockholm/lass/2configs/bitcoin.nix>
   ];

@@ -9,7 +9,6 @@ with import <stockholm/lib>;
     ./monitoring/client.nix
     ./zsh.nix
     ./htop.nix
-    ./backups.nix
     ./security-workarounds.nix
     {
       users.extraUsers =
