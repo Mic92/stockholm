@@ -9,6 +9,7 @@ in {
     dev = {
       name = "dev";
       uid = genid "dev";
+      extraGroups = [ "docker" ];
       description = "user for collaborative development";
       home = "/home/dev";
       useDefaultShell = true;
