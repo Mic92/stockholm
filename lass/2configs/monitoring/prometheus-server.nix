@@ -181,4 +181,37 @@
       security = import <secrets/grafana_security.nix>; # { AdminUser = ""; adminPassword = ""}
     };
   };
+  services.logstash = {
+    enable = true;
+    inputConfig = ''
+      http {
+        port => 14813
+        host => "127.0.0.1"
+      }
+    '';
+    filterConfig = ''
+      if ([alerts]) {
+        ruby {
+          code => '
+            lines = []
+            event["alerts"].each {|p|
+              lines << "#{p["labels"]["instance"]}#{p["annotations"]["summary"]} #{p["status"]}"
+            }
+            event["output"] = lines.join("\n")
+          '
+        }
+      }
+    '';
+    outputConfig = ''
+      file { path => "/tmp/logs.json" codec => "json_lines" }
+      irc {
+        channels => [ "#noise" ]
+        host => "irc.r"
+        nick => "alarm"
+        codec => "json_lines"
+        format => "%{output}"
+      }
+    '';
+    #plugins = [ ];
+  };
 }
