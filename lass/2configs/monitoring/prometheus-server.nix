@@ -130,11 +130,10 @@
           static_configs = [
             {
               targets = [
-                "localhost:9100"
-              ];
-              labels = {
-                alias = "prometheus.example.com";
-              };
+              ] ++ map (host: "${host}:9100") (lib.attrNames (lib.filterAttrs (_: host: host.owner.name == "lass" && host.monitoring) config.krebs.hosts));
+              #labels = {
+              #  alias = "prometheus.example.com";
+              #};
             }
           ];
         }
