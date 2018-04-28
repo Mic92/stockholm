@@ -54,14 +54,17 @@ with import <stockholm/lib>;
         "lassul.us" = ''
           $TTL 3600
           @ IN SOA dns16.ovh.net. tech.ovh.net. (2017093001 86400 3600 3600000 300)
-                          60 IN NS     ns16.ovh.net.
-                          60 IN NS     dns16.ovh.net.
-                          60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-                          60 IN TXT    v=spf1 mx a:lassul.us -all
-          cgit            60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-          io              60 IN NS     ions.lassul.us.
-          ions            60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-          paste           60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+                              60 IN NS     ns16.ovh.net.
+                              60 IN NS     dns16.ovh.net.
+                              60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+                              60 IN TXT    v=spf1 mx a:lassul.us -all
+                              60 IN TXT    ( "v=DKIM1; k=rsa; t=s; s=*; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB" )
+          default._domainkey  60 IN TXT    "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB"
+          cgit                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          go                  60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          io                  60 IN NS     ions.lassul.us.
+          ions                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          paste               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
         '';
       };
       nets = rec {
