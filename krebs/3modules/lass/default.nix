@@ -639,6 +639,37 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPsTeSAedrbp7/KmZX8Mvka702fIUy77Mvqo9HwzCbym";
     };
+    red = {
+      monitoring = false;
+      cores = 1;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.0.13";
+          ip6.addr = "42:0:0:0:0:0:0:12ed";
+          aliases = [
+            "red.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEArAN/62V2MV18wsZ9VMTG
+            4/cqsjvHlffAN8jYDq+GImgREvbiLlFhhHgxwKh0gcDTR8P1xX/00P3/fx/g5bRF
+            Te7LZT2AFmVFFFfx1n9NBweN/gG2/hzB9J8epbWLNT+RzpzHuAoREvDZ+jweSXaI
+            phdmQY2s36yrR3TAShqq0q4cwlXuHT00J+InDutM0mTftBQG/fvYkBhHOfq4WSY0
+            FeMK7DTKNbsqQiKKQ/kvWi7KfTW0F0c7SDpi7BLwbQzP2WbogtGy9MIrw9ZhE6Ox
+            TVdAksPKw0TlYdb16X/MkbzBqTYbxFlmWzpMJABMxIVwAfQx3ZGYvJDdDXmQS2qa
+            mDN2xBb/5pj3fbfp4wbwWlRVSd/AJQtRvaNY24F+UsRJb0WinIguDI6oRZx7Xt8w
+            oYirKqqq1leb3EYUt8TMIXQsOw0/Iq+JJCwB+ZyLLGVNB19XOxdR3RN1JYeZANpE
+            cMSS3SdFGgZ//ZAdhIN5kw9yMeKo6Rnt+Vdz3vZWTuSVp/xYO3IMGXNGAdIWIwrJ
+            7fwSl/rfXGG816h0sD46U0mxd+i68YOtHlzOKe+vMZ4/FJZYd/E5/IDQluV8HLwa
+            5lODfZXUmfStdV+GDA9KVEGUP5xSkC3rMnir66NgHzKpIL002/g/HfGu7O3MrvpW
+            ng7AMvRv5vbsYcJBj2HUhKUCAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKd/6eCR8yxC14zBJLIQgVa4Zbutv5yr2S8k08ztmBpp";
+    };
   };
   users = {
     lass = {

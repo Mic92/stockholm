@@ -10,7 +10,6 @@ in {
   imports = [
     ./default.nix
     ../git.nix
-    (servephpBB [ "rote-allez-fraktion.de" ])
   ];
 
   security.acme = {

@@ -304,6 +304,34 @@ in {
       ];
     }
     <stockholm/lass/2configs/go.nix>
+    {
+      environment.systemPackages = [ pkgs.cryptsetup ];
+      systemd.services."container@red".reloadIfChanged = mkForce false;
+      containers.red = {
+        config = { ... }: {
+          environment.systemPackages = [ pkgs.git ];
+          services.openssh.enable = true;
+          users.users.root.openssh.authorizedKeys.keys = [
+            config.krebs.users.lass.pubkey
+          ];
+        };
+        autoStart = false;
+        enableTun = true;
+        privateNetwork = true;
+        hostAddress = "10.233.2.3";
+        localAddress = "10.233.2.4";
+      };
+      services.nginx.virtualHosts."rote-allez-fraktion.de" = {
+        enableACME = true;
+        addSSL = true;
+        locations."/" = {
+          extraConfig = ''
+            proxy_set_header Host rote-allez-fraktion.de;
+            proxy_pass http://10.233.2.4;
+          '';
+        };
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
