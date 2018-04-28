@@ -21,4 +21,5 @@
   boot.isContainer = true;
   networking.useDHCP = false;
   krebs.ci.stockholmSrc = "http://cgit.prism.r/stockholm";
+  environment.variables.NIX_REMOTE = "daemon";
 }
