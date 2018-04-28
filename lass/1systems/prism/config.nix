@@ -303,6 +303,7 @@ in {
         { predicate = "-p tcp --dport 53589"; target = "ACCEPT"; }
       ];
     }
+    <stockholm/lass/2configs/go.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
