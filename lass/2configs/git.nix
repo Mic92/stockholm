@@ -70,8 +70,8 @@ let
     import <secrets/repos.nix> { inherit config lib pkgs; }
   );
 
-  make-public-repo = name: { cgit ? {}, ... }: {
-    inherit cgit name;
+  make-public-repo = name: { cgit ? {}, collaborators ? [], ... }: {
+    inherit cgit collaborators name;
     public = true;
     hooks = {
       post-receive = pkgs.git-hooks.irc-announce {
