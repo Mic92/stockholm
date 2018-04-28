@@ -9,6 +9,12 @@
   #  useDHCP = true;
   #};
 
+  krebs.iptables.tables.filter.INPUT.rules = [
+    { predicate = "-i retiolum -p tcp --dport 3000"; target = "ACCEPT"; }
+    { predicate = "-i retiolum -p tcp --dport 9090"; target = "ACCEPT"; }
+    { predicate = "-i retiolum -p tcp --dport 9093"; target = "ACCEPT"; }
+  ];
+
   services = {
     prometheus = {
       enable = true;
