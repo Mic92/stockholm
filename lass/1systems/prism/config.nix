@@ -104,6 +104,7 @@ in {
       ];
     }
     { # TODO make new hfos.nix out of this vv
+      boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
       users.users.riot = {
         uid = genid "riot";
         isNormalUser = true;
