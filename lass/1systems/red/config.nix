@@ -24,6 +24,7 @@ in
   networking.useDHCP = false;
 
   services.nginx.enable = true;
+  environment.variables.NIX_REMOTE = "daemon";
   environment.systemPackages = [
     pkgs.mk_sql_pair
   ];
