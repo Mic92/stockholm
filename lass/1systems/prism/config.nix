@@ -8,9 +8,13 @@ in {
   imports = [
     <stockholm/lass>
     {
-      networking.interfaces.et0.ip4 = [
+      networking.interfaces.et0.ipv4.addresses = [
         {
           address = ip;
+          prefixLength = 27;
+        }
+        {
+          address = "46.4.114.243";
           prefixLength = 27;
         }
       ];
@@ -100,6 +104,7 @@ in {
       ];
     }
     { # TODO make new hfos.nix out of this vv
+      boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
       users.users.riot = {
         uid = genid "riot";
         isNormalUser = true;
@@ -110,29 +115,13 @@ in {
       };
 
       # TODO write function for proxy_pass (ssl/nonssl)
-      services.nginx.virtualHosts."hackerfleet.de" = {
-        serverAliases = [
-          "*.hackerfleet.de"
-        ];
-        locations."/".extraConfig = ''
-          proxy_pass http://192.168.122.92:80;
-        '';
-      };
-      services.nginx.virtualHosts."hackerfleet.de-s" = {
-        serverName = "hackerfleet.de";
-        listen = [
-          {
-            addr = "0.0.0.0";
-            port = 443;
-          }
-        ];
-        serverAliases = [
-          "*.hackerfleet.de"
-        ];
-        locations."/".extraConfig = ''
-          proxy_pass http://192.168.122.92:443;
-        '';
-      };
+
+      krebs.iptables.tables.filter.FORWARD.rules = [
+        { v6 = false; precedence = 1000; predicate = "-d 192.168.122.92"; target = "ACCEPT"; }
+      ];
+      krebs.iptables.tables.nat.PREROUTING.rules = [
+        { v6 = false; precedence = 1000; predicate = "-d 46.4.114.243"; target = "DNAT --to-destination 192.168.122.92"; }
+      ];
     }
     {
       users.users.tv = {
@@ -202,26 +191,6 @@ in {
       };
     }
     {
-      #kaepsele
-      systemd.services."container@kaepsele".reloadIfChanged = mkForce false;
-      containers.kaepsele = {
-        config = { ... }: {
-          imports = [ <stockholm/lass/2configs/rebuild-on-boot.nix> ];
-          environment.systemPackages = [ pkgs.git ];
-          services.openssh.enable = true;
-          users.users.root.openssh.authorizedKeys.keys = with config.krebs.users; [
-            lass.pubkey
-            tv.pubkey
-          ];
-        };
-        autoStart = true;
-        enableTun = true;
-        privateNetwork = true;
-        hostAddress = "10.233.2.3";
-        localAddress = "10.233.2.4";
-      };
-    }
-    {
       #onondaga
       systemd.services."container@onondaga".reloadIfChanged = mkForce false;
       containers.onondaga = {
@@ -249,13 +218,12 @@ in {
     <stockholm/lass/2configs/repo-sync.nix>
     <stockholm/lass/2configs/binary-cache/server.nix>
     <stockholm/lass/2configs/iodined.nix>
-    <stockholm/lass/2configs/monitoring/server.nix>
-    <stockholm/lass/2configs/monitoring/monit-alarms.nix>
     <stockholm/lass/2configs/paste.nix>
     <stockholm/lass/2configs/syncthing.nix>
     <stockholm/lass/2configs/reaktor-coders.nix>
     <stockholm/lass/2configs/ciko.nix>
     <stockholm/lass/2configs/container-networking.nix>
+    <stockholm/lass/2configs/monitoring/prometheus-server.nix>
     { # quasi bepasty.nix
       imports = [
         <stockholm/lass/2configs/bepasty.nix>
@@ -335,6 +303,35 @@ in {
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp --dport 53589"; target = "ACCEPT"; }
       ];
+    }
+    <stockholm/lass/2configs/go.nix>
+    {
+      environment.systemPackages = [ pkgs.cryptsetup ];
+      systemd.services."container@red".reloadIfChanged = mkForce false;
+      containers.red = {
+        config = { ... }: {
+          environment.systemPackages = [ pkgs.git ];
+          services.openssh.enable = true;
+          users.users.root.openssh.authorizedKeys.keys = [
+            config.krebs.users.lass.pubkey
+          ];
+        };
+        autoStart = false;
+        enableTun = true;
+        privateNetwork = true;
+        hostAddress = "10.233.2.3";
+        localAddress = "10.233.2.4";
+      };
+      services.nginx.virtualHosts."rote-allez-fraktion.de" = {
+        enableACME = true;
+        addSSL = true;
+        locations."/" = {
+          extraConfig = ''
+            proxy_set_header Host rote-allez-fraktion.de;
+            proxy_pass http://10.233.2.4;
+          '';
+        };
+      };
     }
   ];
 

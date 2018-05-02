@@ -11,6 +11,8 @@ with import <stockholm/lib>;
       <stockholm/makefu/2configs/main-laptop.nix>
       <stockholm/makefu/2configs/extra-fonts.nix>
       <stockholm/makefu/2configs/tools/all.nix>
+      <stockholm/makefu/2configs/tools/mic92.nix>
+
       <stockholm/makefu/2configs/laptop-backup.nix>
       <stockholm/makefu/2configs/dnscrypt/client.nix>
       <stockholm/makefu/2configs/avahi.nix>
@@ -27,6 +29,8 @@ with import <stockholm/lib>;
       # <stockholm/makefu/2configs/vncserver.nix>
       # <stockholm/makefu/2configs/deployment/led-fader>
       # <stockholm/makefu/2configs/deployment/hound>
+      # <stockholm/makefu/2configs/deployment/photostore.krebsco.de.nix>
+      # <stockholm/makefu/2configs/deployment/bureautomation/hass.nix>
 
       # Krebs
       <stockholm/makefu/2configs/tinc/retiolum.nix>
@@ -40,7 +44,7 @@ with import <stockholm/lib>;
       # Virtualization
       <stockholm/makefu/2configs/virtualisation/libvirt.nix>
       <stockholm/makefu/2configs/virtualisation/docker.nix>
-      # <stockholm/makefu/2configs/virtualisation/virtualbox.nix>
+      <stockholm/makefu/2configs/virtualisation/virtualbox.nix>
       {
         networking.firewall.allowedTCPPorts = [ 8080 ];
         networking.nat = {
@@ -78,7 +82,6 @@ with import <stockholm/lib>;
       # <stockholm/makefu/2configs/lanparty/lancache-dns.nix>
       # <stockholm/makefu/2configs/lanparty/samba.nix>
       # <stockholm/makefu/2configs/lanparty/mumble-server.nix>
-      # <stockholm/makefu/2configs/deployment/photostore.krebsco.de.nix>
 
       {
         networking.wireguard.interfaces.wg0 = {
@@ -123,6 +126,7 @@ with import <stockholm/lib>;
             load-module module-filter-heuristics
             load-module module-filter-apply
             load-module module-switch-on-connect
+            load-module module-switch-on-port-available
             '';
         };
 
@@ -136,15 +140,6 @@ with import <stockholm/lib>;
 
         # connect via https://nixos.wiki/wiki/Bluetooth#Using_Bluetooth_headsets_with_PulseAudio
         hardware.bluetooth.enable = true;
-      }
-      { # auto-mounting
-        services.udisks2.enable = true;
-        services.devmon.enable = true;
-        # services.gnome3.gvfs.enable = true;
-        users.users.makefu.packages = with pkgs;[
-          gvfs pcmanfm lxmenu-data
-        ];
-        environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gvfs}/lib/gio/modules" ];
       }
 
     ];
@@ -166,6 +161,7 @@ with import <stockholm/lib>;
 
   networking.extraHosts = ''
     192.168.1.11  omo.local
+    80.92.65.53 www.wifionice.de wifionice.de
   '';
   # hard dependency because otherwise the device will not be unlocked
   boot.initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; allowDiscards=true; }];

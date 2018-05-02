@@ -8,9 +8,9 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/boot/coreboot.nix>
 
     <stockholm/lass/2configs/retiolum.nix>
-    <stockholm/lass/2configs/backups.nix>
     <stockholm/lass/2configs/games.nix>
     <stockholm/lass/2configs/steam.nix>
+    <stockholm/lass/2configs/backup.nix>
     {
       # bubsy config
       users.users.bubsy = {

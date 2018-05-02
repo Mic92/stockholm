@@ -12,9 +12,8 @@ let
   ;
 
   msmtprc = pkgs.writeText "msmtprc" ''
-    account localhost
+    account default
       host localhost
-    account default: localhost
   '';
 
   sendmail = pkgs.writeDash "msmtp" ''

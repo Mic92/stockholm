@@ -3,7 +3,7 @@
 let
   mainUser = config.users.extraUsers.mainUser;
   vdoom = pkgs.writeDash "vdoom" ''
-    ${pkgs.zandronum-bin}/bin/zandronum \
+    ${pkgs.zandronum}/bin/zandronum \
       -fov 120 \
       "$@"
   '';
@@ -50,7 +50,7 @@ let
   vdoomserver = pkgs.writeDashBin "vdoomserver" ''
     DOOM_DIR=''${DOOM_DIR:-~/doom/}
 
-    ${pkgs.zandronum-bin}/bin/zandronum-server \
+    ${pkgs.zandronum}/bin/zandronum-server \
     +exec ${doomservercfg} \
     "$@"
   '';

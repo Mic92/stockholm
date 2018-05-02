@@ -9,6 +9,7 @@ with import <stockholm/lib>;
   hosts = mapAttrs (_: recursiveUpdate {
     owner = config.krebs.users.lass;
     ci = true;
+    monitoring = true;
   }) {
     dishfire = {
       cores = 4;
@@ -43,39 +44,6 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGv0JMp0y+E5433GRSFKVK3cQmP0AAlS9aH9fk49yFxy";
     };
-    echelon = {
-      cores = 2;
-      nets = rec {
-        internet = {
-          ip4.addr = "64.137.242.41";
-          aliases = [
-            "echelon.i"
-          ];
-          ssh.port = 45621;
-        };
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.206.103";
-          ip6.addr = "42:941e:2816:35f4:5c5e:206b:3f0b:f763";
-          aliases = [
-            "echelon.r"
-            "cgit.echelon.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAuscWOYdHu0bpWacvwTNd6bcmrAQ0YFxJWHZF8kPZr+bMKIhnXLkJ
-            oJheENIM6CA9lQQQFUxh2P2pxZavW5rgVlJxIKeiB+MB4v6ZO60LmZgpCsWGD/dX
-            MipM2tLtQxYhvLJIJxEBWn3rxIgeEnCtZsH1KLWyLczb+QpvTjMJ4TNh1nEBPE/f
-            4LUH1JHaGhcaHl2dLemR9wnnDIjmSj0ENJp2al+hWnIggcA/Zp0e4b86Oqbbs5wA
-            n++n5j971cTrBdA89nJDYOEtepisglScVRbgLqJG81lDA+n24RWFynn+U3oD/L8p
-            do+kxlwZUEDRbPU4AO5L+UeIbimsuIfXiQIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL21QDOEFdODFh6WAfNp6odrXo15pEsDQuGJfMu/cKzK";
-    };
     prism = rec {
       cores = 4;
       extraZones = {
@@ -86,14 +54,17 @@ with import <stockholm/lib>;
         "lassul.us" = ''
           $TTL 3600
           @ IN SOA dns16.ovh.net. tech.ovh.net. (2017093001 86400 3600 3600000 300)
-                          60 IN NS     ns16.ovh.net.
-                          60 IN NS     dns16.ovh.net.
-                          60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-                          60 IN TXT    v=spf1 mx -all
-          cgit            60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-          io              60 IN NS     ions.lassul.us.
-          ions            60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-          paste           60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+                              60 IN NS     ns16.ovh.net.
+                              60 IN NS     dns16.ovh.net.
+                              60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+                              60 IN TXT    v=spf1 mx a:lassul.us -all
+                              60 IN TXT    ( "v=DKIM1; k=rsa; t=s; s=*; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB" )
+          default._domainkey  60 IN TXT    "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB"
+          cgit                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          go                  60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          io                  60 IN NS     ions.lassul.us.
+          ions                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          paste               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
         '';
       };
       nets = rec {
@@ -149,6 +120,7 @@ with import <stockholm/lib>;
     };
     domsen-nas = {
       ci = false;
+      monitoring = false;
       external = true;
       nets = rec {
         internet = {
@@ -161,6 +133,7 @@ with import <stockholm/lib>;
       };
     };
     uriel = {
+      monitoring = false;
       cores = 1;
       nets = {
         gg23 = {
@@ -399,10 +372,12 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJzb9BPFClubs6wSOi/ivqPFVPlowXwAxBS0jHaB29hX";
     };
     iso = {
+      monitoring = false;
       ci = false;
       cores = 1;
     };
     sokrateslaptop = {
+      monitoring = false;
       ci = false;
       external = true;
       nets = {
@@ -426,6 +401,7 @@ with import <stockholm/lib>;
       };
     };
     turingmachine = {
+      monitoring = false;
       ci = false;
       external = true;
       nets = {
@@ -454,6 +430,7 @@ with import <stockholm/lib>;
       };
     };
     eddie = {
+      monitoring = false;
       ci = false;
       external = true;
       nets = rec {
@@ -494,6 +471,7 @@ with import <stockholm/lib>;
       };
     };
     borg = {
+      monitoring = false;
       ci = false;
       external = true;
       nets = {
@@ -521,6 +499,7 @@ with import <stockholm/lib>;
       };
     };
     inspector = {
+      monitoring = false;
       ci = false;
       external = true;
       nets = rec {
@@ -552,6 +531,7 @@ with import <stockholm/lib>;
       };
     };
     dpdkm = {
+      monitoring = false;
       ci = false;
       external = true;
       nets = rec {
@@ -617,6 +597,78 @@ with import <stockholm/lib>;
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5HyLyaIvVH0qHIQ4ciKhDiElhSqsK+uXcA6lTvL+5n";
+    };
+    cabal = {
+      cores = 2;
+      nets = rec {
+        retiolum = {
+          ip4.addr = "10.243.1.4";
+          ip6.addr = "42::1:4";
+          aliases = [
+            "cabal.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIECgKCBAEAukXm8xPpC6/F+wssYqQbqt1QDwsPrF3TJ9ToLFcN1WgDlhDhjM3A
+            SuRDMNjRT1fvVTuXyplH5g16eokW/yLOpNnznMS3/VR372pLPEOqfuRf7wAy18jj
+            rZkW3EO7nyZ8KMb+SXA8Q0KIpHY50Ezh+tqGoTZDICwoK6N5dKLgAZShS55JXwwK
+            qRG3vyzV3mDjgVyT0FNfyL1/BN1qvJ+tQQ40lEbkcQauMunMzNbH058kAd6H2/0e
+            LK4JkxI9XpZHE6Pf1epXyClHW7vT7APFRp9gL9tZS/XMC18+aEMFfQrNW9jb3FIq
+            rU5MfJ7aubboe7dT6CRaRSWpduiKLVzY/JCoGvUziyvmR7qHsQWTEjtNuQX9joc3
+            6iq1o+gmLV0G8Xwq8cEcg5USlLxNsGBQPwYnTG6iTPPHqOv7BKucekE/opnVZseE
+            fSNCGl1+tGwa3soSMI97LkpQTZxdeqf+jWZve0RbSa2Ihyod91ldFCqi1+PZx68v
+            yBI0PJamlt+dBx6WQKbPngWYeD8hXo7tg0XVRVa3ZQyX+Mq6uCCb2GM8ewMUPl+A
+            kcY1osFt6+sdkFGdiv3FMyijAiZumPoPprXC/4SGIsMnkoI4JfSAbTpHi2QuesqR
+            KMeairdB7XGUYlMvWpDLKN2dbMdRc+l3kDUKT7hALjKeyWS/27WYeK/STxvZXEXi
+            TZGHopvOFv6wcrb6nI49vIJo5mDLFamAPN3ZjeR20wP95UP7cUUSaTYX49M4lX6U
+            oL5BaFrcLn2PTvS84pUxcXKAp70FgTpvGJbaWwETgDjW+H+qlGmI/BTejpL7flVs
+            TOtaP/uCMxhVZSFv9bzo0ih10o+4gtU8lqxfJsVxlf2K7LVZ++LQba/u+XxRY+xw
+            3IFBfg34tnO6zYlV8XgAiJ6IUOHUZANsuBD4iMoFSVOig6t5eIOkgXR6GEkP8FBD
+            rkroRMmxcu4lTCOzWIuAVOxCd4XXguoGQ4HAzpGd5ccdcb8Ev4RYEvNJY7B5tIQZ
+            4J0F9ECzJuSu1HvWTL+T6a36d2MDTkXU2IJ2tSHciXqiP+QMMF7p9Ux0tiAq4mtf
+            luA94uKWg3cSyTyEM/jF66CgO6Ts3AivNE0MRNupV6AbUdr+TjzotGn9rxi168py
+            w/49OVbpR9EIGC2wxx7qcSEk5chFOcgvNQMRqgIx51bbOL7JYb0f4XuA38GUqLkG
+            09PXmPeyqGzR9HsV2XZDprZdD3Dy4ojdexw0+YILg9bHaAxLHYs6WFZvzfaLLsf1
+            K2I39vvrEEOy8tHi4jvMk7oVX6RWG+DOZMeXTvyUCaBHyYkA0eDlC6NeKOHxnW/g
+            ZtN1W93UdklEqc5okM0/ZIke1HDRt3ZLdQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      secure = true;
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPsTeSAedrbp7/KmZX8Mvka702fIUy77Mvqo9HwzCbym";
+    };
+    red = {
+      monitoring = false;
+      cores = 1;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.0.13";
+          ip6.addr = "42:0:0:0:0:0:0:12ed";
+          aliases = [
+            "red.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEArAN/62V2MV18wsZ9VMTG
+            4/cqsjvHlffAN8jYDq+GImgREvbiLlFhhHgxwKh0gcDTR8P1xX/00P3/fx/g5bRF
+            Te7LZT2AFmVFFFfx1n9NBweN/gG2/hzB9J8epbWLNT+RzpzHuAoREvDZ+jweSXaI
+            phdmQY2s36yrR3TAShqq0q4cwlXuHT00J+InDutM0mTftBQG/fvYkBhHOfq4WSY0
+            FeMK7DTKNbsqQiKKQ/kvWi7KfTW0F0c7SDpi7BLwbQzP2WbogtGy9MIrw9ZhE6Ox
+            TVdAksPKw0TlYdb16X/MkbzBqTYbxFlmWzpMJABMxIVwAfQx3ZGYvJDdDXmQS2qa
+            mDN2xBb/5pj3fbfp4wbwWlRVSd/AJQtRvaNY24F+UsRJb0WinIguDI6oRZx7Xt8w
+            oYirKqqq1leb3EYUt8TMIXQsOw0/Iq+JJCwB+ZyLLGVNB19XOxdR3RN1JYeZANpE
+            cMSS3SdFGgZ//ZAdhIN5kw9yMeKo6Rnt+Vdz3vZWTuSVp/xYO3IMGXNGAdIWIwrJ
+            7fwSl/rfXGG816h0sD46U0mxd+i68YOtHlzOKe+vMZ4/FJZYd/E5/IDQluV8HLwa
+            5lODfZXUmfStdV+GDA9KVEGUP5xSkC3rMnir66NgHzKpIL002/g/HfGu7O3MrvpW
+            ng7AMvRv5vbsYcJBj2HUhKUCAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKd/6eCR8yxC14zBJLIQgVa4Zbutv5yr2S8k08ztmBpp";
     };
   };
   users = {

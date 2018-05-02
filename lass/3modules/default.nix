@@ -8,9 +8,11 @@ _:
     ./mysql-backup.nix
     ./news.nix
     ./pyload.nix
+    ./restic.nix
     ./screenlock.nix
     ./umts.nix
     ./usershadow.nix
+    ./xjail.nix
     ./xserver
   ];
 }

@@ -10,9 +10,6 @@ in {
   krebs.per-user.bitcoin.packages = [
     pkgs.electrum
   ];
-  krebs.per-user.ethereum.packages = [
-    pkgs.go-ethereum
-  ];
   users.extraUsers = {
     bch = {
       name = "bch";
@@ -25,13 +22,6 @@ in {
       name = "bitcoin";
       description = "user for bitcoin stuff";
       home = "/home/bitcoin";
-      useDefaultShell = true;
-      createHome = true;
-    };
-    ethereum = {
-      name = "ethereum";
-      description = "user for ethereum stuff";
-      home = "/home/ethereum";
       useDefaultShell = true;
       createHome = true;
     };

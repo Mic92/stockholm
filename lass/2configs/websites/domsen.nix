@@ -49,6 +49,7 @@ in {
       "www.ubikmedia.eu"
       "www.youthtube.xyz"
       "www.ubikmedia.de"
+      "www.joemisch.com"
       "www.weirdwednesday.de"
 
       "aldona2.ubikmedia.de"
@@ -63,6 +64,7 @@ in {
       "weirdwednesday.ubikmedia.de"
       "freemonkey.ubikmedia.de"
       "jarugadesign.ubikmedia.de"
+      "crypto4art.ubikmedia.de"
     ])
   ];
 

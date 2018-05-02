@@ -52,7 +52,7 @@ in {
 
       # network
       <stockholm/makefu/2configs/vpn/openvpn-server.nix>
-      <stockholm/makefu/2configs/vpn/vpnws/server.nix>
+      # <stockholm/makefu/2configs/vpn/vpnws/server.nix>
       <stockholm/makefu/2configs/dnscrypt/server.nix>
       <stockholm/makefu/2configs/iodined.nix>
 
@@ -64,8 +64,10 @@ in {
       <stockholm/makefu/2configs/nginx/euer.test.nix>
       <stockholm/makefu/2configs/nginx/euer.wiki.nix>
       <stockholm/makefu/2configs/nginx/euer.blog.nix>
+      # <stockholm/makefu/2configs/nginx/gum.krebsco.de.nix>
       <stockholm/makefu/2configs/nginx/public_html.nix>
       <stockholm/makefu/2configs/nginx/update.connector.one.nix>
+      <stockholm/makefu/2configs/nginx/misa-felix-hochzeit.ml.nix>
 
       <stockholm/makefu/2configs/deployment/photostore.krebsco.de.nix>
       <stockholm/makefu/2configs/deployment/graphs.nix>
@@ -222,6 +224,8 @@ in {
           25
           # http
           80 443
+          # httptunnel
+          8080 8443
           # tinc
           655
           # tinc-shack

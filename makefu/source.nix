@@ -1,12 +1,14 @@
 with import <stockholm/lib>;
 host@{ name,
-  override ? {},
-  secure ? false,
-  full ? false,
-  torrent ? false,
-  hw ? false,
-  musnix ? false,
-  python ? false
+  override ? {}
+,  secure ? false
+,  full ? false
+,  torrent ? false
+,  hw ? false
+,  musnix ? false
+,  python ? false
+,  unstable ? false #unstable channel checked out
+,  mic92 ? false
 }:
 let
   builder = if getEnv "dummy_secrets" == "true"
@@ -19,9 +21,8 @@ let
     ];
   };
   # TODO: automate updating of this ref + cherry-picks
-  ref = "51810e0"; # nixos-17.09 @ 2018-02-14
-                   # + do_sqlite3 ruby: 55a952be5b5
-                   # + signal: 0f19beef3
+  ref = "a09afbfb8a4"; # nixos-18.03 @ 2018-04-04
+                       # + do_sqlite3 ruby: 55a952be5b5
 
 in
   evalSource (toString _file) [
@@ -52,28 +53,44 @@ in
     (mkIf ( musnix ) {
       musnix.git = {
         url = https://github.com/musnix/musnix.git;
-        ref = "d8b989f";
+        ref = "master"; # follow the musnix channel, lets see how this works out
       };
     })
 
     (mkIf ( hw ) {
       nixos-hardware.git = {
         url = https://github.com/nixos/nixos-hardware.git;
-        ref = "8a05dc9";
+        ref = "30fdd53";
       };
     })
 
     (mkIf ( python ) {
       python.git = {
         url = https://github.com/garbas/nixpkgs-python;
-        ref = "cac319b";
+        ref = "cac319b7";
       };
     })
+
     (mkIf ( torrent ) {
       torrent-secrets.file = getAttr builder {
         buildbot = toString <stockholm/makefu/6tests/data/secrets>;
         makefu = "/home/makefu/secrets/torrent" ;
       };
     })
+
+    (mkIf ( unstable ) {
+      nixpkgs-unstable.git = {
+        url = https://github.com/nixos/nixpkgs-channels;
+        ref = "nixos-unstable";
+      };
+    })
+
+    (mkIf ( mic92 ) {
+      mic92.git = {
+        url = https://github.com/Mic92/dotfiles/;
+        ref = "48a1f49";
+      };
+    })
+
     override
   ]

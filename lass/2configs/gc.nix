@@ -3,6 +3,6 @@
 with import <stockholm/lib>;
 {
   nix.gc = {
-    automatic = ! elem config.krebs.build.host.name [ "prism" "mors" "helios" ];
+    automatic = ! (elem config.krebs.build.host.name [ "prism" "mors" "helios" ] || config.boot.isContainer);
   };
 }

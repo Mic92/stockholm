@@ -31,7 +31,6 @@ in {
       fi
       ${self.coreutils}/bin/rm $tmp
     '';
-    rtl8814au = callPackage ./custom/rtl8814au { kernel = self.linux; };
 }
 
 // mapAttrs (_: flip callPackage {})
