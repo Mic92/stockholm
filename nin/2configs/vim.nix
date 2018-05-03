@@ -349,6 +349,7 @@ let
     let b:current_syntax = "nix"
 
     set isk=@,48-57,_,192-255,-,'
+    set bg=dark
   '';
 in
 out
