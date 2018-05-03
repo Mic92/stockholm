@@ -164,7 +164,7 @@
               ];
               "webhook_configs" = [
                 {
-                  "url" = "https://example.com/prometheus-alerts";
+                  "url" = "http://127.0.0.1:14813/prometheus-alerts";
                   "send_resolved" = true;
                 }
               ];
