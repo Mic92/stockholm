@@ -1,32 +1,33 @@
 { config, pkgs, lib, ... }:
 {
+  # :l <nixpkgs>
+  # builtins.readDir (pkgs.fetchFromGitHub { owner = "nixos"; repo = "nixpkgs-channels"; rev = "6c064e6b"; sha256 = "1rqzh475xn43phagrr30lb0fd292c1s8as53irihsnd5wcksnbyd"; })
   imports = [
     <stockholm/krebs>
     <stockholm/krebs/2configs>
-    { # minimal disk usage
-      environment.noXlibs = true;
+    { # flag to rebuild everything yourself:
+      # environment.noXlibs = true;
+
+      # minimal disk usage
       nix.gc.automatic = true;
       nix.gc.dates = "03:10";
-      programs.info.enable = false;
-      programs.man.enable = false;
-      services.journald.extraConfig = "SystemMaxUse=50M";
+      documentation.man.enable = false;
+      documentation.info.enable = false;
       services.nixosManual.enable = false;
+      services.journald.extraConfig = "SystemMaxUse=50M";
     }
   ];
   krebs.build.host = config.krebs.hosts.onebutton;
   # NixOS wants to enable GRUB by default
   boot.loader.grub.enable = false;
+
   # Enables the generation of /boot/extlinux/extlinux.conf
   boot.loader.generic-extlinux-compatible.enable = true;
 
-  # !!! If your board is a Raspberry Pi 1, select this:
   boot.kernelPackages = pkgs.linuxPackages_rpi;
 
   nix.binaryCaches = [ "http://nixos-arm.dezgeg.me/channel" ];
   nix.binaryCachePublicKeys = [ "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
-
-  # !!! Needed for the virtual console to work on the RPi 3, as the default of 16M doesn't seem to be enough.
-  # boot.kernelParams = ["cma=32M"];
 
   fileSystems = {
     "/boot" = {
@@ -41,4 +42,7 @@
 
   swapDevices = [ { device = "/swapfile"; size = 1024; } ];
   services.openssh.enable = true;
+
+  networking.wireless.enable = true;
+  hardware.enableRedistributableFirmware = true;
 }

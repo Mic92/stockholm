@@ -75,6 +75,7 @@ let
   };
   wdpath = "/usr/worlddomination/wd.lst";
   esphost = "10.42.24.7"; # esp8266
+  afrihost = "10.42.25.201"; # africa
   timeout = 10; # minutes
 in {
   systemd.services.worlddomination = {
@@ -83,6 +84,18 @@ in {
     serviceConfig = {
       User = "nobody"; # TODO separate user
       ExecStart = "${pkg}/bin/push-led ${esphost} ${pkg}/${wdpath} loop ${toString timeout}";
+      Restart = "always";
+      PrivateTmp = true;
+      PermissionsStartOnly = true;
+    };
+  };
+
+  systemd.services.worlddomination-africa = {
+    description = "run worlddomination africa";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      User = "nobody"; # TODO separate user
+      ExecStart = "${pkg}/bin/push-led ${afrihost} ${pkg}/${wdpath} loop ${toString timeout}";
       Restart = "always";
       PrivateTmp = true;
       PermissionsStartOnly = true;
