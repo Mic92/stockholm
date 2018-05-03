@@ -9,7 +9,6 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/retiolum.nix>
     #<stockholm/lass/2configs/exim-retiolum.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
-    <stockholm/lass/2configs/backups.nix>
     {
       # discordius config
       services.xserver.enable = true;

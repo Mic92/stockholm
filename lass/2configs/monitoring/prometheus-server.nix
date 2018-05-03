@@ -9,6 +9,12 @@
   #  useDHCP = true;
   #};
 
+  krebs.iptables.tables.filter.INPUT.rules = [
+    { predicate = "-i retiolum -p tcp --dport 3000"; target = "ACCEPT"; }
+    { predicate = "-i retiolum -p tcp --dport 9090"; target = "ACCEPT"; }
+    { predicate = "-i retiolum -p tcp --dport 9093"; target = "ACCEPT"; }
+  ];
+
   services = {
     prometheus = {
       enable = true;
@@ -124,11 +130,10 @@
           static_configs = [
             {
               targets = [
-                "localhost:9100"
-              ];
-              labels = {
-                alias = "prometheus.example.com";
-              };
+              ] ++ map (host: "${host}:9100") (lib.attrNames (lib.filterAttrs (_: host: host.owner.name == "lass" && host.monitoring) config.krebs.hosts));
+              #labels = {
+              #  alias = "prometheus.example.com";
+              #};
             }
           ];
         }
@@ -159,7 +164,7 @@
               ];
               "webhook_configs" = [
                 {
-                  "url" = "https://example.com/prometheus-alerts";
+                  "url" = "http://127.0.0.1:14813/prometheus-alerts";
                   "send_resolved" = true;
                 }
               ];
@@ -175,5 +180,38 @@
       rootUrl = "https://grafana.example.com/";
       security = import <secrets/grafana_security.nix>; # { AdminUser = ""; adminPassword = ""}
     };
+  };
+  services.logstash = {
+    enable = true;
+    inputConfig = ''
+      http {
+        port => 14813
+        host => "127.0.0.1"
+      }
+    '';
+    filterConfig = ''
+      if ([alerts]) {
+        ruby {
+          code => '
+            lines = []
+            event["alerts"].each {|p|
+              lines << "#{p["labels"]["instance"]}#{p["annotations"]["summary"]} #{p["status"]}"
+            }
+            event["output"] = lines.join("\n")
+          '
+        }
+      }
+    '';
+    outputConfig = ''
+      file { path => "/tmp/logs.json" codec => "json_lines" }
+      irc {
+        channels => [ "#noise" ]
+        host => "irc.r"
+        nick => "alarm"
+        codec => "json_lines"
+        format => "%{output}"
+      }
+    '';
+    #plugins = [ ];
   };
 }

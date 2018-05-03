@@ -1,3 +1,4 @@
 import <stockholm/lass/source.nix> {
-  name = "echelon";
+  name = "red";
+  secure = true;
 }

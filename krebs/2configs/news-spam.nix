@@ -2,6 +2,7 @@
 
 {
   krebs.newsbot-js.news-spam = {
+    urlShortenerHost = "go.lassul.us";
     feeds = pkgs.writeText "feeds" ''
       [SPAM]aje|http://www.aljazeera.com/Services/Rss/?PostingId=2007731105943979989|#snews
       [SPAM]allafrica|http://allafrica.com/tools/headlines/rdf/latest/headlines.rdf|#snews

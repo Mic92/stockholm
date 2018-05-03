@@ -54,8 +54,8 @@
       eval $(dircolors -b ${pkgs.fetchFromGitHub {
         owner = "trapd00r";
         repo = "LS_COLORS";
-        rev = "master";
-        sha256="05lh5w3bgj9h8d8lrbbwbzw8788709cnzzkl8yh7m1dawkpf6nlp";
+        rev = "a75fca8545f91abb8a5f802981033ef54bf1eac0";
+        sha256="1lzj0qnj89mzh76ha137mnz2hf86k278rh0y9x124ghxj9yqsnb4";
       }}/LS_COLORS)
       alias ls='ls --color'
       zstyle ':completion:*:default' list-colors ''${(s.:.)LS_COLORS}
