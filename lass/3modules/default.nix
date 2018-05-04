@@ -7,6 +7,7 @@ _:
     ./hosts.nix
     ./mysql-backup.nix
     ./news.nix
+    ./nichtparasoup.nix
     ./pyload.nix
     ./restic.nix
     ./screenlock.nix
