@@ -1,13 +1,15 @@
 { config, lib, pkgs, ... }:
 # bln config file
 {
-  imports =
-    [ <stockholm/jeschli>
-      <stockholm/jeschli/2configs/virtualbox.nix>
-      <stockholm/jeschli/2configs/urxvt.nix>
-      <stockholm/jeschli/2configs/emacs.nix>
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix
+    <stockholm/jeschli>
+    <stockholm/jeschli/2configs/virtualbox.nix>
+    <stockholm/jeschli/2configs/urxvt.nix>
+    <stockholm/jeschli/2configs/emacs.nix>
+    <stockholm/jeschli/2configs/xdg.nix>
+    <stockholm/jeschli/2configs/xserver>
+  ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -91,18 +93,11 @@
   services.printing.drivers = [ pkgs.postscript-lexmark ];
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
-
-  services.xserver.windowManager.xmonad.enable = true;
-  services.xserver.windowManager.xmonad.enableContribAndExtras = true;
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.dpi = 100;
-  fonts.fontconfig.dpi = 100;
 
   users.extraUsers.jeschli = {
     isNormalUser = true;
-    extraGroups = ["docker" "vboxusers"];
+    extraGroups = ["docker" "vboxusers" "audio"];
     uid = 1000;
   };
 

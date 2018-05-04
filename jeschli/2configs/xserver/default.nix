@@ -43,6 +43,8 @@ in {
     enable = true;
     display = 11;
     tty = 11;
+
+    dpi = 200;
   
     synaptics = {
       enable = true;
