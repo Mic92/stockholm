@@ -35,9 +35,11 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/rtl-sdr.nix>
     <stockholm/lass/2configs/backup.nix>
     {
-      #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
+        #risk of rain
         { predicate = "-p tcp --dport 11100"; target = "ACCEPT"; }
+        #chromecast
+        { predicate = "-p udp -m multiport --sports 32768:61000 -m multiport --dports 32768:61000"; target = "ACCEPT"; }
       ];
     }
     {
