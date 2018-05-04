@@ -46,6 +46,7 @@ in {
 
     dpi = 200;
   
+    videoDrivers = [ "nvidia" ];
     synaptics = {
       enable = true;
       twoFingerScroll = true;

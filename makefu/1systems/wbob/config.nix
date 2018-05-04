@@ -33,6 +33,9 @@ in {
 
       <stockholm/makefu/2configs/share/wbob.nix>
       <stockholm/makefu/2configs/bluetooth-mpd.nix>
+      {
+        users.users.makefu.extraGroups = [ "pulse" ];
+      }
 
       # Sensors
       <stockholm/makefu/2configs/stats/telegraf>
@@ -49,9 +52,10 @@ in {
           db = "collectd_db";
           logging-interface = "enp0s25";
         in {
+          networking.firewall.allowedTCPPorts = [ 3000 ];
+
           services.grafana.enable = true;
           services.grafana.addr = "0.0.0.0";
-
           services.influxdb.enable = true;
           services.influxdb.extraConfig = {
             meta.hostname = config.krebs.build.host.name;
@@ -121,6 +125,7 @@ in {
   networking.firewall.allowedTCPPorts = [
     655
     8081 #smokeping
+    8086 #influx
     49152
   ];
   networking.firewall.trustedInterfaces = [ "enp0s25" ];

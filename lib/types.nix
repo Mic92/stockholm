@@ -50,6 +50,14 @@ rec {
         default = false;
       };
 
+      monitoring = mkOption {
+        description = ''
+          Whether the host should be monitored by monitoring tools like Prometheus.
+        '';
+        type = bool;
+        default = false;
+      };
+
       owner = mkOption {
         type = user;
       };

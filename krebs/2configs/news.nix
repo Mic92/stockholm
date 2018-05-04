@@ -11,7 +11,7 @@
       painload|https://github.com/krebscode/painload/commits/master.atom|#news
       reddit_haskell|http://www.reddit.com/r/haskell/.rss|#news
       reddit_nix|http://www.reddit.com/r/nixos/.rss|#news
-      shackspace|http://blog.shackspace.de/?feed=rss2|#news
+      shackspace|http://shackspace.de/atom.xml|#news
       tinc|http://tinc-vpn.org/news/index.rss|#news
       vimperator|https://sites.google.com/a/vimperator.org/www/blog/posts.xml|#news
       weechat|http://dev.weechat.org/feed/atom|#news

@@ -9,7 +9,6 @@ in {
     ./power-action.nix
     ./copyq.nix
     ./livestream.nix
-    ./dns-stuff.nix
     ./urxvt.nix
     ./network-manager.nix
     {

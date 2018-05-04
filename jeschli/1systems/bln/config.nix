@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 # bln config file
 {
-  imports = [
+  imports = [ 
     ./hardware-configuration.nix
     <stockholm/jeschli>
     <stockholm/jeschli/2configs/virtualbox.nix>
@@ -94,6 +94,12 @@
 
   # Enable the X11 windowing system.
   services.xserver.videoDrivers = [ "nvidia" ];
+
+#  services.xserver.windowManager.xmonad.enable = true;
+#  services.xserver.windowManager.xmonad.enableContribAndExtras = true;
+#  services.xserver.displayManager.sddm.enable = true;
+#  services.xserver.dpi = 100;
+#  fonts.fontconfig.dpi = 100;
 
   users.extraUsers.jeschli = {
     isNormalUser = true;

@@ -1,14 +1,16 @@
 with import <stockholm/lib>;
 host@{ name,
   override ? {}
-,  secure ? false
-,  full ? false
-,  torrent ? false
-,  hw ? false
-,  musnix ? false
-,  python ? false
-,  unstable ? false #unstable channel checked out
-,  mic92 ? false
+, secure ? false
+, full ? false
+, torrent ? false
+, hw ? false
+, musnix ? false
+, python ? false
+, unstable ? false #unstable channel checked out
+, mic92 ? false
+, nms ? false
+, clever_kexec ?false
 }:
 let
   builder = if getEnv "dummy_secrets" == "true"
@@ -21,9 +23,8 @@ let
     ];
   };
   # TODO: automate updating of this ref + cherry-picks
-  ref = "6583793"; # nixos-17.09 @ 2018-03-07
-                   # + do_sqlite3 ruby: 55a952be5b5
-                   # + signal: 0f19beef3, 50ad913, 9449782, b7046ab2
+  ref = "a09afbfb8a4"; # nixos-18.03 @ 2018-04-04
+                       # + do_sqlite3 ruby: 55a952be5b5
 
 in
   evalSource (toString _file) [
@@ -43,10 +44,14 @@ in
           file = "/home/makefu/store/${ref}";
         };
 
-      secrets.file = getAttr builder {
-        buildbot = toString <stockholm/makefu/6tests/data/secrets>;
-        makefu = "/home/makefu/secrets/${name}";
+      secrets = getAttr builder {
+        buildbot.file = toString <stockholm/makefu/6tests/data/secrets>;
+        makefu.pass = {
+          inherit name;
+          dir = "${getEnv "HOME"}/.secrets-pass";
+        };
       };
+
 
       stockholm.file = toString <stockholm>;
       stockholm-version.pipe = "${pkgs.stockholm}/bin/get-version";
@@ -54,7 +59,7 @@ in
     (mkIf ( musnix ) {
       musnix.git = {
         url = https://github.com/musnix/musnix.git;
-        ref = "d8b989f";
+        ref = "master"; # follow the musnix channel, lets see how this works out
       };
     })
 
@@ -73,9 +78,12 @@ in
     })
 
     (mkIf ( torrent ) {
-      torrent-secrets.file = getAttr builder {
-        buildbot = toString <stockholm/makefu/6tests/data/secrets>;
-        makefu = "/home/makefu/secrets/torrent" ;
+      torrent-secrets = getAttr builder {
+        buildbot.file = toString <stockholm/makefu/6tests/data/secrets>;
+        makefu.pass = {
+          name = "torrent";
+          dir = "${getEnv "HOME"}/.secrets-pass";
+        };
       };
     })
 
@@ -90,6 +98,20 @@ in
       mic92.git = {
         url = https://github.com/Mic92/dotfiles/;
         ref = "48a1f49";
+      };
+    })
+
+    (mkIf ( nms ) {
+      nms.git = {
+        url = https://github.com/r-raymond/nixos-mailserver;
+        ref = "v2.1.2";
+      };
+    })
+
+    (mkIf ( clever_kexec ) {
+      clever_kexec.git = {
+        url = https://github.com/cleverca22/nix-tests;
+        ref = "5a670de7f2decfaafc95c34ffeb0f1896662f3d7";
       };
     })
 
