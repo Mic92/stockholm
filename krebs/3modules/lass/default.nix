@@ -698,6 +698,7 @@ with import <stockholm/lib>;
     lass-icarus = {
       mail = "lass@icarus.r";
       pubkey = builtins.readFile ./ssh/icarus.rsa;
+      pgp.pubkeys.default = builtins.readFile ./pgp/icarus.pgp;
     };
     lass-xerxes = {
       mail = "lass@xerxes.r";
