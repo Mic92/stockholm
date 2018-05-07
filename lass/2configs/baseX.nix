@@ -74,6 +74,7 @@ in {
     gi
     git-preview
     gitAndTools.qgit
+    gnome3.dconf
     lm_sensors
     mpv-poll
     much
