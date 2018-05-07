@@ -367,15 +367,12 @@ in {
       lass.nichtparasoup.enable = true;
       services.nginx = {
         enable = true;
-        virtualHosts.lol = {
+        virtualHosts."lol.lassul.us" = {
           forceSSL = true;
           enableACME = true;
           locations."/".extraConfig = ''
             proxy_pass http://localhost:5001;
           '';
-          serverAliases = [
-            "lol.lassul.us"
-          ];
         };
       };
     }
