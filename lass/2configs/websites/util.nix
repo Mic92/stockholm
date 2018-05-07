@@ -16,11 +16,7 @@ rec {
     in {
       services.nginx.virtualHosts.${domain} = {
         enableACME = true;
-        onlySSL = true;
-        extraConfig = ''
-          listen 80;
-          listen [::]:80;
-        '';
+        forceSSL = true;
         serverAliases = domains;
         locations."/".extraConfig = ''
           root /srv/http/${domain};
@@ -87,12 +83,9 @@ rec {
     in {
       services.nginx.virtualHosts."${domain}" = {
         enableACME = true;
-        onlySSL = true;
+        forceSSL = true;
         serverAliases = domains;
         extraConfig = ''
-          listen 80;
-          listen [::]:80;
-
           # Add headers to serve security related headers
           add_header Strict-Transport-Security "max-age=15768000; includeSubDomains; preload;";
           add_header X-Content-Type-Options nosniff;
@@ -201,12 +194,9 @@ rec {
     in {
       services.nginx.virtualHosts."${domain}" = {
         enableACME = true;
-        onlySSL = true;
+        forceSSL = true;
         serverAliases = domains;
         extraConfig = ''
-          listen 80;
-          listen [::]:80;
-
           root /srv/http/${domain}/;
           index index.php;
           access_log /tmp/nginx_acc.log;
