@@ -90,7 +90,7 @@ main' = do
 
 myLayoutHook = defLayout
   where
-    defLayout = minimize $ ((avoidStruts $ Tall 1 (3/100) (1/2) ||| Full ||| Mirror (Tall 1 (3/100) (1/2))) ||| FixedColumn 2 80 80 1 ||| simplestFloat)
+    defLayout = minimize $ ((avoidStruts $ Mirror (Tall 1 (3/100) (1/2))) ||| Full ||| FixedColumn 2 80 80 1 ||| Tall 1 (3/100) (1/2) ||| simplestFloat)
 
 floatHooks :: Query (Endo WindowSet)
 floatHooks = composeAll . concat $
