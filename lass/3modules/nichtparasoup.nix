@@ -24,9 +24,9 @@ with import <stockholm/lib>;
         [Sites]
         SoupIO: everyone
         Pr0gramm: new,top
-        Reddit: gifs,pics,aww,aww_gifs,reactiongifs,wtf,FoodPorn,cats,StarWars,ANormalDayInRussia,perfectloops,reallifedoodles
+        Reddit: gifs,reactiongifs,ANormalDayInRussia,perfectloops,reallifedoodles,bizarrebuildings,cablefail,cableporn,cableporn,cableporn,educationalgifs,EngineeringPorn,forbiddensnacks,holdmybeer,itsaunixsystem,loadingicon,michaelbaygifs,nononoyesno,oddlysatisfying,ofcoursethatsathing,OSHA,PeopleFuckingDying,PerfectTiming,PixelArt,RetroFuturism,robotsbeingjerks,scriptedasiangifs,shittyrobots,startrekstabilized,ThingsCutInHalfPorn,totallynotrobots,Unexpected
         NineGag: geeky,wtf,hot,trending
-        Instagram: cats,animals,nerdy_gaming_art,nature,wtf
+        Instagram: nature,wtf
         Fourchan: sci
       '';
     };
