@@ -38,7 +38,7 @@
       secrets =
         if test
           then {
-            file = toString <stockholm/krebs/6tests/data/secrets>;
+            file = toString <stockholm/krebs/0tests/data/secrets>;
           }
           else {
             pass = {

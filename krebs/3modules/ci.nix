@@ -147,7 +147,7 @@ in
                     "dummy_secrets": "true",
                   },
                   command=[
-                    "nix-build", "-I", "stockholm=.", "krebs/6tests",
+                    "nix-build", "-I", "stockholm=.", "krebs/0tests",
                     "-A", "{}".format(test)
                   ],
                   timeout=90001
