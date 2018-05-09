@@ -135,7 +135,6 @@ in {
     (sync-retiolum "populate")
     (sync-retiolum "stockholm")
     (sync-retiolum "wai-middleware-time")
-    (sync-retiolum "web-routes-wai-custom")
     (sync-retiolum "xmonad-stockholm")
   ];
 }

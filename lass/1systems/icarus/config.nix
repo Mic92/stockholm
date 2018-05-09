@@ -14,9 +14,10 @@
     <stockholm/lass/2configs/browsers.nix>
     <stockholm/lass/2configs/programs.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
-    <stockholm/lass/2configs/backups.nix>
     <stockholm/lass/2configs/games.nix>
     <stockholm/lass/2configs/bitcoin.nix>
+    <stockholm/lass/2configs/backup.nix>
+    <stockholm/lass/2configs/wine.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.icarus;
@@ -33,4 +34,13 @@
     SUBSYSTEM=="net", ATTR{address}=="00:24:d7:f0:a0:0c", NAME="wl0"
     SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:71:cb:35", NAME="et0"
   '';
+
+  environment.systemPackages = with pkgs; [
+    macchanger
+    dpass
+  ];
+  services.redshift = {
+    enable = true;
+    provider = "geoclue2";
+  };
 }

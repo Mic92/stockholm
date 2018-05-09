@@ -33,10 +33,13 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/ableton.nix>
     <stockholm/lass/2configs/dunst.nix>
     <stockholm/lass/2configs/rtl-sdr.nix>
+    <stockholm/lass/2configs/backup.nix>
     {
-      #risk of rain port
       krebs.iptables.tables.filter.INPUT.rules = [
+        #risk of rain
         { predicate = "-p tcp --dport 11100"; target = "ACCEPT"; }
+        #chromecast
+        { predicate = "-p udp -m multiport --sports 32768:61000 -m multiport --dports 32768:61000"; target = "ACCEPT"; }
       ];
     }
     {
@@ -140,6 +143,8 @@ with import <stockholm/lib>;
     dpass
 
     dnsutils
+    woeusb
+    l-gen-secrets
     generate-secrets
     (pkgs.writeDashBin "btc-coinbase" ''
       ${pkgs.curl}/bin/curl -Ss 'https://api.coinbase.com/v2/prices/spot?currency=EUR' | ${pkgs.jq}/bin/jq '.data.amount'
@@ -186,6 +191,10 @@ with import <stockholm/lib>;
   programs.adb.enable = true;
   users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
   virtualisation.docker.enable = true;
+  services.redshift = {
+    enable = true;
+    provider = "geoclue2";
+  };
 
   lass.restic = genAttrs [
     "daedalus"

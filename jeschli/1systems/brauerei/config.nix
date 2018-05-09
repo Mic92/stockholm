@@ -6,6 +6,8 @@
     ./hardware-configuration.nix
     <stockholm/jeschli/2configs/urxvt.nix>
     <stockholm/jeschli/2configs/emacs.nix>
+    <stockholm/jeschli/2configs/xdg.nix>
+    <stockholm/jeschli/2configs/xserver>
   ];
 
   krebs.build.host = config.krebs.hosts.brauerei;
@@ -57,7 +59,6 @@
     terminator
     tmux
     wget
-  #  rxvt_unicode
   # editors
     emacs
   # internet
@@ -65,6 +66,7 @@
     chromium
     google-chrome
   # programming languages
+    exercism
     go
     gcc
     ghc
@@ -73,6 +75,9 @@
   # go tools
     golint
     gotools
+  # rust
+    cargo
+    rustc
   # dev tools
     gnumake
     jetbrains.pycharm-professional
@@ -105,8 +110,8 @@
   # services.printing.enable = true;
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.layout = "us";
+  # services.xserver.enable = true;
+  # services.xserver.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e";
 
   # Enable touchpad support.
@@ -115,18 +120,18 @@
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.sddm.enable = true;
   # services.xserver.desktopManager.plasma5.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.windowManager.xmonad.enable = true;
-  services.xserver.windowManager.xmonad.enableContribAndExtras = true;
-#
+  #  services.xserver.displayManager.sddm.enable = true;
+  #  services.xserver.windowManager.xmonad.enable = true;
+  #  services.xserver.windowManager.xmonad.enableContribAndExtras = true;
+  #
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.extraUsers.jeschli = {
+  users.extraUsers.jeschli = { # TODO: define as krebs.users
     isNormalUser = true;
     uid = 1000;
   };
   users.extraUsers.jamie = {
     isNormalUser = true;
-    uid = 1001;
+    uid = 1001; # TODO genid
   };
 
   users.users.root.openssh.authorizedKeys.keys = [
@@ -138,5 +143,12 @@
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "17.09"; # Did you read the comment?
+
+  hardware.trackpoint = {
+    enable = true;
+    sensitivity = 220;
+    speed = 0;
+    emulateWheel = true;
+  };
 
 }
