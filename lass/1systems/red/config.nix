@@ -20,8 +20,6 @@ in
   ];
 
   krebs.build.host = config.krebs.hosts.red;
-  boot.isContainer = true;
-  networking.useDHCP = false;
 
   services.nginx.enable = true;
   environment.variables.NIX_REMOTE = "daemon";
