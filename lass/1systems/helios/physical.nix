@@ -25,8 +25,6 @@
         fsType = "tmpfs";
         options = ["nosuid" "nodev" "noatime"];
       };
-
-      nix.maxJobs = lib.mkDefault 8;
     }
     { # crypto stuff
       boot.initrd.luks = {
