@@ -24,7 +24,7 @@ with import <stockholm/lib>;
         [Sites]
         SoupIO: everyone
         Pr0gramm: new,top
-        Reddit: gifs,reactiongifs,ANormalDayInRussia,perfectloops,reallifedoodles,bizarrebuildings,cablefail,cableporn,cableporn,cableporn,educationalgifs,EngineeringPorn,forbiddensnacks,holdmybeer,itsaunixsystem,loadingicon,michaelbaygifs,nononoyesno,oddlysatisfying,ofcoursethatsathing,OSHA,PeopleFuckingDying,PerfectTiming,PixelArt,RetroFuturism,robotsbeingjerks,scriptedasiangifs,shittyrobots,startrekstabilized,ThingsCutInHalfPorn,totallynotrobots,Unexpected
+        Reddit: gifs,reactiongifs,ANormalDayInRussia,perfectloops,reallifedoodles,bizarrebuildings,cablefail,cableporn,educationalgifs,EngineeringPorn,holdmybeer,itsaunixsystem,loadingicon,michaelbaygifs,nononoyesno,oddlysatisfying,ofcoursethatsathing,OSHA,PeopleFuckingDying,PerfectTiming,PixelArt,RetroFuturism,robotsbeingjerks,scriptedasiangifs,shittyrobots,startrekstabilized,ThingsCutInHalfPorn,totallynotrobots,Unexpected
         NineGag: geeky,wtf,hot,trending
         Instagram: nature,wtf
         Fourchan: sci
