@@ -26,12 +26,7 @@ in {
     ./default.nix
     ./sqlBackup.nix
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
-    (servePage [
-      "habsys.de"
-      "habsys.eu"
-      "www.habsys.de"
-      "www.habsys.eu"
-    ])
+    (servePage [ "freemonkey.art" ])
     (serveOwncloud [ "o.ubikmedia.de" ])
     (serveWordpress [
       "ubikmedia.de"
