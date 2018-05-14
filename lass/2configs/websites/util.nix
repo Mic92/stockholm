@@ -16,7 +16,7 @@ rec {
     in {
       services.nginx.virtualHosts.${domain} = {
         enableACME = true;
-        forceSSL = true;
+        addSSL = true;
         serverAliases = domains;
         locations."/".extraConfig = ''
           root /srv/http/${domain};
@@ -83,7 +83,7 @@ rec {
     in {
       services.nginx.virtualHosts."${domain}" = {
         enableACME = true;
-        forceSSL = true;
+        addSSL = true;
         serverAliases = domains;
         extraConfig = ''
           # Add headers to serve security related headers
@@ -194,7 +194,7 @@ rec {
     in {
       services.nginx.virtualHosts."${domain}" = {
         enableACME = true;
-        forceSSL = true;
+        addSSL = true;
         serverAliases = domains;
         extraConfig = ''
           root /srv/http/${domain}/;
