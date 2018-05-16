@@ -186,4 +186,5 @@ with import <stockholm/lib>;
       RandomizedDelaySec = "5h";
     };
   });
+  virtualisation.libvirtd.enable = true;
 }
