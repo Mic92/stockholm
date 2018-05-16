@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 
 {
   #krebs.iptables.tables.filter.INPUT.rules = [
@@ -24,4 +24,5 @@
     { v6 = false; predicate = "-s 10.233.2.0/24 ! -d 10.233.2.0/24 -p tcp"; target = "MASQUERADE --to-ports 1024-65535"; }
     { v6 = false; predicate = "-s 10.233.2.0/24 ! -d 10.233.2.0/24 -p udp"; target = "MASQUERADE --to-ports 1024-65535"; }
   ];
+  boot.kernel.sysctl."net.ipv4.ip_forward" = lib.mkDefault 1;
 }
