@@ -18,8 +18,8 @@
   };
 
   services.udev.extraRules = ''
-    SUBSYSTEM=="net", ATTR{address}=="00:24:d7:f0:e8:c8", NAME="wl0"
-    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:8f:8a:78", NAME="et0"
+    SUBSYSTEM=="net", ATTR{address}=="5a:37:e4:6e:1f:9d", NAME="wl0"
+    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:c4:7a:f1", NAME="et0"
   '';
 
   #TODO activationScripts seem broken, fix them!
