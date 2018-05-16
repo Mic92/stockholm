@@ -702,8 +702,13 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSBxtPf8yJfzzI7/iYpoRSc/TT+zYmE/HM9XWS3MZlv";
     };
   };
-  users = {
-    lass = {
+  users = rec {
+    lass = lass-mors;
+    lass-blue = {
+      mail = "lass@blue.r";
+      pubkey = builtins.readFile ./ssh/blue.rsa;
+    };
+    lass-mors = {
       mail = "lass@mors.r";
       pubkey = builtins.readFile ./ssh/mors.rsa;
       pgp.pubkeys.default = builtins.readFile ./pgp/mors.pgp;
