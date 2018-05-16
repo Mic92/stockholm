@@ -22,7 +22,6 @@ in
   krebs.build.host = config.krebs.hosts.red;
 
   services.nginx.enable = true;
-  environment.variables.NIX_REMOTE = "daemon";
   environment.systemPackages = [
     pkgs.mk_sql_pair
   ];
