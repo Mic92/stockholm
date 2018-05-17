@@ -707,6 +707,7 @@ with import <stockholm/lib>;
     lass-blue = {
       mail = "lass@blue.r";
       pubkey = builtins.readFile ./ssh/blue.rsa;
+      pgp.pubkeys.default = builtins.readFile ./pgp/blue.pgp;
     };
     lass-mors = {
       mail = "lass@mors.r";
