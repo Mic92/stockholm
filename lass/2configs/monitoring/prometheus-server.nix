@@ -159,7 +159,6 @@
               "email_configs" = [
                 {
                   "to" = "devnull@example.com";
-                  "send_resolved" = true;
                 }
               ];
               "webhook_configs" = [
