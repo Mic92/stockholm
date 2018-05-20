@@ -703,7 +703,7 @@ with import <stockholm/lib>;
     };
   };
   users = rec {
-    lass = lass-mors;
+    lass = lass-blue;
     lass-blue = {
       mail = "lass@blue.r";
       pubkey = builtins.readFile ./ssh/blue.rsa;
