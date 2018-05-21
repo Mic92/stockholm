@@ -309,6 +309,34 @@ with import <stockholm/lib>;
         { v6 = false; predicate = "-d ${config.krebs.hosts.blue.nets.retiolum.ip4.addr} -p tcp --dport 9999"; target = "MASQUERADE"; }
       ];
     }
+    {
+      krebs.iptables.tables.filter.INPUT.rules = [
+         { predicate = "-p udp --dport 51820"; target = "ACCEPT"; }
+      ];
+      krebs.iptables.tables.nat.PREROUTING.rules = [
+        { v6 = false; precedence = 1000; predicate = "-s 10.244.1.0/24"; target = "ACCEPT"; }
+      ];
+      krebs.iptables.tables.filter.FORWARD.rules = [
+        { v6 = false; precedence = 1000; predicate = "-s 10.244.1.0/24"; target = "ACCEPT"; }
+        { v6 = false; precedence = 1000; predicate = "-s 10.243.0.0/16 -d 10.244.1.0/24"; target = "ACCEPT"; }
+      ];
+      krebs.iptables.tables.nat.POSTROUTING.rules = [
+        { v6 = false; predicate = "-s 10.244.1.0/24 ! -d 10.244.1.0/24"; target = "MASQUERADE"; }
+      ];
+      networking.wireguard.interfaces.wg0 = {
+        ips = [ "10.244.1.1/24" ];
+        listenPort = 51820;
+        privateKeyFile = (toString <secrets>) + "/wireguard.key";
+        allowedIPsAsRoutes = true;
+        peers = [
+          {
+            # lass-android
+            allowedIPs = [ "10.244.1.2/32" ];
+            publicKey = "63+ns9AGv6e6a8WgxiZNFEt1xQT0YKFlEHzRaYJWtmk=";
+          }
+        ];
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
