@@ -243,7 +243,7 @@ with import <stockholm/lib>;
       };
       services.nginx.virtualHosts."rote-allez-fraktion.de" = {
         enableACME = true;
-        addSSL = true;
+        forceSSL = true;
         locations."/" = {
           extraConfig = ''
             proxy_set_header Host rote-allez-fraktion.de;
