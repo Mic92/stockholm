@@ -13,7 +13,6 @@ let
       ./buildbot/master.nix
       ./buildbot/slave.nix
       ./build.nix
-      ./ci.nix
       ./current.nix
       ./exim.nix
       ./exim-retiolum.nix
