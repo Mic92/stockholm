@@ -65,6 +65,7 @@ with import <stockholm/lib>;
           io                  60 IN NS     ions.lassul.us.
           ions                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           paste               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          lol                 60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
         '';
       };
       nets = rec {
@@ -670,9 +671,45 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKd/6eCR8yxC14zBJLIQgVa4Zbutv5yr2S8k08ztmBpp";
     };
+    blue = {
+      cores = 1;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.0.77";
+          ip6.addr = "42:0:0:0:0:0:0:77";
+          aliases = [
+            "blue.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA28b+WMiQaWbwUPcJlacd
+            QwyX4PvVm9WItPmmNy+RE2y0Mf04LxZ7RLm5+e0wPuhXXQyhZ06CNd6tjeaKfXUc
+            sNeC1Vjuh1hsyYJLR5Xf/YRNJQKoaHjbkXGt+rSK7PPuCcsUPOSZSEAgHYVvcFzM
+            wWE4kTDcBZeISB4+yLmPIZXhnDImRRMEurFNRiocoMmEIu/zyYVq8rnlTl972Agu
+            PMGo1HqVxCouEWstRvtX5tJmV8yruRbH4tADAruLXErLLwUAx/AYDNRjY1TYYetJ
+            RoaxejmZVVIvR+hWaDLkHZO89+to6wS5IVChs1anFxMNN6Chq2v8Bb2Nyy1oG/H/
+            HzXxj1Rn7CN9es5Wl0UX4h9Zg+hfspoI75lQ509GLusYOyFwgmFF02eMpxgHBiWm
+            khSJzPkFdYJKUKaZI0nQEGGsFJOe/Se5jj70x3Q5XEuUoQqyahAqwQIYh6uwhbuP
+            49RBPHpE+ry6smhUPLTitrRsqeBU4RZRNsUAYyCbwyAH1i+K3Q5PSovgPtlHVr2N
+            w+VZCzsrtOY2fxXw0e+mncrx/Qga62s4m6a/dyukA5RytA9f6bBsvSTqr7/EQTs6
+            ZEBoPudk7ULNEbfjmJtBkeG7wKIlpgzVg/JaCAwMuSgVjrpIHrZmjOVvmOwB8W6J
+            Ch/o7chVljAwW4JmyRnhZbMCAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSBxtPf8yJfzzI7/iYpoRSc/TT+zYmE/HM9XWS3MZlv";
+    };
   };
-  users = {
-    lass = {
+  users = rec {
+    lass = lass-blue;
+    lass-blue = {
+      mail = "lass@blue.r";
+      pubkey = builtins.readFile ./ssh/blue.rsa;
+      pgp.pubkeys.default = builtins.readFile ./pgp/blue.pgp;
+    };
+    lass-mors = {
       mail = "lass@mors.r";
       pubkey = builtins.readFile ./ssh/mors.rsa;
       pgp.pubkeys.default = builtins.readFile ./pgp/mors.pgp;
@@ -697,6 +734,7 @@ with import <stockholm/lib>;
     lass-icarus = {
       mail = "lass@icarus.r";
       pubkey = builtins.readFile ./ssh/icarus.rsa;
+      pgp.pubkeys.default = builtins.readFile ./pgp/icarus.pgp;
     };
     lass-xerxes = {
       mail = "lass@xerxes.r";

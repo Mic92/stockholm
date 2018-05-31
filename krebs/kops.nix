@@ -13,7 +13,7 @@
 
   krebs-source = {
     nixpkgs.git = {
-      ref = "b50443b5c4ac0f382c49352a892b9d5d970eb4e7";
+      ref = "ef74cafd3e5914fdadd08bf20303328d72d65d6c";
       url = https://github.com/NixOS/nixpkgs;
     };
     stockholm.file = toString ../.;
@@ -38,7 +38,7 @@
       secrets =
         if test
           then {
-            file = toString <stockholm/krebs/6tests/data/secrets>;
+            file = toString <stockholm/krebs/0tests/data/secrets>;
           }
           else {
             pass = {

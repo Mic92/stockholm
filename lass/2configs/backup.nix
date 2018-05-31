@@ -15,6 +15,7 @@ with import <stockholm/lib>;
     openssh.authorizedKeys.keys = with config.krebs.hosts; [
       mors.ssh.pubkey
       prism.ssh.pubkey
+      blue.ssh.pubkey
     ];
   };
 }

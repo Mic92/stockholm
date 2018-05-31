@@ -12,7 +12,7 @@ host@{ name, secure ? false, override ? {} }: let
 in
   evalSource (toString _file) [
     {
-      nixos-config.symlink = "stockholm/lass/1systems/${name}/config.nix";
+      nixos-config.symlink = "stockholm/lass/1systems/${name}/physical.nix";
       nixpkgs = (import <stockholm/krebs/source.nix> host).nixpkgs;
       secrets = getAttr builder {
         buildbot.file = toString <stockholm/lass/2configs/tests/dummy-secrets>;

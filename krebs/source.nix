@@ -14,7 +14,7 @@ in
     {
       nixos-config.symlink = "stockholm/krebs/1systems/${name}/config.nix";
       secrets = getAttr builder {
-        buildbot.file = toString <stockholm/krebs/6tests/data/secrets>;
+        buildbot.file = toString <stockholm/krebs/0tests/data/secrets>;
         krebs.pass = {
           dir = "${getEnv "HOME"}/brain";
           name = "krebs-secrets/${name}";

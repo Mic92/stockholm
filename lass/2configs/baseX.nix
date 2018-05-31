@@ -69,11 +69,13 @@ in {
   environment.systemPackages = with pkgs; [
     acpi
     bank
+    cabal2nix
     dic
     dmenu
     gi
-    git-preview
     gitAndTools.qgit
+    git-preview
+    gnome3.dconf
     lm_sensors
     mpv-poll
     much
@@ -86,19 +88,18 @@ in {
     rxvt_unicode_with-plugins
     slock
     sxiv
-    timewarrior
     taskwarrior
     termite
+    thesauron
+    timewarrior
     xclip
+    xephyrify
     xorg.xbacklight
     xorg.xhost
     xsel
     youtube-tools
     yt-next
     zathura
-
-    cabal2nix
-    xephyrify
   ];
 
   fonts.fonts = with pkgs; [

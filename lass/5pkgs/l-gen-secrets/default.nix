@@ -17,9 +17,9 @@ pkgs.writeDashBin "l-gen-secrets" ''
 
   cd $TMPDIR
   for x in *; do
-    ${pkgs.coreutils}/bin/cat $x | ${pkgs.pass}/bin/pass insert -m krebs-secrets/$HOSTNAME/$x > /dev/null
+    ${pkgs.coreutils}/bin/cat $x | ${pkgs.pass}/bin/pass insert -m hosts/$HOSTNAME/$x > /dev/null
   done
-  echo $PASSWORD | ${pkgs.pass}/bin/pass insert -m hosts/$HOSTNAME/pass > /dev/null
+  echo $PASSWORD | ${pkgs.pass}/bin/pass insert -m admin/$HOSTNAME/pass > /dev/null
 
   cat <<EOF
     $HOSTNAME = {

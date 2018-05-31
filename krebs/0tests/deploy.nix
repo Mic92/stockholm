@@ -3,7 +3,7 @@ import <nixpkgs/nixos/tests/make-test.nix> ({ ... }:
 
 let
   pkgs = import <nixpkgs> { overlays = [(import ../5pkgs)]; };
-  test-config = <stockholm/krebs/6tests/data/test-config.nix>;
+  test-config = <stockholm/krebs/0tests/data/test-config.nix>;
   privKey = ''
     -----BEGIN OPENSSH PRIVATE KEY-----
     b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW

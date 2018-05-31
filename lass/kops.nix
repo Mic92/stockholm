@@ -8,7 +8,7 @@
   source = { test }: lib.evalSource [
     krebs-source
     {
-      nixos-config.symlink = "stockholm/lass/1systems/${name}/config.nix";
+      nixos-config.symlink = "stockholm/lass/1systems/${name}/physical.nix";
       secrets = if test then {
         file = "/home/lass/stockholm/lass/2configs/tests/dummy-secrets";
       } else {

@@ -44,7 +44,7 @@ in {
     display = 11;
     tty = 11;
 
-    dpi = 100;
+    dpi = 200;
   
     videoDrivers = [ "nvidia" ];
     synaptics = {
