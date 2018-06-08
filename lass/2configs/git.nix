@@ -54,7 +54,7 @@ let
       cgit.section  = "art";
     };
     nix-user-chroot = {
-      cgit.desc = "Fork of nix-user-chroot my lethalman";
+      cgit.desc = "Fork of nix-user-chroot by lethalman";
       cgit.section = "software";
     };
     krops = {
