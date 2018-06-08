@@ -141,25 +141,5 @@ rec {
     '';
   });
 
-  wiki-todo-add = buildSimpleReaktorPlugin "wiki-todo-add" {
-    pattern = "^wiki-todo: (?P<args>.*)$$";
-    script = pkgs.writeDash "wiki-todo-add" ''
-      echo "$*" >> wiki-todo
-      echo "added todo. check on http://lassul.us/wiki-todo"
-    '';
-  };
-  wiki-todo-done = buildSimpleReaktorPlugin "wiki-todo-done" {
-    pattern = "^wiki-done: (?P<args>.*)$$";
-    script = pkgs.writeDash "wiki-todo-done" ''
-      ${pkgs.gnugrep}/bin/grep -Fvxe "$*" wiki-todo > wiki-todo.tmp
-      ${pkgs.coreutils}/bin/mv wiki-todo.tmp wiki-todo
-      echo "thank you for resolving todo: $*"
-    '';
-  };
-  wiki-todo-show = buildSimpleReaktorPlugin "wiki-todo" {
-    pattern = "^wiki-show$";
-    script = pkgs.writeDash "wiki-show" ''
-      ${pkgs.coreutils}/bin/cat wiki-todo
-    '';
   };
 }
