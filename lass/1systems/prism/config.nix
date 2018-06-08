@@ -321,6 +321,11 @@ with import <stockholm/lib>;
         ];
       };
     }
+    {
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
+      ];
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
