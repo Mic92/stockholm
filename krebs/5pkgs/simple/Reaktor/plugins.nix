@@ -141,5 +141,27 @@ rec {
     '';
   });
 
+  todo = name: {
+    add = buildSimpleReaktorPlugin "${name}-add" {
+      pattern = "^${name}-add: (?P<args>.*)$$";
+      script = pkgs.writeDash "${name}-add" ''
+        echo "$*" >> ${name}-todo
+        echo "added ${name} todo"
+      '';
+    };
+    delete = buildSimpleReaktorPlugin "${name}-delete" {
+      pattern = "^${name}-delete: (?P<args>.*)$$";
+      script = pkgs.writeDash "${name}-delete" ''
+        ${pkgs.gnugrep}/bin/grep -Fvxe "$*" ${name}-todo > ${name}-todo.tmp
+        ${pkgs.coreutils}/bin/mv ${name}-todo.tmp ${name}-todo
+        echo "removed ${name} todo: $*"
+      '';
+    };
+    show = buildSimpleReaktorPlugin "${name}-show" {
+      pattern = "^${name}-show$";
+      script = pkgs.writeDash "${name}-show" ''
+        ${pkgs.coreutils}/bin/cat ${name}-todo
+      '';
+    };
   };
 }
