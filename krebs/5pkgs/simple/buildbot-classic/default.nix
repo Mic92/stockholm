@@ -7,7 +7,7 @@ python2Packages.buildPythonApplication rec {
   patches = [];
 
   src = fetchFromGitHub {
-    owner = "krebscode";
+    owner = "krebs";
     repo = "buildbot-classic";
     rev = version;
     sha256 = "0g686n6m0cjfyympl0ksansllx503gby3hx9gmc8hiyx6x5fkjha";

@@ -94,7 +94,7 @@
       [SPAM]npr_world|http://www.npr.org/rss/rss.php?id=1004|#snews
       [SPAM]nsa|https://www.nsa.gov/rss.xml|#snews #bullerei
       [SPAM]nytimes|http://rss.nytimes.com/services/xml/rss/nyt/World.xml|#snews
-      [SPAM]painload|https://github.com/krebscode/painload/commits/master.atom|#snews
+      [SPAM]painload|https://github.com/krebs/painload/commits/master.atom|#snews
       [SPAM]phys|http://phys.org/rss-feed/|#snews
       [SPAM]piraten|https://www.piratenpartei.de/feed/|#snews
       [SPAM]polizei_berlin|http://www.berlin.de/polizei/presse-fahndung/_rss_presse.xml|#snews

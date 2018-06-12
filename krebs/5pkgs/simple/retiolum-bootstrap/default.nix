@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
 
   src = fetchurl {
-    url = https://raw.githubusercontent.com/krebscode/painload/master/retiolum/scripts/tinc_setup/new_install.sh;
+    url = https://raw.githubusercontent.com/krebs/painload/master/retiolum/scripts/tinc_setup/new_install.sh;
     sha256 = "03kmil8q2xm3rdm2jxyah7vww84pw6w01d0c3siid9zpn2j7la9s";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Retiolum boostrap scripts";
-    url = https://github.com/krebscode/painload;
+    url = https://github.com/krebs/painload;
     license = licenses.wtfpl;
     platforms = platforms.unix;
     maintainers = with maintainers; [ makefu ];
