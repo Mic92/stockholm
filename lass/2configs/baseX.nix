@@ -68,6 +68,7 @@ in {
 
   environment.systemPackages = with pkgs; [
     acpi
+    ag
     bank
     cabal2nix
     dic

@@ -50,6 +50,7 @@ with import <stockholm/lib>;
   users.extraUsers.root.openssh.authorizedKeys.keys = [
     # TODO
     config.krebs.users.lass.pubkey
+    config.krebs.users.lass-mors.pubkey
     config.krebs.users.makefu.pubkey
     # TODO HARDER:
     config.krebs.users.makefu-omo.pubkey

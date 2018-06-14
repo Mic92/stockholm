@@ -9,6 +9,11 @@ with (import <stockholm/lib>);
     ./pass.nix
   ];
 
+  environment.systemPackages = with pkgs; [
+    ag
+    nmap
+  ];
+
   services.tor.enable = true;
 
   krebs.iptables.tables.filter.INPUT.rules = [

@@ -133,6 +133,7 @@ myKeys conf = Map.fromList $
     [ ((_4  , xK_Escape ), forkFile "/run/wrappers/bin/slock" [] Nothing)
     , ((_4S , xK_c      ), kill)
 
+    , ((_4  , xK_o      ), forkFile "${pkgs.otpmenu}/bin/otpmenu" [] Nothing)
     , ((_4  , xK_p      ), forkFile "${pkgs.pass}/bin/passmenu" ["--type"] Nothing)
 
     , ((_4  , xK_x      ), chooseAction spawnTermAt)

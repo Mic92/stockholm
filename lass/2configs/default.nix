@@ -23,7 +23,6 @@ with import <stockholm/lib>;
             config.krebs.users.lass-blue.pubkey
             config.krebs.users.lass-shodan.pubkey
             config.krebs.users.lass-icarus.pubkey
-            config.krebs.users.lass-xerxes.pubkey
           ];
         };
         mainUser = {

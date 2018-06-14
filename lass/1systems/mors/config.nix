@@ -140,14 +140,6 @@ with import <stockholm/lib>;
     OnCalendar = "00:37";
   };
 
-  environment.shellAliases = {
-    deploy = pkgs.writeDash "deploy" ''
-      set -eu
-      export SYSTEM="$1"
-      $(nix-build $HOME/stockholm/lass/kops.nix --no-out-link --argstr name "$SYSTEM" -A deploy)
-    '';
-  };
-
   nix.package = pkgs.nixUnstable;
   programs.adb.enable = true;
   users.users.mainUser.extraGroups = [ "adbusers" "docker" ];

@@ -10,7 +10,7 @@ with python3Packages; buildPythonPackage rec {
     pkgs.git
   ];
   src = fetchFromGitHub {
-    owner = "krebscode";
+    owner = "krebs";
     repo = "repo-sync";
     rev = version;
     sha256 = "1qjf1jmxf7xzwskybdys4vqncnwj9f3xwk1gv354zrla68s533cw";

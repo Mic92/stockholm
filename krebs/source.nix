@@ -22,7 +22,7 @@ in
       };
       stockholm.file = toString <stockholm>;
       stockholm-version.pipe = "${pkgs.stockholm}/bin/get-version";
-      nixpkgs = (import ./kops.nix { name = ""; }).krebs-source.nixpkgs;
+      nixpkgs = (import ./krops.nix { name = ""; }).krebs-source.nixpkgs;
     }
     override
   ]

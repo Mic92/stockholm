@@ -175,7 +175,6 @@ with import <stockholm/lib>;
         alias /var/realwallpaper/realwallpaper.png;
       '';
     }
-    <stockholm/krebs/2configs/reaktor-krebs.nix>
     <stockholm/lass/2configs/dcso-dev.nix>
     {
       users.users.jeschli = {
@@ -336,6 +335,11 @@ with import <stockholm/lib>;
           }
         ];
       };
+    }
+    {
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
+      ];
     }
   ];
 
