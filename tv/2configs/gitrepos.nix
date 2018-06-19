@@ -42,7 +42,7 @@ let {
     kirk = {
       cgit.desc = "IRC tools";
     };
-    kops = {
+    krops = {
       cgit.desc = "deployment tools";
     };
     load-env = {};
@@ -54,6 +54,7 @@ let {
     netcup = {
       cgit.desc = "netcup command line interface";
     };
+    nix-writers = {};
     populate = {
       cgit.desc = "source code installer";
     };

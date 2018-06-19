@@ -6,7 +6,7 @@ in {
   boot.extraModulePackages = [
     pkgs.linuxPackages.rtl8814au
   ];
-  networking.networkmanager.unmanaged = [ wifi ];
+  networking.networkmanager.unmanaged = [ wifi "et0" ];
 
   systemd.services.hostapd = {
     description = "hostapd wireless AP";
@@ -38,12 +38,17 @@ in {
     };
   };
 
-  networking.interfaces.${wifi}.ipv4.addresses = [
+  networking.bridges.br0.interfaces = [
+    wifi
+    "et0"
+  ];
+
+  networking.interfaces.br0.ipv4.addresses = [
     { address = "10.99.0.1"; prefixLength = 24; }
   ];
   services.dhcpd4 = {
     enable = true;
-    interfaces = [ wifi ];
+    interfaces = [ "br0" ];
     extraConfig = ''
       option subnet-mask 255.255.255.0;
       option routers 10.99.0.1;
@@ -56,11 +61,12 @@ in {
 
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
   krebs.iptables.tables.filter.FORWARD.rules = [
-    { v6 = false; predicate = "-d 10.99.0.0/24 -o ${wifi} -m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; }
-    { v6 = false; predicate = "-s 10.99.0.0/24 -i ${wifi}"; target = "ACCEPT"; }
-    { v6 = false; predicate = "-i ${wifi} -o ${wifi}"; target = "ACCEPT"; }
-    { v6 = false; predicate = "-o ${wifi}"; target = "REJECT --reject-with icmp-port-unreachable"; }
-    { v6 = false; predicate = "-i ${wifi}"; target = "REJECT --reject-with icmp-port-unreachable"; }
+    { v6 = false; predicate = "-d 10.99.0.0/24 -o br0 -m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; }
+    { v6 = false; predicate = "-s 10.99.0.0/24 -i br0"; target = "ACCEPT"; }
+    { v6 = false; predicate = "-i br0 -o br0"; target = "ACCEPT"; }
+    { v6 = false; predicate = "-i br0 -o br0"; target = "ACCEPT"; }
+    { v6 = false; predicate = "-o br0"; target = "REJECT --reject-with icmp-port-unreachable"; }
+    { v6 = false; predicate = "-i br0"; target = "REJECT --reject-with icmp-port-unreachable"; }
   ];
   krebs.iptables.tables.nat.PREROUTING.rules = [
     { v6 = false; predicate = "-s 10.99.0.0/24"; target = "ACCEPT"; precedence = 1000; }

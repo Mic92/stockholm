@@ -1,90 +1,9 @@
 { config, lib, pkgs, ... }:
 with import <stockholm/lib>;
 
-let
-  ip = config.krebs.build.host.nets.internet.ip4.addr;
-
-in {
+{
   imports = [
     <stockholm/lass>
-    {
-      networking.interfaces.et0.ipv4.addresses = [
-        {
-          address = ip;
-          prefixLength = 27;
-        }
-        {
-          address = "46.4.114.243";
-          prefixLength = 27;
-        }
-      ];
-      networking.defaultGateway = "46.4.114.225";
-      networking.nameservers = [
-        "8.8.8.8"
-      ];
-      services.udev.extraRules = ''
-        SUBSYSTEM=="net", ATTR{address}=="08:60:6e:e7:87:04", NAME="et0"
-      '';
-    }
-    {
-      imports = [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix> ];
-
-      boot.loader.grub = {
-        devices = [
-          "/dev/sda"
-          "/dev/sdb"
-        ];
-        splashImage = null;
-      };
-
-      boot.initrd.availableKernelModules = [
-        "ata_piix"
-        "vmw_pvscsi"
-        "ahci" "sd_mod"
-      ];
-
-      boot.kernelModules = [ "kvm-intel" ];
-
-      fileSystems."/" = {
-        device = "/dev/pool/nix_root";
-        fsType = "ext4";
-      };
-
-      fileSystems."/tmp" = {
-        device = "tmpfs";
-        fsType = "tmpfs";
-        options = ["nosuid" "nodev" "noatime"];
-      };
-
-      fileSystems."/var/download" = {
-        device = "/dev/pool/download";
-        fsType = "ext4";
-      };
-
-      fileSystems."/srv/http" = {
-        device = "/dev/pool/http";
-        fsType = "ext4";
-      };
-
-      fileSystems."/home" = {
-        device = "/dev/pool/home";
-        fsType = "ext4";
-      };
-
-      fileSystems."/bku" = {
-        device = "/dev/pool/bku";
-        fsType = "ext4";
-      };
-
-      swapDevices = [
-        { label = "swap1"; }
-        { label = "swap2"; }
-      ];
-
-      sound.enable = false;
-      nixpkgs.config.allowUnfree = true;
-      time.timeZone = "Europe/Berlin";
-    }
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/libvirt.nix>
     {
@@ -212,7 +131,6 @@ in {
     }
     <stockholm/lass/2configs/exim-smarthost.nix>
     <stockholm/lass/2configs/ts3.nix>
-    <stockholm/lass/2configs/IM.nix>
     <stockholm/lass/2configs/privoxy-retiolum.nix>
     <stockholm/lass/2configs/radio.nix>
     <stockholm/lass/2configs/repo-sync.nix>
@@ -257,7 +175,6 @@ in {
         alias /var/realwallpaper/realwallpaper.png;
       '';
     }
-    <stockholm/krebs/2configs/reaktor-krebs.nix>
     <stockholm/lass/2configs/dcso-dev.nix>
     {
       users.users.jeschli = {
@@ -324,7 +241,7 @@ in {
       };
       services.nginx.virtualHosts."rote-allez-fraktion.de" = {
         enableACME = true;
-        addSSL = true;
+        forceSSL = true;
         locations."/" = {
           extraConfig = ''
             proxy_set_header Host rote-allez-fraktion.de;
@@ -357,6 +274,72 @@ in {
           RandomizedDelaySec = "5h";
         };
       });
+    }
+    {
+      users.users.download.openssh.authorizedKeys.keys = [
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDB0d0JA20Vqn7I4lCte6Ne2EOmLZyMJyS9yIKJYXNLjbLwkQ4AYoQKantPBkTxR75M09E7d3j5heuWnCjWH45TrfQfe1EOSSC3ppCI6C6aIVlaNs+KhAYZS0m2Y8WkKn+TT5JLEa8yybYVN/RlZPOilpj/1QgjU6CQK+eJ1k/kK+QFXcwN82GDVh5kbTVcKUNp2tiyxFA+z9LY0xFDg/JHif2ROpjJVLQBJ+YPuOXZN5LDnVcuyLWKThjxy5srQ8iDjoxBg7dwLHjby5Mv41K4W61Gq6xM53gDEgfXk4cQhJnmx7jA/pUnsn2ZQDeww3hcc7vRf8soogXXz2KC9maiq0M/svaATsa9Ul4hrKnqPZP9Q8ScSEAUX+VI+x54iWrnW0p/yqBiRAzwsczdPzaQroUFTBxrq8R/n5TFdSHRMX7fYNOeVMjhfNca/gtfw9dYBVquCvuqUuFiRc0I7yK44rrMjjVQRcAbw6F8O7+04qWCmaJ8MPlmApwu2c05VMv9hiJo5p6PnzterRSLCqF6rIdhSnuOwrUIt1s/V+EEZXHCwSaNLaQJnYL0H9YjaIuGz4c8kVzxw4c0B6nl+hqW5y5/B2cuHiumnlRIDKOIzlv8ufhh21iN7QpIsPizahPezGoT1XqvzeXfH4qryo8O4yTN/PWoA+f7o9POU7L6hQ== lhebendanz@nixos"
+      ];
+    }
+    {
+      lass.nichtparasoup.enable = true;
+      services.nginx = {
+        enable = true;
+        virtualHosts."lol.lassul.us" = {
+          forceSSL = true;
+          enableACME = true;
+          locations."/".extraConfig = ''
+            proxy_pass http://localhost:5001;
+          '';
+        };
+      };
+    }
+    { #weechat port forwarding to blue
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 9998"; target = "ACCEPT";}
+      ];
+      krebs.iptables.tables.nat.PREROUTING.rules = [
+        { v6 = false; precedence = 1000; predicate = "-d ${config.krebs.hosts.prism.nets.internet.ip4.addr} -p tcp --dport 9998"; target = "DNAT --to-destination ${config.krebs.hosts.blue.nets.retiolum.ip4.addr}:9999"; }
+      ];
+      krebs.iptables.tables.filter.FORWARD.rules = [
+        { v6 = false; precedence = 1000; predicate = "-d ${config.krebs.hosts.blue.nets.retiolum.ip4.addr} -p tcp --dport 9999"; target = "ACCEPT"; }
+        { v6 = false; precedence = 1000; predicate = "-s ${config.krebs.hosts.blue.nets.retiolum.ip4.addr}"; target = "ACCEPT"; }
+      ];
+      krebs.iptables.tables.nat.POSTROUTING.rules = [
+        { v6 = false; predicate = "-d ${config.krebs.hosts.blue.nets.retiolum.ip4.addr} -p tcp --dport 9999"; target = "MASQUERADE"; }
+      ];
+    }
+    {
+      krebs.iptables.tables.filter.INPUT.rules = [
+         { predicate = "-p udp --dport 51820"; target = "ACCEPT"; }
+      ];
+      krebs.iptables.tables.nat.PREROUTING.rules = [
+        { v6 = false; precedence = 1000; predicate = "-s 10.244.1.0/24"; target = "ACCEPT"; }
+      ];
+      krebs.iptables.tables.filter.FORWARD.rules = [
+        { v6 = false; precedence = 1000; predicate = "-s 10.244.1.0/24"; target = "ACCEPT"; }
+        { v6 = false; precedence = 1000; predicate = "-s 10.243.0.0/16 -d 10.244.1.0/24"; target = "ACCEPT"; }
+      ];
+      krebs.iptables.tables.nat.POSTROUTING.rules = [
+        { v6 = false; predicate = "-s 10.244.1.0/24 ! -d 10.244.1.0/24"; target = "MASQUERADE"; }
+      ];
+      networking.wireguard.interfaces.wg0 = {
+        ips = [ "10.244.1.1/24" ];
+        listenPort = 51820;
+        privateKeyFile = (toString <secrets>) + "/wireguard.key";
+        allowedIPsAsRoutes = true;
+        peers = [
+          {
+            # lass-android
+            allowedIPs = [ "10.244.1.2/32" ];
+            publicKey = "63+ns9AGv6e6a8WgxiZNFEt1xQT0YKFlEHzRaYJWtmk=";
+          }
+        ];
+      };
+    }
+    {
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
+      ];
     }
   ];
 

@@ -32,30 +32,6 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_rsa>;
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDP9JS2Nyjx4Pn+/4MrFi1EvBBYVKkGm2Q4lhgaAiSuiGLol53OSsL2KIo01mbcSSBWow9QpQpn8KDoRnT2aMLDrdTFqL20ztDLOXmtrSsz3flgCjmW4f6uOaoZF0RNjAybd1coqwSJ7EINugwoqOsg1zzN2qeIGKYFvqFIKibYFAnQ8hcksmkvPdIO5O8CbdIiP9sZSrSDp0ZyLK2T0PML2jensVZOeqSPulQDFqLsbmavpVLkpDjdzzPRwbZWNB4++YeipbYNOkX4GR1EB4wMZ93IbBV7kpJtib2Zb2AnUf7UW37hxWBjILdstj9ClwNOQggn8kD9ub7YxBzH1dz0Xd8a0mPOAWIDJz9MypXgFRc3vdvPB/W1I4Se0CLbgOkORun9CkgijKr9oEY8JNt8HFd6viZcAaQxOyIm6PNHZTnHfdSc7bIBS2n3e3IZBv0fTd77knGLXg402aTuu2bm/kxsKivxsILXIaGbeXe4ceN3Fynr3FzSM2bUkzHb0mAHu1BQ9YaX0xzCwjVueA5nzGls7ODSFkXsiBfg2FvMN/sTLFca6tnwyqcnD6nujoiS5+BxjDWPgnZYqCaW3B/IkpTsRMsX6QrfhOFcsP8qlJ2Cp82orWoDK/D0vZ9pdzAc6PFGga0RofuJKY2yiq+SRZ7/e9E6VncIVCYZ1OfN0Q==";
     };
-    kaepsele = {
-      external = true;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.166.2";
-          ip6.addr = "42:b9d:6660:d07c:2bb7:4e91:1a01:2e7d";
-          aliases = [
-            "kaepsele.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEA4+kDaKhCBNlpHqRCA2R6c4UEFk0OaiPwHvjmBBjpihTJVyffIEYm
-            QFZ5ZNkaVumSOAgKk9ygppO9WsNasl1ag+IRWik9oupdzEkNjgvOMBVJGhcwGZGF
-            6UEY5sdA1n0qg74og5BGSiXUBiaahVM0rAfCNk8gV3qrot5kWJMQLb9BKabJ56eb
-            JrgWepxuVaw3BoEhz6uusuvw5i1IF382L8R11hlvyefifXONFOAUjCrCr0bCb4uK
-            ZZcRUU35pbHLDXXTOrOarOO1tuVGu85VXo3S1sLaaouHYjhTVT8bxqbwcNhxBXYf
-            ONLv0f7G5XwecgUNbE6ZTfjV5PQKaww3lwIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC5Wr36T0MmB8pnSO5/pw9/Dfe5+IMgVHOhm6EUa55jj";
-    };
     mu = {
       ci = true;
       cores = 2;

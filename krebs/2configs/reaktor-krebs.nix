@@ -13,13 +13,8 @@ with import <stockholm/lib>;
     };
     plugins = with pkgs.ReaktorPlugins; [
       sed-plugin
-      wiki-todo-add
-      wiki-todo-done
-      wiki-todo-show
-    ];
+    ] ++
+      (attrValues (todo "agenda"))
+    ;
   };
-  services.nginx.virtualHosts."lassul.us".locations."/wiki-todo".extraConfig = ''
-    default_type "text/plain";
-    alias /var/lib/Reaktor/state/wiki-todo;
-  '';
 }

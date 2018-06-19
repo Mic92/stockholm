@@ -14,7 +14,7 @@ with import <stockholm/lib>;
     ];
     relay_from_hosts = map (host: host.nets.retiolum.ip6.addr) [
       config.krebs.hosts.mors
-      config.krebs.hosts.uriel
+      config.krebs.hosts.blue
     ];
     internet-aliases = with config.krebs.users; [
       { from = "postmaster@lassul.us"; to = lass.mail; } # RFC 822
@@ -80,6 +80,9 @@ with import <stockholm/lib>;
       { from = "hetzner@lassul.us"; to = lass.mail; }
       { from = "allygator@lassul.us"; to = lass.mail; }
       { from = "immoscout@lassul.us"; to = lass.mail; }
+      { from = "elitedangerous@lassul.us"; to = lass.mail; }
+      { from = "boardgamegeek@lassul.us"; to = lass.mail; }
+      { from = "qwertee@lassul.us"; to = lass.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }

@@ -23,8 +23,9 @@ let
     ];
   };
   # TODO: automate updating of this ref + cherry-picks
-  ref = "a09afbfb8a4"; # nixos-18.03 @ 2018-04-04
-                       # + do_sqlite3 ruby: 55a952be5b5
+  ref = "60b6ab055ad"; # nixos-18.03 @ 2018-05-31
+                       # + do_sqlite3 ruby:   55a952be5b5
+                       # + exfat-nofuse bump: ee6a5296a35
 
 in
   evalSource (toString _file) [
@@ -45,7 +46,7 @@ in
         };
 
       secrets = getAttr builder {
-        buildbot.file = toString <stockholm/makefu/6tests/data/secrets>;
+        buildbot.file = toString <stockholm/makefu/0tests/data/secrets>;
         makefu.pass = {
           inherit name;
           dir = "${getEnv "HOME"}/.secrets-pass";
@@ -79,7 +80,7 @@ in
 
     (mkIf ( torrent ) {
       torrent-secrets = getAttr builder {
-        buildbot.file = toString <stockholm/makefu/6tests/data/secrets>;
+        buildbot.file = toString <stockholm/makefu/0tests/data/secrets>;
         makefu.pass = {
           name = "torrent";
           dir = "${getEnv "HOME"}/.secrets-pass";

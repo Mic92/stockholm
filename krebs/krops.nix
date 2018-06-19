@@ -1,19 +1,18 @@
 { name }: rec {
 
-  kops = (import <nixpkgs> {}).fetchgit {
-    url = https://cgit.krebsco.de/kops/;
-    rev = "e89cf20d4310070a877c2e24a287659546b561c9";
-    sha256 = "0wg8d80sxa46z4i7ir79sci2hwmv3qskzqdg0si64p6vazy8vckb";
+  krops = builtins.fetchGit {
+    url = https://cgit.krebsco.de/krops/;
+    rev = "4e466eaf05861b47365c5ef46a31a188b70f3615";
   };
 
-  lib = import "${kops}/lib";
+  lib = import "${krops}/lib";
 
   # TODO document why pkgs should be used like this
-  pkgs = import "${kops}/pkgs" {};
+  pkgs = import "${krops}/pkgs" {};
 
   krebs-source = {
     nixpkgs.git = {
-      ref = "b50443b5c4ac0f382c49352a892b9d5d970eb4e7";
+      ref = "7295e175bf6c6e8aa54f1b4d99256ee95d13d385";
       url = https://github.com/NixOS/nixpkgs;
     };
     stockholm.file = toString ../.;
@@ -38,7 +37,7 @@
       secrets =
         if test
           then {
-            file = toString <stockholm/krebs/6tests/data/secrets>;
+            file = toString <stockholm/krebs/0tests/data/secrets>;
           }
           else {
             pass = {
@@ -51,14 +50,14 @@
   ];
 
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME -A deploy)
-  deploy = pkgs.kops.writeDeploy "${name}-deploy" {
+  deploy = pkgs.krops.writeDeploy "${name}-deploy" {
     source = source { test = false; };
     target = "root@${name}/var/src";
   };
 
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME -A test)
-  test = pkgs.kops.writeTest "${name}-test" {
+  test = pkgs.krops.writeTest "${name}-test" {
     source = source { test = true; };
-    target = "${lib.getEnv "HOME"}/tmp/${name}-kops-test-src";
+    target = "${lib.getEnv "HOME"}/tmp/${name}-krops-test-src";
   };
 }

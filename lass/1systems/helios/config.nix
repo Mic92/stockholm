@@ -12,48 +12,12 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/otp-ssh.nix>
     # TODO fix krebs.git.rules.[definition 2-entry 2].lass not defined
     #<stockholm/lass/2configs/git.nix>
-    <stockholm/lass/2configs/dcso-vpn.nix>
+    #<stockholm/lass/2configs/dcso-vpn.nix>
     <stockholm/lass/2configs/virtualbox.nix>
     <stockholm/lass/2configs/dcso-dev.nix>
     <stockholm/lass/2configs/steam.nix>
     <stockholm/lass/2configs/rtl-sdr.nix>
     <stockholm/lass/2configs/backup.nix>
-    { # automatic hardware detection
-      boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-      boot.kernelModules = [ "kvm-intel" ];
-
-      fileSystems."/" = {
-        device = "/dev/pool/root";
-        fsType = "btrfs";
-      };
-
-      fileSystems."/boot" = {
-        device = "/dev/disk/by-uuid/1F60-17C6";
-        fsType = "vfat";
-      };
-
-      fileSystems."/home" = {
-        device = "/dev/pool/home";
-        fsType = "btrfs";
-      };
-
-      fileSystems."/tmp" = {
-        device = "tmpfs";
-        fsType = "tmpfs";
-        options = ["nosuid" "nodev" "noatime"];
-      };
-
-      nix.maxJobs = lib.mkDefault 8;
-    }
-    { # crypto stuff
-      boot.initrd.luks = {
-        cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
-        devices =  [{
-           name = "luksroot";
-           device = "/dev/nvme0n1p3";
-        }];
-      };
-    }
     {
       services.xserver.dpi = 200;
       fonts.fontconfig.dpi = 200;
@@ -99,13 +63,6 @@ with import <stockholm/lib>;
     }
   ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  networking.wireless.enable = true;
-  hardware.enableRedistributableFirmware = true;
-
   environment.systemPackages = with pkgs; [
     ag
     vim
@@ -123,17 +80,6 @@ with import <stockholm/lib>;
   };
 
   services.tlp.enable = true;
-
-  services.xserver.videoDrivers = [ "nvidia" ];
-  services.xserver.xrandrHeads = [
-    { output = "DP-2"; primary = true; }
-    { output = "DP-4"; monitorConfig = ''Option "Rotate" "left"''; }
-    { output = "DP-0"; }
-  ];
-
-  services.xserver.displayManager.sessionCommands = ''
-    ${pkgs.xorg.xrandr}/bin/xrandr --output DP-6 --off --output DP-5 --off --output DP-4 --mode 2560x1440 --pos 3840x0 --rotate left --output DP-3 --off --output DP-2 --primary --mode 3840x2160 --scale 0.5x0.5 --pos 0x400 --rotate normal --output DP-1 --off --output DP-0 --mode 2560x1440 --pos 5280x1120 --rotate normal
-  '';
 
   networking.hostName = lib.mkForce "BLN02NB0162";
 

@@ -141,25 +141,27 @@ rec {
     '';
   });
 
-  wiki-todo-add = buildSimpleReaktorPlugin "wiki-todo-add" {
-    pattern = "^wiki-todo: (?P<args>.*)$$";
-    script = pkgs.writeDash "wiki-todo-add" ''
-      echo "$*" >> wiki-todo
-      echo "added todo. check on http://lassul.us/wiki-todo"
-    '';
-  };
-  wiki-todo-done = buildSimpleReaktorPlugin "wiki-todo-done" {
-    pattern = "^wiki-done: (?P<args>.*)$$";
-    script = pkgs.writeDash "wiki-todo-done" ''
-      ${pkgs.gnugrep}/bin/grep -Fvxe "$*" wiki-todo > wiki-todo.tmp
-      ${pkgs.coreutils}/bin/mv wiki-todo.tmp wiki-todo
-      echo "thank you for resolving todo: $*"
-    '';
-  };
-  wiki-todo-show = buildSimpleReaktorPlugin "wiki-todo" {
-    pattern = "^wiki-show$";
-    script = pkgs.writeDash "wiki-show" ''
-      ${pkgs.coreutils}/bin/cat wiki-todo
-    '';
+  todo = name: {
+    add = buildSimpleReaktorPlugin "${name}-add" {
+      pattern = "^${name}-add: (?P<args>.*)$$";
+      script = pkgs.writeDash "${name}-add" ''
+        echo "$*" >> ${name}-todo
+        echo "added ${name} todo"
+      '';
+    };
+    delete = buildSimpleReaktorPlugin "${name}-delete" {
+      pattern = "^${name}-delete: (?P<args>.*)$$";
+      script = pkgs.writeDash "${name}-delete" ''
+        ${pkgs.gnugrep}/bin/grep -Fvxe "$*" ${name}-todo > ${name}-todo.tmp
+        ${pkgs.coreutils}/bin/mv ${name}-todo.tmp ${name}-todo
+        echo "removed ${name} todo: $*"
+      '';
+    };
+    show = buildSimpleReaktorPlugin "${name}-show" {
+      pattern = "^${name}-show$";
+      script = pkgs.writeDash "${name}-show" ''
+        ${pkgs.coreutils}/bin/cat ${name}-todo
+      '';
+    };
   };
 }
