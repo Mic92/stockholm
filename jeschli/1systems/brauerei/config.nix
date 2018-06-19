@@ -68,6 +68,8 @@
     chromium
     google-chrome
   # programming languages
+    elixir
+    elmPackages.elm
     exercism
     go
     gcc
