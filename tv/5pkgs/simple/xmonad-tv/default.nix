@@ -1,5 +1,5 @@
 { pkgs, ... }:
-pkgs.writeHaskell "xmonad-tv" {
+pkgs.writeHaskellPackage "xmonad-tv" {
   executables.xmonad = {
     extra-depends = [
       "containers"

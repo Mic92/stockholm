@@ -1,6 +1,11 @@
 let
   lib = import ./lib;
-  pkgs = import <nixpkgs> { overlays = [(import ./krebs/5pkgs)]; };
+  pkgs = import <nixpkgs> {
+    overlays = [
+      (import ./krebs/5pkgs)
+      (import ./submodules/nix-writers/pkgs)
+    ];
+  };
 
 in pkgs.stdenv.mkDerivation {
   name = "stockholm";

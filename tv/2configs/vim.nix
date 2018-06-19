@@ -111,7 +111,7 @@ let {
         command! -n=0 -bar ShowSyntax :call ShowSyntax()
       '';
     })))
-    ((rtp: rtp // { inherit rtp; }) (pkgs.writeOut "vim-tv" {
+    ((rtp: rtp // { inherit rtp; }) (pkgs.write "vim-tv" {
       "/syntax/haskell.vim".text = /* vim */ ''
         syn region String start=+\[[[:alnum:]]*|+ end=+|]+
 

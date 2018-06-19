@@ -1,5 +1,5 @@
 { config, pkgs, ... }:
-pkgs.writeHaskell "xmonad-lass" {
+pkgs.writeHaskellPackage "xmonad-lass" {
   executables.xmonad = {
     extra-depends = [
       "containers"

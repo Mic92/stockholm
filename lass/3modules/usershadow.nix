@@ -45,7 +45,7 @@
       "pwstore-fast"
       "bytestring"
     ];
-    body = pkgs.writeHaskell "passwords" {
+    body = pkgs.writeHaskellPackage "passwords" {
       executables.verify_pam = {
         extra-depends = deps;
         text = ''

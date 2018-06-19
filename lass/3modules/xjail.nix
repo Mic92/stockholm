@@ -44,7 +44,7 @@ with import <stockholm/lib>;
         wm = mkOption {
           #TODO find type
           type = types.string;
-          default = "${pkgs.writeHaskell "xephyrify-xmonad" {
+          default = "${pkgs.writeHaskellPackage "xephyrify-xmonad" {
             executables.xmonad = {
               extra-depends = [
                 "containers"

@@ -1,6 +1,6 @@
-{ pass, writeOut, writeDash, ... }:
+{ pass, write, writeDash, ... }:
 
-writeOut "brain" {
+write "brain" {
   "/bin/brain".link = writeDash "brain" ''
     PASSWORD_STORE_DIR=$HOME/brain \
     exec ${pass}/bin/pass $@
