@@ -76,6 +76,7 @@
     ghc
     python35
     python35Packages.pip
+    vagrant
   # go tools
     golint
     gotools
