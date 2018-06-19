@@ -25,9 +25,10 @@
     preLVM = true;
     allowDiscards = true;
   } ];
-  # networking.hostName = "nixos";
+#  networking.hostName = "brauerei";
   # Define your hostname.
-  networking.wireless.enable = true;
+#  networking.wireless.enable = true;
+  networking.networkmanager.enable = true;
   # Enables wireless support via wpa_supplicant.
   # Select internationalisation properties.
   # i18n = {
