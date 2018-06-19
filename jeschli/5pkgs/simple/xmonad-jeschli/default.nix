@@ -129,13 +129,16 @@ spawnTermAt ws = do
     let env' = ("XMONAD_SPAWN_WORKSPACE", ws) : env
     forkFile urxvtcPath [] (Just env')
 
+
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf = Map.fromList $
     [ ((_4  , xK_Escape ), forkFile "/run/wrappers/bin/slock" [] Nothing)
     , ((_4S , xK_c      ), kill)
 
-    , ((_4  , xK_p      ), forkFile "${pkgs.pass}/bin/passmenu" ["--type"] Nothing)
-
+   , ((_4  , xK_p      ), spawn "${pkgs.writeDash "my-dmenu" ''
+      export PATH=$PATH:${pkgs.dmenu}/bin
+      exec dmenu_run "$@"
+   ''}")
     , ((_4  , xK_x      ), chooseAction spawnTermAt)
     , ((_4C , xK_x      ), spawnRootTerm)
 
