@@ -44,6 +44,7 @@ import XMonad.Layout.Reflect (reflectVert)
 import XMonad.Layout.FixedColumn (FixedColumn(..))
 import XMonad.Hooks.Place (placeHook, smart)
 import XMonad.Hooks.FloatNext (floatNextHook)
+import XMonad.Hooks.SetWMName
 import XMonad.Actions.PerWorkspaceKeys (chooseAction)
 import XMonad.Layout.PerWorkspace (onWorkspace)
 --import XMonad.Layout.BinarySpacePartition
@@ -88,7 +89,7 @@ mainNoArgs = do
             , manageHook        = placeHook (smart (1,0)) <+> floatNextHook
             , startupHook =
                 whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
-                          (\path -> forkFile path [] Nothing)
+                          (\path -> forkFile path [] Nothing) <+> setWMName "LG3D"  
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
             , handleEventHook = handleShutdownEvent
