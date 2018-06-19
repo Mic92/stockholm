@@ -76,6 +76,7 @@
     texlive.combined.scheme-full
     pandoc
     redis
+    vagrant
   # document viewer
     zathura
   ];
