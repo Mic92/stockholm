@@ -70,7 +70,6 @@
     sqlite
   # internet
     thunderbird
-    hipchat
     chromium
     google-chrome
   # programming languages
