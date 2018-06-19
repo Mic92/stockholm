@@ -9,16 +9,17 @@
     <stockholm/krebs>
     <stockholm/krebs/2configs>
 
-    <stockholm/krebs/2configs/buildbot-all.nix>
+    <stockholm/krebs/2configs/buildbot-stockholm.nix>
     <stockholm/krebs/2configs/gitlab-runner-shackspace.nix>
     <stockholm/krebs/2configs/binary-cache/nixos.nix>
     <stockholm/krebs/2configs/ircd.nix>
     <stockholm/krebs/2configs/reaktor-retiolum.nix>
+    <stockholm/krebs/2configs/reaktor-krebs.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.hotdog;
 
   boot.isContainer = true;
   networking.useDHCP = false;
-  krebs.ci.stockholmSrc = "http://cgit.prism.r/stockholm";
+  environment.variables.NIX_REMOTE = "daemon";
 }

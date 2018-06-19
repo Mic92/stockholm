@@ -30,38 +30,6 @@ let
   });
 in {
   hosts = {
-    hope = {
-      ci = true;
-      owner = config.krebs.users.krebs;
-      nets = {
-        internet = {
-          ip4.addr = "45.62.225.18";
-          aliases = [
-            "hope.i"
-          ];
-          ssh.port = 45621;
-        };
-        retiolum = {
-          ip4.addr = "10.243.77.4";
-          ip6.addr = "42:0:0:0:0:0:77:4";
-          aliases = [
-            "hope.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAsQVWCoNZZd77tYw1qEDlUsfcF0ld+jVorq2uR5il1D8sqER644l5
-            uaWxPQjSl27xdq5kvzIH24Ab6/xF2EDgE2fUTwpO5coBYafeiGyi5AwURQmYMp2a
-            2CV7uUAagFQaSzD0Aj796r1BXPn1IeE+uRSBmmc/+/7L0hweRGLiha34NOMZkq+4
-            A0pwI/CjnyRXdV4AqfORHXkelykJPATm+m3bC+KYogPBeNMP2AV2aYgY8a0UJPMK
-            fjAJCzxYJjiYxm8faJlm2U1bWytZODQa8pRZOrYQa4he2UoU6x78CNcrQkYLPOFC
-            K2Q7+B5WJNKV6CqYztXuU/6LTHJRmV0FiwIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOdLHRI29xJj1jmfSidE2Dh7EsDNszm+WH3Kj4zYBkP/";
-    };
     hotdog = {
       ci = true;
       owner = config.krebs.users.krebs;
@@ -90,6 +58,37 @@ in {
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxFkBln23wUxt4RhIHE3GvdKeBpJbjn++6maupHqUHp";
+    };
+    onebutton = {
+      cores = 1;
+      owner = config.krebs.users.krebs;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.0.101";
+          ip6.addr = "42:0:0:0:0:0:0:101";
+          aliases = [
+            "onebutton.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA11w6votRExwE0ZEiQmPa
+            9WGNsMfNAZEd14iHaHCZH7UPQEH+cH/T6isGPpaysindroMnqFe9mUf/cdYChb6N
+            aaFreApwGBQaJPUcdy4cfphrFpzmOClpOFuFbnV7ZvAk/wefBad3kUzsq/lK4HvB
+            7nPKeOB9kljphLrkzuLL/h2yOenMpO2ZdvwxyWN8HKmUNgvpBQjIr+Hka6cgy7Gp
+            pBVFHfSnad/eHeEvq91O/bHxrAxzH5N5DVagPDpkbiWYGl+0XVGP/h0CApr15Ael
+            +j2pJYc0ZlaXIp4KmNRqbd/fLe52JLrWbnFX4rRuY/DhoMqK8kjECEZ7gLiNSpCC
+            KlnlJ2LXX9c+d79ubzl5yLAJ3d6T4IJqkbAWJDuCrj821M9ZDk/qZwerayhrrvkF
+            tMYkQoGSe8MvSOU0rTEoH5iSRwDC7M0XzUe4l8/yZLFyD4Prz/dq6coqANfk/tlE
+            DnH3vDu9lmFvYrLcd6yDWzFfI3mWDJoUa6AKKoScCOaCkRfIM4Aew0i73+h1nJLO
+            59AAbZIkDYyWs53QniIG4EQteI9y/9j/628nPAVj68V5oIN76RDXfFHWDWq4DxmU
+            PpGVmoIKcKZmnl7RrDomRVpuGMdyQ+kCzIGH3XYe12v8Y5beHZBrd3OajgHZ/Tfp
+            jP873cT6h0hsGm9glgOYho8CAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAcZg+iLaPZ0SpLM+nANxIjZC/RIsansjyutK0+gPhIe ";
     };
     puyak = {
       ci = true;

@@ -1,16 +1,32 @@
 { config, lib, pkgs, ... }:
 # bln config file
 {
-  imports =
-    [ <stockholm/jeschli>
-      <stockholm/jeschli/2configs/virtualbox.nix>
-      <stockholm/jeschli/2configs/urxvt.nix>
-      <stockholm/jeschli/2configs/emacs.nix>
-      ./hardware-configuration.nix
-    ];
+  imports = [ 
+    ./hardware-configuration.nix
+    <stockholm/jeschli>
+    <stockholm/jeschli/2configs/virtualbox.nix>
+    <stockholm/jeschli/2configs/urxvt.nix>
+    <stockholm/jeschli/2configs/emacs.nix>
+    <stockholm/jeschli/2configs/xdg.nix>
+    <stockholm/jeschli/2configs/xserver>
+  ];
 
-  boot.loader.systemd-boot.enable = true;
+#  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.loader.grub = {
+    devices = [ "nodev" ];
+    efiSupport = true;
+    enable = true;
+    extraEntries = ''
+      menuentry "Debian" {
+        insmod ext2
+        insmod chain
+        chainloader /EFI/debian/grubx64.efi
+      }
+    '';
+    version = 2;
+  };
 
   jeschliFontSize = 20;
 
@@ -54,7 +70,6 @@
     sqlite
   # internet
     thunderbird
-    hipchat
     chromium
     google-chrome
   # programming languages
@@ -92,18 +107,17 @@
   services.printing.drivers = [ pkgs.postscript-lexmark ];
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
 
-  services.xserver.windowManager.xmonad.enable = true;
-  services.xserver.windowManager.xmonad.enableContribAndExtras = true;
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.dpi = 100;
-  fonts.fontconfig.dpi = 100;
+#  services.xserver.windowManager.xmonad.enable = true;
+#  services.xserver.windowManager.xmonad.enableContribAndExtras = true;
+#  services.xserver.displayManager.sddm.enable = true;
+#  services.xserver.dpi = 100;
+#  fonts.fontconfig.dpi = 100;
 
   users.extraUsers.jeschli = {
     isNormalUser = true;
-    extraGroups = ["docker" "vboxusers"];
+    extraGroups = ["docker" "vboxusers" "audio"];
     uid = 1000;
   };
 
@@ -123,14 +137,16 @@
 
   # DCSO Certificates
   security.pki.certificateFiles = [
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC1G1.pem"; sha256 = "14vz9c0fk6li0a26vx0s5ha6y3yivnshx9pjlh9vmnpkbph5a7rh"; })
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC2G1.pem"; sha256 = "0r1dd48a850cv7whk4g2maik550rd0vsrsl73r6x0ivzz7ap1xz5"; })
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC3G1.pem"; sha256 = "0b5cdchdkvllnr0kz35d8jrmrf9cjw0kd98mmvzr0x6nkc8hwpdy"; })
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCACOMPC2G1.pem"; sha256 = "0rn57zv1ry9vj4p2248mxmafmqqmdhbrfx1plszrxsphshbk2hfz"; })
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCACOMPC3G1.pem"; sha256 = "0w88qaqhwxzvdkx40kzj2gka1yi85ipppjdkxah4mscwfhlryrnk"; })
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAIDENC2G1.pem"; sha256 = "1z2qkyhgjvri13bvi06ynkb7mjmpcznmc9yw8chx1lnwc3cxa7kf"; })
-   (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAIDENC3G1.pem"; sha256 = "0smdjjvz95n652cb45yhzdb2lr83zg52najgbzf6lm3w71f8mv7f"; })
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC1G1.pem"; sha256 = "006j61q2z44z6d92638iin6r46r4cj82ipwm37784h34i5x4mp0d"; })
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC2G1.pem"; sha256 = "1nkd1rjcn02q9xxjg7sw79lbwy08i7hb4v4pn98djknvcmplpz5m"; })
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAROOTC3G1.pem"; sha256 = "094m12npglnnv1nf1ijcv70p8l15l00id44qq7rwynhcgxi5539i"; })
+
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCACOMPC2G1.pem"; sha256 = "1anfncdf5xsp219kryncv21ra87flpzcjwcc85hzvlwbxhid3g4x"; })
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCACOMPC3G1.pem"; sha256 = "035kkfizyl5dndj7rhvmy91rr75lakqbqgjx4dpiw0kqq369mz8r"; })
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAIDENC2G1.pem"; sha256 = "14fpzx1qjs9ws9sz0y7pb6j40336xlckkqcm2rc5j86yn7r22lp7"; })
+    (pkgs.fetchurl { url = "http://pki.dcso.de/ca/PEM/DCSOCAIDENC3G1.pem"; sha256 = "1yjl3kyw4chc8vw7bnqac2h9vn8dxryw7lr7i03lqi9sdvs4108s"; })
   ];
+
 
   hardware.bluetooth.enable = true;
   krebs.build.host = config.krebs.hosts.bln;

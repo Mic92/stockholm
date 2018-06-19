@@ -27,10 +27,8 @@ in {
     ./sqlBackup.nix
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
     (servePage [
-      "habsys.de"
-      "habsys.eu"
-      "www.habsys.de"
-      "www.habsys.eu"
+      "freemonkey.art"
+      "www.freemonkey.art"
     ])
     (serveOwncloud [ "o.ubikmedia.de" ])
     (serveWordpress [
@@ -120,6 +118,7 @@ in {
       { from = "jms@ubikmedia.eu"; to = "jms"; }
       { from = "ms@ubikmedia.eu"; to = "ms"; }
       { from = "ubik@ubikmedia.eu"; to = "domsen, jms, ms"; }
+      { from = "akayguen@freemonkey.art"; to ="akayguen"; }
 
       { from = "testuser@lassul.us"; to = "testuser"; }
       { from = "testuser@ubikmedia.eu"; to = "testuser"; }
@@ -173,6 +172,13 @@ in {
   users.users.testuser = {
     uid = genid_signed "testuser";
     home = "/home/testuser";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
+  users.users.akayguen = {
+    uid = genid_signed "akayguen";
+    home = "/home/akayguen";
     useDefaultShell = true;
     createHome = true;
   };

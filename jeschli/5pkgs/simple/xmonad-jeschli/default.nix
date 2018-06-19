@@ -87,7 +87,8 @@ mainNoArgs = do
             -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
             --, handleEventHook   = handleTimerEvent
             , manageHook        = placeHook (smart (1,0)) <+> floatNextHook
-            , startupHook =
+            , startupHook = do
+                setWMName "LG3D"
                 whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
                           (\path -> forkFile path [] Nothing) <+> setWMName "LG3D"  
             , normalBorderColor  = "#1c1c1c"
@@ -221,7 +222,7 @@ myKeys conf = Map.fromList $
 pagerConfig :: PagerConfig
 pagerConfig = def
     { pc_font           = myFont
-    , pc_cellwidth      = 64
+    , pc_cellwidth      = 256 
     --, pc_cellheight     = 36 -- TODO automatically keep screen aspect
     --, pc_borderwidth    = 1
     --, pc_matchcolor     = "#f0b000"

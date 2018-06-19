@@ -126,8 +126,8 @@ in {
     (sync-remote "xintmap" "https://github.com/4z3/xintmap")
     (sync-remote "realwallpaper" "https://github.com/lassulus/realwallpaper")
     (sync-remote "lassulus-blog" "https://github.com/lassulus/lassulus-blog")
-    (sync-remote "painload" "https://github.com/krebscode/painload")
-    (sync-remote "Reaktor" "https://github.com/krebscode/Reaktor")
+    (sync-remote "painload" "https://github.com/krebs/painload")
+    (sync-remote "Reaktor" "https://github.com/krebs/Reaktor")
     (sync-remote "nixos-wiki" "https://github.com/Mic92/nixos-wiki.wiki.git")
     (sync-retiolum "go")
     (sync-retiolum "much")
@@ -135,7 +135,6 @@ in {
     (sync-retiolum "populate")
     (sync-retiolum "stockholm")
     (sync-retiolum "wai-middleware-time")
-    (sync-retiolum "web-routes-wai-custom")
     (sync-retiolum "xmonad-stockholm")
   ];
 }

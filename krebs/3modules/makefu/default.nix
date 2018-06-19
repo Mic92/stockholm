@@ -539,6 +539,7 @@ with import <stockholm/lib>;
           dl.euer           IN A      ${nets.internet.ip4.addr}
           boot.euer         IN A      ${nets.internet.ip4.addr}
           wiki.euer         IN A      ${nets.internet.ip4.addr}
+          mon.euer          IN A      ${nets.internet.ip4.addr}
           graph             IN A      ${nets.internet.ip4.addr}
           ghook             IN A      ${nets.internet.ip4.addr}
           dockerhub         IN A      ${nets.internet.ip4.addr}

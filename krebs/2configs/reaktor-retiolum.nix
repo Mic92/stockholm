@@ -10,6 +10,8 @@ with import <stockholm/lib>;
     };
     plugins = with pkgs.ReaktorPlugins; [
       sed-plugin
-    ];
+    ] ++
+      (attrValues (todo "agenda"))
+    ;
   };
 }

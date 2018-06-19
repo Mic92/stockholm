@@ -6,10 +6,9 @@ with import <stockholm/lib>;
     ./gc.nix
     ./mc.nix
     ./vim.nix
-    ./monitoring/client.nix
+    ./monitoring/node-exporter.nix
     ./zsh.nix
     ./htop.nix
-    ./backups.nix
     ./security-workarounds.nix
     {
       users.extraUsers =
@@ -20,10 +19,10 @@ with import <stockholm/lib>;
       users.extraUsers = {
         root = {
           openssh.authorizedKeys.keys = [
-            config.krebs.users.lass.pubkey
+            config.krebs.users.lass-mors.pubkey
+            config.krebs.users.lass-blue.pubkey
             config.krebs.users.lass-shodan.pubkey
             config.krebs.users.lass-icarus.pubkey
-            config.krebs.users.lass-xerxes.pubkey
           ];
         };
         mainUser = {
@@ -39,7 +38,8 @@ with import <stockholm/lib>;
             "wheel"
           ];
           openssh.authorizedKeys.keys = [
-            config.krebs.users.lass.pubkey
+            config.krebs.users.lass-mors.pubkey
+            config.krebs.users.lass-blue.pubkey
             config.krebs.users.lass-shodan.pubkey
             config.krebs.users.lass-icarus.pubkey
           ];

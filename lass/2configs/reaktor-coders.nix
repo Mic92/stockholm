@@ -4,7 +4,7 @@ with import <stockholm/lib>;
 {
   krebs.Reaktor.coders = {
     nickname = "Reaktor|lass";
-    channels = [ "#coders" "#germany" ];
+    channels = [ "#coders" "#germany" "#panthermoderns" ];
     extraEnviron = {
       REAKTOR_HOST = "irc.hackint.org";
     };
@@ -85,6 +85,19 @@ with import <stockholm/lib>;
         pattern = "^!ping (?P<args>.*)$$";
         script = pkgs.writeDash "ping" ''
           exec /run/wrappers/bin/ping -q -c1 "$1" 2>&1 | tail -1
+        '';
+      })
+      (buildSimpleReaktorPlugin "google" {
+        pattern = "^!g (?P<args>.*)$$";
+        script = pkgs.writeDash "google" ''
+          exec ${pkgs.ddgr}/bin/ddgr -C -n1 --json "$@" | \
+            ${pkgs.jq}/bin/jq '@text "\(.[0].abstract) \(.[0].url)"'
+        '';
+      })
+      (buildSimpleReaktorPlugin "blockchain" {
+        pattern = ".*[Bb]lockchain.*$$";
+        script = pkgs.writeDash "blockchain" ''
+          exec echo 'DID SOMEBODY SAY BLOCKCHAIN? https://paste.krebsco.de/r99pMoQq/+inline'
         '';
       })
     ];
