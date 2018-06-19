@@ -8,6 +8,7 @@
     <stockholm/jeschli/2configs/emacs.nix>
     <stockholm/jeschli/2configs/xdg.nix>
     <stockholm/jeschli/2configs/xserver>
+    <stockholm/jeschli/2configs/virtualbox.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.brauerei;
@@ -127,6 +128,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.jeschli = { # TODO: define as krebs.users
     isNormalUser = true;
+    extraGroups = ["docker" "vboxusers"];
     uid = 1000;
   };
   users.extraUsers.jamie = {
