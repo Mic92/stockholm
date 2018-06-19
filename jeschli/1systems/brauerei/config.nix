@@ -88,6 +88,7 @@
     jetbrains.webstorm
     jetbrains.goland
   # document viewer
+    evince
     zathura
   # xorg
     xorg.xbacklight
