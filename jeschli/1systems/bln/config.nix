@@ -11,8 +11,22 @@
     <stockholm/jeschli/2configs/xserver>
   ];
 
-  boot.loader.systemd-boot.enable = true;
+#  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.loader.grub = {
+    devices = [ "nodev" ];
+    efiSupport = true;
+    enable = true;
+    extraEntries = ''
+      menuentry "Debian" {
+        insmod ext2
+        insmod chain
+        chainloader /EFI/debian/grubx64.efi
+      }
+    '';
+    version = 2;
+  };
 
   jeschliFontSize = 20;
 
