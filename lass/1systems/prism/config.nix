@@ -281,6 +281,18 @@ with import <stockholm/lib>;
       ];
     }
     {
+      services.nginx = {
+        enable = true;
+        virtualHosts."radio.lassul.us" = {
+          forceSSL = true;
+          enableACME = true;
+          locations."/".extraConfig = ''
+            proxy_pass http://localhost:8000;
+          '';
+        };
+      };
+    }
+    {
       lass.nichtparasoup.enable = true;
       services.nginx = {
         enable = true;
