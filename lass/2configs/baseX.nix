@@ -81,6 +81,7 @@ in {
     mpv-poll
     much
     ncdu
+    nix-index
     nix-repl
     nmap
     pavucontrol
