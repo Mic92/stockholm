@@ -353,6 +353,14 @@ with import <stockholm/lib>;
         { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
       ];
     }
+    {
+      services.murmur.enable = true;
+      services.murmur.registerName = "lassul.us";
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 64738"; target = "ACCEPT";}
+      ];
+
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
