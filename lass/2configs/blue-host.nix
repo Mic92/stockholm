@@ -5,6 +5,7 @@ with import <stockholm/lib>;
   imports = [
     <stockholm/lass/2configs/container-networking.nix>
   ];
+  systemd.services."container@blue".reloadIfChanged = mkForce false;
   containers.blue = {
     config = { ... }: {
       environment.systemPackages = [ pkgs.git ];
