@@ -225,6 +225,6 @@
 
 in
 
-  pkgs.writeOut "stockholm" (lib.mapAttrs' (name: link:
+  pkgs.write "stockholm" (lib.mapAttrs' (name: link:
     lib.nameValuePair "/bin/${name}" { inherit link; }
   ) cmds)

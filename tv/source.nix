@@ -9,6 +9,7 @@ with import <stockholm/lib>;
   pkgs = import <nixpkgs> {
     overlays = map import [
       <stockholm/krebs/5pkgs>
+      <stockholm/submodules/nix-writers/pkgs>
     ];
   };
 in

@@ -281,6 +281,18 @@ with import <stockholm/lib>;
       ];
     }
     {
+      services.nginx = {
+        enable = true;
+        virtualHosts."radio.lassul.us" = {
+          forceSSL = true;
+          enableACME = true;
+          locations."/".extraConfig = ''
+            proxy_pass http://localhost:8000;
+          '';
+        };
+      };
+    }
+    {
       lass.nichtparasoup.enable = true;
       services.nginx = {
         enable = true;
@@ -340,6 +352,14 @@ with import <stockholm/lib>;
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
       ];
+    }
+    {
+      services.murmur.enable = true;
+      services.murmur.registerName = "lassul.us";
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 64738"; target = "ACCEPT";}
+      ];
+
     }
   ];
 

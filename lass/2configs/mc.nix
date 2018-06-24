@@ -326,7 +326,7 @@ in {
       name = "mc";
       paths = [
         (pkgs.writeDashBin "mc" ''
-          export MC_DATADIR=${pkgs.writeOut "mc-ext" {
+          export MC_DATADIR=${pkgs.write "mc-ext" {
               "/mc.ext".link = mcExt;
               "/sfs.ini".text = "";
           }};

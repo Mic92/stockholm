@@ -1,8 +1,8 @@
-{ writeDashBin, writeHaskell, coreutils, xorg, virtualgl, ... }:
+{ writeDashBin, writeHaskellPackage, coreutils, xorg, virtualgl, ... }:
 
 let
 
-  xephyrify-xmonad = writeHaskell "xephyrify-xmonad" {
+  xephyrify-xmonad = writeHaskellPackage "xephyrify-xmonad" {
     executables.xmonad = {
       extra-depends = [
         "containers"

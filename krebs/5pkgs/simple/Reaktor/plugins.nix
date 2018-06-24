@@ -120,7 +120,7 @@ rec {
   url-title = (buildSimpleReaktorPlugin "url-title" {
     pattern = "^.*(?P<args>http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+).*$$";
     path = with pkgs; [ curl perl ];
-    script = pkgs.writePython3 [ "beautifulsoup4" "lxml" ] "url-title" ''
+    script = pkgs.writePython3 "url-title" [ "beautifulsoup4" "lxml" ] ''
       import sys
       import urllib.request
       from bs4 import BeautifulSoup

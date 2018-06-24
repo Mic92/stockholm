@@ -1,5 +1,5 @@
 { pkgs, ... }:
-pkgs.writeHaskell "xmonad-jeschli" {
+pkgs.writeHaskellPackage "xmonad-jeschli" {
   executables.xmonad = {
     extra-depends = [
       "containers"

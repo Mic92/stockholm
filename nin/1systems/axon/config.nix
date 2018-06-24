@@ -59,7 +59,11 @@ with lib;
 
   # nin config
   time.timeZone = "Europe/Berlin";
-  services.xserver.enable = true;
+  services.xserver = {
+    enable = true;
+
+    displayManager.lightdm.enable = true;
+  };
 
   networking.networkmanager.enable = true;
   #networking.wireless.enable = true;
@@ -76,12 +80,19 @@ with lib;
   #nixpkgs.config.steam.java = true;
 
   environment.systemPackages = with pkgs; [
+    atom
+    chromium
     firefox
     git
+    htop
+    keepassx
     lmms
     networkmanagerapplet
+    openvpn
     python
+    ruby
     steam
+    taskwarrior
     thunderbird
     vim
     virtmanager
@@ -109,7 +120,7 @@ with lib;
         Control + p
   '';
   in {
-    enable = true;
+  enable = true;
       extraSessionCommands = ''
       ${pkgs.xbindkeys}/bin/xbindkeys -f ${xbindConfig}
     '';
