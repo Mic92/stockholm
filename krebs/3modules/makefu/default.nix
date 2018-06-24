@@ -520,6 +520,38 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN5ZmJSypW3LXIJ67DdbxMxCfLtORFkl5jEuD131S5Tr";
     };
+    nextgum = rec {
+      ci = true;
+      cores = 8;
+      nets = rec {
+        internet = {
+          ip4.addr = "144.76.26.247";
+          ip6.addr = "2a01:4f8:191:12f6::2";
+          aliases = [
+            "nextgum.i"
+          ];
+        };
+        retiolum = {
+          via = internet;
+          ip4.addr = "10.243.0.213";
+          ip6.addr = "42:f9f0:0000:0000:0000:0000:0000:70d3";
+          aliases = [
+            "nextgum.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAucCebFmS96WorD+Br4UQudmAhMlLpacErjwA/u2argBTT2nGHTR8
+            aN4e0xf3IYLA+iogLIW/JuQfKLe8evEK21iZ3jleW8N7mbCulhasi/0lqWlirrpO
+            npJAiSNF1m7ijoylkEKxtmehze+8ojprUT2hx1ImMlHMWGxvs+TmBbZBMgxAGMJh
+            6cMMDJQi+4d9XrJQ3+XUVK3MkviLA91oIAXsLdFptL6b12siUaz4StQXDJUHemBF
+            3ZwlO+W2Es69ifEhmV6NaDDRcSRdChGbHTz1OU8wYaFNaxWla/iprQQ+jEUldpcN
+            VC18QGYRUAgZ0PCIpKurjWNehJFB3zXt+wIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcxWFEPzke/Sdd9qNX6rSJgXal8NmINYajpFCxXfYdj root@gum";
+    };
 
     gum = rec {
       ci = true;
