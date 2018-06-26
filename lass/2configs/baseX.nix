@@ -71,6 +71,7 @@ in {
     ag
     bank
     cabal2nix
+    cholerab
     dic
     dmenu
     gi
@@ -92,7 +93,6 @@ in {
     sxiv
     taskwarrior
     termite
-    thesauron
     timewarrior
     xclip
     xephyrify
