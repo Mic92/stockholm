@@ -54,10 +54,14 @@ in {
   krebs.per-user.dev.packages = [
     pkgs.go
   ];
+  environment.variables.GOPATH = "$HOME/go";
 
   security.sudo.extraConfig = ''
     ${mainUser.name} ALL=(dev) NOPASSWD: ALL
   '';
 
-  services.minio.enable = true;
+  services.rabbitmq.enable = true;
+  networking.interfaces.et0.ipv4.addresses = [
+    { address = "10.99.23.1"; prefixLength = 24; }
+  ];
 }
