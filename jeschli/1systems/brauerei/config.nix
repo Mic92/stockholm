@@ -116,31 +116,26 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  services.xserver = {
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
+    # Don't install feh into systemPackages
+    # refs <nixpkgs/nixos/modules/services/x11/desktop-managers>
+    desktopManager.session = lib.mkForce [];
 
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
+    enable = true;
+    display = 11;
+    tty = 11;
 
-  # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
+    dpi = 96;
 
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
-  #  services.xserver.displayManager.sddm.enable = true;
-  #  services.xserver.windowManager.xmonad.enable = true;
-  #  services.xserver.windowManager.xmonad.enableContribAndExtras = true;
-  #
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+#    videoDrivers = [ "nvidia" ];
+    synaptics = {
+      enable = true;
+      twoFingerScroll = true;
+      accelFactor = "0.035";
+    };
+  };
+
   users.extraUsers.jeschli = { # TODO: define as krebs.users
     isNormalUser = true;
     extraGroups = ["docker" "vboxusers"];
