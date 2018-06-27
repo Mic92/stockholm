@@ -1,5 +1,5 @@
 # Edit this configuration file to define what should be installed on # your system.  Help is available in the configuration.nix(5) man page # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
   imports = [
     <stockholm/jeschli>
@@ -76,7 +76,17 @@
     ghc
     python35
     python35Packages.pip
-    vagrant
+    (vagrant.override {
+      bundlerEnv = bundlerEnv.override {
+        bundler = bundler.overrideAttrs (old: {
+          name = "bundler-1.16.1";
+          src = fetchurl {
+            url = "https://rubygems.org/gems/bundler-1.16.1.gem";
+            sha256 = "1s2nq4qnffxg3kwrk7cnwxcvfihlhxm9absl2l6d3qckf3sy1f22";
+          };
+        });
+      };
+    })
   # go tools
     golint
     gotools
