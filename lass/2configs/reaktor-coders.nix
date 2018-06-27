@@ -100,6 +100,12 @@ with import <stockholm/lib>;
           exec echo 'DID SOMEBODY SAY BLOCKCHAIN? https://paste.krebsco.de/r99pMoQq/+inline'
         '';
       })
+      (buildSimpleReaktorPlugin "shrug" {
+        pattern = "^!shrug$";
+        script = pkgs.writeDash "shrug" ''
+          exec echo '¯\_(ツ)_/¯'
+        '';
+      })
     ];
   };
 }
