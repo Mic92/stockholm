@@ -106,14 +106,23 @@
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.postscript-lexmark ];
 
-  # Enable the X11 windowing system.
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver = {
 
-#  services.xserver.windowManager.xmonad.enable = true;
-#  services.xserver.windowManager.xmonad.enableContribAndExtras = true;
-#  services.xserver.displayManager.sddm.enable = true;
-#  services.xserver.dpi = 100;
-#  fonts.fontconfig.dpi = 100;
+    desktopManager.session = lib.mkForce [];
+
+    enable = true;
+    display = 11;
+    tty = 11;
+
+    dpi = 200;
+
+    videoDrivers = [ "nvidia" ];
+    synaptics = {
+      enable = false;
+    };
+
+  };
+
 
   users.extraUsers.jeschli = {
     isNormalUser = true;
