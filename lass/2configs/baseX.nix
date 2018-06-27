@@ -74,6 +74,7 @@ in {
     cholerab
     dic
     dmenu
+    font-size
     gi
     gitAndTools.qgit
     git-preview
