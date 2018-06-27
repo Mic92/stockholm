@@ -194,7 +194,7 @@ rec {
     in {
       services.nginx.virtualHosts."${domain}" = {
         enableACME = true;
-        addSSL = true;
+        forceSSL = true;
         serverAliases = domains;
         extraConfig = ''
           root /srv/http/${domain}/;
