@@ -195,6 +195,16 @@ with import <stockholm/lib>;
             jeschli-bolide
             jeschli-brauerei
           ];
+          repo = [ config.krebs.git.repos.xmonad-stockholm ];
+          perm = with git; push "refs/heads/jeschli*" [ fast-forward non-fast-forward create delete merge ];
+        }
+        {
+          user = with config.krebs.users; [
+            jeschli
+            jeschli-bln
+            jeschli-bolide
+            jeschli-brauerei
+          ];
           repo = [ config.krebs.git.repos.stockholm ];
           perm = with git; push "refs/heads/staging/jeschli*" [ fast-forward non-fast-forward create delete merge ];
         }
