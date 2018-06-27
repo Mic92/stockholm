@@ -17,6 +17,7 @@ in {
       createHome = true;
       packages = [
         pkgs.wine
+        pkgs.winetricks
       ];
     };
   };
