@@ -137,5 +137,6 @@ in {
     (sync-retiolum "stockholm")
     (sync-retiolum "wai-middleware-time")
     (sync-retiolum "xmonad-stockholm")
+    (sync-retiolum "nix-writers")
   ];
 }
