@@ -34,26 +34,6 @@ in {
     };
   };
 
-  services.xserver = {
-  
-    # Don't install feh into systemPackages
-    # refs <nixpkgs/nixos/modules/services/x11/desktop-managers>
-    desktopManager.session = mkForce [];
-  
-    enable = true;
-    display = 11;
-    tty = 11;
-
-    dpi = 200;
-  
-    videoDrivers = [ "nvidia" ];
-    synaptics = {
-      enable = true;
-      twoFingerScroll = true;
-      accelFactor = "0.035";
-    };
-  };
-
   systemd.services.display-manager.enable = false;
 
   systemd.services.xmonad = {
