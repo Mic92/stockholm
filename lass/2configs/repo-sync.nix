@@ -27,6 +27,7 @@ let
         user = with config.krebs.users; [
           config.krebs.users."${config.networking.hostName}-repo-sync"
           lass
+          lass-mors
           lass-shodan
         ];
         repo = [ repo ];
