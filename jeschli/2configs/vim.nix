@@ -11,16 +11,24 @@ let
       sha256 = "08l7ricd3j5h2bj9i566byh39v9n5wj5mj75f2c8a5dsc732b2k7";
     };
   };
-   customPlugins.vim-jsx = pkgs.vimUtils.buildVimPlugin {
-     name = "vim-jsx";
-     src = pkgs.fetchFromGitHub {
-       owner = "mxw";
-       repo = "vim-jsx";
-       rev = "5b968dfa512c57c38ad7fe420f3e8ab75a73949a";
-       sha256 = "1z3yhhbmbzfw68qjzyvpbmlyv2a1p814sy5q2knn04kcl30vx94a";
-     };
-   };
-
+  customPlugins.vim-jsx = pkgs.vimUtils.buildVimPlugin {
+    name = "vim-jsx";
+    src = pkgs.fetchFromGitHub {
+      owner = "mxw";
+      repo = "vim-jsx";
+      rev = "5b968dfa512c57c38ad7fe420f3e8ab75a73949a";
+      sha256 = "1z3yhhbmbzfw68qjzyvpbmlyv2a1p814sy5q2knn04kcl30vx94a";
+    };
+  };
+  customPlugins.vim-fileline = pkgs.vimUtils.buildVimPlugin {
+    name = "file-line-1.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "bogado";
+      repo = "file-line";
+      rev = "1.0";
+      sha256 = "0z47zq9rqh06ny0q8lpcdsraf3lyzn9xvb59nywnarf3nxrk6hx0";
+    };
+  };
 in {
   environment.systemPackages = [
     (pkgs.vim_configurable.customize {
@@ -33,6 +41,8 @@ in {
         setStatements = ''
           set autowrite
           set clipboard=unnamedplus
+          set listchars=trail:¶
+          set mouse=a
           set nocompatible
           set path+=**
           set ruler
@@ -40,7 +50,6 @@ in {
           set undofile                 "turn on the feature
           set wildignore+=*.o,*.class,*.hi,*.dyn_hi,*.dyn_o
           set wildmenu
-          set listchars=trail:¶
         '';
         remapStatements = ''
           imap jk <Esc>
@@ -91,13 +100,14 @@ in {
          { names = [
             "ctrlp"
             "easymotion"
+            "elm-vim"
+            "vim-fileline"
             "molokai"
             "nerdtree"
             "snipmate"
             "surround"
             "Syntastic"
             "undotree"
-            "elm-vim"
            ];
          }
          { names = [ "vim-addon-nix" ]; ft_regex = "^nix\$"; }
