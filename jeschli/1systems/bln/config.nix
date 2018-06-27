@@ -11,8 +11,22 @@
     <stockholm/jeschli/2configs/xserver>
   ];
 
-  boot.loader.systemd-boot.enable = true;
+#  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.loader.grub = {
+    devices = [ "nodev" ];
+    efiSupport = true;
+    enable = true;
+    extraEntries = ''
+      menuentry "Debian" {
+        insmod ext2
+        insmod chain
+        chainloader /EFI/debian/grubx64.efi
+      }
+    '';
+    version = 2;
+  };
 
   jeschliFontSize = 20;
 
@@ -56,7 +70,6 @@
     sqlite
   # internet
     thunderbird
-    hipchat
     chromium
     google-chrome
   # programming languages
@@ -78,6 +91,7 @@
     texlive.combined.scheme-full
     pandoc
     redis
+    vagrant
   # document viewer
     zathura
   ];
@@ -92,14 +106,23 @@
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.postscript-lexmark ];
 
-  # Enable the X11 windowing system.
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver = {
 
-#  services.xserver.windowManager.xmonad.enable = true;
-#  services.xserver.windowManager.xmonad.enableContribAndExtras = true;
-#  services.xserver.displayManager.sddm.enable = true;
-#  services.xserver.dpi = 100;
-#  fonts.fontconfig.dpi = 100;
+    desktopManager.session = lib.mkForce [];
+
+    enable = true;
+    display = 11;
+    tty = 11;
+
+    dpi = 200;
+
+    videoDrivers = [ "nvidia" ];
+    synaptics = {
+      enable = false;
+    };
+
+  };
+
 
   users.extraUsers.jeschli = {
     isNormalUser = true;
