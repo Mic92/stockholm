@@ -1,7 +1,7 @@
 { fetchgit, callPackage }: let
   src = fetchgit {
     url = "https://github.com/krebs/cholerab";
-    rev = "403107219ba9f3b6881f2cdae57ac373a13d98f0";
-    sha256 = "076giaha52zxkvkr2f471g2rl9c5m8r5g03wncgh46qmdfcb5idb";
+    rev = "25d7ef051d6fc74d99b155e768b3c650296a230c";
+    sha256 = "1pymw7v2ql42iq825ccx98s4fp9jsz5b2hjr1qad6bamfc6i7yy9";
   };
 in callPackage src {}
