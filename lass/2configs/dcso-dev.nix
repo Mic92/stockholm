@@ -60,7 +60,6 @@ in {
     ${mainUser.name} ALL=(dev) NOPASSWD: ALL
   '';
 
-  services.rabbitmq.enable = true;
   networking.interfaces.et0.ipv4.addresses = [
     { address = "10.99.23.1"; prefixLength = 24; }
   ];
