@@ -141,6 +141,13 @@ rec {
     '';
   });
 
+  taskwarrior = buildSimpleReaktorPlugin "task" {
+    pattern = "^task: (?P<args>.*)$$";
+    script = pkgs.writeDash "task-wrapper" ''
+      task "$*"
+    '';
+  };
+
   todo = name: {
     add = buildSimpleReaktorPlugin "${name}-add" {
       pattern = "^${name}-add: (?P<args>.*)$$";
