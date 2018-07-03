@@ -143,9 +143,15 @@ rec {
 
   taskwarrior = buildSimpleReaktorPlugin "task" {
     pattern = "^task: (?P<args>.*)$$";
-    script = pkgs.writeDash "task-wrapper" ''
-      ${pkgs.taskwarrior}/bin/task "$*"
-    '';
+    script = let
+      taskrc = "$HOME/.taskrc";
+    in
+      pkgs.writeDash "task-wrapper" ''
+        if [ -f ${taskrc} ] ; then
+          touch ${taskrc}
+        fi
+        ${pkgs.taskwarrior}/bin/task "$*"
+      '';
   };
 
   todo = name: {
