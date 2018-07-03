@@ -180,4 +180,9 @@ with import <stockholm/lib>;
     };
   });
   virtualisation.libvirtd.enable = true;
+
+  services.earlyoom = {
+    enable = true;
+    freeMemThreshold = 5;
+  };
 }
