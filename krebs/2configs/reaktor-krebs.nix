@@ -13,6 +13,7 @@ with import <stockholm/lib>;
     };
     plugins = with pkgs.ReaktorPlugins; [
       sed-plugin
+      taskwarrior
     ] ++
       (attrValues (todo "agenda"))
     ;
