@@ -66,6 +66,22 @@ in {
     locations."/tinc".extraConfig = ''
       alias ${config.krebs.tinc_graphs.workingDir}/external;
     '';
+    locations."/urlaubyay2018".extraConfig = ''
+      autoindex on;
+      alias /srv/http/lassul.us-media/india2018;
+      auth_basic "Restricted Content";
+      auth_basic_user_file ${pkgs.writeText "pics-user-pass" ''
+        paolo:$apr1$aQ6mYNR3$ho.aJ7icqSO.y.xKo3GQf0
+      ''};
+    '';
+    locations."/heilstadt".extraConfig = ''
+      autoindex on;
+      alias /srv/http/lassul.us-media/grabowsee2018;
+      auth_basic "Restricted Content";
+      auth_basic_user_file ${pkgs.writeText "pics-user-pass" ''
+        c-base:$apr1$aQ6mYNR3$ho.aJ7icqSO.y.xKo3GQf0
+      ''};
+    '';
     # TODO make this work!
     locations."= /ddate".extraConfig = let
       script = pkgs.writeBash "test" ''
