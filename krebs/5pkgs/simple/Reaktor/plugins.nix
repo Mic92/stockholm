@@ -144,7 +144,7 @@ rec {
   taskwarrior = buildSimpleReaktorPlugin "task" {
     pattern = "^task: (?P<args>.*)$$";
     script = pkgs.writeDash "task-wrapper" ''
-      task "$*"
+      ${pkgs.taskwarrior}/bin/task "$*"
     '';
   };
 
