@@ -121,21 +121,27 @@ rec {
     pattern = "^.*(?P<args>http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+).*$$";
     path = with pkgs; [ curl perl ];
     script = pkgs.writePython3 "url-title" [ "beautifulsoup4" "lxml" ] ''
+      import cgi
       import sys
       import urllib.request
       from bs4 import BeautifulSoup
 
       try:
-          soup = BeautifulSoup(urllib.request.urlopen(sys.argv[1]), "lxml")
-          title = soup.find('title').string
+          resp = urllib.request.urlopen(sys.argv[1])
+          if resp.headers['content-type'].find('text/html') >= 0:
+              soup = BeautifulSoup(resp.read(16000), "lxml")
+              title = soup.find('title').string
 
-          if title:
-              if len(title) > 512:
-                  print('message to long, skipped')
-              elif len(title.split('\n')) > 5:
-                  print('to many lines, skipped')
-              else:
-                  print(title)
+              if title:
+                  if len(title) > 450:
+                      print('message to long, rest skipped')
+                  elif len(title.split('\n')) > 5:
+                      print('to many lines, skipped')
+                  else:
+                      print(title)
+          else:
+              cd_header = resp.headers['content-disposition']
+              print(cgi.parse_header(cd_header)[1]['filename'])
       except:  # noqa: E722
           pass
     '';
