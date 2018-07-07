@@ -127,18 +127,17 @@ rec {
       from bs4 import BeautifulSoup
 
       try:
-          resp = urllib.request.urlopen(sys.argv[1])
+          req = urllib.request.Request(sys.argv[1])
+          req.add_header('user-agent', 'Reaktor-url-title')
+          resp = urllib.request.urlopen(req)
           if resp.headers['content-type'].find('text/html') >= 0:
               soup = BeautifulSoup(resp.read(16000), "lxml")
               title = soup.find('title').string
 
-              if title:
-                  if len(title) > 450:
-                      print('message to long, rest skipped')
-                  elif len(title.split('\n')) > 5:
-                      print('to many lines, skipped')
-                  else:
-                      print(title)
+              if len(title.split('\n')) > 5:
+                  title = '\n'.join(title.split('\n')[:5])
+
+              print(title[:450])
           else:
               cd_header = resp.headers['content-disposition']
               print(cgi.parse_header(cd_header)[1]['filename'])
