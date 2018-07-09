@@ -63,4 +63,11 @@ in {
   networking.interfaces.et0.ipv4.addresses = [
     { address = "10.99.23.1"; prefixLength = 24; }
   ];
+  virtualisation.docker.enable = true;
+  environment.etc."docker/daemon.json".source = pkgs.writeText "daemon.json" ''
+    {
+      "bip": "172.25.0.1/16"
+    }
+  '';
+  services.rabbitmq.enable = true;
 }
