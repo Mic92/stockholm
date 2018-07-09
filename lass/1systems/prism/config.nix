@@ -315,21 +315,6 @@ with import <stockholm/lib>;
         };
       };
     }
-    { #weechat port forwarding to blue
-      krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-p tcp --dport 9998"; target = "ACCEPT";}
-      ];
-      krebs.iptables.tables.nat.PREROUTING.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d ${config.krebs.hosts.prism.nets.internet.ip4.addr} -p tcp --dport 9998"; target = "DNAT --to-destination ${config.krebs.hosts.blue.nets.retiolum.ip4.addr}:9999"; }
-      ];
-      krebs.iptables.tables.filter.FORWARD.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d ${config.krebs.hosts.blue.nets.retiolum.ip4.addr} -p tcp --dport 9999"; target = "ACCEPT"; }
-        { v6 = false; precedence = 1000; predicate = "-s ${config.krebs.hosts.blue.nets.retiolum.ip4.addr}"; target = "ACCEPT"; }
-      ];
-      krebs.iptables.tables.nat.POSTROUTING.rules = [
-        { v6 = false; predicate = "-d ${config.krebs.hosts.blue.nets.retiolum.ip4.addr} -p tcp --dport 9999"; target = "MASQUERADE"; }
-      ];
-    }
     {
       krebs.iptables.tables.filter.INPUT.rules = [
          { predicate = "-p udp --dport 51820"; target = "ACCEPT"; }
