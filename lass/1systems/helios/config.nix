@@ -71,6 +71,9 @@ with import <stockholm/lib>;
     hashPassword
     thunderbird
     dpass
+
+    # we want tensorflow! (with GPU acceleration)
+    python3Packages.tensorflowWithCuda
   ];
 
   users.users = {
