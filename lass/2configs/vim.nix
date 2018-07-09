@@ -2,6 +2,12 @@
 
 with import <stockholm/lib>;
 let
+  unstable_nixpkgs = import (pkgs.fetchFromGitHub {
+    owner = "NixOS";
+    repo = "nixpkgs";
+    rev = "a8c71037e041725d40fbf2f3047347b6833b1703";
+    sha256 = "1z4cchcw7qgjhy0x6mnz7iqvpswc2nfjpdynxc54zpm66khfrjqw";
+  }) {};
   out = {
     environment.systemPackages = [
       (hiPrio vim)
@@ -9,6 +15,10 @@ let
       (pkgs.writeDashBin "govet" ''
         go vet "$@"
       '')
+      (hiPrio (unstable_nixpkgs.python3.withPackages (ps: [
+        ps.python-language-server
+        ps.pyls-isort
+      ])))
     ];
 
     environment.etc.vimrc.source = vimrc;
@@ -68,11 +78,17 @@ let
     au BufRead,BufNewFile /dev/shm/* set nobackup nowritebackup noswapfile
 
     "Syntastic config
-    let g:syntastic_python_checkers=['flake8']
-    let g:syntastic_python_flake8_post_args='--ignore=E501'
+    "let g:syntastic_python_checkers=['flake8']
+    "let g:syntastic_python_flake8_post_args='--ignore=E501'
 
-    let g:go_metalinter_autosave = 1
-    let g:go_metalinter_deadline = "10s"
+    nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+    set hidden
+    let g:LanguageClient_serverCommands = {
+        \ 'python': ['pyls'],
+        \ 'go': ['~/go/bin/go-langserver']
+        \ }
+
+    let g:LanguageClient_diagnosticsDisplay = { 2: { "signText": "W" } }
 
     nmap <esc>q :buffer 
     nmap <M-q> :buffer 
@@ -115,9 +131,11 @@ let
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
     pkgs.vimPlugins.ack-vim
     pkgs.vimPlugins.Gundo
-    pkgs.vimPlugins.Syntastic
+    #pkgs.vimPlugins.Syntastic
     pkgs.vimPlugins.undotree
     pkgs.vimPlugins.vim-go
+    pkgs.vimPlugins.fzf-vim
+    unstable_nixpkgs.vimPlugins.LanguageClient-neovim
     (pkgs.vimUtils.buildVimPlugin {
       name = "file-line-1.0";
       src = pkgs.fetchFromGitHub {
