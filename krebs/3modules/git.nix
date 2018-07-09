@@ -484,7 +484,7 @@ let
 
   reponames = rules: sort lessThan (unique (map (x: x.repo.name) rules));
 
-  # TODO use `writeOut`
+  # TODO use pkgs.write (from nix-writers)
   scriptFarm =
     farm-name: scripts:
     let

@@ -65,7 +65,7 @@ with import <stockholm/lib>;
       })
       (buildSimpleReaktorPlugin "random-unicorn-porn" {
         pattern = "^!rup$$";
-        script = pkgs.writePython2 [] "rup" ''
+        script = pkgs.writePython2 "rup" [] ''
           t1 = """
                               _.
                            ;=',_ ()
@@ -98,6 +98,12 @@ with import <stockholm/lib>;
         pattern = ".*[Bb]lockchain.*$$";
         script = pkgs.writeDash "blockchain" ''
           exec echo 'DID SOMEBODY SAY BLOCKCHAIN? https://paste.krebsco.de/r99pMoQq/+inline'
+        '';
+      })
+      (buildSimpleReaktorPlugin "shrug" {
+        pattern = "^!shrug$";
+        script = pkgs.writeDash "shrug" ''
+          exec echo '¯\_(ツ)_/¯'
         '';
       })
     ];

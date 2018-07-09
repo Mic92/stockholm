@@ -1,6 +1,6 @@
-{ pass, writeOut, writeDash, ... }:
+{ pass, write, writeDash, ... }:
 
-writeOut "dsco-pass" {
+write "dsco-pass" {
   "/bin/dpass".link = writeDash "dpass" ''
     PASSWORD_STORE_DIR=$HOME/.dpasswordstore \
     exec ${pass}/bin/pass $@

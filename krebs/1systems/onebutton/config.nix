@@ -16,6 +16,36 @@
       services.nixosManual.enable = false;
       services.journald.extraConfig = "SystemMaxUse=50M";
     }
+    {
+      systemd.services.mpc-booter = let
+        mpc = "${pkgs.mpc_cli}/bin/mpc -h mpd.shack -p 6600";
+        url = "http://lassul.us:8000/radio.ogg";
+        say = pkgs.writeDash "say" ''
+          tmpfile=$(${pkgs.coreutils}/bin/mktemp)
+          echo "$@" > $tmpfile
+          ${pkgs.curl}/bin/curl -i -H "content-type: text/plain" -X POST -d "@$tmpfile" gobbelz.shack/say/
+          rm "$tmpfile"
+        '';
+      in {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network-online.target" ];
+        serviceConfig = {
+          RemainAfterExit = "yes";
+          Type = "oneshot";
+          ExecStart = pkgs.writeDash "mpc-boot" ''
+            until ${mpc} stats;do
+              echo "waiting for mpd.shack to appear"
+              sleep 1
+            done
+            ${say} "Willkommen im Shack wertes Mitglied"
+
+            ${say} "Lassulus Super Radio wurde gestartet"
+            ${mpc} add ${url}
+            ${mpc} play
+          '';
+        };
+      };
+    }
   ];
   krebs.build.host = config.krebs.hosts.onebutton;
   # NixOS wants to enable GRUB by default

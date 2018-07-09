@@ -61,6 +61,10 @@ let
       cgit.desc = "krebs deployment";
       cgit.section = "software";
     };
+    xmonad-stockholm = {
+      cgit.desc = "krebs xmonad modules";
+      cgit.section = "configuration";
+    };
   } // mapAttrs make-public-repo-silent {
     nixos-aws = {
       collaborators = [ {

@@ -41,10 +41,14 @@ with import <stockholm/lib>;
           type = types.path;
           default = pkgs.writeScript "echo_lol" "echo lol";
         };
+        vglrun = mkOption {
+          type = types.bool;
+          default = false;
+        };
         wm = mkOption {
           #TODO find type
           type = types.string;
-          default = "${pkgs.writeHaskell "xephyrify-xmonad" {
+          default = "${pkgs.writeHaskellPackage "xephyrify-xmonad" {
             executables.xmonad = {
               extra-depends = [
                 "containers"
@@ -116,9 +120,11 @@ with import <stockholm/lib>;
           ${pkgs.coreutils}/bin/kill $WM_PID
           ${pkgs.coreutils}/bin/kill $XEPHYR_PID
         '';
-        sudo_ = pkgs.writeDash "${cfg.name}-sudo" ''
+        sudo_ = pkgs.writeDash "${cfg.name}-sudo" (if cfg.vglrun then ''
           /var/run/wrappers/bin/sudo -u ${cfg.name} -i ${vglrun_} "$@"
-        '';
+        '' else ''
+          /var/run/wrappers/bin/sudo -u ${cfg.name} -i env DISPLAY=:${cfg.display} ${cfg.script} "$@"
+        '');
         vglrun_ = pkgs.writeDash "${cfg.name}-vglrun" ''
           DISPLAY=:${cfg.display} ${pkgs.virtualgl}/bin/vglrun ${cfg.extraVglrunArgs} ${cfg.script} "$@"
         '';

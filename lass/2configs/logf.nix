@@ -11,7 +11,7 @@ let
     cloudkrebs = "119";
   };
   urgent = [
-    "\\blass@mors\\b"
+    "\\blass@blue\\b"
   ];
 in {
   environment.systemPackages = [

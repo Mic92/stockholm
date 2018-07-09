@@ -1,5 +1,5 @@
 { config, pkgs, ... }:
-pkgs.writeHaskell "xmonad-lass" {
+pkgs.writeHaskellPackage "xmonad-lass" {
   executables.xmonad = {
     extra-depends = [
       "containers"
@@ -48,7 +48,8 @@ import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedWindows (getName)
 import XMonad.Util.Run (safeSpawn)
 
-import XMonad.Stockholm.Shutdown
+import XMonad.Stockholm.Shutdown (handleShutdownEvent, sendShutdownEvent)
+import XMonad.Stockholm.Pager (defaultWindowColors, pager, MatchMethod(MatchPrefix), PagerConfig(..))
 
 data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
 
@@ -129,8 +130,8 @@ myKeyMap =
     , ("M4-f", floatNext True)
     , ("M4-b", sendMessage ToggleStruts)
 
-    , ("M4-v", withWorkspace autoXPConfig (windows . W.greedyView))
-    , ("M4-S-v", withWorkspace autoXPConfig (windows . W.shift))
+    , ("M4-v", gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.view) )
+    , ("M4-S-v", gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
     , ("M4-C-v", withWorkspace autoXPConfig (windows . copy))
 
     , ("M4-m", withFocused minimizeWindow)
@@ -183,6 +184,21 @@ infixAutoXPConfig = autoXPConfig
     { searchPredicate = isInfixOf
     }
 
+pagerConfig :: PagerConfig
+pagerConfig = def
+    { pc_font           = myFont
+    , pc_cellwidth      = 64
+    , pc_matchmethod    = MatchPrefix
+    , pc_windowColors   = windowColors
+    }
+    where
+    windowColors _ _ _ True _ = ("#ef4242","#ff2323")
+    windowColors wsf m c u wf = do
+        let y = defaultWindowColors wsf m c u wf
+        if m == False && wf == True
+            then ("#402020", snd y)
+            else y
+
 gridConfig :: GSConfig WorkspaceId
 gridConfig = def
     { gs_cellwidth = 100
@@ -191,6 +207,10 @@ gridConfig = def
     , gs_navigate = navNSearch
     , gs_font = myFont
     }
+
+allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
+allWorkspaceNames ws =
+    return $ map W.tag (W.hidden ws) ++ [W.tag $ W.workspace $ W.current ws]
     '';
   };
 }

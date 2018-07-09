@@ -27,6 +27,7 @@ let
         user = with config.krebs.users; [
           config.krebs.users."${config.networking.hostName}-repo-sync"
           lass
+          lass-mors
           lass-shodan
         ];
         repo = [ repo ];
@@ -136,5 +137,6 @@ in {
     (sync-retiolum "stockholm")
     (sync-retiolum "wai-middleware-time")
     (sync-retiolum "xmonad-stockholm")
+    (sync-retiolum "nix-writers")
   ];
 }
