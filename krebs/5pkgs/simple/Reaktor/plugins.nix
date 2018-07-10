@@ -146,16 +146,28 @@ rec {
     '';
   });
 
-  taskwarrior = buildSimpleReaktorPlugin "task" {
-    pattern = "^task: (?P<args>.*)$$";
-    script = let
-      taskrc = "$HOME/.taskrc";
-    in
-      pkgs.writeDash "task-wrapper" ''
-        if [ -f ${taskrc} ] ; then
-          touch ${taskrc}
-        fi
-        ${pkgs.taskwarrior}/bin/task "$*"
+  taskrcFile = builtins.toFile "taskrc" ''
+    confirmation=no
+  '';
+
+  task-add = buildSimpleReaktorPlugin "task-add" {
+    pattern = "^task-add: (?P<args>.*)$$";
+    script = pkgs.writeDash "task-add" ''
+        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} add "$*"
+      '';
+  };
+
+  task-list = buildSimpleReaktorPlugin "task-list" {
+    pattern = "^task-list";
+    script = pkgs.writeDash "task-list" ''
+        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} list
+      '';
+  };
+
+  task-delete = buildSimpleReaktorPlugin "task-delete" {
+    pattern = "^task-remove: (?P<args>.*)$$";
+    script = pkgs.writeDash "task-delete" ''
+        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} delete "$*"
       '';
   };
 
