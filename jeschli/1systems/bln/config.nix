@@ -106,6 +106,8 @@
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.postscript-lexmark ];
 
+  services.redis.enable = true;
+
   services.xserver = {
 
     desktopManager.session = lib.mkForce [];
