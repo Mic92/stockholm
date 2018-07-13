@@ -71,4 +71,5 @@ in {
     }
   '';
   services.rabbitmq.enable = true;
+  services.postgresql.enable = true;
 }
