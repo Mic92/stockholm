@@ -32,6 +32,9 @@ let {
     dic = {
       cgit.desc = "dict.leo.org command line interface";
     };
+    disko = {
+      cgit.desc = "declarative partitioning and formatting tool";
+    };
     get = {};
     hstool = {
       cgit.desc = "Haskell Development Environment ^_^";
