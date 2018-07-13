@@ -55,6 +55,7 @@ with import <stockholm/lib>;
       services.nginx = {
         enable = true;
         virtualHosts.default = {
+          default = true;
           serverAliases = [
             "localhost"
             "${config.krebs.build.host.name}"
