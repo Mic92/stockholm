@@ -10,6 +10,9 @@ with import <stockholm/lib>;
     };
     plugins = with pkgs.ReaktorPlugins; [
       sed-plugin
+      task-add
+      task-delete
+      task-list
     ] ++
       (attrValues (todo "agenda"))
     ;
