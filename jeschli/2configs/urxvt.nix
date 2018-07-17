@@ -29,11 +29,11 @@ with import <stockholm/lib>;
     *color13: rgb:fc/54/fc
     *color14: rgb:54/fc/fc
     *color15: rgb:fc/fc/fc
-    
+
     URxvt*scrollBar:                      false
     URxvt*urgentOnBell:                   true
     URxvt*font: xft:DejaVu Sans Mono:pixelsize=${toString config.jeschliFontSize}
     URXvt*faceSize: ${toString config.jeschliFontSize}
     '';
-  }; 
+  };
 }
