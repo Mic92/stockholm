@@ -15,7 +15,7 @@ in {
       description = "user for running VirtualBox";
       home = "/home/virtual";
       useDefaultShell = true;
-      extraGroups = [ "vboxusers" "audio" ];
+      extraGroups = [ "vboxusers" "audio" "video" ];
       createHome = true;
     };
   };

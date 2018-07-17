@@ -121,25 +121,55 @@ rec {
     pattern = "^.*(?P<args>http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+).*$$";
     path = with pkgs; [ curl perl ];
     script = pkgs.writePython3 "url-title" [ "beautifulsoup4" "lxml" ] ''
+      import cgi
       import sys
       import urllib.request
       from bs4 import BeautifulSoup
 
       try:
-          soup = BeautifulSoup(urllib.request.urlopen(sys.argv[1]), "lxml")
-          title = soup.find('title').string
+          req = urllib.request.Request(sys.argv[1])
+          req.add_header('user-agent', 'Reaktor-url-title')
+          resp = urllib.request.urlopen(req)
+          if resp.headers['content-type'].find('text/html') >= 0:
+              soup = BeautifulSoup(resp.read(16000), "lxml")
+              title = soup.find('title').string
 
-          if title:
-              if len(title) > 512:
-                  print('message to long, skipped')
-              elif len(title.split('\n')) > 5:
-                  print('to many lines, skipped')
-              else:
-                  print(title)
+              if len(title.split('\n')) > 5:
+                  title = '\n'.join(title.split('\n')[:5])
+
+              print(title[:450])
+          else:
+              cd_header = resp.headers['content-disposition']
+              print(cgi.parse_header(cd_header)[1]['filename'])
       except:  # noqa: E722
           pass
     '';
   });
+
+  taskrcFile = builtins.toFile "taskrc" ''
+    confirmation=no
+  '';
+
+  task-add = buildSimpleReaktorPlugin "task-add" {
+    pattern = "^task-add: (?P<args>.*)$$";
+    script = pkgs.writeDash "task-add" ''
+        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} add "$*"
+      '';
+  };
+
+  task-list = buildSimpleReaktorPlugin "task-list" {
+    pattern = "^task-list";
+    script = pkgs.writeDash "task-list" ''
+        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} list
+      '';
+  };
+
+  task-delete = buildSimpleReaktorPlugin "task-delete" {
+    pattern = "^task-remove: (?P<args>.*)$$";
+    script = pkgs.writeDash "task-delete" ''
+        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} delete "$*"
+      '';
+  };
 
   todo = name: {
     add = buildSimpleReaktorPlugin "${name}-add" {

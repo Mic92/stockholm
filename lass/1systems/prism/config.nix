@@ -195,6 +195,16 @@ with import <stockholm/lib>;
             jeschli-bolide
             jeschli-brauerei
           ];
+          repo = [ config.krebs.git.repos.xmonad-stockholm ];
+          perm = with git; push "refs/heads/jeschli*" [ fast-forward non-fast-forward create delete merge ];
+        }
+        {
+          user = with config.krebs.users; [
+            jeschli
+            jeschli-bln
+            jeschli-bolide
+            jeschli-brauerei
+          ];
           repo = [ config.krebs.git.repos.stockholm ];
           perm = with git; push "refs/heads/staging/jeschli*" [ fast-forward non-fast-forward create delete merge ];
         }
@@ -281,6 +291,18 @@ with import <stockholm/lib>;
       ];
     }
     {
+      services.nginx = {
+        enable = true;
+        virtualHosts."radio.lassul.us" = {
+          forceSSL = true;
+          enableACME = true;
+          locations."/".extraConfig = ''
+            proxy_pass http://localhost:8000;
+          '';
+        };
+      };
+    }
+    {
       lass.nichtparasoup.enable = true;
       services.nginx = {
         enable = true;
@@ -292,21 +314,6 @@ with import <stockholm/lib>;
           '';
         };
       };
-    }
-    { #weechat port forwarding to blue
-      krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-p tcp --dport 9998"; target = "ACCEPT";}
-      ];
-      krebs.iptables.tables.nat.PREROUTING.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d ${config.krebs.hosts.prism.nets.internet.ip4.addr} -p tcp --dport 9998"; target = "DNAT --to-destination ${config.krebs.hosts.blue.nets.retiolum.ip4.addr}:9999"; }
-      ];
-      krebs.iptables.tables.filter.FORWARD.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d ${config.krebs.hosts.blue.nets.retiolum.ip4.addr} -p tcp --dport 9999"; target = "ACCEPT"; }
-        { v6 = false; precedence = 1000; predicate = "-s ${config.krebs.hosts.blue.nets.retiolum.ip4.addr}"; target = "ACCEPT"; }
-      ];
-      krebs.iptables.tables.nat.POSTROUTING.rules = [
-        { v6 = false; predicate = "-d ${config.krebs.hosts.blue.nets.retiolum.ip4.addr} -p tcp --dport 9999"; target = "MASQUERADE"; }
-      ];
     }
     {
       krebs.iptables.tables.filter.INPUT.rules = [
@@ -341,9 +348,21 @@ with import <stockholm/lib>;
         { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
       ];
     }
+    {
+      services.murmur.enable = true;
+      services.murmur.registerName = "lassul.us";
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 64738"; target = "ACCEPT";}
+      ];
+
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
   # workaround because grub store paths are broken
   boot.copyKernels = true;
+  services.earlyoom = {
+    enable = true;
+    freeMemThreshold = 5;
+  };
 }

@@ -71,8 +71,10 @@ in {
     ag
     bank
     cabal2nix
+    cholerab
     dic
     dmenu
+    font-size
     gi
     gitAndTools.qgit
     git-preview
@@ -81,6 +83,7 @@ in {
     mpv-poll
     much
     ncdu
+    nix-index
     nix-repl
     nmap
     pavucontrol
@@ -91,7 +94,6 @@ in {
     sxiv
     taskwarrior
     termite
-    thesauron
     timewarrior
     xclip
     xephyrify

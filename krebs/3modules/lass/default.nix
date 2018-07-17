@@ -66,6 +66,7 @@ with import <stockholm/lib>;
           ions                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           paste               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           lol                 60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          radio               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
         '';
       };
       nets = rec {

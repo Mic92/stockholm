@@ -63,6 +63,7 @@ in
       grab_repo = steps.Git(
           repourl=stockholm_repo,
           mode='full',
+          submodules=True,
       )
     '';
     builder = {

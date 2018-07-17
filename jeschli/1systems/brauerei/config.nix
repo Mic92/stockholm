@@ -1,5 +1,5 @@
 # Edit this configuration file to define what should be installed on # your system.  Help is available in the configuration.nix(5) man page # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
   imports = [
     <stockholm/jeschli>
@@ -8,6 +8,7 @@
     <stockholm/jeschli/2configs/emacs.nix>
     <stockholm/jeschli/2configs/xdg.nix>
     <stockholm/jeschli/2configs/xserver>
+    <stockholm/jeschli/2configs/virtualbox.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.brauerei;
@@ -24,9 +25,10 @@
     preLVM = true;
     allowDiscards = true;
   } ];
-  # networking.hostName = "nixos";
+#  networking.hostName = "brauerei";
   # Define your hostname.
-  networking.wireless.enable = true;
+#  networking.wireless.enable = true;
+  networking.networkmanager.enable = true;
   # Enables wireless support via wpa_supplicant.
   # Select internationalisation properties.
   # i18n = {
@@ -66,12 +68,25 @@
     chromium
     google-chrome
   # programming languages
+    elixir
+    elmPackages.elm
     exercism
     go
     gcc
     ghc
     python35
     python35Packages.pip
+    (vagrant.override {
+      bundlerEnv = bundlerEnv.override {
+        bundler = bundler.overrideAttrs (old: {
+          name = "bundler-1.16.1";
+          src = fetchurl {
+            url = "https://rubygems.org/gems/bundler-1.16.1.gem";
+            sha256 = "1s2nq4qnffxg3kwrk7cnwxcvfihlhxm9absl2l6d3qckf3sy1f22";
+          };
+        });
+      };
+    })
   # go tools
     golint
     gotools
@@ -84,6 +99,7 @@
     jetbrains.webstorm
     jetbrains.goland
   # document viewer
+    evince
     zathura
   # xorg
     xorg.xbacklight
@@ -100,33 +116,29 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  services.xserver = {
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
+    # Don't install feh into systemPackages
+    # refs <nixpkgs/nixos/modules/services/x11/desktop-managers>
+    desktopManager.session = lib.mkForce [];
 
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
+    enable = true;
+    display = 11;
+    tty = 11;
 
-  # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
+    dpi = 96;
 
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
-  #  services.xserver.displayManager.sddm.enable = true;
-  #  services.xserver.windowManager.xmonad.enable = true;
-  #  services.xserver.windowManager.xmonad.enableContribAndExtras = true;
-  #
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+#    videoDrivers = [ "nvidia" ];
+    synaptics = {
+      enable = true;
+      twoFingerScroll = true;
+      accelFactor = "0.035";
+    };
+  };
+
   users.extraUsers.jeschli = { # TODO: define as krebs.users
     isNormalUser = true;
+    extraGroups = ["docker" "vboxusers"];
     uid = 1000;
   };
   users.extraUsers.jamie = {

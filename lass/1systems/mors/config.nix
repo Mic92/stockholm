@@ -29,6 +29,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/c-base.nix>
     <stockholm/lass/2configs/br.nix>
     <stockholm/lass/2configs/ableton.nix>
+    <stockholm/lass/2configs/starcraft.nix>
     <stockholm/lass/2configs/dunst.nix>
     <stockholm/lass/2configs/rtl-sdr.nix>
     <stockholm/lass/2configs/backup.nix>
@@ -54,6 +55,7 @@ with import <stockholm/lib>;
       services.nginx = {
         enable = true;
         virtualHosts.default = {
+          default = true;
           serverAliases = [
             "localhost"
             "${config.krebs.build.host.name}"
@@ -78,9 +80,6 @@ with import <stockholm/lib>;
         enable = true;
         client.enable = true;
       };
-    }
-    {
-      services.mongodb.enable = true;
     }
   ];
 
@@ -179,4 +178,9 @@ with import <stockholm/lib>;
     };
   });
   virtualisation.libvirtd.enable = true;
+
+  services.earlyoom = {
+    enable = true;
+    freeMemThreshold = 5;
+  };
 }
