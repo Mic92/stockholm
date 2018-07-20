@@ -30,6 +30,14 @@ let
   rules = concatMap make-rules (attrValues repos);
 
   public-repos = mapAttrs make-public-repo {
+    cholerab = {
+      cgit.desc = "krebs thesauron & enterprise-patterns";
+      cgit.section = "documentation";
+    };
+    disko = {
+      cgit.desc = "take a description of your disk layout and produce a format script";
+      cgit.section = "software";
+    };
     news = {
       cgit.desc = "take a rss feed and a timeout and print it to stdout";
       cgit.section = "software";

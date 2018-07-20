@@ -30,7 +30,7 @@ in {
       jeschli-bln.pubkey
       jeschli-brauerei.pubkey
     ];
-    packages = [ tmux ]; 
+    packages = [ tmux ];
   };
 
 

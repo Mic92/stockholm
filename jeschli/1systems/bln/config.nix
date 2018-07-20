@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 # bln config file
 {
-  imports = [ 
+  imports = [
     ./hardware-configuration.nix
     <stockholm/jeschli>
     <stockholm/jeschli/2configs/virtualbox.nix>
@@ -105,6 +105,8 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.postscript-lexmark ];
+
+  services.redis.enable = true;
 
   services.xserver = {
 
