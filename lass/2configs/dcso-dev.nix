@@ -52,6 +52,10 @@ in {
     { predicate = "-p tcp --dport 9000"; target = "ACCEPT";}
   ];
 
+  krebs.iptables.tables.filter.OUTPUT.rules = [
+    { predicate = "-p tcp --dport 21"; target = "REJECT";}
+  ];
+
   krebs.per-user.dev.packages = [
     pkgs.go
   ];
@@ -64,12 +68,6 @@ in {
   networking.interfaces.et0.ipv4.addresses = [
     { address = "10.99.23.1"; prefixLength = 24; }
   ];
-  virtualisation.docker.enable = true;
-  environment.etc."docker/daemon.json".source = pkgs.writeText "daemon.json" ''
-    {
-      "bip": "172.25.0.1/16"
-    }
-  '';
   services.rabbitmq.enable = true;
   services.postgresql.enable = true;
 }
