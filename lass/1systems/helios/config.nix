@@ -98,7 +98,7 @@ with import <stockholm/lib>;
   ];
 
   programs.adb.enable = true;
-  users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
+  users.users.mainUser.extraGroups = [ "adbusers" ];
 
   services.printing.drivers = [ pkgs.postscript-lexmark ];
 
@@ -106,5 +106,4 @@ with import <stockholm/lib>;
     HandleLidSwitch=ignore
   '';
 
-  virtualisation.docker.enable = true;
 }
