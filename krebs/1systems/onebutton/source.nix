@@ -1,11 +1,8 @@
 with import <stockholm/lib>;
 let
   pkgs = import <nixpkgs> {};
-  nixpkgs = pkgs.fetchFromGitHub {
-    owner = "nixos";
-    repo = "nixpkgs-channels";
-    rev = "nixos-unstable"; # only binary cache for unstable arm6
-    sha256 = "1rqzh475xn43phagrr30lb0fd292c1s8as53irihsnd5wcksnbyd";
+  nixpkgs = builtins.fetchTarball {
+    url = https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
   };
 in import <stockholm/krebs/source.nix> {
   name = "onebutton";
