@@ -165,7 +165,7 @@ rec {
   };
 
   task-delete = buildSimpleReaktorPlugin "task-delete" {
-    pattern = "^task-remove: (?P<args>.*)$$";
+    pattern = "^task-delete: (?P<args>.*)$$";
     script = pkgs.writeDash "task-delete" ''
         ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} delete "$*"
       '';
