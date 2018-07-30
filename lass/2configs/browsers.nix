@@ -66,6 +66,7 @@ in {
     extensions = [
       "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
       "dbepggeogbaibhgnhhndojpepiihcmeb" # vimium
+      "liloimnbhkghhdhlamdjipkmadhpcjmn" # krebsgold
     ];
   };
 
