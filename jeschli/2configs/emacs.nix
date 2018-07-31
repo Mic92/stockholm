@@ -17,18 +17,19 @@ let
   '';
   evilMode = ''
     ;; Evil Mode
-    (add-to-list 'load-path "~/.emacs.d/evil")
     (require 'evil)
     (evil-mode 1)
-    (require 'evil-org)
-    (add-hook 'org-mode-hook 'evil-org-mode)
-    (evil-org-set-key-theme '(navigation insert textobjects additional calendar))
-    (require 'evil-org-agenda)
-    (evil-org-agenda-set-keys)
+    ;; (require 'evil-org)
+    ;; (add-hook 'org-mode-hook 'evil-org-mode)
+    ;; (evil-org-set-key-theme '(navigation insert textobjects additional calendar))
+    ;; (require 'evil-org-agenda)
+    ;; (evil-org-agenda-set-keys)
   '';
   windowCosmetics = ''
+    (menu-bar-mode -1)
     (tool-bar-mode -1)                  ; Disable the button bar atop screen
     (scroll-bar-mode -1)                ; Disable scroll bar
+    (toggle-scroll-bar -1)
     (setq inhibit-startup-screen t)     ; Disable startup screen with graphics
     (setq-default indent-tabs-mode nil) ; Use spaces instead of tabs
     (setq default-tab-width 2)          ; Two spaces is a tab
@@ -41,10 +42,14 @@ let
     (global-set-key "\C-cl" 'org-store-link)
     (global-set-key "\C-ca" 'org-agenda)
     (global-set-key "\C-cb" 'org-iswitchb)
+    (setq org-link-frame-setup '((file . find-file))) ; open link in same frame.
     (if (boundp 'org-user-agenda-files)
       (setq org-agenda-files org-user-agenda-files)
       (setq org-agenda-files (quote ("~/projects/notes")))
     )
+  '';
+  theme = ''
+    (load-theme 'monokai-alt)
   '';
   recentFiles = ''
     (recentf-mode 1)
@@ -55,14 +60,17 @@ let
     ${packageRepos}
     ${orgMode}
     ${recentFiles}
+    ${theme}
     ${windowCosmetics}
   '';
   emacsWithCustomPackages = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: [
+    epkgs.melpaPackages.evil
     epkgs.melpaStablePackages.magit
     epkgs.melpaPackages.mmm-mode
     epkgs.melpaPackages.nix-mode
     epkgs.melpaPackages.go-mode
     epkgs.melpaPackages.google-this
+    epkgs.melpaPackages.monokai-alt-theme
   ]);
   myEmacs = pkgs.writeDashBin "my-emacs" ''
     exec ${emacsWithCustomPackages}/bin/emacs -q -l ${dotEmacs} "$@"
