@@ -90,7 +90,7 @@ in {
     }
     ( createQuteUser "qb" [ "audio" ] 20 )
     ( createFirefoxUser "ff" [ "audio" ] 10 )
-    ( createChromiumUser "cr" [ "audio" ] 9 )
+    ( createChromiumUser "cr" [ "audio" "video" ] 9 )
     ( createChromiumUser "gm" [ "video" "audio" ] 8 )
     ( createChromiumUser "wk" [ "audio" ] 0 )
     ( createChromiumUser "fb" [ "audio" ] 0 )

@@ -4,7 +4,7 @@ with import <stockholm/lib>;
 
 pkgs.writeText "Xresources" /* xdefaults */ ''
   Xcursor.theme: aero-large-drop
-  Xcursor.size: 128 
+  Xcursor.size: 128
   Xft.dpi: 144
 
   URxvt*cutchars: "\\`\"'&()*,;<=>?@[]^{|}‘’"

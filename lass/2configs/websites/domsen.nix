@@ -119,6 +119,7 @@ in {
       { from = "ms@ubikmedia.eu"; to = "ms"; }
       { from = "ubik@ubikmedia.eu"; to = "domsen, jms, ms"; }
       { from = "akayguen@freemonkey.art"; to ="akayguen"; }
+      { from = "bui@freemonkey.art"; to ="bui"; }
 
       { from = "testuser@lassul.us"; to = "testuser"; }
       { from = "testuser@ubikmedia.eu"; to = "testuser"; }
@@ -179,6 +180,13 @@ in {
   users.users.akayguen = {
     uid = genid_signed "akayguen";
     home = "/home/akayguen";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
+  users.users.bui = {
+    uid = genid_signed "bui";
+    home = "/home/bui";
     useDefaultShell = true;
     createHome = true;
   };

@@ -26,18 +26,15 @@ with import <stockholm/lib>;
   fileSystems = {
     "/" = {
       device = "/dev/mapper/wuvga-root";
-      fsType = "btrfs";
-      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+      fsType = "ext4";
     };
     "/bku" = {
       device = "/dev/mapper/wuvga-bku";
-      fsType = "btrfs";
-      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+      fsType = "ext4";
     };
     "/home" = {
       device = "/dev/mapper/wuvga-home";
-      fsType = "btrfs";
-      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+      fsType = "ext4";
     };
     "/boot" = {
       device = "/dev/sda1";

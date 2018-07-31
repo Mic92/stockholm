@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 # bln config file
 {
-  imports = [ 
+  imports = [
     ./hardware-configuration.nix
     <stockholm/jeschli>
     <stockholm/jeschli/2configs/virtualbox.nix>
