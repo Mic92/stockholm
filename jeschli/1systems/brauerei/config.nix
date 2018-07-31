@@ -37,6 +37,7 @@
       exec nix-shell -I stockholm="$PWD" --run 'deploy  --system="brauerei"'
     '';
   };
+
   environment.systemPackages = with pkgs; [
   # system helper
     ag
