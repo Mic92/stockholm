@@ -25,21 +25,11 @@
     preLVM = true;
     allowDiscards = true;
   } ];
-#  networking.hostName = "brauerei";
-  # Define your hostname.
-#  networking.wireless.enable = true;
   networking.networkmanager.enable = true;
-  # Enables wireless support via wpa_supplicant.
-  # Select internationalisation properties.
-  # i18n = {
-  #   consoleFont = "Lat2-Terminus16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
-  # };
-  # Set your time zone.  #
   time.timeZone = "Europe/Amsterdam";
+
   nixpkgs.config.allowUnfree = true;
-  # List packages installed in system profile. To search by name, run: # $ nix-env -qaP | grep wget
+
   environment.shellAliases = {
     n = "nix-shell";
     stocki = pkgs.writeDash "deploy" ''
