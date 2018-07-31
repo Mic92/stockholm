@@ -9,6 +9,8 @@
     <stockholm/jeschli/2configs/emacs.nix>
     <stockholm/jeschli/2configs/xdg.nix>
     <stockholm/jeschli/2configs/xserver>
+#    <stockholm/jeschli/1systems/bln/dcso-vpn.nix>
+    <stockholm/jeschli/2configs/officevpn.nix>
   ];
 
 #  boot.loader.systemd-boot.enable = true;
@@ -94,6 +96,8 @@
     vagrant
   # document viewer
     zathura
+
+    samba
   ];
 
 
