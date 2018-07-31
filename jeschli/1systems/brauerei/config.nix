@@ -130,7 +130,7 @@
 
   users.extraUsers.jeschli = { # TODO: define as krebs.users
     isNormalUser = true;
-    extraGroups = ["docker" "vboxusers"];
+    extraGroups = ["docker" "vboxusers" "audio"];
     uid = 1000;
   };
   users.extraUsers.jamie = {
