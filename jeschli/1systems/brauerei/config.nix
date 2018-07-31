@@ -94,6 +94,7 @@
     zathura
   # xorg
     xorg.xbacklight
+    taskwarrior
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
