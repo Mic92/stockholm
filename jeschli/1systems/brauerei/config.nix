@@ -118,7 +118,7 @@
     display = 11;
     tty = 11;
 
-    dpi = 96;
+    dpi = 144;
 
 #    videoDrivers = [ "nvidia" ];
     synaptics = {
