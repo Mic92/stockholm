@@ -8,6 +8,21 @@
 
 with import <stockholm/lib>;
 let
+  defaultBool = o: mkOption {
+          type = types.bool;
+          default = option;
+  };
+
+  defaultUint = o: mkOption {
+          type = types.uint;
+          default = o;
+  };
+
+  defaultAbsolutpath = o: mkOption {
+          type = types.absolute-pathname;
+          default = o;
+  };
+
   cfg = config.krebs.git;
 
   out = {
@@ -121,42 +136,15 @@ let
     cgit-settings = types.submodule {
       # A setting's value of `null` means cgit's default should be used.
       options = {
-        cache-root = mkOption {
-          type = types.absolute-pathname;
-          default = "/tmp/cgit";
-        };
-        cache-size = mkOption {
-          type = types.uint;
-          default = 1000;
-        };
-        css = mkOption {
-          type = types.absolute-pathname;
-          default = "/static/cgit.css";
-        };
-        enable-commit-graph = mkOption {
-          type = types.bool;
-          default = true;
-        };
-        enable-index-links = mkOption {
-          type = types.bool;
-          default = true;
-        };
-        enable-index-owner = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        enable-log-filecount = mkOption {
-          type = types.bool;
-          default = true;
-        };
-        enable-log-linecount = mkOption {
-          type = types.bool;
-          default = true;
-        };
-        enable-remote-branches = mkOption {
-          type = types.bool;
-          default = true;
-        };
+        cache-root = defaultAbsolutpath("/tmp/cgit");
+        cache-size = defaultUint(1000);
+        css = defaultAbsolutpath("/static/cgit.css");
+        enable-commit-graph = defaultBool(true);
+        enable-index-links = defaultBool(true);
+        enable-index-owner = defaultBool(false);
+        enable-log-filecount = defaultBool(true);
+        enable-log-linecount = defaultBool(true);
+        enable-remote-branches = defaultBool(true);
         logo = mkOption {
           type = types.absolute-pathname;
           default = "/static/cgit.png";
