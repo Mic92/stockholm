@@ -5,7 +5,6 @@ with import <stockholm/lib>;
 pkgs.writeText "Xresources" /* xdefaults */ ''
   Xcursor.theme: aero-large-drop
   Xcursor.size: 128
-  Xft.dpi: 144
 
   URxvt*cutchars: "\\`\"'&()*,;<=>?@[]^{|}‘’"
   URxvt*eightBitInput: false
@@ -22,7 +21,8 @@ pkgs.writeText "Xresources" /* xdefaults */ ''
   URxvt*charClass: 33:48,37:48,45-47:48,64:48,38:48,61:48,63:48
   URxvt*cutNewline: False
   URxvt*cutToBeginningOfLine: False
-
+  URxvt*font: xft:Monospace:size=12
+  URxvt*font: xft:Monospace:size=12:bold
   URxvt*color0: #232342
   URxvt*color3: #c07000
   URxvt*color4: #4040c0
