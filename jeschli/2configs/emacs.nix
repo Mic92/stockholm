@@ -57,6 +57,7 @@ let
     (global-set-key "\C-x\ \C-r" 'recentf-open-files)
   '';
   dotEmacs = pkgs.writeText "dot-emacs" ''
+    ${evilMode}
     ${packageRepos}
     ${orgMode}
     ${recentFiles}
