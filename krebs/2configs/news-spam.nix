@@ -7,7 +7,6 @@
       [SPAM]aje|http://www.aljazeera.com/Services/Rss/?PostingId=2007731105943979989|#snews
       [SPAM]allafrica|http://allafrica.com/tools/headlines/rdf/latest/headlines.rdf|#snews
       [SPAM]antirez|http://antirez.com/rss|#snews
-      [SPAM]arbor|http://feeds2.feedburner.com/asert/|#snews
       [SPAM]archlinux|http://www.archlinux.org/feeds/news/|#snews
       [SPAM]ars|http://feeds.arstechnica.com/arstechnica/index?format=xml|#snews
       [SPAM]augustl|http://augustl.com/atom.xml|#snews
@@ -131,7 +130,6 @@
       [SPAM]slashdot|http://rss.slashdot.org/Slashdot/slashdot|#snews
       [SPAM]slate|http://feeds.slate.com/slate|#snews
       [SPAM]spiegel_eil|http://www.spiegel.de/schlagzeilen/eilmeldungen/index.rss|#snews
-      [SPAM]spiegelfechter|http://feeds.feedburner.com/DerSpiegelfechter?format=xml|#snews
       [SPAM]spiegel_top|http://www.spiegel.de/schlagzeilen/tops/index.rss|#snews
       [SPAM]standardmedia_ke|http://www.standardmedia.co.ke/rss/headlines.php|#snews
       [SPAM]stern|http://www.stern.de/feed/standard/all/|#snews
@@ -146,7 +144,6 @@
       [SPAM]the_insider|http://www.theinsider.org/rss/news/headlines-xml.asp|#snews
       [SPAM]tigsource|http://www.tigsource.com/feed/|#snews
       [SPAM]tinc|http://tinc-vpn.org/news/index.rss|#snews
-      [SPAM]topix_b|http://www.topix.com/rss/wire/de/berlin|#snews
       [SPAM]torr_bits|http://feeds.feedburner.com/TorrentfreakBits|#snews
       [SPAM]torrentfreak|http://feeds.feedburner.com/Torrentfreak|#snews
       [SPAM]torr_news|http://feed.torrentfreak.com/Torrentfreak/|#snews
@@ -160,7 +157,6 @@
       [SPAM]us_math_society|http://www.ams.org/cgi-bin/content/news_items.cgi?rss=1|#snews
       [SPAM]vimperator|https://sites.google.com/a/vimperator.org/www/blog/posts.xml|#snews
       [SPAM]weechat|http://dev.weechat.org/feed/atom|#snews
-      [SPAM]wp_world|http://feeds.washingtonpost.com/rss/rss_blogpost|#snews
       [SPAM]xkcd|https://xkcd.com/rss.xml|#snews
       [SPAM]zdnet|http://www.zdnet.com/news/rss.xml|#snews
     '';
