@@ -336,7 +336,6 @@ with import <stockholm/lib>;
         "krebsco.de" = ''
           euer              IN MX 1   aspmx.l.google.com.
           nixos.unstable    IN CNAME  krebscode.github.io.
-          gold              IN A      ${nets.internet.ip4.addr}
           boot              IN A      ${nets.internet.ip4.addr}
         '';
       };
@@ -522,6 +521,13 @@ with import <stockholm/lib>;
     };
     nextgum = rec {
       ci = true;
+      extraZones = {
+        "krebsco.de" = ''
+          cache.euer        IN A      ${nets.internet.ip4.addr}
+          cache.gum         IN A      ${nets.internet.ip4.addr}
+          gold              IN A      ${nets.internet.ip4.addr}
+        '';
+      };
       cores = 8;
       nets = rec {
         internet = {
@@ -537,6 +543,7 @@ with import <stockholm/lib>;
           ip6.addr = "42:f9f0:0000:0000:0000:0000:0000:70d3";
           aliases = [
             "nextgum.r"
+            "cache.gum.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
