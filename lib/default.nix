@@ -13,7 +13,7 @@ let
     mod = x: y: x - y * (x / y);
 
     genid = import ./genid.nix { inherit lib; };
-    genid_signed = x: ((lib.genid x) + 16777216) / 2;
+    genid_uint31 = x: ((lib.genid x) + 16777216) / 2;
 
     lpad = n: c: s:
       if lib.stringLength s < n
