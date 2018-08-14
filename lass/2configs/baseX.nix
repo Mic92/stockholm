@@ -58,14 +58,6 @@ in {
   programs.ssh.startAgent = true;
   services.openssh.forwardX11 = true;
 
-  services.printing = {
-    enable = true;
-    drivers = [
-      pkgs.foomatic_filters
-      pkgs.gutenprint
-    ];
-  };
-
   environment.systemPackages = with pkgs; [
     acpi
     ag
