@@ -1,4 +1,4 @@
-{ mkDerivation, base, containers, fetchgit, stdenv, X11, X11-xshape
+{ mkDerivation, base, containers, fetchgit, stdenv, X11, X11-xft, X11-xshape
 , xmonad, xmonad-contrib
 }:
 mkDerivation rec {
@@ -10,7 +10,7 @@ mkDerivation rec {
     sha256 = "05nnfg6q35z3qgf507qa80bz32jl4k719dl5phlmchplp3769585";
   };
   libraryHaskellDepends = [
-    base containers X11 X11-xshape xmonad xmonad-contrib
+    base containers X11 X11-xft X11-xshape xmonad xmonad-contrib
   ];
   license = stdenv.lib.licenses.mit;
 }
