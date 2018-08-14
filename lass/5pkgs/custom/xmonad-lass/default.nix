@@ -64,7 +64,7 @@ myTerm :: FilePath
 myTerm = "${pkgs.rxvt_unicode_with-plugins}/bin/urxvtc"
 
 myFont :: String
-myFont = "${config.lass.fonts.regular}"
+myFont = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1"
 
 main :: IO ()
 main = getArgs >>= \case
