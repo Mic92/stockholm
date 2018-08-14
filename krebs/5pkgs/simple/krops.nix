@@ -2,6 +2,6 @@
 
 fetchgit {
   url = https://cgit.krebsco.de/krops;
-  rev = "refs/tags/v1.1.0";
-  sha256 = "19z5385rdci2bj0l7ksjbgyj84vsb29kz87j9x6vj5vv16y7y4ll";
+  rev = "refs/tags/v1.3.0";
+  sha256 = "1vfmm7aqi6y6cjz7vivamc70dkaxxxlihj48qvqc0dlj1bi331c2";
 }
