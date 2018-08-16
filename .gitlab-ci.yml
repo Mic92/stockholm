@@ -1,5 +1,17 @@
+before_script:
+   - mkdir -p ~/.ssh
+   - echo "$deploy_privkey" > deploy.key
+   - export GIT_SSH_COMMAND="ssh -i $PWD/deploy.key"
+   - chmod 600 deploy.key
+   - ssh-keyscan -H 'github.com' >> ~/.ssh/known_hosts
 nix-shell test:
   script:
     - env
     - nix-shell --pure --command 'true' -p stdenv && echo success
     - nix-shell --pure --command 'false' -p stdenv || echo success
+nur-packages makefu:
+  script:
+    - git reset --hard origin/master
+    - git filter-branch -f --prune-empty --subdirectory-filter makefu/5pkgs HEAD
+    - git remote add deploy git@github.com:makefu/nur-packages.git  || git remote set-url deploy git@github.com:makefu/nur-packages.git
+    - git push --force deploy HEAD:master
