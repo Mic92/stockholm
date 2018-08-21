@@ -165,4 +165,9 @@
 
   hardware.bluetooth.enable = true;
   krebs.build.host = config.krebs.hosts.bln;
+
+  networking.interfaces.enp0s31f6.ipv4.addresses = [
+    { address = "10.99.23.2"; prefixLength = 24; }
+  ];
+
 }
