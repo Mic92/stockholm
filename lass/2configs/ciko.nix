@@ -2,7 +2,7 @@
 with import <stockholm/lib>;
 {
   users.users.ciko = {
-    uid = genid_signed "ciko";
+    uid = genid_uint31 "ciko";
     description = "acc for ciko";
     home = "/home/ciko";
     useDefaultShell = true;

@@ -175,7 +175,6 @@ with import <stockholm/lib>;
         alias /var/realwallpaper/realwallpaper.png;
       '';
     }
-    <stockholm/lass/2configs/dcso-dev.nix>
     {
       users.users.jeschli = {
         uid = genid "jeschli";

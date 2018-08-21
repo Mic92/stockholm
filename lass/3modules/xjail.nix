@@ -23,7 +23,7 @@ with import <stockholm/lib>;
         };
         display = mkOption {
           type = types.string;
-          default = toString (genid_signed config._module.args.name);
+          default = toString (genid_uint31 config._module.args.name);
         };
         dpi = mkOption {
           type = types.int;

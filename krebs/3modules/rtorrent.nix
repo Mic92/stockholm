@@ -29,7 +29,7 @@ let
     ''}
 
     ${optionalString (cfg.watchDir != null) ''
-      schedule = watch_directory,5,5,load_start=${cfg.watchDir}/*.torrent
+      directory.watch.added = "${cfg.watchDir}", load.start_verbose
     ''}
 
     directory = ${cfg.downloadDir}

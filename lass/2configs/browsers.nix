@@ -29,7 +29,7 @@ let
       environment.systemPackages = [
         config.lass.xjail-bins.${name}
         (pkgs.writeDashBin "cx-${name}" ''
-          DISPLAY=:${toString (genid_signed name)} ${pkgs.xclip}/bin/xclip -o | DISPLAY=:0 ${pkgs.xclip}/bin/xclip
+          DISPLAY=:${toString (genid_uint31 name)} ${pkgs.xclip}/bin/xclip -o | DISPLAY=:0 ${pkgs.xclip}/bin/xclip
         '')
       ];
       lass.browser.paths.${name} = {
@@ -66,6 +66,7 @@ in {
     extensions = [
       "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
       "dbepggeogbaibhgnhhndojpepiihcmeb" # vimium
+      "liloimnbhkghhdhlamdjipkmadhpcjmn" # krebsgold
     ];
   };
 
