@@ -337,7 +337,7 @@ with import <stockholm/lib>;
           {
             # lass-android
             allowedIPs = [ "10.244.1.2/32" ];
-            publicKey = "63+ns9AGv6e6a8WgxiZNFEt1xQT0YKFlEHzRaYJWtmk=";
+            publicKey = "zVunBVOxsMETlnHkgjfH71HaZjjNUOeYNveAVv5z3jw=";
           }
         ];
       };
