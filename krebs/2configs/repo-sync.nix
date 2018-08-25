@@ -29,10 +29,10 @@ let
       {
         user = with config.krebs.users; [
           config.krebs.users."${config.networking.hostName}-repo-sync"
-          lass
-          tv
-          makefu
           jeschli
+          lass
+          makefu
+          tv
         ];
         repo = [ repo ];
         perm = push ''refs/*'' [ non-fast-forward create delete merge ];
@@ -54,35 +54,20 @@ let
     {
       krebs.repo-sync.repos.${name} = {
         branches = {
-          makefu = {
-            origin.url = "http://cgit.gum/${name}";
+          lassulus = {
+            origin.url = "http://cgit.lassul.us/${name}";
             mirror.url = "${mirror}${name}";
           };
-          tv = {
-            origin.url = "http://cgit.ni.r/${name}";
+          makefu = {
+            origin.url = "http://cgit.gum/${name}";
             mirror.url = "${mirror}${name}";
           };
           nin = {
             origin.url = "http://cgit.onondaga.r/${name}";
             mirror.url = "${mirror}${name}";
           };
-          lassulus = {
-            origin.url = "http://cgit.lassul.us/${name}";
-            mirror.url = "${mirror}${name}";
-          };
-          makefu-staging = {
-            origin.url = "http://cgit.gum/${name}";
-            origin.ref = "heads/staging";
-            mirror.url = "${mirror}${name}";
-          };
-          tv-staging = {
+          tv = {
             origin.url = "http://cgit.ni.r/${name}";
-            origin.ref = "heads/staging";
-            mirror.url = "${mirror}${name}";
-          };
-          nin-staging = {
-            origin.url = "http://cgit.onondaga.r/${name}";
-            origin.ref = "heads/staging";
             mirror.url = "${mirror}${name}";
           };
         };
