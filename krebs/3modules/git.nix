@@ -348,6 +348,10 @@ let
     users.users.${cfg.user.name} = {
       inherit (cfg.user) home name uid;
       description = "Git repository hosting user";
+      extraGroups = [
+        # To allow running cgit-clear-cache via hooks.
+        cfg.cgit.fcgiwrap.group.name
+      ];
       shell = "/bin/sh";
       openssh.authorizedKeys.keys =
         unique
@@ -407,7 +411,8 @@ let
     ];
 
     system.activationScripts.cgit = ''
-      mkdir -m 0700 -p ${cfg.cgit.settings.cache-root}
+      mkdir -m 0770 -p ${cfg.cgit.settings.cache-root}
+      chmod 0770 ${cfg.cgit.settings.cache-root}
       chown ${toString cfg.cgit.fcgiwrap.user.uid}:${toString cfg.cgit.fcgiwrap.group.gid} ${cfg.cgit.settings.cache-root}
     '';
 
