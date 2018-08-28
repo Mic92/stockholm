@@ -30,7 +30,8 @@ with import <stockholm/lib>;
       };
       environment.systemPackages = with pkgs; [
         pavucontrol
-        firefox
+        #firefox
+        chromium
         hexchat
         networkmanagerapplet
         libreoffice

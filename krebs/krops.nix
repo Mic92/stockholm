@@ -12,7 +12,7 @@
 
   krebs-source = {
     nixpkgs.git = {
-      ref = "56fad146a12a6f934d1d5ef875eb729be1b19129";
+      ref = (lib.importJSON ./nixpkgs.json).rev;
       url = https://github.com/NixOS/nixpkgs;
     };
     stockholm.file = toString ../.;

@@ -8,7 +8,6 @@ in {
     ./mpv.nix
     ./power-action.nix
     ./copyq.nix
-    ./livestream.nix
     ./urxvt.nix
     ./network-manager.nix
     {
@@ -58,30 +57,18 @@ in {
   programs.ssh.startAgent = true;
   services.openssh.forwardX11 = true;
 
-  services.printing = {
-    enable = true;
-    drivers = [
-      pkgs.foomatic_filters
-      pkgs.gutenprint
-    ];
-  };
-
   environment.systemPackages = with pkgs; [
     acpi
     ag
-    bank
     cabal2nix
     cholerab
     dic
     dmenu
     font-size
-    gi
     gitAndTools.qgit
     git-preview
     gnome3.dconf
     lm_sensors
-    mpv-poll
-    much
     ncdu
     nix-index
     nix-repl
@@ -90,18 +77,14 @@ in {
     powertop
     push
     rxvt_unicode_with-plugins
-    slock
     sxiv
     taskwarrior
     termite
-    timewarrior
     xclip
     xephyrify
     xorg.xbacklight
     xorg.xhost
     xsel
-    youtube-tools
-    yt-next
     zathura
   ];
 
@@ -112,7 +95,6 @@ in {
     xlibs.fontschumachermisc
   ];
 
-  #lass.xserver.enable = true;
   services.xserver = {
     enable = true;
     layout = "us";

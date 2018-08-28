@@ -29,5 +29,6 @@
 
   swapDevices = [ ];
 
+  hardware.pulseaudio.enable = true;
   nix.maxJobs = lib.mkDefault 4;
 }

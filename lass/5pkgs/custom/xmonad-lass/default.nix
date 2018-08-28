@@ -64,7 +64,7 @@ myTerm :: FilePath
 myTerm = "${pkgs.rxvt_unicode_with-plugins}/bin/urxvtc"
 
 myFont :: String
-myFont = "${config.lass.fonts.regular}"
+myFont = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1"
 
 main :: IO ()
 main = getArgs >>= \case
@@ -159,6 +159,8 @@ myKeyMap =
     , ("M4-<F8>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 100")
 
     , ("<Pause>", spawn "${pkgs.xcalib}/bin/xcalib -invert -alter")
+
+    , ("M4-s", spawn "${pkgs.knav}/bin/knav")
 
     --, ("M4-w", screenWorkspace 0 >>= (windows . W.greedyView))
     --, ("M4-e", screenWorkspace 1 >>= (windows . W.greedyView))
