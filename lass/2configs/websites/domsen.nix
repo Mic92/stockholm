@@ -4,7 +4,7 @@ let
 
   inherit (import <stockholm/lib>)
     genid
-    genid_signed
+    genid_uint31
   ;
   inherit (import <stockholm/lass/2configs/websites/util.nix> {inherit lib pkgs;})
     servePage
@@ -134,7 +134,7 @@ in {
   };
 
   users.users.domsen = {
-    uid = genid_signed "domsen";
+    uid = genid_uint31 "domsen";
     description = "maintenance acc for domsen";
     home = "/home/domsen";
     useDefaultShell = true;
@@ -143,49 +143,49 @@ in {
   };
 
   users.users.bruno = {
-    uid = genid_signed "bruno";
+    uid = genid_uint31 "bruno";
     home = "/home/bruno";
     useDefaultShell = true;
     createHome = true;
   };
 
   users.users.jla-trading = {
-    uid = genid_signed "jla-trading";
+    uid = genid_uint31 "jla-trading";
     home = "/home/jla-trading";
     useDefaultShell = true;
     createHome = true;
   };
 
   users.users.jms = {
-    uid = genid_signed "jms";
+    uid = genid_uint31 "jms";
     home = "/home/jms";
     useDefaultShell = true;
     createHome = true;
   };
 
   users.users.ms = {
-    uid = genid_signed "ms";
+    uid = genid_uint31 "ms";
     home = "/home/ms";
     useDefaultShell = true;
     createHome = true;
   };
 
   users.users.testuser = {
-    uid = genid_signed "testuser";
+    uid = genid_uint31 "testuser";
     home = "/home/testuser";
     useDefaultShell = true;
     createHome = true;
   };
 
   users.users.akayguen = {
-    uid = genid_signed "akayguen";
+    uid = genid_uint31 "akayguen";
     home = "/home/akayguen";
     useDefaultShell = true;
     createHome = true;
   };
 
   users.users.bui = {
-    uid = genid_signed "bui";
+    uid = genid_uint31 "bui";
     home = "/home/bui";
     useDefaultShell = true;
     createHome = true;

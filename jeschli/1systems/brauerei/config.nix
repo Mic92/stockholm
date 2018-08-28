@@ -25,21 +25,11 @@
     preLVM = true;
     allowDiscards = true;
   } ];
-#  networking.hostName = "brauerei";
-  # Define your hostname.
-#  networking.wireless.enable = true;
   networking.networkmanager.enable = true;
-  # Enables wireless support via wpa_supplicant.
-  # Select internationalisation properties.
-  # i18n = {
-  #   consoleFont = "Lat2-Terminus16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
-  # };
-  # Set your time zone.  #
   time.timeZone = "Europe/Amsterdam";
+
   nixpkgs.config.allowUnfree = true;
-  # List packages installed in system profile. To search by name, run: # $ nix-env -qaP | grep wget
+
   environment.shellAliases = {
     n = "nix-shell";
     stocki = pkgs.writeDash "deploy" ''
@@ -47,6 +37,7 @@
       exec nix-shell -I stockholm="$PWD" --run 'deploy  --system="brauerei"'
     '';
   };
+
   environment.systemPackages = with pkgs; [
   # system helper
     ag
@@ -103,6 +94,7 @@
     zathura
   # xorg
     xorg.xbacklight
+    taskwarrior
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -126,7 +118,7 @@
     display = 11;
     tty = 11;
 
-    dpi = 96;
+    dpi = 144;
 
 #    videoDrivers = [ "nvidia" ];
     synaptics = {
@@ -138,7 +130,7 @@
 
   users.extraUsers.jeschli = { # TODO: define as krebs.users
     isNormalUser = true;
-    extraGroups = ["docker" "vboxusers"];
+    extraGroups = ["docker" "vboxusers" "audio"];
     uid = 1000;
   };
   users.extraUsers.jamie = {

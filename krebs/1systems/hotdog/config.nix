@@ -15,6 +15,7 @@
     <stockholm/krebs/2configs/ircd.nix>
     <stockholm/krebs/2configs/reaktor-retiolum.nix>
     <stockholm/krebs/2configs/reaktor-krebs.nix>
+    <stockholm/krebs/2configs/repo-sync.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.hotdog;

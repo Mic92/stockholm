@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 # bln config file
 {
-  imports = [ 
+  imports = [
     ./hardware-configuration.nix
     <stockholm/jeschli>
     <stockholm/jeschli/2configs/virtualbox.nix>
@@ -9,6 +9,8 @@
     <stockholm/jeschli/2configs/emacs.nix>
     <stockholm/jeschli/2configs/xdg.nix>
     <stockholm/jeschli/2configs/xserver>
+#    <stockholm/jeschli/1systems/bln/dcso-vpn.nix>
+    <stockholm/jeschli/2configs/officevpn.nix>
   ];
 
 #  boot.loader.systemd-boot.enable = true;
@@ -94,6 +96,8 @@
     vagrant
   # document viewer
     zathura
+
+    samba
   ];
 
 
@@ -161,4 +165,9 @@
 
   hardware.bluetooth.enable = true;
   krebs.build.host = config.krebs.hosts.bln;
+
+  networking.interfaces.enp0s31f6.ipv4.addresses = [
+    { address = "10.99.23.2"; prefixLength = 24; }
+  ];
+
 }

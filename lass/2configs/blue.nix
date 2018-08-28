@@ -12,6 +12,7 @@ with (import <stockholm/lib>);
   environment.systemPackages = with pkgs; [
     ag
     nmap
+    git-preview
   ];
 
   services.tor.enable = true;

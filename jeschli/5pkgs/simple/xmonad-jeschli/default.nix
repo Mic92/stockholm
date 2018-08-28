@@ -90,7 +90,7 @@ mainNoArgs = do
             , startupHook = do
                 setWMName "LG3D"
                 whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
-                          (\path -> forkFile path [] Nothing) <+> setWMName "LG3D"  
+                          (\path -> forkFile path [] Nothing) <+> setWMName "LG3D"
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
             , handleEventHook = handleShutdownEvent
@@ -150,7 +150,7 @@ myKeys conf = Map.fromList $
     , ((_S  , xK_Print   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
     , ((_C  , xK_Print   ), toggleWS)
     , ((_4  , xK_Print   ), rhombus horseConfig (liftIO . hPutStrLn stderr) ["Correct", "Horse", "Battery", "Staple", "Stuhl", "Tisch"] )
-    
+
     -- %! Rotate through the available layout algorithms
     , ((_4  , xK_space  ), sendMessage NextLayout)
     , ((_4S , xK_space  ), setLayout $ XMonad.layoutHook conf) -- reset layout
@@ -222,7 +222,7 @@ myKeys conf = Map.fromList $
 pagerConfig :: PagerConfig
 pagerConfig = def
     { pc_font           = myFont
-    , pc_cellwidth      = 256 
+    , pc_cellwidth      = 256
     --, pc_cellheight     = 36 -- TODO automatically keep screen aspect
     --, pc_borderwidth    = 1
     --, pc_matchcolor     = "#f0b000"
