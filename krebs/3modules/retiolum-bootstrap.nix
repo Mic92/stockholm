@@ -31,11 +31,8 @@ in
       enable = mkDefault true;
       virtualHosts.retiolum-bootstrap = {
         inherit (cfg) serverName sslCertificate sslCertificateKey;
-        enableSSL = true;
+        forceSSL = true;
         extraConfig =''
-          if ($scheme = http){
-            return 301 https://$server_name$request_uri;
-          }
 
           root ${pkgs.retiolum-bootstrap};
           try_files $uri $uri/retiolum.sh;
