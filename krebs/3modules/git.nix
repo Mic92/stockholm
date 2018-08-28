@@ -403,9 +403,7 @@ let
         ));
 
     environment.systemPackages = [
-      (pkgs.writeDashBin "cgit-clear-cache" ''
-        ${pkgs.coreutils}/bin/rm -f ${cfg.cgit.settings.cache-root}/*
-      '')
+      (pkgs.cgit-clear-cache.override { inherit (cfg.cgit.settings) cache-root; })
     ];
 
     system.activationScripts.cgit = ''
