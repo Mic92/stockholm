@@ -24,7 +24,7 @@ in
       testslave = "lasspass";
     };
     change_source.stockholm = ''
-      stockholm_repo = 'http://cgit.prism.r/stockholm'
+      stockholm_repo = 'http://cgit.hotdog.r/stockholm'
       cs.append(
           changes.GitPoller(
               stockholm_repo,
