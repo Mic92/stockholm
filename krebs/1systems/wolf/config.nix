@@ -25,6 +25,7 @@ in
     <stockholm/krebs/2configs/shack/muell_caller.nix>
     <stockholm/krebs/2configs/shack/radioactive.nix>
     <stockholm/krebs/2configs/shack/share.nix>
+    <stockholm/krebs/2configs/shack/mobile.mpd.nix>
     {
       systemd.services.telegraf.path = [ pkgs.net_snmp ]; # for snmptranslate
       systemd.services.telegraf.environment = {
@@ -114,7 +115,7 @@ in
   networking = {
     firewall.enable = false;
     firewall.allowedTCPPorts = [ 8088 8086 8083 ];
-    interfaces."${ext-if}".ip4 = [{
+    interfaces."${ext-if}".ipv4.addresses = [{
       address = shack-ip;
       prefixLength = 20;
     }];
