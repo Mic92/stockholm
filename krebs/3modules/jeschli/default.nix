@@ -132,6 +132,7 @@ with import <stockholm/lib>;
           ip6.addr = "42::30";
           aliases = [
             "enklave.r"
+            "cgit.enklave.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----

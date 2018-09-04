@@ -5,6 +5,7 @@
     <stockholm/jeschli>
     <stockholm/jeschli/2configs/retiolum.nix>
     <stockholm/jeschli/2configs/IM.nix>
+    <stockholm/jeschli/2configs/git.nix>
     <stockholm/jeschli/2configs/os-templates/CentOS-7-64bit.nix>
     {
       networking.dhcpcd.allowInterfaces = [
