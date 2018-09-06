@@ -20,7 +20,10 @@ let
           verbose = false;
           channel = "#xxx";
           server = "irc.r";
-          branches = [ "newest" ];
+          branches = [
+            "master"
+            "newest"
+          ];
         };
       };
     };
