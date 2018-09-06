@@ -20,6 +20,7 @@ let
           refs = [
             "refs/heads/master"
             "refs/heads/newest"
+            "refs/tags/*"
           ];
           nick = config.networking.hostName;
           server = "irc.r";
