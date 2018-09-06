@@ -11,39 +11,6 @@ with import <stockholm/lib>;
     ci = true;
     monitoring = true;
   }) {
-    dishfire = {
-      cores = 4;
-      nets = rec {
-        internet = {
-          ip4.addr = "144.76.172.188";
-          aliases = [
-            "dishfire.i"
-          ];
-          ssh.port = 45621;
-        };
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.133.99";
-          ip6.addr = "42:0000:0000:0000:0000:0000:d15f:1233";
-          aliases = [
-            "dishfire.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAwKi49fN+0s5Cze6JThM7f7lj4da27PSJ/3w3tDFPvtQco11ksNLs
-            Xd3qPaQIgmcNVCR06aexae3bBeTx9y3qHvKqZVE1nCtRlRyqy1LVKSj15J1D7yz7
-            uS6u/BSZiCzmdZwu3Fq5qqoK0nfzWe/NKEDWNa5l4Mz/BZQyI/hbOpn6UfFD0LpK
-            R4jzc9Dbk/IFNAvwb5yrgEYtwBzlXzeDvHW2JcPq3qQjK2byQYNiIyV3g0GHppEd
-            vDbIPDFhTn3Hv5zz/lX+/We8izzRge7MEd+Vn9Jwb5NAzwDsOHl6ExpqASv9H49U
-            HwgPw5pstabyrsDWXybSYUb+8LcZf+unGwIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.port = 993;
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGv0JMp0y+E5433GRSFKVK3cQmP0AAlS9aH9fk49yFxy";
-    };
     prism = rec {
       cores = 4;
       extraZones = {
@@ -441,7 +408,7 @@ with import <stockholm/lib>;
         };
       };
     };
-    borg = {
+    rock = {
       monitoring = false;
       ci = false;
       external = true;
@@ -449,22 +416,21 @@ with import <stockholm/lib>;
         retiolum = {
           ip4.addr = "10.243.29.171";
           ip6.addr = "42:4992:6a6d:700::2";
-          aliases = [ "borg.r" ];
+          aliases = [ "rock.r" ];
           tinc.pubkey = ''
-            -----BEGIN PUBLIC KEY-----
-            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA0bHZApTM7Hl4qqNakSwq
-            bt7zJoTVK9ePoC3Mue1VmJ1mCKMaxKdzlO31kPeHtkilAzgyIJdgikyKFlApGsQL
-            aIuU9h55X7TbikoDD6ghbSrAe3Pgc+sJ3OZ7wO7Qb8CKgJvEbkk/u68YiJgyTjYD
-            HNjIQzlsGdpoSke9vwC8qWanfgN7c2MMGtakqfXDjYjCgp7O43i+SMupkMSXIXMA
-            5XUFh/vVp6xgPxBofcw0uQIyZ5v4PPFjnGPm4rnMbFzbhubntHjDadwGd5Niyw4O
-            zNNKNchTLfNiuNGqTZeYd0kJ5fNMKykhpSs+ou34MvexvpuyPlFuotnPXN/nOMml
-            3nwiqzthzPuBZRLswxT0WvlA8wlbeTOKJ0wTIR4dDuAF+euDtoNocVEN5PJNc7yN
-            fmwAV6geESoJbZQMSCtAp1NioaBlRPp1pFfoM/GotHywuFrTIxyoIBiYhkpWyQvq
-            WYw5j13IKqkL7jDchhoBmcardmh+AP5bL3uQ84BgaYNwFzHp04qIRrrdpF0eMaHB
-            /8zaqsNLn4/zQJB5ffkelwoIqfvLPQeCMLzHGHgP5xUnWgmZZGiiDLvhuaMeNq4U
-            EpCKoTL178sPOgNfHfd8mEqx0qKYuPrNQEdlpa5xOZqwx56pfYpGWY+KtF2FHLhS
-            iO64GCJqCi1MKBYx/NhaxKMCAwEAAQ==
-            -----END PUBLIC KEY-----
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAsMJbXDhkaLZcEzCIe8G+rHyLulWIqrUAmDT4Vbtv4r0QhPBsqwjM
+            DuvRtX5SNHdjfZWnUZoOlmXrmIo07exPFQvyrnppm6DNx+IZ5mNMNVIFUoojRhF7
+            HS2jubcjTEib56XEYWKly0olrVMbsJk5THJqRQyOQuTPCFToxXVRcT5t/UK6Dzgh
+            mp+suJ7IcmmO80IwfZrQrQslkQ6TdOy1Vs908GacSQJyRxdRxLraU/98iMhFbAQf
+            Ap+qVSUU88iCi+tcoSYzKhqU2N0AhRGcsE073B3Px8CAgPK/juwTrFElKEc17X9M
+            Rh41DvUjrtG4ERPmbwKPtsLagmnZUlU8A5YC8wtV08RI5QBsbbOsKInareV1aLeD
+            91ZVCBPFTz8IM6Mc6H435eMCMC2ynFCDyRGdcue3tBQoaTGe1dbduIZkPGn+7cg4
+            fef1db6SQD4HCwDLv8CTFLACR/jmAapwZEgvJ3u3bpgMGzt+QNvL1cxUr3TBUWRv
+            3f0R+Dj8DCUWTJUE7K5LO7bL4p9Ht0yIsVH+/DucyoMQqRwCwWSr7+H2MAsWviav
+            ZRRfH0RqZPEzCxyLDBtkVrx+GRAUZxy1xlqmN16O/sRHiqq3bv8Jk3dwuRZlFu6q
+            cOFu4g9XsamHkmCuVkvTGjnC2h21MjUUr3PGHzOMtiM/18LcfX730f8CAwEAAQ==
+            -----END RSA PUBLIC KEY-----
           '';
         };
       };

@@ -26,6 +26,7 @@ let
       ./iana-etc.nix
       ./iptables.nix
       ./kapacitor.nix
+      ./konsens.nix
       ./monit.nix
       ./newsbot-js.nix
       ./nixpkgs.nix

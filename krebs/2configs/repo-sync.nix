@@ -3,6 +3,10 @@
 with import <stockholm/lib>;
 
 let
+  konsens-user = {
+    name = "konsens";
+    pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIKKozGNGBAzHnyj6xUlsjGxxknyChXvuyrddkWVVnz7";
+  };
   mirror = "git@${config.networking.hostName}:";
 
   defineRepo = {
@@ -40,6 +44,13 @@ let
         ];
         repo = [ repo ];
         perm = push ''refs/*'' [ non-fast-forward create delete merge ];
+      }
+      {
+        user = [
+          konsens-user
+        ];
+        repo = [ repo ];
+        perm = push ''refs/heads/master'' [ create merge ];
       }
       {
         user = attrValues config.krebs.users;
@@ -112,6 +123,19 @@ in {
   krebs.repo-sync = {
     enable = true;
   };
+  krebs.konsens = {
+    enable = true;
+    repos = {
+      krops = { branchesToCheck = [ "lassulus" "tv" ]; };
+      stockholm = {};
+    };
+  };
+  krebs.secret.files.konsens = {
+    path = "/var/lib/konsens/.ssh/id_ed25519";
+    owner = konsens-user;
+    source-path = "${<secrets/konsens.id_ed25519>}";
+  };
+
   imports = [
     (sync-retiolum { name = "the_playlist"; desc = "Good Music collection + tools"; section = "art"; })
 
