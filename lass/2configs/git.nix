@@ -100,10 +100,12 @@ let
         # TODO make nick = config.krebs.build.host.name the default
         nick = config.krebs.build.host.name;
         channel = "#xxx";
+        # TODO define refs in some kind of option per repo
+        refs = [
+          "refs/heads/master"
+        ];
         server = "irc.r";
         verbose = config.krebs.build.host.name == "prism";
-        # TODO define branches in some kind of option per repo
-        branches = [ "master" ];
       };
     };
   };
@@ -121,10 +123,13 @@ let
         # TODO make nick = config.krebs.build.host.name the default
         nick = config.krebs.build.host.name;
         channel = "#xxx";
+        # TODO define refs in some kind of option per repo
+        refs = [
+          "refs/heads/master"
+          "refs/heads/staging*"
+        ];
         server = "irc.r";
         verbose = false;
-        # TODO define branches in some kind of option per repo
-        branches = [ "master" "staging*" ];
       };
     } // hooks;
   };

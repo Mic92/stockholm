@@ -6,11 +6,11 @@ with import <stockholm/lib>;
   # TODO irc-announce should return a derivation
   #      but it cannot because krebs.git.repos.*.hooks :: attrsOf str
   irc-announce =
-  { branches ? []
-  , cgit_endpoint ? "http://cgit.${nick}.r"
+  { cgit_endpoint ? "http://cgit.${nick}.r"
   , channel
   , nick
   , port ? 6667
+  , refs ? []
   , server
   , verbose ? false
   }: /* sh */ ''
@@ -57,14 +57,15 @@ with import <stockholm/lib>;
         receive_mode=non-fast-forward
       fi
 
-      h=$(echo $ref | sed 's:^refs/heads/::')
-
-      ${optionalString (branches != []) ''
-        if ! (echo "$h" | grep -qE "${concatStringsSep "|" branches}"); then
-          echo "we are not serving this branch: $h"
+      ${optionalString (refs != []) ''
+        if ! { echo "$ref" | grep -qE "${concatStringsSep "|" refs}"; }; then
+          echo "we are not announcing this ref: $h"
           exit 0
         fi
       ''}
+
+      h=$(echo $ref | sed 's:^refs/heads/::')
+
       # empty_tree=$(git hash-object -t tree /dev/null)
       empty_tree=4b825dc6
 

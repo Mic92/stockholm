@@ -16,14 +16,14 @@ let
       cgit.section = section;
       hooks = mkDefault {
         post-receive = pkgs.git-hooks.irc-announce {
-          nick = config.networking.hostName;
-          verbose = false;
           channel = "#xxx";
-          server = "irc.r";
-          branches = [
-            "master"
-            "newest"
+          refs = [
+            "refs/heads/master"
+            "refs/heads/newest"
           ];
+          nick = config.networking.hostName;
+          server = "irc.r";
+          verbose = false;
         };
       };
     };
