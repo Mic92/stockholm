@@ -35,6 +35,9 @@ let
     krebs-page = {
       cgit.desc = "Die Krebs Page";
     };
+    xmonad-stockholm = {
+      cgit.desc = "XMonad Stockholm";
+    };
   };
 
   make-public-repo = name: { cgit ? {}, ... }: {
