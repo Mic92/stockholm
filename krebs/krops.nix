@@ -60,4 +60,9 @@
     source = source { test = true; };
     target = "${lib.getEnv "HOME"}/tmp/${name}-krops-test-src";
   };
+
+  ci = pkgs.krops.writeTest "${name}-test" {
+    source = source { test = true; };
+    target = "${lib.getEnv "HOME"}/stockholm-build";
+  };
 }
