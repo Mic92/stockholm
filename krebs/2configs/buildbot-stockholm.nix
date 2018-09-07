@@ -4,6 +4,14 @@ let
 
   hostname = config.networking.hostName;
 
+  build = pkgs.writeDash "build" ''
+    set -eu
+    export USER="$1"
+    export SYSTEM="$2"
+    $(nix-build $USER/krops.nix --no-out-link --argstr name "$SYSTEM" --argstr target "$HOME/stockholm-build" -A ci)
+  '';
+
+
 in
 {
   networking.firewall.allowedTCPPorts = [ 80 ];
@@ -95,15 +103,9 @@ in
                         env={
                           "NIX_PATH": "secrets=/var/src/stockholm/null:stockholm=./:/var/src",
                           "NIX_REMOTE": "daemon",
-                          "dummy_secrets": "true",
                         },
                         command=[
-                          "nix-shell", "-I", "stockholm=.", "--run", " ".join(["test",
-                            "--user={}".format(user),
-                            "--system={}".format(host),
-                            "--force-populate",
-                            "--target=$LOGNAME@${config.krebs.build.host.name}$HOME/{}".format(user),
-                          ])
+                          "${build}", user, host
                         ],
                         timeout=90001,
                         workdir='build', # TODO figure out why we need this?
