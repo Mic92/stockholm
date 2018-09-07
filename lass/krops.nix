@@ -1,4 +1,4 @@
-{ config ? config, name, target}: let
+{ config ? config, name }: let
   inherit (import ../krebs/krops.nix { inherit name; })
     krebs-source
     lib
@@ -24,12 +24,19 @@ in {
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME -A deploy)
   deploy = pkgs.krops.writeDeploy "${name}-deploy" {
     source = source { test = false; };
-    inherit target;
+    target = "root@${name}/var/src";
   };
 
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME -A test)
-  ci = pkgs.krops.writeTest "${name}-test" {
+  test = pkgs.krops.writeTest "${name}-test" {
     source = source { test = true; };
-    inherit target;
+    target = "${lib.getEnv "HOME"}/tmp/${name}-krops-test-src";
   };
+
+  ci = map (host:
+    pkgs.krops.writeTest "${host.name}-test" {
+      source = source { test = true; };
+      target = "${lib.getEnv "TMPDIR"}/lass/${host.name}";
+    }
+  ) (lib.filter (host: lib.getAttr "ci" host && host.owner == "lass") (lib.attrValues config.krebs.hosts));
 }

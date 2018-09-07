@@ -16,7 +16,7 @@ with import <stockholm/lib>;
     deploy = pkgs.writeDash "deploy" ''
       set -eu
       export SYSTEM="$1"
-      $(nix-build $HOME/stockholm/lass/krops.nix --no-out-link --argstr name "$SYSTEM" --argstr target "root@$SYSTEM/var/src" -A deploy)
+      $(nix-build $HOME/stockholm/lass/krops.nix --no-out-link --argstr name "$SYSTEM" -A deploy)
     '';
   };
 
