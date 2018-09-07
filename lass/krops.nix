@@ -1,4 +1,4 @@
-{ config ? config, name }: let
+{ name }: let
   inherit (import ../krebs/krops.nix { inherit name; })
     krebs-source
     lib
