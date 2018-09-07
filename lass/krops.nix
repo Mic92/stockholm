@@ -10,7 +10,7 @@
     {
       nixos-config.symlink = "stockholm/lass/1systems/${name}/physical.nix";
       secrets = if test then {
-        file = "/home/lass/stockholm/lass/2configs/tests/dummy-secrets";
+        file = toString ./2configs/tests/dummy-secrets;
       } else {
         pass = {
           dir = "${lib.getEnv "HOME"}/.password-store";
