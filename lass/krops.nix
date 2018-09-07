@@ -30,13 +30,11 @@ in {
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME -A test)
   test = pkgs.krops.writeTest "${name}-test" {
     source = source { test = true; };
-    target = "${lib.getEnv "HOME"}/tmp/${name}-krops-test-src";
+    target = "${lib.getEnv "HOME"}/tmp/${name}-stockholm-test";
   };
 
-  ci = map (host:
-    pkgs.krops.writeTest "${host.name}-test" {
-      source = source { test = true; };
-      target = "${lib.getEnv "TMPDIR"}/lass/${host.name}";
-    }
-  ) (lib.filter (host: lib.getAttr "ci" host && host.owner == "lass") (lib.attrValues config.krebs.hosts));
+  ci = pkgs.krops.writeTest "${name}-test" {
+    source = source { test = true; };
+    target = "${lib.getEnv "HOME"}/stockholm-build";
+  };
 }
