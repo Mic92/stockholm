@@ -40,6 +40,9 @@ with import <stockholm/lib>;
         { predicate = "-p tcp --dport 11100"; target = "ACCEPT"; }
         #chromecast
         { predicate = "-p udp -m multiport --sports 32768:61000 -m multiport --dports 32768:61000"; target = "ACCEPT"; }
+        #quake3
+        { predicate = "-p tcp --dport 27950:27965"; target = "ACCEPT"; }
+        { predicate = "-p udp --dport 27950:27965"; target = "ACCEPT"; }
       ];
     }
     {
