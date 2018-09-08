@@ -17,7 +17,7 @@
     tinc = pkgs.tinc_pre;
   };
 
-  networking.firewall.allowedTCPPorts = [ 655 ];
+  networking.firewall.allowedTCPPorts = [ 80 655 ];
   networking.firewall.allowedUDPPorts = [ 655 ];
 
   environment.systemPackages = [

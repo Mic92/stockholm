@@ -18,6 +18,10 @@ let {
     };
   };
 
+  cgit-clear-cache = pkgs.cgit-clear-cache.override {
+    inherit (config.krebs.git.cgit.settings) cache-root;
+  };
+
   repos =
     public-repos //
     optionalAttrs config.krebs.build.host.secure restricted-repos;
@@ -97,8 +101,11 @@ let {
     {
       brain = {
         collaborators = with config.krebs.users; [ lass makefu ];
-        hooks.post-receive = irc-announce {
-          cgit_endpoint = null;
+        hooks = {
+          post-receive = /* sh */ ''
+            (${irc-announce { cgit_endpoint = null; }})
+            ${cgit-clear-cache}/bin/cgit-clear-cache
+          '';
         };
       };
     } //
@@ -117,14 +124,24 @@ let {
   make-public-repo = name: { cgit ? {}, ... }: {
     inherit cgit name;
     public = true;
-    hooks = optionalAttrs (config.krebs.build.host.name == "ni") {
-      post-receive = irc-announce {};
+    hooks = {
+      post-receive = /* sh */ ''
+        (${optionalString (config.krebs.build.host.name == "ni")
+                          (irc-announce {})})
+        ${cgit-clear-cache}/bin/cgit-clear-cache
+      '';
     };
   };
 
   make-restricted-repo = name: { collaborators ? [], hooks ? {}, ... }: {
-    inherit collaborators hooks name;
+    inherit collaborators name;
     public = false;
+    hooks = hooks // {
+      post-receive = /* sh */ ''
+        (${hooks.post-receive or ""})
+        ${cgit-clear-cache}/bin/cgit-clear-cache
+      '';
+    };
   };
 
   make-rules =
