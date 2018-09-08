@@ -183,6 +183,6 @@ in
     masterhost = "localhost";
     username = "testslave";
     password = "lasspass";
-    packages = with pkgs; [ gnumake jq nix populate ];
+    packages = with pkgs; [ gnumake jq nix populate gnutar lzma gzip ];
   };
 }
