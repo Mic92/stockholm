@@ -68,7 +68,7 @@ let
             fi
             cd ${name}
             git fetch origin
-            git push origin $(git merge-base ${concatMapStringsSep " " (branch: "origin/${branch}") repo.branchesToCheck}):refs/heads/master
+            git push origin $(git merge-base --octopus ${concatMapStringsSep " " (branch: "origin/${branch}") repo.branchesToCheck}):refs/heads/master
           '';
           WorkingDirectory = /var/lib/konsens;
           User = "konsens";
