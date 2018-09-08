@@ -4,6 +4,14 @@ let
 
   hostname = config.networking.hostName;
 
+  sourceRepos = [
+    "http://cgit.enklave.r/stockholm"
+    "http://cgit.gum.r/stockholm"
+    "http://cgit.hotdog.r/stockholm"
+    "http://cgit.ni.r/stockholm"
+    "http://cgit.prism.r/stockholm"
+  ];
+
   build = pkgs.writeDash "build" ''
     set -eu
     export USER="$1"
@@ -31,17 +39,16 @@ in
     slaves = {
       testslave = "lasspass";
     };
-    change_source.stockholm = ''
-      stockholm_repo = 'http://cgit.hotdog.r/stockholm'
+    change_source.stockholm = concatMapStrings (repo: ''
       cs.append(
           changes.GitPoller(
-              stockholm_repo,
-              workdir='stockholm-poller', branches=True,
+              "${repo}",
+              workdir='stockholm${elemAt(splitString "." repo) 1}', branches=True,
               project='stockholm',
               pollinterval=10
           )
       )
-    '';
+    '') sourceRepos;
     scheduler = {
       auto-scheduler = ''
         sched.append(
@@ -69,7 +76,7 @@ in
     builder_pre = ''
       # prepare grab_repo step for stockholm
       grab_repo = steps.Git(
-          repourl=stockholm_repo,
+          repourl=util.Property('repository', 'http://cgit.hotdog.r/stockholm'),
           mode='full',
           submodules=True,
       )
