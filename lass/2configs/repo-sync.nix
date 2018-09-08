@@ -14,10 +14,12 @@ let
       hooks = mkIf announce (mkDefault {
         post-receive = pkgs.git-hooks.irc-announce {
           nick = config.networking.hostName;
-          verbose = false;
           channel = "#xxx";
+          refs = [
+            "refs/heads/newest"
+          ];
           server = "irc.r";
-          branches = [ "newest" ];
+          verbose = false;
         };
       });
     };

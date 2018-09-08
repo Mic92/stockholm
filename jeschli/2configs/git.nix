@@ -42,11 +42,13 @@ let
     public = true;
     hooks = {
       post-receive = pkgs.git-hooks.irc-announce {
-        nick = config.krebs.build.host.name;
         channel = "#xxx";
+        nick = config.krebs.build.host.name;
+        refs = [
+          "refs/heads/master"
+        ];
         server = "irc.r";
-        verbose = true; 
-        branches = [ "master" ];
+        verbose = true;
       };
     };
   };
