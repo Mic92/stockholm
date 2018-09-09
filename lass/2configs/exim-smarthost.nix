@@ -87,6 +87,8 @@ with import <stockholm/lib>;
       { from = "hackbeach@lassul.us"; to = lass.mail; }
       { from = "transferwise@lassul.us"; to = lass.mail; }
       { from = "cis@lassul.us"; to = lass.mail; }
+      { from = "afra@lassul.us"; to = lass.mail; }
+      { from = "ksp@lassul.us"; to = lass.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }
