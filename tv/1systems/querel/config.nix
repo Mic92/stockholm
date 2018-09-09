@@ -11,9 +11,6 @@ with import <stockholm/lib>;
   krebs.build.host = config.krebs.hosts.querel;
   krebs.build.user = mkForce config.krebs.users.itak;
 
-  boot.extraModulePackages = [
-    config.boot.kernelPackages.exfat-nofuse
-  ];
   boot.initrd.availableKernelModules = [ "ahci" ];
   boot.initrd.luks = {
     cryptoModules = [ "aes" "sha512" "xts" ];
