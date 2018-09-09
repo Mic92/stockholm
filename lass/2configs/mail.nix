@@ -176,6 +176,11 @@ let
 
     # top index bar in email view
     set pager_index_lines=7
+    # top_index_bar toggle
+    macro pager ,@1 "<enter-command> set pager_index_lines=0; macro pager ] ,@2 'Toggle indexbar<Enter>"
+    macro pager ,@2 "<enter-command> set pager_index_lines=3; macro pager ] ,@3 'Toggle indexbar<Enter>"
+    macro pager ,@3 "<enter-command> set pager_index_lines=7; macro pager ] ,@1 'Toggle indexbar<Enter>"
+    macro pager ] ,@1 'Toggle indexbar
 
     # sidebar
     set sidebar_width   = 20
@@ -186,9 +191,9 @@ let
     bind index <right> sidebar-next         # got to next folder in sidebar
     bind index <space> sidebar-open         # open selected folder from sidebar
     # sidebar toggle
-    macro index ,@) "<enter-command> set sidebar_visible=no; macro index ~ ,@( 'Toggle sidebar'<Enter>"
-    macro index ,@( "<enter-command> set sidebar_visible=yes; macro index ~ ,@) 'Toggle sidebar'<Enter>"
-    macro index ~ ,@( 'Toggle sidebar'      # toggle the sidebar
+    macro index,pager ,@) "<enter-command> set sidebar_visible=no; macro index,pager [ ,@( 'Toggle sidebar'<Enter>"
+    macro index,pager ,@( "<enter-command> set sidebar_visible=yes; macro index,pager [ ,@) 'Toggle sidebar'<Enter>"
+    macro index,pager [ ,@( 'Toggle sidebar'      # toggle the sidebar
   '';
 
   mutt = pkgs.symlinkJoin {
