@@ -27,14 +27,9 @@ in {
     target = "root@${name}/var/src";
   };
 
-  # usage: $(nix-build --no-out-link --argstr name HOSTNAME -A test)
-  test = pkgs.krops.writeTest "${name}-test" {
+  # usage: $(nix-build --no-out-link --argstr name HOSTNAME --argstr target PATH -A test)
+  test = { target }: pkgs.krops.writeTest "${name}-test" {
+    inherit target;
     source = source { test = true; };
-    target = "${lib.getEnv "HOME"}/tmp/${name}-stockholm-test";
-  };
-
-  ci = pkgs.krops.writeTest "${name}-test" {
-    source = source { test = true; };
-    target = "${lib.getEnv "HOME"}/stockholm-build";
   };
 }

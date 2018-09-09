@@ -24,7 +24,7 @@ let
     result=$(nix-build \
         --argstr name "$host" \
         --argstr target "$HOME"/stockholm-build \
-        --attr ci \
+        --attr test \
         --no-build-output \
         --no-out-link \
         --show-trace \
