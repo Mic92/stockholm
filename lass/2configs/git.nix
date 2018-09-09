@@ -30,6 +30,10 @@ let
   rules = concatMap make-rules (attrValues repos);
 
   public-repos = mapAttrs make-public-repo {
+    buildbot-classic = {
+      cgit.desc = "fork of buildbot";
+      cgit.section = "software";
+    };
     cholerab = {
       cgit.desc = "krebs thesauron & enterprise-patterns";
       cgit.section = "documentation";
