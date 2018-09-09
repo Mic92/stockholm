@@ -23,6 +23,10 @@ let
     ];
   };
 
+  cgit-clear-cache = pkgs.cgit-clear-cache.override {
+    inherit (config.krebs.git.cgit.settings) cache-root;
+  };
+
   repos =
     public-repos //
     optionalAttrs config.krebs.build.host.secure restricted-repos;
@@ -104,17 +108,20 @@ let
     inherit cgit collaborators name;
     public = true;
     hooks = {
-      post-receive = pkgs.git-hooks.irc-announce {
-        # TODO make nick = config.krebs.build.host.name the default
-        nick = config.krebs.build.host.name;
-        channel = "#xxx";
-        # TODO define refs in some kind of option per repo
-        refs = [
-          "refs/heads/master"
-        ];
-        server = "irc.r";
-        verbose = config.krebs.build.host.name == "prism";
-      };
+      post-receive = ''
+        ${pkgs.git-hooks.irc-announce {
+          # TODO make nick = config.krebs.build.host.name the default
+          nick = config.krebs.build.host.name;
+          channel = "#xxx";
+          # TODO define refs in some kind of option per repo
+          refs = [
+            "refs/heads/master"
+          ];
+          server = "irc.r";
+          verbose = config.krebs.build.host.name == "prism";
+        }}
+        ${cgit-clear-cache}/bin/cgit-clear-cache
+      '';
     };
   };
 
@@ -126,19 +133,22 @@ let
   make-restricted-repo = name: { admins ? [], collaborators ? [], announce ? false, hooks ? {}, ... }: {
     inherit admins collaborators name;
     public = false;
-    hooks = optionalAttrs announce {
-      post-receive = pkgs.git-hooks.irc-announce {
-        # TODO make nick = config.krebs.build.host.name the default
-        nick = config.krebs.build.host.name;
-        channel = "#xxx";
-        # TODO define refs in some kind of option per repo
-        refs = [
-          "refs/heads/master"
-          "refs/heads/staging*"
-        ];
-        server = "irc.r";
-        verbose = false;
-      };
+    hooks = {
+      post-receive = ''
+        ${optionalString announce (pkgs.git-hooks.irc-announce {
+          # TODO make nick = config.krebs.build.host.name the default
+          nick = config.krebs.build.host.name;
+          channel = "#xxx";
+          # TODO define refs in some kind of option per repo
+          refs = [
+            "refs/heads/master"
+            "refs/heads/staging*"
+          ];
+          server = "irc.r";
+          verbose = false;
+        })}
+        ${cgit-clear-cache}/bin/cgit-clear-cache
+      '';
     } // hooks;
   };
 
