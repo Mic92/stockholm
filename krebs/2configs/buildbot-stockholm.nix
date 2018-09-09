@@ -12,11 +12,26 @@ let
     "http://cgit.prism.r/stockholm"
   ];
 
+  # usage: build USER HOST
+  # This executable is meant to be run with <stockholm> as working directory.
+  # USER is expected to be a subdirectory of the working directory.
   build = pkgs.writeDash "build" ''
-    set -eu
-    export USER="$1"
-    export SYSTEM="$2"
-    $(nix-build $USER/krops.nix --no-out-link --argstr name "$SYSTEM" --argstr target "$HOME/stockholm-build" -A ci)
+    set -efu
+
+    user=$1
+    host=$2
+
+    result=$(nix-build \
+        --argstr name "$host" \
+        --argstr target "$HOME"/stockholm-build \
+        --attr ci \
+        --no-build-output \
+        --no-out-link \
+        --show-trace \
+        "$user"/krops.nix \
+    )
+
+    exec "$result"
   '';
 
 
