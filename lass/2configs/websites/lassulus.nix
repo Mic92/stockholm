@@ -82,6 +82,10 @@ in {
         c-base:$apr1$aQ6mYNR3$ho.aJ7icqSO.y.xKo3GQf0
       ''};
     '';
+    locations."/krebspage".extraConfig = ''
+      default_type "text/html";
+      alias ${pkgs.krebspage}/index.html;
+    '';
     # TODO make this work!
     locations."= /ddate".extraConfig = let
       script = pkgs.writeBash "test" ''
