@@ -143,6 +143,7 @@ in {
 
     (sync-retiolum { name = "cholerab"; desc = "krebs thesauron & enterprise-patterns"; section = "documentation"; })
 
+    (sync-retiolum { name = "buildbot-classic"; desc = "fork of buildbot"; section = "software"; })
     (sync-retiolum { name = "disko"; desc = "take a description of your disk layout and produce a format script"; section = "software"; })
     (sync-retiolum { name = "news"; desc = "take a rss feed and a timeout and print it to stdout"; section = "software"; })
     (sync-retiolum { name = "krops"; desc = "krebs ops"; section = "software"; })
