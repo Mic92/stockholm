@@ -160,7 +160,7 @@ rec {
   task-list = buildSimpleReaktorPlugin "task-list" {
     pattern = "^task-list";
     script = pkgs.writeDash "task-list" ''
-        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} list
+        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} minimal
       '';
   };
 
