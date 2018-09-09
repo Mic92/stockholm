@@ -15,6 +15,7 @@ with import <stockholm/lib>;
       sed-plugin
       task-add
       task-delete
+      task-done
       task-list
     ] ++
       (attrValues (todo "agenda"))

@@ -171,6 +171,13 @@ rec {
       '';
   };
 
+  task-done = buildSimpleReaktorPlugin "task-done" {
+    pattern = "^task-done: (?P<args>.*)$$";
+    script = pkgs.writeDash "task-done" ''
+        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} done "$*"
+      '';
+  };
+
   todo = name: {
     add = buildSimpleReaktorPlugin "${name}-add" {
       pattern = "^${name}-add: (?P<args>.*)$$";
