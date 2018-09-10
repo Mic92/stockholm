@@ -4,11 +4,34 @@ let
 
   hostname = config.networking.hostName;
 
+  sourceRepos = [
+    "http://cgit.enklave.r/stockholm"
+    "http://cgit.gum.r/stockholm"
+    "http://cgit.hotdog.r/stockholm"
+    "http://cgit.ni.r/stockholm"
+    "http://cgit.prism.r/stockholm"
+  ];
+
+  # usage: build USER HOST
+  # This executable is meant to be run with <stockholm> as working directory.
+  # USER is expected to be a subdirectory of the working directory.
   build = pkgs.writeDash "build" ''
-    set -eu
-    export USER="$1"
-    export SYSTEM="$2"
-    $(nix-build $USER/krops.nix --no-out-link --argstr name "$SYSTEM" --argstr target "$HOME/stockholm-build" -A ci)
+    set -efu
+
+    user=$1
+    host=$2
+
+    result=$(nix-build \
+        --argstr name "$host" \
+        --argstr target "$HOME"/stockholm-build \
+        --attr test \
+        --no-build-output \
+        --no-out-link \
+        --show-trace \
+        "$user"/krops.nix \
+    )
+
+    exec "$result"
   '';
 
 
@@ -31,17 +54,16 @@ in
     slaves = {
       testslave = "lasspass";
     };
-    change_source.stockholm = ''
-      stockholm_repo = 'http://cgit.hotdog.r/stockholm'
+    change_source.stockholm = concatMapStrings (repo: ''
       cs.append(
           changes.GitPoller(
-              stockholm_repo,
-              workdir='stockholm-poller', branches=True,
+              "${repo}",
+              workdir='stockholm${elemAt(splitString "." repo) 1}', branches=True,
               project='stockholm',
               pollinterval=10
           )
       )
-    '';
+    '') sourceRepos;
     scheduler = {
       auto-scheduler = ''
         sched.append(
@@ -69,7 +91,7 @@ in
     builder_pre = ''
       # prepare grab_repo step for stockholm
       grab_repo = steps.Git(
-          repourl=stockholm_repo,
+          repourl=util.Property('repository', 'http://cgit.hotdog.r/stockholm'),
           mode='full',
           submodules=True,
       )
@@ -176,6 +198,6 @@ in
     masterhost = "localhost";
     username = "testslave";
     password = "lasspass";
-    packages = with pkgs; [ gnumake jq nix populate ];
+    packages = with pkgs; [ gnumake jq nix populate gnutar lzma gzip ];
   };
 }

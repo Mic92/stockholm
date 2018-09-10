@@ -20,11 +20,15 @@ let
       cgit.section = section;
       hooks = mkDefault {
         post-receive = pkgs.git-hooks.irc-announce {
-          nick = config.networking.hostName;
-          verbose = false;
           channel = "#xxx";
+          refs = [
+            "refs/heads/master"
+            "refs/heads/newest"
+            "refs/tags/*"
+          ];
+          nick = config.networking.hostName;
           server = "irc.r";
-          branches = [ "master" "newest" ];
+          verbose = false;
         };
       };
     };
@@ -139,6 +143,7 @@ in {
 
     (sync-retiolum { name = "cholerab"; desc = "krebs thesauron & enterprise-patterns"; section = "documentation"; })
 
+    (sync-retiolum { name = "buildbot-classic"; desc = "fork of buildbot"; section = "software"; })
     (sync-retiolum { name = "disko"; desc = "take a description of your disk layout and produce a format script"; section = "software"; })
     (sync-retiolum { name = "news"; desc = "take a rss feed and a timeout and print it to stdout"; section = "software"; })
     (sync-retiolum { name = "krops"; desc = "krebs ops"; section = "software"; })

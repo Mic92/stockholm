@@ -133,7 +133,6 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/ts3.nix>
     <stockholm/lass/2configs/privoxy-retiolum.nix>
     <stockholm/lass/2configs/radio.nix>
-    <stockholm/lass/2configs/repo-sync.nix>
     <stockholm/lass/2configs/binary-cache/server.nix>
     <stockholm/lass/2configs/iodined.nix>
     <stockholm/lass/2configs/paste.nix>

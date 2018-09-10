@@ -106,6 +106,12 @@ with import <stockholm/lib>;
           exec echo '¯\_(ツ)_/¯'
         '';
       })
+      (buildSimpleReaktorPlugin "flip" {
+        pattern = "^!flip$";
+        script = pkgs.writeDash "shrug" ''
+          exec echo '(╯°□°）╯ ┻━┻'
+        '';
+      })
     ];
   };
 }

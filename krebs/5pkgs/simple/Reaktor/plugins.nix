@@ -160,7 +160,7 @@ rec {
   task-list = buildSimpleReaktorPlugin "task-list" {
     pattern = "^task-list";
     script = pkgs.writeDash "task-list" ''
-        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} list
+        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} minimal
       '';
   };
 
@@ -168,6 +168,13 @@ rec {
     pattern = "^task-delete: (?P<args>.*)$$";
     script = pkgs.writeDash "task-delete" ''
         ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} delete "$*"
+      '';
+  };
+
+  task-done = buildSimpleReaktorPlugin "task-done" {
+    pattern = "^task-done: (?P<args>.*)$$";
+    script = pkgs.writeDash "task-done" ''
+        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} done "$*"
       '';
   };
 
