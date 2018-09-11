@@ -1,4 +1,4 @@
-{ writePython2Bin }:
+{ openssl, writePython2Bin }:
 
 writePython2Bin "syncthing-device-id" {
   flakeIgnore = [
@@ -24,7 +24,12 @@ writePython2Bin "syncthing-device-id" {
       return alphabet[-result]
 
   def main(incert):
-      der_data = subprocess.check_output(['openssl', 'x509', '-outform', 'DER'], stdin=incert)
+      der_data = subprocess.check_output([
+          '${openssl}/bin/openssl',
+          'x509',
+          '-outform',
+          'DER',
+      ], stdin=incert)
       data_hash = hashlib.sha256(der_data)
       b32_hash = base64.b32encode(data_hash.digest()).decode('ascii')
 
