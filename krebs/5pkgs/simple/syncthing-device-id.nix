@@ -1,6 +1,14 @@
 { writePython2Bin }:
 
-writePython2Bin "syncthing-device-id" {} /* python */ ''
+writePython2Bin "syncthing-device-id" {
+  flakeIgnore = [
+    "E226"
+    "E302"
+    "E305"
+    "E501"
+    "F401"
+  ];
+} /* python */ ''
   import base64
   import hashlib
   import subprocess
