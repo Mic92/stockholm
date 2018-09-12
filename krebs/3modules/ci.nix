@@ -141,7 +141,7 @@ let
         enable = true;
         nick = "build|${hostname}";
         server = "irc.r";
-        channels = [ "noise" ];
+        channels = [ "xxx" "noise" ];
         allowForce = true;
       };
       extraConfig = ''
