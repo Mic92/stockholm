@@ -53,9 +53,12 @@ let
         nameValuePair name ''
           sched.append(
               schedulers.SingleBranchScheduler(
-                  change_filter=util.ChangeFilter(branch_re=".*"),
+                  change_filter=util.ChangeFilter(
+                      branch_re=".*",
+                      project='${name}',
+                  ),
                   treeStableTimer=60,
-                  name="build-all-branches",
+                  name="${name}-all-branches",
                   builderNames=[
                       "${name}",
                   ]
