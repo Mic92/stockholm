@@ -49,6 +49,7 @@ with import <stockholm/lib>;
   users.mutableUsers = false;
   users.extraUsers.root.openssh.authorizedKeys.keys = [
     # TODO
+    config.krebs.users.jeschli-brauerei.pubkey
     config.krebs.users.lass.pubkey
     config.krebs.users.lass-mors.pubkey
     config.krebs.users.makefu.pubkey

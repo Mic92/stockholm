@@ -44,11 +44,6 @@ let
     exec >&2
     source=${pkgs.writeJSON "source.json" populate-source}
     LOGNAME=krebs ${pkgs.populate}/bin/populate --force root@server:22/var/src/ < "$source"
-    # TODO: make deploy work
-    #LOGNAME=krebs ${pkgs.stockholm}/bin/deploy \
-    #    --force-populate \
-    #    --source=${./data/test-source.nix} \
-    #    --system=server \
   '';
   minimalSystem = (import <nixpkgs/nixos/lib/eval-config.nix> {
     modules = [
