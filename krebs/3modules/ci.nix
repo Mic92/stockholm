@@ -26,8 +26,8 @@ let
 
   hostname = config.networking.hostName;
   getJobs = pkgs.writeDash "get_jobs" ''
-    nix-build --no-out-link ./ci.nix 2>&1 > /dev/null
-    nix-instantiate --eval --strict --json ./ci.nix
+    nix-build --no-out-link --quiet -Q ./ci.nix > /dev/null
+    nix-instantiate --quiet -Q --eval --strict --json ./ci.nix
   '';
 
   imp = {
@@ -53,9 +53,12 @@ let
         nameValuePair name ''
           sched.append(
               schedulers.SingleBranchScheduler(
-                  change_filter=util.ChangeFilter(branch_re=".*"),
+                  change_filter=util.ChangeFilter(
+                      branch_re=".*",
+                      project='${name}',
+                  ),
                   treeStableTimer=60,
-                  name="build-all-branches",
+                  name="${name}-all-branches",
                   builderNames=[
                       "${name}",
                   ]
