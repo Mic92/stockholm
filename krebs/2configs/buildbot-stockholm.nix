@@ -16,6 +16,12 @@
   krebs.ci = {
     enable = true;
     repos = {
+      disko.urls = [
+        "http://cgit.gum.r/disko"
+        "http://cgit.hotdog.r/disko"
+        "http://cgit.ni.r/disko"
+        "http://cgit.prism.r/disko"
+      ];
       nix_writers.urls = [
         "http://cgit.hotdog.r/nix-writers"
         "http://cgit.ni.r/nix-writers"
