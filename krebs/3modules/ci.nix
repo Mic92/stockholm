@@ -128,7 +128,7 @@ let
               },
               name="get_steps",
               command=["${getJobs}"],
-              property="steps_json"
+              extract_fn=lambda rc, stdout, stderr: { 'steps_json': stdout },
           ))
           f_${name}.addStep(StepToStartMoreSteps(command=["echo"])) # TODO remove dummy command from here
 
