@@ -16,6 +16,12 @@
   krebs.ci = {
     enable = true;
     repos = {
+      nix_writers.urls = [
+        "http://cgit.hotdog.r/nix-writers"
+        "http://cgit.ni.r/nix-writers"
+        "http://cgit.prism.r/nix-writers"
+        "https://git.ingolf-wagner.de/krebs/nix-writers.git"
+      ];
       stockholm.urls = [
         "http://cgit.enklave.r/stockholm"
         "http://cgit.gum.r/stockholm"
