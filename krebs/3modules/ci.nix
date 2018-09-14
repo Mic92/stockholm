@@ -100,6 +100,10 @@ let
                         command=[
                           new_steps[new_step]
                         ],
+                        env={
+                          "NIX_REMOTE": "daemon",
+                          "NIX_PATH": "secrets=/var/src/stockholm/null:/var/src",
+                        },
                         timeout=90001,
                         workdir='build', # TODO figure out why we need this?
                     )])
