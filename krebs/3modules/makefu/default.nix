@@ -1,7 +1,9 @@
 { config, ... }:
 
 with import <stockholm/lib>;
-
+## generate keys with:
+# tinc generate-keys
+# ssh-keygen -f ssh.id_ed25519 -t ed25519 -C host
 {
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.makefu) {
     cake = rec {
@@ -28,6 +30,32 @@ with import <stockholm/lib>;
       };
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGyJlI0YpIh/LiiPMseD2IBHg+uVGrkSy0MPNeD+Jv8Y cake";
+    };
+    crapi = rec { # raspi1
+      cores = 1;
+      ci = false;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.136.237";
+          ip6.addr  = "42:b3b2:9552:eef0:ee67:f3b3:8d33:eee2";
+          aliases = [
+            "crapi.r"
+          ];
+          tinc.pubkey = ''
+            Ed25519PublicKey = Zkh6vtSNBvKYUjCPsMyAFJmxzueglCDoawVPCezKy4F
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAloXLBfZQEVW9mJ7uwOoa+DfV4ek/SG+JQuexJMugei/iNy0NjY66
+            OVIkzFmED32c3D7S1+Q+5Mc3eR02k1o7XERpZeZhCtJOBlS4xMzCKH62E4USvH5L
+            R4O8XX1o/tpeOuZvpnpY1oPmFFc/B5G2jWWQR4Slpbw7kODwYYm5o+B7n+MkVNrk
+            OEOHLaaO6I5QB3GJvDH2JbwzDKLVClQM20L/EvIwnB+Xg0q3veKFj0WTXEK+tuME
+            di++RV4thhZ9IOgRTJOeT94j7ulloh15gqYaIqRqgtzfWE2TnUxvl+upB+yQHNtl
+            bJFLHkE34cQGxEv9dMjRe8i14+Onhb3B6wIDAQAB
+            -----END RSA PUBLIC KEY-----
+            '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGaV5Ga5R8RTrA+nclxw6uy5Z+hPBLitQTfuXdsmbVW6 crapi";
     };
     drop = rec {
       ci = true;
@@ -298,6 +326,13 @@ with import <stockholm/lib>;
             -----END RSA PUBLIC KEY-----
           '';
         };
+        #wiregrill = {
+        #  ip6.addr = "42:4200:0000:0000:0000:0000:0000:a4db";
+        #  aliases = [
+        #    "x.w"
+        #  ];
+        #  wireguard.pubkey = "fe5smvKVy5GAn7EV4w4tav6mqIAKhGWQotm7dRuRt1g=";
+        #};
       };
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHDM0E608d/6rGzXqGbNSuMb2RlCojCJSiiz6QcPOC2G root@x";
@@ -457,8 +492,6 @@ with import <stockholm/lib>;
           ip6.addr = "42:f9f0::10";
           aliases = [
             "omo.r"
-            "logs.makefu.r"
-            "stats.makefu.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -525,7 +558,9 @@ with import <stockholm/lib>;
         "krebsco.de" = ''
           cache.euer        IN A      ${nets.internet.ip4.addr}
           cache.gum         IN A      ${nets.internet.ip4.addr}
+          graph             IN A      ${nets.internet.ip4.addr}
           gold              IN A      ${nets.internet.ip4.addr}
+          iso.euer          IN A      ${nets.internet.ip4.addr}
         '';
       };
       cores = 8;
@@ -537,13 +572,24 @@ with import <stockholm/lib>;
             "nextgum.i"
           ];
         };
+        #wiregrill = {
+        #  via = internet;
+        #  ip6.addr = "42:4200:0000:0000:0000:0000:0000:70d3";
+        #  aliases = [
+        #    "gum.w"
+        #  ];
+        #  wireguard.pubkey = "yAKvxTvcEVdn+MeKsmptZkR3XSEue+wSyLxwcjBYxxo=";
+        #};
         retiolum = {
           via = internet;
           ip4.addr = "10.243.0.213";
           ip6.addr = "42:f9f0:0000:0000:0000:0000:0000:70d3";
           aliases = [
             "nextgum.r"
+            "graph.r"
             "cache.gum.r"
+            "logs.makefu.r"
+            "stats.makefu.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -579,7 +625,6 @@ with import <stockholm/lib>;
           boot.euer         IN A      ${nets.internet.ip4.addr}
           wiki.euer         IN A      ${nets.internet.ip4.addr}
           mon.euer          IN A      ${nets.internet.ip4.addr}
-          graph             IN A      ${nets.internet.ip4.addr}
           ghook             IN A      ${nets.internet.ip4.addr}
           dockerhub         IN A      ${nets.internet.ip4.addr}
           photostore        IN A      ${nets.internet.ip4.addr}
@@ -604,7 +649,6 @@ with import <stockholm/lib>;
             "o.gum.r"
             "tracker.makefu.r"
 
-            "graph.r"
             "search.makefu.r"
             "wiki.makefu.r"
             "wiki.gum.r"
