@@ -55,6 +55,7 @@ with import <stockholm/lib>;
     gimp
     iptables
     libreoffice
+    plasma-pa
     (pkgs.pidgin-with-plugins.override {
       plugins = [ pkgs.pidginotr ];
     })
