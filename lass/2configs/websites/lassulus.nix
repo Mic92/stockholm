@@ -91,7 +91,7 @@ in {
       script = pkgs.writeBash "test" ''
         echo "hello world"
       '';
-      #script = pkgs.execve "ddate-wrapper" {
+      #script = pkgs.exec "ddate-wrapper" {
       #  filename = "${pkgs.ddate}/bin/ddate";
       #  argv = [];
       #};

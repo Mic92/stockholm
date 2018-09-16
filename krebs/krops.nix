@@ -2,7 +2,7 @@
 
   krops = builtins.fetchGit {
     url = https://cgit.krebsco.de/krops/;
-    rev = "4e466eaf05861b47365c5ef46a31a188b70f3615";
+    rev = "c46166d407c7d246112f13346621a3fbdb25889e";
   };
 
   lib = import "${krops}/lib";
