@@ -34,6 +34,10 @@ let
   rules = concatMap make-rules (attrValues repos);
 
   public-repos = mapAttrs make-public-repo {
+    Reaktor = {
+      cgit.desc = "Reaktor IRC bot";
+      cgit.section = "software";
+    };
     buildbot-classic = {
       cgit.desc = "fork of buildbot";
       cgit.section = "software";
