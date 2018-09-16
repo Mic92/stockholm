@@ -11,6 +11,8 @@ with (import <stockholm/lib>);
 
   environment.systemPackages = with pkgs; [
     ag
+    brain
+    dic
     nmap
     git-preview
   ];
