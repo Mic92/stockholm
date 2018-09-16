@@ -100,6 +100,10 @@ let
                         command=[
                           new_steps[new_step]
                         ],
+                        env={
+                          "NIX_REMOTE": "daemon",
+                          "NIX_PATH": "secrets=/var/src/stockholm/null:/var/src",
+                        },
                         timeout=90001,
                         workdir='build', # TODO figure out why we need this?
                     )])
@@ -124,7 +128,7 @@ let
               },
               name="get_steps",
               command=["${getJobs}"],
-              property="steps_json"
+              extract_fn=lambda rc, stdout, stderr: { 'steps_json': stdout },
           ))
           f_${name}.addStep(StepToStartMoreSteps(command=["echo"])) # TODO remove dummy command from here
 
