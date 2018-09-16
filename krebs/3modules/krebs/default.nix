@@ -129,6 +129,8 @@ in {
             "graphite.shack"
             "acng.shack"
             "drivedroid.shack"
+            "mobile.lounge.mpd.shack"
+            "lounge.mpd.wolf.shack"
           ];
         };
         retiolum = {
@@ -138,6 +140,7 @@ in {
             "wolf.r"
             "build.wolf.r"
             "cgit.wolf.r"
+            "lounge.mpd.wolf.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
