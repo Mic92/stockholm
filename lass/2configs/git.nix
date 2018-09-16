@@ -58,6 +58,10 @@ let
       cgit.desc = "take a rss feed and a timeout and print it to stdout";
       cgit.section = "software";
     };
+    nix-writers = {
+      cgit.desc = "high level writers for nix";
+      cgit.section = "software";
+    };
     nixpkgs = {
       cgit.desc = "nixpkgs fork";
       cgit.section = "configuration";
