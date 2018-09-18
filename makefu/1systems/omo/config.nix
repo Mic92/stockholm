@@ -17,7 +17,10 @@ in {
       # <stockholm/makefu/2configs/smart-monitor.nix>
       <stockholm/makefu/2configs/mail-client.nix>
       <stockholm/makefu/2configs/mosh.nix>
+      <stockholm/makefu/2configs/tools/core.nix>
+      <stockholm/makefu/2configs/tools/desktop.nix>
       <stockholm/makefu/2configs/tools/mobility.nix>
+      { environment.systemPackages = [ pkgs.esniper ]; }
       # <stockholm/makefu/2configs/disable_v6.nix>
       #<stockholm/makefu/2configs/graphite-standalone.nix>
       #<stockholm/makefu/2configs/share-user-sftp.nix>
@@ -33,12 +36,12 @@ in {
       # logs to influx
       <stockholm/makefu/2configs/stats/external/aralast.nix>
       <stockholm/makefu/2configs/stats/telegraf>
-      <stockholm/makefu/2configs/stats/telegraf/europastats.nix>
+      # <stockholm/makefu/2configs/stats/telegraf/europastats.nix>
+      <stockholm/makefu/2configs/stats/telegraf/hamstats.nix>
       <stockholm/makefu/2configs/stats/arafetch.nix>
 
       # services
       <stockholm/makefu/2configs/syncthing.nix>
-      <stockholm/makefu/2configs/mqtt.nix>
       <stockholm/makefu/2configs/remote-build/slave.nix>
       <stockholm/makefu/2configs/deployment/google-muell.nix>
       <stockholm/makefu/2configs/virtualisation/docker.nix>
@@ -67,8 +70,8 @@ in {
       # <stockholm/makefu/2configs/temp/rst-issue.nix>
 
     ];
-  makefu.full-populate = true;
-  krebs.rtorrent = {
+  makefu.full-populate =  true;
+  krebs.rtorrent = (builtins.trace (builtins.toJSON config.services.telegraf.extraConfig)) {
     downloadDir = lib.mkForce "/media/cryptX/torrent";
     extraConfig = ''
       upload_rate = 200
