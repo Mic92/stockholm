@@ -82,6 +82,7 @@ let
       irc = words.IRC("${cfg.irc.server}", "${cfg.irc.nick}",
                       channels=${builtins.toJSON cfg.irc.channels},
                       notify_events={
+                        'started': 1,
                         'success': 1,
                         'failure': 1,
                         'exception': 1,
