@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 with import <stockholm/lib>; #genid
 let
-  cfg = config.makefu.airdcpp;
+  cfg = config.krebs.airdcpp;
 
   out = {
-    options.makefu.airdcpp = api;
+    options.krebs.airdcpp = api;
     config = lib.mkIf cfg.enable imp;
   };
 
@@ -18,7 +18,7 @@ let
 
     user = mkOption {
       description = ''
-        user which will run udpt. if kept default a new user will be created
+        user which will run airdcpp. if kept default a new user will be created
       '';
       type = str;
       default = "airdcpp";
@@ -195,7 +195,7 @@ let
       ''<Hub Name="${hub.name}" Connect="${
           if hub.AutoConnect then "1" else "0"
         }" Description="" Password="${hub.Password}" Server="${hub.Server}" ChatUserSplit="0" UserListState="1" HubFrameOrder="" HubFrameWidths="" HubFrameVisible="" Group="" Bottom="0" Top="0" Right="0" Left="0" Nick="${hub.Nick}"/>'' )
-      (mapAttrsToList (name: val: val // { inherit name; }) cfg.hubs);
+      (mapAttrsToList (name: val: val // { inherit name; }) hubs);
     favoritesConfigFile = if (cfg.initialFavoritesConfigFile == null) then
     builtins.trace "warning: airdcpp hub passwords are stored in plain text" pkgs.writeText "initial-config" ''
         <?xml version="1.0" encoding="utf-8" standalone="yes"?>
@@ -206,7 +206,7 @@ let
         </Favorites>
       '' else cfg.initialFavoritesConfigFile;
     genShares = shares: concatMapStringsSep "\n" (share:
-      ''<Directory Virtual="stockholm" Incoming="${
+      ''<Directory Virtual="${share.name}" Incoming="${
           if share.incoming then "1" else "0"
         }" LastRefreshTime="0">${share.path}</Directory>'' )
       (mapAttrsToList (name: val: val // { inherit name; }) shares);
