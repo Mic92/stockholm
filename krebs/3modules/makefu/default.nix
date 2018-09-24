@@ -4,7 +4,9 @@ with import <stockholm/lib>;
 ## generate keys with:
 # tinc generate-keys
 # ssh-keygen -f ssh.id_ed25519 -t ed25519 -C host
-{
+let
+  pub-for = name: builtins.readFile (./ssh + "/${name}.pub");
+in {
   hosts = mapAttrs (_: setAttr "owner" config.krebs.users.makefu) {
     cake = rec {
       cores = 4;
@@ -590,6 +592,7 @@ with import <stockholm/lib>;
             "cache.gum.r"
             "logs.makefu.r"
             "stats.makefu.r"
+            "dcpp.nextgum.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -654,6 +657,7 @@ with import <stockholm/lib>;
             "wiki.gum.r"
             "blog.makefu.r"
             "blog.gum.r"
+            "dcpp.gum.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -1099,48 +1103,48 @@ with import <stockholm/lib>;
   users = rec {
     makefu = {
       mail = "makefu@x.r";
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl3RTOHd5DLiVeUbUr/GSiKoRWknXQnbkIf+uNiFO+XxiqZVojPlumQUVhasY8UzDzj9tSDruUKXpjut50FhIO5UFAgsBeMJyoZbgY/+R+QKU00Q19+IiUtxeFol/9dCO+F4o937MC0OpAC10LbOXN/9SYIXueYk3pJxIycXwUqhYmyEqtDdVh9Rx32LBVqlBoXRHpNGPLiswV2qNe0b5p919IGcslzf1XoUzfE3a3yjk/XbWh/59xnl4V7Oe7+iQheFxOT6rFA30WYwEygs5As//ZYtxvnn0gA02gOnXJsNjOW9irlxOUeP7IOU6Ye3WRKFRR0+7PS+w8IJLag2xb makefu@x";
+      pubkey = pub-for "makefu.x";
       pgp.pubkeys.default = builtins.readFile ./pgp/default.asc;
       pgp.pubkeys.brain = builtins.readFile ./pgp/brain.asc;
     };
     makefu-omo = {
       inherit (makefu) mail pgp;
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtDhAxjiCH0SmTGNDqmlKPug9qTf+IFOVjdXfk01lAV2KMVW00CgNo2d5kl5+6pM99K7zZO7Uo7pmSFLSCAg8J6cMRI3v5OxFsnQfcJ9TeGLZt/ua7F8YsyIIr5wtqKtFbujqve31q9xJMypEpiX4np3nLiHfYwcWu7AFAUY8UHcCNl4JXm6hsmPe+9f6Mg2jICOdkfMMn0LtW+iq1KZpw1Nka2YUSiE2YuUtV+V+YaVMzdcjknkVkZNqcVk6tbJ1ZyZKM+bFEnE4VkHJYDABZfELpcgBAszfWrVG0QpEFjVCUq5atpIVHJcWWDx072r0zgdTPcBuzsHHC5PRfVBLEw== makefu@servarch";
+      pubkey = pub-for "makefu.omo";
     };
     makefu-tsp = {
       inherit (makefu) mail pgp;
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1srWa67fcsw3r64eqgIuHbMbrj6Ywd9AwzCM+2dfXqYQZblchzH4Q4oydjdFOnV9LaA1LfNcWEjV/gVQKA2/xLSyXSDwzTxQDyOAZaqseKVg1F0a7wAF20+LiegQj6KXE29wcTW1RjcPncmagTBv5/vYbo1eDLKZjwGpEnG0+s+TRftrAhrgtbsuwR1GWWYACxk1CbxbcV+nIZ1RF9E1Fngbl4C4WjXDvsASi8s24utCd/XxgKwKcSFv7EWNfXlNzlETdTqyNVdhA7anc3N7d/TGrQuzCdtrvBFq4WbD3IRhSk79PXaB3L6xJ7LS8DyOSzfPyiJPK65Zw5s4BC07Z makefu@tsp";
+      pubkey = pub-for "makefu.tsp";
     };
     makefu-vbob = {
       inherit (makefu) mail pgp;
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCiKvLKaRQPL/Y/4EWx3rNhrY5YGKK4AeqDOFTLgJ7djwJnMo7FP+OIH/4pFxS6Ri2TZwS9QsR3hsycA4n8Z15jXAOXuK52kP65Ei3lLyz9mF+/s1mJsV0Ui/UKF3jE7PEAVky7zXuyYirJpMK8LhXydpFvH95aGrL1Dk30R9/vNkE9rc1XylBfNpT0X0GXmldI+r5OPOtiKLA5BHJdlV8qDYhQsU2fH8S0tmAHF/ir2bh7+PtLE2hmRT+b8I7y1ZagkJsC0sn9GT1AS8ys5s65V2xTTIfQO1zQ4sUH0LczuRuY8MLaO33GAzhyoSQdbdRAmwZQpY/JRJ3C/UROgHYt makefu@vbob";
+      pubkey = pub-for "makefu.vbob";
     };
     makefu-tempx = {
       inherit (makefu) mail pgp;
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDOXG6iwvm6zUVk+OE9ZviO+WNosAHSZw4ku0RxWbXSlSG0RfzvV4IfByF3Dw+4a8yZQmjwNkQalUURh2fEqhBLBI9XNEIL7qIu17zheguyXzpE3Smy4pbI+fjdsnfFrw+WE2n/IO8N6ojdH6sMmnWwfkFZYqqofWyLB3WUN9wy2b2z0w/jc56+HxxyTl3rD7CttTs9ak67HqIn3/pNeHoOM+JQ/te8t4ageIlPi8yJJpqZgww1RUWCgPPwZ9DP6gQjo85he76x0h9jvhnFd7m9N1aGdRDcK55QyoY/9x07R24GRutohAB/KDWSkDWQv5BW7M1LCawpJcF3DDslD1i7 makefu@gum";
+      pubkey = pub-for "makefu.tempx";
     };
     makefu-android = {
       inherit (makefu) mail pgp;
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDoAtBa10AbiFXfYL4Za7e0CLeXJeH6FhMqVZFqElLkJBKmQ7c7WEMlnuRhEZWSFDXBpaS7p73s5MMOZA13uYv6fI2ipOOwE9Ej1EoMsrQGegBp2VDMo0wnr/sgTL1do+uGI85E/i0uFw0DYhXqlZQk1eK8SdgXYltiVL27IA3NG2kYuoTIvJgRnaPJjTbhLBWti3m586LuO+pBKtcTt1D9EV6wp+6Jum4owPtCgVPQaZfFGYWkEiINV83WX9HoIk4S3bTPLh8Kfp0je0xsioS4T9/cxSPgUie8MjSg0irvLJXRH0JOVuG5NvZTYhAAekwNkHll9CtypPrutjbrXPXf makefu@x";
+      pubkey = pub-for "makefu.android";
     };
     makefu-remote-builder = {
       inherit (makefu) mail pgp;
-      pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPlhb0TIBW9RN9T8Is4YRIc1RjOg+cxbZCaDjbM4zxrX nixBuild";
+      pubkey = pub-for "makefu.remote-builder";
     };
     makefu-bob = {
       inherit (makefu) mail pgp;
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+fEK1bCB8cdDiBzXBXEWLFQyp/7xjNGQ5GyqHOtgxxe6Ypb0kAaWJaG3Ak/qI/nToGKwkQJLsuYNA3lZj2rFyBdoxnNO3kRFTc7NoaU5mC2BlHbpmn9dzvgiBoRAKAlzj/022u65SI19AFciKXtwqQfjuB3mPVOFOfCFB2SYjjWb8ffPnHp6PB5KKNLxaVPCbZgOdSju25/wB2lY00W8WIDOTqfbNClQnjkLsUZpTuRnvpHTemKtt1FH+WBZiMwMXRt19rm9LFSO7pvrZjdJz0l1TZVsODkbKZzQzSixoCPmdpPPAYaqrGUQpmukXk0xQtR3E2jEsk+FJv4AkIKqD";
+      pubkey = pub-for "makefu.bob";
     };
     ciko = {
       mail = "wieczorek.stefan@googlemail.com";
     };
     ulrich = {
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC1sobyfvUu/G2Ms+T0cI4CSgtjCoO2qEYVK1jkqC2A9mLJfNoPsToLowfGszpOAM9S4Rtn+OJ+vPMvs2E4pkZmXcmJZFAKKPNadmzwqCQyskBdoyszkj7DXngX56ZQ+ZEf+vPp2tu/IN0CFNVUllUcWP2TD2ECH5qkBODBHLyGf4PvV35yGpuYNFhFSWkTxwXZ7d5eat2kmwTfryX91Z+M901t6MK0ADyUwBkbotwSn/B6xUEZzExlGhRziRlIM0MrmSMvUA1mcmMJWVfHbb5Sw8yVstUuaU98C3EzDPNlVTbu5al2sDk4+jjireMMMVHC0j8aj7DlhvcF2t7ZpAKy+HN/PFuV7+RgN3DmIMLwbSRfykH3ATVdBzoL0/XmGBRXht6M22igAMFt9o/oHtwWt2JYcNX5poS8kLcjPzGHcx7KOslZ7VZev4BTpFAZIeMYhlzsNCI88bxUqdFxIcofNIQMy4Ep4qJXlgMduQbYtPDRpclDe82yiblhz48+HF/j8+0ZBx4w3jb4XBtgeTfwM2nARsD7MRzokfMfbGf6cZ8AU0/h69ECdsy2KYCKzgFxV/SHN2fDk6SZWLHmxDZ8N02VqgXMTvkYHvDBiaNxM0/iNMKqYCfuxjQPSusBENSgwhUnBGgoGYZuz0r2oMdtzqrkC/VbDxi5gSKl+ZoaMQ== shackspace.de@myvdr.de";
+      pubkey = pub-for "ulrich";
       mail = "shackspace.de@myvdr.de";
     };
     exco = {
       mail = "dickbutt@excogitation.de";
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC7HCK+TzelJp7atCbvCbvZZnXFr3cE35ioactgpIJL7BOyQM6lJ/7y24WbbrstClTuV7n0rWolDgfjx/8kVQExP3HXEAgCwV6tIcX/Ep84EXSok7QguN0ozZMCwX9CYXOEyLmqpe2KAx3ggXDyyDUr2mWs04J95CFjiR/YgOhIfM4+gVBxGtLSTyegyR3Fk7O0KFwYDjBRLi7a5TIub3UYuOvw3Dxo7bUkdhtf38Kff8LEK8PKtIku/AyDlwZ0mZT4Z7gnihSG2ezR5mLD6QXVuGhG6gW/gsqfPVRF4aZbrtJWZCp2G21wBRafpEZJ8KFHtR18JNcvsuWA1HJmFOj2K0mAY5hBvzCbXGhSzBtcGxKOmTBDTRlZ7FIFgukP/ckSgDduydFUpsv07ZRj+qY07zKp3Nhh3RuN7ZcveCo2WpaAzTuWCMPB0BMhEQvsO8I/p5YtTaw2T1poOPorBbURQwEgNrZ92kB1lL5t1t1ZB4oNeDJX5fddKLkgnLqQZWOZBTKtoq0EAVXojTDLZaA+5z20h8DU7sicDQ/VG4LWtqm9fh8iDpvt/3IHUn/HJEEnlfE1Gd+F2Q+R80yu4e1PClmuzfWjCtkPc4aY7oDxfcJqyeuRW6husAufPqNs31W6X9qXwoaBh9vRQ1erZUo46iicxbzujXIy/Hwg67X8dw== dickbutt@excogitation.de";
+      pubkey = pub-for "exco";
     };
   };
 }
