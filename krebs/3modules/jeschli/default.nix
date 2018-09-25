@@ -7,43 +7,6 @@ with import <stockholm/lib>;
     owner = config.krebs.users.jeschli;
     ci = true;
   }) {
-    bln = {
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.27.28";
-          ip6.addr = "42::28";
-          aliases = [
-            "bln.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIECgKCBAEAwoN2f6iyQ1Wnk4rZVqhovny8VpwWvC9buE+NoedRaxmWmA5QIP02
-            BLwTWFKnbiKOQiYN+a4m/JKs0fFOjYCa2EKhqWWKwdEIN4wJTq8zrjzIaa2rdz+8
-            tamE+8rSYDE+RbJ6Gs3SUDfwcxJT6FXCi3JYoirdhAssLSwTf9d5IsfXvkKMabky
-            FpY9Im51utmIR8UmYL4Ti7dEaOxif+5Hgl1LuitC8e2IIZJhXJprK9tJk9J0LRWt
-            PUM31IG1+A2hNBzs5hferLmmwFvYF1sJ22NtFepxVyOLaLcLEFKWHyU+14qEMSgL
-            acsu0lgVZ4A1TY6vVBmawfVCzUzRfalNIty1x+qDA4MB1RQ4W7ivWCjd/+wirSyc
-            BLxCvriXRdUwPIRoHy0kNMmS83HGm2iv2IrHUrcH8lyJvMys216J2lCF2arRVnBn
-            lArObfR3mXgd/YoANmZ4cinLAjLCjCjXfOe39+pvTFph6WnDt4gOO+tQlnCk19Fa
-            NoiK1THcuZiFVE+4CAXVmstNqYKSMgw+Upw7/t6iUzur98iwKpcicomhJjGVVtbg
-            2iDf4lYVrUyb7iPns2T4EzAuHk7iESktEASU5creSbWYRu/4uyhuNlUoiCpVOEKg
-            H9jkrLlCpQGv/GmgdH9oj35Dsv5TINauCT2jjWV65wcKAlvyafy5UtLyF4HBRHaM
-            2xyxC9gxr8bmeOFyOnHVJQvpkeLxyaRp/VppjCTzr82TQvpZd5a+tISIbDGfqX1o
-            cEyPsowb3KHNtW9DqRBp+80fPGnQHsNjVXbJb37wjpnR/ePg/XyENbZF/OQEsjqt
-            bki8hZQXKJAFyx1bq/2A1q4ocx7JlJKynL4szG1unHbSPKNH2OOVvoezuP7e+lXU
-            gnzrSbe9lPIOp4Vu1HjWOi6tNWZFoZrSHVIK+VGxm+wm/HoS+Enj4Yq+vRvU3luv
-            UllR5KHHK2970RbFEUE0zaVMZjQn5KgJjFXfqfrCztp0wZ5CQo+tRFPq35llaIQ2
-            0WyT2IZlxt1Xr2IpOM0DpO4SJnivZT/wdZN7upzsUPf4a9suztpA3KcKAKqH0OM5
-            fv2/LXspc73vACAOZ9qDJnwp8bFrMOaQdAL1oPpOLB3yYTDA3E20IAQ6OKoSy1Nl
-            B4coqo1gBCcMrWwVFYAuc5J4itXJ0SSj67+WUnuDzPm88LI3g+AO0r1m6k6YdA58
-            SeNxYPMLYNLRg86rsjKjXu+QyvBsd04O/QvIxpTFCtdjbUXNS1H4++/inYZSwWPp
-            U0lN9erLJbwr4WqU/Mn6J+jKijXwmCSiF5if5baszMsOL/0u9yFt6OcaLyehE3sJ
-            eAo00n9phSna0lxtbtRnh/Gd4D7rFcX33wIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-    };
     brauerei = {
       nets = {
         retiolum = {
