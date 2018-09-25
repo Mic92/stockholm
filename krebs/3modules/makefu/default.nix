@@ -592,6 +592,7 @@ in {
             "cache.gum.r"
             "logs.makefu.r"
             "stats.makefu.r"
+            "backup.makefu.r"
             "dcpp.nextgum.r"
           ];
           tinc.pubkey = ''
