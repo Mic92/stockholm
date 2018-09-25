@@ -122,6 +122,7 @@ let
         wantedBy = [ "multi-user.target" ];
         environment = {
           GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+          PYTHONPATH = "${pkgs.Reaktor}/lib/python3.6/site-packages";
           REAKTOR_NICKNAME = botcfg.nickname;
           REAKTOR_DEBUG = (if botcfg.debug  then "True" else "False");
           REAKTOR_CHANNELS = lib.concatStringsSep "," botcfg.channels;

@@ -2,7 +2,7 @@
 
   krops = builtins.fetchGit {
     url = https://cgit.krebsco.de/krops/;
-    rev = "4e466eaf05861b47365c5ef46a31a188b70f3615";
+    rev = "c46166d407c7d246112f13346621a3fbdb25889e";
   };
 
   lib = import "${krops}/lib";
@@ -18,7 +18,7 @@
     stockholm.file = toString ../.;
     stockholm-version.pipe = toString (pkgs.writeDash "${name}-version" ''
       set -efu
-      cd $HOME/stockholm
+      cd ${lib.escapeShellArg krebs-source.stockholm.file}
       V=$(${pkgs.coreutils}/bin/date +%y.%m)
       if test -d .git; then
         V=$V.git.$(${pkgs.git}/bin/git describe --always --dirty)

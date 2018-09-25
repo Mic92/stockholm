@@ -53,7 +53,7 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    system.activationScripts.announce-activation = ''
+    system.activationScripts.announce-activation = stringAfter [ "etc" ] ''
       ${announce-activation}
     '';
   };

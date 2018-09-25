@@ -13,10 +13,7 @@ import <nixpkgs/nixos/lib/eval-config.nix> {
       (attrNames (filterAttrs (_: eq "directory") (readDir (<stockholm> + "/${ns}/1systems"))))
       (name: let
         config = import (<stockholm> + "/${ns}/1systems/${name}/config.nix");
-        source = import (<stockholm> + "/${ns}/1systems/${name}/source.nix");
       in import <nixpkgs/nixos/lib/eval-config.nix> {
         modules = [ config ];
-      } // {
-        inherit source;
       });
 }

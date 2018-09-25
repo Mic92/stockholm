@@ -26,8 +26,8 @@ let
 
   hostname = config.networking.hostName;
   getJobs = pkgs.writeDash "get_jobs" ''
-    nix-build --no-out-link ./ci.nix 2>&1 > /dev/null
-    nix-instantiate --eval --strict --json ./ci.nix
+    nix-build --no-out-link --quiet -Q ./ci.nix > /dev/null
+    nix-instantiate --quiet -Q --eval --strict --json ./ci.nix
   '';
 
   imp = {
@@ -53,9 +53,12 @@ let
         nameValuePair name ''
           sched.append(
               schedulers.SingleBranchScheduler(
-                  change_filter=util.ChangeFilter(branch_re=".*"),
+                  change_filter=util.ChangeFilter(
+                      branch_re=".*",
+                      project='${name}',
+                  ),
                   treeStableTimer=60,
-                  name="build-all-branches",
+                  name="${name}-all-branches",
                   builderNames=[
                       "${name}",
                   ]
@@ -97,6 +100,10 @@ let
                         command=[
                           new_steps[new_step]
                         ],
+                        env={
+                          "NIX_REMOTE": "daemon",
+                          "NIX_PATH": "secrets=/var/src/stockholm/null:/var/src",
+                        },
                         timeout=90001,
                         workdir='build', # TODO figure out why we need this?
                     )])
@@ -121,7 +128,7 @@ let
               },
               name="get_steps",
               command=["${getJobs}"],
-              property="steps_json"
+              extract_fn=lambda rc, stdout, stderr: { 'steps_json': stdout },
           ))
           f_${name}.addStep(StepToStartMoreSteps(command=["echo"])) # TODO remove dummy command from here
 
@@ -141,7 +148,7 @@ let
         enable = true;
         nick = "build|${hostname}";
         server = "irc.r";
-        channels = [ "noise" ];
+        channels = [ "xxx" "noise" ];
         allowForce = true;
       };
       extraConfig = ''

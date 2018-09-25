@@ -58,7 +58,7 @@ let
         };
       };
       config.activate = let
-        src = pkgs.execve config.name {
+        src = pkgs.exec config.name {
           inherit (config) envp filename;
         };
         dst = "${wrapperDir}/${config.name}";

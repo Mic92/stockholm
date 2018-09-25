@@ -131,6 +131,30 @@ in {
     };
   };
 
+  systemd.services.radio-recent = let
+    recentlyPlayed = pkgs.writeDash "recentlyPlayed" ''
+      LIMIT=1000 #how many tracks to keep in the history
+      HISTORY_FILE=/tmp/played
+      while :; do
+        ${pkgs.mpc_cli}/bin/mpc idle player > /dev/null
+        ${pkgs.mpc_cli}/bin/mpc current -f %file%
+      done | while read track; do
+        echo "$(date -Is)" "$track" | tee -a "$HISTORY_FILE"
+        echo "$(tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
+      done
+    '';
+  in {
+    description = "radio recently played";
+    after = [ "mpd.service" "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    restartIfChanged = true;
+
+    serviceConfig = {
+      ExecStart = recentlyPlayed;
+    };
+  };
+
   krebs.Reaktor.playlist = {
     nickname = "the_playlist|r";
     channels = [
@@ -157,27 +181,40 @@ in {
       })
     ];
   };
-  services.nginx.virtualHosts."lassul.us".locations."/the_playlist".extraConfig = let
-    html = pkgs.writeText "index.html" ''
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <meta charset="utf-8">
-          <title>lassulus playlist</title>
-        </head>
-        <body>
-          <div style="display:inline-block;margin:0px;padding:0px;overflow:hidden">
-            <iframe src="https://kiwiirc.com/client/irc.freenode.org/?nick=kiwi_test|?&theme=cli#the_playlist" frameborder="0" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:95%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="95%" width="100%"></iframe>
-          </div>
-          <div style="position:absolute;bottom:1px;display:inline-block;background-color:red;">
-            <audio controls autoplay="autoplay"><source src="http://lassul.us:8000/radio.ogg" type="audio/ogg">Your browser does not support the audio element.</audio>
-          </div>
-          <!-- page content -->
-        </body>
-      </html>
+  services.nginx = {
+    enable = true;
+    virtualHosts."radio.lassul.us" = {
+      forceSSL = true;
+      enableACME = true;
+      locations."/".extraConfig = ''
+        proxy_pass http://localhost:8000;
+      '';
+      locations."/recent".extraConfig = ''
+        alias /tmp/played;
+      '';
+    };
+    virtualHosts."lassul.us".locations."/the_playlist".extraConfig = let
+      html = pkgs.writeText "index.html" ''
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>lassulus playlist</title>
+          </head>
+          <body>
+            <div style="display:inline-block;margin:0px;padding:0px;overflow:hidden">
+              <iframe src="https://kiwiirc.com/client/irc.freenode.org/?nick=kiwi_test|?&theme=cli#the_playlist" frameborder="0" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:95%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="95%" width="100%"></iframe>
+            </div>
+            <div style="position:absolute;bottom:1px;display:inline-block;background-color:red;">
+              <audio controls autoplay="autoplay"><source src="http://lassul.us:8000/radio.ogg" type="audio/ogg">Your browser does not support the audio element.</audio>
+            </div>
+            <!-- page content -->
+          </body>
+        </html>
+      '';
+    in ''
+      default_type "text/html";
+      alias ${html};
     '';
-  in ''
-    default_type "text/html";
-    alias ${html};
-  '';
+  };
 }

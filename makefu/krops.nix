@@ -18,17 +18,20 @@
     unstable = false; #unstable channel checked out
     mic92 = false;
     nms = false;
+    arm6 = false;
     clever_kexec = false;
+    home-manager = false;
   } // import (./. + "/1systems/${name}/source.nix");
   source = { test }: lib.evalSource [
     {
-      # nixos-18.03 @ 2018-08-06
-      # + do_sqlite3 ruby:   55a952be5b5
-      # + exfat-nofuse bump: ee6a5296a35
+      # nixos-18.09 @ 2018-09-18
       # + uhub/sqlite: 5dd7610401747
       nixpkgs = if test || host-src.full then {
         git.ref = nixpkgs-src.rev;
         git.url = nixpkgs-src.url;
+      } else if host-src.arm6 then {
+        # TODO: we want to track the unstable channel
+        symlink = "/nix/var/nix/profiles/per-user/root/channels/nixos/";
       } else {
         file = "/home/makefu/store/${nixpkgs-src.rev}";
       };
@@ -64,6 +67,12 @@
       nixos-hardware.git = {
         url = https://github.com/nixos/nixos-hardware.git;
         ref = "30fdd53";
+      };
+    })
+    (lib.mkIf ( host-src.home-manager ) {
+      home-manager.git = {
+        url = https://github.com/rycee/home-manager;
+        ref = "6eea2a4";
       };
     })
   ];

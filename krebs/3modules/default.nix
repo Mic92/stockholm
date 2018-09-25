@@ -182,6 +182,11 @@ let
           to = concatMapStringsSep "," (getAttr "mail") (toList to);
         };
       in mapAttrsToList format (with config.krebs.users; let
+        brain-ml = [
+          lass
+          makefu
+          tv
+        ];
         eloop-ml = spam-ml ++ [ ciko ];
         spam-ml = [
           lass
@@ -191,6 +196,7 @@ let
         ciko.mail = "ciko@slash16.net";
       in {
         "anmeldung@eloop.org" = eloop-ml;
+        "brain@krebsco.de" = brain-ml;
         "cfp@eloop.org" = eloop-ml;
         "kontakt@eloop.org" = eloop-ml;
         "root@eloop.org" = eloop-ml;

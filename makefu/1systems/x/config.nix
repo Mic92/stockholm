@@ -1,14 +1,16 @@
 #
 #
 #
-{ config, pkgs, ... }:
-with import <stockholm/lib>;
-
+{ config, pkgs, lib, ... }:
 {
   imports =
     [ # base
       <stockholm/makefu>
       <stockholm/makefu/2configs/nur.nix>
+      <stockholm/makefu/2configs/home-manager>
+      <stockholm/makefu/2configs/home-manager/desktop.nix>
+      <stockholm/makefu/2configs/home-manager/cli.nix>
+      <stockholm/makefu/2configs/home-manager/mail.nix>
       <stockholm/makefu/2configs/main-laptop.nix>
       <stockholm/makefu/2configs/extra-fonts.nix>
       <stockholm/makefu/2configs/tools/all.nix>
@@ -43,6 +45,7 @@ with import <stockholm/lib>;
       <stockholm/makefu/2configs/mail-client.nix>
       <stockholm/makefu/2configs/printer.nix>
       <stockholm/makefu/2configs/task-client.nix>
+      # <stockholm/makefu/2configs/syncthing.nix>
 
       # Virtualization
       <stockholm/makefu/2configs/virtualisation/libvirt.nix>
@@ -149,4 +152,6 @@ with import <stockholm/lib>;
     "/home/makefu/backup/borgun"
     "/home/makefu/.mail/"
   ];
+  services.syncthing.user = lib.mkForce "makefu";
+  services.syncthing.dataDir = lib.mkForce "/home/makefu/.config/syncthing/";
 }
