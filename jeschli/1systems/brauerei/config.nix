@@ -37,6 +37,11 @@
       cd ~/stockholm
       exec nix-shell -I stockholm="$PWD" --run 'deploy  --system="brauerei"'
     '';
+    deploy = pkgs.writeDash "deploy" ''
+      set -eu
+      export SYSTEM="$1"
+      $(nix-build $HOME/stockholm/jeschli/krops.nix --no-out-link --argstr name "$SYSTEM" -A deploy)
+    '';
   };
 
   environment.systemPackages = with pkgs; [
