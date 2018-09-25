@@ -39,6 +39,9 @@ let {
     disko = {
       cgit.desc = "declarative partitioning and formatting tool";
     };
+    fswm = {
+      cgit.desc = "simple full screen window manager";
+    };
     get = {};
     hstool = {
       cgit.desc = "Haskell Development Environment ^_^";
