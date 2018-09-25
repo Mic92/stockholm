@@ -84,6 +84,7 @@ let
       default = null;
     };
     dcpp = {
+      # entries in DCPlusPlus.xml
       Nick = mkOption {
         description = ''
           Nick Name for connection
@@ -115,6 +116,11 @@ let
         description = "Total Upload Speed in Mbp/s";
         type = str;
         default = "100";
+      };
+      DownloadDirectory = mkOption {
+        description = "Directory, where new files will be saved into";
+        type = str;
+        default = "${cfg.stateDir}/Download";
       };
       shares = mkOption {
         default = {};
@@ -218,6 +224,7 @@ let
         <InPort type="int">${toString cfg.dcpp.InPort}</InPort>
         <UDPPort type="int">${toString cfg.dcpp.UDPPort}</UDPPort>
         <TLSPort type="int">${toString cfg.dcpp.TLSPort}</TLSPort>
+         <DownloadDirectory type="string">${cfg.dcpp.DownloadDirectory}</DownloadDirectory>
         <AutoDetectIncomingConnection type="int">0</AutoDetectIncomingConnection>
         <NoIpOverride type="int">1</NoIpOverride>
         <WizardRunNew type="int">0</WizardRunNew>
