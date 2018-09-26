@@ -2,9 +2,7 @@ with import <stockholm/lib>;
 { config, pkgs, ... }: {
 
   imports = [
-    <stockholm/krebs>
-    <stockholm/tv/2configs>
-    <stockholm/tv/3modules>
+    <stockholm/tv>
     <stockholm/tv/2configs/exim-retiolum.nix>
     <stockholm/tv/2configs/retiolum.nix>
   ];
@@ -57,6 +55,7 @@ with import <stockholm/lib>;
     gimp
     iptables
     libreoffice
+    plasma-pa
     (pkgs.pidgin-with-plugins.override {
       plugins = [ pkgs.pidginotr ];
     })

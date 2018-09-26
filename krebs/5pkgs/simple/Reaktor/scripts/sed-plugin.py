@@ -8,9 +8,19 @@ import shelve
 from os import environ
 from os.path import join
 from sys import argv
+from time import sleep
 import re
 
-d = shelve.open(join(environ['state_dir'], 'sed-plugin.shelve'), writeback=True)
+# try to open the shelve file until it succeeds
+while True:
+    try:
+        d = shelve.open(
+            join(environ['state_dir'], 'sed-plugin.shelve'),
+            writeback=True
+        )
+        break
+    except:  # noqa: E722
+        sleep(0.2)
 usr = environ['_from']
 
 
