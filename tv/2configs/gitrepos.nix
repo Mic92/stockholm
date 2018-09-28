@@ -64,7 +64,9 @@ let {
     netcup = {
       cgit.desc = "netcup command line interface";
     };
-    nix-writers = {};
+    nix-writers = {
+      cgit.desc = "collection of package builders";
+    };
     populate = {
       cgit.desc = "source code installer";
     };
