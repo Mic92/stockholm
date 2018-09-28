@@ -9,8 +9,19 @@ let {
       enable = true;
       cgit = {
         settings = {
-          root-title = "repositories at ${config.krebs.build.host.name}";
+          about-filter = pkgs.exec "krebs.cgit.about-filter" rec {
+            filename = "${pkgs.pythonPackages.markdown2}/bin/markdown2";
+            argv = [
+              filename
+              "--extras=fenced-code-blocks"
+            ];
+            envp = {};
+          };
+          readme = [
+            ":README.md"
+          ];
           root-desc = "mostly krebs";
+          root-title = "repositories at ${config.krebs.build.host.name}";
         };
       };
       repos = repos;
