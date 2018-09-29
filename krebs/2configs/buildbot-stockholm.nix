@@ -22,6 +22,12 @@
         "http://cgit.ni.r/disko"
         "http://cgit.prism.r/disko"
       ];
+      krops.urls = [
+        "http://cgit.hotdog.r/krops"
+        "http://cgit.ni.r/krops"
+        "http://cgit.prism.r/krops"
+        "https://git.ingolf-wagner.de/krebs/krops.git"
+      ];
       nix_writers.urls = [
         "http://cgit.hotdog.r/nix-writers"
         "http://cgit.ni.r/nix-writers"
