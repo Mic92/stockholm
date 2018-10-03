@@ -3,6 +3,7 @@ with import <stockholm/lib>;
 
   imports = [
     <stockholm/tv>
+    <stockholm/tv/2configs/br.nix>
     <stockholm/tv/2configs/exim-retiolum.nix>
     <stockholm/tv/2configs/retiolum.nix>
   ];
@@ -89,20 +90,6 @@ with import <stockholm/lib>;
   fonts.fonts = [
     pkgs.xlibs.fontschumachermisc
   ];
-
-  # Enable CUPS to print documents.
-  services.printing = {
-    enable = true;
-    #drivers = [
-    #  #pkgs.foomatic_filters
-    #  #pkgs.gutenprint
-    #  #pkgs.cups_pdf_filter
-    #  #pkgs.ghostscript
-    #];
-    #cupsdConf = ''
-    #  LogLevel debug2
-    #'';
-  };
 
   services.xserver.enable = true;
   services.xserver.layout = "de";
