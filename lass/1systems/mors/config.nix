@@ -77,6 +77,7 @@ with import <stockholm/lib>;
       environment.systemPackages = [
         pkgs.ovh-zone
         pkgs.bank
+        pkgs.adb-sync
       ];
     }
     {
