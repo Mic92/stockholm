@@ -41,6 +41,9 @@ in {
     # refs <nixpkgs/nixos/modules/services/x11/desktop-managers>
     desktopManager.session = mkForce [];
 
+    displayManager.lightdm.enable = mkForce false;
+    displayManager.job.execCmd = mkForce "derp";
+
     enable = true;
     display = 11;
     tty = 11;

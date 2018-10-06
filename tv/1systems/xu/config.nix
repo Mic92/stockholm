@@ -41,7 +41,6 @@ with import <stockholm/lib>;
         mkpasswd
         netcat
         netcup
-        nix-repl
         nmap
         p7zip
         pass
