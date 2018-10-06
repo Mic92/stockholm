@@ -121,8 +121,8 @@
     desktopManager.session = lib.mkForce [];
 
     enable = true;
-    display = 11;
-    tty = 11;
+    display = lib.mkForce 11;
+    tty = lib.mkForce 11;
 
     dpi = 144;
 

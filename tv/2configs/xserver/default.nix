@@ -42,8 +42,8 @@ in {
     desktopManager.session = mkForce [];
 
     enable = true;
-    display = 11;
-    tty = 11;
+    display = mkForce 11;
+    tty = mkForce 11;
 
     synaptics = {
       enable = true;
