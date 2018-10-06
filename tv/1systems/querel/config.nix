@@ -2,10 +2,9 @@ with import <stockholm/lib>;
 { config, pkgs, ... }: {
 
   imports = [
-    <stockholm/krebs>
-    <stockholm/tv/2configs>
-    <stockholm/tv/3modules>
+    <stockholm/tv>
     <stockholm/tv/2configs/retiolum.nix>
+    <stockholm/tv/2configs/xp-332.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.querel;
@@ -37,6 +36,7 @@ with import <stockholm/lib>;
     sxiv
     texlive.combined.scheme-full
     vim
+    xsane
     zathura
   ];
 
@@ -66,10 +66,6 @@ with import <stockholm/lib>;
   nixpkgs.config.chromium.enablePepperFlash = true;
 
   programs.ssh.startAgent = false;
-
-  services.printing = {
-    enable = true;
-  };
 
   services.xserver.enable = true;
   services.xserver.layout = "de";
