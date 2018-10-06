@@ -62,6 +62,10 @@ let
       cgit.desc = "high level writers for nix";
       cgit.section = "software";
     };
+    nixos-generators = {
+      cgit.desc = "custom image builders";
+      cgit.section = "software";
+    };
     nixpkgs = {
       cgit.desc = "nixpkgs fork";
       cgit.section = "configuration";
