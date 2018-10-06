@@ -71,7 +71,6 @@ in {
     lm_sensors
     ncdu
     nix-index
-    nix-repl
     nmap
     pavucontrol
     powertop
