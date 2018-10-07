@@ -64,7 +64,7 @@ in {
         ExecStartPre =
           "${pkgs.coreutils}/bin/ln -s /etc/charybdis-ircd.motd /tmp/ircd.motd";
         ExecStart = toString [
-          "${pkgs.charybdis}/bin/charybdis-ircd"
+          "${pkgs.charybdis}/bin/charybdis"
             "-configfile ${import ./config.nix args}"
             "-foreground"
             "-logfile /dev/stderr"

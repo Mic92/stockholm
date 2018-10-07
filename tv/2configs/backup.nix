@@ -26,7 +26,7 @@ with import <stockholm/lib>;
       method = "pull";
       src = { host = config.krebs.hosts.querel; path = "/home"; };
       dst = { host = config.krebs.hosts.nomic; path = "/fs/ponyhof/bku/querel-home"; };
-      startAt = "00:00";
+      startAt = "22:00";
     };
     wu-home-xu = {
       method = "push";
