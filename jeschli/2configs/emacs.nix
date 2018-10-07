@@ -67,7 +67,6 @@ let
   emacsWithCustomPackages = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: [
     epkgs.melpaPackages.evil
     epkgs.melpaStablePackages.magit
-    epkgs.melpaPackages.mmm-mode
     epkgs.melpaPackages.nix-mode
     epkgs.melpaPackages.go-mode
     epkgs.melpaPackages.google-this
