@@ -14,6 +14,7 @@ let
       ./buildbot/master.nix
       ./buildbot/slave.nix
       ./build.nix
+      ./charybdis.nix
       ./ci.nix
       ./current.nix
       ./exim.nix
