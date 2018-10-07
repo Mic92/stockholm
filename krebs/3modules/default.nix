@@ -14,6 +14,7 @@ let
       ./buildbot/master.nix
       ./buildbot/slave.nix
       ./build.nix
+      ./charybdis.nix
       ./ci.nix
       ./current.nix
       ./exim.nix
@@ -111,7 +112,6 @@ let
     { krebs = import ./krebs  { inherit config; }; }
     { krebs = import ./lass   { inherit config; }; }
     { krebs = import ./makefu { inherit config; }; }
-    { krebs = import ./nin    { inherit config; }; }
     { krebs = import ./tv     { inherit config; }; }
     {
       krebs.dns.providers = {

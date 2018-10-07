@@ -18,6 +18,7 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/retiolum.nix>
     <stockholm/tv/2configs/binary-cache>
     <stockholm/tv/2configs/br.nix>
+    <stockholm/tv/2configs/xp-332.nix>
     <stockholm/tv/2configs/xserver>
     {
       environment.systemPackages = with pkgs; [
@@ -40,7 +41,6 @@ with import <stockholm/lib>;
         mkpasswd
         netcat
         netcup
-        nix-repl
         nmap
         p7zip
         pass
@@ -146,8 +146,6 @@ with import <stockholm/lib>;
 
     gptfdisk
   ];
-
-  services.printing.enable = true;
 
   #services.bitlbee.enable = true;
   #services.tor.client.enable = true;

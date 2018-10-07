@@ -121,6 +121,10 @@ let
     cgit-settings = types.submodule {
       # A setting's value of `null` means cgit's default should be used.
       options = {
+        about-filter = mkOption {
+          type = types.nullOr types.package;
+          default = null;
+        };
         cache-root = mkOption {
           type = types.absolute-pathname;
           default = "/tmp/cgit";
@@ -165,6 +169,10 @@ let
           type =
             types.nullOr (types.enum ["week" "month" "quarter" "year"]);
           default = "year";
+        };
+        readme = mkOption {
+          type = types.listOf types.str;
+          default = [];
         };
         robots = mkOption {
           type = types.nullOr (types.listOf types.str);
@@ -394,8 +402,14 @@ let
       kv-to-cgitrc = k: v: getAttr (typeOf v) {
         bool = kv-to-cgitrc k (if v then 1 else 0);
         null = []; # This will be removed by `flatten`.
-        list = "${k}=${concatStringsSep ", " v}";
+        list = {
+          readme = map (x: "readme=${x}") v;
+        }.${k} or "${k}=${concatStringsSep ", " v}";
         int = "${k}=${toString v}";
+        set =
+          if subtypes.cgit-settings.check v
+            then "${k}=${v}"
+            else error "kv-to-cgitrc: unhandled type: set";
         string = "${k}=${v}";
       };
     in

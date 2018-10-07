@@ -1,9 +1,6 @@
 { name }: rec {
 
-  krops = builtins.fetchGit {
-    url = https://cgit.krebsco.de/krops/;
-    rev = "c46166d407c7d246112f13346621a3fbdb25889e";
-  };
+  krops = ../submodules/krops;
 
   lib = import "${krops}/lib";
 

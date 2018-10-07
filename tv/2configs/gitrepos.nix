@@ -9,8 +9,19 @@ let {
       enable = true;
       cgit = {
         settings = {
-          root-title = "repositories at ${config.krebs.build.host.name}";
+          about-filter = pkgs.exec "krebs.cgit.about-filter" rec {
+            filename = "${pkgs.pythonPackages.markdown2}/bin/markdown2";
+            argv = [
+              filename
+              "--extras=fenced-code-blocks"
+            ];
+            envp = {};
+          };
+          readme = [
+            ":README.md"
+          ];
           root-desc = "mostly krebs";
+          root-title = "repositories at ${config.krebs.build.host.name}";
         };
       };
       repos = repos;
@@ -30,46 +41,33 @@ let {
 
   public-repos = mapAttrs make-public-repo ({
   } // mapAttrs (_: recursiveUpdate { cgit.section = "1. miscellaneous"; }) {
-    cac-api = {
-      cgit.desc = "CloudAtCost API command line interface";
-    };
     dic = {
       cgit.desc = "dict.leo.org command line interface";
     };
     disko = {
       cgit.desc = "declarative partitioning and formatting tool";
     };
-    get = {};
-    hstool = {
-      cgit.desc = "Haskell Development Environment ^_^";
+    fswm = {
+      cgit.desc = "simple full screen window manager";
     };
     htgen = {
       cgit.desc = "toy HTTP server";
     };
-    kirk = {
-      cgit.desc = "IRC tools";
-    };
     krops = {
       cgit.desc = "deployment tools";
     };
-    load-env = {};
-    loldns = {
-      cgit.desc = "toy DNS server";
-    };
-    make-snapshot = {};
     much = {};
     netcup = {
       cgit.desc = "netcup command line interface";
     };
-    nix-writers = {};
+    nix-writers = {
+      cgit.desc = "collection of package builders";
+    };
     populate = {
       cgit.desc = "source code installer";
     };
     q = {};
     regfish = {};
-    soundcloud = {
-      cgit.desc = "SoundCloud command line interface";
-    };
     stockholm = {
       cgit.desc = "NixOS configuration";
     };
@@ -86,15 +84,32 @@ let {
     xintmap = {};
     xmonad-stockholm = {};
   } // mapAttrs (_: recursiveUpdate { cgit.section = "4. museum"; }) {
+    cac-api = {
+      cgit.desc = "CloudAtCost API command line interface";
+    };
     cgserver = {};
     crude-mail-setup = {};
     dot-xmonad = {};
     hirc = {};
+    hstool = {
+      cgit.desc = "Haskell Development Environment ^_^";
+    };
+    kirk = {
+      cgit.desc = "IRC tools";
+    };
     make-snapshot = {};
     nixos-infest = {};
     painload = {};
     push = {};
     with-tmpdir = {};
+    get = {};
+    load-env = {};
+    loldns = {
+      cgit.desc = "toy DNS server";
+    };
+    soundcloud = {
+      cgit.desc = "SoundCloud command line interface";
+    };
   });
 
   restricted-repos = mapAttrs make-restricted-repo (
