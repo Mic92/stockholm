@@ -143,6 +143,7 @@ with import <stockholm/lib>;
       environment.systemPackages = [
         pkgs.get
         pkgs.git
+        pkgs.git-crypt
         pkgs.git-preview
         pkgs.hashPassword
         pkgs.htop
