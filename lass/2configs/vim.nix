@@ -5,7 +5,6 @@ let
   out = {
     environment.systemPackages = [
       (hiPrio vim)
-      pkgs.python35Packages.flake8
       (pkgs.writeDashBin "govet" ''
         go vet "$@"
       '')

@@ -164,6 +164,7 @@ stdenv.mkDerivation rec {
   ;
 
   NIX_CFLAGS_COMPILE = [
+    "-Wno-error=deprecated-declarations"
     "-Wno-error=unused-variable"
   ];
 

@@ -17,7 +17,7 @@ python2Packages.buildPythonApplication rec {
   propagatedBuildInputs = [
     python2Packages.jinja2
     python2Packages.twisted
-    python2Packages.dateutil_1_5
+    python2Packages.dateutil
     python2Packages.sqlalchemy_migrate
     python2Packages.pysqlite
     pkgs.coreutils
