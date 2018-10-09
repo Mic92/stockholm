@@ -15,6 +15,7 @@ let {
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
     pkgs.vimPlugins.undotree
+    pkgs.vimPlugins.vim-elixir
     (pkgs.vimUtils.buildVimPlugin {
       name = "vim-syntax-jq";
       src = pkgs.fetchgit {
