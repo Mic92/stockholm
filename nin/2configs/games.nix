@@ -57,7 +57,6 @@ let
 
 in {
   environment.systemPackages = with pkgs; [
-    dwarf_fortress
     doom1
     doom2
     vdoom1
