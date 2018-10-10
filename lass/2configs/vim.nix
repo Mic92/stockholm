@@ -63,6 +63,8 @@ let
     au Syntax * syn match Garbage containedin=ALL /\s\+$/
             \ | syn match TabStop containedin=ALL /\t\+/
             \ | syn keyword Todo containedin=ALL TODO
+            \ | syn match NBSP '\%xa0'
+            \ | syn match NarrowNBSP '\%u202F'
 
     au BufRead,BufNewFile *.hs so ${hs.vim}
 
@@ -165,6 +167,8 @@ let
 
         hi Garbage      ctermbg=088
         hi TabStop      ctermbg=016
+        hi NBSP         ctermbg=094
+        hi NarrowNBSP   ctermbg=097
         hi Todo         ctermfg=174 ctermbg=NONE
 
         hi NixCode      ctermfg=148
