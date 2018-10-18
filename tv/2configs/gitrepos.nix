@@ -153,7 +153,7 @@ let {
     public = false;
     hooks = hooks // {
       post-receive = /* sh */ ''
-        (${hooks.post-receive or ""})
+        (${hooks.post-receive or ":"})
         ${cgit-clear-cache}/bin/cgit-clear-cache
       '';
     };
