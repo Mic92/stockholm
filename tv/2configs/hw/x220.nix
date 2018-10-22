@@ -3,6 +3,19 @@
 {
   imports = [
     ../smartd.nix
+    {
+      boot.extraModulePackages = [
+        config.boot.kernelPackages.acpi_call
+      ];
+
+      boot.kernelModules = [
+        "acpi_call"
+      ];
+
+      environment.systemPackages = [
+        pkgs.tpacpi-bat
+      ];
+    }
   ];
 
   boot.extraModulePackages = [
