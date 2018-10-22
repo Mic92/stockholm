@@ -5,6 +5,12 @@
     ../smartd.nix
   ];
 
+  boot.extraModulePackages = [
+    config.boot.kernelPackages.tp_smapi
+  ];
+
+  boot.kernelModules = [ "tp_smapi" ];
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
