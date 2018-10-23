@@ -5,7 +5,7 @@ with import <stockholm/lib>;
   services.urxvtd.enable = true;
 
   krebs.xresources.resources.urxvt = ''
-    URxvt*SaveLines: 1000000
+    URxvt.saveLines:            100000
     URxvt*scrollBar:            false
     URxvt*urgentOnBell:         true
     URxvt.perl-ext-common:      default,clipboard,url-select,keyboard-select
