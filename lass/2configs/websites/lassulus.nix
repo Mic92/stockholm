@@ -145,8 +145,9 @@ in {
     home = "/srv/http/lassul.us";
     useDefaultShell = true;
     createHome = true;
-    openssh.authorizedKeys.keys = [
-      config.krebs.users.lass.pubkey
+    openssh.authorizedKeys.keys = with config.krebs.users; [
+      lass.pubkey
+      lass-mors.pubkey
     ];
   };
 }

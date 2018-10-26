@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 with import <stockholm/lib>; #genid
 let
-  cfg = config.makefu.airdcpp;
+  cfg = config.krebs.airdcpp;
 
   out = {
-    options.makefu.airdcpp = api;
+    options.krebs.airdcpp = api;
     config = lib.mkIf cfg.enable imp;
   };
 
@@ -18,7 +18,7 @@ let
 
     user = mkOption {
       description = ''
-        user which will run udpt. if kept default a new user will be created
+        user which will run airdcpp. if kept default a new user will be created
       '';
       type = str;
       default = "airdcpp";
@@ -37,7 +37,54 @@ let
       type = str;
       default = "/var/lib/airdcpp";
     };
+    hubs = mkOption {
+        type = attrsOf (submodule ( { config, ... }: {
+          options = {
+            Nick = mkOption {
+              description = ''
+                Nick Name for hub
+              '';
+              type = str;
+              default = cfg.Nick;
+            };
+            Password = mkOption {
+              description = ''
+                Password to be used
+
+                WARNING: will be stored in plain text in /nix/store
+              '';
+              type = str;
+              default = "";
+              apply = lib.removeSuffix "\n";
+            };
+            Server = mkOption {
+              description = ''
+                URL to the hub (must be provided)
+              '';
+              type = str;
+            };
+            AutoConnect = mkOption {
+              description = ''
+                automatically connect to the hub
+              '';
+              type = bool;
+              default = false;
+            };
+          };
+        }));
+        description = "hubs which should be configured via Favorites.xml,
+        Options are only used if no initial Favorites.xml file is provided and none exists";
+        default = {};
+    };
+    initialFavoritesConfigFile = mkOption {
+      description = ''
+        path inital Favorites.xml configuration if none exists
+      '';
+      type = nullOr path;
+      default = null;
+    };
     dcpp = {
+      # entries in DCPlusPlus.xml
       Nick = mkOption {
         description = ''
           Nick Name for connection
@@ -69,6 +116,11 @@ let
         description = "Total Upload Speed in Mbp/s";
         type = str;
         default = "100";
+      };
+      DownloadDirectory = mkOption {
+        description = "Directory, where new files will be saved into";
+        type = str;
+        default = "${cfg.stateDir}/Download";
       };
       shares = mkOption {
         default = {};
@@ -117,6 +169,7 @@ let
             password = mkOption {
               description = "password of user";
               type = str;
+              apply = lib.removeSuffix "\n";
             };
             permissions = mkOption {
               description = "user permissions";
@@ -133,11 +186,6 @@ let
     genUsers = users: concatMapStringsSep "\n" (user: 
       ''<WebUser Username="${user.name}" Password="${user.password}" LastLogin="0" Permissions="${user.permissions}"/>'' )
       (mapAttrsToList (name: val: val // { inherit name; }) users);
-    genShares = shares: concatMapStringsSep "\n" (share:
-      ''<Directory Virtual="stockholm" Incoming="${
-          if share.incoming then "1" else "0"
-        }" LastRefreshTime="0">${share.path}</Directory>'' )
-      (mapAttrsToList (name: val: val // { inherit name; }) shares);
     webConfigFile = if (cfg.web.initialConfigFile == null) then builtins.trace "warning: airdcpp passwords are stored in plain text" pkgs.writeText "initial-config" ''
       <?xml version="1.0" encoding="utf-8" standalone="yes"?>
       <WebServer>
@@ -149,16 +197,34 @@ let
         </WebUsers>
       </WebServer>
       '' else cfg.web.initialConfigFile;
+    genHubs = hubs: concatMapStringsSep "\n" (hub:
+      ''<Hub Name="${hub.name}" Connect="${
+          if hub.AutoConnect then "1" else "0"
+        }" Description="" Password="${hub.Password}" Server="${hub.Server}" ChatUserSplit="0" UserListState="1" HubFrameOrder="" HubFrameWidths="" HubFrameVisible="" Group="" Bottom="0" Top="0" Right="0" Left="0" Nick="${hub.Nick}"/>'' )
+      (mapAttrsToList (name: val: val // { inherit name; }) hubs);
+    favoritesConfigFile = if (cfg.initialFavoritesConfigFile == null) then
+    builtins.trace "warning: airdcpp hub passwords are stored in plain text" pkgs.writeText "initial-config" ''
+        <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+        <Favorites>
+          <Hubs>
+            ${genHubs cfg.hubs}
+          </Hubs>
+        </Favorites>
+      '' else cfg.initialFavoritesConfigFile;
+    genShares = shares: concatMapStringsSep "\n" (share:
+      ''<Directory Virtual="${share.name}" Incoming="${
+          if share.incoming then "1" else "0"
+        }" LastRefreshTime="0">${share.path}</Directory>'' )
+      (mapAttrsToList (name: val: val // { inherit name; }) shares);
     dcppConfigFile = if (cfg.dcpp.initialConfigFile == null) then pkgs.writeText "initial-config" ''
     <?xml version="1.0" encoding="utf-8" standalone="yes"?>
     <DCPlusPlus>
       <Settings>
         <Nick type="string">${cfg.dcpp.Nick}</Nick>
-        <ConfigVersion type="string">${cfg.package.version}</ConfigVersion>
         <InPort type="int">${toString cfg.dcpp.InPort}</InPort>
         <UDPPort type="int">${toString cfg.dcpp.UDPPort}</UDPPort>
         <TLSPort type="int">${toString cfg.dcpp.TLSPort}</TLSPort>
-        <ConfigBuildNumber type="int">0</ConfigBuildNumber>
+         <DownloadDirectory type="string">${cfg.dcpp.DownloadDirectory}</DownloadDirectory>
         <AutoDetectIncomingConnection type="int">0</AutoDetectIncomingConnection>
         <NoIpOverride type="int">1</NoIpOverride>
         <WizardRunNew type="int">0</WizardRunNew>
@@ -187,6 +253,8 @@ let
           test -e $d || install -m700 -o${cfg.user} ${webConfigFile} $d
           d=${cfg.stateDir}/DCPlusPlus.xml
           test -e $d || install -m700 -o${cfg.user} ${dcppConfigFile} $d
+          d=${cfg.stateDir}/Favorites.xml
+          test -e $d || install -m700 -o${cfg.user} ${favoritesConfigFile} $d
         '';
         PermissionsStartOnly = true;
         ExecStart = "${cfg.package}/bin/airdcppd -c=${cfg.stateDir} -p=${cfg.stateDir}/airdcpp.pid";

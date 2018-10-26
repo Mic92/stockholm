@@ -130,10 +130,12 @@
     # Don't install feh into systemPackages
     # refs <nixpkgs/nixos/modules/services/x11/desktop-managers>
     desktopManager.session = lib.mkForce [];
+    displayManager.lightdm.enable = lib.mkForce false;
+    displayManager.job.execCmd = lib.mkForce "derp";
 
     enable = true;
-    display = 11;
-    tty = 11;
+    display = lib.mkForce 11;
+    tty = lib.mkForce 11;
 
     dpi = 144;
 

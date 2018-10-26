@@ -1,6 +1,10 @@
-{ config, pkgs, ... }:
 with import <stockholm/lib>;
-{
+{ config, pkgs, ... }: let
+  json = url: {
+    inherit url;
+    filter = "system:${pkgs.jq}/bin/jq .";
+  };
+in {
   krebs.urlwatch = {
     enable = true;
     mailto = config.krebs.users.tv.mail;
@@ -13,17 +17,8 @@ with import <stockholm/lib>;
 
       http://www.exim.org/
 
-      # ref src/nixpkgs/pkgs/tools/admin/sec/default.nix
-      {
-        url = https://api.github.com/repos/simple-evcorr/sec/tags;
-        filter = "system:${pkgs.jq}/bin/jq .";
-      }
-
       # ref src/nixpkgs/pkgs/tools/networking/urlwatch/default.nix
       https://thp.io/2008/urlwatch/
-
-      # 2014-12-20 ref src/nixpkgs/pkgs/tools/networking/tlsdate/default.nix
-      https://api.github.com/repos/ioerror/tlsdate/tags
 
       # 2015-02-18
       # ref ~/src/nixpkgs/pkgs/tools/text/qprint/default.nix
@@ -50,7 +45,13 @@ with import <stockholm/lib>;
       #http://hackage.haskell.org/package/web-page
 
       # ref <stockholm/krebs/3modules>, services.openssh.knownHosts.github*
-      https://api.github.com/meta
+      (json https://api.github.com/meta)
+
+      # 2014-12-20 ref src/nixpkgs/pkgs/tools/networking/tlsdate/default.nix
+      (json https://api.github.com/repos/ioerror/tlsdate/tags)
+
+      # ref src/nixpkgs/pkgs/tools/admin/sec/default.nix
+      (json https://api.github.com/repos/simple-evcorr/sec/tags)
 
       # <stockholm/tv/2configs/xserver/xserver.conf.nix>
       # is derived from `configFile` in:

@@ -29,6 +29,7 @@ in {
 
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME --argstr target PATH -A test)
   test = { target }: pkgs.krops.writeTest "${name}-test" {
+    force = true;
     inherit target;
     source = source { test = true; };
   };

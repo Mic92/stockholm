@@ -3,7 +3,6 @@
 with python3Packages; buildPythonPackage rec {
   name = "repo-sync-${version}";
   version = "0.2.7";
-  disabled = isPy26 || isPy27;
   propagatedBuildInputs = [
     docopt
     GitPython

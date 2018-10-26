@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, makeWrapper, which
 }:
 stdenv.mkDerivation rec {
   name = "airdcpp-webclient-${version}";
@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/{share,bin}
     cp -r *  $out/share
-    ln -s $out/share/airdcppd $out/bin/
+    makeWrapper $out/share/airdcppd $out/bin/airdcppd --prefix PATH ${which}/bin
   '';
+  nativeBuildInputs = [ makeWrapper ];
 
   meta = with stdenv.lib; {
     # to start it: airdcpp -p=<pid-file> -c=<config-store-path (must be writeable)> --configure

@@ -33,4 +33,16 @@ foldl' mergeAttrs {}
   '';
 
   gnupg = self.gnupg22;
+
+  pass = {
+    "18.03" =
+      self.callPackage ./compat/18.03/pass {
+        pass-otp = self.callPackage ./compat/18.03/pass-otp {};
+      };
+    "18.09" =
+      super.pass.withExtensions (ext: [
+        ext.pass-otp
+      ]);
+  }.${versions.majorMinor nixpkgsVersion};
+
 }

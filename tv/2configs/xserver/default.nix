@@ -41,9 +41,12 @@ in {
     # refs <nixpkgs/nixos/modules/services/x11/desktop-managers>
     desktopManager.session = mkForce [];
 
+    displayManager.lightdm.enable = mkForce false;
+    displayManager.job.execCmd = mkForce "derp";
+
     enable = true;
-    display = 11;
-    tty = 11;
+    display = mkForce 11;
+    tty = mkForce 11;
 
     synaptics = {
       enable = true;
@@ -55,7 +58,7 @@ in {
   systemd.services.display-manager.enable = false;
 
   systemd.services.xmonad = {
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "graphical.target" ];
     requires = [ "xserver.service" ];
     environment = {
       DISPLAY = ":${toString config.services.xserver.display}";
@@ -101,21 +104,20 @@ in {
 
   systemd.services.xserver = {
     after = [
-      "systemd-udev-settle.service"
-      "local-fs.target"
       "acpid.service"
+      "local-fs.target"
+      "systemd-udev-settle.service"
     ];
-    reloadIfChanged = true;
+    wants = [
+      "systemd-udev-settle.service"
+    ];
+    restartIfChanged = false;
     environment = {
-      XKB_BINDIR = "${pkgs.xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
-      XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
-      LD_LIBRARY_PATH = concatStringsSep ":" (
-        [ "${pkgs.xorg.libX11}/lib" "${pkgs.xorg.libXext}/lib" ]
+      LD_LIBRARY_PATH = concatStringsSep ":" ([ "/run/opengl-driver/lib" ]
         ++ concatLists (catAttrs "libPath" config.services.xserver.drivers));
     };
     serviceConfig = {
       SyslogIdentifier = "xserver";
-      ExecReload = "${pkgs.coreutils}/bin/echo NOP";
       ExecStart = toString [
         "${pkgs.xorg.xorgserver}/bin/X"
         ":${toString config.services.xserver.display}"
@@ -123,17 +125,16 @@ in {
         "-config ${import ./xserver.conf.nix args}"
         "-logfile /dev/null -logverbose 0 -verbose 3"
         "-nolisten tcp"
-        "-xkbdir ${pkgs.xkeyboard_config}/etc/X11/xkb"
+        "-xkbdir ${config.services.xserver.xkbDir}"
       ];
     };
   };
 
   systemd.services.urxvtd = {
-    wantedBy = [ "multi-user.target" ];
-    reloadIfChanged = true;
+    wantedBy = [ "graphical.target" ];
+    restartIfChanged = false;
     serviceConfig = {
       SyslogIdentifier = "urxvtd";
-      ExecReload = "${pkgs.coreutils}/bin/echo NOP";
       ExecStart = "${pkgs.rxvt_unicode}/bin/urxvtd";
       Restart = "always";
       RestartSec = "2s";

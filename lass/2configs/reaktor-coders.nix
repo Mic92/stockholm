@@ -63,24 +63,6 @@ with import <stockholm/lib>;
             -e "@kind $1"
         '';
       })
-      (buildSimpleReaktorPlugin "random-unicorn-porn" {
-        pattern = "^!rup$$";
-        script = pkgs.writePython2 "rup" {} ''
-          t1 = """
-                              _.
-                           ;=',_ ()
-                 8===D~~  S" .--`||
-                         sS  \__ ||
-                      __.' ( \-->||
-                   _=/    _./-\/ ||
-          8===D~~ ((\( /-'   -'l ||
-                   ) |/ \\      (_))
-                      \\  \\
-                       '~ '~
-          """
-          print(t1)
-        '';
-      })
       (buildSimpleReaktorPlugin "ping" {
         pattern = "^!ping (?P<args>.*)$$";
         script = pkgs.writeDash "ping" ''

@@ -2,20 +2,13 @@
 
 with import <stockholm/lib>;
 let
-  unstable_nixpkgs = import (pkgs.fetchFromGitHub {
-    owner = "NixOS";
-    repo = "nixpkgs";
-    rev = "a8c71037e041725d40fbf2f3047347b6833b1703";
-    sha256 = "1z4cchcw7qgjhy0x6mnz7iqvpswc2nfjpdynxc54zpm66khfrjqw";
-  }) {};
   out = {
     environment.systemPackages = [
       (hiPrio vim)
-      pkgs.python35Packages.flake8
       (pkgs.writeDashBin "govet" ''
         go vet "$@"
       '')
-      (hiPrio (unstable_nixpkgs.python3.withPackages (ps: [
+      (hiPrio (pkgs.python3.withPackages (ps: [
         ps.python-language-server
         ps.pyls-isort
       ])))
@@ -70,6 +63,8 @@ let
     au Syntax * syn match Garbage containedin=ALL /\s\+$/
             \ | syn match TabStop containedin=ALL /\t\+/
             \ | syn keyword Todo containedin=ALL TODO
+            \ | syn match NBSP '\%xa0'
+            \ | syn match NarrowNBSP '\%u202F'
 
     au BufRead,BufNewFile *.hs so ${hs.vim}
 
@@ -135,7 +130,7 @@ let
     pkgs.vimPlugins.undotree
     pkgs.vimPlugins.vim-go
     pkgs.vimPlugins.fzf-vim
-    unstable_nixpkgs.vimPlugins.LanguageClient-neovim
+    pkgs.vimPlugins.LanguageClient-neovim
     (pkgs.vimUtils.buildVimPlugin {
       name = "file-line-1.0";
       src = pkgs.fetchFromGitHub {
@@ -172,6 +167,8 @@ let
 
         hi Garbage      ctermbg=088
         hi TabStop      ctermbg=016
+        hi NBSP         ctermbg=094
+        hi NarrowNBSP   ctermbg=097
         hi Todo         ctermfg=174 ctermbg=NONE
 
         hi NixCode      ctermfg=148

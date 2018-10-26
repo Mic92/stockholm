@@ -77,6 +77,7 @@ with import <stockholm/lib>;
       environment.systemPackages = [
         pkgs.ovh-zone
         pkgs.bank
+        pkgs.adb-sync
       ];
     }
     {
@@ -143,7 +144,6 @@ with import <stockholm/lib>;
     OnCalendar = "00:37";
   };
 
-  nix.package = pkgs.nixUnstable;
   programs.adb.enable = true;
   users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
   virtualisation.docker.enable = true;

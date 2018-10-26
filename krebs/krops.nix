@@ -1,9 +1,6 @@
 { name }: rec {
 
-  krops = builtins.fetchGit {
-    url = https://cgit.krebsco.de/krops/;
-    rev = "c46166d407c7d246112f13346621a3fbdb25889e";
-  };
+  krops = ../submodules/krops;
 
   lib = import "${krops}/lib";
 
@@ -57,6 +54,7 @@
 
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME --argstr target PATH -A test)
   test = { target }: pkgs.krops.writeTest "${name}-test" {
+    force = true;
     inherit target;
     source = source { test = true; };
   };

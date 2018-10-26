@@ -66,6 +66,12 @@ in {
     ])
   ];
 
+  services.mysql.ensureDatabases = [ "ubikmedia_de" "o_ubikmedia_de" ];
+  services.mysql.ensureUsers = [
+    { ensurePermissions = { "ubikmedia_de.*" = "ALL"; }; name = "nginx"; }
+    { ensurePermissions = { "o_ubikmedia_de.*" = "ALL"; }; name = "nginx"; }
+  ];
+
   services.nginx.virtualHosts."ubikmedia.de".locations."/piwika".extraConfig = ''
     try_files $uri $uri/ /index.php?$args;
   '';

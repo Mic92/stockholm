@@ -22,13 +22,14 @@
 
 in {
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME -A deploy)
-  deploy = pkgs.krops.writeDeploy "${name}-deploy" {
+  deploy = { target ? "root@${name}/var/src" }: pkgs.krops.writeDeploy "${name}-deploy" {
     source = source { test = false; };
-    target = "root@${name}/var/src";
+    inherit target;
   };
 
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME --argstr target PATH -A test)
   test = { target }: pkgs.krops.writeTest "${name}-test" {
+    force = true;
     inherit target;
     source = source { test = true; };
   };
