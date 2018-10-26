@@ -32,11 +32,16 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.shellAliases = {
-    n = "nix-shell";
-    stocki = pkgs.writeDash "deploy" ''
-      cd ~/stockholm
-      exec nix-shell -I stockholm="$PWD" --run 'deploy  --system="brauerei"'
-    '';
+    # git aliases
+    ga = "git add";
+    gch = "git checkout";
+    gco = "git commit";
+    gp = "git push";
+    gr = "git rebase";
+    gs = "git status";
+    # nix aliases
+    ns = "nix-shell";
+    # krops
     deploy = pkgs.writeDash "deploy" ''
       set -eu
       export SYSTEM="$1"
