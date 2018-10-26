@@ -76,6 +76,7 @@ let
     epkgs.melpaStablePackages.magit
     epkgs.melpaPackages.nix-mode
     epkgs.melpaPackages.go-mode
+    epkgs.melpaPackages.haskell-mode
     epkgs.melpaPackages.google-this
     epkgs.melpaPackages.monokai-alt-theme
   ]);
