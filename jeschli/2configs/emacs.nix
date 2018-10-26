@@ -46,6 +46,8 @@ let
     (global-set-key "\C-cl" 'org-store-link)
     (global-set-key "\C-ca" 'org-agenda)
     (global-set-key "\C-cb" 'org-iswitchb)
+    (global-set-key "\C-c L" 'org-insert-link-global)
+    (global-set-key "\C-c o" 'org-open-at-point-global)
     (setq org-link-frame-setup '((file . find-file))) ; open link in same frame.
     (if (boundp 'org-user-agenda-files)
       (setq org-agenda-files org-user-agenda-files)
