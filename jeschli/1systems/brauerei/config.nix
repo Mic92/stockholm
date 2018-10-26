@@ -50,15 +50,17 @@
   };
 
   environment.systemPackages = with pkgs; [
-  # system helper
+    # system helper
+    acpi
     ag
-    curl
     copyq
+    curl
     dmenu
     git
     i3lock
     keepass
     networkmanagerapplet
+    pavucontrol
     rsync
     terminator
     tmux
@@ -66,16 +68,17 @@
   # editors
     emacs
   # internet
-    thunderbird
     chromium
+    firefox
     google-chrome
+    thunderbird
   # programming languages
     elixir
     elmPackages.elm
     exercism
-    go
     gcc
     ghc
+    go
     python35
     python35Packages.pip
     (vagrant.override {
@@ -89,23 +92,24 @@
         });
       };
     })
+  # dev tools
+    gnumake
+    jetbrains.goland
+    jetbrains.pycharm-professional
+    jetbrains.webstorm
+  # document viewer
+    evince
+    zathura
   # go tools
     golint
     gotools
   # rust
     cargo
     rustc
-  # dev tools
-    gnumake
-    jetbrains.pycharm-professional
-    jetbrains.webstorm
-    jetbrains.goland
-  # document viewer
-    evince
-    zathura
+  # orga tools
+    taskwarrior
   # xorg
     xorg.xbacklight
-    taskwarrior
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
