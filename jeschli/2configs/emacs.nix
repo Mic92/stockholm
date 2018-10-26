@@ -25,6 +25,10 @@ let
     ;; (require 'evil-org-agenda)
     ;; (evil-org-agenda-set-keys)
   '';
+  ido = ''
+    (require 'ido)
+    (ido-mode t)
+  '';
   windowCosmetics = ''
     (menu-bar-mode -1)
     (tool-bar-mode -1)                  ; Disable the button bar atop screen
@@ -58,6 +62,7 @@ let
   '';
   dotEmacs = pkgs.writeText "dot-emacs" ''
     ${evilMode}
+    ${ido}
     ${packageRepos}
     ${orgMode}
     ${recentFiles}
