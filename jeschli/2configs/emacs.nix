@@ -55,7 +55,7 @@ let
     )
   '';
   theme = ''
-    (load-theme 'monokai-alt)
+    (load-theme 'monokai-alt t)
   '';
   recentFiles = ''
     (recentf-mode 1)
