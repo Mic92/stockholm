@@ -123,6 +123,8 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
+  virtualisation.docker.enable = true;
+
   services.xserver = {
 
     # Don't install feh into systemPackages
