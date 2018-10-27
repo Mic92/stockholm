@@ -50,16 +50,36 @@ let
       cgit.desc = "take a description of your disk layout and produce a format script";
       cgit.section = "software";
     };
+    go = {
+      cgit.desc = "url shortener";
+      cgit.section = "software";
+    };
     krebspage = {
       cgit.desc = "homepage of krebs";
       cgit.section = "configuration";
+    };
+    krops = {
+      cgit.desc = "krebs deployment";
+      cgit.section = "software";
     };
     news = {
       cgit.desc = "take a rss feed and a timeout and print it to stdout";
       cgit.section = "software";
     };
+    newsbot-js = {
+      cgit.desc = "print rss feeds to irc channels";
+      cgit.section = "software";
+    };
+    nix-user-chroot = {
+      cgit.desc = "Fork of nix-user-chroot by lethalman";
+      cgit.section = "software";
+    };
     nix-writers = {
       cgit.desc = "high level writers for nix";
+      cgit.section = "software";
+    };
+    nixos-generators = {
+      cgit.desc = "custom image builders";
       cgit.section = "software";
     };
     nixpkgs = {
@@ -80,14 +100,6 @@ let
     the_playlist = {
       cgit.desc = "Good Music collection + tools";
       cgit.section  = "art";
-    };
-    nix-user-chroot = {
-      cgit.desc = "Fork of nix-user-chroot by lethalman";
-      cgit.section = "software";
-    };
-    krops = {
-      cgit.desc = "krebs deployment";
-      cgit.section = "software";
     };
     xmonad-stockholm = {
       cgit.desc = "krebs xmonad modules";

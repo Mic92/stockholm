@@ -222,7 +222,7 @@ myKeys conf = Map.fromList $
 pagerConfig :: PagerConfig
 pagerConfig = def
     { pc_font           = myFont
-    , pc_cellwidth      = 256
+    , pc_cellwidth      = 100
     --, pc_cellheight     = 36 -- TODO automatically keep screen aspect
     --, pc_borderwidth    = 1
     --, pc_matchcolor     = "#f0b000"

@@ -1,8 +1,5 @@
 { config ? config, name, target ? name }: let
-  krops = builtins.fetchGit {
-    url = https://cgit.krebsco.de/krops/;
-    rev = "4e466eaf05861b47365c5ef46a31a188b70f3615";
-  };
+  krops = ../submodules/krops;
   nixpkgs-src = lib.importJSON ./nixpkgs.json;
 
   lib = import "${krops}/lib";
@@ -20,12 +17,11 @@
     nms = false;
     arm6 = false;
     clever_kexec = false;
+    home-manager = false;
   } // import (./. + "/1systems/${name}/source.nix");
   source = { test }: lib.evalSource [
     {
-      # nixos-18.03 @ 2018-08-06
-      # + do_sqlite3 ruby:   55a952be5b5
-      # + exfat-nofuse bump: ee6a5296a35
+      # nixos-18.09 @ 2018-09-18
       # + uhub/sqlite: 5dd7610401747
       nixpkgs = if test || host-src.full then {
         git.ref = nixpkgs-src.rev;
@@ -70,6 +66,12 @@
         ref = "30fdd53";
       };
     })
+    (lib.mkIf ( host-src.home-manager ) {
+      home-manager.git = {
+        url = https://github.com/rycee/home-manager;
+        ref = "6eea2a4";
+      };
+    })
   ];
 
 in {
@@ -81,6 +83,7 @@ in {
 
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME --argstr target PATH -A test)
   test = { target ? target }: pkgs.krops.writeTest "${name}-test" {
+    force = true;
     inherit target;
     source = source { test = true; };
   };

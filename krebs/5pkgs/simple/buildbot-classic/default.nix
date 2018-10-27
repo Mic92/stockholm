@@ -2,7 +2,7 @@
 
 python2Packages.buildPythonApplication rec {
   name = "buildbot-classic-${version}";
-  version = "0.8.17";
+  version = "0.8.18";
   namePrefix = "";
   patches = [];
 
@@ -10,14 +10,14 @@ python2Packages.buildPythonApplication rec {
     owner = "krebs";
     repo = "buildbot-classic";
     rev = version;
-    sha256 = "0yn0n37rs2bhz9q0simnvyzz5sfrpqhbdm6pdj6qk7sab4y6xbq8";
+    sha256 = "0b4y3n9zd2gdy8xwk1vpvs4n9fbg72vi8mx4ydgijwngcmdqkjmq";
   };
   postUnpack = "sourceRoot=\${sourceRoot}/master";
 
   propagatedBuildInputs = [
     python2Packages.jinja2
     python2Packages.twisted
-    python2Packages.dateutil_1_5
+    python2Packages.dateutil
     python2Packages.sqlalchemy_migrate
     python2Packages.pysqlite
     pkgs.coreutils
