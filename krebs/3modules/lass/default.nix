@@ -338,6 +338,35 @@ with import <stockholm/lib>;
         };
       };
     };
+    kruck = {
+      monitoring = false;
+      ci = false;
+      external = true;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.29.201";
+          ip6.addr = "42:4234:6a6d:600::1";
+          aliases = [
+            "kruck.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAxcui2sirT5YY9HrSauj9nSF3AxUnfd2CCEGyzmzbi5+qw8T9jdNh
+            QcIG3s+eC3uEy6leL/eeR4NjVtQRt8CDmhGul95Vs3I1jx9gdvYR+HOatPgK0YQA
+            EFwk0jv8Z8tOc87X1qwA00Gb+25+kAzsf+8+4HQuh/szSGje3RBmBFkUyNHh8R0U
+            uzs8NSTRdN+edvYtzjnYcE1sq59HFBPkVcJNp5I3qYTp6m9SxGHMvsq6vRpNnjq/
+            /RZVBhnPDBlgxia/aVfVQKeEOHZV3svLvsJzGDrUWsJCEvF0YwW4bvohY19myTNR
+            9lXo/VFx86qAkY09il2OloE7iu5cA2RV+FWwLeajE9vIDA06AD7nECVgthNoZd1s
+            qsDfuu3WqlpyBmr6XhRkYOFFE4xVLrZ0vItGYlgR2UPp9TjHrzfsedoyJoJAbhMH
+            gDlFgiHlAy1fhG1sCX5883XmSjWn0eJwmZ2O9sZNBP5dxfGUXg/x8NWfQj7E1lqj
+            jQ59UC6yiz7bFtObKvpdn1D4tPbqBvndZzn19U/3wKo+cCBRjtLmUD7HQHC65dCs
+            fAiCFvUTVMM3SNDvYChm0U/KGjZZFwQ+cCLj1JNVPet2C+CJ0qI2muXOnCuv/0o5
+            TBZrrHMpj6Th8AiOgeMVuxzjX1FsmAThWj9Qp/jQu6O0qvnkUNaU7I8CAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     turingmachine = {
       monitoring = false;
       ci = false;
