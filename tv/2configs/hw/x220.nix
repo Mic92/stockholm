@@ -1,9 +1,27 @@
-{ pkgs, ... }:
-
+{ config, pkgs, ... }:
 {
   imports = [
     ../smartd.nix
+    {
+      boot.extraModulePackages = [
+        config.boot.kernelPackages.acpi_call
+      ];
+
+      boot.kernelModules = [
+        "acpi_call"
+      ];
+
+      environment.systemPackages = [
+        pkgs.tpacpi-bat
+      ];
+    }
   ];
+
+  boot.extraModulePackages = [
+    config.boot.kernelPackages.tp_smapi
+  ];
+
+  boot.kernelModules = [ "tp_smapi" ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
