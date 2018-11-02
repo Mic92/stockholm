@@ -31,10 +31,15 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.shellAliases = {
+    # emacs aliases
+    ed = "emacsclient";
+    edc = "emacsclient --create-frame";
     # git aliases
     ga = "git add";
     gch = "git checkout";
     gco = "git commit";
+    gf = "git fetch";
+    gm = "git merge";
     gp = "git push";
     gr = "git rebase";
     gs = "git status";
