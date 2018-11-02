@@ -130,9 +130,6 @@
   virtualisation.docker.enable = true;
 
   services.xserver = {
-
-    # Don't install feh into systemPackages
-    # refs <nixpkgs/nixos/modules/services/x11/desktop-managers>
     desktopManager.session = lib.mkForce [];
     displayManager.lightdm.enable = lib.mkForce false;
     displayManager.job.execCmd = lib.mkForce "derp";
@@ -143,7 +140,6 @@
 
     dpi = 144;
 
-#    videoDrivers = [ "nvidia" ];
     synaptics = {
       enable = true;
       twoFingerScroll = true;
