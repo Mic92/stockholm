@@ -25,10 +25,22 @@ let
     ;; (require 'evil-org-agenda)
     ;; (evil-org-agenda-set-keys)
   '';
+
+  goMode = ''
+    (add-to-list 'exec-path "~/go/bin")
+    (add-hook 'go-mode-hook
+    (lambda ()
+      (setq-default)
+      (setq tab-width 2)
+      (setq standard-indent 2)
+      (setq indent-tabs-mode nil)))
+  '';
+
   ido = ''
     (require 'ido)
     (ido-mode t)
   '';
+
   windowCosmetics = ''
     (menu-bar-mode -1)
     (tool-bar-mode -1)                  ; Disable the button bar atop screen
@@ -54,16 +66,20 @@ let
       (setq org-agenda-files (quote ("~/projects/notes")))
     )
   '';
+
   theme = ''
     (load-theme 'monokai-alt t)
   '';
+
   recentFiles = ''
     (recentf-mode 1)
     (setq recentf-max-menu-items 25)
     (global-set-key "\C-x\ \C-r" 'recentf-open-files)
   '';
+
   dotEmacs = pkgs.writeText "dot-emacs" ''
     ${evilMode}
+    ${goMode}
     ${ido}
     ${packageRepos}
     ${orgMode}
