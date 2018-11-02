@@ -15,6 +15,7 @@ let
       (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
     (package-initialize)
   '';
+
   evilMode = ''
     ;; Evil Mode
     (require 'evil)
@@ -53,6 +54,7 @@ let
     (setq visible-bell nil)             ; Disable annoying visual bell graphic
     (setq ring-bell-function 'ignore)   ; Disable super annoying audio bell
   '';
+
   orgMode = ''
     (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
     (global-set-key "\C-cl" 'org-store-link)
