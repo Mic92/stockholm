@@ -89,7 +89,9 @@ let
     ${theme}
     ${windowCosmetics}
   '';
+
   emacsWithCustomPackages = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: [
+    epkgs.melpaPackages.ag
     epkgs.melpaPackages.evil
     epkgs.melpaStablePackages.magit
     epkgs.melpaPackages.nix-mode
@@ -97,12 +99,23 @@ let
     epkgs.melpaPackages.haskell-mode
     epkgs.melpaPackages.google-this
     epkgs.melpaPackages.monokai-alt-theme
+    epkgs.melpaPackages.rust-mode
   ]);
+
   myEmacs = pkgs.writeDashBin "my-emacs" ''
     exec ${emacsWithCustomPackages}/bin/emacs -q -l ${dotEmacs} "$@"
   '';
+
+  myEmacsWithDaemon = pkgs.writeDashBin "my-emacs-daemon" ''
+    exec ${emacsWithCustomPackages}/bin/emacs -q -l ${dotEmacs} --daemon
+  '';
+
+  myEmacsClient = pkgs.writeDashBin "meclient" ''
+    exec ${emacsWithCustomPackages}/bin/emacsclient --create-frame
+  '';
+
 in {
   environment.systemPackages = [
-    myEmacs
+    myEmacs myEmacsWithDaemon myEmacsClient
   ];
 }
