@@ -74,7 +74,6 @@ in {
     nmap
     pavucontrol
     powertop
-    push
     rxvt_unicode_with-plugins
     sxiv
     taskwarrior

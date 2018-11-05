@@ -8,9 +8,9 @@
   source = { test }: lib.evalSource [
     krebs-source
     {
-      nixos-config.symlink = "stockholm/lass/1systems/${name}/physical.nix";
+      nixos-config.symlink = "stockholm/nin/1systems/${name}/config.nix";
       secrets = if test then {
-        file = toString ./2configs/tests/dummy-secrets;
+        file = toString ./0tests/dummysecrets;
       } else {
         pass = {
           dir = "${lib.getEnv "HOME"}/.password-store";
@@ -22,9 +22,9 @@
 
 in {
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME -A deploy)
-  deploy = { target ? "root@${name}/var/src" }: pkgs.krops.writeDeploy "${name}-deploy" {
+  deploy = pkgs.krops.writeDeploy "${name}-deploy" {
     source = source { test = false; };
-    inherit target;
+    target = "root@${name}/var/src";
   };
 
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME --argstr target PATH -A test)

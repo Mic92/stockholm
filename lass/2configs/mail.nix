@@ -210,6 +210,7 @@ in {
   environment.systemPackages = [
     msmtp
     mutt
+    pkgs.notmuch
     pkgs.much
     tag-new-mails
     tag-old-mails

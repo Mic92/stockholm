@@ -16,6 +16,7 @@
 
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME --argstr target PATH -A test)
   test = { target }: pkgs.krops.writeTest "tv-krops-${name}-ci" {
+    force = true;
     inherit source target;
   };
 
