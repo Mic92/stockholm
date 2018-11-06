@@ -4,6 +4,7 @@
 mkDerivation rec {
   pname = "xmonad-stockholm";
   version = "1.2.0";
+#  src = /home/jeschli/projects/haskell/xmonad-stockholm;
   src = fetchgit {
     url = http://cgit.ni.krebsco.de/xmonad-stockholm;
     rev = "refs/tags/v${version}";
