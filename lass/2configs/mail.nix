@@ -51,7 +51,7 @@ let
     gmail = [ "to:gmail@lassul.us" "to:lassulus@gmail.com" "lassulus@googlemail.com" ];
     kaosstuff = [ "to:gearbest@lassul.us" "to:banggood@lassul.us" "to:tomtop@lassul.us" ];
     lugs = [ "to:lugs@lug-s.org" ];
-    nix-devel = [ "to:nix-devel@googlegroups.com" ];
+    nix = [ "to:nix-devel@googlegroups.com" "to:nix@lassul.us" ];
     patreon = [ "to:patreon@lassul.us" ];
     paypal = [ "to:paypal@lassul.us" ];
     ptl = [ "to:ptl@posttenebraslab.ch" ];
