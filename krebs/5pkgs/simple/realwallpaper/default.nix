@@ -5,8 +5,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = https://github.com/Lassulus/realwallpaper;
-    rev = "e0563289c2ab592b669ce4549fc40130246e9d79";
-    sha256 = "1zgk8ips2d686216h203w62wrw7zy9z0lrndx9f8z6f1vpvjcmqc";
+    rev = "847faebc9b7e87e4bea078e3a2304ec00b4cdfc0";
+    sha256 = "10zihkwj9vpshlxw2jk67zbsy8g4i8b1y4jzna9fdcsgn7s12jrr";
   };
 
   phases = [
