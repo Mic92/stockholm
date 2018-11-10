@@ -36,10 +36,10 @@ with import <stockholm/lib>;
       # TODO write function for proxy_pass (ssl/nonssl)
 
       krebs.iptables.tables.filter.FORWARD.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d 192.168.122.92"; target = "ACCEPT"; }
+        { v6 = false; precedence = 1000; predicate = "-d 192.168.122.179"; target = "ACCEPT"; }
       ];
       krebs.iptables.tables.nat.PREROUTING.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d 46.4.114.243"; target = "DNAT --to-destination 192.168.122.92"; }
+        { v6 = false; precedence = 1000; predicate = "-d 46.4.114.243"; target = "DNAT --to-destination 192.168.122.179"; }
       ];
     }
     {
@@ -229,7 +229,7 @@ with import <stockholm/lib>;
         { predicate = "-p tcp --dport 53589"; target = "ACCEPT"; }
       ];
     }
-    <stockholm/lass/2configs/go.nix>
+    #<stockholm/lass/2configs/go.nix>
     {
       environment.systemPackages = [ pkgs.cryptsetup ];
       systemd.services."container@red".reloadIfChanged = mkForce false;
@@ -258,31 +258,31 @@ with import <stockholm/lib>;
         };
       };
     }
-    {
-      imports = [ <stockholm/lass/2configs/backup.nix> ];
-      lass.restic = genAttrs [
-        "daedalus"
-        "icarus"
-        "littleT"
-        "mors"
-        "shodan"
-        "skynet"
-      ] (dest: {
-        dirs = [
-          "/home/chat/.weechat"
-          "/bku/sql_dumps"
-        ];
-        passwordFile = (toString <secrets>) + "/restic/${dest}";
-        repo = "sftp:backup@${dest}.r:/backups/prism";
-        extraArguments = [
-          "sftp.command='ssh backup@${dest}.r -i ${config.krebs.build.host.ssh.privkey.path} -s sftp'"
-        ];
-        timerConfig = {
-          OnCalendar = "00:05";
-          RandomizedDelaySec = "5h";
-        };
-      });
-    }
+    #{
+    #  imports = [ <stockholm/lass/2configs/backup.nix> ];
+    #  lass.restic = genAttrs [
+    #    "daedalus"
+    #    "icarus"
+    #    "littleT"
+    #    "mors"
+    #    "shodan"
+    #    "skynet"
+    #  ] (dest: {
+    #    dirs = [
+    #      "/home/chat/.weechat"
+    #      "/bku/sql_dumps"
+    #    ];
+    #    passwordFile = (toString <secrets>) + "/restic/${dest}";
+    #    repo = "sftp:backup@${dest}.r:/backups/prism";
+    #    extraArguments = [
+    #      "sftp.command='ssh backup@${dest}.r -i ${config.krebs.build.host.ssh.privkey.path} -s sftp'"
+    #    ];
+    #    timerConfig = {
+    #      OnCalendar = "00:05";
+    #      RandomizedDelaySec = "5h";
+    #    };
+    #  });
+    #}
     {
       users.users.download.openssh.authorizedKeys.keys = [
         "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDB0d0JA20Vqn7I4lCte6Ne2EOmLZyMJyS9yIKJYXNLjbLwkQ4AYoQKantPBkTxR75M09E7d3j5heuWnCjWH45TrfQfe1EOSSC3ppCI6C6aIVlaNs+KhAYZS0m2Y8WkKn+TT5JLEa8yybYVN/RlZPOilpj/1QgjU6CQK+eJ1k/kK+QFXcwN82GDVh5kbTVcKUNp2tiyxFA+z9LY0xFDg/JHif2ROpjJVLQBJ+YPuOXZN5LDnVcuyLWKThjxy5srQ8iDjoxBg7dwLHjby5Mv41K4W61Gq6xM53gDEgfXk4cQhJnmx7jA/pUnsn2ZQDeww3hcc7vRf8soogXXz2KC9maiq0M/svaATsa9Ul4hrKnqPZP9Q8ScSEAUX+VI+x54iWrnW0p/yqBiRAzwsczdPzaQroUFTBxrq8R/n5TFdSHRMX7fYNOeVMjhfNca/gtfw9dYBVquCvuqUuFiRc0I7yK44rrMjjVQRcAbw6F8O7+04qWCmaJ8MPlmApwu2c05VMv9hiJo5p6PnzterRSLCqF6rIdhSnuOwrUIt1s/V+EEZXHCwSaNLaQJnYL0H9YjaIuGz4c8kVzxw4c0B6nl+hqW5y5/B2cuHiumnlRIDKOIzlv8ufhh21iN7QpIsPizahPezGoT1XqvzeXfH4qryo8O4yTN/PWoA+f7o9POU7L6hQ== lhebendanz@nixos"
@@ -348,7 +348,7 @@ with import <stockholm/lib>;
     }
   ];
 
-  krebs.build.host = config.krebs.hosts.prism;
+  krebs.build.host = config.krebs.hosts.archprism;
   services.earlyoom = {
     enable = true;
     freeMemThreshold = 5;
