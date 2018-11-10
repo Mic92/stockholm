@@ -15,9 +15,9 @@ with import <stockholm/lib>;
       cores = 4;
       extraZones = {
         "krebsco.de" = ''
-          prism     IN A ${nets.internet.ip4.addr}
-          paste     IN A ${nets.internet.ip4.addr}
           cache     IN A ${nets.internet.ip4.addr}
+          paste     IN A ${nets.internet.ip4.addr}
+          prism     IN A ${nets.internet.ip4.addr}
         '';
         "lassul.us" = ''
           $TTL 3600
@@ -28,14 +28,14 @@ with import <stockholm/lib>;
                               60 IN TXT    v=spf1 mx a:lassul.us -all
                               60 IN TXT    ( "v=DKIM1; k=rsa; t=s; s=*; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB" )
           default._domainkey  60 IN TXT    "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB"
+          cache               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           cgit                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           go                  60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           io                  60 IN NS     ions.lassul.us.
           ions                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-          paste               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           lol                 60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          paste               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           radio               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-          cache               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
         '';
       };
       nets = rec {
