@@ -57,13 +57,6 @@ with import <stockholm/lib>;
           config.krebs.users.makefu.pubkey
         ];
       };
-      users.users.nin = {
-        uid = genid "nin";
-        isNormalUser = true;
-        openssh.authorizedKeys.keys = [
-          config.krebs.users.nin.pubkey
-        ];
-      };
       users.extraUsers.dritter = {
         uid = genid "dritter";
         isNormalUser = true;
@@ -119,7 +112,6 @@ with import <stockholm/lib>;
           services.openssh.enable = true;
           users.users.root.openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
-            config.krebs.users.nin.pubkey
           ];
         };
         autoStart = true;
@@ -349,8 +341,6 @@ with import <stockholm/lib>;
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
-  # workaround because grub store paths are broken
-  boot.copyKernels = true;
   services.earlyoom = {
     enable = true;
     freeMemThreshold = 5;

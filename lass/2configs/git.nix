@@ -21,6 +21,10 @@ let
     krebs.iptables.tables.filter.INPUT.rules = [
       { predicate = "-i retiolum -p tcp --dport 80"; target = "ACCEPT"; }
     ];
+
+    system.activationScripts.spool-chmod = ''
+      ${pkgs.coreutils}/bin/chmod +x /var/spool
+    '';
   };
 
   cgit-clear-cache = pkgs.cgit-clear-cache.override {

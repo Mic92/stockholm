@@ -5,7 +5,7 @@
     6667 6669
   ];
 
-  services.charybdis = {
+  krebs.charybdis = {
     enable = true;
     motd = ''
       hello

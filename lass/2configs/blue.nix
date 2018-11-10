@@ -15,6 +15,7 @@ with (import <stockholm/lib>);
     dic
     nmap
     git-preview
+    l-gen-secrets
   ];
 
   services.tor.enable = true;

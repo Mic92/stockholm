@@ -19,5 +19,9 @@ with import <stockholm/lib>;
       "slash16.net"
     ];
   };
+
+  system.activationScripts.user-shadow = ''
+    ${pkgs.coreutils}/bin/chmod +x /home/ciko
+  '';
 }
 
