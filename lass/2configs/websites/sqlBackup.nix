@@ -11,7 +11,6 @@
     enable = true;
     dataDir = "/var/mysql";
     package = pkgs.mariadb;
-    rootPassword = config.krebs.secret.files.mysql_rootPassword.path;
   };
 
   systemd.services.mysql = {
