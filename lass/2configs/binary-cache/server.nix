@@ -20,7 +20,7 @@
   services.nginx = {
     enable = true;
     virtualHosts.nix-serve = {
-      serverAliases = [ "cache.prism.r" ];
+      serverAliases = [ "cache.prism.r" "cache.krebsco.de" "cache.lassul.us" ];
       locations."/".extraConfig = ''
         proxy_pass http://localhost:${toString config.services.nix-serve.port};
       '';

@@ -201,6 +201,7 @@ let
         "cfp@eloop.org" = eloop-ml;
         "kontakt@eloop.org" = eloop-ml;
         "root@eloop.org" = eloop-ml;
+        "youtube@eloop.org" = eloop-ml;
         "eloop2016@krebsco.de" = eloop-ml;
         "eloop2017@krebsco.de" = eloop-ml;
         "postmaster@krebsco.de" = spam-ml; # RFC 822

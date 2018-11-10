@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   hostname = config.krebs.build.host.name;
@@ -9,6 +9,9 @@ let
 in {
   krebs.realwallpaper.enable = true;
 
+  system.activationScripts.user-shadow = ''
+    ${pkgs.coreutils}/bin/chmod +x /var/realwallpaper
+  '';
   services.nginx.virtualHosts.wallpaper = {
     extraConfig = ''
       if ( $server_addr = "${config.krebs.build.host.nets.internet.ip4.addr}" ) {
@@ -22,10 +25,7 @@ in {
     locations."/realwallpaper.png".extraConfig = ''
       root /var/realwallpaper/;
     '';
-    locations."/realwallpaper-sat.png".extraConfig = ''
-      root /var/realwallpaper/;
-    '';
-    locations."/realwallpaper-sat-krebs.png".extraConfig = ''
+    locations."/realwallpaper-krebs.png".extraConfig = ''
       root /var/realwallpaper/;
     '';
   };

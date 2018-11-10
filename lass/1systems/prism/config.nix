@@ -341,8 +341,6 @@ with import <stockholm/lib>;
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
-  # workaround because grub store paths are broken
-  boot.copyKernels = true;
   services.earlyoom = {
     enable = true;
     freeMemThreshold = 5;

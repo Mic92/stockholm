@@ -10,7 +10,6 @@
     <stockholm/krebs/2configs>
 
     <stockholm/krebs/2configs/buildbot-stockholm.nix>
-    <stockholm/krebs/2configs/gitlab-runner-shackspace.nix>
     <stockholm/krebs/2configs/binary-cache/nixos.nix>
     <stockholm/krebs/2configs/ircd.nix>
     <stockholm/krebs/2configs/reaktor-retiolum.nix>
