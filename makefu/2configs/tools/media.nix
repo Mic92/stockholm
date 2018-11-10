@@ -7,10 +7,12 @@
     vlc
     mumble
     mplayer
-    quodlibet
+    quodlibet # exfalso
 
     plowshare
     streamripper
     youtube-dl
+
+    pulseeffects
   ];
 }
