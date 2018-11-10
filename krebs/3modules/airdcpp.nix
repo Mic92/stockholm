@@ -243,7 +243,7 @@ let
   in {
     systemd.services.airdcpp = {
       description = "airdcpp webui";
-      after = [ "network.target" ];
+      after = [ "network.target" "local-fs.target" ];
       wantedBy = [ "multi-user.target" ];
       restartIfChanged = true;
       serviceConfig = {
