@@ -17,6 +17,7 @@ with import <stockholm/lib>;
         "krebsco.de" = ''
           prism     IN A ${nets.internet.ip4.addr}
           paste     IN A ${nets.internet.ip4.addr}
+          cache     IN A ${nets.internet.ip4.addr}
         '';
         "lassul.us" = ''
           $TTL 3600
@@ -34,6 +35,7 @@ with import <stockholm/lib>;
           paste               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           lol                 60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           radio               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          cache               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
         '';
       };
       nets = rec {
