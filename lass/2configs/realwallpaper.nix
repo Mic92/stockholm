@@ -22,10 +22,7 @@ in {
     locations."/realwallpaper.png".extraConfig = ''
       root /var/realwallpaper/;
     '';
-    locations."/realwallpaper-sat.png".extraConfig = ''
-      root /var/realwallpaper/;
-    '';
-    locations."/realwallpaper-sat-krebs.png".extraConfig = ''
+    locations."/realwallpaper-krebs.png".extraConfig = ''
       root /var/realwallpaper/;
     '';
   };
