@@ -60,7 +60,7 @@ in {
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGaV5Ga5R8RTrA+nclxw6uy5Z+hPBLitQTfuXdsmbVW6 crapi";
     };
     drop = rec {
-      ci = true;
+      ci = false;
       cores = 1;
       nets = {
         retiolum = {
@@ -83,7 +83,7 @@ in {
       };
     };
     studio = rec {
-      ci = true;
+      ci = false;
       cores = 4;
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIqBR5gjJkR1TEIs2yx6JRoIOA7+/LJA6kjju8yCauFa studio";
@@ -109,7 +109,7 @@ in {
     };
 
     fileleech = rec {
-      ci = true;
+      ci = false;
       cores = 4;
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+jB5QdPsAJc90alYDhAEP3sPDJb6eIj9bebj+rTBEJ fileleech";
@@ -134,7 +134,7 @@ in {
       };
     };
     latte = rec {
-      ci = true;
+      ci = false;
       cores = 1;
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       # ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIrkK1mWfPvfZ9ALC1irGLuzOtMefaGAmGY1VD4dj7K1 latte";
@@ -166,7 +166,7 @@ in {
     };
 
     pnp = {
-      ci = true;
+      ci = false;
       cores = 1;
       nets = {
         retiolum = {
@@ -190,7 +190,7 @@ in {
       };
     };
     darth = {
-      ci = true;
+      ci = false;
       cores = 4;
       nets = {
         retiolum = {
@@ -404,7 +404,7 @@ in {
       };
     };
     wry = rec {
-      ci = true;
+      ci = false;
       cores = 1;
       extraZones = {
         "krebsco.de" = ''
@@ -449,7 +449,7 @@ in {
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH4Tjx9qK6uWtxT1HCpeC0XvDZKO/kaPygyKatpAqU6I root@wry";
     };
     filepimp = rec {
-      ci = true;
+      ci = false;
       cores = 1;
       nets = {
         lan = {
@@ -639,9 +639,9 @@ in {
       };
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcxWFEPzke/Sdd9qNX6rSJgXal8NmINYajpFCxXfYdj root@gum";
     };
-            
+
     shoney = rec {
-      ci = true;
+      ci = false;
       cores = 1;
       nets = rec {
         siem = {
