@@ -30,6 +30,8 @@ let
     nix-instantiate --quiet -Q --eval --strict --json ./ci.nix
   '';
 
+  profileRoot = "/nix/var/nix/profiles/ci";
+
   imp = {
     krebs.buildbot.master = {
       slaves = {
@@ -98,9 +100,16 @@ let
                     self.addBuildSteps([steps.ShellCommand(
                         name=str(new_step),
                         command=[
-                          new_steps[new_step]
+                          "${pkgs.writeDash "build-stepper.sh" ''
+                            set -efu
+                            profile=${shell.escape profileRoot}/$build_name
+                            result=$("$build_script")
+                            ${pkgs.nix}/bin/nix-env -p "$profile" --set "$result"
+                          ''}"
                         ],
                         env={
+                          "build_name": new_step,
+                          "build_script": new_steps[new_step],
                           "NIX_REMOTE": "daemon",
                           "NIX_PATH": "secrets=/var/src/stockholm/null:/var/src",
                         },
@@ -162,6 +171,20 @@ let
       username = "testslave";
       password = "lasspass";
       packages = with pkgs; [ gnumake jq nix populate gnutar lzma gzip ];
+    };
+
+    system.activationScripts.buildbots-nix-profile = ''
+      ${pkgs.coreutils}/bin/mkdir -p ${shell.escape profileRoot}
+      ${pkgs.coreutils}/bin/chmod 0770 ${shell.escape profileRoot}
+      ${pkgs.coreutils}/bin/chgrp buildbots ${shell.escape profileRoot}
+    '';
+
+    users = {
+      groups.buildbots.gid = genid "buildbots";
+      users = {
+        buildbotMaster.extraGroups = [ "buildbots" ];
+        buildbotSlave.extraGroups = [ "buildbots" ];
+      };
     };
   };
 
