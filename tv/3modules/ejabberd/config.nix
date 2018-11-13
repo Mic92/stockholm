@@ -87,7 +87,6 @@ in /* yaml */ ''
     mod_configure: {}
     mod_disco: {}
     mod_echo: {}
-    mod_irc: {}
     mod_bosh: {}
     mod_last: {}
     mod_offline:
