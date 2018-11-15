@@ -14,6 +14,16 @@ let {
   };
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
+    # cannot use pkgs.vimPlugins.fzf-vim as it's missing :Rg
+    (pkgs.vimUtils.buildVimPlugin {
+      name = "junegunn";
+      src = pkgs.fetchgit {
+        url = git://github.com/junegunn/fzf.vim;
+        rev = "ad1833ecbc9153b6e34a4292dc089a58c4bcb8dc";
+        sha256 = "1z2q71q6l9hq9fqfqpj1svhyk4yk1bzw1ljhksx4bnpz8gkfbx2m";
+      };
+    })
+    pkgs.vimPlugins.fzfWrapper
     pkgs.vimPlugins.undotree
     pkgs.vimPlugins.vim-elixir
     (pkgs.vimUtils.buildVimPlugin {
@@ -309,6 +319,11 @@ let {
     paths = [
       (pkgs.writeDashBin "vim" ''
         set -efu
+        export FZF_DEFAULT_COMMAND='${pkgs.ripgrep}/bin/rg --files'
+        export PATH=$PATH:${makeBinPath [
+          pkgs.fzf
+          pkgs.ripgrep
+        ]}
         (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString need-dirs})
         exec ${pkgs.vim}/bin/vim "$@"
       '')
@@ -385,5 +400,9 @@ let {
     noremap <esc>[c <nop> | noremap! <esc>[c <nop>
     noremap <esc>[d <nop> | noremap! <esc>[d <nop>
     vnoremap u <nop>
+
+    " fzf
+    nnoremap <esc>q :Files<cr>
+    nnoremap <esc>w :Rg<cr>
   '';
 }
