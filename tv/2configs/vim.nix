@@ -404,5 +404,9 @@ let {
     " fzf
     nnoremap <esc>q :Files<cr>
     nnoremap <esc>w :Rg<cr>
+
+    " edit alternate buffer
+    " For some reason neither putting <ctrl>6 nor <ctrl>^ works here...
+    nnoremap <esc>a 
   '';
 }
