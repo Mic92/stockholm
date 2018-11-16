@@ -348,6 +348,7 @@ let {
     set shortmess+=I
     set showcmd
     set showmatch
+    set timeoutlen=0
     set ttimeoutlen=0
     set undodir=${dirs.undodir}
     set undofile
