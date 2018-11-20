@@ -17,7 +17,7 @@ with import <stockholm/lib>;
         config.krebs.users.lass.pubkey
       ];
     };
-    autoStart = true;
+    autoStart = false;
     enableTun = true;
     privateNetwork = true;
     hostAddress = "10.233.2.9";
