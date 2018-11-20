@@ -177,7 +177,8 @@
       addr = "0.0.0.0";
       domain = "grafana.example.com";
       rootUrl = "https://grafana.example.com/";
-      security = import <secrets/grafana_security.nix>; # { AdminUser = ""; adminPassword = ""}
+      auth.anonymous.enable = true;
+      auth.anonymous.org_role = "Admin";
     };
   };
   services.logstash = {
