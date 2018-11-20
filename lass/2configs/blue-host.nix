@@ -8,7 +8,10 @@ with import <stockholm/lib>;
   systemd.services."container@blue".reloadIfChanged = mkForce false;
   containers.blue = {
     config = { ... }: {
-      environment.systemPackages = [ pkgs.git ];
+      environment.systemPackages = [
+        pkgs.git
+        pkgs.rxvt_unicode.terminfo
+      ];
       services.openssh.enable = true;
       users.users.root.openssh.authorizedKeys.keys = [
         config.krebs.users.lass.pubkey
