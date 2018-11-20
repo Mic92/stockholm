@@ -1,4 +1,4 @@
-# usage: nix-instantiate --eval --strict --json ./ci.nix
+# usage: nix-instantiate --eval --json --read-write-mode --strict ci.nix | jq .
 with import ./lib;
 let
   pkgs = import <nixpkgs> { overlays = [ (import ./submodules/nix-writers/pkgs) ]; };
