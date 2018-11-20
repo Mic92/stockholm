@@ -50,7 +50,7 @@ let
     eloop = [ "to:eloop.org" ];
     github = [ "to:github@lassul.us" ];
     gmail = [ "to:gmail@lassul.us" "to:lassulus@gmail.com" "lassulus@googlemail.com" ];
-    india = [ "to:hillhackers@lists.hillhacks.in" ];
+    india = [ "to:hillhackers@lists.hillhacks.in" "to:hackbeach@lists.hackbeach.in" ];
     kaosstuff = [ "to:gearbest@lassul.us" "to:banggood@lassul.us" "to:tomtop@lassul.us" ];
     lugs = [ "to:lugs@lug-s.org" ];
     meetup = [ "to:meetup@lassul.us" ];
