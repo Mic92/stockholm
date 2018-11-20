@@ -10,7 +10,6 @@
     <stockholm/krebs/2configs/stats/puyak-client.nix>
     <stockholm/krebs/2configs/binary-cache/nixos.nix>
     <stockholm/krebs/2configs/binary-cache/prism.nix>
-    <stockholm/krebs/2configs/cache.nsupdate.info.nix>
     <stockholm/krebs/2configs/go.nix>
     <stockholm/krebs/2configs/ircd.nix>
     <stockholm/krebs/2configs/news.nix>
