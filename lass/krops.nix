@@ -21,10 +21,18 @@
   ];
 
 in {
+
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME -A deploy)
   deploy = { target ? "root@${name}/var/src" }: pkgs.krops.writeDeploy "${name}-deploy" {
     source = source { test = false; };
     inherit target;
+  };
+
+  # usage: $(nix-build --no-out-link --argstr name HOSTNAME --argstr target PATH -A populate)
+  populate = { target, force ? false }: pkgs.populate {
+    inherit force;
+    source = source { test = false; };
+    target = lib.mkTarget target;
   };
 
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME --argstr target PATH -A test)
