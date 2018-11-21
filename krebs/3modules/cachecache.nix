@@ -91,7 +91,7 @@ in
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = [ 80 443 ];
 
 
