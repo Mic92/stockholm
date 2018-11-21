@@ -5,6 +5,12 @@
     pkgs
   ;
 
+  host-source = if lib.pathExists (./. + "/1systems/${name}/source.nix") then
+    import (./. + "/1systems/${name}/source.nix") { inherit lib pkgs; }
+  else
+    {}
+  ;
+
   source = { test }: lib.evalSource [
     krebs-source
     {
@@ -18,6 +24,7 @@
         };
       };
     }
+    host-source
   ];
 
 in {
