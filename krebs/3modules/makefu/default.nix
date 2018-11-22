@@ -624,6 +624,7 @@ in {
             "blog.makefu.r"
             "blog.gum.r"
             "dcpp.gum.r"
+            "torrent.gum.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
