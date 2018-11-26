@@ -26,6 +26,7 @@ let
 
   hostname = config.networking.hostName;
   getJobs = pkgs.writeDash "get_jobs" ''
+    set -efu
     nix-build --no-out-link --quiet -Q ./ci.nix > /dev/null
     nix-instantiate --quiet -Q --eval --strict --json ./ci.nix
   '';
