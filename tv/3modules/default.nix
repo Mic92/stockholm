@@ -1,6 +1,7 @@
 {
   imports = [
     ./charybdis
+    ./dnsmasq.nix
     ./ejabberd
     ./hosts.nix
     ./iptables.nix
