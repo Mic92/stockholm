@@ -23,6 +23,12 @@ in {
       '';
     }
   ];
+
+  system.activationScripts.containerPermissions = ''
+    mkdir -p /var/lib/containers
+    chmod 711 /var/lib/containers
+  '';
+
   containers.blue = {
     config = { ... }: {
       environment.systemPackages = [
