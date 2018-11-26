@@ -28,7 +28,13 @@ let
   getJobs = pkgs.writeDash "get_jobs" ''
     set -efu
     nix-build --no-out-link --quiet -Q ./ci.nix > /dev/null
-    nix-instantiate --quiet -Q --eval --strict --json ./ci.nix
+    js="$(nix-instantiate --quiet -Q --eval --strict --json ./ci.nix)"
+    echo "$js" | jq -r 'to_entries[] | [.key, .value] | @tsv' \
+      | while read -r host builder; do
+        gcroot=${shell.escape profileRoot}/$host-builder
+        ${pkgs.nix}/bin/nix-env -p "$gcroot" --set "$builder"
+      done
+    echo "$js"
   '';
 
   profileRoot = "/nix/var/nix/profiles/ci";
