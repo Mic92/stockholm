@@ -624,15 +624,16 @@ in {
             "blog.makefu.r"
             "blog.gum.r"
             "dcpp.gum.r"
+            "torrent.gum.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAucCebFmS96WorD+Br4UQudmAhMlLpacErjwA/u2argBTT2nGHTR8
-            aN4e0xf3IYLA+iogLIW/JuQfKLe8evEK21iZ3jleW8N7mbCulhasi/0lqWlirrpO
-            npJAiSNF1m7ijoylkEKxtmehze+8ojprUT2hx1ImMlHMWGxvs+TmBbZBMgxAGMJh
-            6cMMDJQi+4d9XrJQ3+XUVK3MkviLA91oIAXsLdFptL6b12siUaz4StQXDJUHemBF
-            3ZwlO+W2Es69ifEhmV6NaDDRcSRdChGbHTz1OU8wYaFNaxWla/iprQQ+jEUldpcN
-            VC18QGYRUAgZ0PCIpKurjWNehJFB3zXt+wIDAQAB
+            MIIBCgKCAQEAvgvzx3rT/3zLuCkzXk1ZkYBkG4lltxrLOLNivohw2XAzrYDIw/ZY
+            BTDDcD424EkNOF6g/3tIRWqvVGZ1u12WQ9A/R+2F7i1SsaE4nTxdNlQ5rjy80gO3
+            i1ZubMkTGwd1OYjJytYdcMTwM9V9/8QYFiiWqh77Xxu/FhY6PcQqwHxM7SMyZCJ7
+            09gtZuR16ngKnKfo2tw6C3hHQtWCfORVbWQq5cmGzCb4sdIKow5BxUC855MulNsS
+            u5l+G8wX+UbDI85VSDAtOP4QaSFzLL+U0aaDAmq0NO1QiODJoCo0iPhULZQTFZUa
+            OMDYHHfqzluEI7n8ENI4WwchDXH+MstsgwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
         };

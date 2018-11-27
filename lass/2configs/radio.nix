@@ -62,8 +62,23 @@ in {
     extraConfig = ''
       audio_output {
         type        "shout"
+        encoding    "lame"
+        name        "the_playlist_mp3"
+        host        "localhost"
+        port        "8000"
+        mount       "/radio.mp3"
+        password    "${source-password}"
+        bitrate     "128"
+
+        format      "44100:16:2"
+
+        user        "source"
+        genre       "good music"
+      }
+      audio_output {
+        type        "shout"
         encoding    "ogg"
-        name        "the_playlist"
+        name        "the_playlist_ogg"
         host        "localhost"
         port        "8000"
         mount       "/radio.ogg"

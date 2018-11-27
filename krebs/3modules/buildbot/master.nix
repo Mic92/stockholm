@@ -362,7 +362,7 @@ let
           #       normally we should write buildbot.tac by our own
           # ${pkgs.buildbot-classic}/bin/buildbot upgrade-master ${workdir}
 
-          chmod 700 -R ${workdir}
+          chmod 700 ${workdir}
           chown buildbotMaster:buildbotMaster -R ${workdir}
         '';
         ExecStart = "${pkgs.buildbot-classic}/bin/buildbot start --nodaemon ${workdir}";
