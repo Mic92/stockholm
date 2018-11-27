@@ -45,18 +45,14 @@
     krebs-source
     {
       nixos-config.symlink = "stockholm/krebs/1systems/${name}/config.nix";
-      secrets =
-        if test
-          then {
-            file = toString <stockholm/krebs/0tests/data/secrets>;
-          }
-          else {
-            pass = {
-              dir = "${lib.getEnv "HOME"}/brain";
-              name = "krebs-secrets/${name}";
-            };
-          }
-        ;
+      secrets = if test then {
+        file = toString <stockholm/krebs/0tests/data/secrets>;
+      } else {
+        pass = {
+          dir = "${lib.getEnv "HOME"}/brain";
+          name = "krebs-secrets/${name}";
+        };
+      };
     }
   ];
 
