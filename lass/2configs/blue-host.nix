@@ -80,6 +80,10 @@ in {
             source = "/var/lib/containers/.blue",
             host = "${host}.r",
             targetdir = "/var/lib/containers/.blue",
+            rsync = {
+              owner = true,
+              group = true,
+            };
             ssh = {
               binary = "${pkgs.openssh}/bin/ssh";
               identityFile = "/var/lib/containers/blue/home/lass/.ssh/id_rsa",
