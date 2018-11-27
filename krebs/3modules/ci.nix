@@ -27,14 +27,14 @@ let
   hostname = config.networking.hostName;
   getJobs = pkgs.writeDash "get_jobs" ''
     set -efu
-    ${pkgs.nix}/bin/nix-build --no-out-link --quiet -Q ./ci.nix > /dev/null
-    js="$(${pkgs.nix}/bin/nix-instantiate --quiet -Q --eval --strict --json ./ci.nix)"
-    echo "$js" | ${pkgs.jq}/bin/jq -r 'to_entries[] | [.key, .value] | @tsv' \
+    ${pkgs.nix}/bin/nix-build --no-out-link --quiet -Q ./ci.nix >&2
+    json="$(${pkgs.nix}/bin/nix-instantiate --quiet -Q --eval --strict --json ./ci.nix)"
+    echo "$json" | ${pkgs.jq}/bin/jq -r 'to_entries[] | [.key, .value] | @tsv' \
       | while read -r host builder; do
         gcroot=${shell.escape profileRoot}/$host-builder
         ${pkgs.nix}/bin/nix-env -p "$gcroot" --set "$builder"
       done
-    echo "$js"
+    echo "$json"
   '';
 
   profileRoot = "/nix/var/nix/profiles/ci";
