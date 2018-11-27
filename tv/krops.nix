@@ -1,12 +1,14 @@
 { name }: rec {
 
   inherit (import ../krebs/krops.nix { inherit name; })
+    krebs-nixpkgs
     krebs-source
     lib
     pkgs
   ;
 
   source = lib.evalSource [
+    (krebs-nixpkgs { test = true; })
     krebs-source
     {
       nixos-config.symlink = "stockholm/tv/1systems/${name}/config.nix";

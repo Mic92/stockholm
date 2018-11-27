@@ -7,11 +7,24 @@
   # TODO document why pkgs should be used like this
   pkgs = import "${krops}/pkgs" {};
 
-  krebs-source = {
+  krebs-nixpkgs = { test ? false }: if test then {
+    nixpkgs.file = {
+      path = toString (pkgs.fetchFromGitHub {
+        owner = "nixos";
+        repo = "nixpkgs";
+        rev = (lib.importJSON ./nixpkgs.json).rev;
+        sha256 = (lib.importJSON ./nixpkgs.json).sha256;
+      });
+      useChecksum = true;
+    };
+  } else {
     nixpkgs.git = {
       ref = (lib.importJSON ./nixpkgs.json).rev;
       url = https://github.com/NixOS/nixpkgs;
     };
+  };
+
+  krebs-source = {
     stockholm.file = toString ../.;
     stockholm-version.pipe = toString (pkgs.writeDash "${name}-version" ''
       set -efu
@@ -28,6 +41,7 @@
   };
 
   source ={ test }: lib.evalSource [
+    (krebs-nixpkgs { test = test; })
     krebs-source
     {
       nixos-config.symlink = "stockholm/krebs/1systems/${name}/config.nix";

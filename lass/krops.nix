@@ -1,5 +1,6 @@
 { name }: let
   inherit (import ../krebs/krops.nix { inherit name; })
+    krebs-nixpkgs
     krebs-source
     lib
     pkgs
@@ -12,6 +13,7 @@
   ;
 
   source = { test }: lib.evalSource [
+    (krebs-nixpkgs { test = test; })
     krebs-source
     {
       nixos-config.symlink = "stockholm/lass/1systems/${name}/physical.nix";
