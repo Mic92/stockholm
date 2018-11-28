@@ -25,30 +25,22 @@ import Graphics.X11.ExtraTypes.XF86
 import Text.Read (readEither)
 import XMonad
 import System.IO (hPutStrLn, stderr)
-import System.Environment (getArgs, withArgs, getEnv, getEnvironment, lookupEnv)
+import System.Environment (getArgs, getEnv, getEnvironment, lookupEnv)
 import System.Posix.Process (executeFile)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
 import XMonad.Actions.GridSelect
 import XMonad.Actions.CycleWS (toggleWS)
---import XMonad.Actions.CopyWindow ( copy )
 import XMonad.Layout.NoBorders ( smartBorders )
 import qualified XMonad.StackSet as W
 import Data.Map (Map)
 import qualified Data.Map as Map
--- TODO import XMonad.Layout.WorkspaceDir
 import XMonad.Hooks.UrgencyHook (SpawnUrgencyHook(..), withUrgencyHook)
 import XMonad.Hooks.ManageHelpers (doCenterFloat)
--- import XMonad.Layout.Tabbed
---import XMonad.Layout.MouseResizableTile
-import XMonad.Layout.Reflect (reflectVert)
 import XMonad.Layout.FixedColumn (FixedColumn(..))
 import XMonad.Hooks.Place (placeHook, smart)
 import XMonad.Actions.PerWorkspaceKeys (chooseAction)
-import XMonad.Layout.PerWorkspace (onWorkspace)
---import XMonad.Layout.BinarySpacePartition
 
---import XMonad.Actions.Submap
 import XMonad.Stockholm.Pager
 import XMonad.Stockholm.Rhombus
 import XMonad.Stockholm.Shutdown
@@ -72,10 +64,6 @@ mainNoArgs :: IO ()
 mainNoArgs = do
     workspaces0 <- getWorkspaces0
     xmonad
-        -- $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "magenta", "-fg", "magenta", "-h", "2"], duration = 500000 }
-        --                   urgencyConfig { remindWhen = Every 1 }
-        -- $ withUrgencyHook borderUrgencyHook "magenta"
-        -- $ withUrgencyHookC BorderUrgencyHook { urgencyBorderColor = "magenta" } urgencyConfig { suppressWhen = Never }
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
             { terminal          = urxvtcPath
@@ -83,8 +71,6 @@ mainNoArgs = do
             , keys              = myKeys
             , workspaces        = workspaces0
             , layoutHook        = smartBorders $ FixedColumn 1 20 80 10 ||| Full
-            -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
-            --, handleEventHook   = handleTimerEvent
             , manageHook =
                 composeAll
                   [ appName =? "fzmenu-urxvt" --> doCenterFloat
@@ -259,34 +245,6 @@ wGSConfig = def
     , gs_font = myFont
     , gs_navigate = navNSearch
     }
-
--- wsGSConfig = def
---     { gs_cellheight = 20
---     , gs_cellwidth = 64
---     , gs_cellpadding = 5
---     , gs_font = myFont
---     , gs_navigate = navNSearch
---     }
-
--- custom navNSearch
---makeGSNav :: (KeyMask, KeySym) -> TwoD a (Maybe a)
---makeGSNav esc = nav
---    where
---    nav = makeXEventhandler $ shadowWithKeymap keyMap navNSearchDefaultHandler
---    keyMap = Map.fromList
---        [ (esc              , cancel)
---        , ((0,xK_Escape)    , cancel)
---        , ((0,xK_Return)    , select)
---        , ((0,xK_Left)      , move (-1, 0) >> nav)
---        , ((0,xK_Right)     , move ( 1, 0) >> nav)
---        , ((0,xK_Down)      , move ( 0, 1) >> nav)
---        , ((0,xK_Up)        , move ( 0,-1) >> nav)
---        , ((0,xK_BackSpace) , transformSearchString (\s -> if (s == "") then "" else init s) >> nav)
---        ]
---    -- The navigation handler ignores unknown key symbols, therefore we const
---    navNSearchDefaultHandler (_,s,_) = do
---        transformSearchString (++ s)
---        nav
 
 
 (&) :: a -> (a -> c) -> c
