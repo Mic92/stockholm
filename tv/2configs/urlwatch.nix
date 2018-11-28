@@ -27,11 +27,6 @@ in {
       # 2014-09-24 ref https://github.com/4z3/xintmap
       http://www.mathstat.dal.ca/~selinger/quipper/
 
-      ## other
-
-      https://nixos.org/channels/nixos-18.03/git-revision
-      https://nixos.org/channels/nixos-unstable/git-revision
-
       ## 2014-10-17
       ## TODO update ~/src/login/default.nix
       #http://hackage.haskell.org/package/bcrypt
