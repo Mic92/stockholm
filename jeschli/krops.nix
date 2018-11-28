@@ -1,14 +1,12 @@
 { name }: let
   inherit (import ../krebs/krops.nix { inherit name; })
-    krebs-nixpkgs
     krebs-source
     lib
     pkgs
   ;
 
   source = { test }: lib.evalSource [
-    (krebs-nixpkgs { test = test; })
-    krebs-source
+    (krebs-source { test = test; })
     {
       nixos-config.symlink = "stockholm/jeschli/1systems/${name}/config.nix";
       secrets = if test then {

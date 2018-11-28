@@ -7,28 +7,27 @@
   # TODO document why pkgs should be used like this
   pkgs = import "${krops}/pkgs" {};
 
-  krebs-nixpkgs = { test ? false }: if test then {
-    nixpkgs.file = {
-      path = toString (pkgs.fetchFromGitHub {
-        owner = "nixos";
-        repo = "nixpkgs";
-        rev = (lib.importJSON ./nixpkgs.json).rev;
-        sha256 = (lib.importJSON ./nixpkgs.json).sha256;
-      });
-      useChecksum = true;
+  krebs-source = { test ? false }: rec {
+    nixpkgs = if test then {
+      file = {
+        path = toString (pkgs.fetchFromGitHub {
+          owner = "nixos";
+          repo = "nixpkgs";
+          rev = (lib.importJSON ./nixpkgs.json).rev;
+          sha256 = (lib.importJSON ./nixpkgs.json).sha256;
+        });
+        useChecksum = true;
+      };
+    } else {
+      git = {
+        ref = (lib.importJSON ./nixpkgs.json).rev;
+        url = https://github.com/NixOS/nixpkgs;
+      };
     };
-  } else {
-    nixpkgs.git = {
-      ref = (lib.importJSON ./nixpkgs.json).rev;
-      url = https://github.com/NixOS/nixpkgs;
-    };
-  };
-
-  krebs-source = {
     stockholm.file = toString ../.;
     stockholm-version.pipe = toString (pkgs.writeDash "${name}-version" ''
       set -efu
-      cd ${lib.escapeShellArg krebs-source.stockholm.file}
+      cd ${lib.escapeShellArg stockholm.file}
       V=$(${pkgs.coreutils}/bin/date +%y.%m)
       if test -d .git; then
         V=$V.git.$(${pkgs.git}/bin/git describe --always --dirty)
@@ -41,8 +40,7 @@
   };
 
   source ={ test }: lib.evalSource [
-    (krebs-nixpkgs { test = test; })
-    krebs-source
+    (krebs-source { test = test; })
     {
       nixos-config.symlink = "stockholm/krebs/1systems/${name}/config.nix";
       secrets = if test then {
