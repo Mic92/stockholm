@@ -63,6 +63,11 @@ in {
     environment = {
       DISPLAY = ":${toString config.services.xserver.display}";
 
+      FZMENU_FZF_DEFAULT_OPTS = toString [
+        "--color=dark,border:126,bg+:090"
+        "--inline-info"
+      ];
+
       XMONAD_CACHE_DIR = cfg.cacheDir;
       XMONAD_CONFIG_DIR = cfg.configDir;
       XMONAD_DATA_DIR = cfg.dataDir;
@@ -95,8 +100,8 @@ in {
         "\${XMONAD_CONFIG_DIR}"
         "\${XMONAD_DATA_DIR}"
       ]}";
-      ExecStart = "${pkgs.xmonad-tv}/bin/xmonad";
-      ExecStop = "${pkgs.xmonad-tv}/bin/xmonad --shutdown";
+      ExecStart = "${pkgs.xmonad-tv}/bin/xmonad-${currentSystem}";
+      ExecStop = "${pkgs.xmonad-tv}/bin/xmonad-${currentSystem} --shutdown $MAINPID";
       User = cfg.user.name;
       WorkingDirectory = cfg.user.home;
     };

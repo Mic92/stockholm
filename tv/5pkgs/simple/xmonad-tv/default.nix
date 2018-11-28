@@ -1,6 +1,6 @@
 { pkgs, ... }:
 pkgs.writeHaskellPackage "xmonad-tv" {
-  executables.xmonad = {
+  executables."xmonad-${builtins.currentSystem}" = {
     extra-depends = [
       "containers"
       "extra"
@@ -19,36 +19,35 @@ pkgs.writeHaskellPackage "xmonad-tv" {
 
 module Main where
 
+import System.IO.Error (isDoesNotExistError, tryIOError)
+import System.Exit (exitFailure)
+import Control.Monad (forever)
+import Control.Concurrent (threadDelay)
+
 import Control.Exception
 import Control.Monad.Extra (whenJustM)
 import Graphics.X11.ExtraTypes.XF86
 import Text.Read (readEither)
 import XMonad
 import System.IO (hPutStrLn, stderr)
-import System.Environment (getArgs, withArgs, getEnv, getEnvironment, lookupEnv)
+import System.Environment (getArgs, getEnv, getEnvironment, lookupEnv)
 import System.Posix.Process (executeFile)
+import System.Posix.Signals (nullSignal, signalProcess)
+import System.Posix.Types (ProcessID)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
 import XMonad.Actions.GridSelect
 import XMonad.Actions.CycleWS (toggleWS)
---import XMonad.Actions.CopyWindow ( copy )
 import XMonad.Layout.NoBorders ( smartBorders )
 import qualified XMonad.StackSet as W
 import Data.Map (Map)
 import qualified Data.Map as Map
--- TODO import XMonad.Layout.WorkspaceDir
 import XMonad.Hooks.UrgencyHook (SpawnUrgencyHook(..), withUrgencyHook)
--- import XMonad.Layout.Tabbed
---import XMonad.Layout.MouseResizableTile
-import XMonad.Layout.Reflect (reflectVert)
+import XMonad.Hooks.ManageHelpers (doCenterFloat)
 import XMonad.Layout.FixedColumn (FixedColumn(..))
 import XMonad.Hooks.Place (placeHook, smart)
-import XMonad.Hooks.FloatNext (floatNextHook)
 import XMonad.Actions.PerWorkspaceKeys (chooseAction)
-import XMonad.Layout.PerWorkspace (onWorkspace)
---import XMonad.Layout.BinarySpacePartition
 
---import XMonad.Actions.Submap
 import XMonad.Stockholm.Pager
 import XMonad.Stockholm.Rhombus
 import XMonad.Stockholm.Shutdown
@@ -65,17 +64,28 @@ myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
 
 main :: IO ()
 main = getArgs >>= \case
-    ["--shutdown"] -> sendShutdownEvent
-    _ -> mainNoArgs
+    [] -> mainNoArgs
+    ["--shutdown", pidArg] -> mainShutdown (read pidArg)
+    args -> hPutStrLn stderr ("bad arguments: " <> show args) >> exitFailure
+
+mainShutdown :: ProcessID -> IO ()
+mainShutdown pid = do
+    sendShutdownEvent
+    hPutStrLn stderr ("waiting for: " <> show pid)
+    result <- tryIOError (waitProcess pid)
+    if isSuccess result
+      then hPutStrLn stderr ("result: " <> show result <> " [AKA success^_^]")
+      else hPutStrLn stderr ("result: " <> show result)
+  where
+    isSuccess = either isDoesNotExistError (const False)
+
+waitProcess :: ProcessID -> IO ()
+waitProcess pid = forever (signalProcess nullSignal pid >> threadDelay 10000)
 
 mainNoArgs :: IO ()
 mainNoArgs = do
     workspaces0 <- getWorkspaces0
     xmonad
-        -- $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "magenta", "-fg", "magenta", "-h", "2"], duration = 500000 }
-        --                   urgencyConfig { remindWhen = Every 1 }
-        -- $ withUrgencyHook borderUrgencyHook "magenta"
-        -- $ withUrgencyHookC BorderUrgencyHook { urgencyBorderColor = "magenta" } urgencyConfig { suppressWhen = Never }
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
             { terminal          = urxvtcPath
@@ -83,11 +93,14 @@ mainNoArgs = do
             , keys              = myKeys
             , workspaces        = workspaces0
             , layoutHook        = smartBorders $ FixedColumn 1 20 80 10 ||| Full
-            -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
-            --, handleEventHook   = handleTimerEvent
-            , manageHook        = placeHook (smart (1,0)) <+> floatNextHook
+            , manageHook =
+                composeAll
+                  [ appName =? "fzmenu-urxvt" --> doCenterFloat
+                  , appName =? "pinentry" --> doCenterFloat
+                  , placeHook (smart (1,0))
+                  ]
             , startupHook =
-                whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
+                whenJustM (io (lookupEnv "XMONAD_STARTUP_HOOK"))
                           (\path -> forkFile path [] Nothing)
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
@@ -124,7 +137,7 @@ spawnRootTerm =
 
 spawnTermAt :: String -> X ()
 spawnTermAt ws = do
-    env <- liftIO getEnvironment
+    env <- io getEnvironment
     let env' = ("XMONAD_SPAWN_WORKSPACE", ws) : env
     forkFile urxvtcPath [] (Just env')
 
@@ -133,8 +146,8 @@ myKeys conf = Map.fromList $
     [ ((_4  , xK_Escape ), forkFile "/run/wrappers/bin/slock" [] Nothing)
     , ((_4S , xK_c      ), kill)
 
-    , ((_4  , xK_o      ), forkFile "${pkgs.otpmenu}/bin/otpmenu" [] Nothing)
-    , ((_4  , xK_p      ), forkFile "${pkgs.pass}/bin/passmenu" ["--type"] Nothing)
+    , ((_4  , xK_o      ), forkFile "${pkgs.fzmenu}/bin/otpmenu" [] Nothing)
+    , ((_4  , xK_p      ), forkFile "${pkgs.fzmenu}/bin/passmenu" [] Nothing)
 
     , ((_4  , xK_x      ), chooseAction spawnTermAt)
     , ((_4C , xK_x      ), spawnRootTerm)
@@ -254,34 +267,6 @@ wGSConfig = def
     , gs_font = myFont
     , gs_navigate = navNSearch
     }
-
--- wsGSConfig = def
---     { gs_cellheight = 20
---     , gs_cellwidth = 64
---     , gs_cellpadding = 5
---     , gs_font = myFont
---     , gs_navigate = navNSearch
---     }
-
--- custom navNSearch
---makeGSNav :: (KeyMask, KeySym) -> TwoD a (Maybe a)
---makeGSNav esc = nav
---    where
---    nav = makeXEventhandler $ shadowWithKeymap keyMap navNSearchDefaultHandler
---    keyMap = Map.fromList
---        [ (esc              , cancel)
---        , ((0,xK_Escape)    , cancel)
---        , ((0,xK_Return)    , select)
---        , ((0,xK_Left)      , move (-1, 0) >> nav)
---        , ((0,xK_Right)     , move ( 1, 0) >> nav)
---        , ((0,xK_Down)      , move ( 0, 1) >> nav)
---        , ((0,xK_Up)        , move ( 0,-1) >> nav)
---        , ((0,xK_BackSpace) , transformSearchString (\s -> if (s == "") then "" else init s) >> nav)
---        ]
---    -- The navigation handler ignores unknown key symbols, therefore we const
---    navNSearchDefaultHandler (_,s,_) = do
---        transformSearchString (++ s)
---        nav
 
 
 (&) :: a -> (a -> c) -> c

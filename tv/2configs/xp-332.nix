@@ -11,7 +11,7 @@ with import <stockholm/lib>;
   hardware.sane = {
     enable = true;
     extraBackends = [
-      pkgs.utsushi
+      pkgs.utsushi-customized
     ];
   };
 
@@ -19,7 +19,7 @@ with import <stockholm/lib>;
     elem (parseDrvName pkg.name).name [ "imagescan-plugin-networkscan" ];
 
   nixpkgs.overlays = singleton (self: super: {
-    utsushi = super.utsushi.override {
+    utsushi-customized = self.utsushi.override {
       guiSupport = false;
       jpegSupport = false;
       networkSupport = true;
