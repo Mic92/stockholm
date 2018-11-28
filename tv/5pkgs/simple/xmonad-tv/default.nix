@@ -38,12 +38,12 @@ import Data.Map (Map)
 import qualified Data.Map as Map
 -- TODO import XMonad.Layout.WorkspaceDir
 import XMonad.Hooks.UrgencyHook (SpawnUrgencyHook(..), withUrgencyHook)
+import XMonad.Hooks.ManageHelpers (doCenterFloat)
 -- import XMonad.Layout.Tabbed
 --import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.Reflect (reflectVert)
 import XMonad.Layout.FixedColumn (FixedColumn(..))
 import XMonad.Hooks.Place (placeHook, smart)
-import XMonad.Hooks.FloatNext (floatNextHook)
 import XMonad.Actions.PerWorkspaceKeys (chooseAction)
 import XMonad.Layout.PerWorkspace (onWorkspace)
 --import XMonad.Layout.BinarySpacePartition
@@ -85,7 +85,12 @@ mainNoArgs = do
             , layoutHook        = smartBorders $ FixedColumn 1 20 80 10 ||| Full
             -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
             --, handleEventHook   = handleTimerEvent
-            , manageHook        = placeHook (smart (1,0)) <+> floatNextHook
+            , manageHook =
+                composeAll
+                  [ appName =? "fzmenu-urxvt" --> doCenterFloat
+                  , appName =? "pinentry" --> doCenterFloat
+                  , placeHook (smart (1,0))
+                  ]
             , startupHook =
                 whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
                           (\path -> forkFile path [] Nothing)
@@ -133,8 +138,8 @@ myKeys conf = Map.fromList $
     [ ((_4  , xK_Escape ), forkFile "/run/wrappers/bin/slock" [] Nothing)
     , ((_4S , xK_c      ), kill)
 
-    , ((_4  , xK_o      ), forkFile "${pkgs.otpmenu}/bin/otpmenu" [] Nothing)
-    , ((_4  , xK_p      ), forkFile "${pkgs.pass}/bin/passmenu" ["--type"] Nothing)
+    , ((_4  , xK_o      ), forkFile "${pkgs.fzmenu}/bin/otpmenu" [] Nothing)
+    , ((_4  , xK_p      ), forkFile "${pkgs.fzmenu}/bin/passmenu" [] Nothing)
 
     , ((_4  , xK_x      ), chooseAction spawnTermAt)
     , ((_4C , xK_x      ), spawnRootTerm)
