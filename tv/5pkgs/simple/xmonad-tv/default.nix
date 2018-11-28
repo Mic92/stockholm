@@ -1,6 +1,6 @@
 { pkgs, ... }:
 pkgs.writeHaskellPackage "xmonad-tv" {
-  executables.xmonad = {
+  executables."xmonad-${builtins.currentSystem}" = {
     extra-depends = [
       "containers"
       "extra"

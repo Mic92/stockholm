@@ -100,8 +100,8 @@ in {
         "\${XMONAD_CONFIG_DIR}"
         "\${XMONAD_DATA_DIR}"
       ]}";
-      ExecStart = "${pkgs.xmonad-tv}/bin/xmonad";
-      ExecStop = "${pkgs.xmonad-tv}/bin/xmonad --shutdown";
+      ExecStart = "${pkgs.xmonad-tv}/bin/xmonad-${currentSystem}";
+      ExecStop = "${pkgs.xmonad-tv}/bin/xmonad-${currentSystem} --shutdown";
       User = cfg.user.name;
       WorkingDirectory = cfg.user.home;
     };
