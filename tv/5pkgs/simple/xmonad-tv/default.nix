@@ -92,7 +92,7 @@ mainNoArgs = do
                   , placeHook (smart (1,0))
                   ]
             , startupHook =
-                whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
+                whenJustM (io (lookupEnv "XMONAD_STARTUP_HOOK"))
                           (\path -> forkFile path [] Nothing)
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
@@ -129,7 +129,7 @@ spawnRootTerm =
 
 spawnTermAt :: String -> X ()
 spawnTermAt ws = do
-    env <- liftIO getEnvironment
+    env <- io getEnvironment
     let env' = ("XMONAD_SPAWN_WORKSPACE", ws) : env
     forkFile urxvtcPath [] (Just env')
 
