@@ -12,7 +12,7 @@
   ;
 
   source = { test }: lib.evalSource [
-    krebs-source
+    (krebs-source { test = test; })
     {
       nixos-config.symlink = "stockholm/lass/1systems/${name}/physical.nix";
       secrets = if test then {

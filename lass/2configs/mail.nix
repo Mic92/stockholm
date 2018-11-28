@@ -47,6 +47,7 @@ let
     ];
     dezentrale = [ "to:dezentrale.space" ];
     dhl = [ "to:dhl@lassul.us" ];
+    dn42 = [ "to:dn42@lists.nox.tf" ];
     eloop = [ "to:eloop.org" ];
     github = [ "to:github@lassul.us" ];
     gmail = [ "to:gmail@lassul.us" "to:lassulus@gmail.com" "lassulus@googlemail.com" ];

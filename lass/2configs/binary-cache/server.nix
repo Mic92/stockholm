@@ -20,7 +20,14 @@
   services.nginx = {
     enable = true;
     virtualHosts.nix-serve = {
-      serverAliases = [ "cache.prism.r" "cache.krebsco.de" "cache.lassul.us" ];
+      serverAliases = [ "cache.prism.r" ];
+      locations."/".extraConfig = ''
+        proxy_pass http://localhost:${toString config.services.nix-serve.port};
+      '';
+    };
+    virtualHosts."cache.krebsco.de" = {
+      serverAliases = [ "cache.lassul.us" ];
+      enableACME = true;
       locations."/".extraConfig = ''
         proxy_pass http://localhost:${toString config.services.nix-serve.port};
       '';

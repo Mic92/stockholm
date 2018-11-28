@@ -50,4 +50,9 @@ pkgs.writeText "Xresources" /* xdefaults */ ''
   root-urxvt*foreground: #e0c0c0
   root-urxvt*BorderColor: #400000
   root-urxvt*color0: #800000
+
+  fzmenu-urxvt*background: rgb:42/23/42
+  fzmenu-urxvt*externalBorder: 1
+  fzmenu-urxvt*geometry: 70x9
+  fzmenu-urxvt*internalBorder: 1
 ''

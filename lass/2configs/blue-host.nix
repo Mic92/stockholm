@@ -23,6 +23,12 @@ in {
       '';
     }
   ];
+
+  system.activationScripts.containerPermissions = ''
+    mkdir -p /var/lib/containers
+    chmod 711 /var/lib/containers
+  '';
+
   containers.blue = {
     config = { ... }: {
       environment.systemPackages = [
@@ -74,6 +80,10 @@ in {
             source = "/var/lib/containers/.blue",
             host = "${host}.r",
             targetdir = "/var/lib/containers/.blue",
+            rsync = {
+              owner = true,
+              group = true,
+            };
             ssh = {
               binary = "${pkgs.openssh}/bin/ssh";
               identityFile = "/var/lib/containers/blue/home/lass/.ssh/id_rsa",
@@ -89,14 +99,15 @@ in {
   environment.systemPackages = [
     (pkgs.writeDashBin "start-blue" ''
       set -ef
-      if ping -c1 blue.r >/dev/null; then
-        echo 'blue is already running. bailing out'
-        exit 23
-      fi
       if ! $(mount | ${pkgs.gnugrep}/bin/grep -qi '^encfs on /var/lib/containers/blue'); then
         ${pkgs.encfs}/bin/encfs --public /var/lib/containers/.blue /var/lib/containers/blue
       fi
       nixos-container start blue
+      nixos-container run blue -- nixos-rebuild -I /var/src dry-build
+      if ping -c1 blue.r >/dev/null; then
+        echo 'blue is already running. bailing out'
+        exit 23
+      fi
       nixos-container run blue -- nixos-rebuild -I /var/src switch
     '')
   ];
