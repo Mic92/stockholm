@@ -25,6 +25,8 @@ import Control.Monad.Extra (whenJustM)
 import Data.List (isInfixOf)
 import Data.Monoid (Endo)
 import System.Environment (getArgs, lookupEnv)
+import System.Exit (exitFailure)
+import System.IO (hPutStrLn, stderr)
 import System.Posix.Process (executeFile)
 import XMonad.Actions.CopyWindow (copy, kill1)
 import XMonad.Actions.CycleWS (toggleWS)
@@ -49,7 +51,7 @@ import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedWindows (getName)
 import XMonad.Util.Run (safeSpawn)
 
-import XMonad.Stockholm.Shutdown (handleShutdownEvent, sendShutdownEvent)
+import XMonad.Stockholm.Shutdown (newShutdownEventHandler, shutdown)
 import XMonad.Stockholm.Pager (defaultWindowColors, pager, MatchMethod(MatchPrefix), PagerConfig(..))
 
 data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
@@ -69,11 +71,13 @@ myFont = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1"
 
 main :: IO ()
 main = getArgs >>= \case
-  ["--shutdown"] -> sendShutdownEvent
-  _ -> main'
+    [] -> main'
+    ["--shutdown"] -> shutdown
+    args -> hPutStrLn stderr ("bad arguments: " <> show args) >> exitFailure
 
 main' :: IO ()
 main' = do
+    handleShutdownEvent <- newShutdownEventHandler
     xmonad $ ewmh
         $ withUrgencyHook LibNotifyUrgencyHook
         $ def
