@@ -1,16 +1,3 @@
-{ pkgs, ... }:
-pkgs.writeHaskellPackage "xmonad-tv" {
-  executables."xmonad-${builtins.currentSystem}" = {
-    extra-depends = [
-      "containers"
-      "extra"
-      "unix"
-      "X11"
-      "xmonad"
-      "xmonad-contrib"
-      "xmonad-stockholm"
-    ];
-    text = /* haskell */ ''
 {-# LANGUAGE DeriveDataTypeable #-} -- for XS
 {-# LANGUAGE FlexibleContexts #-} -- for xmonad'
 {-# LANGUAGE LambdaCase #-}
@@ -46,13 +33,8 @@ import XMonad.Actions.PerWorkspaceKeys (chooseAction)
 import XMonad.Stockholm.Pager
 import XMonad.Stockholm.Rhombus
 import XMonad.Stockholm.Shutdown
+import qualified Paths
 
-
-amixerPath :: FilePath
-amixerPath = "${pkgs.alsaUtils}/bin/amixer"
-
-urxvtcPath :: FilePath
-urxvtcPath = "${pkgs.rxvt_unicode}/bin/urxvtc"
 
 myFont :: String
 myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
@@ -70,7 +52,7 @@ mainNoArgs = do
     xmonad
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
-            { terminal          = urxvtcPath
+            { terminal          = Paths.urxvtc
             , modMask           = mod4Mask
             , keys              = myKeys
             , workspaces        = workspaces0
@@ -113,23 +95,23 @@ forkFile path args env =
 spawnRootTerm :: X ()
 spawnRootTerm =
     forkFile
-        urxvtcPath
-        ["-name", "root-urxvt", "-e", "/run/wrappers/bin/su", "-"]
+        Paths.urxvtc
+        ["-name", "root-urxvt", "-e", Paths.su, "-"]
         Nothing
 
 spawnTermAt :: String -> X ()
 spawnTermAt ws = do
     env <- io getEnvironment
     let env' = ("XMONAD_SPAWN_WORKSPACE", ws) : env
-    forkFile urxvtcPath [] (Just env')
+    forkFile Paths.urxvtc [] (Just env')
 
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf = Map.fromList $
-    [ ((_4  , xK_Escape ), forkFile "/run/wrappers/bin/slock" [] Nothing)
+    [ ((_4  , xK_Escape ), forkFile Paths.slock [] Nothing)
     , ((_4S , xK_c      ), kill)
 
-    , ((_4  , xK_o      ), forkFile "${pkgs.fzmenu}/bin/otpmenu" [] Nothing)
-    , ((_4  , xK_p      ), forkFile "${pkgs.fzmenu}/bin/passmenu" [] Nothing)
+    , ((_4  , xK_o      ), forkFile Paths.otpmenu [] Nothing)
+    , ((_4  , xK_p      ), forkFile Paths.passmenu [] Nothing)
 
     , ((_4  , xK_x      ), chooseAction spawnTermAt)
     , ((_4C , xK_x      ), spawnRootTerm)
@@ -140,7 +122,7 @@ myKeys conf = Map.fromList $
     , ((0   , xK_Menu   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.view) )
     , ((_S  , xK_Menu   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
     , ((_C  , xK_Menu   ), toggleWS)
-    , ((_4  , xK_Menu   ), rhombus horseConfig (liftIO . hPutStrLn stderr) ["Correct", "Horse", "Battery", "Staple", "Stuhl", "Tisch"] )
+    -- , ((_4  , xK_Menu   ), rhombus horseConfig (io . hPutStrLn stderr) ["Correct", "Horse", "Battery", "Staple", "Stuhl", "Tisch"] )
     
     -- %! Rotate through the available layout algorithms
     , ((_4  , xK_space  ), sendMessage NextLayout)
@@ -207,7 +189,7 @@ myKeys conf = Map.fromList $
     _4CM = _4 .|. _C .|. _M
     _4SM = _4 .|. _S .|. _M
 
-    amixer args = forkFile amixerPath args Nothing
+    amixer args = forkFile Paths.amixer args Nothing
 
 
 pagerConfig :: PagerConfig
@@ -257,6 +239,3 @@ wGSConfig = def
 allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
 allWorkspaceNames ws =
     return $ map W.tag (W.hidden ws) ++ [W.tag $ W.workspace $ W.current ws]
-  '';
-  };
-}
