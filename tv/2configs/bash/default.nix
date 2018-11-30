@@ -13,6 +13,18 @@ with import <stockholm/lib>;
       shopt -s histappend histreedit histverify
       shopt -s no_empty_cmd_completion
       complete -d cd
+
+      case $UID in
+        ${shell.escape (toString config.krebs.users.tv.uid)})
+          if test ''${SHLVL-1} = 1; then
+            case ''${XMONAD_SPAWN_WORKSPACE-} in
+              stockholm)
+                cd ~/stockholm
+              ;;
+            esac
+          fi
+        ;;
+      esac
     '';
     promptInit = /* sh */ ''
       case $UID in
@@ -31,14 +43,6 @@ with import <stockholm/lib>;
       fi
       if test -n "$SSH_AGENT_PID"; then
         PS1="ssh-agent[$SSH_AGENT_PID] $PS1"
-      fi
-
-      if test ''${SHLVL-1} = 1; then
-        case ''${XMONAD_SPAWN_WORKSPACE-} in
-          stockholm)
-            cd ~/stockholm
-          ;;
-        esac
       fi
     '';
   };
