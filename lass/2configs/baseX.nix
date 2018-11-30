@@ -126,6 +126,12 @@ in {
     restartIfChanged = false;
   };
 
+  nixpkgs.config.packageOverrides = super: {
+    dmenu = pkgs.writeDashBin "dmenu" ''
+      ${pkgs.fzfmenu}/bin/fzfmenu "$@"
+    '';
+  };
+
   krebs.xresources.enable = true;
   lass.screenlock.enable = true;
 }

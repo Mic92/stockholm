@@ -19,10 +19,7 @@ pkgs.writeHaskellPackage "xmonad-tv" {
 
 module Main where
 
-import System.IO.Error (isDoesNotExistError, tryIOError)
 import System.Exit (exitFailure)
-import Control.Monad (forever)
-import Control.Concurrent (threadDelay)
 
 import Control.Exception
 import Control.Monad.Extra (whenJustM)
@@ -32,8 +29,6 @@ import XMonad
 import System.IO (hPutStrLn, stderr)
 import System.Environment (getArgs, getEnv, getEnvironment, lookupEnv)
 import System.Posix.Process (executeFile)
-import System.Posix.Signals (nullSignal, signalProcess)
-import System.Posix.Types (ProcessID)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
 import XMonad.Actions.GridSelect
@@ -65,26 +60,13 @@ myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
 main :: IO ()
 main = getArgs >>= \case
     [] -> mainNoArgs
-    ["--shutdown", pidArg] -> mainShutdown (read pidArg)
+    ["--shutdown"] -> shutdown
     args -> hPutStrLn stderr ("bad arguments: " <> show args) >> exitFailure
-
-mainShutdown :: ProcessID -> IO ()
-mainShutdown pid = do
-    sendShutdownEvent
-    hPutStrLn stderr ("waiting for: " <> show pid)
-    result <- tryIOError (waitProcess pid)
-    if isSuccess result
-      then hPutStrLn stderr ("result: " <> show result <> " [AKA success^_^]")
-      else hPutStrLn stderr ("result: " <> show result)
-  where
-    isSuccess = either isDoesNotExistError (const False)
-
-waitProcess :: ProcessID -> IO ()
-waitProcess pid = forever (signalProcess nullSignal pid >> threadDelay 10000)
 
 mainNoArgs :: IO ()
 mainNoArgs = do
     workspaces0 <- getWorkspaces0
+    handleShutdownEvent <- newShutdownEventHandler
     xmonad
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
