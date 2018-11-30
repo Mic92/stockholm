@@ -38,7 +38,7 @@ import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Hooks.FloatNext (floatNext)
 import XMonad.Hooks.FloatNext (floatNextHook)
 import XMonad.Hooks.ManageDocks (avoidStruts, ToggleStruts(ToggleStruts))
-import XMonad.Hooks.Place (placeHook, smart)
+import XMonad.Hooks.ManageHelpers (composeOne, doCenterFloat, (-?>))
 import XMonad.Hooks.UrgencyHook (focusUrgent)
 import XMonad.Hooks.UrgencyHook (withUrgencyHook, UrgencyHook(..))
 import XMonad.Layout.FixedColumn (FixedColumn(..))
@@ -84,7 +84,7 @@ main' = do
             { terminal           = myTerm
             , modMask            = mod4Mask
             , layoutHook         = smartBorders $ myLayoutHook
-            , manageHook         = placeHook (smart (1,0)) <+> floatNextHook <+> floatHooks
+            , manageHook         = floatHooks <+> floatNextHook
             , startupHook =
                 whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
                           (\path -> forkFile path [] Nothing)
@@ -99,13 +99,12 @@ myLayoutHook = defLayout
     defLayout = minimize $ ((avoidStruts $ Mirror (Tall 1 (3/100) (1/2))) ||| Full ||| FixedColumn 2 80 80 1 ||| Tall 1 (3/100) (1/2) ||| simplestFloat)
 
 floatHooks :: Query (Endo WindowSet)
-floatHooks = composeAll . concat $
-    [ [ title =? t --> doFloat | t <- myTitleFloats]
-    , [ className =? c --> doFloat | c <- myClassFloats ] ]
-  where
-      myTitleFloats = []
-      myClassFloats = ["Pinentry"] -- for gpg passphrase entry
-
+floatHooks = composeOne
+   [ className =? "Pinentry" -?> doCenterFloat
+   , title =? "fzfmenu" -?> doCenterFloat
+   , title =? "glxgears" -?> doCenterFloat
+   , resource =? "Dialog" -?> doFloat
+   ]
 
 myKeyMap :: [([Char], X ())]
 myKeyMap =
