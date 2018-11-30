@@ -162,6 +162,9 @@ myKeyMap =
     , ("M4-<F7>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 33")
     , ("M4-<F8>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 100")
 
+    , ("M4-<F9>", spawn "${pkgs.redshift}/bin/redshift -O 4000 -g 0.9:0.8:0.8")
+    , ("M4-<F10>", spawn "${pkgs.redshift}/bin/redshift -x")
+
     , ("<Pause>", spawn "${pkgs.xcalib}/bin/xcalib -invert -alter")
 
     , ("M4-s", spawn "${pkgs.knav}/bin/knav")
