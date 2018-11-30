@@ -5,6 +5,7 @@ let
     evalSource = import ./eval-source.nix;
 
     git = import ./git.nix { inherit lib; };
+    krops = import ../submodules/krops/lib;
     shell = import ./shell.nix { inherit lib; };
     types = nixpkgs-lib.types // import ./types.nix { inherit lib; };
 
