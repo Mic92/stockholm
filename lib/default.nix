@@ -5,6 +5,7 @@ let
     evalSource = import ./eval-source.nix;
 
     git = import ./git.nix { inherit lib; };
+    krops = import ../submodules/krops/lib;
     shell = import ./shell.nix { inherit lib; };
     types = nixpkgs-lib.types // import ./types.nix { inherit lib; };
 
@@ -43,6 +44,23 @@ let
     }.${type} or reject;
 
     indent = replaceChars ["\n"] ["\n  "];
+
+    mapNixDir = f: x: {
+      list = foldl' mergeAttrs {} (map (mapNixDir1 f) x);
+      path = mapNixDir1 f x;
+    }.${typeOf x};
+
+    mapNixDir1 = f: dirPath:
+      listToAttrs
+        (map
+          (relPath: let
+            name = removeSuffix ".nix" relPath;
+            path = dirPath + "/${relPath}";
+          in
+            nameValuePair name (f path))
+          (filter
+            (name: name != "default.nix" && !hasPrefix "." name)
+            (attrNames (readDir dirPath))));
 
     # https://tools.ietf.org/html/rfc5952
     normalize-ip6-addr =

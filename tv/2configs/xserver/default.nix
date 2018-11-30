@@ -57,7 +57,9 @@ in {
 
   systemd.services.display-manager.enable = false;
 
-  systemd.services.xmonad = {
+  systemd.services.xmonad = let
+    xmonad = "${pkgs.haskellPackages.xmonad-tv}/bin/xmonad";
+  in {
     wantedBy = [ "graphical.target" ];
     requires = [ "xserver.service" ];
     environment = {
@@ -93,6 +95,11 @@ in {
         "za" "zh" "zj" "zs"
       ]);
     };
+    path = [
+      pkgs.fzmenu
+      pkgs.pulseaudioLight.out
+      pkgs.rxvt_unicode
+    ];
     serviceConfig = {
       SyslogIdentifier = "xmonad";
       ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${toString [
@@ -100,8 +107,8 @@ in {
         "\${XMONAD_CONFIG_DIR}"
         "\${XMONAD_DATA_DIR}"
       ]}";
-      ExecStart = "${pkgs.xmonad-tv}/bin/xmonad-${currentSystem}";
-      ExecStop = "${pkgs.xmonad-tv}/bin/xmonad-${currentSystem} --shutdown";
+      ExecStart = "@${xmonad} xmonad-${currentSystem} ";
+      ExecStop = "@${xmonad} xmonad-${currentSystem} --shutdown";
       User = cfg.user.name;
       WorkingDirectory = cfg.user.home;
     };

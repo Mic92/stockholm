@@ -1,23 +1,10 @@
-{ pkgs, ... }:
-pkgs.writeHaskellPackage "xmonad-tv" {
-  executables."xmonad-${builtins.currentSystem}" = {
-    extra-depends = [
-      "containers"
-      "extra"
-      "unix"
-      "X11"
-      "xmonad"
-      "xmonad-contrib"
-      "xmonad-stockholm"
-    ];
-    text = /* haskell */ ''
 {-# LANGUAGE DeriveDataTypeable #-} -- for XS
 {-# LANGUAGE FlexibleContexts #-} -- for xmonad'
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 
-module Main where
+module Main (main) where
 
 import System.Exit (exitFailure)
 
@@ -31,7 +18,6 @@ import System.Environment (getArgs, getEnv, getEnvironment, lookupEnv)
 import System.Posix.Process (executeFile)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
-import XMonad.Actions.GridSelect
 import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Layout.NoBorders ( smartBorders )
 import qualified XMonad.StackSet as W
@@ -44,24 +30,20 @@ import XMonad.Hooks.Place (placeHook, smart)
 import XMonad.Actions.PerWorkspaceKeys (chooseAction)
 
 import XMonad.Stockholm.Pager
-import XMonad.Stockholm.Rhombus
 import XMonad.Stockholm.Shutdown
+import qualified Paths
 
-
-amixerPath :: FilePath
-amixerPath = "${pkgs.alsaUtils}/bin/amixer"
-
-urxvtcPath :: FilePath
-urxvtcPath = "${pkgs.rxvt_unicode}/bin/urxvtc"
 
 myFont :: String
 myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
+
 
 main :: IO ()
 main = getArgs >>= \case
     [] -> mainNoArgs
     ["--shutdown"] -> shutdown
     args -> hPutStrLn stderr ("bad arguments: " <> show args) >> exitFailure
+
 
 mainNoArgs :: IO ()
 mainNoArgs = do
@@ -70,7 +52,7 @@ mainNoArgs = do
     xmonad
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
-            { terminal          = urxvtcPath
+            { terminal          = Paths.urxvtc
             , modMask           = mod4Mask
             , keys              = myKeys
             , workspaces        = workspaces0
@@ -102,6 +84,7 @@ getWorkspaces0 =
   where
     warn msg = hPutStrLn stderr ("getWorkspaces0: " ++ msg) >> return []
 
+
 displaySomeException :: SomeException -> String
 displaySomeException = displayException
 
@@ -110,76 +93,52 @@ forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()
 forkFile path args env =
     xfork (executeFile path False args env) >> return ()
 
+
 spawnRootTerm :: X ()
 spawnRootTerm =
     forkFile
-        urxvtcPath
-        ["-name", "root-urxvt", "-e", "/run/wrappers/bin/su", "-"]
+        Paths.urxvtc
+        ["-name", "root-urxvt", "-e", Paths.su, "-"]
         Nothing
+
 
 spawnTermAt :: String -> X ()
 spawnTermAt ws = do
     env <- io getEnvironment
     let env' = ("XMONAD_SPAWN_WORKSPACE", ws) : env
-    forkFile urxvtcPath [] (Just env')
+    forkFile Paths.urxvtc [] (Just env')
+
 
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf = Map.fromList $
-    [ ((_4  , xK_Escape ), forkFile "/run/wrappers/bin/slock" [] Nothing)
+    [ ((_4  , xK_Escape ), forkFile Paths.slock [] Nothing)
     , ((_4S , xK_c      ), kill)
 
-    , ((_4  , xK_o      ), forkFile "${pkgs.fzmenu}/bin/otpmenu" [] Nothing)
-    , ((_4  , xK_p      ), forkFile "${pkgs.fzmenu}/bin/passmenu" [] Nothing)
+    , ((_4  , xK_o      ), forkFile Paths.otpmenu [] Nothing)
+    , ((_4  , xK_p      ), forkFile Paths.passmenu [] Nothing)
 
     , ((_4  , xK_x      ), chooseAction spawnTermAt)
     , ((_4C , xK_x      ), spawnRootTerm)
 
-    --, ((_4  , xK_F1     ), withFocused jojo)
-    --, ((_4  , xK_F1     ), printAllGeometries)
-
     , ((0   , xK_Menu   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.view) )
     , ((_S  , xK_Menu   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
     , ((_C  , xK_Menu   ), toggleWS)
-    , ((_4  , xK_Menu   ), rhombus horseConfig (liftIO . hPutStrLn stderr) ["Correct", "Horse", "Battery", "Staple", "Stuhl", "Tisch"] )
-    
-    -- %! Rotate through the available layout algorithms
+
     , ((_4  , xK_space  ), sendMessage NextLayout)
     , ((_4S , xK_space  ), setLayout $ XMonad.layoutHook conf) -- reset layout
 
-    ---- BinarySpacePartition
-    --, ((_4  , xK_l), sendMessage $ ExpandTowards R)
-    --, ((_4  , xK_h), sendMessage $ ExpandTowards L)
-    --, ((_4  , xK_j), sendMessage $ ExpandTowards D)
-    --, ((_4  , xK_k), sendMessage $ ExpandTowards U)
-    --, ((_4S , xK_l), sendMessage $ ShrinkFrom R)
-    --, ((_4S , xK_h), sendMessage $ ShrinkFrom L)
-    --, ((_4S , xK_j), sendMessage $ ShrinkFrom D)
-    --, ((_4S , xK_k), sendMessage $ ShrinkFrom U)
-    --, ((_4  , xK_n), sendMessage Rotate)
-    --, ((_4S , xK_n), sendMessage Swap)
-
-    ---- mouseResizableTile
-    --, ((_4    , xK_u), sendMessage ShrinkSlave)
-    --, ((_4    , xK_i), sendMessage ExpandSlave)
-
-    -- move focus up or down the window stack
-    --, ((_4  , xK_m      ), windows W.focusMaster)
     , ((_4  , xK_j      ), windows W.focusDown)
     , ((_4  , xK_k      ), windows W.focusUp)
 
-    -- modifying the window order
     , ((_4S , xK_m      ), windows W.swapMaster)
     , ((_4S , xK_j      ), windows W.swapDown)
     , ((_4S , xK_k      ), windows W.swapUp)
 
-    -- resizing the master/slave ratio
-    , ((_4  , xK_h      ), sendMessage Shrink) -- %! Shrink the master area
-    , ((_4  , xK_l      ), sendMessage Expand) -- %! Expand the master area
+    , ((_4  , xK_h      ), sendMessage Shrink)
+    , ((_4  , xK_l      ), sendMessage Expand)
 
-    -- floating layer support
-    , ((_4  , xK_t      ), withFocused $ windows . W.sink)  -- make tiling
+    , ((_4  , xK_t      ), withFocused $ windows . W.sink) -- make tiling
 
-    -- increase or decrease number of windows in the master area
     , ((_4  , xK_comma  ), sendMessage $ IncMasterN 1)
     , ((_4  , xK_period ), sendMessage $ IncMasterN (-1))
 
@@ -188,13 +147,10 @@ myKeys conf = Map.fromList $
     , ((_4  , xK_Delete ), removeEmptyWorkspace)
 
     , ((_4  , xK_Return ), toggleWS)
-    --,  (0   , xK_Menu   ) & \k -> (k, gridselectWorkspace wsGSConfig { gs_navigate = makeGSNav k } W.view)
-    --,  (_4  , xK_v      ) & \k -> (k, gridselectWorkspace wsGSConfig { gs_navigate = makeGSNav k } W.view)
-    --,  (_4S , xK_v      ) & \k -> (k, gridselectWorkspace wsGSConfig { gs_navigate = makeGSNav k } W.shift)
-    --,  (_4  , xK_b      ) & \k -> (k, goToSelected        wGSConfig  { gs_navigate = makeGSNav k })
-    , ((noModMask, xF86XK_AudioLowerVolume), amixer ["sset", "Master", "5%-"])
-    , ((noModMask, xF86XK_AudioRaiseVolume), amixer ["sset", "Master", "5%+"])
-    , ((noModMask, xF86XK_AudioMute), amixer ["sset", "Master", "toggle"])
+
+    , ((0, xF86XK_AudioLowerVolume), audioLowerVolume)
+    , ((0, xF86XK_AudioRaiseVolume), audioRaiseVolume)
+    , ((0, xF86XK_AudioMute), audioMute)
     ]
     where
     _4 = mod4Mask
@@ -207,18 +163,17 @@ myKeys conf = Map.fromList $
     _4CM = _4 .|. _C .|. _M
     _4SM = _4 .|. _S .|. _M
 
-    amixer args = forkFile amixerPath args Nothing
+    pactl args = forkFile Paths.pactl args Nothing
+    audioLowerVolume = pactl ["--", "set-sink-volume", "@DEFAULT_SINK@", "-5%"]
+    audioRaiseVolume = pactl ["--", "set-sink-volume", "@DEFAULT_SINK@", "+5%"]
+    audioMute = pactl ["--", "set-sink-mute", "@DEFAULT_SINK@", "toggle"]
 
 
 pagerConfig :: PagerConfig
 pagerConfig = def
     { pc_font           = myFont
     , pc_cellwidth      = 64
-    --, pc_cellheight     = 36 -- TODO automatically keep screen aspect
-    --, pc_borderwidth    = 1
-    --, pc_matchcolor     = "#f0b000"
     , pc_matchmethod    = MatchPrefix
-    --, pc_colors         = pagerWorkspaceColors
     , pc_windowColors   = windowColors
     }
     where
@@ -229,34 +184,7 @@ pagerConfig = def
             then ("#402020", snd y)
             else y
 
-horseConfig :: RhombusConfig
-horseConfig = def
-    { rc_font           = myFont
-    , rc_cellwidth      = 64
-    --, rc_cellheight     = 36 -- TODO automatically keep screen aspect
-    --, rc_borderwidth    = 1
-    --, rc_matchcolor     = "#f0b000"
-    , rc_matchmethod    = MatchPrefix
-    --, rc_colors         = pagerWorkspaceColors
-    --, rc_paint          = myPaint
-    }
-
-wGSConfig :: GSConfig Window
-wGSConfig = def
-    { gs_cellheight = 20
-    , gs_cellwidth = 192
-    , gs_cellpadding = 5
-    , gs_font = myFont
-    , gs_navigate = navNSearch
-    }
-
-
-(&) :: a -> (a -> c) -> c
-(&) = flip ($)
 
 allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
 allWorkspaceNames ws =
     return $ map W.tag (W.hidden ws) ++ [W.tag $ W.workspace $ W.current ws]
-  '';
-  };
-}

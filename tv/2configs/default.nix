@@ -87,11 +87,6 @@ with import <stockholm/lib>;
           export SYSTEM="$1"
           exec nix-shell -I stockholm="$PWD" --run 'deploy --system="$SYSTEM"'
         '';
-        reload = "systemctl reload";
-        restart = "systemctl restart";
-        start = "systemctl start";
-        status = "systemctl status";
-        stop = "systemctl stop";
       };
 
       environment.variables = {

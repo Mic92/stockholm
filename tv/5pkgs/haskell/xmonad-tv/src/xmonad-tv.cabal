@@ -1,0 +1,25 @@
+name: xmonad-tv
+version: 1.0.0
+license: MIT
+author: tv <tv@krebsco.de>
+maintainer: tv <tv@krebsco.de>
+build-type: Simple
+cabal-version: >=1.10
+
+executable xmonad
+  main-is: main.hs
+  build-depends:
+    base,
+    containers,
+    directory,
+    extra,
+    unix,
+    X11,
+    xmonad,
+    xmonad-contrib,
+    xmonad-stockholm
+  other-modules:
+    Helpers.Path,
+    Paths
+  default-language: Haskell2010
+  ghc-options: -O2 -Wall -threaded

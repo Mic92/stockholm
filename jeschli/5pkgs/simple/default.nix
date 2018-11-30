@@ -15,10 +15,4 @@ let
     else override;
 in
 
-  listToAttrs
-    (map
-      (name: nameValuePair (removeSuffix ".nix" name)
-                           (callPackage (./. + "/${name}") {}))
-      (filter
-        (name: name != "default.nix" && !hasPrefix "." name)
-        (attrNames (readDir ./.))))
+  mapNixDir (path: callPackage path {}) ./.
