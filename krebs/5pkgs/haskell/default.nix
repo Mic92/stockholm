@@ -1,13 +1,6 @@
 with import <stockholm/lib>;
 let
-  overrides = self: super:
-    listToAttrs
-      (map
-        (name: nameValuePair (removeSuffix ".nix" name)
-                             (self.callPackage (./. + "/${name}") {}))
-        (filter
-          (name: name != "default.nix" && !hasPrefix "." name)
-          (attrNames (readDir ./.))));
+  overrides = self: super: mapNixDir (path: self.callPackage path {}) ./.;
 in
 self: super:
 {
