@@ -23,6 +23,8 @@ with import <stockholm/lib>;
               ;;
             esac
           fi
+
+          export NIX_PATH="stockholm=$HOME/stockholm:$NIX_PATH"
         ;;
       esac
     '';
