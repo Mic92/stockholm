@@ -96,8 +96,8 @@ in {
       ]);
     };
     path = [
-      pkgs.alsaUtils
       pkgs.fzmenu
+      pkgs.pulseaudioLight.out
       pkgs.rxvt_unicode
     ];
     serviceConfig = {

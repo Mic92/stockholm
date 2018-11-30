@@ -3,11 +3,11 @@ module Paths where
 import Helpers.Path
 
 
-amixer :: FilePath
-amixer = findExecutable "amixer"
-
 otpmenu :: FilePath
 otpmenu = findExecutable "otpmenu"
+
+pactl :: FilePath
+pactl = findExecutable "pactl"
 
 passmenu :: FilePath
 passmenu = findExecutable "passmenu"

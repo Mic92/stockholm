@@ -147,9 +147,10 @@ myKeys conf = Map.fromList $
     , ((_4  , xK_Delete ), removeEmptyWorkspace)
 
     , ((_4  , xK_Return ), toggleWS)
-    , ((noModMask, xF86XK_AudioLowerVolume), amixer ["sset", "Master", "5%-"])
-    , ((noModMask, xF86XK_AudioRaiseVolume), amixer ["sset", "Master", "5%+"])
-    , ((noModMask, xF86XK_AudioMute), amixer ["sset", "Master", "toggle"])
+
+    , ((0, xF86XK_AudioLowerVolume), audioLowerVolume)
+    , ((0, xF86XK_AudioRaiseVolume), audioRaiseVolume)
+    , ((0, xF86XK_AudioMute), audioMute)
     ]
     where
     _4 = mod4Mask
@@ -162,7 +163,10 @@ myKeys conf = Map.fromList $
     _4CM = _4 .|. _C .|. _M
     _4SM = _4 .|. _S .|. _M
 
-    amixer args = forkFile Paths.amixer args Nothing
+    pactl args = forkFile Paths.pactl args Nothing
+    audioLowerVolume = pactl ["--", "set-sink-volume", "@DEFAULT_SINK@", "-5%"]
+    audioRaiseVolume = pactl ["--", "set-sink-volume", "@DEFAULT_SINK@", "+5%"]
+    audioMute = pactl ["--", "set-sink-mute", "@DEFAULT_SINK@", "toggle"]
 
 
 pagerConfig :: PagerConfig
