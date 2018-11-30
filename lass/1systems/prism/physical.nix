@@ -25,6 +25,11 @@
     fsType = "zfs";
   };
 
+  fileSystems."/var/download" = {
+    device = "tank/download";
+    fsType = "zfs";
+  };
+
   fileSystems."/var/lib/containers" = {
     device = "tank/containers";
     fsType = "zfs";
