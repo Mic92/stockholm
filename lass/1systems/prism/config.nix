@@ -207,7 +207,6 @@ with import <stockholm/lib>;
         RandomizedDelaySec = "2min";
       };
     }
-    <stockholm/lass/2configs/downloading.nix>
     <stockholm/lass/2configs/minecraft.nix>
     {
       services.taskserver = {
@@ -337,6 +336,63 @@ with import <stockholm/lib>;
         { predicate = "-p tcp --dport 64738"; target = "ACCEPT";}
       ];
 
+    }
+    {
+      systemd.services."container@yellow".reloadIfChanged = mkForce false;
+      containers.yellow = {
+        config = { ... }: {
+          environment.systemPackages = [ pkgs.git ];
+          services.openssh.enable = true;
+          users.users.root.openssh.authorizedKeys.keys = [
+            config.krebs.users.lass.pubkey
+          ];
+        };
+        autoStart = false;
+        enableTun = true;
+        privateNetwork = true;
+        hostAddress = "10.233.2.13";
+        localAddress = "10.233.2.14";
+      };
+
+      services.nginx.virtualHosts."lassul.us".locations."^~ /transmission".extraConfig = ''
+        if ($scheme != "https") {
+          rewrite ^ https://$host$uri permanent;
+        }
+        auth_basic "Restricted Content";
+        auth_basic_user_file ${pkgs.writeText "transmission-user-pass" ''
+          krebs:$apr1$1Fwt/4T0$YwcUn3OBmtmsGiEPlYWyq0
+        ''};
+        proxy_pass http://10.233.2.14:9091;
+      '';
+
+      users.groups.download = {};
+      users.users = {
+        download = {
+          createHome = true;
+          group = "download";
+          name = "download";
+          home = "/var/download";
+          useDefaultShell = true;
+          openssh.authorizedKeys.keys = with config.krebs.users; [
+            lass.pubkey
+            lass-shodan.pubkey
+            lass-icarus.pubkey
+            lass-daedalus.pubkey
+            lass-helios.pubkey
+            makefu.pubkey
+            wine-mors.pubkey
+          ];
+        };
+      };
+
+      system.activationScripts.downloadFolder = ''
+        mkdir -p /var/download
+        chmod 775 /var/download
+        ln -fs /var/download/finished /var/lib/containers/yellow/var/download/finished || :
+        chown download: /var/download/finished
+        ln -fs /var/download/incoming /var/lib/containers/yellow/var/download/incoming || :
+        chown download: /var/download/incoming
+      '';
     }
   ];
 
