@@ -134,7 +134,7 @@ myKeys conf = Map.fromList $
     , ((_C  , xK_Menu   ), toggleWS)
 
     , ((_4  , xK_space  ), sendMessage NextLayout)
-    , ((_4S , xK_space  ), setLayout $ XMonad.layoutHook conf) -- reset layout
+    , ((_4M , xK_space  ), resetLayout)
 
     , ((_4  , xK_m      ), windows W.focusMaster)
     , ((_4  , xK_j      ), windows W.focusDown)
@@ -150,7 +150,7 @@ myKeys conf = Map.fromList $
     , ((_4M , xK_j      ), sendMessage MirrorShrink)
     , ((_4M , xK_k      ), sendMessage MirrorExpand)
 
-    , ((_4  , xK_t      ), withFocused $ windows . W.sink) -- make tiling
+    , ((_4  , xK_t      ), withFocused $ windows . W.sink)
 
     , ((_4  , xK_comma  ), sendMessage $ IncMasterN 1)
     , ((_4  , xK_period ), sendMessage $ IncMasterN (-1))
@@ -181,6 +181,8 @@ myKeys conf = Map.fromList $
     audioRaiseVolume = pactl ["--", "set-sink-volume", "@DEFAULT_SINK@", "+5%"]
     audioMute = pactl ["--", "set-sink-mute", "@DEFAULT_SINK@", "toggle"]
 
+    resetLayout = setLayout $ XMonad.layoutHook conf
+
 
 pagerConfig :: PagerConfig
 pagerConfig = def
@@ -199,5 +201,4 @@ pagerConfig = def
 
 
 allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
-allWorkspaceNames ws =
-    return $ map W.tag (W.hidden ws) ++ [W.tag $ W.workspace $ W.current ws]
+allWorkspaceNames = return . map W.tag . W.workspaces
