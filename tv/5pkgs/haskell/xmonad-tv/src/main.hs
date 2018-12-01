@@ -136,6 +136,7 @@ myKeys conf = Map.fromList $
     , ((_4  , xK_space  ), sendMessage NextLayout)
     , ((_4S , xK_space  ), setLayout $ XMonad.layoutHook conf) -- reset layout
 
+    , ((_4  , xK_m      ), windows W.focusMaster)
     , ((_4  , xK_j      ), windows W.focusDown)
     , ((_4  , xK_k      ), windows W.focusUp)
 
