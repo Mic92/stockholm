@@ -20,12 +20,13 @@ import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
 import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Layout.NoBorders ( smartBorders )
+import XMonad.Layout.ResizableTile (ResizableTall(ResizableTall))
+import XMonad.Layout.ResizableTile (MirrorResize(MirrorExpand,MirrorShrink))
 import qualified XMonad.StackSet as W
 import Data.Map (Map)
 import qualified Data.Map as Map
 import XMonad.Hooks.UrgencyHook (SpawnUrgencyHook(..), withUrgencyHook)
 import XMonad.Hooks.ManageHelpers (doCenterFloat)
-import XMonad.Layout.FixedColumn (FixedColumn(..))
 import XMonad.Hooks.Place (placeHook, smart)
 import XMonad.Actions.PerWorkspaceKeys (chooseAction)
 
@@ -47,6 +48,7 @@ main = getArgs >>= \case
 
 mainNoArgs :: IO ()
 mainNoArgs = do
+    let width = 1366
     workspaces0 <- getWorkspaces0
     handleShutdownEvent <- newShutdownEventHandler
     xmonad
@@ -56,7 +58,14 @@ mainNoArgs = do
             , modMask           = mod4Mask
             , keys              = myKeys
             , workspaces        = workspaces0
-            , layoutHook        = smartBorders $ FixedColumn 1 20 80 10 ||| Full
+            , layoutHook =
+                smartBorders $
+                  ResizableTall
+                    1
+                    (10 * 6 / width)
+                    ((80 * 6 + 2 * (1+1+1))/width) []
+                  |||
+                  Full
             , manageHook =
                 composeAll
                   [ appName =? "fzmenu-urxvt" --> doCenterFloat
@@ -134,8 +143,11 @@ myKeys conf = Map.fromList $
     , ((_4S , xK_j      ), windows W.swapDown)
     , ((_4S , xK_k      ), windows W.swapUp)
 
-    , ((_4  , xK_h      ), sendMessage Shrink)
-    , ((_4  , xK_l      ), sendMessage Expand)
+    , ((_4M , xK_h      ), sendMessage Shrink)
+    , ((_4M , xK_l      ), sendMessage Expand)
+
+    , ((_4M , xK_j      ), sendMessage MirrorShrink)
+    , ((_4M , xK_k      ), sendMessage MirrorExpand)
 
     , ((_4  , xK_t      ), withFocused $ windows . W.sink) -- make tiling
 
