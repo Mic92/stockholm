@@ -95,7 +95,7 @@ in
   users = {
     groups.pulse.gid = config.users.users.pulse.uid;
     users.pulse = {
-      uid = genid "pulse";
+      uid = genid_uint31 "pulse";
       group = "pulse";
       extraGroups = [ "audio" ];
       home = "${runDir}/home";
