@@ -259,7 +259,9 @@ let {
             (writer "Jq")
             ''write[^ \t\r\n]*[ \t\r\n]*"[^"]*\.jq"''
           ];
+          javascript.extraStart = ''/\* js \*/'';
           lua = {};
+          python.extraStart = ''/\* py \*/'';
           sed.extraStart = writer "Sed";
           sh.extraStart = let
             phases = [
