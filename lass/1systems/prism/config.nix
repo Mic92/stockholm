@@ -388,7 +388,7 @@ with import <stockholm/lib>;
       system.activationScripts.downloadFolder = ''
         mkdir -p /var/download
         chmod 775 /var/download
-        ln -fs /var/lib/containers/yellow/var/download/finished /var/download/finished || :
+        ln -fnsT /var/lib/containers/yellow/var/download/finished /var/download/finished || :
         chown download: /var/download/finished
       '';
     }
