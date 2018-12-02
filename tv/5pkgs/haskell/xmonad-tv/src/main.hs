@@ -164,6 +164,8 @@ myKeys conf = Map.fromList $
     , ((0, xF86XK_AudioLowerVolume), audioLowerVolume)
     , ((0, xF86XK_AudioRaiseVolume), audioRaiseVolume)
     , ((0, xF86XK_AudioMute), audioMute)
+
+    , ((_4, xK_Prior), forkFile Paths.xcalib ["-invert", "-alter"] Nothing)
     ]
     where
     _4 = mod4Mask

@@ -89,6 +89,7 @@ in {
       pkgs.fzmenu
       pkgs.pulseaudioLight.out
       pkgs.rxvt_unicode
+      pkgs.xcalib
       "/run/wrappers" # for su
     ];
     serviceConfig = {
