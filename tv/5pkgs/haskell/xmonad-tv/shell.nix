@@ -28,7 +28,7 @@ in
         config.systemd.services.xmonad.environment.XMONAD_CACHE_DIR
       }
 
-      xmonad=$CACHEDIR/main
+      xmonad=$CACHEDIR/xmonad-${lib.currentSystem}
 
       xmonad_build() {(
         set -efu
