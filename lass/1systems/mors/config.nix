@@ -102,6 +102,7 @@ with import <stockholm/lib>;
     urban
     mk_sql_pair
     remmina
+    transmission
 
     iodine
 
