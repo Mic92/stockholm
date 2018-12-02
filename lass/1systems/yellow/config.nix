@@ -32,16 +32,24 @@ with import <stockholm/lib>;
     };
   };
 
+  services.nginx = {
+    enable = true;
+    virtualHosts."yellow.r".locations."/dl".extraConfig = ''
+      autoindex on;
+      alias /var/download/finished;
+    '';
+  };
+
   krebs.iptables = {
     enable = true;
     tables.filter.INPUT.rules = [
+      { predicate = "-p tcp --dport 80"; target = "ACCEPT"; }
       { predicate = "-p tcp --dport 9091"; target = "ACCEPT"; }
       { predicate = "-p tcp --dport 51413"; target = "ACCEPT"; }
       { predicate = "-p udp --dport 51413"; target = "ACCEPT"; }
     ];
   };
 
-  services.nginx.enable = true;
   services.openvpn.servers.nordvpn.config = ''
     client
     dev tun
