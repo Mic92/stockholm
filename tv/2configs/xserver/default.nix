@@ -99,6 +99,7 @@ in {
       pkgs.fzmenu
       pkgs.pulseaudioLight.out
       pkgs.rxvt_unicode
+      "/run/wrappers" # for slock, and su
     ];
     serviceConfig = {
       SyslogIdentifier = "xmonad";
