@@ -1,4 +1,4 @@
-{lib, ... }:
+{ pkgs, lib, ... }:
 with lib;
 let
   domain = "cache.nsupdate.info";
@@ -17,9 +17,13 @@ in {
   };
   krebs.cachecache = {
     enable = true;
-    enableSSL = false; # disable letsencrypt for testing
+    enableSSL = true; # disable letsencrypt for testing
     cacheDir = "/var/cache/nix-cache-cache";
     maxSize = "10g";
+    indexFile = pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/krebs/35c3-nixos-cache/master/index.html";
+      sha256 = "0n9lji4rpi2wpfik3dvl92mmpfrywyp33iwsw7d8qmykk7l0hfp8";
+    };
 
     # assumes that the domain is reachable from the internet
     virtualHost = domain;
