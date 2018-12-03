@@ -81,6 +81,7 @@ in {
             host = "${host}.r",
             targetdir = "/var/lib/containers/.blue",
             rsync = {
+              archive = true,
               owner = true,
               group = true,
             };
