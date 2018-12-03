@@ -143,12 +143,12 @@ let
     ) cfg.servers;
 
     users.extraUsers.bepasty = {
-      uid = genid "bepasty";
+      uid = genid_uint31 "bepasty";
       group = "bepasty";
       home = "/var/lib/bepasty-server";
     };
     users.extraGroups.bepasty = {
-      gid = genid "bepasty";
+      gid = genid_uint31 "bepasty";
     };
   };
 
