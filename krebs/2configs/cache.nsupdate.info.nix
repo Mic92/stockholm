@@ -22,7 +22,7 @@ in {
     maxSize = "10g";
     indexFile = pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/krebs/35c3-nixos-cache/master/index.html";
-      sha256 = "0n9lji4rpi2wpfik3dvl92mmpfrywyp33iwsw7d8qmykk7l0hfp8";
+      sha256 = "1vlngzbn0jipigspccgikd7xgixksimdl4wf8ix7d30ljx47p9n0";
     };
 
     # assumes that the domain is reachable from the internet
