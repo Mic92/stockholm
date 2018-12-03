@@ -25,7 +25,7 @@ with import <stockholm/lib>;
     { # TODO make new hfos.nix out of this vv
       boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
       users.users.riot = {
-        uid = genid "riot";
+        uid = genid_uint31 "riot";
         isNormalUser = true;
         extraGroups = [ "libvirtd" ];
         openssh.authorizedKeys.keys = [
@@ -44,21 +44,21 @@ with import <stockholm/lib>;
     }
     {
       users.users.tv = {
-        uid = genid "tv";
+        uid = genid_uint31 "tv";
         isNormalUser = true;
         openssh.authorizedKeys.keys = [
           config.krebs.users.tv.pubkey
         ];
       };
       users.users.makefu = {
-        uid = genid "makefu";
+        uid = genid_uint31 "makefu";
         isNormalUser = true;
         openssh.authorizedKeys.keys = [
           config.krebs.users.makefu.pubkey
         ];
       };
       users.extraUsers.dritter = {
-        uid = genid "dritter";
+        uid = genid_uint31 "dritter";
         isNormalUser = true;
         extraGroups = [
           "download"
@@ -75,7 +75,7 @@ with import <stockholm/lib>;
         ];
       };
       users.users.hellrazor = {
-        uid = genid "hellrazor";
+        uid = genid_uint31 "hellrazor";
         isNormalUser = true;
         extraGroups = [
           "download"
@@ -168,7 +168,7 @@ with import <stockholm/lib>;
     }
     {
       users.users.jeschli = {
-        uid = genid "jeschli";
+        uid = genid_uint31 "jeschli";
         isNormalUser = true;
         openssh.authorizedKeys.keys = with config.krebs.users; [
           jeschli.pubkey
