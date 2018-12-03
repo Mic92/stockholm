@@ -129,7 +129,7 @@ let {
         command! -n=0 -bar ShowSyntax :call ShowSyntax()
       '';
     })))
-    ((rtp: rtp // { inherit rtp; }) (pkgs.write "vim-tv" {
+    ((rtp: rtp // { inherit rtp; }) (pkgs.write "vim-syntax-nix-nested" {
       "/syntax/haskell.vim".text = /* vim */ ''
         syn region String start=+\[[[:alnum:]]*|+ end=+|]+
 
@@ -239,26 +239,58 @@ let {
           " This is required because containedin isn't transitive.
           syn cluster nix_has_dollar_curly
             \ add=@nix_${lang}_syntax
-        '') {
+        '') (let
+
+          capitalize = s: let
+            xs = stringToCharacters s;
+          in
+            toUpper (head xs) + concatStrings (tail xs);
+
+          alts = xs: ''\(${concatStringsSep ''\|'' xs}\)'';
+          def = k: ''${k}[ \t\r\n]*='';
+          writer = k: ''write${k}[^ \t\r\n]*[ \t\r\n]*\("[^"]*"\|[a-z]\+\)'';
+
+        in {
           c = {};
           cabal = {};
           diff = {};
           haskell = {};
-          jq.extraStart = concatStringsSep ''\|'' [
-            ''writeJq.*''
+          jq.extraStart = alts [
+            (writer "Jq")
             ''write[^ \t\r\n]*[ \t\r\n]*"[^"]*\.jq"''
           ];
+          javascript.extraStart = ''/\* js \*/'';
           lua = {};
-          sed.extraStart = ''writeSed[^ \t\r\n]*[ \t\r\n]*"[^"]*"'';
-          sh.extraStart = concatStringsSep ''\|'' [
-            ''write\(A\|Ba\|Da\)sh[^ \t\r\n]*[ \t\r\n]*\("[^"]*"\|[a-z]\+\)''
-            ''[a-z]*Phase[ \t\r\n]*=''
+          python.extraStart = ''/\* py \*/'';
+          sed.extraStart = writer "Sed";
+          sh.extraStart = let
+            phases = [
+              "unpack"
+              "patch"
+              "configure"
+              "build"
+              "check"
+              "install"
+              "fixup"
+              "installCheck"
+              "dist"
+            ];
+            shells = [
+              "ash"
+              "bash"
+              "dash"
+            ];
+          in alts [
+            (def "shellHook")
+            (def "${alts phases}Phase")
+            (def "${alts ["pre" "post"]}${alts (map capitalize phases)}")
+            (writer (alts (map capitalize shells)))
           ];
           yaml = {};
           vim.extraStart =
             ''write[^ \t\r\n]*[ \t\r\n]*"\(\([^"]*\.\)\?vimrc\|[^"]*\.vim\)"'';
           xdefaults = {};
-        })}
+        }))}
 
         " Clear syntax that interferes with nixINSIDE_DOLLAR_CURLY.
         syn clear shVarAssign

@@ -24,17 +24,6 @@ in {
     pkgs.xlibs.fontschumachermisc
   ];
 
-  # TODO dedicated group, i.e. with a single user [per-user-setuid]
-  # TODO krebs.setuid.slock.path vs /run/wrappers/bin
-  krebs.setuid.slock = {
-    filename = "${pkgs.slock}/bin/slock";
-    group = "wheel";
-    envp = {
-      DISPLAY = ":${toString config.services.xserver.display}";
-      USER = cfg.user.name;
-    };
-  };
-
   services.xserver = {
 
     # Don't install feh into systemPackages
@@ -96,9 +85,12 @@ in {
       ]);
     };
     path = [
+      config.tv.slock.package
       pkgs.fzmenu
       pkgs.pulseaudioLight.out
       pkgs.rxvt_unicode
+      pkgs.xcalib
+      "/run/wrappers" # for su
     ];
     serviceConfig = {
       SyslogIdentifier = "xmonad";
@@ -153,5 +145,10 @@ in {
       StartLimitBurst = 0;
       User = cfg.user.name;
     };
+  };
+
+  tv.slock = {
+    enable = true;
+    user = cfg.user;
   };
 }

@@ -13,10 +13,13 @@ passmenu :: FilePath
 passmenu = findExecutable "passmenu"
 
 slock :: FilePath
-slock = "/run/wrappers/bin/slock"
+slock = findExecutable "slock"
 
 su :: FilePath
-su = "/run/wrappers/bin/su"
+su = findExecutable "su"
 
 urxvtc :: FilePath
 urxvtc = findExecutable "urxvtc"
+
+xcalib :: FilePath
+xcalib = findExecutable "xcalib"

@@ -3,7 +3,7 @@
 let
   inherit (lib)
     all any attrNames concatMapStringsSep concatStringsSep const filter flip
-    genid hasSuffix head isInt isString length mergeOneOption mkOption
+    genid_uint31 hasSuffix head isInt isString length mergeOneOption mkOption
     mkOptionType optional optionalAttrs optionals range splitString
     stringLength substring test testString typeOf;
   inherit (lib.types)
@@ -365,7 +365,7 @@ rec {
       };
       uid = mkOption {
         type = int;
-        default = genid config.name;
+        default = genid_uint31 config.name;
       };
     };
   });
@@ -377,7 +377,7 @@ rec {
       };
       gid = mkOption {
         type = int;
-        default = genid config.name;
+        default = genid_uint31 config.name;
       };
     };
   });

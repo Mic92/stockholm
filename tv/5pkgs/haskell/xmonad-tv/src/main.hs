@@ -20,12 +20,13 @@ import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
 import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Layout.NoBorders ( smartBorders )
+import XMonad.Layout.ResizableTile (ResizableTall(ResizableTall))
+import XMonad.Layout.ResizableTile (MirrorResize(MirrorExpand,MirrorShrink))
 import qualified XMonad.StackSet as W
 import Data.Map (Map)
 import qualified Data.Map as Map
 import XMonad.Hooks.UrgencyHook (SpawnUrgencyHook(..), withUrgencyHook)
 import XMonad.Hooks.ManageHelpers (doCenterFloat)
-import XMonad.Layout.FixedColumn (FixedColumn(..))
 import XMonad.Hooks.Place (placeHook, smart)
 import XMonad.Actions.PerWorkspaceKeys (chooseAction)
 
@@ -47,6 +48,7 @@ main = getArgs >>= \case
 
 mainNoArgs :: IO ()
 mainNoArgs = do
+    let width = 1366
     workspaces0 <- getWorkspaces0
     handleShutdownEvent <- newShutdownEventHandler
     xmonad
@@ -56,7 +58,14 @@ mainNoArgs = do
             , modMask           = mod4Mask
             , keys              = myKeys
             , workspaces        = workspaces0
-            , layoutHook        = smartBorders $ FixedColumn 1 20 80 10 ||| Full
+            , layoutHook =
+                smartBorders $
+                  ResizableTall
+                    1
+                    (10 * 6 / width)
+                    ((80 * 6 + 2 * (1+1+1))/width) []
+                  |||
+                  Full
             , manageHook =
                 composeAll
                   [ appName =? "fzmenu-urxvt" --> doCenterFloat
@@ -125,8 +134,9 @@ myKeys conf = Map.fromList $
     , ((_C  , xK_Menu   ), toggleWS)
 
     , ((_4  , xK_space  ), sendMessage NextLayout)
-    , ((_4S , xK_space  ), setLayout $ XMonad.layoutHook conf) -- reset layout
+    , ((_4M , xK_space  ), resetLayout)
 
+    , ((_4  , xK_m      ), windows W.focusMaster)
     , ((_4  , xK_j      ), windows W.focusDown)
     , ((_4  , xK_k      ), windows W.focusUp)
 
@@ -134,10 +144,13 @@ myKeys conf = Map.fromList $
     , ((_4S , xK_j      ), windows W.swapDown)
     , ((_4S , xK_k      ), windows W.swapUp)
 
-    , ((_4  , xK_h      ), sendMessage Shrink)
-    , ((_4  , xK_l      ), sendMessage Expand)
+    , ((_4M , xK_h      ), sendMessage Shrink)
+    , ((_4M , xK_l      ), sendMessage Expand)
 
-    , ((_4  , xK_t      ), withFocused $ windows . W.sink) -- make tiling
+    , ((_4M , xK_j      ), sendMessage MirrorShrink)
+    , ((_4M , xK_k      ), sendMessage MirrorExpand)
+
+    , ((_4  , xK_t      ), withFocused $ windows . W.sink)
 
     , ((_4  , xK_comma  ), sendMessage $ IncMasterN 1)
     , ((_4  , xK_period ), sendMessage $ IncMasterN (-1))
@@ -151,6 +164,8 @@ myKeys conf = Map.fromList $
     , ((0, xF86XK_AudioLowerVolume), audioLowerVolume)
     , ((0, xF86XK_AudioRaiseVolume), audioRaiseVolume)
     , ((0, xF86XK_AudioMute), audioMute)
+
+    , ((_4, xK_Prior), forkFile Paths.xcalib ["-invert", "-alter"] Nothing)
     ]
     where
     _4 = mod4Mask
@@ -167,6 +182,8 @@ myKeys conf = Map.fromList $
     audioLowerVolume = pactl ["--", "set-sink-volume", "@DEFAULT_SINK@", "-5%"]
     audioRaiseVolume = pactl ["--", "set-sink-volume", "@DEFAULT_SINK@", "+5%"]
     audioMute = pactl ["--", "set-sink-mute", "@DEFAULT_SINK@", "toggle"]
+
+    resetLayout = setLayout $ XMonad.layoutHook conf
 
 
 pagerConfig :: PagerConfig
@@ -186,5 +203,4 @@ pagerConfig = def
 
 
 allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
-allWorkspaceNames ws =
-    return $ map W.tag (W.hidden ws) ++ [W.tag $ W.workspace $ W.current ws]
+allWorkspaceNames = return . map W.tag . W.workspaces
