@@ -46,7 +46,7 @@ in
       xmonad_restart() {(
         set -efu
         cd "$WORKDIR"
-        if systemctl is-active xmonad; then
+        if systemctl --quiet is-active xmonad; then
           sudo systemctl stop xmonad
           cp -b "$config_XMONAD_CACHE_DIR"/xmonad.state "$CACHEDIR"/
           echo "xmonad.state: $(cat "$CACHEDIR"/xmonad.state)"
@@ -59,9 +59,14 @@ in
 
       xmonad_yield() {(
         set -efu
-        "$xmonad" --shutdown
-        cp -b "$CACHEDIR"/xmonad.state "$config_XMONAD_CACHE_DIR"/
-        sudo systemctl start xmonad
+        if ! systemctl --quiet is-active xmonad; then
+          "$xmonad" --shutdown
+          cp -b "$CACHEDIR"/xmonad.state "$config_XMONAD_CACHE_DIR"/
+          sudo systemctl start xmonad
+        else
+          echo "xmonad.service is already running" >&2
+          exit -1
+        fi
       )}
 
       export PATH=${config.systemd.services.xmonad.path}:$PATH
