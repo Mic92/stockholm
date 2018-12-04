@@ -15,7 +15,7 @@ with import <stockholm/lib>;
 
   # hardware configuration
   boot.initrd.luks.devices.muca = {
-    device = "/dev/disk/by-uuid/a8796bb3-6c03-4ddf-b2e4-c2e44c51d352";
+    device = "/dev/disk/by-uuid/7b24a931-40b6-44a6-ba22-c805cf164e91";
   };
   boot.initrd.luks.cryptoModules = [ "aes" "sha512" "xts" ];
   boot.initrd.availableKernelModules = [ "ahci" ];
@@ -25,16 +25,17 @@ with import <stockholm/lib>;
   fileSystems = {
     "/" = {
       device = "/dev/mapper/muvga-root";
-      fsType = "btrfs";
-      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+      fsType = "ext4";
+      options = [ "defaults" "discard" ];
     };
     "/home" = {
       device = "/dev/mapper/muvga-home";
-      fsType = "btrfs";
-      options = ["defaults" "noatime" "ssd" "compress=lzo"];
+      fsType = "ext4";
+      options = [ "defaults" "discard" ];
     };
     "/boot" = {
-      device = "/dev/disk/by-uuid/DC38-F165";
+      device = "/dev/disk/by-uuid/CEB1-9743";
+      fsType = "vfat";
     };
   };
 

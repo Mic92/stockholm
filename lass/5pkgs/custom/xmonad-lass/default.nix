@@ -25,6 +25,8 @@ import Control.Monad.Extra (whenJustM)
 import Data.List (isInfixOf)
 import Data.Monoid (Endo)
 import System.Environment (getArgs, lookupEnv)
+import System.Exit (exitFailure)
+import System.IO (hPutStrLn, stderr)
 import System.Posix.Process (executeFile)
 import XMonad.Actions.CopyWindow (copy, kill1)
 import XMonad.Actions.CycleWS (toggleWS)
@@ -36,7 +38,7 @@ import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Hooks.FloatNext (floatNext)
 import XMonad.Hooks.FloatNext (floatNextHook)
 import XMonad.Hooks.ManageDocks (avoidStruts, ToggleStruts(ToggleStruts))
-import XMonad.Hooks.Place (placeHook, smart)
+import XMonad.Hooks.ManageHelpers (composeOne, doCenterFloat, (-?>))
 import XMonad.Hooks.UrgencyHook (focusUrgent)
 import XMonad.Hooks.UrgencyHook (withUrgencyHook, UrgencyHook(..))
 import XMonad.Layout.FixedColumn (FixedColumn(..))
@@ -49,7 +51,7 @@ import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedWindows (getName)
 import XMonad.Util.Run (safeSpawn)
 
-import XMonad.Stockholm.Shutdown (handleShutdownEvent, sendShutdownEvent)
+import XMonad.Stockholm.Shutdown (newShutdownEventHandler, shutdown)
 import XMonad.Stockholm.Pager (defaultWindowColors, pager, MatchMethod(MatchPrefix), PagerConfig(..))
 
 data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
@@ -69,18 +71,20 @@ myFont = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1"
 
 main :: IO ()
 main = getArgs >>= \case
-  ["--shutdown"] -> sendShutdownEvent
-  _ -> main'
+    [] -> main'
+    ["--shutdown"] -> shutdown
+    args -> hPutStrLn stderr ("bad arguments: " <> show args) >> exitFailure
 
 main' :: IO ()
 main' = do
+    handleShutdownEvent <- newShutdownEventHandler
     xmonad $ ewmh
         $ withUrgencyHook LibNotifyUrgencyHook
         $ def
             { terminal           = myTerm
             , modMask            = mod4Mask
             , layoutHook         = smartBorders $ myLayoutHook
-            , manageHook         = placeHook (smart (1,0)) <+> floatNextHook <+> floatHooks
+            , manageHook         = floatHooks <+> floatNextHook
             , startupHook =
                 whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
                           (\path -> forkFile path [] Nothing)
@@ -95,13 +99,12 @@ myLayoutHook = defLayout
     defLayout = minimize $ ((avoidStruts $ Mirror (Tall 1 (3/100) (1/2))) ||| Full ||| FixedColumn 2 80 80 1 ||| Tall 1 (3/100) (1/2) ||| simplestFloat)
 
 floatHooks :: Query (Endo WindowSet)
-floatHooks = composeAll . concat $
-    [ [ title =? t --> doFloat | t <- myTitleFloats]
-    , [ className =? c --> doFloat | c <- myClassFloats ] ]
-  where
-      myTitleFloats = []
-      myClassFloats = ["Pinentry"] -- for gpg passphrase entry
-
+floatHooks = composeOne
+   [ className =? "Pinentry" -?> doCenterFloat
+   , title =? "fzfmenu" -?> doCenterFloat
+   , title =? "glxgears" -?> doCenterFloat
+   , resource =? "Dialog" -?> doFloat
+   ]
 
 myKeyMap :: [([Char], X ())]
 myKeyMap =
@@ -110,6 +113,7 @@ myKeyMap =
     , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
     , ("M4-o", spawn "${pkgs.brain}/bin/brainmenu --type")
     , ("M4-i", spawn "${pkgs.dpass}/bin/dpassmenu --type")
+    , ("M4-z", spawn "${pkgs.emot-menu}/bin/emoticons")
 
     , ("<XF86AudioMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-mute @DEFAULT_SINK@ toggle")
     , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ +4%")
@@ -158,6 +162,9 @@ myKeyMap =
     , ("M4-<F6>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 10")
     , ("M4-<F7>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 33")
     , ("M4-<F8>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 100")
+
+    , ("M4-<F9>", spawn "${pkgs.redshift}/bin/redshift -O 4000 -g 0.9:0.8:0.8")
+    , ("M4-<F10>", spawn "${pkgs.redshift}/bin/redshift -x")
 
     , ("<Pause>", spawn "${pkgs.xcalib}/bin/xcalib -invert -alter")
 

@@ -1,0 +1,41 @@
+#! /bin/sh
+set -efu
+
+#PATH=
+
+case ${FZMENU_PHASE-0} in
+  0)
+    export FZMENU_PHASE=1
+    exec setsid -f urxvt -name fzmenu-urxvt -e dash "$0"
+    ;;
+  1)
+    if result=$(
+      FZF_DEFAULT_OPTS=${FZMENU_FZF_DEFAULT_OPTS-}
+      if test -n "$FZF_DEFAULT_OPTS"; then
+        export FZF_DEFAULT_OPTS
+      fi
+      pass git ls-files '*/otp.gpg' | \
+      sed '
+
+        s/\/otp\.gpg$//
+      ' |
+      exec fzf \
+          --history=/dev/null \
+          --no-sort \
+          --prompt='OTP: ' \
+    )
+    then
+      export FZMENU_PHASE=2
+      export FZMENU_RESULT="$result"
+      setsid -f "$0"
+    fi
+    ;;
+  2)
+    pass=$(pass otp code "$FZMENU_RESULT/otp")
+    printf %s "$pass" |
+    xdotool type -f -
+    ;;
+  *)
+    echo "$0: error: bad phase: $FZMENU_PHASE" >&2
+    exit -1
+esac

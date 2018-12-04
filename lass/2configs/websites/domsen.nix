@@ -139,6 +139,13 @@ in {
     ssl_key = "/var/lib/acme/lassul.us/key.pem";
   };
 
+  users.users.xanf = {
+    uid = genid_uint31 "xanf";
+    home = "/home/xanf";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
   users.users.domsen = {
     uid = genid_uint31 "domsen";
     description = "maintenance acc for domsen";

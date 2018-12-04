@@ -24,8 +24,9 @@ import Control.Monad.Extra (whenJustM)
 import Graphics.X11.ExtraTypes.XF86
 import Text.Read (readEither)
 import XMonad
-import System.IO (hPutStrLn, stderr)
 import System.Environment (getArgs, withArgs, getEnv, getEnvironment, lookupEnv)
+import System.Exit (exitFailure)
+import System.IO (hPutStrLn, stderr)
 import System.Posix.Process (executeFile)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
@@ -66,12 +67,14 @@ myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
 
 main :: IO ()
 main = getArgs >>= \case
-    ["--shutdown"] -> sendShutdownEvent
-    _ -> mainNoArgs
+    [] -> mainNoArgs
+    ["--shutdown"] -> shutdown
+    args -> hPutStrLn stderr ("bad arguments: " <> show args) >> exitFailure
 
 mainNoArgs :: IO ()
 mainNoArgs = do
     workspaces0 <- getWorkspaces0
+    handleShutdownEvent <- newShutdownEventHandler
     xmonad
         -- $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "magenta", "-fg", "magenta", "-h", "2"], duration = 500000 }
         --                   urgencyConfig { remindWhen = Every 1 }

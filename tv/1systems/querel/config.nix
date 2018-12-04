@@ -25,7 +25,6 @@ with import <stockholm/lib>;
   };
 
   environment.systemPackages = with pkgs; [
-    chromium
     firefoxWrapper
     gimp
     kate
@@ -62,8 +61,6 @@ with import <stockholm/lib>;
   i18n.defaultLocale = "de_DE.UTF-8";
 
   networking.networkmanager.enable = true;
-
-  nixpkgs.config.chromium.enablePepperFlash = true;
 
   programs.ssh.startAgent = false;
 

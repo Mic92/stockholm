@@ -14,8 +14,25 @@ let {
   };
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
+    # cannot use pkgs.vimPlugins.fzf-vim as it's missing :Rg
+    (pkgs.vimUtils.buildVimPlugin {
+      name = "fzf-2018-11-14";
+      src = pkgs.fetchgit {
+        url = https://github.com/junegunn/fzf.vim;
+        rev = "ad1833ecbc9153b6e34a4292dc089a58c4bcb8dc";
+        sha256 = "1z2q71q6l9hq9fqfqpj1svhyk4yk1bzw1ljhksx4bnpz8gkfbx2m";
+      };
+    })
+    pkgs.vimPlugins.fzfWrapper
     pkgs.vimPlugins.undotree
-    pkgs.vimPlugins.vim-elixir
+    (pkgs.vimUtils.buildVimPlugin {
+      name = "vim-elixir-2018-08-17";
+      src = pkgs.fetchgit {
+        url = https://github.com/elixir-editors/vim-elixir;
+        rev = "0a847f0faed5ba2d94bb3d51f355c50f37ba025b";
+        sha256 = "1jl85wpgywhcvhgw02y8zpvqf0glr4i8522kxpvhsiacb1v1xh04";
+      };
+    })
     (pkgs.vimUtils.buildVimPlugin {
       name = "vim-syntax-jq";
       src = pkgs.fetchgit {
@@ -112,7 +129,7 @@ let {
         command! -n=0 -bar ShowSyntax :call ShowSyntax()
       '';
     })))
-    ((rtp: rtp // { inherit rtp; }) (pkgs.write "vim-tv" {
+    ((rtp: rtp // { inherit rtp; }) (pkgs.write "vim-syntax-nix-nested" {
       "/syntax/haskell.vim".text = /* vim */ ''
         syn region String start=+\[[[:alnum:]]*|+ end=+|]+
 
@@ -222,26 +239,58 @@ let {
           " This is required because containedin isn't transitive.
           syn cluster nix_has_dollar_curly
             \ add=@nix_${lang}_syntax
-        '') {
+        '') (let
+
+          capitalize = s: let
+            xs = stringToCharacters s;
+          in
+            toUpper (head xs) + concatStrings (tail xs);
+
+          alts = xs: ''\(${concatStringsSep ''\|'' xs}\)'';
+          def = k: ''${k}[ \t\r\n]*='';
+          writer = k: ''write${k}[^ \t\r\n]*[ \t\r\n]*\("[^"]*"\|[a-z]\+\)'';
+
+        in {
           c = {};
           cabal = {};
           diff = {};
           haskell = {};
-          jq.extraStart = concatStringsSep ''\|'' [
-            ''writeJq.*''
+          jq.extraStart = alts [
+            (writer "Jq")
             ''write[^ \t\r\n]*[ \t\r\n]*"[^"]*\.jq"''
           ];
+          javascript.extraStart = ''/\* js \*/'';
           lua = {};
-          sed.extraStart = ''writeSed[^ \t\r\n]*[ \t\r\n]*"[^"]*"'';
-          sh.extraStart = concatStringsSep ''\|'' [
-            ''write\(A\|Ba\|Da\)sh[^ \t\r\n]*[ \t\r\n]*\("[^"]*"\|[a-z]\+\)''
-            ''[a-z]*Phase[ \t\r\n]*=''
+          python.extraStart = ''/\* py \*/'';
+          sed.extraStart = writer "Sed";
+          sh.extraStart = let
+            phases = [
+              "unpack"
+              "patch"
+              "configure"
+              "build"
+              "check"
+              "install"
+              "fixup"
+              "installCheck"
+              "dist"
+            ];
+            shells = [
+              "ash"
+              "bash"
+              "dash"
+            ];
+          in alts [
+            (def "shellHook")
+            (def "${alts phases}Phase")
+            (def "${alts ["pre" "post"]}${alts (map capitalize phases)}")
+            (writer (alts (map capitalize shells)))
           ];
           yaml = {};
           vim.extraStart =
             ''write[^ \t\r\n]*[ \t\r\n]*"\(\([^"]*\.\)\?vimrc\|[^"]*\.vim\)"'';
           xdefaults = {};
-        })}
+        }))}
 
         " Clear syntax that interferes with nixINSIDE_DOLLAR_CURLY.
         syn clear shVarAssign
@@ -309,6 +358,11 @@ let {
     paths = [
       (pkgs.writeDashBin "vim" ''
         set -efu
+        export FZF_DEFAULT_COMMAND='${pkgs.ripgrep}/bin/rg --files'
+        export PATH=$PATH:${makeBinPath [
+          pkgs.fzf
+          pkgs.ripgrep
+        ]}
         (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString need-dirs})
         exec ${pkgs.vim}/bin/vim "$@"
       '')
@@ -333,6 +387,7 @@ let {
     set shortmess+=I
     set showcmd
     set showmatch
+    set timeoutlen=0
     set ttimeoutlen=0
     set undodir=${dirs.undodir}
     set undofile
@@ -385,5 +440,13 @@ let {
     noremap <esc>[c <nop> | noremap! <esc>[c <nop>
     noremap <esc>[d <nop> | noremap! <esc>[d <nop>
     vnoremap u <nop>
+
+    " fzf
+    nnoremap <esc>q :Files<cr>
+    nnoremap <esc>w :Rg<cr>
+
+    " edit alternate buffer
+    " For some reason neither putting <ctrl>6 nor <ctrl>^ works here...
+    nnoremap <esc>a 
   '';
 }

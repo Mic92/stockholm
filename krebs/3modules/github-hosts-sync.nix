@@ -57,7 +57,7 @@ let
 
   user = rec {
     name = "github-hosts-sync";
-    uid = genid name;
+    uid = genid_uint31 name;
   };
 
   # TODO move to lib?

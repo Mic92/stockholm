@@ -60,7 +60,7 @@ in {
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGaV5Ga5R8RTrA+nclxw6uy5Z+hPBLitQTfuXdsmbVW6 crapi";
     };
     drop = rec {
-      ci = true;
+      ci = false;
       cores = 1;
       nets = {
         retiolum = {
@@ -83,7 +83,7 @@ in {
       };
     };
     studio = rec {
-      ci = true;
+      ci = false;
       cores = 4;
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIqBR5gjJkR1TEIs2yx6JRoIOA7+/LJA6kjju8yCauFa studio";
@@ -109,7 +109,7 @@ in {
     };
 
     fileleech = rec {
-      ci = true;
+      ci = false;
       cores = 4;
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+jB5QdPsAJc90alYDhAEP3sPDJb6eIj9bebj+rTBEJ fileleech";
@@ -134,7 +134,7 @@ in {
       };
     };
     latte = rec {
-      ci = true;
+      ci = false;
       cores = 1;
       ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       # ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIrkK1mWfPvfZ9ALC1irGLuzOtMefaGAmGY1VD4dj7K1 latte";
@@ -166,7 +166,7 @@ in {
     };
 
     pnp = {
-      ci = true;
+      ci = false;
       cores = 1;
       nets = {
         retiolum = {
@@ -190,7 +190,7 @@ in {
       };
     };
     darth = {
-      ci = true;
+      ci = false;
       cores = 4;
       nets = {
         retiolum = {
@@ -404,7 +404,7 @@ in {
       };
     };
     wry = rec {
-      ci = true;
+      ci = false;
       cores = 1;
       extraZones = {
         "krebsco.de" = ''
@@ -449,7 +449,7 @@ in {
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH4Tjx9qK6uWtxT1HCpeC0XvDZKO/kaPygyKatpAqU6I root@wry";
     };
     filepimp = rec {
-      ci = true;
+      ci = false;
       cores = 1;
       nets = {
         lan = {
@@ -494,6 +494,8 @@ in {
           ip6.addr = "42:f9f0::10";
           aliases = [
             "omo.r"
+            "dcpp.omo.r"
+            "torrent.omo.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -554,7 +556,7 @@ in {
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN5ZmJSypW3LXIJ67DdbxMxCfLtORFkl5jEuD131S5Tr";
     };
-    nextgum = rec {
+    gum = rec {
       ci = true;
       extraZones = {
         "krebsco.de" = ''
@@ -563,6 +565,23 @@ in {
           graph             IN A      ${nets.internet.ip4.addr}
           gold              IN A      ${nets.internet.ip4.addr}
           iso.euer          IN A      ${nets.internet.ip4.addr}
+          wg.euer           IN A      ${nets.internet.ip4.addr}
+          photostore        IN A      ${nets.internet.ip4.addr}
+          o.euer            IN A      ${nets.internet.ip4.addr}
+          mon.euer          IN A      ${nets.internet.ip4.addr}
+          boot.euer         IN A      ${nets.internet.ip4.addr}
+          wiki.euer         IN A      ${nets.internet.ip4.addr}
+          pigstarter        IN A      ${nets.internet.ip4.addr}
+          cgit.euer         IN A      ${nets.internet.ip4.addr}
+          git.euer          IN A      ${nets.internet.ip4.addr}
+          euer              IN A      ${nets.internet.ip4.addr}
+          share.euer        IN A      ${nets.internet.ip4.addr}
+          gum               IN A      ${nets.internet.ip4.addr}
+          wikisearch        IN A      ${nets.internet.ip4.addr}
+          dl.euer           IN A      ${nets.internet.ip4.addr}
+          ghook             IN A      ${nets.internet.ip4.addr}
+          dockerhub         IN A      ${nets.internet.ip4.addr}
+          io                IN NS     gum.krebsco.de.
         '';
       };
       cores = 8;
@@ -571,6 +590,7 @@ in {
           ip4.addr = "144.76.26.247";
           ip6.addr = "2a01:4f8:191:12f6::2";
           aliases = [
+            "gum.i"
             "nextgum.i"
           ];
         };
@@ -594,71 +614,17 @@ in {
             "stats.makefu.r"
             "backup.makefu.r"
             "dcpp.nextgum.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAucCebFmS96WorD+Br4UQudmAhMlLpacErjwA/u2argBTT2nGHTR8
-            aN4e0xf3IYLA+iogLIW/JuQfKLe8evEK21iZ3jleW8N7mbCulhasi/0lqWlirrpO
-            npJAiSNF1m7ijoylkEKxtmehze+8ojprUT2hx1ImMlHMWGxvs+TmBbZBMgxAGMJh
-            6cMMDJQi+4d9XrJQ3+XUVK3MkviLA91oIAXsLdFptL6b12siUaz4StQXDJUHemBF
-            3ZwlO+W2Es69ifEhmV6NaDDRcSRdChGbHTz1OU8wYaFNaxWla/iprQQ+jEUldpcN
-            VC18QGYRUAgZ0PCIpKurjWNehJFB3zXt+wIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcxWFEPzke/Sdd9qNX6rSJgXal8NmINYajpFCxXfYdj root@gum";
-    };
-
-    gum = rec {
-      ci = true;
-      cores = 2;
-
-      extraZones = {
-        "krebsco.de" = ''
-          share.euer        IN A      ${nets.internet.ip4.addr}
-          mattermost.euer   IN A      ${nets.internet.ip4.addr}
-          gum               IN A      ${nets.internet.ip4.addr}
-          wikisearch        IN A      ${nets.internet.ip4.addr}
-          pigstarter        IN A      ${nets.internet.ip4.addr}
-          cgit.euer         IN A      ${nets.internet.ip4.addr}
-          euer              IN A      ${nets.internet.ip4.addr}
-          o.euer            IN A      ${nets.internet.ip4.addr}
-          git.euer          IN A      ${nets.internet.ip4.addr}
-          dl.euer           IN A      ${nets.internet.ip4.addr}
-          boot.euer         IN A      ${nets.internet.ip4.addr}
-          wiki.euer         IN A      ${nets.internet.ip4.addr}
-          mon.euer          IN A      ${nets.internet.ip4.addr}
-          ghook             IN A      ${nets.internet.ip4.addr}
-          dockerhub         IN A      ${nets.internet.ip4.addr}
-          photostore        IN A      ${nets.internet.ip4.addr}
-          io                IN NS     gum.krebsco.de.
-        '';
-      };
-      nets = rec {
-        internet = {
-          ip4.addr = "185.194.143.140";
-          ip6.addr = "2a03:4000:1c:43f::1";
-          aliases = [
-            "gum.i"
-          ];
-        };
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.0.211";
-          ip6.addr = "42:f9f0:0000:0000:0000:0000:0000:70d2";
-          aliases = [
             "gum.r"
             "cgit.gum.r"
             "o.gum.r"
             "tracker.makefu.r"
-
             "search.makefu.r"
             "wiki.makefu.r"
             "wiki.gum.r"
             "blog.makefu.r"
             "blog.gum.r"
             "dcpp.gum.r"
+            "torrent.gum.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -672,12 +638,11 @@ in {
           '';
         };
       };
-      # configured manually
-      # ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcxWFEPzke/Sdd9qNX6rSJgXal8NmINYajpFCxXfYdj root@gum";
     };
+
     shoney = rec {
-      ci = true;
+      ci = false;
       cores = 1;
       nets = rec {
         siem = {

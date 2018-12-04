@@ -166,7 +166,7 @@ let
           echo ${description} > ${workdir}/info/host
 
           chown buildbotSlave:buildbotSlave -R ${workdir}
-          chmod 700 -R ${workdir}
+          chmod 700 ${workdir}
         '';
         ExecStart = "${pkgs.buildbot-classic-slave}/bin/buildslave start ${workdir}";
         ExecStop = "${pkgs.buildbot-classic-slave}/bin/buildslave stop ${workdir}";

@@ -36,10 +36,10 @@ with import <stockholm/lib>;
       # TODO write function for proxy_pass (ssl/nonssl)
 
       krebs.iptables.tables.filter.FORWARD.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d 192.168.122.92"; target = "ACCEPT"; }
+        { v6 = false; precedence = 1000; predicate = "-d 192.168.122.179"; target = "ACCEPT"; }
       ];
       krebs.iptables.tables.nat.PREROUTING.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d 46.4.114.243"; target = "DNAT --to-destination 192.168.122.92"; }
+        { v6 = false; precedence = 1000; predicate = "-d 46.4.114.243"; target = "DNAT --to-destination 192.168.122.179"; }
       ];
     }
     {
@@ -55,13 +55,6 @@ with import <stockholm/lib>;
         isNormalUser = true;
         openssh.authorizedKeys.keys = [
           config.krebs.users.makefu.pubkey
-        ];
-      };
-      users.users.nin = {
-        uid = genid "nin";
-        isNormalUser = true;
-        openssh.authorizedKeys.keys = [
-          config.krebs.users.nin.pubkey
         ];
       };
       users.extraUsers.dritter = {
@@ -109,26 +102,6 @@ with import <stockholm/lib>;
         localAddress = "10.233.2.2";
       };
     }
-    {
-      #onondaga
-      systemd.services."container@onondaga".reloadIfChanged = mkForce false;
-      containers.onondaga = {
-        config = { ... }: {
-          imports = [ <stockholm/lass/2configs/rebuild-on-boot.nix> ];
-          environment.systemPackages = [ pkgs.git ];
-          services.openssh.enable = true;
-          users.users.root.openssh.authorizedKeys.keys = [
-            config.krebs.users.lass.pubkey
-            config.krebs.users.nin.pubkey
-          ];
-        };
-        autoStart = true;
-        enableTun = true;
-        privateNetwork = true;
-        hostAddress = "10.233.2.5";
-        localAddress = "10.233.2.6";
-      };
-    }
     <stockholm/lass/2configs/exim-smarthost.nix>
     <stockholm/lass/2configs/ts3.nix>
     <stockholm/lass/2configs/privoxy-retiolum.nix>
@@ -137,7 +110,6 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/iodined.nix>
     <stockholm/lass/2configs/paste.nix>
     <stockholm/lass/2configs/syncthing.nix>
-    <stockholm/lass/2configs/reaktor-coders.nix>
     <stockholm/lass/2configs/ciko.nix>
     <stockholm/lass/2configs/container-networking.nix>
     <stockholm/lass/2configs/monitoring/prometheus-server.nix>

@@ -1,4 +1,4 @@
-# usage: nix-instantiate --eval --strict --json ./ci.nix
+# usage: nix-instantiate --eval --json --read-write-mode --strict ci.nix | jq .
 with import ./lib;
 let
   pkgs = import <nixpkgs> { overlays = [ (import ./submodules/nix-writers/pkgs) ]; };
@@ -16,6 +16,6 @@ let
   ci-systems = filterAttrs (_: v: v.ci) system.config.krebs.hosts;
 
   build = host: owner:
-  ((import (toString ./. + "/${owner}/krops.nix") { name = host; }).test {target = "${getEnv "HOME"}/stockholm-build/${host}";});
+  ((import (toString ./. + "/${owner}/krops.nix") { name = host; }).test {target = "${getEnv "HOME"}/stockholm-tmp";});
 
 in mapAttrs (n: h: build n h.owner.name) ci-systems

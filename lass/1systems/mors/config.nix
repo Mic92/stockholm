@@ -33,6 +33,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/rtl-sdr.nix>
     <stockholm/lass/2configs/backup.nix>
     <stockholm/lass/2configs/print.nix>
+    <stockholm/lass/2configs/blue-host.nix>
     {
       krebs.iptables.tables.filter.INPUT.rules = [
         #risk of rain
@@ -101,6 +102,7 @@ with import <stockholm/lib>;
     urban
     mk_sql_pair
     remmina
+    transmission
 
     iodine
 
@@ -147,10 +149,6 @@ with import <stockholm/lib>;
   programs.adb.enable = true;
   users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
   virtualisation.docker.enable = true;
-  services.redshift = {
-    enable = true;
-    provider = "geoclue2";
-  };
 
   lass.restic = genAttrs [
     "daedalus"

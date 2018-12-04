@@ -14,16 +14,16 @@
         };
       };
       # TODO use this network config
-      #networking.interfaces.et0.ipv4.addresses = [
-      #  {
-      #    address = config.krebs.build.host.nets.internet.ip4.addr;
-      #    prefixLength = 27;
-      #  }
-      #  {
-      #    address = "46.4.114.243";
-      #    prefixLength = 27;
-      #  }
-      #];
+      networking.interfaces.eth0.ipv4.addresses = [
+        {
+          address = config.krebs.build.host.nets.internet.ip4.addr;
+          prefixLength = 27;
+        }
+        {
+          address = "46.4.114.243";
+          prefixLength = 27;
+        }
+      ];
       #networking.defaultGateway = "46.4.114.225";
       #networking.nameservers = [
       #  "8.8.8.8"

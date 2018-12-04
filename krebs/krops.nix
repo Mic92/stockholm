@@ -7,15 +7,27 @@
   # TODO document why pkgs should be used like this
   pkgs = import "${krops}/pkgs" {};
 
-  krebs-source = {
-    nixpkgs.git = {
-      ref = (lib.importJSON ./nixpkgs.json).rev;
-      url = https://github.com/NixOS/nixpkgs;
+  krebs-source = { test ? false }: rec {
+    nixpkgs = if test then {
+      file = {
+        path = toString (pkgs.fetchFromGitHub {
+          owner = "nixos";
+          repo = "nixpkgs";
+          rev = (lib.importJSON ./nixpkgs.json).rev;
+          sha256 = (lib.importJSON ./nixpkgs.json).sha256;
+        });
+        useChecksum = true;
+      };
+    } else {
+      git = {
+        ref = (lib.importJSON ./nixpkgs.json).rev;
+        url = https://github.com/NixOS/nixpkgs;
+      };
     };
     stockholm.file = toString ../.;
     stockholm-version.pipe = toString (pkgs.writeDash "${name}-version" ''
       set -efu
-      cd ${lib.escapeShellArg krebs-source.stockholm.file}
+      cd ${lib.escapeShellArg stockholm.file}
       V=$(${pkgs.coreutils}/bin/date +%y.%m)
       if test -d .git; then
         V=$V.git.$(${pkgs.git}/bin/git describe --always --dirty)
@@ -28,21 +40,17 @@
   };
 
   source ={ test }: lib.evalSource [
-    krebs-source
+    (krebs-source { test = test; })
     {
       nixos-config.symlink = "stockholm/krebs/1systems/${name}/config.nix";
-      secrets =
-        if test
-          then {
-            file = toString <stockholm/krebs/0tests/data/secrets>;
-          }
-          else {
-            pass = {
-              dir = "${lib.getEnv "HOME"}/brain";
-              name = "krebs-secrets/${name}";
-            };
-          }
-        ;
+      secrets = if test then {
+        file = toString <stockholm/krebs/0tests/data/secrets>;
+      } else {
+        pass = {
+          dir = "${lib.getEnv "HOME"}/brain";
+          name = "krebs-secrets/${name}";
+        };
+      };
     }
   ];
 

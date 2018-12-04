@@ -71,6 +71,11 @@ let
         '+[1m%Y-%m-%d[;30mT[;38;5;088m%H:%M[m:%S%:z'
   '';
 
+  q-utcdate = ''
+    ${pkgs.coreutils}/bin/date -u \
+        '+[1m%Y-%m-%d[;30mT[;38;5;065m%H:%M[m:%S%:z'
+  '';
+
   q-gitdir = ''
     if test -d .git; then
       #git status --porcelain
@@ -295,6 +300,7 @@ pkgs.writeBashBin "q" ''
   set -eu
   export PATH=/var/empty
   ${q-cal}
+  ${q-utcdate}
   ${q-isodate}
   ${q-sgtdate}
   (${q-gitdir}) &

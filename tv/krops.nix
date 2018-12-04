@@ -7,7 +7,7 @@
   ;
 
   source = lib.evalSource [
-    krebs-source
+    (krebs-source { test = true; })
     {
       nixos-config.symlink = "stockholm/tv/1systems/${name}/config.nix";
       secrets.file = toString ./dummy_secrets;

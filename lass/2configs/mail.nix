@@ -31,6 +31,7 @@ let
   '';
 
   mailboxes = {
+    afra = [ "to:afra@afra-berlin.de" ];
     c-base = [ "to:c-base.org" ];
     coins = [
       "to:btce@lassul.us"
@@ -46,12 +47,15 @@ let
     ];
     dezentrale = [ "to:dezentrale.space" ];
     dhl = [ "to:dhl@lassul.us" ];
+    dn42 = [ "to:dn42@lists.nox.tf" ];
     eloop = [ "to:eloop.org" ];
     github = [ "to:github@lassul.us" ];
     gmail = [ "to:gmail@lassul.us" "to:lassulus@gmail.com" "lassulus@googlemail.com" ];
+    india = [ "to:hillhackers@lists.hillhacks.in" "to:hackbeach@lists.hackbeach.in" ];
     kaosstuff = [ "to:gearbest@lassul.us" "to:banggood@lassul.us" "to:tomtop@lassul.us" ];
     lugs = [ "to:lugs@lug-s.org" ];
-    nix-devel = [ "to:nix-devel@googlegroups.com" ];
+    meetup = [ "to:meetup@lassul.us" ];
+    nix = [ "to:nix-devel@googlegroups.com" "to:nix@lassul.us" ];
     patreon = [ "to:patreon@lassul.us" ];
     paypal = [ "to:paypal@lassul.us" ];
     ptl = [ "to:ptl@posttenebraslab.ch" ];
@@ -168,6 +172,16 @@ let
     macro index a "<modify-labels>-archive\n"  # tag as Archived
     macro pager A "<modify-labels>+archive -unread -inbox\n"  # tag as Archived
     macro pager a "<modify-labels>-archive\n"  # tag as Archived
+
+
+    bind index U noop
+    bind index u noop
+    bind pager U noop
+    bind pager u noop
+    macro index U "<modify-labels>+unread\n"
+    macro index u "<modify-labels>-unread\n"
+    macro pager U "<modify-labels>+unread\n"
+    macro pager u "<modify-labels>-unread\n"
 
 
     bind index t noop

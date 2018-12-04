@@ -75,12 +75,18 @@ let
               ${iproute}/sbin/ip -6 addr add ${net.ip6.addr} dev ${netname}
               ${iproute}/sbin/ip -6 route add ${net.ip6.prefix} dev ${netname}
             ''}
+            ${tinc.config.tincUpExtra}
           '';
           description = ''
             tinc-up script to be used. Defaults to setting the
             krebs.host.nets.<netname>.ip4 and ip6 for the new ips and
             configures forwarding of the respecitive netmask as subnet.
           '';
+        };
+
+        tincUpExtra = mkOption {
+          type = types.str;
+          default = "";
         };
 
         tincPackage = mkOption {

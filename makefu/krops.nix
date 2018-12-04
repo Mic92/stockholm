@@ -23,7 +23,17 @@
     {
       # nixos-18.09 @ 2018-09-18
       # + uhub/sqlite: 5dd7610401747
-      nixpkgs = if test || host-src.full then {
+      nixpkgs = if test then {
+        file = {
+          path = toString (pkgs.fetchFromGitHub {
+            owner = "makefu";
+            repo = "nixpkgs";
+            rev = nixpkgs-src.rev;
+            sha256 = nixpkgs-src.sha256;
+          });
+          useChecksum = true;
+        };
+      } else if host-src.full then {
         git.ref = nixpkgs-src.rev;
         git.url = nixpkgs-src.url;
       } else if host-src.arm6 then {
@@ -69,7 +79,7 @@
     (lib.mkIf ( host-src.home-manager ) {
       home-manager.git = {
         url = https://github.com/rycee/home-manager;
-        ref = "6eea2a4";
+        ref = "f947faf";
       };
     })
   ];

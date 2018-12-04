@@ -87,7 +87,6 @@ in /* yaml */ ''
     mod_configure: {}
     mod_disco: {}
     mod_echo: {}
-    mod_irc: {}
     mod_bosh: {}
     mod_last: {}
     mod_offline:
@@ -96,9 +95,9 @@ in /* yaml */ ''
     mod_privacy: {}
     mod_private: {}
     mod_register:
-      access_from: deny
+      access_from: allow
       access: register
-      ip_access: trusted_network
+      # ip_access: trusted_network
       registration_watchers: ${toJSON config.registration_watchers}
     mod_roster: {}
     mod_shared_roster: {}

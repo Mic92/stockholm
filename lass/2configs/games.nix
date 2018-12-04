@@ -75,6 +75,8 @@ in {
       packages = with pkgs; [
         ftb
         minecraft
+        steam-run
+        dolphinEmu
       ];
     };
   };

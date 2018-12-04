@@ -15,8 +15,9 @@ with import <stockholm/lib>;
       cores = 4;
       extraZones = {
         "krebsco.de" = ''
-          prism     IN A ${nets.internet.ip4.addr}
+          cache     IN A ${nets.internet.ip4.addr}
           paste     IN A ${nets.internet.ip4.addr}
+          prism     IN A ${nets.internet.ip4.addr}
         '';
         "lassul.us" = ''
           $TTL 3600
@@ -27,12 +28,13 @@ with import <stockholm/lib>;
                               60 IN TXT    v=spf1 mx a:lassul.us -all
                               60 IN TXT    ( "v=DKIM1; k=rsa; t=s; s=*; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB" )
           default._domainkey  60 IN TXT    "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB"
+          cache               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           cgit                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           go                  60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           io                  60 IN NS     ions.lassul.us.
           ions                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-          paste               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           lol                 60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          paste               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           radio               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
         '';
       };
@@ -642,47 +644,6 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5HyLyaIvVH0qHIQ4ciKhDiElhSqsK+uXcA6lTvL+5n";
     };
-    cabal = {
-      cores = 2;
-      nets = rec {
-        retiolum = {
-          ip4.addr = "10.243.1.4";
-          ip6.addr = "42::1:4";
-          aliases = [
-            "cabal.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIECgKCBAEAukXm8xPpC6/F+wssYqQbqt1QDwsPrF3TJ9ToLFcN1WgDlhDhjM3A
-            SuRDMNjRT1fvVTuXyplH5g16eokW/yLOpNnznMS3/VR372pLPEOqfuRf7wAy18jj
-            rZkW3EO7nyZ8KMb+SXA8Q0KIpHY50Ezh+tqGoTZDICwoK6N5dKLgAZShS55JXwwK
-            qRG3vyzV3mDjgVyT0FNfyL1/BN1qvJ+tQQ40lEbkcQauMunMzNbH058kAd6H2/0e
-            LK4JkxI9XpZHE6Pf1epXyClHW7vT7APFRp9gL9tZS/XMC18+aEMFfQrNW9jb3FIq
-            rU5MfJ7aubboe7dT6CRaRSWpduiKLVzY/JCoGvUziyvmR7qHsQWTEjtNuQX9joc3
-            6iq1o+gmLV0G8Xwq8cEcg5USlLxNsGBQPwYnTG6iTPPHqOv7BKucekE/opnVZseE
-            fSNCGl1+tGwa3soSMI97LkpQTZxdeqf+jWZve0RbSa2Ihyod91ldFCqi1+PZx68v
-            yBI0PJamlt+dBx6WQKbPngWYeD8hXo7tg0XVRVa3ZQyX+Mq6uCCb2GM8ewMUPl+A
-            kcY1osFt6+sdkFGdiv3FMyijAiZumPoPprXC/4SGIsMnkoI4JfSAbTpHi2QuesqR
-            KMeairdB7XGUYlMvWpDLKN2dbMdRc+l3kDUKT7hALjKeyWS/27WYeK/STxvZXEXi
-            TZGHopvOFv6wcrb6nI49vIJo5mDLFamAPN3ZjeR20wP95UP7cUUSaTYX49M4lX6U
-            oL5BaFrcLn2PTvS84pUxcXKAp70FgTpvGJbaWwETgDjW+H+qlGmI/BTejpL7flVs
-            TOtaP/uCMxhVZSFv9bzo0ih10o+4gtU8lqxfJsVxlf2K7LVZ++LQba/u+XxRY+xw
-            3IFBfg34tnO6zYlV8XgAiJ6IUOHUZANsuBD4iMoFSVOig6t5eIOkgXR6GEkP8FBD
-            rkroRMmxcu4lTCOzWIuAVOxCd4XXguoGQ4HAzpGd5ccdcb8Ev4RYEvNJY7B5tIQZ
-            4J0F9ECzJuSu1HvWTL+T6a36d2MDTkXU2IJ2tSHciXqiP+QMMF7p9Ux0tiAq4mtf
-            luA94uKWg3cSyTyEM/jF66CgO6Ts3AivNE0MRNupV6AbUdr+TjzotGn9rxi168py
-            w/49OVbpR9EIGC2wxx7qcSEk5chFOcgvNQMRqgIx51bbOL7JYb0f4XuA38GUqLkG
-            09PXmPeyqGzR9HsV2XZDprZdD3Dy4ojdexw0+YILg9bHaAxLHYs6WFZvzfaLLsf1
-            K2I39vvrEEOy8tHi4jvMk7oVX6RWG+DOZMeXTvyUCaBHyYkA0eDlC6NeKOHxnW/g
-            ZtN1W93UdklEqc5okM0/ZIke1HDRt3ZLdQIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      secure = true;
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPsTeSAedrbp7/KmZX8Mvka702fIUy77Mvqo9HwzCbym";
-    };
     red = {
       monitoring = false;
       cores = 1;
@@ -713,6 +674,36 @@ with import <stockholm/lib>;
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKd/6eCR8yxC14zBJLIQgVa4Zbutv5yr2S8k08ztmBpp";
+    };
+    yellow = {
+      cores = 1;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.0.14";
+          ip6.addr = "42:0:0:0:0:0:0:14";
+          aliases = [
+            "yellow.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA6lHmzq8+04h3zivJmIbP
+            MkYiW7KflcTWQrl/4jJ7DVFbrtS6BSSI0wIibW5ygtLrp2nYgWv1jhg7K9q8tWMY
+            b6tDv/ze02ywCwStbjytW3ymSZUJlRkK2DQ4Ld7JEyKmLQIjxXYah+2P3QeUxLfU
+            Uwk6vSRuTlcb94rLFOrCUDRy1cZC73ZmtdbEP2UZz3ey6beo3l/K5O4OOz+lNXgd
+            OXPls4CeNm6NYhSGTBomS/zZBzGqb+4sOtLSPraNQuc75ZVpT8nFa/7tLVytWCOP
+            vWglPTJOyQSygSoVwGU9I8pq8xF1aTE72hLGHprIJAGgQE9rmS9/3mbiGLVZpny6
+            C6Q9t6vkYBRb+jg3WozIXdUvPP19qTEFaeb08kAuf1xhjZhirfDQjI7K6SFaDOUp
+            Y/ZmCrCuaevifaXYza/lM+4qhPXmh82WD5ONOhX0Di98HBtij2lybIRUG/io4DAU
+            52rrNAhRvMkUTBRlGG6LPC4q6khjuYgo9uley5BbyWWbCB1A9DUfbc6KfLUuxSwg
+            zLybZs/SHgXw+pJSXNgFJTYGv1i/1YQdpnbTgW4QsEp05gb+gA9/6+IjSIJdJE3p
+            DSZGcJz3gNSR1vETk8I2sSC/N8wlYXYV7wxQvSlQsehfEPrFtXM65k3RWzAAbNIJ
+            Akz4E3+xLVIMqKmHaGWi0usCAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC03TCO73NQZHo7NKZiVJp2iiUbe6PQP14Kg3Bnlkqje ";
     };
     blue = {
       cores = 1;
@@ -786,9 +777,6 @@ with import <stockholm/lib>;
     lass-daedalus = {
       mail = "lass@daedalus.r";
       pubkey = builtins.readFile ./ssh/daedalus.rsa;
-    };
-    fritz = {
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCz34435NSXgj72YAOL4cIlRq/4yInKEyL9no+gymURoW5x1nkYpP0EK331e7UyQQSOdWOogRo6d7YHcFqNlYWv5xlYcHucIhgJwC4Zda1liVA+v7tSOJz2BjmFvOT3/qlcPS69f3zdLHZooz2C33uHX1FgGRXlxiA8dpqGnSr8o76QLZjuQkuDqr8reOspjO/RHCo2Moq0Xm5q9OgN1WLAZzupqt9A5lx567mRzYsRAr23pUxVN8T/tSCgDlPe4ktEjYX9CXLKfMyh9WuBVi+AuH4GFEWBT+AMpsHeF45w+w956x56mz0F5nYOQNK87gFr+Jr+mh2AF1ot2CxzrfTb fritz@scriptkiddiT540";
     };
     prism-repo-sync = {
       pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKhpCKTnSq6VDJPB+0NiHu2ZxSKEIxHN6uPAPnbXYNCe";

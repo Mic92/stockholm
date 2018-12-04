@@ -26,9 +26,18 @@ let
 
   hostname = config.networking.hostName;
   getJobs = pkgs.writeDash "get_jobs" ''
-    nix-build --no-out-link --quiet -Q ./ci.nix > /dev/null
-    nix-instantiate --quiet -Q --eval --strict --json ./ci.nix
+    set -efu
+    ${pkgs.nix}/bin/nix-build --no-out-link --quiet -Q ./ci.nix >&2
+    json="$(${pkgs.nix}/bin/nix-instantiate --quiet -Q --eval --strict --json ./ci.nix)"
+    echo "$json" | ${pkgs.jq}/bin/jq -r 'to_entries[] | [.key, .value] | @tsv' \
+      | while read -r host builder; do
+        gcroot=${shell.escape profileRoot}/$host-builder
+        ${pkgs.nix}/bin/nix-env -p "$gcroot" --set "$builder"
+      done
+    echo "$json"
   '';
+
+  profileRoot = "/nix/var/nix/profiles/ci";
 
   imp = {
     krebs.buildbot.master = {
@@ -98,9 +107,16 @@ let
                     self.addBuildSteps([steps.ShellCommand(
                         name=str(new_step),
                         command=[
-                          new_steps[new_step]
+                          "${pkgs.writeDash "build-stepper.sh" ''
+                            set -efu
+                            profile=${shell.escape profileRoot}/$build_name
+                            result=$("$build_script")
+                            ${pkgs.nix}/bin/nix-env -p "$profile" --set "$result"
+                          ''}"
                         ],
                         env={
+                          "build_name": new_step,
+                          "build_script": new_steps[new_step],
                           "NIX_REMOTE": "daemon",
                           "NIX_PATH": "secrets=/var/src/stockholm/null:/var/src",
                         },
@@ -162,6 +178,20 @@ let
       username = "testslave";
       password = "lasspass";
       packages = with pkgs; [ gnumake jq nix populate gnutar lzma gzip ];
+    };
+
+    system.activationScripts.buildbots-nix-profile = ''
+      ${pkgs.coreutils}/bin/mkdir -p ${shell.escape profileRoot}
+      ${pkgs.coreutils}/bin/chmod 0770 ${shell.escape profileRoot}
+      ${pkgs.coreutils}/bin/chgrp buildbots ${shell.escape profileRoot}
+    '';
+
+    users = {
+      groups.buildbots.gid = genid "buildbots";
+      users = {
+        buildbotMaster.extraGroups = [ "buildbots" ];
+        buildbotSlave.extraGroups = [ "buildbots" ];
+      };
     };
   };
 
