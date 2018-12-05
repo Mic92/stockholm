@@ -351,11 +351,6 @@ with import <stockholm/lib>;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJzb9BPFClubs6wSOi/ivqPFVPlowXwAxBS0jHaB29hX";
     };
-    iso = {
-      monitoring = false;
-      ci = false;
-      cores = 1;
-    };
     sokrateslaptop = {
       monitoring = false;
       ci = false;
