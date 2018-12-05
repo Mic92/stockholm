@@ -19,7 +19,7 @@ rec {
         default = config._module.args.name;
       };
       cores = mkOption {
-        type = positive;
+        type = uint;
       };
       nets = mkOption {
         type = attrsOf net;
