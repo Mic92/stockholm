@@ -133,11 +133,6 @@ with import <stockholm/lib>;
       monitoring = false;
       cores = 1;
       nets = {
-        gg23 = {
-          ip4.addr = "10.23.1.12";
-          aliases = ["uriel.gg23"];
-          ssh.port = 45621;
-        };
         retiolum = {
           ip4.addr = "10.243.81.176";
           ip6.addr = "42:dc25:60cf:94ef:759b:d2b6:98a9:2e56";
@@ -164,11 +159,6 @@ with import <stockholm/lib>;
     mors = {
       cores = 2;
       nets = {
-        gg23 = {
-          ip4.addr = "10.23.1.11";
-          aliases = ["mors.gg23"];
-          ssh.port = 45621;
-        };
         retiolum = {
           ip4.addr = "10.243.0.2";
           ip6.addr = "42:0:0:0:0:0:0:dea7";
