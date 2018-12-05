@@ -129,20 +129,6 @@ with import <stockholm/lib>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAsANFdMi825qWQXQbWLYuNZ6/fARt3lnh1KStQHQQMD";
     };
 
-    domsen-nas = {
-      ci = false;
-      monitoring = false;
-      external = true;
-      nets = rec {
-        internet = {
-          aliases = [
-            "domsen-nas.internet"
-          ];
-          ip4.addr = "87.138.180.167";
-          ssh.port = 2223;
-        };
-      };
-    };
     uriel = {
       monitoring = false;
       cores = 1;
