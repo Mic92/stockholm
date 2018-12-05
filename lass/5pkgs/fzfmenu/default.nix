@@ -12,8 +12,20 @@ pkgs.writeDashBin "fzfmenu" ''
       shift
       break
       ;;
+      -l)
+      # no reason to filter number of lines
+      LINES="$2"
+      shift
+      shift
+      break
+      ;;
+      -i)
+      # we do this anyway
+      shift
+      break
+      ;;
       *)
-      echo "Unknown option $1"
+      echo "Unknown option $1" >&2
       shift
       ;;
   esac

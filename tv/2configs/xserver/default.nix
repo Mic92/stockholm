@@ -24,17 +24,6 @@ in {
     pkgs.xlibs.fontschumachermisc
   ];
 
-  # TODO dedicated group, i.e. with a single user [per-user-setuid]
-  # TODO krebs.setuid.slock.path vs /run/wrappers/bin
-  krebs.setuid.slock = {
-    filename = "${pkgs.slock}/bin/slock";
-    group = "wheel";
-    envp = {
-      DISPLAY = ":${toString config.services.xserver.display}";
-      USER = cfg.user.name;
-    };
-  };
-
   services.xserver = {
 
     # Don't install feh into systemPackages
@@ -57,7 +46,9 @@ in {
 
   systemd.services.display-manager.enable = false;
 
-  systemd.services.xmonad = {
+  systemd.services.xmonad = let
+    xmonad = "${pkgs.haskellPackages.xmonad-tv}/bin/xmonad";
+  in {
     wantedBy = [ "graphical.target" ];
     requires = [ "xserver.service" ];
     environment = {
@@ -93,6 +84,14 @@ in {
         "za" "zh" "zj" "zs"
       ]);
     };
+    path = [
+      config.tv.slock.package
+      pkgs.fzmenu
+      pkgs.pulseaudioLight.out
+      pkgs.rxvt_unicode
+      pkgs.xcalib
+      "/run/wrappers" # for su
+    ];
     serviceConfig = {
       SyslogIdentifier = "xmonad";
       ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${toString [
@@ -100,8 +99,8 @@ in {
         "\${XMONAD_CONFIG_DIR}"
         "\${XMONAD_DATA_DIR}"
       ]}";
-      ExecStart = "${pkgs.xmonad-tv}/bin/xmonad-${currentSystem}";
-      ExecStop = "${pkgs.xmonad-tv}/bin/xmonad-${currentSystem} --shutdown";
+      ExecStart = "@${xmonad} xmonad-${currentSystem} ";
+      ExecStop = "@${xmonad} xmonad-${currentSystem} --shutdown";
       User = cfg.user.name;
       WorkingDirectory = cfg.user.home;
     };
@@ -146,5 +145,10 @@ in {
       StartLimitBurst = 0;
       User = cfg.user.name;
     };
+  };
+
+  tv.slock = {
+    enable = true;
+    user = cfg.user;
   };
 }

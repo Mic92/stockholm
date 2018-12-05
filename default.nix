@@ -1,19 +1,12 @@
-import <nixpkgs/nixos/lib/eval-config.nix> {
-  modules = [
-    (import <nixpkgs/nixos/lib/from-env.nix> "NIXOS_CONFIG" <nixos-config>)
-  ];
-}
-//
-{
+import <nixpkgs/nixos> {} // rec {
   lib = import ./lib;
-  systems = with import ./lib; let
-    ns = getEnv "LOGNAME";
+  systems = with lib; let
+    namespace = getEnv "LOGNAME";
+    systemsDir = <stockholm> + "/${namespace}/1systems";
   in
     genAttrs
-      (attrNames (filterAttrs (_: eq "directory") (readDir (<stockholm> + "/${ns}/1systems"))))
-      (name: let
-        config = import (<stockholm> + "/${ns}/1systems/${name}/config.nix");
-      in import <nixpkgs/nixos/lib/eval-config.nix> {
-        modules = [ config ];
+      (attrNames (filterAttrs (_: eq "directory") (readDir systemsDir)))
+      (name: import <nixpkgs/nixos> {
+        configuration = import (systemsDir + "/${name}/config.nix");
       });
 }

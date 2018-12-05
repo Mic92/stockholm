@@ -25,9 +25,5 @@
     macchanger
     dpass
   ];
-  services.redshift = {
-    enable = true;
-    provider = "geoclue2";
-  };
   programs.adb.enable = true;
 }

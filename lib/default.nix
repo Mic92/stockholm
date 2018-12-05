@@ -5,6 +5,7 @@ let
     evalSource = import ./eval-source.nix;
 
     git = import ./git.nix { inherit lib; };
+    krops = import ../submodules/krops/lib;
     shell = import ./shell.nix { inherit lib; };
     types = nixpkgs-lib.types // import ./types.nix { inherit lib; };
 
@@ -12,8 +13,9 @@ let
     ne = x: y: x != y;
     mod = x: y: x - y * (x / y);
 
-    genid = import ./genid.nix { inherit lib; };
-    genid_uint31 = x: ((lib.genid x) + 16777216) / 2;
+    genid = lib.genid_uint32; # TODO remove
+    genid_uint31 = x: ((lib.genid_uint32 x) + 16777216) / 2;
+    genid_uint32 = import ./genid.nix { inherit lib; };
 
     lpad = n: c: s:
       if lib.stringLength s < n
@@ -43,6 +45,23 @@ let
     }.${type} or reject;
 
     indent = replaceChars ["\n"] ["\n  "];
+
+    mapNixDir = f: x: {
+      list = foldl' mergeAttrs {} (map (mapNixDir1 f) x);
+      path = mapNixDir1 f x;
+    }.${typeOf x};
+
+    mapNixDir1 = f: dirPath:
+      listToAttrs
+        (map
+          (relPath: let
+            name = removeSuffix ".nix" relPath;
+            path = dirPath + "/${relPath}";
+          in
+            nameValuePair name (f path))
+          (filter
+            (name: name != "default.nix" && !hasPrefix "." name)
+            (attrNames (readDir dirPath))));
 
     # https://tools.ietf.org/html/rfc5952
     normalize-ip6-addr =

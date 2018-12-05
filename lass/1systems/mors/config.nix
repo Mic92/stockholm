@@ -102,6 +102,7 @@ with import <stockholm/lib>;
     urban
     mk_sql_pair
     remmina
+    transmission
 
     iodine
 
@@ -148,10 +149,6 @@ with import <stockholm/lib>;
   programs.adb.enable = true;
   users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
   virtualisation.docker.enable = true;
-  services.redshift = {
-    enable = true;
-    provider = "geoclue2";
-  };
 
   lass.restic = genAttrs [
     "daedalus"

@@ -26,6 +26,7 @@
       '';
     };
     virtualHosts."cache.krebsco.de" = {
+      forceSSL = true;
       serverAliases = [ "cache.lassul.us" ];
       enableACME = true;
       locations."/".extraConfig = ''

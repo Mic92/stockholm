@@ -183,7 +183,7 @@ let
 
   user = rec {
     name = "urlwatch";
-    uid = genid name;
+    uid = genid_uint31 name;
   };
 
   subtypes.job = types.submodule {

@@ -409,6 +409,66 @@ with import <stockholm/lib>;
         };
       };
     };
+    scardanelli = {
+      monitoring = false;
+      ci = false;
+      external = true;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.2.2";
+          ip6.addr = "42:2:5ca:da:3111::1";
+          aliases = [
+            "scardanelli.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAxM93+YgGhk5PtcOrE7E/
+            MAOMF/c9c4Ps6m8xd4VZat3ru07yH8Yfox1yM6jwZBwIwK2AC9DK0/k3WIvZQUge
+            UKSTiXpE4z/0ceaesugLQ9KTjUty1e/2vQ78bOqmd7EG3aPV2QsjlgpjJ6qQxeFi
+            kjlHoFi9NNBLVkIyaAdlAhwvZuYFmAY/FQEmm6+XOb+Nmo+fccQlG6+NinA2GOg0
+            gdY/dKYxa04Ns/yu7TK3sBQIt6cg/YUk9VpyC4yIIRPMdyVcAPz3Kd2mp23fhSvx
+            we80prWXYtdct4vXaBZm9FUY5y4SL3c0TEScuM73VXtr2tPAxjD5W4XMWhrjnIiY
+            QzoyAquVS9rR4fCaoP+hw3Tjy7Att3voa/YlHEDaendxjZ3nuO0m0vcgOa+SfCNm
+            SqLsqb8to1y8yJ8LnR2og4MbtasxqSe1L9VLTsb4k/AGfmAdlqyG4Q1h5pCBh0GL
+            2F6FbYHzwrwqBvVCz4DTPygPtta5o7THpP50PgojtzNLm1yKWpfdcWeMgGQJSI0f
+            m3yenytM1u0jjw7KbBG79Z3etFNIYZy4Uq/dryEJnwpTFls+zZn9Q3tDEnO4a38Q
+            FgzV0VLQpRM/uf1powSDzoWp+/JYgB9464OKcTsSlVJpi3crxF86xFqqc39U2/u5
+            lM61fOMcVW1KREdWypiDtu8CAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+    homeros = {
+      monitoring = false;
+      ci = false;
+      external = true;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.2.1";
+          ip6.addr = "42:2::0:3:05::1";
+          aliases = [
+            "homeros.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAoZq6BwB6rV6EfTf8PWOd
+            ZhEWig5VcK1FcH0qi7KgojAhGSHhWmtFlvRSoGpQrSFRN0g5eTnrrguuTiIs6djc
+            6Al9HMqwSD1IOkqFm8jM4aG5NqjYg3in6blOFarBEOglfnsYHiUPt6T4fERxRZ9v
+            RguEWrishNMSv+D4vclKwctTB/6dQNsTAfnplcyDZ9un/ql9BG2cgU9yqeYLDdXd
+            vRvrWX9eZKGJvTrQmAiKONlSvspr1d28FxcUrUnCsdRLvP3Cc4JZiUhSA7ixFxn3
+            +LgGIZiMKTnl8syrsHk5nvLi5EUER7xkVX8iBlKA4JD4XTZVyBxPB1mJnOCUShQc
+            QK6nVr6auvJbRn7DHHKxDflSBgYt4qaf92+5A4xEsZtgMpmIFH5t6ifGQsQwgYsm
+            fOexviy9gMyZrHjQDUs4smQxxYq3AJLdfOg2jQXeAbgZpCVw5l8YHk3ECoAk7Fvh
+            VMJVPwukErGuVn2LpCHeVyFBXNft4bem1g0gtaf2SuGFEnl7ABetQ0bRwClRSLd7
+            k7PGDbdcCImsWhqyuLpkNcm95DfBrXa12GETm48Wv9jV52C5tfWFmOnJ0mOnvtxX
+            gpizJjFzHz275TVnJHhmIr2DkiGpaIVUL4FRkTslejSJQoUTZfDAvKF2gRyk+n6N
+            mJ/hywVtvLxNkNimyztoKKMCAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     turingmachine = {
       monitoring = false;
       ci = false;
@@ -777,9 +837,6 @@ with import <stockholm/lib>;
     lass-daedalus = {
       mail = "lass@daedalus.r";
       pubkey = builtins.readFile ./ssh/daedalus.rsa;
-    };
-    fritz = {
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCz34435NSXgj72YAOL4cIlRq/4yInKEyL9no+gymURoW5x1nkYpP0EK331e7UyQQSOdWOogRo6d7YHcFqNlYWv5xlYcHucIhgJwC4Zda1liVA+v7tSOJz2BjmFvOT3/qlcPS69f3zdLHZooz2C33uHX1FgGRXlxiA8dpqGnSr8o76QLZjuQkuDqr8reOspjO/RHCo2Moq0Xm5q9OgN1WLAZzupqt9A5lx567mRzYsRAr23pUxVN8T/tSCgDlPe4ktEjYX9CXLKfMyh9WuBVi+AuH4GFEWBT+AMpsHeF45w+w956x56mz0F5nYOQNK87gFr+Jr+mh2AF1ot2CxzrfTb fritz@scriptkiddiT540";
     };
     prism-repo-sync = {
       pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKhpCKTnSq6VDJPB+0NiHu2ZxSKEIxHN6uPAPnbXYNCe";

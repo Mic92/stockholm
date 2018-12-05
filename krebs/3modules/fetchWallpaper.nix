@@ -53,7 +53,7 @@ let
   imp = {
     users.users.fetchWallpaper = {
       name = "fetchWallpaper";
-      uid = genid "fetchWallpaper";
+      uid = genid_uint31 "fetchWallpaper";
       description = "fetchWallpaper user";
       home = cfg.stateDir;
       createHome = true;
