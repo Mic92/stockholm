@@ -323,6 +323,15 @@ with import <stockholm/lib>;
           }
         ];
       };
+      services.dnsmasq = {
+        enable = true;
+        resolveLocalQueries = false;
+
+        extraConfig= ''
+          except-interface=lo
+          interface=wg0
+        '';
+      };
     }
     {
       krebs.iptables.tables.filter.INPUT.rules = [
