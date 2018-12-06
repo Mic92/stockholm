@@ -427,7 +427,7 @@ let
     system.activationScripts.cgit = ''
       mkdir -m 0770 -p ${cfg.cgit.settings.cache-root}
       chmod 0770 ${cfg.cgit.settings.cache-root}
-      chown ${toString cfg.cgit.fcgiwrap.user.uid}:${toString cfg.cgit.fcgiwrap.group.gid} ${cfg.cgit.settings.cache-root}
+      chown ${toString cfg.cgit.fcgiwrap.user.name}:${toString cfg.cgit.fcgiwrap.group.name} ${cfg.cgit.settings.cache-root}
     '';
 
     services.nginx.virtualHosts.cgit = {
