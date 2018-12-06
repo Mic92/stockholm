@@ -64,7 +64,10 @@ in {
       XMONAD_DATA_DIR = cfg.dataDir;
 
       XMONAD_STARTUP_HOOK = pkgs.writeDash "xmonad-startup-hook" ''
-        ${pkgs.xorg.xhost}/bin/xhost +LOCAL: &
+        {
+          ${pkgs.xorg.xhost}/bin/xhost +SI:localuser:${cfg.user.name}
+          ${pkgs.xorg.xhost}/bin/xhost -LOCAL:
+        } &
         ${pkgs.xorg.xmodmap}/bin/xmodmap ${import ./Xmodmap.nix args} &
         ${pkgs.xorg.xrdb}/bin/xrdb ${import ./Xresources.nix args} &
         ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c' &
