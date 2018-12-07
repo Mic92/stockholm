@@ -13,8 +13,9 @@ let
     ne = x: y: x != y;
     mod = x: y: x - y * (x / y);
 
-    genid = import ./genid.nix { inherit lib; };
-    genid_uint31 = x: ((lib.genid x) + 16777216) / 2;
+    genid = lib.genid_uint32; # TODO remove
+    genid_uint31 = x: ((lib.genid_uint32 x) + 16777216) / 2;
+    genid_uint32 = import ./genid.nix { inherit lib; };
 
     lpad = n: c: s:
       if lib.stringLength s < n

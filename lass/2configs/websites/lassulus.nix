@@ -3,7 +3,7 @@
 with lib;
 let
   inherit (import <stockholm/lib>)
-    genid
+    genid_uint31
   ;
 
 in {
@@ -22,7 +22,7 @@ in {
   krebs.tinc_graphs.enable = true;
 
   users.users.lass-stuff = {
-    uid = genid "lass-stuff";
+    uid = genid_uint31 "lass-stuff";
     description = "lassul.us blog cgi stuff";
     home = "/var/empty";
   };
@@ -65,22 +65,6 @@ in {
     '';
     locations."/tinc".extraConfig = ''
       alias ${config.krebs.tinc_graphs.workingDir}/external;
-    '';
-    locations."/urlaubyay2018".extraConfig = ''
-      autoindex on;
-      alias /srv/http/lassul.us-media/india2018;
-      auth_basic "Restricted Content";
-      auth_basic_user_file ${pkgs.writeText "pics-user-pass" ''
-        paolo:$apr1$aQ6mYNR3$ho.aJ7icqSO.y.xKo3GQf0
-      ''};
-    '';
-    locations."/heilstadt".extraConfig = ''
-      autoindex on;
-      alias /srv/http/lassul.us-media/grabowsee2018;
-      auth_basic "Restricted Content";
-      auth_basic_user_file ${pkgs.writeText "pics-user-pass" ''
-        c-base:$apr1$aQ6mYNR3$ho.aJ7icqSO.y.xKo3GQf0
-      ''};
     '';
     locations."/krebspage".extraConfig = ''
       default_type "text/html";
@@ -140,7 +124,7 @@ in {
   };
 
   users.users.blog = {
-    uid = genid "blog";
+    uid = genid_uint31 "blog";
     description = "lassul.us blog deployment";
     home = "/srv/http/lassul.us";
     useDefaultShell = true;

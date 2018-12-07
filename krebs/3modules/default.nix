@@ -109,6 +109,7 @@ let
   };
 
   imp = lib.mkMerge [
+    { krebs = import ./external { inherit config; }; }
     { krebs = import ./jeschli { inherit config; }; }
     { krebs = import ./krebs  { inherit config; }; }
     { krebs = import ./lass   { inherit config; }; }

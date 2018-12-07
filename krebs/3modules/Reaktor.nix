@@ -8,7 +8,7 @@ let
 
   out = {
     options.krebs.Reaktor = api;
-    config = imp;
+    config = mkIf (cfg != {}) imp;
   };
 
   api = mkOption {

@@ -174,6 +174,16 @@ let
     macro pager a "<modify-labels>-archive\n"  # tag as Archived
 
 
+    bind index U noop
+    bind index u noop
+    bind pager U noop
+    bind pager u noop
+    macro index U "<modify-labels>+unread\n"
+    macro index u "<modify-labels>-unread\n"
+    macro pager U "<modify-labels>+unread\n"
+    macro pager u "<modify-labels>-unread\n"
+
+
     bind index t noop
     bind pager t noop
     macro index t "<modify-labels>"        # tag as Archived
