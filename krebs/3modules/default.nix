@@ -122,6 +122,7 @@ let
         shack = "hosts";
         i = "hosts";
         r = "hosts";
+        w = "hosts";
       };
 
       krebs.users = {
