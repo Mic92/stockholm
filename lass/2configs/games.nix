@@ -57,6 +57,7 @@ let
 
 in {
   environment.systemPackages = with pkgs; [
+    dolphinEmu
     doom1
     doom2
     vdoom1
