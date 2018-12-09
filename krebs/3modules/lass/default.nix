@@ -1,7 +1,11 @@
 { config, ... }:
-
 with import <stockholm/lib>;
+let
 
+  rip6 = krebs.genipv6 "retiolum" "lass";
+  wip6 = krebs.genipv6 "wirelum" "lass";
+
+in
 {
   dns.providers = {
     "lassul.us" = "zones";
@@ -458,6 +462,20 @@ with import <stockholm/lib>;
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSBxtPf8yJfzzI7/iYpoRSc/TT+zYmE/HM9XWS3MZlv";
+    };
+    phone = {
+      nets = {
+        wirelum = {
+          ip6.addr = (wip6 "a").address;
+          ip4.addr = "10.244.1.2";
+          aliases = [
+            "phone.w"
+          ];
+          wireguard.pubkey = "zVunBVOxsMETlnHkgjfH71HaZjjNUOeYNveAVv5z3jw=";
+        };
+      };
+      external = true;
+      ci = false;
     };
   };
   users = rec {
