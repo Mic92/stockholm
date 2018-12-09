@@ -192,6 +192,28 @@ rec {
         }));
         default = null;
       };
+      wireguard = mkOption {
+        type = nullOr (submodule ({ config, ... }: {
+          options = {
+            port = mkOption {
+              type = int;
+              description = "tinc port to use to connect to host";
+              default = 51820;
+            };
+            pubkey = mkOption {
+              type = wireguard-pubkey;
+            };
+            subnets = mkOption {
+              type = listOf cidr;
+              description = ''
+                wireguard subnets,
+                this defines how routing behaves for hosts that can't reach each other.
+              '';
+              default = [];
+            };
+          };
+        }));
+      };
     };
   });
 
@@ -548,4 +570,6 @@ rec {
     check = filename.check;
     merge = mergeOneOption;
   };
+
+  wireguard-pubkey = str;
 }
