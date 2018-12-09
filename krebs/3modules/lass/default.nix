@@ -89,11 +89,22 @@ in
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wirelum = {
+          via = internet;
+          ip4.addr = "10.244.1.1";
+          ip6.addr = (wip6 "1").address;
+          aliases = [
+            "prism.w"
+          ];
+          wireguard = {
+            pubkey = "oKJotppdEJqQBjrqrommEUPw+VFryvEvNJr/WikXohk=";
+            subnets = [ "10.244.1.0/24" (wip6 "1").subnetCIDR ];
+          };
+        };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAsANFdMi825qWQXQbWLYuNZ6/fARt3lnh1KStQHQQMD";
     };
-
     archprism = {
       cores = 1;
       nets = rec {
@@ -181,6 +192,13 @@ in
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wirelum = {
+          ip6.addr = (wip6 "dea7").address;
+          aliases = [
+            "mors.w"
+          ];
+          wireguard.pubkey = "FkcxMathQzJYwuJBli/nibh0C0kHe9/T2xU0za3J3SQ=";
+        };
       };
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
@@ -207,6 +225,13 @@ in
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wirelum = {
+          ip6.addr = (wip6 "50da").address;
+          aliases = [
+            "shodan.w"
+          ];
+          wireguard.pubkey = "FkcxMathQzJYwuJBli/nibh0C0kHe9/T2xU0za4J3SQ=";
+        };
       };
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
@@ -232,6 +257,13 @@ in
             gl0Dx29bSPU3L8udj0Vu6ul7CiQ5bZzUCQIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
+        };
+        wirelum = {
+          ip6.addr = (wip6 "1205").address;
+          aliases = [
+            "icarus.w"
+          ];
+          wireguard.pubkey = "mVe3YdlWOlVF5+YD5vgNha3s03dv6elmNVsARtPLXQQ=";
         };
       };
       secure = true;
@@ -428,6 +460,13 @@ in
             Akz4E3+xLVIMqKmHaGWi0usCAwEAAQ==
             -----END PUBLIC KEY-----
           '';
+        };
+        wirelum = {
+          ip6.addr = (wip6 "e110").address;
+          aliases = [
+            "yellow.w"
+          ];
+          wireguard.pubkey = "YeWbR3mW+nOVBE7bcNSzF5fjj9ppd8OGHBJqERAUVxU=";
         };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
