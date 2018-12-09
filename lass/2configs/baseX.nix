@@ -97,9 +97,9 @@ in {
     enable = true;
     layout = "us";
     display = mkForce 0;
-    xkbModel = "evdev";
     xkbVariant = "altgr-intl";
-    xkbOptions = "caps:backspace";
+    xkbOptions = "caps:escape";
+    libinput.enable = true;
     displayManager.lightdm.enable = true;
     windowManager.default = "xmonad";
     windowManager.session = [{
