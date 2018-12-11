@@ -36,7 +36,7 @@ let {
     suffixLength = addressLength - subnetPrefixLength;
   };
 
-  hash = s: head (match "0*(.*)" (substring 0 4 (hashString "sha256" s)));
+  hash = s: head (match "0*(.+)" (substring 0 4 (hashString "sha256" s)));
 
   dropLast = n: xs: reverseList (drop n (reverseList xs));
   takeLast = n: xs: reverseList (take n (reverseList xs));

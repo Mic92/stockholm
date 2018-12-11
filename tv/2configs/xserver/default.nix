@@ -48,34 +48,35 @@ in {
 
   systemd.services.xmonad = let
     xmonad = "${pkgs.haskellPackages.xmonad-tv}/bin/xmonad";
+    xmonad-prepare = pkgs.writeDash "xmonad-prepare" ''
+      ${pkgs.coreutils}/bin/mkdir -p "$XMONAD_CACHE_DIR"
+      ${pkgs.coreutils}/bin/mkdir -p "$XMONAD_CONFIG_DIR"
+      ${pkgs.coreutils}/bin/mkdir -p "$XMONAD_DATA_DIR"
+    '';
+    xmonad-ready = pkgs.writeDash "xmonad-ready" ''
+      {
+        ${pkgs.xorg.xhost}/bin/xhost +SI:localuser:${cfg.user.name}
+        ${pkgs.xorg.xhost}/bin/xhost -LOCAL:
+      } &
+      ${pkgs.xorg.xmodmap}/bin/xmodmap ${import ./Xmodmap.nix args} &
+      ${pkgs.xorg.xrdb}/bin/xrdb ${import ./Xresources.nix args} &
+      ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c' &
+      wait
+    '';
   in {
     wantedBy = [ "graphical.target" ];
     requires = [ "xserver.service" ];
     environment = {
       DISPLAY = ":${toString config.services.xserver.display}";
-
       FZMENU_FZF_DEFAULT_OPTS = toString [
         "--color=dark,border:126,bg+:090"
         "--inline-info"
       ];
-
       XMONAD_CACHE_DIR = cfg.cacheDir;
       XMONAD_CONFIG_DIR = cfg.configDir;
       XMONAD_DATA_DIR = cfg.dataDir;
-
-      XMONAD_STARTUP_HOOK = pkgs.writeDash "xmonad-startup-hook" ''
-        {
-          ${pkgs.xorg.xhost}/bin/xhost +SI:localuser:${cfg.user.name}
-          ${pkgs.xorg.xhost}/bin/xhost -LOCAL:
-        } &
-        ${pkgs.xorg.xmodmap}/bin/xmodmap ${import ./Xmodmap.nix args} &
-        ${pkgs.xorg.xrdb}/bin/xrdb ${import ./Xresources.nix args} &
-        ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c' &
-        wait
-      '';
-
-      # XXX JSON is close enough :)
-      XMONAD_WORKSPACES0_FILE = pkgs.writeText "xmonad.workspaces0" (toJSON [
+      XMONAD_STARTUP_HOOK = xmonad-ready;
+      XMONAD_WORKSPACES0_FILE = pkgs.writeJSON "xmonad-workspaces0.json" [
         "Dashboard" # we start here
         "23"
         "cr"
@@ -85,7 +86,7 @@ in {
         "mail"
         "stockholm"
         "za" "zh" "zj" "zs"
-      ]);
+      ];
     };
     path = [
       config.tv.slock.package
@@ -96,14 +97,10 @@ in {
       "/run/wrappers" # for su
     ];
     serviceConfig = {
-      SyslogIdentifier = "xmonad";
-      ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${toString [
-        "\${XMONAD_CACHE_DIR}"
-        "\${XMONAD_CONFIG_DIR}"
-        "\${XMONAD_DATA_DIR}"
-      ]}";
-      ExecStart = "@${xmonad} xmonad-${currentSystem} ";
+      ExecStartPre = "@${xmonad-prepare} xmonad-prepare";
+      ExecStart = "@${xmonad} xmonad-${currentSystem}";
       ExecStop = "@${xmonad} xmonad-${currentSystem} --shutdown";
+      SyslogIdentifier = "xmonad";
       User = cfg.user.name;
       WorkingDirectory = cfg.user.home;
     };
