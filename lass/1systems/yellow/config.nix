@@ -19,7 +19,11 @@ with import <stockholm/lib>;
   users.groups.download.members = [ "transmission" ];
   users.users.transmission.group = mkForce "download";
 
-  systemd.services.transmission.serviceConfig.bindsTo = [ "openvpn-nordvpn.service" ];
+  systemd.services.transmission.bindsTo = [ "openvpn-nordvpn.service" ];
+  systemd.services.transmission.after = [ "openvpn-nordvpn.service" ];
+  systemd.services.transmission.postStart = ''
+    chmod 775 /var/download/finished
+  '';
   services.transmission = {
     enable = true;
     settings = {
@@ -52,6 +56,9 @@ with import <stockholm/lib>;
           autoindex on;
         '';
       };
+      locations."/dl".extraConfig = ''
+        return 301 /;
+      '';
       locations."/" = {
         root = "/var/download/finished";
         extraConfig = ''

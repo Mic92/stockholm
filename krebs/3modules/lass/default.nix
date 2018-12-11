@@ -1,7 +1,11 @@
 { config, ... }:
-
 with import <stockholm/lib>;
+let
 
+  rip6 = krebs.genipv6 "retiolum" "lass";
+  wip6 = krebs.genipv6 "wirelum" "lass";
+
+in
 {
   dns.providers = {
     "lassul.us" = "zones";
@@ -85,11 +89,22 @@ with import <stockholm/lib>;
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wirelum = {
+          via = internet;
+          ip4.addr = "10.244.1.1";
+          ip6.addr = (wip6 "1").address;
+          aliases = [
+            "prism.w"
+          ];
+          wireguard = {
+            pubkey = "oKJotppdEJqQBjrqrommEUPw+VFryvEvNJr/WikXohk=";
+            subnets = [ "10.244.1.0/24" (wip6 "1").subnetCIDR ];
+          };
+        };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAsANFdMi825qWQXQbWLYuNZ6/fARt3lnh1KStQHQQMD";
     };
-
     archprism = {
       cores = 1;
       nets = rec {
@@ -177,6 +192,13 @@ with import <stockholm/lib>;
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wirelum = {
+          ip6.addr = (wip6 "dea7").address;
+          aliases = [
+            "mors.w"
+          ];
+          wireguard.pubkey = "FkcxMathQzJYwuJBli/nibh0C0kHe9/T2xU0za3J3SQ=";
+        };
       };
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
@@ -203,6 +225,13 @@ with import <stockholm/lib>;
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wirelum = {
+          ip6.addr = (wip6 "50da").address;
+          aliases = [
+            "shodan.w"
+          ];
+          wireguard.pubkey = "FkcxMathQzJYwuJBli/nibh0C0kHe9/T2xU0za4J3SQ=";
+        };
       };
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
@@ -228,6 +257,13 @@ with import <stockholm/lib>;
             gl0Dx29bSPU3L8udj0Vu6ul7CiQ5bZzUCQIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
+        };
+        wirelum = {
+          ip6.addr = (wip6 "1205").address;
+          aliases = [
+            "icarus.w"
+          ];
+          wireguard.pubkey = "mVe3YdlWOlVF5+YD5vgNha3s03dv6elmNVsARtPLXQQ=";
         };
       };
       secure = true;
@@ -425,6 +461,13 @@ with import <stockholm/lib>;
             -----END PUBLIC KEY-----
           '';
         };
+        wirelum = {
+          ip6.addr = (wip6 "e110").address;
+          aliases = [
+            "yellow.w"
+          ];
+          wireguard.pubkey = "YeWbR3mW+nOVBE7bcNSzF5fjj9ppd8OGHBJqERAUVxU=";
+        };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC03TCO73NQZHo7NKZiVJp2iiUbe6PQP14Kg3Bnlkqje ";
@@ -458,6 +501,49 @@ with import <stockholm/lib>;
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSBxtPf8yJfzzI7/iYpoRSc/TT+zYmE/HM9XWS3MZlv";
+    };
+    phone = {
+      nets = {
+        wirelum = {
+          ip6.addr = (wip6 "a").address;
+          ip4.addr = "10.244.1.2";
+          aliases = [
+            "phone.w"
+          ];
+          wireguard.pubkey = "zVunBVOxsMETlnHkgjfH71HaZjjNUOeYNveAVv5z3jw=";
+        };
+      };
+      external = true;
+      ci = false;
+    };
+    morpheus = {
+      cores = 1;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.0.19";
+          ip6.addr = "42::19";
+          aliases = [
+            "morpheus.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAptrlSKQKsBH2QMQxllZR94S/fXneajpJifRjXR5bi+7ME2ThdQXY
+            T7yWiKaUuBJThWged9PdPltLUEMmv+ubQqpWHZq442VWSS36r1yMSGpUeKK+oYMN
+            /Sfu+1yC4m2uXno95wpJZIcDfbbn26jT6ldJ4Yd97zyrXKljvcdrz3wZzQq0tojh
+            S5Q59x/aQMJbnQpnlFnMIEVgULuFPW16+vPGsXIPdYNggaF1avcBaFl8i3M0EZVz
+            Swn4hArDynDJhR7M0QdlwOpOh7O+1iOnmXqqei3LxMVHb+YtzfHgxOPxggUsy7CR
+            bj9uBR9loGwgmZwaxXd1Vfbw8kn/feOb9FcW73u+SZyzwEA9HFRV0jGQe3P9mGfI
+            Bwe02DOTVXEB8jTAGCw5T3bXLIOX8kqdlCECuAWFfrt8H+GjZDuGUWRcMn32orMz
+            sMvkab95ZOHK6Q31mrhILOIOdyZWKPZIabL3HF6CZtu52h6MDHbmGS0w0OJYhj2+
+            VnT9ZBoaeooVg8QOE43rCXvmL5vzhLKrj4s/53wTGG5SpzLs9Q9rrJVgAnz4YQ7j
+            3Ov5q3Zxyr+vO6O7Pb5X49vCQw/jzK41S0/15GEmKcoxXemzeZCpX1mbeeTUtLvA
+            U7OJwldrElzictBJ1gT94L4BDvoGZVqAkXJCJPamfsWaiw6SsMqtTfECAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHXS60mmNWMdMRvaPxGn91Cm/hm7zY8xn5rkI4n2KG/f ";
     };
   };
   users = rec {
