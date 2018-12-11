@@ -93,7 +93,13 @@ let
           in
             if max.pos == 0
               then a
-              else "${concatStringsSep ":" lhs}::${concatStringsSep ":" rhs}";
+              else let
+                sep =
+                  if 8 - (length lhs + length rhs) == 1
+                    then ":0:"
+                    else "::";
+              in
+                "${concatStringsSep ":" lhs}${sep}${concatStringsSep ":" rhs}";
 
         drop-leading-zeros =
           let
