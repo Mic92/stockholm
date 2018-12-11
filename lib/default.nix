@@ -29,8 +29,6 @@ let
       listToAttrs (map (name: nameValuePair name set.${name})
                        (filter (flip hasAttr set) names));
 
-    setAttr = name: value: set: set // { ${name} = value; };
-
     test = re: x: isString x && testString re x;
 
     testString = re: x: match re x != null;
