@@ -29,8 +29,6 @@ let
       listToAttrs (map (name: nameValuePair name set.${name})
                        (filter (flip hasAttr set) names));
 
-    setAttr = name: value: set: set // { ${name} = value; };
-
     test = re: x: isString x && testString re x;
 
     testString = re: x: match re x != null;
@@ -109,7 +107,11 @@ let
           in
             a: concatStringsSep ":" (map f (splitString ":" a));
       in
-        a: toLower (group-zeros (drop-leading-zeros a));
+        a:
+          toLower
+            (if test ".*::.*" a
+              then a
+              else group-zeros (drop-leading-zeros a));
   };
 in
 

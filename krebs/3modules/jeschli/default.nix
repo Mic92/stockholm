@@ -1,17 +1,20 @@
-{ config, ... }:
-
 with import <stockholm/lib>;
+{ config, ... }: let
 
-{
-  hosts = mapAttrs (_: recursiveUpdate {
-    owner = config.krebs.users.jeschli;
+  hostDefaults = hostName: host: flip recursiveUpdate host ({
     ci = true;
-  }) {
+    owner = config.krebs.users.jeschli;
+  } // optionalAttrs (host.nets?retiolum) {
+    nets.retiolum.ip6.addr =
+      (krebs.genipv6 "retiolum" "jeschli" { inherit hostName; }).address;
+  });
+
+in {
+  hosts = mapAttrs hostDefaults {
     brauerei = {
       nets = {
         retiolum = {
           ip4.addr = "10.243.27.29";
-          ip6.addr = "42::29";
           aliases = [
             "brauerei.r"
           ];
@@ -48,7 +51,6 @@ with import <stockholm/lib>;
       nets = {
         retiolum = {
           ip4.addr = "10.243.27.27";
-          ip6.addr = "42::27";
           aliases = [
             "reagenzglas.r"
           ];
@@ -92,7 +94,6 @@ with import <stockholm/lib>;
         retiolum = {
           via = internet;
           ip4.addr = "10.243.27.30";
-          ip6.addr = "42::30";
           aliases = [
             "enklave.r"
             "cgit.enklave.r"
@@ -131,7 +132,6 @@ with import <stockholm/lib>;
       nets = {
         retiolum = {
           ip4.addr = "10.243.27.31";
-          ip6.addr = "42::31";
           aliases = [
             "bolide.r"
           ];
