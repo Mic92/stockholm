@@ -3,18 +3,16 @@ with lib;
 let {
   body = netname: subnetname: suffixSpec: rec {
     address = let
-      suffix' =
-        if hasEmptyGroup (parseAddress suffix)
-          then suffix
-          else joinAddress "::" suffix;
+      suffix' = prependZeros suffixLength suffix;
     in
-      checkAddress addressLength (joinAddress subnetPrefix suffix');
+      normalize-ip6-addr
+        (checkAddress addressLength (joinAddress subnetPrefix suffix'));
     addressCIDR = "${address}/${toString addressLength}";
     addressLength = 128;
 
     inherit netname;
     netCIDR = "${netAddress}/${toString netPrefixLength}";
-    netAddress = joinAddress netPrefix "::";
+    netAddress = appendZeros netPrefixLength netPrefix;
     netHash = toString {
       retiolum = 0;
       wirelum = 1;
@@ -27,21 +25,34 @@ let {
 
     inherit subnetname;
     subnetCIDR = "${subnetAddress}/${toString subnetPrefixLength}";
-    subnetAddress = joinAddress subnetPrefix "::";
-    subnetHash = simplify (hash 4 subnetname);
+    subnetAddress = appendZeros subnetPrefixLength subnetPrefix;
+    subnetHash = hash 4 subnetname;
     subnetPrefix = joinAddress netPrefix subnetHash;
     subnetPrefixLength = netPrefixLength + 16;
 
     suffix = getAttr (typeOf suffixSpec) {
       set =
-        concatMapStringsSep
+        concatStringsSep
           ":"
-          simplify
-          (stringToGroupsOf 4 (hash (suffixLength / 8) suffixSpec.hostName));
+          (stringToGroupsOf 4 (hash (suffixLength / 4) suffixSpec.hostName));
       string = suffixSpec;
     };
     suffixLength = addressLength - subnetPrefixLength;
   };
+
+  appendZeros = n: s: let
+    n' = n / 16;
+    zeroCount = n' - length parsedaddr;
+    parsedaddr = parseAddress s;
+  in
+    formatAddress (parsedaddr ++ map (const "0") (range 1 zeroCount));
+
+  prependZeros = n: s: let
+    n' = n / 16;
+    zeroCount = n' - length parsedaddr;
+    parsedaddr = parseAddress s;
+  in
+    formatAddress (map (const "0") (range 1 zeroCount) ++ parsedaddr);
 
   # Split string into list of chunks where each chunk is at most n chars long.
   # The leftmost chunk might shorter.
@@ -63,8 +74,6 @@ let {
         (stringToCharacters s);
   in
     filter (x: x != []) ([acc.chunk] ++ acc.chunks);
-
-  simplify = s: head (match "0*(.+)" s);
 
   hash = n: s: substring 0 n (hashString "sha256" s);
 
