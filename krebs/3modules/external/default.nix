@@ -1,19 +1,22 @@
-{ config, ... }:
-
 with import <stockholm/lib>;
+{ config, ... }: let
 
-{
-  hosts = mapAttrs (_: recursiveUpdate {
+  hostDefaults = hostName: host: flip recursiveUpdate host ({
     ci = false;
     external = true;
     monitoring = false;
-  }) {
+  } // optionalAttrs (host.nets?retiolum) {
+    nets.retiolum.ip6.addr =
+      (krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
+  });
+
+in {
+  hosts = mapAttrs hostDefaults {
     sokrateslaptop = {
       owner = config.krebs.users.sokratess;
       nets = {
         retiolum = {
           ip4.addr = "10.243.142.104";
-          ip6.addr = "42:f8a1:044d:0f75:9d73:56d8:f432:c6cc";
           aliases = [
             "sokrateslaptop.r"
           ];
@@ -35,7 +38,6 @@ with import <stockholm/lib>;
       nets = {
         retiolum = {
           ip4.addr = "10.243.29.201";
-          ip6.addr = "42:4234:6a6d:600::1";
           aliases = [
             "kruck.r"
           ];
@@ -62,7 +64,6 @@ with import <stockholm/lib>;
       nets = {
         retiolum = {
           ip4.addr = "10.243.2.2";
-          ip6.addr = "42:2:5ca:da:3111::1";
           aliases = [
             "scardanelli.r"
           ];
@@ -90,7 +91,6 @@ with import <stockholm/lib>;
       nets = {
         retiolum = {
           ip4.addr = "10.243.2.1";
-          ip6.addr = "42:2::0:3:05::1";
           aliases = [
             "homeros.r"
           ];
@@ -118,7 +118,6 @@ with import <stockholm/lib>;
       nets = {
         retiolum = {
           ip4.addr = "10.243.29.168";
-          ip6.addr = "42:4992:6a6d:600::1";
           aliases = [
             "turingmachine.r"
           ];
@@ -148,14 +147,13 @@ with import <stockholm/lib>;
           ip4.addr = "129.215.197.11";
           aliases = [ "eddie.i" ];
         };
-        retiolum = rec {
+        retiolum = {
           via = internet;
           addrs = [
-            ip4.addr
-            ip6.addr
+            config.krebs.hosts.eddie.nets.retiolum.ip4.addr
+            config.krebs.hosts.eddie.nets.retiolum.ip6.addr
           ];
           ip4.addr = "10.243.29.170";
-          ip6.addr = "42:4992:6a6d:700::1";
           aliases = [ "eddie.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -184,7 +182,6 @@ with import <stockholm/lib>;
       nets = {
         retiolum = {
           ip4.addr = "10.243.29.171";
-          ip6.addr = "42:4992:6a6d:700::2";
           aliases = [ "rock.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -214,7 +211,6 @@ with import <stockholm/lib>;
         retiolum = {
           via = internet;
           ip4.addr = "10.243.29.172";
-          ip6.addr = "42:4992:6a6d:800::1";
           aliases = [ "inspector.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -239,7 +235,6 @@ with import <stockholm/lib>;
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.29.173";
-          ip6.addr = "42:4992:6a6d:900::1";
           aliases = [ "dpdkm.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -268,14 +263,13 @@ with import <stockholm/lib>;
           ip6.addr = "2a03:4000:13:31e::1";
           aliases = [ "eve.i" ];
         };
-        retiolum = rec {
+        retiolum = {
           via = internet;
           addrs = [
-            ip4.addr
-            ip6.addr
+            config.krebs.hosts.eve.nets.retiolum.ip4.addr
+            config.krebs.hosts.eve.nets.retiolum.ip6.addr
           ];
           ip4.addr = "10.243.29.174";
-          ip6.addr = "42:4992:6a6d:a00::1";
           aliases = [ "eve.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----

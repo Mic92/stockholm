@@ -1,19 +1,24 @@
-{ config, ... }:
-
 with import <stockholm/lib>;
+{ config, ... }: let
 
-{
+  hostDefaults = hostName: host: flip recursiveUpdate host ({
+    owner = config.krebs.users.tv;
+  } // optionalAttrs (host.nets?retiolum) {
+    nets.retiolum.ip6.addr =
+      (krebs.genipv6 "retiolum" "tv" { inherit hostName; }).address;
+  });
+
+in {
   dns.providers = {
     "viljetic.de" = "regfish";
   };
-  hosts = mapAttrs (_: setAttr "owner" config.krebs.users.tv) {
+  hosts = mapAttrs hostDefaults {
     alnus = {
       ci = true;
       cores = 2;
       nets = {
         retiolum = {
           ip4.addr = "10.243.21.1";
-          ip6.addr = "42::2101";
           aliases = [
             "alnus.r"
           ];
@@ -38,7 +43,6 @@ with import <stockholm/lib>;
       nets = {
         retiolum = {
           ip4.addr = "10.243.20.1";
-          ip6.addr = "42::2001";
           aliases = [
             "mu.r"
           ];
@@ -79,7 +83,6 @@ with import <stockholm/lib>;
         retiolum = {
           via = config.krebs.hosts.ni.nets.internet;
           ip4.addr = "10.243.113.223";
-          ip6.addr = "42:4522:25f8:36bb:8ccb:150:231a:2af4";
           aliases = [
             "ni.r"
             "cgit.ni.r"
@@ -114,7 +117,6 @@ with import <stockholm/lib>;
         };
         retiolum = {
           ip4.addr = "10.243.0.110";
-          ip6.addr = "42:2d5:733f:d6da:c0f5:2bb7:2b18:9ec";
           aliases = [
             "nomic.r"
             "cgit.nomic.r"
@@ -158,7 +160,6 @@ with import <stockholm/lib>;
         };
         retiolum = {
           ip4.addr = "10.243.13.37";
-          ip6.addr = "42::1337";
           aliases = [
             "wu.r"
             "cgit.wu.r"
@@ -185,7 +186,6 @@ with import <stockholm/lib>;
       nets = {
         retiolum = {
           ip4.addr = "10.243.22.22";
-          ip6.addr = "42::2222";
           aliases = [
             "querel.r"
           ];
@@ -226,7 +226,6 @@ with import <stockholm/lib>;
         };
         retiolum = {
           ip4.addr = "10.243.13.38";
-          ip6.addr = "42::1338";
           aliases = [
             "xu.r"
             "cgit.xu.r"
@@ -261,7 +260,6 @@ with import <stockholm/lib>;
         };
         retiolum = {
           ip4.addr = "10.243.13.40";
-          ip6.addr = "42::1340";
           aliases = [
             "zu.r"
           ];

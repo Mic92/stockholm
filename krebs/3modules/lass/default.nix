@@ -1,20 +1,22 @@
-{ config, ... }:
 with import <stockholm/lib>;
-let
+{ config, ... }: let
 
-  rip6 = krebs.genipv6 "retiolum" "lass";
+  hostDefaults = hostName: host: flip recursiveUpdate host ({
+    ci = true;
+    monitoring = true;
+    owner = config.krebs.users.lass;
+  } // optionalAttrs (host.nets?retiolum) {
+    nets.retiolum.ip6.addr =
+      (krebs.genipv6 "retiolum" "lass" { inherit hostName; }).address;
+  });
+
   wip6 = krebs.genipv6 "wirelum" "lass";
 
-in
-{
+in {
   dns.providers = {
     "lassul.us" = "zones";
   };
-  hosts = mapAttrs (_: recursiveUpdate {
-    owner = config.krebs.users.lass;
-    ci = true;
-    monitoring = true;
-  }) {
+  hosts = mapAttrs hostDefaults {
     prism = rec {
       cores = 4;
       extraZones = {
@@ -54,7 +56,6 @@ in
         retiolum = {
           via = internet;
           ip4.addr = "10.243.0.103";
-          ip6.addr = "42:0000:0000:0000:0000:0000:0000:15ab";
           aliases = [
             "prism.r"
             "cache.prism.r"
@@ -118,7 +119,6 @@ in
         retiolum = {
           via = internet;
           ip4.addr = "10.243.0.123";
-          ip6.addr = "42:0:0:0:0:0:0:123";
           aliases = [
             "archprism.r"
           ];
@@ -150,7 +150,6 @@ in
       nets = {
         retiolum = {
           ip4.addr = "10.243.81.176";
-          ip6.addr = "42:dc25:60cf:94ef:759b:d2b6:98a9:2e56";
           aliases = [
             "uriel.r"
             "cgit.uriel.r"
@@ -176,7 +175,6 @@ in
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.2";
-          ip6.addr = "42:0:0:0:0:0:0:dea7";
           aliases = [
             "mors.r"
             "cgit.mors.r"
@@ -209,7 +207,6 @@ in
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.4";
-          ip6.addr = "42:0:0:0:0:0:0:50d4";
           aliases = [
             "shodan.r"
             "cgit.shodan.r"
@@ -242,7 +239,6 @@ in
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.133.114";
-          ip6.addr = "42:0:0:0:0:0:01ca:1205";
           aliases = [
             "icarus.r"
             "cgit.icarus.r"
@@ -275,7 +271,6 @@ in
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.133.115";
-          ip6.addr = "42:0:0:0:0:0:daed:a105";
           aliases = [
             "daedalus.r"
             "cgit.daedalus.r"
@@ -301,7 +296,6 @@ in
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.133.116";
-          ip6.addr = "42:0:0:0:0:0:0:1101";
           aliases = [
             "skynet.r"
             "cgit.skynet.r"
@@ -327,7 +321,6 @@ in
       nets = {
         retiolum = {
           ip4.addr = "10.243.133.77";
-          ip6.addr = "42:0:0:0:0:0:717:7137";
           aliases = [
             "littleT.r"
           ];
@@ -368,7 +361,6 @@ in
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.1.3";
-          ip6.addr = "42::1:3";
           aliases = [
             "xerxes.r"
           ];
@@ -410,7 +402,6 @@ in
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.13";
-          ip6.addr = "42:0:0:0:0:0:0:12ed";
           aliases = [
             "red.r"
           ];
@@ -440,7 +431,6 @@ in
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.14";
-          ip6.addr = "42:0:0:0:0:0:0:14";
           aliases = [
             "yellow.r"
           ];
@@ -477,7 +467,6 @@ in
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.77";
-          ip6.addr = "42:0:0:0:0:0:0:77";
           aliases = [
             "blue.r"
           ];
@@ -521,7 +510,6 @@ in
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.19";
-          ip6.addr = "42::19";
           aliases = [
             "morpheus.r"
           ];
