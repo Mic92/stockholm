@@ -33,7 +33,7 @@ with import <stockholm/lib>;
     };
   });
 in {
-  hosts = mapAttrs hostDefaults {
+  hosts = mapAttrs hostDefaults ({
     hotdog = {
       ci = true;
       nets = {
@@ -153,7 +153,7 @@ in {
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKYMXMWZIK0jjnZDM9INiYAKcwjXs2241vew54K8veCR";
     };
-  } // testHosts;
+  } // testHosts);
   users = {
     krebs = {
       pubkey = "lol"; # TODO krebs.users.krebs.pubkey should be unnecessary
