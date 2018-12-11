@@ -26,7 +26,7 @@ let {
     inherit subnetname;
     subnetCIDR = "${subnetAddress}/${toString subnetPrefixLength}";
     subnetAddress = appendZeros subnetPrefixLength subnetPrefix;
-    subnetHash = hash 4 subnetname;
+    subnetHash = hashToLength 4 subnetname;
     subnetPrefix = joinAddress netPrefix subnetHash;
     subnetPrefixLength = netPrefixLength + 16;
 
@@ -34,7 +34,9 @@ let {
       set =
         concatStringsSep
           ":"
-          (stringToGroupsOf 4 (hash (suffixLength / 4) suffixSpec.hostName));
+          (stringToGroupsOf
+            4
+            (hashToLength (suffixLength / 4) suffixSpec.hostName));
       string = suffixSpec;
     };
     suffixLength = addressLength - subnetPrefixLength;
@@ -53,32 +55,6 @@ let {
     parsedaddr = parseAddress s;
   in
     formatAddress (map (const "0") (range 1 zeroCount) ++ parsedaddr);
-
-  # Split string into list of chunks where each chunk is at most n chars long.
-  # The leftmost chunk might shorter.
-  # Example: stringToGroupsOf "123456" -> ["12" "3456"]
-  stringToGroupsOf = n: s: let
-    acc =
-      foldl'
-        (acc: c: if stringLength acc.chunk < n then {
-          chunk = acc.chunk + c;
-          chunks = acc.chunks;
-        } else {
-          chunk = c;
-          chunks = acc.chunks ++ [acc.chunk];
-        })
-        {
-          chunk = "";
-          chunks = [];
-        }
-        (stringToCharacters s);
-  in
-    filter (x: x != []) ([acc.chunk] ++ acc.chunks);
-
-  hash = n: s: substring 0 n (hashString "sha256" s);
-
-  dropLast = n: xs: reverseList (drop n (reverseList xs));
-  takeLast = n: xs: reverseList (take n (reverseList xs));
 
   hasEmptyPrefix = xs: take 2 xs == ["" ""];
   hasEmptySuffix = xs: takeLast 2 xs == ["" ""];
