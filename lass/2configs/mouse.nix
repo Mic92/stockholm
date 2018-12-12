@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 {
   hardware.trackpoint = {
     enable = true;
@@ -7,6 +7,7 @@
     emulateWheel = true;
   };
 
+  services.xserver.libinput.enable = lib.mkForce false;
   services.xserver.synaptics = {
     enable = true;
     horizEdgeScroll = false;
