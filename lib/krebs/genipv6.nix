@@ -12,7 +12,8 @@ let {
 
     inherit netname;
     netCIDR = "${netAddress}/${toString netPrefixLength}";
-    netAddress = appendZeros addressLength netPrefix;
+    netAddress =
+      normalize-ip6-addr (appendZeros addressLength netPrefix);
     netHash = toString {
       retiolum = 0;
       wirelum = 1;
@@ -25,7 +26,8 @@ let {
 
     inherit subnetname;
     subnetCIDR = "${subnetAddress}/${toString subnetPrefixLength}";
-    subnetAddress = appendZeros addressLength subnetPrefix;
+    subnetAddress =
+      normalize-ip6-addr (appendZeros addressLength subnetPrefix);
     subnetHash = hashToLength 4 subnetname;
     subnetPrefix = joinAddress netPrefix subnetHash;
     subnetPrefixLength = netPrefixLength + 16;
