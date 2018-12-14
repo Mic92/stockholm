@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
 
 
 # fork of https://gist.github.com/rycee/f495fc6cc4130f155e8b670609a1e57b
@@ -59,15 +59,6 @@ in
         '';
       };
 
-      # webRoot = mkOption {
-      #   type = types.str;
-      #   default = "/";
-      #   description = ''
-      #     Directory on virtual host that serves the cache. Must end in
-      #     <literal>/</literal>.
-      #   '';
-      # };
-
       resolver = mkOption {
         type = types.str;
         description = "Address of DNS resolver.";
@@ -80,6 +71,13 @@ in
         default = "/var/cache/nix-cache-cache";
         description = ''
           Where nginx should store cached data.
+        '';
+      };
+      indexFile = mkOption {
+        type = types.path;
+        default = pkgs.writeText "myindex" "<html>hello world</html>";
+        description = ''
+          Path to index.html file.
         '';
       };
 
@@ -98,6 +96,7 @@ in
     systemd.services.nginx.preStart = ''
       mkdir -p ${cfg.cacheDir} /srv/www/nix-cache-cache
       chmod 700 ${cfg.cacheDir} /srv/www/nix-cache-cache
+      ln -fs ${cfg.indexFile} /srv/www/nix-cache-cache/index.html
       chown ${nginxCfg.user}:${nginxCfg.group} \
         ${cfg.cacheDir} /srv/www/nix-cache-cache
     '';
@@ -143,6 +142,7 @@ in
         locations."/" =
         {
           root = "/srv/www/nix-cache-cache";
+          index = "index.html";
           extraConfig = ''
             expires max;
             add_header Cache-Control $nix_cache_cache_header always;
