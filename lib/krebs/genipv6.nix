@@ -12,7 +12,7 @@ let {
 
     inherit netname;
     netCIDR = "${netAddress}/${toString netPrefixLength}";
-    netAddress = appendZeros netPrefixLength netPrefix;
+    netAddress = appendZeros addressLength netPrefix;
     netHash = toString {
       retiolum = 0;
       wirelum = 1;
@@ -25,7 +25,7 @@ let {
 
     inherit subnetname;
     subnetCIDR = "${subnetAddress}/${toString subnetPrefixLength}";
-    subnetAddress = appendZeros subnetPrefixLength subnetPrefix;
+    subnetAddress = appendZeros addressLength subnetPrefix;
     subnetHash = hashToLength 4 subnetname;
     subnetPrefix = joinAddress netPrefix subnetHash;
     subnetPrefixLength = netPrefixLength + 16;
