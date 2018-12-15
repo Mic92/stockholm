@@ -1,16 +1,14 @@
 with import <stockholm/lib>;
 { config, ... }: let
 
-  hostDefaults = hostName: host: flip recursiveUpdate host ({
+  hostDefaults = hostName: host: flip recursiveUpdate host {
     ci = true;
     monitoring = true;
     owner = config.krebs.users.lass;
-  } // optionalAttrs (host.nets?retiolum) {
-    nets.retiolum.ip6.addr =
-      (krebs.genipv6 "retiolum" "lass" { inherit hostName; }).address;
-  });
+  };
 
-  wip6 = krebs.genipv6 "wirelum" "lass";
+  r6 = ip: (krebs.genipv6 "retiolum" "lass" ip).address;
+  w6 = ip: (krebs.genipv6 "wirelum" "lass" ip).address;
 
 in {
   dns.providers = {
@@ -56,6 +54,7 @@ in {
         retiolum = {
           via = internet;
           ip4.addr = "10.243.0.103";
+          ip6.addr = r6 "1";
           aliases = [
             "prism.r"
             "cache.prism.r"
@@ -93,13 +92,13 @@ in {
         wirelum = {
           via = internet;
           ip4.addr = "10.244.1.1";
-          ip6.addr = (wip6 "1").address;
+          ip6.addr = w6 "1";
           aliases = [
             "prism.w"
           ];
           wireguard = {
             pubkey = "oKJotppdEJqQBjrqrommEUPw+VFryvEvNJr/WikXohk=";
-            subnets = [ "10.244.1.0/24" (wip6 "1").subnetCIDR ];
+            subnets = [ "10.244.1.0/24" "42:1::/32" ];
           };
         };
       };
@@ -150,6 +149,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.81.176";
+          ip6.addr = r6 "1e1";
           aliases = [
             "uriel.r"
             "cgit.uriel.r"
@@ -175,6 +175,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.2";
+          ip6.addr = r6 "dea7";
           aliases = [
             "mors.r"
             "cgit.mors.r"
@@ -191,7 +192,7 @@ in {
           '';
         };
         wirelum = {
-          ip6.addr = (wip6 "dea7").address;
+          ip6.addr = w6 "dea7";
           aliases = [
             "mors.w"
           ];
@@ -207,6 +208,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.4";
+          ip6.addr = r6 "50da";
           aliases = [
             "shodan.r"
             "cgit.shodan.r"
@@ -223,7 +225,7 @@ in {
           '';
         };
         wirelum = {
-          ip6.addr = (wip6 "50da").address;
+          ip6.addr = w6 "50da";
           aliases = [
             "shodan.w"
           ];
@@ -239,6 +241,7 @@ in {
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.133.114";
+          ip6.addr = r6 "1205";
           aliases = [
             "icarus.r"
             "cgit.icarus.r"
@@ -255,7 +258,7 @@ in {
           '';
         };
         wirelum = {
-          ip6.addr = (wip6 "1205").address;
+          ip6.addr = w6 "1205";
           aliases = [
             "icarus.w"
           ];
@@ -271,6 +274,7 @@ in {
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.133.115";
+          ip6.addr = r6 "dead";
           aliases = [
             "daedalus.r"
             "cgit.daedalus.r"
@@ -296,6 +300,7 @@ in {
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.133.116";
+          ip6.addr = r6 "5ce7";
           aliases = [
             "skynet.r"
             "cgit.skynet.r"
@@ -321,6 +326,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.133.77";
+          ip6.addr = r6 "771e";
           aliases = [
             "littleT.r"
           ];
@@ -402,6 +408,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.13";
+          ip6.addr = r6 "12ed";
           aliases = [
             "red.r"
           ];
@@ -431,6 +438,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.14";
+          ip6.addr = r6 "3110";
           aliases = [
             "yellow.r"
           ];
@@ -452,7 +460,7 @@ in {
           '';
         };
         wirelum = {
-          ip6.addr = (wip6 "e110").address;
+          ip6.addr = w6 "3110";
           aliases = [
             "yellow.w"
           ];
@@ -467,6 +475,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.77";
+          ip6.addr = r6 "b1ce";
           aliases = [
             "blue.r"
           ];
@@ -487,6 +496,13 @@ in {
             -----END PUBLIC KEY-----
           '';
         };
+        wirelum = {
+          ip6.addr = w6 "b1ce";
+          aliases = [
+            "blue.w"
+          ];
+          wireguard.pubkey = "emftvx8v8GdoKe68MFVL53QZ187Ei0zhMmvosU1sr3U=";
+        };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSBxtPf8yJfzzI7/iYpoRSc/TT+zYmE/HM9XWS3MZlv";
@@ -494,8 +510,8 @@ in {
     phone = {
       nets = {
         wirelum = {
-          ip6.addr = (wip6 "a").address;
           ip4.addr = "10.244.1.2";
+          ip6.addr = w6 "a";
           aliases = [
             "phone.w"
           ];
@@ -510,6 +526,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.19";
+          ip6.addr = r6 "012f";
           aliases = [
             "morpheus.r"
           ];
@@ -528,6 +545,13 @@ in {
             U7OJwldrElzictBJ1gT94L4BDvoGZVqAkXJCJPamfsWaiw6SsMqtTfECAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
+        };
+        wirelum = {
+          ip6.addr = w6 "012f";
+          aliases = [
+            "morpheus.w"
+          ];
+          wireguard.pubkey = "BdiIHJjJQThmZD8DehxPGA+bboBHjljedwaRaV5yyDY=";
         };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
