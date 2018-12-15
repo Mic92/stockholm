@@ -229,7 +229,7 @@ in {
           aliases = [
             "shodan.w"
           ];
-          wireguard.pubkey = "FkcxMathQzJYwuJBli/nibh0C0kHe9/T2xU0za4J3SQ=";
+          wireguard.pubkey = "0rI/I8FYQ3Pba7fQ9oyvtP4a54GWsPa+3zAiGIuyV30=";
         };
       };
       secure = true;
