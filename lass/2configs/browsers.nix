@@ -45,7 +45,7 @@ let
 
   createFirefoxUser = name: groups: precedence:
     createUser (pkgs.writeDash name ''
-      ${pkgs.firefox-devedition-bin}/bin/firefox-devedition "$@"
+      ${pkgs.firefox}/bin/firefox "$@"
     '') name groups precedence 80;
 
   createQuteUser = name: groups: precedence:
