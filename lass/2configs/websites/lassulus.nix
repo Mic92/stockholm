@@ -3,7 +3,7 @@
 with lib;
 let
   inherit (import <stockholm/lib>)
-    genid
+    genid_uint31
   ;
 
 in {
@@ -22,7 +22,7 @@ in {
   krebs.tinc_graphs.enable = true;
 
   users.users.lass-stuff = {
-    uid = genid "lass-stuff";
+    uid = genid_uint31 "lass-stuff";
     description = "lassul.us blog cgi stuff";
     home = "/var/empty";
   };
@@ -124,7 +124,7 @@ in {
   };
 
   users.users.blog = {
-    uid = genid "blog";
+    uid = genid_uint31 "blog";
     description = "lassul.us blog deployment";
     home = "/srv/http/lassul.us";
     useDefaultShell = true;

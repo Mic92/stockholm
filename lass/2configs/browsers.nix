@@ -45,7 +45,7 @@ let
 
   createFirefoxUser = name: groups: precedence:
     createUser (pkgs.writeDash name ''
-      ${pkgs.firefox-devedition-bin}/bin/firefox-devedition "$@"
+      ${pkgs.firefox}/bin/firefox "$@"
     '') name groups precedence 80;
 
   createQuteUser = name: groups: precedence:
@@ -89,8 +89,8 @@ in {
         }));
       };
     }
-    ( createQuteUser "qb" [ "audio" ] 20 )
-    ( createFirefoxUser "ff" [ "audio" ] 10 )
+    ( createFirefoxUser "ff" [ "audio" ] 11 )
+    ( createQuteUser "qb" [ "audio" ] 10 )
     ( createChromiumUser "cr" [ "audio" "video" ] 9 )
     ( createChromiumUser "gm" [ "video" "audio" ] 8 )
     ( createChromiumUser "wk" [ "audio" ] 0 )

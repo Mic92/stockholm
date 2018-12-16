@@ -142,7 +142,7 @@ with import <stockholm/lib>;
 
     users.users = mapAttrs' (_: cfg:
       nameValuePair cfg.name {
-        uid = genid cfg.name;
+        uid = genid_uint31 cfg.name;
         home = "/home/${cfg.name}";
         useDefaultShell = true;
         createHome = true;

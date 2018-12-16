@@ -78,7 +78,7 @@ main = getArgs >>= \case
 main' :: IO ()
 main' = do
     handleShutdownEvent <- newShutdownEventHandler
-    xmonad $ ewmh
+    launch $ ewmh
         $ withUrgencyHook LibNotifyUrgencyHook
         $ def
             { terminal           = myTerm

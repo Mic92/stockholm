@@ -25,7 +25,7 @@ with import <stockholm/lib>;
     { # TODO make new hfos.nix out of this vv
       boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
       users.users.riot = {
-        uid = genid "riot";
+        uid = genid_uint31 "riot";
         isNormalUser = true;
         extraGroups = [ "libvirtd" ];
         openssh.authorizedKeys.keys = [
@@ -44,21 +44,21 @@ with import <stockholm/lib>;
     }
     {
       users.users.tv = {
-        uid = genid "tv";
+        uid = genid_uint31 "tv";
         isNormalUser = true;
         openssh.authorizedKeys.keys = [
           config.krebs.users.tv.pubkey
         ];
       };
       users.users.makefu = {
-        uid = genid "makefu";
+        uid = genid_uint31 "makefu";
         isNormalUser = true;
         openssh.authorizedKeys.keys = [
           config.krebs.users.makefu.pubkey
         ];
       };
       users.extraUsers.dritter = {
-        uid = genid "dritter";
+        uid = genid_uint31 "dritter";
         isNormalUser = true;
         extraGroups = [
           "download"
@@ -75,7 +75,7 @@ with import <stockholm/lib>;
         ];
       };
       users.users.hellrazor = {
-        uid = genid "hellrazor";
+        uid = genid_uint31 "hellrazor";
         isNormalUser = true;
         extraGroups = [
           "download"
@@ -168,7 +168,7 @@ with import <stockholm/lib>;
     }
     {
       users.users.jeschli = {
-        uid = genid "jeschli";
+        uid = genid_uint31 "jeschli";
         isNormalUser = true;
         openssh.authorizedKeys.keys = with config.krebs.users; [
           jeschli.pubkey
@@ -297,31 +297,30 @@ with import <stockholm/lib>;
       };
     }
     {
-      krebs.iptables.tables.filter.INPUT.rules = [
-         { predicate = "-p udp --dport 51820"; target = "ACCEPT"; }
+      imports = [
+        <stockholm/lass/2configs/wiregrill.nix>
       ];
       krebs.iptables.tables.nat.PREROUTING.rules = [
         { v6 = false; precedence = 1000; predicate = "-s 10.244.1.0/24"; target = "ACCEPT"; }
+        { v4 = false; precedence = 1000; predicate = "-s 42:1::/32"; target = "ACCEPT"; }
       ];
       krebs.iptables.tables.filter.FORWARD.rules = [
-        { v6 = false; precedence = 1000; predicate = "-s 10.244.1.0/24"; target = "ACCEPT"; }
-        { v6 = false; precedence = 1000; predicate = "-s 10.243.0.0/16 -d 10.244.1.0/24"; target = "ACCEPT"; }
+        { precedence = 1000; predicate = "-i wiregrill -o retiolum"; target = "ACCEPT"; }
+        { precedence = 1000; predicate = "-i retiolum -o wiregrill"; target = "ACCEPT"; }
       ];
       krebs.iptables.tables.nat.POSTROUTING.rules = [
+        { v4 = false; predicate = "-s 42:1:ce16::/48 ! -d 42:1:ce16::48"; target = "MASQUERADE"; }
         { v6 = false; predicate = "-s 10.244.1.0/24 ! -d 10.244.1.0/24"; target = "MASQUERADE"; }
       ];
-      networking.wireguard.interfaces.wg0 = {
-        ips = [ "10.244.1.1/24" ];
-        listenPort = 51820;
-        privateKeyFile = (toString <secrets>) + "/wireguard.key";
-        allowedIPsAsRoutes = true;
-        peers = [
-          {
-            # lass-android
-            allowedIPs = [ "10.244.1.2/32" ];
-            publicKey = "zVunBVOxsMETlnHkgjfH71HaZjjNUOeYNveAVv5z3jw=";
-          }
-        ];
+      services.dnsmasq = {
+        enable = true;
+        resolveLocalQueries = false;
+
+        extraConfig= ''
+          listen-address=42:1:ce16::1
+          except-interface=lo
+          interface=wg0
+        '';
       };
     }
     {

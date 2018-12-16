@@ -19,7 +19,11 @@ with import <stockholm/lib>;
   users.groups.download.members = [ "transmission" ];
   users.users.transmission.group = mkForce "download";
 
-  systemd.services.transmission.serviceConfig.bindsTo = [ "openvpn-nordvpn.service" ];
+  systemd.services.transmission.bindsTo = [ "openvpn-nordvpn.service" ];
+  systemd.services.transmission.after = [ "openvpn-nordvpn.service" ];
+  systemd.services.transmission.postStart = ''
+    chmod 775 /var/download/finished
+  '';
   services.transmission = {
     enable = true;
     settings = {
@@ -34,10 +38,40 @@ with import <stockholm/lib>;
 
   services.nginx = {
     enable = true;
-    virtualHosts."yellow.r".locations."/dl".extraConfig = ''
-      autoindex on;
-      alias /var/download/finished;
-    '';
+    package = pkgs.nginx.override {
+      modules = with pkgs.nginxModules; [
+        fancyindex
+      ];
+    };
+    virtualHosts."dl" = {
+      default = true;
+      locations."/Nginx-Fancyindex-Theme-dark" = {
+        extraConfig = ''
+          alias ${pkgs.fetchFromGitHub {
+            owner = "Naereen";
+            repo = "Nginx-Fancyindex-Theme";
+            rev = "e84f7d6a32085c2b6238f85f5fdebe9ceb710fc4";
+            sha256 = "0wzl4ws2w8f0749vxfd1c8c21p3jw463wishgfcmaljbh4dwplg6";
+          }}/Nginx-Fancyindex-Theme-dark;
+          autoindex on;
+        '';
+      };
+      locations."/dl".extraConfig = ''
+        return 301 /;
+      '';
+      locations."/" = {
+        root = "/var/download/finished";
+        extraConfig = ''
+          fancyindex on;
+          fancyindex_header "/Nginx-Fancyindex-Theme-dark/header.html";
+          fancyindex_footer "/Nginx-Fancyindex-Theme-dark/footer.html";
+          dav_methods PUT DELETE MKCOL COPY MOVE;
+
+          create_full_put_path on;
+          dav_access all:r;
+        '';
+      };
+    };
   };
 
   krebs.iptables = {

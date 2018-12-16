@@ -34,6 +34,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/backup.nix>
     <stockholm/lass/2configs/print.nix>
     <stockholm/lass/2configs/blue-host.nix>
+    <stockholm/lass/2configs/network-manager.nix>
     {
       krebs.iptables.tables.filter.INPUT.rules = [
         #risk of rain

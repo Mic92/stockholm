@@ -9,7 +9,6 @@ in {
     ./power-action.nix
     ./copyq.nix
     ./urxvt.nix
-    ./network-manager.nix
     {
       hardware.pulseaudio = {
         enable = true;
@@ -65,6 +64,7 @@ in {
     dic
     dmenu
     font-size
+    fzfmenu
     gitAndTools.qgit
     git-preview
     gnome3.dconf
@@ -97,9 +97,9 @@ in {
     enable = true;
     layout = "us";
     display = mkForce 0;
-    xkbModel = "evdev";
     xkbVariant = "altgr-intl";
-    xkbOptions = "caps:backspace";
+    xkbOptions = "caps:escape";
+    libinput.enable = true;
     displayManager.lightdm.enable = true;
     windowManager.default = "xmonad";
     windowManager.session = [{

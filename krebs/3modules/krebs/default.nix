@@ -1,20 +1,24 @@
-{ config, ... }:
-
 with import <stockholm/lib>;
-let
+{ config, ... }: let
+
+  hostDefaults = hostName: host: flip recursiveUpdate host ({
+    owner = config.krebs.users.krebs;
+  } // optionalAttrs (host.nets?retiolum) {
+    nets.retiolum.ip6.addr =
+      (krebs.genipv6 "retiolum" "krebs" { inherit hostName; }).address;
+  });
+
   testHosts = genAttrs [
     "test-arch"
     "test-centos6"
     "test-centos7"
     "test-all-krebs-modules"
   ] (name: {
-    owner = config.krebs.users.krebs;
     inherit name;
     cores = 1;
     nets = {
       retiolum = {
         ip4.addr = "10.243.73.57";
-        ip6.addr = "42:0:0:0:0:0:0:7357";
         tinc.pubkey = ''
           -----BEGIN RSA PUBLIC KEY-----
           MIIBCgKCAQEAy41YKF/wpHLnN370MSdnAo63QUW30aw+6O79cnaJyxoL6ZQkk4Nd
@@ -29,14 +33,12 @@ let
     };
   });
 in {
-  hosts = {
+  hosts = mapAttrs hostDefaults ({
     hotdog = {
       ci = true;
-      owner = config.krebs.users.krebs;
       nets = {
         retiolum = {
           ip4.addr = "10.243.77.3";
-          ip6.addr = "42:0:0:0:0:0:77:3";
           aliases = [
             "hotdog.r"
             "build.r"
@@ -61,11 +63,9 @@ in {
     };
     onebutton = {
       cores = 1;
-      owner = config.krebs.users.krebs;
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.101";
-          ip6.addr = "42:0:0:0:0:0:0:101";
           aliases = [
             "onebutton.r"
           ];
@@ -92,11 +92,9 @@ in {
     };
     puyak = {
       ci = true;
-      owner = config.krebs.users.krebs;
       nets = {
         retiolum = {
           ip4.addr = "10.243.77.2";
-          ip6.addr = "42:0:0:0:0:0:77:2";
           aliases = [
             "puyak.r"
             "build.puyak.r"
@@ -120,7 +118,6 @@ in {
     };
     wolf = {
       ci = true;
-      owner = config.krebs.users.krebs;
       nets = {
         shack = {
           ip4.addr =  "10.42.2.150" ;
@@ -135,7 +132,6 @@ in {
         };
         retiolum = {
           ip4.addr = "10.243.77.1";
-          ip6.addr = "42:0:0:0:0:0:77:1";
           aliases = [
             "wolf.r"
             "build.wolf.r"
@@ -157,7 +153,7 @@ in {
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKYMXMWZIK0jjnZDM9INiYAKcwjXs2241vew54K8veCR";
     };
-  } // testHosts;
+  } // testHosts);
   users = {
     krebs = {
       pubkey = "lol"; # TODO krebs.users.krebs.pubkey should be unnecessary

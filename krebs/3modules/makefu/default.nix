@@ -1,20 +1,27 @@
-{ config, ... }:
-
-with import <stockholm/lib>;
 ## generate keys with:
 # tinc generate-keys
 # ssh-keygen -f ssh.id_ed25519 -t ed25519 -C host
-let
+
+with import <stockholm/lib>;
+{ config, ... }: let
+
+  hostDefaults = hostName: host: flip recursiveUpdate host ({
+    owner = config.krebs.users.makefu;
+  } // optionalAttrs (host.nets?retiolum) {
+    nets.retiolum.ip6.addr =
+      (krebs.genipv6 "retiolum" "makefu" { inherit hostName; }).address;
+  });
+
   pub-for = name: builtins.readFile (./ssh + "/${name}.pub");
+
 in {
-  hosts = mapAttrs (_: setAttr "owner" config.krebs.users.makefu) {
+  hosts = mapAttrs hostDefaults {
     cake = rec {
       cores = 4;
       ci = false;
       nets = {
         retiolum = {
           ip4.addr = "10.243.136.236";
-          ip6.addr  = "42:b3b2:9552:eef0:ee67:f3b3:8d33:eee1";
           aliases = [
             "cake.r"
           ];
@@ -39,7 +46,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.136.237";
-          ip6.addr  = "42:b3b2:9552:eef0:ee67:f3b3:8d33:eee2";
           aliases = [
             "crapi.r"
           ];
@@ -65,7 +71,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.177.9";
-          ip6.addr = "42:f63:ddf8:7520:cfec:9b61:d807:1dce";
           aliases = [
             "drop.r"
           ];
@@ -90,7 +95,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.227.163";
-          ip6.addr  = "42:e23f:ae0e:ea25:72ff:4ab8:9bd9:38a6";
           aliases = [
             "studio.r"
           ];
@@ -116,7 +120,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.113.98";
-          # ip6.addr  = "42:5cf1:e7f2:3fd:cd4c:a1ee:ec71:7096";
           aliases = [
             "fileleech.r"
           ];
@@ -147,7 +150,6 @@ in {
         };
         retiolum = {
           ip4.addr = "10.243.80.249";
-          ip6.addr  = "42:ecb0:376:b37d:cf47:1ecf:f32b:a3b9";
           aliases = [
             "latte.r"
           ];
@@ -171,7 +173,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.210";
-          ip6.addr = "42:f9f1:0000:0000:0000:0000:0000:0001";
           aliases = [
             "pnp.r"
             "cgit.pnp.r"
@@ -195,7 +196,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.84";
-          ip6.addr = "42:ff6b:5f0b:460d:2cee:4d05:73f7:5566";
           aliases = [
             "darth.r"
           ];
@@ -267,7 +267,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.212";
-          ip6.addr = "42:f9f1:0000:0000:0000:0000:0000:0002";
           aliases = [
             "tsp.r"
           ];
@@ -295,7 +294,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.91";
-          ip6.addr = "42:0b2c:d90e:e717:03dc:9ac1:7c30:a4db";
           aliases = [
             "x.r"
           ];
@@ -329,7 +327,6 @@ in {
           '';
         };
         #wiregrill = {
-        #  ip6.addr = "42:4200:0000:0000:0000:0000:0000:a4db";
         #  aliases = [
         #    "x.w"
         #  ];
@@ -347,7 +344,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.1.91";
-          ip6.addr = "42:0b2c:d90e:e717:03dd:9ac1:0000:a400";
           aliases = [
             "vbob.r"
           ];
@@ -386,7 +382,6 @@ in {
         };
         retiolum = {
           ip4.addr = "10.243.0.153";
-          ip6.addr = "42:9143:b4c0:f981:6030:7aa2:8bc5:4110";
           aliases = [
             "pigstarter.r"
           ];
@@ -422,7 +417,6 @@ in {
         retiolum = {
           via = internet;
           ip4.addr = "10.243.29.169";
-          ip6.addr = "42:6e1e:cc8a:7cef:827:f938:8c64:baad";
           aliases = [
             "wry.r"
             "graph.wry.r"
@@ -460,7 +454,6 @@ in {
         };
         retiolum = {
           ip4.addr = "10.243.153.102";
-          ip6.addr = "42:4b0b:d990:55ba:8da8:630f:dc0e:aae0";
           aliases = [
             "filepimp.r"
           ];
@@ -491,7 +484,6 @@ in {
         };
         retiolum = {
           ip4.addr = "10.243.0.89";
-          ip6.addr = "42:f9f0::10";
           aliases = [
             "omo.r"
             "dcpp.omo.r"
@@ -536,7 +528,6 @@ in {
         };
         retiolum = {
           ip4.addr = "10.243.214.15";
-          # ip6.addr = "42:5a02:2c30:c1b1:3f2e:7c19:2496:a732";
           aliases = [
             "wbob.r"
             "hydra.wbob.r"
@@ -560,27 +551,28 @@ in {
       ci = true;
       extraZones = {
         "krebsco.de" = ''
+          boot.euer         IN A      ${nets.internet.ip4.addr}
           cache.euer        IN A      ${nets.internet.ip4.addr}
           cache.gum         IN A      ${nets.internet.ip4.addr}
-          graph             IN A      ${nets.internet.ip4.addr}
-          gold              IN A      ${nets.internet.ip4.addr}
-          iso.euer          IN A      ${nets.internet.ip4.addr}
-          wg.euer           IN A      ${nets.internet.ip4.addr}
-          photostore        IN A      ${nets.internet.ip4.addr}
-          o.euer            IN A      ${nets.internet.ip4.addr}
-          mon.euer          IN A      ${nets.internet.ip4.addr}
-          boot.euer         IN A      ${nets.internet.ip4.addr}
-          wiki.euer         IN A      ${nets.internet.ip4.addr}
-          pigstarter        IN A      ${nets.internet.ip4.addr}
           cgit.euer         IN A      ${nets.internet.ip4.addr}
-          git.euer          IN A      ${nets.internet.ip4.addr}
-          euer              IN A      ${nets.internet.ip4.addr}
-          share.euer        IN A      ${nets.internet.ip4.addr}
-          gum               IN A      ${nets.internet.ip4.addr}
-          wikisearch        IN A      ${nets.internet.ip4.addr}
           dl.euer           IN A      ${nets.internet.ip4.addr}
-          ghook             IN A      ${nets.internet.ip4.addr}
           dockerhub         IN A      ${nets.internet.ip4.addr}
+          euer              IN A      ${nets.internet.ip4.addr}
+          ghook             IN A      ${nets.internet.ip4.addr}
+          git.euer          IN A      ${nets.internet.ip4.addr}
+          gold              IN A      ${nets.internet.ip4.addr}
+          graph             IN A      ${nets.internet.ip4.addr}
+          gum               IN A      ${nets.internet.ip4.addr}
+          iso.euer          IN A      ${nets.internet.ip4.addr}
+          mon.euer          IN A      ${nets.internet.ip4.addr}
+          netdata.euer      IN A      ${nets.internet.ip4.addr}
+          o.euer            IN A      ${nets.internet.ip4.addr}
+          photostore        IN A      ${nets.internet.ip4.addr}
+          pigstarter        IN A      ${nets.internet.ip4.addr}
+          share.euer        IN A      ${nets.internet.ip4.addr}
+          wg.euer           IN A      ${nets.internet.ip4.addr}
+          wiki.euer         IN A      ${nets.internet.ip4.addr}
+          wikisearch        IN A      ${nets.internet.ip4.addr}
           io                IN NS     gum.krebsco.de.
         '';
       };
@@ -596,7 +588,6 @@ in {
         };
         #wiregrill = {
         #  via = internet;
-        #  ip6.addr = "42:4200:0000:0000:0000:0000:0000:70d3";
         #  aliases = [
         #    "gum.w"
         #  ];
@@ -605,26 +596,26 @@ in {
         retiolum = {
           via = internet;
           ip4.addr = "10.243.0.213";
-          ip6.addr = "42:f9f0:0000:0000:0000:0000:0000:70d3";
           aliases = [
-            "nextgum.r"
-            "graph.r"
-            "cache.gum.r"
-            "logs.makefu.r"
-            "stats.makefu.r"
             "backup.makefu.r"
-            "dcpp.nextgum.r"
-            "gum.r"
-            "cgit.gum.r"
-            "o.gum.r"
-            "tracker.makefu.r"
-            "search.makefu.r"
-            "wiki.makefu.r"
-            "wiki.gum.r"
-            "blog.makefu.r"
             "blog.gum.r"
+            "blog.makefu.r"
+            "cache.gum.r"
+            "cgit.gum.r"
             "dcpp.gum.r"
+            "dcpp.nextgum.r"
+            "graph.r"
+            "gum.r"
+            "logs.makefu.r"
+            "netdata.makefu.r"
+            "nextgum.r"
+            "o.gum.r"
+            "search.makefu.r"
+            "stats.makefu.r"
             "torrent.gum.r"
+            "tracker.makefu.r"
+            "wiki.gum.r"
+            "wiki.makefu.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -673,7 +664,6 @@ in {
         };
         retiolum = {
           ip4.addr = "10.243.205.131";
-          ip6.addr = "42:490d:cd82:d2bb:56d5:abd1:b88b:e8b4";
           aliases = [
             "shoney.r"
           ];
@@ -698,7 +688,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.83.237";
-          ip6.addr  = "42:af50:99cf:c185:f1a8:14d5:acb:8101";
           aliases = [
             "sdev.r"
           ];
@@ -736,7 +725,6 @@ in {
         };
         retiolum = {
           ip4.addr = "10.243.211.172";
-          ip6.addr = "42:472a:3d01:bbe4:4425:567e:592b:065d";
           aliases = [
             "flap.r"
           ];
@@ -759,7 +747,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.231.219";
-          ip6.addr = "42:f7bf:178d:4b68:1c1b:42e8:6b27:6a72";
           aliases = [
             "nukular.r"
           ];
@@ -782,7 +769,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.124.21";
-          ip6.addr = "42:9898:a8be:ce56:0ee3:b99c:42c5:109e";
           aliases = [
             "heidi.r"
           ];
@@ -872,7 +858,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.189.130";
-          ip6.addr = "42:c64e:011f:9755:31e1:c3e6:73c0:af2d";
           aliases = [
             "filebitch.r"
           ];
@@ -895,7 +880,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.26.29";
-          ip6.addr = "42:927a:3d59:1cb3:29d6:1a08:78d3:812e";
           aliases = [
             "excobridge.r"
           ];
@@ -918,7 +902,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.226.213";
-          ip6.addr = "42:432e:2379:0cd2:8486:f3b5:335a:5d83";
           aliases = [
             "horisa.r"
           ];
@@ -947,7 +930,6 @@ in {
         };
         retiolum = {
           ip4.addr = "10.243.57.85";
-          ip6.addr = "42:2f06:b899:a3b5:1dcf:51a4:a02b:8731";
           aliases = [
             "wooki.r"
           ];
@@ -970,7 +952,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.163";
-          ip6.addr = "42:b67b:5752:a730:5f28:d80d:6b37:5bda";
           aliases = [
             "senderechner.r"
           ];
@@ -995,7 +976,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.144.142";
-          ip6.addr  = "42:4bf8:94b:eec5:69e2:c837:686e:f278";
           aliases = [
             "tcac-0-1.r"
           ];
@@ -1025,7 +1005,6 @@ in {
         };
         retiolum = {
           ip4.addr = "10.243.139.184";
-          ip6.addr = "42:d568:6106:ba30:753b:0f2a:8225:b1fb";
           aliases = [
             "muhbaasu.r"
           ];
@@ -1048,7 +1027,6 @@ in {
         nets = {
           retiolum = {
             ip4.addr = "10.243.183.236";
-            ip6.addr = "42:8ca8:d2e4:adf6:5c0f:38cb:e9ef:eb3c";
             aliases = [
               "tpsw.r"
             ];

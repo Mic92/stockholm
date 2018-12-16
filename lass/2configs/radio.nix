@@ -5,7 +5,6 @@ with import <stockholm/lib>;
 let
   name = "radio";
   mainUser = config.users.extraUsers.mainUser;
-  inherit (import <stockholm/lib>) genid;
 
   admin-password = import <secrets/icecast-admin-pw>;
   source-password = import <secrets/icecast-source-pw>;
@@ -31,7 +30,7 @@ in {
     "${name}" = rec {
       inherit name;
       group = name;
-      uid = genid name;
+      uid = genid_uint31 name;
       description = "radio manager";
       home = "/home/${name}";
       useDefaultShell = true;
