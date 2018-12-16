@@ -8,8 +8,8 @@ pkgs.writeDashBin "l-gen-secrets" ''
   ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f $TMPDIR/ssh.id_ed25519 -P "" -C "" >/dev/null
   ${pkgs.openssl}/bin/openssl genrsa -out $TMPDIR/retiolum.rsa_key.priv 4096 2>/dev/null > /dev/null
   ${pkgs.openssl}/bin/openssl rsa -in $TMPDIR/retiolum.rsa_key.priv -pubout -out $TMPDIR/retiolum.rsa_key.pub 2>/dev/null > /dev/null
-  ${pkgs.wireguard}/bin/wg genkey > $TMPDIR/wirelum.key
-  ${pkgs.coreutils}/bin/cat $TMPDIR/wirelum.key | ${pkgs.wireguard}/bin/wg pubkey > $TMPDIR/wirelum.pub
+  ${pkgs.wireguard}/bin/wg genkey > $TMPDIR/wiregrill.key
+  ${pkgs.coreutils}/bin/cat $TMPDIR/wiregrill.key | ${pkgs.wireguard}/bin/wg pubkey > $TMPDIR/wiregrill.pub
   cat <<EOF > $TMPDIR/hashedPasswords.nix
   {
     root = "$HASHED_PASSWORD";
@@ -37,13 +37,13 @@ pkgs.writeDashBin "l-gen-secrets" ''
   $(cat $TMPDIR/retiolum.rsa_key.pub)
           ${"''"};
         };
-        wirelum = {
+        wiregrill = {
           ip6.addr = (wip6 "changeme").address;
           aliases = [
             "$HOSTNAME.w"
           ];
           wireguard.pubkey = ${"''"}
-  $(cat $TMPDIR/wirelum.pub)
+  $(cat $TMPDIR/wiregrill.pub)
           ${"''"};
         };
       };

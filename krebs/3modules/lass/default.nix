@@ -8,7 +8,7 @@ with import <stockholm/lib>;
   };
 
   r6 = ip: (krebs.genipv6 "retiolum" "lass" ip).address;
-  w6 = ip: (krebs.genipv6 "wirelum" "lass" ip).address;
+  w6 = ip: (krebs.genipv6 "wiregrill" "lass" ip).address;
 
 in {
   dns.providers = {
@@ -89,7 +89,7 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
-        wirelum = {
+        wiregrill = {
           via = internet;
           ip4.addr = "10.244.1.1";
           ip6.addr = w6 "1";
@@ -191,7 +191,7 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
-        wirelum = {
+        wiregrill = {
           ip6.addr = w6 "dea7";
           aliases = [
             "mors.w"
@@ -224,7 +224,7 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
-        wirelum = {
+        wiregrill = {
           ip6.addr = w6 "50da";
           aliases = [
             "shodan.w"
@@ -257,7 +257,7 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
-        wirelum = {
+        wiregrill = {
           ip6.addr = w6 "1205";
           aliases = [
             "icarus.w"
@@ -419,7 +419,7 @@ in {
             -----END PUBLIC KEY-----
           '';
         };
-        wirelum = {
+        wiregrill = {
           ip6.addr = w6 "3110";
           aliases = [
             "yellow.w"
@@ -456,7 +456,7 @@ in {
             -----END PUBLIC KEY-----
           '';
         };
-        wirelum = {
+        wiregrill = {
           ip6.addr = w6 "b1ce";
           aliases = [
             "blue.w"
@@ -469,7 +469,7 @@ in {
     };
     phone = {
       nets = {
-        wirelum = {
+        wiregrill = {
           ip4.addr = "10.244.1.2";
           ip6.addr = w6 "a";
           aliases = [
@@ -506,7 +506,7 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
-        wirelum = {
+        wiregrill = {
           ip6.addr = w6 "012f";
           aliases = [
             "morpheus.w"
