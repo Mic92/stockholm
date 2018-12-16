@@ -82,7 +82,7 @@ let
     source ${pkgs.neomutt}/share/doc/neomutt/samples/gpg.rc
     set pgp_use_gpg_agent = yes
     set pgp_sign_as = 0xDC2A43EF4F11E854B44D599A89E82952976A7E4D
-    set crypt_autosign = yes
+    set crypt_autosign = no
     set crypt_replyencrypt = yes
     set crypt_verify_sig = yes
     set pgp_verify_command = "gpg --no-verbose --batch --output - --verify %s %f"
