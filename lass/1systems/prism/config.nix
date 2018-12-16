@@ -300,14 +300,16 @@ with import <stockholm/lib>;
       imports = [
         <stockholm/lass/2configs/wirelum.nix>
       ];
-      #krebs.iptables.tables.nat.PREROUTING.rules = [
-      #  { v6 = false; precedence = 1000; predicate = "-s 10.244.1.0/24"; target = "ACCEPT"; }
-      #];
+      krebs.iptables.tables.nat.PREROUTING.rules = [
+        { v6 = false; precedence = 1000; predicate = "-s 10.244.1.0/24"; target = "ACCEPT"; }
+        { v4 = false; precedence = 1000; predicate = "-s 42:1::/32"; target = "ACCEPT"; }
+      ];
       krebs.iptables.tables.filter.FORWARD.rules = [
-        { v6 = false; precedence = 1000; predicate = "-s 10.244.1.0/24 -d 10.243.0.0/16"; target = "ACCEPT"; }
-        { v6 = false; precedence = 1000; predicate = "-s 10.243.0.0/16 -d 10.244.1.0/24"; target = "ACCEPT"; }
+        { precedence = 1000; predicate = "-i wirelum -o retiolum"; target = "ACCEPT"; }
+        { precedence = 1000; predicate = "-i retiolum -o wirelum"; target = "ACCEPT"; }
       ];
       krebs.iptables.tables.nat.POSTROUTING.rules = [
+        { v4 = false; predicate = "-s 42:1:ce16::/48 ! -d 42:1:ce16::48"; target = "MASQUERADE"; }
         { v6 = false; predicate = "-s 10.244.1.0/24 ! -d 10.244.1.0/24"; target = "MASQUERADE"; }
       ];
       services.dnsmasq = {
@@ -315,7 +317,7 @@ with import <stockholm/lib>;
         resolveLocalQueries = false;
 
         extraConfig= ''
-          listen-address=10.244.1.1
+          listen-address=42:1:ce16::1
           except-interface=lo
           interface=wg0
         '';
