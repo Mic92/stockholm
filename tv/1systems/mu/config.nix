@@ -13,10 +13,7 @@ with import <stockholm/lib>;
 
   tv.x0vncserver.enable = true;
 
-  # hardware configuration
-  boot.initrd.luks.devices.muca = {
-    device = "/dev/disk/by-uuid/7b24a931-40b6-44a6-ba22-c805cf164e91";
-  };
+  boot.initrd.luks.devices.muca.device = "/dev/sda2";
   boot.initrd.luks.cryptoModules = [ "aes" "sha512" "xts" ];
   boot.initrd.availableKernelModules = [ "ahci" ];
   boot.kernelModules = [ "fbcon" "kvm-intel" ];
@@ -34,7 +31,7 @@ with import <stockholm/lib>;
       options = [ "defaults" "discard" ];
     };
     "/boot" = {
-      device = "/dev/disk/by-uuid/CEB1-9743";
+      device = "/dev/sda1";
       fsType = "vfat";
     };
   };
