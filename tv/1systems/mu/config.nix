@@ -5,6 +5,11 @@ with import <stockholm/lib>;
     <stockholm/tv>
     <stockholm/tv/2configs/br.nix>
     <stockholm/tv/2configs/exim-retiolum.nix>
+    <stockholm/tv/2configs/hw/x220.nix>
+    {
+      # Override x220.nix as we're using networkmanager here.
+      networking.wireless.enable = mkForce false;
+    }
     <stockholm/tv/2configs/retiolum.nix>
   ];
 
