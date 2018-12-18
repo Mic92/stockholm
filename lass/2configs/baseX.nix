@@ -9,7 +9,6 @@ in {
     ./power-action.nix
     ./copyq.nix
     ./urxvt.nix
-    ./network-manager.nix
     {
       hardware.pulseaudio = {
         enable = true;
@@ -65,6 +64,7 @@ in {
     dic
     dmenu
     font-size
+    fzfmenu
     gitAndTools.qgit
     git-preview
     gnome3.dconf

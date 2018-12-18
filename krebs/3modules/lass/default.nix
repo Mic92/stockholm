@@ -1,16 +1,14 @@
 with import <stockholm/lib>;
 { config, ... }: let
 
-  hostDefaults = hostName: host: flip recursiveUpdate host ({
+  hostDefaults = hostName: host: flip recursiveUpdate host {
     ci = true;
     monitoring = true;
     owner = config.krebs.users.lass;
-  } // optionalAttrs (host.nets?retiolum) {
-    nets.retiolum.ip6.addr =
-      (krebs.genipv6 "retiolum" "lass" { inherit hostName; }).address;
-  });
+  };
 
-  wip6 = krebs.genipv6 "wirelum" "lass";
+  r6 = ip: (krebs.genipv6 "retiolum" "lass" ip).address;
+  w6 = ip: (krebs.genipv6 "wiregrill" "lass" ip).address;
 
 in {
   dns.providers = {
@@ -56,6 +54,7 @@ in {
         retiolum = {
           via = internet;
           ip4.addr = "10.243.0.103";
+          ip6.addr = r6 "1";
           aliases = [
             "prism.r"
             "cache.prism.r"
@@ -90,16 +89,16 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
-        wirelum = {
+        wiregrill = {
           via = internet;
           ip4.addr = "10.244.1.1";
-          ip6.addr = (wip6 "1").address;
+          ip6.addr = w6 "1";
           aliases = [
             "prism.w"
           ];
           wireguard = {
             pubkey = "oKJotppdEJqQBjrqrommEUPw+VFryvEvNJr/WikXohk=";
-            subnets = [ "10.244.1.0/24" (wip6 "1").subnetCIDR ];
+            subnets = [ "10.244.1.0/24" "42:1::/32" ];
           };
         };
       };
@@ -150,6 +149,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.81.176";
+          ip6.addr = r6 "1e1";
           aliases = [
             "uriel.r"
             "cgit.uriel.r"
@@ -175,6 +175,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.2";
+          ip6.addr = r6 "dea7";
           aliases = [
             "mors.r"
             "cgit.mors.r"
@@ -190,8 +191,8 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
-        wirelum = {
-          ip6.addr = (wip6 "dea7").address;
+        wiregrill = {
+          ip6.addr = w6 "dea7";
           aliases = [
             "mors.w"
           ];
@@ -207,6 +208,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.4";
+          ip6.addr = r6 "50da";
           aliases = [
             "shodan.r"
             "cgit.shodan.r"
@@ -222,12 +224,12 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
-        wirelum = {
-          ip6.addr = (wip6 "50da").address;
+        wiregrill = {
+          ip6.addr = w6 "50da";
           aliases = [
             "shodan.w"
           ];
-          wireguard.pubkey = "FkcxMathQzJYwuJBli/nibh0C0kHe9/T2xU0za4J3SQ=";
+          wireguard.pubkey = "0rI/I8FYQ3Pba7fQ9oyvtP4a54GWsPa+3zAiGIuyV30=";
         };
       };
       secure = true;
@@ -239,6 +241,7 @@ in {
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.133.114";
+          ip6.addr = r6 "1205";
           aliases = [
             "icarus.r"
             "cgit.icarus.r"
@@ -254,8 +257,8 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
-        wirelum = {
-          ip6.addr = (wip6 "1205").address;
+        wiregrill = {
+          ip6.addr = w6 "1205";
           aliases = [
             "icarus.w"
           ];
@@ -271,6 +274,7 @@ in {
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.133.115";
+          ip6.addr = r6 "dead";
           aliases = [
             "daedalus.r"
             "cgit.daedalus.r"
@@ -296,6 +300,7 @@ in {
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.133.116";
+          ip6.addr = r6 "5ce7";
           aliases = [
             "skynet.r"
             "cgit.skynet.r"
@@ -321,6 +326,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.133.77";
+          ip6.addr = r6 "771e";
           aliases = [
             "littleT.r"
           ];
@@ -356,52 +362,13 @@ in {
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJzb9BPFClubs6wSOi/ivqPFVPlowXwAxBS0jHaB29hX";
     };
-    xerxes = {
-      cores = 2;
-      nets = rec {
-        retiolum = {
-          ip4.addr = "10.243.1.3";
-          aliases = [
-            "xerxes.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIECgKCBAEArqEaK+m7WZe/9/Vbc+qx2TjkkRJ9lDgDMr1dvj98xb8/EveUME6U
-            MZyAqNjLuKq3CKzJLo02ZmdFs4CT1Hj28p5IC0wLUWn53hrqdy8cCJDvIiKIv+Jk
-            gItsxJyMnRtsdDbB6IFJ08D5ReGdAFJT5lqpN0DZuNC6UQRxzUK5fwKYVVzVX2+W
-            /EZzEPe5XbE69V/Op2XJ2G6byg9KjOzNJyJxyjwVco7OXn1OBNp94NXoFrUO7kxb
-            mTNnh3D+iB4c3qv8woLhmb+Uh/9MbXS14QrSf85ou4kfUjb5gdhjIlzz+jfA/6XO
-            X4t86uv8L5IzrhSGb0TmhrIh5HhUmSKT4RdHJom0LB7EASMR2ZY9AqIG11XmXuhj
-            +2b5INBZSj8Cotv5aoRXiPSaOd7bw7lklYe4ZxAU+avXot9K3/4XVLmi6Wa6Okim
-            hz+MEYjW5gXY+YSUWXOR4o24jTmDjQJpdL83eKwLVAtbrE7TcVszHX6zfMoQZ5M9
-            3EtOkDMxhC+WfkL+DLQAURhgcPTZoaj0cAlvpb0TELZESwTBI09jh/IBMXHBZwI4
-            H1gOD5YENpf0yUbLjVu4p82Qly10y58XFnUmYay0EnEgdPOOVViovGEqTiAHMmm5
-            JixtwJDz7a6Prb+owIg27/eE1/E6hpfXpU8U83qDYGkIJazLnufy32MTFE4T9fI4
-            hS8icFcNlsobZp+1pB3YK4GV5BnvMwOIVXVlP8yMCRTDRWZ4oYmAZ5apD7OXyNwe
-            SUP2mCNNlQCqyjRsxj5S1lZQRy1sLQztU5Sff4xYNK+5aPgJACmvSi3uaJAxBloo
-            4xCCYzxhaBlvwVISJXZTq76VSPybeQ+pmSZFMleNnWOstvevLFeOoH2Is0Ioi1Fe
-            vnu5r0D0VYsb746wyRooiEuOAjBmni8X/je6Vwr1gb/WZfZ23EwYpGyakJdxLNv3
-            Li+LD9vUfOR80WL608sUU45tAx1RAy6QcH/YDtdClbOdK53+cQVTsYnCvDW8uGlO
-            scQWgk+od3qvo6yCPO7pRlEd3nedcPSGh/KjBHao6eP+bsVERp733Vb9qrEVwmxv
-            jlZ1m12V63wHVu9uMAGi9MhK+2Q/l7uLTj03OYpi4NYKL2Bu01VXfoxuauuZLdIJ
-            Z3ZV+qUcjzZI0PBlGxubq6CqVFoSB7nhHUbcdPQ66WUnwoKq0cKmE7VOlJQvJ07u
-            /Wsl8BIsxODVt0rTzEAx0hTd5mJCX7sCawRt+NF+1DZizl9ouebNMkNlsEAg4Ps0
-            bQerZLcOmpYjGa5+lWDwJIMXVIcxwTmQR86stlP/KQm0vdOvH2ZUWTXcYvCYlHkQ
-            sgVnnA2wt+7UpZnEBHy04ry+jYaSsPdYgwIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      secure = true;
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5HyLyaIvVH0qHIQ4ciKhDiElhSqsK+uXcA6lTvL+5n";
-    };
     red = {
       monitoring = false;
       cores = 1;
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.13";
+          ip6.addr = r6 "12ed";
           aliases = [
             "red.r"
           ];
@@ -431,6 +398,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.14";
+          ip6.addr = r6 "3110";
           aliases = [
             "yellow.r"
           ];
@@ -451,8 +419,8 @@ in {
             -----END PUBLIC KEY-----
           '';
         };
-        wirelum = {
-          ip6.addr = (wip6 "e110").address;
+        wiregrill = {
+          ip6.addr = w6 "3110";
           aliases = [
             "yellow.w"
           ];
@@ -467,6 +435,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.77";
+          ip6.addr = r6 "b1ce";
           aliases = [
             "blue.r"
           ];
@@ -487,15 +456,22 @@ in {
             -----END PUBLIC KEY-----
           '';
         };
+        wiregrill = {
+          ip6.addr = w6 "b1ce";
+          aliases = [
+            "blue.w"
+          ];
+          wireguard.pubkey = "emftvx8v8GdoKe68MFVL53QZ187Ei0zhMmvosU1sr3U=";
+        };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSBxtPf8yJfzzI7/iYpoRSc/TT+zYmE/HM9XWS3MZlv";
     };
     phone = {
       nets = {
-        wirelum = {
-          ip6.addr = (wip6 "a").address;
+        wiregrill = {
           ip4.addr = "10.244.1.2";
+          ip6.addr = w6 "a";
           aliases = [
             "phone.w"
           ];
@@ -510,6 +486,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.19";
+          ip6.addr = r6 "012f";
           aliases = [
             "morpheus.r"
           ];
@@ -528,6 +505,13 @@ in {
             U7OJwldrElzictBJ1gT94L4BDvoGZVqAkXJCJPamfsWaiw6SsMqtTfECAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
+        };
+        wiregrill = {
+          ip6.addr = w6 "012f";
+          aliases = [
+            "morpheus.w"
+          ];
+          wireguard.pubkey = "BdiIHJjJQThmZD8DehxPGA+bboBHjljedwaRaV5yyDY=";
         };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;

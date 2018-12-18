@@ -7,6 +7,7 @@ let
     "daedalus"
     "skynet"
     "prism"
+    "littleT"
   ];
   remote_hosts = filter (h: h != config.networking.hostName) all_hosts;
 

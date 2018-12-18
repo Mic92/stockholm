@@ -126,6 +126,7 @@ in {
       { from = "ubik@ubikmedia.eu"; to = "domsen, jms, ms"; }
       { from = "akayguen@freemonkey.art"; to ="akayguen"; }
       { from = "bui@freemonkey.art"; to ="bui"; }
+      { from = "kontakt@alewis.de"; to ="klabusterbeere"; }
 
       { from = "testuser@lassul.us"; to = "testuser"; }
       { from = "testuser@ubikmedia.eu"; to = "testuser"; }
@@ -134,6 +135,7 @@ in {
       "jla-trading.com"
       "ubikmedia.eu"
       "ubikmedia.de"
+      "alewis.de"
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";
@@ -200,6 +202,13 @@ in {
   users.users.bui = {
     uid = genid_uint31 "bui";
     home = "/home/bui";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
+  users.users.klabusterbeere = {
+    uid = genid_uint31 "klabusterbeere";
+    home = "/home/klabusterbeere";
     useDefaultShell = true;
     createHome = true;
   };

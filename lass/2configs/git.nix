@@ -154,7 +154,7 @@ let
     public = true;
   };
 
-  make-restricted-repo = name: { admins ? [], collaborators ? [], announce ? false, hooks ? {}, ... }: {
+  make-restricted-repo = name: { admins ? [], collaborators ? [], announce ? true, hooks ? {}, ... }: {
     inherit admins collaborators name;
     public = false;
     hooks = {

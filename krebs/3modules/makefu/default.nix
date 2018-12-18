@@ -551,27 +551,28 @@ in {
       ci = true;
       extraZones = {
         "krebsco.de" = ''
+          boot.euer         IN A      ${nets.internet.ip4.addr}
           cache.euer        IN A      ${nets.internet.ip4.addr}
           cache.gum         IN A      ${nets.internet.ip4.addr}
-          graph             IN A      ${nets.internet.ip4.addr}
-          gold              IN A      ${nets.internet.ip4.addr}
-          iso.euer          IN A      ${nets.internet.ip4.addr}
-          wg.euer           IN A      ${nets.internet.ip4.addr}
-          photostore        IN A      ${nets.internet.ip4.addr}
-          o.euer            IN A      ${nets.internet.ip4.addr}
-          mon.euer          IN A      ${nets.internet.ip4.addr}
-          boot.euer         IN A      ${nets.internet.ip4.addr}
-          wiki.euer         IN A      ${nets.internet.ip4.addr}
-          pigstarter        IN A      ${nets.internet.ip4.addr}
           cgit.euer         IN A      ${nets.internet.ip4.addr}
-          git.euer          IN A      ${nets.internet.ip4.addr}
-          euer              IN A      ${nets.internet.ip4.addr}
-          share.euer        IN A      ${nets.internet.ip4.addr}
-          gum               IN A      ${nets.internet.ip4.addr}
-          wikisearch        IN A      ${nets.internet.ip4.addr}
           dl.euer           IN A      ${nets.internet.ip4.addr}
-          ghook             IN A      ${nets.internet.ip4.addr}
           dockerhub         IN A      ${nets.internet.ip4.addr}
+          euer              IN A      ${nets.internet.ip4.addr}
+          ghook             IN A      ${nets.internet.ip4.addr}
+          git.euer          IN A      ${nets.internet.ip4.addr}
+          gold              IN A      ${nets.internet.ip4.addr}
+          graph             IN A      ${nets.internet.ip4.addr}
+          gum               IN A      ${nets.internet.ip4.addr}
+          iso.euer          IN A      ${nets.internet.ip4.addr}
+          mon.euer          IN A      ${nets.internet.ip4.addr}
+          netdata.euer      IN A      ${nets.internet.ip4.addr}
+          o.euer            IN A      ${nets.internet.ip4.addr}
+          photostore        IN A      ${nets.internet.ip4.addr}
+          pigstarter        IN A      ${nets.internet.ip4.addr}
+          share.euer        IN A      ${nets.internet.ip4.addr}
+          wg.euer           IN A      ${nets.internet.ip4.addr}
+          wiki.euer         IN A      ${nets.internet.ip4.addr}
+          wikisearch        IN A      ${nets.internet.ip4.addr}
           io                IN NS     gum.krebsco.de.
         '';
       };
@@ -596,24 +597,25 @@ in {
           via = internet;
           ip4.addr = "10.243.0.213";
           aliases = [
-            "nextgum.r"
-            "graph.r"
-            "cache.gum.r"
-            "logs.makefu.r"
-            "stats.makefu.r"
             "backup.makefu.r"
-            "dcpp.nextgum.r"
-            "gum.r"
-            "cgit.gum.r"
-            "o.gum.r"
-            "tracker.makefu.r"
-            "search.makefu.r"
-            "wiki.makefu.r"
-            "wiki.gum.r"
-            "blog.makefu.r"
             "blog.gum.r"
+            "blog.makefu.r"
+            "cache.gum.r"
+            "cgit.gum.r"
             "dcpp.gum.r"
+            "dcpp.nextgum.r"
+            "graph.r"
+            "gum.r"
+            "logs.makefu.r"
+            "netdata.makefu.r"
+            "nextgum.r"
+            "o.gum.r"
+            "search.makefu.r"
+            "stats.makefu.r"
             "torrent.gum.r"
+            "tracker.makefu.r"
+            "wiki.gum.r"
+            "wiki.makefu.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
