@@ -1,12 +1,30 @@
 with import <stockholm/lib>;
 { config, ... }: let
 
-  hostDefaults = hostName: host: flip recursiveUpdate host ({
-    owner = config.krebs.users.tv;
-  } // optionalAttrs (host.nets?retiolum) {
-    nets.retiolum.ip6.addr =
-      (krebs.genipv6 "retiolum" "tv" { inherit hostName; }).address;
-  });
+  hostDefaults = hostName: host: foldl' recursiveUpdate {} [
+    {
+      owner = config.krebs.users.tv;
+    }
+    (optionalAttrs (host.nets?retiolum) {
+      nets.retiolum = {
+        ip6.addr =
+          (krebs.genipv6 "retiolum" "tv" { inherit hostName; }).address;
+      };
+    })
+    (let
+      pubkey-path = ./wiregrill + "/${hostName}.pub";
+    in optionalAttrs (pathExists pubkey-path) {
+      nets.wiregrill = {
+        aliases = [
+          "${hostName}.w"
+        ];
+        ip6.addr =
+          (krebs.genipv6 "wiregrill" "tv" { inherit hostName; }).address;
+        wireguard.pubkey = readFile pubkey-path;
+      };
+    })
+    host
+  ];
 
 in {
   dns.providers = {
@@ -103,6 +121,9 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wiregrill.wireguard.subnets = [
+          (krebs.genipv6 "wiregrill" "tv" 0).subnetCIDR
+        ];
       };
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILGDdcKwFm6udU0/x6XGGb87k9py0VlrxF54HeYu9Izb";
     };
