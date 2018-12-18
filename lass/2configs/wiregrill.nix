@@ -37,7 +37,7 @@ in mkIf (hasAttr "wiregrill" config.krebs.build.host.nets) {
         ;
         endpoint = mkIf (!isNull host.nets.wiregrill.via) (host.nets.wiregrill.via.ip4.addr + ":${toString host.nets.wiregrill.wireguard.port}");
         persistentKeepalive = mkIf (!isNull host.nets.wiregrill.via) 61;
-        publicKey = host.nets.wiregrill.wireguard.pubkey;
+        publicKey = (replaceStrings ["\n"] [""] host.nets.wiregrill.wireguard.pubkey);
       })
       (filterAttrs (_: h: hasAttr "wiregrill" h.nets) config.krebs.hosts);
   };
