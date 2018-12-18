@@ -25,8 +25,6 @@ with import <stockholm/lib>;
     config.boot.kernelPackages.broadcom_sta
   ];
 
-  networking.wireless.enable = true;
-
   nix = {
     buildCores = 2;
     maxJobs = 2;

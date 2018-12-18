@@ -147,6 +147,8 @@ with import <stockholm/lib>;
     gptfdisk
   ];
 
+  networking.wireless.enable = true;
+
   #services.bitlbee.enable = true;
   #services.tor.client.enable = true;
   #services.tor.enable = true;

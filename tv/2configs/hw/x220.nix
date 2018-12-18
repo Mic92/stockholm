@@ -26,8 +26,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.wireless.enable = true;
-
   # Required for Centrino.
   hardware.enableRedistributableFirmware = true;
 
