@@ -8,10 +8,6 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/retiolum.nix>
   ];
 
-  # TODO remove non-hardware stuff from ../2configs/hw/x220.nix
-  # networking.wireless.enable collides with networkmanager
-  networking.wireless.enable = mkForce false;
-
   boot = {
     initrd = {
       availableKernelModules = [ "ahci" ];
