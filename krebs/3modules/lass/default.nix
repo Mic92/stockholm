@@ -98,7 +98,11 @@ in {
           ];
           wireguard = {
             pubkey = "oKJotppdEJqQBjrqrommEUPw+VFryvEvNJr/WikXohk=";
-            subnets = [ "10.244.1.0/24" "42:1::/32" ];
+            subnets = [
+              "10.244.1.0/24"
+              (krebs.genipv6 "wiregrill" "external" 0).subnetCIDR
+              (krebs.genipv6 "wiregrill" "lass" 0).subnetCIDR
+            ];
           };
         };
       };
