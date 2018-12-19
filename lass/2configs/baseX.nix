@@ -64,6 +64,7 @@ in {
     dic
     dmenu
     font-size
+    fzfmenu
     gitAndTools.qgit
     git-preview
     gnome3.dconf

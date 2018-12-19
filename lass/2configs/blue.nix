@@ -22,9 +22,9 @@ with (import <stockholm/lib>);
 
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-i retiolum -p udp --dport 60000:61000"; target = "ACCEPT";}
-    { predicate = "-i wirelum -p udp --dport 60000:61000"; target = "ACCEPT";}
+    { predicate = "-i wiregrill -p udp --dport 60000:61000"; target = "ACCEPT";}
     { predicate = "-i retiolum -p tcp --dport 9999"; target = "ACCEPT";}
-    { predicate = "-i wirelum -p tcp --dport 9999"; target = "ACCEPT";}
+    { predicate = "-i wiregrill -p tcp --dport 9999"; target = "ACCEPT";}
   ];
 
   systemd.services.chat = let

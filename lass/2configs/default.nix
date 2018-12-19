@@ -10,7 +10,7 @@ with import <stockholm/lib>;
     ./zsh.nix
     ./htop.nix
     ./security-workarounds.nix
-    ./wirelum.nix
+    ./wiregrill.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })

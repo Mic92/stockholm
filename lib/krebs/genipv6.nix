@@ -16,12 +16,12 @@ let {
       normalize-ip6-addr (appendZeros addressLength netPrefix);
     netHash = toString {
       retiolum = 0;
-      wirelum = 1;
+      wiregrill = 1;
     }.${netname};
     netPrefix = "42:${netHash}";
     netPrefixLength = {
       retiolum = 32;
-      wirelum = 32;
+      wiregrill = 32;
     }.${netname};
 
     inherit subnetname;
