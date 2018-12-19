@@ -1079,16 +1079,5 @@ in {
       inherit (makefu) mail pgp;
       pubkey = pub-for "makefu.bob";
     };
-    ciko = {
-      mail = "wieczorek.stefan@googlemail.com";
-    };
-    ulrich = {
-      pubkey = pub-for "ulrich";
-      mail = "shackspace.de@myvdr.de";
-    };
-    exco = {
-      mail = "dickbutt@excogitation.de";
-      pubkey = pub-for "exco";
-    };
   };
 }

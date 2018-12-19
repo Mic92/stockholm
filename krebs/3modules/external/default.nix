@@ -9,6 +9,7 @@ with import <stockholm/lib>;
     nets.retiolum.ip6.addr =
       (krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
   });
+  pub-for = name: builtins.readFile (./ssh + "/${name}.pub");
 
 in {
   hosts = mapAttrs hostDefaults {
@@ -316,18 +317,33 @@ in {
     };
   };
   users = {
-    Mic92 = {
-      pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKbBp2dH2X3dcU1zh+xW3ZsdYROKpJd3n13ssOP092qE";
-      mail = "joerg@higgsboson.tk";
+    ciko = {
+      mail = "wieczorek.stefan@googlemail.com";
+    };
+    exco = {
+      mail = "dickbutt@excogitation.de";
+      pubkey = pub-for "exco";
     };
     kmein = {
     };
-    palo = {
+    Mic92 = {
+      mail = "joerg@higgsboson.tk";
+      pubkey = pub-for "Mic92";
     };
-    sokratess = {
+    palo = {
     };
     qubasa = {
       mail = "luis.nixos@gmail.com";
+    };
+    raute = {
+      mail = "macxylo@gmail.com";
+      pubkey = pub-for "raute";
+    };
+    sokratess = {
+    };
+    ulrich = {
+      mail = "shackspace.de@myvdr.de";
+      pubkey = pub-for "ulrich";
     };
   };
 }
