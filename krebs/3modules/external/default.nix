@@ -9,7 +9,8 @@ with import <stockholm/lib>;
     nets.retiolum.ip6.addr =
       (krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
   });
-  pub-for = name: builtins.readFile (./ssh + "/${name}.pub");
+  ssh-for = name: builtins.readFile (./ssh + "/${name}.pub");
+  tinc-for = name: builtins.readFile (./tinc + "/${name}.pub");
 
 in {
   hosts = mapAttrs hostDefaults {
@@ -137,6 +138,18 @@ in {
         };
       };
     };
+    justraute = {
+      owner = config.krebs.users.raute; # laptop
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.183.231";
+          aliases = [
+            "justraute.r"
+          ];
+          tinc.pubkey = tinc-for "justraute";
+        };
+      };
+    };
     kruck = {
       owner = config.krebs.users.palo;
       nets = {
@@ -260,6 +273,19 @@ in {
         };
       };
     };
+    tpsw = {
+      cores = 2;
+      owner = config.krebs.users.ciko; # main laptop
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.183.236";
+          aliases = [
+            "tpsw.r"
+          ];
+          tinc.pubkey = tinc-for "tpsw";
+        };
+      };
+    };
     turingmachine = {
       owner = config.krebs.users.Mic92;
       nets = {
@@ -322,13 +348,13 @@ in {
     };
     exco = {
       mail = "dickbutt@excogitation.de";
-      pubkey = pub-for "exco";
+      pubkey = ssh-for "exco";
     };
     kmein = {
     };
     Mic92 = {
       mail = "joerg@higgsboson.tk";
-      pubkey = pub-for "Mic92";
+      pubkey = ssh-for "Mic92";
     };
     palo = {
     };
@@ -337,13 +363,13 @@ in {
     };
     raute = {
       mail = "macxylo@gmail.com";
-      pubkey = pub-for "raute";
+      pubkey = ssh-for "raute";
     };
     sokratess = {
     };
     ulrich = {
       mail = "shackspace.de@myvdr.de";
-      pubkey = pub-for "ulrich";
+      pubkey = ssh-for "ulrich";
     };
   };
 }
