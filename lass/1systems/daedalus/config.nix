@@ -7,6 +7,7 @@ with import <stockholm/lib>;
 
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/backup.nix>
+    <stockholm/lass/2configs/nfs-dl.nix>
     {
       # bubsy config
       users.users.bubsy = {
