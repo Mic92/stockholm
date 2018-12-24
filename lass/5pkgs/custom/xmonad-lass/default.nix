@@ -11,10 +11,7 @@ pkgs.writeHaskellPackage "xmonad-lass" {
       "xmonad-stockholm"
     ];
     text = /* haskell */ ''
-{-# LANGUAGE DeriveDataTypeable #-} -- for XS
-{-# LANGUAGE FlexibleContexts #-} -- for xmonad'
 {-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 
 
 module Main where
@@ -28,7 +25,7 @@ import System.Environment (getArgs, lookupEnv)
 import System.Exit (exitFailure)
 import System.IO (hPutStrLn, stderr)
 import System.Posix.Process (executeFile)
-import XMonad.Actions.CopyWindow (copy, kill1)
+import XMonad.Actions.CopyWindow (copy, copyToAll, kill1)
 import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace, removeEmptyWorkspace)
 import XMonad.Actions.DynamicWorkspaces (withWorkspace)
@@ -148,6 +145,8 @@ myKeyMap =
     , ("M4-S-q", return ())
 
     , ("M4-d", floatNext True >> spawn "${pkgs.copyq}/bin/copyq show")
+
+    , ("M4-<F2>", windows copyToAll)
 
     , ("M4-<F4>", spawn "${pkgs.writeDash "nm-dmenu" ''
       export PATH=$PATH:${pkgs.dmenu}/bin:${pkgs.networkmanagerapplet}/bin
