@@ -390,6 +390,28 @@ with import <stockholm/lib>;
         ln -fnsT /var/lib/containers/yellow/var/download/finished /var/download/finished || :
         chown download: /var/download/finished
       '';
+
+      fileSystems."/export/download" = {
+        device = "/var/lib/containers/yellow/var/download";
+        options = [ "bind" ];
+      };
+      services.nfs.server = {
+        enable = true;
+        exports = ''
+          /export 42::/16(insecure,ro,crossmnt)
+        '';
+        lockdPort = 4001;
+        mountdPort = 4002;
+        statdPort = 4000;
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+         { predicate = "-i wiregrill -p tcp --dport 111"; target = "ACCEPT"; }
+         { predicate = "-i wiregrill -p udp --dport 111"; target = "ACCEPT"; }
+         { predicate = "-i wiregrill -p tcp --dport 2049"; target = "ACCEPT"; }
+         { predicate = "-i wiregrill -p udp --dport 2049"; target = "ACCEPT"; }
+         { predicate = "-i wiregrill -p tcp --dport 4000:4002"; target = "ACCEPT"; }
+         { predicate = "-i wiregrill -p udp --dport 4000:4002"; target = "ACCEPT"; }
+      ];
     }
   ];
 
