@@ -70,6 +70,7 @@ with import <stockholm/lib>;
       #remote control
       environment.systemPackages = with pkgs; [
         x11vnc
+        torbrowser
       ];
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp -i retiolum --dport 5900"; target = "ACCEPT"; }
