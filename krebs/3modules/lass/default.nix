@@ -91,7 +91,6 @@ in {
         };
         wiregrill = {
           via = internet;
-          ip4.addr = "10.244.1.1";
           ip6.addr = w6 "1";
           aliases = [
             "prism.w"
@@ -99,7 +98,6 @@ in {
           wireguard = {
             pubkey = "oKJotppdEJqQBjrqrommEUPw+VFryvEvNJr/WikXohk=";
             subnets = [
-              "10.244.1.0/24"
               (krebs.genipv6 "wiregrill" "external" 0).subnetCIDR
               (krebs.genipv6 "wiregrill" "lass" 0).subnetCIDR
             ];
@@ -474,7 +472,6 @@ in {
     phone = {
       nets = {
         wiregrill = {
-          ip4.addr = "10.244.1.2";
           ip6.addr = w6 "a";
           aliases = [
             "phone.w"
