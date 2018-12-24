@@ -276,7 +276,7 @@ in {
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.133.115";
-          ip6.addr = r6 "dead";
+          ip6.addr = r6 "daed";
           aliases = [
             "daedalus.r"
             "cgit.daedalus.r"
@@ -292,8 +292,14 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wiregrill = {
+          ip6.addr = w6 "daed";
+          aliases = [
+            "dapdalus.w"
+          ];
+          wireguard.pubkey = "ZVTTWbJfe8Oq6E6QW1qgXU91FnkuKDGJO3MF3I3gDFI=";
+        };
       };
-      secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAq5Ovdcsljr5dOl7+2sQNKpGpdX0SlOIuCZKEiWEp8g";
     };
