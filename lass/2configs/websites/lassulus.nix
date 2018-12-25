@@ -63,6 +63,9 @@ in {
     locations."= /retiolum.hosts".extraConfig = ''
       alias ${pkgs.retiolum-hosts};
     '';
+    locations."= /wireguard-key".extraConfig = ''
+      alias ${pkgs.writeText "prism.wg" config.krebs.hosts.prism.nets.wiregrill.wireguard.pubkey};
+    '';
     locations."/tinc".extraConfig = ''
       alias ${config.krebs.tinc_graphs.workingDir}/external;
     '';
