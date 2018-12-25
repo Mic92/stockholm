@@ -309,7 +309,7 @@ with import <stockholm/lib>;
         { precedence = 1000; predicate = "-i retiolum -o wiregrill"; target = "ACCEPT"; }
       ];
       krebs.iptables.tables.nat.POSTROUTING.rules = [
-        { v4 = false; predicate = "-s 42:1:ce16::/48 ! -d 42:1:ce16::48"; target = "MASQUERADE"; }
+        { v4 = false; predicate = "-s 42:1::/32 ! -d 42:1::/48"; target = "MASQUERADE"; }
         { v6 = false; predicate = "-s 10.244.1.0/24 ! -d 10.244.1.0/24"; target = "MASQUERADE"; }
       ];
       services.dnsmasq = {
