@@ -295,7 +295,7 @@ in {
         wiregrill = {
           ip6.addr = w6 "daed";
           aliases = [
-            "dapdalus.w"
+            "daedalus.w"
           ];
           wireguard.pubkey = "ZVTTWbJfe8Oq6E6QW1qgXU91FnkuKDGJO3MF3I3gDFI=";
         };
