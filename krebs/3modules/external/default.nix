@@ -344,6 +344,20 @@ in {
         };
       };
     };
+    miaoski = {
+      owner = config.krebs.users.miaoski;
+      nets = {
+        wiregrill = {
+          aliases = [ "miaoski.w" ];
+          wireguard = {
+            pubkey = "8haz9JX5nAMORzNy89VdHC1Z9XA94ogaZsY3d2Rfkl4=";
+            subnets = [
+              (krebs.genipv6 "wiregrill" "external" 0).subnetCIDR
+            ];
+          };
+        };
+      };
+    };
   };
   users = {
     ciko = {
@@ -373,6 +387,8 @@ in {
     ulrich = {
       mail = "shackspace.de@myvdr.de";
       pubkey = ssh-for "ulrich";
+    };
+    miaoski = {
     };
   };
 }
