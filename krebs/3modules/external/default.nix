@@ -351,9 +351,6 @@ in {
           aliases = [ "miaoski.w" ];
           wireguard = {
             pubkey = "8haz9JX5nAMORzNy89VdHC1Z9XA94ogaZsY3d2Rfkl4=";
-            subnets = [
-              (krebs.genipv6 "wiregrill" "external" 0).subnetCIDR
-            ];
           };
         };
       };
