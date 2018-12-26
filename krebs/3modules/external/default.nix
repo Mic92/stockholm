@@ -368,6 +368,8 @@ in {
       pubkey = ssh-for "exco";
     };
     kmein = {
+      mail = "kieran.meinhardt@gmail.com";
+      pubkey = ssh-for "kmein";
     };
     Mic92 = {
       mail = "joerg@higgsboson.tk";
