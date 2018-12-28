@@ -71,6 +71,7 @@ let {
     stockholm = {
       cgit.desc = "NixOS configuration";
     };
+    with-ssh = {};
   } // mapAttrs (_: recursiveUpdate { cgit.section = "2. Host configurations"; }) {
     ni = {
     };
