@@ -41,7 +41,7 @@ let
           };
           location = mkOption {
             type = str;
-            default = "/bku/sql_dumps";
+            default = "/backups/sql_dumps";
           };
         };
       }));
@@ -51,11 +51,9 @@ let
 
   imp = {
 
-    #systemd.timers =
-    #  mapAttrs (_: plan: {
-    #  wantedBy = [ "timers.target" ];
-    #  timerConfig = plan.timerConfig;
-    #}) cfg.config;
+    services.mysql.ensureUsers = [
+      { ensurePermissions = { "*.*" = "ALL"; }; name = "root"; }
+    ];
 
     systemd.services =
       mapAttrs' (_: plan: nameValuePair "mysqlBackup-${plan.name}" {
@@ -75,8 +73,10 @@ let
 
 
   start = plan: let
-    backupScript = plan: db:
-      "mysqldump -u ${plan.user} ${optionalString (plan.password != null) "-p$(cat ${plan.password})"} ${db} | gzip -c > ${plan.location}/${db}.gz";
+    backupScript = plan: db: ''
+      mkdir -p ${plan.location}
+      mysqldump -u ${plan.user} ${optionalString (plan.password != null) "-p$(cat ${plan.password})"} ${db} | gzip -c > ${plan.location}/${db}.gz
+    '';
 
   in pkgs.pkgs.writeDash "mysqlBackup.${plan.name}" ''
     ${concatMapStringsSep "\n" (backupScript plan) plan.databases}

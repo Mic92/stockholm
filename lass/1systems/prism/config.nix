@@ -82,6 +82,13 @@ with import <stockholm/lib>;
         ];
         openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDQFaYOWRUvHP6I37q9Dd4PJOq8FNQqAeJZ8pLx0G62uC450kbPGcG80rHHvXmk7HqQP6biJmMg48bOsvXAScPot2Qhp1Qc35CuUqVhLiTvUAsi8l/iJjhjZ23yRGDCAmW5+JIOzIvECkcbMnG7YoYAQ9trNGHe9qwGzQGhpt3QVClE23WtE3PVKRLQx1VbiabSnAm6tXVd2zpUoSdpWt8Gpi2taM4XXJ5+l744MNxFHvDapN5xqpYzwrA34Ii13jNLWcGbtgxESpR+VjnamdWByrkBsW4X5/xn2K1I1FrujaM/DBHV1QMaDKst9V8+uL5X7aYNt0OUBu2eyZdg6aujY2BYovB9uRyR1JIuSbA/a54MM96yN9WirMUufJF/YZrV0L631t9EW8ORyWUo1GRzMuBHVHQlfApj7NCU/jEddUuTqKgwyRgTmMFMUI4M0tRULAB/7pBE1Vbcx9tg6RsKIk8VkskfbBJW9Y6Sx6YoFlxPdgMNIrBefqEjIV62piP7YLMlvfIDCJ7TNd9dLN86XGggZ/nD5zt6SL1o61vVnw9If8pHosppxADPJsJvcdN6fOe16/tFAeE0JRo0jTcyFVTBGfhpey+rFfuW8wtUyuO5WPUxkOn7xMHGMWHJAtWX2vwVIDtLxvqn48B4SmEOpPD6ii+vcpwqAex3ycqBUQ==" ];
       };
+      users.users.kmein = {
+        uid = genid_uint31 "kmein";
+        isNormalUser = true;
+        openssh.authorizedKeys.keys = [
+          config.krebs.users.kmein.pubkey
+        ];
+      };
     }
     {
       #hotdog
@@ -309,7 +316,7 @@ with import <stockholm/lib>;
         { precedence = 1000; predicate = "-i retiolum -o wiregrill"; target = "ACCEPT"; }
       ];
       krebs.iptables.tables.nat.POSTROUTING.rules = [
-        { v4 = false; predicate = "-s 42:1:ce16::/48 ! -d 42:1:ce16::48"; target = "MASQUERADE"; }
+        { v4 = false; predicate = "-s 42:1::/32 ! -d 42:1::/48"; target = "MASQUERADE"; }
         { v6 = false; predicate = "-s 10.244.1.0/24 ! -d 10.244.1.0/24"; target = "MASQUERADE"; }
       ];
       services.dnsmasq = {
@@ -390,6 +397,28 @@ with import <stockholm/lib>;
         ln -fnsT /var/lib/containers/yellow/var/download/finished /var/download/finished || :
         chown download: /var/download/finished
       '';
+
+      fileSystems."/export/download" = {
+        device = "/var/lib/containers/yellow/var/download";
+        options = [ "bind" ];
+      };
+      services.nfs.server = {
+        enable = true;
+        exports = ''
+          /export 42::/16(insecure,ro,crossmnt)
+        '';
+        lockdPort = 4001;
+        mountdPort = 4002;
+        statdPort = 4000;
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+         { predicate = "-i wiregrill -p tcp --dport 111"; target = "ACCEPT"; }
+         { predicate = "-i wiregrill -p udp --dport 111"; target = "ACCEPT"; }
+         { predicate = "-i wiregrill -p tcp --dport 2049"; target = "ACCEPT"; }
+         { predicate = "-i wiregrill -p udp --dport 2049"; target = "ACCEPT"; }
+         { predicate = "-i wiregrill -p tcp --dport 4000:4002"; target = "ACCEPT"; }
+         { predicate = "-i wiregrill -p udp --dport 4000:4002"; target = "ACCEPT"; }
+      ];
     }
   ];
 

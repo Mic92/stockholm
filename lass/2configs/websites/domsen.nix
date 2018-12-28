@@ -135,6 +135,7 @@ in {
       "jla-trading.com"
       "ubikmedia.eu"
       "ubikmedia.de"
+      "alewis.de"
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";

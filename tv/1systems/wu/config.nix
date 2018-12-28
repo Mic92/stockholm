@@ -41,6 +41,8 @@ with import <stockholm/lib>;
     };
   };
 
+  networking.wireless.enable = true;
+
   services.printing.enable = true;
 
   services.udev.extraRules = ''

@@ -64,4 +64,6 @@ with import <stockholm/lib>;
     gnupg
     tmux
   ];
+
+  networking.wireless.enable = true;
 }

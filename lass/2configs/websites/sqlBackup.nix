@@ -20,9 +20,7 @@
 
   lass.mysqlBackup = {
     enable = true;
-    config.all = {
-      password = toString (<secrets/mysql_rootPassword>);
-    };
+    config.all = {};
   };
 }
 
