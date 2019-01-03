@@ -348,7 +348,7 @@ in {
       owner = config.krebs.users.Mic92;
       nets = {
         retiolum = {
-          ip4.addr = "10.243.29.172";
+          ip4.addr = "10.243.29.176";
           aliases = [ "matchbox.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
