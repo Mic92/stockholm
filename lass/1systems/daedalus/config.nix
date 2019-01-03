@@ -6,9 +6,8 @@ with import <stockholm/lib>;
     <stockholm/lass>
 
     <stockholm/lass/2configs/retiolum.nix>
-    <stockholm/lass/2configs/games.nix>
-    <stockholm/lass/2configs/steam.nix>
     <stockholm/lass/2configs/backup.nix>
+    <stockholm/lass/2configs/nfs-dl.nix>
     {
       # bubsy config
       users.users.bubsy = {
@@ -72,6 +71,7 @@ with import <stockholm/lib>;
       #remote control
       environment.systemPackages = with pkgs; [
         x11vnc
+        torbrowser
       ];
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp -i retiolum --dport 5900"; target = "ACCEPT"; }
