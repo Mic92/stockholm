@@ -45,6 +45,11 @@
     fsType = "zfs";
   };
 
+  fileSystems."/var/lib/libvirt" = {
+    device = "tank/libvirt";
+    fsType = "zfs";
+  };
+
   nix.maxJobs = lib.mkDefault 8;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
