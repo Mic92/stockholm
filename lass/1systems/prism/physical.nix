@@ -40,6 +40,11 @@
     fsType = "zfs";
   };
 
+  fileSystems."/var/lib/nextcloud" = {
+    device = "tank/nextcloud";
+    fsType = "zfs";
+  };
+
   nix.maxJobs = lib.mkDefault 8;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
