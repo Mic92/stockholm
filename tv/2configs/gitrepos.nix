@@ -67,6 +67,7 @@ let {
       cgit.desc = "source code installer";
     };
     q = {};
+    reaktor2 = {};
     regfish = {};
     stockholm = {
       cgit.desc = "NixOS configuration";
