@@ -103,6 +103,7 @@ let {
     nixos-infest = {};
     painload = {};
     push = {};
+    Reaktor = {};
     with-tmpdir = {};
     get = {};
     load-env = {};
