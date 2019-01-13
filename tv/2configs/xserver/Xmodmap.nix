@@ -17,6 +17,7 @@ pkgs.writeText "Xmodmap" ''
   keycode  39 = s S ssharp
 
   keycode  33 = p P Greek_pi Greek_PI
+  keycode  40 = d D Greek_delta Greek_DELTA
   keycode  46 = l L Greek_lambda Greek_LAMBDA
 
   keycode  54 = c C cacute Cacute
