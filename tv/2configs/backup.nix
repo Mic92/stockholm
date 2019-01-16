@@ -60,7 +60,7 @@ with import <stockholm/lib>;
     };
     xu-pull-ni-ejabberd = {
       method = "pull";
-      src = { host = config.krebs.hosts.ni; path = "/var/ejabberd"; };
+      src = { host = config.krebs.hosts.ni; path = "/var/lib/ejabberd"; };
       dst = { host = config.krebs.hosts.xu; path = "/bku/ni-ejabberd"; };
       startAt = "07:00";
     };
@@ -78,7 +78,7 @@ with import <stockholm/lib>;
     };
     zu-pull-ni-ejabberd = {
       method = "pull";
-      src = { host = config.krebs.hosts.ni; path = "/var/ejabberd"; };
+      src = { host = config.krebs.hosts.ni; path = "/var/lib/ejabberd"; };
       dst = { host = config.krebs.hosts.zu; path = "/bku/ni-ejabberd"; };
       startAt = "06:00";
     };

@@ -67,10 +67,12 @@ let {
       cgit.desc = "source code installer";
     };
     q = {};
+    reaktor2 = {};
     regfish = {};
     stockholm = {
       cgit.desc = "NixOS configuration";
     };
+    with-ssh = {};
   } // mapAttrs (_: recursiveUpdate { cgit.section = "2. Host configurations"; }) {
     ni = {
     };
@@ -102,6 +104,7 @@ let {
     nixos-infest = {};
     painload = {};
     push = {};
+    Reaktor = {};
     with-tmpdir = {};
     get = {};
     load-env = {};
