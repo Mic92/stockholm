@@ -269,26 +269,19 @@ let
   q-todo = /* sh */ ''
     TODO_file=$PWD/TODO
     if test -e "$TODO_file"; then
-      ${pkgs.coreutils}/bin/cat "$TODO_file" \
-        | ${pkgs.gawk}/bin/gawk -v now=$(${pkgs.coreutils}/bin/date +%s) '
-            BEGIN { print "remind=0" }
-            /^[0-9]/{
-              x = $1
-              gsub(".", "\\\\&", x)
-              rest = substr($0, index($0, " "))
-              rest = $0
-              sub(" *", "", rest)
-              gsub(".", "\\\\&", rest)
-              print "test $(${pkgs.coreutils}/bin/date +%s -d"x") -lt "now" && \
-                echo \"\x1b[38;5;208m\""rest esc "\"\x1b[m\" && \
-                (( remind++ ))"
-            }
-            END { print "test $remind = 0 && echo \"nothing to remind\"" }
-          ' \
-        | {
-          # bash needed for (( ... ))
-          ${pkgs.bash}/bin/bash
-        }
+      ${pkgs.jq}/bin/jq -Rrs <"$TODO_file" -f ${pkgs.writeJq "q-todo.jq" ''
+        split("\n") | map(
+          (match("^([0-9]+-\\d{2}-\\d{2})\\s+(.*)$").captures | map(.string))
+            as $captures |
+          ($captures[0] | strptime("%Y-%m-%d") | mktime) as $date |
+          $captures[1] as $text |
+
+          select(now >= $date) |
+
+          "\u001b[38;5;208m\(.)\u001b[m"
+        ) |
+        if length == 0 then "nothing to remind" else .[] end
+      ''}
     else
       echo "$TODO_file: no such file or directory"
     fi
