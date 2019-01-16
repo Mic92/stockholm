@@ -13,7 +13,7 @@ in {
     });
     default = {};
   };
-  config = {
+  config = mkIf (cfg != {}) {
     environment = {
       etc =
         mapAttrs'

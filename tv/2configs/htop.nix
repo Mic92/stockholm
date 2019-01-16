@@ -22,7 +22,7 @@ with import <stockholm/lib>;
             highlight_megabytes=1
             highlight_threads=1
             tree_view=1
-            header_margin=1
+            header_margin=0
             detailed_cpu_time=0
             cpu_count_from_zero=0
             update_process_names=0

@@ -146,58 +146,36 @@ rec {
     '';
   });
 
-  taskrcFile = builtins.toFile "taskrc" ''
-    confirmation=no
-  '';
-
-  task-add = buildSimpleReaktorPlugin "task-add" {
-    pattern = "^task-add: (?P<args>.*)$$";
-    script = pkgs.writeDash "task-add" ''
-        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} add "$*"
-      '';
-  };
-
-  task-list = buildSimpleReaktorPlugin "task-list" {
-    pattern = "^task-list";
-    script = pkgs.writeDash "task-list" ''
-        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} export | ${pkgs.jq}/bin/jq -r '.[] | select(.id != 0) | "\(.id) \(.description)"'
-      '';
-  };
-
-  task-delete = buildSimpleReaktorPlugin "task-delete" {
-    pattern = "^task-delete: (?P<args>.*)$$";
-    script = pkgs.writeDash "task-delete" ''
-        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} delete "$*"
-      '';
-  };
-
-  task-done = buildSimpleReaktorPlugin "task-done" {
-    pattern = "^task-done: (?P<args>.*)$$";
-    script = pkgs.writeDash "task-done" ''
-        ${pkgs.taskwarrior}/bin/task rc:${taskrcFile} done "$*"
-      '';
-  };
-
-  todo = name: {
-    add = buildSimpleReaktorPlugin "${name}-add" {
+  task = name: let
+    rcFile = builtins.toFile "taskrc" ''
+      confirmation=no
+    '';
+  in {
+    add = buildSimpleReaktorPlugin "${name}-task-add" {
       pattern = "^${name}-add: (?P<args>.*)$$";
       script = pkgs.writeDash "${name}-add" ''
-        echo "$*" >> ${name}-todo
-        echo "added ${name} todo"
+        TASKDATA=$HOME/${name} ${pkgs.taskwarrior}/bin/task rc:${rcFile} add "$*"
       '';
     };
-    delete = buildSimpleReaktorPlugin "${name}-delete" {
+
+    list = buildSimpleReaktorPlugin "task-list" {
+      pattern = "^${name}-list";
+      script = pkgs.writeDash "task-list" ''
+        TASKDATA=$HOME/${name} ${pkgs.taskwarrior}/bin/task rc:${rcFile} export | ${pkgs.jq}/bin/jq -r '.[] | select(.id != 0) | "\(.id) \(.description)"'
+      '';
+    };
+
+    delete = buildSimpleReaktorPlugin "task-delete" {
       pattern = "^${name}-delete: (?P<args>.*)$$";
-      script = pkgs.writeDash "${name}-delete" ''
-        ${pkgs.gnugrep}/bin/grep -Fvxe "$*" ${name}-todo > ${name}-todo.tmp
-        ${pkgs.coreutils}/bin/mv ${name}-todo.tmp ${name}-todo
-        echo "removed ${name} todo: $*"
+      script = pkgs.writeDash "task-delete" ''
+        TASKDATA=$HOME/${name} ${pkgs.taskwarrior}/bin/task rc:${rcFile} delete "$*"
       '';
     };
-    show = buildSimpleReaktorPlugin "${name}-show" {
-      pattern = "^${name}-show$";
-      script = pkgs.writeDash "${name}-show" ''
-        ${pkgs.coreutils}/bin/cat ${name}-todo
+
+    done = buildSimpleReaktorPlugin "task-done" {
+      pattern = "^${name}-done: (?P<args>.*)$$";
+      script = pkgs.writeDash "task-done" ''
+        TASKDATA=$HOME/${name} ${pkgs.taskwarrior}/bin/task rc:${rcFile} done "$*"
       '';
     };
   };
