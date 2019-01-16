@@ -88,6 +88,20 @@ in {
     file_uploads = on
   '';
 
+  services.nextcloud = {
+    enable = true;
+    hostName = "o.xanf.org";
+    config = {
+      adminpassFile = toString <secrets> + "/nextcloud_pw";
+    };
+    #https = true;
+    nginx.enable = true;
+  };
+  services.nginx.virtualHosts."o.xanf.org" = {
+    enableACME = true;
+    forceSSL = true;
+  };
+
   # MAIL STUFF
   # TODO: make into its own module
   services.dovecot2 = {

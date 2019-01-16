@@ -9,15 +9,15 @@
 
   krebs-source = { test ? false }: rec {
     nixpkgs = if test then {
-      file = {
-        path = toString (pkgs.fetchFromGitHub {
+      derivation = ''
+        with import <nixpkgs> {};
+        pkgs.fetchFromGitHub {
           owner = "nixos";
           repo = "nixpkgs";
-          rev = (lib.importJSON ./nixpkgs.json).rev;
-          sha256 = (lib.importJSON ./nixpkgs.json).sha256;
-        });
-        useChecksum = true;
-      };
+          rev = "${(lib.importJSON ./nixpkgs.json).rev}";
+          sha256 = "${(lib.importJSON ./nixpkgs.json).sha256}";
+        }
+      '';
     } else {
       git = {
         ref = (lib.importJSON ./nixpkgs.json).rev;

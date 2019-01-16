@@ -91,7 +91,6 @@ in {
         };
         wiregrill = {
           via = internet;
-          ip4.addr = "10.244.1.1";
           ip6.addr = w6 "1";
           aliases = [
             "prism.w"
@@ -99,7 +98,6 @@ in {
           wireguard = {
             pubkey = "oKJotppdEJqQBjrqrommEUPw+VFryvEvNJr/WikXohk=";
             subnets = [
-              "10.244.1.0/24"
               (krebs.genipv6 "wiregrill" "external" 0).subnetCIDR
               (krebs.genipv6 "wiregrill" "lass" 0).subnetCIDR
             ];
@@ -278,7 +276,7 @@ in {
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.133.115";
-          ip6.addr = r6 "dead";
+          ip6.addr = r6 "daed";
           aliases = [
             "daedalus.r"
             "cgit.daedalus.r"
@@ -294,8 +292,14 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wiregrill = {
+          ip6.addr = w6 "daed";
+          aliases = [
+            "daedalus.w"
+          ];
+          wireguard.pubkey = "ZVTTWbJfe8Oq6E6QW1qgXU91FnkuKDGJO3MF3I3gDFI=";
+        };
       };
-      secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAq5Ovdcsljr5dOl7+2sQNKpGpdX0SlOIuCZKEiWEp8g";
     };
@@ -474,7 +478,6 @@ in {
     phone = {
       nets = {
         wiregrill = {
-          ip4.addr = "10.244.1.2";
           ip6.addr = w6 "a";
           aliases = [
             "phone.w"

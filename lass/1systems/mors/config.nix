@@ -35,6 +35,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/print.nix>
     <stockholm/lass/2configs/blue-host.nix>
     <stockholm/lass/2configs/network-manager.nix>
+    <stockholm/lass/2configs/nfs-dl.nix>
     {
       krebs.iptables.tables.filter.INPUT.rules = [
         #risk of rain
@@ -147,6 +148,7 @@ with import <stockholm/lib>;
     OnCalendar = "00:37";
   };
 
+  nixpkgs.config.android_sdk.accept_license = true;
   programs.adb.enable = true;
   users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
   virtualisation.docker.enable = true;

@@ -992,57 +992,6 @@ in {
         };
       };
     };
-  } // { # hosts only maintained in stockholm, not owned by me
-    muhbaasu = rec {
-      owner = config.krebs.users.root;
-      cores = 1;
-      nets = {
-        internet = {
-          ip4.addr = "217.160.206.154";
-          aliases = [
-            "muhbaasu.i"
-          ];
-        };
-        retiolum = {
-          ip4.addr = "10.243.139.184";
-          aliases = [
-            "muhbaasu.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEA0f4C4xKXpnyV1ig03O2Kef8ag+/5WGkW90uxEBb/h5NY9barex+Z
-            KqVbkPdHhwoCIINuCVcOnJXzeo0FZtSEq3zVhscVm0PVdNfjct8a9KMsK0iUmuul
-            5WD9Glh5/1wkEmbRfVxDErhssz1b8YmFOAGQn+ujO/Znn3BLv36uKQvpqU2y5bzb
-            +rVnq3eE1bCSeuj41bgEve8+vxpforjLO6gbE91mwp3Ol6nkkp6CjpG+aFTuLCAj
-            YR0MIl2gGwskOGSI38QxlLouOlIGwus5f+KfC94ZP0pMwu5pT45UOUkVnlBXuZ9E
-            igNHG2Vtm76nB3yYHndOvuDTOufatX61dQIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-    };
-    tpsw = {
-      cores = 2;
-      owner = config.krebs.users.ciko; # main laptop
-        nets = {
-          retiolum = {
-            ip4.addr = "10.243.183.236";
-            aliases = [
-              "tpsw.r"
-            ];
-            tinc.pubkey = ''
-              -----BEGIN RSA PUBLIC KEY-----
-              MIIBCgKCAQEAvwYPFAINwV0EH0myFpNzRjVbqXdAmJP616C5JvODklhZWJxFxlKJ
-              Poczl57j2Z+4bonkTrJmsNtSaQLPKYH4H1qfo/lwz7nqEpPi3Xp4Fgts23w36eML
-              WBvbw0fQO9R8zZJIIdRkJ2qqlhZiTlor1Gtlm8Z1RmpKkhL9O6Yzj94VhGLhABVl
-              OsaF2M3PgXJMiLry67jzbAs3+mVaT3iBTzWOaOyREjKQEUg9B9IDxrmZMSWqdXZM
-              0wfzaCjS40jD73m7tqi7W3tXzAUP4mEeUqkC+NC2Zgm/lJ5B1KPx7AyNqtRLsBLd
-              pIdJs6ng63WV1fyHYUWMYqZk9zB/tQ0b0wIDAQAB
-              -----END RSA PUBLIC KEY-----
-            '';
-          };
-        };
-    };
   };
   users = rec {
     makefu = {
@@ -1078,17 +1027,6 @@ in {
     makefu-bob = {
       inherit (makefu) mail pgp;
       pubkey = pub-for "makefu.bob";
-    };
-    ciko = {
-      mail = "wieczorek.stefan@googlemail.com";
-    };
-    ulrich = {
-      pubkey = pub-for "ulrich";
-      mail = "shackspace.de@myvdr.de";
-    };
-    exco = {
-      mail = "dickbutt@excogitation.de";
-      pubkey = pub-for "exco";
     };
   };
 }
