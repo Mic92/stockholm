@@ -278,7 +278,11 @@ let
 
           select(now >= $date) |
 
-          "\u001b[38;5;208m\(.)\u001b[m"
+          ($text | test("\\[URGENT]"; "i")) as $urgent |
+          (if $urgent then "38;5;196" else "38;5;208" end) as $sgr |
+          if $urgent then sub("\\s*\\[URGENT]\\s*"; " "; "i") else . end |
+
+          "\u001b[\($sgr)m\(.)\u001b[m"
         ) |
         if length == 0 then "nothing to remind" else .[] end
       ''}
