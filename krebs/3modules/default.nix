@@ -43,6 +43,7 @@ let
       ./Reaktor.nix
       ./realwallpaper.nix
       ./retiolum-bootstrap.nix
+      ./retiolum-hosts.nix
       ./rtorrent.nix
       ./secret.nix
       ./setuid.nix
@@ -146,29 +147,6 @@ let
           ) (filterAttrs (name: host: host.aliases != []) host.nets)
         ) cfg.hosts
       ));
-
-      # TODO dedup with networking.extraHosts
-      nixpkgs.config.packageOverrides = oldpkgs:
-        let
-          domains = attrNames (filterAttrs (_: eq "hosts") cfg.dns.providers);
-          check = hostname: any (domain: hasSuffix ".${domain}" hostname) domains;
-        in
-          {
-            retiolum-hosts = oldpkgs.writeText "retiolum-hosts" ''
-              ${concatStringsSep "\n" (flatten (
-                map (host:
-                    let
-                      net = host.nets.retiolum;
-                      aliases = longs;
-                      longs = filter check net.aliases;
-                    in
-                      optionals
-                        (aliases != [])
-                        (map (addr: "${addr} ${toString aliases}") net.addrs)
-                ) (filter (host: hasAttr "retiolum" host.nets)
-                          (attrValues cfg.hosts))))}
-            '';
-          };
 
       services.openssh.hostKeys =
         let inherit (config.krebs.build.host.ssh) privkey; in
