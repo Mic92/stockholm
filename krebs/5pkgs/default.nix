@@ -22,6 +22,8 @@ foldl' mergeAttrs {}
     };
   });
 
+  reaktor2 = self.haskellPackages.reaktor2;
+
   ReaktorPlugins = self.callPackage ./simple/Reaktor/plugins.nix {};
 
   # https://github.com/proot-me/PRoot/issues/106
