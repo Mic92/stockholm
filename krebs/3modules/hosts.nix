@@ -13,24 +13,23 @@ in {
   };
 
   config = {
-    networking.extraHosts =
-      concatStringsSep
-        "\n"
-        (flatten
-          (mapAttrsToList
-            (hostname: host:
-              mapAttrsToList
-                (netname: net: let
+    networking.hosts =
+      filterAttrs
+        (_name: value: value != [])
+        (zipAttrsWith
+          (_: concatLists)
+          (concatMap
+            (host:
+              concatMap
+                (net: let
                   aliases = longs ++ shorts;
                   longs = filter check net.aliases;
                   shorts = let s = ".${config.krebs.dns.search-domain}"; in
                     map (removeSuffix s) (filter (hasSuffix s) longs);
                 in
-                  optionals
-                    (aliases != [])
-                    (map (addr: "${addr} ${toString aliases}") net.addrs))
-                (filterAttrs (name: host: host.aliases != []) host.nets))
-            config.krebs.hosts));
+                  map (addr: { ${addr} = aliases; }) net.addrs)
+                (attrValues host.nets))
+            (attrValues config.krebs.hosts)));
   };
 
 }
