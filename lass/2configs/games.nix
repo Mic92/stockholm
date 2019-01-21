@@ -74,7 +74,6 @@ in {
       createHome = true;
       useDefaultShell = true;
       packages = with pkgs; [
-        ftb
         minecraft
         steam-run
         dolphinEmu
