@@ -28,6 +28,7 @@ let
       ./git.nix
       ./go.nix
       ./hidden-ssh.nix
+      ./hosts.nix
       ./htgen.nix
       ./iana-etc.nix
       ./iptables.nix
@@ -60,11 +61,6 @@ let
 
   api = {
     enable = mkEnableOption "krebs";
-
-    hosts = mkOption {
-      type = with types; attrsOf host;
-      default = {};
-    };
 
     users = mkOption {
       type = with types; attrsOf user;
@@ -128,25 +124,6 @@ let
           uid = 0;
         };
       };
-
-      networking.extraHosts = let
-        domains = attrNames (filterAttrs (_: eq "hosts") cfg.dns.providers);
-        check = hostname: any (domain: hasSuffix ".${domain}" hostname) domains;
-      in concatStringsSep "\n" (flatten (
-        mapAttrsToList (hostname: host:
-          mapAttrsToList (netname: net:
-            let
-              aliases = longs ++ shorts;
-              longs = filter check net.aliases;
-              shorts = let s = ".${cfg.dns.search-domain}"; in
-                map (removeSuffix s) (filter (hasSuffix s) longs);
-            in
-              optionals
-                (aliases != [])
-                (map (addr: "${addr} ${toString aliases}") net.addrs)
-          ) (filterAttrs (name: host: host.aliases != []) host.nets)
-        ) cfg.hosts
-      ));
 
       services.openssh.hostKeys =
         let inherit (config.krebs.build.host.ssh) privkey; in

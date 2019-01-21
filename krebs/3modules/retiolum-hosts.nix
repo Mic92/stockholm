@@ -1,6 +1,6 @@
 with import <stockholm/lib>;
 { config, ... }: let
-  # TODO dedup functions with networking.extraHosts
+  # TODO dedup functions with ./hosts.nix
   check = hostname: any (domain: hasSuffix ".${domain}" hostname) domains;
   domains = attrNames (filterAttrs (_: eq "hosts") config.krebs.dns.providers);
 in {
