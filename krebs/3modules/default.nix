@@ -18,6 +18,7 @@ let
       ./charybdis.nix
       ./ci.nix
       ./current.nix
+      ./dns.nix
       ./exim.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
@@ -59,12 +60,6 @@ let
   api = {
     enable = mkEnableOption "krebs";
 
-    dns = {
-      providers = mkOption {
-        type = with types; attrsOf str;
-      };
-    };
-
     hosts = mkOption {
       type = with types; attrsOf host;
       default = {};
@@ -72,13 +67,6 @@ let
 
     users = mkOption {
       type = with types; attrsOf user;
-    };
-
-    # XXX is there a better place to define search-domain?
-    # TODO search-domains :: listOf hostname
-    search-domain = mkOption {
-      type = types.hostname;
-      default = "r";
     };
 
     sitemap = mkOption {
@@ -126,6 +114,8 @@ let
         w = "hosts";
       };
 
+      krebs.dns.search-domain = mkDefault "r";
+
       krebs.users = {
         krebs = {
           home = "/krebs";
@@ -147,7 +137,7 @@ let
             let
               aliases = longs ++ shorts;
               longs = filter check net.aliases;
-              shorts = let s = ".${cfg.search-domain}"; in
+              shorts = let s = ".${cfg.dns.search-domain}"; in
                 map (removeSuffix s) (filter (hasSuffix s) longs);
             in
               optionals
@@ -203,8 +193,8 @@ let
                     let
                       longs = net.aliases;
                       shorts =
-                        map (removeSuffix ".${cfg.search-domain}")
-                            (filter (hasSuffix ".${cfg.search-domain}")
+                        map (removeSuffix ".${cfg.dns.search-domain}")
+                            (filter (hasSuffix ".${cfg.dns.search-domain}")
                                     longs);
                       add-port = a:
                         if net.ssh.port != 22
@@ -228,8 +218,8 @@ let
           (concatMap (host: attrValues host.nets)
             (mapAttrsToList
               (_: host: recursiveUpdate host
-                (optionalAttrs (hasAttr config.krebs.search-domain host.nets) {
-                  nets."" = host.nets.${config.krebs.search-domain} // {
+                (optionalAttrs (hasAttr cfg.dns.search-domain host.nets) {
+                  nets."" = host.nets.${cfg.dns.search-domain} // {
                     aliases = [host.name];
                     addrs = [];
                   };
