@@ -22,6 +22,8 @@ in {
         };
       }
       <stockholm/makefu/2configs/support-nixos.nix>
+      <stockholm/makefu/2configs/home-manager>
+      <stockholm/makefu/2configs/home-manager/cli.nix>
       # <stockholm/makefu/2configs/stats/client.nix>
       <stockholm/makefu/2configs/stats/netdata-server.nix>
 
@@ -123,7 +125,7 @@ in {
       #<stockholm/makefu/2configs/nginx/update.connector.one.nix>
       <stockholm/makefu/2configs/nginx/misa-felix-hochzeit.ml.nix>
       # <stockholm/makefu/2configs/nginx/gold.krebsco.de.nix>
-      <stockholm/makefu/2configs/nginx/iso.euer.nix>
+      # <stockholm/makefu/2configs/nginx/iso.euer.nix>
 
       <stockholm/makefu/2configs/deployment/photostore.krebsco.de.nix>
       <stockholm/makefu/2configs/deployment/graphs.nix>
