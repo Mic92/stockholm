@@ -416,7 +416,7 @@ in {
       pubkey = ssh-for "kmein";
     };
     Mic92 = {
-      mail = "joerg@higgsboson.tk";
+      mail = "joerg@thalheim.io";
       pubkey = ssh-for "Mic92";
     };
     palo = {
