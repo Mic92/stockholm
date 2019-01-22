@@ -84,5 +84,5 @@ with import <stockholm/lib>;
     SystemMaxUse=1G
     RuntimeMaxUse=128M
     '';
-
+  environment.pathsToLink = [ "/share" ];
 }
