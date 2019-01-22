@@ -421,6 +421,16 @@ with import <stockholm/lib>;
          { predicate = "-i wiregrill -p udp --dport 4000:4002"; target = "ACCEPT"; }
       ];
     }
+    {
+      nix.trustedUsers = [ "Mic92" ];
+      users.users.Mic92 = {
+        uid = genid_uint31 "Mic92";
+        isNormalUser = true;
+        openssh.authorizedKeys.keys = [
+          config.krebs.users.Mic92.pubkey
+        ];
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
