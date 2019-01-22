@@ -115,6 +115,7 @@ with import <stockholm/lib>;
   #network
     iptables
     iftop
+    tcpdump
 
   #stuff for dl
     aria2
