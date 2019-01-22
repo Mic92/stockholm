@@ -7,6 +7,7 @@ with import <stockholm/lib>;
     channels = [
       "#krebs"
       "#nixos-wiki"
+      "#nixos-de"
     ];
     extraEnviron = {
       REAKTOR_HOST = "irc.freenode.org";
