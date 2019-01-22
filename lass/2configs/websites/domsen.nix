@@ -155,6 +155,13 @@ in {
     ssl_key = "/var/lib/acme/lassul.us/key.pem";
   };
 
+  users.users.UBIK-SFTP = {
+    uid = genid_uint31 "UBIK-SFTP";
+    home = "/home/UBIK-SFTP";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
   users.users.xanf = {
     uid = genid_uint31 "xanf";
     home = "/home/xanf";
