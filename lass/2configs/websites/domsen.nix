@@ -234,5 +234,22 @@ in {
     createHome = true;
   };
 
+  services.restic.backups.domsen = {
+    initialize = true;
+    extraOptions = [ "sftp.command='ssh efOVcMWSZ@wilhelmstr.duckdns.org -p 52222 -i ${toString <secrets> + "/ssh.id_ed25519"} -s sftp'" ];
+    repository = "sftp:efOVcMWSZ@wilhelmstr.duckdns.org:/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES";
+    passwordFile = toString <secrets> + "/domsen_backup_pw";
+    paths = [
+      "/srv/http"
+      "/home/domsen/Mail"
+      "/home/ms/Mail"
+      "/home/klabusterbeere/Mail"
+      "/home/jms/Mail"
+      "/home/bruno/Mail"
+      "/home/akayguen/Mail"
+      "/backups/sql_dumps"
+    ];
+  };
+
 }
 
