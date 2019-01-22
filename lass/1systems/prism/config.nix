@@ -379,6 +379,7 @@ with import <stockholm/lib>;
           name = "download";
           home = "/var/download";
           useDefaultShell = true;
+          uid = genid "download";
           openssh.authorizedKeys.keys = with config.krebs.users; [
             lass.pubkey
             lass-shodan.pubkey
