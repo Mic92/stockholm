@@ -36,10 +36,10 @@ with import <stockholm/lib>;
       # TODO write function for proxy_pass (ssl/nonssl)
 
       krebs.iptables.tables.filter.FORWARD.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d 192.168.122.92"; target = "ACCEPT"; }
+        { v6 = false; precedence = 1000; predicate = "-d 192.168.122.141"; target = "ACCEPT"; }
       ];
       krebs.iptables.tables.nat.PREROUTING.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d 46.4.114.243"; target = "DNAT --to-destination 192.168.122.92"; }
+        { v6 = false; precedence = 1000; predicate = "-d 95.216.1.130"; target = "DNAT --to-destination 192.168.122.141"; }
       ];
     }
     {
