@@ -6,11 +6,11 @@
 }:
 mkDerivation {
   pname = "reaktor2";
-  version = "0.1.1";
+  version = "0.1.2";
   src = fetchgit {
     url = "https://cgit.krebsco.de/reaktor2";
-    sha256 = "0d78560gj8hm02zaps63f9mby4lzz82f45i8ypwc9l3lnsypdsr3";
-    rev = "4fa5cb937c016f8c10bf8f40d017ca3a436db2d3";
+    sha256 = "1198sajpkd6m87j402y796270hwifyn9wk2by6wcrxvwhq1vgs9k";
+    rev = "d5f66b27b2cd7c36eb7c2e81b0cdca10c5a5ef90";
     fetchSubmodules = true;
   };
   isLibrary = false;
