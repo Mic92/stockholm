@@ -7,8 +7,8 @@ with import <stockholm/lib>;
       sha256 = "1k908zap3694fcxdk4bb29s54b0lhdh557y10ybjskfwnym7szn1";
     };
     "18.09" = {
-      version = "1.3.0";
-      sha256 = "1y9jhh9pchrr48zgfib2jip97x1fkm7qb1gnfx477rmmryjs500h";
+      version = "2.1.0";
+      sha256 = "0wc8v48bb0bkvypc0j6imvnf8xc8572hykk9sgjhzf2w0ggqxv5d";
     };
   }.${versions.majorMinor nixpkgsVersion};
 
