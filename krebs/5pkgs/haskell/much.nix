@@ -8,11 +8,12 @@
 }:
 mkDerivation {
   pname = "much";
-  version = "1.1.0";
+  version = "1.2.0";
   src = fetchgit {
-    url = "http://cgit.ni.krebsco.de/much";
-    sha256 = "1325554zymr1dd0clj8c5ygl70c791csvs0hz33jcfr6b8wysdrl";
-    rev = "dfec37d848e11c00d9b7f03295af1fc7b0e83ef5";
+    url = "https://cgit.krebsco.de/much";
+    sha256 = "0gfvppi8acylz0q7xh8dkm3dj676d4sc1m1gxwp663bkn4748873";
+    rev = "8fc4fbb5bb7781626da8f63cd8df8bb0f554cfe7";
+    fetchSubmodules = true;
   };
   isLibrary = false;
   isExecutable = true;
