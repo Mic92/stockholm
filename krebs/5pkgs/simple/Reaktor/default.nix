@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonPackage rec {
   name = "Reaktor-${version}";
-  version = "0.6.2";
+  version = "0.7.0";
 
   doCheck = false;
 
@@ -13,8 +13,8 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "krebs";
     repo = "Reaktor";
-    rev = version;
-    sha256 = "0h8pj0x9b5fnxddwrc0f63rxd3275v5phmjc0fv4kiwlzvbcxj6m";
+    rev = "v${version}";
+    sha256 = "12yy06vk0smjs0rmahrn2kd4bcdh1yjw1fz6rifw6nmgx889d9hj";
   };
   meta = {
     homepage = http://krebsco.de/;
