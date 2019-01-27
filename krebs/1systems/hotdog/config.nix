@@ -14,6 +14,7 @@
     <stockholm/krebs/2configs/ircd.nix>
     <stockholm/krebs/2configs/reaktor-retiolum.nix>
     <stockholm/krebs/2configs/reaktor-krebs.nix>
+    <stockholm/krebs/2configs/nscd-fix.nix>
     <stockholm/krebs/2configs/repo-sync.nix>
   ];
 
