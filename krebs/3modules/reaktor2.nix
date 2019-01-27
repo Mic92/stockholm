@@ -33,6 +33,10 @@ with import <stockholm/lib>;
           default = "reaktor2${optionalString (name != "default") "-${name}"}";
           type = types.filename;
         };
+        useTLS = mkOption {
+          default = self.config.port == "6697";
+          type = types.bool;
+        };
       };
     }));
   };
