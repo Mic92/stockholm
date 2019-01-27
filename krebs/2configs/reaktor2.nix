@@ -2,6 +2,7 @@ with import <stockholm/lib>;
 { config, pkgs, ... }:
 
 let
+  #for shared state directory
   stateDir = config.krebs.reaktor2.r.stateDir;
 
   generators = pkgs.reaktor2-plugins.generators;
@@ -13,11 +14,12 @@ let
       confirmation=no
     '';
   in {
-    "${name}-task-add" = {
-      pattern = "^${name}-add: (.*)$";
-      activate = "match";
-      arguments = [1];
-      command = {
+    pattern = "^${name}-([a-z]+)(?::\\s*(.*))?";
+    activate = "match";
+    command = 1;
+    arguments = [2];
+    commands = {
+      add = {
         env = {
           TASKDATA = "${stateDir}/${name}";
         };
@@ -25,12 +27,7 @@ let
           ${pkgs.taskwarrior}/bin/task rc:${rcFile} add "$*"
         '';
       };
-    };
-
-    "${name}-task-list" = {
-      pattern = "^${name}-list$";
-      activate = "match";
-      command = {
+      list = {
         env = {
           TASKDATA = "${stateDir}/${name}";
         };
@@ -38,13 +35,7 @@ let
           ${pkgs.taskwarrior}/bin/task rc:${rcFile} export | ${pkgs.jq}/bin/jq -r '.[] | select(.id != 0) | "\(.id) \(.description)"'
         '';
       };
-    };
-
-    "${name}-task-delete" = {
-      pattern = "^${name}-delete: (.*)$";
-      activate = "match";
-      arguments = [1];
-      command = {
+      delete = {
         env = {
           TASKDATA = "${stateDir}/${name}";
         };
@@ -52,13 +43,7 @@ let
           ${pkgs.taskwarrior}/bin/task rc:${rcFile} delete "$*"
         '';
       };
-    };
-
-    "${name}-task-done" = {
-      pattern = "^${name}-done: (.*)$";
-      activate = "match";
-      arguments = [1];
-      command = {
+      done = {
         env = {
           TASKDATA = "${stateDir}/${name}";
         };
@@ -139,8 +124,8 @@ let
             };
           };
         })
-      ] ++ (attrValues (task "agenda"))
-      ;
+        (task "agenda")
+      ];
     };
   };
 
