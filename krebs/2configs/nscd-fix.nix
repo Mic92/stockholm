@@ -1,18 +1,19 @@
-{ pkgs, ... }:
 with import <stockholm/lib>;
-let
+{ pkgs, ... }: let
+
+  enable = versionOlderThan "19.03";
+
   versionOlderThan = v:
     compareVersions
       (versions.majorMinor version)
       (versions.majorMinor v)
       == -1;
 
-  enable =
-    versionOlderThan "19.03";
-    warning = ''
-      Using custom services.nscd.config because
-      https://github.com/NixOS/nixpkgs/pull/50316
-    '';
+  warning = ''
+    Using custom services.nscd.config because
+    https://github.com/NixOS/nixpkgs/pull/50316
+  '';
+
 in
   optionalAttrs enable (trace warning {
     services.nscd.enable = mkForce true;
@@ -21,4 +22,3 @@ in
       sha256 = "1jlddk38lyynjn51zx3xi1nc29ahajyh0qg48qbq6dqlsrn3wxqs";
     }));
   })
-
