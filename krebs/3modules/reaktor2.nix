@@ -37,6 +37,10 @@ with import <stockholm/lib>;
           default = self.config.systemd-service-name;
           type = types.str;
         };
+        useTLS = mkOption {
+          default = self.config.port == "6697";
+          type = types.bool;
+        };
       };
     }));
   };

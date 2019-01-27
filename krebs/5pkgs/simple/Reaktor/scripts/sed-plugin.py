@@ -46,7 +46,7 @@ if is_regex(line):
             print('to many lines, skipped')
         else:
             if last.strip() != ret.strip():
-                print("\x1b[1m{}\x1b[0m meant: {}".format(usr, ret.strip()))
+                print("\x02{}\x02 meant: {}".format(usr, ret.strip()))
                 if ret:
                     d[usr] = ret
 
