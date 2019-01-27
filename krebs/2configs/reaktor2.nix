@@ -92,13 +92,13 @@ let
       ];
       hooks.PRIVMSG = [
         {
-          pattern = "^ledger balance";
+          pattern = "^bier balance";
           activate = "match";
           command = {
             env = {
               state_file = "${stateDir}/ledger";
             };
-            filename = pkgs.writeDash "ledger-balance" ''
+            filename = pkgs.writeDash "bier-balance" ''
               ${pkgs.hledger}/bin/hledger -f $state_file bal -N
             '';
           };
