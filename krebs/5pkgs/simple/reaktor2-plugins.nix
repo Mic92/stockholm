@@ -1,5 +1,5 @@
-{ lib, pkgs, ... }:
 with import <stockholm/lib>;
+{ lib, pkgs, ... }:
 
 rec {
   generators = {
