@@ -99,7 +99,9 @@ let
               state_file = "${stateDir}/ledger";
             };
             filename = pkgs.writeDash "bier-balance" ''
-              ${pkgs.hledger}/bin/hledger -f $state_file bal -N
+              ${pkgs.hledger}/bin/hledger -f $state_file bal -N -O csv \
+                | ${pkgs.coreutils}/bin/tail +2 \
+                | ${pkgs.miller}/bin/mlr --icsv --opprint cat
             '';
           };
         }
