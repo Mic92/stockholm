@@ -92,7 +92,7 @@ let
       ];
       hooks.PRIVMSG = [
         {
-          pattern = "^bier balance";
+          pattern = "^bier bal(ance)*$";
           activate = "match";
           command = {
             env = {
