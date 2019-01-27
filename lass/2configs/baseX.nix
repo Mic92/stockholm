@@ -74,7 +74,7 @@ in {
     nmap
     pavucontrol
     powertop
-    rxvt_unicode_with-plugins
+    rxvt_unicode-with-plugins
     sxiv
     taskwarrior
     termite
