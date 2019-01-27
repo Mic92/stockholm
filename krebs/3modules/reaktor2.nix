@@ -25,7 +25,7 @@ with import <stockholm/lib>;
           type = types.listOf types.attrs;
         };
         stateDir = mkOption {
-          default = "/var/lib/${self.config.user}";
+          default = "/var/lib/${self.config.username}";
           readOnly = true;
           type = types.absolute-pathname;
         };
@@ -33,9 +33,9 @@ with import <stockholm/lib>;
           default = "reaktor2${optionalString (name != "default") "-${name}"}";
           type = types.filename;
         };
-        user = mkOption {
+        username = mkOption {
           default = self.config.systemd-service-name;
-          type = types.str;
+          type = types.username;
         };
         useTLS = mkOption {
           default = self.config.port == "6697";
@@ -51,10 +51,10 @@ with import <stockholm/lib>;
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          User = cfg.user;
+          User = cfg.username;
           Group = "reaktor2";
           DynamicUser = true;
-          StateDirectory = cfg.user;
+          StateDirectory = cfg.username;
           ExecStart = let
             configFile = pkgs.writeJSON configFileName configValue;
             configFileName = "${cfg.systemd-service-name}.config.json";

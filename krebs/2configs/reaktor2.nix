@@ -146,7 +146,7 @@ in {
         }
         systemPlugin
       ];
-      user = "reaktor2";
+      username = "reaktor2";
     };
     r = {
       nick = "reaktor2|krebs";
@@ -162,7 +162,7 @@ in {
         }
         systemPlugin
       ];
-      user = "reaktor2";
+      username = "reaktor2";
     };
   };
 }
