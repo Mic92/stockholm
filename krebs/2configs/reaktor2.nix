@@ -18,39 +18,23 @@ let
     activate = "match";
     command = 1;
     arguments = [2];
+    env.TASKDATA = "${stateDir}/${name}";
     commands = {
-      add = {
-        env = {
-          TASKDATA = "${stateDir}/${name}";
-        };
-        filename = pkgs.writeDash "${name}-task-add" ''
-          ${pkgs.taskwarrior}/bin/task rc:${rcFile} add "$*"
-        '';
-      };
-      list = {
-        env = {
-          TASKDATA = "${stateDir}/${name}";
-        };
-        filename = pkgs.writeDash "${name}-task-list" ''
-          ${pkgs.taskwarrior}/bin/task rc:${rcFile} export | ${pkgs.jq}/bin/jq -r '.[] | select(.id != 0) | "\(.id) \(.description)"'
-        '';
-      };
-      delete = {
-        env = {
-          TASKDATA = "${stateDir}/${name}";
-        };
-        filename = pkgs.writeDash "${name}-task-delete" ''
-          ${pkgs.taskwarrior}/bin/task rc:${rcFile} delete "$*"
-        '';
-      };
-      done = {
-        env = {
-          TASKDATA = "${stateDir}/${name}";
-        };
-        filename = pkgs.writeDash "${name}-task-done" ''
-          ${pkgs.taskwarrior}/bin/task rc:${rcFile} done "$*"
-        '';
-      };
+      add.filename = pkgs.writeDash "${name}-task-add" ''
+        ${pkgs.taskwarrior}/bin/task rc:${rcFile} add "$1"
+      '';
+      list.filename = pkgs.writeDash "${name}-task-list" ''
+        ${pkgs.taskwarrior}/bin/task rc:${rcFile} export \
+          | ${pkgs.jq}/bin/jq -r '
+              .[] | select(.id != 0) | "\(.id) \(.description)"
+            '
+      '';
+      delete.filename = pkgs.writeDash "${name}-task-delete" ''
+        ${pkgs.taskwarrior}/bin/task rc:${rcFile} delete "$1"
+      '';
+      done.filename = pkgs.writeDash "${name}-task-done" ''
+        ${pkgs.taskwarrior}/bin/task rc:${rcFile} done "$1"
+      '';
     };
   };
 
