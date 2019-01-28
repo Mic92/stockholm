@@ -1,0 +1,16 @@
+diff --git a/htdocs/index.html b/htdocs/index.html
+index ed77279..eaf92b6 100644
+--- a/htdocs/index.html
++++ b/htdocs/index.html
+@@ -76,6 +76,11 @@
+ 
+       <div class="col-md-10 col-xs-12">
+         <div class="notifications top-right"></div>
++
++        <ul class="pager">
++          <li id="prev" class="page-btn hide"><a href="">Previous</a></li>
++          <li id="next" class="page-btn"><a href="">Next</a></li>
++        </ul>
+         
+         <div class="panel panel-primary">
+           <!-- Default panel contents -->
