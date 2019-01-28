@@ -225,7 +225,7 @@ in {
     msmtp
     mutt
     pkgs.notmuch
-    pkgs.much
+    pkgs.haskellPackages.much
     tag-new-mails
     tag-old-mails
   ];
