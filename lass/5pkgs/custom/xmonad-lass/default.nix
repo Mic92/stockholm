@@ -41,6 +41,7 @@ import XMonad.Hooks.UrgencyHook (withUrgencyHook, UrgencyHook(..))
 import XMonad.Layout.FixedColumn (FixedColumn(..))
 import XMonad.Layout.Minimize (minimize)
 import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.MouseResizableTile (mouseResizableTile)
 import XMonad.Layout.SimplestFloat (simplestFloat)
 import XMonad.Prompt (autoComplete, font, searchPredicate, XPConfig)
 import XMonad.Prompt.Window (windowPromptGoto, windowPromptBringCopy)
@@ -93,7 +94,7 @@ main' = do
 
 myLayoutHook = defLayout
   where
-    defLayout = minimize $ ((avoidStruts $ Mirror (Tall 1 (3/100) (1/2))) ||| Full ||| FixedColumn 2 80 80 1 ||| Tall 1 (3/100) (1/2) ||| simplestFloat)
+    defLayout = minimize $ ((avoidStruts $ Mirror (Tall 1 (3/100) (1/2))) ||| Full ||| FixedColumn 2 80 80 1 ||| Tall 1 (3/100) (1/2) ||| simplestFloat ||| mouseResizableTile)
 
 floatHooks :: Query (Endo WindowSet)
 floatHooks = composeOne
