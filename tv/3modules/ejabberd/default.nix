@@ -67,7 +67,7 @@ in {
       type = types.user;
       default = {
         name = "ejabberd";
-        home = "/var/ejabberd";
+        home = "/var/lib/ejabberd";
       };
     };
   };

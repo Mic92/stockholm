@@ -84,8 +84,8 @@ in {
       nets = rec {
         internet = {
           # eve.thalheim.io
-          ip4.addr = "188.68.39.17";
-          ip6.addr = "2a03:4000:13:31e::1";
+          ip4.addr = "95.216.112.61";
+          ip6.addr = "2a01:4f9:2b:1605::1";
           aliases = [ "eve.i" ];
         };
         retiolum = {
@@ -137,6 +137,29 @@ in {
             gpizJjFzHz275TVnJHhmIr2DkiGpaIVUL4FRkTslejSJQoUTZfDAvKF2gRyk+n6N
             mJ/hywVtvLxNkNimyztoKKMCAwEAAQ==
             -----END PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+    idontcare = {
+      owner = config.krebs.users.Mic92;
+      nets = rec {
+        retiolum = {
+          addrs = [
+            config.krebs.hosts.idontcare.nets.retiolum.ip4.addr
+            config.krebs.hosts.idontcare.nets.retiolum.ip6.addr
+          ];
+          ip4.addr = "10.243.29.177";
+          aliases = [ "idontcare.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAxmmbQLVXcnCU9Vg9TCoJxfq/RyNfzaTj8XJsn4Kpo3CvQOwFzL6O
+            qZnbG55WjPjPumuFgtUdHA/G8mgtrTVaIRbVE9ck2l2wWFzMWxORzuvDbMh5xP8A
+            OW2Z2qjlH6O9GTBCzpYyHuyBWCjtiN4x9zEqxkIsBARKOylAoy3zQIiiQF0d72An
+            lqKFi9vYUU90zo9rP8BTzx2ZsEWb28xhHUlwf1+vgaOHI1jI99gnr12dVYl/i/Hb
+            O28gDUogfpP/5pWFAHJ+53ZscHo8/Y7imjiKgGXmOHywoXOsKQ67M6ROEU/0xPnw
+            jKmq2p7zTJk2mDhphjePi5idd5yKNX5Q3wIDAQAB
+            -----END RSA PUBLIC KEY-----
           '';
         };
       };
@@ -344,6 +367,30 @@ in {
         };
       };
     };
+    matchbox = {
+      owner = config.krebs.users.Mic92;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.29.176";
+          aliases = [ "matchbox.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAqwB9pzV889vpMp/am+T0sfm5qO/wAWS/tv0auYK3Zyx3ChxrQX2m
+            VrxO5a/bjR/g1fi/t2kJIV/6tsVSRHfzKuKHprE2KxeNOmwUuSjjiM4CboASMR+w
+            nra6U0Ldf5vBxtEj5bj384QxwxxVLhSw8NbE43FCM07swSvAT8Y/ZmGUd738674u
+            TNC6zM6zwLvN0dxCDLuD5bwUq7y73JNQTm2YXv1Hfw3T8XqJK/Xson2Atv2Y5ZbE
+            TA0RaH3PoEkhkVeJG/EuUIJhvmunS5bBjFSiOiUZ8oEOSjo9nHUMD0u+x1BZIg/1
+            yy5B5iB4YSGPAtjMJhwD/LRIoI8msWpdVCCnA+FlKCKAsgC7JbJgcOUtK9eDFdbO
+            4FyzdUJbK+4PDguraPGzIX7p+K3SY8bbyo3SSp5rEb+CEWtFf26oJm7eBhDBT6K4
+            Ofmzp0GjFbS8qkqEGCQcfi4cAsXMVCn4AJ6CKs89y19pLZ42fUtWg7WgUZA7GWV/
+            bPE2RSBMUkGb0ovgoe7Z7NXsL3AST8EQEy+3lAEyUrPFLiwoeGJZmfTDTy1VBFI4
+            nCShp7V+MSmz4DnLK1HLksLVLmGyZmouGsLjYUnEa414EI6NJF3bfEO2ZRGaswyR
+            /vW066YCTe7wi+YrvrMDgkdbyfn/ecMTn2iXsTb4k9/fuO0+hsqL+isCAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     miaoski = {
       owner = config.krebs.users.miaoski;
       nets = {
@@ -369,7 +416,7 @@ in {
       pubkey = ssh-for "kmein";
     };
     Mic92 = {
-      mail = "joerg@higgsboson.tk";
+      mail = "joerg@thalheim.io";
       pubkey = ssh-for "Mic92";
     };
     palo = {

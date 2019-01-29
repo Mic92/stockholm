@@ -2,6 +2,7 @@ with import <stockholm/lib>;
 { config, pkgs, ... }:
 {
   imports = [
+    <stockholm/krebs/2configs/nscd-fix.nix>
     ./binary-cache/client.nix
     ./gc.nix
     ./mc.nix
@@ -72,7 +73,6 @@ with import <stockholm/lib>;
 
   krebs = {
     enable = true;
-    search-domain = "r";
     build.user = config.krebs.users.lass;
   };
 
@@ -81,9 +81,6 @@ with import <stockholm/lib>;
   users.mutableUsers = false;
 
   services.timesyncd.enable = mkForce true;
-
-  #why is this on in the first place?
-  services.nscd.enable = false;
 
   systemd.tmpfiles.rules = [
     "d /tmp 1777 root root - -"
@@ -116,6 +113,7 @@ with import <stockholm/lib>;
   #network
     iptables
     iftop
+    tcpdump
 
   #stuff for dl
     aria2

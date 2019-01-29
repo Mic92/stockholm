@@ -9,7 +9,6 @@ in {
     ./power-action.nix
     ./copyq.nix
     ./urxvt.nix
-    ./nfs-dl.nix
     {
       hardware.pulseaudio = {
         enable = true;
@@ -75,12 +74,11 @@ in {
     nmap
     pavucontrol
     powertop
-    rxvt_unicode_with-plugins
+    rxvt_unicode-with-plugins
     sxiv
     taskwarrior
     termite
     xclip
-    xephyrify
     xorg.xbacklight
     xorg.xhost
     xsel

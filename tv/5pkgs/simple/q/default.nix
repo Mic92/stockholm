@@ -14,7 +14,7 @@ let
       assert n >= 1;
       n * calwidth + (n - 1) * hspace;
 
-    pad = ''{
+    pad = /* sh */ ''{
       ${pkgs.gnused}/bin/sed '
             # rtrim
             s/ *$//
@@ -31,7 +31,7 @@ let
               s/^[ 1-9][0-9]/[38;5;238;1m&[39;22m/
             '
     }'';
-  in ''
+  in /* sh */ ''
     cols=$(${pkgs.ncurses}/bin/tput cols)
     ${pkgs.coreutils}/bin/paste \
         <(if test $cols -ge ${toString (need_width 3)}; then
@@ -59,24 +59,24 @@ let
         '
   '';
 
-  q-isodate = ''
+  q-isodate = /* sh */ ''
     ${pkgs.coreutils}/bin/date \
         '+[1m%Y-%m-%d[;30mT[;38;5;085m%H:%M[m:%S%:z'
   '';
 
   # Singapore's red is #ED2E38
-  q-sgtdate = ''
+  q-sgtdate = /* sh */ ''
     TZ=Asia/Singapore \
     ${pkgs.coreutils}/bin/date \
         '+[1m%Y-%m-%d[;30mT[;38;5;088m%H:%M[m:%S%:z'
   '';
 
-  q-utcdate = ''
+  q-utcdate = /* sh */ ''
     ${pkgs.coreutils}/bin/date -u \
         '+[1m%Y-%m-%d[;30mT[;38;5;065m%H:%M[m:%S%:z'
   '';
 
-  q-gitdir = ''
+  q-gitdir = /* sh */ ''
     if test -d .git; then
       #git status --porcelain
       branch=$(
@@ -87,7 +87,7 @@ let
     fi
   '';
 
-  q-intel_backlight = ''
+  q-intel_backlight = /* sh */ ''
     cd /sys/class/backlight/intel_backlight
     </dev/null exec ${pkgs.gawk}/bin/awk '
       END {
@@ -227,11 +227,11 @@ let
     done
   '';
 
-  q-virtualization = ''
+  q-virtualization = /* sh */ ''
     echo "VT: $(${pkgs.systemd}/bin/systemd-detect-virt)"
   '';
 
-  q-wireless = ''
+  q-wireless = /* sh */ ''
     for dev in $(
       ${pkgs.iw}/bin/iw dev \
         | ${pkgs.gnused}/bin/sed -n 's/^\s*Interface\s\+\([0-9a-z]\+\)$/\1/p'
@@ -250,7 +250,7 @@ let
     done
   '';
 
-  q-online = ''
+  q-online = /* sh */ ''
     if ${pkgs.curl}/bin/curl -s google.com >/dev/null; then
       echo '[32;1monline[m'
     else
@@ -258,7 +258,7 @@ let
     fi
   '';
 
-  q-thermal_zone = ''
+  q-thermal_zone = /* sh */ ''
     for i in /sys/class/thermal/thermal_zone*; do
       type=$(${pkgs.coreutils}/bin/cat $i/type)
       temp=$(${pkgs.coreutils}/bin/cat $i/temp)
@@ -266,29 +266,26 @@ let
     done
   '';
 
-  q-todo = ''
+  q-todo = /* sh */ ''
     TODO_file=$PWD/TODO
     if test -e "$TODO_file"; then
-      ${pkgs.coreutils}/bin/cat "$TODO_file" \
-        | ${pkgs.gawk}/bin/gawk -v now=$(${pkgs.coreutils}/bin/date +%s) '
-            BEGIN { print "remind=0" }
-            /^[0-9]/{
-              x = $1
-              gsub(".", "\\\\&", x)
-              rest = substr($0, index($0, " "))
-              rest = $0
-              sub(" *", "", rest)
-              gsub(".", "\\\\&", rest)
-              print "test $(${pkgs.coreutils}/bin/date +%s -d"x") -lt "now" && \
-                echo \"\x1b[38;5;208m\""rest esc "\"\x1b[m\" && \
-                (( remind++ ))"
-            }
-            END { print "test $remind = 0 && echo \"nothing to remind\"" }
-          ' \
-        | {
-          # bash needed for (( ... ))
-          ${pkgs.bash}/bin/bash
-        }
+      ${pkgs.jq}/bin/jq -Rrs <"$TODO_file" -f ${pkgs.writeJq "q-todo.jq" ''
+        split("\n") | map(
+          (match("^([0-9]+-\\d{2}-\\d{2})\\s+(.*)$").captures | map(.string))
+            as $captures |
+          ($captures[0] | strptime("%Y-%m-%d") | mktime) as $date |
+          $captures[1] as $text |
+
+          select(now >= $date) |
+
+          ($text | test("\\[URGENT]"; "i")) as $urgent |
+          (if $urgent then "38;5;196" else "38;5;208" end) as $sgr |
+          if $urgent then sub("\\s*\\[URGENT]\\s*"; " "; "i") else . end |
+
+          "\u001b[\($sgr)m\(.)\u001b[m"
+        ) |
+        if length == 0 then "nothing to remind" else .[] end
+      ''}
     else
       echo "$TODO_file: no such file or directory"
     fi

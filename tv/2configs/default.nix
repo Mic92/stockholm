@@ -92,7 +92,6 @@ with import <stockholm/lib>;
       environment.variables = {
         NIX_PATH = mkForce (concatStringsSep ":" [
           "secrets=/var/src/stockholm/null"
-          "nixpkgs-overlays=${config.tv.nixpkgs-overlays}"
           "/var/src"
         ]);
       };

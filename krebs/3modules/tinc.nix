@@ -27,6 +27,7 @@ let
               "tinc.conf" = pkgs.writeText "${netname}-tinc.conf" ''
                 Name = ${tinc.config.host.name}
                 Interface = ${netname}
+                Broadcast = no
                 ${concatMapStrings (c: "ConnectTo = ${c}\n") tinc.config.connectTo}
                 PrivateKeyFile = ${tinc.config.privkey.path}
                 Port = ${toString tinc.config.host.nets.${netname}.tinc.port}

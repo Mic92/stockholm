@@ -113,10 +113,11 @@ let
         '';
       in nameValuePair "Reaktor-${name}" {
         path = with pkgs; [
-          utillinux #flock for tell_on-join
           git # for nag
+          jq # for tell
           python # for caps
-          ];
+          utillinux # flock for tell
+        ];
         description = "Reaktor IRC Bot";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];

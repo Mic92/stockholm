@@ -18,14 +18,17 @@ let
       ./charybdis.nix
       ./ci.nix
       ./current.nix
+      ./dns.nix
       ./exim.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
       ./fetchWallpaper.nix
       ./github-hosts-sync.nix
+      ./github-known-hosts.nix
       ./git.nix
       ./go.nix
       ./hidden-ssh.nix
+      ./hosts.nix
       ./htgen.nix
       ./iana-etc.nix
       ./iptables.nix
@@ -39,8 +42,10 @@ let
       ./per-user.nix
       ./power-action.nix
       ./Reaktor.nix
+      ./reaktor2.nix
       ./realwallpaper.nix
       ./retiolum-bootstrap.nix
+      ./retiolum-hosts.nix
       ./rtorrent.nix
       ./secret.nix
       ./setuid.nix
@@ -58,26 +63,8 @@ let
   api = {
     enable = mkEnableOption "krebs";
 
-    dns = {
-      providers = mkOption {
-        type = with types; attrsOf str;
-      };
-    };
-
-    hosts = mkOption {
-      type = with types; attrsOf host;
-      default = {};
-    };
-
     users = mkOption {
       type = with types; attrsOf user;
-    };
-
-    # XXX is there a better place to define search-domain?
-    # TODO search-domains :: listOf hostname
-    search-domain = mkOption {
-      type = types.hostname;
-      default = "r";
     };
 
     sitemap = mkOption {
@@ -125,6 +112,8 @@ let
         w = "hosts";
       };
 
+      krebs.dns.search-domain = mkDefault "r";
+
       krebs.users = {
         krebs = {
           home = "/krebs";
@@ -136,93 +125,6 @@ let
           uid = 0;
         };
       };
-
-      networking.extraHosts = let
-        domains = attrNames (filterAttrs (_: eq "hosts") cfg.dns.providers);
-        check = hostname: any (domain: hasSuffix ".${domain}" hostname) domains;
-      in concatStringsSep "\n" (flatten (
-        mapAttrsToList (hostname: host:
-          mapAttrsToList (netname: net:
-            let
-              aliases = longs ++ shorts;
-              longs = filter check net.aliases;
-              shorts = let s = ".${cfg.search-domain}"; in
-                map (removeSuffix s) (filter (hasSuffix s) longs);
-            in
-              optionals
-                (aliases != [])
-                (map (addr: "${addr} ${toString aliases}") net.addrs)
-          ) (filterAttrs (name: host: host.aliases != []) host.nets)
-        ) cfg.hosts
-      ));
-
-      # TODO dedup with networking.extraHosts
-      nixpkgs.config.packageOverrides = oldpkgs:
-        let
-          domains = attrNames (filterAttrs (_: eq "hosts") cfg.dns.providers);
-          check = hostname: any (domain: hasSuffix ".${domain}" hostname) domains;
-        in
-          {
-            retiolum-hosts = oldpkgs.writeText "retiolum-hosts" ''
-              ${concatStringsSep "\n" (flatten (
-                map (host:
-                    let
-                      net = host.nets.retiolum;
-                      aliases = longs;
-                      longs = filter check net.aliases;
-                    in
-                      optionals
-                        (aliases != [])
-                        (map (addr: "${addr} ${toString aliases}") net.addrs)
-                ) (filter (host: hasAttr "retiolum" host.nets)
-                          (attrValues cfg.hosts))))}
-            '';
-          };
-
-      krebs.exim-smarthost.internet-aliases = let
-        format = from: to: {
-          inherit from;
-          # TODO assert is-retiolum-mail-address to;
-          to = concatMapStringsSep "," (getAttr "mail") (toList to);
-        };
-      in mapAttrsToList format (with config.krebs.users; let
-        brain-ml = [
-          lass
-          makefu
-          tv
-        ];
-        eloop-ml = spam-ml ++ [ ciko ];
-        spam-ml = [
-          lass
-          makefu
-          tv
-        ];
-        ciko.mail = "ciko@slash16.net";
-      in {
-        "anmeldung@eloop.org" = eloop-ml;
-        "brain@krebsco.de" = brain-ml;
-        "cfp@eloop.org" = eloop-ml;
-        "kontakt@eloop.org" = eloop-ml;
-        "root@eloop.org" = eloop-ml;
-        "youtube@eloop.org" = eloop-ml;
-        "eloop2016@krebsco.de" = eloop-ml;
-        "eloop2017@krebsco.de" = eloop-ml;
-        "postmaster@krebsco.de" = spam-ml; # RFC 822
-        "lass@krebsco.de" = lass;
-        "makefu@krebsco.de" = makefu;
-        "spam@krebsco.de" = spam-ml;
-        "tv@krebsco.de" = tv;
-        # XXX These are no internet aliases
-        # XXX exim-retiolum hosts should be able to relay to retiolum addresses
-        "lass@retiolum" = lass;
-        "makefu@retiolum" = makefu;
-        "spam@retiolum" = spam-ml;
-        "tv@retiolum" = tv;
-        "lass@r" = lass;
-        "makefu@r" = makefu;
-        "spam@r" = spam-ml;
-        "tv@r" = tv;
-      });
 
       services.openssh.hostKeys =
         let inherit (config.krebs.build.host.ssh) privkey; in
@@ -238,31 +140,6 @@ let
             };
           })
         //
-        {
-          github = {
-            hostNames = [
-              "github.com"
-              # List generated with
-              # curl -sS https://api.github.com/meta | jq -r .git[] | cidr2glob
-              "192.30.252.*"
-              "192.30.253.*"
-              "192.30.254.*"
-              "192.30.255.*"
-              "185.199.108.*"
-              "185.199.109.*"
-              "185.199.110.*"
-              "185.199.111.*"
-              "13.229.188.59"
-              "13.250.177.223"
-              "18.194.104.89"
-              "18.195.85.27"
-              "35.159.8.160"
-              "52.74.223.119"
-            ];
-            publicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==";
-          };
-        }
-        //
         mapAttrs
           (name: host: {
             hostNames =
@@ -272,8 +149,8 @@ let
                     let
                       longs = net.aliases;
                       shorts =
-                        map (removeSuffix ".${cfg.search-domain}")
-                            (filter (hasSuffix ".${cfg.search-domain}")
+                        map (removeSuffix ".${cfg.dns.search-domain}")
+                            (filter (hasSuffix ".${cfg.dns.search-domain}")
                                     longs);
                       add-port = a:
                         if net.ssh.port != 22
@@ -297,8 +174,8 @@ let
           (concatMap (host: attrValues host.nets)
             (mapAttrsToList
               (_: host: recursiveUpdate host
-                (optionalAttrs (hasAttr config.krebs.search-domain host.nets) {
-                  nets."" = host.nets.${config.krebs.search-domain} // {
+                (optionalAttrs (hasAttr cfg.dns.search-domain host.nets) {
+                  nets."" = host.nets.${cfg.dns.search-domain} // {
                     aliases = [host.name];
                     addrs = [];
                   };

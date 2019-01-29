@@ -40,6 +40,16 @@
     fsType = "zfs";
   };
 
+  fileSystems."/var/lib/nextcloud" = {
+    device = "tank/nextcloud";
+    fsType = "zfs";
+  };
+
+  fileSystems."/var/lib/libvirt" = {
+    device = "tank/libvirt";
+    fsType = "zfs";
+  };
+
   nix.maxJobs = lib.mkDefault 8;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
@@ -53,9 +63,15 @@
     defaultGateway = "95.216.1.129";
     # Use google's public DNS server
     nameservers = [ "8.8.8.8" ];
-    interfaces.eth0 = {
-      ipAddress = "95.216.1.150";
-      prefixLength = 26;
-    };
+    interfaces.eth0.ipv4.addresses = [
+      {
+        address = "95.216.1.150";
+        prefixLength = 26;
+      }
+      {
+        address = "95.216.1.130";
+        prefixLength = 26;
+      }
+    ];
   };
 }

@@ -88,6 +88,20 @@ in {
     file_uploads = on
   '';
 
+  services.nextcloud = {
+    enable = true;
+    hostName = "o.xanf.org";
+    config = {
+      adminpassFile = toString <secrets> + "/nextcloud_pw";
+    };
+    #https = true;
+    nginx.enable = true;
+  };
+  services.nginx.virtualHosts."o.xanf.org" = {
+    enableACME = true;
+    forceSSL = true;
+  };
+
   # MAIL STUFF
   # TODO: make into its own module
   services.dovecot2 = {
@@ -139,6 +153,13 @@ in {
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";
+  };
+
+  users.users.UBIK-SFTP = {
+    uid = genid_uint31 "UBIK-SFTP";
+    home = "/home/UBIK-SFTP";
+    useDefaultShell = true;
+    createHome = true;
   };
 
   users.users.xanf = {
@@ -211,6 +232,23 @@ in {
     home = "/home/klabusterbeere";
     useDefaultShell = true;
     createHome = true;
+  };
+
+  services.restic.backups.domsen = {
+    initialize = true;
+    extraOptions = [ "sftp.command='ssh efOVcMWSZ@wilhelmstr.duckdns.org -p 52222 -i ${toString <secrets> + "/ssh.id_ed25519"} -s sftp'" ];
+    repository = "sftp:efOVcMWSZ@wilhelmstr.duckdns.org:/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES";
+    passwordFile = toString <secrets> + "/domsen_backup_pw";
+    paths = [
+      "/srv/http"
+      "/home/domsen/Mail"
+      "/home/ms/Mail"
+      "/home/klabusterbeere/Mail"
+      "/home/jms/Mail"
+      "/home/bruno/Mail"
+      "/home/akayguen/Mail"
+      "/backups/sql_dumps"
+    ];
   };
 
 }

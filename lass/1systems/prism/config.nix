@@ -36,10 +36,10 @@ with import <stockholm/lib>;
       # TODO write function for proxy_pass (ssl/nonssl)
 
       krebs.iptables.tables.filter.FORWARD.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d 192.168.122.92"; target = "ACCEPT"; }
+        { v6 = false; precedence = 1000; predicate = "-d 192.168.122.141"; target = "ACCEPT"; }
       ];
       krebs.iptables.tables.nat.PREROUTING.rules = [
-        { v6 = false; precedence = 1000; predicate = "-d 46.4.114.243"; target = "DNAT --to-destination 192.168.122.92"; }
+        { v6 = false; precedence = 1000; predicate = "-d 95.216.1.130"; target = "DNAT --to-destination 192.168.122.141"; }
       ];
     }
     {
@@ -379,6 +379,7 @@ with import <stockholm/lib>;
           name = "download";
           home = "/var/download";
           useDefaultShell = true;
+          uid = genid "download";
           openssh.authorizedKeys.keys = with config.krebs.users; [
             lass.pubkey
             lass-shodan.pubkey
@@ -419,6 +420,16 @@ with import <stockholm/lib>;
          { predicate = "-i wiregrill -p tcp --dport 4000:4002"; target = "ACCEPT"; }
          { predicate = "-i wiregrill -p udp --dport 4000:4002"; target = "ACCEPT"; }
       ];
+    }
+    {
+      nix.trustedUsers = [ "Mic92" ];
+      users.users.Mic92 = {
+        uid = genid_uint31 "Mic92";
+        isNormalUser = true;
+        openssh.authorizedKeys.keys = [
+          config.krebs.users.Mic92.pubkey
+        ];
+      };
     }
   ];
 

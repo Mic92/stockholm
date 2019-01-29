@@ -5,10 +5,12 @@ in {
   options.tv.slock = {
     enable = mkEnableOption "tv.slock";
     package = mkOption {
-      default = pkgs.execBin "slock" rec {
-        filename = "${pkgs.systemd}/bin/systemctl";
-        argv = [ filename "start" "slock-${cfg.user.name}.service" ];
-      };
+      default = pkgs.writeDashBin "slock" ''
+        set -efu
+        display=''${DISPLAY#:}
+        service=slock-$LOGNAME@$display.service
+        exec ${pkgs.systemd}/bin/systemctl start "$service"
+      '';
       type = types.package;
     };
     user = mkOption {
@@ -18,16 +20,16 @@ in {
   config = mkIf cfg.enable {
     security.polkit.extraConfig = /* js */ ''
       polkit.addRule(function(action, subject) {
-        if (action.id == "org.freedesktop.systemd1.manage-units" &&
-            action.lookup("unit") == "slock-${cfg.user.name}.service" &&
-            subject.user == ${toJSON cfg.user.name}) {
+        if (action.id === "org.freedesktop.systemd1.manage-units" &&
+            subject.user === ${toJSON cfg.user.name} &&
+            /^slock-${cfg.user.name}@[0-9]+\.service$/.test(action.lookup("unit")) ) {
           return polkit.Result.YES;
         }
       });
     '';
-    systemd.services."slock-${cfg.user.name}" = {
+    systemd.services."slock-${cfg.user.name}@" = {
       environment = {
-        DISPLAY = ":${toString config.services.xserver.display}";
+        DISPLAY = ":%I";
         LD_PRELOAD = pkgs.runCommandCC "slock-${cfg.user.name}.so" {
           passAsFile = ["text"];
           text = /* c */ ''

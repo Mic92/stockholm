@@ -101,6 +101,9 @@ in {
     locations."/pub".extraConfig = ''
       alias ${pkgs.writeText "pub" config.krebs.users.lass.pubkey};
     '';
+    locations."/pub1".extraConfig = ''
+      alias ${pkgs.writeText "pub" config.krebs.users.lass-mors.pubkey};
+    '';
   };
 
   security.acme.certs."cgit.lassul.us" = {

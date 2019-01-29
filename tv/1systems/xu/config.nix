@@ -20,6 +20,7 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/br.nix>
     <stockholm/tv/2configs/xp-332.nix>
     <stockholm/tv/2configs/xserver>
+    <stockholm/tv/2configs/xserver/xkiller.nix>
     {
       environment.systemPackages = with pkgs; [
 
@@ -155,11 +156,6 @@ with import <stockholm/lib>;
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "15.09";
-
-  tv.nixpkgs-overlays = {
-    krebs = "/home/tv/stockholm/krebs/5pkgs";
-    tv = "/home/tv/stockholm/tv/5pkgs";
-  };
 
   virtualisation.virtualbox.host.enable = true;
 }
