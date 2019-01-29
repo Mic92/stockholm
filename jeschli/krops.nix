@@ -12,10 +12,7 @@
       secrets = if test then {
         file = toString ./2configs/tests/dummy-secrets;
       } else {
-        pass = {
-          dir = "${lib.getEnv "HOME"}/.password-store";
-          name = "hosts/${name}";
-        };
+        file = "${lib.getEnv "HOME"}/secrets/${name}";
       };
     }
   ];
