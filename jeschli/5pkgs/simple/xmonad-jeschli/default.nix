@@ -92,7 +92,7 @@ mainNoArgs = do
             , startupHook = do
                 setWMName "LG3D"
                 whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
-                          (\path -> forkFile path [] Nothing) <+> setWMName "LG3D"
+                          (\path -> forkFile path [] Nothing)
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
             , handleEventHook = handleShutdownEvent
