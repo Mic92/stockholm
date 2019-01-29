@@ -42,7 +42,7 @@ in
       export SYSTEM="$1"
       $(nix-build $HOME/stockholm/jeschli/krops.nix --no-out-link --argstr name "$SYSTEM" -A deploy)
     '';
-  };
+ };
 
   environment.systemPackages = with pkgs; [
     # system helper
