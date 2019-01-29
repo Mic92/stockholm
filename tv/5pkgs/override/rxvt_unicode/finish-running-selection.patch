@@ -1,0 +1,41 @@
+diff --git a/src/rxvttoolkit.h b/src/rxvttoolkit.h
+index 56c9a3f..429055d 100644
+--- a/src/rxvttoolkit.h
++++ b/src/rxvttoolkit.h
+@@ -384,6 +384,7 @@ struct rxvt_selection
+ {
+   rxvt_selection (rxvt_display *disp, int selnum, Time tm, Window win, Atom prop, rxvt_term *term);
+   void run ();
++  void finish (char *data = 0, unsigned int len = 0);
+   ~rxvt_selection ();
+ 
+   rxvt_term *term; // terminal to paste to, may be 0
+@@ -404,7 +405,6 @@ private:
+   void timer_cb (ev::timer &w, int revents); ev::timer timer_ev;
+   void x_cb (XEvent &xev); xevent_watcher x_ev;
+ 
+-  void finish (char *data = 0, unsigned int len = 0);
+   void stop ();
+   bool request (Atom target, int selnum);
+   void handle_selection (Window win, Atom prop, bool delete_prop);
+diff --git a/src/screen.C b/src/screen.C
+index 9eb375a..77e7109 100644
+--- a/src/screen.C
++++ b/src/screen.C
+@@ -2736,11 +2736,11 @@ rxvt_term::paste (char *data, unsigned int len) NOTHROW
+ void
+ rxvt_term::selection_request (Time tm, int selnum) NOTHROW
+ {
+-  if (!selection_req)
+-    {
+-      selection_req = new rxvt_selection (display, selnum, tm, vt, xa[XA_VT_SELECTION], this);
+-      selection_req->run ();
+-    }
++  if (selection_req)
++    selection_req->finish ();
++
++  selection_req = new rxvt_selection (display, selnum, tm, vt, xa[XA_VT_SELECTION], this);
++  selection_req->run ();
+ }
+ 
+ /* ------------------------------------------------------------------------- */
