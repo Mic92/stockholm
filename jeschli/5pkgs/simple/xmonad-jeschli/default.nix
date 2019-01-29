@@ -151,7 +151,6 @@ myKeys conf = Map.fromList $
     , ((0   , xK_Print   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.view) )
     , ((_S  , xK_Print   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
     , ((_C  , xK_Print   ), toggleWS)
-    , ((_4  , xK_Print   ), rhombus horseConfig (liftIO . hPutStrLn stderr) ["Correct", "Horse", "Battery", "Staple", "Stuhl", "Tisch"] )
 
     -- %! Rotate through the available layout algorithms
     , ((_4  , xK_space  ), sendMessage NextLayout)
