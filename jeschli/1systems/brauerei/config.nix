@@ -1,12 +1,12 @@
 { config, pkgs, lib, ... }:
+let
+  xmonad-jeschli = pkgs.callPackage <stockholm/jeschli/5pkgs/simple/xmonad-jeschli> { inherit config; };
+in
 {
   imports = [
     <stockholm/jeschli>
     ./hardware-configuration.nix
     <stockholm/jeschli/2configs/urxvt.nix>
-    <stockholm/jeschli/2configs/emacs.nix>
-    <stockholm/jeschli/2configs/xdg.nix>
-    <stockholm/jeschli/2configs/xserver>
     <stockholm/jeschli/2configs/steam.nix>
     <stockholm/jeschli/2configs/virtualbox.nix>
   ];
@@ -126,25 +126,29 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+  services.emacs.enable = true;
 
   virtualisation.docker.enable = true;
 
   services.xserver = {
-    desktopManager.session = lib.mkForce [];
-    displayManager.lightdm.enable = lib.mkForce false;
-    displayManager.job.execCmd = lib.mkForce "derp";
-
     enable = true;
-    display = lib.mkForce 11;
-    tty = lib.mkForce 11;
 
-    dpi = 144;
-
-    synaptics = {
-      enable = true;
-      twoFingerScroll = true;
-      accelFactor = "0.035";
+    desktopManager = {
+      xfce.enable = true;
+      gnome3.enable = true;
     };
+
+    windowManager = {
+      session = [{
+        name = "xmonad";
+        start = ''
+          ${xmonad-jeschli}/bin/xmonad &
+          waitPID=$!
+        '';
+        }
+      ];
+    };
+
   };
 
   users.extraUsers.jeschli = { # TODO: define as krebs.users
