@@ -73,7 +73,6 @@ main = getArgs >>= \case
 
 mainNoArgs :: IO ()
 mainNoArgs = do
-    workspaces0 <- getWorkspaces0
     handleShutdownEvent <- newShutdownEventHandler
     xmonad
         -- $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "magenta", "-fg", "magenta", "-h", "2"], duration = 500000 }
@@ -85,7 +84,7 @@ mainNoArgs = do
             { terminal          = urxvtcPath
             , modMask           = mod4Mask
             , keys              = myKeys
-            , workspaces        = workspaces0
+            , workspaces        = ["comms", "org", "dev"]
             , layoutHook        = smartBorders $ FixedColumn 1 20 80 10 ||| Full
             -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
             --, handleEventHook   = handleTimerEvent
