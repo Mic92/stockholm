@@ -45,7 +45,6 @@ let
       ./reaktor2.nix
       ./realwallpaper.nix
       ./retiolum-bootstrap.nix
-      ./retiolum-hosts.nix
       ./rtorrent.nix
       ./secret.nix
       ./setuid.nix
