@@ -62,13 +62,6 @@ in {
           {}
           (attrValues config.krebs.hosts);
 
-      # allAddrAliases : [addrAliases]
-      allAddrAliases =
-        flatten
-          (map
-            (host: attrValues (hostNetAliases host))
-            (attrValues config.krebs.hosts));
-
       # writeHosts : str -> [addrAliases] -> package
       writeHosts = name: addrAliases: super.writeText name ''
         ${concatMapStringsSep
@@ -78,7 +71,18 @@ in {
       '';
     in
       {
-        krebs-hosts = writeHosts "krebs-hosts" allAddrAliases;
+        # hosts file for all krebs networks
+        krebs-hosts =
+          writeHosts "krebs-hosts" (concatLists [
+            netAliases.internet
+            netAliases.retiolum
+            netAliases.wiregrill
+          ]);
+
+        # combined hosts file for all networks (even custom ones)
+        krebs-hosts_combined =
+          writeHosts "krebs-hosts_combined"
+            (concatLists (attrValues netAliases));
       }
       //
       genAttrs' (attrNames netAliases) (netname: rec {
