@@ -129,6 +129,19 @@ let {
         command! -n=0 -bar ShowSyntax :call ShowSyntax()
       '';
     })))
+    ((rtp: rtp // { inherit rtp; }) (pkgs.write "vim-tv" {
+      #
+      # Haskell
+      #
+      "/ftplugin/haskell.vim".text = ''
+        if exists("g:vim_tv_ftplugin_haskell_loaded")
+          finish
+        endif
+        let g:vim_tv_ftplugin_haskell_loaded = 1
+
+        setlocal iskeyword+='
+      '';
+    }))
     ((rtp: rtp // { inherit rtp; }) (pkgs.write "vim-syntax-nix-nested" {
       "/syntax/haskell.vim".text = ''
         syn region String start=+\[[[:alnum:]]*|+ end=+|]+
