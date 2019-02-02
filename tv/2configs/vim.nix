@@ -250,6 +250,9 @@ let {
           def = k: ''${k}[ \t\r\n]*='';
           writer = k: ''write${k}[^ \t\r\n]*[ \t\r\n]*\("[^"]*"\|[a-z]\+\)'';
 
+          writerExt = k: writerName ''[^"]*\.${k}'';
+          writerName = k: ''write[^ \t\r\n]*[ \t\r\n]*"${k}"'';
+
         in {
           c = {};
           cabal = {};
@@ -257,7 +260,7 @@ let {
           haskell = {};
           jq.extraStart = alts [
             (writer "Jq")
-            ''write[^ \t\r\n]*[ \t\r\n]*"[^"]*\.jq"''
+            (writerExt "jq")
           ];
           javascript.extraStart = ''/\* js \*/'';
           lua = {};
@@ -287,8 +290,10 @@ let {
             (writer (alts (map capitalize shells)))
           ];
           yaml = {};
-          vim.extraStart =
-            ''write[^ \t\r\n]*[ \t\r\n]*"\(\([^"]*\.\)\?vimrc\|[^"]*\.vim\)"'';
+          vim.extraStart = alts [
+            (writerExt "vim")
+            (writerName ''\([^"]*\.\)\?vimrc'')
+          ];
           xdefaults = {};
         }))}
 
