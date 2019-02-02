@@ -16,6 +16,7 @@ with import <stockholm/lib>;
   tinc-for = name: builtins.readFile (./tinc + "/${name}.pub");
 
 in {
+
   hosts = mapAttrs hostDefaults {
     dpdkm = {
       owner = config.krebs.users.Mic92;
@@ -225,17 +226,6 @@ in {
         };
       };
     };
-    pepe = {
-      owner = config.krebs.users.palo;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.123.4";
-          tinc.port = 720;
-          aliases = [ "pepe.r" ];
-          tinc.pubkey = tinc-for "pepe";
-        };
-      };
-    };
     scardanelli = {
       owner = config.krebs.users.kmein;
       nets = {
@@ -403,8 +393,6 @@ in {
     Mic92 = {
       mail = "joerg@thalheim.io";
       pubkey = ssh-for "Mic92";
-    };
-    palo = {
     };
     qubasa = {
       mail = "luis.nixos@gmail.com";
