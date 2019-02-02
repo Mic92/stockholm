@@ -1,5 +1,8 @@
 {lib,pkgs, ... }:
 let
+  pkg = lib.overrideDerivation pkgs.ympd (old: {
+      patches = [ ./ympd-top-next.patch ];
+  });
   mpdHost = "mpd.shack";
   ympd = name: port: let
     webPort = 10000 + port;
@@ -7,7 +10,7 @@ let
     systemd.services."ympd-${name}" = {
       description = "mpd for ${name}";
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.ympd}/bin/ympd --host ${mpdHost} --port ${toString port} --webport ${toString webPort} --user nobody";
+      serviceConfig.ExecStart = "${pkg}/bin/ympd --host ${mpdHost} --port ${toString port} --webport ${toString webPort} --user nobody";
     };
     services.nginx.virtualHosts."mobile.${name}.mpd.shack" = {
       serverAliases = [

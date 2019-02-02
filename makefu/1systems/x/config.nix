@@ -14,10 +14,12 @@
       <stockholm/makefu/2configs/main-laptop.nix>
       <stockholm/makefu/2configs/extra-fonts.nix>
       <stockholm/makefu/2configs/tools/all.nix>
+      <stockholm/makefu/2configs/dict.nix>
 
       <stockholm/makefu/2configs/backup/state.nix>
       # <stockholm/makefu/2configs/dnscrypt/client.nix>
       <stockholm/makefu/2configs/avahi.nix>
+      <stockholm/makefu/2configs/support-nixos.nix>
 
       # Debugging
       # <stockholm/makefu/2configs/disable_v6.nix>
@@ -64,7 +66,7 @@
       <stockholm/makefu/2configs/tor.nix>
       <stockholm/makefu/2configs/vpn/vpngate.nix>
       # <stockholm/makefu/2configs/buildbot-standalone.nix>
-      # <stockholm/makefu/2configs/remote-build/master.nix>
+      <stockholm/makefu/2configs/remote-build/aarch64-community.nix>
 
       # Hardware
       <stockholm/makefu/2configs/hw/tp-x230.nix>

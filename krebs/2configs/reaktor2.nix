@@ -61,7 +61,7 @@ let
       ];
       hooks.PRIVMSG = [
         {
-          pattern = "^bier bal(ance)*$";
+          pattern = "^bier bal(an(ce)?)?$";
           activate = "match";
           command = {
             env = {
@@ -134,6 +134,7 @@ in {
     };
     r = {
       nick = "reaktor2|krebs";
+      sendDelaySec = null;
       plugins = [
         {
           plugin = "register";

@@ -170,32 +170,45 @@ in {
     };
   };
 
-  krebs.Reaktor.playlist = {
-    nickname = "the_playlist|r";
-    channels = [
-      "#the_playlist"
-      "#krebs"
-    ];
-    extraEnviron = {
-      REAKTOR_HOST = "irc.freenode.org";
-    };
-    plugins = with pkgs.ReaktorPlugins; [
-      (buildSimpleReaktorPlugin "skip" {
-        script = "${skip_track}/bin/skip_track";
-        pattern = "^skip$";
-      })
-      (buildSimpleReaktorPlugin "current" {
-        script = "${print_current}/bin/print_current";
-        pattern = "^current$";
-      })
-      (buildSimpleReaktorPlugin "suggest" {
-        script = "${pkgs.writeDash "suggest" ''
-          echo "$@" >> $HOME/playlist_suggest
-        ''}";
-        pattern = "^suggest: (?P<args>.*)$";
-      })
+  krebs.reaktor2.the_playlist = {
+    hostname = "irc.freenode.org";
+    port = "6697";
+    useTLS = true;
+    nick = "the_playlist";
+    plugins = [
+      {
+        plugin = "register";
+        config = {
+          channels = [
+            "#the_playlist"
+            "#krebs"
+          ];
+        };
+      }
+      {
+        plugin = "system";
+        config = {
+          workdir = config.krebs.reaktor2.the_playlist.stateDir;
+          hooks.PRIVMSG = [
+            {
+              activate = "match";
+              pattern = ''!([^ ]+)(?:\s*(.*))?'';
+              command = 1;
+              arguments = [2];
+              commands = {
+                skip.filename = "${skip_track}/bin/skip_track";
+                current.filename = "${print_current}/bin/print_current";
+                suggest.filename = pkgs.writeDash "suggest" ''
+                  echo "$@" >> playlist_suggest
+                '';
+              };
+            }
+          ];
+        };
+      }
     ];
   };
+
   services.nginx = {
     enable = true;
     virtualHosts."radio.lassul.us" = {

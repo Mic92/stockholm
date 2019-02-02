@@ -9,13 +9,19 @@
 
   krebs-source = { test ? false }: rec {
     nixpkgs = if test then {
-      derivation = ''
-        with import <nixpkgs> {};
+      derivation = let
+        rev = (lib.importJSON ./nixpkgs.json).rev;
+        sha256 = (lib.importJSON ./nixpkgs.json).sha256;
+      in ''
+        with import (builtins.fetchTarball {
+          url = "https://github.com/nixos/nixpkgs/archive/${rev}.tar.gz";
+          sha256 = "${sha256}";
+        }) {};
         pkgs.fetchFromGitHub {
           owner = "nixos";
           repo = "nixpkgs";
-          rev = "${(lib.importJSON ./nixpkgs.json).rev}";
-          sha256 = "${(lib.importJSON ./nixpkgs.json).sha256}";
+          rev = "${rev}";
+          sha256 = "${sha256}";
         }
       '';
     } else {

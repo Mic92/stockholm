@@ -32,6 +32,7 @@ in {
               pattern = ''@([^ ]+) (.*)$'';
               command = 1;
               arguments = [2];
+              env.HOME = config.krebs.reaktor2.coders.stateDir;
               commands = let
                 lambdabot = (import (pkgs.fetchFromGitHub {
                   owner = "NixOS"; repo = "nixpkgs";
@@ -46,36 +47,21 @@ in {
                     -e "$@"
                 '';
               in {
-                pl = {
-                  env.HOME = config.krebs.reaktor2.coders.stateDir;
-                  filename = pkgs.writeDash "lambdabot-pl" ''
-                    ${lambdabotWrapper} "@pl $1"
-                  '';
-                };
-                type = {
-                  env.HOME = config.krebs.reaktor2.coders.stateDir;
-                  filename = pkgs.writeDash "lambdabot-type" ''
-                    ${lambdabotWrapper} "@type $1"
-                  '';
-                };
-                "let" = {
-                  env.HOME = config.krebs.reaktor2.coders.stateDir;
-                  filename = pkgs.writeDash "lambdabot-let" ''
-                    ${lambdabotWrapper} "@let $1"
-                  '';
-                };
-                run = {
-                  env.HOME = config.krebs.reaktor2.coders.stateDir;
-                  filename = pkgs.writeDash "lambdabot-run" ''
-                    ${lambdabotWrapper} "@run $1"
-                  '';
-                };
-                kind = {
-                  env.HOME = config.krebs.reaktor2.coders.stateDir;
-                  filename = pkgs.writeDash "lambdabot-kind" ''
-                    ${lambdabotWrapper} "@kind $1"
-                  '';
-                };
+                pl.filename = pkgs.writeDash "lambdabot-pl" ''
+                  ${lambdabotWrapper} "@pl $1"
+                '';
+                type.filename = pkgs.writeDash "lambdabot-type" ''
+                  ${lambdabotWrapper} "@type $1"
+                '';
+                "let".filename = pkgs.writeDash "lambdabot-let" ''
+                  ${lambdabotWrapper} "@let $1"
+                '';
+                run.filename = pkgs.writeDash "lambdabot-run" ''
+                  ${lambdabotWrapper} "@run $1"
+                '';
+                kind.filename = pkgs.writeDash "lambdabot-kind" ''
+                  ${lambdabotWrapper} "@kind $1"
+                '';
               };
             }
             {
