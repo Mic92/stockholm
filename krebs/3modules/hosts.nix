@@ -42,7 +42,7 @@ in {
 
       # hostNetAliases : host -> { ${netname} : [addrAliases] }
       hostNetAliases = host:
-        mapAttrs (_: net: filter (x: x.name != null) [
+        mapAttrs (_: net: filter (x: x.name != null && x.value != []) [
           { name = net.ip4.addr or null; value = net.aliases; }
           { name = net.ip6.addr or null; value = net.aliases; }
         ]) host.nets;
