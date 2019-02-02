@@ -162,7 +162,7 @@ let {
           \ start="." end="$\n"
           \ nextgroup=todoBlock
 
-        syn match todoTag /\[[a-z]\+\]/hs=s+1,he=e-1
+        syn match todoTag /\[[A-Za-z]\+\]/hs=s+1,he=e-1
           \ contained
 
         syn region todoBlock
