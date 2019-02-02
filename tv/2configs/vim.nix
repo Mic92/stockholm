@@ -130,14 +130,14 @@ let {
       '';
     })))
     ((rtp: rtp // { inherit rtp; }) (pkgs.write "vim-syntax-nix-nested" {
-      "/syntax/haskell.vim".text = /* vim */ ''
+      "/syntax/haskell.vim".text = ''
         syn region String start=+\[[[:alnum:]]*|+ end=+|]+
 
         hi link ConId Identifier
         hi link VarId Identifier
         hi link hsDelimiter Delimiter
       '';
-      "/syntax/nix.vim".text = /* vim */ ''
+      "/syntax/nix.vim".text = ''
         "" Quit when a (custom) syntax file was already loaded
         "if exists("b:current_syntax")
         "  finish
@@ -291,6 +291,7 @@ let {
           ];
           yaml = {};
           vim.extraStart = alts [
+            (def ''"[^"]*\.vim"\.text'')
             (writerExt "vim")
             (writerName ''\([^"]*\.\)\?vimrc'')
           ];
@@ -334,7 +335,7 @@ let {
 
         set isk=@,48-57,_,192-255,-,'
       '';
-      "/syntax/sed.vim".text = /* vim */ ''
+      "/syntax/sed.vim".text = ''
         syn region sedBranch
           \ matchgroup=sedFunction start="T"
           \ matchgroup=sedSemicolon end=";\|$"
