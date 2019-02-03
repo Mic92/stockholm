@@ -169,7 +169,7 @@ let {
           \ contained
           \ contains=Comment
           \ fold
-          \ start="^[^1-9]" end="^[1-9]"re=s-1,he=s-1,me=s-1
+          \ start="^[^1-9]" end="^[1-9]"re=s-1,he=s-1,me=s-1
 
         syn sync minlines=1000
 
