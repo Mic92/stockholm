@@ -1,5 +1,5 @@
 with import <stockholm/lib>;
-{ mkDerivation, base, fetchgit, stdenv }: let
+{ mkDerivation, base, fetchgit, hspec, QuickCheck, stdenv, text }: let
 
   cfg = {
     "18.03" = {
@@ -7,8 +7,8 @@ with import <stockholm/lib>;
       sha256 = "1k908zap3694fcxdk4bb29s54b0lhdh557y10ybjskfwnym7szn1";
     };
     "18.09" = {
-      version = "2.1.0";
-      sha256 = "0wc8v48bb0bkvypc0j6imvnf8xc8572hykk9sgjhzf2w0ggqxv5d";
+      version = "2.2.0";
+      sha256 = "1pb56dgf3jj2kq3cbbppwzyg3ccgqy9xara62hkjwyxzdx20clk1";
     };
   }.${versions.majorMinor nixpkgsVersion};
 
@@ -20,7 +20,8 @@ in mkDerivation {
     rev = "refs/tags/v${cfg.version}";
     sha256 = cfg.sha256;
   };
-  libraryHaskellDepends = [ base ];
+  libraryHaskellDepends = [ base text ];
+  testHaskellDepends = [ base hspec QuickCheck ];
   doHaddock = false;
   # WTFPL is the true license, which is unknown to cabal.
   license = stdenv.lib.licenses.wtfpl;
