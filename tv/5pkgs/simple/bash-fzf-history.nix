@@ -35,7 +35,12 @@ with import <stockholm/lib>;
     __fzf_history__() (
       IFS=$'\n'
       result=( $(
+        # To add "unknown timestamps" to each line of the history:
+        # sed -i '/^#[0-9]/{n;b};s/^/#1\n/' "$HISTFILE"
         HISTTIMEFORMAT=$'\e[38;5;244m%Y-%m-%dT%H:%M:%S\e[m  ' history |
+        ${pkgs.gnused}/bin/sed '
+          s/\(\x1b\[[0-9;]*\)244m1970-[0-9T:-]*/\1237m????-??-??T??:??:??/
+        ' |
         FZF_DEFAULT_OPTS="${toString [
           /* sh */ "--ansi"
           /* sh */ "--tac"
