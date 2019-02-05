@@ -33,7 +33,8 @@ with import <stockholm/lib>;
     ]}'
 
     __fzf_history__() (
-      result=$(
+      IFS=$'\n'
+      result=( $(
         HISTTIMEFORMAT= history |
         FZF_DEFAULT_OPTS="${toString [
           /* sh */ "--tac"
@@ -45,15 +46,18 @@ with import <stockholm/lib>;
           /* sh */ "$FZF_DEFAULT_OPTS"
           /* sh */ "+m"
         ]}" \
-        ${pkgs.fzf}/bin/fzf
-      )
+        ${pkgs.fzf}/bin/fzf |
+        ${pkgs.gnused}/bin/sed '
+          /^ *[0-9]/{
+            s/^ *//
+            s/ \+/\n/;# index
+          }
+        '
+      ) )
       if test -n "$result"; then
-        shopt -s extglob
-
-        key=''${result%%$'\n'*}
-        line=''${result##*([^0-9])}
-        index=''${line%%[^0-9]*}
-        command=''${line##*([0-9 ])}
+        key=''${result[0]}
+        index=''${result[1]}
+        command=''${result[2]}
 
         echo "$command${mark-prefix}$key"
       else
