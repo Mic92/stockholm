@@ -35,8 +35,9 @@ with import <stockholm/lib>;
     __fzf_history__() (
       IFS=$'\n'
       result=( $(
-        HISTTIMEFORMAT= history |
+        HISTTIMEFORMAT=$'\e[38;5;244m%Y-%m-%dT%H:%M:%S\e[m  ' history |
         FZF_DEFAULT_OPTS="${toString [
+          /* sh */ "--ansi"
           /* sh */ "--tac"
           /* sh */ "--sync"
           /* sh */ "-n2..,.."
@@ -51,13 +52,15 @@ with import <stockholm/lib>;
           /^ *[0-9]/{
             s/^ *//
             s/ \+/\n/;# index
+            s/ \+/\n/;# date
           }
         '
       ) )
       if test -n "$result"; then
         key=''${result[0]}
         index=''${result[1]}
-        command=''${result[2]}
+        date=''${result[2]}
+        command=''${result[3]}
 
         echo "$command${mark-prefix}$key"
       else
