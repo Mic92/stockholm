@@ -8,6 +8,7 @@ with import <stockholm/lib>;
       HISTCONTROL='erasedups:ignorespace'
       HISTSIZE=65536
       HISTFILESIZE=$HISTSIZE
+      HISTTIMEFORMAT=
 
       shopt -s checkhash
       shopt -s histappend histreedit histverify
