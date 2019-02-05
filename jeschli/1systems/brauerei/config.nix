@@ -109,14 +109,7 @@ in
   # xorg
     xorg.xbacklight
   # tokei
-    tokei = overrideDerivation super.tokei (old: {
-      patches = old.patches or [] ++ [
-        (self.fetchurl {
-          url = https://github.com/4z3/tokei/commit/c27529c.patch;
-          sha256 = "1rdw8bk379cav603ryrb57yfkvk2z8wavfw9prfh01agk3ml693x";
-        })
-      ];
-    });
+    tokei
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
