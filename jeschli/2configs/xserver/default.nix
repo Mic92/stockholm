@@ -51,6 +51,12 @@ in {
         ${pkgs.xorg.xmodmap}/bin/xmodmap ${import ./Xmodmap.nix args} &
         ${pkgs.xorg.xrdb}/bin/xrdb ${import ./Xresources.nix args} &
         ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c' &
+        ${config.services.xserver.displayManager.sessionCommands}
+        if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+          exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" ""
+        fi
+        export DBUS_SESSION_BUS_ADDRESS
+        ${config.systemd.package}/bin/systemctl --user import-environment DISPLAY DBUS_SESSION_BUS_ADDRESS
         wait
       '';
 
