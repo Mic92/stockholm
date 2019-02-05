@@ -18,6 +18,31 @@ with import <stockholm/lib>;
 in {
 
   hosts = mapAttrs hostDefaults {
+    catullus = {
+      owner = config.krebs.users.kmein;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.2.3";
+          aliases = [ "catullus.r" ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA2tRtskPP6391+ZX9xzsx
+            CUotXuqYucYmnUbrRSIlxASVqTmAf3nDOE5EDBBcTdSwnb02JcJW4Zh7+BGgMxjF
+            GxDPs6ETI28mHK+6rp8TOkMnyDb5mtSGVZPvKJU9fFOt6aAX1J1BzTfwtHtVQq7K
+            WBzdpeKXlw4dIQ6K6SGmPIPpEh9pE1Xb+GuVljCXKxGJFbW40dmh2ZdadO7umBDu
+            vRk08jT9/BUnUP6KrZlvyePnG38z6srMrVU+XAHu5D2qZ9y+QIp3kw7Y5JUrNXc7
+            9q9P9TYx15GiIz2mSJKcLVmkLRebsaqdV7dBibPbfdGE+NB+F1FYPGDdW4cnonon
+            DzzjGm/FDfOCXEnSkYGQDBWpfd/8AWum1xGJxJCPNBJElGE2o5jDWo4Y1b9gHP0M
+            vARm8AOK8R1pQ7BP+pNMO0gGw2NDrtWiWpTeZ7SqXmZAZ/Gmyen9X+/fowcbTyDH
+            b9joIuMQeOtxbUV2JprZIdit9NBFSZq/7Re/GBUwjGBm3LabIXFNGKZovx/f9lf8
+            r5tVs4SPauiKzZS0K1Gz1NSq+3OXaY5EwVrBUXptYqRT7uyhVloOPRUsqRFeB0Fn
+            Y5xOpDJ0UiJxgFbdH5Vb81D/VjNO9Q4nZib8wSEuLrYLHGoceQPX4+Ov9IdhIL4B
+            BMTCaF+VCWC5PCLr0e61KqMCAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     dpdkm = {
       owner = config.krebs.users.Mic92;
       nets = rec {
