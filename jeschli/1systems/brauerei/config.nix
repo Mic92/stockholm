@@ -7,6 +7,9 @@ in
     <stockholm/jeschli>
     ./hardware-configuration.nix
     <stockholm/jeschli/2configs/urxvt.nix>
+#    <stockholm/jeschli/2configs/emacs.nix>
+#    <stockholm/jeschli/2configs/xdg.nix>
+#    <stockholm/jeschli/2configs/xserver>
     <stockholm/jeschli/2configs/steam.nix>
     <stockholm/jeschli/2configs/virtualbox.nix>
   ];
@@ -147,8 +150,17 @@ in
         '';
         }
       ];
-    };
+#      xmonad = {
+#        enable = true;
+#        enableContribAndExtras = true;
+#        extraPackages = haskellPackages: [
+#          haskellPackages.xmonad-contrib
+#          haskellPackages.xmonad-extras
+#          haskellPackages.xmonad
+#        ];
+#      }
 
+    };
   };
 
   users.extraUsers.jeschli = { # TODO: define as krebs.users
