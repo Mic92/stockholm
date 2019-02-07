@@ -47,6 +47,9 @@ let {
     disko = {
       cgit.desc = "declarative partitioning and formatting tool";
     };
+    flameshot-once = {
+      cgit.desc = "flameshot runner that automatically starts/stops the daemon";
+    };
     fswm = {
       cgit.desc = "simple full screen window manager";
     };
