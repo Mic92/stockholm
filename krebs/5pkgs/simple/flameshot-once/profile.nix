@@ -60,6 +60,12 @@ let
           default = 8;
           type = types.positive;
         };
+        filenamePattern = mkOption {
+          default = "%FT%T%z_flameshot.png";
+          type =
+            # This is types.filename extended by [%:][%:+]*
+            types.addCheck types.str (test "[%:0-9A-Za-z._][%:+0-9A-Za-z._-]*");
+        };
         savePath = mkOption {
           default = "/tmp";
           type = types.absolute-pathname;
@@ -109,6 +115,7 @@ let
       buttons=@Variant(\0\0\0\x7f\0\0\0\v${toQList "int" cfg.buttons})
       disabledTrayIcon=${toJSON cfg.disabledTrayIcon}
       drawThickness=${toJSON cfg.drawThickness}
+      filenamePattern=${toJSON cfg.filenamePattern}
       savePath=${toJSON cfg.savePath}
       showDesktopNotification=${toJSON cfg.showDesktopNotification}
       showHelp=${toJSON cfg.showHelp}
