@@ -1,8 +1,4 @@
-{-# LANGUAGE DeriveDataTypeable #-} -- for XS
-{-# LANGUAGE FlexibleContexts #-} -- for xmonad'
 {-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-
 
 module Main (main) where
 
