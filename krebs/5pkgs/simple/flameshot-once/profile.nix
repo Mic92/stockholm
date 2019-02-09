@@ -45,7 +45,6 @@ let
             "SELECTIONINDICATOR"
             "MOVESELECTION"
             "UNDO"
-            "COPY"
             "SAVE"
             "EXIT"
             "BLUR"

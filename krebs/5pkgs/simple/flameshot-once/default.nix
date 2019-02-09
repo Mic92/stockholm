@@ -15,6 +15,7 @@ in
         export PATH=${makeBinPath [
           pkgs.flameshot
           pkgs.qt5.qtbase
+          pkgs.xclip
         ]}
         ${optionalString (config != null) /* sh */ ''
           . ${import ./profile.nix { inherit config pkgs; }}
