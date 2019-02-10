@@ -32,6 +32,10 @@ let {
           type = with types; listOf str;
           default = [];
         };
+        filter.Retiolum = mkOption {
+          type = with types; listOf str;
+          default = [];
+        };
       };
     };
   };
