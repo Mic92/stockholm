@@ -97,7 +97,6 @@ with import <stockholm/lib>;
     bind -s | ${pkgs.gnugrep}/bin/grep __fzf_ >&2
   '';
 in
-  script //
-  rec {
+  script.overrideAttrs (old: rec {
     bind = /* sh */ ''bind -x '"${load-keyseq}": . ${script}' '';
-  }
+  })
