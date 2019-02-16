@@ -151,7 +151,7 @@ let {
         setlocal foldmethod=syntax
       '';
       "/syntax/todo.vim".text = ''
-        syn match Comment /#.*/
+        syn match todoComment /#.*/
 
         syn match todoDate /^[1-9]\S*/
           \ nextgroup=todoSummary
@@ -173,6 +173,7 @@ let {
 
         syn sync minlines=1000
 
+        hi link todoComment Comment
         hi todoDate ctermfg=255
         hi todoSummary ctermfg=229
         hi todoBlock ctermfg=248
