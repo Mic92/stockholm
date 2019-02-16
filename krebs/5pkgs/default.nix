@@ -31,9 +31,4 @@ foldl' mergeAttrs {}
     export PROOT_NO_SECCOMP=1
     exec ${super.proot}/bin/proot "$@"
   '';
-
-  # XXX symlinkJoin changed arguments somewhere around nixpkgs d541e0d
-  symlinkJoin = { name, paths, ... }@args: let
-    x = super.symlinkJoin args;
-  in if typeOf x != "lambda" then x else super.symlinkJoin name paths;
 }
