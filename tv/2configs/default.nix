@@ -80,13 +80,6 @@ with import <stockholm/lib>;
         ls = "ls -h --color=auto --group-directories-first";
         dmesg = "dmesg -L --reltime";
         view = "vim -R";
-
-        deploy = pkgs.writeDash "deploy" ''
-          set -eu
-          cd ~/stockholm
-          export SYSTEM="$1"
-          exec nix-shell -I stockholm="$PWD" --run 'deploy --system="$SYSTEM"'
-        '';
       };
 
       environment.variables = {
