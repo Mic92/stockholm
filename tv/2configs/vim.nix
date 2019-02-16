@@ -490,6 +490,8 @@ let {
     inoremap <f1> <esc>:tabp<cr>
     inoremap <f2> <esc>:tabn<cr>
 
+    noremap <f3> :ShowSyntax<cr>
+
     " <C-{Up,Down,Right,Left>
     noremap <esc>Oa <nop> | noremap! <esc>Oa <nop>
     noremap <esc>Ob <nop> | noremap! <esc>Ob <nop>
