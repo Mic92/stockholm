@@ -145,6 +145,11 @@ let
     in
       filter (x: x != []) ([acc.chunk] ++ acc.chunks);
 
+    warnOldVersion = oldName: newName:
+      if compareVersions oldName newName != -1 then
+        trace "Upstream `${oldName}' gets overridden by `${newName}'." newName
+      else
+        newName;
   };
 in
 
