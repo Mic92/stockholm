@@ -347,6 +347,7 @@ let {
             (writerName ''\([^"]*\.\)\?vimrc'')
           ];
           xdefaults = {};
+          xmodmap = {};
         }))}
 
         " Clear syntax that interferes with nixINSIDE_DOLLAR_CURLY.
@@ -391,6 +392,9 @@ let {
           \ matchgroup=sedFunction start="T"
           \ matchgroup=sedSemicolon end=";\|$"
           \ contains=sedWhitespace
+      '';
+      "/syntax/xmodmap.vim".text = ''
+        syn match xmodmapComment /^\s*!.*/
       '';
     }))
   ];
