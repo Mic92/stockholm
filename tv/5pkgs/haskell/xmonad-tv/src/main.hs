@@ -1,8 +1,4 @@
-{-# LANGUAGE DeriveDataTypeable #-} -- for XS
-{-# LANGUAGE FlexibleContexts #-} -- for xmonad'
 {-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-
 
 module Main (main) where
 
@@ -51,7 +47,7 @@ mainNoArgs = do
     let width = 1366
     workspaces0 <- getWorkspaces0
     handleShutdownEvent <- newShutdownEventHandler
-    xmonad
+    launch
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
             { terminal          = Paths.urxvtc

@@ -9,6 +9,37 @@ let {
     config = lib.mkIf cfg.enable imp;
   };
 
+  extraTypes = {
+    rules = types.submodule {
+      options = {
+        nat.OUTPUT = mkOption {
+          type = with types; listOf str;
+          default = [];
+        };
+        nat.PREROUTING = mkOption {
+          type = with types; listOf str;
+          default = [];
+        };
+        nat.POSTROUTING = mkOption {
+          type = with types; listOf str;
+          default = [];
+        };
+        filter.FORWARD = mkOption {
+          type = with types; listOf str;
+          default = [];
+        };
+        filter.INPUT = mkOption {
+          type = with types; listOf str;
+          default = [];
+        };
+        filter.Retiolum = mkOption {
+          type = with types; listOf str;
+          default = [];
+        };
+      };
+    };
+  };
+
   api = {
     enable = mkEnableOption "tv.iptables";
 
@@ -37,19 +68,19 @@ let {
       default = [];
     };
 
-    extra = {
-      nat.POSTROUTING = mkOption {
-        type = with types; listOf str;
-        default = [];
-      };
-      filter.FORWARD = mkOption {
-        type = with types; listOf str;
-        default = [];
-      };
-      filter.INPUT = mkOption {
-        type = with types; listOf str;
-        default = [];
-      };
+    extra = mkOption {
+      default = {};
+      type = extraTypes.rules;
+    };
+
+    extra4 = mkOption {
+      default = {};
+      type = extraTypes.rules;
+    };
+
+    extra6 = mkOption {
+      default = {};
+      type = extraTypes.rules;
     };
   };
 
@@ -112,6 +143,7 @@ let {
         "-o lo -p tcp -m tcp --dport 11423 -j REDIRECT --to-ports 22"
       ]}
       ${formatTable cfg.extra.nat}
+      ${formatTable cfg."extra${toString iptables-version}".nat}
       COMMIT
       *filter
       :INPUT DROP [0:0]
@@ -129,6 +161,7 @@ let {
         ++ ["-i retiolum -j Retiolum"]
       )}
       ${formatTable cfg.extra.filter}
+      ${formatTable cfg."extra${toString iptables-version}".filter}
       ${concatMapStringsSep "\n" (rule: "-A Retiolum ${rule}") ([]
         ++ optional (cfg.accept-echo-request == "retiolum") accept-echo-request
         ++ map accept-tcp (unique (map toString cfg.input-retiolum-accept-tcp))
