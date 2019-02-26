@@ -103,7 +103,9 @@ in
     gotools
   # rust
     cargo
-    rustc
+    rustracer
+    rustup
+    vscode
   # orga tools
     taskwarrior
   # xorg
