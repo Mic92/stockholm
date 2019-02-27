@@ -132,6 +132,7 @@ in {
         retiolum = {
           ip4.addr = "10.243.0.89";
           aliases = [
+            "omo.r"
             "dcpp.omo.r"
             "torrent.omo.r"
           ];
@@ -145,6 +146,7 @@ in {
         retiolum = {
           ip4.addr = "10.243.214.15";
           aliases = [
+            "wbob.r"
             "hydra.wbob.r"
           ];
         };
@@ -206,6 +208,7 @@ in {
           via = internet;
           ip4.addr = "10.243.0.213";
           aliases = [
+            "gum.r"
             "backup.makefu.r"
             "blog.gum.r"
             "blog.makefu.r"
