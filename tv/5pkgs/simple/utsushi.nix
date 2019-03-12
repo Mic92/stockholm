@@ -172,6 +172,7 @@ stdenv.mkDerivation rec {
     "--with-boost=${boost}"
     "--with-magick"
     "--with-magick-pp"
+    "--with-udev-confdir=$(out)/etc/udev"
   ]
   ++ stdenv.lib.optionals guiSupport [
     "--with-gtkmm"
