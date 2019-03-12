@@ -5,128 +5,103 @@
 with import <stockholm/lib>;
 { config, ... }: let
 
-  hostDefaults = hostName: host: flip recursiveUpdate host ({
-    owner = config.krebs.users.makefu;
-  } // optionalAttrs (host.nets?retiolum) {
-    nets.retiolum.ip6.addr =
-      (krebs.genipv6 "retiolum" "makefu" { inherit hostName; }).address;
-  });
+  hostDefaults = hostName: host: foldl' recursiveUpdate {} [
+    {
+      owner = config.krebs.users.makefu;
+    }
+    # Retiolum defaults
+    (let
+      pubkey-path = ./retiolum + "/${hostName}.pub";
+    in optionalAttrs (pathExists pubkey-path) {
+      nets.retiolum = {
+        tinc.pubkey = readFile pubkey-path;
+        aliases = [
+          "${hostName}.r"
+        ];
+        ip6.addr =
+          (krebs.genipv6 "retiolum" "makefu" { inherit hostName; }).address;
+      };
+    })
+    # Wiregrill defaults
+    (let
+      pubkey-path = ./wiregrill + "/${hostName}.pub";
+    in optionalAttrs (pathExists pubkey-path) {
+      nets.wiregrill = {
+        aliases = [
+          "${hostName}.w"
+        ];
+        ip6.addr =
+          (krebs.genipv6 "wiregrill" "makefu" { inherit hostName; }).address;
+        wireguard.pubkey = readFile pubkey-path;
+      };
+    })
+    # SSHD defaults
+    (let
+      pubkey-path = ./sshd + "/${hostName}.pub";
+    in optionalAttrs (pathExists pubkey-path) {
+      ssh.pubkey = readFile pubkey-path;
+      # We assume that if the sshd pubkey exits then there must be a privkey in
+      # the screts store as well
+      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+    })
+    host
+  ];
 
   pub-for = name: builtins.readFile (./ssh + "/${name}.pub");
-  sshd-for = name: builtins.readFile (./sshd + "/${name}.pub");
-  tinc-for= name: builtins.readFile (./tinc + "/${name}.pub");
-
+  w6 = ip: (krebs.genipv6 "wiregrill" "makefu" ip).address;
 in {
   hosts = mapAttrs hostDefaults {
     cake = rec {
       cores = 4;
       ci = false;
       nets = {
-        retiolum = {
-          ip4.addr = "10.243.136.236";
-          aliases = [
-            "cake.r"
-          ];
-          tinc.pubkey = tinc-for "cake";
-        };
+        retiolum.ip4.addr = "10.243.136.236";
       };
-      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
-      ssh.pubkey = sshd-for "cake";
     };
     crapi = rec { # raspi1
       cores = 1;
       ci = false;
       nets = {
-        retiolum = {
-          ip4.addr = "10.243.136.237";
-          aliases = [
-            "crapi.r"
-          ];
-          tinc.pubkey = tinc-for "crapi";
-        };
+        retiolum.ip4.addr = "10.243.136.237";
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = sshd-for "crapi";
     };
     firecracker = {
       cores = 4;
       nets = {
-        retiolum = {
-          ip4.addr = "10.243.12.12";
-          ip6.addr = "42:0:0:0:0:0:0:12";
-          aliases = [
-            "firecracker.r"
-          ];
-          tinc.pubkey = tinc-for "firecracker";
-        };
+        retiolum.ip4.addr = "10.243.12.12";
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = sshd-for "firecracker";
     };
 
     studio = rec {
       ci = false;
       cores = 4;
-      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
-      ssh.pubkey = sshd-for "studio";
       nets = {
-        retiolum = {
-          ip4.addr = "10.243.227.163";
-          aliases = [
-            "studio.r"
-          ];
-          tinc.pubkey = tinc-for "studio";
-        };
+        retiolum.ip4.addr = "10.243.227.163";
       };
     };
     fileleech = rec {
       ci = false;
       cores = 4;
-      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
-      ssh.pubkey = "";
       nets = {
-        retiolum = {
-          ip4.addr = "10.243.113.98";
-          aliases = [
-            "fileleech.r"
-          ];
-          tinc.pubkey = tinc-for "fileleech";
-        };
+        retiolum.ip4.addr = "10.243.113.98";
       };
     };
     tsp = {
       ci = true;
       cores = 1;
       nets = {
-        retiolum = {
-          ip4.addr = "10.243.0.212";
-          aliases = [
-            "tsp.r"
-          ];
-          tinc.pubkey = tinc-for "tsp";
-        };
+        retiolum.ip4.addr = "10.243.0.212";
       };
     };
     x = {
       ci = true;
       cores = 4;
       nets = {
-        retiolum = {
-          ip4.addr = "10.243.0.91";
-          aliases = [
-            "x.r"
-          ];
-          tinc.pubkey = tinc-for "x";
+        retiolum.ip4.addr = "10.243.0.91";
+        wiregrill = {
+          # defaults
         };
-        #wiregrill = {
-        #  aliases = [
-        #    "x.w"
-        #  ];
-        #  wireguard.pubkey = "fe5smvKVy5GAn7EV4w4tav6mqIAKhGWQotm7dRuRt1g=";
-        #};
       };
-      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
-      ssh.pubkey = sshd-for "x";
 
     };
     filepimp = rec {
@@ -139,13 +114,7 @@ in {
             "filepimp.lan"
           ];
         };
-        retiolum = {
-          ip4.addr = "10.243.153.102";
-          aliases = [
-            "filepimp.r"
-          ];
-          tinc.pubkey = tinc-for "filepimp";
-        };
+        retiolum.ip4.addr = "10.243.153.102";
       };
     };
 
@@ -167,11 +136,8 @@ in {
             "dcpp.omo.r"
             "torrent.omo.r"
           ];
-          tinc.pubkey = tinc-for "omo";
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = sshd-for "omo";
     };
     wbob = rec {
       ci = true;
@@ -183,11 +149,8 @@ in {
             "wbob.r"
             "hydra.wbob.r"
           ];
-          tinc.pubkey = tinc-for "wbob";
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = sshd-for "wbob";
     };
     gum = rec {
       ci = true;
@@ -231,17 +194,21 @@ in {
             "nextgum.i"
           ];
         };
-        #wiregrill = {
-        #  via = internet;
-        #  aliases = [
-        #    "gum.w"
-        #  ];
-        #  wireguard.pubkey = "yAKvxTvcEVdn+MeKsmptZkR3XSEue+wSyLxwcjBYxxo=";
-        #};
+        wiregrill = {
+          via = internet;
+          ip6.addr = w6 "1";
+          wireguard = {
+            subnets = [
+              (krebs.genipv6 "wiregrill" "external" 0).subnetCIDR
+              (krebs.genipv6 "wiregrill" "makefu" 0).subnetCIDR
+            ];
+          };
+        };
         retiolum = {
           via = internet;
           ip4.addr = "10.243.0.213";
           aliases = [
+            "gum.r"
             "backup.makefu.r"
             "blog.gum.r"
             "blog.makefu.r"
@@ -250,7 +217,6 @@ in {
             "dcpp.gum.r"
             "dcpp.nextgum.r"
             "graph.r"
-            "gum.r"
             "logs.makefu.r"
             "netdata.makefu.r"
             "nextgum.r"
@@ -262,25 +228,15 @@ in {
             "wiki.gum.r"
             "wiki.makefu.r"
           ];
-          tinc.pubkey = tinc-for "gum";
         };
       };
-      ssh.pubkey = sshd-for "gum";
     };
 
     sdev = rec {
       ci = true;
       cores = 1;
-      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
-      ssh.pubkey = sshd-for "sdev";
       nets = {
-        retiolum = {
-          ip4.addr = "10.243.83.237";
-          aliases = [
-            "sdev.r"
-          ];
-          tinc.pubkey = tinc-for "sdev";
-        };
+        retiolum.ip4.addr = "10.243.83.237";
       };
     };
 
@@ -304,10 +260,6 @@ in {
         };
         retiolum = {
           ip4.addr = "10.243.211.172";
-          aliases = [
-            "flap.r"
-          ];
-          tinc.pubkey = tinc-for "flap";
         };
       };
     };
@@ -317,10 +269,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.231.219";
-          aliases = [
-            "nukular.r"
-          ];
-          tinc.pubkey = tinc-for "nukular";
         };
       };
     };
@@ -330,10 +278,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.189.130";
-          aliases = [
-            "filebitch.r"
-          ];
-          tinc.pubkey = tinc-for "filebitch";
         };
       };
     };
@@ -343,10 +287,6 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.163";
-          aliases = [
-            "senderechner.r"
-          ];
-          tinc.pubkey = tinc-for "senderechner";
         };
       };
     };
