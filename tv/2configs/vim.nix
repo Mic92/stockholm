@@ -151,7 +151,7 @@ let {
         setlocal foldmethod=syntax
       '';
       "/syntax/todo.vim".text = ''
-        syn match Comment /#.*/
+        syn match todoComment /#.*/
 
         syn match todoDate /^[1-9]\S*/
           \ nextgroup=todoSummary
@@ -173,6 +173,7 @@ let {
 
         syn sync minlines=1000
 
+        hi link todoComment Comment
         hi todoDate ctermfg=255
         hi todoSummary ctermfg=229
         hi todoBlock ctermfg=248
@@ -346,6 +347,7 @@ let {
             (writerName ''\([^"]*\.\)\?vimrc'')
           ];
           xdefaults = {};
+          xmodmap = {};
         }))}
 
         " Clear syntax that interferes with nixINSIDE_DOLLAR_CURLY.
@@ -390,6 +392,9 @@ let {
           \ matchgroup=sedFunction start="T"
           \ matchgroup=sedSemicolon end=";\|$"
           \ contains=sedWhitespace
+      '';
+      "/syntax/xmodmap.vim".text = ''
+        syn match xmodmapComment /^\s*!.*/
       '';
     }))
   ];
@@ -484,6 +489,8 @@ let {
     nnoremap <f2> :tabn<cr>
     inoremap <f1> <esc>:tabp<cr>
     inoremap <f2> <esc>:tabn<cr>
+
+    noremap <f3> :ShowSyntax<cr>
 
     " <C-{Up,Down,Right,Left>
     noremap <esc>Oa <nop> | noremap! <esc>Oa <nop>

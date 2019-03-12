@@ -76,6 +76,9 @@ in {
   users = {
     palo = {
     };
+    palo-pepe = {
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCe3j1dk8o7e0cFn+RepOjdeYcS0YcG0d6NnsMoq8pjqzLRuvOVN4CmsuRo4UJtWOUVv8kIWLcegks2RXbKOSTFAnvEIpPlSmL3BgvFGmUiOmPw1w93yxdVnfd9kJ6SBNuS+kFspKPvOEV9yVpjTywKZ0qKWjRd89Vz2+8aFJ/R3hyE+YqpzlzYbrucEIXbEWESqnzrx61NrWwd1ueHj0RYMDBjIJjVfIIK3W32vQ//pYJio1di0PpOPK2Ya0yugSixymuQBvzCgaedVeLdJ0k1d7d5iVb4LjCR8zg0Jnf1RLfpqRrFYwMJpwuhtIEevfNrhzqZA58QgHO6iOg50FeaD5k1rlWfoOvX2rcV5iqCC9jClIfMKzePdm+MeVorBXp+bflOhyPJG+Qrz6NTE9Ohe5A71Z0bBa96MEoW1hyrLCn0+z+Cx5kt7n2QzAAa/VPNjRDZeHbsu26MrvViEoh+FcPqx4DUIUaDRs/TNIvMGAl14E6gur68AI01a0PZJ/gnqZeOJKuyz4pKT0nIcg0EvkjXM2uEJ9m8h4IBAqTUYMZYm7iJBfpbwT6ePxFfah4q960orBUwW87CyPu/wDGmDblQ7dpkuw+skpzNgOGzerDyGAGKOsjGfYZpqsv9303S2f7884NAIK1ohgpMELytEYpY4YNi2KQYfHhgoQRJ5w== palo@pepe";
+    };
   };
 }
 

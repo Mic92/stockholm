@@ -60,7 +60,7 @@ let
           type = types.positive;
         };
         filenamePattern = mkOption {
-          default = "%FT%T%z_flameshot.png";
+          default = "%FT%T%z_flameshot";
           type =
             # This is types.filename extended by [%:][%:+]*
             types.addCheck types.str (test "[%:0-9A-Za-z._][%:+0-9A-Za-z._-]*");
