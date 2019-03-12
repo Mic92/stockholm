@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://support.epson.net/linux/src/scanner/imagescanv3/debian/imagescan_${meta.version}.orig.tar.gz";
-    sha256 = "12mzq3wc8gzdma84pjs5gb0gp8mga13wax5g7vjfrzq8pjyqrnmw";
+    sha256 = "1gmiimwkcyzbkfr25vzqczjhgh90fgxd96agbnkpf9gah1mpd6qj";
   };
 
   preConfigure = ''
@@ -203,6 +203,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.tv ];
     platforms = stdenv.lib.platforms.linux;
-    version = "3.48.0";
+    version = "3.54.0";
   };
 }
