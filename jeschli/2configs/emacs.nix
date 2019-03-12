@@ -15,6 +15,7 @@ let
       (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
     (package-initialize)
   '';
+
   evilMode = ''
     ;; Evil Mode
     (require 'evil)
@@ -25,6 +26,22 @@ let
     ;; (require 'evil-org-agenda)
     ;; (evil-org-agenda-set-keys)
   '';
+
+  goMode = ''
+    (add-to-list 'exec-path "~/go/bin")
+    (add-hook 'go-mode-hook
+    (lambda ()
+      (setq-default)
+      (setq tab-width 2)
+      (setq standard-indent 2)
+      (setq indent-tabs-mode nil)))
+  '';
+
+  ido = ''
+    (require 'ido)
+    (ido-mode t)
+  '';
+
   windowCosmetics = ''
     (menu-bar-mode -1)
     (tool-bar-mode -1)                  ; Disable the button bar atop screen
@@ -37,46 +54,68 @@ let
     (setq visible-bell nil)             ; Disable annoying visual bell graphic
     (setq ring-bell-function 'ignore)   ; Disable super annoying audio bell
   '';
+
   orgMode = ''
     (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
     (global-set-key "\C-cl" 'org-store-link)
     (global-set-key "\C-ca" 'org-agenda)
     (global-set-key "\C-cb" 'org-iswitchb)
+    (global-set-key "\C-c L" 'org-insert-link-global)
+    (global-set-key "\C-c o" 'org-open-at-point-global)
     (setq org-link-frame-setup '((file . find-file))) ; open link in same frame.
     (if (boundp 'org-user-agenda-files)
       (setq org-agenda-files org-user-agenda-files)
       (setq org-agenda-files (quote ("~/projects/notes")))
     )
   '';
+
   theme = ''
-    (load-theme 'monokai-alt)
+    (load-theme 'monokai-alt t)
   '';
+
   recentFiles = ''
     (recentf-mode 1)
     (setq recentf-max-menu-items 25)
     (global-set-key "\C-x\ \C-r" 'recentf-open-files)
   '';
+
   dotEmacs = pkgs.writeText "dot-emacs" ''
     ${evilMode}
+    ${goMode}
+    ${ido}
     ${packageRepos}
     ${orgMode}
     ${recentFiles}
     ${theme}
     ${windowCosmetics}
   '';
+
   emacsWithCustomPackages = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: [
+    epkgs.melpaPackages.ag
     epkgs.melpaPackages.evil
     epkgs.melpaStablePackages.magit
     epkgs.melpaPackages.nix-mode
     epkgs.melpaPackages.go-mode
+    epkgs.melpaPackages.haskell-mode
     epkgs.melpaPackages.google-this
     epkgs.melpaPackages.monokai-alt-theme
+    epkgs.melpaPackages.rust-mode
   ]);
+
   myEmacs = pkgs.writeDashBin "my-emacs" ''
     exec ${emacsWithCustomPackages}/bin/emacs -q -l ${dotEmacs} "$@"
   '';
+
+  myEmacsWithDaemon = pkgs.writeDashBin "my-emacs-daemon" ''
+    exec ${emacsWithCustomPackages}/bin/emacs -q -l ${dotEmacs} --daemon
+  '';
+
+  myEmacsClient = pkgs.writeDashBin "meclient" ''
+    exec ${emacsWithCustomPackages}/bin/emacsclient --create-frame
+  '';
+
 in {
   environment.systemPackages = [
-    myEmacs
+    myEmacs myEmacsWithDaemon myEmacsClient
   ];
 }
