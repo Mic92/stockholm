@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with import <stockholm/lib>;
-
+with lib;
 let
   cfg = config.krebs.power-action;
 
