@@ -8,6 +8,7 @@ with import <stockholm/lib>;
       HISTCONTROL='erasedups:ignorespace'
       HISTSIZE=65536
       HISTFILESIZE=$HISTSIZE
+      HISTTIMEFORMAT=
 
       shopt -s checkhash
       shopt -s histappend histreedit histverify
@@ -27,6 +28,8 @@ with import <stockholm/lib>;
           export NIX_PATH="stockholm=$HOME/stockholm:$NIX_PATH"
         ;;
       esac
+
+      ${pkgs.bash-fzf-history.bind}
     '';
     promptInit = /* sh */ ''
       case $UID in

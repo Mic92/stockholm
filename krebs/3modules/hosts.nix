@@ -1,6 +1,5 @@
 with import <stockholm/lib>;
 { config, ... }: let
-  # TODO dedup functions with ./retiolum-hosts.nix
   check = hostname: any (domain: hasSuffix ".${domain}" hostname) domains;
   domains = attrNames (filterAttrs (_: eq "hosts") config.krebs.dns.providers);
 in {
@@ -30,6 +29,66 @@ in {
                   map (addr: { ${addr} = aliases; }) net.addrs)
                 (attrValues host.nets))
             (attrValues config.krebs.hosts)));
+
+    nixpkgs.config.packageOverrides = super: let
+      # nameValuePair name value : { "name" : name, "value" : value }
+
+      # addr : str
+      # aliase : str
+      # hostname : str
+      # netname : str
+
+      # addrAliases : nameValuePair addr [alias]
+
+      # hostNetAliases : host -> { ${netname} : [addrAliases] }
+      hostNetAliases = host:
+        mapAttrs (_: net: filter (x: x.name != null && x.value != []) [
+          { name = net.ip4.addr or null; value = net.aliases; }
+          { name = net.ip6.addr or null; value = net.aliases; }
+        ]) host.nets;
+
+      # netAliases : { ${netname} : [addrAliases] }
+      netAliases =
+        foldl'
+          (result: host:
+            foldl'
+              # λ netAliases -> [addrAliases] -> netAliases
+              (result: { name, value }: result // {
+                ${name} = result.${name} or [] ++ value;
+              })
+              result
+              (mapAttrsToList nameValuePair (hostNetAliases host))
+          )
+          {}
+          (attrValues config.krebs.hosts);
+
+      # writeHosts : str -> [addrAliases] -> package
+      writeHosts = name: addrAliases: super.writeText name ''
+        ${concatMapStringsSep
+            "\n"
+            ({ name, value }: "${name} ${toString value}")
+            addrAliases}
+      '';
+    in
+      {
+        # hosts file for all krebs networks
+        krebs-hosts =
+          writeHosts "krebs-hosts" (concatLists [
+            netAliases.internet
+            netAliases.retiolum
+            netAliases.wiregrill
+          ]);
+
+        # combined hosts file for all networks (even custom ones)
+        krebs-hosts_combined =
+          writeHosts "krebs-hosts_combined"
+            (concatLists (attrValues netAliases));
+      }
+      //
+      genAttrs' (attrNames netAliases) (netname: rec {
+        name = "krebs-hosts-${netname}";
+        value = writeHosts name netAliases.${netname};
+      });
   };
 
 }

@@ -129,15 +129,66 @@ let {
         command! -n=0 -bar ShowSyntax :call ShowSyntax()
       '';
     })))
+    ((rtp: rtp // { inherit rtp; }) (pkgs.write "vim-tv" {
+      #
+      # Haskell
+      #
+      "/ftplugin/haskell.vim".text = ''
+        if exists("g:vim_tv_ftplugin_haskell_loaded")
+          finish
+        endif
+        let g:vim_tv_ftplugin_haskell_loaded = 1
+
+        setlocal iskeyword+='
+      '';
+      #
+      # TODO
+      #
+      "/ftdetect/todo.vim".text = ''
+        au BufRead,BufNewFile TODO set ft=todo
+      '';
+      "/ftplugin/todo.vim".text = ''
+        setlocal foldmethod=syntax
+      '';
+      "/syntax/todo.vim".text = ''
+        syn match todoComment /#.*/
+
+        syn match todoDate /^[1-9]\S*/
+          \ nextgroup=todoSummary
+
+        syn region todoSummary
+          \ contained
+          \ contains=todoTag
+          \ start="." end="$\n"
+          \ nextgroup=todoBlock
+
+        syn match todoTag /\[[A-Za-z]\+\]/hs=s+1,he=e-1
+          \ contained
+
+        syn region todoBlock
+          \ contained
+          \ contains=Comment
+          \ fold
+          \ start="^[^1-9]" end="^[1-9]"re=s-1,he=s-1,me=s-1
+
+        syn sync minlines=1000
+
+        hi link todoComment Comment
+        hi todoDate ctermfg=255
+        hi todoSummary ctermfg=229
+        hi todoBlock ctermfg=248
+        hi todoTag ctermfg=217
+      '';
+    }))
     ((rtp: rtp // { inherit rtp; }) (pkgs.write "vim-syntax-nix-nested" {
-      "/syntax/haskell.vim".text = /* vim */ ''
+      "/syntax/haskell.vim".text = ''
         syn region String start=+\[[[:alnum:]]*|+ end=+|]+
 
         hi link ConId Identifier
         hi link VarId Identifier
         hi link hsDelimiter Delimiter
       '';
-      "/syntax/nix.vim".text = /* vim */ ''
+      "/syntax/nix.vim".text = ''
         "" Quit when a (custom) syntax file was already loaded
         "if exists("b:current_syntax")
         "  finish
@@ -250,6 +301,9 @@ let {
           def = k: ''${k}[ \t\r\n]*='';
           writer = k: ''write${k}[^ \t\r\n]*[ \t\r\n]*\("[^"]*"\|[a-z]\+\)'';
 
+          writerExt = k: writerName ''[^"]*\.${k}'';
+          writerName = k: ''write[^ \t\r\n]*[ \t\r\n]*"${k}"'';
+
         in {
           c = {};
           cabal = {};
@@ -257,7 +311,7 @@ let {
           haskell = {};
           jq.extraStart = alts [
             (writer "Jq")
-            ''write[^ \t\r\n]*[ \t\r\n]*"[^"]*\.jq"''
+            (writerExt "jq")
           ];
           javascript.extraStart = ''/\* js \*/'';
           lua = {};
@@ -287,9 +341,13 @@ let {
             (writer (alts (map capitalize shells)))
           ];
           yaml = {};
-          vim.extraStart =
-            ''write[^ \t\r\n]*[ \t\r\n]*"\(\([^"]*\.\)\?vimrc\|[^"]*\.vim\)"'';
+          vim.extraStart = alts [
+            (def ''"[^"]*\.vim"\.text'')
+            (writerExt "vim")
+            (writerName ''\([^"]*\.\)\?vimrc'')
+          ];
           xdefaults = {};
+          xmodmap = {};
         }))}
 
         " Clear syntax that interferes with nixINSIDE_DOLLAR_CURLY.
@@ -329,11 +387,14 @@ let {
 
         set isk=@,48-57,_,192-255,-,'
       '';
-      "/syntax/sed.vim".text = /* vim */ ''
+      "/syntax/sed.vim".text = ''
         syn region sedBranch
           \ matchgroup=sedFunction start="T"
           \ matchgroup=sedSemicolon end=";\|$"
           \ contains=sedWhitespace
+      '';
+      "/syntax/xmodmap.vim".text = ''
+        syn match xmodmapComment /^\s*!.*/
       '';
     }))
   ];
@@ -428,6 +489,8 @@ let {
     nnoremap <f2> :tabn<cr>
     inoremap <f1> <esc>:tabp<cr>
     inoremap <f2> <esc>:tabn<cr>
+
+    noremap <f3> :ShowSyntax<cr>
 
     " <C-{Up,Down,Right,Left>
     noremap <esc>Oa <nop> | noremap! <esc>Oa <nop>
