@@ -86,6 +86,12 @@ rec {
         type = nullOr ssh-privkey;
         default = null;
       };
+
+      syncthing.id = mkOption {
+        # TODO syncthing id type
+        type = nullOr string;
+        default = null;
+      };
     };
   });
 
