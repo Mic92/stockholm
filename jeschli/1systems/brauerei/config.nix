@@ -145,9 +145,10 @@ in
         '';
         }
       ];
-
     };
   };
+
+  services.xserver.windowManager.i3.enable = true;
 
   users.extraUsers.jeschli = { # TODO: define as krebs.users
     isNormalUser = true;
