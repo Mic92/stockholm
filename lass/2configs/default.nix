@@ -218,4 +218,7 @@ with import <stockholm/lib>;
   networking.dhcpcd.extraConfig = ''
     noipv4ll
   '';
+  services.netdata = {
+    enable = true;
+  };
 }
