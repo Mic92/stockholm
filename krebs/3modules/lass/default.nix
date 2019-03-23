@@ -485,6 +485,7 @@ in {
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSBxtPf8yJfzzI7/iYpoRSc/TT+zYmE/HM9XWS3MZlv";
+      syncthing.id = "J2LMIPD-PBEPVKL-A3MN6NQ-KL6DZ4N-K4GGWZB-E2EPLFN-PDLVAOC-DCSZHAD";
     };
     phone = {
       nets = {
