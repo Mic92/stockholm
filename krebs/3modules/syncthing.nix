@@ -28,6 +28,8 @@ let
 
   updateConfig = pkgs.writeDash "merge-syncthing-config" ''
     set -efu
+    # wait for service to restart
+    ${pkgs.untilport}/bin/untilport localhost 8384
     API_KEY=$(${getApiKey})
     CFG=$(${pkgs.curl}/bin/curl -Ss -H "X-API-Key: $API_KEY" localhost:8384/rest/system/config)
     echo "$CFG" | ${pkgs.jq}/bin/jq -s '.[] * {
