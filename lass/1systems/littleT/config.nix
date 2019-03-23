@@ -7,6 +7,7 @@ with import <stockholm/lib>;
 
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/blue-host.nix>
+    <stockholm/lass/2configs/syncthing.nix>
   ];
 
   networking.networkmanager.enable = true;
