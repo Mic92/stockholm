@@ -499,6 +499,7 @@ in {
       };
       external = true;
       ci = false;
+      syncthing.id = "V6D4CKT-7POOIKX-KB6UM7R-3R774RB-DSZ26FE-MSW3VTO-6AIJCIA-ZHJXKA7";
     };
     morpheus = {
       cores = 1;
