@@ -97,7 +97,7 @@ in
 
           rescanInterval = mkOption {
             type = types.int;
-            default = 60;
+            default = 3600;
           };
 
           type = mkOption {
