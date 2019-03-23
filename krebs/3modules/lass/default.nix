@@ -368,10 +368,18 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wiregrill = {
+          ip6.addr = w6 "771e";
+          aliases = [
+            "littleT.w"
+          ];
+          wireguard.pubkey = "VfSTPO1XGqLqujAGCov1yA0WxyRXJndZCW5XYkScNXg=";
+        };
       };
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJzb9BPFClubs6wSOi/ivqPFVPlowXwAxBS0jHaB29hX";
+      syncthing.id = "PCDXICO-GMGWKSB-V6CYF3I-LQMZSGV-B7YBJXA-DVO7KXN-TFCSQXW-XY6WNQD";
     };
     red = {
       monitoring = false;
