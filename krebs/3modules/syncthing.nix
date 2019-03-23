@@ -15,6 +15,9 @@ let
     id = folder.path;
     devices = map (peer: { deviceId = cfg.peers.${peer}.id; }) folder.peers;
     rescanIntervalS = folder.rescanInterval;
+    fsWatcherEnabled = folder.watch;
+    fsWatcherDelayS = folder.watchDelay;
+    ignorePerms = folder.ignorePerms;
   }) cfg.folders;
 
   getApiKey = pkgs.writeDash "getAPIKey" ''
@@ -98,6 +101,21 @@ in
           type = mkOption {
             type = types.enum [ "sendreceive" "sendonly" "receiveonly" ];
             default = "sendreceive";
+          };
+
+          watch = mkOption {
+            type = types.bool;
+            default = true;
+          };
+
+          watchDelay = mkOption {
+            type = types.int;
+            default = 10;
+          };
+
+          ignorePerms = mkOption {
+            type = types.bool;
+            default = true;
           };
 
         };
