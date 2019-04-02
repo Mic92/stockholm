@@ -13,15 +13,6 @@ foldl' mergeAttrs {}
 //
 
 {
-  # https://github.com/NixOS/nixpkgs/pull/30065
-  brscan4 = overrideDerivation super.brscan4 (original: rec {
-    name = "brscan4-0.4.4-4";
-    src = super.fetchurl {
-      url = "http://download.brother.com/welcome/dlf006645/${name}.amd64.deb";
-      sha256 = "0xy5px96y1saq9l80vwvfn6anr2q42qlxdhm6ci2a0diwib5q9fd";
-    };
-  });
-
   reaktor2 = self.haskellPackages.reaktor2;
 
   ReaktorPlugins = self.callPackage ./simple/Reaktor/plugins.nix {};
@@ -31,9 +22,4 @@ foldl' mergeAttrs {}
     export PROOT_NO_SECCOMP=1
     exec ${super.proot}/bin/proot "$@"
   '';
-
-  # XXX symlinkJoin changed arguments somewhere around nixpkgs d541e0d
-  symlinkJoin = { name, paths, ... }@args: let
-    x = super.symlinkJoin args;
-  in if typeOf x != "lambda" then x else super.symlinkJoin name paths;
 }

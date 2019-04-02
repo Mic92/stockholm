@@ -8,6 +8,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/exim-retiolum.nix>
 
     <stockholm/lass/2configs/blue.nix>
+    <stockholm/lass/2configs/syncthing.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.blue;

@@ -86,6 +86,12 @@ rec {
         type = nullOr ssh-privkey;
         default = null;
       };
+
+      syncthing.id = mkOption {
+        # TODO syncthing id type
+        type = nullOr string;
+        default = null;
+      };
     };
   });
 
@@ -539,7 +545,7 @@ rec {
   # POSIX.1‐2013, 3.278 Portable Filename Character Set
   filename = mkOptionType {
     name = "POSIX filename";
-    check = test "([0-9A-Za-z._])[0-9A-Za-z._-]*";
+    check = test "[0-9A-Za-z._][0-9A-Za-z._-]*";
     merge = mergeOneOption;
   };
 

@@ -17,6 +17,7 @@
     <stockholm/lass/2configs/backup.nix>
     <stockholm/lass/2configs/wine.nix>
     <stockholm/lass/2configs/blue-host.nix>
+    <stockholm/lass/2configs/syncthing.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.icarus;

@@ -48,10 +48,24 @@ in {
 
   systemd.services.xmonad = let
     xmonad = "${pkgs.haskellPackages.xmonad-tv}/bin/xmonad";
-    xmonad-prepare = pkgs.writeDash "xmonad-prepare" ''
+    xmonad-start = pkgs.writeDash "xmonad-start" ''
       ${pkgs.coreutils}/bin/mkdir -p "$XMONAD_CACHE_DIR"
       ${pkgs.coreutils}/bin/mkdir -p "$XMONAD_CONFIG_DIR"
       ${pkgs.coreutils}/bin/mkdir -p "$XMONAD_DATA_DIR"
+
+      f=$HOME/.dbus/session-bus/$(${pkgs.coreutils}/bin/cat /etc/machine-id)-${
+        toString config.services.xserver.display
+      }
+      if test -e "$f" &&
+          . "$f" &&
+          ${pkgs.coreutils}/bin/kill -0 "$DBUS_SESSION_BUS_PID"
+      then
+        export DBUS_SESSION_BUS_ADDRESS
+      else
+        eval "$(${pkgs.dbus.lib}/bin/dbus-launch --sh-syntax)"
+      fi
+
+      exec ${xmonad}
     '';
     xmonad-ready = pkgs.writeDash "xmonad-ready" ''
       {
@@ -97,8 +111,7 @@ in {
       "/run/wrappers" # for su
     ];
     serviceConfig = {
-      ExecStartPre = "@${xmonad-prepare} xmonad-prepare";
-      ExecStart = "@${xmonad} xmonad-${currentSystem}";
+      ExecStart = "@${xmonad-start} xmonad-${currentSystem}";
       ExecStop = "@${xmonad} xmonad-${currentSystem} --shutdown";
       SyslogIdentifier = "xmonad";
       User = cfg.user.name;

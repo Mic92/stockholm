@@ -45,10 +45,10 @@ let
       ./reaktor2.nix
       ./realwallpaper.nix
       ./retiolum-bootstrap.nix
-      ./retiolum-hosts.nix
       ./rtorrent.nix
       ./secret.nix
       ./setuid.nix
+      ./syncthing.nix
       ./tinc.nix
       ./tinc_graphs.nix
       ./urlwatch.nix
@@ -101,6 +101,7 @@ let
     { krebs = import ./krebs  { inherit config; }; }
     { krebs = import ./lass   { inherit config; }; }
     { krebs = import ./makefu { inherit config; }; }
+    { krebs = import ./external/palo.nix { inherit config; }; }
     { krebs = import ./tv     { inherit config; }; }
     {
       krebs.dns.providers = {

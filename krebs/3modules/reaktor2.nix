@@ -33,6 +33,10 @@ with import <stockholm/lib>;
           default = "reaktor2${optionalString (name != "default") "-${name}"}";
           type = types.filename;
         };
+        sendDelaySec = mkOption {
+          default = 0.7;
+          type = types.nullOr types.float;
+        };
         username = mkOption {
           default = self.config.systemd-service-name;
           type = types.username;

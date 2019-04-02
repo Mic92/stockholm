@@ -7,6 +7,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/blue-host.nix>
     <stockholm/lass/2configs/power-action.nix>
+    <stockholm/lass/2configs/syncthing.nix>
     {
       services.xserver.enable = true;
       services.xserver.desktopManager.xfce.enable = true;

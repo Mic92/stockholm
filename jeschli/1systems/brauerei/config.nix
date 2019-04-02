@@ -103,7 +103,9 @@ in
     gotools
   # rust
     cargo
-    rustc
+    rustracer
+    rustup
+    vscode
   # orga tools
     taskwarrior
   # xorg
@@ -143,18 +145,10 @@ in
         '';
         }
       ];
-#      xmonad = {
-#        enable = true;
-#        enableContribAndExtras = true;
-#        extraPackages = haskellPackages: [
-#          haskellPackages.xmonad-contrib
-#          haskellPackages.xmonad-extras
-#          haskellPackages.xmonad
-#        ];
-#      }
-
     };
   };
+
+  services.xserver.windowManager.i3.enable = true;
 
   users.extraUsers.jeschli = { # TODO: define as krebs.users
     isNormalUser = true;
