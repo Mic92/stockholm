@@ -133,7 +133,7 @@ myKeyMap =
     , ("M4-f", floatNext True)
     , ("M4-b", sendMessage ToggleStruts)
 
-    , ("M4-v", gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.view) )
+    , ("M4-v", gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.greedyView) )
     , ("M4-S-v", gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
     , ("M4-C-v", withWorkspace autoXPConfig (windows . copy))
 
@@ -220,7 +220,7 @@ gridConfig = def
 
 allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
 allWorkspaceNames ws =
-    return $ map W.tag (W.hidden ws) ++ [W.tag $ W.workspace $ W.current ws]
+    return $ map W.tag (W.hidden ws ++ (map W.workspace $ W.visible ws)) ++ [W.tag $ W.workspace $ W.current ws]
     '';
   };
 }
