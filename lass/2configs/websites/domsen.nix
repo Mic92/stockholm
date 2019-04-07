@@ -94,7 +94,7 @@ in {
     config = {
       adminpassFile = toString <secrets> + "/nextcloud_pw";
     };
-    #https = true;
+    https = true;
     nginx.enable = true;
   };
   services.nginx.virtualHosts."o.xanf.org" = {
