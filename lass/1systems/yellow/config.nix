@@ -44,7 +44,7 @@ with import <stockholm/lib>;
         fancyindex
       ];
     };
-    virtualHosts."dl" = {
+    virtualHosts.default = {
       default = true;
       locations."/Nginx-Fancyindex-Theme-dark" = {
         extraConfig = ''
