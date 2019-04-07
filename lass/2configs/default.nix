@@ -4,6 +4,7 @@ with import <stockholm/lib>;
   imports = [
     <stockholm/krebs/2configs/nscd-fix.nix>
     ./binary-cache/client.nix
+    ./backup.nix
     ./gc.nix
     ./mc.nix
     ./vim.nix
