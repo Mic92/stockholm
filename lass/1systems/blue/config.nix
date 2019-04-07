@@ -13,6 +13,13 @@ with import <stockholm/lib>;
 
   krebs.build.host = config.krebs.hosts.blue;
 
+  krebs.syncthing.folders = [
+    { id = "contacts"; path = "/home/lass/contacts"; peers = [ "mors" "blue" "green" "phone" ]; }
+  ];
+  lass.ensure-permissions = [
+    { folder = "/home/lass/contacts"; owner = "lass"; group = "syncthing"; }
+  ];
+
   environment.shellAliases = {
     deploy = pkgs.writeDash "deploy" ''
       set -eu

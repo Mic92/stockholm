@@ -49,6 +49,16 @@ with import <stockholm/lib>;
       ];
     }
     {
+      krebs.syncthing.folders = [
+        { id = "contacts"; path = "/home/lass/contacts"; peers = [ "mors" "blue" "green" "phone" ]; }
+        { id = "the_playlist"; path = "/home/lass/tmp/the_playlist"; peers = [ "mors" "phone" ]; }
+      ];
+      lass.ensure-permissions = [
+        { folder = "/home/lass/contacts"; owner = "lass"; group = "syncthing"; }
+        { folder = "/home/lass/tmp/the_playlist"; owner = "lass"; group = "syncthing"; }
+      ];
+    }
+    {
       lass.umts = {
         enable = true;
         modem = "/dev/serial/by-id/usb-Lenovo_F5521gw_2C7D8D7C35FC7040-if09";
