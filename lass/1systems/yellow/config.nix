@@ -11,7 +11,8 @@ with import <stockholm/lib>;
 
   system.activationScripts.downloadFolder = ''
     mkdir -p /var/download
-    chown download:download /var/download
+    chown transmission:download /var/download
+    chown transmission:download /var/download/finished
     chmod 775 /var/download
   '';
 
