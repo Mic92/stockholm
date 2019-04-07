@@ -109,25 +109,6 @@ with import <stockholm/lib>;
         localAddress = "10.233.2.2";
       };
     }
-    {
-      #onondaga
-      systemd.services."container@onondaga".reloadIfChanged = mkForce false;
-      containers.onondaga = {
-        config = { ... }: {
-          imports = [ <stockholm/lass/2configs/rebuild-on-boot.nix> ];
-          environment.systemPackages = [ pkgs.git ];
-          services.openssh.enable = true;
-          users.users.root.openssh.authorizedKeys.keys = [
-            config.krebs.users.lass.pubkey
-          ];
-        };
-        autoStart = true;
-        enableTun = true;
-        privateNetwork = true;
-        hostAddress = "10.233.2.5";
-        localAddress = "10.233.2.6";
-      };
-    }
     <stockholm/lass/2configs/exim-smarthost.nix>
     <stockholm/lass/2configs/ts3.nix>
     <stockholm/lass/2configs/privoxy-retiolum.nix>
