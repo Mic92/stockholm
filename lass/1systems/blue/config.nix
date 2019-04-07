@@ -30,7 +30,7 @@ with import <stockholm/lib>;
 
   networking.nameservers = [ "1.1.1.1" ];
 
-  lass.restic = genAttrs [
+  services.restic.backups = genAttrs [
     "daedalus"
     "icarus"
     "littleT"
@@ -38,20 +38,19 @@ with import <stockholm/lib>;
     "shodan"
     "skynet"
   ] (dest: {
-    dirs = [
+    initialize = true;
+    extraOptions = [
+      "sftp.command='ssh backup@${dest}.r -i ${config.krebs.build.host.ssh.privkey.path} -s sftp'"
+    ];
+    repository = "sftp:backup@${dest}.r:/backups/blue";
+    passwordFile = (toString <secrets>) + "/restic/${dest}";
+    timerConfig = { OnCalendar = "00:05"; RandomizedDelaySec = "5h"; };
+    paths = [
       "/home/"
       "/var/lib"
     ];
-    passwordFile = (toString <secrets>) + "/restic/${dest}";
-    repo = "sftp:backup@${dest}.r:/backups/blue";
-    extraArguments = [
-      "sftp.command='ssh backup@${dest}.r -i ${config.krebs.build.host.ssh.privkey.path} -s sftp'"
-    ];
-    timerConfig = {
-      OnCalendar = "00:05";
-      RandomizedDelaySec = "5h";
-    };
   });
+
   time.timeZone = "Europe/Berlin";
   users.users.mainUser.openssh.authorizedKeys.keys = [ config.krebs.users.lass-android.pubkey ];
 }
