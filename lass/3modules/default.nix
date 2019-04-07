@@ -3,6 +3,7 @@ _:
   imports = [
     ./dnsmasq.nix
     ./ejabberd
+    ./ensure-permissions.nix
     ./folderPerms.nix
     ./hosts.nix
     ./mysql-backup.nix
