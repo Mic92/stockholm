@@ -386,6 +386,7 @@ with import <stockholm/lib>;
             lass-icarus.pubkey
             lass-daedalus.pubkey
             lass-helios.pubkey
+            lass-android.pubkey
             makefu.pubkey
             wine-mors.pubkey
           ];
