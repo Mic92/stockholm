@@ -8,7 +8,6 @@ with import <stockholm/lib>;
     ./gc.nix
     ./mc.nix
     ./vim.nix
-    ./monitoring/node-exporter.nix
     ./zsh.nix
     ./htop.nix
     ./security-workarounds.nix
