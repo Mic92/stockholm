@@ -327,6 +327,13 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wiregrill = {
+          ip6.addr = w6 "5ce7";
+          aliases = [
+            "skynet.w"
+          ];
+          wireguard.pubkey = "pt9a6nP+YPqxnSskcM9NqRmAmFzbO5bE7wzViFFonnU=";
+        };
       };
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
