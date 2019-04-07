@@ -502,12 +502,12 @@ in {
           aliases = [
             "phone.w"
           ];
-          wireguard.pubkey = "zVunBVOxsMETlnHkgjfH71HaZjjNUOeYNveAVv5z3jw=";
+          wireguard.pubkey = "MRicxap2VxPnzmXoOqqjQNGWJ54cQC8Tfy28+IXXsxM=";
         };
       };
       external = true;
       ci = false;
-      syncthing.id = "V6D4CKT-7POOIKX-KB6UM7R-3R774RB-DSZ26FE-MSW3VTO-6AIJCIA-ZHJXKA7";
+      syncthing.id = "DUFMX7V-HNR6WXM-LZB5LJE-TM6QIOH-MTGHEUJ-QSD3XIY-YRFJLOR-G6Y3XQB";
     };
     morpheus = {
       cores = 1;
