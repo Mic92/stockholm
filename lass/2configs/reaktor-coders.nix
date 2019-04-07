@@ -29,7 +29,7 @@ in {
             hooks.url-title
             {
               activate = "match";
-              pattern = ''@([^ ]+) (.*)$'';
+              pattern = ''^@([^ ]+) (.*)$'';
               command = 1;
               arguments = [2];
               env.HOME = config.krebs.reaktor2.coders.stateDir;
@@ -66,7 +66,7 @@ in {
             }
             {
               activate = "match";
-              pattern = ''!([^ ]+)(?:\s*(.*))?'';
+              pattern = ''^!([^ ]+)(?:\s*(.*))?'';
               command = 1;
               arguments = [2];
               commands = {
