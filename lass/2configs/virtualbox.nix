@@ -6,7 +6,6 @@ let
 in {
   #services.virtualboxHost.enable = true;
   virtualisation.virtualbox.host.enable = true;
-  nixpkgs.config.virtualbox.enableExtensionPack = true;
   virtualisation.virtualbox.host.enableHardening = false;
 
   users.extraUsers = {
