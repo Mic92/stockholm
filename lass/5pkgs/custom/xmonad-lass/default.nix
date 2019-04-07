@@ -169,6 +169,7 @@ myKeyMap =
     , ("<Pause>", spawn "${pkgs.xcalib}/bin/xcalib -invert -alter")
 
     , ("M4-s", spawn "${pkgs.knav}/bin/knav")
+    , ("<Print>", spawn "${pkgs.flameshot-once}/bin/flameshot-once")
 
     --, ("M4-w", screenWorkspace 0 >>= (windows . W.greedyView))
     --, ("M4-e", screenWorkspace 1 >>= (windows . W.greedyView))
