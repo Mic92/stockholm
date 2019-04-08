@@ -1,9 +1,11 @@
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with import <stockholm/lib>;
 let
   pkg = pkgs.pulseaudioLight;
   runDir = "/run/pulse";
+
+  pkgs_i686 = pkgs.pkgsi686Linux;
 
   support32Bit =
     pkgs.stdenv.isx86_64 &&
