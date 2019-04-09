@@ -92,9 +92,11 @@ in
     })
   # dev tools
     gnumake
+    jetbrains.clion
     jetbrains.goland
     jetbrains.pycharm-professional
     jetbrains.webstorm
+    vscode
   # document viewer
     evince
     zathura
@@ -105,7 +107,6 @@ in
     cargo
     rustracer
     rustup
-    vscode
   # orga tools
     taskwarrior
   # xorg
