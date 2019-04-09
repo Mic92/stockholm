@@ -79,6 +79,7 @@ in {
     taskwarrior
     termite
     xclip
+    xephyrify
     xorg.xbacklight
     xorg.xhost
     xsel

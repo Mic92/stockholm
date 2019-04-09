@@ -94,7 +94,7 @@ in {
     config = {
       adminpassFile = toString <secrets> + "/nextcloud_pw";
     };
-    #https = true;
+    https = true;
     nginx.enable = true;
   };
   services.nginx.virtualHosts."o.xanf.org" = {
@@ -234,11 +234,13 @@ in {
     createHome = true;
   };
 
+  krebs.on-failure.plans.restic-backups-domsen = {};
   services.restic.backups.domsen = {
     initialize = true;
-    extraOptions = [ "sftp.command='ssh efOVcMWSZ@wilhelmstr.duckdns.org -p 52222 -i ${toString <secrets> + "/ssh.id_ed25519"} -s sftp'" ];
+    extraOptions = [ "sftp.command='ssh efOVcMWSZ@wilhelmstr.duckdns.org -S none -v -p 52222 -i ${toString <secrets> + "/ssh.id_ed25519"} -s sftp'" ];
     repository = "sftp:efOVcMWSZ@wilhelmstr.duckdns.org:/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES";
     passwordFile = toString <secrets> + "/domsen_backup_pw";
+    timerConfig = { OnCalendar = "00:05"; RandomizedDelaySec = "5h"; };
     paths = [
       "/srv/http"
       "/home/domsen/Mail"

@@ -11,6 +11,10 @@
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
+    "/backups" = {
+      device = "/dev/pool/backup";
+      fsType = "ext4";
+    };
   };
 
   services.udev.extraRules = ''

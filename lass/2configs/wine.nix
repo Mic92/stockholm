@@ -6,8 +6,6 @@ let
 in {
   users.users= {
     wine = {
-      name = "wine";
-      description = "user for running wine";
       home = "/home/wine";
       useDefaultShell = true;
       extraGroups = [

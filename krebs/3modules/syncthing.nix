@@ -11,8 +11,7 @@ let
   }) cfg.peers;
 
   folders = map (folder: {
-    inherit (folder) path type;
-    id = folder.path;
+    inherit (folder) path id type;
     devices = map (peer: { deviceId = cfg.peers.${peer}.id; }) folder.peers;
     rescanIntervalS = folder.rescanInterval;
     fsWatcherEnabled = folder.watch;
@@ -83,11 +82,16 @@ in
 
     folders = mkOption {
       default = [];
-      type = types.listOf (types.submodule ({
+      type = types.listOf (types.submodule ({ config, ... }: {
         options = {
 
           path = mkOption {
             type = types.absolute-pathname;
+          };
+
+          id = mkOption {
+            type = types.str;
+            default = config.path;
           };
 
           peers = mkOption {

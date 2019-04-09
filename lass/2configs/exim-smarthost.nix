@@ -97,6 +97,9 @@ with import <stockholm/lib>;
       { from = "csv-direct@lassul.us"; to = lass.mail; }
       { from = "nintendo@lassul.us"; to = lass.mail; }
       { from = "overleaf@lassul.us"; to = lass.mail; }
+      { from = "box@lassul.us"; to = lass.mail; }
+      { from = "paloalto@lassul.us"; to = lass.mail; }
+      { from = "subtitles@lassul.us"; to = lass.mail; }
     ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }

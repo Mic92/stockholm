@@ -15,6 +15,10 @@
       device = "/dev/mapper/pool-virtual";
       fsType = "ext4";
     };
+    "/backups" = {
+      device = "/dev/pool/backup";
+      fsType = "ext4";
+    };
   };
 
   services.udev.extraRules = ''
