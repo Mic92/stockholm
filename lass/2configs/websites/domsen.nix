@@ -237,8 +237,8 @@ in {
   krebs.on-failure.plans.restic-backups-domsen = {};
   services.restic.backups.domsen = {
     initialize = true;
-    extraOptions = [ "sftp.command='ssh efOVcMWSZ@wilhelmstr.duckdns.org -S none -v -p 52222 -i ${toString <secrets> + "/ssh.id_ed25519"} -s sftp'" ];
-    repository = "sftp:efOVcMWSZ@wilhelmstr.duckdns.org:/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES";
+    extraOptions = [ "sftp.command='ssh efOVcMWSZ@wilhelmstr2.duckdns.org -S none -v -p 52222 -i ${toString <secrets> + "/ssh.id_ed25519"} -s sftp'" ];
+    repository = "sftp:efOVcMWSZ@wilhelmstr2.duckdns.org:/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES";
     passwordFile = toString <secrets> + "/domsen_backup_pw";
     timerConfig = { OnCalendar = "00:05"; RandomizedDelaySec = "5h"; };
     paths = [
