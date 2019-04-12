@@ -45,10 +45,9 @@ foldl' mergeAttrs {}
       self.callPackage ./compat/18.03/pass {
         pass-otp = self.callPackage ./compat/18.03/pass-otp {};
       };
-    "18.09" =
+  }.${versions.majorMinor nixpkgsVersion} or
       super.pass.withExtensions (ext: [
         ext.pass-otp
       ]);
-  }.${versions.majorMinor nixpkgsVersion};
 
 }
