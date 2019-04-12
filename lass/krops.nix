@@ -11,7 +11,7 @@
     {}
   ;
 
-  source = { test }: lib.evalSource [
+  source = { test }: lib.evalSource ([
     (krebs-source { test = test; })
     {
       nixos-config.symlink = "stockholm/lass/1systems/${name}/physical.nix";
@@ -24,8 +24,7 @@
         };
       };
     }
-    host-source
-  ];
+  ] ++ (lib.optional (! test) host-source));
 
 in {
 

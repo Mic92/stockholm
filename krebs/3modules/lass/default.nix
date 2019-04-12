@@ -106,6 +106,7 @@ in {
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAsANFdMi825qWQXQbWLYuNZ6/fARt3lnh1KStQHQQMD";
+      syncthing.id = "QITFKYQ-VEPIPL2-AZIXHMD-BBT62ML-YHSB35A-BSUIBXS-QYMPFHW-M7XN2QU";
     };
     archprism = {
       cores = 1;
@@ -204,6 +205,7 @@ in {
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINAMPlIG+6u75GJ3kvsPF6OoIZsU+u8ZQ+rdviv5fNMD";
+      syncthing.id = "ZPRS57K-YK32ROQ-7A6MRAV-VOYXQ3I-CQCXISZ-C5PCV2A-GSFLG3I-K7UGGAH";
     };
     shodan = {
       cores = 2;
@@ -270,6 +272,7 @@ in {
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOPgQIMYiyD4/Co+nlOQWEzCKssemOEXAY/lbIZZaMhj";
+      syncthing.id = "7V75LMM-MIFCAIZ-TAWR3AI-OXONVZR-TEW4GBK-URKPPN4-PQFG653-LGHPDQ4";
     };
     daedalus = {
       cores = 2;
@@ -324,10 +327,18 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wiregrill = {
+          ip6.addr = w6 "5ce7";
+          aliases = [
+            "skynet.w"
+          ];
+          wireguard.pubkey = "pt9a6nP+YPqxnSskcM9NqRmAmFzbO5bE7wzViFFonnU=";
+        };
       };
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEB/MmASvx3i09DY1xFVM5jOhZRZA8rMRqtf8bCIkC+t";
+      syncthing.id = "KWGPAHH-H53Y2WL-SDAUVQE-7PMYRVP-6Q2INYB-FL535EO-HIE7425-ZCNP7A3";
     };
     littleT = {
       cores = 2;
@@ -365,10 +376,18 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wiregrill = {
+          ip6.addr = w6 "771e";
+          aliases = [
+            "littleT.w"
+          ];
+          wireguard.pubkey = "VfSTPO1XGqLqujAGCov1yA0WxyRXJndZCW5XYkScNXg=";
+        };
       };
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJzb9BPFClubs6wSOi/ivqPFVPlowXwAxBS0jHaB29hX";
+      syncthing.id = "PCDXICO-GMGWKSB-V6CYF3I-LQMZSGV-B7YBJXA-DVO7KXN-TFCSQXW-XY6WNQD";
     };
     red = {
       monitoring = false;
@@ -474,7 +493,48 @@ in {
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSBxtPf8yJfzzI7/iYpoRSc/TT+zYmE/HM9XWS3MZlv";
+      syncthing.id = "J2LMIPD-PBEPVKL-A3MN6NQ-KL6DZ4N-K4GGWZB-E2EPLFN-PDLVAOC-DCSZHAD";
     };
+
+    green = {
+      cores = 1;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.0.66";
+          ip6.addr = r6 "12ee";
+          aliases = [
+            "green.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAwpgFxMxWQ0Cp3I82bLWk
+            uoDBjWqhM9Pgq6PJSpJjyNAgMkKJcQnWi0WpELaHISAVqjdPGUQSLiar++JN3YBx
+            ZQGFiucG0ijVJKAUbQQDYbc+RGK8MGO2v3Bv/6E56UKjxtT1zjjvkyXpSC7FN477
+            n9IfsvIzH/RLcAP5VnHBYqZ467UR4rqi7T7yWjrEgr+VirY9Opp9LM9YozlbRrlI
+            hYshk5RET/EvOSwYlw/KJEMMmYHro74neZKIVKoXD3CSE66rncNmdFwD3ZXVxYn6
+            m3Eob8ojWPW+CpAL2AurUyq4Igem9JVigZiyKGgaYsdkOWgkYLW2M0DXX+vCRcM6
+            BvJgJn7s0PHkLvybEVveTolRWO+I/IG1LN8m0SvrVPXf5JYHB32nKYwVMLwi+BQ1
+            pwo0USGByVRv2lWZfy3doKxow0ppilq4DwoT+iqVO4sK5YhPipBHSmCcaxlquHjy
+            2k1eb0gYisp0LBjHlhTErXtt4RlrUqs/84RfgtIZYUowJfXbtEbyDmLIlESbY7qk
+            UlXIMXtY0sWpDivWwpdMj9kJdKlS09QTMeLYz4fFGXMksFmLijx8RKDOYfNWL7oA
+            udmEOHPzYzu/Ex8RfKJjD4GhWLDvDTcyXDG9vmuDNZGcPHANeg23sGhr5Hz37FRT
+            3MVh92sFyMVYkJcL7SISk80CAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+        wiregrill = {
+          ip6.addr = w6 "12ee";
+          aliases = [
+            "green.w"
+          ];
+          wireguard.pubkey = "lOORkStNJ6iP5ffqjHa/kWOxilJIMW4E6BEtNvNhLGk=";
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH0wqzo7rMkyw6gqTGuUp8aUA0vtwj0HuuaTIkkOnA30 ";
+      syncthing.id = "CADHN7J-CWRCWTZ-3GZRLII-JBVZN4N-RGHDGDL-UTAJNYI-RZPHK55-7EYAWQM";
+    };
+
     phone = {
       nets = {
         wiregrill = {
@@ -482,11 +542,12 @@ in {
           aliases = [
             "phone.w"
           ];
-          wireguard.pubkey = "zVunBVOxsMETlnHkgjfH71HaZjjNUOeYNveAVv5z3jw=";
+          wireguard.pubkey = "MRicxap2VxPnzmXoOqqjQNGWJ54cQC8Tfy28+IXXsxM=";
         };
       };
       external = true;
       ci = false;
+      syncthing.id = "DUFMX7V-HNR6WXM-LZB5LJE-TM6QIOH-MTGHEUJ-QSD3XIY-YRFJLOR-G6Y3XQB";
     };
     morpheus = {
       cores = 1;

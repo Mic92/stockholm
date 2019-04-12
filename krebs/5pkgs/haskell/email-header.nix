@@ -15,6 +15,11 @@ with import <stockholm/lib>;
       rev = "refs/tags/v${cfg.version}";
       sha256 = "11xjivpj495r2ss9aqljnpzzycb57cm4sr7yzmf939rzwsd3ib0x";
     };
+    "19.03" = {
+      version = "0.4.1-tv1";
+      rev = "refs/tags/v${cfg.version}";
+      sha256 = "11xjivpj495r2ss9aqljnpzzycb57cm4sr7yzmf939rzwsd3ib0x";
+    };
   }.${versions.majorMinor nixpkgsVersion};
 
 in mkDerivation {
