@@ -4,6 +4,7 @@ with import <stockholm/lib>;
   services.syncthing = {
     enable = true;
     group = "syncthing";
+    configDir = "/var/lib/syncthing";
   };
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp --dport 22000"; target = "ACCEPT";}
