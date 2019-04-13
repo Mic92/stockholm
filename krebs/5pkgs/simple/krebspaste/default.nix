@@ -1,6 +1,12 @@
-{ writeDashBin, bepasty-client-cli }:
+{ bepasty-client-cli, gnused, writeDashBin }:
 
-# TODO use `pkgs.exec` instead?
 writeDashBin "krebspaste" ''
-  exec ${bepasty-client-cli}/bin/bepasty-cli -L 1m --url http://paste.r "$@" | sed '$ s/$/\/+inline/g'
+  ${bepasty-client-cli}/bin/bepasty-cli -L 1m --url http://paste.r "$@" |
+  ${gnused}/bin/sed '
+    $ {
+      s/$/\/+inline/
+      p
+      s/\<r\>/krebsco.de/
+    }
+  '
 ''
