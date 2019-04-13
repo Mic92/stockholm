@@ -2,10 +2,10 @@
 
 with import <stockholm/lib>;
 let
-  gunicorn = pkgs.python3Packages.gunicorn;
-  bepasty = pkgs.bepasty;
-  gevent = pkgs.python3Packages.gevent;
-  python = pkgs.python3Packages.python;
+  gunicorn = pkgs.python27Packages.gunicorn;
+  bepasty = pkgs.bepasty.override { python3Packages = pkgs.python27Packages; };
+  gevent = pkgs.python27Packages.gevent;
+  python = pkgs.python27Packages.python;
   cfg = config.krebs.bepasty;
 
   out = {
