@@ -89,7 +89,7 @@ rec {
 
       syncthing.id = mkOption {
         # TODO syncthing id type
-        type = nullOr string;
+        type = nullOr str;
         default = null;
       };
     };
