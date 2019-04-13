@@ -73,7 +73,6 @@ main = getArgs >>= \case
 
 mainNoArgs :: IO ()
 mainNoArgs = do
-    workspaces0 <- getWorkspaces0
     handleShutdownEvent <- newShutdownEventHandler
     xmonad
         -- $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "magenta", "-fg", "magenta", "-h", "2"], duration = 500000 }
@@ -85,7 +84,7 @@ mainNoArgs = do
             { terminal          = urxvtcPath
             , modMask           = mod4Mask
             , keys              = myKeys
-            , workspaces        = workspaces0
+            , workspaces        = ["comms", "org", "dev"]
             , layoutHook        = smartBorders $ FixedColumn 1 20 80 10 ||| Full
             -- , handleEventHook   = myHandleEventHooks <+> handleTimerEvent
             --, handleEventHook   = handleTimerEvent
@@ -93,7 +92,7 @@ mainNoArgs = do
             , startupHook = do
                 setWMName "LG3D"
                 whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
-                          (\path -> forkFile path [] Nothing) <+> setWMName "LG3D"
+                          (\path -> forkFile path [] Nothing)
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#f000b0"
             , handleEventHook = handleShutdownEvent
@@ -152,7 +151,6 @@ myKeys conf = Map.fromList $
     , ((0   , xK_Print   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.view) )
     , ((_S  , xK_Print   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
     , ((_C  , xK_Print   ), toggleWS)
-    , ((_4  , xK_Print   ), rhombus horseConfig (liftIO . hPutStrLn stderr) ["Correct", "Horse", "Battery", "Staple", "Stuhl", "Tisch"] )
 
     -- %! Rotate through the available layout algorithms
     , ((_4  , xK_space  ), sendMessage NextLayout)

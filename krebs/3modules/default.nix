@@ -48,6 +48,7 @@ let
       ./rtorrent.nix
       ./secret.nix
       ./setuid.nix
+      ./syncthing.nix
       ./tinc.nix
       ./tinc_graphs.nix
       ./urlwatch.nix

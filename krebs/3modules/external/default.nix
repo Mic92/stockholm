@@ -299,6 +299,33 @@ in {
         };
       };
     };
+    toastbrot = {
+      owner = config.krebs.users.jan;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.117.12";
+          aliases = [
+            "toastbrot.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA12VLPJMhGSh5fQgrB6bP
+            2H1eew0/7t1xr3oJ3uaTZd7UIvPQ/aA5pB9xL5s+BIBvRa5P3QFWUAVhqchsPiRc
+            yC4awLvo6zrUZB3pJBFiUuThx1xzmazTbRNyJ0E3Dwi2VSp3dAi5xEwHSVDSElGj
+            DyRrdwyLe9lKghGHgNhB01QAt1/AO3A/TBs2RS/E0kuPhVQzpo5Ae5I530Cr0pf3
+            r/de1TdArIcOfnTvW7WNrdBhwLq14cfdXkZwJ2bBE9Q22FAJp5k21PW5dQ41oDuT
+            PYHZIH555sxifMThrUpuNHIrDtIQk6D+Km90WNf/lBGwZqQr/B5G6zSNX7d/0JbY
+            Hi8Ltq++Sf0XgWNir9+evGNLCBqAXdvQFrj2l7BuNywE0L2nZThnxjTxP6QLFnqO
+            IXY97x3p7AYcfmVFutfYqYM1HdyyehF711hhm30fdcXHsJ+GpQgGrj67+++N7g7g
+            fjWBGNI9EL9CyTZ/N9U3TGeoxooc1BSaAiHmaPoYaAeI0Y/W6bNrixpL3aI5X8MH
+            Flen2y2XEk2n+pXozPDbLAT+MZ3sWwODDYRc8zGbV2RlMvL94LHh95/JC0itdXa3
+            uNRDtSnfbNe4eHw9/HMDkclhywuE+hbyq+JNNodqLwG/o1/r3GI+ggOyCdZHjF4B
+            4R8QXUJiqUdcbR3WQDR5i10CAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     tpsw = {
       cores = 2;
       owner = config.krebs.users.ciko; # main laptop
@@ -410,6 +437,9 @@ in {
     exco = {
       mail = "dickbutt@excogitation.de";
       pubkey = ssh-for "exco";
+    };
+    jan = {
+      mail = "jan.heidbrink@posteo.de";
     };
     kmein = {
       mail = "kieran.meinhardt@gmail.com";

@@ -60,7 +60,10 @@ let
     paypal = [ "to:paypal@lassul.us" ];
     ptl = [ "to:ptl@posttenebraslab.ch" ];
     retiolum = [ "to:lass@mors.r" ];
-    security = [ "to:seclists.org" "to:bugtraq" "to:securityfocus@lassul.us" ];
+    security = [
+      "to:seclists.org" "to:bugtraq" "to:securityfocus@lassul.us"
+      "to:security-announce@lists.apple.com"
+    ];
     shack = [ "to:shackspace.de" ];
     steam = [ "to:steam@lassul.us" ];
     tinc = [ "to:tinc@tinc-vpn.org" "to:tinc-devel@tinc-vpn.org" ];
@@ -225,6 +228,7 @@ in {
     msmtp
     mutt
     pkgs.notmuch
+    pkgs.muchsync
     pkgs.haskellPackages.much
     tag-new-mails
     tag-old-mails

@@ -13,15 +13,18 @@ let
   api = {
     enable = mkEnableOption "screenlock";
     command = mkOption {
-      type = types.str;
-      default = "${pkgs.xlockmore}/bin/xlock -mode life1d -size 1";
+      type = types.path;
+      default = pkgs.writeDash "screenlock" ''
+        ${pkgs.xlockmore}/bin/xlock -mode life1d -size 1
+        sleep 3
+      '';
     };
   };
 
   imp = {
     systemd.services.screenlock = {
       before = [ "sleep.target" ];
-      wantedBy = [ "sleep.target" ];
+      requiredBy = [ "sleep.target" ];
       environment = {
         DISPLAY = ":${toString config.services.xserver.display}";
       };

@@ -38,6 +38,10 @@
       device = "/dev/pool/bku";
       fsType = "btrfs";
     };
+    "/backups" = {
+      device = "/dev/pool/backup";
+      fsType = "ext4";
+    };
   };
 
   services.udev.extraRules = ''

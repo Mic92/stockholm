@@ -36,7 +36,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/blue-host.nix>
     <stockholm/lass/2configs/network-manager.nix>
     <stockholm/lass/2configs/nfs-dl.nix>
-    <stockholm/lass/2configs/hardening.nix>
+    #<stockholm/lass/2configs/hardening.nix>
     {
       krebs.iptables.tables.filter.INPUT.rules = [
         #risk of rain
@@ -46,6 +46,16 @@ with import <stockholm/lib>;
         #quake3
         { predicate = "-p tcp --dport 27950:27965"; target = "ACCEPT"; }
         { predicate = "-p udp --dport 27950:27965"; target = "ACCEPT"; }
+      ];
+    }
+    {
+      krebs.syncthing.folders = [
+        { id = "contacts"; path = "/home/lass/contacts"; peers = [ "mors" "blue" "green" "phone" ]; }
+        { id = "the_playlist"; path = "/home/lass/tmp/the_playlist"; peers = [ "mors" "phone" ]; }
+      ];
+      lass.ensure-permissions = [
+        { folder = "/home/lass/contacts"; owner = "lass"; group = "syncthing"; }
+        { folder = "/home/lass/tmp/the_playlist"; owner = "lass"; group = "syncthing"; }
       ];
     }
     {

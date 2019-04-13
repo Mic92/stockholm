@@ -4,10 +4,10 @@ with import <stockholm/lib>;
   imports = [
     <stockholm/krebs/2configs/nscd-fix.nix>
     ./binary-cache/client.nix
+    ./backup.nix
     ./gc.nix
     ./mc.nix
     ./vim.nix
-    ./monitoring/node-exporter.nix
     ./zsh.nix
     ./htop.nix
     ./security-workarounds.nix
@@ -42,8 +42,6 @@ with import <stockholm/lib>;
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass-mors.pubkey
             config.krebs.users.lass-blue.pubkey
-            config.krebs.users.lass-shodan.pubkey
-            config.krebs.users.lass-icarus.pubkey
           ];
         };
       };
@@ -211,6 +209,7 @@ with import <stockholm/lib>;
         { predicate = "-p udp -i retiolum"; target = "REJECT --reject-with icmp-port-unreachable"; v6 = false; precedence = -10000; }
         { predicate = "-i retiolum"; target = "REJECT --reject-with icmp-proto-unreachable"; v6 = false; precedence = -10000; }
         { predicate = "-i retiolum -p udp -m udp --dport 53"; target = "ACCEPT"; }
+        { predicate = "-i retiolum -p tcp --dport 19999"; target = "ACCEPT"; }
       ];
     };
   };
@@ -218,4 +217,7 @@ with import <stockholm/lib>;
   networking.dhcpcd.extraConfig = ''
     noipv4ll
   '';
+  services.netdata = {
+    enable = true;
+  };
 }

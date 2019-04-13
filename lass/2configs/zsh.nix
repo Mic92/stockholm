@@ -28,8 +28,8 @@
       }
       zle -N down-line-or-local-history
 
-      setopt share_history
-      setopt hist_ignore_dups
+      setopt SHARE_HISTORY
+      setopt HIST_IGNORE_ALL_DUPS
       # setopt inc_append_history
       bindkey '^R' history-incremental-search-backward
 

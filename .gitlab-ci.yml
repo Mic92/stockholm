@@ -15,5 +15,6 @@ nur-packages makefu:
     - git filter-branch -f --prune-empty --subdirectory-filter makefu/5pkgs HEAD
     - git remote add deploy git@github.com:makefu/nur-packages.git  || git remote set-url deploy git@github.com:makefu/nur-packages.git
     - git push --force deploy HEAD:master
+    - curl -XPOST http://nur-update.herokuapp.com/update?repo=makefu
 after_script:
     - rm -f deploy.key
