@@ -10,6 +10,16 @@ with import <stockholm/lib>;
       proxy_pass http://localhost:9081;
     '';
   };
+  services.nginx.virtualHosts.paste-readonly = {
+    serverAliases = [ "p.krebsco.de" ];
+    locations."/".extraConfig = ''
+      if ($request_method != GET) {
+        return 403;
+      }
+      proxy_set_header Host $host;
+      proxy_pass http://localhost:9081;
+    '';
+  };
   krebs.htgen.paste = {
     port = 9081;
     script = toString [
