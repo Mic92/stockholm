@@ -20,6 +20,7 @@ in {
       extraZones = {
         "krebsco.de" = ''
           cache     IN A ${nets.internet.ip4.addr}
+          p         IN A ${nets.internet.ip4.addr}
           paste     IN A ${nets.internet.ip4.addr}
           prism     IN A ${nets.internet.ip4.addr}
         '';
@@ -38,7 +39,6 @@ in {
           io                  60 IN NS     ions.lassul.us.
           ions                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           lol                 60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-          p                   60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           paste               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           radio               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
         '';
