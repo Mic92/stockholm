@@ -542,6 +542,13 @@ rec {
     merge = mergeOneOption;
   };
 
+  # POSIX.1‐2017, 3.190 Group Name
+  groupname = mkOptionType {
+    name = "POSIX group name";
+    check = filename.check;
+    merge = mergeOneOption;
+  };
+
   # POSIX.1‐2017, 3.281 Portable Filename
   filename = mkOptionType {
     name = "POSIX portable filename";
