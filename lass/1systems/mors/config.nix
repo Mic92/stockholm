@@ -92,6 +92,7 @@ with import <stockholm/lib>;
         pkgs.ovh-zone
         pkgs.bank
         pkgs.adb-sync
+        pkgs.transgui
       ];
     }
     {
