@@ -233,8 +233,4 @@ in {
     tag-new-mails
     tag-old-mails
   ];
-
-  nixpkgs.config.packageOverrides = opkgs: {
-    notmuch = (opkgs.notmuch.overrideAttrs (o: { doCheck = false; }));
-  };
 }

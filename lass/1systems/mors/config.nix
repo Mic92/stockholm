@@ -26,6 +26,8 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/syncthing.nix>
     <stockholm/lass/2configs/otp-ssh.nix>
     <stockholm/lass/2configs/c-base.nix>
+    <stockholm/lass/2configs/sync/decsync.nix>
+    <stockholm/lass/2configs/sync/weechat.nix>
     <stockholm/lass/2configs/br.nix>
     <stockholm/lass/2configs/ableton.nix>
     <stockholm/lass/2configs/starcraft.nix>
@@ -41,8 +43,6 @@ with import <stockholm/lib>;
       krebs.iptables.tables.filter.INPUT.rules = [
         #risk of rain
         { predicate = "-p tcp --dport 11100"; target = "ACCEPT"; }
-        #chromecast
-        { predicate = "-p udp -m multiport --sports 32768:61000 -m multiport --dports 32768:61000"; target = "ACCEPT"; }
         #quake3
         { predicate = "-p tcp --dport 27950:27965"; target = "ACCEPT"; }
         { predicate = "-p udp --dport 27950:27965"; target = "ACCEPT"; }
@@ -50,14 +50,10 @@ with import <stockholm/lib>;
     }
     {
       krebs.syncthing.folders = [
-        { id = "contacts"; path = "/home/lass/contacts"; peers = [ "mors" "blue" "green" "phone" ]; }
-        { id = "the_playlist"; path = "/home/lass/tmp/the_playlist"; peers = [ "mors" "phone" ]; }
-        { path = "/home/lass/.weechat"; peers = [ "blue" "green" "mors" ]; }
+        { id = "the_playlist"; path = "/home/lass/tmp/the_playlist"; peers = [ "mors" "phone" "prism" ]; }
       ];
       lass.ensure-permissions = [
-        { folder = "/home/lass/contacts"; owner = "lass"; group = "syncthing"; }
         { folder = "/home/lass/tmp/the_playlist"; owner = "lass"; group = "syncthing"; }
-        { folder = "/home/lass/.weechat"; owner = "lass"; group = "syncthing"; }
       ];
     }
     {
@@ -94,6 +90,7 @@ with import <stockholm/lib>;
         pkgs.ovh-zone
         pkgs.bank
         pkgs.adb-sync
+        pkgs.transgui
       ];
     }
     {
@@ -136,6 +133,18 @@ with import <stockholm/lib>;
     '')
     (pkgs.writeDashBin "btc-kraken" ''
       ${pkgs.curl}/bin/curl -Ss  'https://api.kraken.com/0/public/Ticker?pair=BTCEUR' | ${pkgs.jq}/bin/jq '.result.XXBTZEUR.a[0]'
+    '')
+    (pkgs.writeDashBin "krebsco.de" ''
+      TMPDIR=$(${pkgs.coreutils}/bin/mktemp -d)
+      ${pkgs.brain}/bin/brain show krebs-secrets/ovh-secrets.json > "$TMPDIR"/ovh-secrets.json
+      OVH_ZONE_CONFIG="$TMPDIR"/ovh-secrets.json ${pkgs.krebszones}/bin/krebszones import
+      ${pkgs.coreutils}/bin/rm -rf "$TMPDIR"
+    '')
+    (pkgs.writeDashBin "lassul.us" ''
+      TMPDIR=$(${pkgs.coreutils}/bin/mktemp -d)
+      ${pkgs.pass}/bin/pass show admin/ovh/api.config > "$TMPDIR"/ovh-secrets.json
+      OVH_ZONE_CONFIG="$TMPDIR"/ovh-secrets.json ${pkgs.ovh-zone}/bin/ovh-zone import /etc/zones/lassul.us lassul.us
+      ${pkgs.coreutils}/bin/rm -rf "$TMPDIR"
     '')
   ];
 

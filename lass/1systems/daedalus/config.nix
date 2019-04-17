@@ -27,6 +27,12 @@ with import <stockholm/lib>;
         enable = true;
         systemWide = true;
       };
+      programs.chromium = {
+        enable = true;
+        extensions = [
+          "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
+        ];
+      };
       environment.systemPackages = with pkgs; [
         pavucontrol
         #firefox
@@ -40,7 +46,7 @@ with import <stockholm/lib>;
         wine
         geeqie
         vlc
-        minecraft
+        zsnes
       ];
       nixpkgs.config.firefox.enableAdobeFlash = true;
       services.xserver.enable = true;

@@ -21,7 +21,7 @@ with import <stockholm/lib>;
     shares = {
       incoming = {
         path = "/mnt/prism";
-        "read only" = "no";
+        "read only" = "yes";
         browseable = "yes";
         "guest ok" = "yes";
       };

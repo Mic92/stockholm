@@ -45,6 +45,10 @@
       source = "${usershadow}/bin/verify_pam";
       owner = "root";
     };
+    security.wrappers.shadow_verify_arg = {
+      source = "${usershadow}/bin/verify_arg";
+      owner = "root";
+    };
   };
 
   usershadow = let {

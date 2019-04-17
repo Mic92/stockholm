@@ -59,6 +59,9 @@ in {
     group = "radio";
     musicDirectory = "/home/radio/the_playlist/music";
     extraConfig = ''
+      log_level "default"
+      auto_update "yes"
+
       audio_output {
         type        "shout"
         encoding    "lame"
@@ -245,4 +248,10 @@ in {
       alias ${html};
     '';
   };
+  krebs.syncthing.folders = [
+    { id = "the_playlist"; path = "/home/radio/music/the_playlist"; peers = [ "mors" "phone" "prism" ]; }
+  ];
+  lass.ensure-permissions = [
+    { folder = "/home/radio/music/the_playlist"; owner = "radio"; group = "syncthing"; }
+  ];
 }

@@ -6,7 +6,6 @@ with import <stockholm/lib>;
     <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix>
     <stockholm/krebs>
     <stockholm/lass/3modules>
-    <stockholm/lass/5pkgs>
     <stockholm/lass/2configs/mc.nix>
     <stockholm/lass/2configs/vim.nix>
     {
@@ -40,9 +39,10 @@ with import <stockholm/lib>;
       networking.hostName = "lass-iso";
     }
     {
+      nixpkgs.config.packageOverrides = import <stockholm/lass/5pkgs> pkgs;
       krebs.enable = true;
       krebs.build.user = config.krebs.users.lass;
-      krebs.build.host = config.krebs.hosts.iso;
+      krebs.build.host = {};
     }
     {
       nixpkgs.config.allowUnfree = true;
@@ -174,11 +174,13 @@ with import <stockholm/lib>;
           user = "lass";
         };
         windowManager.default = "xmonad";
-        windowManager.session = [{
+        windowManager.session = let
+          xmonad-lass = pkgs.callPackage <stockholm/lass/5pkgs/custom/xmonad-lass> { inherit config; };
+        in [{
           name = "xmonad";
           start = ''
             ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
-            ${pkgs.xmonad-lass}/bin/xmonad &
+            ${xmonad-lass}/bin/xmonad &
             waitPID=$!
           '';
         }];

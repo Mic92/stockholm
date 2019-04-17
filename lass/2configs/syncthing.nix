@@ -16,7 +16,7 @@ with import <stockholm/lib>;
     key = toString <secrets/syncthing.key>;
     peers = mapAttrs (n: v: { id = v.syncthing.id; }) (filterAttrs (n: v: v.syncthing.id != null) config.krebs.hosts);
     folders = [
-      { path = "/home/lass/sync"; peers = [ "icarus" "mors" "skynet" "blue" "green" "littleT" "prism"]; }
+      { path = "/home/lass/sync"; peers = [ "icarus" "mors" "skynet" "blue" "green" "littleT" "prism" "shodan" ]; }
     ];
   };
 
