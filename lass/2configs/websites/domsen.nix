@@ -119,7 +119,7 @@ in {
     authenticators.PLAIN = ''
       driver = plaintext
       public_name = PLAIN
-      server_condition = ''${run{${config.lass.usershadow.path}/bin/verify_arg ${config.lass.usershadow.pattern} $auth2 $auth3}{yes}{no}}
+      server_condition = ''${run{/run/wrappers/bin/shadow_verify_arg ${config.lass.usershadow.pattern} $auth2 $auth3}{yes}{no}}
     '';
     authenticators.LOGIN = ''
       driver = plaintext

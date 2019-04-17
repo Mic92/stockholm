@@ -1,5 +1,6 @@
-{ curl, writeDashBin }:
+{ curl, gnused, writeDashBin }:
 
 writeDashBin "kpaste" ''
-  exec ${curl}/bin/curl -sS http://p.r --data-binary @-
+  ${curl}/bin/curl -sS http://p.r --data-binary @- |
+  ${gnused}/bin/sed '$ {p;s/\<r\>/krebsco.de/}'
 ''

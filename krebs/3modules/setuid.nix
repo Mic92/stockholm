@@ -21,8 +21,8 @@ let
           default = config._module.args.name;
         };
         envp = mkOption {
-          type = types.attrsOf types.str;
-          default = {};
+          type = types.nullOr (types.attrsOf types.str);
+          default = null;
         };
         filename = mkOption {
           type = mkOptionType {

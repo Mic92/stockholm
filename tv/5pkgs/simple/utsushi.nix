@@ -51,13 +51,19 @@ let
     src =
       if stdenv.system == "i686-linux" then
         fetchurl {
-          url = "https://download2.ebz.epson.net/imagescanv3/debian/latest1/deb/x64/imagescan-bundle-debian-9-1.3.21.x86.deb.tar.gz";
-          sha256 = "16xv1pdfm2ryis815fawb7zqg6c4swww726g272ssx044r5dp80r";
+          urls = [
+            "https://download2.ebz.epson.net/imagescanv3/debian/latest1/deb/x86/imagescan-bundle-debian-9-3.55.0.x86.deb.tar.gz"
+            "http://ni.r/~tv/mirrors/epson/imagescan-bundle-debian-9-3.55.0.x86.deb.tar.gz"
+          ];
+          sha256 = "12syk4y8z22hm9r1lgxqp81vd24jbqgmq83b7yiyqfd4wfxb6k3s";
         }
       else if stdenv.system == "x86_64-linux" then
         fetchurl {
-          url = "https://download2.ebz.epson.net/imagescanv3/debian/latest1/deb/x64/imagescan-bundle-debian-9-1.3.21.x64.deb.tar.gz";
-          sha256 = "0zik35h2jwrvkwcmq55wc72imidwdnmn1bayhypzhjcz61rasjg2";
+          urls = [
+            "https://download2.ebz.epson.net/imagescanv3/debian/latest1/deb/x64/imagescan-bundle-debian-9-3.55.0.x64.deb.tar.gz"
+            "http://ni.r/~tv/mirrors/epson/imagescan-bundle-debian-9-3.55.0.x64.deb.tar.gz"
+          ];
+          sha256 = "1wp372hqhzdar6ldxy7s9js2s872x8c5nwq3608dwg9gca11ppc5";
         }
       else throw "${name} is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
 
@@ -92,7 +98,7 @@ let
       license = stdenv.lib.licenses.eapl;
       maintainers = [ stdenv.lib.maintainers.tv ];
       platforms = stdenv.lib.platforms.linux;
-      version = "1.1.0";
+      version = "1.1.2";
     };
   };
 
@@ -102,8 +108,11 @@ stdenv.mkDerivation rec {
   name = "utsushi-${meta.version}";
 
   src = fetchurl {
-    url = "http://support.epson.net/linux/src/scanner/imagescanv3/debian/imagescan_${meta.version}.orig.tar.gz";
-    sha256 = "1gmiimwkcyzbkfr25vzqczjhgh90fgxd96agbnkpf9gah1mpd6qj";
+    urls = [
+      "http://support.epson.net/linux/src/scanner/imagescanv3/debian/imagescan_${meta.version}.orig.tar.gz"
+      "http://ni.r/~tv/mirrors/epson/imagescan_${meta.version}.orig.tar.gz"
+    ];
+    sha256 = "0xwl4xp07cigslbi1qc52jsjvxcyvjlx54g812mn7211p01v2h4l";
   };
 
   preConfigure = ''
@@ -203,6 +212,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.tv ];
     platforms = stdenv.lib.platforms.linux;
-    version = "3.54.0";
+    version = "3.55.0";
   };
 }

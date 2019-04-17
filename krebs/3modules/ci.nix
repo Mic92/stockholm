@@ -108,10 +108,12 @@ let
                         name=str(new_step),
                         command=[
                           "${pkgs.writeDash "build-stepper.sh" ''
-                            set -efu
+                            set -xefu
                             profile=${shell.escape profileRoot}/$build_name
                             result=$("$build_script")
-                            ${pkgs.nix}/bin/nix-env -p "$profile" --set "$result"
+                            if [ -n "$result" ]; then
+                              ${pkgs.nix}/bin/nix-env -p "$profile" --set "$result"
+                            fi
                           ''}"
                         ],
                         env={

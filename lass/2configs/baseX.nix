@@ -9,6 +9,7 @@ in {
     ./power-action.nix
     ./copyq.nix
     ./urxvt.nix
+    ./xdg-open.nix
     {
       hardware.pulseaudio = {
         enable = true;

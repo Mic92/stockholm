@@ -31,6 +31,7 @@ with import <stockholm/lib>;
       download-dir = "/var/download/finished";
       incomplete-dir = "/var/download/incoming";
       incomplete-dir-enable = true;
+      message-level = 1;
       umask = "002";
       rpc-whitelist-enabled = false;
       rpc-host-whitelist-enabled = false;
