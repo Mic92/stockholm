@@ -46,7 +46,6 @@ with import <stockholm/lib>;
         wine
         geeqie
         vlc
-        minecraft
         zsnes
       ];
       nixpkgs.config.firefox.enableAdobeFlash = true;
