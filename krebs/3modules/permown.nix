@@ -37,6 +37,12 @@ with import <stockholm/lib>;
     plans = attrValues config.krebs.permown;
   in mkIf (plans != []) {
 
+    system.activationScripts.permown = let
+      mkdir = plan: /* sh */ ''
+        ${pkgs.coreutils}/bin/mkdir -p ${shell.escape plan.path}
+      '';
+    in concatMapStrings mkdir plans;
+
     systemd.services = genAttrs' plans (plan: {
       name = "permown.${replaceStrings ["/"] ["_"] plan.path}";
       value = {
