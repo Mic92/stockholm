@@ -429,6 +429,17 @@ in {
         };
       };
     };
+    ada = {
+      owner = config.krebs.users.filly;
+      nets = {
+        wiregrill = {
+          aliases = [ "ada.w" ];
+          wireguard = {
+            pubkey = "+t0j9j7TZqvSFPzgunnON/ArXVGpMS/L3DldpanLoUk=";
+          };
+        };
+      };
+    };
   };
   users = {
     ciko = {
@@ -463,6 +474,8 @@ in {
       pubkey = ssh-for "ulrich";
     };
     miaoski = {
+    };
+    filly = {
     };
   };
 }
