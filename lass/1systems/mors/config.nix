@@ -26,6 +26,8 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/syncthing.nix>
     <stockholm/lass/2configs/otp-ssh.nix>
     <stockholm/lass/2configs/c-base.nix>
+    <stockholm/lass/2configs/sync/decsync.nix>
+    <stockholm/lass/2configs/sync/weechat.nix>
     <stockholm/lass/2configs/br.nix>
     <stockholm/lass/2configs/ableton.nix>
     <stockholm/lass/2configs/starcraft.nix>
@@ -50,14 +52,10 @@ with import <stockholm/lib>;
     }
     {
       krebs.syncthing.folders = [
-        { id = "contacts"; path = "/home/lass/contacts"; peers = [ "mors" "blue" "green" "phone" ]; }
         { id = "the_playlist"; path = "/home/lass/tmp/the_playlist"; peers = [ "mors" "phone" "prism" ]; }
-        { path = "/home/lass/.weechat"; peers = [ "blue" "green" "mors" ]; }
       ];
       lass.ensure-permissions = [
-        { folder = "/home/lass/contacts"; owner = "lass"; group = "syncthing"; }
         { folder = "/home/lass/tmp/the_playlist"; owner = "lass"; group = "syncthing"; }
-        { folder = "/home/lass/.weechat"; owner = "lass"; group = "syncthing"; }
       ];
     }
     {
