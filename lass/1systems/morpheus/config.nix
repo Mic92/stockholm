@@ -30,4 +30,12 @@ with import <stockholm/lib>;
       ];
     };
   };
+
+
+  services.xserver.desktopManager.default = "none";
+  services.xserver.displayManager.lightdm.autoLogin = {
+    enable = true;
+    user = "lass";
+    timeout = 5;
+  };
 }
