@@ -137,6 +137,18 @@ with import <stockholm/lib>;
     (pkgs.writeDashBin "btc-kraken" ''
       ${pkgs.curl}/bin/curl -Ss  'https://api.kraken.com/0/public/Ticker?pair=BTCEUR' | ${pkgs.jq}/bin/jq '.result.XXBTZEUR.a[0]'
     '')
+    (pkgs.writeDashBin "krebsco.de" ''
+      TMPDIR=$(${pkgs.coreutils}/bin/mktemp -d)
+      ${pkgs.brain}/bin/brain show krebs-secrets/ovh-secrets.json > "$TMPDIR"/ovh-secrets.json
+      OVH_ZONE_CONFIG="$TMPDIR"/ovh-secrets.json ${pkgs.krebszones}/bin/krebszones import
+      ${pkgs.coreutils}/bin/rm -rf "$TMPDIR"
+    '')
+    (pkgs.writeDashBin "lassul.us" ''
+      TMPDIR=$(${pkgs.coreutils}/bin/mktemp -d)
+      ${pkgs.pass}/bin/pass show admin/ovh/api.config > "$TMPDIR"/ovh-secrets.json
+      OVH_ZONE_CONFIG="$TMPDIR"/ovh-secrets.json ${pkgs.ovh-zone}/bin/ovh-zone import /etc/zones/lassul.us lassul.us
+      ${pkgs.coreutils}/bin/rm -rf "$TMPDIR"
+    '')
   ];
 
   #TODO: fix this shit
