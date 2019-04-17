@@ -542,21 +542,28 @@ rec {
     merge = mergeOneOption;
   };
 
-  # POSIX.1‐2013, 3.278 Portable Filename Character Set
+  # POSIX.1‐2017, 3.190 Group Name
+  groupname = mkOptionType {
+    name = "POSIX group name";
+    check = filename.check;
+    merge = mergeOneOption;
+  };
+
+  # POSIX.1‐2017, 3.281 Portable Filename
   filename = mkOptionType {
-    name = "POSIX filename";
+    name = "POSIX portable filename";
     check = test "[0-9A-Za-z._][0-9A-Za-z._-]*";
     merge = mergeOneOption;
   };
 
-  # POSIX.1‐2013, 3.2 Absolute Pathname
+  # POSIX.1‐2017, 3.2 Absolute Pathname
   absolute-pathname = mkOptionType {
     name = "POSIX absolute pathname";
     check = x: isString x && substring 0 1 x == "/" && pathname.check x;
     merge = mergeOneOption;
   };
 
-  # POSIX.1‐2013, 3.267 Pathname
+  # POSIX.1-2017, 3.271 Pathname
   pathname = mkOptionType {
     name = "POSIX pathname";
     check = x:
@@ -570,9 +577,9 @@ rec {
     merge = mergeOneOption;
   };
 
-  # POSIX.1-2013, 3.431 User Name
+  # POSIX.1-2017, 3.216 Login Name
   username = mkOptionType {
-    name = "POSIX username";
+    name = "POSIX login name";
     check = filename.check;
     merge = mergeOneOption;
   };
