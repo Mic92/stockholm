@@ -27,6 +27,12 @@ with import <stockholm/lib>;
         enable = true;
         systemWide = true;
       };
+      programs.chromium = {
+        enable = true;
+        extensions = [
+          "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
+        ];
+      };
       environment.systemPackages = with pkgs; [
         pavucontrol
         #firefox
