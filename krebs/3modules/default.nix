@@ -39,6 +39,7 @@ let
       ./nixpkgs.nix
       ./on-failure.nix
       ./os-release.nix
+      ./permown.nix
       ./per-user.nix
       ./power-action.nix
       ./Reaktor.nix
