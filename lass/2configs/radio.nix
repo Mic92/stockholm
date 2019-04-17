@@ -59,6 +59,9 @@ in {
     group = "radio";
     musicDirectory = "/home/radio/the_playlist/music";
     extraConfig = ''
+      log_level "default"
+      auto_update "yes"
+
       audio_output {
         type        "shout"
         encoding    "lame"
