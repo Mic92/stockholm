@@ -30,8 +30,7 @@
     };
   };
 
-  services.logind.extraConfig = ''
-    HandleLidSwitch=ignore
-  '';
+  services.logind.lidSwitch = "ignore";
+  services.logind.lidSwitchDocked = "ignore";
 
 }

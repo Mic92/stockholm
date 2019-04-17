@@ -31,13 +31,20 @@
       session required pam_loginuid.so
     '';
 
-    security.pam.services.dovecot2.text = ''
-      auth required pam_exec.so expose_authtok ${usershadow}/bin/verify_pam ${cfg.pattern}
-      auth required pam_permit.so
-      account required pam_permit.so
-      session required pam_permit.so
-      session required pam_env.so envfile=${config.system.build.pamEnvironment}
-    '';
+    security.pam.services.dovecot2 = {
+      text = ''
+        auth required pam_exec.so debug expose_authtok log=/tmp/lol /run/wrappers/bin/shadow_verify_pam ${cfg.pattern}
+        auth required pam_permit.so
+        account required pam_permit.so
+        session required pam_permit.so
+        session required pam_env.so envfile=${config.system.build.pamEnvironment}
+      '';
+    };
+
+    security.wrappers.shadow_verify_pam = {
+      source = "${usershadow}/bin/verify_pam";
+      owner = "root";
+    };
   };
 
   usershadow = let {
@@ -46,10 +53,13 @@
       "bytestring"
     ];
     body = pkgs.writeHaskellPackage "passwords" {
+      ghc-options = [
+        "-rtsopts"
+        "-Wall"
+      ];
       executables.verify_pam = {
         extra-depends = deps;
         text = ''
-          import Data.Monoid
           import System.IO
           import Data.Char (chr)
           import System.Environment (getEnv, getArgs)
@@ -72,7 +82,6 @@
       executables.verify_arg = {
         extra-depends = deps;
         text = ''
-          import Data.Monoid
           import System.Environment (getArgs)
           import Crypto.PasswordStore (verifyPasswordWith, pbkdf2)
           import qualified Data.ByteString.Char8 as BS8

@@ -52,10 +52,12 @@ with import <stockholm/lib>;
       krebs.syncthing.folders = [
         { id = "contacts"; path = "/home/lass/contacts"; peers = [ "mors" "blue" "green" "phone" ]; }
         { id = "the_playlist"; path = "/home/lass/tmp/the_playlist"; peers = [ "mors" "phone" ]; }
+        { path = "/home/lass/.weechat"; peers = [ "blue" "green" "mors" ]; }
       ];
       lass.ensure-permissions = [
         { folder = "/home/lass/contacts"; owner = "lass"; group = "syncthing"; }
         { folder = "/home/lass/tmp/the_playlist"; owner = "lass"; group = "syncthing"; }
+        { folder = "/home/lass/.weechat"; owner = "lass"; group = "syncthing"; }
       ];
     }
     {
