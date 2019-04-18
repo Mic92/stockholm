@@ -1,8 +1,8 @@
 {
-  krebs.syncthing.folders = [
-    { path = "/home/lass/.weechat"; peers = [ "blue" "green" "mors" ]; }
-  ];
-  lass.ensure-permissions = [
-    { folder = "/home/lass/.weechat"; owner = "lass"; group = "syncthing"; }
-  ];
+  krebs.syncthing.folders."/home/lass/.weechat".peers = [ "blue" "green" "mors" ];
+  krebs.permown."/home/lass/.weechat" = {
+    owner = "lass";
+    group = "syncthing";
+    umask = "0007";
+  };
 }

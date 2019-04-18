@@ -248,10 +248,13 @@ in {
       alias ${html};
     '';
   };
-  krebs.syncthing.folders = [
-    { id = "the_playlist"; path = "/home/radio/music/the_playlist"; peers = [ "mors" "phone" "prism" ]; }
-  ];
-  lass.ensure-permissions = [
-    { folder = "/home/radio/music/the_playlist"; owner = "radio"; group = "syncthing"; }
-  ];
+  krebs.syncthing.folders."the_playlist" = {
+    path = "/home/radio/music/the_playlist";
+    peers = [ "mors" "phone" "prism" ];
+  };
+  krebs.permown."/home/radio/music/the_playlist" = {
+    owner = "radio";
+    group = "syncthing";
+    umask = "0007";
+  };
 }

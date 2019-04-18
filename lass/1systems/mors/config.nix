@@ -49,12 +49,15 @@ with import <stockholm/lib>;
       ];
     }
     {
-      krebs.syncthing.folders = [
-        { id = "the_playlist"; path = "/home/lass/tmp/the_playlist"; peers = [ "mors" "phone" "prism" ]; }
-      ];
-      lass.ensure-permissions = [
-        { folder = "/home/lass/tmp/the_playlist"; owner = "lass"; group = "syncthing"; }
-      ];
+      krebs.syncthing.folders."the_playlist" = {
+        path = "/home/lass/tmp/the_playlist";
+        peers = [ "mors" "phone" "prism" ];
+      };
+      krebs.permown."/home/lass/tmp/the_playlist" = {
+        owner = "lass";
+        group = "syncthing";
+        umask = "0007";
+      };
     }
     {
       lass.umts = {
