@@ -10,7 +10,7 @@ let
     addresses = peer.addresses;
   }) cfg.peers;
 
-  folders = map (folder: {
+  folders = mapAttrsToList ( _: folder: {
     inherit (folder) path id type;
     devices = map (peer: { deviceId = cfg.peers.${peer}.id; }) folder.peers;
     rescanIntervalS = folder.rescanInterval;
@@ -81,17 +81,18 @@ in
     };
 
     folders = mkOption {
-      default = [];
-      type = types.listOf (types.submodule ({ config, ... }: {
+      default = {};
+      type = types.attrsOf (types.submodule ({ config, ... }: {
         options = {
 
           path = mkOption {
             type = types.absolute-pathname;
+            default = config._module.args.name;
           };
 
           id = mkOption {
             type = types.str;
-            default = config.path;
+            default = config._module.args.name;
           };
 
           peers = mkOption {
