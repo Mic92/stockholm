@@ -35,7 +35,7 @@ with import <stockholm/lib>;
 
   config = let
     plans = attrValues config.krebs.permown;
-  in mkIf (plans != {}) {
+  in mkIf (plans != []) {
 
     system.activationScripts.permown = let
       mkdir = plan: /* sh */ ''
