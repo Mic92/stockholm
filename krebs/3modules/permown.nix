@@ -35,7 +35,7 @@ with import <stockholm/lib>;
 
   config = let
     plans = attrValues config.krebs.permown;
-  in mkIf (plans != {}) {
+  in mkIf (plans != []) {
 
     system.activationScripts.permown = let
       mkdir = plan: /* sh */ ''
@@ -61,7 +61,7 @@ with import <stockholm/lib>;
           ExecStart = pkgs.writeDash "permown" ''
             set -efu
 
-            find "$ROOT_PATH" -exec chown "$OWNER_GROUP" {} +
+            find "$ROOT_PATH" -exec chown -h "$OWNER_GROUP" {} +
             find "$ROOT_PATH" -type d -exec chmod "$DIR_MODE" {} +
             find "$ROOT_PATH" -type f -exec chmod "$FILE_MODE" {} +
 
@@ -70,8 +70,10 @@ with import <stockholm/lib>;
               if test -d "$path"; then
                 exec "$0" "$@"
               fi
-              chown "$OWNER_GROUP" "$path"
-              chmod "$FILE_MODE" "$path"
+              chown -h "$OWNER_GROUP" "$path"
+              if test -f "$path"; then
+                chmod "$FILE_MODE" "$path"
+              fi
             done
           '';
           Restart = "always";
