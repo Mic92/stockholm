@@ -255,6 +255,6 @@ in {
   krebs.permown."/home/radio/music/the_playlist" = {
     owner = "radio";
     group = "syncthing";
-    umask = "0007";
+    umask = "0002";
   };
 }
