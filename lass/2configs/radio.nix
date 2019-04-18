@@ -10,7 +10,7 @@ let
   source-password = import <secrets/icecast-source-pw>;
 
   add_random = pkgs.writeDashBin "add_random" ''
-    ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.mpc_cli}/bin/mpc ls | shuf -n1)"
+    ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.mpc_cli}/bin/mpc ls the_playlist/music | grep '\.ogg$' | shuf -n1)"
   '';
 
   skip_track = pkgs.writeDashBin "skip_track" ''
@@ -57,7 +57,7 @@ in {
   services.mpd = {
     enable = true;
     group = "radio";
-    musicDirectory = "/home/radio/the_playlist/music";
+    musicDirectory = "/home/radio/music";
     extraConfig = ''
       log_level "default"
       auto_update "yes"
