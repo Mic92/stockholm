@@ -65,17 +65,30 @@ with import <stockholm/lib>;
             find "$ROOT_PATH" -type d -exec chmod "$DIR_MODE" {} +
             find "$ROOT_PATH" -type f -exec chmod "$FILE_MODE" {} +
 
-            inotifywait -mrq -e CREATE --format %w%f "$ROOT_PATH" |
+            paths=/tmp/paths
+            rm -f "$paths"
+            mkfifo "$paths"
+
+            inotifywait -mrq -e CREATE --format %w%f "$ROOT_PATH" > "$paths" &
+            inotifywaitpid=$!
+
+            trap cleanup EXIT
+            cleanup() {
+              kill "$inotifywaitpid"
+            }
+
             while read -r path; do
               if test -d "$path"; then
+                cleanup
                 exec "$0" "$@"
               fi
               chown -h "$OWNER_GROUP" "$path"
               if test -f "$path"; then
                 chmod "$FILE_MODE" "$path"
               fi
-            done
+            done < "$paths"
           '';
+          PrivateTemp = true;
           Restart = "always";
           RestartSec = 10;
           UMask = plan.umask;
