@@ -20,13 +20,12 @@ with import <stockholm/lib>;
     }
   ];
 
-  lass.ensure-permissions = [
-    { folder = "/var/lib/sync-containers"; owner = "root"; group = "syncthing"; }
-  ];
-
-  krebs.syncthing.folders = [
-    { path = "/var/lib/sync-containers"; peers = [ "icarus" "skynet" "littleT" "shodan" ]; }
-  ];
+  krebs.syncthing.folders."/var/lib/sync-containers".peers = [ "icarus" "skynet" "littleT" "shodan" ];
+  krebs.permown."/var/lib/sync-containers" = {
+    owner = "root";
+    group = "syncthing";
+    umask = "0007";
+  };
 
   system.activationScripts.containerPermissions = ''
     mkdir -p /var/lib/containers
