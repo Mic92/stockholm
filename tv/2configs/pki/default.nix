@@ -11,4 +11,10 @@ in {
     "SSL_CERT_FILE"
   ];
 
+  security.pki.certificateFiles =
+    mapAttrsToList
+      (name: const (./certs + "/${name}"))
+      (filterAttrs (const (eq "regular"))
+                   (readDir ./certs));
+
 }
