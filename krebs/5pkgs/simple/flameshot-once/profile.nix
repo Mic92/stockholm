@@ -29,7 +29,7 @@ let
 
   eval = evalModules {
     modules = singleton {
-      _file = toString ./config.nix;
+      _file = toString ./profile.nix;
       imports = singleton config;
       options = {
         buttons = mkOption {
