@@ -4,11 +4,11 @@
 }:
 mkDerivation {
   pname = "flameshot-once";
-  version = "1.1.0";
+  version = "1.2.0";
   src = fetchgit {
     url = "https://cgit.krebsco.de/flameshot-once";
-    sha256 = "158ha1yyj3p3mdjjga62j91ml83nhrsg34xbg3dir5cb399j8pxx";
-    rev = "9d688b6ffad14912bd1afe42555747cb3d213d95";
+    sha256 = "01c11dk8ss37awfn9xqsgx668dcrf4kvzfxlq7ycnqsnpbjjvm0a";
+    rev = "cebaefa37095e74ad2253c4e2f9d9ab390f88737";
     fetchSubmodules = true;
   };
   isLibrary = false;
