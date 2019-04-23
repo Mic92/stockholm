@@ -78,7 +78,7 @@ let
       serviceConfig = {
         Type = "simple";
         ExecStart = pkgs.writeDash "generate-wallpaper" ''
-          set -xeuf
+          set -euf
 
           # usage: getimg FILENAME URL
           fetch() {

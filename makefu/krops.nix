@@ -1,6 +1,6 @@
 { config ? config, name, target ? name }: let
   krops = ../submodules/krops;
-  nixpkgs-src = lib.importJSON ./nixpkgs.json;
+  nixpkgs-src = lib.importJSON ../krebs/nixpkgs.json;
 
   lib = import "${krops}/lib";
   pkgs = import "${krops}/pkgs" {};
@@ -20,10 +20,6 @@
   } // import (./. + "/1systems/${name}/source.nix");
   source = { test }: lib.evalSource [
     {
-      # nixos-18.09 @ 2018-09-18
-      # + uhub/sqlite: 5dd7610401747
-      # + hovercraft: 7134801b17d72
-      # + PR#53934:   eac6797380af1
       nixpkgs = if host-src.arm6 then {
         # TODO: we want to track the unstable channel
         symlink = "/nix/var/nix/profiles/per-user/root/channels/nixos/";
@@ -31,7 +27,7 @@
         derivation = ''
           with import <nixpkgs> {};
           pkgs.fetchFromGitHub {
-            owner = "makefu";
+            owner = "nixos";
             repo = "nixpkgs";
             rev = "${nixpkgs-src.rev}";
             sha256 = "${nixpkgs-src.sha256}";
@@ -75,7 +71,7 @@
     (lib.mkIf ( host-src.home-manager ) {
       home-manager.git = {
         url = https://github.com/rycee/home-manager;
-        ref = "4aa07c3";
+        ref = "ff602cb906e3dd5d5f89c7c1d0fae65bc67119a0";
       };
     })
   ];

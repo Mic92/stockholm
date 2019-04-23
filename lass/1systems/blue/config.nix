@@ -9,16 +9,11 @@ with import <stockholm/lib>;
 
     <stockholm/lass/2configs/blue.nix>
     <stockholm/lass/2configs/syncthing.nix>
+    <stockholm/lass/2configs/sync/decsync.nix>
+    <stockholm/lass/2configs/sync/weechat.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.blue;
-
-  krebs.syncthing.folders = [
-    { id = "contacts"; path = "/home/lass/contacts"; peers = [ "mors" "blue" "green" "phone" ]; }
-  ];
-  lass.ensure-permissions = [
-    { folder = "/home/lass/contacts"; owner = "lass"; group = "syncthing"; }
-  ];
 
   environment.shellAliases = {
     deploy = pkgs.writeDash "deploy" ''

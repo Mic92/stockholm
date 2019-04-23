@@ -1,9 +1,10 @@
-{ config, pkgs, ... }:
-with import <stockholm/lib>;
-{
+{ config, pkgs, ... }: with import <stockholm/lib>; let
+  peers = mapAttrs (n: v: { id = v.syncthing.id; }) (filterAttrs (n: v: v.syncthing.id != null) config.krebs.hosts);
+in {
   services.syncthing = {
     enable = true;
     group = "syncthing";
+    configDir = "/var/lib/syncthing";
   };
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp --dport 22000"; target = "ACCEPT";}
@@ -13,17 +14,17 @@ with import <stockholm/lib>;
     enable = true;
     cert = toString <secrets/syncthing.cert>;
     key = toString <secrets/syncthing.key>;
-    peers = mapAttrs (n: v: { id = v.syncthing.id; }) (filterAttrs (n: v: v.syncthing.id != null) config.krebs.hosts);
-    folders = [
-      { path = "/home/lass/sync"; peers = [ "icarus" "mors" "skynet" "blue" "green" "littleT" "prism"]; }
-    ];
+    peers = peers;
+    folders."/home/lass/sync".peers = attrNames peers;
   };
 
   system.activationScripts.syncthing-home = ''
     ${pkgs.coreutils}/bin/chmod a+x /home/lass
   '';
 
-  lass.ensure-permissions = [
-    { folder = "/home/lass/sync"; owner = "lass"; group = "syncthing"; }
-  ];
+  krebs.permown."/home/lass/sync" = {
+    owner = "lass";
+    group = "syncthing";
+    umask = "0007";
+  };
 }

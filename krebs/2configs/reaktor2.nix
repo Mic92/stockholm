@@ -115,6 +115,11 @@ let
 
 in {
 
+  users.users.reaktor2 = {
+    uid = genid_uint31 "reaktor2";
+    home = stateDir;
+  };
+
   krebs.reaktor2 = {
     freenode = {
       hostname = "irc.freenode.org";

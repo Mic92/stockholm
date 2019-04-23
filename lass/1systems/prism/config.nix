@@ -413,6 +413,42 @@ with import <stockholm/lib>;
         ];
       };
     }
+    { #macos mounting of yellow
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-i wiregrill -p tcp --dport 139"; target = "ACCEPT"; }
+        { predicate = "-i wiregrill -p tcp --dport 445"; target = "ACCEPT"; }
+        { predicate = "-i wiregrill -p udp --dport 137"; target = "ACCEPT"; }
+        { predicate = "-i wiregrill -p udp --dport 138"; target = "ACCEPT"; }
+      ];
+      users.users.smbguest = {
+        name = "smbguest";
+        uid = config.ids.uids.smbguest;
+        description = "smb guest user";
+        home = "/home/share";
+        createHome = true;
+      };
+      services.samba = {
+        enable = true;
+        enableNmbd = true;
+        shares = {
+          download = {
+            path = "/var/download/finished";
+            "read only" = "yes";
+            browseable = "yes";
+            "guest ok" = "yes";
+          };
+        };
+        extraConfig = ''
+          guest account = smbguest
+          map to guest = bad user
+          # disable printing
+          load printers = no
+          printing = bsd
+          printcap name = /dev/null
+          disable spoolss = yes
+        '';
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;

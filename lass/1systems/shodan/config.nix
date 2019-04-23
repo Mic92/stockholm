@@ -15,6 +15,8 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/bitcoin.nix>
     <stockholm/lass/2configs/backup.nix>
     <stockholm/lass/2configs/blue-host.nix>
+    <stockholm/lass/2configs/green-host.nix>
+    <stockholm/lass/2configs/ssh-cryptsetup.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.shodan;
