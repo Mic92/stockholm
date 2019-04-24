@@ -9,6 +9,10 @@ let
   };
 in {
 
+  imports = [
+    ./Xresources.nix
+  ];
+
   environment.systemPackages = [
     pkgs.ff
     pkgs.font-size
@@ -73,7 +77,6 @@ in {
         ${pkgs.xorg.xhost}/bin/xhost -LOCAL:
       } &
       ${pkgs.xorg.xmodmap}/bin/xmodmap ${import ./Xmodmap.nix args} &
-      ${pkgs.xorg.xrdb}/bin/xrdb ${import ./Xresources.nix args} &
       ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c' &
       wait
     '';
