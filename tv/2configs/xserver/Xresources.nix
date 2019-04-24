@@ -14,7 +14,7 @@ with import <stockholm/lib>;
     "URxvt*cursorBlink" = "off";
     "URxvt*jumpScroll" = "true";
     "URxvt*allowSendEvents" = "false";
-    "URxvt*charClass" = "33:48,37:48,45-47:48,64:48,38:48,61:48,63:48";
+    "URxvt*charClass" = "33:48,37-38:48,45-47:48,61:48,63-64:48";
     "URxvt*cutNewline" = "False";
     "URxvt*cutToBeginningOfLine" = "False";
 
