@@ -40,7 +40,7 @@ with import <stockholm/lib>;
     "URxvt*perl-ext" = "default,url-select";
     "URxvt*keysym.M-u" = "perl:url-select:select_next";
     "URxvt*url-select.launcher" =
-      "/etc/per-user/${config.krebs.build.user.name}/bin/ff -new-tab";
+      "/etc/profiles/per-user/${config.krebs.build.user.name}/bin/ff -new-tab";
     "URxvt*url-select.underline" = "true";
     "URxvt*colorUL" = "#4682B4";
     "URxvt.perl-lib" = "${pkgs.urxvt_perls}/lib/urxvt/perl";
