@@ -10,6 +10,7 @@ let
 in {
 
   imports = [
+    ./sxiv.nix
     ./urxvt.nix
   ];
 
@@ -18,7 +19,6 @@ in {
     pkgs.font-size
     pkgs.gitAndTools.qgit
     pkgs.mpv
-    pkgs.sxiv
     pkgs.xdotool
     pkgs.xsel
     pkgs.zathura
