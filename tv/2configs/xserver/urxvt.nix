@@ -1,6 +1,19 @@
 with import <stockholm/lib>;
-{ config, pkgs, ... }: {
-
+{ config, pkgs, ... }: let
+  cfg.user = config.krebs.build.user;
+in {
+  systemd.services.urxvtd = {
+    wantedBy = [ "graphical.target" ];
+    restartIfChanged = false;
+    serviceConfig = {
+      SyslogIdentifier = "urxvtd";
+      ExecStart = "${pkgs.rxvt_unicode}/bin/urxvtd";
+      Restart = "always";
+      RestartSec = "2s";
+      StartLimitBurst = 0;
+      User = cfg.user.name;
+    };
+  };
   tv.Xresources = {
     "URxvt*cutchars" = ''"\\`\"'&()*,;<=>?@[]^{|}‘’"'';
     "URxvt*eightBitInput" = "false";
@@ -40,7 +53,7 @@ with import <stockholm/lib>;
     "URxvt*perl-ext" = "default,url-select";
     "URxvt*keysym.M-u" = "perl:url-select:select_next";
     "URxvt*url-select.launcher" =
-      "/etc/profiles/per-user/${config.krebs.build.user.name}/bin/ff -new-tab";
+      "/etc/profiles/per-user/${cfg.user.name}/bin/ff -new-tab";
     "URxvt*url-select.underline" = "true";
     "URxvt*colorUL" = "#4682B4";
     "URxvt.perl-lib" = "${pkgs.urxvt_perls}/lib/urxvt/perl";
@@ -57,5 +70,4 @@ with import <stockholm/lib>;
     "fzmenu-urxvt*geometry" = "70x9";
     "fzmenu-urxvt*internalBorder" = "1";
   };
-
 }

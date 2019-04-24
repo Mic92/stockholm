@@ -10,7 +10,7 @@ let
 in {
 
   imports = [
-    ./Xresources.nix
+    ./urxvt.nix
   ];
 
   environment.systemPackages = [
@@ -147,19 +147,6 @@ in {
         "-nolisten tcp"
         "-xkbdir ${config.services.xserver.xkbDir}"
       ];
-    };
-  };
-
-  systemd.services.urxvtd = {
-    wantedBy = [ "graphical.target" ];
-    restartIfChanged = false;
-    serviceConfig = {
-      SyslogIdentifier = "urxvtd";
-      ExecStart = "${pkgs.rxvt_unicode}/bin/urxvtd";
-      Restart = "always";
-      RestartSec = "2s";
-      StartLimitBurst = 0;
-      User = cfg.user.name;
     };
   };
 
