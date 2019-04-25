@@ -55,6 +55,7 @@ in
     curl
     dmenu
     git
+    gnupg
     i3lock
     keepass
     networkmanagerapplet
