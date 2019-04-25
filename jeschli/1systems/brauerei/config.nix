@@ -10,7 +10,7 @@ in
 #    <stockholm/jeschli/2configs/emacs.nix>
 #    <stockholm/jeschli/2configs/xdg.nix>
 #    <stockholm/jeschli/2configs/xserver>
-    <stockholm/jeschli/2configs/steam.nix>
+#    <stockholm/jeschli/2configs/steam.nix>
     <stockholm/jeschli/2configs/virtualbox.nix>
   ];
 
