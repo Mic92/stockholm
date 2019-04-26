@@ -14,6 +14,8 @@ in {
         retiolum = {
           ip4.addr = "10.243.42.23";
           aliases = [
+            "orange.r"
+            "or4ng3.r"
             "0r4n93.r"
           ];
           tinc.pubkey = ''
