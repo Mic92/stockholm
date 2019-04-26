@@ -22,7 +22,7 @@
     environment.systemPackages = [ usershadow ];
     lass.usershadow.path = "${usershadow}";
     security.pam.services.sshd.text = ''
-      auth required pam_exec.so expose_authtok ${usershadow}/bin/verify_pam ${cfg.pattern}
+      auth required pam_exec.so expose_authtok /run/wrappers/bin/shadow_verify_pam ${cfg.pattern}
       auth required pam_permit.so
       account required pam_permit.so
       session required pam_permit.so
@@ -30,7 +30,7 @@
 
     security.pam.services.dovecot2 = {
       text = ''
-        auth required pam_exec.so debug expose_authtok log=/tmp/lol /run/wrappers/bin/shadow_verify_pam ${cfg.pattern}
+        auth required pam_exec.so expose_authtok /run/wrappers/bin/shadow_verify_pam ${cfg.pattern}
         auth required pam_permit.so
         account required pam_permit.so
         session required pam_permit.so
