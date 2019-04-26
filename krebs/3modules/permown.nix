@@ -2,8 +2,8 @@ with import <stockholm/lib>;
 { config, pkgs, ... }: {
 
   options.krebs.permown = mkOption {
-    default = [];
-    type = types.listOf (types.submodule {
+    default = {};
+    type = types.attrsOf (types.submodule ({ config, ... }: {
       options = {
         directory-mode = mkOption {
           default = "=rwx";
@@ -22,6 +22,7 @@ with import <stockholm/lib>;
           type = types.username;
         };
         path = mkOption {
+          default = config._module.args.name;
           type = types.absolute-pathname;
         };
         umask = mkOption {
@@ -29,46 +30,73 @@ with import <stockholm/lib>;
           type = types.file-mode;
         };
       };
-    });
+    }));
   };
 
-  config.systemd.services = genAttrs' config.krebs.permown (plan: {
-    name = "permown.${replaceStrings ["/"] ["_"] plan.path}";
-    value = {
-      environment = {
-        DIR_MODE = plan.directory-mode;
-        FILE_MODE = plan.file-mode;
-        OWNER_GROUP = "${plan.owner}:${plan.group}";
-        ROOT_PATH = plan.path;
-      };
-      path = [
-        pkgs.coreutils
-        pkgs.findutils
-        pkgs.inotifyTools
-      ];
-      serviceConfig = {
-        ExecStart = pkgs.writeDash "permown" ''
-          set -efu
+  config = let
+    plans = attrValues config.krebs.permown;
+  in mkIf (plans != []) {
 
-          find "$ROOT_PATH" -exec chown "$OWNER_GROUP" {} +
-          find "$ROOT_PATH" -type d -exec chmod "$DIR_MODE" {} +
-          find "$ROOT_PATH" -type f -exec chmod "$FILE_MODE" {} +
+    system.activationScripts.permown = let
+      mkdir = plan: /* sh */ ''
+        ${pkgs.coreutils}/bin/mkdir -p ${shell.escape plan.path}
+      '';
+    in concatMapStrings mkdir plans;
 
-          inotifywait -mrq -e CREATE --format %w%f "$ROOT_PATH" |
-          while read -r path; do
-            if test -d "$path"; then
-              exec "$0" "$@"
-            fi
-            chown "$OWNER_GROUP" "$path"
-            chmod "$FILE_MODE" "$path"
-          done
-        '';
-        Restart = "always";
-        RestartSec = 10;
-        UMask = plan.umask;
+    systemd.services = genAttrs' plans (plan: {
+      name = "permown.${replaceStrings ["/"] ["_"] plan.path}";
+      value = {
+        environment = {
+          DIR_MODE = plan.directory-mode;
+          FILE_MODE = plan.file-mode;
+          OWNER_GROUP = "${plan.owner}:${plan.group}";
+          ROOT_PATH = plan.path;
+        };
+        path = [
+          pkgs.coreutils
+          pkgs.findutils
+          pkgs.inotifyTools
+        ];
+        serviceConfig = {
+          ExecStart = pkgs.writeDash "permown" ''
+            set -efu
+
+            find "$ROOT_PATH" -exec chown -h "$OWNER_GROUP" {} +
+            find "$ROOT_PATH" -type d -exec chmod "$DIR_MODE" {} +
+            find "$ROOT_PATH" -type f -exec chmod "$FILE_MODE" {} +
+
+            paths=/tmp/paths
+            rm -f "$paths"
+            mkfifo "$paths"
+
+            inotifywait -mrq -e CREATE --format %w%f "$ROOT_PATH" > "$paths" &
+            inotifywaitpid=$!
+
+            trap cleanup EXIT
+            cleanup() {
+              kill "$inotifywaitpid"
+            }
+
+            while read -r path; do
+              if test -d "$path"; then
+                cleanup
+                exec "$0" "$@"
+              fi
+              chown -h "$OWNER_GROUP" "$path"
+              if test -f "$path"; then
+                chmod "$FILE_MODE" "$path"
+              fi
+            done < "$paths"
+          '';
+          PrivateTemp = true;
+          Restart = "always";
+          RestartSec = 10;
+          UMask = plan.umask;
+        };
+        wantedBy = [ "multi-user.target" ];
       };
-      wantedBy = [ "multi-user.target" ];
-    };
-  });
+    });
+
+  };
 
 }
