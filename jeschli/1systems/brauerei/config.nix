@@ -157,6 +157,11 @@ in
     extraGroups = ["docker" "vboxusers" "audio"];
     uid = 1000;
   };
+  users.extraUsers.blafoo = {
+    isNormalUser = true;
+    extraGroups = ["audio"];
+    uid = 1002;
+  };
   users.extraUsers.jamie = {
     isNormalUser = true;
     uid = 1001; # TODO genid
