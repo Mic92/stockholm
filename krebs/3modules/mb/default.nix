@@ -45,7 +45,7 @@ in {
             "p1nk.r"
           ];
           tinc.pubkey = ''
-            ----BEGIN PUBLIC KEY-----
+            -----BEGIN PUBLIC KEY-----
             MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA5YVML71oW3iJrzZKuX48
             AKrGitO5zNvsAHOI8BVsGfZTyxAAZgG4OaDX45kr27K39NcBU43LdDD0I1yjNvGe
             zAoL5MIiCPD/QR1kAvLmgpMUSqOVvrk+uoGLVt6dOGvxlOiG1AAaN0gA8Q0B/jZV
