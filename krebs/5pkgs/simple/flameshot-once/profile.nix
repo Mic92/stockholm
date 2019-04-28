@@ -29,7 +29,7 @@ let
 
   eval = evalModules {
     modules = singleton {
-      _file = toString ./config.nix;
+      _file = toString ./profile.nix;
       imports = singleton config;
       options = {
         buttons = mkOption {
@@ -76,6 +76,14 @@ let
         showHelp = mkOption {
           default = false;
           type = types.bool;
+        };
+        timeout = mkOption {
+          default = 100;
+          description = ''
+            Maximum time in milliseconds allowed for the flameshot daemon to
+            react.
+          '';
+          type = types.positive;
         };
       };
     };
@@ -125,5 +133,6 @@ in
 
   pkgs.writeDash "flameshot.profile" ''
     export FLAMESHOT_CAPTURE_PATH=${cfg.savePath}
+    export FLAMESHOT_ONCE_TIMEOUT=${toString cfg.timeout}
     export XDG_CONFIG_HOME=${XDG_CONFIG_HOME}
   ''

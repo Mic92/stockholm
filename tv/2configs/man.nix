@@ -8,5 +8,6 @@
   environment.systemPackages = with pkgs; [
     manpages
     posix_man_pages
+    xorg.xorgdocs
   ];
 }

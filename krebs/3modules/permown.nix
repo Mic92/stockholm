@@ -88,7 +88,7 @@ with import <stockholm/lib>;
               fi
             done < "$paths"
           '';
-          PrivateTemp = true;
+          PrivateTmp = true;
           Restart = "always";
           RestartSec = 10;
           UMask = plan.umask;
