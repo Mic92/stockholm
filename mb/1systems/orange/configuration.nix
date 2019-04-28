@@ -27,15 +27,13 @@ in {
 
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
   fileSystems."/mnt/public" = {
-    device = "//192.168.88.252/public";
+    device = "//192.168.0.4/public";
     fsType = "cifs";
     options = let
       automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
     in [ "${automount_opts},user,rw,username=mb0,iocharset=utf8,credentials=${config.users.users.mb.home}/.smbcredentials" ];
   };
 
-  #networking.hostName = "0r4n93";
-  networking.wireless.enable = false;
 
   # Select internationalisation properties.
   i18n = {
@@ -173,7 +171,9 @@ in {
   #services.openssh.permitRootLogin = "yes";
   services.openssh.passwordAuthentication = false;
 
+  networking.wireless.enable = false;
   networking.networkmanager.enable = false;
+  krebs.iptables.enable = true;
   #networking.nameservers = [ "8.8.8.8" "141.1.1.1" ];
   networking.enableIPv6 = false;
 
