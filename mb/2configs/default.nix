@@ -67,6 +67,7 @@ with import <stockholm/lib>;
   environment.systemPackages = with pkgs; [
   #stockholm
     git
+    git-preview
     gnumake
     jq
     parallel

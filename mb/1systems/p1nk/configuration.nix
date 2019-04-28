@@ -22,14 +22,13 @@ in {
   ];
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
   fileSystems."/mnt/public" = {
-    device = "//192.168.88.252/public";
+    device = "//192.168.0.4/public";
     fsType = "cifs";
     options = let
       automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
     in [ "${automount_opts},user,rw,username=mb0,iocharset=utf8,credentials=${config.users.users.mb.home}/.smbcredentials" ];
   };
 
-  networking.wireless.enable = true;
 
   i18n = {
     consoleFont = "Lat2-Terminus16";
@@ -147,7 +146,7 @@ in {
   services.xserver = {
     enable = true;
     layout = "de";
-    xkbOptions = "neo";
+    xkbOptions = "nodeadkeys";
     libinput.enable = true;
     desktopManager = {
       default = "xfce";
@@ -164,7 +163,9 @@ in {
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
 
+  krebs.iptables.enable = true;
   networking.networkmanager.enable = false;
+  networking.wireless.enable = true;
   networking.nameservers = [ "8.8.8.8" "141.1.1.1" ];
   networking.enableIPv6 = false;
 
