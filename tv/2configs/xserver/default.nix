@@ -9,12 +9,16 @@ let
   };
 in {
 
+  imports = [
+    ./sxiv.nix
+    ./urxvt.nix
+  ];
+
   environment.systemPackages = [
     pkgs.ff
     pkgs.font-size
     pkgs.gitAndTools.qgit
     pkgs.mpv
-    pkgs.sxiv
     pkgs.xdotool
     pkgs.xsel
     pkgs.zathura
@@ -73,7 +77,6 @@ in {
         ${pkgs.xorg.xhost}/bin/xhost -LOCAL:
       } &
       ${pkgs.xorg.xmodmap}/bin/xmodmap ${import ./Xmodmap.nix args} &
-      ${pkgs.xorg.xrdb}/bin/xrdb ${import ./Xresources.nix args} &
       ${pkgs.xorg.xsetroot}/bin/xsetroot -solid '#1c1c1c' &
       wait
     '';
@@ -144,19 +147,6 @@ in {
         "-nolisten tcp"
         "-xkbdir ${config.services.xserver.xkbDir}"
       ];
-    };
-  };
-
-  systemd.services.urxvtd = {
-    wantedBy = [ "graphical.target" ];
-    restartIfChanged = false;
-    serviceConfig = {
-      SyslogIdentifier = "urxvtd";
-      ExecStart = "${pkgs.rxvt_unicode}/bin/urxvtd";
-      Restart = "always";
-      RestartSec = "2s";
-      StartLimitBurst = 0;
-      User = cfg.user.name;
     };
   };
 
