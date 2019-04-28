@@ -49,7 +49,7 @@ with import <stockholm/lib>;
     build.user = config.krebs.users.mb;
   };
 
-  users.mutableUsers = false;
+  users.mutableUsers = true;
 
   services.timesyncd.enable = mkForce true;
 
