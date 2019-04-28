@@ -130,7 +130,6 @@ in {
     vulnix
     wcalc
     wget
-    wireshark-gtk
     xz
   ];
 
