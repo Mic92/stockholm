@@ -52,6 +52,7 @@ in
     copyq
     curl
     dmenu
+    rofi
     git
     gnupg
     i3lock
