@@ -1,16 +1,14 @@
 { config, pkgs, lib, ... }:
 let
   xmonad-jeschli = pkgs.callPackage <stockholm/jeschli/5pkgs/simple/xmonad-jeschli> { inherit config; };
+  mainUser = config.krebs.build.user.name;
 in
 {
   imports = [
     <stockholm/jeschli>
     ./hardware-configuration.nix
     <stockholm/jeschli/2configs/urxvt.nix>
-#    <stockholm/jeschli/2configs/emacs.nix>
-#    <stockholm/jeschli/2configs/xdg.nix>
-#    <stockholm/jeschli/2configs/xserver>
-#    <stockholm/jeschli/2configs/steam.nix>
+    <stockholm/jeschli/2configs/steam.nix>
     <stockholm/jeschli/2configs/virtualbox.nix>
   ];
 
