@@ -21,8 +21,7 @@ in {
     });
     systemd.services.${if cfg.enable then "Xresources" else null} = {
       wantedBy = [ "graphical.target" ];
-      after = [ "xserver.service" ];
-      requires = [ "xserver.service" ];
+      after = [ "xmonad.service" ];
       environment = {
         DISPLAY = ":${toString config.services.xserver.display}";
       };

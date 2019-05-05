@@ -42,6 +42,9 @@ in {
       # ref <stockholm/krebs/3modules>, services.openssh.knownHosts.github*
       (json https://api.github.com/meta)
 
+      # ref <nixpkgs/pkgs/tools/security/ssh-audit>
+      (json https://api.github.com/repos/arthepsy/ssh-audit/tags)
+
       # 2014-12-20 ref src/nixpkgs/pkgs/tools/networking/tlsdate/default.nix
       (json https://api.github.com/repos/ioerror/tlsdate/tags)
 
