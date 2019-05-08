@@ -53,6 +53,7 @@ in
     curl
     dmenu
     rofi
+    xdotool
     git
     gnupg
     i3lock
