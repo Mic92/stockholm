@@ -7,5 +7,6 @@
     ./iptables.nix
     ./slock.nix
     ./x0vncserver.nix
+    ./Xresources.nix
   ];
 }

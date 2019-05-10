@@ -17,6 +17,7 @@ with import <stockholm/lib>;
     ./bash
     ./htop.nix
     ./nginx
+    ./pki
     ./ssh.nix
     ./sshd.nix
     ./vim.nix
@@ -88,15 +89,6 @@ with import <stockholm/lib>;
           "/var/src"
         ]);
       };
-    }
-
-    {
-      environment.variables =
-        flip genAttrs (_: "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt") [
-          "CURL_CA_BUNDLE"
-          "GIT_SSL_CAINFO"
-          "SSL_CERT_FILE"
-        ];
     }
 
     {

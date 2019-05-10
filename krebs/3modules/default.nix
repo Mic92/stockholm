@@ -49,6 +49,7 @@ let
       ./rtorrent.nix
       ./secret.nix
       ./setuid.nix
+      ./shadow.nix
       ./syncthing.nix
       ./tinc.nix
       ./tinc_graphs.nix
@@ -102,6 +103,7 @@ let
     { krebs = import ./krebs  { inherit config; }; }
     { krebs = import ./lass   { inherit config; }; }
     { krebs = import ./makefu { inherit config; }; }
+    { krebs = import ./mb { inherit config; }; }
     { krebs = import ./external/palo.nix { inherit config; }; }
     { krebs = import ./tv     { inherit config; }; }
     {
@@ -130,7 +132,7 @@ let
 
       services.openssh.hostKeys =
         let inherit (config.krebs.build.host.ssh) privkey; in
-        mkIf (privkey != null) (mkForce [privkey]);
+        mkIf (privkey != null) [privkey];
 
       # TODO use imports for merging
       services.openssh.knownHosts =
