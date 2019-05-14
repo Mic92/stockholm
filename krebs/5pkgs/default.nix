@@ -16,6 +16,7 @@ foldl' mergeAttrs {}
   reaktor2 = self.haskellPackages.reaktor2;
 
   ReaktorPlugins = self.callPackage ./simple/Reaktor/plugins.nix {};
+  prison-break = nur.repos.makefu.prison-break;
 
   # https://github.com/proot-me/PRoot/issues/106
   proot = self.writeDashBin "proot" ''
