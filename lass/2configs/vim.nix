@@ -11,7 +11,9 @@ let
       (hiPrio (pkgs.python3.withPackages (ps: [
         ps.python-language-server
         ps.pyls-isort
+        ps.pyflakes
         ps.flake8
+        ps.yapf
       ])))
     ];
 
