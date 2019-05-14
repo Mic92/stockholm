@@ -72,6 +72,7 @@ in {
       exec ${xmonad}
     '';
     xmonad-ready = pkgs.writeDash "xmonad-ready" ''
+      ${pkgs.systemd}/bin/systemd-notify --ready
       {
         ${pkgs.xorg.xhost}/bin/xhost +SI:localuser:${cfg.user.name}
         ${pkgs.xorg.xhost}/bin/xhost -LOCAL:
@@ -119,6 +120,9 @@ in {
       SyslogIdentifier = "xmonad";
       User = cfg.user.name;
       WorkingDirectory = cfg.user.home;
+
+      NotifyAccess = "all";
+      Type = "notify";
     };
   };
 

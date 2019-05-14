@@ -11,6 +11,9 @@ let
       (hiPrio (pkgs.python3.withPackages (ps: [
         ps.python-language-server
         ps.pyls-isort
+        ps.pyflakes
+        ps.flake8
+        ps.yapf
       ])))
     ];
 
@@ -72,10 +75,6 @@ let
 
     au BufRead,BufNewFile /dev/shm/* set nobackup nowritebackup noswapfile
 
-    "Syntastic config
-    "let g:syntastic_python_checkers=['flake8']
-    "let g:syntastic_python_flake8_post_args='--ignore=E501'
-
     nnoremap <F5> :call LanguageClient_contextMenu()<CR>
     set hidden
     let g:LanguageClient_serverCommands = {
@@ -126,7 +125,6 @@ let
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
     pkgs.vimPlugins.ack-vim
     pkgs.vimPlugins.Gundo
-    #pkgs.vimPlugins.Syntastic
     pkgs.vimPlugins.undotree
     pkgs.vimPlugins.vim-go
     pkgs.vimPlugins.fzf-vim
