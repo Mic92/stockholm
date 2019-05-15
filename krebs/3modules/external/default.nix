@@ -167,6 +167,20 @@ in {
         };
       };
     };
+    horisa = {
+      cores = 2;
+      owner = config.krebs.users.ulrich; # main laptop
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.226.213";
+          ip6.addr = "42:0:e644:9099:4f8:b9aa:3856:4e85";
+          aliases = [
+            "horisa.r"
+          ];
+          tinc.pubkey = tinc-for "horisa";
+        };
+      };
+    };
     idontcare = {
       owner = config.krebs.users.Mic92;
       nets = rec {

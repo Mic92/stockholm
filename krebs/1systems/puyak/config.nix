@@ -73,6 +73,13 @@
   system.activationScripts."disengage fancontrol" = ''
     echo level disengaged > /proc/acpi/ibm/fan
   '';
+
+  # to access vorstand vm
+  users.users.root.openssh.authorizedKeys.keys = [
+    config.krebs.users.ulrich.pubkey
+    config.krebs.users.raute.pubkey
+  ];
+
   users.users.joerg = {
     openssh.authorizedKeys.keys = [ config.krebs.users.Mic92.pubkey ];
     isNormalUser = true;

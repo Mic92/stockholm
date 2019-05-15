@@ -3,12 +3,12 @@ with pkgs.python3.pkgs;
 
 buildPythonPackage rec {
   pname = "prison-break";
-  version = "1.0.0";
+  version = "1.2.0";
   src = fetchFromGitHub {
     owner = "makefu";
     repo = pname;
-    rev = "1.0.0";
-    sha256 = "0ab42z6qr42vz4fc077irn9ykrrylagx1dzlw8dqcanf49dxd961";
+    rev = version;
+    sha256 = "07wy6f06vj9s131c16gw1xl1jf9gq5xiqia8awfb26s99gxlv7l9";
   };
   propagatedBuildInputs = [
     docopt
