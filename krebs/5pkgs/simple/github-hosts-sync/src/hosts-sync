@@ -4,7 +4,7 @@ exec >&2
 
 hosts_srcdir=$GITHUB_HOST_SYNC_SRCDIR
 hosts_worktree=${GITHUB_HOST_SYNC_WORKTREE-/tmp/hosts}
-hosts_url=${GITHUB_HOST_SYNC_URL-git@github.com:krebscode/hosts.git}
+hosts_url=${GITHUB_HOST_SYNC_URL-git@github.com:krebs/hosts.git}
 
 test -d "$hosts_worktree" || git clone "$hosts_url" "$hosts_worktree"
 

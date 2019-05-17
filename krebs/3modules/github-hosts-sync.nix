@@ -25,7 +25,7 @@ let
     };
     url = mkOption {
       type = types.str;
-      default = "git@github.com:krebscode/hosts.git";
+      default = "git@github.com:krebs/hosts.git";
     };
     workTree = mkOption {
       type = types.absolute-pathname;
