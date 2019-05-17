@@ -1,7 +1,8 @@
 { pkgs, stdenv, ... }:
 
-stdenv.mkDerivation {
-  name = "github-hosts-sync";
+stdenv.mkDerivation rec {
+  name = "github-hosts-sync-${version}";
+  version = "2.0.0";
 
   src = ./src;
 
@@ -10,28 +11,21 @@ stdenv.mkDerivation {
     "installPhase"
   ];
 
-  installPhase =
-    let
-      ca-bundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-      path = stdenv.lib.makeBinPath (with pkgs; [
-        coreutils
-        findutils
-        git
-        gnugrep
-        gnused
-        nettools
-        openssh
-        socat
-      ]);
-    in
+  installPhase = let
+    ca-bundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+    path = stdenv.lib.makeBinPath [
+      pkgs.git
+      pkgs.openssh
+      pkgs.rsync
+    ];
+  in
     ''
       mkdir -p $out/bin
 
-      sed \
-        's,^main() {$,&\n  export PATH=${path} GIT_SSL_CAINFO=${ca-bundle},' \
-        < hosts-sync \
-        > $out/bin/github-hosts-sync
+      cp hosts-sync $out/bin/github-hosts-sync
 
-      chmod +x $out/bin/github-hosts-sync
+      sed -i \
+        '1s,$,\nPATH=${path}''${PATH+:$PATH} GIT_SSL_CAINFO=${ca-bundle},' \
+        $out/bin/github-hosts-sync
     '';
 }

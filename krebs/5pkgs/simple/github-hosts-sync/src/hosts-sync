@@ -1,66 +1,31 @@
 #! /bin/sh
-# TODO do_work should retry until success
-set -euf
+set -efu
+exec >&2
 
-port=${port-1028}
-local_painload=$HOME/painload
-remote_painload="https://github.com/krebscode/painload"
-local_hosts=$HOME/hosts
-remote_hosts="git@github.com:krebscode/hosts.git"
+hosts_srcdir=$GITHUB_HOST_SYNC_SRCDIR
+hosts_worktree=${GITHUB_HOST_SYNC_WORKTREE-/tmp/hosts}
+hosts_url=${GITHUB_HOST_SYNC_URL-git@github.com:krebscode/hosts.git}
 
-main() {
-  ensure_local_painload
-  ensure_local_hosts
-  is_worker && do_work || become_server
-}
+test -d "$hosts_worktree" || git clone "$hosts_url" "$hosts_worktree"
 
-ensure_local_painload() {
-  test -d "$local_painload" || git clone "$remote_painload" "$local_painload"
-}
+cd "$hosts_worktree"
 
-ensure_local_hosts() {
-  test -d "$local_hosts" || git clone "$remote_hosts" "$local_hosts"
-}
+git pull
 
-become_server() {
-  exec socat "TCP-LISTEN:$port,reuseaddr,fork" "EXEC:$0"
-}
+rsync \
+    --chmod D755,F644 \
+    --delete-excluded \
+    --filter 'protect .git' \
+    --recursive \
+    --verbose \
+    "$hosts_srcdir/" \
+    .
 
-is_worker() {
-  test "${SOCAT_SOCKPORT-}" = "$port"
-}
+git add .
 
-do_work() {
-  # read request
-  req_line="$(read line && echo "$line")"
-  req_hdrs="$(sed -n '/^\r$/q;p')"
-
-  set -x
-
-  cd "$local_hosts"
-  git pull >&2
-
-  cd "$local_hosts"
-  find . -name .git -prune -o -type f -exec git rm \{\} \; >/dev/null
-
-  cd "$local_painload"
-  git pull >&2
-
-  find "$local_painload/retiolum/hosts" -type f -exec cp \{\} "$local_hosts" \;
-
-  cd "$local_hosts"
-  find . -name .git -prune -o -type f -exec git add \{\} \; >&2
-  if git status --porcelain | grep -q .; then
-    git config user.email "$LOGNAME@$(hostname)"
-    git config user.name "$LOGNAME"
-    git commit -m bump >&2
-    git push >&2
-  fi
-
-  echo "HTTP/1.1 200 OK"
-  echo
-  echo "https://github.com/krebscode/hosts/archive/master.tar.gz"
-  echo "https://github.com/krebscode/hosts/archive/master.zip"
-}
-
-main "$@"
+if test -n "$(git status --porcelain)"; then
+  git config user.email "$LOGNAME@$(hostname)"
+  git config user.name "$LOGNAME"
+  git commit -m bump
+  git push
+fi
