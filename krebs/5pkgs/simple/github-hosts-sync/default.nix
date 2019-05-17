@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     ca-bundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
     path = stdenv.lib.makeBinPath [
       pkgs.git
+      pkgs.nettools
       pkgs.openssh
       pkgs.rsync
     ];
