@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "github-hosts-sync";
 
-  src = pkgs.painload;
+  src = ./src;
 
   phases = [
     "unpackPhase"
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
       sed \
         's,^main() {$,&\n  export PATH=${path} GIT_SSL_CAINFO=${ca-bundle},' \
-        < ./retiolum/scripts/github_hosts_sync/hosts-sync \
+        < hosts-sync \
         > $out/bin/github-hosts-sync
 
       chmod +x $out/bin/github-hosts-sync
