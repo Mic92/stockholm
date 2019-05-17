@@ -38,6 +38,8 @@ let
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = {
+        GITHUB_HOST_SYNC_USER_MAIL = user.mail;
+        GITHUB_HOST_SYNC_USER_NAME = user.name;
         GITHUB_HOST_SYNC_SRCDIR = cfg.srcDir;
         GITHUB_HOST_SYNC_WORKTREE = cfg.workTree;
         GITHUB_HOST_SYNC_URL = cfg.url;
@@ -67,6 +69,7 @@ let
   };
 
   user = rec {
+    mail = "${name}@${config.krebs.build.host.name}";
     name = "github-hosts-sync";
     uid = genid_uint31 name;
   };
