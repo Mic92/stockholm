@@ -7,11 +7,11 @@ in
   imports = [
     <stockholm/jeschli>
     ./hardware-configuration.nix
+    <home-manager/nixos>
     <stockholm/jeschli/2configs/urxvt.nix>
     <stockholm/jeschli/2configs/steam.nix>
     <stockholm/jeschli/2configs/virtualbox.nix>
-  ];
-
+   ];
   krebs.build.host = config.krebs.hosts.brauerei;
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
@@ -121,6 +121,24 @@ in
   # programs.bash.enableCompletion = true;
   # programs.mtr.enable = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+
+  home-manager.useUserPackages = true;
+  home-manager.users.jeschli = {
+    home.stateVersion = "19.03";
+  };
+#  home-manager.enable = true;
+
+  home-manager.users.jeschli.home.file = {
+     ".emacs.d" = {
+       source = pkgs.fetchFromGitHub {
+         owner = "jeschli";
+         repo = "emacs.d";
+         rev = "8ed6c40";
+         sha256 = "1q2y478srwp9f58l8cixnd2wj51909gp1z68k8pjlbjy2mrvibs0";
+       };
+       recursive = true;
+     };
+  };
 
   # List services that you want to enable:
 

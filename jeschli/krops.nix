@@ -15,6 +15,12 @@
         file = "${lib.getEnv "HOME"}/secrets/${name}";
       };
     }
+    {
+       home-manager.git = {
+         url = https://github.com/rycee/home-manager;
+         ref = "2ccbf43";
+       };
+    }
   ];
 
 in {
