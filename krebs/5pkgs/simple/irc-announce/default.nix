@@ -15,7 +15,7 @@ pkgs.writeDashBin "irc-announce" ''
 
   IRC_SERVER=$1
   IRC_PORT=$2
-  IRC_NICK=$3$$
+  IRC_NICK=$3_$$
   IRC_CHANNEL=$4
   message=$5
 

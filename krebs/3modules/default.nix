@@ -132,7 +132,7 @@ let
 
       services.openssh.hostKeys =
         let inherit (config.krebs.build.host.ssh) privkey; in
-        mkIf (privkey != null) (mkForce [privkey]);
+        mkIf (privkey != null) [privkey];
 
       # TODO use imports for merging
       services.openssh.knownHosts =
