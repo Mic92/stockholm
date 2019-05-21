@@ -14,17 +14,10 @@ let {
   };
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
+    pkgs.tv.vimPlugins.elixir
     pkgs.tv.vimPlugins.fzf
     pkgs.vimPlugins.fzfWrapper
     pkgs.vimPlugins.undotree
-    (pkgs.vimUtils.buildVimPlugin {
-      name = "vim-elixir-2018-08-17";
-      src = pkgs.fetchgit {
-        url = https://github.com/elixir-editors/vim-elixir;
-        rev = "0a847f0faed5ba2d94bb3d51f355c50f37ba025b";
-        sha256 = "1jl85wpgywhcvhgw02y8zpvqf0glr4i8522kxpvhsiacb1v1xh04";
-      };
-    })
     (pkgs.vimUtils.buildVimPlugin {
       name = "vim-syntax-jq";
       src = pkgs.fetchgit {
