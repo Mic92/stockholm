@@ -82,7 +82,10 @@ let
         \ 'go': ['~/go/bin/go-langserver']
         \ }
 
-    let g:LanguageClient_diagnosticsDisplay = { 2: { "signText": "W" } }
+    let g:LanguageClient_diagnosticsDisplay = {
+        \ 1: { "signText": "E" },
+        \ 2: { "signText": "W" }
+        \ }
 
     nmap <esc>q :buffer 
     nmap <M-q> :buffer 
