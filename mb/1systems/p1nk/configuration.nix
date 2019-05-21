@@ -142,6 +142,7 @@ in {
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.support32Bit = true;
 
   services.xserver = {
     enable = true;
