@@ -3,7 +3,6 @@ with import <stockholm/lib>;
 
   hostDefaults = hostName: host: flip recursiveUpdate host {
     ci = true;
-    monitoring = true;
     owner = config.krebs.users.mb;
   };
 
@@ -90,6 +89,7 @@ in {
       };
     };
     sunsh1n3 = {
+      ci = false;
       nets = {
         retiolum = {
           ip4.addr = "10.243.42.142";
