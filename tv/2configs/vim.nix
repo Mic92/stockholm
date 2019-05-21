@@ -15,18 +15,11 @@ let {
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
     pkgs.tv.vimPlugins.elixir
+    pkgs.tv.vimPlugins.file-line
     pkgs.tv.vimPlugins.fzf
     pkgs.tv.vimPlugins.jq
     pkgs.vimPlugins.fzfWrapper
     pkgs.vimPlugins.undotree
-    (pkgs.vimUtils.buildVimPlugin {
-      name = "file-line-1.0";
-      src = pkgs.fetchgit {
-        url = git://github.com/bogado/file-line;
-        rev = "refs/tags/1.0";
-        sha256 = "0z47zq9rqh06ny0q8lpcdsraf3lyzn9xvb59nywnarf3nxrk6hx0";
-      };
-    })
     ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
       name = "hack";
     in {
