@@ -20,7 +20,7 @@ with import <stockholm/lib>;
       rev = "refs/tags/v${cfg.version}";
       sha256 = "11xjivpj495r2ss9aqljnpzzycb57cm4sr7yzmf939rzwsd3ib0x";
     };
-  }.${versions.majorMinor nixpkgsVersion};
+  }.${versions.majorMinor version};
 
 in mkDerivation {
   pname = "email-header";

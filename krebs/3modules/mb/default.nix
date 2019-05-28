@@ -3,7 +3,6 @@ with import <stockholm/lib>;
 
   hostDefaults = hostName: host: flip recursiveUpdate host {
     ci = true;
-    monitoring = true;
     owner = config.krebs.users.mb;
   };
 
@@ -58,6 +57,59 @@ in {
             V5iypsd6lNDzlodjleTgGK8FmHGRPRdq1wb3eOLE8mWZj7ygDT50FwaC8FzAcHgC
             bLN/zlHvCbYmk9IJhktO3B6wtMrZl60+XCpb5rTulM94RirifFYsnTIDJApI11yb
             3AYi5dQXHjab/lvj6917xa0CAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+    gr33n = {
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.42.123";
+          aliases = [
+            "gr33n.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAvcqecLfk8TlGFF7JJpv8
+            kjLFNgoNfu9FYRMNG4GSxWL5w+49n6b+GC5ciOC+RJ+N56jfB9JYE0MtbuOmkY5M
+            JUphuvgOCNhTbBJsjnmG9n02evpxZn9HWypNC3oQCvY2K7vHpIxGKR5PyTVKPO0P
+            OOYKAbCLD9F2bmuLaBQ/dFXFQxfu3tjvJI9mYDWBpSkh1mYeMZLw2xxnRZLs0bEO
+            ZWdzxCh9UM/mgb4WYuNED9+sz7MSsaMPAqquarFCguUxhjp6rElGFcNWjXaxA5zt
+            JGS6VompUViVSHjSaQ5/3VRKoIQjr4NOFYQqLpmB5S2OpiggV6I9OpB7QUGlvcYd
+            I3j+1AeK11HuEyPqSwxjNCCrI12bSIo3685BPHbl+AMhWGhzrCkAGcOCbAefreXQ
+            5v4SaKUIDlCYhN+vyNdlu2jvqQlxfJrPAfBt+jJBK6gMcAEKc7P/Oj4B9Fsl331X
+            s0kWH5G9t6OhO/Of8/kb2/P+YEbM6zi1QQdZAOr6Cg0y4cMt9zxLWknaM4yEDAXH
+            oSM33PTv9DOvBjfxRXqOHqOHRq5ayqZdIFgfLUlPTdbWRkhNzjG8f7k7p32m20A6
+            Kal+OF//I2c9E9vKFzyepyTcnwi3B8+cFJ74+XYaNApdwHSb1BU/+c3O9RJExZGV
+            jtTSbSJHU5esECtAuXy1XH8CAwEAAQ==
+            -----END PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+    sunsh1n3 = {
+      ci = false;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.42.142";
+          aliases = [
+            "sunsh1n3.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAo2VCqp6mUbyo3n+1XpKf
+            QavpgRYQyv9wAZzYSYHjxThuLmNb/wERPbWJFMZfAGuku0blKWJISSgFWd9YL7dU
+            pZQZxfqo/9xnS/r0xIKrKSsBiTZt7JZmTQzj1ri11TIO0S1QPjIP5HsxlZZAw0nz
+            idEDlKmgWs74FPdezlXqvJyEUKDqL/ZQBtdhZZIDMkSJnCdBzXxKwv+uLVE46ZBf
+            4HrtQjcj+dyVMogMIoseAgf5lS6V3pyCM7/NHZFxrIxoIAxSsUoB59i2EbK6aUK5
+            yuiWHI6ZHToxN2K/0SX96hzxcwrUmdk49tTHBY0Zhn2ku6NjQPU3LuxgIwrSaSJD
+            /KWh6XkqR7EsCVN0AIsLvFelI2ckSyNyAlnYbMAHDt7GwHlNp4Lsy+x4ZQ6m0xTY
+            Z+/jt6sfoMiulPcwWEpqNCCf5A65lF77DldQhH3qYrdQ756n/kOqSfQtPCnVNYXy
+            LlN5rKCOgxKxxtKkwMUif2OM9RPHpM7wS09Rvek6zpL9ymhU5THF7UylLKxKGjYj
+            6dTooyRVQRJdrwIYLrJIy0MfGyYiGAJxf/C0KOOZnJPCW2b51+bo5Zh+BhKZYN8H
+            C2DEGc8+4h5hX1TAaUfTpfVm3mMTh8H2m9N8Pdl5ji+A0m0IwHDLQyaoskcxSjvU
+            9IxYLfkSD6AJqasnHlz0L08CAwEAAQ==
             -----END PUBLIC KEY-----
           '';
         };

@@ -1,5 +1,5 @@
 { config, pkgs, callPackage, ... }: let
-    unstable = import <nixpkgs-unstable> { config = { allowUnfree = true; }; };
+  unstable = import <nixpkgs-unstable> { config = { allowUnfree = true; }; };
 in {
   imports =
     [ # Include the results of the hardware scan.
@@ -7,7 +7,7 @@ in {
       <stockholm/mb>
     ];
 
-  krebs.build.host = config.krebs.hosts.orange;
+  krebs.build.host = config.krebs.hosts.gr33n;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = with config.boot.kernelPackages; [ wireguard ];
@@ -15,15 +15,6 @@ in {
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  boot.initrd.luks.devices = [
-    {
-      name = "root";
-      device = "/dev/disk/by-uuid/09a36f91-a713-4b82-8b41-4e7a6acc4acf";
-      preLVM = true;
-      allowDiscards = true;
-    }
-  ];
 
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
   fileSystems."/mnt/public" = {
@@ -34,8 +25,6 @@ in {
     in [ "${automount_opts},user,rw,username=mb0,iocharset=utf8,credentials=${config.users.users.mb.home}/.smbcredentials" ];
   };
 
-
-  # Select internationalisation properties.
   i18n = {
     consoleFont = "Lat2-Terminus16";
     consoleKeyMap = "de";
@@ -44,141 +33,50 @@ in {
 
   time.timeZone = "Europe/Berlin";
 
-  nixpkgs.config.packageOverrides = super: {
-    openvpn = super.openvpn.override { pkcs11Support = true; useSystemd = false; };
-  };
-
   nixpkgs.config.allowUnfree = true;
 
-  fonts = {
-    enableCoreFonts = true;
-    enableGhostscriptFonts = true;
-    fonts = with pkgs; [
-      anonymousPro
-      corefonts
-      dejavu_fonts
-      envypn-font
-      fira
-      gentium
-      gohufont
-      inconsolata
-      liberation_ttf
-      powerline-fonts
-      source-code-pro
-      terminus_font
-      ttf_bitstream_vera
-      ubuntu_font_family
-      unifont
-      unstable.cherry
-      xorg.fontbitstream100dpi
-      xorg.fontbitstream75dpi
-      xorg.fontbitstreamtype1
-    ];
+  nixpkgs.config.packageOverrides = super: {
+    openvpn = super.openvpn.override {
+      pkcs11Support = true;
+      useSystemd = false;
+    };
   };
-
-  environment.systemPackages = with pkgs; [
-    adapta-gtk-theme
-    aircrackng
-    ag
-    arandr
-    binutils
-    chromium
-    cifs-utils
-    curl
-    evince
-    exfat
-    feh
-    file
-    firefox
-    freetype
-    gimp
-    git
-    gnupg
-    graphite2
-    hicolor_icon_theme
-    htop
-    i3lock
-    jq
-    keepassx2
-    kvm
-    lxappearance
-    man-pages
-    moc
-    mpv
-    mpvc
-    mupdf
-    ncdu
-    nmap
-    openvpn
-    pass
-    p7zip
-    powertop
-    ranger
-    rofi
-    sshfs
-    tcpdump
-    tmux
-    traceroute
-    tree
-    unstable.alacritty
-    unstable.ponyc
-    unstable.sublime3
-    unstable.youtube-dl
-    vim
-    virt-viewer
-    virtmanager
-    vulnix
-    wcalc
-    wget
-    xz
-  ];
 
   environment.shellAliases = {
     ll = "ls -alh";
     ls = "ls --color=tty";
   };
 
-  virtualisation.libvirtd.enable = true;
-  #virtualisation.kvmgt.enable = true;
+  environment.systemPackages = with pkgs; [
+     curl
+     fish
+     git
+     htop
+     nmap
+     ranger
+     tcpdump
+     tmux
+     traceroute
+     tree
+     vim
+     wcalc
+     wget
+     xz
+  ];
 
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
+  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
-  hardware.pulseaudio.support32Bit = true;
-  nixpkgs.config.pulseaudio = true;
-
-  services.xserver = {
-    enable = true;
-    layout = "de";
-    xkbVariant = "nodeadkeys";
-    libinput.enable = true;
-    desktopManager = {
-      default = "xfce";
-      xterm.enable = false;
-      xfce = {
-        enable = true;
-        noDesktop = true;
-        enableXfwm = false;
-      };
-    };
-    windowManager.ratpoison.enable = true;
-  };
+  sound.enable = false;
 
   services.openssh.enable = true;
-  #services.openssh.permitRootLogin = "yes";
   services.openssh.passwordAuthentication = false;
 
   networking.wireless.enable = false;
   networking.networkmanager.enable = false;
   krebs.iptables.enable = true;
-  #networking.nameservers = [ "8.8.8.8" "141.1.1.1" ];
   networking.enableIPv6 = false;
 
-  programs.fish = {
+   programs.fish = {
     enable = true;
     shellInit = ''
       function ssh_agent --description 'launch the ssh-agent and add the id_rsa identity'
@@ -219,12 +117,11 @@ in {
                   set suffix '>'
           end
 
-          echo -n -s "$USER" @ (set_color yellow) (prompt_hostname) (set_color normal) "$nix_shell_info" ' ' (set_color $color_cwd) (prompt_pwd) (set_color normal) "$suffix "
+          echo -n -s "$USER" @ (set_color green) (prompt_hostname) (set_color normal) "$nix_shell_info" ' ' (set_color $color_cwd) (prompt_pwd) (set_color normal) "$suffix "
       end
     '';
   };
 
-  nix.maxJobs = 4;
   nix.buildCores = 4;
   system.autoUpgrade.enable = false;
   system.autoUpgrade.channel = "https://nixos.org/channels/nixos-19.03";

@@ -49,7 +49,7 @@ with import <stockholm/lib>;
     build.user = config.krebs.users.mb;
   };
 
-  users.mutableUsers = false;
+  users.mutableUsers = true;
 
   services.timesyncd.enable = mkForce true;
 
@@ -67,6 +67,7 @@ with import <stockholm/lib>;
   environment.systemPackages = with pkgs; [
   #stockholm
     git
+    git-preview
     gnumake
     jq
     parallel
