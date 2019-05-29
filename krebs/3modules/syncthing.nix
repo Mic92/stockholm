@@ -22,7 +22,7 @@ let
   getApiKey = pkgs.writeDash "getAPIKey" ''
     ${pkgs.libxml2}/bin/xmllint \
       --xpath 'string(configuration/gui/apikey)'\
-      ${config.services.syncthing.dataDir}/config.xml
+      ${config.services.syncthing.configDir}/config.xml
   '';
 
   updateConfig = pkgs.writeDash "merge-syncthing-config" ''
@@ -31,9 +31,9 @@ let
     ${pkgs.untilport}/bin/untilport localhost 8384
     API_KEY=$(${getApiKey})
     CFG=$(${pkgs.curl}/bin/curl -Ss -H "X-API-Key: $API_KEY" localhost:8384/rest/system/config)
-    echo "$CFG" | ${pkgs.jq}/bin/jq -s '.[] * {
-      "devices": ${builtins.toJSON devices},
-      "folders": ${builtins.toJSON folders}
+    echo "$CFG" | ${pkgs.jq}/bin/jq -s '.[] as $in | $in * {
+      "devices": (${builtins.toJSON devices}${optionalString (! cfg.overridePeers) " + $in.devices"}),
+      "folders": (${builtins.toJSON folders}${optionalString (! cfg.overrideFolders) " + $in.folders"})
     }' | ${pkgs.curl}/bin/curl -Ss -H "X-API-Key: $API_KEY" localhost:8384/rest/system/config -d @-
     ${pkgs.curl}/bin/curl -Ss -H "X-API-Key: $API_KEY" localhost:8384/rest/system/restart -X POST
   '';
@@ -45,11 +45,6 @@ in
 
     enable = mkEnableOption "syncthing-init";
 
-    id = mkOption {
-      type = types.str;
-      default = config.krebs.build.host.name;
-    };
-
     cert = mkOption {
       type = types.nullOr types.absolute-pathname;
       default = null;
@@ -60,6 +55,13 @@ in
       default = null;
     };
 
+    overridePeers = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to delete the peers which are not configured via the peers option
+      '';
+    };
     peers = mkOption {
       default = {};
       type = types.attrsOf (types.submodule ({
@@ -80,6 +82,13 @@ in
       }));
     };
 
+    overrideFolders = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to delete the folders which are not configured via the peers option
+      '';
+    };
     folders = mkOption {
       default = {};
       type = types.attrsOf (types.submodule ({ config, ... }: {
@@ -135,14 +144,14 @@ in
     systemd.services.syncthing = mkIf (cfg.cert != null || cfg.key != null) {
       preStart = ''
         ${optionalString (cfg.cert != null) ''
-          cp ${toString cfg.cert} ${config.services.syncthing.dataDir}/cert.pem
-          chown ${config.services.syncthing.user}:${config.services.syncthing.group} ${config.services.syncthing.dataDir}/cert.pem
-          chmod 400 ${config.services.syncthing.dataDir}/cert.pem
+          cp ${toString cfg.cert} ${config.services.syncthing.configDir}/cert.pem
+          chown ${config.services.syncthing.user}:${config.services.syncthing.group} ${config.services.syncthing.configDir}/cert.pem
+          chmod 400 ${config.services.syncthing.configDir}/cert.pem
         ''}
         ${optionalString (cfg.key != null) ''
-          cp ${toString cfg.key} ${config.services.syncthing.dataDir}/key.pem
-          chown ${config.services.syncthing.user}:${config.services.syncthing.group} ${config.services.syncthing.dataDir}/key.pem
-          chmod 400 ${config.services.syncthing.dataDir}/key.pem
+          cp ${toString cfg.key} ${config.services.syncthing.configDir}/key.pem
+          chown ${config.services.syncthing.user}:${config.services.syncthing.group} ${config.services.syncthing.configDir}/key.pem
+          chmod 400 ${config.services.syncthing.configDir}/key.pem
         ''}
       '';
     };
