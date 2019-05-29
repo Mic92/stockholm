@@ -262,10 +262,40 @@ in {
       "/home/ms/Mail"
       "/home/klabusterbeere/Mail"
       "/home/jms/Mail"
+      "/home/kasia/Mail"
       "/home/bruno/Mail"
       "/home/akayguen/Mail"
       "/backups/sql_dumps"
     ];
+  };
+
+  boot.kernel.sysctl."fs.inotify.max_user_watches" = "1048576";
+  krebs.permown = {
+    "/srv/http/ubikmedia.de" = {
+      owner = "domsen";
+      group = "nginx";
+      umask = "0007";
+    };
+    "/srv/http/o.ubikmedia.de" = {
+      owner = "domsen";
+      group = "nginx";
+      umask = "0007";
+    };
+    "/srv/http/freemonkey.art" = {
+      owner = "domsen";
+      group = "nginx";
+      umask = "0002";
+    };
+    "/srv/http/jarugadesign.de" = {
+      owner = "domsen";
+      group = "nginx";
+      umask = "0002";
+    };
+    "/srv/http/reich-gebaeudereinigung.de" = {
+      owner = "domsen";
+      group = "nginx";
+      umask = "0002";
+    };
   };
 
 }
