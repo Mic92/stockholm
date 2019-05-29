@@ -25,8 +25,9 @@ in {
   '';
 
   krebs.permown."/home/lass/sync" = {
+    file-mode = "u+rw,g+rw";
     owner = "lass";
     group = "syncthing";
-    umask = "0007";
+    umask = "0002";
   };
 }
