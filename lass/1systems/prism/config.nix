@@ -396,6 +396,12 @@ with import <stockholm/lib>;
         statdPort = 4000;
       };
       krebs.iptables.tables.filter.INPUT.rules = [
+         { predicate = "-i retiolum -p tcp --dport 111"; target = "ACCEPT"; }
+         { predicate = "-i retiolum -p udp --dport 111"; target = "ACCEPT"; }
+         { predicate = "-i retiolum -p tcp --dport 2049"; target = "ACCEPT"; }
+         { predicate = "-i retiolum -p udp --dport 2049"; target = "ACCEPT"; }
+         { predicate = "-i retiolum -p tcp --dport 4000:4002"; target = "ACCEPT"; }
+         { predicate = "-i retiolum -p udp --dport 4000:4002"; target = "ACCEPT"; }
          { predicate = "-i wiregrill -p tcp --dport 111"; target = "ACCEPT"; }
          { predicate = "-i wiregrill -p udp --dport 111"; target = "ACCEPT"; }
          { predicate = "-i wiregrill -p tcp --dport 2049"; target = "ACCEPT"; }
