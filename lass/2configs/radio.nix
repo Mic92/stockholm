@@ -97,7 +97,7 @@ in {
 
   services.icecast = {
     enable = true;
-    hostname =  "config.krebs.build.host.name";
+    hostname = "radio.lassul.us";
     admin.password = admin-password;
     extraConf = ''
       <authentication>
@@ -218,6 +218,11 @@ in {
       forceSSL = true;
       enableACME = true;
       locations."/".extraConfig = ''
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Server $host;
+        proxy_set_header X-Real-IP $remote_addr;
         proxy_pass http://localhost:8000;
       '';
       locations."/recent".extraConfig = ''
