@@ -383,7 +383,7 @@ with import <stockholm/lib>;
       '';
 
       fileSystems."/export/download" = {
-        device = "/var/lib/containers/yellow/var/download";
+        device = "/var/lib/containers/yellow/var/download/finished";
         options = [ "bind" ];
       };
       services.nfs.server = {
