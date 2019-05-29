@@ -29,4 +29,5 @@
 
   nix.maxJobs = lib.mkDefault 8;
   powerManagement.cpuFreqGovernor = "powersave";
+  hardware.pulseaudio.enable = true;
 }

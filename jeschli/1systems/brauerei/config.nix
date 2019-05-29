@@ -1,19 +1,17 @@
 { config, pkgs, lib, ... }:
 let
   xmonad-jeschli = pkgs.callPackage <stockholm/jeschli/5pkgs/simple/xmonad-jeschli> { inherit config; };
+  mainUser = config.krebs.build.user.name;
 in
 {
   imports = [
     <stockholm/jeschli>
     ./hardware-configuration.nix
+    <home-manager/nixos>
     <stockholm/jeschli/2configs/urxvt.nix>
-#    <stockholm/jeschli/2configs/emacs.nix>
-#    <stockholm/jeschli/2configs/xdg.nix>
-#    <stockholm/jeschli/2configs/xserver>
     <stockholm/jeschli/2configs/steam.nix>
     <stockholm/jeschli/2configs/virtualbox.nix>
-  ];
-
+   ];
   krebs.build.host = config.krebs.hosts.brauerei;
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
@@ -54,7 +52,10 @@ in
     copyq
     curl
     dmenu
+    rofi
+    xdotool
     git
+    gnupg
     i3lock
     keepass
     networkmanagerapplet
@@ -92,9 +93,11 @@ in
     })
   # dev tools
     gnumake
+    jetbrains.clion
     jetbrains.goland
     jetbrains.pycharm-professional
     jetbrains.webstorm
+    vscode
   # document viewer
     evince
     zathura
@@ -105,7 +108,6 @@ in
     cargo
     rustracer
     rustup
-    vscode
   # orga tools
     taskwarrior
   # xorg
@@ -119,6 +121,24 @@ in
   # programs.bash.enableCompletion = true;
   # programs.mtr.enable = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+
+  home-manager.useUserPackages = true;
+  home-manager.users.jeschli = {
+    home.stateVersion = "19.03";
+  };
+#  home-manager.enable = true;
+
+  home-manager.users.jeschli.home.file = {
+     ".emacs.d" = {
+       source = pkgs.fetchFromGitHub {
+         owner = "jeschli";
+         repo = "emacs.d";
+         rev = "8ed6c40";
+         sha256 = "1q2y478srwp9f58l8cixnd2wj51909gp1z68k8pjlbjy2mrvibs0";
+       };
+       recursive = true;
+     };
+  };
 
   # List services that you want to enable:
 
@@ -154,6 +174,11 @@ in
     isNormalUser = true;
     extraGroups = ["docker" "vboxusers" "audio"];
     uid = 1000;
+  };
+  users.extraUsers.blafoo = {
+    isNormalUser = true;
+    extraGroups = ["audio"];
+    uid = 1002;
   };
   users.extraUsers.jamie = {
     isNormalUser = true;
