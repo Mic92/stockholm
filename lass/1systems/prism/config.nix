@@ -463,4 +463,10 @@ with import <stockholm/lib>;
     enable = true;
     freeMemThreshold = 5;
   };
+
+  # prism rsa hack
+  services.openssh.hostKeys = [{
+    path = toString <secrets> + "ssh.id_rsa";
+    type = "rsa";
+  }];
 }
