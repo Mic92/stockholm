@@ -26,6 +26,7 @@ in {
     ./default.nix
     ./sqlBackup.nix
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
+    (servePage [ "jarugadesign.de" "www.jarugadesign.de" ])
     (servePage [
       "freemonkey.art"
       "www.freemonkey.art"
@@ -141,6 +142,7 @@ in {
       { from = "akayguen@freemonkey.art"; to ="akayguen"; }
       { from = "bui@freemonkey.art"; to ="bui"; }
       { from = "kontakt@alewis.de"; to ="klabusterbeere"; }
+      { from = "hallo@jarugadesign.de"; to ="kasia"; }
 
       { from = "testuser@lassul.us"; to = "testuser"; }
       { from = "testuser@ubikmedia.eu"; to = "testuser"; }
@@ -150,6 +152,7 @@ in {
       "ubikmedia.eu"
       "ubikmedia.de"
       "alewis.de"
+      "jarugadesign.de"
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";
@@ -235,6 +238,12 @@ in {
   };
 
   krebs.on-failure.plans.restic-backups-domsen = {};
+  users.users.kasia = {
+    uid = genid_uint31 "kasia";
+    home = "/home/kasia";
+    useDefaultShell = true;
+    createHome = true;
+  };
   services.restic.backups.domsen = {
     initialize = true;
     extraOptions = [ "sftp.command='ssh efOVcMWSZ@wilhelmstr2.duckdns.org -S none -v -p 52222 -i ${toString <secrets> + "/ssh.id_ed25519"} -s sftp'" ];
