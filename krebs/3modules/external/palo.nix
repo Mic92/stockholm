@@ -34,7 +34,10 @@ in {
         retiolum = {
           ip4.addr = "10.243.23.3";
           tinc.port = 720;
-          aliases = [ "kruck.r" ];
+          aliases = [
+            "kruck.r"
+            "video.kruck.r"
+          ];
           tinc.pubkey = tinc-for "palo";
         };
       };
