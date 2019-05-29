@@ -238,12 +238,17 @@ in {
     createHome = true;
   };
 
-  krebs.on-failure.plans.restic-backups-domsen = {};
   users.users.kasia = {
     uid = genid_uint31 "kasia";
     home = "/home/kasia";
     useDefaultShell = true;
     createHome = true;
+  };
+
+  krebs.on-failure.plans.restic-backups-domsen = {
+    journalctl = {
+      lines = 1000;
+    };
   };
   services.restic.backups.domsen = {
     initialize = true;
