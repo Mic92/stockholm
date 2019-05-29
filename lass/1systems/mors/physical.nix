@@ -22,7 +22,7 @@
   };
 
   services.udev.extraRules = ''
-    SUBSYSTEM=="net", ATTR{address}=="10:0b:a9:72:f4:88", NAME="wl0"
+    SUBSYSTEM=="net", DEVPATH=="/devices/pci*/*1c.1/*/net/*", NAME="wl0"
     SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:c4:7a:f1", NAME="et0"
   '';
 
