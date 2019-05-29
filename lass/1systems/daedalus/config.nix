@@ -57,6 +57,8 @@ with import <stockholm/lib>;
     {
       krebs.per-user.bitcoin.packages = [
         pkgs.electrum
+        pkgs.electron-cash
+        pkgs.altcoins.litecoin
       ];
       users.extraUsers = {
         bitcoin = {
