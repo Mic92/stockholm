@@ -100,9 +100,14 @@ in {
     hostname = "radio.lassul.us";
     admin.password = admin-password;
     extraConf = ''
-      <authentication>
-        <source-password>${source-password}</source-password>
-      </authentication>
+      <mount>
+        <mount-name>/radio.mp3</mount-name>
+        <password>${source-password}</password>
+      </mount>
+      <mount>
+        <mount-name>/radio.ogg</mount-name>
+        <password>${source-password}</password>
+      </mount>
     '';
   };
 
