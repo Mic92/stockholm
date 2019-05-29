@@ -21,6 +21,9 @@
       "gum"
       "ni"
     ];
+    extraConfig = ''
+      LocalDiscovery = yes
+    '';
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
