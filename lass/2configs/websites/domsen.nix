@@ -94,6 +94,7 @@ in {
     hostName = "o.xanf.org";
     config = {
       adminpassFile = toString <secrets> + "/nextcloud_pw";
+      overwriteProtocol = "https";
     };
     https = true;
     nginx.enable = true;
