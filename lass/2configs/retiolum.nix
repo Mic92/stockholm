@@ -20,7 +20,6 @@
       "prism"
       "gum"
       "ni"
-      "dishfire"
     ];
   };
 
