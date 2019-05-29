@@ -199,8 +199,8 @@ in {
           workdir = config.krebs.reaktor2.the_playlist.stateDir;
           hooks.PRIVMSG = [
             {
-              activate = "match";
-              pattern = ''!([^ ]+)(?:\s*(.*))?'';
+              #activate = "match";
+              pattern = "^\\s*([0-9A-Za-z._][0-9A-Za-z._-]*)(?:\\s+(.*\\S))?\\s*$";
               command = 1;
               arguments = [2];
               commands = {
