@@ -52,6 +52,7 @@ in {
           tinc.pubkey = tinc-for "palo";
         };
       };
+      syncthing.id = "FLY7DHI-TJLEQBJ-JZNC4YV-NBX53Z2-ZBRWADL-BKSFXYZ-L4FMDVH-MOSEVAQ";
     };
     workhorse = {
       owner = config.krebs.users.palo;
