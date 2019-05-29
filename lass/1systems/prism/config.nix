@@ -195,6 +195,7 @@ with import <stockholm/lib>;
       };
     }
     <stockholm/lass/2configs/minecraft.nix>
+    <stockholm/lass/2configs/codimd.nix>
     {
       services.taskserver = {
         enable = true;
