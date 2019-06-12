@@ -26,6 +26,7 @@ in
     <stockholm/krebs/2configs/shack/radioactive.nix>
     <stockholm/krebs/2configs/shack/share.nix>
     <stockholm/krebs/2configs/shack/mobile.mpd.nix>
+    <stockholm/krebs/2configs/shack/gitlab-runner.nix>
     {
       systemd.services.telegraf.path = [ pkgs.net_snmp ]; # for snmptranslate
       systemd.services.telegraf.environment = {
