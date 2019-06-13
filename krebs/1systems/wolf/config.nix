@@ -43,6 +43,8 @@ in
     ## write collectd statistics to wolf.shack
     <stockholm/krebs/2configs/collectd-base.nix>
     { services.influxdb.enable = true; }
+
+    <stockholm/krebs/2configs/shack/netbox.nix>
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
   # apt-cacher-ng in first place)
