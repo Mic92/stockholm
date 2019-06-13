@@ -50,7 +50,7 @@
     {
       nixos-config.symlink = "stockholm/krebs/1systems/${name}/config.nix";
       secrets = if test then {
-        file = toString <stockholm/krebs/0tests/data/secrets>;
+        file = toString ./0tests/data/secrets;
       } else {
         pass = {
           dir = "${lib.getEnv "HOME"}/brain";
