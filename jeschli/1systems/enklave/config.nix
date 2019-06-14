@@ -49,7 +49,7 @@
         listenPort = 53589;
         organisations.lass.users = [ "jeschli" ];
       };
-      networking.firewall.allowedTCPPorts = [ 53589 ];
+      networking.firewall.allowedTCPPorts = [ 53589 8001 ];
     }
   ];
 

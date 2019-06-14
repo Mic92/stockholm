@@ -2,7 +2,7 @@
 with import <stockholm/lib>;
 {
   imports = [
-    ./vim.nix
+#    ./vim.nix
     ./retiolum.nix
     ./zsh.nix
     <stockholm/lass/2configs/security-workarounds.nix>
@@ -56,7 +56,7 @@ with import <stockholm/lib>;
     usbutils
   #  logify
     goify
-
+    vim
   #unpack stuff
     p7zip
     unzip

@@ -97,12 +97,17 @@ in {
 
   services.icecast = {
     enable = true;
-    hostname =  "config.krebs.build.host.name";
+    hostname = "radio.lassul.us";
     admin.password = admin-password;
     extraConf = ''
-      <authentication>
-        <source-password>${source-password}</source-password>
-      </authentication>
+      <mount>
+        <mount-name>/radio.mp3</mount-name>
+        <password>${source-password}</password>
+      </mount>
+      <mount>
+        <mount-name>/radio.ogg</mount-name>
+        <password>${source-password}</password>
+      </mount>
     '';
   };
 
@@ -194,8 +199,8 @@ in {
           workdir = config.krebs.reaktor2.the_playlist.stateDir;
           hooks.PRIVMSG = [
             {
-              activate = "match";
-              pattern = ''!([^ ]+)(?:\s*(.*))?'';
+              #activate = "match";
+              pattern = "^\\s*([0-9A-Za-z._][0-9A-Za-z._-]*)(?:\\s+(.*\\S))?\\s*$";
               command = 1;
               arguments = [2];
               commands = {
@@ -218,6 +223,11 @@ in {
       forceSSL = true;
       enableACME = true;
       locations."/".extraConfig = ''
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Server $host;
+        proxy_set_header X-Real-IP $remote_addr;
         proxy_pass http://localhost:8000;
       '';
       locations."/recent".extraConfig = ''
