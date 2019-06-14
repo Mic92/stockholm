@@ -143,11 +143,19 @@ in {
       ci = true;
       cores = 4;
       nets = {
+        lan = {
+          ip4.addr = "192.168.8.11";
+          aliases = [
+            "wbob.lan"
+            "log.wbob.lan"
+          ];
+        };
         retiolum = {
           ip4.addr = "10.243.214.15";
           aliases = [
             "wbob.r"
             "hydra.wbob.r"
+            "log.wbob.r"
           ];
         };
       };
@@ -182,6 +190,7 @@ in {
           wiki.euer         IN A      ${nets.internet.ip4.addr}
           wikisearch        IN A      ${nets.internet.ip4.addr}
           io                IN NS     gum.krebsco.de.
+          mediengewitter    IN CNAME  over.dose.io.
         '';
       };
       cores = 8;
@@ -196,13 +205,9 @@ in {
         };
         wiregrill = {
           via = internet;
+          ip4.addr = "10.245.0.1";
           ip6.addr = w6 "1";
-          wireguard = {
-            subnets = [
-              (krebs.genipv6 "wiregrill" "external" 0).subnetCIDR
-              (krebs.genipv6 "wiregrill" "makefu" 0).subnetCIDR
-            ];
-          };
+          wireguard.port = 51821;
         };
         retiolum = {
           via = internet;
@@ -247,7 +252,6 @@ in {
       cores = 1;
       extraZones = {
         "krebsco.de" = ''
-          mediengewitter    IN A      ${nets.internet.ip4.addr}
           flap              IN A      ${nets.internet.ip4.addr}
         '';
       };
@@ -280,6 +284,10 @@ in {
           ip4.addr = "10.243.189.130";
         };
       };
+    };
+    rockit = rec { # router@home
+      cores = 1;
+      nets.wiregrill.ip4.addr = "10.245.0.2";
     };
 
     senderechner = rec {
