@@ -11,83 +11,44 @@ in
     <stockholm/krebs>
     <stockholm/krebs/2configs>
     <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
-    <stockholm/krebs/2configs/collectd-base.nix>
-    <stockholm/krebs/2configs/stats/wolf-client.nix>
 
-    <stockholm/krebs/2configs/graphite.nix>
     <stockholm/krebs/2configs/binary-cache/nixos.nix>
     <stockholm/krebs/2configs/binary-cache/prism.nix>
 
+    # handle the worlddomination map via coap
     <stockholm/krebs/2configs/shack/worlddomination.nix>
+
+    # drivedroid.shack for shackphone
     <stockholm/krebs/2configs/shack/drivedroid.nix>
     # <stockholm/krebs/2configs/shack/nix-cacher.nix>
-    <stockholm/krebs/2configs/shack/mqtt_sub.nix>
+    # Say if muell will be collected
     <stockholm/krebs/2configs/shack/muell_caller.nix>
-    <stockholm/krebs/2configs/shack/radioactive.nix>
-    <stockholm/krebs/2configs/shack/share.nix>
-    <stockholm/krebs/2configs/shack/mobile.mpd.nix>
-    {
-      systemd.services.telegraf.path = [ pkgs.net_snmp ]; # for snmptranslate
-      systemd.services.telegraf.environment = {
-        MIBDIRS = pkgs.fetchgit {
-          url = "http://git.shackspace.de/makefu/modem-mibs.git";
-          sha256 =
-          "1rhrpaascvj5p3dj29hrw79gm39rp0aa787x95m3r2jrcq83ln1k";
-        }; # extra mibs like ADSL
-      };
-      services.telegraf = {
-        enable = true;
-        extraConfig = {
-          inputs = {
-            snmp = {
-              agents = [ "10.0.1.3:161" ];
-              version = 2;
-              community = "shack";
-              name = "snmp";
-              field = [
-                {
-                  name = "hostname";
-                  oid = "RFC1213-MIB::sysName.0";
-                  is_tag = true;
-                }
-                {
-                  name = "load-percent"; #cisco
-                  oid = ".1.3.6.1.4.1.9.9.109.1.1.1.1.4.9";
-                }
-                {
-                  name = "uptime";
-                  oid = "DISMAN-EVENT-MIB::sysUpTimeInstance";
-                }
-              ];
-              table = [{
-                name = "snmp";
-                inherit_tags = [ "hostname" ];
-                oid = "IF-MIB::ifXTable";
-                field = [{
-                  name = "ifName";
-                  oid = "IF-MIB::ifName";
-                  is_tag = true;
-                }];
-              }];
-            };
-          };
-          outputs = {
-            influxdb = {
-              urls = [ "http://${influx-host}:8086" ];
-              database = "telegraf";
-              write_consistency = "any";
-              timeout = "5s";
-            };
-          };
-        };
-      };
-    }
 
+    # create samba share for anonymous usage with the laser and 3d printer pc
+    <stockholm/krebs/2configs/shack/share.nix>
+
+    # mobile.lounge.mpd.shack
+    <stockholm/krebs/2configs/shack/mobile.mpd.nix>
+    # connect to git.shackspace.de as group runner for rz
+    <stockholm/krebs/2configs/shack/gitlab-runner.nix>
+
+    # Statistics collection and visualization
+    <stockholm/krebs/2configs/graphite.nix>
+    ## Collect data from mqtt.shack and store in graphite database
+    <stockholm/krebs/2configs/shack/mqtt_sub.nix>
+    ## Collect radioactive data and put into graphite
+    <stockholm/krebs/2configs/shack/radioactive.nix>
+    ## Collect local statistics via collectd and send to collectd
+    <stockholm/krebs/2configs/stats/wolf-client.nix>
+    ## write collectd statistics to wolf.shack
+    <stockholm/krebs/2configs/collectd-base.nix>
+    { services.influxdb.enable = true; }
+
+    <stockholm/krebs/2configs/shack/netbox.nix>
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
   # apt-cacher-ng in first place)
 
-  services.influxdb.enable = true;
 
   # local discovery in shackspace
   nixpkgs.config.packageOverrides = pkgs: { tinc = pkgs.tinc_pre; };
@@ -156,10 +117,10 @@ in
   # fallout of ipv6calypse
   networking.extraHosts = ''
     hass.shack    10.42.2.191
-    heidi.shack   10.42.2.135
   '';
 
   users.extraUsers.root.openssh.authorizedKeys.keys = [
+    config.krebs.users."0x4a6f".pubkey
     config.krebs.users.ulrich.pubkey
     config.krebs.users.raute.pubkey
     config.krebs.users.makefu-omo.pubkey
