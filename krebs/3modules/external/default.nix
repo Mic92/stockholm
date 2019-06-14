@@ -241,6 +241,13 @@ in {
         };
       };
     };
+    rilke = {
+      owner = config.krebs.users.kmein;
+      nets.wiregrill = {
+        aliases = [ "rilke.w" ];
+        wireguard.pubkey = "09yVPHL/ucvqc6V5n7vFQ2Oi1LBMdwQZDL+7jBwy+iQ=";
+      };
+    };
     rock = {
       owner = config.krebs.users.Mic92;
       nets = {
@@ -493,4 +500,3 @@ in {
     };
   };
 }
-
