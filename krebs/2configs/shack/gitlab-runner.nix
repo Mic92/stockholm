@@ -10,7 +10,7 @@ in
     "/run/wrappers" # /run/wrappers/bin/su
     "/" # /bin/sh
   ];
-  imports = [ 
+  imports = [
     "${runner-src}/gitlab-runner.nix"
   ];
   services.gitlab-runner2.enable = true;
