@@ -205,9 +205,13 @@ in {
         };
         wiregrill = {
           via = internet;
-          ip4.addr = "10.245.0.1";
+          ip4.addr = "10.244.245.1";
           ip6.addr = w6 "1";
           wireguard.port = 51821;
+          wireguard.subnets = [
+              (krebs.genipv6 "wiregrill" "makefu" 0).subnetCIDR
+              "10.244.245.0/24" # required for routing directly to gum via rockit
+          ];
         };
         retiolum = {
           via = internet;
@@ -287,7 +291,7 @@ in {
     };
     rockit = rec { # router@home
       cores = 1;
-      nets.wiregrill.ip4.addr = "10.245.0.2";
+      nets.wiregrill.ip4.addr = "10.244.245.2";
     };
 
     senderechner = rec {
