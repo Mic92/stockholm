@@ -7,13 +7,13 @@
     <stockholm/krebs/2configs/secret-passwords.nix>
     <stockholm/krebs/2configs/hw/x220.nix>
 
-    <stockholm/krebs/2configs/stats/puyak-client.nix>
     <stockholm/krebs/2configs/binary-cache/nixos.nix>
     <stockholm/krebs/2configs/binary-cache/prism.nix>
     <stockholm/krebs/2configs/go.nix>
     <stockholm/krebs/2configs/ircd.nix>
     <stockholm/krebs/2configs/news.nix>
     <stockholm/krebs/2configs/news-spam.nix>
+    <stockholm/krebs/2configs/shack/prometheus/node.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;
@@ -59,10 +59,7 @@
     };
   };
 
-  services.logind.extraConfig = ''
-    HandleLidSwitch=ignore
-  '';
-
+  services.logind.lidSwitch = "ignore";
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="8c:70:5a:b2:84:58", NAME="wl0"
     SUBSYSTEM=="net", ATTR{address}=="3c:97:0e:07:b9:14", NAME="et0"
