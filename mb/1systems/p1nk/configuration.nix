@@ -125,6 +125,7 @@ in {
     wcalc
     wget
     xz
+    zbackup
   ];
 
   environment.shellAliases = {

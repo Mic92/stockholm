@@ -91,6 +91,7 @@ in {
     virt-viewer
     (wine.override { wineBuild = "wineWow"; }) 
     xz    
+    zbackup
   ];
 
   virtualisation.libvirtd.enable = true;

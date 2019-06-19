@@ -62,6 +62,7 @@ in {
      wcalc
      wget
      xz
+     zbackup
   ];
 
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
