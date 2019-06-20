@@ -40,11 +40,16 @@ in
     <stockholm/krebs/2configs/shack/radioactive.nix>
     ## Collect local statistics via collectd and send to collectd
     <stockholm/krebs/2configs/stats/wolf-client.nix>
-    ## write collectd statistics to wolf.shack
-    <stockholm/krebs/2configs/collectd-base.nix>
+
     { services.influxdb.enable = true; }
 
     <stockholm/krebs/2configs/shack/netbox.nix>
+    <stockholm/krebs/2configs/shack/prometheus/server.nix>
+    <stockholm/krebs/2configs/shack/prometheus/node.nix>
+    <stockholm/krebs/2configs/shack/prometheus/unifi.nix>
+    <stockholm/krebs/2configs/collectd-base.nix> # home-assistant
+    { services.influxdb.enable = true; }
+
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
   # apt-cacher-ng in first place)
