@@ -16,6 +16,7 @@ let
     rescanIntervalS = folder.rescanInterval;
     fsWatcherEnabled = folder.watch;
     fsWatcherDelayS = folder.watchDelay;
+    ignoreDelete = folder.ignoreDelete;
     ignorePerms = folder.ignorePerms;
   }) cfg.folders;
 
@@ -118,6 +119,11 @@ in
           watchDelay = mkOption {
             type = types.int;
             default = 10;
+          };
+
+          ignoreDelete = mkOption {
+            type = types.bool;
+            default = false;
           };
 
           ignorePerms = mkOption {
