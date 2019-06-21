@@ -29,15 +29,36 @@ let
 
   updateConfig = pkgs.writeDash "merge-syncthing-config" ''
     set -efu
+
+    # XXX this assumes the GUI address to be "IPv4 address and port"
+    host=${shell.escape (elemAt (splitString ":" scfg.guiAddress) 0)}
+    port=${shell.escape (elemAt (splitString ":" scfg.guiAddress) 1)}
+
     # wait for service to restart
-    ${pkgs.untilport}/bin/untilport localhost 8384
+    ${pkgs.untilport}/bin/untilport "$host" "$port"
+
     API_KEY=$(${getApiKey})
-    CFG=$(${pkgs.curl}/bin/curl -Ss -H "X-API-Key: $API_KEY" localhost:8384/rest/system/config)
-    echo "$CFG" | ${pkgs.jq}/bin/jq -s '.[] * {
-      "devices": ${builtins.toJSON devices},
-      "folders": ${builtins.toJSON folders}
-    }' | ${pkgs.curl}/bin/curl -Ss -H "X-API-Key: $API_KEY" localhost:8384/rest/system/config -d @-
-    ${pkgs.curl}/bin/curl -Ss -H "X-API-Key: $API_KEY" localhost:8384/rest/system/restart -X POST
+
+    _curl() {
+      ${pkgs.curl}/bin/curl \
+          -Ss \
+          -H "X-API-Key: $API_KEY" \
+          "http://$host:$port/rest""$@"
+    }
+
+    old_config=$(_curl /system/config)
+    patch=${shell.escape (toJSON {
+      inherit devices folders;
+    })}
+    new_config=$(${pkgs.jq}/bin/jq -en \
+        --argjson old_config "$old_config" \
+        --argjson patch "$patch" \
+        '
+          $old_config * $patch
+        '
+    )
+    echo $new_config | _curl /system/config -d @-
+    _curl /system/restart -X POST
   '';
 
 in
