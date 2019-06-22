@@ -29,7 +29,7 @@ in {
         # This configuration makes only sense for retiolum-enabled hosts.
         # TODO modular configuration
         assert config.krebs.tinc.retiolum.enable;
-        ''
+        /* exim */ ''
           keep_environment =
 
           primary_hostname = ${cfg.primary_hostname}
