@@ -130,6 +130,7 @@ with import <stockholm/lib>;
       c = {};
       cabal = {};
       diff = {};
+      exim = {};
       haskell = {};
       jq.extraStart = alts [
         (writer "Jq")
