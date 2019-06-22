@@ -1,15 +1,8 @@
-{ config, pkgs, lib, ... }:
-
 with import <stockholm/lib>;
-let
+{ config, pkgs, lib, ... }: let
   cfg = config.krebs.exim-retiolum;
-
-  out = {
-    options.krebs.exim-retiolum = api;
-    config = lib.mkIf cfg.enable imp;
-  };
-
-  api = {
+in {
+  options.krebs.exim-retiolum = {
     enable = mkEnableOption "krebs.exim-retiolum";
     local_domains = mkOption {
       type = with types; listOf hostname;
@@ -29,8 +22,7 @@ let
       ];
     };
   };
-
-  imp = {
+  config = lib.mkIf cfg.enable {
     krebs.exim = {
       enable = true;
       config =
@@ -118,4 +110,4 @@ let
         '';
     };
   };
-in out
+}
