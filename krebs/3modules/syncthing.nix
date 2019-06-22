@@ -2,28 +2,29 @@
 
 let
 
-  cfg = config.krebs.syncthing;
+  kcfg = config.krebs.syncthing;
+  scfg = config.services.syncthing;
 
   devices = mapAttrsToList (name: peer: {
     name = name;
     deviceID = peer.id;
     addresses = peer.addresses;
-  }) cfg.peers;
+  }) kcfg.peers;
 
   folders = mapAttrsToList ( _: folder: {
     inherit (folder) path id type;
-    devices = map (peer: { deviceId = cfg.peers.${peer}.id; }) folder.peers;
+    devices = map (peer: { deviceId = kcfg.peers.${peer}.id; }) folder.peers;
     rescanIntervalS = folder.rescanInterval;
     fsWatcherEnabled = folder.watch;
     fsWatcherDelayS = folder.watchDelay;
     ignoreDelete = folder.ignoreDelete;
     ignorePerms = folder.ignorePerms;
-  }) cfg.folders;
+  }) kcfg.folders;
 
   getApiKey = pkgs.writeDash "getAPIKey" ''
     ${pkgs.libxml2}/bin/xmllint \
       --xpath 'string(configuration/gui/apikey)'\
-      ${config.services.syncthing.dataDir}/config.xml
+      ${scfg.dataDir}/config.xml
   '';
 
   updateConfig = pkgs.writeDash "merge-syncthing-config" ''
@@ -136,19 +137,19 @@ in
     };
   };
 
-  config = (mkIf cfg.enable) {
+  config = mkIf kcfg.enable {
 
-    systemd.services.syncthing = mkIf (cfg.cert != null || cfg.key != null) {
+    systemd.services.syncthing = mkIf (kcfg.cert != null || kcfg.key != null) {
       preStart = ''
-        ${optionalString (cfg.cert != null) ''
-          cp ${toString cfg.cert} ${config.services.syncthing.dataDir}/cert.pem
-          chown ${config.services.syncthing.user}:${config.services.syncthing.group} ${config.services.syncthing.dataDir}/cert.pem
-          chmod 400 ${config.services.syncthing.dataDir}/cert.pem
+        ${optionalString (kcfg.cert != null) ''
+          cp ${toString kcfg.cert} ${scfg.dataDir}/cert.pem
+          chown ${scfg.user}:${scfg.group} ${scfg.dataDir}/cert.pem
+          chmod 400 ${scfg.dataDir}/cert.pem
         ''}
-        ${optionalString (cfg.key != null) ''
-          cp ${toString cfg.key} ${config.services.syncthing.dataDir}/key.pem
-          chown ${config.services.syncthing.user}:${config.services.syncthing.group} ${config.services.syncthing.dataDir}/key.pem
-          chmod 400 ${config.services.syncthing.dataDir}/key.pem
+        ${optionalString (kcfg.key != null) ''
+          cp ${toString kcfg.key} ${scfg.dataDir}/key.pem
+          chown ${scfg.user}:${scfg.group} ${scfg.dataDir}/key.pem
+          chmod 400 ${scfg.dataDir}/key.pem
         ''}
       '';
     };
@@ -158,7 +159,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        User = config.services.syncthing.user;
+        User = scfg.user;
         RemainAfterExit = true;
         Type = "oneshot";
         ExecStart = updateConfig;
