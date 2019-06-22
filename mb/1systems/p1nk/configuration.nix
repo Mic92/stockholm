@@ -5,6 +5,7 @@ in {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       <stockholm/mb>
+      <stockholm/mb/2config/nvim.nix>
     ];
 
   krebs.build.host = config.krebs.hosts.p1nk;
@@ -118,7 +119,6 @@ in {
     unstable.ponyc
     unstable.sublime3
     youtube-dl
-    vim
     virt-viewer
     virtmanager
     vulnix
