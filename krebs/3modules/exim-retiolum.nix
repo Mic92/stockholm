@@ -21,7 +21,32 @@ in {
         "*.r"
       ];
     };
+    rspamd = {
+      enable = mkEnableOption "krebs.exim-retiolum.rspamd" // {
+        default = false;
+      };
+      local_networks = mkOption {
+        type = types.listOf types.cidr;
+        default = [
+          config.krebs.build.host.nets.retiolum.ip4.prefix
+          config.krebs.build.host.nets.retiolum.ip6.prefix
+        ];
+      };
+    };
   };
+  imports = [
+    {
+      config = lib.mkIf cfg.rspamd.enable {
+        services.rspamd.enable = true;
+        services.rspamd.locals."options.inc".text = ''
+          local_networks = ${toJSON cfg.rspamd.local_networks};
+        '';
+        users.users.${config.krebs.exim.user.name}.extraGroups = [
+          config.services.rspamd.group
+        ];
+      };
+    }
+  ];
   config = lib.mkIf cfg.enable {
     krebs.exim = {
       enable = true;
@@ -35,6 +60,10 @@ in {
           primary_hostname = ${cfg.primary_hostname}
           domainlist local_domains = ${concatStringsSep ":" cfg.local_domains}
           domainlist relay_to_domains = ${concatStringsSep ":" cfg.relay_to_domains}
+
+          ${optionalString cfg.rspamd.enable /* exim */ ''
+            spamd_address = /run/rspamd/rspamd.sock variant=rspamd
+          ''}
 
           acl_smtp_rcpt = acl_check_rcpt
           acl_smtp_data = acl_check_data
@@ -64,6 +93,24 @@ in {
 
 
           acl_check_data:
+            ${optionalString cfg.rspamd.enable /* exim */ ''
+              accept condition = ''${if eq{$interface_port}{587}}
+
+              warn remove_header = ${concatStringsSep " : " [
+                "x-spam"
+                "x-spam-report"
+                "x-spam-score"
+              ]}
+
+              warn
+                spam = nobody:true
+
+              warn
+                condition = ''${if !eq{$spam_action}{no action}}
+                add_header = X-Spam: Yes
+                add_header = X-Spam-Report: $spam_report
+                add_header = X-Spam-Score: $spam_score
+            ''}
             accept
 
 
