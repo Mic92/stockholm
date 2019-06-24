@@ -35,6 +35,19 @@ in {
         default = false;
       };
       locals = {
+        logging = {
+          level = mkOption {
+            type = types.enum [
+              "error"
+              "warning"
+              "notice"
+              "info"
+              "debug"
+              "silent"
+            ];
+            default = "notice";
+          };
+        };
         options = {
           local_networks = mkOption {
             type = types.listOf types.cidr;
