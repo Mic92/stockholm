@@ -1,6 +1,15 @@
 with import <stockholm/lib>;
 { config, pkgs, lib, ... }: let
   cfg = config.krebs.exim-retiolum;
+
+  # Due to improvements to the JSON notation, braces around top-level objects
+  # are not necessary^Wsupported by rspamd's parser when including files:
+  # https://github.com/rspamd/rspamd/issues/2674
+  toMostlyJSON = value:
+    assert typeOf value == "set";
+    (s: substring 1 (stringLength s - 2) s)
+    (toJSON value);
+
 in {
   options.krebs.exim-retiolum = {
     enable = mkEnableOption "krebs.exim-retiolum";
@@ -25,12 +34,16 @@ in {
       enable = mkEnableOption "krebs.exim-retiolum.rspamd" // {
         default = false;
       };
-      local_networks = mkOption {
-        type = types.listOf types.cidr;
-        default = [
-          config.krebs.build.host.nets.retiolum.ip4.prefix
-          config.krebs.build.host.nets.retiolum.ip6.prefix
-        ];
+      locals = {
+        options = {
+          local_networks = mkOption {
+            type = types.listOf types.cidr;
+            default = [
+              config.krebs.build.host.nets.retiolum.ip4.prefix
+              config.krebs.build.host.nets.retiolum.ip6.prefix
+            ];
+          };
+        };
       };
     };
   };
@@ -38,9 +51,12 @@ in {
     {
       config = lib.mkIf cfg.rspamd.enable {
         services.rspamd.enable = true;
-        services.rspamd.locals."options.inc".text = ''
-          local_networks = ${toJSON cfg.rspamd.local_networks};
-        '';
+        services.rspamd.locals =
+          mapAttrs'
+            (name: value: nameValuePair "${name}.inc" {
+              text = toMostlyJSON value;
+            })
+            cfg.rspamd.locals;
         users.users.${config.krebs.exim.user.name}.extraGroups = [
           config.services.rspamd.group
         ];
