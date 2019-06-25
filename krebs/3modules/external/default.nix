@@ -415,7 +415,7 @@ in {
       owner = config.krebs.users.ilmu;
       nets = {
         retiolum = {
-          ip4.addr = "10.243.42.313";
+          ip4.addr = "10.243.42.13";
           aliases = [ "ilmu.r" ];
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
