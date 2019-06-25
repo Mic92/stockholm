@@ -28,12 +28,22 @@
       "140.82.125.*"
       "140.82.126.*"
       "140.82.127.*"
+      "13.114.40.48"
       "13.229.188.59"
+      "13.234.176.102"
+      "13.234.210.38"
+      "13.236.229.21"
+      "13.237.44.5"
       "13.250.177.223"
+      "15.164.81.167"
       "18.194.104.89"
       "18.195.85.27"
       "35.159.8.160"
+      "52.192.72.89"
+      "52.64.108.95"
+      "52.69.186.44"
       "52.74.223.119"
+      "52.78.231.108"
     ];
     publicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==";
   };

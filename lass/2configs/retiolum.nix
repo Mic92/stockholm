@@ -20,8 +20,10 @@
       "prism"
       "gum"
       "ni"
-      "dishfire"
     ];
+    extraConfig = ''
+      LocalDiscovery = yes
+    '';
   };
 
   nixpkgs.config.packageOverrides = pkgs: {

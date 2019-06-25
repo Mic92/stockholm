@@ -11,17 +11,25 @@ let
 
   api = {
     enable = mkEnableOption "krebs.github-hosts-sync";
-    port = mkOption {
-      type = types.int; # TODO port type
-      default = 1028;
-    };
     dataDir = mkOption {
       type = types.str; # TODO path (but not just into store)
       default = "/var/lib/github-hosts-sync";
     };
+    srcDir = mkOption {
+      type = types.str;
+      default = "${config.krebs.tinc.retiolum.confDir}/hosts";
+    };
     ssh-identity-file = mkOption {
       type = types.suffixed-str [".ssh.id_ed25519" ".ssh.id_rsa"];
-      default = toString <secrets/github-hosts-sync.ssh.id_rsa>;
+      default = toString <secrets/github-hosts-sync.ssh.id_ed25519>;
+    };
+    url = mkOption {
+      type = types.str;
+      default = "git@github.com:krebs/hosts.git";
+    };
+    workTree = mkOption {
+      type = types.absolute-pathname;
+      default = "${cfg.dataDir}/cache";
     };
   };
 
@@ -30,13 +38,18 @@ let
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = {
-        port = toString cfg.port;
+        GITHUB_HOST_SYNC_USER_MAIL = user.mail;
+        GITHUB_HOST_SYNC_USER_NAME = user.name;
+        GITHUB_HOST_SYNC_SRCDIR = cfg.srcDir;
+        GITHUB_HOST_SYNC_WORKTREE = cfg.workTree;
+        GITHUB_HOST_SYNC_URL = cfg.url;
       };
       serviceConfig = {
         PermissionsStartOnly = "true";
         SyslogIdentifier = "github-hosts-sync";
         User = user.name;
-        Restart = "always";
+        Type = "oneshot";
+        RemainAfterExit = true;
         ExecStartPre = pkgs.writeDash "github-hosts-sync-init" ''
           set -euf
           install -m 0711 -o ${user.name} -d ${cfg.dataDir}
@@ -56,6 +69,7 @@ let
   };
 
   user = rec {
+    mail = "${name}@${config.krebs.build.host.name}";
     name = "github-hosts-sync";
     uid = genid_uint31 name;
   };

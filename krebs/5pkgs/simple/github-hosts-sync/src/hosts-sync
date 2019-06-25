@@ -1,0 +1,33 @@
+#! /bin/sh
+set -efu
+exec >&2
+
+hosts_srcdir=$GITHUB_HOST_SYNC_SRCDIR
+hosts_worktree=${GITHUB_HOST_SYNC_WORKTREE-/tmp/hosts}
+hosts_url=${GITHUB_HOST_SYNC_URL-git@github.com:krebs/hosts.git}
+user_mail=${GITHUB_HOST_SYNC_USER_MAIL-$LOGNAME@$(hostname)}
+user_name=${GITHUB_HOST_SYNC_USER_NAME-$LOGNAME}
+
+test -d "$hosts_worktree" || git clone "$hosts_url" "$hosts_worktree"
+
+cd "$hosts_worktree"
+
+git pull
+
+rsync \
+    --chmod D755,F644 \
+    --delete-excluded \
+    --filter 'protect .git' \
+    --recursive \
+    --verbose \
+    "$hosts_srcdir/" \
+    .
+
+git add .
+
+if test -n "$(git status --porcelain)"; then
+  git config user.email "$user_mail"
+  git config user.name "$user_name"
+  git commit -m bump
+  git push
+fi

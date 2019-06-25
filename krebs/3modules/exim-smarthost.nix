@@ -121,7 +121,7 @@ let
     };
     krebs.exim = {
       enable = true;
-      config = ''
+      config = /* exim */ ''
         keep_environment =
 
         primary_hostname = ${cfg.primary_hostname}
@@ -233,7 +233,7 @@ let
 
         remote_smtp:
           driver = smtp
-          ${optionalString (cfg.dkim != []) (indent ''
+          ${optionalString (cfg.dkim != []) (indent /* exim */ ''
             dkim_canon = relaxed
             dkim_domain = $sender_address_domain
             dkim_private_key = ''${lookup{$sender_address_domain}lsearch{${lsearch.dkim_private_key}}}
@@ -262,7 +262,7 @@ let
 
         begin rewrite
         begin authenticators
-        ${concatStringsSep "\n" (mapAttrsToList (name: text: ''
+        ${concatStringsSep "\n" (mapAttrsToList (name: text: /* exim */ ''
         ${name}:
           ${indent text}
         '') cfg.authenticators)}

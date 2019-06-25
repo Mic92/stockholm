@@ -26,6 +26,7 @@ in {
     ./default.nix
     ./sqlBackup.nix
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
+    (servePage [ "jarugadesign.de" "www.jarugadesign.de" ])
     (servePage [
       "freemonkey.art"
       "www.freemonkey.art"
@@ -93,6 +94,7 @@ in {
     hostName = "o.xanf.org";
     config = {
       adminpassFile = toString <secrets> + "/nextcloud_pw";
+      overwriteProtocol = "https";
     };
     https = true;
     nginx.enable = true;
@@ -141,6 +143,7 @@ in {
       { from = "akayguen@freemonkey.art"; to ="akayguen"; }
       { from = "bui@freemonkey.art"; to ="bui"; }
       { from = "kontakt@alewis.de"; to ="klabusterbeere"; }
+      { from = "hallo@jarugadesign.de"; to ="kasia"; }
 
       { from = "testuser@lassul.us"; to = "testuser"; }
       { from = "testuser@ubikmedia.eu"; to = "testuser"; }
@@ -150,6 +153,7 @@ in {
       "ubikmedia.eu"
       "ubikmedia.de"
       "alewis.de"
+      "jarugadesign.de"
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";
@@ -234,7 +238,18 @@ in {
     createHome = true;
   };
 
-  krebs.on-failure.plans.restic-backups-domsen = {};
+  users.users.kasia = {
+    uid = genid_uint31 "kasia";
+    home = "/home/kasia";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
+  krebs.on-failure.plans.restic-backups-domsen = {
+    journalctl = {
+      lines = 1000;
+    };
+  };
   services.restic.backups.domsen = {
     initialize = true;
     extraOptions = [ "sftp.command='ssh efOVcMWSZ@wilhelmstr2.duckdns.org -S none -v -p 52222 -i ${toString <secrets> + "/ssh.id_ed25519"} -s sftp'" ];
@@ -247,10 +262,40 @@ in {
       "/home/ms/Mail"
       "/home/klabusterbeere/Mail"
       "/home/jms/Mail"
+      "/home/kasia/Mail"
       "/home/bruno/Mail"
       "/home/akayguen/Mail"
       "/backups/sql_dumps"
     ];
+  };
+
+  boot.kernel.sysctl."fs.inotify.max_user_watches" = "1048576";
+  krebs.permown = {
+    "/srv/http/ubikmedia.de" = {
+      owner = "domsen";
+      group = "nginx";
+      umask = "0007";
+    };
+    "/srv/http/o.ubikmedia.de" = {
+      owner = "domsen";
+      group = "nginx";
+      umask = "0007";
+    };
+    "/srv/http/freemonkey.art" = {
+      owner = "domsen";
+      group = "nginx";
+      umask = "0002";
+    };
+    "/srv/http/jarugadesign.de" = {
+      owner = "domsen";
+      group = "nginx";
+      umask = "0002";
+    };
+    "/srv/http/reich-gebaeudereinigung.de" = {
+      owner = "domsen";
+      group = "nginx";
+      umask = "0002";
+    };
   };
 
 }

@@ -57,6 +57,11 @@
     HandleSuspendKey=ignore
   '';
 
+  # because extraConfig is not extra enough:
+  services.logind.lidSwitch = "ignore";
+  services.logind.lidSwitchDocked = "ignore";
+  services.logind.lidSwitchExternalPower = "ignore";
+
   services.xserver = {
     videoDriver = "intel";
   };

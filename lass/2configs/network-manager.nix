@@ -15,6 +15,8 @@
     };
   };
   networking.networkmanager = {
+    ethernet.macAddress = "random";
+    wifi.macAddress = "random";
     enable = true;
     unmanaged = [
       "docker*"

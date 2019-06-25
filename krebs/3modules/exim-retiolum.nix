@@ -1,15 +1,17 @@
-{ config, pkgs, lib, ... }:
-
 with import <stockholm/lib>;
-let
+{ config, pkgs, lib, ... }: let
   cfg = config.krebs.exim-retiolum;
 
-  out = {
-    options.krebs.exim-retiolum = api;
-    config = lib.mkIf cfg.enable imp;
-  };
+  # Due to improvements to the JSON notation, braces around top-level objects
+  # are not necessary^Wsupported by rspamd's parser when including files:
+  # https://github.com/rspamd/rspamd/issues/2674
+  toMostlyJSON = value:
+    assert typeOf value == "set";
+    (s: substring 1 (stringLength s - 2) s)
+    (toJSON value);
 
-  api = {
+in {
+  options.krebs.exim-retiolum = {
     enable = mkEnableOption "krebs.exim-retiolum";
     local_domains = mkOption {
       type = with types; listOf hostname;
@@ -28,21 +30,69 @@ let
         "*.r"
       ];
     };
+    rspamd = {
+      enable = mkEnableOption "krebs.exim-retiolum.rspamd" // {
+        default = false;
+      };
+      locals = {
+        logging = {
+          level = mkOption {
+            type = types.enum [
+              "error"
+              "warning"
+              "notice"
+              "info"
+              "debug"
+              "silent"
+            ];
+            default = "notice";
+          };
+        };
+        options = {
+          local_networks = mkOption {
+            type = types.listOf types.cidr;
+            default = [
+              config.krebs.build.host.nets.retiolum.ip4.prefix
+              config.krebs.build.host.nets.retiolum.ip6.prefix
+            ];
+          };
+        };
+      };
+    };
   };
-
-  imp = {
+  imports = [
+    {
+      config = lib.mkIf cfg.rspamd.enable {
+        services.rspamd.enable = true;
+        services.rspamd.locals =
+          mapAttrs'
+            (name: value: nameValuePair "${name}.inc" {
+              text = toMostlyJSON value;
+            })
+            cfg.rspamd.locals;
+        users.users.${config.krebs.exim.user.name}.extraGroups = [
+          config.services.rspamd.group
+        ];
+      };
+    }
+  ];
+  config = lib.mkIf cfg.enable {
     krebs.exim = {
       enable = true;
       config =
         # This configuration makes only sense for retiolum-enabled hosts.
         # TODO modular configuration
         assert config.krebs.tinc.retiolum.enable;
-        ''
+        /* exim */ ''
           keep_environment =
 
           primary_hostname = ${cfg.primary_hostname}
           domainlist local_domains = ${concatStringsSep ":" cfg.local_domains}
           domainlist relay_to_domains = ${concatStringsSep ":" cfg.relay_to_domains}
+
+          ${optionalString cfg.rspamd.enable /* exim */ ''
+            spamd_address = /run/rspamd/rspamd.sock variant=rspamd
+          ''}
 
           acl_smtp_rcpt = acl_check_rcpt
           acl_smtp_data = acl_check_data
@@ -72,6 +122,24 @@ let
 
 
           acl_check_data:
+            ${optionalString cfg.rspamd.enable /* exim */ ''
+              accept condition = ''${if eq{$interface_port}{587}}
+
+              warn remove_header = ${concatStringsSep " : " [
+                "x-spam"
+                "x-spam-report"
+                "x-spam-score"
+              ]}
+
+              warn
+                spam = nobody:true
+
+              warn
+                condition = ''${if !eq{$spam_action}{no action}}
+                add_header = X-Spam: Yes
+                add_header = X-Spam-Report: $spam_report
+                add_header = X-Spam-Score: $spam_score
+            ''}
             accept
 
 
@@ -118,4 +186,4 @@ let
         '';
     };
   };
-in out
+}

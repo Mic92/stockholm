@@ -34,7 +34,10 @@ in {
         retiolum = {
           ip4.addr = "10.243.23.3";
           tinc.port = 720;
-          aliases = [ "kruck.r" ];
+          aliases = [
+            "kruck.r"
+            "video.kruck.r"
+          ];
           tinc.pubkey = tinc-for "palo";
         };
       };
@@ -49,6 +52,7 @@ in {
           tinc.pubkey = tinc-for "palo";
         };
       };
+      syncthing.id = "FLY7DHI-TJLEQBJ-JZNC4YV-NBX53Z2-ZBRWADL-BKSFXYZ-L4FMDVH-MOSEVAQ";
     };
     workhorse = {
       owner = config.krebs.users.palo;

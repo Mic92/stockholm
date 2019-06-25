@@ -2,40 +2,69 @@
 
 let
 
-  cfg = config.krebs.syncthing;
+  kcfg = config.krebs.syncthing;
+  scfg = config.services.syncthing;
 
   devices = mapAttrsToList (name: peer: {
     name = name;
     deviceID = peer.id;
     addresses = peer.addresses;
-  }) cfg.peers;
+  }) kcfg.peers;
 
   folders = mapAttrsToList ( _: folder: {
     inherit (folder) path id type;
-    devices = map (peer: { deviceId = cfg.peers.${peer}.id; }) folder.peers;
+    devices = map (peer: { deviceId = kcfg.peers.${peer}.id; }) folder.peers;
     rescanIntervalS = folder.rescanInterval;
     fsWatcherEnabled = folder.watch;
     fsWatcherDelayS = folder.watchDelay;
+    ignoreDelete = folder.ignoreDelete;
     ignorePerms = folder.ignorePerms;
-  }) cfg.folders;
+  }) kcfg.folders;
 
   getApiKey = pkgs.writeDash "getAPIKey" ''
     ${pkgs.libxml2}/bin/xmllint \
       --xpath 'string(configuration/gui/apikey)'\
-      ${config.services.syncthing.dataDir}/config.xml
+      ${scfg.configDir}/config.xml
   '';
 
   updateConfig = pkgs.writeDash "merge-syncthing-config" ''
     set -efu
+
+    # XXX this assumes the GUI address to be "IPv4 address and port"
+    host=${shell.escape (elemAt (splitString ":" scfg.guiAddress) 0)}
+    port=${shell.escape (elemAt (splitString ":" scfg.guiAddress) 1)}
+
     # wait for service to restart
-    ${pkgs.untilport}/bin/untilport localhost 8384
+    ${pkgs.untilport}/bin/untilport "$host" "$port"
+
     API_KEY=$(${getApiKey})
-    CFG=$(${pkgs.curl}/bin/curl -Ss -H "X-API-Key: $API_KEY" localhost:8384/rest/system/config)
-    echo "$CFG" | ${pkgs.jq}/bin/jq -s '.[] * {
-      "devices": ${builtins.toJSON devices},
-      "folders": ${builtins.toJSON folders}
-    }' | ${pkgs.curl}/bin/curl -Ss -H "X-API-Key: $API_KEY" localhost:8384/rest/system/config -d @-
-    ${pkgs.curl}/bin/curl -Ss -H "X-API-Key: $API_KEY" localhost:8384/rest/system/restart -X POST
+
+    _curl() {
+      ${pkgs.curl}/bin/curl \
+          -Ss \
+          -H "X-API-Key: $API_KEY" \
+          "http://$host:$port/rest""$@"
+    }
+
+    old_config=$(_curl /system/config)
+    new_config=${shell.escape (toJSON {
+      inherit devices folders;
+    })}
+    new_config=$(${pkgs.jq}/bin/jq -en \
+        --argjson old_config "$old_config" \
+        --argjson new_config "$new_config" \
+        '
+          $old_config * $new_config
+          ${optionalString (!kcfg.overridePeers) ''
+            * { devices: $old_config.devices }
+          ''}
+          ${optionalString (!kcfg.overrideFolders) ''
+            * { folders: $old_config.folders }
+          ''}
+        '
+    )
+    echo $new_config | _curl /system/config -d @-
+    _curl /system/restart -X POST
   '';
 
 in
@@ -44,11 +73,6 @@ in
   options.krebs.syncthing = {
 
     enable = mkEnableOption "syncthing-init";
-
-    id = mkOption {
-      type = types.str;
-      default = config.krebs.build.host.name;
-    };
 
     cert = mkOption {
       type = types.nullOr types.absolute-pathname;
@@ -60,6 +84,13 @@ in
       default = null;
     };
 
+    overridePeers = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to delete the peers which are not configured via the peers option
+      '';
+    };
     peers = mkOption {
       default = {};
       type = types.attrsOf (types.submodule ({
@@ -80,6 +111,13 @@ in
       }));
     };
 
+    overrideFolders = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to delete the folders which are not configured via the peers option
+      '';
+    };
     folders = mkOption {
       default = {};
       type = types.attrsOf (types.submodule ({ config, ... }: {
@@ -120,6 +158,11 @@ in
             default = 10;
           };
 
+          ignoreDelete = mkOption {
+            type = types.bool;
+            default = false;
+          };
+
           ignorePerms = mkOption {
             type = types.bool;
             default = true;
@@ -130,19 +173,19 @@ in
     };
   };
 
-  config = (mkIf cfg.enable) {
+  config = mkIf kcfg.enable {
 
-    systemd.services.syncthing = mkIf (cfg.cert != null || cfg.key != null) {
+    systemd.services.syncthing = mkIf (kcfg.cert != null || kcfg.key != null) {
       preStart = ''
-        ${optionalString (cfg.cert != null) ''
-          cp ${toString cfg.cert} ${config.services.syncthing.dataDir}/cert.pem
-          chown ${config.services.syncthing.user}:${config.services.syncthing.group} ${config.services.syncthing.dataDir}/cert.pem
-          chmod 400 ${config.services.syncthing.dataDir}/cert.pem
+        ${optionalString (kcfg.cert != null) ''
+          cp ${toString kcfg.cert} ${scfg.configDir}/cert.pem
+          chown ${scfg.user}:${scfg.group} ${scfg.configDir}/cert.pem
+          chmod 400 ${scfg.configDir}/cert.pem
         ''}
-        ${optionalString (cfg.key != null) ''
-          cp ${toString cfg.key} ${config.services.syncthing.dataDir}/key.pem
-          chown ${config.services.syncthing.user}:${config.services.syncthing.group} ${config.services.syncthing.dataDir}/key.pem
-          chmod 400 ${config.services.syncthing.dataDir}/key.pem
+        ${optionalString (kcfg.key != null) ''
+          cp ${toString kcfg.key} ${scfg.configDir}/key.pem
+          chown ${scfg.user}:${scfg.group} ${scfg.configDir}/key.pem
+          chmod 400 ${scfg.configDir}/key.pem
         ''}
       '';
     };
@@ -152,7 +195,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        User = config.services.syncthing.user;
+        User = scfg.user;
         RemainAfterExit = true;
         Type = "oneshot";
         ExecStart = updateConfig;
