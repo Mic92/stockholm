@@ -2,15 +2,15 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
-
+{ config, pkgs, lib, ... }:
 {
   imports =
     [
       ./hardware-configuration.nix
       <stockholm/jeschli>
+      <home-manager/nixos>
       <stockholm/jeschli/2configs/urxvt.nix>
-      <stockholm/jeschli/2configs/emacs.nix>
+    #  <stockholm/jeschli/2configs/emacs.nix>
     ];
 
   krebs.build.host = config.krebs.hosts.bolide;
@@ -29,7 +29,8 @@
     allowDiscards = true;
   } ];
 #  networking.hostName = "bolide"; # Define your hostname.
-  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+#  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.networkmanager.enable = true;
 
   # Select internationalisation properties.
   # i18n = {
@@ -52,6 +53,8 @@
   };
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
+    home-manager
+
     wget vim
   # system helper
     ag
@@ -92,6 +95,22 @@
     zathura
   ];
 
+  home-manager.useUserPackages = true;
+  home-manager.users.jeschli = {
+    home.stateVersion = "19.03";
+  };
+
+  home-manager.users.jeschli.home.file = {
+     ".emacs.d" = {
+       source = pkgs.fetchFromGitHub {
+         owner = "jeschli";
+         repo = "emacs.d";
+         rev = "8ed6c40";
+         sha256 = "1q2y478srwp9f58l8cixnd2wj51909gp1z68k8pjlbjy2mrvibs0";
+       };
+       recursive = true;
+     };
+  };
  # Some programs need SUID wrappers, can be configured further or are
  # started in user sessions.
  # programs.bash.enableCompletion = true;
@@ -103,36 +122,37 @@
  # Enable the OpenSSH daemon.
  services.openssh.enable = true;
 
- # Open ports in the firewall.
- # networking.firewall.allowedTCPPorts = [ ... ];
- # networking.firewall.allowedUDPPorts = [ ... ];
- # Or disable the firewall altogether.
- # networking.firewall.enable = false;
 
- # Enable CUPS to print documents.
- # services.printing.enable = true;
+  services.xserver = {
 
- # Enable the X11 windowing system.
- services.xserver.enable = true;
- # services.xserver.layout = "us";
- # services.xserver.xkbOptions = "eurosign:e";
+    enable = true;
 
- services.xserver.displayManager.sddm.enable = true;
- services.xserver.windowManager.xmonad.enable = true;
- services.xserver.windowManager.xmonad.enableContribAndExtras = true;
- # Enable touchpad support.
- # services.xserver.libinput.enable = true;
+    desktopManager = {
+      xfce.enable = true;
+      gnome3.enable = true;
+    };
+#    # Don't install feh into systemPackages
+#    # refs <nixpkgs/nixos/modules/services/x11/desktop-managers>
+#    desktopManager.session = lib.mkForce [];
+#
+#    enable = true;
+#    display = 11;
+#    tty = 11;
+#
+#    dpi = 96;
 
- # Enable the KDE Desktop Environment.
- # services.xserver.displayManager.sddm.enable = true;
- # services.xserver.desktopManager.plasma5.enable = true;
+    videoDrivers = [ "nvidia" ];
+  };
 
- # Define a user account. Don't forget to set a password with ‘passwd’.
+  services.xserver.windowManager.i3.enable = true;
+
   users.extraUsers.jeschli = {
     isNormalUser = true;
+    extraGroups = ["docker" "vboxusers" "audio"];
     uid = 1000;
   };
 
+  hardware.pulseaudio.enable = true;
  # This value determines the NixOS release with which your system is to be
  # compatible, in order to avoid breaking some software such as database
  # servers. You should change this only after NixOS release notes say you

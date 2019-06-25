@@ -60,7 +60,7 @@ let
     with git // config.krebs.users;
     repo:
       singleton {
-        user = [ jeschli jeschli-brauerei];
+        user = [ jeschli jeschli-brauerei jeschli-bolide];
         repo = [ repo ];
         perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++

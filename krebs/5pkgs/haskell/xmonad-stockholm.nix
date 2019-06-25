@@ -1,5 +1,4 @@
-{ mkDerivation, base, containers, fetchgit, filepath, stdenv, unix, X11, X11-xft
-, X11-xshape, xmonad, xmonad-contrib
+{ mkDerivation, base, containers, fetchgit, filepath, stdenv, unix, X11, X11-xft , X11-xshape, xmonad, xmonad-contrib
 }:
 mkDerivation rec {
   pname = "xmonad-stockholm";

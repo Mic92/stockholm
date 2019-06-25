@@ -49,14 +49,31 @@ with import <stockholm/lib>;
       ];
     }
     {
-      krebs.syncthing.folders."the_playlist" = {
-        path = "/home/lass/tmp/the_playlist";
-        peers = [ "mors" "phone" "prism" ];
+      krebs.syncthing = {
+        peers.schasch.addresses = [ "schasch.r:22000" ];
+        folders = {
+          the_playlist = {
+            path = "/home/lass/tmp/the_playlist";
+            peers = [ "mors" "phone" "prism" ];
+          };
+          free_music = {
+            id = "mu9mn-zgvsw";
+            path = "/home/lass/tmp/free_music";
+            peers = [ "mors" "schasch" ];
+          };
+        };
       };
-      krebs.permown."/home/lass/tmp/the_playlist" = {
-        owner = "lass";
-        group = "syncthing";
-        umask = "0007";
+      krebs.permown = {
+        "/home/lass/tmp/free_music" = {
+          owner = "lass";
+          group = "syncthing";
+          umask = "0007";
+        };
+        "/home/lass/tmp/the_playlist" = {
+          owner = "lass";
+          group = "syncthing";
+          umask = "0007";
+        };
       };
     }
     {

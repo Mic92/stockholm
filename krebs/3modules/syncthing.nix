@@ -24,7 +24,7 @@ let
   getApiKey = pkgs.writeDash "getAPIKey" ''
     ${pkgs.libxml2}/bin/xmllint \
       --xpath 'string(configuration/gui/apikey)'\
-      ${scfg.dataDir}/config.xml
+      ${scfg.configDir}/config.xml
   '';
 
   updateConfig = pkgs.writeDash "merge-syncthing-config" ''
@@ -47,14 +47,20 @@ let
     }
 
     old_config=$(_curl /system/config)
-    patch=${shell.escape (toJSON {
+    new_config=${shell.escape (toJSON {
       inherit devices folders;
     })}
     new_config=$(${pkgs.jq}/bin/jq -en \
         --argjson old_config "$old_config" \
-        --argjson patch "$patch" \
+        --argjson new_config "$new_config" \
         '
-          $old_config * $patch
+          $old_config * $new_config
+          ${optionalString (!kcfg.overridePeers) ''
+            * { devices: $old_config.devices }
+          ''}
+          ${optionalString (!kcfg.overrideFolders) ''
+            * { folders: $old_config.folders }
+          ''}
         '
     )
     echo $new_config | _curl /system/config -d @-
@@ -68,11 +74,6 @@ in
 
     enable = mkEnableOption "syncthing-init";
 
-    id = mkOption {
-      type = types.str;
-      default = config.krebs.build.host.name;
-    };
-
     cert = mkOption {
       type = types.nullOr types.absolute-pathname;
       default = null;
@@ -83,6 +84,13 @@ in
       default = null;
     };
 
+    overridePeers = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to delete the peers which are not configured via the peers option
+      '';
+    };
     peers = mkOption {
       default = {};
       type = types.attrsOf (types.submodule ({
@@ -103,6 +111,13 @@ in
       }));
     };
 
+    overrideFolders = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to delete the folders which are not configured via the peers option
+      '';
+    };
     folders = mkOption {
       default = {};
       type = types.attrsOf (types.submodule ({ config, ... }: {
@@ -163,14 +178,14 @@ in
     systemd.services.syncthing = mkIf (kcfg.cert != null || kcfg.key != null) {
       preStart = ''
         ${optionalString (kcfg.cert != null) ''
-          cp ${toString kcfg.cert} ${scfg.dataDir}/cert.pem
-          chown ${scfg.user}:${scfg.group} ${scfg.dataDir}/cert.pem
-          chmod 400 ${scfg.dataDir}/cert.pem
+          cp ${toString kcfg.cert} ${scfg.configDir}/cert.pem
+          chown ${scfg.user}:${scfg.group} ${scfg.configDir}/cert.pem
+          chmod 400 ${scfg.configDir}/cert.pem
         ''}
         ${optionalString (kcfg.key != null) ''
-          cp ${toString kcfg.key} ${scfg.dataDir}/key.pem
-          chown ${scfg.user}:${scfg.group} ${scfg.dataDir}/key.pem
-          chmod 400 ${scfg.dataDir}/key.pem
+          cp ${toString kcfg.key} ${scfg.configDir}/key.pem
+          chown ${scfg.user}:${scfg.group} ${scfg.configDir}/key.pem
+          chmod 400 ${scfg.configDir}/key.pem
         ''}
       '';
     };
