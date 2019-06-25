@@ -520,6 +520,9 @@ in {
       mail = "dickbutt@excogitation.de";
       pubkey = ssh-for "exco";
     };
+    ilmu = {
+      mail = "ilmu@rishi.is";
+    };
     jan = {
       mail = "jan.heidbrink@posteo.de";
     };
