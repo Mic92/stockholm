@@ -53,6 +53,8 @@ in
     copyq
     curl
     dmenu
+    aspell
+    ispell
     rofi
     xdotool
     git
