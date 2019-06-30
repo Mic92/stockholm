@@ -76,7 +76,9 @@ in
     elixir
     elmPackages.elm
     exercism
-    gcc
+    gcc9
+    ccls
+    unstable.clang_8
     ghc
     go
     python37
