@@ -79,7 +79,9 @@ in
     google-chrome
   # programming languages
     go
-    gcc
+    gcc9
+    ccls
+    unstable.clang_8
     ghc
     python35
     python35Packages.pip
