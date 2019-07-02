@@ -104,6 +104,7 @@ let
     { krebs = import ./lass   { inherit config; }; }
     { krebs = import ./makefu { inherit config; }; }
     { krebs = import ./mb { inherit config; }; }
+    { krebs = import ./nin    { inherit config; }; }
     { krebs = import ./external/palo.nix { inherit config; }; }
     { krebs = import ./tv     { inherit config; }; }
     {
