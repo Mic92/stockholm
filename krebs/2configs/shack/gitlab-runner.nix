@@ -13,9 +13,12 @@ in
   imports = [
     "${runner-src}/gitlab-runner.nix"
   ];
-  services.gitlab-runner2.enable = true;
-  ## registrationConfigurationFile contains:
-  # CI_SERVER_URL=<CI server URL>
-  # REGISTRATION_TOKEN=<registration secret>
-  services.gitlab-runner2.registrationConfigFile = <secrets/shackspace-gitlab-ci>;
+  services.gitlab-runner2 = {
+    enable = true;
+    ## registrationConfigurationFile contains:
+    # CI_SERVER_URL=<CI server URL>
+    # REGISTRATION_TOKEN=<registration secret>
+    registrationConfigFile = <secrets/shackspace-gitlab-ci>;
+    gracefulTermination = true;
+  };
 }
