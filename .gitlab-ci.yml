@@ -32,7 +32,9 @@ wolf deployment:
   script:
     - GIT_SSH_COMMAND="ssh -i ~/.ssh/gitlab_deploy.key" git clone git@ssh.git.shackspace.de:rz/secrets.git ~/brain
     - git submodule update --init
-    - $(nix-build krebs/krops.nix --no-out-link --argstr name wolf -A deploy)
+    - ssh-keyscan -H 'wolf.shack' >> ~/.ssh/known_hosts
+    # TODO, hostname wolf cannot be resolved
+    - $(nix-build krebs/krops.nix --no-out-link --argstr name wolf --argstr target wolf.shack -A deploy)
 nur-packages makefu:
   stage: deploy
   script:
