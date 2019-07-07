@@ -1,5 +1,5 @@
 before_script:
-  - nix-env -iA nixpkgs.openssh nixpkgs.gnupg nixpkgs.curl nixpkgs.git || true
+  - nix-env -iA nixpkgs.openssh nixpkgs.gnupg nixpkgs.curl nixpkgs.git nixpkgs.pass || true
   # prepare github deployment for NUR
   - mkdir -p ~/.ssh
   - echo "$github_deploy_privkey" > ~/.ssh/github_deploy.key
