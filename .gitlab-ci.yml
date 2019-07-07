@@ -16,6 +16,7 @@ wolf deployment test:
   script:
     - GIT_SSH_COMMAND="ssh -i ~/.ssh/gitlab_deploy.key" git clone git@ssh.git.shackspace.de:rz/secrets.git ~/brain
     - test $(PASSWORD_STORE_DIR=~/brain pass smoke) == 1337
+    - git submodule update --init
     - $(nix-build krebs/krops.nix --no-out-link --argstr name wolf --argstr target /tmp -A test)
 nix-shell test:
   stage: test
@@ -30,6 +31,7 @@ wolf deployment:
   stage: deploy
   script:
     - GIT_SSH_COMMAND="ssh -i ~/.ssh/gitlab_deploy.key" git clone git@ssh.git.shackspace.de:rz/secrets.git ~/brain
+    - git submodule update --init
     - $(nix-build krebs/krops.nix --no-out-link --argstr name wolf -A deploy)
 nur-packages makefu:
   stage: deploy
