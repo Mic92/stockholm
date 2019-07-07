@@ -19,6 +19,7 @@ in
     # CI_SERVER_URL=<CI server URL>
     # REGISTRATION_TOKEN=<registration secret>
     registrationConfigFile = <secrets/shackspace-gitlab-ci>;
-    gracefulTermination = true;
+    #gracefulTermination = true;
   };
+  systemd.services.gitlab-runner2.restartIfChanged = false;
 }

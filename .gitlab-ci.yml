@@ -30,9 +30,12 @@ nix-shell test:
 wolf deployment:
   stage: deploy
   script:
-    - GIT_SSH_COMMAND="ssh -i ~/.ssh/gitlab_deploy.key" git clone git@ssh.git.shackspace.de:rz/secrets.git ~/brain
+    - cp ~/.ssh/gitlab_deploy.key ~/.ssh/id_rsa
+    - git clone git@ssh.git.shackspace.de:rz/secrets.git ~/brain
     - git submodule update --init
     - ssh-keyscan -H 'wolf.shack' >> ~/.ssh/known_hosts
+    - ssh-keyscan -H 'wolf' >> ~/.ssh/known_hosts
+    - ssh wolf uname -a
     # TODO, hostname wolf cannot be resolved
     - $(nix-build krebs/krops.nix --no-out-link --argstr name wolf --argstr target wolf.shack -A deploy)
 nur-packages makefu:
