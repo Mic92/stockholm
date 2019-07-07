@@ -1,20 +1,35 @@
 before_script:
-   - mkdir -p ~/.ssh
-   - echo "$deploy_privkey" > deploy.key
-   - export GIT_SSH_COMMAND="ssh -i $PWD/deploy.key"
-   - chmod 600 deploy.key
-   - ssh-keyscan -H 'github.com' >> ~/.ssh/known_hosts
-nix-shell test:
+  - nix-env -iA nixpkgs.openssh nixpkgs.gnupg nixpkgs.curl nixpkgs.git || true
+  # prepare github deployment for NUR
+  - mkdir -p ~/.ssh
+  - echo "$github_deploy_privkey" > ~/.ssh/github_deploy.key
+  - chmod 600 ~/.ssh/github_deploy.key
+  - ssh-keyscan -H 'github.com' >> ~/.ssh/known_hosts
+  # prepare git fetching of secrets
+  - ssh-keyscan -H 'git.shackspace.de' >> ~/.ssh/known_hosts
+  # import secret key for secrets
+  - echo "$secrets_gpg_key" | gpg --import
+wolf deployment test:
+  stage: test
   script:
-    - env
+    - GIT_SSH_COMMAND="ssh -i ~/.ssh/gitlab_deploy.key" git clone git@ssh.git.shackspace.de:rz/secrets.git ~/brain
+    - test $(PASSWORD_STORE_DIR=~/brain pass smoke) == 1337
+nix-shell test:
+  stage: test
+  script:
     - nix-shell --pure --command 'true' -p stdenv && echo success
     - nix-shell --pure --command 'false' -p stdenv || echo success
+    - git --version
+    - ssh -V
+    - gpg --version
+    - curl --version
 nur-packages makefu:
+  stage: deploy
   script:
     - git reset --hard origin/master
     - git filter-branch -f --prune-empty --subdirectory-filter makefu/5pkgs HEAD
     - git remote add deploy git@github.com:makefu/nur-packages.git  || git remote set-url deploy git@github.com:makefu/nur-packages.git
-    - git push --force deploy HEAD:master
+    - GIT_SSH_COMMAND="ssh -i ~/.ssh/github_deploy.key" git push --force deploy HEAD:master
     - curl -XPOST http://nur-update.herokuapp.com/update?repo=makefu
 after_script:
-    - rm -f deploy.key
+    - rm -rf .ssh/
