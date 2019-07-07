@@ -14,6 +14,7 @@
     <stockholm/krebs/2configs/news.nix>
     <stockholm/krebs/2configs/news-spam.nix>
     <stockholm/krebs/2configs/shack/prometheus/node.nix>
+    <stockholm/krebs/2configs/shack/gitlab-runner.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;
@@ -60,6 +61,9 @@
   };
 
   services.logind.lidSwitch = "ignore";
+  services.logind.lidSwitchExternalPower = "ignore";
+
+
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="8c:70:5a:b2:84:58", NAME="wl0"
     SUBSYSTEM=="net", ATTR{address}=="3c:97:0e:07:b9:14", NAME="et0"
