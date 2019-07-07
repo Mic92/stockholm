@@ -6,6 +6,8 @@ before_script:
   - chmod 600 ~/.ssh/github_deploy.key
   - ssh-keyscan -H 'github.com' >> ~/.ssh/known_hosts
   # prepare git fetching of secrets
+  - echo "$gitlab_deploy_privkey" > ~/.ssh/gitlab_deploy.key
+  - chmod 600 ~/.ssh/gitlab_deploy.key
   - ssh-keyscan -H 'git.shackspace.de' >> ~/.ssh/known_hosts
   # import secret key for secrets
   - echo "$secrets_gpg_key" | gpg --import
