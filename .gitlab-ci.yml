@@ -36,6 +36,12 @@ wolf deployment:
     - ssh-keyscan -H 'wolf.shack' >> ~/.ssh/known_hosts
     # TODO, hostname wolf cannot be resolved
     - $(nix-build krebs/krops.nix --no-out-link --argstr name wolf --argstr target wolf.shack -A deploy)
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - krebs/**/*
+      - lib/**/*
+      - .gitmodules
 nur-packages makefu:
   stage: deploy
   script:
@@ -44,5 +50,8 @@ nur-packages makefu:
     - git remote add deploy git@github.com:makefu/nur-packages.git  || git remote set-url deploy git@github.com:makefu/nur-packages.git
     - GIT_SSH_COMMAND="ssh -i ~/.ssh/github_deploy.key" git push --force deploy HEAD:master
     - curl -XPOST http://nur-update.herokuapp.com/update?repo=makefu
+  only:
+    changes:
+      - makefu/**/*
 after_script:
     - rm -rf .ssh/
