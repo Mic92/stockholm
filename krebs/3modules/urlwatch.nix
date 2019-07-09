@@ -56,6 +56,15 @@ let
         The format is described in systemd.time(7), CALENDAR EVENTS.
       '';
     };
+    telegram = {
+      enable = mkEnableOption "krebs.urlwatch.telegram" // { default = false; };
+      botToken = mkOption {
+        type = types.str;
+      };
+      chatId = mkOption {
+        type = types.listOf types.str;
+      };
+    };
     urls = mkOption {
       type = with types; listOf (either str subtypes.job);
       default = [];
@@ -111,6 +120,11 @@ let
       stdout = {
         color = true;
         enabled = true;
+      };
+      ${if cfg.telegram.enable then "telegram" else null} = {
+        enabled = cfg.telegram.enable;
+        bot_token = cfg.telegram.botToken;
+        chat_id = cfg.telegram.chatId;
       };
       text = {
         details = true;
