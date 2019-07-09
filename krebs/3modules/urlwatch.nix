@@ -17,6 +17,8 @@ let
   api = {
     enable = mkEnableOption "krebs.urlwatch";
 
+    customSendmail.enable = mkEnableOption "krebs.urlwatch.customSendmail";
+
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/urlwatch";
@@ -158,19 +160,21 @@ let
               --urls=${shell.escape urlsFile} \
             > changes || :
 
-          if test -s changes; then
-            {
-              echo Date: $(date -R)
-              echo From: ${shell.escape cfg.from}
-              echo Subject: $(
-                sed -n 's/^\(CHANGED\|ERROR\|NEW\): //p' changes \
-                  | tr '\n' ' '
-              )
-              echo To: ${shell.escape cfg.mailto}
-              echo
-              cat changes
-            } | /run/wrappers/bin/sendmail -t
-          fi
+          ${optionalString cfg.customSendmail.enable /* sh */ ''
+            if test -s changes; then
+              {
+                echo Date: $(date -R)
+                echo From: ${shell.escape cfg.from}
+                echo Subject: $(
+                  sed -n 's/^\(CHANGED\|ERROR\|NEW\): //p' changes \
+                    | tr '\n' ' '
+                )
+                echo To: ${shell.escape cfg.mailto}
+                echo
+                cat changes
+              } | /run/wrappers/bin/sendmail -t
+            fi
+          ''}
         '';
       };
     };
