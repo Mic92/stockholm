@@ -17,6 +17,8 @@ let
   api = {
     enable = mkEnableOption "krebs.urlwatch";
 
+    customSendmail.enable = mkEnableOption "krebs.urlwatch.customSendmail";
+
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/urlwatch";
@@ -53,6 +55,15 @@ let
         Run urlwatch at this interval.
         The format is described in systemd.time(7), CALENDAR EVENTS.
       '';
+    };
+    telegram = {
+      enable = mkEnableOption "krebs.urlwatch.telegram" // { default = false; };
+      botToken = mkOption {
+        type = types.str;
+      };
+      chatId = mkOption {
+        type = types.listOf types.str;
+      };
     };
     urls = mkOption {
       type = with types; listOf (either str subtypes.job);
@@ -110,6 +121,11 @@ let
         color = true;
         enabled = true;
       };
+      ${if cfg.telegram.enable then "telegram" else null} = {
+        enabled = cfg.telegram.enable;
+        bot_token = cfg.telegram.botToken;
+        chat_id = cfg.telegram.chatId;
+      };
       text = {
         details = true;
         footer = true;
@@ -158,19 +174,21 @@ let
               --urls=${shell.escape urlsFile} \
             > changes || :
 
-          if test -s changes; then
-            {
-              echo Date: $(date -R)
-              echo From: ${shell.escape cfg.from}
-              echo Subject: $(
-                sed -n 's/^\(CHANGED\|ERROR\|NEW\): //p' changes \
-                  | tr '\n' ' '
-              )
-              echo To: ${shell.escape cfg.mailto}
-              echo
-              cat changes
-            } | /run/wrappers/bin/sendmail -t
-          fi
+          ${optionalString cfg.customSendmail.enable /* sh */ ''
+            if test -s changes; then
+              {
+                echo Date: $(date -R)
+                echo From: ${shell.escape cfg.from}
+                echo Subject: $(
+                  sed -n 's/^\(CHANGED\|ERROR\|NEW\): //p' changes \
+                    | tr '\n' ' '
+                )
+                echo To: ${shell.escape cfg.mailto}
+                echo
+                cat changes
+              } | /run/wrappers/bin/sendmail -t
+            fi
+          ''}
         '';
       };
     };
