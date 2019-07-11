@@ -25,6 +25,8 @@ in
     <stockholm/krebs/2configs/shack/muell_caller.nix>
     # provide muellshack api
     <stockholm/krebs/2configs/shack/muellshack.nix>
+    # provide light control api
+    <stockholm/krebs/2configs/shack/node-light.nix>
 
     # create samba share for anonymous usage with the laser and 3d printer pc
     <stockholm/krebs/2configs/shack/share.nix>
