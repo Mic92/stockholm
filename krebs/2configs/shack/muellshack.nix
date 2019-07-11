@@ -32,6 +32,7 @@ in {
       ExecStartPre = pkgs.writeDash "call-muell-pre" ''
         cp -vf ${pkg}/share/static_muelldata.json ${home}
         cp -vn  ${pkg}/share/storage.json ${home}
+        chmod 700 ${home}/storage.json
       '';
       WorkingDirectory = home;
       ExecStart = "${pkg}/bin/muellshack";
