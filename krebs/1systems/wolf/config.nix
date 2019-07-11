@@ -23,6 +23,8 @@ in
     # <stockholm/krebs/2configs/shack/nix-cacher.nix>
     # Say if muell will be collected
     <stockholm/krebs/2configs/shack/muell_caller.nix>
+    # provide muellshack api
+    <stockholm/krebs/2configs/shack/muellshack.nix>
 
     # create samba share for anonymous usage with the laser and 3d printer pc
     <stockholm/krebs/2configs/shack/share.nix>
