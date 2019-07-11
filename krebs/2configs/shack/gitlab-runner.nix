@@ -6,10 +6,6 @@ let
   };
 in
 {
-  systemd.services.gitlab-runner.path = [
-    "/run/wrappers" # /run/wrappers/bin/su
-    "/" # /bin/sh
-  ];
   imports = [
     "${runner-src}/gitlab-runner.nix"
   ];
@@ -22,4 +18,5 @@ in
     #gracefulTermination = true;
   };
   systemd.services.gitlab-runner2.restartIfChanged = false;
+  systemd.services.docker.restartIfChanged = false;
 }
