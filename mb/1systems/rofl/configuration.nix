@@ -3,27 +3,11 @@
 in {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+      <stockholm/mb/2configs/google-compute-config.nix>
       <stockholm/mb>
     ];
 
-  krebs.build.host = config.krebs.hosts.gr33n;
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.extraModulePackages = with config.boot.kernelPackages; [ wireguard ];
-
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
-  fileSystems."/mnt/public" = {
-    device = "//192.168.0.4/public";
-    fsType = "cifs";
-    options = let
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-    in [ "${automount_opts},user,rw,username=mb0,iocharset=utf8,credentials=${config.users.users.mb.home}/.smbcredentials" ];
-  };
+  krebs.build.host = config.krebs.hosts.rofl;
 
   i18n = {
     consoleFont = "Lat2-Terminus16";
@@ -34,13 +18,6 @@ in {
   time.timeZone = "Europe/Berlin";
 
   nixpkgs.config.allowUnfree = true;
-
-  nixpkgs.config.packageOverrides = super: {
-    openvpn = super.openvpn.override {
-      pkcs11Support = true;
-      useSystemd = false;
-    };
-  };
 
   environment.shellAliases = {
     ll = "ls -alh";
@@ -59,31 +36,14 @@ in {
      traceroute
      tree
      vim
-     wcalc
-     wget
      xz
      zbackup
   ];
-
-  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
   sound.enable = false;
 
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
-
-  services.codimd = {
-    enable = true;
-    workDir = "/storage/codimd";
-    configuration = {
-      port = 1337;
-      host = "0.0.0.0";
-      db = {
-        dialect = "sqlite";
-        storage = "/storage/codimd/db.codimd.sqlite";
-      };
-    };
-  };
 
   networking.wireless.enable = false;
   networking.networkmanager.enable = false;
@@ -136,7 +96,6 @@ in {
     '';
   };
 
-  nix.buildCores = 4;
   system.autoUpgrade.enable = false;
   system.autoUpgrade.channel = "https://nixos.org/channels/nixos-19.03";
   system.stateVersion = "19.03";
