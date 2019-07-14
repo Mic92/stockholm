@@ -5,7 +5,7 @@ in {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       <stockholm/mb>
-      <stockholm/mb/2config/nvim.nix>
+      <stockholm/mb/2configs/nvim.nix>
     ];
 
   krebs.build.host = config.krebs.hosts.p1nk;
@@ -160,6 +160,7 @@ in {
       };
     };
     windowManager.ratpoison.enable = true;
+    windowManager.pekwm.enable = true;
   };
 
   services.openssh.enable = true;
