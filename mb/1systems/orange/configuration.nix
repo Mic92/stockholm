@@ -134,6 +134,10 @@ in {
     zbackup
   ];
 
+  environment.variables = {
+    EDITOR = ["nvim"];
+  };
+
   environment.shellAliases = {
     ll = "ls -alh";
     ls = "ls --color=tty";

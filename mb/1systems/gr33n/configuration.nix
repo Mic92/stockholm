@@ -72,6 +72,19 @@ in {
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
 
+  services.codimd = {
+    enable = true;
+    workDir = "/storage/codimd";
+    configuration = {
+      port = 1337;
+      host = "0.0.0.0";
+      db = {
+        dialect = "sqlite";
+        storage = "/storage/codimd/db.codimd.sqlite";
+      };
+    };
+  };
+
   networking.wireless.enable = false;
   networking.networkmanager.enable = false;
   krebs.iptables.enable = true;
