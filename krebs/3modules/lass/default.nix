@@ -398,6 +398,7 @@ in {
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.1.3";
+          ip6.addr = r6 "3";
           aliases = [
             "xerxes.r"
           ];
@@ -428,10 +429,18 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
         };
+        wiregrill = {
+          ip6.addr = w6 "3";
+          aliases = [
+            "xerxes.w"
+          ];
+          wireguard.pubkey = "UTm8B8YUVvBGqwwxAUMVFsVQFQGQ6jbcXAavZ8LxYT8=";
+        };
       };
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5HyLyaIvVH0qHIQ4ciKhDiElhSqsK+uXcA6lTvL+5n";
+      syncthing.id = "EA76ZHP-DF2I3CJ-NNTFEUH-YGPQK5S-T7FQ6JA-BNQQUNC-GF2YL46-CKOZCQM";
     };
     red = {
       monitoring = false;
@@ -666,7 +675,7 @@ in {
     };
     lass-xerxes = {
       mail = "lass@xerxes.r";
-      pubkey = builtins.readFile ./ssh/xerxes.rsa;
+      pubkey = builtins.readFile ./ssh/xerxes.ed25519;
     };
     lass-daedalus = {
       mail = "lass@daedalus.r";

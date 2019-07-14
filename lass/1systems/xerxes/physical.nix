@@ -1,29 +1,86 @@
+{ pkgs, lib, ... }:
 {
   imports = [
     ./config.nix
-    <stockholm/lass/2configs/hw/gpd-pocket.nix>
-    <stockholm/lass/2configs/boot/stock-x220.nix>
+    <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
   ];
-  services.udev.extraRules = ''
-    SUBSYSTEM=="net", ATTR{address}=="b0:f1:ec:9f:5c:78", NAME="wl0"
+
+  boot.zfs.enableUnstable = true;
+  boot.loader.grub = {
+    enable = true;
+    device = "/dev/sda";
+    efiSupport = true;
+  };
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  # TODO fix touchscreen
+  boot.blacklistedKernelModules = [
+    "goodix"
+  ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "sd_mod" ];
+  boot.initrd.kernelModules = [ ];
+  boot.initrd.luks.devices.crypted.device = "/dev/sda3";
+  boot.kernelModules = [ "kvm-intel" ];
+  boot.extraModulePackages = [ ];
+  boot.kernelParams = [
+    "fbcon=rotate:1"
+    "boot.shell_on_fail"
+  ];
+
+  services.xserver.displayManager.sessionCommands = ''
+    (sleep 2 && ${pkgs.xorg.xrandr}/bin/xrandr --output eDP-1 --rotate right)
+    (sleep 2 && ${pkgs.xorg.xinput}/bin/xinput set-prop 'Goodix Capacitive TouchScreen' 'Coordinate Transformation Matrix' 0 1 0 -1 0 1 0 0 1)
   '';
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/d227d88f-bd24-4e8a-aa14-9e966b471437";
-    fsType = "btrfs";
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/16C8-D053";
-    fsType = "vfat";
+    device = "rpool/root";
+    fsType = "zfs";
   };
 
   fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/1ec4193b-7f41-490d-8782-7677d437b358";
-    fsType = "btrfs";
+    device = "rpool/home";
+    fsType = "zfs";
   };
 
-  boot.initrd.luks.devices = [ { name = "luksroot"; device = "/dev/disk/by-uuid/d17f19a3-dcba-456d-b5da-e45cc15dc9c8"; } ];
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/E749-784C";
+    fsType = "vfat";
+  };
 
-  networking.wireless.enable = true;
+  swapDevices = [ ];
+
+  boot.extraModprobeConfig = ''
+    options zfs zfs_arc_max=1073741824
+  '';
+
+  nix.maxJobs = lib.mkDefault 4;
+
+  networking.hostId = "9b0a74ac";
+  networking.networkmanager.enable = true;
+
+  hardware.opengl.enable = true;
+
+  services.tlp.enable = true;
+  services.tlp.extraConfig = ''
+    CPU_SCALING_GOVERNOR_ON_AC=ondemand
+    CPU_SCALING_GOVERNOR_ON_BAT=powersave
+    CPU_MIN_PERF_ON_AC=0
+    CPU_MAX_PERF_ON_AC=100
+    CPU_MIN_PERF_ON_BAT=0
+    CPU_MAX_PERF_ON_BAT=30
+  '';
+
+  services.logind.extraConfig = ''
+    HandlePowerKey=suspend
+    IdleAction=suspend
+    IdleActionSec=300
+  '';
+
+  services.xserver.extraConfig = ''
+    Section "Device"
+    Identifier "Intel Graphics"
+    Driver "Intel"
+    Option "TearFree" "true"
+    EndSection
+  '';
 }
