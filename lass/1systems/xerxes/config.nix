@@ -32,4 +32,19 @@
   ];
 
   lass.screenlock.enable = lib.mkForce false;
+  krebs.syncthing = {
+    folders = {
+      the_playlist = {
+        path = "/home/lass/tmp/the_playlist";
+        peers = [ "mors" "phone" "prism" "xerxes" ];
+      };
+    };
+  };
+  krebs.permown = {
+    "/home/lass/tmp/the_playlist" = {
+      owner = "lass";
+      group = "syncthing";
+      umask = "0007";
+    };
+  };
 }
