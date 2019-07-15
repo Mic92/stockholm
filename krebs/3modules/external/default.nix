@@ -620,6 +620,13 @@ in {
         };
       };
     };
+    domsen-backup = {
+      owner = config.krebs.users.domsen;
+      ci = false;
+      external = true;
+      syncthing.id = "22NLFY5-QMRM3BH-76QIBYI-OPMKVGM-DU4FNZI-3KN2POF-V4WIC6M-2SFFUAC";
+      nets = {};
+    };
   };
   users = {
     ciko = {
@@ -665,5 +672,7 @@ in {
     filly = {
     };
     pie_ = {};
+    domsen = {
+    };
   };
 }
