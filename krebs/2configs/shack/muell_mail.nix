@@ -4,8 +4,8 @@ let
   pkg = pkgs.callPackage (
     pkgs.fetchgit {
       url = "https://git.shackspace.de/rz/muell_mail";
-      rev = "317370e3e98ce34da4ee615af7a80df7b519ab89";
-      sha256 = "sha256:02mywm37n0v4icgy474wwkavb7vad93bvkigvz1cqn7fbg4ldc8k";
+      rev = "861ec25ab22797d8961efb32e72d79e113aa9f0f";
+      sha256 = "sha256:18cw95zbr7isv4cw80cbpd84n5z208fwh5390i6j10jkn398mjq2";
     }) {};
     home = "/var/lib/muell_mail";
     cfg = toString <secrets/shack/muell_mail.js>;
