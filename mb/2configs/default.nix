@@ -21,6 +21,29 @@ with import <stockholm/lib>;
             "video"
             "fuse"
             "wheel"
+            "kvm"
+            "qemu-libvirtd"
+            "libvirtd"
+          ];
+          openssh.authorizedKeys.keys = [
+            config.krebs.users.mb.pubkey
+          ];
+        };
+        xo = {
+          name = "xo";
+          uid = 2323;
+          home = "/home/xo";
+          group = "users";
+          createHome = true;
+          shell = "/run/current-system/sw/bin/fish";
+          extraGroups = [
+            "audio"
+            "video"
+            "fuse"
+            "wheel"
+            "kvm"
+            "qemu-libvirtd"
+            "libvirtd"
           ];
           openssh.authorizedKeys.keys = [
             config.krebs.users.mb.pubkey

@@ -1,35 +1,31 @@
-{ config, pkgs, callPackage, ... }: let
+
+{ config, pkgs, ... }: let
   unstable = import <nixpkgs-unstable> { config = { allowUnfree = true; }; };
 in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      <stockholm/mb>
-      <stockholm/mb/2configs/nvim.nix>
+     <stockholm/mb>
     ];
 
-  krebs.build.host = config.krebs.hosts.p1nk;
+  krebs.build.host = config.krebs.hosts.sunsh1n3;
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
+  
   boot.initrd.luks.devices = [
     {
       name = "root";
-      device = "/dev/disk/by-uuid/0392257b-f6cf-484d-8c46-e20aab4fddb7";
+      device = "/dev/disk/by-uuid/5354ba31-c7de-4b55-8f86-a2a437dfbb21";
       preLVM = true;
       allowDiscards = true;
     }
   ];
-  fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
-  fileSystems."/mnt/public" = {
-    device = "//192.168.0.4/public";
-    fsType = "cifs";
-    options = let
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-    in [ "${automount_opts},user,rw,username=mb0,iocharset=utf8,credentials=${config.users.users.mb.home}/.smbcredentials" ];
-  };
-
 
   i18n = {
     consoleFont = "Lat2-Terminus16";
@@ -38,6 +34,12 @@ in {
   };
 
   time.timeZone = "Europe/Berlin";
+
+  nixpkgs.config.packageOverrides = super : {
+   openvpn = super.openvpn.override { pkcs11Support = true; useSystemd = true ; };
+  };
+
+  nixpkgs.config.allowUnfree = true;
 
   fonts = {
     enableCoreFonts = true;
@@ -65,112 +67,66 @@ in {
     ];
   };
 
-  nixpkgs.config.packageOverrides = super: {
-    openvpn = super.openvpn.override { pkcs11Support = true; useSystemd = false; };
-  };
-
-  nixpkgs.config.allowUnfree = true;
-
   environment.systemPackages = with pkgs; [
-    adapta-gtk-theme
-    aircrackng
+    wget vim git curl fish
     ag
-    arandr
-    binutils
     chromium
-    cifs-utils
-    curl
-    evince
-    exfat
-    feh
-    file
     firefox
-    freetype
     gimp
-    git
-    gnupg
-    graphite2
-    hicolor_icon_theme
+    p7zip
     htop
-    i3lock
-    jq
-    keepassx2
-    kvm
-    lxappearance
-    man-pages
-    moc
     mpv
     mpvc
-    mupdf
-    ncdu
     nmap
-    openvpn
-    pass
-    p7zip
-    powertop
-    ranger
-    rofi
+    ntfs3g
+    keepassx2
     sshfs
-    tcpdump
-    tmux
-    traceroute
-    tree
+    #unstable.skrooge
+    skrooge
     unstable.alacritty
-    unstable.ponyc
-    unstable.sublime3
-    youtube-dl
-    virt-viewer
-    virtmanager
-    vulnix
+    tmux
+    tree
     wcalc
-    wget
-    xz
+    virtmanager
+    virt-viewer
+    (wine.override { wineBuild = "wineWow"; }) 
+    xz    
     zbackup
   ];
-
-  environment.shellAliases = {
-    ll = "ls -alh";
-    ls = "ls --color=tty";
-  };
 
   virtualisation.libvirtd.enable = true;
   virtualisation.kvmgt.enable = true;
 
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
 
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
-  hardware.pulseaudio.support32Bit = true;
+  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  programs.dconf.enable = true;
 
-  services.xserver = {
-    enable = true;
-    layout = "de";
-    xkbOptions = "nodeadkeys";
-    libinput.enable = true;
-    desktopManager = {
-      default = "xfce";
-      xterm.enable = false;
-      xfce = {
-        enable = true;
-        noDesktop = true;
-        enableXfwm = false;
-      };
-    };
-    windowManager.ratpoison.enable = true;
-    windowManager.pekwm.enable = true;
-  };
-
+  # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
 
   krebs.iptables.enable = true;
-  networking.networkmanager.enable = false;
-  networking.wireless.enable = true;
-  networking.nameservers = [ "8.8.8.8" "141.1.1.1" ];
+  #networking.wireless.enable = true;  
+  networking.networkmanager.enable = true;
   networking.enableIPv6 = false;
+
+  # Enable sound.
+  sound.enable = true;
+  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.support32Bit = true;
+  nixpkgs.config.pulseaudio = true;
+
+  services.xserver.enable = true;
+  services.xserver.layout = "de";
+  services.xserver.xkbOptions = "nodeadkeys";
+  services.xserver.libinput.enable = true;
+
+  # Enable the KDE Desktop Environment.
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.desktopManager.plasma5.enable = true;
 
   programs.fish = {
     enable = true;
@@ -213,15 +169,13 @@ in {
                   set suffix '>'
           end
 
-          echo -n -s "$USER" @ (set_color magenta) (prompt_hostname) (set_color normal) "$nix_shell_info" ' ' (set_color $color_cwd) (prompt_pwd) (set_color normal) "$suffix "
+          echo -n -s "$USER" @ (set_color yellow) (prompt_hostname) (set_color normal) "$nix_shell_info" ' ' (set_color $color_cwd) (prompt_pwd) (set_color normal) "$suffix "
       end
     '';
   };
-
-  nix.maxJobs = 4;
+  
   nix.buildCores = 4;
-  system.autoUpgrade.enable = false;
-  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-19.03";
-  system.stateVersion = "19.03";
+
+  system.stateVersion = "19.09";
 
 }
