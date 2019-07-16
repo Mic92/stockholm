@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 let
   shack-ip = config.krebs.build.host.nets.shack.ip4.addr;
+  openhab-ip = "10.42.2.139"; # powerraw contains the hardcoded ip of openhab.shack
   influx-host = "127.0.0.1";
   ext-if = "et0";
   external-mac = "52:54:b0:0b:af:fe";
@@ -89,10 +90,16 @@ in
   networking = {
     firewall.enable = false;
     firewall.allowedTCPPorts = [ 8088 8086 8083 ];
-    interfaces."${ext-if}".ipv4.addresses = [{
-      address = shack-ip;
-      prefixLength = 20;
-    }];
+    interfaces."${ext-if}".ipv4.addresses = [
+      {
+        address = shack-ip;
+        prefixLength = 20;
+      }
+      {
+        address = openhab-ip;
+        prefixLength = 20;
+      }
+    ];
 
     defaultGateway = "10.42.0.1";
     nameservers = [ "10.42.0.100" "10.42.0.200" ];
