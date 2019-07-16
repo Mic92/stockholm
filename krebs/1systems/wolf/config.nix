@@ -29,6 +29,8 @@ in
     <stockholm/krebs/2configs/shack/node-light.nix>
     # send mail if muell was not handled
     <stockholm/krebs/2configs/shack/muell_mail.nix>
+    # send mail if muell was not handled
+    <stockholm/krebs/2configs/shack/s3-power.nix>
 
     # create samba share for anonymous usage with the laser and 3d printer pc
     <stockholm/krebs/2configs/shack/share.nix>
