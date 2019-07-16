@@ -29,8 +29,8 @@ in {
 
   services.nginx.virtualHosts."openhab.shack" = {
     serverAliases = [ "lightapi.shack" ];
-    locations."/power".proxyPass = "http://localhost:${port}";
-    locations."/lounge".proxyPass = "http://localhost:${port}";
+    locations."/power/".proxyPass = "http://localhost:${port}/power/";
+    locations."/lounge/".proxyPass = "http://localhost:${port}/lounge/";
   };
   systemd.services.node-light= {
     description = "node-light";

@@ -20,7 +20,7 @@ in {
     };
   };
   services.nginx.virtualHosts."openhab.shack" = {
-    locations."/muellshack".proxyPass = "http://localhost:${port}";
+    locations."/muellshack/".proxyPass = "http://localhost:${port}/muellshack/";
   };
   systemd.services.muellshack = {
     description = "muellshack";
