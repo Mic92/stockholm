@@ -4,8 +4,8 @@ let
   pkg = pkgs.callPackage (
     pkgs.fetchgit {
       url = "https://git.shackspace.de/rz/s3-power";
-      rev = "1a59f8e34924c8809d06895bd96c7f98d037026e";
-      sha256 = "sha256:191625mg7n41852h1c0ay3492f29n7kxkab0kwczyp07xh5y25nn";
+      rev = "36df203a8fc1af02b08f60ab8d49c849b01e711f";
+      sha256 = "sha256:0i05vllnfwj02sfpmg2m8hy0zq27kww9ampiaix6dl5wbyjlp51j";
     }) {};
     home = "/var/lib/s3-power";
     cfg = toString <secrets/shack/s3-power.json>;
@@ -15,10 +15,11 @@ in {
     createHome = true;
   };
   systemd.services.s3-power = {
+    startAt = "daily";
     description = "s3-power";
-    wantedBy = [ "multi-user.target" ];
     environment.CONFIG = "${home}/s3-power.json";
     serviceConfig = {
+      Type = "oneshot";
       User = "s3_power";
       ExecStartPre = pkgs.writeDash "s3-power-pre" ''
         install -D -os3_power -m700 ${cfg} ${home}/s3-power.json
@@ -26,7 +27,6 @@ in {
       WorkingDirectory = home;
       PermissionsStartOnly = true;
       ExecStart = "${pkg}/bin/s3-power";
-      Restart = "always";
       PrivateTmp = true;
     };
   };
