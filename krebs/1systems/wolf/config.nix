@@ -47,6 +47,8 @@ in
     <stockholm/krebs/2configs/shack/mqtt_sub.nix>
     ## Collect radioactive data and put into graphite
     <stockholm/krebs/2configs/shack/radioactive.nix>
+    ## mqtt.shack
+    <stockholm/krebs/2configs/shack/mqtt.nix>
     ## Collect local statistics via collectd and send to collectd
     <stockholm/krebs/2configs/stats/wolf-client.nix>
 
