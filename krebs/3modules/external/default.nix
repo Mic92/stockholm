@@ -232,7 +232,12 @@ in {
     rose = {
       owner = config.krebs.users.Mic92;
       nets = rec {
+        internet = {
+          ip4.addr = "129.215.165.52";
+          aliases = [ "rose.i" ];
+        };
         retiolum = {
+          via = internet;
           addrs = [
             config.krebs.hosts.rose.nets.retiolum.ip4.addr
             config.krebs.hosts.rose.nets.retiolum.ip6.addr
@@ -260,7 +265,12 @@ in {
     martha = {
       owner = config.krebs.users.Mic92;
       nets = rec {
+        internet = {
+          ip4.addr = "129.215.165.53";
+          aliases = [ "martha.i" ];
+        };
         retiolum = {
+          via = internet;
           addrs = [
             config.krebs.hosts.martha.nets.retiolum.ip4.addr
             config.krebs.hosts.martha.nets.retiolum.ip6.addr
@@ -288,7 +298,12 @@ in {
     donna = {
       owner = config.krebs.users.Mic92;
       nets = rec {
+        internet = {
+          ip4.addr = "129.215.165.54";
+          aliases = [ "donna.i" ];
+        };
         retiolum = {
+          via = internet;
           addrs = [
             config.krebs.hosts.donna.nets.retiolum.ip4.addr
             config.krebs.hosts.donna.nets.retiolum.ip6.addr
