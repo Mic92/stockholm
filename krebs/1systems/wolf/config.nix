@@ -42,18 +42,18 @@ in
     # connect to git.shackspace.de as group runner for rz
     <stockholm/krebs/2configs/shack/gitlab-runner.nix>
 
-    # Statistics collection and visualization
-    <stockholm/krebs/2configs/graphite.nix>
+    # Statistics collection and visualization 
+    <stockholm/krebs/2configs/shack/graphite.nix>
     ## Collect data from mqtt.shack and store in graphite database
     <stockholm/krebs/2configs/shack/mqtt_sub.nix>
     ## Collect radioactive data and put into graphite
     <stockholm/krebs/2configs/shack/radioactive.nix>
     ## mqtt.shack
     <stockholm/krebs/2configs/shack/mqtt.nix>
+    ## influx.shack
+    <stockholm/krebs/2configs/shack/influx.nix>
     ## Collect local statistics via collectd and send to collectd
     <stockholm/krebs/2configs/stats/wolf-client.nix>
-
-    { services.influxdb.enable = true; }
 
     <stockholm/krebs/2configs/shack/netbox.nix>
     <stockholm/krebs/2configs/shack/prometheus/server.nix>

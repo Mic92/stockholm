@@ -1,16 +1,22 @@
 { config, lib, pkgs, ... }:
+# hostname: graphite.shack
+
 
 # graphite-web on port 8080
 # carbon cache on port 2003 (tcp/udp)
-
-# TODO: krebs.graphite.minimal.enable
-# TODO: configure firewall
-with import <stockholm/lib>;
-{
-  imports = [ ];
-
+let
+  port = 8080;
+in {
+  networking.firewall.allowedTCPPorts = [ 2003 port ];
+  networking.firewall.allowedUDPPorts = [ 2003 ];
+  services.nginx.virtualHosts."graphite.shack" = {
+    locations."/" = {
+      proxyPass = "http://localhost:${toString port}/";
+    };
+  };
   services.graphite = {
     api = {
+      inherit port;
       enable = true;
       listenAddress = "0.0.0.0";
     };
