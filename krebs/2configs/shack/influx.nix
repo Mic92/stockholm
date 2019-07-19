@@ -1,3 +1,4 @@
+# hostname: influx.shack
 let
   port = 8086;
 in
@@ -11,7 +12,7 @@ in
   services.influxdb = {
     enable = true;
     extraConfig = {
-      bind-address = ":${toString port}";
+      http.bind-address = "0.0.0.0:${toString port}";
       http.log-enabled = false;
     };
   };

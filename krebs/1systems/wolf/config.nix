@@ -1,7 +1,6 @@
 { config, pkgs, ... }:
 let
   shack-ip = config.krebs.build.host.nets.shack.ip4.addr;
-  influx-host = "127.0.0.1";
   ext-if = "et0";
   external-mac = "52:54:b0:0b:af:fe";
 
@@ -56,11 +55,13 @@ in
     <stockholm/krebs/2configs/stats/wolf-client.nix>
 
     <stockholm/krebs/2configs/shack/netbox.nix>
+    # prometheus.shack
     <stockholm/krebs/2configs/shack/prometheus/server.nix>
     <stockholm/krebs/2configs/shack/prometheus/node.nix>
     <stockholm/krebs/2configs/shack/prometheus/unifi.nix>
+    # grafana.shack
+    <stockholm/krebs/2configs/shack/grafana.nix>
     <stockholm/krebs/2configs/collectd-base.nix> # home-assistant
-    { services.influxdb.enable = true; }
 
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
@@ -70,15 +71,6 @@ in
   # local discovery in shackspace
   nixpkgs.config.packageOverrides = pkgs: { tinc = pkgs.tinc_pre; };
   krebs.tinc.retiolum.extraConfig = "TCPOnly = yes";
-  services.grafana = {
-    enable = true;
-    addr = "0.0.0.0";
-    users.allowSignUp = true;
-    users.allowOrgCreate = true;
-    users.autoAssignOrg = true;
-    auth.anonymous.enable = true;
-    security = import <secrets/grafana_security.nix>;
-  };
 
   nix = {
     # use the up to date prism cache
