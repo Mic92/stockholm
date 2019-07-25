@@ -14,18 +14,13 @@ with import <stockholm/lib>;
   ];
   krebs.announce-activation.enable = true;
   krebs.enable = true;
-  krebs.tinc.retiolum.enable = true;
+  krebs.tinc.retiolum.enable = mkDefault true;
 
   krebs.build.user = mkDefault config.krebs.users.krebs;
 
   networking.hostName = config.krebs.build.host.name;
 
   nix.maxJobs = 1;
-  nix.trustedBinaryCaches = [
-    "https://cache.nixos.org"
-    "http://cache.nixos.org"
-    "http://hydra.nixos.org"
-  ];
   nix.useSandbox = true;
 
   environment.systemPackages = with pkgs; [
@@ -38,8 +33,6 @@ with import <stockholm/lib>;
     consoleKeyMap = "us";
     defaultLocale = lib.mkForce "C";
   };
-
-
 
   programs.ssh.startAgent = false;
 
@@ -55,18 +48,13 @@ with import <stockholm/lib>;
 
   users.mutableUsers = false;
   users.extraUsers.root.openssh.authorizedKeys.keys = [
-    # TODO
     config.krebs.users.jeschli-brauerei.pubkey
     config.krebs.users.lass.pubkey
     config.krebs.users.lass-mors.pubkey
     config.krebs.users.makefu.pubkey
-    # TODO HARDER:
-    config.krebs.users.makefu-omo.pubkey
     config.krebs.users.tv.pubkey
   ];
 
-
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "17.03";
-
 }

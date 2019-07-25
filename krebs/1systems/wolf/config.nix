@@ -67,20 +67,10 @@ in
   # use your own binary cache, fallback use cache.nixos.org (which is used by
   # apt-cacher-ng in first place)
 
-
   # local discovery in shackspace
   nixpkgs.config.packageOverrides = pkgs: { tinc = pkgs.tinc_pre; };
   krebs.tinc.retiolum.extraConfig = "TCPOnly = yes";
 
-  nix = {
-    # use the up to date prism cache
-    binaryCaches = [
-      "https://cache.nixos.org/"
-    ];
-    binaryCachePublicKeys = [
-      "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
-    ];
-  };
 
   networking = {
     firewall.enable = false;
@@ -125,10 +115,6 @@ in
   swapDevices = [
     { device = "/dev/disk/by-label/swap";  }
   ];
-  # fallout of ipv6calypse
-  networking.extraHosts = ''
-    hass.shack    10.42.2.191
-  '';
 
   users.extraUsers.root.openssh.authorizedKeys.keys = [
     config.krebs.users."0x4a6f".pubkey
