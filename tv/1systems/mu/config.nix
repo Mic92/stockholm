@@ -49,6 +49,13 @@ with import <stockholm/lib>;
 
   networking.networkmanager.enable = true;
 
+  # XXX reload to work around occasional "Failed to load firmware chunk!"
+  # TODO only do this if firmware is actually broken(?)
+  system.activationScripts.reload-iwlwifi = /* sh */ ''
+    ${pkgs.kmod}/bin/modprobe -vr iwlwifi
+    ${pkgs.kmod}/bin/modprobe -v iwlwifi
+  '';
+
   environment.systemPackages = with pkgs; [
     chromium
     firefoxWrapper
