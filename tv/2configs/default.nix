@@ -120,6 +120,7 @@ with import <stockholm/lib>;
 
     {
       environment.systemPackages = [
+        pkgs.field
         pkgs.get
         pkgs.git
         pkgs.git-crypt
