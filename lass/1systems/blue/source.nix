@@ -1,6 +1,6 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, test, ... }:
 {
-  nixpkgs = lib.mkForce {
+  nixpkgs = lib.mkIf (! test) (lib.mkForce {
     file = {
       path = toString (pkgs.fetchFromGitHub {
         owner = "nixos";
@@ -10,5 +10,5 @@
       });
       useChecksum = true;
     };
-  };
+  });
 }

@@ -70,7 +70,8 @@ let
             filename = pkgs.writeDash "bier-balance" ''
               ${pkgs.hledger}/bin/hledger -f $state_file bal -N -O csv \
                 | ${pkgs.coreutils}/bin/tail +2 \
-                | ${pkgs.miller}/bin/mlr --icsv --opprint cat
+                | ${pkgs.miller}/bin/mlr --icsv --opprint cat \
+                | ${pkgs.gnused}/bin/sed 's/^/the_/'
             '';
           };
         }

@@ -176,6 +176,7 @@ in
   config = mkIf kcfg.enable {
 
     systemd.services.syncthing = mkIf (kcfg.cert != null || kcfg.key != null) {
+      serviceConfig.PermissionsStartOnly = mkDefault true;
       preStart = ''
         ${optionalString (kcfg.cert != null) ''
           cp ${toString kcfg.cert} ${scfg.configDir}/cert.pem
