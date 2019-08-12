@@ -135,7 +135,10 @@ with import <stockholm/lib>;
       javascript.extraStart = comment "jq";
       lua = {};
       #nginx = {};
-      python.extraStart = comment "py";
+      python.extraStart = alts [
+        (comment "py")
+        (writerExt "py")
+      ];
       sed.extraStart = writer "Sed";
       sh.extraStart = let
         phases = [
