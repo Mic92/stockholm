@@ -1,19 +1,15 @@
 with import <stockholm/lib>;
 { config, pkgs, ... }: let
+  exec = filename: args: url: {
+    inherit url;
+    filter = "system:${
+      concatMapStringsSep " " shell.escape ([filename] ++ toList args)
+    }";
+  };
   json = json' ["."];
-  json' = args: url: {
-    inherit url;
-    filter = "system:${pkgs.jq}/bin/jq ${
-      concatMapStringsSep " " shell.escape (toList args)
-    }";
-  };
+  json' = exec "${pkgs.jq}/bin/jq";
   xml = xml' ["--format" "-"];
-  xml' = args: url: {
-    inherit url;
-    filter = "system:${pkgs.libxml2}/bin/xmllint ${
-      concatMapStringsSep " " shell.escape (toList args)
-    }";
-  };
+  xml' = exec "${pkgs.libxml2}/bin/xmllint";
 in {
   krebs.urlwatch = {
     enable = true;
