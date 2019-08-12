@@ -1,8 +1,11 @@
 with import <stockholm/lib>;
 { config, pkgs, ... }: let
-  json = url: {
+  json = json' ["."];
+  json' = args: url: {
     inherit url;
-    filter = "system:${pkgs.jq}/bin/jq .";
+    filter = "system:${pkgs.jq}/bin/jq ${
+      concatMapStringsSep " " shell.escape (toList args)
+    }";
   };
 in {
   krebs.urlwatch = {
