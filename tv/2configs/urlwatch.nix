@@ -7,6 +7,13 @@ with import <stockholm/lib>;
       concatMapStringsSep " " shell.escape (toList args)
     }";
   };
+  xml = xml' ["--format" "-"];
+  xml' = args: url: {
+    inherit url;
+    filter = "system:${pkgs.libxml2}/bin/xmllint ${
+      concatMapStringsSep " " shell.escape (toList args)
+    }";
+  };
 in {
   krebs.urlwatch = {
     enable = true;
