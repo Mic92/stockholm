@@ -73,7 +73,8 @@ with import <stockholm/lib>;
       def = k: ''${k}[ \t\r\n]*='';
       writer = k: ''write${k}[^ \t\r\n]*[ \t\r\n]*\("[^"]*"\|[a-z]\+\)'';
       writerExt = k: writerName ''[^"]*\.${k}'';
-      writerName = k: ''write[^ \t\r\n]*[ \t\r\n]*"${k}"'';
+      writerName = k:
+        ''${alts [''toFile'' ''write[^ \t\r\n]*'']}*[ \t\r\n]*"${k}"'';
     in mapAttrsToList (name: {
       extraStart ? null,
       lang ? name
