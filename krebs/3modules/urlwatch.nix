@@ -93,7 +93,7 @@ let
 
   hooksFile = cfg.hooksFile;
 
-  configFile = pkgs.writeText "urlwatch.yaml" (toJSON {
+  configFile = pkgs.writeJSON "urlwatch.yaml" {
     display = {
       error = true;
       new = true;
@@ -129,7 +129,7 @@ let
         line_length = 75;
       };
     };
-  });
+  };
 
   imp = {
     systemd.timers.urlwatch = {
