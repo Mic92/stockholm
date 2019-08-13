@@ -16,9 +16,6 @@ let
 
   api = {
     enable = mkEnableOption "krebs.urlwatch";
-
-    customSendmail.enable = mkEnableOption "krebs.urlwatch.customSendmail";
-
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/urlwatch";
@@ -56,8 +53,11 @@ let
         The format is described in systemd.time(7), CALENDAR EVENTS.
       '';
     };
+    sendmail.enable = mkEnableOption "krebs.urlwatch.sendmail" // {
+      default = true;
+    };
     telegram = {
-      enable = mkEnableOption "krebs.urlwatch.telegram" // { default = false; };
+      enable = mkEnableOption "krebs.urlwatch.telegram";
       botToken = mkOption {
         type = types.str;
       };
@@ -174,7 +174,7 @@ let
               --urls=${shell.escape urlsFile} \
             > changes || :
 
-          ${optionalString cfg.customSendmail.enable /* sh */ ''
+          ${optionalString cfg.sendmail.enable /* sh */ ''
             if test -s changes; then
               {
                 echo Date: $(date -R)
