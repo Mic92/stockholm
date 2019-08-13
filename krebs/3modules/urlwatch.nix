@@ -210,6 +210,10 @@ let
         default = null;
         type = with types; nullOr str; # TODO nullOr subtypes.filter
       };
+      ignore_cached = mkOption {
+        default = null;
+        type = with types; nullOr bool;
+      };
     };
   };
 in out
