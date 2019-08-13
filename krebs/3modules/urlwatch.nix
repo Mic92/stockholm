@@ -75,10 +75,7 @@ let
       ];
       apply = map (x: getAttr (typeOf x) {
         set = x;
-        string = {
-          url = x;
-          filter = null;
-        };
+        string.url = x;
       });
     };
     verbose = mkOption {
@@ -210,6 +207,7 @@ let
         type = types.str;
       };
       filter = mkOption {
+        default = null;
         type = with types; nullOr str; # TODO nullOr subtypes.filter
       };
     };
