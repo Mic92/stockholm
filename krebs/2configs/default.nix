@@ -34,6 +34,13 @@ with import <stockholm/lib>;
     rxvt_unicode.terminfo
   ];
 
+  i18n = {
+    consoleKeyMap = "us";
+    defaultLocale = lib.mkForce "C";
+  };
+
+
+
   programs.ssh.startAgent = false;
 
   services.openssh = {
