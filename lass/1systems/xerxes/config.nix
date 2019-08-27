@@ -39,7 +39,6 @@
     "xpad"
   ];
 
-  lass.screenlock.enable = lib.mkForce false;
   krebs.syncthing = {
     folders = {
       the_playlist = {
