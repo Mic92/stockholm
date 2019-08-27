@@ -22,6 +22,14 @@
 
   krebs.build.host = config.krebs.hosts.xerxes;
 
+  environment.shellAliases = {
+    deploy = pkgs.writeDash "deploy" ''
+      set -eu
+      export SYSTEM="$1"
+      $(nix-build $HOME/sync/stockholm/lass/krops.nix --no-out-link --argstr name "$SYSTEM" -A deploy)
+    '';
+  };
+
   services.xserver = {
     displayManager.lightdm.autoLogin.enable = true;
     displayManager.lightdm.autoLogin.user = "lass";
