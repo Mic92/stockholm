@@ -17,6 +17,7 @@
   boot.blacklistedKernelModules = [
     "goodix"
   ];
+
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.initrd.luks.devices.crypted.device = "/dev/sda3";
@@ -26,11 +27,6 @@
     "fbcon=rotate:1"
     "boot.shell_on_fail"
   ];
-
-  services.xserver.displayManager.sessionCommands = ''
-    (sleep 2 && ${pkgs.xorg.xrandr}/bin/xrandr --output eDP-1 --rotate right)
-    (sleep 2 && ${pkgs.xorg.xinput}/bin/xinput set-prop 'Goodix Capacitive TouchScreen' 'Coordinate Transformation Matrix' 0 1 0 -1 0 1 0 0 1)
-  '';
 
   fileSystems."/" = {
     device = "rpool/root";
@@ -76,11 +72,15 @@
     IdleActionSec=300
   '';
 
-  services.xserver.extraConfig = ''
-    Section "Device"
-    Identifier "Intel Graphics"
-    Driver "Intel"
-    Option "TearFree" "true"
-    EndSection
-  '';
+  services.xserver = {
+    videoDrivers = [ "intel" ];
+    deviceSection = ''
+      Option "TearFree" "true"
+    '';
+    displayManager.sessionCommands = ''
+      echo nonono > /tmp/xxyy
+      (sleep 2 && ${pkgs.xorg.xrandr}/bin/xrandr --output eDP1 --rotate right)
+      (sleep 2 && ${pkgs.xorg.xinput}/bin/xinput set-prop 'Goodix Capacitive TouchScreen' 'Coordinate Transformation Matrix' 0 1 0 -1 0 1 0 0 1)
+    '';
+  };
 }
