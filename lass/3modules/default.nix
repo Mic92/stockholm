@@ -14,5 +14,6 @@ _:
     ./umts.nix
     ./usershadow.nix
     ./xjail.nix
+    ./autowifi.nix
   ];
 }
