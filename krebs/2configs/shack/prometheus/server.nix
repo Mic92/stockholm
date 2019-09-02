@@ -19,7 +19,7 @@
     prometheus = {
       enable = true;
       extraFlags = [
-        "-storage.local.retention 8760h"
+        "-storage.local.retention 720h"
         "-storage.local.series-file-shrink-ratio 0.3"
         "-storage.local.memory-chunks 2097152"
         "-storage.local.max-chunks-to-persist 1048576"
