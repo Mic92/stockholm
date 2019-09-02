@@ -9,7 +9,7 @@ let
       ModulePath "${collectd-connect-time}/lib/${python.libPrefix}/site-packages/"
       Import "collectd_connect_time"
       <Module collectd_connect_time>
-        target "localhost:22" "google.com" "google.de" "gum.r:22" "gum.krebsco.de" "10.42.0.1:22" "heise.de" "t-online.de"
+        target "localhost:22" "google.com" "google.de" "gum.krebsco.de" "10.42.0.1:22" "heise.de" "t-online.de""10.0.1.3" "10.0.0.3:22" "10.0.0.4:22"
         interval 10
       </Module>
     </Plugin>
@@ -18,7 +18,7 @@ let
     LoadPlugin write_graphite
     <Plugin "write_graphite">
       <Carbon>
-        Host "wolf.r"
+        Host "graphite.shack"
         Port "2003"
         Prefix "retiolum."
         EscapeCharacter "_"
