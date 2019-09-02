@@ -17,6 +17,8 @@
         Interface "lo"
         Interface "vboxnet*"
         Interface "virbr*"
+        Interface "veth*"
+        Interface "br-*"
         IgnoreSelected true
       </Plugin>
 
