@@ -139,7 +139,7 @@ in
   '';
 
   users.extraUsers.root.openssh.authorizedKeys.keys = [
-    config.krebs.users."0x4a6f".pubkey
+    config.krebs.users."0x4A6F".pubkey
     config.krebs.users.ulrich.pubkey
     config.krebs.users.raute.pubkey
     config.krebs.users.makefu-omo.pubkey
