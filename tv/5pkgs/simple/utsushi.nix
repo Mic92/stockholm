@@ -46,7 +46,8 @@ let
   '';
 
   imagescan-plugin-networkscan = stdenv.mkDerivation rec {
-    name = "imagescan-plugin-networkscan-${meta.version}";
+    pname = "imagescan-plugin-networkscan";
+    version = "1.1.2";
 
     src =
       if stdenv.system == "i686-linux" then
@@ -65,14 +66,14 @@ let
           ];
           sha256 = "1wp372hqhzdar6ldxy7s9js2s872x8c5nwq3608dwg9gca11ppc5";
         }
-      else throw "${name} is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
+      else throw "${pname} is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
 
     dontBuild = true;
 
     installPhase = ''
       # Wildcard * stand for either i386 or amd64
       ${dpkg}/bin/dpkg -x \
-          plugins/imagescan-plugin-networkscan_${meta.version}-1epson4debian9_*.deb \
+          plugins/imagescan-plugin-networkscan_${version}-1epson4debian9_*.deb \
           tmp
 
       mv tmp/usr $out
@@ -94,23 +95,23 @@ let
         This package provides the unfree networkscan plugin from the Epson
         Image Scan v3 scanner driver bundle, which can be used by Utsushi.
       '';
-      homepage = "http://support.epson.net/linux/en/imagescanv3.php?version=${meta.version}";
+      homepage = "http://support.epson.net/linux/en/imagescanv3.php?version=${version}";
       license = stdenv.lib.licenses.eapl;
       maintainers = [ stdenv.lib.maintainers.tv ];
       platforms = stdenv.lib.platforms.linux;
-      version = "1.1.2";
     };
   };
 
 in
 
 stdenv.mkDerivation rec {
-  name = "utsushi-${meta.version}";
+  pname = "utsushi";
+  version = "3.55.0";
 
   src = fetchurl {
     urls = [
-      "http://support.epson.net/linux/src/scanner/imagescanv3/debian/imagescan_${meta.version}.orig.tar.gz"
-      "http://ni.r/~tv/mirrors/epson/imagescan_${meta.version}.orig.tar.gz"
+      "http://support.epson.net/linux/src/scanner/imagescanv3/debian/imagescan_${version}.orig.tar.gz"
+      "http://ni.r/~tv/mirrors/epson/imagescan_${version}.orig.tar.gz"
     ];
     sha256 = "0xwl4xp07cigslbi1qc52jsjvxcyvjlx54g812mn7211p01v2h4l";
   };
@@ -212,6 +213,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.tv ];
     platforms = stdenv.lib.platforms.linux;
-    version = "3.55.0";
   };
 }
