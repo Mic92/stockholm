@@ -106,14 +106,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "utsushi";
-  version = "3.55.0";
+  version = "3.59.2";
 
   src = fetchurl {
     urls = [
       "http://support.epson.net/linux/src/scanner/imagescanv3/debian/imagescan_${version}.orig.tar.gz"
       "http://ni.r/~tv/mirrors/epson/imagescan_${version}.orig.tar.gz"
     ];
-    sha256 = "0xwl4xp07cigslbi1qc52jsjvxcyvjlx54g812mn7211p01v2h4l";
+    sha256 = "1mns10mpyjprkrh2bjcg2nda9iyrnd0pf1did9py84glpapkzrdq";
   };
 
   preConfigure = ''
