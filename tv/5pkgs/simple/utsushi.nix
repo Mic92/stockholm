@@ -47,24 +47,24 @@ let
 
   imagescan-plugin-networkscan = stdenv.mkDerivation rec {
     pname = "imagescan-plugin-networkscan";
-    version = "1.1.2";
+    version = "1.1.3";
 
     src =
       if stdenv.system == "i686-linux" then
         fetchurl {
           urls = [
-            "https://download2.ebz.epson.net/imagescanv3/debian/latest1/deb/x86/imagescan-bundle-debian-9-3.55.0.x86.deb.tar.gz"
-            "http://ni.r/~tv/mirrors/epson/imagescan-bundle-debian-9-3.55.0.x86.deb.tar.gz"
+            "https://download2.ebz.epson.net/imagescanv3/debian/latest1/deb/x86/imagescan-bundle-debian-9-3.59.2.x86.deb.tar.gz"
+            "http://ni.r/~tv/mirrors/epson/imagescan-bundle-debian-9-3.59.2.x86.deb.tar.gz"
           ];
-          sha256 = "12syk4y8z22hm9r1lgxqp81vd24jbqgmq83b7yiyqfd4wfxb6k3s";
+          sha256 = "1whw96kcfj65h2jnk72xgyr9jj05fa07d0xjxpaqb0zwdag3465g";
         }
       else if stdenv.system == "x86_64-linux" then
         fetchurl {
           urls = [
-            "https://download2.ebz.epson.net/imagescanv3/debian/latest1/deb/x64/imagescan-bundle-debian-9-3.55.0.x64.deb.tar.gz"
-            "http://ni.r/~tv/mirrors/epson/imagescan-bundle-debian-9-3.55.0.x64.deb.tar.gz"
+            "https://download2.ebz.epson.net/imagescanv3/debian/latest1/deb/x64/imagescan-bundle-debian-9-3.59.2.x64.deb.tar.gz"
+            "http://ni.r/~tv/mirrors/epson/imagescan-bundle-debian-9-3.59.2.x64.deb.tar.gz"
           ];
-          sha256 = "1wp372hqhzdar6ldxy7s9js2s872x8c5nwq3608dwg9gca11ppc5";
+          sha256 = "0kd6mrs48wwss54gw4v9fm7ss5ma2xpn6gd1pz26cgjvp6n8hknn";
         }
       else throw "${pname} is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
 
