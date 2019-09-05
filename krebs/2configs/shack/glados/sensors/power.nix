@@ -2,6 +2,7 @@ let
   power_x = name: phase:
   { platform = "mqtt";
     name = "${phase} ${name}";
+    # device_class = "power";
     state_topic = "/power/total/${phase}/${name}";
     availability_topic = "/power/lwt";
     payload_available = "Online";
@@ -10,6 +11,7 @@ let
   power_consumed =
   { platform = "mqtt";
     name = "Power Consumed";
+    #device_class = "power";
     state_topic = "/power/total/consumed";
     availability_topic = "/power/lwt";
     payload_available = "Online";

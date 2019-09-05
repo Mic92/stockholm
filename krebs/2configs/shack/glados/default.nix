@@ -1,5 +1,7 @@
 { config, pkgs, lib, ... }:
 let
+  shackopen = import ./multi/shackopen.nix;
+  wasser = import ./multi/wasser.nix;
 in {
   services.nginx.virtualHosts."hass.shack".locations."/" = {
     proxyPass = "http://localhost:8123";
@@ -81,17 +83,21 @@ in {
           retain = true;
         };
       };
-      switch = [];
+      switch = wasser.switch;
       light =  [];
       media_player = [
         { platform = "mpd";
           host = "lounge.mpd.shack";
         }
       ];
+
       sensor =
         [{ platform = "version"; }]
         ++ (import ./sensors/hass.nix)
-        ++ (import ./sensors/power.nix);
+        ++ (import ./sensors/power.nix)
+        ++ shackopen.sensor;
+
+      binary_sensor = shackopen.binary_sensor;
 
       camera = [];
 
@@ -123,7 +129,7 @@ in {
       recorder = {};
       sun = {};
 
-      automation = [];
+      automation = wasser.automation;
       device_tracker = [];
     };
   };
