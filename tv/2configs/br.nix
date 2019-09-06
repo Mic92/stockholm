@@ -5,10 +5,11 @@ with import <stockholm/lib>;
     <nixpkgs/nixos/modules/services/hardware/sane_extra_backends/brscan4.nix>
   ];
 
-  krebs.nixpkgs.allowUnfreePredicate = pkg: any (flip hasPrefix pkg.name) [
-    "brother-udev-rule-type1-"
-    "brscan4-"
-    "mfcl2700dnlpr-"
+  krebs.nixpkgs.allowUnfreePredicate = pkg: any (eq (packageName pkg)) [
+    "brother-udev-rule-type1"
+    "brscan4"
+    "brscan4-etc-files"
+    "mfcl2700dnlpr"
   ];
 
   hardware.sane = {

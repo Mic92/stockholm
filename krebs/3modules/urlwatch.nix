@@ -16,7 +16,6 @@ let
 
   api = {
     enable = mkEnableOption "krebs.urlwatch";
-
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/urlwatch";
@@ -54,6 +53,18 @@ let
         The format is described in systemd.time(7), CALENDAR EVENTS.
       '';
     };
+    sendmail.enable = mkEnableOption "krebs.urlwatch.sendmail" // {
+      default = true;
+    };
+    telegram = {
+      enable = mkEnableOption "krebs.urlwatch.telegram";
+      botToken = mkOption {
+        type = types.str;
+      };
+      chatId = mkOption {
+        type = types.listOf types.str;
+      };
+    };
     urls = mkOption {
       type = with types; listOf (either str subtypes.job);
       default = [];
@@ -64,10 +75,7 @@ let
       ];
       apply = map (x: getAttr (typeOf x) {
         set = x;
-        string = {
-          url = x;
-          filter = null;
-        };
+        string.url = x;
       });
     };
     verbose = mkOption {
@@ -85,7 +93,7 @@ let
 
   hooksFile = cfg.hooksFile;
 
-  configFile = pkgs.writeText "urlwatch.yaml" (toJSON {
+  configFile = pkgs.writeJSON "urlwatch.yaml" {
     display = {
       error = true;
       new = true;
@@ -110,13 +118,18 @@ let
         color = true;
         enabled = true;
       };
+      ${if cfg.telegram.enable then "telegram" else null} = {
+        enabled = cfg.telegram.enable;
+        bot_token = cfg.telegram.botToken;
+        chat_id = cfg.telegram.chatId;
+      };
       text = {
         details = true;
         footer = true;
         line_length = 75;
       };
     };
-  });
+  };
 
   imp = {
     systemd.timers.urlwatch = {
@@ -158,19 +171,21 @@ let
               --urls=${shell.escape urlsFile} \
             > changes || :
 
-          if test -s changes; then
-            {
-              echo Date: $(date -R)
-              echo From: ${shell.escape cfg.from}
-              echo Subject: $(
-                sed -n 's/^\(CHANGED\|ERROR\|NEW\): //p' changes \
-                  | tr '\n' ' '
-              )
-              echo To: ${shell.escape cfg.mailto}
-              echo
-              cat changes
-            } | /run/wrappers/bin/sendmail -t
-          fi
+          ${optionalString cfg.sendmail.enable /* sh */ ''
+            if test -s changes; then
+              {
+                echo Date: $(date -R)
+                echo From: ${shell.escape cfg.from}
+                echo Subject: $(
+                  sed -n 's/^\(CHANGED\|ERROR\|NEW\): //p' changes \
+                    | tr '\n' ' '
+                )
+                echo To: ${shell.escape cfg.mailto}
+                echo
+                cat changes
+              } | /run/wrappers/bin/sendmail -t
+            fi
+          ''}
         '';
       };
     };
@@ -192,7 +207,12 @@ let
         type = types.str;
       };
       filter = mkOption {
+        default = null;
         type = with types; nullOr str; # TODO nullOr subtypes.filter
+      };
+      ignore_cached = mkOption {
+        default = null;
+        type = with types; nullOr bool;
       };
     };
   };

@@ -16,7 +16,7 @@ with import <stockholm/lib>;
   };
 
   krebs.nixpkgs.allowUnfreePredicate = pkg:
-    elem (parseDrvName pkg.name).name [ "imagescan-plugin-networkscan" ];
+    packageName pkg == "imagescan-plugin-networkscan";
 
   nixpkgs.overlays = singleton (self: super: {
     utsushi-customized = self.utsushi.override {

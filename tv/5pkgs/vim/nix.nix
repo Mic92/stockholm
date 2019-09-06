@@ -63,16 +63,28 @@ with import <stockholm/lib>;
     syn cluster nix_ind_strings contains=NixIND_STRING
     syn cluster nix_strings contains=NixSTRING
 
-    ${concatStringsSep "\n" (mapAttrsToList (name: {
+    ${concatStringsSep "\n" (let
+      alts = xs: ''\(${concatStringsSep ''\|'' xs}\)'';
+      capitalize = s: let
+        xs = stringToCharacters s;
+      in
+        toUpper (head xs) + concatStrings (tail xs);
+      comment = k: ''/\* ${k} \*/'';
+      def = k: ''${k}[ \t\r\n]*='';
+      writer = k: ''write${k}[^ \t\r\n]*[ \t\r\n]*\("[^"]*"\|[a-z]\+\)'';
+      writerExt = k: writerName ''[^"]*\.${k}'';
+      writerName = k:
+        ''${alts [''toFile'' ''write[^ \t\r\n]*'']}*[ \t\r\n]*"${k}"'';
+    in mapAttrsToList (name: {
       extraStart ? null,
       lang ? name
     }:
     let
       startAlts = filter isString [
-        ''/\* ${name} \*/''
+        (comment name)
         extraStart
       ];
-      sigil = ''\(${concatStringsSep ''\|'' startAlts}\)[ \t\r\n]*'';
+      sigil = ''${alts startAlts}[ \t\r\n]*'';
     in /* vim */ ''
       syn include @nix_${lang}_syntax syntax/${lang}.vim
       if exists("b:current_syntax")
@@ -111,22 +123,7 @@ with import <stockholm/lib>;
       " This is required because containedin isn't transitive.
       syn cluster nix_has_dollar_curly
         \ add=@nix_${lang}_syntax
-    '') (let
-
-      # TODO move this higher
-      capitalize = s: let
-        xs = stringToCharacters s;
-      in
-        toUpper (head xs) + concatStrings (tail xs);
-
-      alts = xs: ''\(${concatStringsSep ''\|'' xs}\)'';
-      def = k: ''${k}[ \t\r\n]*='';
-      writer = k: ''write${k}[^ \t\r\n]*[ \t\r\n]*\("[^"]*"\|[a-z]\+\)'';
-
-      writerExt = k: writerName ''[^"]*\.${k}'';
-      writerName = k: ''write[^ \t\r\n]*[ \t\r\n]*"${k}"'';
-
-    in {
+    '') {
       c = {};
       cabal = {};
       diff = {};
@@ -136,10 +133,13 @@ with import <stockholm/lib>;
         (writer "Jq")
         (writerExt "jq")
       ];
-      javascript.extraStart = ''/\* js \*/'';
+      javascript.extraStart = comment "jq";
       lua = {};
       #nginx = {};
-      python.extraStart = ''/\* py \*/'';
+      python.extraStart = alts [
+        (comment "py")
+        (writerExt "py")
+      ];
       sed.extraStart = writer "Sed";
       sh.extraStart = let
         phases = [
@@ -172,7 +172,7 @@ with import <stockholm/lib>;
       ];
       xdefaults = {};
       xmodmap = {};
-    }))}
+    })}
 
     " Clear syntax that interferes with nixINSIDE_DOLLAR_CURLY.
     syn clear shVarAssign
