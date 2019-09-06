@@ -3,18 +3,23 @@
 {
   networking = {
     firewall.allowedTCPPorts = [
-      3000  # grafana
       9090  # prometheus
       9093  # alertmanager
     ];
-    useDHCP = true;
   };
-
   services = {
+    nginx.virtualHosts = {
+      "prometheus.shack" = {
+        locations."/".proxyPass = "http://localhost:9090";
+      };
+      "alert.prometheus.shack" = {
+        locations."/".proxyPass = "http://localhost:9093";
+      };
+    };
     prometheus = {
       enable = true;
       extraFlags = [
-        "-storage.local.retention 8760h"
+        "-storage.local.retention 720h"
         "-storage.local.series-file-shrink-ratio 0.3"
         "-storage.local.memory-chunks 2097152"
         "-storage.local.max-chunks-to-persist 1048576"

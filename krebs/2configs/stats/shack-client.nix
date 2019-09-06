@@ -17,6 +17,8 @@
         Interface "lo"
         Interface "vboxnet*"
         Interface "virbr*"
+        Interface "veth*"
+        Interface "br-*"
         IgnoreSelected true
       </Plugin>
 
@@ -53,15 +55,7 @@
 
       LoadPlugin network
       <Plugin "network">
-          Server "stats.makefu.r" "25826"
-      </Plugin>
-
-      LoadPlugin curl
-      <Plugin curl>
-        <Page "smarthome">
-          URL "http://smarthome.shack/";
-          MeasureResponseTime true
-        </Page>
+          Server "influx.shack" "25826"
       </Plugin>
     '';
   };

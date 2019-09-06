@@ -1,3 +1,4 @@
+# hostname: mqtt.shack
 {
   networking.firewall.allowedTCPPorts = [ 1883 ];
   networking.firewall.allowedUDPPorts = [ 1883 ];

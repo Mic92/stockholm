@@ -15,6 +15,10 @@
     <stockholm/krebs/2configs/news-spam.nix>
     <stockholm/krebs/2configs/shack/prometheus/node.nix>
     <stockholm/krebs/2configs/shack/gitlab-runner.nix>
+
+    ## Collect local statistics via collectd and send to collectd
+    <stockholm/krebs/2configs/stats/shack-client.nix>
+    <stockholm/krebs/2configs/stats/shack-debugging.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;
