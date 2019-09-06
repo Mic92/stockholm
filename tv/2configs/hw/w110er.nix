@@ -10,10 +10,11 @@ with import <stockholm/lib>;
       #hardware.bumblebee.enable = true;
       #hardware.bumblebee.group = "video";
       #hardware.enableRedistributableFirmware= true;
-      #krebs.nixpkgs.allowUnfreePredicate = pkg:
-      #  hasPrefix "nvidia-x11-" pkg.name ||
-      #  hasPrefix "nvidia-persistenced-" pkg.name ||
-      #  hasPrefix "nvidia-settings-" pkg.name;
+      #krebs.nixpkgs.allowUnfreePredicate = pkg: any (eq (packageName pkg)) [
+      #  "nvidia-x11"
+      #  "nvidia-persistenced"
+      #  "nvidia-settings"
+      #];
     }
   ];
 

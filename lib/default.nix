@@ -30,6 +30,9 @@ let
       listToAttrs (map (name: nameValuePair name set.${name})
                        (filter (flip hasAttr set) names));
 
+    packageName = pkg:
+      pkg.pname or (parseDrvName pkg.name).name;
+
     test = re: x: isString x && testString re x;
 
     testString = re: x: match re x != null;

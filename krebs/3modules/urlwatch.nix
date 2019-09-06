@@ -75,10 +75,7 @@ let
       ];
       apply = map (x: getAttr (typeOf x) {
         set = x;
-        string = {
-          url = x;
-          filter = null;
-        };
+        string.url = x;
       });
     };
     verbose = mkOption {
@@ -96,7 +93,7 @@ let
 
   hooksFile = cfg.hooksFile;
 
-  configFile = pkgs.writeText "urlwatch.yaml" (toJSON {
+  configFile = pkgs.writeJSON "urlwatch.yaml" {
     display = {
       error = true;
       new = true;
@@ -132,7 +129,7 @@ let
         line_length = 75;
       };
     };
-  });
+  };
 
   imp = {
     systemd.timers.urlwatch = {
@@ -210,7 +207,12 @@ let
         type = types.str;
       };
       filter = mkOption {
+        default = null;
         type = with types; nullOr str; # TODO nullOr subtypes.filter
+      };
+      ignore_cached = mkOption {
+        default = null;
+        type = with types; nullOr bool;
       };
     };
   };
