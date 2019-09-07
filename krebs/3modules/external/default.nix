@@ -695,6 +695,7 @@ in {
     };
     qubasa = {
       mail = "luis.nixos@gmail.com";
+      pubkey = ssh-for "qubasa";
     };
     raute = {
       mail = "macxylo@gmail.com";
