@@ -56,6 +56,7 @@ in
   };
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
+    rofi
     wget vim
   # system helper
     ag
