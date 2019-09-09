@@ -79,6 +79,7 @@ in
     chromium
     google-chrome
   # programming languages
+    vscode
     go
     gcc9
     ccls
