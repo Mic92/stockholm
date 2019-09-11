@@ -106,6 +106,8 @@ let
     epkgs.melpaPackages.haskell-mode
     epkgs.melpaPackages.monokai-alt-theme
     epkgs.melpaPackages.rust-mode
+    epkgs.melpaPackages.elpy
+
     epkgs.elpaPackages.which-key
   ]);
 
