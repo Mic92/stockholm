@@ -42,6 +42,10 @@ let
     (ido-mode t)
   '';
 
+  magit = ''
+    (global-set-key (kbd "C-x g") 'magit-status) ; "Most Magit commands are commonly invoked from the status buffer"
+  '';
+
   windowCosmetics = ''
     (menu-bar-mode -1)
     (tool-bar-mode -1)                  ; Disable the button bar atop screen
@@ -83,6 +87,7 @@ let
     ${evilMode}
     ${goMode}
     ${ido}
+    ${magit}
     ${packageRepos}
     ${orgMode}
     ${recentFiles}
