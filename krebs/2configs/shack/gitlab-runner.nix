@@ -6,16 +6,17 @@ let
   };
 in
 {
-  systemd.services.gitlab-runner.path = [
-    "/run/wrappers" # /run/wrappers/bin/su
-    "/" # /bin/sh
-  ];
   imports = [
     "${runner-src}/gitlab-runner.nix"
   ];
-  services.gitlab-runner2.enable = true;
-  ## registrationConfigurationFile contains:
-  # CI_SERVER_URL=<CI server URL>
-  # REGISTRATION_TOKEN=<registration secret>
-  services.gitlab-runner2.registrationConfigFile = <secrets/shackspace-gitlab-ci>;
+  services.gitlab-runner2 = {
+    enable = true;
+    ## registrationConfigurationFile contains:
+    # CI_SERVER_URL=<CI server URL>
+    # REGISTRATION_TOKEN=<registration secret>
+    registrationConfigFile = <secrets/shackspace-gitlab-ci>;
+    #gracefulTermination = true;
+  };
+  systemd.services.gitlab-runner2.restartIfChanged = false;
+  systemd.services.docker.restartIfChanged = false;
 }

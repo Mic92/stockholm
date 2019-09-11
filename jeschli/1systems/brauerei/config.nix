@@ -2,6 +2,7 @@
 let
   xmonad-jeschli = pkgs.callPackage <stockholm/jeschli/5pkgs/simple/xmonad-jeschli> { inherit config; };
   mainUser = config.krebs.build.user.name;
+  unstable = import <nixpkgs-unstable> { config = { allowUnfree = true; }; };
 in
 {
   imports = [
@@ -52,6 +53,8 @@ in
     copyq
     curl
     dmenu
+    aspell
+    ispell
     rofi
     xdotool
     git
@@ -75,22 +78,14 @@ in
     elixir
     elmPackages.elm
     exercism
-    gcc
+    gcc9
+    ccls
+    unstable.clang_8
     ghc
     go
-    python35
-    python35Packages.pip
-    (vagrant.override {
-      bundlerEnv = bundlerEnv.override {
-        bundler = bundler.overrideAttrs (old: {
-          name = "bundler-1.16.1";
-          src = fetchurl {
-            url = "https://rubygems.org/gems/bundler-1.16.1.gem";
-            sha256 = "1s2nq4qnffxg3kwrk7cnwxcvfihlhxm9absl2l6d3qckf3sy1f22";
-          };
-        });
-      };
-    })
+    python37
+    python37Packages.pip
+    pipenv
   # dev tools
     gnumake
     jetbrains.clion

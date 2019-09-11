@@ -236,6 +236,7 @@ in {
             "tracker.makefu.r"
             "wiki.gum.r"
             "wiki.makefu.r"
+            "sick.makefu.r"
           ];
         };
       };
@@ -288,10 +289,16 @@ in {
           ip4.addr = "10.243.189.130";
         };
       };
-    };
-    rockit = rec { # router@home
+          };
+
+    shackdev = rec { # router@shack
       cores = 1;
       nets.wiregrill.ip4.addr = "10.244.245.2";
+    };
+
+    rockit = rec { # router@home
+      cores = 1;
+      nets.wiregrill.ip4.addr = "10.244.245.3";
     };
 
     senderechner = rec {

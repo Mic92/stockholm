@@ -595,12 +595,12 @@ in {
           aliases = [
             "phone.w"
           ];
-          wireguard.pubkey = "MRicxap2VxPnzmXoOqqjQNGWJ54cQC8Tfy28+IXXsxM=";
+          wireguard.pubkey = "FY4PB8E/RC2JvtLgq/IDyMmZ9Ln6pz6eGyoytmUFMgk=";
         };
       };
       external = true;
       ci = false;
-      syncthing.id = "DUFMX7V-HNR6WXM-LZB5LJE-TM6QIOH-MTGHEUJ-QSD3XIY-YRFJLOR-G6Y3XQB";
+      syncthing.id = "PWKVXPB-JCNO6E4-KVIQ7CK-6FSOWHM-AWORMDU-HVVYLKW-44DQTYW-XZT7DQJ";
     };
     morpheus = {
       cores = 1;

@@ -588,6 +588,34 @@ in {
         };
       };
     };
+    crustacea = {
+      owner = config.krebs.users."0x4A6F";
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.42.63";
+          ip6.addr = "42:4a6f::4263";
+          aliases = [
+            "crustacea.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEA1dA67Uq6IcWTWVVcg5kO4OUcmYY/mUzERK6WwrU7m+Qq2ovA2Fh1
+            VTxfNzJg8zgyrBbUwpaLE4LuRgyrYbPABwgNMXS6wnHdunbm0x5RUcih/IRNobV1
+            uf2Q/rVcrXHZD5+YL09hTZnU7PVkZm6WX0fc79rEKYIEopPpomCs2mECPSmqZPaW
+            L9wprtRTuQ3V0xxrCuUKX7SxANEursM8SvNfKydWdaUxjIV2iGVKuVUkAZHwx5jJ
+            roKEriWsIJ6FHTMb1v5yWXrvngMgYlKrpF6/m/AHEkQoPsEJ+oBkn0fop9pfyZjM
+            WzMhZHcKFYebSI4HqFRuQOc1scIzUdpC/sZYLYlddbwpJHj4xdJwIUN03Uga/KRQ
+            n1SrJnhmXonHvJZFBYcNDR6aTtdN7mJVBv8bQ7DGt1q6Gp8QItQqvpdzq314+Pw6
+            0EVKPaqdz6Cqpwn8RtJ9ZGb6BE3yUrpJkU25DyCSO86LmeCchApwssghWvPsbBDg
+            iF4QCyrWJ2HFnl7jJDGbEajHaE/xko2dt1F5frTWxsmDHRKSRhaGDwp5qgFUpCa0
+            2h+zZqkG4boV6CrMEjStb15EOXTUVfq0DPojFik6agCltslsJAwp+f1fb7NSee4d
+            TNWb1CHfIQWLPnm1LFwphSqyHY/9ehcsX3PJ7oXI+/BnV8ivvoApWA0CAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = DWfh6H8Qco+GURdVRhKhLBAsN5epsEYhOM2+88dTdTE
+          '';
+        };
+      };
+    };
     unnamed = {
       owner = config.krebs.users.pie_;
       nets = {
@@ -678,9 +706,9 @@ in {
       mail = "shackspace.de@myvdr.de";
       pubkey = ssh-for "ulrich";
     };
-    "0x4a6f" = {
+    "0x4A6F" = {
       mail = "0x4a6f@shackspace.de";
-      pubkey = ssh-for "0x4a6f";
+      pubkey = ssh-for "0x4A6F";
     };
     miaoski = {
     };
