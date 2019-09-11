@@ -97,6 +97,7 @@ let
 
   emacsWithCustomPackages = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: [
     epkgs.melpaPackages.ag
+    epkgs.melpaPackages.company
     epkgs.melpaPackages.evil
     epkgs.melpaStablePackages.magit
     epkgs.melpaPackages.nix-mode
