@@ -104,11 +104,12 @@ let
   '';
 
   dotEmacs = pkgs.writeText "dot-emacs" ''
+    ${packageRepos}
+
     ${evilMode}
     ${goMode}
     ${ido}
     ${magit}
-    ${packageRepos}
     ${orgMode}
     ${recentFiles}
     ${theme}
