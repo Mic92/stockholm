@@ -1,6 +1,5 @@
 { config, pkgs, lib, ... }:
 let
-  xmonad-jeschli = pkgs.callPackage <stockholm/jeschli/5pkgs/simple/xmonad-jeschli> { inherit config; };
   mainUser = config.krebs.build.user.name;
   unstable = import <nixpkgs-unstable> { config = { allowUnfree = true; }; };
 in
@@ -151,16 +150,6 @@ in
       gnome3.enable = true;
     };
 
-    windowManager = {
-      session = [{
-        name = "xmonad";
-        start = ''
-          ${xmonad-jeschli}/bin/xmonad &
-          waitPID=$!
-        '';
-        }
-      ];
-    };
   };
 
   services.xserver.windowManager.i3.enable = true;
