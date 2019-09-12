@@ -86,8 +86,8 @@ in
     ccls
     unstable.clang_8
     ghc
-    python35
-    python35Packages.pip
+    python37
+    python37Packages.pip
   # go tools
     golint
     gotools
