@@ -100,42 +100,13 @@ in
     zathura
   ];
 
- # Some programs need SUID wrappers, can be configured further or are
- # started in user sessions.
- # programs.bash.enableCompletion = true;
- # programs.mtr.enable = true;
- # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
-
- # List services that you want to enable:
 
  # Enable the OpenSSH daemon.
- services.openssh.enable = true;
+  services.openssh.enable = true;
 
+  services.xserver.videoDrivers = [ "nvidia" ];
 
-  services.xserver = {
-
-    enable = true;
-
-    desktopManager = {
-      xfce.enable = true;
-      gnome3.enable = true;
-    };
-#    # Don't install feh into systemPackages
-#    # refs <nixpkgs/nixos/modules/services/x11/desktop-managers>
-#    desktopManager.session = lib.mkForce [];
-#
-#    enable = true;
-#    display = 11;
-#    tty = 11;
-#
-#    dpi = 96;
-
-    videoDrivers = [ "nvidia" ];
-  };
-
-  services.xserver.windowManager.i3.enable = true;
-
-  users.extraUsers.jeschli = {
+users.extraUsers.jeschli = {
     isNormalUser = true;
     extraGroups = ["docker" "vboxusers" "audio"];
     uid = 1000;
