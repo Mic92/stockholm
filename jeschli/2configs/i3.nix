@@ -212,7 +212,7 @@ in {
   #       XSERVER       #
   #                     #
   #######################
-  services.xserver.enable = true;
+services.xserver.enable = true;
 
   # Enable i3 Window Manager
   services.xserver.windowManager.i3 = {
@@ -229,9 +229,7 @@ in {
 
 
   # Enable the X11 windowing system.
-  services.xserver.displayManager.slim = {
-    enable = true;
-  };
+  services.xserver.displayManager.lightdm.enable = true;
 
   # Allow users in video group to change brightness
   hardware.brightnessctl.enable = true;
@@ -245,7 +243,6 @@ in {
     acpi
     xorg.xhost
     xorg.xauth
-    gnome3.gnome_terminal
   ];
 
 }
