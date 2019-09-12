@@ -75,6 +75,26 @@ let
 
   theme = ''
     (load-theme 'monokai-alt t)
+    (load-theme 'whiteboard t)
+
+    (defun mh/load-whiteboard-theme ()
+      "load whiteboard theme"
+      (interactive)
+      (message "whiteboard loaded")
+      (disable-theme 'monokai-alt)
+      (enable-theme 'whiteboard)
+    )
+
+    (defun mh/load-monokai-theme ()
+      "load monokai theme"
+      (interactive)
+      (message "monokai loaded")
+      (disable-theme 'whiteboard)
+      (enable-theme 'monokai-alt)
+    )
+
+    (global-set-key "\C-ctw" 'mh/load-whiteboard-theme)
+    (global-set-key "\C-ctm" 'mh/load-monokai-theme)
   '';
 
   recentFiles = ''
