@@ -8,6 +8,7 @@ in
     <stockholm/jeschli>
     ./hardware-configuration.nix
     <home-manager/nixos>
+    <stockholm/jeschli/2configs/emacs.nix>
     <stockholm/jeschli/2configs/urxvt.nix>
     <stockholm/jeschli/2configs/steam.nix>
     <stockholm/jeschli/2configs/virtualbox.nix>
@@ -116,29 +117,29 @@ in
   # programs.mtr.enable = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
-  home-manager.useUserPackages = true;
-  home-manager.users.jeschli = {
-    home.stateVersion = "19.03";
-  };
+#  home-manager.useUserPackages = true;
+#  home-manager.users.jeschli = {
+#    home.stateVersion = "19.03";
+#  };
 #  home-manager.enable = true;
 
-  home-manager.users.jeschli.home.file = {
-     ".emacs.d" = {
-       source = pkgs.fetchFromGitHub {
-         owner = "jeschli";
-         repo = "emacs.d";
-         rev = "8ed6c40";
-         sha256 = "1q2y478srwp9f58l8cixnd2wj51909gp1z68k8pjlbjy2mrvibs0";
-       };
-       recursive = true;
-     };
-  };
+#  home-manager.users.jeschli.home.file = {
+#     ".emacs.d" = {
+#       source = pkgs.fetchFromGitHub {
+#         owner = "jeschli";
+#         repo = "emacs.d";
+#         rev = "8ed6c40";
+#         sha256 = "1q2y478srwp9f58l8cixnd2wj51909gp1z68k8pjlbjy2mrvibs0";
+#       };
+#       recursive = true;
+#     };
+#  };
 
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.emacs.enable = true;
+#  services.emacs.enable = true;
 
   virtualisation.docker.enable = true;
 
