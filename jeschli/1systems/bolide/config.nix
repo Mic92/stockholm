@@ -12,6 +12,7 @@ in
       ./hardware-configuration.nix
       <stockholm/jeschli>
       <stockholm/jeschli/2configs/urxvt.nix>
+      <stockholm/jeschli/2configs/i3.nix>
       <stockholm/jeschli/2configs/emacs.nix>
     ];
 
