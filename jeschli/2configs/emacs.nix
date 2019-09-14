@@ -2163,6 +2163,11 @@ Late deadlines first, then scheduled, then non-late deadlines"
     epkgs.melpaPackages.rust-mode
     epkgs.melpaPackages.elpy
 
+    epkgs.orgPackages.org-plus-contrib
+    epkgs.melpaPackages.smex
+    epkgs.melpaPackages.org-mime
+
+    epkgs.elpaPackages.bbdb
     epkgs.elpaPackages.which-key
   ]);
 
