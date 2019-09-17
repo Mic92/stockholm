@@ -101,6 +101,23 @@ let
     (global-set-key "\C-ctm" 'mh/load-monokai-theme)
   '';
 
+  # Configuration for rust development
+  # inspired by
+  # https://github.com/bbatsov/prelude/blob/master/modules/prelude-rust.el
+  rustDevelopment = ''
+    (add-hook 'rust-mode-hook #'racer-mode)
+    (add-hook 'rust-mode-hook (lambda()
+      (local-set-key (kbd "C-c C-d") 'racer-describe)
+      (local-set-key (kbd "C-c .") 'racer-find-definition)
+      (local-set-key (kbd "C-c ,") 'pop-tag-mark))
+    )
+    (add-hook 'racer-mode-hook #'eldoc-mode)
+    (add-hook 'racer-mode-hook #'company-mode)
+    (require 'rust-mode)
+    (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+    (setq company-tooltip-align-annotations t)
+  '';
+
   recentFiles = ''
     (recentf-mode 1)
     (setq recentf-max-menu-items 25)
@@ -116,6 +133,7 @@ let
     ${magit}
     ${orgMode}
     ${recentFiles}
+    ${rustDevelopment}
     ${theme}
     ${windowCosmetics}
 
@@ -132,14 +150,18 @@ let
     epkgs.melpaPackages.google-this
     epkgs.melpaPackages.haskell-mode
     epkgs.melpaPackages.monokai-alt-theme
+# rust
     epkgs.melpaPackages.rust-mode
+    epkgs.melpaPackages.flycheck-rust
+    epkgs.melpaPackages.racer
+
     epkgs.melpaPackages.elpy
 
+    epkgs.elpaPackages.bbdb
     epkgs.orgPackages.org-plus-contrib
     epkgs.melpaPackages.smex
     epkgs.melpaPackages.org-mime
 
-    epkgs.elpaPackages.bbdb
     epkgs.elpaPackages.which-key
   ]);
 
