@@ -12,6 +12,7 @@ let
     retain = false;
     qos = 1;
   };
+  seconds = 30;
 in
 {
   switch = [
@@ -19,7 +20,7 @@ in
   ];
   automation =
   [
-    { alias = "Water the plant for 10 seconds";
+    { alias = "Water the plant for ${toString seconds} seconds";
       trigger = [
         { # trigger at 20:00 no matter what
           # TODO: retry or run only if switch.wasser is available
@@ -35,7 +36,7 @@ in
             "switch.wasser"
           ];
         }
-        { delay.seconds = 10; }
+        { delay.seconds = seconds; }
         {
           service = "homeassistant.turn_off";
           entity_id =  [
@@ -44,13 +45,13 @@ in
         }
       ];
     }
-    { alias = "Always turn off water after 15 seconds";
+    { alias = "Always turn off water after ${toString (seconds * 2)}seconds";
       trigger = [
         {
           platform = "state";
           entity_id = "switch.wasser";
           to = "on";
-          for.seconds = 15;
+          for.seconds = seconds*2;
         }
       ];
       action =
