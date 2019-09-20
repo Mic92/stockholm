@@ -129,6 +129,31 @@ in {
       };
     };
 
+    reagenzglas = {
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.27.32";
+          aliases = [
+            "reagenzglas.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAon6oMki2GuJah9c1jNj0CupIPNo765AxtpSkut1PvoydAVYWZMO0
+            /UQgrvoDQPq3VQU98LHhtQVjmfmcxmxIK3mWoM356P9TGsheOspTcVP4HCMoWZoF
+            QpgpQs1RNuG/nAAcoVHnTqFeFt6oWsykESIWj5jFV5XA+KanyLFThi8aWPumJgOV
+            W0AR4+0eECMjBXCV0yRaug4cnFKwLtTQ993AP6Di+5iyh8H39wuASUA/USfMItyX
+            KEPCT1LPVu2JKsLE/aQEqX1ra3qVJ+SzSPKvOJGKNjcN0e84TuqGrh6cmEDcT/hd
+            MNZisdPvWA8UwXZfsT/TOGyd8MBqgGxWS6JSFHXy9enyjvS+rws8U0IySlnAIEoi
+            mXi0leXXDHSQBUnLgDwx4yAJ2R63bUr0pvVd9NBvS9CYHH3TETuwxtMsd3Djm1tu
+            9/GxN78N+dTHCwOFw/RFOGKCDuM2v1P0f56SdcADqiziuVn+Sj/WPL7rM7qLkySv
+            jAqY7q5PUjcz/tltJUJwIHaV3sSB6+zOKhSPhGE5ASr4dYEnxiTSD2YE7fj3+WKK
+            ShG3cpjOwgW0/Ut88zIs7zQxfHj5ZML+Gh2E2LN5nb7StMBWafgvq58eTKbMCKbx
+            ev7cFjOOV86sCjqtt5LVSi7TPAtolnmLyxzM+s/eZoLYITh+Zo8UERMCAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
   };
   users = {
     jeschli = {
@@ -143,6 +168,9 @@ in {
    };
    jeschli-bolide = {
      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGnLjnFw3OYJJy/ID9RCWHTtnVcKRfROIj1tJdJZoOWzGMY+kgyCN/WNBg7JJtCW22yU5O3ftSdN851URCBZ6FgYmcvURBxUOKPlyX5EoxUrrnbmtxJM9+OIT3Dt2RWfrqX6aEQ57nwe/qIFKo9UaoedB/FOzsw1f3U5zBxVuWVRQrsnPxkbPWHmPAGB4CvL897tb83uecDexmGZpLe/0dN4768i2nYaSwrNL+HtqZCvkEqEmnfHlmqqXhiuq83q8su/WSXAtDbUVucG3frgOir14YCbrWKf59+MugxhYOEYBqp+KME5+niFGoulg+NBW/HzH6U+DiH4RFBJhCu1Gr jeschli@bolide";
+   };
+   jeschli-reagenzglas = {
+     pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFXgtbgeivxlMKkoEJ4ANhtR+LRMSPrsmL4U5grFUME jeschli@nixos";
    };
   };
 }
