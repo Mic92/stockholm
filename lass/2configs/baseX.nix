@@ -73,6 +73,7 @@ in {
     lm_sensors
     ncdu
     nix-index
+    nix-review
     nmap
     pavucontrol
     powertop
@@ -80,6 +81,8 @@ in {
     sxiv
     taskwarrior
     termite
+    transgui
+    wirelesstools
     xclip
     xephyrify
     xorg.xhost
