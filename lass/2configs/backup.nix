@@ -6,6 +6,7 @@ with import <stockholm/lib>;
     useDefaultShell = true;
     home = "/backups";
     createHome = true;
+    group = "syncthing";
     openssh.authorizedKeys.keys = with config.krebs.hosts; [
       blue.ssh.pubkey
     ];
