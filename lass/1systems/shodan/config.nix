@@ -25,4 +25,16 @@ with import <stockholm/lib>;
   services.logind.extraConfig = ''
     HandleLidSwitch=ignore
   '';
+
+  #media center
+  users.users.media = {
+    isNormalUser = true;
+    uid = genid_uint31 "media";
+    extraGroups = [ "video" "audio" ];
+  };
+
+  services.xserver.displayManager.lightdm.autoLogin = {
+    enable = true;
+    user = "media";
+  };
 }
