@@ -54,7 +54,7 @@ with import <stockholm/lib>;
         folders = {
           the_playlist = {
             path = "/home/lass/tmp/the_playlist";
-            peers = [ "mors" "phone" "prism" ];
+            peers = [ "mors" "phone" "prism" "xerxes" ];
           };
           free_music = {
             id = "mu9mn-zgvsw";
