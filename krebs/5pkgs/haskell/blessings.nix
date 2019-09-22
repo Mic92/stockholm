@@ -6,19 +6,10 @@ with import <stockholm/lib>;
       version = "1.1.0";
       sha256 = "1k908zap3694fcxdk4bb29s54b0lhdh557y10ybjskfwnym7szn1";
     };
-    "18.09" = {
-      version = "2.2.0";
-      sha256 = "1pb56dgf3jj2kq3cbbppwzyg3ccgqy9xara62hkjwyxzdx20clk1";
-    };
-    "19.03" = {
-      version = "2.2.0";
-      sha256 = "1pb56dgf3jj2kq3cbbppwzyg3ccgqy9xara62hkjwyxzdx20clk1";
-    };
-    "19.09" = {
-      version = "2.2.0";
-      sha256 = "1pb56dgf3jj2kq3cbbppwzyg3ccgqy9xara62hkjwyxzdx20clk1";
-    };
-  }.${versions.majorMinor version};
+  }.${versions.majorMinor version} or {
+    version = "2.2.0";
+    sha256 = "1pb56dgf3jj2kq3cbbppwzyg3ccgqy9xara62hkjwyxzdx20clk1";
+  };
 
 in mkDerivation {
   pname = "blessings";
