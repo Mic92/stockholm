@@ -105,6 +105,8 @@ let
   # Configuration for rust development
   # inspired by
   # https://github.com/bbatsov/prelude/blob/master/modules/prelude-rust.el
+  #
+  # This requires rls and racer to be installed on the system
   rustDevelopment = ''
     (add-hook 'rust-mode-hook #'racer-mode)
     (add-hook 'rust-mode-hook (lambda()
