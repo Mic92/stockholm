@@ -162,7 +162,7 @@ let
     epkgs.melpaPackages.smex
     epkgs.melpaPackages.org-mime
 
-    epkgs.elpaPackages.which-key
+    epkgs.melpaPackages.which-key
   ]);
 
   myEmacs = pkgs.writeDashBin "my-emacs" ''
