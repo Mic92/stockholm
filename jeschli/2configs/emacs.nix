@@ -151,22 +151,31 @@ let
   '';
 
   emacsWithCustomPackages = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: [
+#testing
+    epkgs.melpaPackages.gitlab
+
+# emacs convenience
     epkgs.melpaPackages.ag
     epkgs.melpaPackages.company
+    epkgs.melpaPackages.direnv
     epkgs.melpaPackages.evil
+    epkgs.melpaPackages.google-this
+    epkgs.melpaPackages.monokai-alt-theme
+
+# development
     epkgs.melpaStablePackages.magit
     epkgs.melpaPackages.nix-mode
     epkgs.melpaPackages.go-mode
-    epkgs.melpaPackages.google-this
     epkgs.melpaPackages.haskell-mode
-    epkgs.melpaPackages.monokai-alt-theme
 # rust
     epkgs.melpaPackages.rust-mode
     epkgs.melpaPackages.flycheck-rust
     epkgs.melpaPackages.racer
 
+# python
     epkgs.melpaPackages.elpy
 
+# org-mode
     epkgs.elpaPackages.bbdb
     epkgs.orgPackages.org-plus-contrib
     epkgs.melpaPackages.smex
