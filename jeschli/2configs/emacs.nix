@@ -127,11 +127,25 @@ let
     (global-set-key "\C-x\ \C-r" 'recentf-open-files)
   '';
 
-  killActualBuffer = ''
+  myFunctionKeys = ''
     (fset 'kill-actual-buffer
       [?\C-x ?k return])
-    (global-set-key (kbd "<f5>") 'kill-actual-buffer)
+
+    (defun mh/open-term-and-rename (name)
+      "open a new bash and rename it"
+      (interactive "sName of new terminal: ")
+      (term "/run/current-system/sw/bin/bash")
+      (rename-buffer name)
+    )
+    (global-set-key (kbd "M-<f8>") 'kill-actual-buffer)
+
+    (global-set-key (kbd "<f5>") 'mh/open-term-and-rename)
+    (global-set-key (kbd "<f6>") 'other-window)
+    (global-set-key (kbd "<f7>") 'split-window-right)
+    (global-set-key (kbd "<f8>") 'delete-other-windows)
   '';
+
+
 
   dotEmacs = pkgs.writeText "dot-emacs" ''
     ${packageRepos}
@@ -147,7 +161,7 @@ let
     ${windowCosmetics}
 
     ${orgAgendaView}
-    ${killActualBuffer}
+    ${myFunctionKeys}
   '';
 
   emacsWithCustomPackages = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: [
@@ -181,7 +195,7 @@ let
     epkgs.melpaPackages.smex
     epkgs.melpaPackages.org-mime
 
-    epkgs.melpaPackages.which-key
+    epkgs.elpaPackages.which-key
   ]);
 
   myEmacs = pkgs.writeDashBin "my-emacs" ''
