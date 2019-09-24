@@ -189,6 +189,7 @@ in {
           wg.euer           IN A      ${nets.internet.ip4.addr}
           wiki.euer         IN A      ${nets.internet.ip4.addr}
           wikisearch        IN A      ${nets.internet.ip4.addr}
+          bookmark.euer     IN A      ${nets.internet.ip4.addr}
           io                IN NS     gum.krebsco.de.
           mediengewitter    IN CNAME  over.dose.io.
         '';
