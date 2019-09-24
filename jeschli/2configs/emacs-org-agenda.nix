@@ -29,8 +29,6 @@ let
 ;; Custom Key Bindings
 (global-set-key (kbd "<f12>") 'org-agenda)
 (global-set-key (kbd "<S-f5>") 'bh/widen)
-(global-set-key (kbd "<f7>") 'bh/set-truncate-lines)
-(global-set-key (kbd "<f8>") 'org-cycle-agenda-files)
 (global-set-key (kbd "<f9> <f9>") 'bh/show-org-agenda)
 (global-set-key (kbd "<f9> b") 'bbdb)
 (global-set-key (kbd "<f9> c") 'calendar)
@@ -918,7 +916,6 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
                   nil))  ; available to archive
             (or subtree-end (point-max)))
         next-headline))))
-
 (setq org-alphabetical-lists t)
 
 ;; Explicitly load required exporters
@@ -1893,7 +1890,6 @@ Late deadlines first, then scheduled, then non-late deadlines"
 ;; Bookmark handling
 ;;
 (global-set-key (kbd "<C-f6>") '(lambda () (interactive) (bookmark-set "SAVED")))
-(global-set-key (kbd "<f6>") '(lambda () (interactive) (bookmark-jump "SAVED")))
 
 (require 'org-mime)
 
