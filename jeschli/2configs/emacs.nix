@@ -30,6 +30,7 @@ let
   '';
 
   goMode = ''
+    (setq godoc-and-godef-command "go doc") ;godoc has no cli support any more, thats go doc now
     (add-to-list 'exec-path "~/go/bin")
     (add-hook 'go-mode-hook
     (lambda ()
