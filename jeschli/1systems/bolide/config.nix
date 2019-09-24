@@ -3,12 +3,14 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, lib, ... }:
+let
+  unstable = import <nixpkgs-unstable> { config = { allowUnfree = true; }; };
+in
 {
   imports =
     [
       ./hardware-configuration.nix
       <stockholm/jeschli>
-      <home-manager/nixos>
       <stockholm/jeschli/2configs/urxvt.nix>
     #  <stockholm/jeschli/2configs/emacs.nix>
     ];
@@ -31,6 +33,7 @@
 #  networking.hostName = "bolide"; # Define your hostname.
 #  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;
+  networking.enableB43Firmware = true; #new
 
   # Select internationalisation properties.
   # i18n = {
@@ -53,8 +56,6 @@
   };
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
-    home-manager
-
     wget vim
   # system helper
     ag
@@ -78,7 +79,9 @@
     google-chrome
   # programming languages
     go
-    gcc
+    gcc9
+    ccls
+    unstable.clang_8
     ghc
     python35
     python35Packages.pip
@@ -95,22 +98,6 @@
     zathura
   ];
 
-  home-manager.useUserPackages = true;
-  home-manager.users.jeschli = {
-    home.stateVersion = "19.03";
-  };
-
-  home-manager.users.jeschli.home.file = {
-     ".emacs.d" = {
-       source = pkgs.fetchFromGitHub {
-         owner = "jeschli";
-         repo = "emacs.d";
-         rev = "8ed6c40";
-         sha256 = "1q2y478srwp9f58l8cixnd2wj51909gp1z68k8pjlbjy2mrvibs0";
-       };
-       recursive = true;
-     };
-  };
  # Some programs need SUID wrappers, can be configured further or are
  # started in user sessions.
  # programs.bash.enableCompletion = true;
