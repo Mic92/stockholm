@@ -147,6 +147,7 @@ let
     ${windowCosmetics}
 
     ${orgAgendaView}
+    ${killActualBuffer}
   '';
 
   emacsWithCustomPackages = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: [
