@@ -28,7 +28,6 @@ let
 
 ;; Custom Key Bindings
 (global-set-key (kbd "<f12>") 'org-agenda)
-(global-set-key (kbd "<f5>") 'bh/org-todo)
 (global-set-key (kbd "<S-f5>") 'bh/widen)
 (global-set-key (kbd "<f7>") 'bh/set-truncate-lines)
 (global-set-key (kbd "<f8>") 'org-cycle-agenda-files)
@@ -1320,8 +1319,6 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
   "#+end_src\n")
 
 (define-abbrev org-mode-abbrev-table "selisp" "" 'skel-org-block-elisp)
-
-(global-set-key (kbd "<f5>") 'bh/org-todo)
 
 (defun bh/org-todo (arg)
   (interactive "p")
