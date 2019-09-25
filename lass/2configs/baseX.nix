@@ -59,6 +59,7 @@ in {
 
   environment.systemPackages = with pkgs; [
     acpi
+    acpilight
     ag
     cabal2nix
     cholerab
@@ -72,6 +73,7 @@ in {
     lm_sensors
     ncdu
     nix-index
+    nix-review
     nmap
     pavucontrol
     powertop
@@ -79,9 +81,10 @@ in {
     sxiv
     taskwarrior
     termite
+    transgui
+    wirelesstools
     xclip
     xephyrify
-    xorg.xbacklight
     xorg.xhost
     xsel
     zathura
@@ -93,6 +96,12 @@ in {
     symbola
     xlibs.fontschumachermisc
   ];
+
+  services.udev.extraRules = ''
+    SUBSYSTEM=="backlight", ACTION=="add", \
+    RUN+="${pkgs.coreutils}/bin/chgrp video /sys/class/backlight/%k/brightness", \
+    RUN+="${pkgs.coreutils}/bin/chmod g+w /sys/class/backlight/%k/brightness"
+  '';
 
   services.xserver = {
     enable = true;

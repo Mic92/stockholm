@@ -20,6 +20,11 @@
     fsType = "ext4";
   };
 
+  fileSystems."/backups" = {
+    device = "tank/backups";
+    fsType = "zfs";
+  };
+
   fileSystems."/srv/http" = {
     device = "tank/srv-http";
     fsType = "zfs";
