@@ -12,7 +12,8 @@ in
       ./hardware-configuration.nix
       <stockholm/jeschli>
       <stockholm/jeschli/2configs/urxvt.nix>
-    #  <stockholm/jeschli/2configs/emacs.nix>
+      <stockholm/jeschli/2configs/i3.nix>
+      <stockholm/jeschli/2configs/emacs.nix>
     ];
 
   krebs.build.host = config.krebs.hosts.bolide;
@@ -56,6 +57,7 @@ in
   };
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
+    rofi
     wget vim
   # system helper
     ag
@@ -78,13 +80,14 @@ in
     chromium
     google-chrome
   # programming languages
+    vscode
     go
     gcc9
     ccls
     unstable.clang_8
     ghc
-    python35
-    python35Packages.pip
+    python37
+    python37Packages.pip
   # go tools
     golint
     gotools
@@ -98,42 +101,13 @@ in
     zathura
   ];
 
- # Some programs need SUID wrappers, can be configured further or are
- # started in user sessions.
- # programs.bash.enableCompletion = true;
- # programs.mtr.enable = true;
- # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
-
- # List services that you want to enable:
 
  # Enable the OpenSSH daemon.
- services.openssh.enable = true;
+  services.openssh.enable = true;
 
+  services.xserver.videoDrivers = [ "nvidia" ];
 
-  services.xserver = {
-
-    enable = true;
-
-    desktopManager = {
-      xfce.enable = true;
-      gnome3.enable = true;
-    };
-#    # Don't install feh into systemPackages
-#    # refs <nixpkgs/nixos/modules/services/x11/desktop-managers>
-#    desktopManager.session = lib.mkForce [];
-#
-#    enable = true;
-#    display = 11;
-#    tty = 11;
-#
-#    dpi = 96;
-
-    videoDrivers = [ "nvidia" ];
-  };
-
-  services.xserver.windowManager.i3.enable = true;
-
-  users.extraUsers.jeschli = {
+users.extraUsers.jeschli = {
     isNormalUser = true;
     extraGroups = ["docker" "vboxusers" "audio"];
     uid = 1000;

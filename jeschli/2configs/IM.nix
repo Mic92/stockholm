@@ -29,6 +29,7 @@ in {
       jeschli.pubkey
       jeschli-bln.pubkey
       jeschli-brauerei.pubkey
+      jeschli-bolide.pubkey
     ];
     packages = [ tmux ];
   };

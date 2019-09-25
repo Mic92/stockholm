@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 let
+  orgAgendaView = import ./emacs-org-agenda.nix;
+
   packageRepos = ''
     (require 'package) ;; You might already have this line
     (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
@@ -28,6 +30,7 @@ let
   '';
 
   goMode = ''
+    (setq godoc-and-godef-command "go doc") ;godoc has no cli support any more, thats go doc now
     (add-to-list 'exec-path "~/go/bin")
     (add-hook 'go-mode-hook
     (lambda ()
@@ -40,6 +43,10 @@ let
   ido = ''
     (require 'ido)
     (ido-mode t)
+  '';
+
+  magit = ''
+    (global-set-key (kbd "C-x g") 'magit-status) ; "Most Magit commands are commonly invoked from the status buffer"
   '';
 
   windowCosmetics = ''
@@ -65,12 +72,53 @@ let
     (setq org-link-frame-setup '((file . find-file))) ; open link in same frame.
     (if (boundp 'org-user-agenda-files)
       (setq org-agenda-files org-user-agenda-files)
-      (setq org-agenda-files (quote ("~/projects/notes")))
+      (setq org-agenda-files (quote ("~/projects/notes_privat")))
     )
   '';
 
   theme = ''
     (load-theme 'monokai-alt t)
+    (load-theme 'whiteboard t)
+    (disable-theme 'monokai-alt)
+    (disable-theme 'whiteboard)
+
+    (defun mh/load-whiteboard-theme ()
+      "load whiteboard theme"
+      (interactive)
+      (message "whiteboard loaded")
+      (disable-theme 'monokai-alt)
+      (enable-theme 'whiteboard)
+    )
+
+    (defun mh/load-monokai-theme ()
+      "load monokai theme"
+      (interactive)
+      (message "monokai loaded")
+      (disable-theme 'whiteboard)
+      (enable-theme 'monokai-alt)
+    )
+
+    (global-set-key "\C-ctw" 'mh/load-whiteboard-theme)
+    (global-set-key "\C-ctm" 'mh/load-monokai-theme)
+  '';
+
+  # Configuration for rust development
+  # inspired by
+  # https://github.com/bbatsov/prelude/blob/master/modules/prelude-rust.el
+  #
+  # This requires rls and racer to be installed on the system
+  rustDevelopment = ''
+    (add-hook 'rust-mode-hook #'racer-mode)
+    (add-hook 'rust-mode-hook (lambda()
+      (local-set-key (kbd "C-c C-d") 'racer-describe)
+      (local-set-key (kbd "C-c .") 'racer-find-definition)
+      (local-set-key (kbd "C-c ,") 'pop-tag-mark))
+    )
+    (add-hook 'racer-mode-hook #'eldoc-mode)
+    (add-hook 'racer-mode-hook #'company-mode)
+    (require 'rust-mode)
+    (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+    (setq company-tooltip-align-annotations t)
   '';
 
   recentFiles = ''
@@ -79,27 +127,75 @@ let
     (global-set-key "\C-x\ \C-r" 'recentf-open-files)
   '';
 
+  myFunctionKeys = ''
+    (fset 'kill-actual-buffer
+      [?\C-x ?k return])
+
+    (defun mh/open-term-and-rename (name)
+      "open a new bash and rename it"
+      (interactive "sName of new terminal: ")
+      (term "/run/current-system/sw/bin/bash")
+      (rename-buffer name)
+    )
+    (global-set-key (kbd "M-<f8>") 'kill-actual-buffer)
+
+    (global-set-key (kbd "<f5>") 'mh/open-term-and-rename)
+    (global-set-key (kbd "<f6>") 'other-window)
+    (global-set-key (kbd "<f7>") 'split-window-right)
+    (global-set-key (kbd "<f8>") 'delete-other-windows)
+  '';
+
+
+
   dotEmacs = pkgs.writeText "dot-emacs" ''
+    ${packageRepos}
+
     ${evilMode}
     ${goMode}
     ${ido}
-    ${packageRepos}
+    ${magit}
     ${orgMode}
     ${recentFiles}
+    ${rustDevelopment}
     ${theme}
     ${windowCosmetics}
+
+    ${orgAgendaView}
+    ${myFunctionKeys}
   '';
 
   emacsWithCustomPackages = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: [
+#testing
+    epkgs.melpaPackages.gitlab
+
+# emacs convenience
     epkgs.melpaPackages.ag
+    epkgs.melpaPackages.company
+    epkgs.melpaPackages.direnv
     epkgs.melpaPackages.evil
+    epkgs.melpaPackages.google-this
+    epkgs.melpaPackages.monokai-alt-theme
+
+# development
     epkgs.melpaStablePackages.magit
     epkgs.melpaPackages.nix-mode
     epkgs.melpaPackages.go-mode
     epkgs.melpaPackages.haskell-mode
-    epkgs.melpaPackages.google-this
-    epkgs.melpaPackages.monokai-alt-theme
+# rust
     epkgs.melpaPackages.rust-mode
+    epkgs.melpaPackages.flycheck-rust
+    epkgs.melpaPackages.racer
+
+# python
+    epkgs.melpaPackages.elpy
+
+# org-mode
+    epkgs.elpaPackages.bbdb
+    epkgs.orgPackages.org-plus-contrib
+    epkgs.melpaPackages.smex
+    epkgs.melpaPackages.org-mime
+
+    epkgs.elpaPackages.which-key
   ]);
 
   myEmacs = pkgs.writeDashBin "my-emacs" ''
