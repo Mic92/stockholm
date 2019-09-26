@@ -33,9 +33,10 @@ in {
         chown nobody /tmp/tell.json
       '';
       ExecStart = "${pkg}/bin/call-muell --cfg /tmp/tell.json --mode mpd loop 60";
-      Restart = "always";
       PrivateTmp = true;
       PermissionsStartOnly = true;
+      Restart = "always";
+      RestartSec = "15";
     };
   };
 }

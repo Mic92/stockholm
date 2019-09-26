@@ -26,8 +26,9 @@ in {
       WorkingDirectory = home;
       PermissionsStartOnly = true;
       ExecStart = "${pkg}/bin/muell_mail";
-      Restart = "always";
       PrivateTmp = true;
+      Restart = "always";
+      RestartSec = "15";
     };
   };
 }

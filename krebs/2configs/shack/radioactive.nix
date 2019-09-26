@@ -27,9 +27,10 @@ in {
     serviceConfig = {
       User = "nobody"; # TODO separate user
       ExecStart = "${pkg}/bin/radioactive-add-many loop 60";
-      Restart = "always";
       PrivateTmp = true;
       PermissionsStartOnly = true;
+      Restart = "always";
+      RestartSec = "15";
     };
   };
 }

@@ -36,8 +36,9 @@ in {
       '';
       WorkingDirectory = home;
       ExecStart = "${pkg}/bin/muellshack";
-      Restart = "always";
       PrivateTmp = true;
+      Restart = "always";
+      RestartSec = "15";
     };
   };
 }
