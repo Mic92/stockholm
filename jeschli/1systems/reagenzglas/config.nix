@@ -1,18 +1,5 @@
 { config, pkgs, ... }:
-with pkgs;
-let
-  rebuild_script = pkgs.writeTextFile {
-    name="rebuild";
-    text=''
-      #!/usr/bin/env sh
-      set -eu
-      sudo cp -r /etc/nixos ~/old-nixos
-      sudo cp -r $HOME/nixos /etc/
-      sudo nixos-rebuild switch 
-      '';
-    executable=true;
-  };
-in
+
 {
   imports =
     [
@@ -51,12 +38,6 @@ in
     rofi
   ];
 
-  # How I rebuild the system
-  environment.shellAliases = {
-    rebuild = rebuild_script;
-  };
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.ombi = {
      isNormalUser = true;
      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
