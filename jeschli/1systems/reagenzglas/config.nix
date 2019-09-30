@@ -15,7 +15,7 @@
   boot.loader.systemd-boot.enable = true;
 
   # Wireless network with network manager
-  krebs.build.host = config.krebs.hosts.brauerei;
+  krebs.build.host = config.krebs.hosts.reagenzglas;
   # networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true;
 
