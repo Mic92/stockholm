@@ -37,6 +37,7 @@
     wget vim git
     firefox
     rofi
+    ag
   ];
 
   users.users.ombi = {
