@@ -5,6 +5,7 @@
     [
     <stockholm/jeschli>
     <stockholm/jeschli/2configs/emacs.nix>
+    <stockholm/jeschli/2configs/python.nix>
        ./desktop.nix
        ./i3-configuration.nix
        ./hardware-configuration.nix
