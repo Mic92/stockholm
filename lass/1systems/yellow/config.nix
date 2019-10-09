@@ -47,9 +47,9 @@ with import <stockholm/lib>;
     };
     virtualHosts.default = {
       default = true;
-      locations."/Nginx-Fancyindex-Theme-dark" = {
+      locations."=/Nginx-Fancyindex-Theme-dark" = {
         extraConfig = ''
-          alias =${pkgs.fetchFromGitHub {
+          alias ${pkgs.fetchFromGitHub {
             owner = "Naereen";
             repo = "Nginx-Fancyindex-Theme";
             rev = "e84f7d6a32085c2b6238f85f5fdebe9ceb710fc4";
