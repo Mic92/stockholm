@@ -13,7 +13,7 @@ in {
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     systemd.services.autowifi = {
       description = "Automatic wifi connector";
       wantedBy = [ "multi-user.target" ];
