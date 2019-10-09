@@ -60,21 +60,23 @@ rec {
           expires max;
         '';
       };
-      services.phpfpm.poolConfigs."${domain}" = ''
-        listen = /srv/http/${domain}/phpfpm.pool
-        user = nginx
-        group = nginx
-        pm = dynamic
-        pm.max_children = 25
-        pm.start_servers = 5
-        pm.min_spare_servers = 3
-        pm.max_spare_servers = 20
-        listen.owner = nginx
-        listen.group = nginx
-        php_admin_value[error_log] = 'stderr'
-        php_admin_flag[log_errors] = on
-        catch_workers_output = yes
-      '';
+      services.phpfpm.pools."${domain}" = {
+        user = "nginx";
+        group = "nginx";
+        extraConfig = ''
+          listen = /srv/http/${domain}/phpfpm.pool
+          pm = dynamic
+          pm.max_children = 25
+          pm.start_servers = 5
+          pm.min_spare_servers = 3
+          pm.max_spare_servers = 20
+          listen.owner = nginx
+          listen.group = nginx
+          php_admin_value[error_log] = 'stderr'
+          php_admin_flag[log_errors] = on
+          catch_workers_output = yes
+        '';
+      };
     };
 
   serveOwncloud = domains:
