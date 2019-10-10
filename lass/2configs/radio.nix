@@ -230,11 +230,11 @@ in {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_pass http://localhost:8000;
       '';
-      locations."/recent".extraConfig = ''
+      locations."= /recent".extraConfig = ''
         alias /tmp/played;
       '';
     };
-    virtualHosts."lassul.us".locations."/the_playlist".extraConfig = let
+    virtualHosts."lassul.us".locations."= /the_playlist".extraConfig = let
       html = pkgs.writeText "index.html" ''
         <!DOCTYPE html>
         <html lang="en">

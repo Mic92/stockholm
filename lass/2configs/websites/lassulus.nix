@@ -37,30 +37,33 @@ in {
     locations."= /retiolum-hosts.tar.bz2".extraConfig = ''
       alias ${config.krebs.tinc.retiolum.hostsArchive};
     '';
+    locations."= /hosts".extraConfig = ''
+      alias ${pkgs.krebs-hosts_combined};
+    '';
     locations."= /retiolum.hosts".extraConfig = ''
       alias ${pkgs.krebs-hosts-retiolum};
     '';
     locations."= /wireguard-key".extraConfig = ''
       alias ${pkgs.writeText "prism.wg" config.krebs.hosts.prism.nets.wiregrill.wireguard.pubkey};
     '';
-    locations."/tinc".extraConfig = ''
+    locations."/tinc/".extraConfig = ''
       alias ${config.krebs.tinc_graphs.workingDir}/external;
     '';
-    locations."/krebspage".extraConfig = ''
+    locations."= /krebspage".extraConfig = ''
       default_type "text/html";
       alias ${pkgs.krebspage}/index.html;
     '';
-    locations."/init".extraConfig = let
+    locations."= /init".extraConfig = let
       initscript = pkgs.init.override {
         pubkey = config.krebs.users.lass.pubkey;
       };
     in ''
       alias ${initscript};
     '';
-    locations."/pub".extraConfig = ''
+    locations."= /pub".extraConfig = ''
       alias ${pkgs.writeText "pub" config.krebs.users.lass.pubkey};
     '';
-    locations."/pub1".extraConfig = ''
+    locations."= /pub1".extraConfig = ''
       alias ${pkgs.writeText "pub" config.krebs.users.lass-mors.pubkey};
     '';
   };

@@ -184,7 +184,7 @@ with import <stockholm/lib>;
       imports = [
         <stockholm/lass/2configs/realwallpaper.nix>
       ];
-      services.nginx.virtualHosts."lassul.us".locations."/wallpaper.png".extraConfig = ''
+      services.nginx.virtualHosts."lassul.us".locations."= /wallpaper.png".extraConfig = ''
         alias /var/realwallpaper/realwallpaper.png;
       '';
     }
