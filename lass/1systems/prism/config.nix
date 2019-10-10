@@ -379,7 +379,7 @@ with import <stockholm/lib>;
 
       services.nginx.virtualHosts."lassul.us".locations."^~ /transmission".extraConfig = ''
         if ($scheme != "https") {
-          rewrite ^ https://$host$uri permanent;
+          rewrite ^ https://$host$request_uri permanent;
         }
         auth_basic "Restricted Content";
         auth_basic_user_file ${pkgs.writeText "transmission-user-pass" ''
