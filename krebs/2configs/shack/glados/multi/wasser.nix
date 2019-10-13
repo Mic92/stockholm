@@ -12,7 +12,7 @@ let
     retain = false;
     qos = 1;
   };
-  seconds = 10;
+  seconds = 20;
 in
 {
   switch = [
