@@ -14,6 +14,8 @@
     <stockholm/krebs/2configs/news.nix>
     <stockholm/krebs/2configs/news-spam.nix>
     <stockholm/krebs/2configs/shack/prometheus/node.nix>
+    <stockholm/krebs/2configs/shack/prometheus/server.nix>
+    <stockholm/krebs/2configs/shack/prometheus/unifi.nix>
     <stockholm/krebs/2configs/shack/gitlab-runner.nix>
 
     ## Collect local statistics via collectd and send to collectd

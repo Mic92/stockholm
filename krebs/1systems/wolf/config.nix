@@ -62,9 +62,9 @@ in
 
     <stockholm/krebs/2configs/shack/netbox.nix>
     # prometheus.shack
-    <stockholm/krebs/2configs/shack/prometheus/server.nix>
+    #<stockholm/krebs/2configs/shack/prometheus/server.nix>
     <stockholm/krebs/2configs/shack/prometheus/node.nix>
-    <stockholm/krebs/2configs/shack/prometheus/unifi.nix>
+    #<stockholm/krebs/2configs/shack/prometheus/unifi.nix>
     # grafana.shack
     <stockholm/krebs/2configs/shack/grafana.nix>
 
