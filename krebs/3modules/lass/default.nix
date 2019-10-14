@@ -602,42 +602,6 @@ in {
       ci = false;
       syncthing.id = "PWKVXPB-JCNO6E4-KVIQ7CK-6FSOWHM-AWORMDU-HVVYLKW-44DQTYW-XZT7DQJ";
     };
-    morpheus = {
-      cores = 1;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.0.19";
-          ip6.addr = r6 "012f";
-          aliases = [
-            "morpheus.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAptrlSKQKsBH2QMQxllZR94S/fXneajpJifRjXR5bi+7ME2ThdQXY
-            T7yWiKaUuBJThWged9PdPltLUEMmv+ubQqpWHZq442VWSS36r1yMSGpUeKK+oYMN
-            /Sfu+1yC4m2uXno95wpJZIcDfbbn26jT6ldJ4Yd97zyrXKljvcdrz3wZzQq0tojh
-            S5Q59x/aQMJbnQpnlFnMIEVgULuFPW16+vPGsXIPdYNggaF1avcBaFl8i3M0EZVz
-            Swn4hArDynDJhR7M0QdlwOpOh7O+1iOnmXqqei3LxMVHb+YtzfHgxOPxggUsy7CR
-            bj9uBR9loGwgmZwaxXd1Vfbw8kn/feOb9FcW73u+SZyzwEA9HFRV0jGQe3P9mGfI
-            Bwe02DOTVXEB8jTAGCw5T3bXLIOX8kqdlCECuAWFfrt8H+GjZDuGUWRcMn32orMz
-            sMvkab95ZOHK6Q31mrhILOIOdyZWKPZIabL3HF6CZtu52h6MDHbmGS0w0OJYhj2+
-            VnT9ZBoaeooVg8QOE43rCXvmL5vzhLKrj4s/53wTGG5SpzLs9Q9rrJVgAnz4YQ7j
-            3Ov5q3Zxyr+vO6O7Pb5X49vCQw/jzK41S0/15GEmKcoxXemzeZCpX1mbeeTUtLvA
-            U7OJwldrElzictBJ1gT94L4BDvoGZVqAkXJCJPamfsWaiw6SsMqtTfECAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-        wiregrill = {
-          ip6.addr = w6 "012f";
-          aliases = [
-            "morpheus.w"
-          ];
-          wireguard.pubkey = "BdiIHJjJQThmZD8DehxPGA+bboBHjljedwaRaV5yyDY=";
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHXS60mmNWMdMRvaPxGn91Cm/hm7zY8xn5rkI4n2KG/f ";
-    };
     hilum = {
       cores = 1;
       nets = {
