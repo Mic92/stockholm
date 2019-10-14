@@ -28,6 +28,12 @@
       export SYSTEM="$1"
       $(nix-build $HOME/sync/stockholm/lass/krops.nix --no-out-link --argstr name "$SYSTEM" -A deploy)
     '';
+    usb-tether-on = pkgs.writeDash "usb-tether-on" ''
+      adb shell su -c service call connectivity 33 i32 1 s16 text
+    '';
+    usb-tether-off = pkgs.writeDash "usb-tether-off" ''
+      adb shell su -c service call connectivity 33 i32 0 s16 text
+    '';
   };
 
   services.xserver = {
