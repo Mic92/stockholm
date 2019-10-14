@@ -19,20 +19,6 @@ self: super: let
      mapAttrs (name: _: path + "/${name}")
               (filterAttrs (_: eq "directory") (readDir path));
 
-in {
-    bank = self.writeDashBin "bank" ''
-      tmp=$(mktemp)
-      ${self.pass}/bin/pass show hledger > $tmp
-      ${self.hledger}/bin/hledger --file=$tmp "$@"
-      ${self.pass}/bin/pass show hledger | if ${self.diffutils}/bin/diff $tmp -; then
-        exit 0
-      else
-        ${self.coreutils}/bin/cat $tmp | ${self.pass}/bin/pass insert -m hledger
-      fi
-      ${self.coreutils}/bin/rm $tmp
-    '';
-}
-
-// mapAttrs (_: flip callPackage {})
+in mapAttrs (_: flip callPackage {})
             (filterAttrs (_: dir: pathExists (dir + "/default.nix"))
                          (subdirsOf ./.))
