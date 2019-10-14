@@ -29,6 +29,8 @@ in {
       User = "nobody";
       ExecStart = "${pkg}/bin/sub-new";
       PrivateTmp = true;
+      Restart = "always";
+      RestartSec = "15";
     };
   };
 }

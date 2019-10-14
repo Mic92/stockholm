@@ -22,8 +22,9 @@ in {
     serviceConfig = {
       User = "powermeter";
       ExecStart = "${pkg}/bin/powermeter-serial2mqtt";
-      Restart = "always";
       PrivateTmp = true;
+      Restart = "always";
+      RestartSec = "15";
     };
   };
 
@@ -33,8 +34,9 @@ in {
     serviceConfig = {
       User = "powermeter";
       ExecStart = "${pkg}/bin/powermeter-mqtt2socket";
-      Restart = "always";
       PrivateTmp = true;
+      Restart = "always";
+      RestartSec = "15";
     };
   };
 

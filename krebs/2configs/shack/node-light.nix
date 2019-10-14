@@ -46,8 +46,9 @@ in {
       '';
       WorkingDirectory = home;
       ExecStart = "${pkg}/bin/node-light";
-      Restart = "always";
       PrivateTmp = true;
+      Restart = "always";
+      RestartSec = "15";
     };
   };
 }

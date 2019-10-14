@@ -184,7 +184,7 @@ in {
           nixos.unstable    IN CNAME  krebscode.github.io.
           o.euer            IN A      ${nets.internet.ip4.addr}
           photostore        IN A      ${nets.internet.ip4.addr}
-          pigstarter        IN A      ${nets.internet.ip4.addr}
+          pigstarter        IN CNAME  makefu.github.io.
           share.euer        IN A      ${nets.internet.ip4.addr}
           wg.euer           IN A      ${nets.internet.ip4.addr}
           wiki.euer         IN A      ${nets.internet.ip4.addr}
