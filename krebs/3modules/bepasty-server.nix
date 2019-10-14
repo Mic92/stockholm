@@ -164,7 +164,7 @@ let
             client_max_body_size 32M;
             '';
           locations = {
-            "/".extraConfig = "proxy_set_header Host $http_host;";
+            "/".extraConfig = "proxy_set_header Host $host;";
             "/".proxyPass = "http://unix:${server.workDir}/gunicorn-${name}.sock";
             "/static/".extraConfig = ''
               alias ${bepasty}/lib/${python.libPrefix}/site-packages/bepasty/static/;

@@ -1,6 +1,5 @@
 { config, pkgs, lib, ... }:
 let
-  xmonad-jeschli = pkgs.callPackage <stockholm/jeschli/5pkgs/simple/xmonad-jeschli> { inherit config; };
   mainUser = config.krebs.build.user.name;
   unstable = import <nixpkgs-unstable> { config = { allowUnfree = true; }; };
 in
@@ -9,6 +8,7 @@ in
     <stockholm/jeschli>
     ./hardware-configuration.nix
     <home-manager/nixos>
+    <stockholm/jeschli/2configs/emacs.nix>
     <stockholm/jeschli/2configs/urxvt.nix>
     <stockholm/jeschli/2configs/steam.nix>
     <stockholm/jeschli/2configs/virtualbox.nix>
@@ -117,29 +117,29 @@ in
   # programs.mtr.enable = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
-  home-manager.useUserPackages = true;
-  home-manager.users.jeschli = {
-    home.stateVersion = "19.03";
-  };
+#  home-manager.useUserPackages = true;
+#  home-manager.users.jeschli = {
+#    home.stateVersion = "19.03";
+#  };
 #  home-manager.enable = true;
 
-  home-manager.users.jeschli.home.file = {
-     ".emacs.d" = {
-       source = pkgs.fetchFromGitHub {
-         owner = "jeschli";
-         repo = "emacs.d";
-         rev = "8ed6c40";
-         sha256 = "1q2y478srwp9f58l8cixnd2wj51909gp1z68k8pjlbjy2mrvibs0";
-       };
-       recursive = true;
-     };
-  };
+#  home-manager.users.jeschli.home.file = {
+#     ".emacs.d" = {
+#       source = pkgs.fetchFromGitHub {
+#         owner = "jeschli";
+#         repo = "emacs.d";
+#         rev = "8ed6c40";
+#         sha256 = "1q2y478srwp9f58l8cixnd2wj51909gp1z68k8pjlbjy2mrvibs0";
+#       };
+#       recursive = true;
+#     };
+#  };
 
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.emacs.enable = true;
+#  services.emacs.enable = true;
 
   virtualisation.docker.enable = true;
 
@@ -151,16 +151,6 @@ in
       gnome3.enable = true;
     };
 
-    windowManager = {
-      session = [{
-        name = "xmonad";
-        start = ''
-          ${xmonad-jeschli}/bin/xmonad &
-          waitPID=$!
-        '';
-        }
-      ];
-    };
   };
 
   services.xserver.windowManager.i3.enable = true;

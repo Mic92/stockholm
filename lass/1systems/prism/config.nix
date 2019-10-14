@@ -65,6 +65,13 @@ with import <stockholm/lib>;
           config.krebs.users.makefu.pubkey
         ];
       };
+      users.users.nin = {
+        uid = genid "nin";
+        isNormalUser = true;
+        openssh.authorizedKeys.keys = [
+          config.krebs.users.nin.pubkey
+        ];
+      };
       users.extraUsers.dritter = {
         uid = genid_uint31 "dritter";
         isNormalUser = true;
@@ -117,6 +124,26 @@ with import <stockholm/lib>;
         localAddress = "10.233.2.2";
       };
     }
+    {
+      #onondaga
+      systemd.services."container@onondaga".reloadIfChanged = mkForce false;
+      containers.onondaga = {
+        config = { ... }: {
+          imports = [ <stockholm/lass/2configs/rebuild-on-boot.nix> ];
+          environment.systemPackages = [ pkgs.git ];
+          services.openssh.enable = true;
+          users.users.root.openssh.authorizedKeys.keys = [
+            config.krebs.users.lass.pubkey
+            config.krebs.users.nin.pubkey
+          ];
+        };
+        autoStart = true;
+        enableTun = true;
+        privateNetwork = true;
+        hostAddress = "10.233.2.5";
+        localAddress = "10.233.2.6";
+      };
+    }
     <stockholm/lass/2configs/exim-smarthost.nix>
     <stockholm/lass/2configs/ts3.nix>
     <stockholm/lass/2configs/privoxy-retiolum.nix>
@@ -157,7 +184,7 @@ with import <stockholm/lib>;
       imports = [
         <stockholm/lass/2configs/realwallpaper.nix>
       ];
-      services.nginx.virtualHosts."lassul.us".locations."/wallpaper.png".extraConfig = ''
+      services.nginx.virtualHosts."lassul.us".locations."= /wallpaper.png".extraConfig = ''
         alias /var/realwallpaper/realwallpaper.png;
       '';
     }
@@ -352,7 +379,7 @@ with import <stockholm/lib>;
 
       services.nginx.virtualHosts."lassul.us".locations."^~ /transmission".extraConfig = ''
         if ($scheme != "https") {
-          rewrite ^ https://$host$uri permanent;
+          rewrite ^ https://$host$request_uri permanent;
         }
         auth_basic "Restricted Content";
         auth_basic_user_file ${pkgs.writeText "transmission-user-pass" ''
