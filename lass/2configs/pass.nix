@@ -2,7 +2,7 @@
 
 {
   krebs.per-user.lass.packages = with pkgs; [
-    pass
+    (pass.withExtensions (ext: [ ext.pass-otp ]))
     gnupg
   ];
 
