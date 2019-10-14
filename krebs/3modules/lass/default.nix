@@ -681,6 +681,11 @@ in {
   };
   users = rec {
     lass = lass-blue;
+    lass-yubikey = {
+      mail = lass.mail;
+      pubkey = builtins.readFile ./ssh/yubikey.rsa;
+      pgp.pubkeys.default = builtins.readFile ./pgp/yubikey.pgp;
+    };
     lass-blue = {
       mail = "lass@blue.r";
       pubkey = builtins.readFile ./ssh/blue.rsa;
