@@ -63,7 +63,6 @@ in {
     acpilight
     ag
     cabal2nix
-    cholerab
     dic
     dmenu
     font-size
