@@ -10,6 +10,7 @@ in {
     ./copyq.nix
     ./urxvt.nix
     ./xdg-open.nix
+    ./yubikey.nix
     {
       hardware.pulseaudio = {
         enable = true;
@@ -54,7 +55,7 @@ in {
   time.timeZone = "Europe/Berlin";
 
   programs.ssh.agentTimeout = "10m";
-  programs.ssh.startAgent = true;
+  programs.ssh.startAgent = false;
   services.openssh.forwardX11 = true;
 
   environment.systemPackages = with pkgs; [
