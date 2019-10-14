@@ -34,6 +34,7 @@ with import <stockholm/lib>;
         ];
       };
       environment.systemPackages = with pkgs; [
+        ark
         pavucontrol
         #firefox
         chromium
