@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   imports = [
     <stockholm/lass>
@@ -14,15 +14,19 @@
 
   krebs.build.host = config.krebs.hosts.hilum;
 
-  boot.loader.grub.extraEntries = ''
-    menuentry "grml" {
-      iso_path=/isos/grml.iso
-      export iso_path
-      search --set=root --file $iso_path
-      loopback loop $iso_path
-      root=(loop)
-      configfile /boot/grub/loopback.cfg
-      loopback --delete loop
-    }
-  '';
+  boot.loader.grub = {
+    extraEntries = ''
+      submenu isos {
+        source /grub/autoiso.cfg
+      }
+    '';
+    extraFiles."/grub/autoiso.cfg" = (pkgs.stdenv.mkDerivation {
+      name = "autoiso.cfg";
+      src = pkgs.grub2.src;
+      phases = [ "unpackPhase" "installPhase" ];
+      installPhase = ''
+        cp docs/autoiso.cfg $out
+      '';
+    });
+  };
 }
