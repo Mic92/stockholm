@@ -1,6 +1,14 @@
 { config, pkgs, ... }:
 
 let
+  pkgsWithOverlay = import <nixpkgs-unstable> {
+    overlays = [
+      (import (builtins.fetchTarball {
+        url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+      }))
+    ];
+  };
+
   orgAgendaView = import ./emacs-org-agenda.nix;
 
   packageRepos = ''
@@ -47,6 +55,9 @@ let
 
   magit = ''
     (global-set-key (kbd "C-x g") 'magit-status) ; "Most Magit commands are commonly invoked from the status buffer"
+
+    (with-eval-after-load 'magit
+      (require 'forge))
   '';
 
   windowCosmetics = ''
@@ -145,8 +156,6 @@ let
     (global-set-key (kbd "<f8>") 'delete-other-windows)
   '';
 
-
-
   dotEmacs = pkgs.writeText "dot-emacs" ''
     ${packageRepos}
 
@@ -164,9 +173,11 @@ let
     ${myFunctionKeys}
   '';
 
-  emacsWithCustomPackages = (pkgs.emacsPackagesNgGen pkgs.emacs).emacsWithPackages (epkgs: [
+  #emacsWithCustomPackages
+  emacsPkgs= epkgs: [
 #testing
     epkgs.melpaPackages.gitlab
+    epkgs.melpaPackages.forge
 
 # emacs convenience
     epkgs.melpaPackages.ag
@@ -177,7 +188,7 @@ let
     epkgs.melpaPackages.monokai-alt-theme
 
 # development
-    epkgs.melpaStablePackages.magit
+    epkgs.melpaPackages.magit
     epkgs.melpaPackages.nix-mode
     epkgs.melpaPackages.go-mode
     epkgs.melpaPackages.haskell-mode
@@ -196,20 +207,26 @@ let
     epkgs.melpaPackages.org-mime
 
     epkgs.elpaPackages.which-key
-  ]);
+  ];
+emacsWithOverlay = (pkgsWithOverlay.emacsWithPackagesFromUsePackage {
+      config = builtins.readFile dotEmacs; # builtins.readFile ./emacs.el;
+      # Package is optional, defaults to pkgs.emacs
+      package = pkgsWithOverlay.emacsGit;
+      # Optionally provide extra packages not in the configuration file
+      extraEmacsPackages = emacsPkgs;
+    });
 
   myEmacs = pkgs.writeDashBin "my-emacs" ''
-    exec ${emacsWithCustomPackages}/bin/emacs -q -l ${dotEmacs} "$@"
+    exec ${emacsWithOverlay}/bin/emacs -q -l ${dotEmacs} "$@"
   '';
 
   myEmacsWithDaemon = pkgs.writeDashBin "my-emacs-daemon" ''
-    exec ${emacsWithCustomPackages}/bin/emacs -q -l ${dotEmacs} --daemon
+    exec ${emacsWithOverlay}/bin/emacs -q -l ${dotEmacs} --daemon
   '';
 
   myEmacsClient = pkgs.writeDashBin "meclient" ''
-    exec ${emacsWithCustomPackages}/bin/emacsclient --create-frame
+    exec ${emacsWithOverlay}/bin/emacsclient --create-frame
   '';
-
 in {
   environment.systemPackages = [
     myEmacs myEmacsWithDaemon myEmacsClient

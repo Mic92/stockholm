@@ -1,23 +1,11 @@
 { config, pkgs, ... }:
-with pkgs;
-let
-  rebuild_script = pkgs.writeTextFile {
-    name="rebuild";
-    text=''
-      #!/usr/bin/env sh
-      set -eu
-      sudo cp -r /etc/nixos ~/old-nixos
-      sudo cp -r $HOME/nixos /etc/
-      sudo nixos-rebuild switch 
-      '';
-    executable=true;
-  };
-in
+
 {
   imports =
     [
     <stockholm/jeschli>
     <stockholm/jeschli/2configs/emacs.nix>
+    <stockholm/jeschli/2configs/python.nix>
        ./desktop.nix
        ./i3-configuration.nix
        ./hardware-configuration.nix
@@ -27,7 +15,7 @@ in
   boot.loader.systemd-boot.enable = true;
 
   # Wireless network with network manager
-  krebs.build.host = config.krebs.hosts.brauerei;
+  krebs.build.host = config.krebs.hosts.reagenzglas;
   # networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true;
 
@@ -49,14 +37,9 @@ in
     wget vim git
     firefox
     rofi
+    ag
   ];
 
-  # How I rebuild the system
-  environment.shellAliases = {
-    rebuild = rebuild_script;
-  };
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.ombi = {
      isNormalUser = true;
      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
