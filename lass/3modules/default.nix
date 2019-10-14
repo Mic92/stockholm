@@ -15,5 +15,6 @@ _:
     ./usershadow.nix
     ./xjail.nix
     ./autowifi.nix
+    ./browsers.nix
   ];
 }
