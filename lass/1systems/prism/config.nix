@@ -261,41 +261,6 @@ with import <stockholm/lib>;
         hostAddress = "10.233.2.3";
         localAddress = "10.233.2.4";
       };
-      services.nginx.virtualHosts."rote-allez-fraktion.de" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/" = {
-          extraConfig = ''
-            proxy_set_header Host rote-allez-fraktion.de;
-            proxy_pass http://10.233.2.4;
-          '';
-        };
-      };
-    }
-    {
-      imports = [ <stockholm/lass/2configs/backup.nix> ];
-      lass.restic = genAttrs [
-        "daedalus"
-        "icarus"
-        "littleT"
-        "mors"
-        "shodan"
-        "skynet"
-      ] (dest: {
-        dirs = [
-          "/home/chat/.weechat"
-          "/bku/sql_dumps"
-        ];
-        passwordFile = (toString <secrets>) + "/restic/${dest}";
-        repo = "sftp:backup@${dest}.r:/backups/prism";
-        extraArguments = [
-          "sftp.command='ssh backup@${dest}.r -i ${config.krebs.build.host.ssh.privkey.path} -s sftp'"
-        ];
-        timerConfig = {
-          OnCalendar = "00:05";
-          RandomizedDelaySec = "5h";
-        };
-      });
     }
     {
       users.users.download.openssh.authorizedKeys.keys = [
