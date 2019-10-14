@@ -73,9 +73,6 @@
 
   services.xserver = {
     videoDrivers = [ "intel" ];
-    deviceSection = ''
-      Option "TearFree" "true"
-    '';
     displayManager.sessionCommands = ''
       echo nonono > /tmp/xxyy
       (sleep 2 && ${pkgs.xorg.xrandr}/bin/xrandr --output eDP1 --rotate right)
