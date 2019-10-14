@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -14,20 +14,13 @@
     <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/games.nix>
     <stockholm/lass/2configs/bitcoin.nix>
-    <stockholm/lass/2configs/backup.nix>
     <stockholm/lass/2configs/wine.nix>
-    <stockholm/lass/2configs/blue-host.nix>
     <stockholm/lass/2configs/syncthing.nix>
     <stockholm/lass/2configs/nfs-dl.nix>
-    <stockholm/lass/2configs/prism-share.nix>
+    #<stockholm/lass/2configs/prism-share.nix>
     <stockholm/lass/2configs/ssh-cryptsetup.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.icarus;
-
-  environment.systemPackages = with pkgs; [
-    macchanger
-    dpass
-  ];
   programs.adb.enable = true;
 }
