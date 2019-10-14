@@ -72,26 +72,8 @@
 
   programs.adb.enable = true;
 
-  services.logind.lidSwitch = "ignore";
-  services.acpid = {
-    enable = true;
-    lidEventCommands = ''
-      export DISPLAY=:${toString config.services.xserver.display}
-      case "$1" in
-        "button/lid LID close")
-          ${pkgs.xorg.xinput}/bin/xinput disable 'pointer:  Mouse for Windows'
-          ${pkgs.xorg.xinput}/bin/xinput disable 'keyboard:  Mouse for Windows'
-          ${pkgs.acpilight}/bin/xbacklight -get > /tmp/pre_lid_brightness
-          ${pkgs.acpilight}/bin/xbacklight -set 0
-          ;;
-        "button/lid LID open")
-          ${pkgs.xorg.xinput}/bin/xinput enable 'pointer:  Mouse for Windows'
-          ${pkgs.xorg.xinput}/bin/xinput enable 'keyboard:  Mouse for Windows'
-          ${pkgs.acpilight}/bin/xbacklight -set $(cat /tmp/pre_lid_brightness)
-          ;;
-      esac
-    '';
-  };
+  services.logind.lidSwitch = "suspend";
+  lass.screenlock.enable = lib.mkForce false;
 
   systemd.services.suspend-again = {
     after = [ "suspend.target" ];
