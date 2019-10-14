@@ -260,7 +260,7 @@ in {
   };
   krebs.syncthing.folders."the_playlist" = {
     path = "/home/radio/music/the_playlist";
-    peers = [ "mors" "phone" "prism" ];
+    peers = [ "mors" "phone" "prism" "xerxes" ];
   };
   krebs.permown."/home/radio/music/the_playlist" = {
     owner = "radio";
