@@ -13,9 +13,8 @@
   };
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # TODO fix touchscreen
   boot.blacklistedKernelModules = [
-    "goodix"
+    "sdhci_pci"
   ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "sd_mod" ];
