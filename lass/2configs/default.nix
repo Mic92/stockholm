@@ -175,13 +175,7 @@ with import <stockholm/lib>;
     '';
   };
 
-  services.openssh = {
-    enable = true;
-    hostKeys = [
-      # XXX bits here make no science
-      { bits = 8192; type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
-    ];
-  };
+  services.openssh.enable = true;
 
   services.journald.extraConfig = ''
     SystemMaxUse=1G
