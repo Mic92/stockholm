@@ -117,8 +117,8 @@ myKeyMap =
     , ("<XF86AudioMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-mute @DEFAULT_SINK@ toggle")
     , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ +4%")
     , ("<XF86AudioLowerVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ -4%")
-    , ("<XF86MonBrightnessDown>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -time 0 -dec 1%")
-    , ("<XF86MonBrightnessUp>",   spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -time 0 -inc 1")
+    , ("<XF86MonBrightnessDown>", spawn "${pkgs.acpilight}/bin/xbacklight -time 0 -dec 1")
+    , ("<XF86MonBrightnessUp>",   spawn "${pkgs.acpilight}/bin/xbacklight -time 0 -inc 1")
     , ("<XF86Launch1>", gridselectWorkspace gridConfig W.view)
     , ("M4-C-k", spawn "${pkgs.xorg.xkill}/bin/xkill")
 
@@ -159,10 +159,10 @@ myKeyMap =
       ${pkgs.xclip}/bin/xclip -o | ${pkgs.xdotool}/bin/xdotool type -f -
     ''}")
 
-    , ("M4-<F5>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 1")
-    , ("M4-<F6>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 10")
-    , ("M4-<F7>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 33")
-    , ("M4-<F8>", spawn "${pkgs.xorg.xbacklight}/bin/xbacklight -set 100")
+    , ("M4-<F5>", spawn "${pkgs.acpilight}/bin/xbacklight -set 1")
+    , ("M4-<F6>", spawn "${pkgs.acpilight}/bin/xbacklight -set 10")
+    , ("M4-<F7>", spawn "${pkgs.acpilight}/bin/xbacklight -set 33")
+    , ("M4-<F8>", spawn "${pkgs.acpilight}/bin/xbacklight -set 100")
 
     , ("M4-<F9>", spawn "${pkgs.redshift}/bin/redshift -O 4000 -g 0.9:0.8:0.8")
     , ("M4-<F10>", spawn "${pkgs.redshift}/bin/redshift -x")
