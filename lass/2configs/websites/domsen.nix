@@ -26,7 +26,6 @@ in {
     ./default.nix
     ./sqlBackup.nix
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
-    (servePage [ "jarugadesign.de" "www.jarugadesign.de" ])
     (servePage [
       "freemonkey.art"
       "www.freemonkey.art"
@@ -41,6 +40,7 @@ in {
       "youthtube.xyz"
       "joemisch.com"
       "weirdwednesday.de"
+      "jarugadesign.de"
 
       "www.apanowicz.de"
       "www.nirwanabluete.de"
@@ -50,6 +50,7 @@ in {
       "www.ubikmedia.de"
       "www.joemisch.com"
       "www.weirdwednesday.de"
+      "www.jarugadesign.de"
 
       "aldona2.ubikmedia.de"
       "apanowicz.ubikmedia.de"
@@ -64,6 +65,7 @@ in {
       "freemonkey.ubikmedia.de"
       "jarugadesign.ubikmedia.de"
       "crypto4art.ubikmedia.de"
+      "jarugadesign.ubikmedia.de"
     ])
   ];
 
@@ -250,14 +252,13 @@ in {
       lines = 1000;
     };
   };
+
   services.restic.backups.domsen = {
     initialize = true;
-    extraOptions = [ "sftp.command='ssh efOVcMWSZ@wilhelmstr2.duckdns.org -S none -v -p 52222 -i ${toString <secrets> + "/ssh.id_ed25519"} -s sftp'" ];
-    repository = "sftp:efOVcMWSZ@wilhelmstr2.duckdns.org:/mnt/UBIK-9TB-Pool/BACKUP/XXXX-MAX-UND-ANDERES";
+    repository = "/backups/domsen";
     passwordFile = toString <secrets> + "/domsen_backup_pw";
     timerConfig = { OnCalendar = "00:05"; RandomizedDelaySec = "5h"; };
     paths = [
-      "/srv/http"
       "/home/domsen/Mail"
       "/home/ms/Mail"
       "/home/klabusterbeere/Mail"
@@ -270,31 +271,31 @@ in {
   };
 
   boot.kernel.sysctl."fs.inotify.max_user_watches" = "1048576";
+  krebs.syncthing.folders = {
+    domsen-backups = {
+      path = "/backups/domsen";
+      peers = [ "domsen-backup" ];
+    };
+    domsen-backup-srv-http = {
+      path = "/srv/http";
+      peers = [ "domsen-backup" ];
+    };
+  };
+
+  system.activationScripts.domsen-backups = ''
+    ${pkgs.coreutils}/bin/chmod 750 /backups
+  '';
+
   krebs.permown = {
-    "/srv/http/ubikmedia.de" = {
-      owner = "domsen";
-      group = "nginx";
+    "/backups/domsen" = {
+      owner = "backup";
+      group = "syncthing";
       umask = "0007";
     };
-    "/srv/http/o.ubikmedia.de" = {
-      owner = "domsen";
+    "/srv/http" = {
+      owner = "syncthing";
       group = "nginx";
       umask = "0007";
-    };
-    "/srv/http/freemonkey.art" = {
-      owner = "domsen";
-      group = "nginx";
-      umask = "0002";
-    };
-    "/srv/http/jarugadesign.de" = {
-      owner = "domsen";
-      group = "nginx";
-      umask = "0002";
-    };
-    "/srv/http/reich-gebaeudereinigung.de" = {
-      owner = "domsen";
-      group = "nginx";
-      umask = "0002";
     };
   };
 
