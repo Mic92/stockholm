@@ -8,6 +8,7 @@
       zsh-newuser-install() { :; }
     '';
     interactiveShellInit = ''
+      unsetopt nomatch # no matches found urls
       setopt autocd extendedglob
       bindkey -e
 
