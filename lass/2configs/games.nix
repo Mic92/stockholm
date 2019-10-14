@@ -56,15 +56,6 @@ let
   '';
 
 in {
-  environment.systemPackages = with pkgs; [
-    dolphinEmu
-    doom1
-    doom2
-    vdoom1
-    vdoom2
-    vdoomserver
-  ];
-
   users.extraUsers = {
     games = {
       name = "games";
@@ -76,7 +67,14 @@ in {
       packages = with pkgs; [
         minecraft
         steam-run
+        scummvm
         dolphinEmu
+        doom1
+        doom2
+        vdoom1
+        vdoom2
+        vdoomserver
+        retroarchBare
       ];
     };
   };
