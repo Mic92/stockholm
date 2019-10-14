@@ -19,7 +19,7 @@
         };
       };
     }
-    (if lib.pathExists (./. + "/1systems/${name}/source.nix") then
+    (if (lib.pathExists (./. + "/1systems/${name}/source.nix")) && (! test) then
       import (./. + "/1systems/${name}/source.nix") { inherit lib pkgs test; }
     else
       {}
