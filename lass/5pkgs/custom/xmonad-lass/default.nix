@@ -109,6 +109,7 @@ myKeyMap =
     [ ("M4-<F11>", spawn "${config.lass.screenlock.command}")
     , ("M4-C-p", spawn "${pkgs.scrot}/bin/scrot ~/public_html/scrot.png")
     , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
+    , ("M4-S-p", spawn "${pkgs.otpmenu}/bin/otpmenu")
     , ("M4-o", spawn "${pkgs.brain}/bin/brainmenu --type")
     , ("M4-i", spawn "${pkgs.dpass}/bin/dpassmenu --type")
     , ("M4-z", spawn "${pkgs.emot-menu}/bin/emoticons")
