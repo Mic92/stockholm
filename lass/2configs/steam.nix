@@ -11,9 +11,8 @@
   #
   ##TODO: make steam module
   nixpkgs.config.steam.java = true;
-  environment.systemPackages = with pkgs; [
-    steam
-  ];
+
+  users.users.games.packages = [ pkgs.steam ];
 
   #ports for inhome streaming
   krebs.iptables = {
