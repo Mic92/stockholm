@@ -45,7 +45,7 @@
   swapDevices = [ ];
 
   boot.extraModprobeConfig = ''
-    options zfs zfs_arc_max=1073741824
+    options zfs zfs_arc_max=107374182
   '';
 
   nix.maxJobs = lib.mkDefault 4;
