@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  pkg = (
+  pkg = pkgs.callPackage (
     pkgs.fetchgit {
       url = "https://git.shackspace.de/rz/muell_mail";
       rev = "861ec25ab22797d8961efb32e72d79e113aa9f0f";
