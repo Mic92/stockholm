@@ -28,20 +28,6 @@ in {
         };
       };
     };
-    kruck = {
-      owner = config.krebs.users.palo;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.23.3";
-          tinc.port = 720;
-          aliases = [
-            "kruck.r"
-            "video.kruck.r"
-          ];
-          tinc.pubkey = tinc-for "palo";
-        };
-      };
-    };
     schasch = {
       owner = config.krebs.users.palo;
       nets = {
@@ -53,6 +39,19 @@ in {
         };
       };
       syncthing.id = "FLY7DHI-TJLEQBJ-JZNC4YV-NBX53Z2-ZBRWADL-BKSFXYZ-L4FMDVH-MOSEVAQ";
+    };
+    sterni = {
+      owner = config.krebs.users.palo;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.23.3";
+          tinc.port = 720;
+          aliases = [
+            "sterni.r"
+          ];
+          tinc.pubkey = tinc-for "palo";
+        };
+      };
     };
     workhorse = {
       owner = config.krebs.users.palo;
@@ -79,9 +78,7 @@ in {
   };
   users = {
     palo = {
-    };
-    palo-pepe = {
-      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCe3j1dk8o7e0cFn+RepOjdeYcS0YcG0d6NnsMoq8pjqzLRuvOVN4CmsuRo4UJtWOUVv8kIWLcegks2RXbKOSTFAnvEIpPlSmL3BgvFGmUiOmPw1w93yxdVnfd9kJ6SBNuS+kFspKPvOEV9yVpjTywKZ0qKWjRd89Vz2+8aFJ/R3hyE+YqpzlzYbrucEIXbEWESqnzrx61NrWwd1ueHj0RYMDBjIJjVfIIK3W32vQ//pYJio1di0PpOPK2Ya0yugSixymuQBvzCgaedVeLdJ0k1d7d5iVb4LjCR8zg0Jnf1RLfpqRrFYwMJpwuhtIEevfNrhzqZA58QgHO6iOg50FeaD5k1rlWfoOvX2rcV5iqCC9jClIfMKzePdm+MeVorBXp+bflOhyPJG+Qrz6NTE9Ohe5A71Z0bBa96MEoW1hyrLCn0+z+Cx5kt7n2QzAAa/VPNjRDZeHbsu26MrvViEoh+FcPqx4DUIUaDRs/TNIvMGAl14E6gur68AI01a0PZJ/gnqZeOJKuyz4pKT0nIcg0EvkjXM2uEJ9m8h4IBAqTUYMZYm7iJBfpbwT6ePxFfah4q960orBUwW87CyPu/wDGmDblQ7dpkuw+skpzNgOGzerDyGAGKOsjGfYZpqsv9303S2f7884NAIK1ohgpMELytEYpY4YNi2KQYfHhgoQRJ5w== palo@pepe";
+      pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDBYNJVuyyZmc2pCkLWjhl0/hMMb7elmI81/9LAGtk8Tz4TmVderTMohwQkaTYznwPOPuKfU1sSMLCB8rYXdAO5nqWC4bGjXJ/+D8/UKfGjSqRQ7UkfpOF3NAm+pqUSFjaVXi1BWd+jxmsD0uRks0PyNSywZfgjn5LYpD3SpxyFy/17P/PJ9vX6PELjeYvNGH3l5cXDwYky3ZZJol7quBJ5yrA6I536A4wNDzg2ow+MRVu51/nIJdnbbsC/dDHgmdRWnStOzvsA+xSEMeKvLW3CaSPINr/bMGxOPrefr79bg59gkw9Wxp51fkx0o18N1liTRfWXau+GFNGMxFluELhfGXYOH9HLedLt8H38zs5vgJ9IY+tlOzMKud5njiNkuG503AiqY2H7coN7VeVA5+6L7tmwFbCMhPal4MS0VKHNBmCTDY5QMURYUajKiUh8n5IcbuTsPM+lEszm16g5iB+XQ1vpjza5ds6DRL1H6pUF/UpUzYUlqh2RnE+CyLsFO2MB/o72NoSWRfmn7/nsg6eEg/9kSn+dwj2ythjuEkMG28Yhm/XjaGnuAE/ZpIeRDozIQNGcHpzPHMd95olfNJW7+fLi+CvSFZa9l+tdS8PoRnCdHOsO4zvESJZ2rDn0Zt0Az6XNRJfYTABDlYPGCnWN4vmlnEJqQARSSiKBDhSgPw== palo@workout";
     };
   };
 }
