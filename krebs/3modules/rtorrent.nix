@@ -333,18 +333,18 @@ let
   rutorrent-imp = {
     services.phpfpm = {
       # phpfpm does not have an enable option
-      poolConfigs  = {
-        rutorrent = ''
-          user =  ${nginx-user}
-          group =  ${nginx-group}
-          listen = ${fpm-socket}
-          listen.owner = ${nginx-user}
-          listen.group = ${nginx-group}
-          pm = dynamic
-          pm.max_children = 5
-          pm.start_servers = 2
-          pm.min_spare_servers = 1
-          pm.max_spare_servers = 3
+      pools.rutorrent = {
+        user =  nginx-user;
+        group =  nginx-group;
+        listen = fpm-socket;
+        settings = {
+          "pm" = "dynamic";
+          "pm.max_children" = 5;
+          "pm.start_servers" = 2;
+          "pm.min_spare_servers" = 1;
+          "pm.max_spare_servers" = 3;
+        };
+        extraConfig = ''
           chdir = /
           php_admin_value[error_log] = 'stderr'
           php_admin_flag[log_errors] = on
