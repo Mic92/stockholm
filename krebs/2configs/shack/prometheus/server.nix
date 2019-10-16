@@ -28,7 +28,6 @@
         "-storage.local.index-cache-size.label-name-to-label-values 2097152"
         "-storage.local.index-cache-size.label-pair-to-fingerprints 41943040"
       ];
-      alertmanagerURL = [ "http://localhost:9093" ];
       rules = [
         ''
           ALERT node_down
@@ -159,6 +158,12 @@
               };
             }
           ];
+        }
+      ];
+      alertmanagers = [
+        { scheme = "http";
+          path_prefix = "/";
+          static_configs = [ { targets = [ "localhost:9093" ]; } ];
         }
       ];
       alertmanager = {

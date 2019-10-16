@@ -110,6 +110,10 @@ let
           add_header X-Content-Type-Options nosniff;
           add_header X-XSS-Protection "1; mode=block";
           add_header X-Robots-Tag none;
+          add_header X-Frame-Options SAMEORIGIN;
+          add_header X-Download-Options noopen;
+          add_header X-Permitted-Cross-Domain-Policies none;
+
           # Optional: Don't log access to assets
           access_log off;
         '';
@@ -118,23 +122,25 @@ let
           access_log off;
         '';
       };
-      services.phpfpm.poolConfigs."${domain}" = ''
-        listen = ${socket}
-        user = nginx
-        group = nginx
-        pm = dynamic
-        pm.max_children = 32
-        pm.max_requests = 500
-        pm.start_servers = 2
-        pm.min_spare_servers = 2
-        pm.max_spare_servers = 5
-        listen.owner = nginx
-        listen.group = nginx
-        php_admin_value[error_log] = 'stderr'
-        php_admin_flag[log_errors] = on
-        env[PATH] = ${lib.makeBinPath [ pkgs.php ]}
-        catch_workers_output = yes
-      '';
+      services.phpfpm.pools."${domain}" = {
+          user = "nginx";
+          group = "nginx";
+          listen = socket;
+          settings = {
+            "pm" = "dynamic";
+            "pm.max_children" = 32;
+            "pm.max_requests" = 500;
+            "pm.start_servers" = 2;
+            "pm.min_spare_servers" = 2;
+            "pm.max_spare_servers" = 5;
+          };
+          extraConfig = ''
+            php_admin_value[error_log] = 'stderr'
+            php_admin_flag[log_errors] = on
+            env[PATH] = ${lib.makeBinPath [ pkgs.php ]}
+            catch_workers_output = yes
+        '';
+      };
       services.phpfpm.phpOptions = ''
         opcache.enable=1
         opcache.enable_cli=1
@@ -171,27 +177,29 @@ in  {
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
   services.redis.enable = true;
-  services.mysql = {
-    enable = false;
-    package = pkgs.mariadb;
-    rootPassword = config.krebs.secret.files.mysql_rootPassword.path;
-    initialDatabases = [
-      # Or use writeText instead of literalExample?
-      #{ name = "nextcloud"; schema = literalExample "./nextcloud.sql"; }
-      {
-        name = "nextcloud";
-        schema = pkgs.writeText "nextcloud.sql"
-        ''
-        create user if not exists 'nextcloud'@'localhost' identified by 'password';
-        grant all privileges on nextcloud.* to 'nextcloud'@'localhost' identified by 'password';
-        '';
-      }
-    ];
-  };
+
+  #services.mysql = {
+  #  enable = false;
+  #  package = pkgs.mariadb;
+  #  rootPassword = config.krebs.secret.files.mysql_rootPassword.path;
+  #  initialDatabases = [
+  #    # Or use writeText instead of literalExample?
+  #    #{ name = "nextcloud"; schema = literalExample "./nextcloud.sql"; }
+  #    {
+  #      name = "nextcloud";
+  #      schema = pkgs.writeText "nextcloud.sql"
+  #      ''
+  #      create user if not exists 'nextcloud'@'localhost' identified by 'password';
+  #      grant all privileges on nextcloud.* to 'nextcloud'@'localhost' identified by 'password';
+  #      '';
+  #    }
+  #  ];
+  #};
+
   # dataDir is only defined after mysql is enabled
-  # krebs.secret.files.mysql_rootPassword = {
-  #   path = "${config.services.mysql.dataDir}/mysql_rootPassword";
-  #   owner.name = "root";
-  #   source-path = toString <secrets> + "/mysql_rootPassword";
-  # };
+  #krebs.secret.files.mysql_rootPassword = {
+  #  path = "${config.services.mysql.dataDir}/mysql_rootPassword";
+  #  owner.name = "root";
+  #  source-path = toString <secrets> + "/mysql_rootPassword";
+  #};
 }

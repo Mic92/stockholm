@@ -23,25 +23,22 @@ let
 in {
   state = [ base-dir ];
   services.phpfpm = {
-    # phpfpm does not have an enable option
-    poolConfigs  = {
-      euer-wiki = ''
-        user =  ${user}
-        group =  ${group}
-        listen = ${fpm-socket}
-        listen.owner = ${user}
-        listen.group = ${group}
-        env[twconf] = ${base-cfg};
-        pm = dynamic
-        pm.max_children = 5
-        pm.start_servers = 2
-        pm.min_spare_servers = 1
-        pm.max_spare_servers = 3
-        chdir = /
-        php_admin_value[error_log] = 'stderr'
-        php_admin_flag[log_errors] = on
-        catch_workers_output = yes
-      '';
+    pools.euer-wiki = {
+      inherit user group;
+      listen = fpm-socket;
+      settings = {
+        "pm" = "dynamic";
+        "pm.max_children" = 5;
+        "pm.start_servers" = 2;
+        "pm.min_spare_servers" = 1;
+        "pm.max_spare_servers" = 3;
+        "chdir" = "/";
+        "php_admin_value[error_log]" = "stderr";
+        "php_admin_flag[log_errors]" = "on";
+        "catch_workers_output" = "yes";
+
+      };
+      phpEnv.twconf = base-cfg;
     };
   };
 
