@@ -68,6 +68,7 @@ with import <stockholm/lib>;
   services.xserver.layout = "de";
   services.xserver.xkbOptions = "eurosign:e";
 
+  services.xserver.libinput.enable = false;
   services.xserver.synaptics = {
     enable = true;
     twoFingerScroll = true;
