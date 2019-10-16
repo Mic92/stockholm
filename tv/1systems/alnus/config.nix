@@ -65,10 +65,13 @@ with import <stockholm/lib>;
     enable = true;
     layout = "de";
     xkbOptions = "eurosign:e";
+
+    libinput.enable = false;
     synaptics = {
       enable = true;
       twoFingerScroll = true;
     };
+
     desktopManager.xfce.enable = true;
     displayManager.auto = {
       enable = true;
