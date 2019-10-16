@@ -31,7 +31,7 @@ let
   else
     let
       name = (lib.head sortedPaths).name;
-    in pkgs.writeScriptBin "browser-select2" ''
+    in pkgs.writeScriptBin "browser-select" ''
       ${config.lass.xjail-bins.${name}}/bin/${name} "$@"
     ''
   ;
