@@ -664,42 +664,5 @@ in {
       mail = "lassulus@gmail.com";
       pubkey = builtins.readFile ./ssh/android.rsa;
     };
-    lass-helios = {
-      mail = "lass@helios.r";
-      pubkey = builtins.readFile ./ssh/helios.rsa;
-    };
-    lass-uriel = {
-      mail = "lass@uriel.r";
-      pubkey = builtins.readFile ./ssh/uriel.rsa;
-    };
-    lass-shodan = {
-      mail = "lass@shodan.r";
-      pubkey = builtins.readFile ./ssh/shodan.rsa;
-      pgp.pubkeys.default = builtins.readFile ./pgp/shodan.pgp;
-    };
-    lass-icarus = {
-      mail = "lass@icarus.r";
-      pubkey = builtins.readFile ./ssh/icarus.rsa;
-      pgp.pubkeys.default = builtins.readFile ./pgp/icarus.pgp;
-    };
-    lass-xerxes = {
-      mail = "lass@xerxes.r";
-      pubkey = builtins.readFile ./ssh/xerxes.ed25519;
-    };
-    lass-daedalus = {
-      mail = "lass@daedalus.r";
-      pubkey = builtins.readFile ./ssh/daedalus.rsa;
-    };
-    prism-repo-sync = {
-      pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKhpCKTnSq6VDJPB+0NiHu2ZxSKEIxHN6uPAPnbXYNCe";
-      mail = "lass@prism.r";
-    };
-    mors-repo-sync = {
-      pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGv6N/UjFnX5vUicT9Sw0+3x4mR0760iaVWZ/JDtdV4h";
-      mail = "lass@mors.r";
-    };
-    wine-mors = {
-      pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEKfTIKmbe1RjX1fjAn//08363zAsI0CijWnaYyAC842";
-    };
   };
 }
