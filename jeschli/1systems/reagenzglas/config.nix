@@ -49,7 +49,9 @@
      isNormalUser = true;
   };
 
-  services.xserver.synaptics.enable = true;
+#  services.xserver.synaptics.enable = true;
+  services.xserver.libinput.enable = true;
+  services.xserver.libinput.disableWhileTyping = true;
 
   #Enable ssh daemon
   services.openssh.enable = true;
