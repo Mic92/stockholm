@@ -53,6 +53,9 @@ with import <stockholm/lib>;
     systemd.services = flip mapAttrs' config.krebs.reaktor2 (_: cfg:
       nameValuePair cfg.systemd-service-name {
         after = [ "network.target" ];
+        environment = {
+          LC_ALL = "en_US.UTF-8";
+        };
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = cfg.username;
