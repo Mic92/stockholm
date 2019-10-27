@@ -53,6 +53,13 @@ let
     (ido-mode t)
   '';
 
+  helm = ''
+    (helm-mode 1)
+    (global-set-key (kbd "M-x") #'helm-M-x)
+    (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
+    (global-set-key (kbd "C-x C-f") #'helm-find-files)
+  '';
+
   magit = ''
     (global-set-key (kbd "C-x g") 'magit-status) ; "Most Magit commands are commonly invoked from the status buffer"
 
@@ -161,10 +168,9 @@ let
 
     ${evilMode}
     ${goMode}
-    ${ido}
+    ${helm}
     ${magit}
     ${orgMode}
-    ${recentFiles}
     ${rustDevelopment}
     ${theme}
     ${windowCosmetics}
@@ -175,9 +181,17 @@ let
 
   #emacsWithCustomPackages
   emacsPkgs= epkgs: [
-#testing
+    #testing
+    epkgs.melpaPackages.web-mode
+    epkgs.melpaPackages.js2-mode
+    epkgs.melpaPackages.xref-js2
+
+    epkgs.melpaPackages.academic-phrases
+
     epkgs.melpaPackages.gitlab
     epkgs.melpaPackages.forge
+    epkgs.melpaPackages.helm
+    epkgs.melpaPackages.weechat
 
 # emacs convenience
     epkgs.melpaPackages.ag

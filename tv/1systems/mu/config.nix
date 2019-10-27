@@ -102,6 +102,7 @@ with import <stockholm/lib>;
   services.xserver.xkbOptions = "eurosign:e";
 
   # TODO this is host specific
+  services.xserver.libinput.enable = false;
   services.xserver.synaptics = {
     enable = true;
     twoFingerScroll = true;

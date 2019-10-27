@@ -5,6 +5,7 @@
     [
     <stockholm/jeschli>
     <stockholm/jeschli/2configs/emacs.nix>
+    <stockholm/jeschli/2configs/firefox.nix>
     <stockholm/jeschli/2configs/python.nix>
        ./desktop.nix
        ./i3-configuration.nix
@@ -35,7 +36,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     wget vim git
-    firefox
     rofi
     ag
   ];
@@ -49,7 +49,9 @@
      isNormalUser = true;
   };
 
-  services.xserver.synaptics.enable = true;
+#  services.xserver.synaptics.enable = true;
+  services.xserver.libinput.enable = true;
+  services.xserver.libinput.disableWhileTyping = true;
 
   #Enable ssh daemon
   services.openssh.enable = true;

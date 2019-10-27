@@ -364,13 +364,8 @@ with import <stockholm/lib>;
           uid = genid "download";
           openssh.authorizedKeys.keys = with config.krebs.users; [
             lass.pubkey
-            lass-shodan.pubkey
-            lass-icarus.pubkey
-            lass-daedalus.pubkey
-            lass-helios.pubkey
             lass-android.pubkey
             makefu.pubkey
-            wine-mors.pubkey
           ];
         };
       };

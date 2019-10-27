@@ -52,8 +52,6 @@ with import <stockholm/lib>;
         root = {
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
-            config.krebs.users.lass-shodan.pubkey
-            config.krebs.users.lass-icarus.pubkey
           ];
         };
       };

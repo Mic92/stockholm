@@ -23,7 +23,6 @@ with import <stockholm/lib>;
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass-mors.pubkey
             config.krebs.users.lass-blue.pubkey
-            config.krebs.users.lass-xerxes.pubkey
             config.krebs.users.lass-yubikey.pubkey
           ];
         };
@@ -42,7 +41,6 @@ with import <stockholm/lib>;
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass-mors.pubkey
             config.krebs.users.lass-blue.pubkey
-            config.krebs.users.lass-xerxes.pubkey
             config.krebs.users.lass-yubikey.pubkey
           ];
         };
