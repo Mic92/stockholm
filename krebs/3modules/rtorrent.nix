@@ -8,7 +8,7 @@ let
 
   nginx-user = config.services.nginx.user;
   nginx-group = config.services.nginx.group;
-  fpm-socket = "/var/run/php5-fpm-rutorrent.sock";
+  fpm-socket = config.services.phpfpm.pools.rutorrent.socket;
 
   webdir = rucfg.webdir;
   systemd-logfile = cfg.workDir + "/rtorrent-systemd.log";
@@ -332,12 +332,11 @@ let
 
   rutorrent-imp = {
     services.phpfpm = {
-      # phpfpm does not have an enable option
       pools.rutorrent = {
         user =  nginx-user;
         group =  nginx-group;
-        listen = fpm-socket;
         settings = {
+          "listen.owner" = nginx-user;
           "pm" = "dynamic";
           "pm.max_children" = 5;
           "pm.start_servers" = 2;
