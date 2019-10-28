@@ -6,7 +6,7 @@ let
       url = "https://git.shackspace.de/rz/muellshack";
       rev = "d8a5e2d4c0a22804838675ac42b468299dcd9a76";
       sha256 = "0ff6q64dgdxmpszp94z100fdic175b1vvxn4crg8p0jcabzxsv0m";
-    }) {};
+    }) { mkYarnPackage = pkgs.yarn2nix-moretea.mkYarnPackage; };
     home = "/var/lib/muellshack";
     port = "8081";
 in {
