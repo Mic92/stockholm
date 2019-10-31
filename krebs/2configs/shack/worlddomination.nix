@@ -65,7 +65,7 @@ let
     };
   LinkHeader = pythonPackages.buildPythonPackage {
     name = "LinkHeader-0.4.3";
-    src = pkgs.fetchurl { url = "https://pypi.python.org/packages/27/d4/eb1da743b2dc825e936ef1d9e04356b5701e3a9ea022c7aaffdf4f6b0594/LinkHeader-0.4.3.tar.gz"; sha256 = "7fbbc35c0ba3fbbc530571db7e1c886e7db3d718b29b345848ac9686f21b50c3"; };
+    src = pkgs.fetchurl { url = "https://files.pythonhosted.org/packages/27/d4/eb1da743b2dc825e936ef1d9e04356b5701e3a9ea022c7aaffdf4f6b0594/LinkHeader-0.4.3.tar.gz"; sha256 = "7fbbc35c0ba3fbbc530571db7e1c886e7db3d718b29b345848ac9686f21b50c3"; };
     propagatedBuildInputs = [ ];
     meta = with pkgs.stdenv.lib; {
       homepage = "";

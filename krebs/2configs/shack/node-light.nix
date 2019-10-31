@@ -4,9 +4,9 @@ let
   pkg = pkgs.callPackage (
     pkgs.fetchgit {
       url = "https://git.shackspace.de/rz/node-light.git";
-      rev = "a32c782650c4cc0adf51250fe249167d7246c59b";
-      sha256 = "0clvcp1m2ay0a9ibh7s21q7d9a6nam3497bysvc6mdygblks22qy";
-    }) {};
+      rev = "32d8064db5172b8068f633211c8bd5688b2c8773";
+      sha256 = "14jzhs7pp3hq42wq3cwqarivn1z7vcgksfzfqfc4yyh21096yi1j";
+    }) { mkYarnPackage = pkgs.yarn2nix-moretea.mkYarnPackage; };
     home = "/var/lib/node-light";
     port = "8082";
 in {
