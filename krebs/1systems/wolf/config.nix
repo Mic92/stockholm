@@ -117,10 +117,6 @@ in
 
   fileSystems."/" = { device = "/dev/disk/by-label/nixos"; fsType = "ext4"; };
 
-  swapDevices = [
-    { device = "/dev/disk/by-label/swap";  }
-  ];
-
   users.extraUsers.root.openssh.authorizedKeys.keys = [
     config.krebs.users."0x4A6F".pubkey
     config.krebs.users.ulrich.pubkey
