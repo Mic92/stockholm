@@ -129,7 +129,6 @@ with import <stockholm/lib>;
     cac-api
     sshpass
     get
-    teamspeak_client
     hashPassword
     urban
     mk_sql_pair
