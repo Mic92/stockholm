@@ -354,6 +354,62 @@ in {
         };
       };
     };
+    amy = {
+      owner = config.krebs.users.Mic92;
+      nets = rec {
+        retiolum = {
+          addrs = [
+            config.krebs.hosts.donna.nets.retiolum.ip4.addr
+            config.krebs.hosts.donna.nets.retiolum.ip6.addr
+          ];
+          ip4.addr = "10.243.29.181";
+          aliases = [ "amy.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAr3jQRA1+hLKYVgHJA2ax5W8J3GVMTnaGpYw9Q2xXXrX/jxLZ6Ia8
+            hBjIcCBDVL5Q3FnyrKB9NJeeIvCOKg8WG+8O0+wKcePKd0Vhbsx4Whog/6PWs6qh
+            q2sURs2tp1hjHks4kZo2WtiYD7Ue9HHdV6FlUO6yuBV0bW2RzHdLPCDSGxnQVkBM
+            tSwAvMCZwvVBiv4m6RyMXqmpdbAPBzgJcmJS0FY+zGxpiwsR/AdoVvnzYyFMCVpG
+            iFl5+k9OGhUJq72MwAXzjW5ZdCPrG+2Dd+QBhhtIMJGA2sJiJteT8vdvpTNCiHJ/
+            HnW7movliN2mW86qwo7QqB5v0c9f9TjfpOld7sS/4vE3zlGi/Stf6SQWaoXez/u3
+            /P9GzupcYgj76m8Z3j7BMHXCBw8iwP2pZpL9hnLdIyCcyLrzXDIzq4hlt60DPhSU
+            klTDBUA/cUdSJGcSn2N+WHLOTfI6qeBNKqcTk70OQsa69jAJeAtA+I9OprNYOXqb
+            MmQakNNlrTaNtGQxfQqEL+wqHlo8CVDGm3O9pQSNF309P4TLNU1EYm+ItScNiVCE
+            DKhcgvE6xHCwZnVyJN8MMy1CVyDmnHVYoaTEZ2cCvNi/hXIXgO9KWjSpAv5tP764
+            UkOE4dlDpEW6G1pNf84BERfRYGDj29A/Jk9LJC/6D09QJXNu18HR0sUCAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+    clara = {
+      owner = config.krebs.users.Mic92;
+      nets = rec {
+        retiolum = {
+          addrs = [
+            config.krebs.hosts.donna.nets.retiolum.ip4.addr
+            config.krebs.hosts.donna.nets.retiolum.ip6.addr
+          ];
+          ip4.addr = "10.243.29.182";
+          aliases = [ "clara.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEA07G1n2sA804nnjWQzq0Fi9i6kxJUo+jVJjtkm5unw3hjflAAd/3d
+            WN+01GdJCk/gr7DfU/Xr5KnR39Z3ADoT1tbUb+i5AJZ5/8VHUwWM8D8mQAam6LBf
+            UEeLxhVH8rG6lHaKwVi9oe4gPhgptUOzX/YIlJOMYDlYRxc7Wbj7YQOAKlPuTAjY
+            Z5bLswfkqTMO0cioJNwwMCNWSMJf3jbKi3eTQ36sf7TDMEneNGSBUpeSjGddoNT/
+            rrVIDDT8tGmtACKr+3Y0H+EA2K5IxdQKKfnPRR31RBWiTkEXBbaJzYO/ZV5/xlbN
+            wmblskwq9d9IwDY7qeMctci+ZUZ3epG8MUwYa4faOrgmmkQpa5B+6UOMzw/WDJEc
+            jTfvSzfPo4anoj8C+MOQYzRvYmp60YEZKomv2BQdBvpGIpUul8WAR2aV0K+wz66e
+            mUamljAXmLiPxgGKduX5VFVuXzYxeMiBBujQCLTjc+xTB2EdwihxNX1rkxz10BDc
+            WrgPV+/VVyThKhOvVCifWARHtT2VGcZazfQOW/y3ZmEPOYuc5ZvrSEiMeG3f64+v
+            UU8cQZ3yBLIhTtC+38pRlsdBQHt526q0j0rrnd30JXVAUdWBunP2UJ5QGtA8/mWn
+            cWSlvRf5sfbyrISz6+mLPM2qGHnCkKwORNxmv/1DY07O3Rn6hX0OY4ECAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     inspector = {
       owner = config.krebs.users.Mic92;
       nets = rec {
