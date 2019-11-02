@@ -3,7 +3,7 @@
     ./config.nix
   ];
 
-  hardware.enableAllFirmware = true;
+  hardware.enableRedistributableFirmware = true;
   boot = {
     #kernelParams = [
     #  "acpi.brightness_switch_enabled=0"
