@@ -53,20 +53,24 @@ in {
         elevation = 303;
         auth_providers = [
           { type = "homeassistant";}
-          { type = "legacy_api_password";}
           { type = "trusted_networks";
-            # allow_bypass_login = true;
+            trusted_networks = [
+              "127.0.0.1/32"
+              "10.42.0.0/16"
+              "::1/128"
+              "fd00::/8"
+            ];
           }
         ];
       };
       # https://www.home-assistant.io/components/influxdb/
-      influxdb = {
-        database = "hass";
-        tags = {
-          instance = "wolf";
-          source = "hass";
-        };
-      };
+      #influxdb = {
+      #  database = "hass";
+      #  tags = {
+      #    instance = "wolf";
+      #    source = "hass";
+      #  };
+      #};
       mqtt = {
         broker = "localhost";
         port = 1883;
@@ -110,26 +114,19 @@ in {
         base_url = "http://hass.shack";
         use_x_forwarded_for = true;
         trusted_proxies = "127.0.0.1";
-        api_password = "shackit";
-        trusted_networks = [
-          "127.0.0.1/32"
-          "10.42.0.0/16"
-          "::1/128"
-          "fd00::/8"
-        ];
       };
-      conversation = {};
-      history = {};
-      logbook = {};
+      #conversation = {};
+      #history = {};
+      #logbook = {};
       tts = [
         { platform = "google";
           language = "de";
         }
-        { platform = "picotts";
-          language = "de-DE";
-        }
+        #{ platform = "picotts";
+        #  language = "de-DE";
+        #}
       ];
-      recorder = {};
+      #recorder = {};
       sun = {};
 
       automation = wasser.automation;
