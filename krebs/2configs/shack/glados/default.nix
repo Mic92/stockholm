@@ -39,8 +39,6 @@ in {
     })).override {
       extraPackages = ps: with ps; [
         python-forecastio jsonrpc-async jsonrpc-websocket mpd2
-        (callPackage ./deps/gtts-token.nix { })
-        (callPackage ./deps/pyhaversion.nix { })
       ];
     };
     autoExtraComponents = true;
@@ -99,8 +97,7 @@ in {
       ];
 
       sensor =
-        [{ platform = "version"; }]
-        ++ (import ./sensors/hass.nix)
+           (import ./sensors/hass.nix)
         ++ (import ./sensors/power.nix)
         ++ shackopen.sensor;
 
@@ -109,8 +106,8 @@ in {
       camera = [];
 
       frontend = { };
+      config = { };
       http = {
-        # TODO: https://github.com/home-assistant/home-assistant/issues/16149
         base_url = "http://hass.shack";
         use_x_forwarded_for = true;
         trusted_proxies = "127.0.0.1";
@@ -119,7 +116,7 @@ in {
       #history = {};
       #logbook = {};
       tts = [
-        { platform = "google";
+        { platform = "google_translate";
           language = "de";
         }
         #{ platform = "picotts";
