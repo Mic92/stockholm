@@ -39,6 +39,7 @@
     wget vim git
     rofi
     ag
+    alacritty
   ];
 
   users.users.ombi = {
