@@ -33,8 +33,7 @@ in {
       extraPackages = ps: with ps; [
         pkgs.pico2wave
         python-forecastio jsonrpc-async jsonrpc-websocket mpd2
-        (callPackage ./deps/gtts-token.nix { })
-        (callPackage ./deps/pyhaversion.nix { })
+        (callPackage ./deps/openwrt-luci-rpc.nix { })
       ];
     };
     autoExtraComponents = true;
@@ -47,8 +46,16 @@ in {
         elevation = 303;
         auth_providers = [
           { type = "homeassistant";}
-          { type = "legacy_api_password";}
+          { type = "legacy_api_password";
+            api_password = "sistemas";
+          }
           { type = "trusted_networks";
+            trusted_networks = [
+              "127.0.0.1/32"
+              "192.168.8.0/24"
+              "::1/128"
+              "fd00::/8"
+            ];
             # allow_bypass_login = true;
           }
         ];
@@ -119,7 +126,7 @@ in {
         aramark.binary_sensor;
 
       sensor =
-        [{ platform = "version"; }] ++
+        # [{ platform = "version"; }] ++ # pyhaversion
         (import ./sensor/pollen.nix) ++
         (import ./sensor/espeasy.nix) ++
         (import ./sensor/airquality.nix) ++
@@ -140,20 +147,15 @@ in {
       http = {
         # TODO: https://github.com/home-assistant/home-assistant/issues/16149
         base_url = "http://192.168.8.11:8123";
-        api_password = "sistemas";
-        trusted_networks = [
-          "127.0.0.1/32"
-          "192.168.8.0/24"
-          "::1/128"
-          "fd00::/8"
-        ];
       };
       conversation = {};
       history = {};
       logbook = {};
       tts = [
-        { platform = "google";
+        { platform = "google_translate";
           language = "de";
+          time_memory = 57600;
+          service_name =  "google_say";
         }
         { platform = "voicerss";
           api_key = builtins.readFile <secrets/hass/voicerss.apikey>;

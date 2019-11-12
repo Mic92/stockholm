@@ -4,9 +4,10 @@ let
   pkg = pkgs.callPackage (
     pkgs.fetchgit {
       url = "https://git.shackspace.de/rz/s3-power";
-      rev = "b2b87b56bb40d714dbbecd1285566870b256aec4";
-      sha256 = "sha256:02wikwf3rgkkggwbwqisdvhlwd38w5pw011xhwvhnj114s3rynan";
-    }) {};
+      rev = "0687ab64";
+      sha256 = "1m8h4bwykv24bbgr5v51mam4wsbp5424xcrawhs4izv563jjf130";
+    }) { mkYarnPackage = pkgs.yarn2nix-moretea.mkYarnPackage; };
+
     home = "/var/lib/s3-power";
     cfg = toString <secrets/shack/s3-power.json>;
 in {
