@@ -62,9 +62,6 @@ let
 
   magit = ''
     (global-set-key (kbd "C-x g") 'magit-status) ; "Most Magit commands are commonly invoked from the status buffer"
-
-    (with-eval-after-load 'magit
-      (require 'forge))
   '';
 
   windowCosmetics = ''
@@ -163,6 +160,11 @@ let
     (global-set-key (kbd "<f8>") 'delete-other-windows)
   '';
 
+  lspMode = ''
+    (require 'lsp-mode)
+    (add-hook 'rust-mode-hook #'lsp)
+  '';
+
   dotEmacs = pkgs.writeText "dot-emacs" ''
     ${packageRepos}
 
@@ -177,11 +179,20 @@ let
 
     ${orgAgendaView}
     ${myFunctionKeys}
+    ${lspMode}
   '';
 
   #emacsWithCustomPackages
   emacsPkgs= epkgs: [
-    #testing
+    # testing lsp mode
+    epkgs.melpaPackages.lsp-ui
+    epkgs.melpaPackages.company-lsp
+    epkgs.melpaPackages.lsp-treemacs
+    epkgs.melpaPackages.helm-lsp
+    epkgs.melpaPackages.dap-mode
+    epkgs.melpaPackages.lsp-mode
+
+    # testing
     epkgs.melpaPackages.web-mode
     epkgs.melpaPackages.js2-mode
     epkgs.melpaPackages.xref-js2
@@ -189,7 +200,6 @@ let
     epkgs.melpaPackages.academic-phrases
 
     epkgs.melpaPackages.gitlab
-    epkgs.melpaPackages.forge
     epkgs.melpaPackages.helm
     epkgs.melpaPackages.weechat
 
@@ -200,6 +210,7 @@ let
     epkgs.melpaPackages.evil
     epkgs.melpaPackages.google-this
     epkgs.melpaPackages.monokai-alt-theme
+    epkgs.melpaPackages.zenburn-theme
 
 # development
     epkgs.melpaPackages.magit
@@ -208,7 +219,7 @@ let
     epkgs.melpaPackages.haskell-mode
 # rust
     epkgs.melpaPackages.rust-mode
-    epkgs.melpaPackages.flycheck-rust
+#    epkgs.melpaPackages.flycheck-rust
     epkgs.melpaPackages.racer
 
 # python
@@ -219,16 +230,19 @@ let
     epkgs.orgPackages.org-plus-contrib
     epkgs.melpaPackages.smex
     epkgs.melpaPackages.org-mime
+    epkgs.melpaPackages.orgit
+
 
     epkgs.elpaPackages.which-key
   ];
-emacsWithOverlay = (pkgsWithOverlay.emacsWithPackagesFromUsePackage {
-      config = builtins.readFile dotEmacs; # builtins.readFile ./emacs.el;
-      # Package is optional, defaults to pkgs.emacs
-      package = pkgsWithOverlay.emacsGit;
-      # Optionally provide extra packages not in the configuration file
-      extraEmacsPackages = emacsPkgs;
-    });
+
+  emacsWithOverlay = pkgsWithOverlay.emacsWithPackagesFromUsePackage {
+    config = builtins.readFile dotEmacs; # builtins.readFile ./emacs.el;
+    # Package is optional, defaults to pkgs.emacs
+    package = pkgsWithOverlay.emacsGit;
+    # Optionally provide extra packages not in the configuration file
+    extraEmacsPackages = emacsPkgs;
+  };
 
   myEmacs = pkgs.writeDashBin "my-emacs" ''
     exec ${emacsWithOverlay}/bin/emacs -q -l ${dotEmacs} "$@"

@@ -114,8 +114,8 @@ let
               ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
               ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
-(setq org-directory "~/git/org")
-(setq org-default-notes-file "~/git/org/refile.org")
+(setq org-directory "~/projects/notes_private")
+(setq org-default-notes-file "~/projects/notes_private/refile.org")
 
 ;; I use C-c c to start capture mode
 (global-set-key (kbd "C-c c") 'org-capture)

@@ -6,6 +6,7 @@
     <stockholm/jeschli>
     <stockholm/jeschli/2configs/emacs.nix>
     <stockholm/jeschli/2configs/firefox.nix>
+    <stockholm/jeschli/2configs/rust.nix>
     <stockholm/jeschli/2configs/python.nix>
        ./desktop.nix
        ./i3-configuration.nix
@@ -38,6 +39,7 @@
     wget vim git
     rofi
     ag
+    alacritty
   ];
 
   users.users.ombi = {
