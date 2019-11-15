@@ -359,8 +359,8 @@ in {
       nets = rec {
         retiolum = {
           addrs = [
-            config.krebs.hosts.donna.nets.retiolum.ip4.addr
-            config.krebs.hosts.donna.nets.retiolum.ip6.addr
+            config.krebs.hosts.amy.nets.retiolum.ip4.addr
+            config.krebs.hosts.amy.nets.retiolum.ip6.addr
           ];
           ip4.addr = "10.243.29.181";
           aliases = [ "amy.r" ];
@@ -387,8 +387,8 @@ in {
       nets = rec {
         retiolum = {
           addrs = [
-            config.krebs.hosts.donna.nets.retiolum.ip4.addr
-            config.krebs.hosts.donna.nets.retiolum.ip6.addr
+            config.krebs.hosts.clara.nets.retiolum.ip4.addr
+            config.krebs.hosts.clara.nets.retiolum.ip6.addr
           ];
           ip4.addr = "10.243.29.182";
           aliases = [ "clara.r" ];
