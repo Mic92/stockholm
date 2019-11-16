@@ -210,6 +210,7 @@ let
     epkgs.melpaPackages.evil
     epkgs.melpaPackages.google-this
     epkgs.melpaPackages.monokai-alt-theme
+    epkgs.melpaPackages.spacemacs-theme
     epkgs.melpaPackages.zenburn-theme
 
 # development
