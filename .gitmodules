@@ -7,6 +7,3 @@
 [submodule "lass/5pkgs/autowifi"]
 	path = lass/5pkgs/autowifi
 	url = https://github.com/Lassulus/autowifi
-[submodule "lass/5pkgs/--force"]
-	path = lass/5pkgs/--force
-	url = https://github.com/Lassulus/autowifi
