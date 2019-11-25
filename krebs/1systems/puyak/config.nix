@@ -13,6 +13,7 @@
     <stockholm/krebs/2configs/ircd.nix>
     <stockholm/krebs/2configs/news.nix>
     <stockholm/krebs/2configs/news-spam.nix>
+    <stockholm/krebs/2configs/shack/ssh-keys.nix>
     <stockholm/krebs/2configs/shack/prometheus/node.nix>
     <stockholm/krebs/2configs/shack/prometheus/server.nix>
     <stockholm/krebs/2configs/shack/prometheus/unifi.nix>
@@ -80,12 +81,6 @@
   system.activationScripts."disengage fancontrol" = ''
     echo level disengaged > /proc/acpi/ibm/fan
   '';
-
-  # to access vorstand vm
-  users.users.root.openssh.authorizedKeys.keys = [
-    config.krebs.users.ulrich.pubkey
-    config.krebs.users.raute.pubkey
-  ];
 
   users.users.joerg = {
     openssh.authorizedKeys.keys = [ config.krebs.users.Mic92.pubkey ];
