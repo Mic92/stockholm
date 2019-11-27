@@ -15,13 +15,12 @@ in {
         makefu
         tv
       ];
-      eloop-ml = spam-ml ++ [ ciko ];
+      eloop-ml = spam-ml;
       spam-ml = [
         lass
         makefu
         tv
       ];
-      ciko.mail = "ciko@slash16.net";
     in {
       "anmeldung@eloop.org" = eloop-ml;
       "brain@krebsco.de" = brain-ml;
