@@ -135,6 +135,7 @@ let
           f_${name} = util.BuildFactory()
           f_${name}.addStep(steps.Git(
               repourl=util.Property('repository', '${head repo.urls}'),
+              method='clobber',
               mode='full',
               submodules=True,
           ))
