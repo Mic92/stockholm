@@ -338,6 +338,19 @@ with import <stockholm/lib>;
         localAddress = "10.233.2.14";
       };
 
+      services.nginx.virtualHosts."lassul.us".locations."^~ /flix/".extraConfig = ''
+        if ($scheme != "https") {
+          rewrite ^ https://$host$request_uri permanent;
+        }
+        auth_basic "Restricted Content";
+        auth_basic_user_file ${pkgs.writeText "flix-user-pass" ''
+          krebs:$apr1$1Fwt/4T0$YwcUn3OBmtmsGiEPlYWyq0
+        ''};
+        proxy_pass http://10.233.2.14:80/;
+        proxy_set_header Accept-Encoding "";
+        sub_filter "https://lassul.us/" "https://lassul.us/flix/";
+        sub_filter_once off;
+      '';
       services.nginx.virtualHosts."lassul.us".locations."^~ /transmission".extraConfig = ''
         if ($scheme != "https") {
           rewrite ^ https://$host$request_uri permanent;
