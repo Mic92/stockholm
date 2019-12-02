@@ -359,6 +359,7 @@ with import <stockholm/lib>;
         auth_basic_user_file ${pkgs.writeText "transmission-user-pass" ''
           krebs:$apr1$1Fwt/4T0$YwcUn3OBmtmsGiEPlYWyq0
         ''};
+        proxy_pass_header X-Transmission-Session-Id;
         proxy_pass http://10.233.2.14:9091;
       '';
 
