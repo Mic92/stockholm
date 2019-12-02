@@ -110,14 +110,13 @@ with import <stockholm/lib>;
       systemd.services."container@hotdog".reloadIfChanged = mkForce false;
       containers.hotdog = {
         config = { ... }: {
-          imports = [ <stockholm/lass/2configs/rebuild-on-boot.nix> ];
           environment.systemPackages = [ pkgs.git ];
           services.openssh.enable = true;
           users.users.root.openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
           ];
         };
-        autoStart = true;
+        autoStart = false;
         enableTun = true;
         privateNetwork = true;
         hostAddress = "10.233.2.1";
