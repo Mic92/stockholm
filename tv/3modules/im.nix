@@ -32,6 +32,8 @@ in {
     tv.im.server.mosh.enable = lib.mkEnableOption "tv.im.server.mosh" // {
       default = true;
     };
+    tv.im.server.weechat.relay.enable =
+      lib.mkEnableOption "tv.im.server.weechat.relay";
     tv.im.server.user = lib.mkOption {
       default = config.krebs.users.tv;
       type = lib.types.user;
@@ -91,6 +93,17 @@ in {
       ];
       tv.iptables.extra6.filter.Retiolum = [
         "-s ${im.client.host.nets.retiolum.ip6.addr} -p udp --dport 60000:61000 -j ACCEPT"
+      ];
+    })
+    (lib.mkIf im.server.weechat.relay.enable {
+      krebs.iana-etc.services = {
+        "9001".tcp.name = "weechat-ssl";
+      };
+      tv.iptables.extra4.filter.Retiolum = [
+        "-s ${im.client.host.nets.retiolum.ip4.addr} -p tcp -m tcp --dport 9001 -j ACCEPT"
+      ];
+      tv.iptables.extra6.filter.Retiolum = [
+        "-s ${im.client.host.nets.retiolum.ip6.addr} -p tcp -m tcp --dport 9001 -j ACCEPT"
       ];
     })
   ];
