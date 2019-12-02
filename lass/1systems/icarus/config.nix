@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 
+with import <stockholm/lib>;
 {
   imports = [
     <stockholm/lass>
@@ -20,6 +21,18 @@
     #<stockholm/lass/2configs/prism-share.nix>
     <stockholm/lass/2configs/ssh-cryptsetup.nix>
   ];
+
+  #media center
+  users.users.media = {
+    isNormalUser = true;
+    uid = genid_uint31 "media";
+    extraGroups = [ "video" "audio" ];
+  };
+
+  services.xserver.displayManager.lightdm.autoLogin = {
+    enable = true;
+    user = "media";
+  };
 
   krebs.build.host = config.krebs.hosts.icarus;
   programs.adb.enable = true;
