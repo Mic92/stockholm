@@ -46,5 +46,6 @@
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="a0:88:b4:29:26:bc", NAME="wl0"
     SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:0c:a7:63", NAME="et0"
+    SUBSYSTEM=="net", ATTR{address}=="00:e0:4c:69:ea:71", NAME="int0"
   '';
 }
