@@ -317,6 +317,7 @@ with import <stockholm/lib>;
       services.murmur.registerName = "lassul.us";
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp --dport 64738"; target = "ACCEPT";}
+        { predicate = "-p udp --dport 64738"; target = "ACCEPT";}
       ];
 
     }
