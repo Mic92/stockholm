@@ -29,7 +29,7 @@ let
 
     cloudmap = mkOption {
       type = types.str;
-      default = "http://xplanetclouds.com/free/local/clouds_2048.jpg";
+      default = "http://home.megapass.co.kr/~holywatr/cloud_data/clouds_2048.jpg";
     };
 
     marker = mkOption {
