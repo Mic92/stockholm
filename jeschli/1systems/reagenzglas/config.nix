@@ -39,6 +39,7 @@
   environment.systemPackages = with pkgs; [
     ag
     alacritty
+    copyq
     git
     rofi
     vim
