@@ -37,10 +37,12 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget vim git
-    rofi
     ag
     alacritty
+    git
+    rofi
+    vim
+    wget
   ];
 
   users.users.ombi = {
