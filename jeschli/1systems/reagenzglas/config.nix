@@ -41,6 +41,7 @@
     alacritty
     copyq
     direnv
+    go
     git
     rofi
     vim
