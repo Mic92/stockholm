@@ -32,6 +32,7 @@ let
     # start dmenu (a program launcher)
     bindsym $mod+d exec ${pkgs.rofi}/bin/rofi -modi drun#run -combi-modi drun#run -show combi -show-icons -display-combi run
  
+    bindsym $mod+x exec ${pkgs.rofi}/bin/rofi -modi window -show window -auto-select
     # There also is the (new) i3-dmenu-desktop which only displays applications
     # shipping a .desktop file. It is a wrapper around dmenu, so you need that
     # installed.
