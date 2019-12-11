@@ -40,6 +40,7 @@
     ag
     alacritty
     copyq
+    direnv
     git
     rofi
     vim
