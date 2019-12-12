@@ -34,6 +34,29 @@ with import <stockholm/lib>;
   });
 in {
   hosts = mapAttrs hostDefaults ({
+    filebitch = {
+      ci = true;
+      cores = 4;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.189.130";
+          aliases = [ "filebitch.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA8ZSLsOlPy9Vd8XdEcIoP8H3rztsbB0McTYPGhUaZ6/aqcD/MBSQa
+            FT9NZS0+N0Pev7y90As6Rj5Wrom92xlThcFPaX0Dzmzz+7363M4qtlrtmmWkx2FX
+            VDrPOYbe4hGGOCsPNOTNJkcW4zs2Ym5YKbZeXHfnuqCW+yuhKBCgO9slc740jkHZ
+            5xuv5zbU3ZMRk1H8xi4+cQcHqh+1PY75lJxVSNvrbe5pvGxm9yVdp235b49ohDRU
+            UfUjXmymPlnfJgTOMxmHwl+UmwYR4Yw2CZKXTjbJe5HjbykleTwUb1qyijM8suJf
+            eXRyma8VGILcY6K/HmE4nz7ESAlI1c+QlwIDAQAB
+            -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = NPjEmo1dkxNS2Xm7qUyWhLKdFYF4MnhIM79NPQELWHC
+          '';
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKRpjW68lSlTL8jBQcXKOTdGa+olQw5ghaU5df2yAE64";
+    };
     hotdog = {
       ci = true;
       nets = {
