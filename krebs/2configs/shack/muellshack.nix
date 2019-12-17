@@ -4,8 +4,8 @@ let
   pkg = pkgs.callPackage (
     pkgs.fetchgit {
       url = "https://git.shackspace.de/rz/muellshack";
-      rev = "4601f59787de090c83be6dbae6ca72d7fc84ab9f";
-      sha256 = "1cshbd6ipvynbm3gmnsm58ccc1m5xc87cpd3b6jx0s6pr2j19g9j";
+      rev = "c3d1f70325e5b90f280c5be60110e14f4de653ae";
+      sha256 = "1dd4kqwdr4v413rmkvmyjzzvw8id9747nifp96pg0c2cy6bhzj24";
     }) { mkYarnPackage = pkgs.yarn2nix-moretea.mkYarnPackage; };
     home = "/var/lib/muellshack";
     port = "8081";
