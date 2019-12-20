@@ -54,12 +54,15 @@
   };
 
   users.users.jeschli = {
-     isNormalUser = true;
+    isNormalUser = true;
+    extraGroups = [ "audio" ];
   };
 
 #  services.xserver.synaptics.enable = true;
   services.xserver.libinput.enable = true;
   services.xserver.libinput.disableWhileTyping = true;
+
+  hardware.pulseaudio.enable = true;
 
   #Enable ssh daemon
   services.openssh.enable = true;
