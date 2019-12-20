@@ -11,4 +11,7 @@
       useChecksum = true;
     };
   });
+  nixpkgs-unstable = lib.mkForce {
+    file.path = "/var/empty";
+  };
 }

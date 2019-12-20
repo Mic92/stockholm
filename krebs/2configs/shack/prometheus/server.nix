@@ -28,90 +28,12 @@
         "-storage.local.index-cache-size.label-name-to-label-values 2097152"
         "-storage.local.index-cache-size.label-pair-to-fingerprints 41943040"
       ];
-      rules = [
-        ''
-          ALERT node_down
-          IF up == 0
-          FOR 5m
-          LABELS {
-            severity="page"
-          }
-          ANNOTATIONS {
-            summary = "{{$labels.alias}}: Node is down.",
-            description = "{{$labels.alias}} has been down for more than 5 minutes."
-          }
-          ALERT node_systemd_service_failed
-          IF node_systemd_unit_state{state="failed"} == 1
-          FOR 4m
-          LABELS {
-            severity="page"
-          }
-          ANNOTATIONS {
-            summary = "{{$labels.alias}}: Service {{$labels.name}} failed to start.",
-            description = "{{$labels.alias}} failed to (re)start service {{$labels.name}}."
-          }
-          ALERT node_filesystem_full_90percent
-          IF sort(node_filesystem_free{device!="ramfs"} < node_filesystem_size{device!="ramfs"} * 0.1) / 1024^3
-          FOR 5m
-          LABELS {
-            severity="page"
-          }
-          ANNOTATIONS {
-            summary = "{{$labels.alias}}: Filesystem is running out of space soon.",
-            description = "{{$labels.alias}} device {{$labels.device}} on {{$labels.mountpoint}} got less than 10% space left on its filesystem."
-          }
-          ALERT node_filesystem_full_in_4h
-          IF predict_linear(node_filesystem_free{device!="ramfs"}[1h], 4*3600) <= 0
-          FOR 5m
-          LABELS {
-            severity="page"
-          }
-          ANNOTATIONS {
-            summary = "{{$labels.alias}}: Filesystem is running out of space in 4 hours.",
-            description = "{{$labels.alias}} device {{$labels.device}} on {{$labels.mountpoint}} is running out of space of in approx. 4 hours"
-          }
-          ALERT node_filedescriptors_full_in_3h
-          IF predict_linear(node_filefd_allocated[1h], 3*3600) >= node_filefd_maximum
-          FOR 20m
-          LABELS {
-            severity="page"
-          }
-          ANNOTATIONS {
-            summary = "{{$labels.alias}} is running out of available file descriptors in 3 hours.",
-            description = "{{$labels.alias}} is running out of available file descriptors in approx. 3 hours"
-          }
-          ALERT node_load1_90percent
-          IF node_load1 / on(alias) count(node_cpu{mode="system"}) by (alias) >= 0.9
-          FOR 1h
-          LABELS {
-            severity="page"
-          }
-          ANNOTATIONS {
-            summary = "{{$labels.alias}}: Running on high load.",
-            description = "{{$labels.alias}} is running with > 90% total load for at least 1h."
-          }
-          ALERT node_cpu_util_90percent
-          IF 100 - (avg by (alias) (irate(node_cpu{mode="idle"}[5m])) * 100) >= 90
-          FOR 1h
-          LABELS {
-            severity="page"
-          }
-          ANNOTATIONS {
-            summary = "{{$labels.alias}}: High CPU utilization.",
-            description = "{{$labels.alias}} has total CPU utilization over 90% for at least 1h."
-          }
-          ALERT node_ram_using_90percent
-          IF node_memory_MemFree + node_memory_Buffers + node_memory_Cached < node_memory_MemTotal * 0.1
-          FOR 30m
-          LABELS {
-            severity="page"
-          }
-          ANNOTATIONS {
-            summary="{{$labels.alias}}: Using lots of RAM.",
-            description="{{$labels.alias}} is using at least 90% of its RAM for at least 30 minutes now.",
-          }
-        ''
-      ];
+      ruleFiles = lib.singleton (pkgs.writeText "prometheus-rules.yml" (builtins.toJSON {
+            groups = lib.singleton {
+              name = "mf-alerting-rules";
+              rules = import ./alert-rules.nix { inherit lib; };
+            };
+          }));
       scrapeConfigs = [
         {
           job_name = "node";

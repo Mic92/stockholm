@@ -11,13 +11,14 @@ before_script:
   - ssh-keyscan -H 'ssh.git.shackspace.de' >> ~/.ssh/known_hosts
   # import secret key for secrets
   - echo "$secrets_gpg_key" | gpg --import
-wolf deployment test:
+deployment test:
   stage: test
   script:
     - GIT_SSH_COMMAND="ssh -i ~/.ssh/gitlab_deploy.key" git clone git@ssh.git.shackspace.de:rz/secrets.git ~/brain
     - test $(PASSWORD_STORE_DIR=~/brain pass smoke) == 1337
     - git submodule update --init
     - $(nix-build krebs/krops.nix --no-out-link --argstr name wolf --argstr target /tmp -A test)
+    - $(nix-build krebs/krops.nix --no-out-link --argstr name puyak --argstr target /tmp -A test)
 nix-shell test:
   stage: test
   script:
@@ -34,8 +35,21 @@ wolf deployment:
     - git clone git@ssh.git.shackspace.de:rz/secrets.git ~/brain
     - git submodule update --init
     - ssh-keyscan -H 'wolf.shack' >> ~/.ssh/known_hosts
-    # TODO, hostname wolf cannot be resolved
     - $(nix-build krebs/krops.nix --no-out-link --argstr name wolf --argstr target wolf.shack -A deploy)
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - krebs/**/*
+      - lib/**/*
+      - .gitmodules
+puyak deployment:
+  stage: deploy
+  script:
+    - cp ~/.ssh/gitlab_deploy.key ~/.ssh/id_rsa
+    - git clone git@ssh.git.shackspace.de:rz/secrets.git ~/brain
+    - git submodule update --init
+    - ssh-keyscan -H 'puyak.shack' >> ~/.ssh/known_hosts
+    - $(nix-build krebs/krops.nix --no-out-link --argstr name puyak --argstr target puyak.shack -A deploy)
   only:
     changes:
       - .gitlab-ci.yml

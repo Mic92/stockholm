@@ -23,32 +23,20 @@ with import <stockholm/lib>;
   };
 
   config.environment.etc = mkIf (config.krebs.iana-etc.services != {})  {
-    services.source = mkForce (pkgs.runCommand "krebs-iana-etc" {} ''
-      exec < ${pkgs.iana_etc}/etc/services
-      exec > $out
-      awk -F '[ /]+' '
-        BEGIN {
-          port=0
-        }
-        ${concatMapStringsSep "\n" (entry: ''
-          $2 == ${entry.port} {
-            port=$2
-            next
-          }
-          port == ${entry.port} {
-            ${concatMapStringsSep "\n"
-              (proto: let
-                s = "${entry.${proto}.name} ${entry.port}/${proto}";
-              in
-                "print ${toJSON s}")
-              (filter (proto: entry.${proto} != null) ["tcp" "udp"])}
-            port=0
-          }
-        '') (attrValues config.krebs.iana-etc.services)}
-        {
-          print $0
-        }
-      '
+    services.source = mkForce (pkgs.runCommand "krebs-iana-etc" {} /* sh */ ''
+      {
+        ${concatMapStringsSep "\n" (entry: /* sh */ ''
+          ${concatMapStringsSep "\n"
+            (proto: let
+              line = "${entry.${proto}.name} ${entry.port}/${proto}";
+            in /* sh */ ''
+              echo ${shell.escape line}
+            '')
+            (filter (proto: entry.${proto} != null) ["tcp" "udp"])}
+          '') (attrValues config.krebs.iana-etc.services)}
+        cat ${pkgs.iana_etc}/etc/services
+      } |
+      sort -b -k 2,2 -u > $out
     '');
   };
 

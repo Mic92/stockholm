@@ -1,11 +1,11 @@
-{ stdenv, makeWrapper, lib, buildEnv, fetchgit, nodejs-12_x, pkgs, icu }:
+{ stdenv, makeWrapper, lib, buildEnv, fetchgit, nodejs, pkgs, icu }:
 
 with lib;
 
 let
   nodeEnv = import <nixpkgs/pkgs/development/node-packages/node-env.nix> {
     inherit (pkgs) stdenv python2 utillinux runCommand writeTextFile;
-    nodejs = nodejs-12_x;
+    nodejs = nodejs;
     libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
   };
 
@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    nodejs-12_x
+    nodejs
     makeWrapper
   ];
 
@@ -45,7 +45,7 @@ in stdenv.mkDerivation {
 
     cp newsbot.js $out/
     cat > $out/newsbot << EOF
-      ${nodejs-12_x}/bin/node $out/newsbot.js
+      ${nodejs}/bin/node $out/newsbot.js
     EOF
     chmod +x $out/newsbot
 

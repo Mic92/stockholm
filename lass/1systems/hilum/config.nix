@@ -10,6 +10,7 @@
     <stockholm/lass/2configs/network-manager.nix>
     <stockholm/lass/2configs/mail.nix>
     <stockholm/lass/2configs/syncthing.nix>
+    <stockholm/lass/2configs/nfs-dl.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.hilum;

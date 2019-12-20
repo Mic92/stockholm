@@ -110,14 +110,13 @@ with import <stockholm/lib>;
       systemd.services."container@hotdog".reloadIfChanged = mkForce false;
       containers.hotdog = {
         config = { ... }: {
-          imports = [ <stockholm/lass/2configs/rebuild-on-boot.nix> ];
           environment.systemPackages = [ pkgs.git ];
           services.openssh.enable = true;
           users.users.root.openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
           ];
         };
-        autoStart = true;
+        autoStart = false;
         enableTun = true;
         privateNetwork = true;
         hostAddress = "10.233.2.1";
@@ -265,12 +264,8 @@ with import <stockholm/lib>;
     {
       users.users.download.openssh.authorizedKeys.keys = [
         "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDB0d0JA20Vqn7I4lCte6Ne2EOmLZyMJyS9yIKJYXNLjbLwkQ4AYoQKantPBkTxR75M09E7d3j5heuWnCjWH45TrfQfe1EOSSC3ppCI6C6aIVlaNs+KhAYZS0m2Y8WkKn+TT5JLEa8yybYVN/RlZPOilpj/1QgjU6CQK+eJ1k/kK+QFXcwN82GDVh5kbTVcKUNp2tiyxFA+z9LY0xFDg/JHif2ROpjJVLQBJ+YPuOXZN5LDnVcuyLWKThjxy5srQ8iDjoxBg7dwLHjby5Mv41K4W61Gq6xM53gDEgfXk4cQhJnmx7jA/pUnsn2ZQDeww3hcc7vRf8soogXXz2KC9maiq0M/svaATsa9Ul4hrKnqPZP9Q8ScSEAUX+VI+x54iWrnW0p/yqBiRAzwsczdPzaQroUFTBxrq8R/n5TFdSHRMX7fYNOeVMjhfNca/gtfw9dYBVquCvuqUuFiRc0I7yK44rrMjjVQRcAbw6F8O7+04qWCmaJ8MPlmApwu2c05VMv9hiJo5p6PnzterRSLCqF6rIdhSnuOwrUIt1s/V+EEZXHCwSaNLaQJnYL0H9YjaIuGz4c8kVzxw4c0B6nl+hqW5y5/B2cuHiumnlRIDKOIzlv8ufhh21iN7QpIsPizahPezGoT1XqvzeXfH4qryo8O4yTN/PWoA+f7o9POU7L6hQ== lhebendanz@nixos"
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACADLPxtB2f2tocXHxD3ul9D1537hTht6/un87JYZNnoYABveasyIcdFIfp5lPJmj3PjwqXNTA4M/3V+ufrpZ91dxFeXWI5mOI4YB3xRu+Elja8g7nfvCz1HrH3sD1equos/7ltQ1GZYvHGw40qD1/ZtOODwRwrYJ7l/DUBrjk/tzXRjm0+ZgyQsb3G9a80cA8d3fiuQDxbAzdoJF46wt36ZfuSMpJ/Td8CbCoLlV/uL9QZemOglyxNxR607qGfRNXF1An+P+fFq24GmdHpMJ00DfjZ/dJRL9QSs7vd07uyB4Qty4VHwRhc46XH6KL7VTF1D3INF/BeBZx90GBxOvpgEji7Zrf7O5eSAjM2Do1+t+Ev2IIuiltB+QqTir4rZcrCBrJ2+zD3DDymKffVi8sz15AvdrFkIplzZxpOcgm9Ns2w/uh8sxeV6J58aoLEVmd2KRUfJFYiS1EuEjYo2OHlj8ltIh3VlfYdWksGpQc71IT0iEWvzvjYcfCda9uzFLKdLfBy4GB8+s4zR2CX9aGDyJaIY1kt/xqDeztnYwW1owG+fLMrDJlq3Mu+KmJljb30jzrOPhFYVZgWenmMFgH2RBzVEmnsR0f2LFVLj6N/a9fpEJ3WhxMOc5Ybdpgg/l9KUdgvWLk6KOtba+z9fuYT1YgwtZBoMgHAdZLmZ/DGtff palo@pepe"
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDGMjbYFmmvpF60YBShyFISbjN+O3e4GPkfsre6xFqz20joi8YqpD/5PtrMsGrPd1ZoZ9qSwXJtbb1WBomFg0xzRSNa1/FliKiE1ilcaB3aUZRtP0OWHIvWD3/YL/0h+/YXDGTfb8FNvpgJmnbN3Q0gw8cwWw+eve5BMyqDhzFvycxO4qDuP2JXkGpdhJqjaYZhP5rPH2mgv1oU1RnOA3A7APZVGf1m6JSmV7FZR514aGlFV+NpsvS29Mib8fcswgpoGhMN6jeh/nf49tp01LUAOmXSqdHIWNOTt3Mt7S4rU7RZwEhswdSRbKdKFRMj+uRkhJ4CPcNuuGtSY3id0Ja7IvrvxNaQUk1L8nBcza709jvSBYWSY5/aGL1ocA/PNWXDpOTp2PWwxkh39aPMqZXPTH3KC4IkRp5SiKibEhdmjnToV7nUAJe4IWn1b7QdoqS03ib0X87DnHWIbvi8UZlImM7pn0rs+rwnOo4lQwrTz7kbBHPaa6XOZAuDYND2728vtcrhwzVrKgiXWbyF6VzvwxPeeStmn1gENvozbj1hl9gbQ1cH/a4pZFBV/OFl/ryzDnB2ghM4acNJazXx/6/us9hX+np1YxIzJaxENj677MLc6HitM2g6XJGaixBQ0U2NNjcjIuQT0ZaeKXsSLnu1Y7+uslbVAwsQ4pJmSxxMMQ== palo@workhorse"
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDbsRjUwOMnxAt/K6A2M/33PbwQCEYVfqfmkXBwkw/L+ZLCnVxfdxJ79ds1k6kyUVcxfHcvxGvUCcM0wr4T7aaP79fsfSf3lcOgySeAtkQjfQL+IdMk0FQVz612cTPg2uWhMFvHGkGSBvSbKNw72RnUaw9qlF8fBx22FozrlmnbY4APTXeqwiF0VeBMq8qr4H9NdIoIFIcq398jn/Na8gYLUfmuDw18AWCt+u7Eg0B/qIU0hi/gK40Lk9+g8Nn19SCad1YOgNDG7aNpEwgT7I7BNXC5oLD31QKKuXmBa/mCLqRLAGW2sJ2ZhBR4tPLMgNrxtn2jxzVVjY+v3bWQnPocB9H9PsdtdNrULLfeJ4y9a3p3kfOzOgYMrnPAjasrkiIyOBBNEFAn/bbvpH01glbF8tVMcPOSD+W89oxTBEgqk6w34QAfySDMW34dIUHeq82v+X0wN9SK6xbBRBsjSpAC4ZcNyzl1JLIMcdZ5mbQXakD3kzDFs5kfjxlkrp3S5gqiSmCp5w/osykjxSH6wnPPCcgzpCBNGRULKw5vbzDSnLAQ3nSYB9tIj4Hp62XymsxVnY+6MsVVy206BYAXrKJomK7sIeLL2wIMYNnAUdSBjqQ5IEE2m+5+YaK0NMNsk2munNrN96ZE3r5xe/BDqfaLMpPfosOTXBtT7tLMlV6zkQ== palo@workout"
+        config.krebs.users.palo.pubkey
       ];
-    }
-    {
     }
     {
       lass.nichtparasoup.enable = true;
@@ -322,6 +317,7 @@ with import <stockholm/lib>;
       services.murmur.registerName = "lassul.us";
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp --dport 64738"; target = "ACCEPT";}
+        { predicate = "-p udp --dport 64738"; target = "ACCEPT";}
       ];
 
     }
@@ -342,6 +338,19 @@ with import <stockholm/lib>;
         localAddress = "10.233.2.14";
       };
 
+      services.nginx.virtualHosts."lassul.us".locations."^~ /flix/".extraConfig = ''
+        if ($scheme != "https") {
+          rewrite ^ https://$host$request_uri permanent;
+        }
+        auth_basic "Restricted Content";
+        auth_basic_user_file ${pkgs.writeText "flix-user-pass" ''
+          krebs:$apr1$1Fwt/4T0$YwcUn3OBmtmsGiEPlYWyq0
+        ''};
+        proxy_pass http://10.233.2.14:80/;
+        proxy_set_header Accept-Encoding "";
+        sub_filter "https://lassul.us/" "https://lassul.us/flix/";
+        sub_filter_once off;
+      '';
       services.nginx.virtualHosts."lassul.us".locations."^~ /transmission".extraConfig = ''
         if ($scheme != "https") {
           rewrite ^ https://$host$request_uri permanent;
@@ -350,6 +359,7 @@ with import <stockholm/lib>;
         auth_basic_user_file ${pkgs.writeText "transmission-user-pass" ''
           krebs:$apr1$1Fwt/4T0$YwcUn3OBmtmsGiEPlYWyq0
         ''};
+        proxy_pass_header X-Transmission-Session-Id;
         proxy_pass http://10.233.2.14:9091;
       '';
 

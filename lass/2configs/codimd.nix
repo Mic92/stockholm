@@ -1,6 +1,5 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 with import <stockholm/lib>;
-
 {
   services.nginx.virtualHosts.codimd = {
     enableACME = true;
