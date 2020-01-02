@@ -69,6 +69,10 @@ in
     # grafana.shack
     <stockholm/krebs/2configs/shack/grafana.nix>
 
+    # shackdns.shack
+    # replacement for leases.shack and shackles.shack
+    <stockholm/krebs/2configs/shack/shackDNS.nix>
+
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
   # apt-cacher-ng in first place)
