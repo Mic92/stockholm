@@ -75,7 +75,6 @@ with import <stockholm/lib>;
   in {
     enable = true;
     package = pkgs.home-assistant.override {
-      python3 = pkgs.python36;
       #extraComponents = [
       #  (pkgs.fetchgit {
       #    url = "https://github.com/marcschumacher/dwd_pollen";
