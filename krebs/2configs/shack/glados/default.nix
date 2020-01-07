@@ -2,6 +2,7 @@
 let
   shackopen = import ./multi/shackopen.nix;
   wasser = import ./multi/wasser.nix;
+  badair = import ./multi/schlechte_luft.nix;
 in {
   services.nginx.virtualHosts."hass.shack" = {
     serverAliases = [ "glados.shack" ];
