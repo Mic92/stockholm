@@ -1,19 +1,84 @@
 let
-  airlevel = name: threshold: color:
-    { alias = "${name} Air trigger ${color}";
-      trigger = [
-      ];
-      action =
-        [
-          # create spark effect with color
-        ];
-    };
+  glados = import ../lib;
 in
 {
   # LED
-  switch = [
+  light = [
+    (glados.esphome.led { name = "Fablab LED"; host = "fablab_led"; topic = "led_ring"; })
+
+    (glados.esphome.led { name = "Fablab LED Part A"; host = "fablab_led"; topic = "A";})
+    (glados.esphome.led { name = "Fablab LED Part B"; host = "fablab_led"; topic =  "B";})
+    (glados.esphome.led { name = "Fablab LED Part C"; host = "fablab_led"; topic = "C";})
+    (glados.esphome.led { name = "Fablab LED Part D"; host = "fablab_led"; topic = "D";})
+  ];
+  sensor = [
+    (glados.esphome.dust_25m  { host = "fablab_feinstaub";})
+    (glados.esphome.dust_100m { host = "fablab_feinstaub";})
   ];
   automation =
-  [
+    [
+    { alias = "Gute Luft Fablab";
+      trigger = [
+        {
+          platform = "numeric_state";
+          below = 25;
+          entity_id = "sensor.fablab_feinstaub_25m";
+        }
+      ];
+      action =
+        [
+          { service = "light.turn_on";
+            data = {
+              entity = "fablab_led";
+              effect = "Twinkle";
+              color_name = "green";
+            };
+          }
+        ];
+    }
+    { alias = "mäßige Luft Fablab";
+      trigger = [
+        #{
+        #  platform = "numeric_state";
+        #  above = 25;
+        #  entity_id = "sensor.fablab_feinstaub_25m";
+        #}
+        {
+          platform = "numeric_state";
+          above = 25;
+          below = 50;
+          entity_id = "sensor.fablab_feinstaub_25m";
+        }
+      ];
+      action =
+        [
+          { service = "light.turn_on";
+            data = {
+              entity = "fablab_led";
+              effect = "Twinkle";
+              color_name = "yellow";
+            };
+          }
+        ];
+    }
+    { alias = "schlechte Luft Fablab";
+      trigger = [
+        {
+          platform = "numeric_state";
+          above = 50;
+          entity_id = "sensor.fablab_feinstaub_25m";
+        }
+      ];
+      action =
+        [
+          { service = "light.turn_on";
+            data = {
+              entity = "fablab_led";
+              effect = "Twinkle";
+              color_name = "red";
+            };
+          }
+        ];
+    }
   ];
 }

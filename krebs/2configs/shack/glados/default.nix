@@ -90,7 +90,7 @@ in {
         };
       };
       switch = wasser.switch;
-      light =  [];
+      light =  badair.light;
       media_player = [
         { platform = "mpd";
           host = "lounge.mpd.shack";
@@ -100,7 +100,8 @@ in {
       sensor =
            (import ./sensors/hass.nix)
         ++ (import ./sensors/power.nix)
-        ++ shackopen.sensor;
+        ++ shackopen.sensor
+        ++ badair.sensor;
 
       binary_sensor = shackopen.binary_sensor;
 
@@ -127,7 +128,7 @@ in {
       #recorder = {};
       sun = {};
 
-      automation = wasser.automation;
+      automation = wasser.automation ++ badair.automation;
       device_tracker = [];
     };
   };
