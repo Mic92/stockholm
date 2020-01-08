@@ -45,7 +45,7 @@ in {
     autoExtraComponents = true;
     config = {
       homeassistant = {
-        name = "Bureautomation";
+        name = "Glados";
         time_zone = "Europe/Berlin";
         latitude = "48.8265";
         longitude = "9.0676";
@@ -128,7 +128,10 @@ in {
       #recorder = {};
       sun = {};
 
-      automation = wasser.automation ++ badair.automation;
+      automation = wasser.automation 
+        ++ badair.automation 
+        ++ (import ./automation/hass-restart.nix);
+
       device_tracker = [];
     };
   };

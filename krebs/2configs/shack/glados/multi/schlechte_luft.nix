@@ -29,7 +29,7 @@ in
         [
           { service = "light.turn_on";
             data = {
-              entity = "fablab_led";
+              entity_id = "light.fablab_led";
               effect = "Twinkle";
               color_name = "green";
             };
@@ -54,7 +54,7 @@ in
         [
           { service = "light.turn_on";
             data = {
-              entity = "fablab_led";
+              entity_id = "light.fablab_led";
               effect = "Twinkle";
               color_name = "yellow";
             };
@@ -73,7 +73,7 @@ in
         [
           { service = "light.turn_on";
             data = {
-              entity = "fablab_led";
+              entity_id = "light.fablab_led";
               effect = "Twinkle";
               color_name = "red";
             };
