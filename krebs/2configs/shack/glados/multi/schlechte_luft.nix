@@ -12,6 +12,7 @@ in
     (glados.esphome.led { name = "Fablab LED Part D"; host = "fablab_led"; topic = "D";})
   ];
   sensor = [
+    (glados.esphome.temp { host = "fablab_feinstaub";})
     (glados.esphome.dust_25m  { host = "fablab_feinstaub";})
     (glados.esphome.dust_100m { host = "fablab_feinstaub";})
   ];
@@ -22,7 +23,7 @@ in
         {
           platform = "numeric_state";
           below = 25;
-          entity_id = "sensor.fablab_feinstaub_25m";
+          entity_id = "sensor.fablab_feinstaub_2_5um";
         }
       ];
       action =
@@ -47,7 +48,7 @@ in
           platform = "numeric_state";
           above = 25;
           below = 50;
-          entity_id = "sensor.fablab_feinstaub_25m";
+          entity_id = "sensor.fablab_feinstaub_2_5um";
         }
       ];
       action =
@@ -66,7 +67,7 @@ in
         {
           platform = "numeric_state";
           above = 50;
-          entity_id = "sensor.fablab_feinstaub_25m";
+          entity_id = "sensor.fablab_feinstaub_2_5um";
         }
       ];
       action =
@@ -76,6 +77,44 @@ in
               entity_id = "light.fablab_led";
               effect = "Twinkle";
               color_name = "red";
+            };
+          }
+        ];
+    }
+    { alias = "Luft Sensor nicht verfügbar";
+      trigger = [
+        {
+          platform = "state";
+          to = "unavailable";
+          entity_id = "sensor.fablab_feinstaub_2_5um";
+        }
+      ];
+      action =
+        [
+          { service = "light.turn_on";
+            data = {
+              entity_id = "light.fablab_led";
+              effect = "Rainbow";
+              color_name = "blue";
+            };
+          }
+        ];
+    }
+    { alias = "Fablab Licht Reboot";
+      trigger = [
+        {
+          platform = "state";
+          from = "unavailable";
+          entity_id = "light.fablab_led";
+        }
+      ];
+      action =
+        [
+          { service = "light.turn_on";
+            data = {
+              entity_id = "light.fablab_led";
+              effect = "Rainbow";
+              color_name = "orange";
             };
           }
         ];
