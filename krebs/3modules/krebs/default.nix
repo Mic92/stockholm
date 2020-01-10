@@ -38,6 +38,12 @@ in {
       ci = true;
       cores = 4;
       nets = {
+        shack = {
+          ip4.addr =  "10.42.0.50" ;
+          aliases = [
+            "filebitch.shack"
+          ];
+        };
         retiolum = {
           ip4.addr = "10.243.189.130";
           aliases = [ "filebitch.r" ];
