@@ -115,8 +115,9 @@ in {
         trusted_proxies = "127.0.0.1";
       };
       #conversation = {};
-      #history = {};
-      #logbook = {};
+      history = {};
+      logbook = {};
+      recorder = {};
       tts = [
         { platform = "google_translate";
           language = "de";
@@ -125,7 +126,6 @@ in {
         #  language = "de-DE";
         #}
       ];
-      #recorder = {};
       sun = {};
 
       automation = wasser.automation 
