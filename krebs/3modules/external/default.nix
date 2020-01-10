@@ -464,6 +464,10 @@ in {
       mail = "0x4a6f@shackspace.de";
       pubkey = ssh-for "0x4A6F";
     };
+    xq = {
+      mail = "xq@shackspace.de";
+      pubkey = ssh-for "xq";
+    };
     miaoski = {
     };
     filly = {
