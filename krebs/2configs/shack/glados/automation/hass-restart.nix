@@ -11,6 +11,7 @@
         data = {
           entity_id = "light.fablab_led";
           effect = "Rainbow";
+          color_name = "yellow";
         };
       }
     ];

@@ -4,7 +4,7 @@ let
 in
 {
   switch = [
-    (glados.tasmota.plug { name = "Wasser"; topic = "plug";} )
+    (glados.tasmota.plug { host = "Wasser"; topic = "plug";} )
   ];
 
   automation =

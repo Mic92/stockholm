@@ -4,32 +4,32 @@ in
 {
   esphome =
   {
-    temp = {name, topic ? "temperature" }:
+    temp = {host, topic ? "temperature" }:
     {
       platform = "mqtt";
-      name = "${name} Temperature";
+      name = "${host} Temperature";
       device_class = "temperature";
       unit_of_measurement =  "°C";
       icon = "mdi:thermometer";
-      state_topic = "${prefix}/${name}/sensor/${topic}/state";
-      availability_topic = "${prefix}/${name}/status";
+      state_topic = "${prefix}/${host}/sensor/${topic}/state";
+      availability_topic = "${prefix}/${host}/status";
       payload_available = "online";
       payload_not_available = "offline";
     };
-    hum = {name, topic ? "humidity" }:
+    hum = {host, topic ? "humidity" }:
     {
       platform = "mqtt";
       unit_of_measurement = "%";
       icon = "mdi:water-percent";
       device_class = "humidity";
-      name = "${name} Humidity";
-      state_topic = "${prefix}/${name}/sensor/${topic}/state";
-      availability_topic = "${prefix}/${name}/status";
+      name = "${host} Humidity";
+      state_topic = "${prefix}/${host}/sensor/${topic}/state";
+      availability_topic = "${prefix}/${host}/status";
       payload_available = "online";
       payload_not_available = "offline";
     };
     # copied from "homeassistant/light/fablab_led/led_ring/config"
-    led = {name,  topic ? "led", host ? name }:
+    led = {host,  topic ? "led", name ? host}:
     { # name: fablab_led
       # topic: led_ring
       platform = "mqtt";
@@ -64,7 +64,7 @@ in
       icon = "mdi:chemical-weapon";
       inherit name;
       state_topic = "${prefix}/${host}/sensor/${topic}/state";
-      availability_topic = "${prefix}/${name}/status";
+      availability_topic = "${prefix}/${host}/status";
     };
     dust_100m = {host, name ? "${host} < 10µm", topic ? "particulate_matter_100m_concentration" }:
     {
@@ -72,8 +72,8 @@ in
       unit_of_measurement = "µg/m³";
       icon = "mdi:chemical-weapon";
       inherit name;
-      state_topic = "${prefix}/${name}/sensor/${topic}/state";
-      availability_topic = "${prefix}/${name}/status";
+      state_topic = "${prefix}/${host}/sensor/${topic}/state";
+      availability_topic = "${prefix}/${host}/status";
     };
     switch = {host, name ? "${host} Button", topic ? "btn" }:
     # host: ampel
@@ -89,7 +89,7 @@ in
   };
   tasmota =
   {
-    plug = {name, topic ? name }:
+    plug = {host, name ? host, topic ? host}:
     {
       platform = "mqtt";
       inherit name;
