@@ -47,7 +47,8 @@ in {
       alias ${pkgs.writeText "prism.wg" config.krebs.hosts.prism.nets.wiregrill.wireguard.pubkey};
     '';
     locations."/tinc/".extraConfig = ''
-      alias ${config.krebs.tinc_graphs.workingDir}/external;
+      index index.html;
+      alias ${config.krebs.tinc_graphs.workingDir}/external/;
     '';
     locations."= /krebspage".extraConfig = ''
       default_type "text/html";
