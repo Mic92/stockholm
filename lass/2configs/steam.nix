@@ -11,6 +11,7 @@
   #
   ##TODO: make steam module
   nixpkgs.config.steam.java = true;
+  hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
 
   users.users.games.packages = [ pkgs.steam ];
 
