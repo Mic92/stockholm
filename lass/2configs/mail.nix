@@ -217,7 +217,7 @@ let
     name = "mutt";
     paths = [
       (pkgs.writeDashBin "mutt" ''
-        exec ${pkgs.neomutt}/bin/neomutt -F ${muttrc} $@
+        exec ${pkgs.neomutt}/bin/neomutt -F ${muttrc} "$@"
       '')
       pkgs.neomutt
     ];
