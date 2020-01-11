@@ -37,9 +37,9 @@ pkgs.writeDashBin "fzfmenu" ''
     -e ${pkgs.dash}/bin/dash -c \
       "echo \"$INPUT\" | ${pkgs.fzf}/bin/fzf \
         --history=/dev/null \
-        --no-sort \
+        --print-query \
         --prompt=\"$PROMPT\" \
         > \"$OUTPUT\"" 2>/dev/null
-  ${pkgs.coreutils}/bin/cat "$OUTPUT"
+  ${pkgs.coreutils}/bin/tail -1 "$OUTPUT"
   ${pkgs.coreutils}/bin/rm "$OUTPUT"
 ''
