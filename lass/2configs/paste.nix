@@ -10,7 +10,9 @@ with import <stockholm/lib>;
       proxy_pass http://localhost:9081;
     '';
   };
-  services.nginx.virtualHosts.paste-readonly = {
+  services.nginx.virtualHosts."p.krebsco.de" = {
+    enableACME = true;
+    addSSL = true;
     serverAliases = [ "p.krebsco.de" ];
     locations."/".extraConfig = ''
       if ($request_method != GET) {
