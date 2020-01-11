@@ -94,6 +94,7 @@ in {
 
   users.users.blog = {
     uid = genid_uint31 "blog";
+    group = "nginx";
     description = "lassul.us blog deployment";
     home = "/srv/http/lassul.us";
     useDefaultShell = true;
