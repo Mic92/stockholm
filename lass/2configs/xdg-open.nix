@@ -62,5 +62,6 @@ in {
 
   security.sudo.extraConfig = ''
     cr ALL=(lass) NOPASSWD: ${xdg-open} *
+    ff ALL=(lass) NOPASSWD: ${xdg-open} *
   '';
 }
