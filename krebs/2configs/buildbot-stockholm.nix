@@ -27,6 +27,7 @@
         "http://cgit.ni.r/krops"
         "http://cgit.prism.r/krops"
         "https://git.ingolf-wagner.de/krebs/krops.git"
+        "https://github.com/krebs/krops.git"
       ];
       nix_writers.urls = [
         "http://cgit.hotdog.r/nix-writers"
