@@ -24,7 +24,7 @@ pkgs.writeDashBin "irc-announce" ''
   # echo2 and cat2 are used output to both, stdout and stderr
   # This is used to see what we send to the irc server. (debug output)
   echo2() { echo "$*"; echo "$*" >&2; }
-  cat2() { tee /dev/stderr; }
+  cat2() { (read x ; echo "$x" ; echo "$x" >&2) }
 
   # privmsg_cat transforms stdin to a privmsg
   privmsg_cat() { awk '{ print "PRIVMSG "ENVIRON["IRC_CHANNEL"]" :"$0 }'; }
