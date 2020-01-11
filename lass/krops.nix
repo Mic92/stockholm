@@ -18,7 +18,7 @@
         file = toString ./2configs/tests/dummy-secrets;
       } else {
         pass = {
-          dir = "${lib.getEnv "HOME"}/.password-store";
+          dir = "${lib.getEnv "HOME"}/sync/pwstore";
           name = "hosts/${name}";
         };
       };
