@@ -10,6 +10,10 @@
     (krebs-source { test = test; })
     {
       nixos-config.symlink = "stockholm/lass/1systems/${name}/physical.nix";
+      nixpkgs-unstable.git = {
+        url = "https://github.com/nixos/nixpkgs-channels";
+        ref = (lib.importJSON ../krebs/nixpkgs-unstable.json).rev;
+      };
       secrets = if test then {
         file = toString ./2configs/tests/dummy-secrets;
       } else {
