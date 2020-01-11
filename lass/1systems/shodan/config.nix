@@ -19,6 +19,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/ssh-cryptsetup.nix>
     <stockholm/lass/2configs/nfs-dl.nix>
     <stockholm/lass/2configs/gg23.nix>
+    <stockholm/lass/2configs/br.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.shodan;
