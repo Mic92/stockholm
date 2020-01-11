@@ -4,7 +4,6 @@ with import <stockholm/lib>;
 let
 
   wizard = pkgs.writers.writeBash "wizard" ''
-    set -x
     shopt -s extglob
 
     echo -n '
