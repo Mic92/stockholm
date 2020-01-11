@@ -61,10 +61,10 @@ in {
     in ''
       alias ${initscript};
     '';
-    locations."= /pub".extraConfig = ''
+    locations."= /blue.pub".extraConfig = ''
       alias ${pkgs.writeText "pub" config.krebs.users.lass.pubkey};
     '';
-    locations."= /pub1".extraConfig = ''
+    locations."= /mors.pub".extraConfig = ''
       alias ${pkgs.writeText "pub" config.krebs.users.lass-mors.pubkey};
     '';
   };
