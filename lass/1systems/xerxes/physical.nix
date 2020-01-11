@@ -66,7 +66,6 @@
   services.xserver = {
     videoDrivers = [ "intel" ];
     displayManager.sessionCommands = ''
-      echo nonono > /tmp/xxyy
       (sleep 2 && ${pkgs.xorg.xrandr}/bin/xrandr --output eDP1 --rotate right)
       (sleep 2 && ${pkgs.xorg.xinput}/bin/xinput set-prop "pointer:Goodix Capacitive TouchScreen" --type=float "Coordinate Transformation Matrix" 0 1 0 -1 0 1 0 0 1)
     '';
