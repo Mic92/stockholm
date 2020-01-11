@@ -25,6 +25,7 @@ in {
   imports = [
     ./default.nix
     ./sqlBackup.nix
+    (servePage [ "aldonasiech.com" "www.aldonasiech.com" ])
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
     (servePage [
       "freemonkey.art"
@@ -35,7 +36,6 @@ in {
       "ubikmedia.de"
       "apanowicz.de"
       "nirwanabluete.de"
-      "aldonasiech.com"
       "ubikmedia.eu"
       "youthtube.xyz"
       "joemisch.com"
@@ -44,7 +44,6 @@ in {
 
       "www.apanowicz.de"
       "www.nirwanabluete.de"
-      "www.aldonasiech.com"
       "www.ubikmedia.eu"
       "www.youthtube.xyz"
       "www.ubikmedia.de"
