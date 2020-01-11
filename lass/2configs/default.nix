@@ -96,9 +96,6 @@ with import <stockholm/lib>;
     git
     gnumake
     jq
-    parallel
-    proot
-    populate
 
   #style
     most
@@ -118,6 +115,7 @@ with import <stockholm/lib>;
 
   #neat utils
     file
+    hashPassword
     kpaste
     krebspaste
     mosh
