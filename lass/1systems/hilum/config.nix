@@ -23,4 +23,7 @@
     '';
     extraFiles."/grub/autoiso.cfg" = "${pkgs.grub2.src}/docs/autoiso.cfg";
   };
+
+  services.logind.lidSwitch = "ignore";
+  services.logind.lidSwitchDocked = "ignore";
 }
