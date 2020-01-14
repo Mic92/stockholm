@@ -2,6 +2,7 @@
 let
   shackopen = import ./multi/shackopen.nix;
   wasser = import ./multi/wasser.nix;
+  badair = import ./multi/schlechte_luft.nix;
 in {
   services.nginx.virtualHosts."hass.shack" = {
     serverAliases = [ "glados.shack" ];
@@ -44,7 +45,7 @@ in {
     autoExtraComponents = true;
     config = {
       homeassistant = {
-        name = "Bureautomation";
+        name = "Glados";
         time_zone = "Europe/Berlin";
         latitude = "48.8265";
         longitude = "9.0676";
@@ -89,7 +90,7 @@ in {
         };
       };
       switch = wasser.switch;
-      light =  [];
+      light =  badair.light;
       media_player = [
         { platform = "mpd";
           host = "lounge.mpd.shack";
@@ -99,7 +100,8 @@ in {
       sensor =
            (import ./sensors/hass.nix)
         ++ (import ./sensors/power.nix)
-        ++ shackopen.sensor;
+        ++ shackopen.sensor
+        ++ badair.sensor;
 
       binary_sensor = shackopen.binary_sensor;
 
@@ -113,8 +115,9 @@ in {
         trusted_proxies = "127.0.0.1";
       };
       #conversation = {};
-      #history = {};
-      #logbook = {};
+      history = {};
+      logbook = {};
+      recorder = {};
       tts = [
         { platform = "google_translate";
           language = "de";
@@ -123,10 +126,12 @@ in {
         #  language = "de-DE";
         #}
       ];
-      #recorder = {};
       sun = {};
 
-      automation = wasser.automation;
+      automation = wasser.automation 
+        ++ badair.automation 
+        ++ (import ./automation/hass-restart.nix);
+
       device_tracker = [];
     };
   };

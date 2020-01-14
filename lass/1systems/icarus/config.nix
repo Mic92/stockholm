@@ -20,6 +20,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/nfs-dl.nix>
     #<stockholm/lass/2configs/prism-share.nix>
     <stockholm/lass/2configs/ssh-cryptsetup.nix>
+    <stockholm/lass/2configs/network-manager.nix>
   ];
 
   #media center

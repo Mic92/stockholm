@@ -283,14 +283,6 @@ in {
       };
     };
 
-    filebitch = rec {
-      cores = 4;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.189.130";
-        };
-      };
-          };
 
     shackdev = rec { # router@shack
       cores = 1;

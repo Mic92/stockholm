@@ -14,7 +14,7 @@ let
       port 465
       tls on
       tls_starttls off
-      tls_fingerprint 8C:10:A6:AB:1F:82:C4:8F:B1:B4:22:D5:8B:8B:49:9B:59:0B:22:A4
+      tls_fingerprint 9C:82:3B:0F:31:CE:1B:8E:96:00:CC:C9:FF:E7:BE:66:95:92:4F:22:DD:D6:2E:0E:1D:90:76:BE:8E:9E:8E:16
       auth on
       user lassulus
       passwordeval pass show c-base/pass
@@ -217,7 +217,7 @@ let
     name = "mutt";
     paths = [
       (pkgs.writeDashBin "mutt" ''
-        exec ${pkgs.neomutt}/bin/neomutt -F ${muttrc} $@
+        exec ${pkgs.neomutt}/bin/neomutt -F ${muttrc} "$@"
       '')
       pkgs.neomutt
     ];

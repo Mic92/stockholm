@@ -5,40 +5,32 @@
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
   ];
 
-  boot.zfs.enableUnstable = true;
   boot.loader.grub = {
     enable = true;
     device = "/dev/sda";
     efiSupport = true;
+    efiInstallAsRemovable = true;
   };
-  boot.loader.efi.canTouchEfiVariables = true;
 
   boot.blacklistedKernelModules = [
     "sdhci_pci"
   ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "sd_mod" ];
-  boot.initrd.kernelModules = [ ];
   boot.initrd.luks.devices.crypted.device = "/dev/sda3";
   boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
   boot.kernelParams = [
     "fbcon=rotate:1"
     "boot.shell_on_fail"
   ];
 
   fileSystems."/" = {
-    device = "rpool/root";
-    fsType = "zfs";
-  };
-
-  fileSystems."/home" = {
-    device = "rpool/home";
-    fsType = "zfs";
+    device = "/dev/disk/by-uuid/8efd0c22-f712-46bf-baad-1fbf19d9ec25";
+    fsType = "xfs";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/E749-784C";
+    device = "/dev/disk/by-uuid/7F23-DDB4";
     fsType = "vfat";
   };
 
@@ -74,7 +66,6 @@
   services.xserver = {
     videoDrivers = [ "intel" ];
     displayManager.sessionCommands = ''
-      echo nonono > /tmp/xxyy
       (sleep 2 && ${pkgs.xorg.xrandr}/bin/xrandr --output eDP1 --rotate right)
       (sleep 2 && ${pkgs.xorg.xinput}/bin/xinput set-prop "pointer:Goodix Capacitive TouchScreen" --type=float "Coordinate Transformation Matrix" 0 1 0 -1 0 1 0 0 1)
     '';

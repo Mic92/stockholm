@@ -1,25 +1,20 @@
-{ pkgs, lib, pubkey ? "", disk ? "/dev/sda", vgname ? "pool", luksmap ? "luksmap", keyfile ? "/root/keyfile", ... }:
+{ pkgs, lib, vgname ? "vgname", luksmap ? "luksmap", ... }:
 
 with lib;
 
-pkgs.writeText "init" ''
-  #! /bin/sh
-  # usage: curl xu/~tv/init | sh
+pkgs.writeScript "init" ''
+  #!/usr/bin/env nix-shell
+  #! nix-shell -i bash -p jq parted libxfs
   set -efu
-  # TODO nix-env -f '<nixpkgs>' -iA jq # if not exists (also version)
-  #       install at tmp location
 
+  disk=$1
 
-  case $(cat /proc/cmdline) in
-     *' root=LABEL=NIXOS_ISO '*) :;;
-     *) echo Error: unknown operating system >&2; exit 1;;
-  esac
+  if mount | grep -q "$disk"; then
+    echo "target device is already mounted, bailout"
+    exit 2
+  fi
 
-  keyfile=${keyfile}
-
-  disk=${disk}
-
-  luksdev=${disk}3
+  luksdev="$disk"3
   luksmap=/dev/mapper/${luksmap}
 
   vgname=${vgname}
@@ -29,13 +24,7 @@ pkgs.writeText "init" ''
   rootdev=/dev/mapper/${vgname}-root
   homedev=/dev/mapper/${vgname}-home
 
-  #
-  #generate keyfile
-  #
-
-  if ! test -e "$keyfile"; then
-    dd if=/dev/urandom bs=512 count=2048 of=$keyfile
-  fi
+  read -p "LUKS Password: " lukspw
 
   #
   # partitioning
@@ -61,14 +50,13 @@ pkgs.writeText "init" ''
 
   if ! cryptsetup isLuks "$luksdev"; then
     # aes xts-plain64
-    cryptsetup luksFormat "$luksdev" "$keyfile" \
+    echo -n "$lukspw" | cryptsetup luksFormat "$luksdev" - \
         -h sha512 \
         --iter-time 5000
   fi
 
   if ! test -e "$luksmap"; then
-    cryptsetup luksOpen "$luksdev" "$(basename "$luksmap")" \
-        --key-file "$keyfile"
+    echo "$lukspw" | cryptsetup luksOpen "$luksdev" "$(basename "$luksmap")" -
   fi
   # cryptsetup close
 
@@ -95,11 +83,11 @@ pkgs.writeText "init" ''
   fi
 
   if ! test "$(blkid -o value -s TYPE "$rootdev")" = btrfs; then
-    mkfs.btrfs "$rootdev"
+    mkfs.xfs "$rootdev"
   fi
 
   if ! test "$(blkid -o value -s TYPE "$homedev")" = btrfs; then
-    mkfs.btrfs "$homedev"
+    mkfs.xfs "$homedev"
   fi
 
 
@@ -134,12 +122,5 @@ pkgs.writeText "init" ''
   parted "$disk" print
   lsblk "$disk"
 
-  key='${pubkey}'
-  if [ "$(cat /root/.ssh/authorized_keys 2>/dev/null)" != "$key" ]; then
-    mkdir -p /root/.ssh
-    echo "$key" > /root/.ssh/authorized_keys
-  fi
-  systemctl start sshd
-  ip route
   echo READY.
 ''

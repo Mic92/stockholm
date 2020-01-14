@@ -47,7 +47,8 @@ in {
       alias ${pkgs.writeText "prism.wg" config.krebs.hosts.prism.nets.wiregrill.wireguard.pubkey};
     '';
     locations."/tinc/".extraConfig = ''
-      alias ${config.krebs.tinc_graphs.workingDir}/external;
+      index index.html;
+      alias ${config.krebs.tinc_graphs.workingDir}/external/;
     '';
     locations."= /krebspage".extraConfig = ''
       default_type "text/html";
@@ -60,10 +61,10 @@ in {
     in ''
       alias ${initscript};
     '';
-    locations."= /pub".extraConfig = ''
+    locations."= /blue.pub".extraConfig = ''
       alias ${pkgs.writeText "pub" config.krebs.users.lass.pubkey};
     '';
-    locations."= /pub1".extraConfig = ''
+    locations."= /mors.pub".extraConfig = ''
       alias ${pkgs.writeText "pub" config.krebs.users.lass-mors.pubkey};
     '';
   };
@@ -93,6 +94,7 @@ in {
 
   users.users.blog = {
     uid = genid_uint31 "blog";
+    group = "nginx";
     description = "lassul.us blog deployment";
     home = "/srv/http/lassul.us";
     useDefaultShell = true;

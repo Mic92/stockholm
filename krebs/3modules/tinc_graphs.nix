@@ -37,6 +37,7 @@ let
 
       anonymous = mkOption {
         type = types.attrsOf types.unspecified;
+        default = {};
         description = ''
           nginx virtualHost options to be merged into the anonymous graphs
           vhost entry.

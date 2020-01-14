@@ -47,17 +47,6 @@ with import <stockholm/lib>;
     };
     virtualHosts.default = {
       default = true;
-      locations."=/Nginx-Fancyindex-Theme-dark" = {
-        extraConfig = ''
-          alias ${pkgs.fetchFromGitHub {
-            owner = "Naereen";
-            repo = "Nginx-Fancyindex-Theme";
-            rev = "e84f7d6a32085c2b6238f85f5fdebe9ceb710fc4";
-            sha256 = "0wzl4ws2w8f0749vxfd1c8c21p3jw463wishgfcmaljbh4dwplg6";
-          }}/Nginx-Fancyindex-Theme-dark;
-          autoindex on;
-        '';
-      };
       locations."/dl".extraConfig = ''
         return 301 /;
       '';
@@ -65,8 +54,6 @@ with import <stockholm/lib>;
         root = "/var/download/finished";
         extraConfig = ''
           fancyindex on;
-          fancyindex_header "/Nginx-Fancyindex-Theme-dark/header.html";
-          fancyindex_footer "/Nginx-Fancyindex-Theme-dark/footer.html";
           dav_methods PUT DELETE MKCOL COPY MOVE;
 
           create_full_put_path on;

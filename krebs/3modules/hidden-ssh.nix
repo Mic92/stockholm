@@ -11,6 +11,14 @@ let
 
   api = {
     enable = mkEnableOption "hidden SSH announce";
+    channel = mkOption {
+      type = types.str;
+      default = "#krebs-announce";
+    };
+    server = mkOption {
+      type = types.str;
+      default = "irc.freenode.org";
+    };
   };
 
   imp = let
@@ -38,10 +46,10 @@ let
             echo "still waiting for ${hiddenServiceDir}/hostname"
             sleep 1
           done
-          ${pkgs.untilport}/bin/untilport irc.freenode.org 6667 && \
+          ${pkgs.untilport}/bin/untilport ${cfg.server} 6667 && \
             ${pkgs.irc-announce}/bin/irc-announce \
-            irc.freenode.org 6667 ${config.krebs.build.host.name}-ssh \
-            \#krebs-announce \
+            ${cfg.server} 6667 ${config.krebs.build.host.name}-ssh \
+            \${cfg.channel} \
             "SSH Hidden Service at $(cat ${hiddenServiceDir}/hostname)"
         '';
         PrivateTmp = "true";

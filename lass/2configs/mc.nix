@@ -228,6 +228,9 @@ let
     shell/i/.divx
       Include=video
 
+    shell/i/.rmvb
+      Include=video
+
     shell/i/.mkv
       Include=video
 
