@@ -186,7 +186,7 @@ let
     };
 
     extraConfig = mkOption {
-      type = types.str;
+      type = types.lines;
       description = ''
         config to be placed into ${cfg.workDir}/.rtorrent.rc
 
