@@ -17,7 +17,7 @@ let
 
       nickname = mkOption {
         default = config.krebs.build.host.name + "|r";
-        type = types.string;
+        type = types.str;
         description = ''
           The nick name of the irc bot.
           Defaults to {hostname}|r
@@ -47,7 +47,7 @@ let
 
       extraConfig = mkOption {
         default = "";
-        type = types.string;
+        type = types.str;
         description = ''
           configuration appended to the default or overridden configuration
         '';
