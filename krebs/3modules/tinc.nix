@@ -63,7 +63,7 @@ let
           '';
         };
         tincUp = mkOption {
-          type = types.string;
+          type = types.str;
           default = let
             net = tinc.config.host.nets.${netname};
             iproute = tinc.config.iproutePackage;
