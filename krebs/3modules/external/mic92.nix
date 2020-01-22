@@ -66,13 +66,13 @@ in {
         };
       };
     };
-    dimitri = {
+    dimitrios = {
       owner = config.krebs.user.Mic92;
       nets = {
         retiolum = {
           ip4.addr = "10.243.29.183";
           aliases = [
-            "dimitri.r"
+            "dimitrios.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
