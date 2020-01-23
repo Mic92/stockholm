@@ -15,6 +15,11 @@ in
     (glados.esphome.temp { host = "fablab_feinstaub";})
     (glados.esphome.dust_25m  { host = "fablab_feinstaub";})
     (glados.esphome.dust_100m { host = "fablab_feinstaub";})
+
+    (glados.esphome.temp { host = "rz_feinstaub";})
+    (glados.esphome.hum { host = "rz_feinstaub";})
+    (glados.esphome.dust_25m  { host = "rz_feinstaub";})
+    (glados.esphome.dust_100m { host = "rz_feinstaub";})
   ];
   automation =
     [
