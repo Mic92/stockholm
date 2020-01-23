@@ -93,6 +93,7 @@ in {
       light =  badair.light;
       media_player = [
         { platform = "mpd";
+          name = "lounge";
           host = "lounge.mpd.shack";
         }
       ];
@@ -117,19 +118,27 @@ in {
       #conversation = {};
       history = {};
       logbook = {};
+      logger = {
+        default = "info";
+      };
       recorder = {};
       tts = [
         { platform = "google_translate";
+          service_name = "say";
           language = "de";
+          cache = true;
+          time_memory = 57600;
         }
         #{ platform = "picotts";
         #  language = "de-DE";
+        #  service_name = "say";
         #}
       ];
       sun = {};
 
-      automation = wasser.automation 
-        ++ badair.automation 
+      automation = wasser.automation
+        ++ badair.automation
+        ++ (import ./automation/shack-startup.nix)
         ++ (import ./automation/hass-restart.nix);
 
       device_tracker = [];
