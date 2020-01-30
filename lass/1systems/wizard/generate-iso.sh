@@ -4,4 +4,4 @@
 set -xefu
 
 WD=$(dirname "$0")
-nixos-generate -I stockholm="$WD"/../../.. -c "$WD"/default.nix -f install-iso
+nixos-generate -I stockholm="$WD"/../../.. -c "$WD"/config.nix -f install-iso

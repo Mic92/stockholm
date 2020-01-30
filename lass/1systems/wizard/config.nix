@@ -1,42 +1,118 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 with import <stockholm/lib>;
 
 let
 
-  wizard = pkgs.writers.writeBash "wizard" ''
-    shopt -s extglob
+  icon = pkgs.writeText "icon" ''
+                    //
+                    //
+                  _ //
+               .' . // '.
+              '_ '_\/_'  `_
+              .  . \\  .  .
+             .==. ` \\' .'
+      .\|   //bd\\   \,
+      \_'`._\\__//_.'`.;
+        `.__      __,' \\
+            |    |      \\
+            |    |       `
+            |    |
+            |    |
+            |____|
+    l42    =='  '==
+  '';
 
-    echo -n '
+  messenger = pkgs.writeText "message" ''
+                                 .
+                              | \/|
+      (\   _                  ) )|/|
+          (/            _----. /.'.'
+    .-._________..      .' @ _\  .'
+    '.._______.   '.   /    (_| .')
+      '._____.  /   '-/      | _.'
+       '.______ (         ) ) \
+         '..____ '._       )  )
+            .' __.--\  , ,  // ((
+            '.'  mrf|  \/   (_.'(
+                    '   \ .'
+                     \   (
+                      \   '.
+                       \ \ '.)
+                        '-'-'
+  '';
+
+  waiting = pkgs.writeText "waiting" ''
+                             Z
+                       Z
+                    z
+                  z
+              * '
+             / \
+            /___\
+           ( - - )
+           )  L  (           .--------------.
+         __()(-)()__      | \              |
+      .~~  )()()()  ~.    |  .             :
+     /      )()()     `   |   `-.__________)
+    |        )()  ~       |  :             :
+    |         )           |  :  |
+    |    _                |     |   [ ##   :
+     \    ~~-.            |  ,   oo_______.'
+      `_   ( \) _____/~~~~ `--___
+      | ~`-)  ) `-.   `---   ( - a:f -
+      |   '///`  | `-.
+      |     | |  |    `-.
+      |     | |  |       `-.
+      |     | |\ |
+      |     | | \|
+       `-.  | |  |
+          `-| '
+  '';
+
+  wizard = pkgs.writers.writeDash "wizard" ''
+    cat ${icon}
+
+    echo -n '${''
       welcome to the computer wizard
       first we will check for internet connectivity
-      (press enter to continue)
-    '
-    read -n 1 -s
-    if ! ping -c1 lassul.us; then
-      echo 'no internet detectio, you will have to provide credentials'
-      read -n 1 -s
-      nmtui
-    fi
 
-    # ping -c1 lassuls.us || ${pkgs.writeDash "nm-dmenu" ''
-    #   set -x
-    #   export PATH=$PATH:${pkgs.dmenu}/bin:${pkgs.networkmanagerapplet}/bin
-    #   exec ${pkgs.networkmanager_dmenu}/bin/networkmanager_dmenu "$@"
-    # ''}
+    ''}'
 
-    mode=$(echo -n '
-    1. help of the wizard
-    2. let the wizard watch and help if needed
-    3. I will do it alone
-    ' | ${pkgs.fzf}/bin/fzf --reverse)
+    read -p '(press enter to continue...)' key
+    until ping -c1 8.8.8.8; do
+      ${pkgs.nm-dmenu}/bin/nm-dmenu
+    done
+
+    mode=$(echo -n '${''
+      1. Help of the wizard
+      2. Install NixOS
+      3. I know what I need to do
+    ''}' | ${pkgs.fzf}/bin/fzf --reverse)
     case "$mode" in
       1*)
         echo 'mode_1' > /tmp/mode
+        clear
+        echo 'waiting for the messenger to reach the wizard'
+        cat ${messenger}
+
+        # get pubkeys
+        mkdir -p /root/.ssh/
+        touch /root/.ssh/authorized_keys
+        curl -Ss 'https://lassul.us/mors.pub' >> /root/.ssh/authorized_keys
+        curl -Ss 'https://lassul.us/blue.pub' >> /root/.ssh/authorized_keys
+        curl -Ss 'https://lassul.us/yubi.pub' >> /root/.ssh/authorized_keys
+
+        # write via irc
         systemctl start hidden-ssh-announce.service
-        tmux new -s help
+        tmux new-session -s help ${pkgs.writers.writeDash "waiting" ''
+          cat ${waiting}
+          read -p 'waiting for the wizard to wake up' key
+          ${pkgs.bashInteractive}/bin/bash
+        ''}
         ;;
       2*)
         echo 'mode_2' > /tmp/mode
+        ${pkgs.nixos-installer}/bin/nixos-installer
         ;;
       3*)
         echo 'mode_3' > /tmp/mode
@@ -52,6 +128,7 @@ in {
     <stockholm/krebs>
     <stockholm/lass/3modules>
     <stockholm/lass/2configs/vim.nix>
+    # <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-base.nix>
     {
       nixpkgs.config.packageOverrides = import <stockholm/lass/5pkgs> pkgs;
       krebs.enable = true;
@@ -86,14 +163,14 @@ in {
   networking.hostName = "wizard";
   nixpkgs.config.allowUnfree = true;
 
-  users.extraUsers = {
-    root = {
-      openssh.authorizedKeys.keys = [
-        config.krebs.users.lass.pubkey
-        config.krebs.users.lass-mors.pubkey
-      ];
-    };
-  };
+  # users.extraUsers = {
+  #   root = {
+  #     openssh.authorizedKeys.keys = [
+  #       config.krebs.users.lass.pubkey
+  #       config.krebs.users.lass-mors.pubkey
+  #     ];
+  #   };
+  # };
 
   environment.systemPackages = with pkgs; [
   #stockholm
@@ -120,16 +197,12 @@ in {
     aria2
 
   #neat utils
-    dmenu
+    chntpw
     hashPassword
     krebspaste
     pciutils
-    pop
     psmisc
-    q
-    rs
     tmux
-    untilport
     usbutils
 
   #unpack stuff
@@ -141,6 +214,8 @@ in {
     ddrescue
     ntfs3g
     dosfstools
+
+    nixos-installer
   ];
 
   environment.extraInit = ''
@@ -193,10 +268,10 @@ in {
   krebs.hidden-ssh = {
     enable = true;
     channel = "##lassulus-wizard";
-
+    message = "lassulus: torify sshn root@";
   };
   systemd.services.hidden-ssh-announce.wantedBy = mkForce [];
-  services.mingetty.autologinUser = "root";
+  services.mingetty.autologinUser = lib.mkForce "root";
 
   nixpkgs.config.packageOverrides = super: {
     dmenu = pkgs.writeDashBin "dmenu" ''
