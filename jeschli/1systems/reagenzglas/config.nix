@@ -9,8 +9,8 @@
     <stockholm/jeschli/2configs/rust.nix>
     <stockholm/jeschli/2configs/haskell.nix>
     <stockholm/jeschli/2configs/python.nix>
-       ./desktop.nix
-       ./i3-configuration.nix
+#       ./desktop.nix
+#       ./i3-configuration.nix
        ./hardware-configuration.nix
     ];
 
@@ -39,6 +39,8 @@
   environment.systemPackages = with pkgs; [
     ag
     alacritty
+    google-chrome
+    chromium
     copyq
     direnv
     go
@@ -66,6 +68,11 @@
 
   #Enable ssh daemon
   services.openssh.enable = true;
+
+  #Enable clight
+  services.clight.enable = true;
+  services.geoclue2.enable = true;
+  location.provider = "geoclue2";
 
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDM1xtX/SF2IzfAIzrXvH4HsW05eTBX8U8MYlEPadq0DS/nHC45hW2PSEUOVsH0UhBRAB+yClVLyN+JAYsuOoQacQqAVq9R7HAoFITdYTMJCxVs4urSRv0pWwTopRIh1rlI+Q0QfdMoeVtO2ZKG3KoRM+APDy2dsX8LTtWjXmh/ZCtpGl1O8TZtz2ZyXyv9OVDPnQiFwPU3Jqs2Z036c+kwxWlxYc55FRuqwRtQ48c/ilPMu+ZvQ22j1Ch8lNuliyAg1b8pZdOkMJF3R8b46IQ8FEqkr3L1YQygYw2M50B629FPgHgeGPMz3mVd+5lzP+okbhPJjMrUqZAUwbMGwGzZ ombi@nixos"

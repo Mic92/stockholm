@@ -9,7 +9,7 @@ let
     ];
   };
 
-  orgAgendaView = import ./emacs-org-agenda.nix;
+#  orgAgendaView = import ./emacs-org-agenda.nix;
 
   packageRepos = ''
     (require 'package) ;; You might already have this line
@@ -179,7 +179,6 @@ let
     ${theme}
     ${windowCosmetics}
 
-    ${orgAgendaView}
     ${myFunctionKeys}
     ${lspMode}
   '';
@@ -202,8 +201,13 @@ let
     epkgs.melpaPackages.academic-phrases
 
     epkgs.melpaPackages.gitlab
-    epkgs.melpaPackages.helm
     epkgs.melpaPackages.weechat
+
+# helm
+    epkgs.melpaPackages.helm
+    epkgs.melpaPackages.helm-fuzzier
+    epkgs.melpaPackages.helm-ag
+
 
 # emacs convenience
     epkgs.melpaPackages.ag
@@ -235,12 +239,15 @@ let
     epkgs.melpaPackages.org-mime
     epkgs.melpaPackages.orgit
 
-
     epkgs.elpaPackages.which-key
+
+    epkgs.exwm
+    epkgs.melpaPackages.desktop-environment
+    epkgs.melpaPackages.helm-exwm
   ];
 
   emacsWithOverlay = pkgsWithOverlay.emacsWithPackagesFromUsePackage {
-    config = builtins.readFile dotEmacs; # builtins.readFile ./emacs.el;
+    config = builtins.readFile ./elisp/init.el;
     # Package is optional, defaults to pkgs.emacs
     package = pkgsWithOverlay.emacsGit;
     # Optionally provide extra packages not in the configuration file
@@ -260,6 +267,21 @@ let
   '';
 in {
   environment.systemPackages = [
-    myEmacs myEmacsWithDaemon myEmacsClient
+    myEmacs myEmacsWithDaemon myEmacsClient emacsWithOverlay
   ];
+
+  services.xserver = {
+    enable = true;
+    xkbOptions = "caps:super";
+    exportConfiguration = true;
+
+    displayManager.slim.enable = true;
+    windowManager.default = "exwm";
+
+    # Set up the login session
+    windowManager.session = [{
+      name = "exwm";
+      start = "${emacsWithOverlay}/bin/emacs -q -l " + builtins.toString ./elisp/init.el;
+    }];
+  };
 }
