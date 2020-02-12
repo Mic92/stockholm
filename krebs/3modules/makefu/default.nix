@@ -171,6 +171,7 @@ in {
           cgit.euer         IN A      ${nets.internet.ip4.addr}
           dl.euer           IN A      ${nets.internet.ip4.addr}
           dockerhub         IN A      ${nets.internet.ip4.addr}
+          dns.euer          IN A      ${nets.internet.ip4.addr}
           euer              IN A      ${nets.internet.ip4.addr}
           euer              IN MX 1   aspmx.l.google.com.
           ghook             IN A      ${nets.internet.ip4.addr}
