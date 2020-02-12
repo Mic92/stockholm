@@ -164,14 +164,15 @@ in {
       ci = true;
       extraZones = {
         "krebsco.de" = ''
+          bookmark.euer     IN A      ${nets.internet.ip4.addr}
           boot              IN A      ${nets.internet.ip4.addr}
           boot.euer         IN A      ${nets.internet.ip4.addr}
           cache.euer        IN A      ${nets.internet.ip4.addr}
           cache.gum         IN A      ${nets.internet.ip4.addr}
           cgit.euer         IN A      ${nets.internet.ip4.addr}
           dl.euer           IN A      ${nets.internet.ip4.addr}
-          dockerhub         IN A      ${nets.internet.ip4.addr}
           dns.euer          IN A      ${nets.internet.ip4.addr}
+          dockerhub         IN A      ${nets.internet.ip4.addr}
           euer              IN A      ${nets.internet.ip4.addr}
           euer              IN MX 1   aspmx.l.google.com.
           ghook             IN A      ${nets.internet.ip4.addr}
@@ -179,7 +180,9 @@ in {
           gold              IN A      ${nets.internet.ip4.addr}
           graph             IN A      ${nets.internet.ip4.addr}
           gum               IN A      ${nets.internet.ip4.addr}
+          io                IN NS     gum.krebsco.de.
           iso.euer          IN A      ${nets.internet.ip4.addr}
+          mediengewitter    IN CNAME  over.dose.io.
           mon.euer          IN A      ${nets.internet.ip4.addr}
           netdata.euer      IN A      ${nets.internet.ip4.addr}
           nixos.unstable    IN CNAME  krebscode.github.io.
@@ -190,9 +193,6 @@ in {
           wg.euer           IN A      ${nets.internet.ip4.addr}
           wiki.euer         IN A      ${nets.internet.ip4.addr}
           wikisearch        IN A      ${nets.internet.ip4.addr}
-          bookmark.euer     IN A      ${nets.internet.ip4.addr}
-          io                IN NS     gum.krebsco.de.
-          mediengewitter    IN CNAME  over.dose.io.
         '';
       };
       cores = 8;
