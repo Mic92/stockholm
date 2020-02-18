@@ -77,6 +77,7 @@
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDM1xtX/SF2IzfAIzrXvH4HsW05eTBX8U8MYlEPadq0DS/nHC45hW2PSEUOVsH0UhBRAB+yClVLyN+JAYsuOoQacQqAVq9R7HAoFITdYTMJCxVs4urSRv0pWwTopRIh1rlI+Q0QfdMoeVtO2ZKG3KoRM+APDy2dsX8LTtWjXmh/ZCtpGl1O8TZtz2ZyXyv9OVDPnQiFwPU3Jqs2Z036c+kwxWlxYc55FRuqwRtQ48c/ilPMu+ZvQ22j1Ch8lNuliyAg1b8pZdOkMJF3R8b46IQ8FEqkr3L1YQygYw2M50B629FPgHgeGPMz3mVd+5lzP+okbhPJjMrUqZAUwbMGwGzZ ombi@nixos"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFXgtbgeivxlMKkoEJ4ANhtR+LRMSPrsmL4U5grFUME jeschli@nixos"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG7C3bgoL9VeVl8pgu8sp3PCOs6TXk4R9y7JKJAHGsfm root@baeckerei"
   ];
 
   # This value determines the NixOS release with which your system is to be
