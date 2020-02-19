@@ -96,6 +96,10 @@ in {
           name = "lounge";
           host = "lounge.mpd.shack";
         }
+        { platform = "mpd";
+          name = "kiosk";
+          host = "lounge.kiosk.shack";
+        }
       ];
 
       sensor =
@@ -103,6 +107,7 @@ in {
         ++ (import ./sensors/power.nix)
         ++ shackopen.sensor
         ++ badair.sensor;
+      airquality = (import ./sensors/sensemap.nix );
 
       binary_sensor = shackopen.binary_sensor;
 
