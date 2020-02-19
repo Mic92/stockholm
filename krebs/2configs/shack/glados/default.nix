@@ -134,10 +134,10 @@ in {
           cache = true;
           time_memory = 57600;
         }
-        #{ platform = "picotts";
-        #  language = "de-DE";
-        #  service_name = "say";
-        #}
+        { platform = "picotts";
+          language = "de-DE";
+          service_name = "pico";
+        }
       ];
       sun = {};
 
