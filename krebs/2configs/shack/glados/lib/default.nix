@@ -9,22 +9,22 @@ in
     [
       {
         service = "media_player.turn_on";
-        data.entity_id = "media_player.lounge";
+        data.entity_id = "media_player.${entity}";
       }
       { service = "media_player.play_media";
         data = {
-          entity_id = "media_player.lounge";
+          entity_id = "media_player.${entity}";
           media_content_type = "playlist";
           media_content_id = "ansage";
         };
       }
       {
         service = "media_player.turn_on";
-        data.entity_id = "media_player.lounge";
+        data.entity_id = "media_player.${entity}";
       }
       { delay.seconds = 8; }
       { service = "tts.say";
-        entity_id =  "media_player.lounge";
+        entity_id =  "media_player.${entity}";
         data_template = {
           inherit message;
           language = "de";
@@ -40,6 +40,10 @@ in
     herrenklo = message: tts {
       inherit message;
       entity = "herrenklo";
+    };
+    kiosk = message: tts {
+      inherit message;
+      entity = "kiosk";
     };
   };
   esphome =
@@ -111,6 +115,22 @@ in
       platform = "mqtt";
       unit_of_measurement = "µg/m³";
       icon = "mdi:chemical-weapon";
+      inherit name;
+      state_topic = "${prefix}/${host}/sensor/${topic}/state";
+      availability_topic = "${prefix}/${host}/status";
+    };
+    ip = {host, name ? "${host} IP", topic ? "ip_address" }:
+    {
+      platform = "mqtt";
+      inherit name;
+      state_topic = "${prefix}/${host}/sensor/${topic}/state";
+      availability_topic = "${prefix}/${host}/status";
+    };
+    wifi = {host, name ? "${host} Wifi Signal", topic ? "wifi_signal" }:
+    {
+      platform = "mqtt";
+      unit_of_measurement = "dB";
+      icon = "mdi:wifi";
       inherit name;
       state_topic = "${prefix}/${host}/sensor/${topic}/state";
       availability_topic = "${prefix}/${host}/status";
