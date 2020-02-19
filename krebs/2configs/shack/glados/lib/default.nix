@@ -72,6 +72,17 @@ in
       payload_available = "online";
       payload_not_available = "offline";
     };
+    rollo = {host, topic ? "rollo" }:
+    {
+      optimistic = true;
+      platform = "mqtt";
+      name = "${host} Rollo";
+      state_topic = "${prefix}/${host}/sensor/${topic}/state";
+      command_topic = "${prefix}/${host}/sensor/${topic}/command";
+      availability_topic = "${prefix}/${host}/status";
+      position_topic =  "${prefix}/${host}/cover/${topic}/position/state";
+      set_position_topic = "${prefix}/${host}/cover/${topic}/position/command";
+    };
     # copied from "homeassistant/light/fablab_led/led_ring/config"
     led = {host,  topic ? "led", name ? host}:
     { # name: fablab_led
@@ -99,6 +110,37 @@ in
       payload_available = "online";
       payload_not_available = "offline";
       qos = 1;
+    };
+    monoled = {host,  topic ? "blue_led", name ? host "MonoLED ${host}"}:
+    {
+      platform = "mqtt";
+      inherit name;
+      schema = "json";
+      brightness =  true;
+      effect =  true;
+      effect_list = [ # TODO: may be different
+        "Strobe"
+        "Twinkle"
+        "None"
+      ];
+      state_topic = "${prefix}/${host}/light/${topic}/state";
+      command_topic = "${prefix}/${host}/light/${topic}/command";
+      availability_topic = "${prefix}/${host}/status";
+    };
+    btn = {host, topic ? "button", name ? "${host} ${topic}"}: #binary_sensor
+    {
+      platform = "mqtt";
+      name = "${host} Button";
+      state_topic = "${prefix}/${host}/binary_sensor/${topic}/state";
+      availability_topic = "${prefix}/${host}/status";
+    };
+    relay = {host, name ? "${host} ${topic}", topic ? "relay" }: #switch
+    {
+      inherit name;
+      platform = "mqtt";
+      state_topic = "${prefix}/${host}/switch/${topic}/state";
+      command_topic = "${prefix}/${host}/switch/${topic}/command";
+      availability_topic = "${prefix}/${host}/status";
     };
     # Feinstaub
     dust_25m = { host, name ? "${host} < 2.5µm", topic ? "particulate_matter_25m_concentration" }:
