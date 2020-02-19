@@ -17,8 +17,8 @@ in
       condition = "template";
       value_template = "{{ trigger.from_state.state != 'No Keyholder' }}";
     };
-    #action = glados.say.lounge "Danke {{trigger.to_state.state}} für das Übernehmen des Keys von {{trigger.from_state.state}}";
-    action = [];
+    action = glados.say.kiosk "Danke {{trigger.to_state.state}} für das Übernehmen des Keys von {{trigger.from_state.state}}";
+    # action = [];
   }
 
   {

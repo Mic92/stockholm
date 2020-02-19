@@ -39,7 +39,7 @@ in {
       '';
     })).override {
       extraPackages = ps: with ps; [
-        python-forecastio jsonrpc-async jsonrpc-websocket mpd2
+        python-forecastio jsonrpc-async jsonrpc-websocket mpd2 picotts
       ];
     };
     autoExtraComponents = true;
