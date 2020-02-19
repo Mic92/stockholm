@@ -12,10 +12,17 @@ in
     (glados.esphome.led { name = "Fablab LED Part D"; host = "fablab_led"; topic = "D";})
   ];
   sensor = [
+    (glados.esphome.ip { host = "fablab_feinstaub";})
+    (glados.esphome.wifi { host = "fablab_feinstaub";})
     (glados.esphome.temp { host = "fablab_feinstaub";})
     (glados.esphome.dust_25m  { host = "fablab_feinstaub";})
     (glados.esphome.dust_100m { host = "fablab_feinstaub";})
 
+    (glados.esphome.ip { host = "fablab_led";})
+    (glados.esphome.wifi { host = "fablab_led";})
+
+    (glados.esphome.ip { host = "rz_feinstaub";})
+    (glados.esphome.wifi { host = "rz_feinstaub";})
     (glados.esphome.temp { host = "rz_feinstaub";})
     (glados.esphome.hum { host = "rz_feinstaub";})
     (glados.esphome.dust_25m  { host = "rz_feinstaub";})
