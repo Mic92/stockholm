@@ -109,29 +109,6 @@ in {
         };
       };
     };
-    idontcare = {
-      owner = config.krebs.users.Mic92;
-      nets = rec {
-        retiolum = {
-          addrs = [
-            config.krebs.hosts.idontcare.nets.retiolum.ip4.addr
-            config.krebs.hosts.idontcare.nets.retiolum.ip6.addr
-          ];
-          ip4.addr = "10.243.29.177";
-          aliases = [ "idontcare.r" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAxmmbQLVXcnCU9Vg9TCoJxfq/RyNfzaTj8XJsn4Kpo3CvQOwFzL6O
-            qZnbG55WjPjPumuFgtUdHA/G8mgtrTVaIRbVE9ck2l2wWFzMWxORzuvDbMh5xP8A
-            OW2Z2qjlH6O9GTBCzpYyHuyBWCjtiN4x9zEqxkIsBARKOylAoy3zQIiiQF0d72An
-            lqKFi9vYUU90zo9rP8BTzx2ZsEWb28xhHUlwf1+vgaOHI1jI99gnr12dVYl/i/Hb
-            O28gDUogfpP/5pWFAHJ+53ZscHo8/Y7imjiKgGXmOHywoXOsKQ67M6ROEU/0xPnw
-            jKmq2p7zTJk2mDhphjePi5idd5yKNX5Q3wIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-    };
     jongepad = {
       owner = config.krebs.users.jonge;
       nets = {
@@ -199,30 +176,6 @@ in {
       nets.wiregrill = {
         aliases = [ "rilke.w" ];
         wireguard.pubkey = "09yVPHL/ucvqc6V5n7vFQ2Oi1LBMdwQZDL+7jBwy+iQ=";
-      };
-    };
-    rock = {
-      owner = config.krebs.users.Mic92;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.29.171";
-          aliases = [ "rock.r" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAsMJbXDhkaLZcEzCIe8G+rHyLulWIqrUAmDT4Vbtv4r0QhPBsqwjM
-            DuvRtX5SNHdjfZWnUZoOlmXrmIo07exPFQvyrnppm6DNx+IZ5mNMNVIFUoojRhF7
-            HS2jubcjTEib56XEYWKly0olrVMbsJk5THJqRQyOQuTPCFToxXVRcT5t/UK6Dzgh
-            mp+suJ7IcmmO80IwfZrQrQslkQ6TdOy1Vs908GacSQJyRxdRxLraU/98iMhFbAQf
-            Ap+qVSUU88iCi+tcoSYzKhqU2N0AhRGcsE073B3Px8CAgPK/juwTrFElKEc17X9M
-            Rh41DvUjrtG4ERPmbwKPtsLagmnZUlU8A5YC8wtV08RI5QBsbbOsKInareV1aLeD
-            91ZVCBPFTz8IM6Mc6H435eMCMC2ynFCDyRGdcue3tBQoaTGe1dbduIZkPGn+7cg4
-            fef1db6SQD4HCwDLv8CTFLACR/jmAapwZEgvJ3u3bpgMGzt+QNvL1cxUr3TBUWRv
-            3f0R+Dj8DCUWTJUE7K5LO7bL4p9Ht0yIsVH+/DucyoMQqRwCwWSr7+H2MAsWviav
-            ZRRfH0RqZPEzCxyLDBtkVrx+GRAUZxy1xlqmN16O/sRHiqq3bv8Jk3dwuRZlFu6q
-            cOFu4g9XsamHkmCuVkvTGjnC2h21MjUUr3PGHzOMtiM/18LcfX730f8CAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
       };
     };
     scardanelli = {
