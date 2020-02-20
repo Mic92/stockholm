@@ -2,32 +2,6 @@ let
   glados = import ../lib;
 in
 {
-  # LED
-  light = [
-    (glados.esphome.led { name = "Fablab LED"; host = "fablab_led"; topic = "led_ring"; })
-
-    (glados.esphome.led { name = "Fablab LED Part A"; host = "fablab_led"; topic = "A";})
-    (glados.esphome.led { name = "Fablab LED Part B"; host = "fablab_led"; topic =  "B";})
-    (glados.esphome.led { name = "Fablab LED Part C"; host = "fablab_led"; topic = "C";})
-    (glados.esphome.led { name = "Fablab LED Part D"; host = "fablab_led"; topic = "D";})
-  ];
-  sensor = [
-    (glados.esphome.ip { host = "fablab_feinstaub";})
-    (glados.esphome.wifi { host = "fablab_feinstaub";})
-    (glados.esphome.temp { host = "fablab_feinstaub";})
-    (glados.esphome.dust_25m  { host = "fablab_feinstaub";})
-    (glados.esphome.dust_100m { host = "fablab_feinstaub";})
-
-    (glados.esphome.ip { host = "fablab_led";})
-    (glados.esphome.wifi { host = "fablab_led";})
-
-    (glados.esphome.ip { host = "rz_feinstaub";})
-    (glados.esphome.wifi { host = "rz_feinstaub";})
-    (glados.esphome.temp { host = "rz_feinstaub";})
-    (glados.esphome.hum { host = "rz_feinstaub";})
-    (glados.esphome.dust_25m  { host = "rz_feinstaub";})
-    (glados.esphome.dust_100m { host = "rz_feinstaub";})
-  ];
   automation =
     [
     { alias = "Gute Luft Fablab";

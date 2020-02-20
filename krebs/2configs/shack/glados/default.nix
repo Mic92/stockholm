@@ -39,7 +39,7 @@ in {
       '';
     })).override {
       extraPackages = ps: with ps; [
-        python-forecastio jsonrpc-async jsonrpc-websocket mpd2 picotts
+        python-forecastio jsonrpc-async jsonrpc-websocket mpd2 pkgs.picotts
       ];
     };
     autoExtraComponents = true;
@@ -76,6 +76,8 @@ in {
         client_id = "home-assistant";
         keepalive = 60;
         protocol = 3.1;
+        discovery = true; #enable esphome discovery
+        discovery_prefix = "homeassistant";
         birth_message = {
           topic = "glados/hass/status/LWT";
           payload = "Online";
@@ -90,7 +92,7 @@ in {
         };
       };
       switch = wasser.switch;
-      light =  badair.light;
+      light =  [];
       media_player = [
         { platform = "mpd";
           name = "lounge";
@@ -103,13 +105,17 @@ in {
       ];
 
       sensor =
-           (import ./sensors/hass.nix)
-        ++ (import ./sensors/power.nix)
+           (import ./sensors/power.nix)
+        ++ (import ./sensors/mate.nix)
+        ++ (import ./sensors/darksky.nix { inherit lib;})
         ++ shackopen.sensor
-        ++ badair.sensor;
-      airquality = (import ./sensors/sensemap.nix );
+        ;
+      air_quality = (import ./sensors/sensemap.nix );
 
-      binary_sensor = shackopen.binary_sensor;
+      binary_sensor =
+           shackopen.binary_sensor
+        ++ (import ./sensors/spaceapi.nix)
+        ;
 
       camera = [];
 
