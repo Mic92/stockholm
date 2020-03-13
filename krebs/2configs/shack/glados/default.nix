@@ -91,7 +91,10 @@ in {
           retain = true;
         };
       };
-      switch = wasser.switch;
+      switch =
+        wasser.switch
+        ++ (import ./switch/power.nix)
+        ;
       light =  [];
       media_player = [
         { platform = "mpd";
