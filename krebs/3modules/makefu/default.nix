@@ -182,6 +182,8 @@ in {
           gum               IN A      ${nets.internet.ip4.addr}
           io                IN NS     gum.krebsco.de.
           iso.euer          IN A      ${nets.internet.ip4.addr}
+          board.euer        IN A      ${nets.internet.ip4.addr}
+          rss.euer          IN A      ${nets.internet.ip4.addr}
           mediengewitter    IN CNAME  over.dose.io.
           mon.euer          IN A      ${nets.internet.ip4.addr}
           netdata.euer      IN A      ${nets.internet.ip4.addr}
@@ -202,7 +204,6 @@ in {
           ip6.addr = "2a01:4f8:191:12f6::2";
           aliases = [
             "gum.i"
-            "nextgum.i"
           ];
         };
         wiregrill = {
@@ -238,6 +239,7 @@ in {
             "tracker.makefu.r"
             "wiki.gum.r"
             "wiki.makefu.r"
+            "warrior.gum.r"
             "sick.makefu.r"
           ];
         };
