@@ -65,7 +65,7 @@ in {
       createHome = true;
       useDefaultShell = true;
       packages = with pkgs; [
-        minecraft
+        # minecraft
         steam-run
         scummvm
         dolphinEmu
