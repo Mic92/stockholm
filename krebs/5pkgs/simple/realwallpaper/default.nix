@@ -77,7 +77,10 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     fetch marker.json "$marker_url" &
     wait
 
-    ${pkgs.nomads-cloud}/bin/nomads-cloud clouds-raw.png
+    # fetch clouds if they are older than 3h
+    if ! test "$(find clouds-raw.png -mmin -180)"; then
+      ${pkgs.nomads-cloud}/bin/nomads-cloud clouds-raw.png
+    fi
 
     check_type nightmap-raw.jpg image
     check_type daymap-raw.png image
