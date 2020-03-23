@@ -128,6 +128,8 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     # create marker file from json
     if [ -s marker.json ]; then
       jq -r 'to_entries[] | @json "\(.value.latitude) \(.value.longitude)"' marker.json > marker_file
+      echo 'position=sun image=subsolar.png transparent={255,255,255}' >> marker_file
+      echo 'position=moon image=sublunar.png transparent={255,255,255}' >> marker_file
     fi
 
     # make all unmodified files as final
