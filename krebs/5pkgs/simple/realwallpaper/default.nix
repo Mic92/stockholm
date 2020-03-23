@@ -169,7 +169,8 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
         map=daymap-final.png
         night_map=nightmap-final.png
         cloud_map=clouds-final.png
-        cloud_threshold=10
+        cloud_threshold=1
+        cloud_gamma=2.5
         shade=15
       ''}
 
@@ -181,7 +182,8 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
         map=daymap-final.png
         night_map=nightmap-final.png
         cloud_map=clouds-final.png
-        cloud_threshold=10
+        cloud_threshold=1
+        cloud_gamma=2.5
         marker_file=marker_file
         shade=15
       ''}

@@ -32,7 +32,7 @@ writers.writeDashBin "nomads-cloud" ''
     echo "$maxval"
     cat "$json_path" |
     ${jq}/bin/jq --argjson maxval "$maxval" -c '
-      ((.[0].data[] | sqrt | sqrt) * $maxval | round)
+      ((.[0].data[]) * $maxval | round)
     ' |
     ${findutils}/bin/xargs -n "$width"
   } > "$pgm_path"
