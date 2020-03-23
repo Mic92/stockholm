@@ -64,12 +64,17 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     cd "$working_dir"
 
     # fetch source images in parallel
-    fetch nightmap-raw.jpg \
-      "$nightmap_url" &
-    fetch daymap-raw.png \
-      "$daymap_url" &
-    fetch marker.json \
-      "$marker_url" &
+    # fetch basic images which should not change
+    test -e nightmap-raw.jpg || fetch nightmap-raw.jpg "$nightmap_url" &
+    test -e sun-raw.png || fetch sun-raw.png \
+      "http://simpleicon.com/wp-content/uploads/sun-64x64.png" &
+
+    test -e moon-raw.png || fetch moon-raw.png \
+      "http://simpleicon.com/wp-content/uploads/moon__star-64x64.png" &
+
+    # regular fetches
+    fetch daymap-raw.png "$daymap_url" &
+    fetch marker.json "$marker_url" &
     wait
 
     ${pkgs.nomads-cloud}/bin/nomads-cloud clouds-raw.png
@@ -112,6 +117,14 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       convert nightmap.png -threshold 25% nightmap-lightmask.png
     fi
 
+    if needs_rebuild sun.png sun-raw.png; then
+      convert sun-raw.png -fill gold -opaque black -resize 50% PNG64:sun.png
+    fi
+
+    if needs_rebuild moon.png moon-raw.png; then
+      convert moon-raw.png -fill royalblue -opaque black -resize 50% PNG64:moon.png
+    fi
+
     # create layers
     make_layer nightmap-snowlayer.png nightmap-fullsnow.png daymap-snowmask.png
     make_layer nightmap-lightlayer.png nightmap.png nightmap-lightmask.png
@@ -125,11 +138,12 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       nightmap-lightsnowlayer.png \
       nightmap.png
 
+
     # create marker file from json
     if [ -s marker.json ]; then
       jq -r 'to_entries[] | @json "\(.value.latitude) \(.value.longitude)"' marker.json > marker_file
-      echo 'position=sun image=subsolar.png transparent={255,255,255}' >> marker_file
-      echo 'position=moon image=sublunar.png transparent={255,255,255}' >> marker_file
+      echo 'position=sun image=sun.png' >> marker_file
+      echo 'position=moon image=moon.png' >> marker_file
     fi
 
     # make all unmodified files as final
