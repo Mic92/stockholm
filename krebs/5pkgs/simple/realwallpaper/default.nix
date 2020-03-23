@@ -1,5 +1,5 @@
 { pkgs, ... }:
-pkgs.writeDashBin "generate-wallpaper" ''
+pkgs.writers.writeDashBin "generate-wallpaper" ''
   set -euf
 
   # usage: getimg FILENAME URL
@@ -68,15 +68,15 @@ pkgs.writeDashBin "generate-wallpaper" ''
       "$nightmap_url" &
     fetch daymap-raw.png \
       "$daymap_url" &
-    fetch clouds-raw.jpg \
-      "$cloudmap_url" &
     fetch marker.json \
       "$marker_url" &
     wait
 
+    ${pkgs.nomads-cloud}/bin/nomads-cloud clouds-raw.png
+
     check_type nightmap-raw.jpg image
     check_type daymap-raw.png image
-    check_type clouds-raw.jpg image
+    check_type clouds-raw.png image
 
     in_size=2048x1024
     xplanet_out_size=1466x1200
@@ -87,7 +87,7 @@ pkgs.writeDashBin "generate-wallpaper" ''
     for raw in \
         nightmap-raw.jpg \
         daymap-raw.png \
-        clouds-raw.jpg \
+        clouds-raw.png \
         ;
     do
       normal=''${raw%-raw.*}.png
