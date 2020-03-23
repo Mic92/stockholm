@@ -22,7 +22,7 @@ writers.writeDashBin "nomads-cloud" ''
   height=$(${jq}/bin/jq '.[0].header.ny' < "$json_path")
 
   # The maximum gray value.  Must be bigger than 0 and less than 65536.
-  maxval=256
+  maxval=1000
 
   # pgm - Netpbm grayscale image format
   # http://netpbm.sourceforge.net/doc/pgm.html
@@ -32,7 +32,7 @@ writers.writeDashBin "nomads-cloud" ''
     echo "$maxval"
     cat "$json_path" |
     ${jq}/bin/jq --argjson maxval "$maxval" -c '
-      .[0].data[] * $maxval | round
+      ((.[0].data[] | sqrt | sqrt) * $maxval | round)
     ' |
     ${findutils}/bin/xargs -n "$width"
   } > "$pgm_path"
