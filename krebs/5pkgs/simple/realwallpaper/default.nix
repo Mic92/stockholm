@@ -73,8 +73,22 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       "http://simpleicon.com/wp-content/uploads/moon__star-64x64.png" &
 
     # regular fetches
-    fetch daymap-raw.png "$daymap_url" &
     fetch marker.json "$marker_url" &
+
+    # fetch daymap twice daily
+    if ! test "$(find daymap-raw.png -mmin -720)"; then
+      fetch daymap-raw.png "$daymap_url" &
+    fi
+
+    # fetch cholrophyl once every week
+    chlora_url=$(curl -Ss \
+      'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MY1DMM_CHLORA&date=2999-12-31' \
+      | grep '3600 x 1800' | sed 's/.*href="\([^"]*\)".*/\1/')
+
+    if ! test "$(find chlora-raw.jpg -mtime -7)"; then
+      fetch chlora-raw.jpg "$chlora_url" &
+    fi
+
     wait
 
     # fetch clouds if they are older than 3h
@@ -96,6 +110,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
         nightmap-raw.jpg \
         daymap-raw.png \
         clouds-raw.png \
+        chlora-raw.jpg \
         ;
     do
       normal=''${raw%-raw.*}.png
@@ -105,7 +120,26 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       fi
     done
 
-    # create nightmap-fullsnow
+    if needs_rebuild sun.png sun-raw.png; then
+      convert sun-raw.png -fill gold -opaque black -resize 50% PNG64:sun.png
+    fi
+
+    if needs_rebuild moon.png moon-raw.png; then
+      convert moon-raw.png -fill royalblue -opaque black -resize 50% PNG64:moon.png
+    fi
+
+    # -- Daymap --
+
+    # merge with water chlora layer
+    convert daymap.png chlora.png -compose lighten -composite daymap-final.png
+
+    # -- Nightmap --
+
+    # merge with water chlora layer
+    convert nightmap.png \( -fill black -colorize 70% chlora.png \) \
+      -compose lighten -composite nightmap-chlora.png
+
+    # create nightmap-fullsnow, a big blue picture
     if needs_rebuild nightmap-fullsnow.png; then
       convert -size $in_size xc:$nightsnow_color nightmap-fullsnow.png
     fi
@@ -120,14 +154,6 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       convert nightmap.png -threshold 25% nightmap-lightmask.png
     fi
 
-    if needs_rebuild sun.png sun-raw.png; then
-      convert sun-raw.png -fill gold -opaque black -resize 50% PNG64:sun.png
-    fi
-
-    if needs_rebuild moon.png moon-raw.png; then
-      convert moon-raw.png -fill royalblue -opaque black -resize 50% PNG64:moon.png
-    fi
-
     # create layers
     make_layer nightmap-snowlayer.png nightmap-fullsnow.png daymap-snowmask.png
     make_layer nightmap-lightlayer.png nightmap.png nightmap-lightmask.png
@@ -139,7 +165,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
 
     flatten nightmap-final.png \
       nightmap-lightsnowlayer.png \
-      nightmap.png
+      nightmap-chlora.png
 
 
     # create marker file from json
@@ -151,7 +177,6 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
 
     # make all unmodified files as final
     for normal in \
-        daymap.png \
         clouds.png \
         ;
     do
