@@ -140,8 +140,8 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     check_type krebs-raw.svg image
 
     in_size=3600x1800
-    xplanet_out_size=3600x2950
-    out_geometry=3200x1800+300+400
+    xplanet_out_size=3200x2500
+    out_geometry=3200x1800+100+350
 
     for raw in \
         nightmap-raw.jpg \
