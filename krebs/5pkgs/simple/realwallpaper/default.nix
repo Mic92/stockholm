@@ -146,7 +146,6 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     for raw in \
         nightmap-raw.jpg \
         daymap-raw.tif \
-        snow-raw.jpg \
         chlora-raw.jpg \
         clouds-raw.png \
         ;
@@ -161,6 +160,10 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     # remove snow from ice map
     if needs_rebuild ice.png ice-raw.jpg; then
       convert ice-raw.jpg -fuzz 20% -fill black -opaque white -scale "$in_size" ice.png
+    fi
+
+    if needs_rebuild snow.png snow-raw.jpg; then
+      convert snow-raw.jpg -fuzz 20% -fill '#DEDEDE' -opaque white -scale "$in_size" snow.png
     fi
 
     # make fire more red
