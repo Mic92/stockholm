@@ -37,7 +37,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     days=$1
     name=$2
     url=$3
-    if ! test "$(find $name -mmin -$days)"; then
+    if ! test "$(find $name -mtime -$days)"; then
       fetch "$name" "$url"
     fi
   }
