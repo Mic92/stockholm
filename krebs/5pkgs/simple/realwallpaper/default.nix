@@ -248,6 +248,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       echo 'position=venus image=venus.png' >> marker_file
       echo 'position=mars image=mars.png' >> marker_file
       echo 'position=jupiter image=jupiter.png' >> marker_file
+      echo 'position=saturn image=saturn.png' >> marker_file
       echo 'position=uranus image=uranus.png' >> marker_file
       echo 'position=neptune image=neptune.png' >> marker_file
     fi
