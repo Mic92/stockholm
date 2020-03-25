@@ -141,7 +141,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
 
     in_size=3600x1800
     xplanet_out_size=3200x2500
-    out_geometry=3200x1800+100+350
+    out_geometry=3200x1800+0+350
 
     for raw in \
         nightmap-raw.jpg \
