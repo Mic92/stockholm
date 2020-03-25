@@ -45,6 +45,7 @@ let
       path = with pkgs; [
         xplanet
         imagemagick
+        inkscape
         curl
         file
         jq

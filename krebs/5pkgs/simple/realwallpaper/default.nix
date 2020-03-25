@@ -82,6 +82,24 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     fetch_once daymap-raw.tif \
       'https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57752/land_shallow_topo_8192.tif' &
 
+    fetch_once mercury-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/2/2e/Mercury_symbol.svg' &
+    fetch_once venus-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/6/66/Venus_symbol.svg' &
+    fetch_once mars-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/b/b7/Mars_symbol.svg' &
+    fetch_once jupiter-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/2/26/Jupiter_symbol.svg' &
+    fetch_once saturn-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/7/74/Saturn_symbol.svg' &
+    fetch_once uranus-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/f/f1/Uranus_symbol.svg' &
+    fetch_once neptune-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/4/47/Neptune_symbol.svg' &
+
+    fetch_once krebs-raw.svg \
+      'https://raw.githubusercontent.com/krebs/painload/master/cholerab/bling/krebs_aquarium.svg' &
+
     fetch_older_min 720 ice-raw.jpg $(get_neo_url \
       'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=NISE_D') &
     fetch_older_days 3 snow-raw.jpg $(get_neo_url \
@@ -111,9 +129,19 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     check_type fire-raw.jpg image
     check_type clouds-raw.png image
 
+    check_type mercury-raw.svg image
+    check_type venus-raw.svg image
+    check_type mars-raw.svg image
+    check_type jupiter-raw.svg image
+    check_type saturn-raw.svg image
+    check_type uranus-raw.svg image
+    check_type neptune-raw.svg image
+
+    check_type krebs-raw.svg image
+
     in_size=3600x1800
-    xplanet_out_size=1466x1200
-    out_geometry=1366x768+100+160
+    xplanet_out_size=3600x2950
+    out_geometry=3200x1800+300+400
 
     for raw in \
         nightmap-raw.jpg \
@@ -141,11 +169,52 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     fi
 
     if needs_rebuild sun.png sun-raw.png; then
-      convert sun-raw.png -fill gold -opaque black -resize 50% PNG64:sun.png
+      convert sun-raw.png -fill gold -opaque black PNG64:sun.png
     fi
 
     if needs_rebuild moon.png moon-raw.png; then
-      convert moon-raw.png -fill royalblue -opaque black -resize 50% PNG64:moon.png
+      convert moon-raw.png -fill royalblue -opaque black PNG64:moon.png
+    fi
+
+    # -- Planets --
+
+    if needs_rebuild mercury.png mercury-raw.svg; then
+      sed -i 's/#000/#A6A6A6/g' mercury-raw.svg
+      inkscape -z -e mercury.png -w 40 -h 40 mercury-raw.svg
+    fi
+
+    if needs_rebuild venus.png venus-raw.svg; then
+      sed -i 's/#000/#C40B98/g' venus-raw.svg
+      inkscape -z -e venus.png -w 40 -h 40 venus-raw.svg
+    fi
+
+    if needs_rebuild mars.png mars-raw.svg; then
+      sed -i 's/#000/#E35A5C/g' mars-raw.svg
+      inkscape -z -e mars.png -w 40 -h 40 mars-raw.svg
+    fi
+
+    if needs_rebuild jupiter.png jupiter-raw.svg; then
+      sed -i 's/#000/#DEA182/g' jupiter-raw.svg
+      inkscape -z -e jupiter.png -w 40 -h 40 jupiter-raw.svg
+    fi
+
+    if needs_rebuild saturn.png saturn-raw.svg; then
+      sed -i 's/#000/#E4C282/g' saturn-raw.svg
+      inkscape -z -e saturn.png -w 40 -h 40 saturn-raw.svg
+    fi
+
+    if needs_rebuild uranus.png uranus-raw.svg; then
+      sed -i 's/#000/#97BCC2/g' uranus-raw.svg
+      inkscape -z -e uranus.png -w 40 -h 40 uranus-raw.svg
+    fi
+
+    if needs_rebuild neptune.png neptune-raw.svg; then
+      sed -i 's/#000/#274687/g' neptune-raw.svg
+      inkscape -z -e neptune.png -w 40 -h 40 neptune-raw.svg
+    fi
+
+    if needs_rebuild krebs.png krebs-raw.svg; then
+      inkscape -z -e krebs.png -w 16 -h 16 krebs-raw.svg
     fi
 
     # -- Daymap --
@@ -165,6 +234,19 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       convert nightmap-1.png \( -fill black -colorize 70% ice.png \) -compose lighten -composite nightmap-2.png
       convert nightmap-2.png \( -fill black -colorize 70% snow.png \) -compose lighten -composite nightmap-3.png
       convert nightmap-3.png \( -fill black -colorize 70% chlora.png \) -compose lighten -composite nightmap-final.png
+    fi
+
+    # create marker file from json
+    if [ -s marker.json ]; then
+      jq -r 'to_entries[] | @json "\(.value.latitude) \(.value.longitude) image=krebs.png"' marker.json > marker_file
+      echo 'position=sun image=sun.png' >> marker_file
+      echo 'position=moon image=moon.png' >> marker_file
+      echo 'position=mercury image=mercury.png' >> marker_file
+      echo 'position=venus image=venus.png' >> marker_file
+      echo 'position=mars image=mars.png' >> marker_file
+      echo 'position=jupiter image=jupiter.png' >> marker_file
+      echo 'position=uranus image=uranus.png' >> marker_file
+      echo 'position=neptune image=neptune.png' >> marker_file
     fi
 
     # rebuild every time to update shadow
