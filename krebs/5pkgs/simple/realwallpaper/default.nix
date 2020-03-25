@@ -259,7 +259,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
         night_map=nightmap-final.png
         cloud_map=clouds.png
         cloud_threshold=1
-        cloud_gamma=2.5
+        cloud_gamma=6
         shade=15
       ''}
 
@@ -272,7 +272,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
         night_map=nightmap-final.png
         cloud_map=clouds.png
         cloud_threshold=1
-        cloud_gamma=2.5
+        cloud_gamma=6
         marker_file=marker_file
         shade=15
       ''}
