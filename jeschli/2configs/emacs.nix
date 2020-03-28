@@ -4,7 +4,7 @@ let
   pkgsWithOverlay = import <nixpkgs-unstable> {
     overlays = [
       (import (builtins.fetchTarball {
-        url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+        url = https://github.com/nix-community/emacs-overlay/archive/403c14c23be188b58c0b1bc197b428041d8a0cea.tar.gz;
       }))
     ];
   };
