@@ -9,8 +9,8 @@
     <stockholm/jeschli/2configs/rust.nix>
     <stockholm/jeschli/2configs/haskell.nix>
     <stockholm/jeschli/2configs/python.nix>
-#       ./desktop.nix
-#       ./i3-configuration.nix
+       ./desktop.nix
+       ./i3-configuration.nix
        ./hardware-configuration.nix
     ];
 
