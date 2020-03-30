@@ -75,8 +75,6 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     # fetch source images in parallel
     fetch_once sun-raw.png \
       'http://simpleicon.com/wp-content/uploads/sun-64x64.png' &
-    fetch_once moon-raw.png \
-      'http://simpleicon.com/wp-content/uploads/moon__star-64x64.png' &
     fetch_once nightmap-raw.jpg \
       'https://eoimages.gsfc.nasa.gov/images/imagerecords/144000/144898/BlackMarble_2016_3km.jpg' &
     fetch_once daymap-raw.tif \
@@ -120,7 +118,6 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     fi
 
     check_type sun-raw.png image
-    check_type moon-raw.png image
     check_type nightmap-raw.jpg image
     check_type daymap-raw.tif image
     check_type ice-raw.jpg image
@@ -175,50 +172,17 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       convert sun-raw.png -fill gold -opaque black PNG64:sun.png
     fi
 
-    if needs_rebuild moon.png moon-raw.png; then
-      convert moon-raw.png -fill royalblue -opaque black PNG64:moon.png
-    fi
-
-    # -- Planets --
-
-    if needs_rebuild mercury.png mercury-raw.svg; then
-      sed -i 's/#000/#A6A6A6/g' mercury-raw.svg
-      inkscape -z -e mercury.png -w 40 -h 40 mercury-raw.svg
-    fi
-
-    if needs_rebuild venus.png venus-raw.svg; then
-      sed -i 's/#000/#C40B98/g' venus-raw.svg
-      inkscape -z -e venus.png -w 40 -h 40 venus-raw.svg
-    fi
-
-    if needs_rebuild mars.png mars-raw.svg; then
-      sed -i 's/#000/#E35A5C/g' mars-raw.svg
-      inkscape -z -e mars.png -w 40 -h 40 mars-raw.svg
-    fi
-
-    if needs_rebuild jupiter.png jupiter-raw.svg; then
-      sed -i 's/#000/#DEA182/g' jupiter-raw.svg
-      inkscape -z -e jupiter.png -w 40 -h 40 jupiter-raw.svg
-    fi
-
-    if needs_rebuild saturn.png saturn-raw.svg; then
-      sed -i 's/#000/#E4C282/g' saturn-raw.svg
-      inkscape -z -e saturn.png -w 40 -h 40 saturn-raw.svg
-    fi
-
-    if needs_rebuild uranus.png uranus-raw.svg; then
-      sed -i 's/#000/#97BCC2/g' uranus-raw.svg
-      inkscape -z -e uranus.png -w 40 -h 40 uranus-raw.svg
-    fi
-
-    if needs_rebuild neptune.png neptune-raw.svg; then
-      sed -i 's/#000/#274687/g' neptune-raw.svg
-      inkscape -z -e neptune.png -w 40 -h 40 neptune-raw.svg
-    fi
-
     if needs_rebuild krebs.png krebs-raw.svg; then
       inkscape -z -e krebs.png -w 16 -h 16 krebs-raw.svg
     fi
+
+    # -- Planets --
+    for planet in mercury venus mars jupiter saturn uranus neptune; do
+      if needs_rebuild "$planet".png "$planet"-raw.svg; then
+        sed -i 's/#000/#FFFF00/g' "$planet"-raw.svg
+        inkscape -z -e "$planet".png -w 40 -h 40 "$planet"-raw.svg
+      fi
+    done
 
     # -- Daymap --
 
@@ -252,6 +216,14 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       echo 'position=uranus image=uranus.png' >> marker_file
       echo 'position=neptune image=neptune.png' >> marker_file
     fi
+
+    # generate moon
+    xplanet -body moon --num_times 1 -origin earth \
+      --transpng moon.png --geometry 50x50 \
+      -config ${pkgs.writeText "moon.config" ''
+        [moon]
+        shade=10
+      ''}
 
     # rebuild every time to update shadow
     xplanet --num_times 1 --geometry $xplanet_out_size \
