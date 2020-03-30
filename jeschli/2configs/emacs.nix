@@ -274,18 +274,19 @@ in {
     myEmacs myEmacsWithDaemon myEmacsClient emacsWithOverlay
   ];
 
-  services.xserver = {
-    enable = true;
-    xkbOptions = "caps:super";
-    exportConfiguration = true;
-
-    displayManager.slim.enable = true;
-    windowManager.default = "exwm";
-
-    # Set up the login session
-    windowManager.session = [{
-      name = "exwm";
-      start = "${emacsWithOverlay}/bin/emacs -q -l " + builtins.toString ./elisp/init.el;
-    }];
-  };
+## EXWM Config
+#  services.xserver = {
+#    enable = true;
+#    xkbOptions = "caps:super";
+#    exportConfiguration = true;
+#
+#    displayManager.slim.enable = true;
+#    windowManager.default = "exwm";
+#
+#    # Set up the login session
+#    windowManager.session = [{
+#      name = "exwm";
+#      start = "${emacsWithOverlay}/bin/emacs -q -l " + builtins.toString ./elisp/init.el;
+#    }];
+#  };
 }
