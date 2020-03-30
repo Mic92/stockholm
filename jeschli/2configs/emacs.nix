@@ -232,7 +232,11 @@ let
 # python
     epkgs.melpaPackages.elpy
 
-# org-mode
+    # org-mode
+    epkgs.melpaPackages.org-super-agenda
+    epkgs.melpaPackages.org-bullets
+    epkgs.melpaPackages.org-ql
+
     epkgs.elpaPackages.bbdb
     epkgs.orgPackages.org-plus-contrib
     epkgs.melpaPackages.smex
