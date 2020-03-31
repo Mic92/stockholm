@@ -73,8 +73,6 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     cd "$working_dir"
 
     # fetch source images in parallel
-    fetch_once sun-raw.png \
-      'http://simpleicon.com/wp-content/uploads/sun-64x64.png' &
     fetch_once nightmap-raw.jpg \
       'https://eoimages.gsfc.nasa.gov/images/imagerecords/144000/144898/BlackMarble_2016_3km.jpg' &
     fetch_once daymap-raw.tif \
@@ -109,6 +107,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
 
     # regular fetches
     fetch marker.json "$marker_url" &
+    fetch sun-raw.jpg 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0171.jpg' &
 
     wait
 
@@ -117,7 +116,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       ${pkgs.nomads-cloud}/bin/nomads-cloud clouds-raw.png
     fi
 
-    check_type sun-raw.png image
+    check_type sun-raw.jpg image
     check_type nightmap-raw.jpg image
     check_type daymap-raw.tif image
     check_type ice-raw.jpg image
@@ -168,8 +167,11 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       convert fire-raw.jpg -fuzz 20% -fill '#ef840c' -opaque white -scale "$in_size" fire.png
     fi
 
-    if needs_rebuild sun.png sun-raw.png; then
-      convert sun-raw.png -fill gold -opaque black PNG64:sun.png
+    # cut out sun with alpha transparency
+    if needs_rebuild sun.png sun-raw.jpg; then
+      convert sun-raw.jpg \
+        \( +clone -colorspace HSB -fill white -draw "circle 256,256 256,54" -separate -delete 0,1 \) \
+        -compose copyopacity -composite -crop 512x472+0+20 -scale "100x100" sun.png
     fi
 
     if needs_rebuild krebs.png krebs-raw.svg; then
@@ -179,7 +181,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     # -- Planets --
     for planet in mercury venus mars jupiter saturn uranus neptune; do
       if needs_rebuild "$planet".png "$planet"-raw.svg; then
-        sed -i 's/#000/#FFFF00/g' "$planet"-raw.svg
+        sed -i 's/#000/#FE8019/g' "$planet"-raw.svg
         inkscape -z -e "$planet".png -w 40 -h 40 "$planet"-raw.svg
       fi
     done
