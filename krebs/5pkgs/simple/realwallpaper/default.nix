@@ -266,6 +266,8 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       convert xplanet-krebs-output.png -crop $out_geometry \
         realwallpaper-krebs-tmp.png
         mv realwallpaper-krebs-tmp.png realwallpaper-krebs.png
+        mkdir -p archive
+        convert realwallpaper-krebs.png archive/"$(date -Is)".jpg
     fi
   }
 
