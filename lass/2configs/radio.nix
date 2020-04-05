@@ -9,13 +9,25 @@ let
   admin-password = import <secrets/icecast-admin-pw>;
   source-password = import <secrets/icecast-source-pw>;
 
+  music_dir = "/home/radio/music";
+
   add_random = pkgs.writeDashBin "add_random" ''
     ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.mpc_cli}/bin/mpc ls the_playlist/music | grep '\.ogg$' | shuf -n1)"
   '';
 
   skip_track = pkgs.writeDashBin "skip_track" ''
     ${add_random}/bin/add_random
-    echo skipping: "$(${print_current}/bin/print_current)"
+    current_track=$(${pkgs.mpc_cli}/bin/mpc current -f %file%)
+    track_infos=$(${print_current}/bin/print_current)
+    skip_count=$(${pkgs.attr}/bin/getfattr -n user.skip_count --only-values "$current_track" || echo 0)
+    if [ "$skip_count" -gt 2 ]; then
+      mv "$music_dir"/"$current_track" "$music_dir"/.graveyard/
+      echo killing: "$track_infos"
+    else
+      skip_count=$((skip_count+1))
+      ${pkgs.attr}/bin/setfattr -n user.skip_count -v "$skip_count" "$music_dir"/"$current_track"
+      echo skipping: "$track_infos" skip_count: "$skip_count"
+    fi
     ${pkgs.mpc_cli}/bin/mpc -q next
   '';
 
@@ -57,7 +69,7 @@ in {
   services.mpd = {
     enable = true;
     group = "radio";
-    musicDirectory = "/home/radio/music";
+    musicDirectory = "${music_dir}";
     extraConfig = ''
       log_level "default"
       auto_update "yes"
