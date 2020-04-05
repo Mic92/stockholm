@@ -16,7 +16,10 @@ let
   '';
 
   skip_track = pkgs.writeDashBin "skip_track" ''
+    set -eu
+
     ${add_random}/bin/add_random
+    music_dir=${escapeShellArg music_dir}
     current_track=$(${pkgs.mpc_cli}/bin/mpc current -f %file%)
     track_infos=$(${print_current}/bin/print_current)
     skip_count=$(${pkgs.attr}/bin/getfattr -n user.skip_count --only-values "$current_track" || echo 0)
