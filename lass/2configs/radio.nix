@@ -277,9 +277,9 @@ in {
       alias ${html};
     '';
   };
-  krebs.syncthing.folders."the_playlist" = {
+  services.syncthing.declarative.folders."the_playlist" = {
     path = "/home/radio/music/the_playlist";
-    peers = [ "mors" "phone" "prism" "xerxes" ];
+    devices = [ "mors" "phone" "prism" "xerxes" ];
   };
   krebs.permown."/home/radio/music/the_playlist" = {
     owner = "radio";
