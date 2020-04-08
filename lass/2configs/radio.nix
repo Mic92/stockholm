@@ -22,7 +22,7 @@ let
     music_dir=${escapeShellArg music_dir}
     current_track=$(${pkgs.mpc_cli}/bin/mpc current -f %file%)
     track_infos=$(${print_current}/bin/print_current)
-    skip_count=$(${pkgs.attr}/bin/getfattr -n user.skip_count --only-values "$current_track" || echo 0)
+    skip_count=$(${pkgs.attr}/bin/getfattr -n user.skip_count --only-values "$music_dir"/"$current_track" || echo 0)
     if [ "$skip_count" -gt 2 ]; then
       mv "$music_dir"/"$current_track" "$music_dir"/.graveyard/
       echo killing: "$track_infos"
@@ -193,11 +193,15 @@ in {
     };
   };
 
+  # allow reaktor2 to modify files
+  systemd.services."reaktor2-the_playlist".serviceConfig.DynamicUser = mkForce false;
+
   krebs.reaktor2.the_playlist = {
     hostname = "irc.freenode.org";
     port = "6697";
     useTLS = true;
     nick = "the_playlist";
+    username = "radio";
     plugins = [
       {
         plugin = "register";
@@ -214,8 +218,8 @@ in {
           workdir = config.krebs.reaktor2.the_playlist.stateDir;
           hooks.PRIVMSG = [
             {
-              #activate = "match";
-              pattern = "^\\s*([0-9A-Za-z._][0-9A-Za-z._-]*)(?:\\s+(.*\\S))?\\s*$";
+              activate = "match";
+              pattern = "^(?:.*\\s)?\\s*the_playlist:\\s*([0-9A-Za-z._][0-9A-Za-z._-]*)(?:\\s+(.*\\S))?\\s*$";
               command = 1;
               arguments = [2];
               commands = {
