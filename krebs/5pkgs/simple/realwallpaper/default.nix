@@ -52,9 +52,11 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     else
       result=1
       for b; do
-        if test "$b" -nt "$a"; then
-          #echo "  $b is newer than $a" >&2
-          result=0
+        if check_type "$b" image; then
+          if test "$b" -nt "$a"; then
+            #echo "  $b is newer than $a" >&2
+            result=0
+          fi
         fi
       done
     fi
@@ -115,25 +117,6 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     if ! test "$(find clouds-raw.png -mmin -180)"; then
       ${pkgs.nomads-cloud}/bin/nomads-cloud clouds-raw.png
     fi
-
-    check_type sun-raw.jpg image
-    check_type nightmap-raw.jpg image
-    check_type daymap-raw.tif image
-    check_type ice-raw.jpg image
-    check_type snow-raw.jpg image
-    check_type chlora-raw.jpg image
-    check_type fire-raw.jpg image
-    check_type clouds-raw.png image
-
-    check_type mercury-raw.svg image
-    check_type venus-raw.svg image
-    check_type mars-raw.svg image
-    check_type jupiter-raw.svg image
-    check_type saturn-raw.svg image
-    check_type uranus-raw.svg image
-    check_type neptune-raw.svg image
-
-    check_type krebs-raw.svg image
 
     in_size=3600x1800
     xplanet_out_size=3200x2500
