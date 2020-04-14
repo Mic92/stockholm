@@ -34,6 +34,9 @@ let
 
     bindsym $mod+x exec ${pkgs.rofi}/bin/rofi -modi window -show window -auto-select
 
+    bindsym $mod+F1 exec xinput --list | grep Touchpad | sed 's/.*id=\([0-9][0-9]\).*/\1/' | xargs xinput disable
+    bindsym $mod+F2 exec xinput --list | grep Touchpad | sed 's/.*id=\([0-9][0-9]\).*/\1/' | xargs xinput enable
+
     # There also is the (new) i3-dmenu-desktop which only displays applications
     # shipping a .desktop file. It is a wrapper around dmenu, so you need that
     # installed.
