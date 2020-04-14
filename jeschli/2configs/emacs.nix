@@ -9,72 +9,69 @@ let
     ];
   };
 
-  #emacsWithCustomPackages
-  emacsPkgs= epkgs: [
-    # testing lsp mode
-    epkgs.melpaPackages.lsp-ui
-    epkgs.melpaPackages.company-lsp
-    epkgs.melpaPackages.lsp-treemacs
-    epkgs.melpaPackages.helm-lsp
-    epkgs.melpaPackages.dap-mode
-    epkgs.melpaPackages.lsp-mode
+  # The emacs packages that I use
+  # I differ between
+  # - stable (Packages that I use for some time - happy with it)
+  # - unstable (Packages that I use for some time - but may drop)
+  # - testing (Packages that I try out - the new stuff)
+  emacsPkgs = epkgs:
+    (with epkgs.melpaPackages ;
 
+    ## helm (stable)
+    # emacs completion engine
+    [ helm helm-ag ] ++
+
+    ## deft (testing)
+    # text search for a directory
+    [ deft ] ++
+
+    ## lsp mode (unstable)
+    # Language Server Protocol mode
+    # Used for rust
+    [ company-lsp dap-mode helm-lsp lsp-mode lsp-treemacs lsp-ui ] ++
+
+    ## emacs convenience (stable)
+    # Mixed and general purpose
+    [ ag company direnv evil google-this spacemacs-theme ] ++
+
+    ## common lisp (testing)
+    [ slime ] ++
+
+    ## magit (stable)
+    [ magit ] ++
+
+    ## bunch of programming languages (unstable)
+    [ go-mode haskell-mode nix-mode ] ++
+
+    ## rust (unstable)
+    [ racer rust-mode ] ++
+
+    ## python (stable)
+    # Python IDE for emacs
+    [ elpy ]) ++
+
+    ## org-mode
+    # Org-Mode has several extensions
+    # and can be seen as an application of its own.
+    (with epkgs.melpaPackages ;
     # testing
-    epkgs.melpaPackages.web-mode
-    epkgs.melpaPackages.js2-mode
-    epkgs.melpaPackages.xref-js2
+      [ org-super-agenda org-bullets org-ql ] ++
+    # unstable
+      [ smex org-mime orgit ]
+    ) ++
 
-    epkgs.melpaPackages.academic-phrases
+    # stable
+    (with epkgs.orgPackages ;
+      [ org-plus-contrib ]) ++
 
-    epkgs.melpaPackages.gitlab
-    epkgs.melpaPackages.weechat
+    (with epkgs.elpaPackages ;
+      [ bbdb which-key ]);
 
-# helm
-    epkgs.melpaPackages.helm
-    epkgs.melpaPackages.helm-fuzzier
-    epkgs.melpaPackages.helm-ag
-
-
-# emacs convenience
-    epkgs.melpaPackages.ag
-    epkgs.melpaPackages.company
-    epkgs.melpaPackages.direnv
-    epkgs.melpaPackages.evil
-    epkgs.melpaPackages.google-this
-    epkgs.melpaPackages.monokai-alt-theme
-    epkgs.melpaPackages.spacemacs-theme
-    epkgs.melpaPackages.zenburn-theme
-
-# development
-    epkgs.melpaPackages.magit
-    epkgs.melpaPackages.nix-mode
-    epkgs.melpaPackages.go-mode
-    epkgs.melpaPackages.haskell-mode
-# rust
-    epkgs.melpaPackages.rust-mode
-#    epkgs.melpaPackages.flycheck-rust
-    epkgs.melpaPackages.racer
-
-# python
-    epkgs.melpaPackages.elpy
-
-    # org-mode
-    epkgs.melpaPackages.org-super-agenda
-    epkgs.melpaPackages.org-bullets
-    epkgs.melpaPackages.org-ql
-
-    epkgs.elpaPackages.bbdb
-    epkgs.orgPackages.org-plus-contrib
-    epkgs.melpaPackages.smex
-    epkgs.melpaPackages.org-mime
-    epkgs.melpaPackages.orgit
-
-    epkgs.elpaPackages.which-key
-
-    epkgs.exwm
-    epkgs.melpaPackages.desktop-environment
-    epkgs.melpaPackages.helm-exwm
-  ];
+#    ## EXWM related (unstable)
+#    epkgs.exwm
+#    epkgs.melpaPackages.desktop-environment
+#    epkgs.melpaPackages.helm-exwm
+#  ];
 
   emacsWithOverlay = pkgsWithOverlay.emacsWithPackagesFromUsePackage {
     config = builtins.readFile ./elisp/init.el;
