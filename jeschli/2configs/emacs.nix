@@ -93,7 +93,7 @@ let
   '';
 
   myEmacsClient = pkgs.writeDashBin "meclient" ''
-    exec ${emacsWithOverlay}/bin/emacsclient --create-frame
+    exec ${emacsWithOverlay}/bin/emacsclient --create-frame "$@"
   '';
 in {
   environment.systemPackages = [
