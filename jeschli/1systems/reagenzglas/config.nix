@@ -46,6 +46,7 @@
     direnv
     go
     git
+    gitAndTools.hub
     rofi
     vim
     wget
