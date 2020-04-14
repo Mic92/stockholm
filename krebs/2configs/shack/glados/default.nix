@@ -39,7 +39,7 @@ in {
       '';
     })).override {
       extraPackages = ps: with ps; [
-        python-forecastio jsonrpc-async jsonrpc-websocket mpd2
+        python-forecastio jsonrpc-async jsonrpc-websocket mpd2 pkgs.picotts
       ];
     };
     autoExtraComponents = true;
@@ -76,6 +76,8 @@ in {
         client_id = "home-assistant";
         keepalive = 60;
         protocol = 3.1;
+        discovery = true; #enable esphome discovery
+        discovery_prefix = "homeassistant";
         birth_message = {
           topic = "glados/hass/status/LWT";
           payload = "Online";
@@ -89,21 +91,34 @@ in {
           retain = true;
         };
       };
-      switch = wasser.switch;
-      light =  badair.light;
+      switch =
+        wasser.switch
+        ++ (import ./switch/power.nix)
+        ;
+      light =  [];
       media_player = [
         { platform = "mpd";
+          name = "lounge";
           host = "lounge.mpd.shack";
+        }
+        { platform = "mpd";
+          name = "kiosk";
+          host = "lounge.kiosk.shack";
         }
       ];
 
       sensor =
-           (import ./sensors/hass.nix)
-        ++ (import ./sensors/power.nix)
+           (import ./sensors/power.nix)
+        ++ (import ./sensors/mate.nix)
+        ++ (import ./sensors/darksky.nix { inherit lib;})
         ++ shackopen.sensor
-        ++ badair.sensor;
+        ;
+      air_quality = (import ./sensors/sensemap.nix );
 
-      binary_sensor = shackopen.binary_sensor;
+      binary_sensor =
+           shackopen.binary_sensor
+        ++ (import ./sensors/spaceapi.nix)
+        ;
 
       camera = [];
 
@@ -117,19 +132,27 @@ in {
       #conversation = {};
       history = {};
       logbook = {};
+      logger = {
+        default = "info";
+      };
       recorder = {};
       tts = [
         { platform = "google_translate";
+          service_name = "say";
           language = "de";
+          cache = true;
+          time_memory = 57600;
         }
-        #{ platform = "picotts";
-        #  language = "de-DE";
-        #}
+        { platform = "picotts";
+          language = "de-DE";
+          service_name = "pico";
+        }
       ];
       sun = {};
 
-      automation = wasser.automation 
-        ++ badair.automation 
+      automation = wasser.automation
+        ++ badair.automation
+        ++ (import ./automation/shack-startup.nix)
         ++ (import ./automation/hass-restart.nix);
 
       device_tracker = [];

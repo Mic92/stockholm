@@ -31,18 +31,19 @@
       };
     };
     stockholm.file = toString ../.;
-    stockholm-version.pipe = toString (pkgs.writeDash "${name}-version" ''
-      set -efu
-      cd ${lib.escapeShellArg stockholm.file}
-      V=$(${pkgs.coreutils}/bin/date +%y.%m)
-      if test -d .git; then
-        V=$V.git.$(${pkgs.git}/bin/git describe --always --dirty)
-        case $V in (*-dirty)
-          V=$V@''${HOSTNAME-$(${pkgs.nettools}/bin/hostname)}
-        esac
-      fi
-      printf %s "$V"
-    '');
+    stockholm-version.pipe =
+      toString (pkgs.writers.writeDash "${name}-version" ''
+        set -efu
+        cd ${lib.escapeShellArg stockholm.file}
+        V=$(${pkgs.coreutils}/bin/date +%y.%m)
+        if test -d .git; then
+          V=$V.git.$(${pkgs.git}/bin/git describe --always --dirty)
+          case $V in (*-dirty)
+            V=$V@''${HOSTNAME-$(${pkgs.nettools}/bin/hostname)}
+          esac
+        fi
+        printf %s "$V"
+      '');
   };
 
   source ={ test }: lib.evalSource [

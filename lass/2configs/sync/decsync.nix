@@ -1,7 +1,7 @@
 {
-  krebs.syncthing.folders.decsync = {
+  services.syncthing.declarative.folders.decsync = {
     path = "/home/lass/decsync";
-    peers = [ "mors" "blue" "green" "phone" ];
+    devices = [ "mors" "blue" "green" "phone" ];
   };
   krebs.permown."/home/lass/decsync" = {
     owner = "lass";

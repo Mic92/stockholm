@@ -9,13 +9,28 @@ let
   admin-password = import <secrets/icecast-admin-pw>;
   source-password = import <secrets/icecast-source-pw>;
 
+  music_dir = "/home/radio/music";
+
   add_random = pkgs.writeDashBin "add_random" ''
     ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.mpc_cli}/bin/mpc ls the_playlist/music | grep '\.ogg$' | shuf -n1)"
   '';
 
   skip_track = pkgs.writeDashBin "skip_track" ''
+    set -eu
+
     ${add_random}/bin/add_random
-    echo skipping: "$(${print_current}/bin/print_current)"
+    music_dir=${escapeShellArg music_dir}
+    current_track=$(${pkgs.mpc_cli}/bin/mpc current -f %file%)
+    track_infos=$(${print_current}/bin/print_current)
+    skip_count=$(${pkgs.attr}/bin/getfattr -n user.skip_count --only-values "$music_dir"/"$current_track" || echo 0)
+    if [ "$skip_count" -gt 2 ]; then
+      mv "$music_dir"/"$current_track" "$music_dir"/.graveyard/
+      echo killing: "$track_infos"
+    else
+      skip_count=$((skip_count+1))
+      ${pkgs.attr}/bin/setfattr -n user.skip_count -v "$skip_count" "$music_dir"/"$current_track"
+      echo skipping: "$track_infos" skip_count: "$skip_count"
+    fi
     ${pkgs.mpc_cli}/bin/mpc -q next
   '';
 
@@ -57,7 +72,7 @@ in {
   services.mpd = {
     enable = true;
     group = "radio";
-    musicDirectory = "/home/radio/music";
+    musicDirectory = "${music_dir}";
     extraConfig = ''
       log_level "default"
       auto_update "yes"
@@ -178,11 +193,15 @@ in {
     };
   };
 
+  # allow reaktor2 to modify files
+  systemd.services."reaktor2-the_playlist".serviceConfig.DynamicUser = mkForce false;
+
   krebs.reaktor2.the_playlist = {
     hostname = "irc.freenode.org";
     port = "6697";
     useTLS = true;
     nick = "the_playlist";
+    username = "radio";
     plugins = [
       {
         plugin = "register";
@@ -199,8 +218,8 @@ in {
           workdir = config.krebs.reaktor2.the_playlist.stateDir;
           hooks.PRIVMSG = [
             {
-              #activate = "match";
-              pattern = "^\\s*([0-9A-Za-z._][0-9A-Za-z._-]*)(?:\\s+(.*\\S))?\\s*$";
+              activate = "match";
+              pattern = "^(?:.*\\s)?\\s*the_playlist:\\s*([0-9A-Za-z._][0-9A-Za-z._-]*)(?:\\s+(.*\\S))?\\s*$";
               command = 1;
               arguments = [2];
               commands = {
@@ -258,9 +277,9 @@ in {
       alias ${html};
     '';
   };
-  krebs.syncthing.folders."the_playlist" = {
+  services.syncthing.declarative.folders."the_playlist" = {
     path = "/home/radio/music/the_playlist";
-    peers = [ "mors" "phone" "prism" "xerxes" ];
+    devices = [ "mors" "phone" "prism" "xerxes" ];
   };
   krebs.permown."/home/radio/music/the_playlist" = {
     owner = "radio";

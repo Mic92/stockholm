@@ -102,6 +102,14 @@
     "microsoft@lassul.us"
     "stickers@lassul.us"
     "nextbike@lassul.us"
+    "mytello@lassul.us"
+    "camp@lassul.us"
+    "urlwatch@lassul.us"
+    "lidl@lassul.us"
+    "geizhals@lassul.us"
+    "auschein@lassul.us"
+    "tleech@lassul.us"
+    "durstexpress@lassul.us"
   ];
 
 in {

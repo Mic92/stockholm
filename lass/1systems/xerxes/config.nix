@@ -41,11 +41,11 @@
     displayManager.lightdm.autoLogin.user = "lass";
   };
 
-  krebs.syncthing = {
+  services.syncthing.declarative = {
     folders = {
       the_playlist = {
         path = "/home/lass/tmp/the_playlist";
-        peers = [ "mors" "phone" "prism" "xerxes" ];
+        devices = [ "mors" "phone" "prism" "xerxes" ];
       };
     };
   };
