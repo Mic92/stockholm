@@ -9,7 +9,7 @@
 	url = https://github.com/Lassulus/autowifi
 [submodule "jeschli/2configs/elisp"]
 	path = jeschli/2configs/elisp
-	url = git@github.com:Jeschli/misc-elisp-scripts.git
+	url = https://github.com/Jeschli/misc-elisp-scripts.git
 [submodule "submodules/brockman"]
 	path = submodules/brockman
 	url = https://github.com/kmein/brockman.git
