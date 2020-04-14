@@ -47,6 +47,7 @@
     go
     git
     gitAndTools.hub
+    sbcl
     rofi
     vim
     wget
