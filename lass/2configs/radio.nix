@@ -15,7 +15,7 @@ let
     ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.findutils}/bin/find "${music_dir}/the_playlist" | grep '\.ogg$' | shuf -n1 | sed 's,${music_dir}/,,')"
   '';
 
-  skip_track = pkgs.writeDashBin "skip_track" ''
+  skip_track = pkgs.writeBashBin "skip_track" ''
     set -eu
 
     ${add_random}/bin/add_random
@@ -23,15 +23,30 @@ let
     current_track=$(${pkgs.mpc_cli}/bin/mpc current -f %file%)
     track_infos=$(${print_current}/bin/print_current)
     skip_count=$(${pkgs.attr}/bin/getfattr -n user.skip_count --only-values "$music_dir"/"$current_track" || echo 0)
-    if [ "$skip_count" -gt 2 ]; then
-      mv "$music_dir"/"$current_track" "$music_dir"/.graveyard/
-      echo killing: "$track_infos"
-    else
+    if [[ "$current_track" =~ ^the_playlist/music/.* ]] && [ "$skip_count" -le 2 ]; then
       skip_count=$((skip_count+1))
       ${pkgs.attr}/bin/setfattr -n user.skip_count -v "$skip_count" "$music_dir"/"$current_track"
       echo skipping: "$track_infos" skip_count: "$skip_count"
+    else
+      mkdir -p "$music_dir"/.graveyard/
+      mv "$music_dir"/"$current_track" "$music_dir"/.graveyard/
+      echo killing: "$track_infos"
     fi
     ${pkgs.mpc_cli}/bin/mpc -q next
+  '';
+
+  good_track = pkgs.writeBashBin "good_track" ''
+    set -eu
+
+    music_dir=${escapeShellArg music_dir}
+    current_track=$(${pkgs.mpc_cli}/bin/mpc current -f %file%)
+    track_infos=$(${print_current}/bin/print_current)
+    if [[ "$current_track" =~ ^the_playlist/music/.* ]]; then
+      ${pkgs.attr}/bin/setfattr -n user.skip_count -v 0 "$music_dir"/"$current_track"
+    else
+      mv "$music_dir"/"$current_track" "$music_dir"/the_playlist/music/
+    fi
+      echo good: "$track_infos"
   '';
 
   print_current = pkgs.writeDashBin "print_current" ''
@@ -63,6 +78,7 @@ in {
 
   krebs.per-user.${name}.packages = with pkgs; [
     add_random
+    good_track
     skip_track
     print_current
     ncmpcpp
@@ -224,6 +240,13 @@ in {
               arguments = [2];
               commands = {
                 skip.filename = "${skip_track}/bin/skip_track";
+                next.filename = "${skip_track}/bin/skip_track";
+                bad.filename = "${skip_track}/bin/skip_track";
+
+                good.filename = "${good_track}/bin/good_track";
+                nice.filename = "${good_track}/bin/good_track";
+                like.filename = "${good_track}/bin/good_track";
+
                 current.filename = "${print_current}/bin/print_current";
                 suggest.filename = pkgs.writeDash "suggest" ''
                   echo "$@" >> playlist_suggest
