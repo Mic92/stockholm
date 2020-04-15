@@ -12,7 +12,7 @@ let
   music_dir = "/home/radio/music";
 
   add_random = pkgs.writeDashBin "add_random" ''
-    ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.mpc_cli}/bin/mpc ls the_playlist/music | grep '\.ogg$' | shuf -n1)"
+    ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.findutils}/bin/find "${music_dir}/the_playlist" | grep '\.ogg$' | shuf -n1 | sed 's,${music_dir}/,,')"
   '';
 
   skip_track = pkgs.writeDashBin "skip_track" ''
