@@ -7,3 +7,6 @@
 [submodule "lass/5pkgs/autowifi"]
 	path = lass/5pkgs/autowifi
 	url = https://github.com/Lassulus/autowifi
+[submodule "submodules/brockman"]
+	path = submodules/brockman
+	url = https://github.com/kmein/brockman.git

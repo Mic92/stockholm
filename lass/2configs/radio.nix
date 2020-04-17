@@ -9,14 +9,44 @@ let
   admin-password = import <secrets/icecast-admin-pw>;
   source-password = import <secrets/icecast-source-pw>;
 
+  music_dir = "/home/radio/music";
+
   add_random = pkgs.writeDashBin "add_random" ''
-    ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.mpc_cli}/bin/mpc ls the_playlist/music | grep '\.ogg$' | shuf -n1)"
+    ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.findutils}/bin/find "${music_dir}/the_playlist" | grep '\.ogg$' | shuf -n1 | sed 's,${music_dir}/,,')"
   '';
 
-  skip_track = pkgs.writeDashBin "skip_track" ''
+  skip_track = pkgs.writeBashBin "skip_track" ''
+    set -eu
+
     ${add_random}/bin/add_random
-    echo skipping: "$(${print_current}/bin/print_current)"
+    music_dir=${escapeShellArg music_dir}
+    current_track=$(${pkgs.mpc_cli}/bin/mpc current -f %file%)
+    track_infos=$(${print_current}/bin/print_current)
+    skip_count=$(${pkgs.attr}/bin/getfattr -n user.skip_count --only-values "$music_dir"/"$current_track" || echo 0)
+    if [[ "$current_track" =~ ^the_playlist/music/.* ]] && [ "$skip_count" -le 2 ]; then
+      skip_count=$((skip_count+1))
+      ${pkgs.attr}/bin/setfattr -n user.skip_count -v "$skip_count" "$music_dir"/"$current_track"
+      echo skipping: "$track_infos" skip_count: "$skip_count"
+    else
+      mkdir -p "$music_dir"/.graveyard/
+      mv "$music_dir"/"$current_track" "$music_dir"/.graveyard/
+      echo killing: "$track_infos"
+    fi
     ${pkgs.mpc_cli}/bin/mpc -q next
+  '';
+
+  good_track = pkgs.writeBashBin "good_track" ''
+    set -eu
+
+    music_dir=${escapeShellArg music_dir}
+    current_track=$(${pkgs.mpc_cli}/bin/mpc current -f %file%)
+    track_infos=$(${print_current}/bin/print_current)
+    if [[ "$current_track" =~ ^the_playlist/music/.* ]]; then
+      ${pkgs.attr}/bin/setfattr -n user.skip_count -v 0 "$music_dir"/"$current_track"
+    else
+      mv "$music_dir"/"$current_track" "$music_dir"/the_playlist/music/
+    fi
+      echo good: "$track_infos"
   '';
 
   print_current = pkgs.writeDashBin "print_current" ''
@@ -48,6 +78,7 @@ in {
 
   krebs.per-user.${name}.packages = with pkgs; [
     add_random
+    good_track
     skip_track
     print_current
     ncmpcpp
@@ -57,7 +88,7 @@ in {
   services.mpd = {
     enable = true;
     group = "radio";
-    musicDirectory = "/home/radio/music";
+    musicDirectory = "${music_dir}";
     extraConfig = ''
       log_level "default"
       auto_update "yes"
@@ -178,11 +209,15 @@ in {
     };
   };
 
+  # allow reaktor2 to modify files
+  systemd.services."reaktor2-the_playlist".serviceConfig.DynamicUser = mkForce false;
+
   krebs.reaktor2.the_playlist = {
     hostname = "irc.freenode.org";
     port = "6697";
     useTLS = true;
     nick = "the_playlist";
+    username = "radio";
     plugins = [
       {
         plugin = "register";
@@ -199,12 +234,19 @@ in {
           workdir = config.krebs.reaktor2.the_playlist.stateDir;
           hooks.PRIVMSG = [
             {
-              #activate = "match";
-              pattern = "^\\s*([0-9A-Za-z._][0-9A-Za-z._-]*)(?:\\s+(.*\\S))?\\s*$";
+              activate = "match";
+              pattern = "^(?:.*\\s)?\\s*the_playlist:\\s*([0-9A-Za-z._][0-9A-Za-z._-]*)(?:\\s+(.*\\S))?\\s*$";
               command = 1;
               arguments = [2];
               commands = {
                 skip.filename = "${skip_track}/bin/skip_track";
+                next.filename = "${skip_track}/bin/skip_track";
+                bad.filename = "${skip_track}/bin/skip_track";
+
+                good.filename = "${good_track}/bin/good_track";
+                nice.filename = "${good_track}/bin/good_track";
+                like.filename = "${good_track}/bin/good_track";
+
                 current.filename = "${print_current}/bin/print_current";
                 suggest.filename = pkgs.writeDash "suggest" ''
                   echo "$@" >> playlist_suggest
@@ -258,9 +300,9 @@ in {
       alias ${html};
     '';
   };
-  krebs.syncthing.folders."the_playlist" = {
+  services.syncthing.declarative.folders."the_playlist" = {
     path = "/home/radio/music/the_playlist";
-    peers = [ "mors" "phone" "prism" "xerxes" ];
+    devices = [ "mors" "phone" "prism" "xerxes" ];
   };
   krebs.permown."/home/radio/music/the_playlist" = {
     owner = "radio";

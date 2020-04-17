@@ -164,12 +164,14 @@ in {
       ci = true;
       extraZones = {
         "krebsco.de" = ''
+          bookmark.euer     IN A      ${nets.internet.ip4.addr}
           boot              IN A      ${nets.internet.ip4.addr}
           boot.euer         IN A      ${nets.internet.ip4.addr}
           cache.euer        IN A      ${nets.internet.ip4.addr}
           cache.gum         IN A      ${nets.internet.ip4.addr}
           cgit.euer         IN A      ${nets.internet.ip4.addr}
           dl.euer           IN A      ${nets.internet.ip4.addr}
+          dns.euer          IN A      ${nets.internet.ip4.addr}
           dockerhub         IN A      ${nets.internet.ip4.addr}
           euer              IN A      ${nets.internet.ip4.addr}
           euer              IN MX 1   aspmx.l.google.com.
@@ -178,7 +180,11 @@ in {
           gold              IN A      ${nets.internet.ip4.addr}
           graph             IN A      ${nets.internet.ip4.addr}
           gum               IN A      ${nets.internet.ip4.addr}
+          io                IN NS     gum.krebsco.de.
           iso.euer          IN A      ${nets.internet.ip4.addr}
+          board.euer        IN A      ${nets.internet.ip4.addr}
+          rss.euer          IN A      ${nets.internet.ip4.addr}
+          mediengewitter    IN CNAME  over.dose.io.
           mon.euer          IN A      ${nets.internet.ip4.addr}
           netdata.euer      IN A      ${nets.internet.ip4.addr}
           nixos.unstable    IN CNAME  krebscode.github.io.
@@ -189,9 +195,6 @@ in {
           wg.euer           IN A      ${nets.internet.ip4.addr}
           wiki.euer         IN A      ${nets.internet.ip4.addr}
           wikisearch        IN A      ${nets.internet.ip4.addr}
-          bookmark.euer     IN A      ${nets.internet.ip4.addr}
-          io                IN NS     gum.krebsco.de.
-          mediengewitter    IN CNAME  over.dose.io.
         '';
       };
       cores = 8;
@@ -201,7 +204,6 @@ in {
           ip6.addr = "2a01:4f8:191:12f6::2";
           aliases = [
             "gum.i"
-            "nextgum.i"
           ];
         };
         wiregrill = {
@@ -237,6 +239,7 @@ in {
             "tracker.makefu.r"
             "wiki.gum.r"
             "wiki.makefu.r"
+            "warrior.gum.r"
             "sick.makefu.r"
           ];
         };

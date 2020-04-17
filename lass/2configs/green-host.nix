@@ -20,7 +20,7 @@ with import <stockholm/lib>;
     }
   ];
 
-  krebs.syncthing.folders."/var/lib/sync-containers".peers = [ "icarus" "skynet" "littleT" "shodan" ];
+  services.syncthing.declarative.folders."/var/lib/sync-containers".devices = [ "icarus" "skynet" "littleT" "shodan" ];
   krebs.permown."/var/lib/sync-containers" = {
     owner = "root";
     group = "syncthing";

@@ -1,5 +1,5 @@
 { pkgs, ... }:
-pkgs.writeDashBin "generate-wallpaper" ''
+pkgs.writers.writeDashBin "generate-wallpaper" ''
   set -euf
 
   # usage: getimg FILENAME URL
@@ -17,24 +17,28 @@ pkgs.writeDashBin "generate-wallpaper" ''
     fi
   }
 
-  # usage: image_size FILENAME
-  image_size() {
-    identify "$1" | awk '{print$3}'
+  # check if file exists and fetch only if missing
+  fetch_once() {
+    name=$1
+    url=$2
+    test -e "$name" || fetch "$name" "$url"
   }
 
-  # usage: make_mask DST SRC MASK
-  make_layer() {
-    if needs_rebuild "$@"; then
-      echo "make $1 (apply mask)" >&2
-      convert "$2" "$3" -alpha off -compose copy_opacity -composite "$1"
+  fetch_older_min() {
+    min=$1
+    name=$2
+    url=$3
+    if ! test "$(find $name -mmin -$min)"; then
+      fetch "$name" "$url"
     fi
   }
 
-  # usage: flatten DST HILAYER LOLAYER
-  flatten() {
-    if needs_rebuild "$@"; then
-      echo "make $1 (flatten)" >&2
-      composite "$2" "$3" "$1"
+  fetch_older_days() {
+    days=$1
+    name=$2
+    url=$3
+    if ! test "$(find $name -mtime -$days)"; then
+      fetch "$name" "$url"
     fi
   }
 
@@ -48,9 +52,11 @@ pkgs.writeDashBin "generate-wallpaper" ''
     else
       result=1
       for b; do
-        if test "$b" -nt "$a"; then
-          #echo "  $b is newer than $a" >&2
-          result=0
+        if check_type "$b" image; then
+          if test "$b" -nt "$a"; then
+            #echo "  $b is newer than $a" >&2
+            result=0
+          fi
         fi
       done
     fi
@@ -60,34 +66,67 @@ pkgs.writeDashBin "generate-wallpaper" ''
     return $result
   }
 
+  get_neo_url() {
+    url=$1
+    curl -Ss "$url" | grep '3600 x 1800' | sed 's/.*href="\([^"]*\)".*/\1/'
+  }
+
   main() {
     cd "$working_dir"
 
     # fetch source images in parallel
-    fetch nightmap-raw.jpg \
-      "$nightmap_url" &
-    fetch daymap-raw.png \
-      "$daymap_url" &
-    fetch clouds-raw.jpg \
-      "$cloudmap_url" &
-    fetch marker.json \
-      "$marker_url" &
+    fetch_once nightmap-raw.jpg \
+      'https://eoimages.gsfc.nasa.gov/images/imagerecords/144000/144898/BlackMarble_2016_3km.jpg' &
+    fetch_once daymap-raw.tif \
+      'https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57752/land_shallow_topo_8192.tif' &
+
+    fetch_once mercury-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/2/2e/Mercury_symbol.svg' &
+    fetch_once venus-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/6/66/Venus_symbol.svg' &
+    fetch_once mars-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/b/b7/Mars_symbol.svg' &
+    fetch_once jupiter-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/2/26/Jupiter_symbol.svg' &
+    fetch_once saturn-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/7/74/Saturn_symbol.svg' &
+    fetch_once uranus-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/f/f1/Uranus_symbol.svg' &
+    fetch_once neptune-raw.svg \
+      'https://upload.wikimedia.org/wikipedia/commons/4/47/Neptune_symbol.svg' &
+
+    fetch_once krebs-raw.svg \
+      'https://raw.githubusercontent.com/krebs/painload/master/cholerab/bling/krebs_aquarium.svg' &
+
+    fetch_older_min 720 ice-raw.jpg $(get_neo_url \
+      'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=NISE_D') &
+    fetch_older_days 3 snow-raw.jpg $(get_neo_url \
+      'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD10C1_E_SNOW') &
+    fetch_older_days 7 chlora-raw.jpg $(get_neo_url \
+      'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MY1DMM_CHLORA') &
+    fetch_older_days 3 fire-raw.jpg $(get_neo_url \
+      'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD14A1_E_FIRE') &
+
+    # regular fetches
+    fetch marker.json "$marker_url" &
+    fetch sun-raw.jpg 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0171.jpg' &
+
     wait
 
-    check_type nightmap-raw.jpg image
-    check_type daymap-raw.png image
-    check_type clouds-raw.jpg image
+    # fetch clouds if they are older than 3h
+    if ! test "$(find clouds-raw.png -mmin -180)"; then
+      ${pkgs.nomads-cloud}/bin/nomads-cloud clouds-raw.png
+    fi
 
-    in_size=2048x1024
-    xplanet_out_size=1466x1200
-    out_geometry=1366x768+100+160
-
-    nightsnow_color='#0c1a49'  # nightmap
+    in_size=3600x1800
+    xplanet_out_size=3200x2500
+    out_geometry=3200x1800+0+350
 
     for raw in \
         nightmap-raw.jpg \
-        daymap-raw.png \
-        clouds-raw.jpg \
+        daymap-raw.tif \
+        chlora-raw.jpg \
+        clouds-raw.png \
         ;
     do
       normal=''${raw%-raw.*}.png
@@ -97,49 +136,79 @@ pkgs.writeDashBin "generate-wallpaper" ''
       fi
     done
 
-    # create nightmap-fullsnow
-    if needs_rebuild nightmap-fullsnow.png; then
-      convert -size $in_size xc:$nightsnow_color nightmap-fullsnow.png
+    # remove snow from ice map
+    if needs_rebuild ice.png ice-raw.jpg; then
+      convert ice-raw.jpg -fuzz 20% -fill black -opaque white -scale "$in_size" ice.png
     fi
 
-    # extract daymap-snowmask from daymap-final
-    if needs_rebuild daymap-snowmask.png daymap.png; then
-      convert daymap.png -threshold 95% daymap-snowmask.png
+    if needs_rebuild snow.png snow-raw.jpg; then
+      convert snow-raw.jpg -fuzz 20% -fill '#DEDEDE' -opaque white -scale "$in_size" snow.png
     fi
 
-    # extract nightmap-lightmask from nightmap
-    if needs_rebuild nightmap-lightmask.png nightmap.png; then
-      convert nightmap.png -threshold 25% nightmap-lightmask.png
+    # make fire more red
+    if needs_rebuild fire.png fire-raw.jpg; then
+      convert fire-raw.jpg -fuzz 20% -fill '#ef840c' -opaque white -scale "$in_size" fire.png
     fi
 
-    # create layers
-    make_layer nightmap-snowlayer.png nightmap-fullsnow.png daymap-snowmask.png
-    make_layer nightmap-lightlayer.png nightmap.png nightmap-lightmask.png
+    # cut out sun with alpha transparency
+    if needs_rebuild sun.png sun-raw.jpg; then
+      convert sun-raw.jpg \
+        \( +clone -colorspace HSB -fill white -draw "circle 256,256 256,54" -separate -delete 0,1 \) \
+        -compose copyopacity -composite -crop 512x472+0+20 -scale "100x100" sun.png
+    fi
 
-    # apply layers
-    flatten nightmap-lightsnowlayer.png \
-      nightmap-lightlayer.png \
-      nightmap-snowlayer.png
+    if needs_rebuild krebs.png krebs-raw.svg; then
+      inkscape -z -e krebs.png -w 16 -h 16 krebs-raw.svg
+    fi
 
-    flatten nightmap-final.png \
-      nightmap-lightsnowlayer.png \
-      nightmap.png
+    # -- Planets --
+    for planet in mercury venus mars jupiter saturn uranus neptune; do
+      if needs_rebuild "$planet".png "$planet"-raw.svg; then
+        sed -i 's/#000/#FE8019/g' "$planet"-raw.svg
+        inkscape -z -e "$planet".png -w 40 -h 40 "$planet"-raw.svg
+      fi
+    done
+
+    # -- Daymap --
+
+    # merge with water chlora layer
+    if needs_rebuild daymap-final.png daymap.png fire.png snow.png ice.png chlora.png; then
+      convert daymap.png fire.png -compose lighten -composite daymap-1.png
+      convert daymap-1.png ice.png -compose lighten -composite daymap-2.png
+      convert daymap-2.png snow.png -compose lighten -composite daymap-3.png
+      convert daymap-3.png chlora.png -compose lighten -composite daymap-final.png
+    fi
+
+    # -- Nightmap --
+
+    if needs_rebuild nightmap-final.png nightmap.png fire.png snow.png ice.png chlora.png; then
+      convert nightmap.png fire.png -compose lighten -composite nightmap-1.png
+      convert nightmap-1.png \( -fill black -colorize 70% ice.png \) -compose lighten -composite nightmap-2.png
+      convert nightmap-2.png \( -fill black -colorize 70% snow.png \) -compose lighten -composite nightmap-3.png
+      convert nightmap-3.png \( -fill black -colorize 70% chlora.png \) -compose lighten -composite nightmap-final.png
+    fi
 
     # create marker file from json
     if [ -s marker.json ]; then
-      jq -r 'to_entries[] | @json "\(.value.latitude) \(.value.longitude)"' marker.json > marker_file
+      jq -r 'to_entries[] | @json "\(.value.latitude) \(.value.longitude) image=krebs.png"' marker.json > marker_file
+      echo 'position=sun image=sun.png' >> marker_file
+      echo 'position=moon image=moon.png' >> marker_file
+      echo 'position=mercury image=mercury.png' >> marker_file
+      echo 'position=venus image=venus.png' >> marker_file
+      echo 'position=mars image=mars.png' >> marker_file
+      echo 'position=jupiter image=jupiter.png' >> marker_file
+      echo 'position=saturn image=saturn.png' >> marker_file
+      echo 'position=uranus image=uranus.png' >> marker_file
+      echo 'position=neptune image=neptune.png' >> marker_file
     fi
 
-    # make all unmodified files as final
-    for normal in \
-        daymap.png \
-        clouds.png \
-        ;
-    do
-      final=''${normal%.png}-final.png
-      needs_rebuild $final &&
-        ln $normal $final
-    done
+    # generate moon
+    xplanet -body moon --num_times 1 -origin earth \
+      --transpng moon.png --geometry 50x50 \
+      -config ${pkgs.writeText "moon.config" ''
+        [moon]
+        shade=10
+      ''}
 
     # rebuild every time to update shadow
     xplanet --num_times 1 --geometry $xplanet_out_size \
@@ -149,8 +218,9 @@ pkgs.writeDashBin "generate-wallpaper" ''
         "Earth"
         map=daymap-final.png
         night_map=nightmap-final.png
-        cloud_map=clouds-final.png
-        cloud_threshold=10
+        cloud_map=clouds.png
+        cloud_threshold=1
+        cloud_gamma=10
         shade=15
       ''}
 
@@ -161,8 +231,9 @@ pkgs.writeDashBin "generate-wallpaper" ''
         "Earth"
         map=daymap-final.png
         night_map=nightmap-final.png
-        cloud_map=clouds-final.png
-        cloud_threshold=10
+        cloud_map=clouds.png
+        cloud_threshold=1
+        cloud_gamma=10
         marker_file=marker_file
         shade=15
       ''}
@@ -178,6 +249,8 @@ pkgs.writeDashBin "generate-wallpaper" ''
       convert xplanet-krebs-output.png -crop $out_geometry \
         realwallpaper-krebs-tmp.png
         mv realwallpaper-krebs-tmp.png realwallpaper-krebs.png
+        mkdir -p archive
+        convert realwallpaper-krebs.png archive/"$(date -Is)".jpg
     fi
   }
 

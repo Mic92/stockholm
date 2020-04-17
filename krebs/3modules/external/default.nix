@@ -373,6 +373,30 @@ in {
       syncthing.id = "22NLFY5-QMRM3BH-76QIBYI-OPMKVGM-DU4FNZI-3KN2POF-V4WIC6M-2SFFUAC";
       nets = {};
     };
+    catalonia = {
+     owner = config.krebs.users.xkey;
+     nets = {
+       retiolum = {
+         ip4.addr = "10.243.13.12";
+         aliases = [ "catalonia.r" ];
+         tinc.pubkey = ''
+           -----BEGIN RSA PUBLIC KEY-----
+           MIICCgKCAgEAug+nej8/spuRHdzcfBYAuzUVoiq4YufmJqXSshvgf4aqjeVEt91Y
+           gT6iBN8IKnMjYk3bAS7MxmgiyVE17MQlaQi0RSYY47M8I9TvCYtWX/FcXuP9e6CA
+           VcalDUNpy2qNB+yEE8gMa8vDA3smKk/iK47jTtpWoPtvejLK/SCi8RdlYjKlOErE
+           Yl9mCniGD1WEYgdrjf6Nl7av6uuGYNibivIMkB2JyGwGGmzvP+oBFi2Cwarw8K2e
+           FK2VGrAfkgiP5rTPACHseoeCsJtRLozgzYzmS5M9XhP5ZoPkbtR/pL5btCwoCTlZ
+           HotmLVg4DezbPjNOBB9gtJF4UuzQjSPNY6K1VvvLOhDwXdyln82LuNcm9l+cy9y3
+           mGeSvqOouBugDqie6OpkF0KrRwlGQVwzwtnDohGd/5f7TbiPf1QjC+JP/m4mxZl3
+           zE0BCOct9b4hUc/CFto71CPlytSbTsMhfJAn8JxttGvsWIAj+dQ0iuLXfLDflWt6
+           sImmnOo28YInvFx6pKoxTwcV1AVrPWn5TSePhZM50dmzs0exltOISFECDhpPabU3
+           ZymRCze8fH9Z3SHxfxTlTZV7IaW2kpyyBe1KsWpM46gLPk5icX+Xc6mdGwbdGBpf
+           vDZ+BoHCjq9FfQrAu1+E83yCYyu+3fWrLSgYyrqjg0gPcCcnb1g6hqECAwEAAQ==
+           -----END RSA PUBLIC KEY-----
+         '';
+        };
+      };
+    };
   };
   users = {
     ciko = {
@@ -421,6 +445,7 @@ in {
       mail = "xq@shackspace.de";
       pubkey = ssh-for "xq";
     };
+    xkey = {};
     miaoski = {
     };
     filly = {
