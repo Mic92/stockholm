@@ -49,6 +49,8 @@ let
 
     indent = replaceChars ["\n"] ["\n  "];
 
+    stripAttr = converge (filterAttrsRecursive (n: v: v != {} && v != null));
+
     mapNixDir = f: x: {
       list = foldl' mergeAttrs {} (map (mapNixDir1 f) x);
       path = mapNixDir1 f x;
