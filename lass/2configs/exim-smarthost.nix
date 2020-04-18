@@ -113,6 +113,8 @@
   ];
 
 in {
+  environment.systemPackages = [ pkgs.review-mail-queue ];
+
   krebs.exim-smarthost = {
     enable = true;
     dkim = [
