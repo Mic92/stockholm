@@ -19,6 +19,7 @@ with (import <stockholm/lib>);
   ];
 
   services.tor.enable = true;
+  services.tor.client.enable = true;
 
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-i retiolum -p udp --dport 60000:61000"; target = "ACCEPT";}
