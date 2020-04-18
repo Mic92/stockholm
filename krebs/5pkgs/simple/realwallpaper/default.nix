@@ -138,7 +138,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
 
     # remove snow from ice map
     if needs_rebuild ice.png ice-raw.jpg; then
-      convert ice-raw.jpg -fuzz 20% -fill black -opaque white -scale "$in_size" ice.png
+      convert ice-raw.jpg -fuzz 20% -fill black -opaque white -colorspace gray -blur 0x6 -scale "$in_size" ice.png
     fi
 
     if needs_rebuild snow.png snow-raw.jpg; then
