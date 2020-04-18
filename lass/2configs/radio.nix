@@ -196,6 +196,14 @@ in {
       done | while read track; do
         echo "$(date -Is)" "$track" | tee -a "$HISTORY_FILE"
         echo "$(tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
+        ${pkgs.curl}/bin/curl -fsSv --unix-socket /home/radio/reaktor.sock http://z/ \
+          -H content-type:application/json \
+          -d "$(${pkgs.jq}/bin/jq -n \
+            --arg track "$track" '{
+              command:"PRIVMSG",
+              params:["#the_playlist","playing: " + $track]
+            }'
+          )"
       done
     '';
   in {
@@ -207,6 +215,7 @@ in {
 
     serviceConfig = {
       ExecStart = recentlyPlayed;
+      User = "radio";
     };
   };
 
@@ -219,6 +228,7 @@ in {
     useTLS = true;
     nick = "the_playlist";
     username = "radio";
+    API.listen = "unix:/home/radio/reaktor.sock";
     plugins = [
       {
         plugin = "register";
