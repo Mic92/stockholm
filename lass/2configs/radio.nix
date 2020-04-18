@@ -146,6 +146,7 @@ in {
     tables = {
       filter.INPUT.rules = [
         { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; }
+        { predicate = "-i retiolum -p tcp --dport 8001"; target = "ACCEPT"; }
       ];
     };
   };
@@ -257,6 +258,29 @@ in {
         };
       }
     ];
+  };
+
+  krebs.htgen.radio = {
+    port = 8001;
+    user = {
+      name = "radio";
+    };
+    script = ''
+      case "$Method $Request_URI" in
+        "POST /skip")
+          ${skip_track}/bin/skip_track
+          exit
+        ;;
+        "POST /good")
+          ${good_track}/bin/good_track
+          exit
+        ;;
+        "POST /current")
+          ${print_current}/bin/print_current
+          exit
+        ;;
+      esac
+    '';
   };
 
   services.nginx = {
