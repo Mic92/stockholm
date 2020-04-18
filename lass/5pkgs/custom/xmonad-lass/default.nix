@@ -1,16 +1,10 @@
 { config, pkgs, ... }:
-pkgs.writeHaskellPackage "xmonad-lass" {
-  executables.xmonad = {
-    extra-depends = [
-      "containers"
-      "extra"
-      "unix"
-      "X11"
-      "xmonad"
-      "xmonad-contrib"
-      "xmonad-stockholm"
-    ];
-    text = /* haskell */ ''
+pkgs.writers.writeHaskellBin "xmonad" {
+  libraries = with pkgs.haskellPackages; [
+    extra
+    xmonad-stockholm
+  ];
+} /* haskell */ ''
 {-# LANGUAGE LambdaCase #-}
 
 
@@ -220,6 +214,4 @@ gridConfig = def
 allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
 allWorkspaceNames ws =
     return $ map W.tag (W.hidden ws ++ (map W.workspace $ W.visible ws)) ++ [W.tag $ W.workspace $ W.current ws]
-    '';
-  };
-}
+''
