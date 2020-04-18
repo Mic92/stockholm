@@ -150,10 +150,7 @@ myKeyMap =
 
     , ("M4-<F2>", windows copyToAll)
 
-    , ("M4-<F4>", spawn "${pkgs.writeDash "nm-dmenu" ''
-      export PATH=$PATH:${pkgs.dmenu}/bin:${pkgs.networkmanagerapplet}/bin
-      exec ${pkgs.networkmanager_dmenu}/bin/networkmanager_dmenu "$@"
-    ''}")
+    , ("M4-<F4>", spawn "${pkgs.nm-dmenu}/bin/nm-dmenu")
     , ("M4-<Insert>", spawn "${pkgs.writeDash "paste" ''
       ${pkgs.coreutils}/bin/sleep 0.1
       ${pkgs.xclip}/bin/xclip -o | ${pkgs.xdotool}/bin/xdotool type -f -
