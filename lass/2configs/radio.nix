@@ -49,10 +49,25 @@ let
     echo good: "$track_infos"
   '';
 
+  track_youtube_link = pkgs.writeDash "track_youtube_link" ''
+    ${pkgs.mpc_cli}/bin/mpc current -f %file% \
+      | ${pkgs.gnused}/bin/sed 's@.*\(.\{11\}\)\.ogg@https://www.youtube.com/watch?v=\1@'
+  '';
+
   print_current = pkgs.writeDashBin "print_current" ''
     echo "$(${pkgs.mpc_cli}/bin/mpc current -f %file%) \
-    $(${pkgs.mpc_cli}/bin/mpc current -f %file% \
-      | ${pkgs.gnused}/bin/sed 's@.*\(.\{11\}\)\.ogg@http://www.youtube.com/watch?v=\1@')"
+    $(${track_youtube_link})"
+  '';
+
+  print_current_json = pkgs.writeDashBin "print_current_json" ''
+    ${pkgs.jq}/bin/jq -n -c \
+      --arg name "$(${pkgs.mpc_cli}/bin/mpc current)" \
+      --arg filename "$(${pkgs.mpc_cli}/bin/mpc current -f %file%)" \
+      --arg youtube "$(${track_youtube_link})" '{
+        name: $name,
+        filename: $filename,
+        youtube: $youtube
+      }'
   '';
 
 in {
@@ -81,6 +96,7 @@ in {
     good_track
     skip_track
     print_current
+    print_current_json
     ncmpcpp
     mpc_cli
   ];
@@ -281,7 +297,7 @@ in {
           printf 'HTTP/1.1 200 OK\r\n'
           printf 'Connection: close\r\n'
           printf '\r\n'
-          ${print_current}/bin/print_current
+          ${print_current_json}/bin/print_current_json
           exit
         ;;
         "POST /skip")
