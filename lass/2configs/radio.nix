@@ -44,9 +44,9 @@ let
     if [[ "$current_track" =~ ^the_playlist/music/.* ]]; then
       ${pkgs.attr}/bin/setfattr -n user.skip_count -v 0 "$music_dir"/"$current_track"
     else
-      mv "$music_dir"/"$current_track" "$music_dir"/the_playlist/music/
+      mv "$music_dir"/"$current_track" "$music_dir"/the_playlist/music/ || :
     fi
-      echo good: "$track_infos"
+    echo good: "$track_infos"
   '';
 
   print_current = pkgs.writeDashBin "print_current" ''
@@ -278,6 +278,9 @@ in {
     script = ''
       case "$Method $Request_URI" in
         "GET /current")
+          printf 'HTTP/1.1 200 OK\r\n'
+          printf 'Connection: close\r\n'
+          printf '\r\n'
           ${print_current}/bin/print_current
           exit
         ;;
