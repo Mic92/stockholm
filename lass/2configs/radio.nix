@@ -277,16 +277,16 @@ in {
     };
     script = ''
       case "$Method $Request_URI" in
+        "GET /current")
+          ${print_current}/bin/print_current
+          exit
+        ;;
         "POST /skip")
           ${skip_track}/bin/skip_track
           exit
         ;;
         "POST /good")
           ${good_track}/bin/good_track
-          exit
-        ;;
-        "POST /current")
-          ${print_current}/bin/print_current
           exit
         ;;
       esac
