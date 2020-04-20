@@ -70,6 +70,17 @@ let
       }'
   '';
 
+  write_to_irc = pkgs.writeDash "write_to_irc" ''
+    ${pkgs.curl}/bin/curl -fsSv --unix-socket /home/radio/reaktor.sock http://z/ \
+      -H content-type:application/json \
+      -d "$(${pkgs.jq}/bin/jq -n \
+        --arg text "$1" '{
+          command:"PRIVMSG",
+          params:["#the_playlist",$text]
+        }'
+      )"
+  '';
+
 in {
   users.users = {
     "${name}" = rec {
@@ -212,14 +223,7 @@ in {
       done | while read track; do
         echo "$(date -Is)" "$track" | tee -a "$HISTORY_FILE"
         echo "$(tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
-        ${pkgs.curl}/bin/curl -fsSv --unix-socket /home/radio/reaktor.sock http://z/ \
-          -H content-type:application/json \
-          -d "$(${pkgs.jq}/bin/jq -n \
-            --arg track "$track" '{
-              command:"PRIVMSG",
-              params:["#the_playlist","playing: " + $track]
-            }'
-          )"
+        ${write_to_irc} "playing: $track"
       done
     '';
   in {
@@ -301,11 +305,21 @@ in {
           exit
         ;;
         "POST /skip")
-          ${skip_track}/bin/skip_track
+          printf 'HTTP/1.1 200 OK\r\n'
+          printf 'Connection: close\r\n'
+          printf '\r\n'
+          msg=$(${skip_track}/bin/skip_track)
+          ${write_to_irc} "$msg"
+          echo "$msg"
           exit
         ;;
         "POST /good")
-          ${good_track}/bin/good_track
+          printf 'HTTP/1.1 200 OK\r\n'
+          printf 'Connection: close\r\n'
+          printf '\r\n'
+          msg=$(${good_track}/bin/good_track)
+          ${write_to_irc} "$msg"
+          echo "$msg"
           exit
         ;;
       esac
