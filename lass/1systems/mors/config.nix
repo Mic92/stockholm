@@ -49,17 +49,17 @@ with import <stockholm/lib>;
       ];
     }
     {
-      krebs.syncthing = {
-        peers.schasch.addresses = [ "schasch.r:22000" ];
+      services.syncthing.declarative = {
+        devices.schasch.addresses = [ "schasch.r:22000" ];
         folders = {
           the_playlist = {
             path = "/home/lass/tmp/the_playlist";
-            peers = [ "mors" "phone" "prism" "xerxes" ];
+            devices = [ "mors" "phone" "prism" "xerxes" ];
           };
           free_music = {
             id = "mu9mn-zgvsw";
             path = "/home/lass/tmp/free_music";
-            peers = [ "mors" "schasch" ];
+            devices = [ "mors" "schasch" ];
           };
         };
       };

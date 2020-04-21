@@ -17,21 +17,6 @@ let
       default = "/var/realwallpaper/";
     };
 
-    nightmap = mkOption {
-      type = types.str;
-      default = "http://eoimages.gsfc.nasa.gov/images/imagerecords/55000/55167/earth_lights_lrg.jpg";
-    };
-
-    daymap = mkOption {
-      type = types.str;
-      default = "https://www.nnvl.noaa.gov/images/globaldata/SnowIceCover_Daily.png";
-    };
-
-    cloudmap = mkOption {
-      type = types.str;
-      default = "http://home.megapass.co.kr/~holywatr/cloud_data/clouds_2048.jpg";
-    };
-
     marker = mkOption {
       type = types.str;
       default = "http://graph.r/marker.json";
@@ -60,6 +45,7 @@ let
       path = with pkgs; [
         xplanet
         imagemagick
+        inkscape
         curl
         file
         jq
@@ -67,9 +53,6 @@ let
 
       environment = {
         working_dir = cfg.workingDir;
-        nightmap_url = cfg.nightmap;
-        daymap_url = cfg.daymap;
-        cloudmap_url = cfg.cloudmap;
         marker_url = cfg.marker;
       };
 

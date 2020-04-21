@@ -19,6 +19,10 @@ let
       type = types.str;
       default = "irc.freenode.org";
     };
+    message = mkOption {
+      type = types.str;
+      default = "SSH Hidden Service at ";
+    };
   };
 
   imp = let
@@ -50,7 +54,7 @@ let
             ${pkgs.irc-announce}/bin/irc-announce \
             ${cfg.server} 6667 ${config.krebs.build.host.name}-ssh \
             \${cfg.channel} \
-            "SSH Hidden Service at $(cat ${hiddenServiceDir}/hostname)"
+            "${cfg.message}$(cat ${hiddenServiceDir}/hostname)"
         '';
         PrivateTmp = "true";
         User = "tor";

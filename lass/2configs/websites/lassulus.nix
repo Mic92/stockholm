@@ -13,6 +13,8 @@ in {
   ];
 
   security.acme = {
+    email = "acme@lassul.us";
+    acceptTerms = true;
     certs."lassul.us" = {
       allowKeysForGroup = true;
       group = "lasscert";
@@ -72,11 +74,6 @@ in {
   security.acme.certs."cgit.lassul.us" = {
     email = "lassulus@lassul.us";
     webroot = "/var/lib/acme/acme-challenge";
-    plugins = [
-      "account_key.json"
-      "fullchain.pem"
-      "key.pem"
-    ];
     group = "nginx";
     user = "nginx";
   };

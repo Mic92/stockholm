@@ -12,6 +12,7 @@ with import <stockholm/lib>;
       i18n.defaultLocale ="de_DE.UTF-8";
       time.timeZone = "Europe/Berlin";
       services.xserver.enable = true;
+      services.xserver.libinput.enable = false;
       users.users.locke = {
         uid = genid "locke";
         home = "/home/locke";

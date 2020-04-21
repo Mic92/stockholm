@@ -7,8 +7,8 @@
     enable = true;
     xkbOptions = "caps:super";
     exportConfiguration = true;
-    
-    displayManager.slim.enable = true;
+
+    displayManager.lightdm.enable = true;
   };
 
   # Configure fonts

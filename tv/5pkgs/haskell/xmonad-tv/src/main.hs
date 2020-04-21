@@ -160,6 +160,7 @@ myKeys conf = Map.fromList $
     , ((0, xF86XK_AudioLowerVolume), audioLowerVolume)
     , ((0, xF86XK_AudioRaiseVolume), audioRaiseVolume)
     , ((0, xF86XK_AudioMute), audioMute)
+    , ((_4, xF86XK_AudioMute), pavucontrol [])
 
     , ((_4, xK_Prior), forkFile Paths.xcalib ["-invert", "-alter"] Nothing)
     ]
@@ -175,6 +176,8 @@ myKeys conf = Map.fromList $
     _4SM = _4 .|. _S .|. _M
 
     pactl args = forkFile Paths.pactl args Nothing
+    pavucontrol args = forkFile Paths.pavucontrol args Nothing
+
     audioLowerVolume = pactl ["--", "set-sink-volume", "@DEFAULT_SINK@", "-5%"]
     audioRaiseVolume = pactl ["--", "set-sink-volume", "@DEFAULT_SINK@", "+5%"]
     audioMute = pactl ["--", "set-sink-mute", "@DEFAULT_SINK@", "toggle"]

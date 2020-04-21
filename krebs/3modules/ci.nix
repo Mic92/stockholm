@@ -52,7 +52,7 @@ let
                   "${url}",
                   workdir='${name}-${elemAt(splitString "." url) 1}', branches=True,
                   project='${name}',
-                  pollinterval=10
+                  pollinterval=100
               )
           )
         '') repo.urls)

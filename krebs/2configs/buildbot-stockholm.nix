@@ -26,14 +26,12 @@
         "http://cgit.hotdog.r/krops"
         "http://cgit.ni.r/krops"
         "http://cgit.prism.r/krops"
-        "https://git.ingolf-wagner.de/krebs/krops.git"
         "https://github.com/krebs/krops.git"
       ];
       nix_writers.urls = [
         "http://cgit.hotdog.r/nix-writers"
         "http://cgit.ni.r/nix-writers"
         "http://cgit.prism.r/nix-writers"
-        "https://git.ingolf-wagner.de/krebs/nix-writers.git"
       ];
       stockholm.urls = [
         "http://cgit.enklave.r/stockholm"
