@@ -21,6 +21,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/gg23.nix>
     <stockholm/lass/2configs/hass>
     <stockholm/lass/2configs/br.nix>
+    <stockholm/lass/2configs/fetchWallpaper.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.shodan;
