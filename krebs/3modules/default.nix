@@ -50,7 +50,6 @@ let
       ./secret.nix
       ./setuid.nix
       ./shadow.nix
-      ./syncthing.nix
       ./tinc.nix
       ./tinc_graphs.nix
       ./urlwatch.nix

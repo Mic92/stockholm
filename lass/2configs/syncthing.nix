@@ -7,18 +7,20 @@ in {
     enable = true;
     group = "syncthing";
     configDir = "/var/lib/syncthing";
+    declarative = {
+      key = toString <secrets/syncthing.key>;
+      cert = toString <secrets/syncthing.cert>;
+      devices = mk_peers all_peers;
+      folders."/home/lass/sync" = {
+        devices = attrNames (filterAttrs (n: v: n != "phone") own_peers);
+        # ignorePerms = false;
+      };
+    };
   };
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp --dport 22000"; target = "ACCEPT";}
     { predicate = "-p udp --dport 21027"; target = "ACCEPT";}
   ];
-  krebs.syncthing = {
-    enable = true;
-    cert = toString <secrets/syncthing.cert>;
-    key = toString <secrets/syncthing.key>;
-    peers = mk_peers all_peers;
-    folders."/home/lass/sync".peers = attrNames (filterAttrs (n: v: n != "phone") own_peers);
-  };
 
   system.activationScripts.syncthing-home = ''
     ${pkgs.coreutils}/bin/chmod a+x /home/lass

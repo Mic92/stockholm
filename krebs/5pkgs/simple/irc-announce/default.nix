@@ -25,10 +25,10 @@ pkgs.writeDashBin "irc-announce" ''
   # This is used to see what we send to the irc server. (debug output)
   echo2() { echo "$*"; echo "$*" >&2; }
   cat2() {
-    while read -r line; do
-      echo "$line"
-      echo "$line" >&2
-    done
+    awk '{
+      print $0
+      print $0 > "/dev/stderr"
+    }'
   }
 
   # privmsg_cat transforms stdin to a privmsg
