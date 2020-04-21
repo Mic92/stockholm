@@ -14,6 +14,7 @@ in {
 
   security.acme = {
     email = "acme@lassul.us";
+    acceptTerms = true;
     certs."lassul.us" = {
       allowKeysForGroup = true;
       group = "lasscert";
