@@ -17,6 +17,9 @@ let
   emacsPkgs = epkgs:
     (with epkgs.melpaPackages ;
 
+    ## windows-purpose (testing)
+    [ window-purpose ] ++
+
     ## helm (stable)
     # emacs completion engine
     [ helm helm-ag ] ++
