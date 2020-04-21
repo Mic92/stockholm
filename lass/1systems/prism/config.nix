@@ -65,13 +65,6 @@ with import <stockholm/lib>;
           config.krebs.users.makefu.pubkey
         ];
       };
-      users.users.nin = {
-        uid = genid "nin";
-        isNormalUser = true;
-        openssh.authorizedKeys.keys = [
-          config.krebs.users.nin.pubkey
-        ];
-      };
       users.extraUsers.dritter = {
         uid = genid_uint31 "dritter";
         isNormalUser = true;
