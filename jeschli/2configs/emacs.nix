@@ -67,6 +67,7 @@ let
     (with epkgs.orgPackages ;
       [ org-plus-contrib ]) ++
 
+    # stable
     (with epkgs.elpaPackages ;
       [ bbdb which-key ]);
 
