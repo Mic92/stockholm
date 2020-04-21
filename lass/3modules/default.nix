@@ -4,6 +4,7 @@ _:
     ./dnsmasq.nix
     ./ejabberd
     ./folderPerms.nix
+    ./hass.nix
     ./hosts.nix
     ./mysql-backup.nix
     ./news.nix
