@@ -90,7 +90,7 @@ let
   '';
 
   myEmacsWithDaemon = pkgs.writeDashBin "my-emacs-daemon" ''
-    exec ${emacsWithOverlay}/bin/emacs -q --daemon
+    exec ${emacsWithOverlay}/bin/emacs -q --daemon -l ${./elisp/init.el}
   '';
 
   myEmacsClient = pkgs.writeDashBin "meclient" ''
