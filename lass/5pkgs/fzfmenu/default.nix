@@ -32,14 +32,24 @@ pkgs.writeDashBin "fzfmenu" ''
   done
   INPUT=$(${pkgs.coreutils}/bin/cat)
   OUTPUT="$(${pkgs.coreutils}/bin/mktemp)"
-  ${pkgs.rxvt_unicode}/bin/urxvt \
-    -name fzfmenu -title fzfmenu \
-    -e ${pkgs.dash}/bin/dash -c \
-      "echo \"$INPUT\" | ${pkgs.fzf}/bin/fzf \
-        --history=/dev/null \
-        --print-query \
-        --prompt=\"$PROMPT\" \
-        > \"$OUTPUT\"" 2>/dev/null
+  if [ -z ''${TERM+x} ]; then #check if we can print fzf in the shell
+    ${pkgs.rxvt_unicode}/bin/urxvt \
+      -name fzfmenu -title fzfmenu \
+      -e ${pkgs.dash}/bin/dash -c \
+        "echo \"$INPUT\" | ${pkgs.fzf}/bin/fzf \
+          --history=/dev/null \
+          --print-query \
+          --prompt=\"$PROMPT\" \
+          --reverse \
+          > \"$OUTPUT\"" 2>/dev/null
+  else
+    echo "$INPUT" | ${pkgs.fzf}/bin/fzf \
+      --history=/dev/null \
+      --print-query \
+      --prompt="$PROMPT" \
+      --reverse \
+      > "$OUTPUT"
+  fi
   ${pkgs.coreutils}/bin/tail -1 "$OUTPUT"
   ${pkgs.coreutils}/bin/rm "$OUTPUT"
 ''

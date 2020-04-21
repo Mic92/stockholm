@@ -12,14 +12,17 @@ let
     video_filename = sys.argv[1]
 
     vid = scan_video(video_filename)
-    sub = download_best_subtitles([vid], {Language('eng')})[vid][0]
+    try:
+        sub = download_best_subtitles([vid], {Language('eng')})[vid][0]
 
-    filename = '/tmp/' + vid.title + '.srt'
+        filename = '/tmp/' + vid.title + '.srt'
 
-    with open(filename, 'wb+') as file:
-        file.write(sub.content)
+        with open(filename, 'wb+') as file:
+            file.write(sub.content)
 
-    print(filename)
+        print(filename)
+    except:  # noqa
+        print("/dev/null")
   '';
 
   autosub = pkgs.writeText "autosub.lua" ''
@@ -70,7 +73,6 @@ let
         download()
     end
 
-    mp.register_event('file-loaded', control_download)
     mp.add_key_binding('S', "download_subs", download)
   '';
 
@@ -79,7 +81,6 @@ let
     paths = [
       (pkgs.writeDashBin "mpv" ''
         exec ${pkgs.mpv}/bin/mpv --no-config --script=${autosub} "$@"
-        # exec ${pkgs.mpv}/bin/mpv --no-config "$@"
       '')
       pkgs.mpv
     ];

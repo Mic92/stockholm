@@ -50,7 +50,6 @@ let
       ./secret.nix
       ./setuid.nix
       ./shadow.nix
-      ./syncthing.nix
       ./tinc.nix
       ./tinc_graphs.nix
       ./urlwatch.nix
@@ -103,7 +102,6 @@ let
     { krebs = import ./krebs  { inherit config; }; }
     { krebs = import ./lass   { inherit config; }; }
     { krebs = import ./makefu { inherit config; }; }
-    { krebs = import ./nin    { inherit config; }; }
     { krebs = import ./external/palo.nix { inherit config; }; }
     { krebs = import ./external/mic92.nix { inherit config; }; }
     { krebs = import ./tv     { inherit config; }; }

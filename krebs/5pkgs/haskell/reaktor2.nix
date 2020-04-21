@@ -1,17 +1,18 @@
 { mkDerivation, aeson, async, attoparsec, base, blessings
 , bytestring, containers, data-default, fetchgit, filepath
 , hashable, lens, lens-aeson, network, network-simple
-, network-simple-tls, pcre-light, process, random, stdenv
-, string-conversions, stringsearch, text, time, transformers
-, unagi-chan, unix, unordered-containers, vector
+, network-simple-tls, network-uri, pcre-light, process, random
+, servant-server, stdenv, string-conversions, stringsearch, text
+, time, transformers, unagi-chan, unix, unordered-containers
+, vector, wai, warp
 }:
 mkDerivation {
   pname = "reaktor2";
-  version = "0.2.2";
+  version = "0.3.0";
   src = fetchgit {
     url = "https://cgit.krebsco.de/reaktor2";
-    sha256 = "1kyr5i5zdzvc7fcyac1i1yvi88kcxafrgp8p79c1b9l4g9sjnv78";
-    rev = "9f4e2644188f985d7cd806c13e2c0dee1688b9f0";
+    sha256 = "02hqpq8wcfd6rvi8qk10zy3f3lrzzqnjwqal4cbvksjn3vahz36h";
+    rev = "a6893c00f78a8acd0a4bfe7da87ab6889eabcf21";
     fetchSubmodules = true;
   };
   isLibrary = false;
@@ -19,9 +20,9 @@ mkDerivation {
   executableHaskellDepends = [
     aeson async attoparsec base blessings bytestring containers
     data-default filepath hashable lens lens-aeson network
-    network-simple network-simple-tls pcre-light process random
-    string-conversions stringsearch text time transformers unagi-chan
-    unix unordered-containers vector
+    network-simple network-simple-tls network-uri pcre-light process
+    random servant-server string-conversions stringsearch text time
+    transformers unagi-chan unix unordered-containers vector wai warp
   ];
   license = stdenv.lib.licenses.mit;
 }

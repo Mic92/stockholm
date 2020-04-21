@@ -71,12 +71,14 @@ in {
     gitAndTools.qgit
     git-preview
     gnome3.dconf
+    iodine
     lm_sensors
     ncdu
     nix-index
     nix-review
     nmap
     pavucontrol
+    ponymix
     powertop
     rxvt_unicode-with-plugins
     sxiv

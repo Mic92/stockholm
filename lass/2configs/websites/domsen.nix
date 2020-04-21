@@ -270,14 +270,14 @@ in {
   };
 
   boot.kernel.sysctl."fs.inotify.max_user_watches" = "1048576";
-  krebs.syncthing.folders = {
+  services.syncthing.declarative.folders = {
     domsen-backups = {
       path = "/backups/domsen";
-      peers = [ "domsen-backup" ];
+      devices = [ "domsen-backup" ];
     };
     domsen-backup-srv-http = {
       path = "/srv/http";
-      peers = [ "domsen-backup" ];
+      devices = [ "domsen-backup" ];
     };
   };
 

@@ -12,6 +12,9 @@ pactl = findExecutable "pactl"
 passmenu :: FilePath
 passmenu = findExecutable "passmenu"
 
+pavucontrol :: FilePath
+pavucontrol = findExecutable "pavucontrol"
+
 slock :: FilePath
 slock = findExecutable "slock"
 

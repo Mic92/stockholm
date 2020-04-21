@@ -45,6 +45,10 @@ with import <stockholm/lib>;
           default = self.config.port == "6697";
           type = types.bool;
         };
+        API.listen = mkOption {
+          default = null;
+          type = types.nullOr types.str;
+        };
       };
     }));
   };
@@ -65,9 +69,11 @@ with import <stockholm/lib>;
           ExecStart = let
             configFile = pkgs.writeJSON configFileName configValue;
             configFileName = "${cfg.systemd-service-name}.config.json";
-            configValue = recursiveUpdate {
-              logTime = false;
-            } (removeAttrs cfg ["_module"]);
+            configValue = stripAttr (
+              recursiveUpdate {
+                logTime = false;
+              } (removeAttrs cfg ["_module"])
+            );
           in "${pkgs.reaktor2}/bin/reaktor ${configFile}";
           Restart = "always";
           RestartSec = "30";
