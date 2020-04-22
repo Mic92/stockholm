@@ -301,6 +301,7 @@ let
       default = mkDefault true;
       inherit (webcfg) basicAuth;
       root = optionalString rucfg.enable webdir;
+      listen = [ { inherit (webcfg) addr port; } ];
 
       locations = {
         "/RPC2".extraConfig = ''
@@ -319,15 +320,7 @@ let
           include ${pkgs.nginx}/conf/fastcgi.conf;
         ''; }
       );
-    # workaround because upstream nginx api changed
-    # TODO remove when nobody uses 17.03 anymore
-    } // (if hasAttr "port" (head options.services.nginx.virtualHosts.type.getSubModules).submodule.options then {
-      port = webcfg.port;
-    } else {
-      listen = [
-        { inherit (webcfg) addr port; }
-      ];
-    });
+    };
   };
 
   rutorrent-imp = {
