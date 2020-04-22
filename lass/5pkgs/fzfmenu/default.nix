@@ -33,7 +33,7 @@ pkgs.writeDashBin "fzfmenu" ''
   INPUT=$(${pkgs.coreutils}/bin/cat)
   OUTPUT="$(${pkgs.coreutils}/bin/mktemp)"
   if [ -z ''${TERM+x} ]; then #check if we can print fzf in the shell
-    ${pkgs.rxvt_unicode}/bin/urxvtc \
+    ${pkgs.rxvt_unicode}/bin/urxvt \
       -name fzfmenu -title fzfmenu \
       -e ${pkgs.dash}/bin/dash -c \
         "echo \"$INPUT\" | ${pkgs.fzf}/bin/fzf \
