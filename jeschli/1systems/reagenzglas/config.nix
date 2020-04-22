@@ -7,7 +7,6 @@
     <stockholm/jeschli/2configs/emacs.nix>
     <stockholm/jeschli/2configs/firefox.nix>
     <stockholm/jeschli/2configs/rust.nix>
-    <stockholm/jeschli/2configs/haskell.nix>
     <stockholm/jeschli/2configs/steam.nix>
     <stockholm/jeschli/2configs/python.nix>
        ./desktop.nix
