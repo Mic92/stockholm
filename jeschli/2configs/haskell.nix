@@ -13,7 +13,6 @@ in
     haskellPackages.hlint
     haskellPackages.hoogle
     haskellPackages.stack
-    haskellPackages.stylish-haskell
     (all-hies.selection { selector = p: {inherit (p) ghc864; }; })
   ];
 }
