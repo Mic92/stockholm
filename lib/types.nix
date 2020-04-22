@@ -65,7 +65,7 @@ rec {
       extraZones = mkOption {
         default = {};
         # TODO: string is either MX, NS, A or AAAA
-        type = attrsOf string;
+        type = attrsOf str;
       };
 
       secure = mkOption {
