@@ -12,7 +12,6 @@ _:
     ./pyload.nix
     ./restic.nix
     ./screenlock.nix
-    ./umts.nix
     ./usershadow.nix
     ./xjail.nix
     ./autowifi.nix

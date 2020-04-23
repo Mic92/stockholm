@@ -6,11 +6,11 @@ with import <stockholm/lib>;
     type = types.attrsOf (types.submodule ({ config, ...}: {
       options = {
         name = mkOption {
-          type = types.string;
+          type = types.str;
           default = config._module.args.name;
         };
         user = mkOption {
-          type = types.string;
+          type = types.str;
           default = config.name;
         };
         groups = mkOption {
@@ -18,11 +18,11 @@ with import <stockholm/lib>;
           default = [];
         };
         from = mkOption {
-          type = types.string;
+          type = types.str;
           default = "lass";
         };
         display = mkOption {
-          type = types.string;
+          type = types.str;
           default = toString (genid_uint31 config._module.args.name);
         };
         dpi = mkOption {
@@ -47,7 +47,7 @@ with import <stockholm/lib>;
         };
         wm = mkOption {
           #TODO find type
-          type = types.string;
+          type = types.str;
           default = "${pkgs.writeHaskellPackage "xephyrify-xmonad" {
             executables.xmonad = {
               extra-depends = [

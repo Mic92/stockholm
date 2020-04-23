@@ -114,7 +114,7 @@ in {
     xkbOptions = "caps:escape";
     libinput.enable = true;
     displayManager.lightdm.enable = true;
-    windowManager.default = "xmonad";
+    displayManager.defaultSession = "none+xmonad";
     windowManager.session = [{
       name = "xmonad";
       start = ''

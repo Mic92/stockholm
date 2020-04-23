@@ -39,6 +39,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/network-manager.nix>
     <stockholm/lass/2configs/nfs-dl.nix>
     #<stockholm/lass/2configs/hardening.nix>
+    <stockholm/lass/2configs/ppp.nix>
     {
       krebs.iptables.tables.filter.INPUT.rules = [
         #risk of rain
@@ -74,16 +75,6 @@ with import <stockholm/lib>;
           group = "syncthing";
           umask = "0007";
         };
-      };
-    }
-    {
-      lass.umts = {
-        enable = true;
-        modem = "/dev/serial/by-id/usb-Lenovo_F5521gw_2C7D8D7C35FC7040-if09";
-        initstrings = ''
-          Init1 = AT+CFUN=1
-          Init2 = AT+CGDCONT=1,"IP","pinternet.interkom.de","",0,0
-        '';
       };
     }
     {
