@@ -162,7 +162,11 @@
   krebs.tinc.retiolum.connectTo = [ "omo" "prism" "nextgum" "wbob" ];
 
   # hard dependency because otherwise the device will not be unlocked
-  boot.initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; allowDiscards=true; }];
+  boot.initrd.luks.devices.luksroot =
+  {
+      device = "/dev/sda2";
+      allowDiscards = true;
+  };
   # avoid full boot dir
   boot.loader.grub.configurationLimit = 3;
 
