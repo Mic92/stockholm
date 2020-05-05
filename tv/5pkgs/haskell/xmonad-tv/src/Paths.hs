@@ -3,6 +3,9 @@ module Paths where
 import Helpers.Path
 
 
+flameshot :: FilePath
+flameshot = findExecutable "flameshot-once"
+
 otpmenu :: FilePath
 otpmenu = findExecutable "otpmenu"
 
