@@ -1,8 +1,12 @@
 { config, lib, pkgs, ... }:
+with import ./lib.nix { inherit lib; };
+
 {
   imports = [
     ./zigbee.nix
     ./rooms/bett.nix
+    ./rooms/essen.nix
+    ./rooms/nass.nix
   ];
 
   krebs.iptables.tables.filter.INPUT.rules = [
@@ -33,9 +37,11 @@
     homeassistant = {
       name = "Home";
       time_zone = "Europe/Berlin";
-      latitude = "48.7687";
-      longitude = "9.2478";
-      elevation = 247;
+      latitude = "52.46187";
+      longitude = "13.41489";
+      elevation = 90;
+      unit_system = "metric";
+      customize = friendly_names;
     };
     config = {};
     sun.elevation = 66;
@@ -61,6 +67,10 @@
       };
     };
     sensor = [
+      {
+        platform = "dwd_weather_warnings";
+        region_name = "Berlin";
+      }
     ];
     switch = [
       (tasmota_s20 "TV" "tv")
@@ -69,6 +79,16 @@
       (tasmota_s20 "Stereo Anlage" "stereo")
     ];
     mobile_app = {};
+    hue = {};
+    weather = [
+      {
+        platform = "openweathermap";
+        api_key = "xxx"; # TODO put into secrets
+      }
+    ];
+    system_health = {};
+    history = {};
+    shopping_list = {};
   };
 
   services.mosquitto = {

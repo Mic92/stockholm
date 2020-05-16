@@ -2,7 +2,7 @@
 
   zigbee2mqtt_cfg = pkgs.writeText "zigbee2mqtt.json" (builtins.toJSON {
     homeassistant = true;
-    permit_join = true;
+    permit_join = false;
     mqtt = {
       discovery = true;
       base_topic = "zigbee";
@@ -41,14 +41,14 @@ in {
       {
         platform = "mqtt";
         name = "Zigbee2mqtt Bridge state";
-        state_topic = "/zigbee/bridge/state";
+        state_topic = "/zigbee2mqtt/bridge/state";
         icon = "mdi:router-wireless";
       }
       # Sensor for Showing the Zigbee2mqtt Version
       {
         platform = "mqtt";
         name = "Zigbee2mqtt Version";
-        state_topic = "/zigbee/bridge/config";
+        state_topic = "/zigbee2mqtt/bridge/config";
         value_template = "{{ value_json.version }}";
         icon = "mdi:zigbee";
       }
@@ -56,7 +56,7 @@ in {
       {
         platform = "mqtt";
         name = "Coordinator Version";
-        state_topic = "/zigbee/bridge/config";
+        state_topic = "/zigbee2mqtt/bridge/config";
         value_template = "{{ value_json.coordinator }}";
         icon = "mdi:chip";
       }
@@ -64,39 +64,39 @@ in {
     switch = [
       {
         platform = "mqtt";
-        name = "Zigbee2mqtt Main join";
-        state_topic = "/zigbee/bridge/config/permit_join";
-        command_topic = "/zigbee/bridge/config/permit_join";
+        name = "zigbee2mqtt_join";
+        state_topic = "/zigbee2mqtt/bridge/config/permit_join";
+        command_topic = "/zigbee2mqtt/bridge/config/permit_join";
         payload_on = "true";
         payload_off = "false";
       }
     ];
     automation = [
-      {
-        alias = "Zigbee2mqtt Log Level";
-        initial_state = "on";
-        trigger = {
-          platform = "state";
-          entity_id = "input_select.zigbee2mqtt_log_level";
-        };
-        action = [
-          {
-            service =  "mqtt.publish";
-            data = {
-              payload_template = "{{ states('input_select.zigbee2mqtt_log_level') }}";
-              topic =  "/zigbee/bridge/config/log_level";
-            };
-          }
-        ];
-      }
+      #{
+      #  alias = "Zigbee2mqtt Log Level";
+      #  initial_state = "on";
+      #  trigger = {
+      #    platform = "state";
+      #    entity_id = "input_select.zigbee2mqtt_log_level";
+      #  };
+      #  action = [
+      #    {
+      #      service =  "mqtt.publish";
+      #      data = {
+      #        payload_template = "{{ states('input_select.zigbee2mqtt_log_level') }}";
+      #        topic =  "/zigbee2mqtt/bridge/config/log_level";
+      #      };
+      #    }
+      #  ];
+      #}
       # Automation to start timer when enable join is turned on
       {
         id = "zigbee_join_enabled";
-        alias = "Zigbee Join Enabled";
+        alias = "";
         hide_entity = "true";
         trigger = {
           platform = "state";
-          entity_id = "switch.zigbee2mqtt_main_join";
+          entity_id = "switch.zigbee2mqtt_join";
           to = "on";
         };
         action = {
@@ -107,7 +107,6 @@ in {
       # Automation to stop timer when switch turned off and turn off switch when timer finished
       {
         id = "zigbee_join_disabled";
-        alias = "Zigbee Join Disabled";
         hide_entity = "true";
         trigger = [
           {
@@ -117,7 +116,7 @@ in {
           }
           {
             platform = "state";
-            entity_id = "switch.zigbee2mqtt_main_join";
+            entity_id = "switch.zigbee2mqtt_join";
             to = "off";
           }
         ];
@@ -126,22 +125,22 @@ in {
             data.entity_id = "timer.zigbee_permit_join";
           }
           { service = "switch.turn_off";
-            entity_id = "switch.zigbee2mqtt_main_join";
+            entity_id = "switch.zigbee2mqtt_join";
           }
         ];
       }
     ];
-    input_select.zigbee2mqtt_log_level = {
-      name = "Zigbee2mqtt Log Level";
-      options = [
-        "debug"
-        "info"
-        "warn"
-        "error"
-      ];
-      initial = "info";
-      icon = "mdi:format-list-bulleted";
-    };
+    #input_select.zigbee2mqtt_log_level = {
+    #  name = "Zigbee2mqtt Log Level";
+    #  options = [
+    #    "debug"
+    #    "info"
+    #    "warn"
+    #    "error"
+    #  ];
+    #  initial = "info";
+    #  icon = "mdi:format-list-bulleted";
+    #};
 
     timer.zigbee_permit_join = {
       name = "Zigbee Time remaining";
