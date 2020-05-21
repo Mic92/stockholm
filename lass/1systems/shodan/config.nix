@@ -22,21 +22,10 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/hass>
     <stockholm/lass/2configs/br.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
+    <stockholm/lass/2configs/home-media.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.shodan;
-
-  #media center
-  users.users.media = {
-    isNormalUser = true;
-    uid = genid_uint31 "media";
-    extraGroups = [ "video" "audio" ];
-  };
-
-  services.xserver.displayManager.lightdm.autoLogin = {
-    enable = true;
-    user = "media";
-  };
 
   services.logind.lidSwitch = "ignore";
   services.logind.lidSwitchDocked = "ignore";
