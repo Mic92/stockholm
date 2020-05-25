@@ -48,7 +48,9 @@ let
             "SAVE"
             "EXIT"
             "BLUR"
-          ];
+          ]
+          ++ optional cfg.imgur.enable "IMAGEUPLOADER"
+          ;
           type = types.listOf (types.enum (attrNames ButtonType));
         };
         disabledTrayIcon = mkOption {
@@ -64,6 +66,44 @@ let
           type =
             # This is types.filename extended by [%:][%:+]*
             types.addCheck types.str (test "[%:0-9A-Za-z._][%:+0-9A-Za-z._-]*");
+        };
+        imgur = mkOption {
+          default = {};
+          type = types.submodule {
+            options = {
+              enable = mkEnableOption "imgur";
+              createUrl = mkOption {
+                example = "http://p.r/image";
+                type = types.str;
+              };
+              deleteUrl = mkOption {
+                example = "http://p.r/image/delete/%1";
+                type = types.str;
+              };
+              xdg-open = mkOption {
+                default = {};
+                type = types.submodule {
+                  options = {
+                    enable = mkEnableOption "imgur.xdg-open" // {
+                      default = true;
+                    };
+                    browser = mkOption {
+                      default = "${pkgs.coreutils}/bin/false";
+                      type = types.str;
+                    };
+                    createPrefix = mkOption {
+                      default = cfg.imgur.createUrl;
+                      type = types.str;
+                    };
+                    deletePrefix = mkOption {
+                      default = removeSuffix "/%1" cfg.imgur.deleteUrl;
+                      type = types.str;
+                    };
+                  };
+                };
+              };
+            };
+          };
         };
         savePath = mkOption {
           default = "/tmp";
@@ -135,4 +175,30 @@ in
     export FLAMESHOT_CAPTURE_PATH=${cfg.savePath}
     export FLAMESHOT_ONCE_TIMEOUT=${toString cfg.timeout}
     export XDG_CONFIG_HOME=${XDG_CONFIG_HOME}
+    ${optionalString cfg.imgur.enable /* sh */ ''
+      export IMGUR_CREATE_URL=${shell.escape cfg.imgur.createUrl}
+      export IMGUR_DELETE_URL=${shell.escape cfg.imgur.deleteUrl}
+      ${optionalString cfg.imgur.xdg-open.enable /* sh */ ''
+        PATH=$PATH:${makeBinPath [
+          (pkgs.writeDashBin "xdg-open" ''
+            set -efu
+            uri=$1
+            prefix=$(${pkgs.coreutils}/bin/dirname "$uri")
+            case $prefix in
+              (${shell.escape cfg.imgur.xdg-open.createPrefix})
+                echo "opening image in browser: $uri" >&2
+                exec ${config.imgur.xdg-open.browser} "$uri"
+                ;;
+              (${shell.escape cfg.imgur.xdg-open.deletePrefix})
+                echo "deleting image: $uri" >&2
+                exec ${pkgs.curl}/bin/curl -fsS -X DELETE "$uri"
+                ;;
+              (*)
+                echo "don't know how to open URI: $uri" >&2
+                exit 1
+            esac
+          '')
+        ]}
+      ''}
+    ''}
   ''

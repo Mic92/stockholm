@@ -1,0 +1,209 @@
+find_item() {
+  if test ${#1} -ge 7; then
+    set -- "$(find "$STATEDIR/items" -mindepth 1 -maxdepth 1 \
+        -regex "$STATEDIR/items/$1[0-9A-Za-z]*$")"
+    if test -n "$1" && test $(echo "$1" | wc -l) = 1; then
+      echo "$1"
+      return 0
+    fi
+  fi
+  return 1
+}
+
+# https://api.imgur.com/models/basic
+basic_response() {(
+  status_code=$1
+  status_reason=$2
+  data=${3-null}
+
+  response_body=$(jq -cn \
+  --argjson data "$data" \
+  --argjson status "$status_code" \
+  '
+    {
+      data: $data,
+      status: $status,
+      success: (200 <= $status and $status <= 299),
+    }
+  ')
+
+  printf "HTTP/1.1 $status_code $status_reason\r\n"
+  printf 'Connection: close\r\n'
+  printf 'Content-Length: %d\r\n' $(expr ${#response_body} + 1)
+  printf 'Content-Type: application/json; charset=UTF-8\r\n'
+  printf 'Server: %s\r\n' "$Server"
+  printf '\r\n'
+  printf '%s\n' "$response_body"
+
+)}
+
+file_response() {
+  jq -n -r \
+  --argjson data "$(attr -q -g data "$1")" \
+  --arg server "$Server" \
+  '
+    [ "HTTP/1.1 200 OK\r"
+    , "Connection: close\r"
+    , "Content-Length: \($data.size)\r"
+    , "Content-Type: \($data.type)\r"
+    , "Server: \($server)\r"
+    , "\r"
+    ][]
+  '
+  cat "$1"
+}
+
+read_uri() {
+  jq -cn --arg uri "$1" '
+    $uri |
+    capture("^((?<scheme>[^:]*):)?(//(?<authority>[^/]*))?(?<path>[^?#]*)([?](?<query>[^#]*))?([#](?<fragment>.*))?$") |
+    . + {
+      query: (.query | if . != null then
+        split("&") |
+        map(split("=") | {key:.[0],value:.[1]}) |
+        from_entries
+      else . end)
+    }
+  '
+}
+
+uri=$(read_uri "$Request_URI")
+path=$(jq -nr --argjson uri "$uri" '$uri.path')
+
+case "$Method $path" in
+  'POST /image')
+    echo create image >&2
+
+    content=$(mktemp -t htgen.$$.content.XXXXXXXX)
+    trap "rm $content >&2" EXIT
+
+    case ${req_expect-} in 100-continue)
+      printf 'HTTP/1.1 100 Continue\r\n\r\n'
+    esac
+
+    head -c $req_content_length > $content
+
+    sha256=$(sha256sum -b $content | cut -d\  -f1)
+    base32=$(nix-hash --to-base32 --type sha256 $sha256)
+    item=$STATEDIR/items/$base32
+
+    if ! test -e $item; then
+      mkdir -v -p $STATEDIR/items >&2
+      cp -v $content $item >&2
+    fi
+
+    base32short=$(echo $base32 | cut -b-7)
+
+    scheme=${req_x_forwarded_proto-http}
+    link=$scheme://$req_host/image/$base32short
+
+    if item=$(find_item $base32short); then
+
+      deletehash=$(uuidgen)
+
+      info=$(
+        exiv2 print "$item" |
+        jq -csR '
+          split("\n") |
+          map(
+            match("^(.*\\S)\\s*:\\s*(.*)").captures |
+            map(.string) |
+            {key:.[0],value:.[1]}
+          ) |
+          from_entries |
+
+          . + (
+            .["Image size"] |
+            match("^(?<width>[0-9]+)\\s*x\\s*(?<height>[0-9]+)$").captures |
+            map({key:.name,value:(.string|tonumber)}) |
+            from_entries
+          ) |
+          . + (
+            .["File size"] |
+            match("^(?<size>[0-9]+)\\s*Bytes$").captures |
+            map({key:.name,value:(.string|tonumber)}) |
+            from_entries
+          ) |
+          .
+        '
+      )
+
+      data=$(jq -cn \
+          --arg deletehash "$deletehash" \
+          --arg id "$base32" \
+          --arg link "$link" \
+          --argjson info "$info" \
+          --argjson uri "$uri" \
+      '
+        {
+          id: $id,
+          title: $uri.query.title,
+          description: $uri.query.description,
+          datetime: now,
+          type: $info["MIME type"],
+          animated: false,
+          width: $info.width,
+          height: $info.height,
+          size: $info.size,
+          views: 0,
+          bandwidth: 0,
+          vote: null,
+          favorite: false,
+          nsfw: null,
+          section: null,
+          account_url: null,
+          acount_id: 0,
+          is_ad: false,
+          is_most_viral: false,
+          tags: [],
+          ad_type: 0,
+          ad_url: "",
+          in_gallery: false,
+          deletehash: @uri "\($id)?deletehash=\($deletehash)",
+          name: "",
+          link: $link,
+        }
+      ')
+
+      attr -q -s deletehash -V "$deletehash" "$item"
+      attr -q -s data -V "$data" "$item"
+
+      basic_response 200 OK "$data"
+      exit
+    fi
+    ;;
+  'GET /image/'*)
+      basename=$(basename "$path")
+      if printf %s "$basename" | grep -q '^[0-9a-z]\+$'; then
+        if item=$(find_item "$basename"); then
+          echo get image >&2
+          file_response "$item"
+          exit
+        fi
+      fi
+    ;;
+  'DELETE /image/delete/'*)
+      basename=$(basename "$path")
+      if printf %s "$basename" | grep -q '^[0-9a-z]\+$'; then
+        if item=$(find_item "$basename"); then
+
+          deletehash=$(jq -nr --argjson uri "$uri" '$uri.query.deletehash')
+
+          stored_deletehash=$(attr -q -g deletehash "$item")
+
+          if test "$deletehash" = "$stored_deletehash"; then
+            echo "delete image" >&2
+
+            rm -v "$item" >&2
+
+            basic_response 200 OK
+            exit
+          else
+            echo "delete image error: bad deletehash provided: $deletehash" >&2
+            basic_response 401 'Unauthorized'
+            exit
+          fi
+        fi
+      fi
+    ;;
+esac

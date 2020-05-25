@@ -22,7 +22,8 @@ import qualified XMonad.StackSet as W
 import Data.Map (Map)
 import qualified Data.Map as Map
 import XMonad.Hooks.UrgencyHook (SpawnUrgencyHook(..), withUrgencyHook)
-import XMonad.Hooks.ManageHelpers (doCenterFloat)
+import XMonad.Hooks.ManageHelpers (doCenterFloat,doRectFloat)
+import Data.Ratio
 import XMonad.Hooks.Place (placeHook, smart)
 import XMonad.Actions.PerWorkspaceKeys (chooseAction)
 
@@ -66,6 +67,8 @@ mainNoArgs = do
                 composeAll
                   [ appName =? "fzmenu-urxvt" --> doCenterFloat
                   , appName =? "pinentry" --> doCenterFloat
+                  , title =? "Upload to Imgur" -->
+                      doRectFloat (W.RationalRect 0 0 (1 % 8) (1 % 8))
                   , placeHook (smart (1,0))
                   ]
             , startupHook =
@@ -163,6 +166,8 @@ myKeys conf = Map.fromList $
     , ((_4, xF86XK_AudioMute), pavucontrol [])
 
     , ((_4, xK_Prior), forkFile Paths.xcalib ["-invert", "-alter"] Nothing)
+
+    , ((0, xK_Print), forkFile Paths.flameshot [] Nothing)
     ]
     where
     _4 = mod4Mask
