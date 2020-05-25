@@ -182,7 +182,9 @@ in {
           gum               IN A      ${nets.internet.ip4.addr}
           io                IN NS     gum.krebsco.de.
           iso.euer          IN A      ${nets.internet.ip4.addr}
+          feed.euer         IN A      ${nets.internet.ip4.addr}
           board.euer        IN A      ${nets.internet.ip4.addr}
+          etherpad.euer     IN A      ${nets.internet.ip4.addr}
           rss.euer          IN A      ${nets.internet.ip4.addr}
           mediengewitter    IN CNAME  over.dose.io.
           mon.euer          IN A      ${nets.internet.ip4.addr}
