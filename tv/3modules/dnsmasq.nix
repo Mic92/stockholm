@@ -31,8 +31,9 @@ in {
       };
       services.dnsmasq.enable = true;
       services.dnsmasq.extraConfig = ''
+        bind-interfaces
         dhcp-range=${cfg.dhcp-range}
-        interface=${cfg.interface}
+        listen-address=${cfg.address}
       '';
       tv.iptables.extra.filter.INPUT = [
         "-i ${cfg.interface} -p tcp -m tcp --dport bootps -j ACCEPT"
