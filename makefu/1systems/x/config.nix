@@ -19,7 +19,9 @@
       <stockholm/makefu/2configs/tools/all.nix>
       { programs.adb.enable = true; }
 
+      { systemd.services.docker.wantedBy = lib.mkForce []; }
       <stockholm/makefu/2configs/dict.nix>
+      <stockholm/makefu/2configs/legacy_only.nix>
       #<stockholm/makefu/3modules/netboot_server.nix>
       #{
       #  netboot_server = {
@@ -162,7 +164,11 @@
   krebs.tinc.retiolum.connectTo = [ "omo" "prism" "nextgum" "wbob" ];
 
   # hard dependency because otherwise the device will not be unlocked
-  boot.initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; allowDiscards=true; }];
+  boot.initrd.luks.devices.luksroot =
+  {
+      device = "/dev/sda2";
+      allowDiscards = true;
+  };
   # avoid full boot dir
   boot.loader.grub.configurationLimit = 3;
 

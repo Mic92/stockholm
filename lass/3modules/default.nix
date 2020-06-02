@@ -4,6 +4,7 @@ _:
     ./dnsmasq.nix
     ./ejabberd
     ./folderPerms.nix
+    ./hass.nix
     ./hosts.nix
     ./mysql-backup.nix
     ./news.nix
@@ -11,7 +12,6 @@ _:
     ./pyload.nix
     ./restic.nix
     ./screenlock.nix
-    ./umts.nix
     ./usershadow.nix
     ./xjail.nix
     ./autowifi.nix

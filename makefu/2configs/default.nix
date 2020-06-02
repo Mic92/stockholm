@@ -30,7 +30,7 @@ with import <stockholm/lib>;
   };
   nix.trustedUsers = [ config.krebs.build.user.name ];
 
-  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages;
 
   nixpkgs.config.allowUnfreePredicate = pkg: packageName pkg == "unrar";
 
@@ -85,4 +85,8 @@ with import <stockholm/lib>;
     RuntimeMaxUse=128M
     '';
   environment.pathsToLink = [ "/share" ];
+  security.acme = {
+    email = "letsencrypt@syntax-fehler.de";
+    acceptTerms = true;
+  };
 }

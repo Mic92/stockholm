@@ -108,7 +108,6 @@ in {
       ## network
       <stockholm/makefu/2configs/vpn/openvpn-server.nix>
       # <stockholm/makefu/2configs/vpn/vpnws/server.nix>
-      <stockholm/makefu/2configs/dnscrypt/server.nix>
       <stockholm/makefu/2configs/binary-cache/server.nix>
       <stockholm/makefu/2configs/backup/server.nix>
       <stockholm/makefu/2configs/iodined.nix>
@@ -137,9 +136,11 @@ in {
       <stockholm/makefu/2configs/deployment/owncloud.nix>
       <stockholm/makefu/2configs/deployment/board.euer.krebsco.de.nix>
       <stockholm/makefu/2configs/deployment/rss.euer.krebsco.de.nix>
+      <stockholm/makefu/2configs/deployment/feed.euer.krebsco.de>
       <stockholm/makefu/2configs/deployment/boot-euer.nix>
       <stockholm/makefu/2configs/deployment/gecloudpad>
       <stockholm/makefu/2configs/deployment/docker/archiveteam-warrior.nix>
+      <stockholm/makefu/2configs/deployment/docker/etherpad.euer.krebsco.de.nix>
       <stockholm/makefu/2configs/shiori.nix>
 
       <stockholm/makefu/2configs/bgt/download.binaergewitter.de.nix>

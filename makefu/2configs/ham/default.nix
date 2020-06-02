@@ -14,6 +14,7 @@ let
   #flurlicht = import ./multi/flurlicht.nix;
   kurzzeitwecker = import ./multi/kurzzeitwecker.nix;
   firetv_restart = import ./multi/firetv_restart.nix;
+  the_playlist = import ./multi/the_playlist.nix;
 #   switch
 #   automation
 #   binary_sensor
@@ -34,6 +35,7 @@ in {
       ];
     };
     config = {
+      config = {};
       input_select = zigbee.input_select; # dict
       timer = zigbee.timer // kurzzeitwecker.timer; # dict
       homeassistant = {
@@ -49,6 +51,8 @@ in {
       logger = {
         default = "info";
       };
+      rest_command = {}
+      // the_playlist.rest_command;
       tts = [
         { platform = "google_translate";
           language = "de";
@@ -131,6 +135,7 @@ in {
         # https://www.home-assistant.io/cookbook/automation_for_rainy_days/
       ]
       ++ ((import ./sensor/outside.nix) {inherit lib;})
+      ++ the_playlist.sensor
       ++ zigbee.sensor ;
       frontend = { };
       # light = flurlicht.light;
@@ -140,6 +145,7 @@ in {
         ++ (import ./automation/firetv_restart.nix)
         ++ kurzzeitwecker.automation
         #++ flurlicht.automation
+        ++ the_playlist.automation
         ++ zigbee.automation;
         script =
         { }

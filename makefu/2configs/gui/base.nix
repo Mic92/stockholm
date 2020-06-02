@@ -29,24 +29,21 @@ in
       awesome.enable = true;
       awesome.noArgb = true;
       awesome.luaModules = [ pkgs.luaPackages.vicious ];
-      default = "awesome";
     };
-
-    displayManager.auto.enable = true;
-    displayManager.auto.user = mainUser;
+    displayManager.defaultSession = lib.mkDefault "none+awesome";
+    displayManager.lightdm = { enable = true; autoLogin.enable = true; autoLogin.user = mainUser; };
     desktopManager.xterm.enable = false;
   };
   environment.systemPackages = [ pkgs.gnome3.defaultIconTheme ];
   # lid switch is handled via button presses
   services.logind.lidSwitch = lib.mkDefault "ignore";
   makefu.awesome.enable = true;
-  i18n.consoleFont = "Lat2-Terminus16";
+  console.font = "Lat2-Terminus16";
 
   fonts = {
-    enableCoreFonts = true;
     enableFontDir = true;
     enableGhostscriptFonts = true;
-    fonts = [ pkgs.terminus_font ];
+    fonts = [ pkgs.terminus_font pkgs.corefonts ];
   };
 
   users.users.${mainUser} = {

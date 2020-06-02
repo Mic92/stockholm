@@ -232,11 +232,10 @@ services.xserver.enable = true;
   services.xserver.displayManager.lightdm.enable = true;
 
   # Allow users in video group to change brightness
-  hardware.brightnessctl.enable = true;
-
   environment.systemPackages = with pkgs; [
     rofi     # Dmenu replacement
     acpilight # Replacement for xbacklight
+    brightnessctl
     arandr # Xrandr gui
     feh
     wirelesstools # To get wireless statistics

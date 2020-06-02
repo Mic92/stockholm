@@ -71,12 +71,14 @@ in {
     gitAndTools.qgit
     git-preview
     gnome3.dconf
+    iodine
     lm_sensors
     ncdu
     nix-index
     nix-review
     nmap
     pavucontrol
+    ponymix
     powertop
     rxvt_unicode-with-plugins
     sxiv
@@ -112,7 +114,7 @@ in {
     xkbOptions = "caps:escape";
     libinput.enable = true;
     displayManager.lightdm.enable = true;
-    windowManager.default = "xmonad";
+    displayManager.defaultSession = "none+xmonad";
     windowManager.session = [{
       name = "xmonad";
       start = ''

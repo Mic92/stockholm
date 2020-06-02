@@ -18,6 +18,9 @@
 ζ | zeta
 (╯°□°）╯ ┻━┻ | table flip
 (」゜ロ゜)」 | why woot
+(_゜_゜_) | gloom I see you
+༼ ༎ຶ ෴ ༎ຶ༽ | sad
+(\/) (°,,,,°) (\/) | krebs
   '';
 
 in

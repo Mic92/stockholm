@@ -12,7 +12,7 @@ let
   music_dir = "/home/radio/music";
 
   add_random = pkgs.writeDashBin "add_random" ''
-    ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.findutils}/bin/find "${music_dir}/the_playlist" | grep '\.ogg$' | shuf -n1 | sed 's,${music_dir}/,,')"
+    ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.findutils}/bin/find "${music_dir}/the_playlist" | grep -v '/other/' | grep '\.ogg$' | shuf -n1 | sed 's,${music_dir}/,,')"
   '';
 
   skip_track = pkgs.writeBashBin "skip_track" ''
@@ -44,15 +44,41 @@ let
     if [[ "$current_track" =~ ^the_playlist/music/.* ]]; then
       ${pkgs.attr}/bin/setfattr -n user.skip_count -v 0 "$music_dir"/"$current_track"
     else
-      mv "$music_dir"/"$current_track" "$music_dir"/the_playlist/music/
+      mv "$music_dir"/"$current_track" "$music_dir"/the_playlist/music/ || :
     fi
-      echo good: "$track_infos"
+    echo good: "$track_infos"
+  '';
+
+  track_youtube_link = pkgs.writeDash "track_youtube_link" ''
+    ${pkgs.mpc_cli}/bin/mpc current -f %file% \
+      | ${pkgs.gnused}/bin/sed 's@.*\(.\{11\}\)\.ogg@https://www.youtube.com/watch?v=\1@'
   '';
 
   print_current = pkgs.writeDashBin "print_current" ''
     echo "$(${pkgs.mpc_cli}/bin/mpc current -f %file%) \
-    $(${pkgs.mpc_cli}/bin/mpc current -f %file% \
-      | ${pkgs.gnused}/bin/sed 's@.*\(.\{11\}\)\.ogg@http://www.youtube.com/watch?v=\1@')"
+    $(${track_youtube_link})"
+  '';
+
+  print_current_json = pkgs.writeDashBin "print_current_json" ''
+    ${pkgs.jq}/bin/jq -n -c \
+      --arg name "$(${pkgs.mpc_cli}/bin/mpc current)" \
+      --arg filename "$(${pkgs.mpc_cli}/bin/mpc current -f %file%)" \
+      --arg youtube "$(${track_youtube_link})" '{
+        name: $name,
+        filename: $filename,
+        youtube: $youtube
+      }'
+  '';
+
+  write_to_irc = pkgs.writeDash "write_to_irc" ''
+    ${pkgs.curl}/bin/curl -fsSv --unix-socket /home/radio/reaktor.sock http://z/ \
+      -H content-type:application/json \
+      -d "$(${pkgs.jq}/bin/jq -n \
+        --arg text "$1" '{
+          command:"PRIVMSG",
+          params:["#the_playlist",$text]
+        }'
+      )"
   '';
 
 in {
@@ -81,6 +107,7 @@ in {
     good_track
     skip_track
     print_current
+    print_current_json
     ncmpcpp
     mpc_cli
   ];
@@ -146,6 +173,7 @@ in {
     tables = {
       filter.INPUT.rules = [
         { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; }
+        { predicate = "-i retiolum -p tcp --dport 8001"; target = "ACCEPT"; }
       ];
     };
   };
@@ -195,6 +223,7 @@ in {
       done | while read track; do
         echo "$(date -Is)" "$track" | tee -a "$HISTORY_FILE"
         echo "$(tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
+        ${write_to_irc} "playing: $track"
       done
     '';
   in {
@@ -206,6 +235,7 @@ in {
 
     serviceConfig = {
       ExecStart = recentlyPlayed;
+      User = "radio";
     };
   };
 
@@ -218,6 +248,7 @@ in {
     useTLS = true;
     nick = "the_playlist";
     username = "radio";
+    API.listen = "unix:/home/radio/reaktor.sock";
     plugins = [
       {
         plugin = "register";
@@ -257,6 +288,42 @@ in {
         };
       }
     ];
+  };
+
+  krebs.htgen.radio = {
+    port = 8001;
+    user = {
+      name = "radio";
+    };
+    script = ''
+      case "$Method $Request_URI" in
+        "GET /current")
+          printf 'HTTP/1.1 200 OK\r\n'
+          printf 'Connection: close\r\n'
+          printf '\r\n'
+          ${print_current_json}/bin/print_current_json
+          exit
+        ;;
+        "POST /skip")
+          printf 'HTTP/1.1 200 OK\r\n'
+          printf 'Connection: close\r\n'
+          printf '\r\n'
+          msg=$(${skip_track}/bin/skip_track)
+          ${write_to_irc} "$msg"
+          echo "$msg"
+          exit
+        ;;
+        "POST /good")
+          printf 'HTTP/1.1 200 OK\r\n'
+          printf 'Connection: close\r\n'
+          printf '\r\n'
+          msg=$(${good_track}/bin/good_track)
+          ${write_to_irc} "$msg"
+          echo "$msg"
+          exit
+        ;;
+      esac
+    '';
   };
 
   services.nginx = {

@@ -21,20 +21,15 @@ with import <stockholm/lib>;
     #<stockholm/lass/2configs/prism-share.nix>
     <stockholm/lass/2configs/ssh-cryptsetup.nix>
     <stockholm/lass/2configs/network-manager.nix>
+    <stockholm/lass/2configs/home-media.nix>
   ];
 
-  #media center
-  users.users.media = {
-    isNormalUser = true;
-    uid = genid_uint31 "media";
-    extraGroups = [ "video" "audio" ];
-  };
+  krebs.build.host = config.krebs.hosts.icarus;
 
   services.xserver.displayManager.lightdm.autoLogin = {
     enable = true;
     user = "media";
   };
 
-  krebs.build.host = config.krebs.hosts.icarus;
-  programs.adb.enable = true;
+  environment.systemPackages = [ pkgs.chromium ];
 }

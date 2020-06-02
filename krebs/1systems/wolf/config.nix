@@ -46,8 +46,8 @@ in
     # connect to git.shackspace.de as group runner for rz
     <stockholm/krebs/2configs/shack/gitlab-runner.nix>
 
-    # Statistics collection and visualization 
-    <stockholm/krebs/2configs/shack/graphite.nix>
+    # Statistics collection and visualization
+    # <stockholm/krebs/2configs/shack/graphite.nix> # graphiteApi is broken and unused(hopefully)
     ## Collect data from mqtt.shack and store in graphite database
     <stockholm/krebs/2configs/shack/mqtt_sub.nix>
     ## Collect radioactive data and put into graphite

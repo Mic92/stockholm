@@ -1,16 +1,10 @@
 { config, pkgs, ... }:
-pkgs.writeHaskellPackage "xmonad-lass" {
-  executables.xmonad = {
-    extra-depends = [
-      "containers"
-      "extra"
-      "unix"
-      "X11"
-      "xmonad"
-      "xmonad-contrib"
-      "xmonad-stockholm"
-    ];
-    text = /* haskell */ ''
+pkgs.writers.writeHaskellBin "xmonad" {
+  libraries = with pkgs.haskellPackages; [
+    extra
+    xmonad-stockholm
+  ];
+} /* haskell */ ''
 {-# LANGUAGE LambdaCase #-}
 
 
@@ -62,7 +56,7 @@ instance UrgencyHook LibNotifyUrgencyHook where
         safeSpawn "${pkgs.libnotify}/bin/notify-send" [show name, "workspace " ++ idx]
 
 myTerm :: FilePath
-myTerm = "${pkgs.rxvt_unicode_with-plugins}/bin/urxvtc"
+myTerm = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtc"
 
 myFont :: String
 myFont = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1"
@@ -150,10 +144,7 @@ myKeyMap =
 
     , ("M4-<F2>", windows copyToAll)
 
-    , ("M4-<F4>", spawn "${pkgs.writeDash "nm-dmenu" ''
-      export PATH=$PATH:${pkgs.dmenu}/bin:${pkgs.networkmanagerapplet}/bin
-      exec ${pkgs.networkmanager_dmenu}/bin/networkmanager_dmenu "$@"
-    ''}")
+    , ("M4-<F4>", spawn "${pkgs.nm-dmenu}/bin/nm-dmenu")
     , ("M4-<Insert>", spawn "${pkgs.writeDash "paste" ''
       ${pkgs.coreutils}/bin/sleep 0.1
       ${pkgs.xclip}/bin/xclip -o | ${pkgs.xdotool}/bin/xdotool type -f -
@@ -223,6 +214,4 @@ gridConfig = def
 allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
 allWorkspaceNames ws =
     return $ map W.tag (W.hidden ws ++ (map W.workspace $ W.visible ws)) ++ [W.tag $ W.workspace $ W.current ws]
-    '';
-  };
-}
+''
