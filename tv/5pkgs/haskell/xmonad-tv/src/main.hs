@@ -18,6 +18,7 @@ import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Layout.NoBorders ( smartBorders )
 import XMonad.Layout.ResizableTile (ResizableTall(ResizableTall))
 import XMonad.Layout.ResizableTile (MirrorResize(MirrorExpand,MirrorShrink))
+import qualified XMonad.Prompt
 import qualified XMonad.StackSet as W
 import Data.Map (Map)
 import qualified Data.Map as Map
@@ -154,8 +155,8 @@ myKeys conf = Map.fromList $
     , ((_4  , xK_comma  ), sendMessage $ IncMasterN 1)
     , ((_4  , xK_period ), sendMessage $ IncMasterN (-1))
 
-    , ((_4  , xK_a      ), addWorkspacePrompt def)
-    , ((_4  , xK_r      ), renameWorkspace def)
+    , ((_4  , xK_a      ), addWorkspacePrompt promptXPConfig)
+    , ((_4  , xK_r      ), renameWorkspace promptXPConfig)
     , ((_4  , xK_Delete ), removeEmptyWorkspace)
 
     , ((_4  , xK_Return ), toggleWS)
@@ -188,6 +189,9 @@ myKeys conf = Map.fromList $
     audioMute = pactl ["--", "set-sink-mute", "@DEFAULT_SINK@", "toggle"]
 
     resetLayout = setLayout $ XMonad.layoutHook conf
+
+    promptXPConfig =
+        def { XMonad.Prompt.font = myFont }
 
 
 pagerConfig :: PagerConfig
