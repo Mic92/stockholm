@@ -17,9 +17,7 @@ with import <stockholm/lib>;
 
   boot.initrd.luks = {
     cryptoModules = [ "aes" "sha512" "xts" ];
-    devices = [
-      { name = "luks1"; device = "/dev/sda2"; }
-    ];
+    devices.luks1.device = "/dev/sda2";
   };
 
   # Don't use UEFI because current disk was partitioned/formatted for AO753.
