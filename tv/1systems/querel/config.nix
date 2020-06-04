@@ -75,6 +75,9 @@ with import <stockholm/lib>;
   };
 
   services.xserver.desktopManager.plasma5.enable = true;
+
+  services.xserver.displayManager.lightdm.autoLogin.enable = true;
+  services.xserver.displayManager.lightdm.autoLogin.user = "itak";
   services.xserver.displayManager.lightdm.enable = true;
 
   users.users.itak = {
