@@ -14,6 +14,7 @@ with import ./lib.nix { inherit lib; };
     { predicate = "-i docker0 -p tcp --dport 1883"; target = "ACCEPT"; } # mosquitto
     { predicate = "-i int0 -p tcp --dport 8123"; target = "ACCEPT"; } # hass
     { predicate = "-i retiolum -p tcp --dport 8123"; target = "ACCEPT"; } # hass
+    { predicate = "-i wiregrill -p tcp --dport 8123"; target = "ACCEPT"; } # hass
   ];
 
   services.home-assistant = {
