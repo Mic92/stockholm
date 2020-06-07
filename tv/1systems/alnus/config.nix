@@ -11,10 +11,8 @@ with import <stockholm/lib>;
   boot = {
     initrd = {
       availableKernelModules = [ "ahci" ];
-      luks = {
-        cryptoModules = [ "aes" "sha512" "xts" ];
-        devices = [ { name = "luksroot"; device = "/dev/sda2"; } ];
-      };
+      luks.cryptoModules = [ "aes" "sha512" "xts" ];
+      luks.devices.luksroot.devices = "/dev/sda2";
     };
   };
 

@@ -1,7 +1,7 @@
 with import <stockholm/lib>;
 { config, pkgs, ... }: let
   cfg = {
-    enable = config.tv.Xresources != {};
+    enable = config.services.xserver.enable && config.tv.Xresources != {};
     user = config.krebs.build.user;
   };
 in {

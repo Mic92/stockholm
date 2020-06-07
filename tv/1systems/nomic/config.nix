@@ -17,9 +17,7 @@ with import <stockholm/lib>;
 
   boot.initrd.luks = {
     cryptoModules = [ "aes" "sha512" "xts" ];
-    devices = [
-      { name = "luks1"; device = "/dev/sda2"; }
-    ];
+    devices.luks1.device = "/dev/sda2";
   };
 
   # Don't use UEFI because current disk was partitioned/formatted for AO753.
@@ -46,6 +44,8 @@ with import <stockholm/lib>;
     { device = "/dev/mapper/nomic1-home";
       fsType = "btrfs";
     };
+
+  environment.homeBinInPath = true;
 
   environment.systemPackages = with pkgs; [
     (writeDashBin "play" ''
