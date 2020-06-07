@@ -24,7 +24,13 @@ in {
       http://www.exim.org/
 
       # ref src/nixpkgs/pkgs/tools/networking/urlwatch/default.nix
-      https://thp.io/2008/urlwatch/
+      {
+        url = https://thp.io/2008/urlwatch/;
+        # workaround: ('Received response with content-encoding: gzip, but
+        # failed to decode it.', error('Error -3 while decompressing data:
+        # incorrect header check',))
+        ignore_cached = true;
+      }
 
       # 2015-02-18
       # ref ~/src/nixpkgs/pkgs/tools/text/qprint/default.nix

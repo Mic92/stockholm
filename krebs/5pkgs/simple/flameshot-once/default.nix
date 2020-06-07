@@ -16,6 +16,7 @@ in
           pkgs.flameshot
           pkgs.qt5.qtbase
           pkgs.xclip
+          pkgs.xwaitforwindow
         ]}
         ${optionalString (config != null) /* sh */ ''
           . ${import ./profile.nix { inherit config pkgs; }}
