@@ -127,7 +127,6 @@ let
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
     pkgs.vimPlugins.ack-vim
-    pkgs.vimPlugins.Gundo
     pkgs.vimPlugins.undotree
     pkgs.vimPlugins.vim-go
     pkgs.vimPlugins.fzf-vim
@@ -155,26 +154,26 @@ let
 
         let colors_name = ${toJSON name}
 
-        hi Normal       ctermbg=235
-        hi Comment      ctermfg=242
-        hi Constant     ctermfg=062
-        hi Identifier   ctermfg=068
+        hi Normal       ctermbg=016
+        hi Comment      ctermfg=255
+        hi Constant     ctermfg=229
+        hi Identifier   ctermfg=123
         hi Function     ctermfg=041
         hi Statement    ctermfg=167
         hi PreProc      ctermfg=167
-        hi Type         ctermfg=041
+        hi Type         ctermfg=046
         hi Delimiter    ctermfg=251
-        hi Special      ctermfg=062
+        hi Special      ctermfg=146
 
-        hi Garbage      ctermbg=088
-        hi TabStop      ctermbg=016
-        hi NBSP         ctermbg=094
+        hi Garbage      ctermbg=124
+        hi TabStop      ctermbg=020
+        hi NBSP         ctermbg=056
         hi NarrowNBSP   ctermbg=097
         hi Todo         ctermfg=174 ctermbg=NONE
 
-        hi NixCode      ctermfg=148
+        hi NixCode      ctermfg=190
         hi NixData      ctermfg=149
-        hi NixQuote     ctermfg=150
+        hi NixQuote     ctermfg=119
 
         hi diffNewFile  ctermfg=207
         hi diffFile     ctermfg=207

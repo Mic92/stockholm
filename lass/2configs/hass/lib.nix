@@ -99,7 +99,7 @@ rec {
           conditions = [
             {
               condition = "template";
-              value_template = "{{ trigger.to_state.attributes.illuminance < 13000 }}";
+              value_template = "{{ trigger.to_state.attributes.illuminance < 7500 }}";
             }
             {
               condition = "template";
