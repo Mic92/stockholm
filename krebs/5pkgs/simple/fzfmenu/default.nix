@@ -14,6 +14,10 @@ let
       _file = toString ./profile.nix;
       imports = singleton config;
       options = {
+        defaultPrompt = mkOption {
+          default = ">";
+          type = types.str;
+        };
         appName = mkOption {
           default = "fzfmenu";
           type = types.label;
@@ -45,7 +49,7 @@ pkgs.writeDashBin "fzfmenu" ''
     exec 1>&''${FZFMENU_OUTPUT_FD-1}
   fi
 
-  PROMPT=">"
+  PROMPT=${shell.escape cfg.defaultPrompt}
   for i in "$@"; do
     case $i in
       -p)
