@@ -83,8 +83,8 @@ pkgs.writeDashBin "fzfmenu" ''
     esac
   done
 
-  FZF_DEFAULT_OPTS=''${FZFMENU_FZF_DEFAULT_OPTS-}
-  if test -n "$FZF_DEFAULT_OPTS"; then
+  if test -n "''${FZFMENU_FZF_DEFAULT_OPTS-}"; then
+    FZF_DEFAULT_OPTS=''${FZFMENU_FZF_DEFAULT_OPTS-}
     export FZF_DEFAULT_OPTS
   fi
 
