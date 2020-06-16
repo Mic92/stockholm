@@ -12,7 +12,7 @@ with import <stockholm/lib>;
     initrd = {
       availableKernelModules = [ "ahci" ];
       luks.cryptoModules = [ "aes" "sha512" "xts" ];
-      luks.devices.luksroot.devices = "/dev/sda2";
+      luks.devices.luksroot.device = "/dev/sda2";
     };
   };
 
