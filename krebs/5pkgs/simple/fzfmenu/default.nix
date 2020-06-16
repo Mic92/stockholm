@@ -26,6 +26,10 @@ let
           default = true;
           type = types.bool;
         };
+        reverse = mkOption {
+          default = true;
+          type = types.bool;
+        };
         windowTitle = mkOption {
           default = "fzfmenu";
           type = types.str;
@@ -87,7 +91,7 @@ pkgs.writeDashBin "fzfmenu" ''
   ${pkgs.fzf}/bin/fzf \
       --history=/dev/null \
       --prompt="$PROMPT" \
-      --reverse \
+      ${optionalString cfg.reverse "--reverse"} \
       ${optionalString cfg.printQuery "--print-query"} \
   ${optionalString cfg.printQuery "| ${pkgs.coreutils}/bin/tail -1"}
 ''
