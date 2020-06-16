@@ -71,10 +71,10 @@ with import <stockholm/lib>;
     };
 
     desktopManager.xfce.enable = true;
-    displayManager.auto = {
-      enable = true;
-      user = "dv";
-    };
+
+    displayManager.lightdm.autoLogin.enable = true;
+    displayManager.lightdm.autoLogin.user = "dv";
+    displayManager.lightdm.enable = true;
   };
 
   users.users.dv = {
