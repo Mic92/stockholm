@@ -108,13 +108,11 @@ with import <stockholm/lib>;
     twoFingerScroll = true;
   };
 
-  services.xserver.desktopManager.plasma5 = {
-    enable = true;
-  };
-  services.xserver.displayManager.auto = {
-    enable = true;
-    user = "vv";
-  };
+  services.xserver.desktopManager.plasma5.enable = true;
+
+  services.xserver.displayManager.lightdm.autoLogin.enable = true;
+  services.xserver.displayManager.lightdm.autoLogin.user = "vv";
+  services.xserver.displayManager.lightdm.enable = true;
 
   users.users.vv = {
     inherit (config.krebs.users.vv) home uid;
