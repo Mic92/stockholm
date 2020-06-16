@@ -14,13 +14,17 @@ let
       _file = toString ./profile.nix;
       imports = singleton config;
       options = {
+        appName = mkOption {
+          default = "fzfmenu";
+          type = types.label;
+        };
         defaultPrompt = mkOption {
           default = ">";
           type = types.str;
         };
-        appName = mkOption {
-          default = "fzfmenu";
-          type = types.label;
+        printQuery = mkOption {
+          default = true;
+          type = types.bool;
         };
         windowTitle = mkOption {
           default = "fzfmenu";
@@ -82,9 +86,8 @@ pkgs.writeDashBin "fzfmenu" ''
 
   ${pkgs.fzf}/bin/fzf \
       --history=/dev/null \
-      --print-query \
       --prompt="$PROMPT" \
       --reverse \
-    |
-  ${pkgs.coreutils}/bin/tail -1
+      ${optionalString cfg.printQuery "--print-query"} \
+  ${optionalString cfg.printQuery "| ${pkgs.coreutils}/bin/tail -1"}
 ''
