@@ -75,6 +75,11 @@ pkgs.writeDashBin "fzfmenu" ''
     esac
   done
 
+  FZF_DEFAULT_OPTS=''${FZFMENU_FZF_DEFAULT_OPTS-}
+  if test -n "$FZF_DEFAULT_OPTS"; then
+    export FZF_DEFAULT_OPTS
+  fi
+
   ${pkgs.fzf}/bin/fzf \
       --history=/dev/null \
       --print-query \
