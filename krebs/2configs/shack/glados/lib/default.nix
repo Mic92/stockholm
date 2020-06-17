@@ -22,7 +22,7 @@ in
         service = "media_player.turn_on";
         data.entity_id = "media_player.${entity}";
       }
-      { delay.seconds = 8; }
+      { delay.seconds = 4.5; }
       { service = "tts.say";
         entity_id =  "media_player.${entity}";
         data_template = {

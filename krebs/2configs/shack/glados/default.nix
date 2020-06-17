@@ -131,11 +131,11 @@ in {
       };
       #conversation = {};
       history = {};
-      logbook = {};
+      #logbook = {};
       logger = {
         default = "info";
       };
-      recorder = {};
+      #recorder = {};
       tts = [
         { platform = "google_translate";
           service_name = "say";
