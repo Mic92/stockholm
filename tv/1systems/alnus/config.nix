@@ -12,7 +12,7 @@ with import <stockholm/lib>;
     initrd = {
       availableKernelModules = [ "ahci" ];
       luks.cryptoModules = [ "aes" "sha512" "xts" ];
-      luks.devices.luksroot.devices = "/dev/sda2";
+      luks.devices.luksroot.device = "/dev/sda2";
     };
   };
 
@@ -71,10 +71,10 @@ with import <stockholm/lib>;
     };
 
     desktopManager.xfce.enable = true;
-    displayManager.auto = {
-      enable = true;
-      user = "dv";
-    };
+
+    displayManager.lightdm.autoLogin.enable = true;
+    displayManager.lightdm.autoLogin.user = "dv";
+    displayManager.lightdm.enable = true;
   };
 
   users.users.dv = {

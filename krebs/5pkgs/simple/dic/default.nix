@@ -4,9 +4,9 @@ stdenv.mkDerivation {
   name = "dic";
 
   src = fetchgit {
-    url = http://cgit.ni.krebsco.de/dic;
-    rev = "refs/tags/v1.1.0";
-    sha256 = "1xzn20b9kfz96nvjli8grpi11v80jbl0dmifksmirwcj5v81ndav";
+    url = https://cgit.ni.krebsco.de/dic;
+    rev = "refs/tags/v1.1.1";
+    sha256 = "1gbj967a5hj53fdkkxijqgwnl9hb8kskz0cmpjq7v65ffz3v6vag";
   };
 
   phases = [
