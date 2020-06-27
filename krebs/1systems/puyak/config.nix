@@ -31,7 +31,7 @@
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
 
-    initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda3"; } ];
+    initrd.luks.devices.luksroot.device = "/dev/sda3";
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
 

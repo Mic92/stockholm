@@ -134,6 +134,24 @@ in {
         };
       };
     };
+    hasegateway = {
+      cores = 1;
+      owner = config.krebs.users.hase;
+      nets = {
+        #internet = {
+        #  ip.addr = "37.24.200.174";
+        #  aliases = [ "hasegateway.i" ];
+        #};
+        retiolum = {
+          ip4.addr = "10.243.226.216";
+          ip6.addr = "42:0:e644:9099:4f8:b9aa:3856:4e86";
+          aliases = [
+            "hasegateway.r"
+          ];
+          tinc.pubkey = tinc-for "hasegateway";
+        };
+      };
+    };
     jongepad = {
       owner = config.krebs.users.jonge;
       nets = {
@@ -464,6 +482,10 @@ in {
     ulrich = {
       mail = "shackspace.de@myvdr.de";
       pubkey = ssh-for "ulrich";
+    };
+    hase = {
+      mail = "hase.christian92@gmail.com";
+      pubkey = ssh-for "hase";
     };
     "0x4A6F" = {
       mail = "0x4a6f@shackspace.de";

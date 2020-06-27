@@ -29,8 +29,8 @@ with import <stockholm/lib>;
     rxvt_unicode.terminfo
   ];
 
+  console.keyMap = "us";
   i18n = {
-    consoleKeyMap = "us";
     defaultLocale = lib.mkForce "C";
   };
 
