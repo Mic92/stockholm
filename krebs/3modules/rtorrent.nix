@@ -328,6 +328,8 @@ let
       pools.rutorrent = {
         user =  nginx-user;
         group =  nginx-group;
+        phpEnv.PATH = makeBinPath rutorrent-deps;
+
         settings = {
           "listen.owner" = nginx-user;
           "pm" = "dynamic";
@@ -335,14 +337,11 @@ let
           "pm.start_servers" = 2;
           "pm.min_spare_servers" = 1;
           "pm.max_spare_servers" = 3;
+          "chdir" = "/";
+          "php_admin_value[error_log]" = "stderr";
+          "php_admin_flag[log_errors]" = "on";
+          "catch_workers_output" = "yes";
         };
-        extraConfig = ''
-          chdir = /
-          php_admin_value[error_log] = 'stderr'
-          php_admin_flag[log_errors] = on
-          catch_workers_output = yes
-          env[PATH] = ${makeBinPath rutorrent-deps}
-        '';
       };
     };
   };
