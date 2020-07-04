@@ -91,6 +91,10 @@ in {
     xorg.xhost
     xsel
     zathura
+    (pkgs.writeDashBin "screenshot" ''
+      ${pkgs.flameshot-once}/bin/flameshot-once
+      ${pkgs.klem}/bin/klem
+    '')
   ];
 
   fonts.fonts = with pkgs; [
