@@ -186,6 +186,12 @@ let
           type = types.nullOr types.str;
           default = null;
         };
+        source-filter = mkOption {
+          type = types.nullOr types.absolute-pathname;
+          default = null;
+          example = literalExample
+            "\${pkgs.cgit}/lib/cgit/filters/syntax-highlighting.py";
+        };
         virtual-root = mkOption {
           type = types.nullOr types.absolute-pathname;
           default = "/";
@@ -451,6 +457,16 @@ let
         fastcgi_param       QUERY_STRING    $args;
         fastcgi_param       HTTP_HOST       $server_name;
         fastcgi_pass        unix:${config.services.fcgiwrap.socketAddress};
+      '';
+      # Smart HTTP transport.  Regex based on.
+      # https://github.com/git/git/blob/v2.27.0/http-backend.c#L708-L721
+      locations."~ \"^/[0-9A-Za-z._-]+/(HEAD|info/refs|objects/info/(alternates|http-alternates|packs)|[0-9a-f]{2}/([0-9a-f]{38}|[0-9a-f]{62})|pack/pack-([0-9a-f]{40}|[0-9a-f]{64})\\.(pack|idx)|git-upload-pack|git-receive-pack)$\"".extraConfig = ''
+        include ${pkgs.nginx}/conf/fastcgi_params;
+        fastcgi_param GIT_HTTP_EXPORT_ALL "";
+        fastcgi_param GIT_PROJECT_ROOT ${cfg.dataDir};
+        fastcgi_param PATH_INFO $fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME ${pkgs.git}/bin/git-http-backend;
+        fastcgi_pass unix:${config.services.fcgiwrap.socketAddress};
       '';
       locations."/static/".extraConfig = ''
         root ${pkgs.cgit}/cgit;

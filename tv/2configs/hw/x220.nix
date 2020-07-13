@@ -15,6 +15,15 @@
         pkgs.tpacpi-bat
       ];
     }
+
+    # fix jumpy touchpad
+    # https://wiki.archlinux.org/index.php/Lenovo_ThinkPad_X220#X220_Touchpad_cursor_jump/imprecise
+    {
+      services.udev.extraHwdb = /* sh */ ''
+        touchpad:i8042:*
+         LIBINPUT_MODEL_LENOVO_X220_TOUCHPAD_FW81=1
+      '';
+    }
   ];
 
   boot.extraModulePackages = [

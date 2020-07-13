@@ -5,6 +5,29 @@ with import <stockholm/lib>;
 let {
 
   body = {
+
+    nixpkgs.config.packageOverrides = super: {
+      cgit = pkgs.symlinkJoin {
+        name = "${super.cgit.name}-tv";
+        paths = [
+          (pkgs.runCommand "${super.cgit.name}-tv-overrides" {
+          } /* sh */ ''
+            mkdir -p $out/lib/cgit/filters
+            cd $out/lib/cgit/filters
+            cp \
+                ${super.cgit}/lib/cgit/filters/syntax-highlighting.py \
+                ${super.cgit}/lib/cgit/filters/.syntax-highlighting.py-wrapped \
+                .
+            sed -i "s:${super.cgit}:$out:" syntax-highlighting.py
+            sed -i '
+              s:^\(formatter =\).*:\1 HtmlFormatter(style="algol_nu"):
+            ' .syntax-highlighting.py-wrapped
+          '')
+          super.cgit
+        ];
+      };
+    };
+
     krebs.git = {
       enable = true;
       cgit = {
@@ -22,6 +45,7 @@ let {
           ];
           root-desc = "mostly krebs";
           root-title = "repositories at ${config.krebs.build.host.name}";
+          source-filter = "${pkgs.cgit}/lib/cgit/filters/syntax-highlighting.py";
         };
       };
       repos = repos;
