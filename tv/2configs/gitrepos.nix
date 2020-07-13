@@ -22,6 +22,7 @@ let {
           ];
           root-desc = "mostly krebs";
           root-title = "repositories at ${config.krebs.build.host.name}";
+          source-filter = "${pkgs.cgit}/lib/cgit/filters/syntax-highlighting.py";
         };
       };
       repos = repos;
