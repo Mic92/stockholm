@@ -186,6 +186,12 @@ let
           type = types.nullOr types.str;
           default = null;
         };
+        source-filter = mkOption {
+          type = types.nullOr types.absolute-pathname;
+          default = null;
+          example = literalExample
+            "\${pkgs.cgit}/lib/cgit/filters/syntax-highlighting.py";
+        };
         virtual-root = mkOption {
           type = types.nullOr types.absolute-pathname;
           default = "/";
