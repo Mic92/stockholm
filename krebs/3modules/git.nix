@@ -454,7 +454,7 @@ let
       '';
       # Smart HTTP transport.  Regex based on.
       # https://github.com/git/git/blob/v2.27.0/http-backend.c#L708-L721
-      locations.''~ "^/[0-9A-Za-z._-]+/(HEAD|info/refs|objects/info/(alternates|http-alternates|packs)|[0-9a-f]{2}/([0-9a-f]{38}|[0-9a-f]{62})|pack/pack-([0-9a-f]{40}|[0-9a-f]{64})\.(pack|idx)|git-upload-pack|git-receive-pack)$"''.extraConfig = ''
+      locations."~ \"^/[0-9A-Za-z._-]+/(HEAD|info/refs|objects/info/(alternates|http-alternates|packs)|[0-9a-f]{2}/([0-9a-f]{38}|[0-9a-f]{62})|pack/pack-([0-9a-f]{40}|[0-9a-f]{64})\\.(pack|idx)|git-upload-pack|git-receive-pack)$\"".extraConfig = ''
         include ${pkgs.nginx}/conf/fastcgi_params;
         fastcgi_param GIT_HTTP_EXPORT_ALL "";
         fastcgi_param GIT_PROJECT_ROOT ${cfg.dataDir};
