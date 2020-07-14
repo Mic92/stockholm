@@ -6,6 +6,7 @@ _:
     ./folderPerms.nix
     ./hass.nix
     ./hosts.nix
+    ./klem.nix
     ./mysql-backup.nix
     ./news.nix
     ./nichtparasoup.nix

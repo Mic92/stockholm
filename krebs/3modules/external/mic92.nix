@@ -13,6 +13,11 @@ in {
     amy = {
       owner = config.krebs.users.Mic92;
       nets = rec {
+        internet = {
+          ip4.addr = "129.215.165.57";
+          ip6.addr = "2001:630:3c1:164:b62e:99ff:fe3e:d369";
+          aliases = [ "amy.i" ];
+        };
         retiolum = {
           addrs = [
             config.krebs.hosts.amy.nets.retiolum.ip4.addr
@@ -41,6 +46,11 @@ in {
     clara = {
       owner = config.krebs.users.Mic92;
       nets = rec {
+        internet = {
+          ip4.addr = "129.215.165.58";
+          ip6.addr = "2001:630:3c1:164:b62e:99ff:fe3d:70f2";
+          aliases = [ "clara.i" ];
+        };
         retiolum = {
           addrs = [
             config.krebs.hosts.clara.nets.retiolum.ip4.addr
@@ -92,6 +102,7 @@ in {
       nets = rec {
         internet = {
           ip4.addr = "129.215.165.54";
+          ip6.addr = "2001:630:3c1:164:30a2:6e7b:c58b:cafd";
           aliases = [ "donna.i" ];
         };
         retiolum = {
@@ -272,6 +283,7 @@ in {
       nets = rec {
         internet = {
           ip4.addr = "129.215.165.53";
+          ip6.addr = "2001:630:3c1:164:6d4:c4ff:fe04:4aba";
           aliases = [ "martha.i" ];
         };
         retiolum = {
@@ -355,6 +367,7 @@ in {
       nets = rec {
         internet = {
           ip4.addr = "129.215.165.52";
+          ip6.addr = "2001:630:3c1:164:6d4:c4ff:fe04:4e4b";
           aliases = [ "rose.i" ];
         };
         retiolum = {

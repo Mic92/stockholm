@@ -23,7 +23,7 @@
 
   services.udev.extraRules = ''
     SUBSYSTEM=="net", DEVPATH=="/devices/pci*/*1c.1/*/net/*", NAME="wl0"
-    SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:c4:7a:f1", NAME="et0"
+    SUBSYSTEM=="net", ATTR{address}=="3c:97:0e:4f:42:35", NAME="et0"
   '';
 
   #TODO activationScripts seem broken, fix them!
@@ -37,12 +37,10 @@
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1f.2/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1f.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1d.0/power/control'
-    echo 'auto' > '/sys/bus/pci/devices/0000:00:1c.3/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1c.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1b.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1a.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:19.0/power/control'
     echo 'auto' > '/sys/bus/pci/devices/0000:00:1c.1/power/control'
-    echo 'auto' > '/sys/bus/pci/devices/0000:00:1c.4/power/control'
   '';
 }

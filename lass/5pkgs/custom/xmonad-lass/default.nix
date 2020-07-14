@@ -126,7 +126,7 @@ myKeyMap =
     , ("M4-x", floatNext True >> spawn myTerm)
     , ("M4-c", floatNext True >> spawn "${pkgs.termite}/bin/termite")
     , ("M4-f", floatNext True)
-    , ("M4-b", sendMessage ToggleStruts)
+    , ("M4-b", spawn "/run/current-system/sw/bin/klem")
 
     , ("M4-v", gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.greedyView) )
     , ("M4-S-v", gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
@@ -161,7 +161,7 @@ myKeyMap =
     , ("M4-u", spawn "${pkgs.xcalib}/bin/xcalib -invert -alter")
 
     , ("M4-s", spawn "${pkgs.knav}/bin/knav")
-    , ("<Print>", spawn "${pkgs.flameshot-once}/bin/flameshot-once")
+    , ("M4-i", spawn "/run/current-system/sw/bin/screenshot")
 
     --, ("M4-w", screenWorkspace 0 >>= (windows . W.greedyView))
     --, ("M4-e", screenWorkspace 1 >>= (windows . W.greedyView))
