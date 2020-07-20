@@ -424,5 +424,27 @@ in {
         };
       };
     };
+    harsha = {
+      owner = config.krebs.users.Mic92;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.29.184";
+          aliases = [
+            "harsha.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAqIc+ozq3hKHMe/X3v4j+6or8LMjEV7MtQ8/+n00xpG4NkI4G38Bv
+            3nmAcV7OhN6of0fr0psbBmym+2VxCZbpl8E3g1GWSKpAvlmP/9v4wDVdrADaTvXC
+            pzCxejtCwEhKLisnMwCMJCuUPbIsSBU+IQDPKP7NP0yY5VapgW3Xl3qXpnehCW1r
+            NBZjZASnhSXcJRLJayEDN6uBviYrnnfbrHOx4fPcjQPTHX5RYr3EbgGZQO9xki44
+            9dKT4EA95lupTqC3wzuQbaNpvIuVzmggiDY/NsBIVh0/2XjGnO54wtCEPudaLnWd
+            WNtc1wfVFB6gzgG1N7msOuFUReOIfyF/ywIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+
+    };
   };
 }
