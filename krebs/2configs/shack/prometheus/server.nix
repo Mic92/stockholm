@@ -18,16 +18,6 @@
     };
     prometheus = {
       enable = true;
-      extraFlags = [
-        "-storage.local.retention 720h"
-        "-storage.local.series-file-shrink-ratio 0.3"
-        "-storage.local.memory-chunks 2097152"
-        "-storage.local.max-chunks-to-persist 1048576"
-        "-storage.local.index-cache-size.fingerprint-to-metric 2097152"
-        "-storage.local.index-cache-size.fingerprint-to-timerange 1048576"
-        "-storage.local.index-cache-size.label-name-to-label-values 2097152"
-        "-storage.local.index-cache-size.label-pair-to-fingerprints 41943040"
-      ];
       ruleFiles = lib.singleton (pkgs.writeText "prometheus-rules.yml" (builtins.toJSON {
             groups = lib.singleton {
               name = "mf-alerting-rules";
@@ -41,7 +31,7 @@
           static_configs = [
             {
               targets = [
-                "localhost:9100"
+                "wolf.shack:9100"
               ];
               labels = {
                 alias = "wolf.shack";
@@ -49,7 +39,15 @@
             }
             {
               targets = [
-                "localhost:9130"
+                "infra01.shack:9100"
+              ];
+              labels = {
+                alias = "infra01.shack";
+              };
+            }
+            {
+              targets = [
+                "unifi.shack:9130"
               ];
               labels = {
                 alias = "unifi.shack";
@@ -57,7 +55,7 @@
             }
             {
               targets = [
-                "10.42.22.184:9100" # puyak.shack
+                "puyak.shack:9100" # puyak.shack
               ];
               labels = {
                 alias = "puyak.shack";
@@ -78,6 +76,36 @@
               labels = {
                 alias = "ibuprofen.shack";
               };
+            }
+          ];
+        }
+        {
+          job_name = "blackbox";
+          metrics_path = "/probe";
+          params.module = [ "icmp" ];
+          static_configs = [
+            {
+              targets = [
+                "google.com"
+                "wolf.shack"
+                "web.de"
+                "10.0.0.1"
+                "licht.shack"
+              ];
+            }
+          ];
+          relabel_configs = [
+            {
+              source_labels = ["__address__"];
+              target_label = "__param_target";
+            }
+            {
+              source_labels = ["__param_target"];
+              target_label = "instance";
+            }
+            {
+              target_label = "__address__";
+              replacement = "127.0.0.1:9115";
             }
           ];
         }

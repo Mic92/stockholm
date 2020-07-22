@@ -29,8 +29,7 @@ in {
       };
     in {
     enable = true;
-    package = (pkgs.home-assistant.overrideAttrs (old: {
-      # TODO: find correct python package
+    package = (pkgs.home-assistant.overrideAttrs (old: { # TODO: find correct python package
       installCheckPhase = ''
         echo LOLLLLLLLLLLLLLL
       '';
@@ -70,6 +69,8 @@ in {
       #    source = "hass";
       #  };
       #};
+      esphome = {};
+      api = {};
       mqtt = {
         broker = "localhost";
         port = 1883;
@@ -130,11 +131,9 @@ in {
         trusted_proxies = "127.0.0.1";
       };
       #conversation = {};
-      history = {};
+      # history = {};
       #logbook = {};
-      logger = {
-        default = "info";
-      };
+      logger.default = "info";
       #recorder = {};
       tts = [
         { platform = "google_translate";
@@ -142,10 +141,6 @@ in {
           language = "de";
           cache = true;
           time_memory = 57600;
-        }
-        { platform = "picotts";
-          language = "de-DE";
-          service_name = "pico";
         }
       ];
       sun = {};

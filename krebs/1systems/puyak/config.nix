@@ -16,6 +16,7 @@
     <stockholm/krebs/2configs/shack/ssh-keys.nix>
     <stockholm/krebs/2configs/shack/prometheus/node.nix>
     <stockholm/krebs/2configs/shack/prometheus/server.nix>
+    <stockholm/krebs/2configs/shack/prometheus/blackbox.nix>
     <stockholm/krebs/2configs/shack/prometheus/unifi.nix>
     <stockholm/krebs/2configs/shack/gitlab-runner.nix>
 
