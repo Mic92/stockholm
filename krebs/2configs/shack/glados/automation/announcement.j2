@@ -1,6 +1,6 @@
 Willkommen werter Keyholder {{ states("sensor.keyholder") }} in deinem Lieblingshackerspace.
 
-Es ist {{states("sensor.temperature") | round(1) | replace('.',' Komma ')}} Grad {% if states("sensor.temperature")|float > 25 %}heiss{%elif states("sensor.temperature")|float > 15%}warm{%else%}kalt{%endif%} bei {% if states("sensor.humidity") | int <45 %}trockenen{% elif states("sensor.humidity") | int <65 %}angenehmen{%else%}feuchten{%endif%} {{states("sensor.humidity") | int }} Prozent Luftfeuchtigkeit.
+Es ist {{states("sensor.fablab_feinstaub_temperature") | round(1) | replace('.',' Komma ')}} Grad {% if states("sensor.fablab_feinstaub_temperature")|float > 25 %}heiss{%elif states("sensor.fablab_feinstaub_temperature")|float > 15%}warm{%else%}kalt{%endif%} bei {% if states(" sensor.rz_feinstaub_humidity") | int <45 %}trockenen{% elif states(" sensor.rz_feinstaub_humidity") | int <65 %}angenehmen{%else%}feuchten{%endif%} {{states(" sensor.rz_feinstaub_humidity") | int }} Prozent Luftfeuchtigkeit.
 
 {% if (states("sensor.fullstand_mate_1")|int == 0) and
   states("sensor.fullstand_mate_2")|int == 0 %}ES IST MAHTECALYPSE, BEIDE MAHTESCHÄCHTE SIND LEER! {%if states("sensor.fullstand_mate_cola")| int == 0%} UND SOGAR DIE COLA IST ALLE. Ihr seid sowas von am Arsch!{%else%}Zum Glück gibt es noch Cola, Phew!{%endif%}
