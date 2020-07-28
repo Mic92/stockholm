@@ -1,5 +1,7 @@
 let
   glados = import ../lib;
+  feinstaub_sensor = "sensor.fablab_particulate_matter_2_5um_concentration";
+  ledring = "light.fablab_led_ring";
 in
 {
   automation =
@@ -8,15 +10,15 @@ in
       trigger = [
         {
           platform = "numeric_state";
-          below = 25;
-          entity_id = "sensor.fablab_feinstaub_2_5um";
+          entity_id = feinstaub_sensor;
+          below = 3;
         }
       ];
       action =
         [
           { service = "light.turn_on";
             data = {
-              entity_id = "light.fablab_led";
+              entity_id = ledring;
               effect = "Twinkle";
               color_name = "green";
             };
@@ -25,23 +27,18 @@ in
     }
     { alias = "mäßige Luft Fablab";
       trigger = [
-        #{
-        #  platform = "numeric_state";
-        #  above = 25;
-        #  entity_id = "sensor.fablab_feinstaub_25m";
-        #}
         {
           platform = "numeric_state";
-          above = 25;
-          below = 50;
-          entity_id = "sensor.fablab_feinstaub_2_5um";
+          above = 3;
+          below = 10;
+          entity_id = feinstaub_sensor;
         }
       ];
       action =
         [
           { service = "light.turn_on";
             data = {
-              entity_id = "light.fablab_led";
+              entity_id = ledring;
               effect = "Twinkle";
               color_name = "yellow";
             };
@@ -52,16 +49,16 @@ in
       trigger = [
         {
           platform = "numeric_state";
-          above = 50;
-          entity_id = "sensor.fablab_feinstaub_2_5um";
+          above = 10;
+          entity_id = feinstaub_sensor;
         }
       ];
       action =
         [
           { service = "light.turn_on";
             data = {
-              entity_id = "light.fablab_led";
-              effect = "Twinkle";
+              entity_id = ledring;
+              effect = "Fireworks";
               color_name = "red";
             };
           }
@@ -72,14 +69,14 @@ in
         {
           platform = "state";
           to = "unavailable";
-          entity_id = "sensor.fablab_feinstaub_2_5um";
+          entity_id = feinstaub_sensor;
         }
       ];
       action =
         [
           { service = "light.turn_on";
             data = {
-              entity_id = "light.fablab_led";
+              entity_id = ledring;
               effect = "Rainbow";
               color_name = "blue";
             };
@@ -91,14 +88,14 @@ in
         {
           platform = "state";
           from = "unavailable";
-          entity_id = "light.fablab_led";
+          entity_id = ledring;
         }
       ];
       action =
         [
           { service = "light.turn_on";
             data = {
-              entity_id = "light.fablab_led";
+              entity_id = ledring;
               effect = "Rainbow";
               color_name = "orange";
             };
