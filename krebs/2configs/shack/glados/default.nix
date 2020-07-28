@@ -148,6 +148,7 @@ in {
       automation = wasser.automation
         ++ badair.automation
         ++ (import ./automation/shack-startup.nix)
+        ++ (import ./automation/party-time.nix)
         ++ (import ./automation/hass-restart.nix);
 
       device_tracker = [];
