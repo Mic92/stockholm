@@ -26,6 +26,7 @@ let
           private_key = mkOption {
             type = types.secret-file;
             default = {
+              name = "exim.dkim_private_key/${config.domain}";
               path = "/run/krebs.secret/${config.domain}.dkim_private_key";
               owner.name = "exim";
               source-path = toString <secrets> + "/${config.domain}.dkim.priv";
@@ -118,7 +119,7 @@ let
         after = flip map cfg.dkim (dkim:
           config.krebs.secret.files."exim.dkim_private_key/${dkim.domain}".service
         );
-        requires = flip map cfg.dkim (dkim:
+        partOf = flip map cfg.dkim (dkim:
           config.krebs.secret.files."exim.dkim_private_key/${dkim.domain}".service
         );
       };

@@ -124,6 +124,7 @@ let
     privateKeyFile = mkOption {
       type = types.secret-file;
       default = {
+        name = "repo-sync-key";
         path = "${cfg.stateDir}/ssh.priv";
         owner = cfg.user;
         source-path = toString <secrets> + "/repo-sync.ssh.key";
@@ -170,7 +171,7 @@ let
           config.krebs.secret.files.repo-sync-key.service
           "network.target"
         ];
-        requires = [
+        partOf = [
           config.krebs.secret.files.repo-sync-key.service
         ];
 

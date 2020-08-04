@@ -12,6 +12,7 @@ in {
     enable = mkEnableOption "tv.x0vncserver";
     pwfile = mkOption {
       default = {
+        name = "x0vncserver-pwfile";
         owner = cfg.user;
         path = "${cfg.user.home}/.vncpasswd";
         source-path = toString <secrets> + "/vncpasswd";

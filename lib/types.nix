@@ -238,7 +238,7 @@ rec {
   secret-file = submodule ({ config, ... }: {
     options = {
       name = mkOption {
-        type = filename;
+        type = pathname;
         default = config._module.args.name;
       };
       path = mkOption {
@@ -257,8 +257,8 @@ rec {
         default = "root";
       };
       service = mkOption {
-        type = filename;
-        default = "secret.service";
+        type = systemd.unit-name;
+        default = "secret-${lib.systemd.encodeName config.name}.service";
       };
       source-path = mkOption {
         type = str;

@@ -12,7 +12,7 @@
     after = [
       config.krebs.secret.files.binary-cache-seckey.service
     ];
-    requires = [
+    partOf = [
       config.krebs.secret.files.binary-cache-seckey.service
     ];
   };

@@ -158,6 +158,7 @@ let
         privkey = mkOption {
           type = types.secret-file;
           default = {
+            name = "${tinc.config.netname}.rsa_key.priv";
             path = "${tinc.config.user.home}/tinc.rsa_key.priv";
             owner = tinc.config.user;
             source-path = toString <secrets> + "/${tinc.config.netname}.rsa_key.priv";
@@ -223,7 +224,7 @@ let
           config.krebs.secret.files."${netname}.rsa_key.priv".service
           "network.target"
         ];
-        requires = [
+        partOf = [
           config.krebs.secret.files."${netname}.rsa_key.priv".service
         ];
         wantedBy = [ "multi-user.target" ];

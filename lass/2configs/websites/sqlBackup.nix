@@ -17,7 +17,7 @@
     after = [
       config.krebs.secret.files.mysql_rootPassword.service
     ];
-    requires = [
+    partOf = [
       config.krebs.secret.files.mysql_rootPassword.service
     ];
   };
