@@ -74,8 +74,15 @@ in {
 
     systemd.services.ejabberd = {
       wantedBy = [ "multi-user.target" ];
-      requires = [ "secret.service" ];
-      after = [ "network.target" "secret.service" ];
+      after = [
+        config.krebs.secret.files.ejabberd-certfile.service
+        config.krebs.secret.files.ejabberd-s2s_certfile.service
+        "network.target"
+      ];
+      requires = [
+        config.krebs.secret.files.ejabberd-certfile.service
+        config.krebs.secret.files.ejabberd-s2s_certfile.service
+      ];
       serviceConfig = {
         ExecStartPre = "${gen-dhparam} ${cfg.dhfile.path}";
         ExecStart = "${cfg.pkgs.ejabberdctl}/bin/ejabberdctl foreground";

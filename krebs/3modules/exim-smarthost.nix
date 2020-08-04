@@ -115,8 +115,12 @@ let
     }));
     systemd.services = mkIf (cfg.dkim != []) {
       exim = {
-        after = [ "secret.service" ];
-        requires = [ "secret.service" ];
+        after = flip map cfg.dkim (dkim:
+          config.krebs.secret.files."exim.dkim_private_key/${dkim.domain}".service
+        );
+        requires = flip map cfg.dkim (dkim:
+          config.krebs.secret.files."exim.dkim_private_key/${dkim.domain}".service
+        );
       };
     };
     krebs.exim = {

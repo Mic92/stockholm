@@ -36,8 +36,16 @@ in {
       x0vncserver-pwfile = cfg.pwfile;
     };
     systemd.services.x0vncserver = {
-      after = [ "graphical.target" "secret.service" ];
-      requires = [ "graphical.target" "secret.service" ];
+      after = [
+        config.krebs.secret.files.x0vncserver-pwfile.service
+        "graphical.target"
+      ];
+      partOf = [
+        config.krebs.secret.files.x0vncserver-pwfile.service
+      ];
+      requires = [
+        "graphical.target"
+      ];
       serviceConfig = {
         ExecStart = "${pkgs.tigervnc}/bin/x0vncserver ${toString [
           "-display ${cfg.display}"

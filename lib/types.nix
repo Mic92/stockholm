@@ -256,6 +256,10 @@ rec {
         type = str;
         default = "root";
       };
+      service = mkOption {
+        type = filename;
+        default = "secret.service";
+      };
       source-path = mkOption {
         type = str;
         default = toString <secrets> + "/${config.name}";

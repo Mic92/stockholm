@@ -51,8 +51,15 @@ in {
 
     systemd.services.charybdis = {
       wantedBy = [ "multi-user.target" ];
-      requires = [ "secret.service" ];
-      after = [ "network-online.target" "secret.service" ];
+      after = [
+        config.krebs.secret.files.charybdis-ssl_dh_params.service
+        config.krebs.secret.files.charybdis-ssl_private_key.service
+        "network-online.target"
+      ];
+      requires = [
+        config.krebs.secret.files.charybdis-ssl_dh_params.service
+        config.krebs.secret.files.charybdis-ssl_private_key.service
+      ];
       environment = {
         BANDB_DBPATH = "${cfg.user.home}/ban.db";
       };

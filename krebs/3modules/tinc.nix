@@ -219,9 +219,14 @@ let
         iproute = cfg.iproutePackage;
       in {
         description = "Tinc daemon for ${netname}";
-        after = [ "network.target" ];
+        after = [
+          config.krebs.secret.files."${netname}.rsa_key.priv".service
+          "network.target"
+        ];
+        requires = [
+          config.krebs.secret.files."${netname}.rsa_key.priv".service
+        ];
         wantedBy = [ "multi-user.target" ];
-        requires = [ "secret.service" ];
         path = [ tinc iproute ];
         serviceConfig = rec {
           Restart = "always";

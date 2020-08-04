@@ -166,7 +166,13 @@ let
           });
       in nameValuePair "repo-sync-${name}" {
         description = "repo-sync";
-        after = [ "network.target" "secret.service" ];
+        after = [
+          config.krebs.secret.files.repo-sync-key.service
+          "network.target"
+        ];
+        requires = [
+          config.krebs.secret.files.repo-sync-key.service
+        ];
 
         environment = {
           GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh -i ${cfg.stateDir}/ssh.priv";
