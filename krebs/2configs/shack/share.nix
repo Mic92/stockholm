@@ -33,6 +33,10 @@
       printing = bsd
       printcap name = /dev/null
       disable spoolss = yes
+
+      # for legacy systems
+      client min protocol = NT1
+      server min protocol = NT1
     '';
   };
 }
