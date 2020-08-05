@@ -530,6 +530,14 @@ rec {
     merge = mergeOneOption;
   };
 
+  systemd.unit-name = mkOptionType {
+    name = "systemd unit name";
+    check = x:
+      test "^[0-9A-Za-z:_.\\-]+@?\\.(service|socket|device|mount|automount|swap|target|path|timer|slice|scope)$" x &&
+      stringLength x <= 256;
+    merge = mergeOneOption;
+  };
+
   # RFC952, B. Lexical grammar, <hname>
   hostname = mkOptionType {
     name = "hostname";
