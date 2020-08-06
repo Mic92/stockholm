@@ -238,7 +238,7 @@ rec {
   secret-file = submodule ({ config, ... }: {
     options = {
       name = mkOption {
-        type = filename;
+        type = pathname;
         default = config._module.args.name;
       };
       path = mkOption {
@@ -255,6 +255,10 @@ rec {
       group-name = mkOption {
         type = str;
         default = "root";
+      };
+      service = mkOption {
+        type = systemd.unit-name;
+        default = "secret-${lib.systemd.encodeName config.name}.service";
       };
       source-path = mkOption {
         type = str;
@@ -523,6 +527,14 @@ rec {
   haskell.modid = mkOptionType {
     name = "Haskell module identifier";
     check = x: isString x && all haskell.conid.check (splitString "." x);
+    merge = mergeOneOption;
+  };
+
+  systemd.unit-name = mkOptionType {
+    name = "systemd unit name";
+    check = x:
+      test "^[0-9A-Za-z:_.\\-]+@?\\.(service|socket|device|mount|automount|swap|target|path|timer|slice|scope)$" x &&
+      stringLength x <= 256;
     merge = mergeOneOption;
   };
 

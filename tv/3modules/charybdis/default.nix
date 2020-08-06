@@ -17,6 +17,7 @@ in {
     ssl_dh_params = mkOption {
       type = types.secret-file;
       default = {
+        name = "charybdis-ssl_dh_params";
         path = "${cfg.user.home}/dh.pem";
         owner = cfg.user;
         source-path = toString <secrets> + "/charybdis.dh.pem";
@@ -25,6 +26,7 @@ in {
     ssl_private_key = mkOption {
       type = types.secret-file;
       default = {
+        name = "charybdis-ssl_private_key";
         path = "${cfg.user.home}/ssl.key.pem";
         owner = cfg.user;
         source-path = toString <secrets> + "/charybdis.key.pem";
@@ -51,8 +53,15 @@ in {
 
     systemd.services.charybdis = {
       wantedBy = [ "multi-user.target" ];
-      requires = [ "secret.service" ];
-      after = [ "network-online.target" "secret.service" ];
+      after = [
+        config.krebs.secret.files.charybdis-ssl_dh_params.service
+        config.krebs.secret.files.charybdis-ssl_private_key.service
+        "network-online.target"
+      ];
+      partOf = [
+        config.krebs.secret.files.charybdis-ssl_dh_params.service
+        config.krebs.secret.files.charybdis-ssl_private_key.service
+      ];
       environment = {
         BANDB_DBPATH = "${cfg.user.home}/ban.db";
       };

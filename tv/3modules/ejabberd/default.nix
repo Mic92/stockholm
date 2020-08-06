@@ -18,6 +18,7 @@ in {
     certfile = mkOption {
       type = types.secret-file;
       default = {
+        name = "ejabberd-certfile";
         path = "${cfg.user.home}/ejabberd.pem";
         owner = cfg.user;
         source-path = toString <secrets> + "/ejabberd.pem";
@@ -26,6 +27,7 @@ in {
     dhfile = mkOption {
       type = types.secret-file;
       default = {
+        name = "ejabberd-dhfile";
         path = "${cfg.user.home}/dhparams.pem";
         owner = cfg.user;
         source-path = "/dev/null";
@@ -95,8 +97,15 @@ in {
 
     systemd.services.ejabberd = {
       wantedBy = [ "multi-user.target" ];
-      requires = [ "secret.service" ];
-      after = [ "network.target" "secret.service" ];
+      after = [
+        config.krebs.secret.files.ejabberd-certfile.service
+        config.krebs.secret.files.ejabberd-s2s_certfile.service
+        "network.target"
+      ];
+      partOf = [
+        config.krebs.secret.files.ejabberd-certfile.service
+        config.krebs.secret.files.ejabberd-s2s_certfile.service
+      ];
       serviceConfig = {
         ExecStartPre = "${gen-dhparam} ${cfg.dhfile.path}";
         ExecStart = "${cfg.pkgs.ejabberd}/bin/ejabberdctl foreground";
