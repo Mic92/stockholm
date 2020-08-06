@@ -1,6 +1,9 @@
+# uses:
+#  switch.crafting_giesskanne_relay
 let
   glados = import ../lib;
-  seconds = 20;
+  seconds = 5;
+  wasser = "switch.crafting_giesskanne_relay";
 in
 {
   switch = [
@@ -22,14 +25,14 @@ in
         {
           service = "homeassistant.turn_on";
           entity_id =  [
-            "switch.wasser"
+            wasser
           ];
         }
         { delay.seconds = seconds; }
         {
           service = "homeassistant.turn_off";
           entity_id =  [
-            "switch.wasser"
+            wasser
           ];
         }
       ];
@@ -38,7 +41,7 @@ in
       trigger = [
         {
           platform = "state";
-          entity_id = "switch.wasser";
+          entity_id = wasser;
           to = "on";
           for.seconds = seconds*2;
         }
@@ -47,7 +50,7 @@ in
       [
         {
           service = "homeassistant.turn_off";
-          entity_id =  [ "switch.wasser" ];
+          entity_id =  [ wasser ];
         }
       ];
     }
