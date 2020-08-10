@@ -14,6 +14,7 @@
     <stockholm/krebs/2configs/ircd.nix>
     <stockholm/krebs/2configs/nscd-fix.nix>
     <stockholm/krebs/2configs/reaktor2.nix>
+    <stockholm/krebs/2configs/wiki.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.hotdog;
