@@ -8,6 +8,9 @@ let
     krebs = import ./krebs lib;
     krops = import ../submodules/krops/lib;
     shell = import ./shell.nix { inherit lib; };
+    systemd = {
+      encodeName = replaceChars ["/"] ["\\x2f"];
+    };
     types = nixpkgs-lib.types // import ./types.nix { inherit lib; };
     xml = import ./xml.nix { inherit lib; };
 

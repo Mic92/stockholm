@@ -14,8 +14,12 @@
   };
 
   systemd.services.mysql = {
-    requires = [ "secret.service" ];
-    after = [ "secret.service" ];
+    after = [
+      config.krebs.secret.files.mysql_rootPassword.service
+    ];
+    partOf = [
+      config.krebs.secret.files.mysql_rootPassword.service
+    ];
   };
 
   lass.mysqlBackup = {

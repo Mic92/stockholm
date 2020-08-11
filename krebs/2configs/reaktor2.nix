@@ -14,7 +14,7 @@ let
       confirmation=no
     '';
   in {
-    pattern = "^${name}-([a-z]+)(?::\\s*(.*))?";
+    pattern = "^${name}-([a-z]+)(?::?\\s*(.*))?";
     activate = "match";
     command = 1;
     arguments = [2];
@@ -76,7 +76,7 @@ let
           };
         }
         {
-          pattern = ''^(\S+)\s+([+-][1-9][0-9]*)\s+(\S+)$'';
+          pattern = ''^([\w-]*):?\s+([+-][1-9][0-9]*)\s+(\S+)$'';
           activate = "match";
           arguments = [1 2 3];
           command = {

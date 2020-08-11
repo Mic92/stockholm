@@ -36,6 +36,7 @@ with import <stockholm/lib>;
       };
     }
     {
+      i18n.defaultLocale = mkDefault "C.UTF-8";
       security.hideProcessInformation = true;
       security.sudo.extraConfig = ''
         Defaults env_keep+="SSH_CLIENT XMONAD_SPAWN_WORKSPACE"

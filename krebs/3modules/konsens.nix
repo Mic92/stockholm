@@ -56,7 +56,7 @@ let
 
     systemd.services = mapAttrs' (name: repo:
       nameValuePair "konsens-${name}" {
-        after = [ "network.target" "secret.service" ];
+        after = [ "network.target" ];
         path = [ pkgs.git ];
         restartIfChanged = false;
         serviceConfig = {

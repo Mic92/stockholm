@@ -5,7 +5,7 @@
   services.nginx = {
     enable = true;
     virtualHosts.build = {
-      serverAliases = [ "build.${config.networking.hostName}.r" ];
+      serverAliases = [ "build.r" "build.${config.networking.hostName}.r" ];
       locations."/".extraConfig = ''
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";

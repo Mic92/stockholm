@@ -9,8 +9,12 @@
   };
 
   systemd.services.nix-serve = {
-    requires = ["secret.service"];
-    after = ["secret.service"];
+    after = [
+      config.krebs.secret.files.binary-cache-seckey.service
+    ];
+    partOf = [
+      config.krebs.secret.files.binary-cache-seckey.service
+    ];
   };
 
   krebs.secret.files.binary-cache-seckey = {

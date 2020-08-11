@@ -158,6 +158,7 @@ let
         privkey = mkOption {
           type = types.secret-file;
           default = {
+            name = "${tinc.config.netname}.rsa_key.priv";
             path = "${tinc.config.user.home}/tinc.rsa_key.priv";
             owner = tinc.config.user;
             source-path = toString <secrets> + "/${tinc.config.netname}.rsa_key.priv";
@@ -219,9 +220,14 @@ let
         iproute = cfg.iproutePackage;
       in {
         description = "Tinc daemon for ${netname}";
-        after = [ "network.target" ];
+        after = [
+          config.krebs.secret.files."${netname}.rsa_key.priv".service
+          "network.target"
+        ];
+        partOf = [
+          config.krebs.secret.files."${netname}.rsa_key.priv".service
+        ];
         wantedBy = [ "multi-user.target" ];
-        requires = [ "secret.service" ];
         path = [ tinc iproute ];
         serviceConfig = rec {
           Restart = "always";
