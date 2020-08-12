@@ -273,8 +273,12 @@ in {
             Pxol8FwH5+Q72bLtvg5Zva8D0Vx2U1jYSHEkRDDzaS5Z6Fus+zeZVMsCAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
-          # ohorn lan
-          tinc.subnets = [ "fd42:4492:6a6d:500:8526:2adf:7451:8bbb" ];
+          tinc.subnets = [
+            # ohorn lan
+            "fd42:4492:6a6d:500:8526:2adf:7451:8bbb"
+            # same prefix as `config.krebs.hosts.eve.nets.retiolum.ip6.addr`
+            "42:0000:3c46:70c7::/80"
+          ];
         };
       };
     };
