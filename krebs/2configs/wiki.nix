@@ -6,14 +6,15 @@ with import <stockholm/lib>;
     enable = true;
     extraConfig = ''
       Gollum::Hook.register(:post_commit, :hook_id) do |committer, sha1|
-        system('${toString (pkgs.writers.writeDash "debuglol" ''
+        system('${toString (pkgs.writers.writeDash "push_cgit" ''
           export PATH=${makeBinPath [ pkgs.git ]}
           export GIT_SSH_COMMAND='${pkgs.openssh}/bin/ssh -i ${config.krebs.gollum.stateDir}/.ssh/id_ed25519'
+          repo='git@localhost:wiki'
           cd ${config.krebs.gollum.stateDir}
           if ! url=$(git config remote.origin.url); then
-            git remote add origin git@localhost:gollum
-          elif test "$url" != 'git@localhost:gollum'; then
-            git remote set-url origin git@localhost:gollum
+            git remote add origin "$repo"
+          elif test "$url" != "$repo"; then
+            git remote set-url origin "$repo"
           fi
           git push origin master
         '')}')
@@ -48,13 +49,13 @@ with import <stockholm/lib>;
           }
           config.krebs.users.lass-mors
         ];
-        repo = [ config.krebs.git.repos.gollum ];
+        repo = [ config.krebs.git.repos.wiki ];
         perm = push ''refs/*'' [ create merge ];
       }
     ];
-    repos.gollum = {
+    repos.wiki = {
       public = true;
-      name = "gollum";
+      name = "wiki";
       hooks = {
         post-receive = pkgs.git-hooks.irc-announce {
           channel = "#xxx";
