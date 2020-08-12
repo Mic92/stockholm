@@ -93,6 +93,7 @@ with import <stockholm/lib>;
 
   environment.systemPackages = with pkgs; [
   #stockholm
+    deploy
     git
     gnumake
     jq

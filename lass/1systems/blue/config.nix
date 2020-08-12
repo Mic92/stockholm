@@ -15,14 +15,6 @@ with import <stockholm/lib>;
 
   krebs.build.host = config.krebs.hosts.blue;
 
-  environment.shellAliases = {
-    deploy = pkgs.writeDash "deploy" ''
-      set -eu
-      export SYSTEM="$1"
-      $(nix-build $HOME/sync/stockholm/lass/krops.nix --no-out-link --argstr name "$SYSTEM" -A deploy)
-    '';
-  };
-
   networking.nameservers = [ "1.1.1.1" ];
 
   services.restic.backups = genAttrs [
