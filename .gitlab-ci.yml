@@ -10,6 +10,8 @@ before_script:
   - chmod 600 ~/.ssh/gitlab_deploy.key
   - echo "$ssh_git_shackspace_serverkey" >> ~/.ssh/known_hosts
   # import secret key for secrets
+  - which gpg
+  - which gpg2
   - echo "$secrets_gpg_key" | gpg --import
 deployment test:
   stage: test
