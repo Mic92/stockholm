@@ -276,8 +276,8 @@ in {
           tinc.subnets = [
             # ohorn lan
             "fd42:4492:6a6d:500:8526:2adf:7451:8bbb"
-            # same prefix as `config.krebs.hosts.eve.nets.retiolum.ip6.addr`
-            "42:0000:3c46:70c7::/80"
+            # docker network
+            "42:0000:002b:1605:3::/80"
           ];
         };
       };
