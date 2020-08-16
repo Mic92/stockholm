@@ -24,7 +24,11 @@ in {
                   aliases = longs ++ shorts;
                   longs = filter check net.aliases;
                   shorts = let s = ".${config.krebs.dns.search-domain}"; in
-                    map (removeSuffix s) (filter (hasSuffix s) longs);
+                    optionals
+                      (config.krebs.dns.search-domain != null)
+                      (map (removeSuffix s)
+                           (filter (hasSuffix s)
+                                   longs));
                 in
                   map (addr: { ${addr} = aliases; }) net.addrs)
                 (attrValues host.nets))
