@@ -109,7 +109,6 @@ let
     {
       krebs.dns.providers = {
         "krebsco.de" = "zones";
-        gg23 = "hosts";
         shack = "hosts";
         i = "hosts";
         r = "hosts";
@@ -153,9 +152,11 @@ let
                     let
                       longs = net.aliases;
                       shorts =
-                        map (removeSuffix ".${cfg.dns.search-domain}")
-                            (filter (hasSuffix ".${cfg.dns.search-domain}")
-                                    longs);
+                        optionals
+                          (cfg.dns.search-domain != null)
+                          (map (removeSuffix ".${cfg.dns.search-domain}")
+                               (filter (hasSuffix ".${cfg.dns.search-domain}")
+                                       longs));
                       add-port = a:
                         if net.ssh.port != 22
                           then "[${a}]:${toString net.ssh.port}"
@@ -178,7 +179,8 @@ let
           (concatMap (host: attrValues host.nets)
             (mapAttrsToList
               (_: host: recursiveUpdate host
-                (optionalAttrs (hasAttr cfg.dns.search-domain host.nets) {
+                (optionalAttrs (cfg.dns.search-domain != null &&
+                                hasAttr cfg.dns.search-domain host.nets) {
                   nets."" = host.nets.${cfg.dns.search-domain} // {
                     aliases = [host.name];
                     addrs = [];

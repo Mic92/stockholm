@@ -6,7 +6,7 @@ with import <stockholm/lib>;
     };
 
     krebs.dns.search-domain = mkOption {
-      type = types.hostname;
+      type = types.nullOr types.hostname;
     };
   };
 }
