@@ -27,7 +27,7 @@
     enable = true;
     virtualHosts.nix-serve = {
       serverAliases = [
-        "cache.${config.krebs.build.host.name}.gg23"
+        "cache.${config.krebs.build.host.name}.hkw"
       ];
       locations."/".extraConfig = ''
         proxy_pass http://localhost:${toString config.services.nix-serve.port};

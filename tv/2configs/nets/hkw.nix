@@ -1,65 +1,65 @@
 {
   krebs = {
-    dns.providers.gg23 = "hosts";
+    dns.providers.hkw = "hosts";
     hosts = {
       nomic = {
-        nets.gg23 = {
+        nets.hkw = {
           ip4 = {
             addr = "10.23.1.110";
             prefix = "10.23.1.0/24";
           };
           aliases = [
-            "nomic.gg23"
+            "nomic.hkw"
           ];
           ssh.port = 11423;
         };
       };
       ok = {
         external = true;
-        nets.gg23 = {
+        nets.hkw = {
           ip4 = {
             addr = "10.23.1.1";
             prefix = "10.23.1.0/24";
           };
           aliases = [
-            "ok.gg23"
+            "ok.hkw"
           ];
         };
       };
       wu = {
-        nets.gg23 = {
+        nets.hkw = {
           ip4 = {
             addr = "10.23.1.37";
             prefix = "10.23.1.0/24";
           };
           aliases = [
-            "wu.gg23"
-            "cache.wu.gg23"
+            "wu.hkw"
+            "cache.wu.hkw"
           ];
           ssh.port = 11423;
         };
       };
       xu = {
-        nets.gg23 = {
+        nets.hkw = {
           ip4 = {
             addr = "10.23.1.38";
             prefix = "10.23.1.0/24";
           };
           aliases = [
-            "xu.gg23"
-            "cache.xu.gg23"
+            "xu.hkw"
+            "cache.xu.hkw"
           ];
           ssh.port = 11423;
         };
       };
       zu = {
-        nets.gg23 = {
+        nets.hkw = {
           ip4 = {
             addr = "10.23.1.39";
             prefix = "10.23.1.0/24";
           };
           aliases = [
-            "zu.gg23"
+            "zu.hkw"
           ];
           ssh.port = 11423;
         };
