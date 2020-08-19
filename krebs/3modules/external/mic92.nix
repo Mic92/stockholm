@@ -451,8 +451,15 @@ in {
     };
     eva = {
       owner = config.krebs.users.Mic92;
-      nets = {
+      nets = rec {
+        internet = {
+          # eva.thalheim.io
+          ip4.addr = "52.59.172.193";
+          ip6.addr = "2a05:d014:301:a601:ef0e:5434:d814:b8ed";
+          aliases = [ "eva.i" ];
+        };
         retiolum = {
+          via = internet;
           ip4.addr = "10.243.29.185";
           aliases = [
             "eva.r"
