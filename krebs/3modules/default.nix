@@ -108,7 +108,6 @@ let
     {
       krebs.dns.providers = {
         "krebsco.de" = "zones";
-        gg23 = "hosts";
         shack = "hosts";
         i = "hosts";
         r = "hosts";

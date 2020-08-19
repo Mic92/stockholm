@@ -131,11 +131,6 @@ in {
       ci = true;
       cores = 2;
       nets = {
-        gg23 = {
-          ip4.addr = "10.23.1.110";
-          aliases = ["nomic.gg23"];
-          ssh.port = 11423;
-        };
         retiolum = {
           ip4.addr = "10.243.0.110";
           aliases = [
@@ -158,27 +153,10 @@ in {
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMIHmwXHV7E9UGuk4voVCADjlLkyygqNw054jvrsPn5t root@nomic";
     };
-    ok = {
-      external = true;
-      nets = {
-        gg23 = {
-          ip4.addr = "10.23.1.1";
-          aliases = ["ok.gg23"];
-        };
-      };
-    };
     wu = {
       ci = true;
       cores = 4;
       nets = {
-        gg23 = {
-          ip4.addr = "10.23.1.37";
-          aliases = [
-            "wu.gg23"
-            "cache.wu.gg23"
-          ];
-          ssh.port = 11423;
-        };
         retiolum = {
           ip4.addr = "10.243.13.37";
           aliases = [
@@ -237,14 +215,6 @@ in {
       ci = true;
       cores = 4;
       nets = {
-        gg23 = {
-          ip4.addr = "10.23.1.38";
-          aliases = [
-            "xu.gg23"
-            "cache.xu.gg23"
-          ];
-          ssh.port = 11423;
-        };
         retiolum = {
           ip4.addr = "10.243.13.38";
           aliases = [
@@ -272,13 +242,6 @@ in {
       ci = true;
       cores = 4;
       nets = {
-        gg23 = {
-          ip4.addr = "10.23.1.39";
-          aliases = [
-            "zu.gg23"
-          ];
-          ssh.port = 11423;
-        };
         retiolum = {
           ip4.addr = "10.243.13.40";
           aliases = [
