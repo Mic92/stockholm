@@ -11,7 +11,7 @@ with import <stockholm/lib>;
 in {
   hosts = mapAttrs hostDefaults {
     amy = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = rec {
         internet = {
           ip4.addr = "129.215.165.57";
@@ -44,7 +44,7 @@ in {
       };
     };
     clara = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = rec {
         internet = {
           ip4.addr = "129.215.165.58";
@@ -77,7 +77,7 @@ in {
       };
     };
     dimitrios = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = {
         retiolum = {
           ip4.addr = "10.243.29.183";
@@ -98,7 +98,7 @@ in {
       };
     };
     donna = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = rec {
         internet = {
           ip4.addr = "129.215.165.54";
@@ -132,7 +132,7 @@ in {
       };
     };
     dpdkm = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.29.173";
@@ -156,7 +156,7 @@ in {
       };
     };
     herbert = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
           addrs = [
@@ -179,7 +179,7 @@ in {
       };
     };
     inspector = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = rec {
         internet = {
           ip4.addr = "141.76.44.154";
@@ -208,7 +208,7 @@ in {
       };
     };
     eddie = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = rec {
         internet = {
           # eddie.thalheim.io
@@ -242,7 +242,7 @@ in {
       };
     };
     eve = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = rec {
         internet = {
           # eve.thalheim.io
@@ -283,7 +283,7 @@ in {
       };
     };
     martha = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = rec {
         internet = {
           ip4.addr = "129.215.165.53";
@@ -317,7 +317,7 @@ in {
       };
     };
     matchbox = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = {
         retiolum = {
           ip4.addr = "10.243.29.176";
@@ -343,7 +343,7 @@ in {
       };
     };
     rock = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = {
         retiolum = {
           ip4.addr = "10.243.29.171";
@@ -367,7 +367,7 @@ in {
       };
     };
     rose = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = rec {
         internet = {
           ip4.addr = "129.215.165.52";
@@ -401,7 +401,7 @@ in {
       };
     };
     turingmachine = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = {
         retiolum = {
           ip4.addr = "10.243.29.168";
@@ -429,7 +429,7 @@ in {
       };
     };
     harsha = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = {
         retiolum = {
           ip4.addr = "10.243.29.184";
@@ -450,7 +450,7 @@ in {
       };
     };
     eva = {
-      owner = config.krebs.users.Mic92;
+      owner = config.krebs.users.mic92;
       nets = rec {
         internet = {
           # eva.thalheim.io
