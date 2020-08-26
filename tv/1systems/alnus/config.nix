@@ -54,10 +54,6 @@ with import <stockholm/lib>;
 
   networking.networkmanager.enable = true;
 
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
-
   services.earlyoom.enable = true;
   services.earlyoom.freeMemThreshold = 5;
   systemd.services.earlyoom.environment.EARLYOOM_ARGS = toString [
