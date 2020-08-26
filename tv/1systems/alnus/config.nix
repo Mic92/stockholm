@@ -58,6 +58,12 @@ with import <stockholm/lib>;
     allowUnfree = true;
   };
 
+  services.earlyoom.enable = true;
+  services.earlyoom.freeMemThreshold = 5;
+  systemd.services.earlyoom.environment.EARLYOOM_ARGS = toString [
+    "--prefer '^(Web Content|Privileged Cont)$'" # firefox tabs
+  ];
+
   services.xserver = {
     enable = true;
     layout = "de";
