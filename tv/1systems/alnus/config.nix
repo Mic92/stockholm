@@ -31,12 +31,12 @@ with import <stockholm/lib>;
     };
     "/" = {
       device = "/dev/mapper/main-root";
-      fsType = "btrfs";
+      fsType = "ext4";
       options = [ "defaults" "noatime" ];
     };
     "/home" = {
       device = "/dev/mapper/main-home";
-      fsType = "btrfs";
+      fsType = "ext4";
       options = [ "defaults" "noatime" ];
     };
   };
