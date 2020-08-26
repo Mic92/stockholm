@@ -17,7 +17,6 @@ with import <stockholm/lib>;
   };
 
   environment.systemPackages = with pkgs; [
-    chromium
     firefoxWrapper
     networkmanagerapplet
     (pkgs.pidgin-with-plugins.override {
