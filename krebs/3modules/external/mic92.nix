@@ -463,6 +463,7 @@ in {
           ip4.addr = "10.243.29.185";
           aliases = [
             "eva.r"
+            "prometheus.r"
           ];
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
