@@ -179,6 +179,10 @@ rec {
             pubkey = mkOption {
               type = tinc-pubkey;
             };
+            pubkey_ed25519 = mkOption {
+              type = nullOr tinc-pubkey;
+              default = null;
+            };
             extraConfig = mkOption {
               description = "Extra Configuration to be appended to the hosts file";
               default = "";
