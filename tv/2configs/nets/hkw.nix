@@ -2,6 +2,18 @@
   krebs = {
     dns.providers.hkw = "hosts";
     hosts = {
+      au = {
+        nets.hkw = {
+          ip4 = {
+            addr = "10.23.1.39";
+            prefix = "10.23.1.0/24";
+          };
+          aliases = [
+            "au.hkw"
+          ];
+          ssh.port = 11423;
+        };
+      };
       nomic = {
         nets.hkw = {
           ip4 = {
@@ -55,7 +67,7 @@
       zu = {
         nets.hkw = {
           ip4 = {
-            addr = "10.23.1.39";
+            addr = "10.23.1.40";
             prefix = "10.23.1.0/24";
           };
           aliases = [

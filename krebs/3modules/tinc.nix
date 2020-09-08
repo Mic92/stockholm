@@ -29,6 +29,9 @@ let
                 Interface = ${netname}
                 Broadcast = no
                 ${concatMapStrings (c: "ConnectTo = ${c}\n") tinc.config.connectTo}
+                ${optionalString (tinc.config.privkey_ed25519 != null)
+                  "Ed25519PrivateKeyFile = ${tinc.config.privkey_ed25519.path}"
+                }
                 PrivateKeyFile = ${tinc.config.privkey.path}
                 Port = ${toString tinc.config.host.nets.${netname}.tinc.port}
                 ${tinc.config.extraConfig}
@@ -165,6 +168,17 @@ let
           };
         };
 
+        privkey_ed25519 = mkOption {
+          type = types.nullOr types.secret-file;
+          default =
+            if config.krebs.hosts.${tinc.config.host.name}.nets.${tinc.config.netname}.tinc.pubkey_ed25519 == null then null else {
+              name = "${tinc.config.netname}.ed25519_key.priv";
+              path = "${tinc.config.user.home}/tinc.ed25519_key.priv";
+              owner = tinc.config.user;
+              source-path = toString <secrets> + "/${tinc.config.netname}.ed25519_key.priv";
+            };
+        };
+
         connectTo = mkOption {
           type = types.listOf types.str;
           ${if tinc.config.netname == "retiolum" then "default" else null} = [
@@ -198,8 +212,23 @@ let
     # TODO `environment.systemPackages = [ cfg.tincPackage cfg.iproutePackage ]` for each network,
     # avoid conflicts in environment if the packages differ
 
-    krebs.secret.files = mapAttrs' (netname: cfg:
-      nameValuePair "${netname}.rsa_key.priv" cfg.privkey ) config.krebs.tinc;
+    krebs.secret.files =
+      let
+        ed25519_keys =
+          filterAttrs
+            (_: key: key != null)
+            (mapAttrs'
+              (netname: cfg:
+                nameValuePair "${netname}.ed25519_key.priv" cfg.privkey_ed25519
+              )
+              config.krebs.tinc);
+
+        rsa_keys =
+          mapAttrs'
+            (netname: cfg: nameValuePair "${netname}.rsa_key.priv" cfg.privkey)
+            config.krebs.tinc;
+      in
+        ed25519_keys // rsa_keys;
 
     users.users = mapAttrs' (netname: cfg:
       nameValuePair "${netname}" {
@@ -221,11 +250,15 @@ let
       in {
         description = "Tinc daemon for ${netname}";
         after = [
-          config.krebs.secret.files."${netname}.rsa_key.priv".service
           "network.target"
+          config.krebs.secret.files."${netname}.rsa_key.priv".service
+        ] ++ optionals (cfg.privkey_ed25519 != null) [
+          config.krebs.secret.files."${netname}.ed25519_key.priv".service
         ];
         partOf = [
           config.krebs.secret.files."${netname}.rsa_key.priv".service
+        ] ++ optionals (cfg.privkey_ed25519 != null) [
+          config.krebs.secret.files."${netname}.ed25519_key.priv".service
         ];
         wantedBy = [ "multi-user.target" ];
         path = [ tinc iproute ];

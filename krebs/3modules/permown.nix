@@ -18,6 +18,15 @@ with import <stockholm/lib>;
           default = null;
           type = types.nullOr types.groupname;
         };
+        keepGoing = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Whether to keep going when chowning or chmodding fails.
+            If set to false, then errors will cause the service to restart
+            instead.
+          '';
+        };
         owner = mkOption {
           type = types.username;
         };
@@ -43,7 +52,12 @@ with import <stockholm/lib>;
       '';
     in concatMapStrings mkdir plans;
 
-    systemd.services = genAttrs' plans (plan: {
+    systemd.services = genAttrs' plans (plan: let
+      continuable = command:
+        if plan.keepGoing
+          then /* sh */ "{ ${command}; } || :"
+          else command;
+    in {
       name = "permown.${replaceStrings ["/"] ["_"] plan.path}";
       value = {
         environment = {
@@ -82,9 +96,9 @@ with import <stockholm/lib>;
                 cleanup
                 exec "$0" "$@"
               fi
-              chown -h "$OWNER_GROUP" "$path"
+              ${continuable /* sh */ ''chown -h "$OWNER_GROUP" "$path"''}
               if test -f "$path"; then
-                chmod "$FILE_MODE" "$path"
+                ${continuable /* sh */ ''chmod "$FILE_MODE" "$path"''}
               fi
             done < "$paths"
           '';
