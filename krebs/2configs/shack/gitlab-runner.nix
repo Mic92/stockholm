@@ -14,6 +14,8 @@ in
     ## registrationConfigurationFile contains:
     # CI_SERVER_URL=<CI server URL>
     # REGISTRATION_TOKEN=<registration secret>
+    # RUNNER_TAG_LIST=nix,shacklan
+    # RUNNER_NAME=stockholm-runner-$name
     registrationConfigFile = <secrets/shackspace-gitlab-ci>;
     #gracefulTermination = true;
   };

@@ -396,12 +396,12 @@ with import <stockholm/lib>;
       ];
     }
     {
-      nix.trustedUsers = [ "Mic92" ];
-      users.users.Mic92 = {
-        uid = genid_uint31 "Mic92";
+      nix.trustedUsers = [ "mic92" ];
+      users.users.mic92 = {
+        uid = genid_uint31 "mic92";
         isNormalUser = true;
         openssh.authorizedKeys.keys = [
-          config.krebs.users.Mic92.pubkey
+          config.krebs.users.mic92.pubkey
         ];
       };
     }

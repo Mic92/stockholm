@@ -27,6 +27,7 @@ let
       ./github-known-hosts.nix
       ./git.nix
       ./go.nix
+      ./gollum.nix
       ./hidden-ssh.nix
       ./hosts.nix
       ./htgen.nix

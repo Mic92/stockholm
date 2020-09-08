@@ -10,8 +10,12 @@ before_script:
   - chmod 600 ~/.ssh/gitlab_deploy.key
   - echo "$ssh_git_shackspace_serverkey" >> ~/.ssh/known_hosts
   # import secret key for secrets
+  - which gpg
+  - which gpg2
   - echo "$secrets_gpg_key" | gpg --import
 deployment test:
+  tags:
+    - nix
   stage: test
   script:
     - GIT_SSH_COMMAND="ssh -i ~/.ssh/gitlab_deploy.key" git clone git@ssh.git.shackspace.de:rz/secrets.git ~/brain
@@ -21,6 +25,8 @@ deployment test:
     - $(nix-build krebs/krops.nix --no-out-link --argstr name puyak --argstr target /tmp -A test)
 nix-shell test:
   stage: test
+  tags:
+    - nix
   script:
     - nix-shell --pure --command 'true' -p stdenv && echo success
     - nix-shell --pure --command 'false' -p stdenv || echo success
@@ -29,6 +35,9 @@ nix-shell test:
     - gpg --version
     - curl --version
 wolf deployment:
+  tags:
+    - shacklan
+    - nix
   stage: deploy
   script:
     - cp ~/.ssh/gitlab_deploy.key ~/.ssh/id_rsa
@@ -44,6 +53,9 @@ wolf deployment:
       - .gitmodules
 puyak deployment:
   stage: deploy
+  tags:
+    - shacklan
+    - nix
   script:
     - cp ~/.ssh/gitlab_deploy.key ~/.ssh/id_rsa
     - git clone git@ssh.git.shackspace.de:rz/secrets.git ~/brain
@@ -58,6 +70,8 @@ puyak deployment:
       - .gitmodules
 nur-packages makefu:
   stage: deploy
+  tags:
+    - nix
   script:
     - git reset --hard origin/master
     - git filter-branch -f --prune-empty --subdirectory-filter makefu/5pkgs HEAD
