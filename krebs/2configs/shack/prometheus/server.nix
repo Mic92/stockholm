@@ -118,7 +118,7 @@
       ];
       alertmanager = {
         enable = true;
-        listenAddress = "0.0.0.0";
+        listenAddress = "127.0.0.1";
         configuration = {
           "global" = {
             "smtp_smarthost" = "smtp.example.com:587";
@@ -134,15 +134,10 @@
           "receivers" = [
             {
               "name" = "team-admins";
-              "email_configs" = [
-                {
-                  "to" = "devnull@example.com";
-                  "send_resolved" = true;
-                }
-              ];
+              "email_configs" = [ ];
               "webhook_configs" = [
                 {
-                  "url" = "https://example.com/prometheus-alerts";
+                  "url" = "http://localhost:8080";
                   "send_resolved" = true;
                 }
               ];
