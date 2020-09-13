@@ -119,6 +119,9 @@
       alertmanager = {
         enable = true;
         listenAddress = "127.0.0.1";
+        webExternalUrl = "http://alert.prometheus.shack";
+        logLevel = "debug";
+
         configuration = {
           "global" = {
             "smtp_smarthost" = "smtp.example.com:587";
@@ -137,7 +140,7 @@
               "email_configs" = [ ];
               "webhook_configs" = [
                 {
-                  "url" = "http://localhost:8080";
+                  "url" = "http://localhost:16320";
                   "send_resolved" = true;
                 }
               ];
