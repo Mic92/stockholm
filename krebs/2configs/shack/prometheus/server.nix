@@ -1,6 +1,9 @@
 { pkgs, lib, config, ... }:
 # from https://gist.github.com/globin/02496fd10a96a36f092a8e7ea0e6c7dd
 {
+  imports = [
+    ./alert-rules.nix
+  ];
   networking = {
     firewall.allowedTCPPorts = [
       9090  # prometheus
@@ -18,12 +21,6 @@
     };
     prometheus = {
       enable = true;
-      ruleFiles = lib.singleton (pkgs.writeText "prometheus-rules.yml" (builtins.toJSON {
-            groups = lib.singleton {
-              name = "mf-alerting-rules";
-              rules = import ./alert-rules.nix { inherit lib; };
-            };
-          }));
       scrapeConfigs = [
         {
           job_name = "node";
