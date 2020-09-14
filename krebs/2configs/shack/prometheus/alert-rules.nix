@@ -10,7 +10,7 @@ in {
             {
               alert = "RootPartitionFull";
               for = "30m";
-              expr = ''(node_filesystem_avail_bytes{alias="wolf",mountpoint="/"} * 100) / node_filesystem_size_bytes{alias="wolf",mountpoint="/"} < ${disk_free_threshold}'';
+              expr = ''(node_filesystem_avail_bytes{alias="wolf.shack",mountpoint="/"} * 100) / node_filesystem_size_bytes{alias="wolf.shack",mountpoint="/"} < ${disk_free_threshold}'';
               labels.severity = "warning";
               annotations.summary = "{{ $labels.alias }} root disk full";
               annotations.url = "http://grafana.shack/";
@@ -19,7 +19,7 @@ in {
             {
               alert = "RootPartitionFull";
               for = "30m";
-              expr = ''(node_filesystem_avail_bytes{alias="puyak",mountpoint="/"} * 100) / node_filesystem_size_bytes{alias="puyak",mountpoint="/"} < ${disk_free_threshold}'';
+              expr = ''(node_filesystem_avail_bytes{alias="puyak.shack",mountpoint="/"} * 100) / node_filesystem_size_bytes{alias="puyak.shack",mountpoint="/"} < ${disk_free_threshold}'';
               labels.severity = "warning";
               annotations.summary = "{{ $labels.alias }} root disk full";
               annotations.url = "http://grafana.shack/";
@@ -27,7 +27,7 @@ in {
             }
             {
               alert = "HostDown";
-              expr = ''up{alias="wolf"} == 0'';
+              expr = ''up{alias="wolf.shack"} == 0'';
               for = "5m";
               labels.severity = "page";
               annotations.summary = "Instance {{ $labels.alias }} down for 5 minutes";
