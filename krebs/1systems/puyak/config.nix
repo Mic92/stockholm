@@ -18,6 +18,7 @@
     <stockholm/krebs/2configs/shack/prometheus/server.nix>
     <stockholm/krebs/2configs/shack/prometheus/blackbox.nix>
     <stockholm/krebs/2configs/shack/prometheus/unifi.nix>
+    <stockholm/krebs/2configs/shack/prometheus/alertmanager-telegram.nix>
     <stockholm/krebs/2configs/shack/gitlab-runner.nix>
 
     ## Collect local statistics via collectd and send to collectd

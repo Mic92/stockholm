@@ -62,13 +62,14 @@ in {
         ];
       };
       # https://www.home-assistant.io/components/influxdb/
-      #influxdb = {
-      #  database = "hass";
-      #  tags = {
-      #    instance = "wolf";
-      #    source = "hass";
-      #  };
-      #};
+      influxdb = {
+        database = "glados";
+        host = "influx.shack";
+        tags = {
+          instance = "wolf";
+          source = "glados";
+        };
+      };
       esphome = {};
       api = {};
       mqtt = {

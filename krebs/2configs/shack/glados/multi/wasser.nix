@@ -2,7 +2,7 @@
 #  switch.crafting_giesskanne_relay
 let
   glados = import ../lib;
-  seconds = 10;
+  seconds = 20;
   wasser = "switch.crafting_giesskanne_relay";
 in
 {

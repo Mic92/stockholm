@@ -34,6 +34,22 @@ in
     # powerraw usb serial to mqtt and raw socket
     <stockholm/krebs/2configs/shack/powerraw.nix>
 
+    { # do not log to /var/spool/log
+      services.nginx.appendHttpConfig = ''
+          map $request_method $loggable {
+            default 1;
+            GET 0;
+          }
+          log_format vhost '$host $remote_addr - $remote_user '
+                     '[$time_local] "$request" $status '
+                     '$body_bytes_sent "$http_referer" '
+                     '"$http_user_agent"';
+          error_log stderr;
+          access_log syslog:server=unix:/dev/log vhost;
+      '';
+      services.journald.rateLimitBurst = 10000;
+    }
+
     # create samba share for anonymous usage with the laser and 3d printer pc
     <stockholm/krebs/2configs/shack/share.nix>
 

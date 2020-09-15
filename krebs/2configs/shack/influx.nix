@@ -8,6 +8,11 @@ in
   networking.firewall.allowedTCPPorts = [ port ]; # for legacy applications
   networking.firewall.allowedUDPPorts = [ collectd-port ];
   services.nginx.virtualHosts."influx.shack" = {
+    # Disable constant GET request logging.
+    # $loggable map is defined in 1/wolf
+    extraConfig = ''
+      access_log syslog:server=unix:/dev/log combined if=$loggable;
+    '';
     locations."/" = {
       proxyPass = "http://localhost:${toString port}/";
     };
