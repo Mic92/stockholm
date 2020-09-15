@@ -66,14 +66,16 @@ in {
       useDefaultShell = true;
       packages = with pkgs; [
         # minecraft
-        steam-run
-        scummvm
-        dolphinEmu
-        doom1
-        doom2
-        vdoom1
-        vdoom2
-        vdoomserver
+        # ftb
+        # steam-run
+        # scummvm
+        # dolphinEmu
+        # doom1
+        # doom2
+        # protontricks
+        # vdoom1
+        # vdoom2
+        # vdoomserver
         retroarchBare
       ];
     };
