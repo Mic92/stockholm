@@ -2,7 +2,7 @@ with import <stockholm/lib>;
 { attr, coreutils, exiv2, findutils, gnugrep, jq, nix, utillinux, stdenv }:
 stdenv.mkDerivation rec {
   pname = "htgen-imgur";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = ./src;
 

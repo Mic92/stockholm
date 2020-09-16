@@ -24,7 +24,11 @@ in {
                   aliases = longs ++ shorts;
                   longs = filter check net.aliases;
                   shorts = let s = ".${config.krebs.dns.search-domain}"; in
-                    map (removeSuffix s) (filter (hasSuffix s) longs);
+                    optionals
+                      (config.krebs.dns.search-domain != null)
+                      (map (removeSuffix s)
+                           (filter (hasSuffix s)
+                                   longs));
                 in
                   map (addr: { ${addr} = aliases; }) net.addrs)
                 (attrValues host.nets))
@@ -44,7 +48,9 @@ in {
       hostNetAliases = host:
         mapAttrs (_: net: filter (x: x.name != null && x.value != []) [
           { name = net.ip4.addr or null; value = net.aliases; }
+          { name = net.ip4.addr or null; value = (map (alias: "4.${alias}") net.aliases); }
           { name = net.ip6.addr or null; value = net.aliases; }
+          { name = net.ip6.addr or null; value = (map (alias: "6.${alias}") net.aliases); }
         ]) host.nets;
 
       # netAliases : { ${netname} : [addrAliases] }

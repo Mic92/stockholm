@@ -465,9 +465,9 @@ in {
       mail = "kieran.meinhardt@gmail.com";
       pubkey = ssh-for "kmein";
     };
-    Mic92 = {
+    mic92 = {
       mail = "joerg@thalheim.io";
-      pubkey = ssh-for "Mic92";
+      pubkey = ssh-for "mic92";
     };
     qubasa = {
       mail = "luis.nixos@gmail.com";

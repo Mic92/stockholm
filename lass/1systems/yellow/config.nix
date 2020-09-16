@@ -251,6 +251,27 @@ with import <stockholm/lib>;
     3f8a56ddb2e64eb67adfc9b337157ff4
     -----END OpenVPN Static key V1-----
     </tls-auth>
-
   '';
+
+  systemd.services.flix-index = {
+    wantedBy = [ "multi-user.target" ];
+    path = [
+      pkgs.coreutils
+      pkgs.findutils
+      pkgs.inotifyTools
+    ];
+    serviceConfig = {
+      Restart = "always";
+      ExecStart = pkgs.writers.writeDash "flix-index" ''
+        set -efu
+
+        DIR=/var/download/finished
+        cd "$DIR"
+        while inotifywait -rq -e create -e move -e delete "$DIR"; do
+          find . -type f > "$DIR"/index.tmp
+          mv "$DIR"/index.tmp "$DIR"/index
+        done
+      '';
+    };
+  };
 }

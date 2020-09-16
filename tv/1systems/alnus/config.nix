@@ -17,7 +17,6 @@ with import <stockholm/lib>;
   };
 
   environment.systemPackages = with pkgs; [
-    chromium
     firefoxWrapper
     networkmanagerapplet
     (pkgs.pidgin-with-plugins.override {
@@ -31,12 +30,12 @@ with import <stockholm/lib>;
     };
     "/" = {
       device = "/dev/mapper/main-root";
-      fsType = "btrfs";
+      fsType = "ext4";
       options = [ "defaults" "noatime" ];
     };
     "/home" = {
       device = "/dev/mapper/main-home";
-      fsType = "btrfs";
+      fsType = "ext4";
       options = [ "defaults" "noatime" ];
     };
   };
@@ -55,9 +54,11 @@ with import <stockholm/lib>;
 
   networking.networkmanager.enable = true;
 
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
+  services.earlyoom.enable = true;
+  services.earlyoom.freeMemThreshold = 5;
+  systemd.services.earlyoom.environment.EARLYOOM_ARGS = toString [
+    "--prefer '^(Web Content|Privileged Cont)$'" # firefox tabs
+  ];
 
   services.xserver = {
     enable = true;

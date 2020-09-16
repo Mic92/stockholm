@@ -13,7 +13,7 @@ with import <stockholm/lib>;
     enable = true;
     virtualHosts.go = {
       locations."/".extraConfig = ''
-        proxy_set_header Host go;
+        proxy_set_header Host go.r;
         proxy_pass http://localhost:1337;
       '';
       serverAliases = [

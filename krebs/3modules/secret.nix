@@ -22,7 +22,7 @@ in {
           wantedBy = ["multi-user.target"];
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${pkgs.systemd}/bin/systemctl restart ${file.service}";
+            ExecStart = "${pkgs.systemd}/bin/systemctl restart ${shell.escape file.service}";
           };
         })
         cfg.files
