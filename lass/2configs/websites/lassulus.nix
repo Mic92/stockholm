@@ -69,6 +69,9 @@ in {
     locations."= /mors.pub".extraConfig = ''
       alias ${pkgs.writeText "pub" config.krebs.users.lass-mors.pubkey};
     '';
+    locations."= /yubi.pub".extraConfig = ''
+      alias ${pkgs.writeText "pub" config.krebs.users.lass-yubikey.pubkey};
+    '';
   };
 
   security.acme.certs."cgit.lassul.us" = {
