@@ -2,10 +2,10 @@
 
 with lib;
 
-pkgs.writeScript "init" ''
+pkgs.writeScriptBin "init" ''
   #!/usr/bin/env nix-shell
-  #! nix-shell -i bash -p jq parted libxfs
-  set -efu
+  #! nix-shell -i bash -p cryptsetup gptfdisk jq libxfs
+  set -xefuo pipefail
 
   disk=$1
 
@@ -14,12 +14,12 @@ pkgs.writeScript "init" ''
     exit 2
   fi
 
+  bootdev="$disk"2
   luksdev="$disk"3
   luksmap=/dev/mapper/${luksmap}
 
   vgname=${vgname}
 
-  bootdev=/dev/sda2
 
   rootdev=/dev/mapper/${vgname}-root
   homedev=/dev/mapper/${vgname}-home
@@ -35,15 +35,13 @@ pkgs.writeScript "init" ''
   #   dd if=/dev/zero bs=512 count=34 of=/dev/sda
   # TODO zero last 34 blocks (lsblk -bno SIZE /dev/sda)
   if ! test "$(blkid -o value -s PTTYPE "$disk")" = gpt; then
-    parted -s -a optimal "$disk" \
-        mklabel gpt \
-        mkpart no-fs 0 1024KiB \
-        set 1 bios_grub on \
-        mkpart ESP fat32 1025KiB 1024MiB  set 2 boot on \
-        mkpart primary 1025MiB 100%
+    sgdisk -og "$disk"
+    sgdisk -n 1:2048:4095 -c 1:"BIOS Boot Partition" -t 1:ef02 "$disk"
+    sgdisk -n 2:4096:+1G -c 2:"EFI System Partition" -t 2:ef00 "$disk"
+    sgdisk -n 3:0:0 -c 3:"LUKS container" -t 3:8300 "$disk"
   fi
 
-  if ! test "$(blkid -o value -s PARTLABEL "$luksdev")" = primary; then
+  if ! test "$(blkid -o value -s PARTLABEL "$luksdev")" = "LUKS container"; then
     echo zonk2
     exit 23
   fi
@@ -58,7 +56,6 @@ pkgs.writeScript "init" ''
   if ! test -e "$luksmap"; then
     echo "$lukspw" | cryptsetup luksOpen "$luksdev" "$(basename "$luksmap")" -
   fi
-  # cryptsetup close
 
   if ! test "$(blkid -o value -s TYPE "$luksmap")" = LVM2_member; then
     pvcreate "$luksmap"
@@ -68,11 +65,7 @@ pkgs.writeScript "init" ''
 
   lvchange -a y /dev/mapper/"$vgname"
 
-  if ! test -e "$rootdev"; then lvcreate -L 7G -n root "$vgname"; fi
-  if ! test -e "$homedev"; then lvcreate -L 100M -n home "$vgname"; fi
-
-  # lvchange -a n "$vgname"
-
+  if ! test -e "$rootdev"; then lvcreate -L 3G -n root "$vgname"; fi
 
   #
   # formatting
@@ -82,34 +75,22 @@ pkgs.writeScript "init" ''
     mkfs.vfat "$bootdev"
   fi
 
-  if ! test "$(blkid -o value -s TYPE "$rootdev")" = btrfs; then
+  if ! test "$(blkid -o value -s TYPE "$rootdev")" = xfs; then
     mkfs.xfs "$rootdev"
   fi
 
-  if ! test "$(blkid -o value -s TYPE "$homedev")" = btrfs; then
-    mkfs.xfs "$homedev"
-  fi
-
-
   if ! test "$(lsblk -n -o MOUNTPOINT "$rootdev")" = /mnt; then
+    mkdir -p /mnt
     mount "$rootdev" /mnt
   fi
   if ! test "$(lsblk -n -o MOUNTPOINT "$bootdev")" = /mnt/boot; then
     mkdir -m 0000 -p /mnt/boot
     mount "$bootdev" /mnt/boot
   fi
-  if ! test "$(lsblk -n -o MOUNTPOINT "$homedev")" = /mnt/home; then
-    mkdir -m 0000 -p /mnt/home
-    mount "$homedev" /mnt/home
-  fi
-
-  # umount -R /mnt
 
   #
   # dependencies for stockholm
   #
-
-  nix-env -iA nixos.git
 
   # TODO: get sentinal file from target_path
   mkdir -p /mnt/var/src
@@ -119,7 +100,7 @@ pkgs.writeScript "init" ''
   # print all the infos
   #
 
-  parted "$disk" print
+  gdisk -l "$disk"
   lsblk "$disk"
 
   echo READY.

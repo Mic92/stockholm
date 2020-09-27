@@ -61,7 +61,7 @@ in {
         pubkey = config.krebs.users.lass.pubkey;
       };
     in ''
-      alias ${initscript};
+      alias ${initscript}/bin/init;
     '';
     locations."= /blue.pub".extraConfig = ''
       alias ${pkgs.writeText "pub" config.krebs.users.lass.pubkey};
