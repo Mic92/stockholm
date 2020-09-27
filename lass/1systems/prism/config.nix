@@ -272,9 +272,9 @@ with import <stockholm/lib>;
         resolveLocalQueries = false;
 
         extraConfig= ''
-          listen-address=42:1:ce16::1
+          listen-address=42:1:ce16::1,10.244.1.103
           except-interface=lo
-          interface=wg0
+          interface=wiregrill
         '';
       };
     }

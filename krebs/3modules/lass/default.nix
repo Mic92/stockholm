@@ -95,6 +95,7 @@ in {
         };
         wiregrill = {
           via = internet;
+          ip4.addr = "10.244.1.103";
           ip6.addr = w6 "1";
           aliases = [
             "prism.w"
@@ -104,6 +105,7 @@ in {
             subnets = [
               (krebs.genipv6 "wiregrill" "external" 0).subnetCIDR
               (krebs.genipv6 "wiregrill" "lass" 0).subnetCIDR
+              "10.244.1.0/24"
             ];
           };
         };
@@ -196,6 +198,7 @@ in {
         };
         wiregrill = {
           ip6.addr = w6 "50da";
+          ip4.addr = "10.244.1.4";
           aliases = [
             "shodan.w"
           ];
@@ -554,6 +557,7 @@ in {
     phone = {
       nets = {
         wiregrill = {
+          ip4.addr = "10.244.1.13";
           ip6.addr = w6 "a";
           aliases = [
             "phone.w"
