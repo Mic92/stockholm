@@ -44,7 +44,15 @@ with import <stockholm/lib>;
             config.krebs.users.lass-yubikey.pubkey
           ];
         };
+        nix = {
+          isNormalUser = true;
+          uid = genid_uint31 "nix";
+          openssh.authorizedKeys.keys = [
+            config.krebs.hosts.mors.ssh.pubkey
+          ];
+        };
       };
+      nix.trustedUsers = ["nix"];
     }
     {
       environment.variables = {
