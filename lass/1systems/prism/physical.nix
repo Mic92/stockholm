@@ -55,6 +55,16 @@
     fsType = "zfs";
   };
 
+  fileSystems."/var/realwallpaper/archive" = {
+    device = "tank/wallpaper";
+    fsType = "zfs";
+  };
+
+  fileSystems."/home/xanf" = {
+    device = "/dev/disk/by-id/wwn-0x500a07511becb076";
+    fsType = "ext4";
+  };
+
   nix.maxJobs = lib.mkDefault 8;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
