@@ -41,22 +41,6 @@
     displayManager.lightdm.autoLogin.user = "lass";
   };
 
-  services.syncthing.declarative = {
-    folders = {
-      the_playlist = {
-        path = "/home/lass/tmp/the_playlist";
-        devices = [ "mors" "phone" "prism" "xerxes" ];
-      };
-    };
-  };
-  krebs.permown = {
-    "/home/lass/tmp/the_playlist" = {
-      owner = "lass";
-      group = "syncthing";
-      umask = "0007";
-    };
-  };
-
   boot.blacklistedKernelModules = [ "xpad" ];
   systemd.services.xboxdrv = {
     wantedBy = [ "multi-user.target" ];
