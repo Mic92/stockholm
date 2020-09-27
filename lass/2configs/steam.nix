@@ -13,7 +13,11 @@
   nixpkgs.config.steam.java = true;
   hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
 
-  users.users.games.packages = [ pkgs.steam ];
+  users.users.games.packages = [ (pkgs.steam.override {
+    extraPkgs = p: with p; [
+      gnutls # needed for Halo MCC
+    ];
+  }) ];
 
   #ports for inhome streaming
   krebs.iptables = {
