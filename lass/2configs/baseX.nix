@@ -72,10 +72,11 @@ in {
     git-preview
     gnome3.dconf
     iodine
+    libarchive
     lm_sensors
     ncdu
     nix-index
-    nix-review
+    nixpkgs-review
     nmap
     pavucontrol
     ponymix
