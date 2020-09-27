@@ -27,6 +27,8 @@ in
     <stockholm/krebs/2configs/shack/muellshack.nix>
     # provide light control api
     <stockholm/krebs/2configs/shack/node-light.nix>
+    # light.shack web-ui
+    <stockholm/krebs/2configs/shack/light.shack.nix>
     # send mail if muell was not handled
     <stockholm/krebs/2configs/shack/muell_mail.nix>
     # send mail if muell was not handled

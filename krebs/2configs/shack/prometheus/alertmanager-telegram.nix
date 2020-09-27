@@ -8,7 +8,7 @@
       DynamicUser = true;
       StateDirectory = "alertbot";
       ExecStart = ''${pkgs.alertmanager-bot-telegram}/bin/alertmanager-bot \
-        --alertmanager.url=http://alert.prometheus.shack --log.level=debug \
+        --alertmanager.url=http://alert.prometheus.shack --log.level=info \
         --store=bolt --bolt.path=/var/lib/alertbot/bot.db \
         --listen.addr="0.0.0.0:16320" \
         --template.paths=${./templates}/shack.tmpl'';
