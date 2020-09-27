@@ -93,6 +93,8 @@ in {
     xsel
     zathura
     (pkgs.writeDashBin "screenshot" ''
+      set -efu
+
       ${pkgs.flameshot-once}/bin/flameshot-once
       ${pkgs.klem}/bin/klem
     '')
