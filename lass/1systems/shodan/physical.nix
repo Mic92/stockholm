@@ -10,7 +10,7 @@
     loader.grub.version = 2;
     loader.grub.device = "/dev/sda";
 
-    initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda2"; } ];
+    initrd.luks.devices.lusksroot.device = "/dev/sda2";
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
   };
