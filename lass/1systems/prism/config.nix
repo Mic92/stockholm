@@ -284,7 +284,10 @@ with import <stockholm/lib>;
       ];
     }
     {
-      services.murmur.enable = true;
+      services.murmur = {
+        enable = true;
+        bandwidth = 10000000;
+      };
       services.murmur.registerName = "lassul.us";
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp --dport 64738"; target = "ACCEPT";}
