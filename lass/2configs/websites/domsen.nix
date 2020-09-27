@@ -26,6 +26,7 @@ in {
     ./default.nix
     ./sqlBackup.nix
     (servePage [ "aldonasiech.com" "www.aldonasiech.com" ])
+    (servePage [ "apanowicz.de" "www.apanowicz.de" ])
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
     (servePage [
       "freemonkey.art"
@@ -34,7 +35,6 @@ in {
     (serveOwncloud [ "o.ubikmedia.de" ])
     (serveWordpress [
       "ubikmedia.de"
-      "apanowicz.de"
       "nirwanabluete.de"
       "ubikmedia.eu"
       "youthtube.xyz"
@@ -42,7 +42,6 @@ in {
       "weirdwednesday.de"
       "jarugadesign.de"
 
-      "www.apanowicz.de"
       "www.nirwanabluete.de"
       "www.ubikmedia.eu"
       "www.youthtube.xyz"
@@ -52,7 +51,6 @@ in {
       "www.jarugadesign.de"
 
       "aldona2.ubikmedia.de"
-      "apanowicz.ubikmedia.de"
       "cinevita.ubikmedia.de"
       "factscloud.ubikmedia.de"
       "illucloud.ubikmedia.de"
