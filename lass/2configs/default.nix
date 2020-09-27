@@ -220,4 +220,7 @@ with import <stockholm/lib>;
   networking.dhcpcd.extraConfig = ''
     noipv4ll
   '';
+
+  # use 24:00 time format, the default got sneakily changed around 20.03
+  i18n.defaultLocale = mkDefault "C.UTF-8";
 }
