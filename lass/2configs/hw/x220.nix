@@ -47,9 +47,10 @@
   services.logind.lidSwitchDocked = "ignore";
 
   services.tlp.enable = true;
-  services.tlp.extraConfig = ''
-    START_CHARGE_THRESH_BAT0=80
-    STOP_CHARGE_THRESH_BAT0=95
-  '';
+  #services.tlp.extraConfig = ''
+  #  START_CHARGE_THRESH_BAT0=80
+  #  STOP_CHARGE_THRESH_BAT0=95
+  #'';
 
+  services.xserver.dpi = 80;
 }
