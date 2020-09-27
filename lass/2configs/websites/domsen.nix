@@ -134,18 +134,16 @@ in {
       server_condition = ''${run{${config.lass.usershadow.path}/bin/verify_arg ${config.lass.usershadow.pattern} $auth1 $auth2}{yes}{no}}
     '';
     internet-aliases = [
-      { from = "dominik@apanowicz.de"; to = "dominik_a@gmx.de"; }
       { from = "dma@ubikmedia.de"; to = "domsen"; }
       { from = "dma@ubikmedia.eu"; to = "domsen"; }
       { from = "mail@habsys.de"; to = "domsen"; }
       { from = "mail@habsys.eu"; to = "domsen"; }
+      { from = "hallo@apanowicz.de"; to = "domsen"; }
       { from = "bruno@apanowicz.de"; to = "bruno"; }
       { from = "mail@jla-trading.com"; to = "jla-trading"; }
       { from = "jms@ubikmedia.eu"; to = "jms"; }
       { from = "ms@ubikmedia.eu"; to = "ms"; }
       { from = "ubik@ubikmedia.eu"; to = "domsen, jms, ms"; }
-      { from = "akayguen@freemonkey.art"; to ="akayguen"; }
-      { from = "bui@freemonkey.art"; to ="bui"; }
       { from = "kontakt@alewis.de"; to ="klabusterbeere"; }
       { from = "hallo@jarugadesign.de"; to ="kasia"; }
 
@@ -156,8 +154,13 @@ in {
       "jla-trading.com"
       "ubikmedia.eu"
       "ubikmedia.de"
+      "apanowicz.de"
       "alewis.de"
       "jarugadesign.de"
+    ];
+    dkim = [
+      { domain = "ubikmedia.eu"; }
+      { domain = "apanowicz.de"; }
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";
