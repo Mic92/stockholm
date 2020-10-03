@@ -135,6 +135,7 @@ with import <stockholm/lib>;
       ];
       javascript.extraStart = comment "js";
       lua = {};
+      markdown.extraStart = writerExt "md";
       #nginx = {};
       python.extraStart = alts [
         (comment "py")
