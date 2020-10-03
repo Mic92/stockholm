@@ -133,7 +133,7 @@ with import <stockholm/lib>;
         (writer "Jq")
         (writerExt "jq")
       ];
-      javascript.extraStart = comment "jq";
+      javascript.extraStart = comment "js";
       lua = {};
       #nginx = {};
       python.extraStart = alts [
