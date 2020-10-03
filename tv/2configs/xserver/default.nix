@@ -6,6 +6,12 @@ let
     configDir = "/var/empty";
     dataDir = "/run/xdg/${cfg.user.name}/xmonad";
     user = config.krebs.build.user;
+    xmonad.pkg = pkgs.haskellPackages.xmonad-tv.overrideAttrs (_: {
+      XMONAD_BUILD_SCREEN_WIDTH = 1366;
+      XMONAD_BUILD_TERM_FONT_WIDTH = 6;
+      XMONAD_BUILD_TERM_FONT = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1";
+      XMONAD_BUILD_TERM_PADDING = 2;
+    });
   };
 in {
 
@@ -51,7 +57,7 @@ in {
   systemd.services.display-manager.enable = false;
 
   systemd.services.xmonad = let
-    xmonad = "${pkgs.haskellPackages.xmonad-tv}/bin/xmonad";
+    xmonad = "${cfg.xmonad.pkg}/bin/xmonad";
     xmonad-start = pkgs.writeDash "xmonad-start" ''
       ${pkgs.coreutils}/bin/mkdir -p "$XMONAD_CACHE_DIR"
       ${pkgs.coreutils}/bin/mkdir -p "$XMONAD_CONFIG_DIR"
