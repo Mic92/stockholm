@@ -1,4 +1,4 @@
-{ pkgs, ... }: let
+{ config, pkgs, ... }: let
   lib = import <stockholm/lib>;
   cfg = {
     pin = "@${toString <secrets/o2.pin>}";
@@ -6,6 +6,18 @@
     ttys.com = "/dev/ttyACM1";
   };
 in {
+  assertions = [
+    {
+      assertion = config.networking.resolvconf.enable;
+      message = "ppp configuration needs resolvconf";
+    }
+  ];
+  environment.etc."ppp/ip-up".source = pkgs.writeDash "ppp.ip-up" ''
+    ${pkgs.openresolv}/bin/resolvconf -a "$IFNAME" < /etc/ppp/resolv.conf
+  '';
+  environment.etc."ppp/ip-down".source = pkgs.writeDash "ppp.ip-down" ''
+    ${pkgs.openresolv}/bin/resolvconf -fd "$IFNAME"
+  '';
   environment.etc."ppp/peers/o2".text = /* sh */ ''
     ${cfg.ttys.ppp}
     921600
