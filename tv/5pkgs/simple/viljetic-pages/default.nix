@@ -11,6 +11,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     cp ${./index.html} $out/index.html
+    convert ${./logo.xpm} $out/favicon.ico
     convert ${./logo.xpm} $out/favicon2.png
   '';
 }
