@@ -18,6 +18,7 @@ with import <stockholm/lib>;
     gitAndTools.hub
     nix-review
     firefox
+    ag
   ];
 
   services.openssh.forwardX11 = true;

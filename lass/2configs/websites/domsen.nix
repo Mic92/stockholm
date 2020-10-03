@@ -26,6 +26,7 @@ in {
     ./default.nix
     ./sqlBackup.nix
     (servePage [ "aldonasiech.com" "www.aldonasiech.com" ])
+    (servePage [ "apanowicz.de" "www.apanowicz.de" ])
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
     (servePage [
       "freemonkey.art"
@@ -34,7 +35,6 @@ in {
     (serveOwncloud [ "o.ubikmedia.de" ])
     (serveWordpress [
       "ubikmedia.de"
-      "apanowicz.de"
       "nirwanabluete.de"
       "ubikmedia.eu"
       "youthtube.xyz"
@@ -42,7 +42,6 @@ in {
       "weirdwednesday.de"
       "jarugadesign.de"
 
-      "www.apanowicz.de"
       "www.nirwanabluete.de"
       "www.ubikmedia.eu"
       "www.youthtube.xyz"
@@ -52,7 +51,6 @@ in {
       "www.jarugadesign.de"
 
       "aldona2.ubikmedia.de"
-      "apanowicz.ubikmedia.de"
       "cinevita.ubikmedia.de"
       "factscloud.ubikmedia.de"
       "illucloud.ubikmedia.de"
@@ -93,6 +91,7 @@ in {
   services.nextcloud = {
     enable = true;
     hostName = "o.xanf.org";
+    package = pkgs.nextcloud18;
     config = {
       adminpassFile = toString <secrets> + "/nextcloud_pw";
       overwriteProtocol = "https";
@@ -107,6 +106,10 @@ in {
 
   # MAIL STUFF
   # TODO: make into its own module
+
+  # workaround for android 7
+  security.acme.certs."lassul.us".keyType = "rsa4096";
+
   services.dovecot2 = {
     enable = true;
     mailLocation = "maildir:~/Mail";
@@ -131,18 +134,16 @@ in {
       server_condition = ''${run{${config.lass.usershadow.path}/bin/verify_arg ${config.lass.usershadow.pattern} $auth1 $auth2}{yes}{no}}
     '';
     internet-aliases = [
-      { from = "dominik@apanowicz.de"; to = "dominik_a@gmx.de"; }
       { from = "dma@ubikmedia.de"; to = "domsen"; }
       { from = "dma@ubikmedia.eu"; to = "domsen"; }
       { from = "mail@habsys.de"; to = "domsen"; }
       { from = "mail@habsys.eu"; to = "domsen"; }
+      { from = "hallo@apanowicz.de"; to = "domsen"; }
       { from = "bruno@apanowicz.de"; to = "bruno"; }
       { from = "mail@jla-trading.com"; to = "jla-trading"; }
       { from = "jms@ubikmedia.eu"; to = "jms"; }
       { from = "ms@ubikmedia.eu"; to = "ms"; }
       { from = "ubik@ubikmedia.eu"; to = "domsen, jms, ms"; }
-      { from = "akayguen@freemonkey.art"; to ="akayguen"; }
-      { from = "bui@freemonkey.art"; to ="bui"; }
       { from = "kontakt@alewis.de"; to ="klabusterbeere"; }
       { from = "hallo@jarugadesign.de"; to ="kasia"; }
 
@@ -153,8 +154,13 @@ in {
       "jla-trading.com"
       "ubikmedia.eu"
       "ubikmedia.de"
+      "apanowicz.de"
       "alewis.de"
       "jarugadesign.de"
+    ];
+    dkim = [
+      { domain = "ubikmedia.eu"; }
+      { domain = "apanowicz.de"; }
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";

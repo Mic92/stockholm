@@ -41,22 +41,6 @@
     displayManager.lightdm.autoLogin.user = "lass";
   };
 
-  services.syncthing.declarative = {
-    folders = {
-      the_playlist = {
-        path = "/home/lass/tmp/the_playlist";
-        devices = [ "mors" "phone" "prism" "xerxes" ];
-      };
-    };
-  };
-  krebs.permown = {
-    "/home/lass/tmp/the_playlist" = {
-      owner = "lass";
-      group = "syncthing";
-      umask = "0007";
-    };
-  };
-
   boot.blacklistedKernelModules = [ "xpad" ];
   systemd.services.xboxdrv = {
     wantedBy = [ "multi-user.target" ];
@@ -93,7 +77,15 @@
     };
   };
 
-  hardware.bluetooth.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    # config.General.Disable = "Headset";
+    extraConfig = ''
+      [General]
+      Disable = Headset
+    '';
+  };
   hardware.pulseaudio.package = pkgs.pulseaudioFull;
   # hardware.pulseaudio.configFile = pkgs.writeText "default.pa" ''
   #   load-module module-bluetooth-policy

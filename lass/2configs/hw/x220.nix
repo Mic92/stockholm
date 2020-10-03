@@ -5,7 +5,7 @@
   ];
 
   boot = {
-    initrd.luks.devices = [ { name = "luksroot"; device = "/dev/sda3"; } ];
+    initrd.luks.devices.luksroot.device = "/dev/sda3";
     initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
     extraModulePackages = [
@@ -47,9 +47,10 @@
   services.logind.lidSwitchDocked = "ignore";
 
   services.tlp.enable = true;
-  services.tlp.extraConfig = ''
-    START_CHARGE_THRESH_BAT0=80
-    STOP_CHARGE_THRESH_BAT0=95
-  '';
+  #services.tlp.extraConfig = ''
+  #  START_CHARGE_THRESH_BAT0=80
+  #  STOP_CHARGE_THRESH_BAT0=95
+  #'';
 
+  services.xserver.dpi = 80;
 }

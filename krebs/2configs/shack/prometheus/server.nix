@@ -1,6 +1,9 @@
 { pkgs, lib, config, ... }:
 # from https://gist.github.com/globin/02496fd10a96a36f092a8e7ea0e6c7dd
 {
+  imports = [
+    ./alert-rules.nix
+  ];
   networking = {
     firewall.allowedTCPPorts = [
       9090  # prometheus
@@ -18,12 +21,6 @@
     };
     prometheus = {
       enable = true;
-      ruleFiles = lib.singleton (pkgs.writeText "prometheus-rules.yml" (builtins.toJSON {
-            groups = lib.singleton {
-              name = "mf-alerting-rules";
-              rules = import ./alert-rules.nix { inherit lib; };
-            };
-          }));
       scrapeConfigs = [
         {
           job_name = "node";
@@ -118,7 +115,10 @@
       ];
       alertmanager = {
         enable = true;
-        listenAddress = "0.0.0.0";
+        listenAddress = "127.0.0.1";
+        webExternalUrl = "http://alert.prometheus.shack";
+        logLevel = "debug";
+
         configuration = {
           "global" = {
             "smtp_smarthost" = "smtp.example.com:587";
@@ -134,15 +134,10 @@
           "receivers" = [
             {
               "name" = "team-admins";
-              "email_configs" = [
-                {
-                  "to" = "devnull@example.com";
-                  "send_resolved" = true;
-                }
-              ];
+              "email_configs" = [ ];
               "webhook_configs" = [
                 {
-                  "url" = "https://example.com/prometheus-alerts";
+                  "url" = "http://localhost:16320";
                   "send_resolved" = true;
                 }
               ];

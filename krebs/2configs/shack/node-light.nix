@@ -28,6 +28,9 @@ in {
   };
 
   services.nginx.virtualHosts."openhab.shack" = {
+    extraConfig = ''
+      access_log syslog:server=unix:/dev/log combined if=$loggable;
+    '';
     serverAliases = [ "lightapi.shack" ];
     locations."/power/".proxyPass = "http://localhost:${port}/power/";
     locations."/lounge/".proxyPass = "http://localhost:${port}/lounge/";

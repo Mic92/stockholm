@@ -3,6 +3,7 @@ let
   shackopen = import ./multi/shackopen.nix;
   wasser = import ./multi/wasser.nix;
   badair = import ./multi/schlechte_luft.nix;
+  rollos = import ./multi/rollos.nix;
 in {
   services.nginx.virtualHosts."hass.shack" = {
     serverAliases = [ "glados.shack" ];
@@ -62,13 +63,18 @@ in {
         ];
       };
       # https://www.home-assistant.io/components/influxdb/
-      #influxdb = {
-      #  database = "hass";
-      #  tags = {
-      #    instance = "wolf";
-      #    source = "hass";
-      #  };
-      #};
+      influxdb = {
+        database = "glados";
+        host = "influx.shack";
+        component_config_glob = {
+          "sensor.*particulate_matter_2_5um_concentration".override_measurement = "2_5um particles";
+          "sensor.*particulate_matter_10_0um_concentration".override_measurement ="10um particles";
+        };
+        tags = {
+          instance = "wolf";
+          source = "glados";
+        };
+      };
       esphome = {};
       api = {};
       mqtt = {
@@ -93,8 +99,7 @@ in {
         };
       };
       switch =
-        wasser.switch
-        ++ (import ./switch/power.nix)
+        (import ./switch/power.nix)
         ;
       light =  [];
       media_player = [
@@ -113,6 +118,7 @@ in {
         ++ (import ./sensors/mate.nix)
         ++ (import ./sensors/darksky.nix { inherit lib;})
         ++ shackopen.sensor
+        ++ wasser.sensor
         ;
       air_quality = (import ./sensors/sensemap.nix );
 
@@ -147,6 +153,7 @@ in {
 
       automation = wasser.automation
         ++ badair.automation
+        ++ rollos.automation
         ++ (import ./automation/shack-startup.nix)
         ++ (import ./automation/party-time.nix)
         ++ (import ./automation/hass-restart.nix);

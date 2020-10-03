@@ -2,13 +2,17 @@
 #  switch.crafting_giesskanne_relay
 let
   glados = import ../lib;
-  seconds = 10;
+  seconds = 20;
   wasser = "switch.crafting_giesskanne_relay";
 in
 {
-  switch = [
-    (glados.tasmota.plug { host = "Wasser"; topic = "plug";} )
-  ];
+  sensor = map ( entity_id: {
+      platform = "statistics";
+      name = "Statistics for ${entity_id}";
+      inherit entity_id;
+      max_age.minutes = "60";
+    }) ["sensor.crafting_brotbox_soil_moisture"];
+
 
   automation =
   [

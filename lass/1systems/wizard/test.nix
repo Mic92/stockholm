@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 {
   imports = [
-    ./default.nix
+    ./config.nix
   ];
   virtualisation.emptyDiskImages = [
     8000

@@ -2,8 +2,6 @@
 
   to = concatStringsSep "," [
     "lass@blue.r"
-    "lass@xerxes.r"
-    "lass@mors.r"
   ];
 
   mails = [
@@ -110,6 +108,12 @@
     "auschein@lassul.us"
     "tleech@lassul.us"
     "durstexpress@lassul.us"
+    "acme@lassul.us"
+    "antstore@lassul.us"
+    "openweather@lassul.us"
+    "lobsters@lassul.us"
+    "rewe@lassul.us"
+    "spotify@lassul.us"
   ];
 
 in {

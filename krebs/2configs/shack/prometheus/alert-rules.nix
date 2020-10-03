@@ -1,102 +1,42 @@
-{ lib }:
-with lib;
-
+{ lib,... }:
 let
-  deviceFilter = ''device!="ramfs",device!="rpc_pipefs",device!="lxcfs",device!="nsfs",device!="borgfs"'';
-in mapAttrsToList (name: opts: {
-  alert = name;
-  expr = opts.condition;
-  for = opts.time or "2m";
-  labels = if (opts.page or true) then { severity = "page"; } else {};
-  annotations = {
-    summary = opts.summary;
-    description = opts.description;
-  };
-}) {
-  node_down = {
-    condition = ''up{job="node"} == 0'';
-    summary = "{{$labels.alias}}: Node is down.";
-    description = "{{$labels.alias}} has been down for more than 2 minutes.";
-  };
-  node_systemd_service_failed = {
-    condition = ''node_systemd_unit_state{state="failed"} == 1'';
-    summary = "{{$labels.alias}}: Service {{$labels.name}} failed to start.";
-    description = "{{$labels.alias}} failed to (re)start service {{$labels.name}}.";
-  };
-  node_filesystem_full_80percent = {
-    condition = ''sort(node_filesystem_free_bytes{${deviceFilter}} < node_filesystem_size_bytes{${deviceFilter}} * 0.2) / 1024^3'';
-    time = "10m";
-    summary = "{{$labels.alias}}: Filesystem is running out of space soon.";
-    description = "{{$labels.alias}} device {{$labels.device}} on {{$labels.mountpoint}} got less than 20% space left on its filesystem.";
-  };
-  node_filesystem_full_in_7d = {
-    condition = ''predict_linear(node_filesystem_free_bytes{${deviceFilter}}[2d], 7*24*3600) <= 0'';
-    time = "1h";
-    summary = "{{$labels.alias}}: Filesystem is running out of space in 7 days.";
-    description = "{{$labels.alias}} device {{$labels.device}} on {{$labels.mountpoint}} is running out of space of in approx. 7 days";
-  };
-  node_filesystem_full_in_30d = {
-    condition = ''predict_linear(node_filesystem_free_bytes{${deviceFilter}}[30d], 30*24*3600) <= 0'';
-    time = "1h";
-    summary = "{{$labels.alias}}: Filesystem is running out of space in 30 days.";
-    description = "{{$labels.alias}} device {{$labels.device}} on {{$labels.mountpoint}} is running out of space of in approx. 30 days";
-  };
-  node_filedescriptors_full_in_3h = {
-    condition = ''predict_linear(node_filefd_allocated[3h], 3*3600) >= node_filefd_maximum'';
-    time = "20m";
-    summary = "{{$labels.alias}} is running out of available file descriptors in 3 hours.";
-    description = "{{$labels.alias}} is running out of available file descriptors in approx. 3 hours";
-  };
-  node_filedescriptors_full_in_7d = {
-    condition = ''predict_linear(node_filefd_allocated[7d], 7*24*3600) >= node_filefd_maximum'';
-    time = "1h";
-    summary = "{{$labels.alias}} is running out of available file descriptors in 7 days.";
-    description = "{{$labels.alias}} is running out of available file descriptors in approx. 7 days";
-  };
-  node_load15 = {
-    condition = ''node_load15 / on(alias) count(node_cpu_seconds_total{mode="system"}) by (alias) >= 1.0'';
-    time = "10m";
-    summary = "{{$labels.alias}}: Running on high load: {{$value}}";
-    description = "{{$labels.alias}} is running with load15 > 1 for at least 5 minutes: {{$value}}";
-  };
-  node_ram_using_90percent = {
-    condition =  "node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes < node_memory_MemTotal_bytes * 0.1";
-    time = "1h";
-    summary = "{{$labels.alias}}: Using lots of RAM.";
-    description = "{{$labels.alias}} is using at least 90% of its RAM for at least 1 hour.";
-  };
-  node_swap_using_30percent = {
-    condition = "node_memory_SwapTotal_bytes - (node_memory_SwapFree_bytes + node_memory_SwapCached_bytes) > node_memory_SwapTotal_bytes * 0.3";
-    time = "30m";
-    summary = "{{$labels.alias}}: Using more than 30% of its swap.";
-    description = "{{$labels.alias}} is using 30% of its swap space for at least 30 minutes.";
-  };
-  node_visible_confluence_space = {
-    condition = "node_visible_confluence_space != 0";
-    summary = "crowd prometheus cann see the {{$labels.space_name}} confluence space!";
-    description = "crowd user `prometheus` can see the `{{$labels.space_name}}` confluence space.";
-  };
-  node_hwmon_temp = {
-    condition = "node_hwmon_temp_celsius > node_hwmon_temp_crit_celsius*0.9 OR node_hwmon_temp_celsius > node_hwmon_temp_max_celsius*0.95";
-    time = "5m";
-    summary = "{{$labels.alias}}: Sensor {{$labels.sensor}}/{{$labels.chip}} temp is high: {{$value}} ";
-    description = "{{$labels.alias}} reports hwmon sensor {{$labels.sensor}}/{{$labels.chip}} temperature value is nearly critical: {{$value}}";
-  };
-  node_conntrack_limit = {
-    condition  = "node_nf_conntrack_entries_limit - node_nf_conntrack_entries < 1000";
-    time = "5m";
-    summary = "{{$labels.alias}}: Number of tracked connections high";
-    description = "{{$labels.alias}} has only {{$value}} free slots for connection tracking available.";
-  };
-  node_reboot = {
-    condition = "time() - node_boot_time_seconds < 300";
-    summary = "{{$labels.alias}}: Reboot";
-    description = "{{$labels.alias}} just rebooted.";
-  };
-  node_uptime = {
-    condition = "time() - node_boot_time_seconds > 2592000";
-    page = false;
-    summary = "{{$labels.alias}}: Uptime monster";
-    description = "{{$labels.alias}} has been up for more than 30 days.";
-  };
+  disk_free_threshold = "10"; # at least this much free disk percentage
+in {
+  services.prometheus.rules = [(builtins.toJSON
+    {
+      groups = [
+        { name = "shack-env";
+          rules = [
+            {
+              alert = "RootPartitionFull";
+              for = "30m";
+              expr = ''(node_filesystem_avail_bytes{alias="wolf.shack",mountpoint="/"} * 100) / node_filesystem_size_bytes{alias="wolf.shack",mountpoint="/"} < ${disk_free_threshold}'';
+              labels.severity = "warning";
+              annotations.summary = "{{ $labels.alias }} root disk full";
+              annotations.url = "http://grafana.shack/d/hb7fSE0Zz/shack-system-dashboard?orgId=1&var-job=node&var-hostname=All&var-node=wolf.shack:9100&var-device=All&var-maxmount=%2F&var-show_hostname=wolf";
+              annotations.description = ''The root disk of {{ $labels.alias }} has {{ $value | printf "%.2f" }}% free disk space (Threshold at ${disk_free_threshold}%).A vast number of shackspace services will stop working. CI for deploying new configuration will also seize working. Log in to the system and run `nix-collect-garbage -d` and clean up the shack share folder in `/home/share` .If this does not help you can check `du -hs /var/ | sort -h`, run `docker system prune` or if you are really desperate run `du -hs / | sort -h` and go through the folders recursively until you've found something to delete'';
+            }
+            {
+              alert = "RootPartitionFull";
+              for = "30m";
+              expr = ''(node_filesystem_avail_bytes{alias="puyak.shack",mountpoint="/"} * 100) / node_filesystem_size_bytes{alias="puyak.shack",mountpoint="/"} < ${disk_free_threshold}'';
+              labels.severity = "warning";
+              annotations.summary = "{{ $labels.alias }} root disk full";
+              annotations.url = "http://grafana.shack/d/hb7fSE0Zz/shack-system-dashboard?orgId=1&var-job=node&var-hostname=All&var-node=wolf.shack:9100&var-device=All&var-maxmount=%2F&var-show_hostname=puyak";
+              annotations.description = ''The root disk of {{ $labels.alias }} has {{ $value | printf "%.2f" }}% free disk space (Threshold at ${disk_free_threshold}%).Prometheus will not be able to create new alerts and CI for deploying new configuration will also seize working. Log in to the system and run `nix-collect-garbage -d` and if this does not help you can check `du -hs /var/ | sort -h`, run `docker system prune` or if you are really desperate run `du -hs / | sort -h` and go through the folders recursively until you've found something to delete'';
+            }
+            {
+              alert = "HostDown";
+              expr = ''up{alias="wolf.shack"} == 0'';
+              for = "5m";
+              labels.severity = "page";
+              annotations.summary = "Instance {{ $labels.alias }} down for 5 minutes";
+              annotations.url = "http://grafana.shack/d/hb7fSE0Zz/shack-system-dashboard?orgId=1&var-job=node&var-hostname=All&var-node=wolf.shack:9100&var-device=All&var-maxmount=%2F&var-show_hostname=wolf";
+              annotations.description = ''Host {{ $labels.alias }} went down and has not been reconnected after 5 minutes. This is probably bad news, try to restart the host via naproxen ( http://naproxen.shack:8006 ). Wolf being down means that CI,glados automation, light management and a couple of other services will not work anymore.'';
+            }
+          ];
+        }
+      ];
+    }
+  )];
 }

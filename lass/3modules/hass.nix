@@ -22,6 +22,22 @@ in {
           };
         in valueType;
     };
+    love = mkOption {
+      default = {};
+      type =  with lib.types; let
+          valueType = nullOr (oneOf [
+            bool
+            int
+            float
+            str
+            (attrsOf valueType)
+            (listOf valueType)
+          ]) // {
+            description = "Yaml value";
+            emptyValue.value = {};
+          };
+        in valueType;
+    };
   };
 
   config =
@@ -29,6 +45,7 @@ in {
     mkIf (cfg.config != {})
      {
       services.home-assistant.config = cfg.config;
+      # services.home-assistant.lovelaceConfig = cfg.love;
     };
 }
 

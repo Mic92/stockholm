@@ -12,7 +12,16 @@ let
   music_dir = "/home/radio/music";
 
   add_random = pkgs.writeDashBin "add_random" ''
-    ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.findutils}/bin/find "${music_dir}/the_playlist" | grep -v '/other/' | grep '\.ogg$' | shuf -n1 | sed 's,${music_dir}/,,')"
+    ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.findutils}/bin/find "${music_dir}/the_playlist" \
+      | grep -Ev '/other/|/.graveyard/' \
+      | grep '\.ogg$' \
+      | shuf -n1 \
+      | sed 's,${music_dir}/,,' \
+    )"
+  '';
+
+  get_current_track_position = pkgs.writeDash "get_current_track_position" ''
+    ${pkgs.mpc_cli}/bin/mpc status | ${pkgs.gawk}/bin/awk '/^\[playing\]/ { sub(/\/.+/,"",$3); split($3,a,/:/); print a[1]*60+a[2] }'
   '';
 
   skip_track = pkgs.writeBashBin "skip_track" ''
@@ -28,8 +37,8 @@ let
       ${pkgs.attr}/bin/setfattr -n user.skip_count -v "$skip_count" "$music_dir"/"$current_track"
       echo skipping: "$track_infos" skip_count: "$skip_count"
     else
-      mkdir -p "$music_dir"/.graveyard/
-      mv "$music_dir"/"$current_track" "$music_dir"/.graveyard/
+      mkdir -p "$music_dir"/the_playlist/.graveyard/
+      mv "$music_dir"/"$current_track" "$music_dir"/the_playlist/.graveyard/
       echo killing: "$track_infos"
     fi
     ${pkgs.mpc_cli}/bin/mpc -q next
@@ -62,10 +71,18 @@ let
   print_current_json = pkgs.writeDashBin "print_current_json" ''
     ${pkgs.jq}/bin/jq -n -c \
       --arg name "$(${pkgs.mpc_cli}/bin/mpc current)" \
+      --arg artist "$(${pkgs.mpc_cli}/bin/mpc current -f %artist%)" \
+      --arg title "$(${pkgs.mpc_cli}/bin/mpc current -f %title%)" \
       --arg filename "$(${pkgs.mpc_cli}/bin/mpc current -f %file%)" \
+      --arg position "$(${get_current_track_position})" \
+      --arg length "$(${pkgs.mpc_cli}/bin/mpc current -f %time%)" \
       --arg youtube "$(${track_youtube_link})" '{
         name: $name,
+        artist: $artist,
+        title: $title,
         filename: $filename,
+        position: $position,
+        length: $length,
         youtube: $youtube
       }'
   '';
@@ -193,7 +210,7 @@ in {
 
       timeLeft () {
         playlistDuration=$(${pkgs.mpc_cli}/bin/mpc --format '%time%' playlist | ${pkgs.gawk}/bin/awk -F ':' 'BEGIN{t=0} {t+=$1*60+$2} END{print t}')
-        currentTime=$(${pkgs.mpc_cli}/bin/mpc status | ${pkgs.gawk}/bin/awk '/^\[playing\]/ { sub(/\/.+/,"",$3); split($3,a,/:/); print a[1]*60+a[2] }')
+        currentTime=$(${get_current_track_position})
         expr ''${playlistDuration:-0} - ''${currentTime:-0}
       }
 
@@ -221,9 +238,11 @@ in {
         ${pkgs.mpc_cli}/bin/mpc idle player > /dev/null
         ${pkgs.mpc_cli}/bin/mpc current -f %file%
       done | while read track; do
+        listeners=$(${pkgs.curl}/bin/curl 'http://localhost:8000/status-json.xsl' \
+          | ${pkgs.jq}/bin/jq '[.icestats.source[].listeners] | add')
         echo "$(date -Is)" "$track" | tee -a "$HISTORY_FILE"
         echo "$(tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
-        ${write_to_irc} "playing: $track"
+        ${write_to_irc} "playing: $track listeners: $listeners"
       done
     '';
   in {

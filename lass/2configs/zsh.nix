@@ -122,14 +122,15 @@
       case $TERM in
         (*xterm* | *rxvt*)
           function precmd {
-            PROMPT_EVALED="$(print -P $TITLE)"
+            PROMPT_EVALED=$(print -P "$TITLE")
             echo -ne "\033]0;$$ $PROMPT_EVALED\007"
           }
-          # This is seen while the shell waits for a command to complete.
-          function preexec {
-            PROMPT_EVALED="$(print -P $TITLE)"
-            echo -ne "\033]0;$$ $PROMPT_EVALED $1\007"
-          }
+          # This seems broken for some reason
+          # # This is seen while the shell waits for a command to complete.
+          # function preexec {
+          #   PROMPT_EVALED=$(print -P "$TITLE")
+          #   echo -ne "\033]0;$$ $PROMPT_EVALED $1\007"
+          # }
         ;;
       esac
     '';

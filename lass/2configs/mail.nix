@@ -107,10 +107,12 @@ let
     set mailcap_path = ${mailcap}
 
     # notmuch
-    set nm_default_uri="notmuch://$HOME/Maildir" # path to the maildir
+    set folder="$HOME/Maildir"
+    set nm_default_uri = "notmuch://$HOME/Maildir"
     set nm_record = yes
     set nm_record_tags = "-inbox me archive"
-    set virtual_spoolfile=yes                    # enable virtual folders
+    set spoolfile = +Inbox
+    set virtual_spoolfile = yes
 
 
     set sendmail="${msmtp}/bin/msmtp"            # enables parsing of outgoing mail
@@ -132,8 +134,8 @@ let
       # V
     ''} %r |"
 
-    virtual-mailboxes "INBOX" "notmuch://?query=tag:inbox"
     virtual-mailboxes "Unread" "notmuch://?query=tag:unread"
+    virtual-mailboxes "INBOX" "notmuch://?query=tag:inbox"
     ${concatMapStringsSep "\n" (i: ''${"  "}virtual-mailboxes "${i.name}" "notmuch://?query=tag:${i.name}"'') (mapAttrsToList nameValuePair mailboxes)}
     virtual-mailboxes "TODO" "notmuch://?query=tag:TODO"
     virtual-mailboxes "Starred" "notmuch://?query=tag:*"
@@ -200,9 +202,15 @@ let
     macro pager ] ,@1 'Toggle indexbar
 
     # sidebar
+    set sidebar_divider_char = '│'
+    set sidebar_delim_chars = "/"
+    set sidebar_short_path
+    set sidebar_folder_indent
+    set sidebar_visible = yes
+    set sidebar_format = '%B%?F? [%F]?%* %?N?%N/? %?S?%S?'
     set sidebar_width   = 20
-    set sidebar_visible = yes               # set to "no" to disable sidebar view at startup
-    color sidebar_new yellow default
+    color sidebar_new yellow red
+
     # sidebar bindings
     bind index <left> sidebar-prev          # got to previous folder in sidebar
     bind index <right> sidebar-next         # got to next folder in sidebar
@@ -229,7 +237,6 @@ in {
     mutt
     pkgs.notmuch
     pkgs.muchsync
-    pkgs.haskellPackages.much
     tag-new-mails
     tag-old-mails
   ];

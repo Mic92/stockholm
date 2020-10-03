@@ -1,0 +1,25 @@
+{{ define "telegram.default" }}
+{{range .Alerts -}}
+{{ $severity := index .Labels "severity" }}
+{{ $desc := "No Description" }}
+{{ if eq .Status "firing" }}
+  {{ $desc = index .Annotations "description" }}
+  {{- if eq $severity "critical" -}}
+    <i><u><b>[CRITICAL]</b></u></i>
+  {{- else if eq $severity "warning" -}}
+    <u><b>[WARNING]</b></u>
+  {{- else -}}
+    <b>[{{ $severity }}]</b>
+  {{- end -}}
+{{ else -}}
+  {{ $desc = "The issue has been resolved" }}
+  <del>[RESOLVED]</del>
+{{- end }} {{ index .Labels "alertname"}}: {{ index .Annotations "summary"}}
+
+{{ $desc }}
+
+Alert Links:
+* <a href="{{ index .Annotations "url"}}">Grafana</a>
+* <a href="{{ .GeneratorURL }}">Source</a>
+{{end -}}
+{{end}}
