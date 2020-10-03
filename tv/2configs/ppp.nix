@@ -31,4 +31,30 @@ in {
       ATDT*99***1# CONNECT
     ''}"
   '';
+  users.users.root.packages = [
+    (pkgs.writeDashBin "connect" ''
+      # usage:
+      #   connect wlan
+      #   connect wwan [PEERNAME]
+      set -efu
+      rfkill_wlan=/sys/class/rfkill/rfkill2
+      rfkill_wwan=/sys/class/rfkill/rfkill1
+      case $1 in
+        wlan)
+          ${pkgs.procps}/bin/pkill pppd || :
+          echo 0 > "$rfkill_wwan"/state
+          echo 1 > "$rfkill_wlan"/state
+          ;;
+        wwan)
+          name=''${2-o2}
+          echo 0 > "$rfkill_wlan"/state
+          echo 1 > "$rfkill_wwan"/state
+          ${pkgs.ppp}/bin/pppd call "$name" updetach
+          ;;
+        *)
+          echo "$0: error: bad arguments: $*" >&2
+          exit 1
+      esac
+    '')
+  ];
 }
