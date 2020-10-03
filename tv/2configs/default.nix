@@ -1,7 +1,7 @@
 with import <stockholm/lib>;
 { config, pkgs, ... }: {
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = mkDefault pkgs.linuxPackages_latest;
 
   boot.tmpOnTmpfs = true;
 
