@@ -3,6 +3,7 @@
   cfg = {
     pin = "@${toString <secrets/o2.pin>}";
     ttys.ppp = "/dev/ttyACM0";
+    ttys.com = "/dev/ttyACM1";
   };
 in {
   environment.etc."ppp/peers/o2".text = /* sh */ ''
@@ -55,6 +56,17 @@ in {
           echo "$0: error: bad arguments: $*" >&2
           exit 1
       esac
+    '')
+    (pkgs.writeDashBin "modem-send" ''
+      # usage: modem-send ATCOMMAND
+      set -efu
+      tty=${lib.shell.escape cfg.ttys.com}
+      exec <"$tty"
+      printf '%s\r\n' "$1" >"$tty"
+      ${pkgs.gnused}/bin/sed -E '
+        /^OK\r?$/q
+        /^ERROR\r?$/q
+      '
     '')
   ];
 }
