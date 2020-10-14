@@ -52,7 +52,7 @@ in {
           '';
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_rsa>;
+      ssh.privkey.path = config.krebs.secret.file "ssh.id_rsa";
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDP9JS2Nyjx4Pn+/4MrFi1EvBBYVKkGm2Q4lhgaAiSuiGLol53OSsL2KIo01mbcSSBWow9QpQpn8KDoRnT2aMLDrdTFqL20ztDLOXmtrSsz3flgCjmW4f6uOaoZF0RNjAybd1coqwSJ7EINugwoqOsg1zzN2qeIGKYFvqFIKibYFAnQ8hcksmkvPdIO5O8CbdIiP9sZSrSDp0ZyLK2T0PML2jensVZOeqSPulQDFqLsbmavpVLkpDjdzzPRwbZWNB4++YeipbYNOkX4GR1EB4wMZ93IbBV7kpJtib2Zb2AnUf7UW37hxWBjILdstj9ClwNOQggn8kD9ub7YxBzH1dz0Xd8a0mPOAWIDJz9MypXgFRc3vdvPB/W1I4Se0CLbgOkORun9CkgijKr9oEY8JNt8HFd6viZcAaQxOyIm6PNHZTnHfdSc7bIBS2n3e3IZBv0fTd77knGLXg402aTuu2bm/kxsKivxsILXIaGbeXe4ceN3Fynr3FzSM2bUkzHb0mAHu1BQ9YaX0xzCwjVueA5nzGls7ODSFkXsiBfg2FvMN/sTLFca6tnwyqcnD6nujoiS5+BxjDWPgnZYqCaW3B/IkpTsRMsX6QrfhOFcsP8qlJ2Cp82orWoDK/D0vZ9pdzAc6PFGga0RofuJKY2yiq+SRZ7/e9E6VncIVCYZ1OfN0Q==";
     };
     au = {
@@ -79,7 +79,7 @@ in {
         };
       };
       secure = true;
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.privkey.path = config.krebs.secret.file "ssh.id_ed25519";
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBsqDuhGJpjpqNv4QmjoOhcODObrPyY3GHLvtVkgXV0g root@au";
     };
     mu = {
@@ -103,7 +103,7 @@ in {
           '';
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.privkey.path = config.krebs.secret.file "ssh.id_ed25519";
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1vJsAddvxMA84u9iJEOrIkKn7pQiemMbfW5cfK1d7g root@mu";
     };
     ni = {
@@ -177,7 +177,7 @@ in {
         };
       };
       secure = true;
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.privkey.path = config.krebs.secret.file "ssh.id_ed25519";
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMIHmwXHV7E9UGuk4voVCADjlLkyygqNw054jvrsPn5t root@nomic";
     };
     wu = {
@@ -203,7 +203,7 @@ in {
         };
       };
       secure = true;
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.privkey.path = config.krebs.secret.file "ssh.id_ed25519";
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcJvu8JDVzObLUtlAQg9qVugthKSfitwCljuJ5liyHa";
     };
     querel = {
@@ -262,7 +262,7 @@ in {
         };
       };
       secure = true;
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.privkey.path = config.krebs.secret.file "ssh.id_ed25519";
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPnjfceKuHNQu7S4eYFN1FqgzMqiL7haNZMh2ZLhvuhK root@xu";
     };
     zu = {
