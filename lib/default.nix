@@ -60,13 +60,17 @@ let
     }.${typeOf x};
 
     mapNixDir1 = f: dirPath:
+      let
+        toPackageName = name:
+          if test "^[0-9].*" name then "_${name}" else name;
+      in
       listToAttrs
         (map
           (relPath: let
             name = removeSuffix ".nix" relPath;
             path = dirPath + "/${relPath}";
           in
-            nameValuePair name (f path))
+            nameValuePair (toPackageName name) (f path))
           (filter
             (name: name != "default.nix" && !hasPrefix "." name)
             (attrNames (readDir dirPath))));
