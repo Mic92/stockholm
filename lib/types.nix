@@ -116,6 +116,10 @@ rec {
         type = listOf hostname;
         default = [];
       };
+      mac = mkOption {
+        type = nullOr str;
+        default = null;
+      };
       ip4 = mkOption {
         type = nullOr (submodule {
           options = {
