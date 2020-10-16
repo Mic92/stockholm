@@ -135,15 +135,8 @@ let {
       :INPUT ACCEPT [0:0]
       :OUTPUT ACCEPT [0:0]
       :POSTROUTING ACCEPT [0:0]
-      ${concatMapStringsSep "\n" (rule: "-A PREROUTING ${rule}") [
-        "! -i retiolum -p tcp -m tcp --dport 22 -j REDIRECT --to-ports 0"
-        "-p tcp -m tcp --dport 11423 -j REDIRECT --to-ports 22"
-      ]}
-      ${concatMapStringsSep "\n" (rule: "-A OUTPUT ${rule}") [
-        "-o lo -p tcp -m tcp --dport 11423 -j REDIRECT --to-ports 22"
-      ]}
-      ${formatTable cfg.extra.nat}
       ${formatTable cfg."extra${toString iptables-version}".nat}
+      ${formatTable cfg.extra.nat}
       COMMIT
       *filter
       :INPUT DROP [0:0]
