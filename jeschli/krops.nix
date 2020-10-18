@@ -10,7 +10,7 @@
     {
       nixos-config.symlink = "stockholm/jeschli/1systems/${name}/config.nix";
       nixpkgs-unstable.git = {
-        url = "https://github.com/nixos/nixpkgs-channels";
+        url = "https://github.com/nixos/nixpkgs";
         ref = (lib.importJSON ../krebs/nixpkgs-unstable.json).rev;
       };
       secrets = if test then {
