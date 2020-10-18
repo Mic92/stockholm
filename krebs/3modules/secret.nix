@@ -3,6 +3,14 @@ with import <stockholm/lib>;
   cfg = config.krebs.secret;
 in {
   options.krebs.secret = {
+    directory = mkOption {
+      default = toString <secrets>;
+      type = types.absolute-pathname;
+    };
+    file = mkOption {
+      default = relpath: "${cfg.directory}/${relpath}";
+      readOnly = true;
+    };
     files = mkOption {
       type = with types; attrsOf secret-file;
       default = {};

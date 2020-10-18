@@ -1,4 +1,6 @@
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeApplications #-}
 
 module Main (main) where
 
@@ -32,9 +34,22 @@ import XMonad.Stockholm.Pager
 import XMonad.Stockholm.Shutdown
 import qualified Paths
 
+import THEnv.JSON (getCompileEnvJSONExp)
+
 
 myFont :: String
 myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
+
+myScreenWidth :: Dimension
+myScreenWidth =
+  $(getCompileEnvJSONExp (id @Dimension) "XMONAD_BUILD_SCREEN_WIDTH")
+
+myTermFontWidth :: Dimension
+myTermFontWidth =
+  $(getCompileEnvJSONExp (id @Dimension) "XMONAD_BUILD_TERM_FONT_WIDTH")
+
+myTermPadding :: Dimension
+myTermPadding = 2
 
 
 main :: IO ()
@@ -46,7 +61,6 @@ main = getArgs >>= \case
 
 mainNoArgs :: IO ()
 mainNoArgs = do
-    let width = 1366
     workspaces0 <- getWorkspaces0
     handleShutdownEvent <- newShutdownEventHandler
     launch
@@ -60,8 +74,9 @@ mainNoArgs = do
                 smartBorders $
                   ResizableTall
                     1
-                    (10 * 6 / width)
-                    ((80 * 6 + 2 * (1+1+1))/width) []
+                    (fromIntegral (10 * myTermFontWidth) / fromIntegral myScreenWidth)
+                    (fromIntegral (80 * myTermFontWidth + 2 * (myTermPadding + borderWidth def)) / fromIntegral myScreenWidth)
+                    []
                   |||
                   Full
             , manageHook =
