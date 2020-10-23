@@ -137,7 +137,7 @@ in {
         systemPlugin
       ];
       username = "reaktor2";
-      port = 6697;
+      port = "6697";
     };
     r = {
       nick = "reaktor2|krebs";
