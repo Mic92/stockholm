@@ -272,9 +272,9 @@ with import <stockholm/lib>;
         resolveLocalQueries = false;
 
         extraConfig= ''
-          listen-address=42:1:ce16::1
+          listen-address=42:1:ce16::1,10.244.1.103
           except-interface=lo
-          interface=wg0
+          interface=wiregrill
         '';
       };
     }
@@ -284,7 +284,10 @@ with import <stockholm/lib>;
       ];
     }
     {
-      services.murmur.enable = true;
+      services.murmur = {
+        enable = true;
+        bandwidth = 10000000;
+      };
       services.murmur.registerName = "lassul.us";
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp --dport 64738"; target = "ACCEPT";}

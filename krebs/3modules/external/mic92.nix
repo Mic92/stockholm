@@ -485,5 +485,28 @@ in {
         };
       };
     };
+    doctor = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        retiolum = {
+          addrs = [
+            config.krebs.hosts.doctor.nets.retiolum.ip4.addr
+            config.krebs.hosts.doctor.nets.retiolum.ip6.addr
+          ];
+          ip4.addr = "10.243.29.186";
+          aliases = [ "doctor.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAx0zdjPX9C0fBQR+8kdlsBTuMr4KxWhqw4ARqW02oSGKJxY+D57oO
+            ORVfjBhrvIiZJfXaY0M+/n+M4Bvt4r5ol3N1NxkT7vc0bAbz9Kk/0M8dlspNoSO9
+            WW+mITVfxg/DgzDegjj4TOrsWC1jBjo4PVrvA+PnxZC4VucnqZZ55JHWAk/mPtzs
+            PUc3mkn3e9pwwrJMQRy7qg9fbatljHCb/fJoDk6DiQP4ZRE/pCf4OYCx7huHibsd
+            EMp7y5QJySmKwJ/XsS6yiHeYXLFwWvfReja/IRFL4RiDSW+6ES4PTEXxoLVDpqgv
+            KF44qim4UBabCMTPVtZcU3Rr+ufBALKJCwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
   };
 }

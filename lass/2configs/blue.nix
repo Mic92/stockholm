@@ -26,6 +26,8 @@ with (import <stockholm/lib>);
     { predicate = "-i wiregrill -p udp --dport 60000:61000"; target = "ACCEPT";}
     { predicate = "-i retiolum -p tcp --dport 9998:9999"; target = "ACCEPT";}
     { predicate = "-i wiregrill -p tcp --dport 9998:9999"; target = "ACCEPT";}
+    { predicate = "-i retiolum -p tcp --dport imap"; target = "ACCEPT";}
+    { predicate = "-i wiregrill -p tcp --dport imap"; target = "ACCEPT";}
   ];
 
   systemd.services.chat = let
@@ -63,5 +65,10 @@ with (import <stockholm/lib>);
       ExecStart = "${tmux} -2 new-session -d -s IM ${pkgs.weechat}/bin/weechat";
       ExecStop = "${tmux} kill-session -t IM";
     };
+  };
+
+  services.dovecot2 = {
+    enable = true;
+    mailLocation = "maildir:~/Maildir";
   };
 }

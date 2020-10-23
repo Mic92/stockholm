@@ -17,27 +17,6 @@ with import <stockholm/lib>;
 
   networking.nameservers = [ "1.1.1.1" ];
 
-  services.restic.backups = genAttrs [
-    "daedalus"
-    "icarus"
-    "littleT"
-    "prism"
-    "shodan"
-    "skynet"
-  ] (dest: {
-    initialize = true;
-    extraOptions = [
-      "sftp.command='ssh backup@${dest}.r -i ${config.krebs.build.host.ssh.privkey.path} -s sftp'"
-    ];
-    repository = "sftp:backup@${dest}.r:/backups/blue";
-    passwordFile = (toString <secrets>) + "/restic/${dest}";
-    timerConfig = { OnCalendar = "00:05"; RandomizedDelaySec = "5h"; };
-    paths = [
-      "/home/"
-      "/var/lib"
-    ];
-  });
-
   time.timeZone = "Europe/Berlin";
   users.users.mainUser.openssh.authorizedKeys.keys = [ config.krebs.users.lass-android.pubkey ];
 }

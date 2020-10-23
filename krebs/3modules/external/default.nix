@@ -18,12 +18,15 @@ with import <stockholm/lib>;
 in {
 
   hosts = mapAttrs hostDefaults {
-    catullus = {
+    toum = {
       owner = config.krebs.users.kmein;
       nets = {
         retiolum = {
           ip4.addr = "10.243.2.3";
-          aliases = [ "catullus.r" ];
+          aliases = [
+            "toum.r"
+            "toum.kmein.r"
+          ];
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
             MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA2tRtskPP6391+ZX9xzsx
@@ -48,7 +51,10 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.2.4";
-          aliases = [ "wilde.r" ];
+          aliases = [
+            "wilde.r"
+            "wilde.kmein.r"
+          ];
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
             MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtz/MY5OSxJqrEMv6Iwjk
@@ -100,6 +106,7 @@ in {
           ip4.addr = "10.243.2.1";
           aliases = [
             "homeros.r"
+            "homeros.kmein.r"
           ];
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
@@ -221,6 +228,32 @@ in {
         wireguard.pubkey = "09yVPHL/ucvqc6V5n7vFQ2Oi1LBMdwQZDL+7jBwy+iQ=";
       };
     };
+    rtjure = {
+      owner = config.krebs.users.rtjure;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.122.122";
+          aliases = [
+            "rtjure.r"
+          ];
+          tinc.pubkey = ''
+             -----BEGIN RSA PUBLIC KEY-----
+             MIICCgKCAgEA3YkPPsO3WDGrXyOBdAxxP1MNNuPa19Gx1pA73FKv0gnfp4wYyjwl
+             sc9A0C5yr741+LhJNqfkUT9Vb7dE2PZcEcAxZ6Vk9FBkkCWHGVyMfeqeK/hTuYqk
+             FKGNPcGWCKZDM6CYSNYr2PW3ER8xMrQP9VSvHk1smdqr8cj3wWJ8TRtUmHzkvPZc
+             C4bgrLDiQ8uev5VCt4POilrnjfcBNzgOFxWZ5uneTwM6tLhOj9uaylJEtDbW2XrF
+             ocm8cGrYkS4c1x77mz/eYfJUJQFhTVGp29QTIiIHglP7W67LLq4qMvREvRhGTovd
+             AT4KUOEXRgcPzHhbcVNeu2/ekKGHAubpjFfqxW7Y9zRTOXeSwyDnVbh+jg/VBGIV
+             2BQZnUqNSQIHVeHQCoI3ugdSsqK5Gf1z9cKqpeNfwo+JK72NTC+nH2d5ypRksTzv
+             VoTrFrv0P2qtKkhI79zY3ezw3HjCf6osKz9/EAYgzGH1Ix4WD3jjc1gqePiHYYlL
+             EQV4HkwmarmMNrNA8qRDhKCTK4G7CS6btOcSsCM3y1lYbkubaOncIACSWIJ1uAMJ
+             SEY30YYtOw2PPWstaWdy8MMZK8/MAXGEkt10OBpai7AdFZq8Oyz6xmLpgVIsWPbt
+             UI8BvkKmFhMU2EHKUbe0qe5M1r218dsrOjPk99QI99iazMG34hyxQB8CAwEAAQ==
+             -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     scardanelli = {
       owner = config.krebs.users.kmein;
       nets = {
@@ -228,6 +261,7 @@ in {
           ip4.addr = "10.243.2.2";
           aliases = [
             "scardanelli.r"
+            "scardanelli.kmein.r"
           ];
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
@@ -476,6 +510,8 @@ in {
     raute = {
       mail = "macxylo@gmail.com";
       pubkey = ssh-for "raute";
+    };
+    rtjure = {
     };
     sokratess = {
     };

@@ -58,6 +58,10 @@ let
       cgit.desc = "url shortener";
       cgit.section = "software";
     };
+    grib2json-bin = {
+      cgit.desc = "build jar of grib2json";
+      cgit.section = "deployment";
+    };
     krebspage = {
       cgit.desc = "homepage of krebs";
       cgit.section = "configuration";

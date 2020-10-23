@@ -29,6 +29,6 @@ writeDashBin "emoticons" ''
 
   data=$(${coreutils}/bin/cat ${emoticons})
   emoticon=$(echo "$data" | ${dmenu}/bin/dmenu | ${gnused}/bin/sed 's/ | .*//')
-  ${xdotool}/bin/xdotool type -- "$emoticon"
+  ${xdotool}/bin/xdotool type --clearmodifiers -- "$emoticon"
   exit 0
 ''

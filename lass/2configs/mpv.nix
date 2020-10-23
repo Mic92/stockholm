@@ -80,7 +80,7 @@ let
     name = "mpv";
     paths = [
       (pkgs.writeDashBin "mpv" ''
-        exec ${pkgs.mpv}/bin/mpv --no-config --script=${autosub} "$@"
+        exec ${pkgs.mpv}/bin/mpv -vo=gpu --no-config --script=${autosub} "$@"
       '')
       pkgs.mpv
     ];

@@ -72,10 +72,11 @@ in {
     git-preview
     gnome3.dconf
     iodine
+    libarchive
     lm_sensors
     ncdu
     nix-index
-    nix-review
+    nixpkgs-review
     nmap
     pavucontrol
     ponymix
@@ -92,6 +93,8 @@ in {
     xsel
     zathura
     (pkgs.writeDashBin "screenshot" ''
+      set -efu
+
       ${pkgs.flameshot-once}/bin/flameshot-once
       ${pkgs.klem}/bin/klem
     '')

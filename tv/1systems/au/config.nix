@@ -3,6 +3,7 @@
     ./disks.nix
     <stockholm/tv>
     <stockholm/tv/2configs/hw/x220.nix>
+    <stockholm/tv/2configs/ppp.nix>
     <stockholm/tv/2configs/retiolum.nix>
   ];
 

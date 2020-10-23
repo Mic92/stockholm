@@ -19,6 +19,8 @@ import System.Environment (getArgs, lookupEnv)
 import System.Exit (exitFailure)
 import System.IO (hPutStrLn, stderr)
 import System.Posix.Process (executeFile)
+import Data.Ratio
+
 import XMonad.Actions.CopyWindow (copy, copyToAll, kill1)
 import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace, removeEmptyWorkspace)
@@ -29,14 +31,17 @@ import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Hooks.FloatNext (floatNext)
 import XMonad.Hooks.FloatNext (floatNextHook)
 import XMonad.Hooks.ManageDocks (avoidStruts, ToggleStruts(ToggleStruts))
-import XMonad.Hooks.ManageHelpers (composeOne, doCenterFloat, (-?>))
+import XMonad.Hooks.ManageHelpers (doCenterFloat, doRectFloat, (-?>))
+import XMonad.Hooks.Place (placeHook, smart)
 import XMonad.Hooks.UrgencyHook (focusUrgent)
 import XMonad.Hooks.UrgencyHook (withUrgencyHook, UrgencyHook(..))
 import XMonad.Layout.FixedColumn (FixedColumn(..))
+import XMonad.Layout.Grid (Grid(..))
 import XMonad.Layout.Minimize (minimize)
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.MouseResizableTile (mouseResizableTile)
 import XMonad.Layout.SimplestFloat (simplestFloat)
+import XMonad.ManageHook (composeAll)
 import XMonad.Prompt (autoComplete, font, searchPredicate, XPConfig)
 import XMonad.Prompt.Window (windowPromptGoto, windowPromptBringCopy)
 import XMonad.Util.EZConfig (additionalKeysP)
@@ -76,7 +81,7 @@ main' = do
             { terminal           = myTerm
             , modMask            = mod4Mask
             , layoutHook         = smartBorders $ myLayoutHook
-            , manageHook         = floatHooks <+> floatNextHook
+            , manageHook         = floatHooks
             , startupHook =
                 whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
                           (\path -> forkFile path [] Nothing)
@@ -88,14 +93,17 @@ main' = do
 
 myLayoutHook = defLayout
   where
-    defLayout = minimize $ ((avoidStruts $ Mirror (Tall 1 (3/100) (1/2))) ||| Full ||| FixedColumn 2 80 80 1 ||| Tall 1 (3/100) (1/2) ||| simplestFloat ||| mouseResizableTile)
+    defLayout = minimize $ ((avoidStruts $ Mirror (Tall 1 (3/100) (1/2))) ||| Full ||| FixedColumn 2 80 80 1 ||| Tall 1 (3/100) (1/2) ||| simplestFloat ||| mouseResizableTile ||| Grid)
 
-floatHooks :: Query (Endo WindowSet)
-floatHooks = composeOne
-   [ className =? "Pinentry" -?> doCenterFloat
-   , title =? "fzfmenu" -?> doCenterFloat
-   , title =? "glxgears" -?> doCenterFloat
-   , resource =? "Dialog" -?> doFloat
+floatHooks = composeAll
+   [ className =? "Pinentry" --> doCenterFloat
+   , title =? "fzfmenu" --> doCenterFloat
+   , title =? "glxgears" --> doCenterFloat
+   , resource =? "Dialog" --> doFloat
+   , title =? "Upload to Imgur" -->
+       doRectFloat (W.RationalRect 0 0 (1 % 8) (1 % 8))
+   , placeHook (smart (1,0))
+   , floatNextHook
    ]
 
 myKeyMap :: [([Char], X ())]
@@ -105,7 +113,6 @@ myKeyMap =
     , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
     , ("M4-S-p", spawn "${pkgs.otpmenu}/bin/otpmenu")
     , ("M4-o", spawn "${pkgs.brain}/bin/brainmenu --type")
-    , ("M4-i", spawn "${pkgs.dpass}/bin/dpassmenu --type")
     , ("M4-z", spawn "${pkgs.emot-menu}/bin/emoticons")
 
     , ("<XF86AudioMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-mute @DEFAULT_SINK@ toggle")

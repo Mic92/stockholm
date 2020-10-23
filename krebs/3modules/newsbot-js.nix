@@ -48,7 +48,7 @@ let
         };
         urlShortenerHost = mkOption {
           type = types.str;
-          default = "go";
+          default = "go.r";
           description = "what server to use for url shortening, host";
         };
         urlShortenerPort = mkOption {

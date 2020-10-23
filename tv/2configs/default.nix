@@ -1,7 +1,7 @@
 with import <stockholm/lib>;
 { config, pkgs, ... }: {
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = mkDefault pkgs.linuxPackages_latest;
 
   boot.tmpOnTmpfs = true;
 
@@ -68,18 +68,13 @@ with import <stockholm/lib>;
       ];
 
       environment.shellAliases = mkForce {
-        # alias cal='cal -m3'
         gp = "${pkgs.pari}/bin/gp -q";
         df = "df -h";
         du = "du -h";
-        # alias grep='grep --color=auto'
 
         # TODO alias cannot contain #\'
         # "ps?" = "ps ax | head -n 1;ps ax | fgrep -v ' grep --color=auto ' | grep";
 
-        # alias la='ls -lA'
-        lAtr = "ls -lAtr";
-        # alias ll='ls -l'
         ls = "ls -h --color=auto --group-directories-first";
         dmesg = "dmesg -L --reltime";
         view = "vim -R";

@@ -31,5 +31,6 @@ in {
     owner = "lass";
     group = "syncthing";
     umask = "0002";
+    keepGoing = true;
   };
 }

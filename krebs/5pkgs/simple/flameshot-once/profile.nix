@@ -118,7 +118,7 @@ let
           type = types.bool;
         };
         timeout = mkOption {
-          default = 100;
+          default = 200;
           description = ''
             Maximum time in milliseconds allowed for the flameshot daemon to
             react.

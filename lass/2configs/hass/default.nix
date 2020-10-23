@@ -23,6 +23,7 @@ with import ./lib.nix { inherit lib; };
       # extraComponents = [ "hue" ];
     };
     configWritable = true;
+    lovelaceConfigWritable = true;
   };
 
   lass.hass.config = let

@@ -126,8 +126,6 @@ with import <stockholm/lib>;
     remmina
     transmission
 
-    iodine
-
     macchanger
     dpass
 

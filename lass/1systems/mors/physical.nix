@@ -23,7 +23,7 @@
 
   services.udev.extraRules = ''
     SUBSYSTEM=="net", DEVPATH=="/devices/pci*/*1c.1/*/net/*", NAME="wl0"
-    SUBSYSTEM=="net", ATTR{address}=="3c:97:0e:4f:42:35", NAME="et0"
+    SUBSYSTEM=="net", ATTR{address}=="3c:97:0e:37:15:d9", NAME="et0"
   '';
 
   #TODO activationScripts seem broken, fix them!

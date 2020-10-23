@@ -172,7 +172,7 @@ with import <stockholm/lib>;
     client
     dev tun
     proto udp
-    remote 89.249.65.83 1194
+    remote 185.230.127.27 1194
     resolv-retry infinite
     remote-random
     nobind
@@ -195,7 +195,6 @@ with import <stockholm/lib>;
     fast-io
     cipher AES-256-CBC
     auth SHA512
-
     <ca>
     -----BEGIN CERTIFICATE-----
     MIIFCjCCAvKgAwIBAgIBATANBgkqhkiG9w0BAQ0FADA5MQswCQYDVQQGEwJQQTEQ
