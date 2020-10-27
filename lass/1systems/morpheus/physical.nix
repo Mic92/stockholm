@@ -34,10 +34,7 @@
   };
   boot.initrd.luks = {
     cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
-    devices =  [{
-       name = "luksroot";
-       device = "/dev/nvme0n1p3";
-    }];
+    devices.luksroot.device = "/dev/nvme0n1p3";
   };
 
   services.udev.extraRules = ''
