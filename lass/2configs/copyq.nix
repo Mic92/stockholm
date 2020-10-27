@@ -25,9 +25,6 @@ in {
     environment = {
       DISPLAY = ":${toString config.services.xserver.display}";
     };
-    path = with pkgs; [
-      qt5.full
-    ];
     serviceConfig = {
       SyslogIdentifier = "copyq";
       ExecStart = "${pkgs.copyq}/bin/copyq";
