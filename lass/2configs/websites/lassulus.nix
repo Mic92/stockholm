@@ -16,7 +16,6 @@ in {
     email = "acme@lassul.us";
     acceptTerms = true;
     certs."lassul.us" = {
-      allowKeysForGroup = true;
       group = "lasscert";
     };
   };
@@ -78,7 +77,6 @@ in {
     email = "lassulus@lassul.us";
     webroot = "/var/lib/acme/acme-challenge";
     group = "nginx";
-    user = "nginx";
   };
 
 
