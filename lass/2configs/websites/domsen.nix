@@ -175,6 +175,7 @@ in {
 
   users.users.xanf = {
     uid = genid_uint31 "xanf";
+    group = "xanf";
     home = "/home/xanf";
     useDefaultShell = true;
     createHome = true;
@@ -251,6 +252,16 @@ in {
     useDefaultShell = true;
     createHome = true;
   };
+
+  users.users.XANF_TEAM = {
+    uid = genid_uint31 "XANF_TEAM";
+    group = "xanf";
+    home = "/home/XANF_TEAM";
+    useDefaultShell = true;
+    createHome = true;
+  };
+
+  users.groups.xanf = {};
 
   krebs.on-failure.plans.restic-backups-domsen = {
     journalctl = {
