@@ -43,7 +43,6 @@ with import <stockholm/lib>;
     ];
   };
   services.cron.enable = false;
-  services.nscd.enable = false;
   services.ntp.enable = false;
 
   users.mutableUsers = false;
