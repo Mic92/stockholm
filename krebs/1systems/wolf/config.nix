@@ -14,9 +14,13 @@ in
     <stockholm/krebs/2configs/binary-cache/nixos.nix>
     <stockholm/krebs/2configs/binary-cache/prism.nix>
 
+    #### shackspace services
+    <stockholm/krebs/2configs/shack/share.nix>
 
     # misc
+    <stockholm/krebs/2configs/shack/ssh-keys.nix>
     <stockholm/krebs/2configs/save-diskspace.nix>
+    <stockholm/krebs/2configs/shack/prometheus/node.nix>
 
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by
