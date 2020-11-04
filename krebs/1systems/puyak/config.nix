@@ -79,11 +79,9 @@
     <stockholm/krebs/2configs/stats/shack-client.nix>
     <stockholm/krebs/2configs/stats/shack-debugging.nix>
 
-    <stockholm/krebs/2configs/shack/netbox.nix>
-    # prometheus.shack
-    #<stockholm/krebs/2configs/shack/prometheus/server.nix>
-    <stockholm/krebs/2configs/shack/prometheus/node.nix>
-    #<stockholm/krebs/2configs/shack/prometheus/unifi.nix>
+    ## netbox.shack: Netbox is disabled as nobody seems to be using it anyway
+    # <stockholm/krebs/2configs/shack/netbox.nix>
+
     # grafana.shack
     <stockholm/krebs/2configs/shack/grafana.nix>
 
