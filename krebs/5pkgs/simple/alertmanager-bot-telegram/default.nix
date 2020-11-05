@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "09cciml1j8x76jpm2v5v6h2q6j1fkhsz1kswslmx8wl4wk40xgp4";
   };
 
-  modSha256 = "0nlnxkpcna7g7qslyz5i1619paw4jkb1ma4fgpsgvgx1spwrjm8h";
+  vendorSha256 = "0nlnxkpcna7g7qslyz5i1619paw4jkb1ma4fgpsgvgx1spwrjm8h";
   postInstall = ''
     install -D ./default.tmpl $out/templates/default.tmpl
   '';
