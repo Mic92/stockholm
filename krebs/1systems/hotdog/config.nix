@@ -12,7 +12,6 @@
     <stockholm/krebs/2configs/buildbot-stockholm.nix>
     <stockholm/krebs/2configs/binary-cache/nixos.nix>
     <stockholm/krebs/2configs/ircd.nix>
-    <stockholm/krebs/2configs/nscd-fix.nix>
     <stockholm/krebs/2configs/reaktor2.nix>
     <stockholm/krebs/2configs/wiki.nix>
   ];

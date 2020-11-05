@@ -2,7 +2,6 @@ with import <stockholm/lib>;
 { config, pkgs, ... }:
 {
   imports = [
-    <stockholm/krebs/2configs/nscd-fix.nix>
     ./binary-cache/client.nix
     ./backup.nix
     ./gc.nix
