@@ -7,12 +7,18 @@
     <stockholm/krebs/2configs/secret-passwords.nix>
     <stockholm/krebs/2configs/hw/x220.nix>
 
+
+    ## initrd unlocking
+    # (brain hosts/puyak/luks-ssd;echo)  | ssh root@$(brain krebs-secrets/puyak/initrd/hostname) 'cat > /crypt-ramfs/passphrase'
+    <stockholm/krebs/2configs/tor/initrd.nix>
+
     <stockholm/krebs/2configs/binary-cache/nixos.nix>
     <stockholm/krebs/2configs/binary-cache/prism.nix>
     <stockholm/krebs/2configs/go.nix>
     <stockholm/krebs/2configs/ircd.nix>
     <stockholm/krebs/2configs/news.nix>
     <stockholm/krebs/2configs/news-spam.nix>
+
     ###   shackspace
     # handle the worlddomination map via coap
     <stockholm/krebs/2configs/shack/worlddomination.nix>
