@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   byid = dev: "/dev/disk/by-id/" + dev;
-  keyFile = byid "usb-SMI_USB_DISK_AA08061700009650-0:0"; 
+  keyFile = byid "usb-SMI_USB_DISK_AA08061700009650-0:0";
 in
 {
   imports =
@@ -19,7 +19,7 @@ in
   boot.tmpOnTmpfs = true;
 
 
-  boot.initrd.availableKernelModules = [ 
+  boot.initrd.availableKernelModules = [
     "xhci_pci" "ahci" "ohci_pci" "ehci_pci" "usb_storage" "usbhid" "sd_mod"
     "raid456"
     "usbhid"
@@ -77,20 +77,18 @@ in
 
   networking.hostId = "54d97450"; # required for zfs use
   boot.initrd.luks.devices = let
-        usbkey = name: device: {
-          inherit name device keyFile;
+        usbkey = device: {
+          inherit device keyFile;
           keyFileSize = 2048;
           preLVM = true;
         };
-  in [
-    ((usbkey "swap" (byid "ata-INTEL_SSDSA2M080G2GC_CVPO013300WD080BGN-part2"))
-    // { allowDiscards = true; } )
-    ((usbkey "root" (byid "ata-INTEL_SSDSA2M080G2GC_CVPO013300WD080BGN-part3"))
-    // { allowDiscards = true; } )
-    (usbkey "125" "/dev/md125")
-    (usbkey "126" "/dev/md126")
-    (usbkey "127" "/dev/md127")
-  ];
-
-
+  in {
+    swap = ((usbkey (byid "ata-INTEL_SSDSA2M080G2GC_CVPO013300WD080BGN-part2"))
+      // { allowDiscards = true; } );
+    root = ((usbkey (byid "ata-INTEL_SSDSA2M080G2GC_CVPO013300WD080BGN-part3"))
+      // { allowDiscards = true; } );
+    md125 = usbkey "/dev/md125";
+    md126 = usbkey "/dev/md126";
+    md127 = usbkey "/dev/md127";
+  };
 }
