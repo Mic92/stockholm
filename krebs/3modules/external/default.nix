@@ -281,7 +281,7 @@ in {
         };
       };
     };
-    scardanelli = {
+    zaatar = {
       owner = config.krebs.users.kmein;
       nets = {
         retiolum = {
