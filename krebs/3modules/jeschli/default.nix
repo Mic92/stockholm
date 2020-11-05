@@ -12,6 +12,7 @@ with import <stockholm/lib>;
 in {
   hosts = mapAttrs hostDefaults {
     brauerei = {
+      ci = false;
       nets = {
         retiolum = {
           ip4.addr = "10.243.27.29";
@@ -93,6 +94,7 @@ in {
     };
 
     bolide = {
+      ci = false;
       nets = {
         retiolum = {
           ip4.addr = "10.243.27.31";
@@ -130,6 +132,7 @@ in {
     };
 
     reagenzglas = {
+      ci = false;
       nets = {
         retiolum = {
           ip4.addr = "10.243.27.32";
