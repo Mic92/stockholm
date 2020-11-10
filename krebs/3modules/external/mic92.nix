@@ -347,7 +347,10 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.29.171";
-          aliases = [ "rock.r" ];
+          aliases = [
+            "rock.r"
+            "loki.r"
+          ];
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
             MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA0uhNk3XXVxQcIVhD1Ime
