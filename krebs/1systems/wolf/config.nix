@@ -15,8 +15,10 @@ in
     <stockholm/krebs/2configs/binary-cache/prism.nix>
 
     #### shackspace services
-    <stockholm/krebs/2configs/shack/share.nix>
+    <stockholm/krebs/2configs/shack/share.nix> # wolf.shack
 
+    # gitlab runner
+    <stockholm/krebs/2configs/shack/gitlab-runner.nix>
     # misc
     <stockholm/krebs/2configs/shack/ssh-keys.nix>
     <stockholm/krebs/2configs/save-diskspace.nix>

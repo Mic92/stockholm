@@ -37,6 +37,9 @@
       # for legacy systems
       client min protocol = NT1
       server min protocol = NT1
+      workgroup = WORKGROUP
+      server string = ${config.networking.hostName}
+      netbios name = ${config.networking.hostName}
     '';
   };
 }
