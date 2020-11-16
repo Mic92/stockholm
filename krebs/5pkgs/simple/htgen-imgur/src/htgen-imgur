@@ -27,15 +27,13 @@ basic_response() {(
     }
   ')
 
-  if test "$HTGEN_VERBOSE" = true; then
-    printf "HTTP/1.1 $status_code $status_reason\r\n"
-    printf 'Connection: close\r\n'
-    printf 'Content-Length: %d\r\n' $(expr ${#response_body} + 1)
-    printf 'Content-Type: application/json; charset=UTF-8\r\n'
-    printf 'Server: %s\r\n' "$Server"
-    printf '\r\n'
-    printf '%s\n' "$response_body"
-  fi
+  printf "HTTP/1.1 $status_code $status_reason\r\n"
+  printf 'Connection: close\r\n'
+  printf 'Content-Length: %d\r\n' $(expr ${#response_body} + 1)
+  printf 'Content-Type: application/json; charset=UTF-8\r\n'
+  printf 'Server: %s\r\n' "$Server"
+  printf '\r\n'
+  printf '%s\n' "$response_body"
 
 )}
 
@@ -80,9 +78,7 @@ case "$Method $path" in
     trap "rm $content >&2" EXIT
 
     case ${req_expect-} in 100-continue)
-      if test "$HTGEN_VERBOSE" = true; then
-        printf 'HTTP/1.1 100 Continue\r\n\r\n'
-      fi
+      printf 'HTTP/1.1 100 Continue\r\n\r\n'
     esac
 
     head -c $req_content_length > $content
