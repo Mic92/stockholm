@@ -10,7 +10,7 @@ let
       sha256 = "1334jbbzlqizyp7zcn4hdswhhrnkj1p4p435n5nph82lzffrsi44";
     };
     buildInputs = [
-      (pkgs.python35.withPackages (pythonPackages: with pythonPackages; [
+      (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
         docopt
         paho-mqtt
       ]))
