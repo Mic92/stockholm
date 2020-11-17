@@ -90,7 +90,9 @@ with import <stockholm/lib>;
 
     {
       services.cron.enable = false;
-      services.nscd.enable = false;
+      services.nscd.enable =
+        # Since 20.09 nscd doesn't cache anymore.
+        versionOlder version "20.09";
       services.ntp.enable = false;
       services.timesyncd.enable = true;
     }
