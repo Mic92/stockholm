@@ -11,9 +11,9 @@ with import <stockholm/lib>;
       sha256 = "12j2n3sbvzjnw99gga7kkdygm8n3qx2lh8q26ad6a53xm5whnz59";
     };
   }.${versions.majorMinor version} or {
-    version = "0.4.1-tv1";
+    version = "0.4.1-tv2";
     rev = "refs/tags/v${cfg.version}";
-    sha256 = "11xjivpj495r2ss9aqljnpzzycb57cm4sr7yzmf939rzwsd3ib0x";
+    sha256 = "1yg4b5318lpviwgjs4kdcqg8cwfnxxfcdckcjq12r2nnj2k4ms2d";
   };
 
 in mkDerivation {
