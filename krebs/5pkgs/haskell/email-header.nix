@@ -10,6 +10,11 @@ with import <stockholm/lib>;
       rev = "7b179bd31192ead8afe7a0b6e34bcad4039deaa8";
       sha256 = "12j2n3sbvzjnw99gga7kkdygm8n3qx2lh8q26ad6a53xm5whnz59";
     };
+    "20.03" = {
+      version = "0.4.1-tv1";
+      rev = "refs/tags/v${cfg.version}";
+      sha256 = "11xjivpj495r2ss9aqljnpzzycb57cm4sr7yzmf939rzwsd3ib0x";
+    };
   }.${versions.majorMinor version} or {
     version = "0.4.1-tv2";
     rev = "refs/tags/v${cfg.version}";
