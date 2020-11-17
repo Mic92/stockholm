@@ -128,7 +128,6 @@ in {
         config.imgur.xdg-open.browser = "/etc/profiles/per-user/tv/bin/cr";
         config.timeout = 200;
       })
-      pkgs.fzmenu
       pkgs.pulseaudioLight.out
       pkgs.rxvt_unicode
       pkgs.xcalib
