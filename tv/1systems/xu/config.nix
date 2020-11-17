@@ -44,7 +44,7 @@ with import <stockholm/lib>;
         netcup
         nmap
         p7zip
-        pass
+        pass-otp
         q
         qrencode
         texlive.combined.scheme-full

@@ -1,4 +1,4 @@
-{ coreutils, dash, gnused, fzf, pass, runCommand, rxvt_unicode, stdenv, utillinux, xdotool }:
+{ coreutils, dash, gnused, fzf, pass-otp, runCommand, rxvt_unicode, stdenv, utillinux, xdotool }:
 
 runCommand "fzmenu" {
 } /* sh */ ''
@@ -13,7 +13,7 @@ runCommand "fzmenu" {
         dash
         fzf
         gnused
-        pass
+        pass-otp
         rxvt_unicode
         utillinux
         xdotool
@@ -26,7 +26,7 @@ runCommand "fzmenu" {
         dash
         fzf
         gnused
-        pass
+        pass-otp
         rxvt_unicode
         utillinux
         xdotool
