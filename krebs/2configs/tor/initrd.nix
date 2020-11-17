@@ -13,7 +13,7 @@
       config.krebs.users.makefu.pubkey
       config.krebs.users.tv.pubkey
     ];
-    hostKeys = [ <secrets/initrd/opensshhost_ecdsa_key> ];
+    hostKeys = [ <secrets/initrd/openssh_host_ecdsa_key> ];
   };
   boot.initrd.availableKernelModules = [ "e1000e" ];
 
