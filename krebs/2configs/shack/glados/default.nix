@@ -21,23 +21,10 @@ in {
         '';
     };
   };
-  services.home-assistant = let
-      dwd_pollen = pkgs.fetchFromGitHub {
-        owner = "marcschumacher";
-        repo = "dwd_pollen";
-        rev = "0.1";
-        sha256 = "1af2mx99gv2hk1ad53g21fwkdfdbymqcdl3jvzd1yg7dgxlkhbj1";
-      };
-    in {
+  services.home-assistant =
+    {
     enable = true;
-    package = (pkgs.home-assistant.overrideAttrs (old: { # TODO: find correct python package
-      installCheckPhase = ''
-        echo LOLLLLLLLLLLLLLL
-      '';
-      postInstall = ''
-        cp -r ${dwd_pollen} $out/lib/python3.7/site-packages/homeassistant/components/dwd_pollen
-      '';
-    })).override {
+    package = pkgs.home-assistant.override {
       extraPackages = ps: with ps; [
         python-forecastio jsonrpc-async jsonrpc-websocket mpd2 pkgs.picotts
       ];
