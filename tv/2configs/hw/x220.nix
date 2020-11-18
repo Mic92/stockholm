@@ -48,9 +48,9 @@
   };
 
   services.tlp.enable = true;
-  services.tlp.extraConfig = ''
-    START_CHARGE_THRESH_BAT0=80
-  '';
+  services.tlp.settings = {
+    START_CHARGE_THRESH_BAT0 = 80;
+  };
 
   nix = {
     buildCores = 2;
