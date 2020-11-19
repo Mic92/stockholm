@@ -112,13 +112,15 @@ let
 
         hostsArchive = mkOption {
           type = types.package;
-          default = pkgs.runCommand "retiolum-hosts.tar.bz2" {} ''
+          default = pkgs.runCommand "retiolum-hosts.tar.bz2" {
+            nativeBuildInputs = [ pkgs.gnutar pkgs.coreutils ];
+          } ''
             cp \
                 --no-preserve=mode \
                 --recursive \
                 ${tinc.config.hostsPackage} \
                 hosts
-            ${pkgs.gnutar}/bin/tar -cjf $out hosts
+            tar -cjf $out hosts
           '';
           readOnly = true;
         };
