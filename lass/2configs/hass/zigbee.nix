@@ -35,7 +35,7 @@ in {
     volumes = ["/var/lib/zigbee2mqtt:/app/data"];
   };
 
-  lass.hass.config = {
+  services.home-assistant.config = {
     sensor = [
       # Sensor for monitoring the bridge state
       {
