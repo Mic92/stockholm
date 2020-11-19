@@ -222,5 +222,5 @@ with import <stockholm/lib>;
 
   # use 24:00 time format, the default got sneakily changed around 20.03
   i18n.defaultLocale = mkDefault "C.UTF-8";
-  system.stateVersion = lib.mkDefault "20.03";
+  system.stateVersion = mkDefault "20.03";
 }
