@@ -4,20 +4,43 @@
   cfg.packageDir = "/var/lib/elm-packages";
   cfg.port = 7782;
 
+  # TODO secret files
+  cfg.htpasswd = "/var/lib/certs/package.elm-lang.org/htpasswd";
+  cfg.sslCertificate = "/var/lib/certs/package.elm-lang.org/fullchain.pem";
+  cfg.sslCertificateKey = "/var/lib/certs/package.elm-lang.org/key.pem";
+
+  semverRegex =
+    "(?<major>0|[1-9]\\d*)\\.(?<minor>0|[1-9]\\d*)\\.(?<patch>0|[1-9]\\d*)(?:-(?<prerelease>(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?";
+
 in {
   services.nginx.virtualHosts."package.elm-lang.org" = {
     addSSL = true;
 
-    # TODO secret files
-    sslCertificate = "/var/lib/certs/package.elm-lang.org/fullchain.pem";
-    sslCertificateKey = "/var/lib/certs/package.elm-lang.org/key.pem";
+    sslCertificate = cfg.sslCertificate;
+    sslCertificateKey = cfg.sslCertificateKey;
 
     locations."/all-packages/since/".extraConfig = ''
       proxy_pass http://127.0.0.1:${toString config.krebs.htgen.elm-packages-proxy.port};
       proxy_pass_header Server;
     '';
 
-    locations."~ ^/packages/(?<author>[A-Za-z0-9-]+)/(?<pname>[A-Za-z0-9-]+)/(?<version>(?<major>0|[1-9]\\d*)\\.(?<minor>0|[1-9]\\d*)\\.(?<patch>0|[1-9]\\d*)(?:-(?<prerelease>(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?)/(?:zipball|elm.json|endpoint.json)\$".extraConfig = ''
+    locations."~ ^/packages/(?<author>[A-Za-z0-9-]+)/(?<pname>[A-Za-z0-9-]+)/(?<version>${semverRegex})\$".extraConfig = ''
+      auth_basic "Restricted Area";
+      auth_basic_user_file ${cfg.htpasswd};
+
+      proxy_set_header X-Author $author;
+      proxy_set_header X-Package $pname;
+      proxy_set_header X-Version $version;
+      proxy_pass_header Server;
+
+      if ($request_method != POST) {
+        return 405;
+      }
+
+      proxy_pass http://127.0.0.1:${toString config.krebs.htgen.elm-packages-proxy.port};
+    '';
+
+    locations."~ ^/packages/(?<author>[A-Za-z0-9-]+)/(?<pname>[A-Za-z0-9-]+)/(?<version>${semverRegex})/(?:zipball|elm.json|endpoint.json)\$".extraConfig = ''
       set $zipball "${cfg.packageDir}/$author/$pname/$version/zipball";
       proxy_set_header X-Author $author;
       proxy_set_header X-Package $pname;
@@ -118,6 +141,27 @@ in {
               exit
             ;;
           esac
+        ;;
+        'POST /packages/'*)
+
+          author=$req_x_author
+          pname=$req_x_package
+          version=$req_x_version
+
+          zipball=${cfg.packageDir}/$author/$pname/$version/zipball
+
+          if test -e "$zipball"; then
+            string_response 409 Conflict \
+                "package already exists: $author/$pname@$version" \
+                text/plain
+          else
+            mkdir -p "$(dirname "$zipball")"
+            head -c $req_content_length > "$zipball"
+            string_response 200 OK \
+                "package created: $author/$pname@$version" \
+                text/plain
+          fi
+          exit
         ;;
         'POST /all-packages/since/'*)
 
