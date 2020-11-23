@@ -165,7 +165,6 @@ in {
         ;;
         'POST /all-packages/since/'*)
 
-          # TODO only show newest?
           my_packages=$(
             cd ${cfg.packageDir}
             find -mindepth 3 -maxdepth 3 |
@@ -174,7 +173,9 @@ in {
               map(
                 select(.!="") |
                 sub("^\\./(?<author>[^/]+)/(?<pname>[^/]+)/(?<version>[^/]+)$";"\(.author)/\(.pname)@\(.version)")
-              )
+              ) |
+              sort_by(split("@") | [.[0]]+(.[1]|split("."))) |
+              reverse
             '
           )
 
