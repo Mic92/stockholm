@@ -28,6 +28,7 @@ in {
       auth_basic "Restricted Area";
       auth_basic_user_file ${cfg.htpasswd};
 
+      proxy_set_header X-User $remote_user;
       proxy_set_header X-Author $author;
       proxy_set_header X-Package $pname;
       proxy_set_header X-Version $version;
@@ -146,6 +147,7 @@ in {
 
           author=$req_x_author
           pname=$req_x_package
+          user=$req_x_user
           version=$req_x_version
 
           zipball=${cfg.packageDir}/$author/$pname/$version/zipball
@@ -155,6 +157,7 @@ in {
                 "package already exists: $author/$pname@$version" \
                 text/plain
           else
+            echo "user $user is uploading package $pname@$version" >&2
             mkdir -p "$(dirname "$zipball")"
             head -c $req_content_length > "$zipball"
             string_response 200 OK \
