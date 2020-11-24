@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./net.nix
     <stockholm/krebs>
     <stockholm/krebs/2configs>
     <stockholm/krebs/2configs/secret-passwords.nix>
@@ -163,10 +164,6 @@
   services.logind.lidSwitchExternalPower = "ignore";
 
 
-  services.udev.extraRules = ''
-    SUBSYSTEM=="net", ATTR{address}=="8c:70:5a:b2:84:58", NAME="wl0"
-    SUBSYSTEM=="net", ATTR{address}=="3c:97:0e:07:b9:14", NAME="et0"
-  '';
 
   environment.systemPackages = [ pkgs.zsh ];
 
@@ -179,5 +176,4 @@
     isNormalUser = true;
     shell = "/run/current-system/sw/bin/zsh";
   };
-  networking.firewall.allowedTCPPorts = [ 5901 ];
 }
