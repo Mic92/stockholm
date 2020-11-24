@@ -1,5 +1,4 @@
 { config, pkgs, ... }:
-
 {
   imports = [
     ./net.nix
@@ -7,6 +6,10 @@
     <stockholm/krebs/2configs>
     <stockholm/krebs/2configs/secret-passwords.nix>
     <stockholm/krebs/2configs/hw/x220.nix>
+
+    # see documentation in included getty-for-esp.nix:
+    # brain hosts/puyak/root
+    <stockholm/krebs/2configs/hw/getty-for-esp.nix>
 
 
     ## initrd unlocking
@@ -119,7 +122,6 @@
 
   krebs.build.host = config.krebs.hosts.puyak;
   sound.enable = false;
-
   boot = {
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
