@@ -468,6 +468,7 @@ in {
           aliases = [
             "eva.r"
             "prometheus.r"
+            "alertmanager.r"
           ];
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
