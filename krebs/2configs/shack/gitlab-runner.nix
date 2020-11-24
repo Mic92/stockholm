@@ -1,5 +1,6 @@
 { pkgs,lib, ... }:
 {
+  boot.kernel.sysctl."net.ipv4.ip_forward" = true;
   services.gitlab-runner = {
     enable = true;
     services= {
@@ -17,6 +18,7 @@
           "/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket:ro"
         ];
         dockerDisableCache = true;
+        # TODO: use the channel from <stockholm/krebs/nixpkgs.json>
         preBuildScript = pkgs.writeScript "setup-container" ''
           mkdir -p -m 0755 /nix/var/log/nix/drvs
           mkdir -p -m 0755 /nix/var/nix/gcroots
@@ -28,9 +30,9 @@
           mkdir -p -m 0755 /nix/var/nix/profiles/per-user/root
           mkdir -p -m 0700 "$HOME/.nix-defexpr"
           . ${pkgs.nix}/etc/profile.d/nix.sh
-          ${pkgs.nix}/bin/nix-env -i ${concatStringsSep " " (with pkgs; [ nix cacert git openssh ])}
-          ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+          ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-20.09 nixpkgs
           ${pkgs.nix}/bin/nix-channel --update nixpkgs
+          ${pkgs.nix}/bin/nix-env -i ${concatStringsSep " " (with pkgs; [ nix cacert git openssh ])}
         '';
         environmentVariables = {
           ENV = "/etc/profile";
