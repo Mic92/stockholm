@@ -83,6 +83,9 @@ let {
     krops = {
       cgit.desc = "deployment tools";
     };
+    mailaids = {
+      cgit.desc = "Assortment of aids for working with electronic mail";
+    };
     much = {};
     netcup = {
       cgit.desc = "netcup command line interface";
