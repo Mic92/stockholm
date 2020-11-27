@@ -68,7 +68,7 @@ in {
 
   krebs.htgen.elm-packages-proxy = {
     port = cfg.port;
-    script = /* sh */ ''(. ${pkgs.writeDash "elm-packages-proxy.sh" ''
+    script = /* sh */ ''. ${pkgs.writeDash "elm-packages-proxy.sh" ''
       PATH=${lib.makeBinPath [
         pkgs.coreutils
         pkgs.curl
@@ -228,6 +228,6 @@ in {
           exit
         ;;
       esac
-    ''})'';
+    ''}'';
   };
 }
