@@ -75,7 +75,7 @@ in {
         pkgs.findutils
         pkgs.gnugrep
         pkgs.jq
-        pkgs.unzip
+        pkgs.p7zip
       ]}
       export PATH
       file_response() {(
@@ -128,7 +128,7 @@ in {
             ;;
             elm.json)
               if ! test -f "$elmjson"; then
-                unzip -p "$zipball" \*/elm.json > "$elmjson"
+                7z x -so "$zipball" \*/elm.json > "$elmjson"
               fi
               file_response 200 OK "$elmjson" 'application/json; charset=UTF-8'
               exit
