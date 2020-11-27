@@ -162,7 +162,7 @@ in {
                 "package already exists: $author/$pname@$version" \
                 text/plain
           else
-            echo "user $user is uploading package $pname@$version" >&2
+            echo "user $user is uploading package $author/$pname@$version" >&2
             mkdir -p "$(dirname "$zipball")"
             head -c $req_content_length > "$zipball"
             string_response 200 OK \
