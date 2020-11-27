@@ -19,6 +19,11 @@ in {
     sslCertificate = cfg.sslCertificate;
     sslCertificateKey = cfg.sslCertificateKey;
 
+    locations."/all-packages".extraConfig = ''
+      proxy_pass http://127.0.0.1:${toString config.krebs.htgen.elm-packages-proxy.port};
+      proxy_pass_header Server;
+    '';
+
     locations."/all-packages/since/".extraConfig = ''
       proxy_pass http://127.0.0.1:${toString config.krebs.htgen.elm-packages-proxy.port};
       proxy_pass_header Server;
@@ -166,11 +171,47 @@ in {
           fi
           exit
         ;;
+        'POST /all-packages')
+
+          response=$(mktemp -t htgen.$$.elm-packages-proxy.all-packages.XXXXXXXX)
+          trap "rm $response >&2" EXIT
+
+          {
+            # upstream packages
+            curl -fsS https://package.elm-lang.org"$Request_URI"
+
+            # private packages
+            (cd ${cfg.packageDir}; find -mindepth 3 -maxdepth 3) |
+            jq -Rs '
+              split("\n") |
+              map(
+                select(.!="") |
+                match("^\\./(?<author>[^/]+)/(?<pname>[^/]+)/(?<version>[^/]+)$").captures |
+                map({key:.name,value:.string}) |
+                from_entries
+              ) |
+              reduce .[] as $item ({};
+                ($item|"\(.author)/\(.pname)") as $name |
+                . + { "\($name)": ((.[$name] // []) + [$item.version]) }
+              )
+            '
+          } |
+          jq -cs add > $response
+
+          file_response 200 OK "$response" 'application/json; charset=UTF-8'
+          exit
+        ;;
         'POST /all-packages/since/'*)
 
-          my_packages=$(
-            cd ${cfg.packageDir}
-            find -mindepth 3 -maxdepth 3 |
+          response=$(mktemp -t htgen.$$.elm-packages-proxy.all-packages.XXXXXXXX)
+          trap "rm $response >&2" EXIT
+
+          {
+            # upstream packages
+            curl -fsS https://package.elm-lang.org"$Request_URI"
+
+            # private packages
+            (cd ${cfg.packageDir}; find -mindepth 3 -maxdepth 3) |
             jq -Rs '
               split("\n") |
               map(
@@ -180,20 +221,10 @@ in {
               sort_by(split("@") | [.[0]]+(.[1]|split("."))) |
               reverse
             '
-          )
+          } |
+          jq -cs add > $response
 
-          new_upstream_packages=$(
-            curl -fsS https://package.elm-lang.org"$Request_URI"
-          )
-
-          response=$(
-            jq -n \
-                --argjson my_packages "$my_packages" \
-                --argjson new_upstream_packages "$new_upstream_packages" \
-                '$new_upstream_packages + $my_packages'
-          )
-
-          string_response 200 OK "$response" 'application/json; charset=UTF-8'
+          file_response 200 OK "$response" 'application/json; charset=UTF-8'
           exit
         ;;
       esac
