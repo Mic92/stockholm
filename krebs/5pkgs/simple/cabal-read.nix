@@ -5,6 +5,7 @@ writeHaskellPackage "cabal-read" {
   executables.ghc-options = {
     extra-depends = ["Cabal"];
     text = /* haskell */ ''
+      {-# LANGUAGE CPP #-}
       module Main (main) where
       import Data.List
       import Data.Maybe
@@ -26,6 +27,9 @@ writeHaskellPackage "cabal-read" {
           case lookup (mkUnqualComponentName name) (condExecutables desc) of
             Just exe ->
               putStrLn . intercalate " " . fromMaybe [] . lookup GHC
+      #if MIN_VERSION_Cabal(3,0,0)
+                       . perCompilerFlavorToList
+      #endif
                        . options . buildInfo . condTreeData $ exe
 
             Nothing ->
