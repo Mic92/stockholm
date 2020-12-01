@@ -39,10 +39,6 @@ in {
       proxy_set_header X-Version $version;
       proxy_pass_header Server;
 
-      if ($request_method != POST) {
-        return 405;
-      }
-
       proxy_pass http://127.0.0.1:${toString config.krebs.htgen.elm-packages-proxy.port};
     '';
 
@@ -171,7 +167,7 @@ in {
           fi
           exit
         ;;
-        'POST /all-packages')
+        'GET /all-packages'|'POST /all-packages')
 
           response=$(mktemp -t htgen.$$.elm-packages-proxy.all-packages.XXXXXXXX)
           trap "rm $response >&2" EXIT
@@ -201,7 +197,7 @@ in {
           file_response 200 OK "$response" 'application/json; charset=UTF-8'
           exit
         ;;
-        'POST /all-packages/since/'*)
+        'GET /all-packages/since/'*|'POST /all-packages/since/'*)
 
           response=$(mktemp -t htgen.$$.elm-packages-proxy.all-packages.XXXXXXXX)
           trap "rm $response >&2" EXIT
