@@ -608,6 +608,10 @@ in {
       mail = "joerg@thalheim.io";
       pubkey = ssh-for "mic92";
     };
+    shannan = {
+      mail = "shannan@lekwati.com";
+      pubkey = ssh-for "shannan";
+    };
     qubasa = {
       mail = "luis.nixos@gmail.com";
       pubkey = ssh-for "qubasa";

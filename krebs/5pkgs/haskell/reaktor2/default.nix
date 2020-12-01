@@ -6,13 +6,13 @@
 , time, transformers, unagi-chan, unix, unordered-containers
 , vector, wai, warp
 }:
-mkDerivation {
+mkDerivation rec {
   pname = "reaktor2";
-  version = "0.3.0";
+  version = "0.4.0";
   src = fetchgit {
     url = "https://cgit.krebsco.de/reaktor2";
-    sha256 = "02hqpq8wcfd6rvi8qk10zy3f3lrzzqnjwqal4cbvksjn3vahz36h";
-    rev = "a6893c00f78a8acd0a4bfe7da87ab6889eabcf21";
+    sha256 = "0bnn23hjl57y0a5rf3h8kq078dziby7il7fandz5wh6s4i3psicp";
+    rev = "v${version}";
     fetchSubmodules = true;
   };
   isLibrary = false;

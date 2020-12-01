@@ -392,6 +392,15 @@ with import <stockholm/lib>;
       ];
     }
     {
+      users.users.shannan = {
+        uid = genid_uint31 "shannan";
+        isNormalUser = true;
+        openssh.authorizedKeys.keys = [
+          config.krebs.users.shannan.pubkey
+        ];
+      };
+    }
+    {
       nix.trustedUsers = [ "mic92" ];
       users.users.mic92 = {
         uid = genid_uint31 "mic92";

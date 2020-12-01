@@ -47,6 +47,7 @@ in {
       # <stockholm/makefu/2configs/legacy_only.nix>
 
       <stockholm/makefu/2configs/share/omo.nix>
+      <stockholm/makefu/2configs/share/gum-client.nix>
       <stockholm/makefu/2configs/dcpp/airdcpp.nix>
       { krebs.airdcpp.dcpp.shares = let
           d = path: "/media/cryptX/${path}";
@@ -91,7 +92,6 @@ in {
       <stockholm/makefu/2configs/bluetooth-mpd.nix>
 
       <stockholm/makefu/2configs/ham>
-      <stockholm/makefu/2configs/ham/zigbee2mqtt>
       {
         makefu.ps3netsrv = {
           enable = true;

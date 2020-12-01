@@ -95,7 +95,7 @@ let
         }
         hooks.sed
         (generators.command_hook {
-          inherit (commands) hello random-emoji nixos-version stockholm-issue;
+          inherit (commands) hello random-emoji nixos-version;
           tell = {
             filename =
               "${pkgs.Reaktor.src}/reaktor/commands/tell-on_privmsg";

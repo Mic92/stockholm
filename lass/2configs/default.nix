@@ -2,7 +2,6 @@ with import <stockholm/lib>;
 { config, pkgs, ... }:
 {
   imports = [
-    <stockholm/krebs/2configs/nscd-fix.nix>
     ./binary-cache/client.nix
     ./backup.nix
     ./gc.nix
@@ -223,4 +222,5 @@ with import <stockholm/lib>;
 
   # use 24:00 time format, the default got sneakily changed around 20.03
   i18n.defaultLocale = mkDefault "C.UTF-8";
+  system.stateVersion = mkDefault "20.03";
 }

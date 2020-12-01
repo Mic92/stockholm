@@ -26,7 +26,7 @@ with import ./lib.nix { inherit lib; };
     lovelaceConfigWritable = true;
   };
 
-  lass.hass.config = let
+  services.home-assistant.config = let
     tasmota_s20 = name: topic: {
       platform = "mqtt";
       inherit name;

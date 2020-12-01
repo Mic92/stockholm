@@ -97,7 +97,6 @@ in {
       overwriteProtocol = "https";
     };
     https = true;
-    nginx.enable = true;
   };
   services.nginx.virtualHosts."o.xanf.org" = {
     enableACME = true;

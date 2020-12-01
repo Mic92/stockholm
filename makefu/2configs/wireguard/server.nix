@@ -54,4 +54,6 @@ in { # wireguard server
     }
     ];
   };
+  # TODO: this issue is related to the router which connects to the host but is
+  # unable to re-connect once restarted
 }

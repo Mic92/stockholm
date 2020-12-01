@@ -62,8 +62,8 @@ let
       };
     };
 
-    users.extraUsers = singleton {
-      inherit (user) name uid;
+    users.users.${user.name} = {
+      inherit (user) uid;
       home = cfg.dataDir;
     };
   };
