@@ -20,7 +20,10 @@ let
   power_watt = (power_x "Power") ;
   power_curr = power_x "Current";
 in
+{
+  services.home-assistant.config.sensor =
    (map power_volt [ "L1" "L2" "L3" ])
 ++ (map (x: ((power_watt x) // { device_class = "power"; })) [ "L1" "L2" "L3" ])
 ++ (map power_curr [ "L1" "L2" "L3" ])
-++ [ power_consumed ]
+++ [ power_consumed ];
+}
