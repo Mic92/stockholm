@@ -10,6 +10,11 @@ with import <stockholm/lib>;
     (s: substring 1 (stringLength s - 2) s)
     (toJSON value);
 
+  to-lsearch = concatMapStrings ({ from, to, ... }: "${from}: ${to}\n");
+  lsearch = mapAttrs (name: set: toFile name (to-lsearch set)) ({
+    inherit (cfg) system-aliases;
+  });
+
 in {
   options.krebs.exim-retiolum = {
     enable = mkEnableOption "krebs.exim-retiolum";
@@ -58,6 +63,19 @@ in {
           };
         };
       };
+    };
+    system-aliases = mkOption {
+      type = types.listOf (types.submodule ({
+        options = {
+          from = mkOption {
+            type = types.str; # TODO e-mail address
+          };
+          to = mkOption {
+            type = types.str; # TODO e-mail address / TODO listOf
+          };
+        };
+      }));
+      default = [];
     };
   };
   imports = [
@@ -144,6 +162,11 @@ in {
 
 
           begin routers
+
+          system_aliases:
+            debug_print = "R: system_aliases for $local_part@$domain"
+            driver = redirect
+            data = ''${lookup{$local_part}lsearch{${lsearch.system-aliases}}}
 
           local:
             driver = accept
