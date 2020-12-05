@@ -98,7 +98,7 @@ in {
 
         printf "HTTP/1.1 $status_code $status_reason\r\n"
         printf 'Connection: close\r\n'
-        printf 'Content-Length: %d\r\n' ''${#response_body}
+        printf 'Content-Length: %d\r\n' "$(expr ''${#response_body} + 1)"
         printf 'Content-Type: %s\r\n' "$content_type"
         printf 'Server: %s\r\n' "$Server"
         printf '\r\n'
