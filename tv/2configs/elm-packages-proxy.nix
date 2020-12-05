@@ -66,6 +66,7 @@ in {
     port = cfg.port;
     script = /* sh */ ''. ${pkgs.writeDash "elm-packages-proxy.sh" ''
       PATH=${lib.makeBinPath [
+        pkgs.attr
         pkgs.coreutils
         pkgs.curl
         pkgs.findutils
@@ -151,20 +152,44 @@ in {
           user=$req_x_user
           version=$req_x_version
 
+          action=uploading
+          force=''${req_x_force-false}
           zipball=${cfg.packageDir}/$author/$pname/$version/zipball
+          elmjson=$HOME/cache/$author%2F$pname%2F$version%2Felm.json
+          endpointjson=$HOME/cache/$author%2F$pname%2F$version%2Fendpoint.json
 
           if test -e "$zipball"; then
-            string_response 409 Conflict \
-                "package already exists: $author/$pname@$version" \
-                text/plain
-          else
-            echo "user $user is uploading package $author/$pname@$version" >&2
-            mkdir -p "$(dirname "$zipball")"
-            head -c $req_content_length > "$zipball"
-            string_response 200 OK \
-                "package created: $author/$pname@$version" \
-                text/plain
+            if test "$force" = true; then
+              zipball_owner=$(attr -q -g X-User "$zipball" || :)
+              if test "$zipball_owner" = "$req_x_user"; then
+                action=replacing
+                rm -f "$elmjson"
+                rm -f "$endpointjson"
+              else
+                string_response 403 Forbidden \
+                    "package already exists: $author/$pname@$version" \
+                    text/plain
+                exit
+              fi
+            else
+              string_response 409 Conflict \
+                  "package already exists: $author/$pname@$version" \
+                  text/plain
+              exit
+            fi
           fi
+
+          echo "user $user is $action package $author/$pname@$version" >&2
+          # TODO check package
+          mkdir -p "$(dirname "$zipball")"
+          head -c $req_content_length > "$zipball"
+
+          attr -q -s X-User -V "$user" "$zipball" || :
+
+          string_response 200 OK \
+              "package created: $author/$pname@$version" \
+              text/plain
+
           exit
         ;;
         'GET /all-packages'|'POST /all-packages')
