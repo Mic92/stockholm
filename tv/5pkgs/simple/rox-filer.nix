@@ -22,8 +22,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "seirios";
     repo = "rox-filer";
-    rev = "14354e21bf94a5f3906238706f6b7ac968fa7fce";
-    sha256 = "07fz6ns9g7bh1764agl8myy3b0j7qvlkns6dq1lsd5kcf4yx201c";
+    rev = "3c3ad5d85a1ab548574bf450f730886b60092587";
+    sha256 = "0h743zpx1v9rrsaxn0q3nwpq8wkjf6icgzrg8jpqldsphw3ygkhr";
   };
 
   nativeBuildInputs = [
