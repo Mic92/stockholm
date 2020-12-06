@@ -1,23 +1,11 @@
-{ autoconf, stdenv, fetchFromGitLab, pkgconfig, libxml2, libSM
-, shared-mime-info
-
-# Even though imported, this causes:
-# (rox:32319): Gtk-WARNING **: 20:16:03.163: Could not find the icon 'text-x-log'. The 'hicolor' theme
-# was not found either, perhaps you need to install it.
-# You can get a copy from:
-# 	http://icon-theme.freedesktop.org/releases
-#
-# XXX can we use propagatedBuildInputs instead?
-, hicolor-icon-theme
-
+{ autoconf, stdenv, fetchFromGitLab, pkgconfig, libxml2, libSM, shared-mime-info
 , libxslt, docbook_xml_dtd_412, docbook_xsl
-, gtk ? gtk2, gtk2 # This is normally in top-level/all-packages.nix
+, gtk ? gtk2, gtk2
 }:
 
-let
-  version = "2.11";
-in stdenv.mkDerivation rec {
-  name = "rox-filer-${version}-tv";
+stdenv.mkDerivation {
+  pname = "rox-filer";
+  version = "2.11-tv";
 
   src = fetchFromGitLab {
     owner = "seirios";
@@ -29,21 +17,14 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoconf
     docbook_xsl
-    pkgconfig
     libxslt
+    pkgconfig
   ];
 
-  buildInputs = [ libxml2 gtk shared-mime-info hicolor-icon-theme libSM ];
-
-  #patches = [
-  #  <nixpkgs/pkgs/desktops/rox/rox-filer/rox-filer-2.11-in-source-build.patch>
-  #];
+  buildInputs = [ libxml2 gtk shared-mime-info libSM ];
 
   # go to the source directory after unpacking the sources
   setSourceRoot = "export sourceRoot=source/ROX-Filer";
-
-  ## patch source with defined patches
-  #patchFlags = "-p0";
 
   # patch the main.c to disable the lookup of the APP_DIR environment variable,
   # which is used to lookup the location for certain images when rox-filer
@@ -105,7 +86,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fast, lightweight, gtk2 file manager";
-    homepage = http://rox.sourceforge.net/desktop;
+    homepage = "http://rox.sourceforge.net/desktop";
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.eleanor ];
