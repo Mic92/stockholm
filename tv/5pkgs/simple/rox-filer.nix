@@ -1,4 +1,4 @@
-{ autoconf, stdenv, fetchFromGitHub, pkgconfig, libxml2, libSM
+{ autoconf, stdenv, fetchFromGitLab, pkgconfig, libxml2, libSM
 , shared-mime-info
 
 # Even though imported, this causes:
@@ -19,7 +19,7 @@ let
 in stdenv.mkDerivation rec {
   name = "rox-filer-${version}-tv";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "seirios";
     repo = "rox-filer";
     rev = "14354e21bf94a5f3906238706f6b7ac968fa7fce";
