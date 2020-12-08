@@ -8,20 +8,25 @@ let
   pkg = pkgs.python3.pkgs.callPackage (
     pkgs.fetchgit {
       url = "https://git.shackspace.de/rz/powermeter.git";
-      rev = "96609f0d632e0732afa768ddd7b3f8841ca37c1b";
-      sha256 = "sha256:0wfpm3ik5r081qv2crmpjwylgg2v8ximq347qh0fzq1rwv0dqbnn";
+      rev = "438b08f";
+      sha256 = "0c5czmrwlw985b7ia6077mfrvbf2fq51iajb481pgqbywgxqis5m";
     }) {};
 in {
   # receive response from light.shack / standby.shack
   networking.firewall.allowedUDPPorts = [ 11111 ];
   users.users.powermeter.extraGroups = [ "dialout" ];
 
+  # we make sure that usb-ttl has the correct permissions
+  # creates /dev/powerraw
+  services.udev.extraRules = ''
+    SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", SYMLINK+="powerraw", MODE="0660", GROUP="dialout"
+  '';
   systemd.services.powermeter-serial2mqtt = {
     description = "powerraw Serial -> mqtt";
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       User = "powermeter";
-      ExecStart = "${pkg}/bin/powermeter-serial2mqtt";
+      ExecStart = "${pkg}/bin/powermeter-serial2mqtt /dev/powerraw";
       PrivateTmp = true;
       Restart = "always";
       RestartSec = "15";
