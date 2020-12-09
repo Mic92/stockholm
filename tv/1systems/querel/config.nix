@@ -11,12 +11,9 @@ with import <stockholm/lib>;
   krebs.build.user = mkForce config.krebs.users.itak;
 
   boot.initrd.availableKernelModules = [ "ahci" ];
-  boot.initrd.luks = {
-    cryptoModules = [ "aes" "sha512" "xts" ];
-    devices.querel-luks1 = {
-      allowDiscards = true;
-      device = "/dev/sda2";
-    };
+  boot.initrd.luks.devices.querel-luks1 = {
+    allowDiscards = true;
+    device = "/dev/sda2";
   };
   boot.kernelModules = [ "kvm-intel" ];
   boot.loader = {

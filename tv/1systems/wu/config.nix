@@ -16,10 +16,7 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/xserver>
   ];
 
-  boot.initrd.luks = {
-    cryptoModules = [ "aes" "sha512" "xts" ];
-    devices.wuca.device = "/dev/sda2";
-  };
+  boot.initrd.luks.devices.wuca.device = "/dev/sda2";
 
   fileSystems = {
     "/" = {

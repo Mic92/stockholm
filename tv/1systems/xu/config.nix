@@ -111,10 +111,7 @@ with import <stockholm/lib>;
     }
   ];
 
-  boot.initrd.luks = {
-    cryptoModules = [ "aes" "sha512" "xts" ];
-    devices.xuca.device = "/dev/sda2";
-  };
+  boot.initrd.luks.devices.xuca.device = "/dev/sda2";
 
   fileSystems = {
     "/" = {
