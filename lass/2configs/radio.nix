@@ -6,9 +6,6 @@ let
   name = "radio";
   mainUser = config.users.extraUsers.mainUser;
 
-  admin-password = import <secrets/icecast-admin-pw>;
-  source-password = import <secrets/icecast-source-pw>;
-
   music_dir = "/home/radio/music";
 
   add_random = pkgs.writeDashBin "add_random" ''
@@ -138,51 +135,16 @@ in {
       auto_update "yes"
 
       audio_output {
-        type        "shout"
-        encoding    "lame"
-        name        "the_playlist_mp3"
-        host        "localhost"
-        port        "8000"
-        mount       "/radio.mp3"
-        password    "${source-password}"
-        bitrate     "128"
-
-        format      "44100:16:2"
-
-        user        "source"
-        genre       "good music"
+        type "httpd"
+        name "lassulus radio"
+        encoder "vorbis" # optional
+        port "8000"
+        quality "5.0" # do not define if bitrate is defined
+        # bitrate "128" # do not define if quality is defined
+        format "44100:16:1"
+        always_on "yes" # prevent MPD from disconnecting all listeners when playback is stopped.
+        tags "yes" # httpd supports sending tags to listening streams.
       }
-      audio_output {
-        type        "shout"
-        encoding    "ogg"
-        name        "the_playlist_ogg"
-        host        "localhost"
-        port        "8000"
-        mount       "/radio.ogg"
-        password    "${source-password}"
-        bitrate     "128"
-
-        format      "44100:16:2"
-
-        user        "source"
-        genre       "good music"
-      }
-    '';
-  };
-
-  services.icecast = {
-    enable = true;
-    hostname = "radio.lassul.us";
-    admin.password = admin-password;
-    extraConf = ''
-      <mount>
-        <mount-name>/radio.mp3</mount-name>
-        <password>${source-password}</password>
-      </mount>
-      <mount>
-        <mount-name>/radio.ogg</mount-name>
-        <password>${source-password}</password>
-      </mount>
     '';
   };
 
@@ -206,7 +168,7 @@ in {
 
   systemd.services.radio = let
     autoAdd = pkgs.writeDash "autoAdd" ''
-      LIMIT=$1 #in secconds
+      LIMIT=$1 #in seconds
 
       timeLeft () {
         playlistDuration=$(${pkgs.mpc_cli}/bin/mpc --format '%time%' playlist | ${pkgs.gawk}/bin/awk -F ':' 'BEGIN{t=0} {t+=$1*60+$2} END{print t}')
@@ -238,8 +200,7 @@ in {
         ${pkgs.mpc_cli}/bin/mpc idle player > /dev/null
         ${pkgs.mpc_cli}/bin/mpc current -f %file%
       done | while read track; do
-        listeners=$(${pkgs.curl}/bin/curl 'http://localhost:8000/status-json.xsl' \
-          | ${pkgs.jq}/bin/jq '[.icestats.source[].listeners] | add')
+        listeners=$(${pkgs.iproute}/bin/ss -Hno state established '( sport = :8000 )' | wc -l)
         echo "$(date -Is)" "$track" | tee -a "$HISTORY_FILE"
         echo "$(tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
         ${write_to_irc} "playing: $track listeners: $listeners"
