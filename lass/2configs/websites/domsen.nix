@@ -91,7 +91,7 @@ in {
   services.nextcloud = {
     enable = true;
     hostName = "o.xanf.org";
-    package = pkgs.nextcloud19;
+    package = pkgs.nextcloud20;
     config = {
       adminpassFile = toString <secrets> + "/nextcloud_pw";
       overwriteProtocol = "https";
