@@ -6,6 +6,7 @@ with import <stockholm/lib>;
     <stockholm/lass>
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/libvirt.nix>
+    <stockholm/lass/2configs/tv.nix>
     {
       services.nginx.enable = true;
       imports = [
