@@ -108,7 +108,10 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD14A1_E_FIRE') &
 
     # regular fetches
-    fetch marker.json "$marker_url" &
+    fetch marker.json.tmp "$marker_url"
+    if [ -s marker.json.tmp ]; then
+      mv marker.json.tmp marker.json
+    fi
     fetch sun-raw.jpg 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0171.jpg' &
 
     wait

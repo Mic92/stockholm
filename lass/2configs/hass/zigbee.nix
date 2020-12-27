@@ -1,38 +1,40 @@
 {config, pkgs, lib, ...}: let
 
-  zigbee2mqtt_cfg = pkgs.writeText "zigbee2mqtt.json" (builtins.toJSON {
-    homeassistant = true;
-    permit_join = false;
-    mqtt = {
-      discovery = true;
-      base_topic = "zigbee";
-      server = "mqtt://10.42.0.1";
-      user = "gg23";
-      password = "gg23-mqtt";
-    };
-    serial.port = "/dev/cc2531";
-  });
+  unstable-pkgs = import <nixpkgs-unstable> {};
 
 in {
   # symlink the zigbee controller
   services.udev.extraRules = ''
-    SUBSYSTEM=="tty", ATTRS{idVendor}=="0451", ATTRS{idProduct}=="16a8", SYMLINK+="cc2531", MODE="0660", GROUP="dailout"
+    SUBSYSTEM=="tty", ATTRS{idVendor}=="0451", ATTRS{idProduct}=="16a8", SYMLINK+="cc2531", MODE="0660", GROUP="dialout"
+    SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", SYMLINK+="cc2652", MODE="0660", GROUP="dialout"
   '';
 
-  system.activationScripts.installZigbee = ''
-    install -d /var/lib/zigbee2mqtt
-    install ${zigbee2mqtt_cfg} /var/lib/zigbee2mqtt/configuration.yaml
-  '';
+  # needed to use unstable package
+  systemd.services.zigbee2mqtt.environment.ZIGBEE2MQTT_DATA = "/var/lib/zigbee2mqtt";
 
-  # hack to restart docker container on config change
-  systemd.services.docker-zigbee2mqtt.environment.cfg = zigbee2mqtt_cfg;
-
-  docker-containers.zigbee2mqtt = {
-    image = "koenkk/zigbee2mqtt";
-    extraDockerOptions = [
-      "--device=/dev/cc2531:/dev/cc2531"
-    ];
-    volumes = ["/var/lib/zigbee2mqtt:/app/data"];
+  services.zigbee2mqtt = {
+    enable = true;
+    package = unstable-pkgs.zigbee2mqtt;
+    config = {
+      homeassistant = true;
+      frontend.port = 1337;
+      experimental.new_api = true;
+      permit_join = false;
+      mqtt = {
+        discovery = true;
+        base_topic = "zigbee";
+        server = "mqtt://10.42.0.1";
+        user = "gg23";
+        password = "gg23-mqtt";
+      };
+      serial = {
+        port = "/dev/cc2652";
+        # disable_led = true;
+      };
+      advanced = {
+        pan_id = 4222;
+      };
+    };
   };
 
   services.home-assistant.config = {
@@ -93,7 +95,6 @@ in {
       {
         id = "zigbee_join_enabled";
         alias = "";
-        hide_entity = "true";
         trigger = {
           platform = "state";
           entity_id = "switch.zigbee2mqtt_join";
@@ -107,7 +108,6 @@ in {
       # Automation to stop timer when switch turned off and turn off switch when timer finished
       {
         id = "zigbee_join_disabled";
-        hide_entity = "true";
         trigger = [
           {
             platform = "event";
