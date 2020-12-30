@@ -13,6 +13,7 @@ foldl' mergeAttrs {}
 //
 
 {
+  brockman = self.haskellPackages.brockman;
   reaktor2 = self.haskellPackages.reaktor2;
 
   ReaktorPlugins = self.callPackage ./simple/Reaktor/plugins.nix {};

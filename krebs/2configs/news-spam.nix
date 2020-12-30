@@ -1,164 +1,167 @@
 { pkgs, ... }:
 
 {
-  krebs.newsbot-js.news-spam = {
-    urlShortenerHost = "go.lassul.us";
-    feeds = pkgs.writeText "feeds" ''
-      _aje|http://www.aljazeera.com/Services/Rss/?PostingId=2007731105943979989|#snews
-      _allafrica|http://allafrica.com/tools/headlines/rdf/latest/headlines.rdf|#snews
-      _antirez|http://antirez.com/rss|#snews
-      _archlinux|http://www.archlinux.org/feeds/news/|#snews
-      _ars|http://feeds.arstechnica.com/arstechnica/index?format=xml|#snews
-      _augustl|http://augustl.com/atom.xml|#snews
-      _bbc|http://feeds.bbci.co.uk/news/rss.xml|#snews
-      _bdt_aktuelle_themen|http://www.bundestag.de/blueprint/servlet/service/de/14154/asFeed/index.rss|#snews
-      _bdt_drucksachen|http://www.bundestag.de/dip21rss/bundestag_drucksachen.rss|#snews
-      _bdt_plenarproto|http://www.bundestag.de/rss_feeds/plenarprotokolle.rss|#snews
-      _bdt_pressemitteilungen|http://www.bundestag.de/blueprint/servlet/service/de/273112/asFeed/index.rss|#snews
-      _bitcoinpakistan|https://bitcoinspakistan.com/feed/|#snews
-      _cancer|http://feeds.feedburner.com/ncinewsreleases?format=xml|#snews
-      _carta|http://feeds2.feedburner.com/carta-standard-rss|#snews
-      _catholic_news|http://feeds.feedburner.com/catholicnewsagency/dailynews|#snews
-      _cbc_busi|http://rss.cbc.ca/lineup/business.xml|#snews
-      _cbc_offbeat|http://www.cbc.ca/cmlink/rss-offbeat|#snews
-      _cbc_pol|http://rss.cbc.ca/lineup/politics.xml|#snews
-      _cbc_tech|http://rss.cbc.ca/lineup/technology.xml|#snews
-      _cbc_top|http://rss.cbc.ca/lineup/topstories.xml|#snews
-      _ccc|http://www.ccc.de/rss/updates.rdf|#snews
-      _chan_biz|http://boards.4chan.org/biz/index.rss|#snews
-      _chan_g|http://boards.4chan.org/g/index.rss|#snews
-      _chan_int|http://boards.4chan.org/int/index.rss|#snews
-      _chan_sci|http://boards.4chan.org/sci/index.rss|#snews
-      _chan_x|http://boards.4chan.org/x/index.rss|#snews
-      _c|http://www.tempolimit-lichtgeschwindigkeit.de/news.xml|#snews
-      _cryptogon|http://www.cryptogon.com/?feed=rss2|#snews
-      _csm|http://rss.csmonitor.com/feeds/csm|#snews
-      _csm_world|http://rss.csmonitor.com/feeds/world|#snews
-      _danisch|http://www.danisch.de/blog/feed/|#snews
-      _dod|http://www.defense.gov/news/afps2.xml|#snews
-      _dwn|http://deutsche-wirtschafts-nachrichten.de/feed/customfeed/|#snews
-      _ecat|http://ecat.com/feed|#snews
-      _eia_press|http://www.eia.gov/rss/press_rss.xml|#snews
-      _eia_today|http://www.eia.gov/rss/todayinenergy.xml|#snews
-      _embargowatch|https://embargowatch.wordpress.com/feed/|#snews
-      _ethereum-comments|http://blog.ethereum.org/comments/feed|#snews
-      _ethereum|http://blog.ethereum.org/feed|#snews
-      _europa_ric|http://ec.europa.eu/research/infocentre/rss/infocentre-rss.xml|#snews
-      _eu_survei|http://www.eurosurveillance.org/public/RSSFeed/RSS.aspx|#snews
-      _exploitdb|http://www.exploit-db.com/rss.xml|#snews
-      _fars|http://www.farsnews.com/rss.php|#snews #test
-      _faz_feui|http://www.faz.net/rss/aktuell/feuilleton/|#snews
-      _faz_politik|http://www.faz.net/rss/aktuell/politik/|#snews
-      _faz_wirtschaft|http://www.faz.net/rss/aktuell/wirtschaft/|#snews
-      _fbi|https://www.fbi.gov/news/rss.xml|#snews
-      _fedreserve|http://www.federalreserve.gov/feeds/press_all.xml|#snews
-      _fefe|http://blog.fefe.de/rss.xml|#snews
-      _forbes|http://www.forbes.com/forbes/feed2/|#snews
-      _forbes_realtime|http://www.forbes.com/real-time/feed2/|#snews
-      _fox|http://feeds.foxnews.com/foxnews/latest|#snews
-      _geheimorganisation|http://geheimorganisation.org/feed/|#snews
-      _GerForPol|http://www.german-foreign-policy.com/de/news/rss-2.0|#snews
-      _gmanet|http://www.gmanetwork.com/news/rss/news|#snews
-      _golem|http://rss.golem.de/rss.php|#snews
-      _google|http://news.google.com/?output=rss|#snews
-      _greenpeace|http://feeds.feedburner.com/GreenpeaceNews|#snews
-      _guardian_uk|http://feeds.theguardian.com/theguardian/uk-news/rss|#snews
-      _gulli|http://ticker.gulli.com/rss/|#snews
-      _hackernews|https://news.ycombinator.com/rss|#snews
-      _handelsblatt|http://www.handelsblatt.com/contentexport/feed/schlagzeilen|#snews
-      _heise|https://www.heise.de/newsticker/heise-atom.xml|#snews
-      _hindu_business|http://www.thehindubusinessline.com/?service=rss|#snews
-      _hindu|http://www.thehindu.com/?service=rss|#snews
-      _ign|http://feeds.ign.com/ign/all|#snews
-      _independent|http://www.independent.com/rss/headlines/|#snews
-      _indymedia|https://de.indymedia.org/rss.xml|#snews
-      _info_libera|http://www.informationliberation.com/rss.xml|#snews
-      _klagen-gegen-rundfuckbeitrag|http://klagen-gegen-rundfunkbeitrag.blogspot.com/feeds/posts/default|#snews
-      _korea_herald|http://www.koreaherald.com/rss_xml.php|#snews
-      _linuxinsider|http://www.linuxinsider.com/perl/syndication/rssfull.pl|#snews
-      _lisp|http://planet.lisp.org/rss20.xml|#snews
-      _liveleak|http://www.liveleak.com/rss|#snews
-      _lolmythesis|http://lolmythesis.com/rss|#snews
-      _LtU|http://lambda-the-ultimate.org/rss.xml|#snews
-      _lukepalmer|http://lukepalmer.wordpress.com/feed/|#snews
-      _mit|http://web.mit.edu/newsoffice/rss-feeds.feed?type=rss|#snews
-      _mongrel2_master|https://github.com/zedshaw/mongrel2/commits/master.atom|#snews
-      _nds|http://www.nachdenkseiten.de/?feed=atom|#snews
-      _netzpolitik|https://netzpolitik.org/feed/|#snews
-      _newsbtc|http://newsbtc.com/feed/|#snews
-      _nnewsg|http://www.net-news-global.net/rss/rssfeed.xml|#snews
-      _npr_busi|http://www.npr.org/rss/rss.php?id=1006|#snews
-      _npr_headlines|http://www.npr.org/rss/rss.php?id=1001|#snews
-      _npr_pol|http://www.npr.org/rss/rss.php?id=1012|#snews
-      _npr_world|http://www.npr.org/rss/rss.php?id=1004|#snews
-      _nsa|https://www.nsa.gov/rss.xml|#snews #bullerei
-      _nytimes|http://rss.nytimes.com/services/xml/rss/nyt/World.xml|#snews
-      _painload|https://github.com/krebs/painload/commits/master.atom|#snews
-      _phys|http://phys.org/rss-feed/|#snews
-      _piraten|https://www.piratenpartei.de/feed/|#snews
-      _polizei_berlin|http://www.berlin.de/polizei/presse-fahndung/_rss_presse.xml|#snews
-      _presse_polizei|http://www.presseportal.de/rss/polizei.rss2|#snews
-      _presseportal|http://www.presseportal.de/rss/presseportal.rss2|#snews
-      _prisonplanet|http://prisonplanet.com/feed.rss|#snews
-      _rawstory|http://www.rawstory.com/rs/feed/|#snews
-      _reddit_4chan|http://www.reddit.com/r/4chan/new/.rss|#snews
-      _reddit_anticonsum|http://www.reddit.com/r/Anticonsumption/new/.rss|#snews
-      _reddit_btc|http://www.reddit.com/r/Bitcoin/new/.rss|#snews
-      _reddit_consp|http://reddit.com/r/conspiracy/.rss|#snews
-      _reddit_haskell|http://www.reddit.com/r/haskell/.rss|#snews
-      _reddit_nix|http://www.reddit.com/r/nixos/.rss|#snews
-      _reddit_prog|http://www.reddit.com/r/programming/new/.rss|#snews
-      _reddit_sci|http://www.reddit.com/r/science/.rss|#snews
-      _reddit_tech|http://www.reddit.com/r/technology/.rss|#snews
-      _reddit_tpp|http://www.reddit.com/r/twitchplayspokemon/.rss|#snews
-      _reddit_world|http://www.reddit.com/r/worldnews/.rss|#snews
-      _r-ethereum|http://www.reddit.com/r/ethereum/.rss|#snews
-      _reuters|http://feeds.reuters.com/Reuters/worldNews|#snews
-      _reuters-odd|http://feeds.reuters.com/reuters/oddlyEnoughNews?format=xml|#snews
-      _rt|http://rt.com/rss/news/|#snews
-      _schallurauch|http://feeds.feedburner.com/SchallUndRauch|#snews
-      _sciencemag|http://news.sciencemag.org/rss/current.xml|#snews
-      _scmp|http://www.scmp.com/rss/91/feed|#snews
-      _sec-db|http://feeds.security-database.com/SecurityDatabaseToolsWatch|#snews
-      _shackspace|http://shackspace.de/atom.xml|#snews
-      _shz_news|http://www.shz.de/nachrichten/newsticker/rss|#snews
-      _sky_busi|http://feeds.skynews.com/feeds/rss/business.xml|#snews
-      _sky_pol|http://feeds.skynews.com/feeds/rss/politics.xml|#snews
-      _sky_strange|http://feeds.skynews.com/feeds/rss/strange.xml|#snews
-      _sky_tech|http://feeds.skynews.com/feeds/rss/technology.xml|#snews
-      _sky_world|http://feeds.skynews.com/feeds/rss/world.xml|#snews
-      _slashdot|http://rss.slashdot.org/Slashdot/slashdot|#snews
-      _slate|http://feeds.slate.com/slate|#snews
-      _spiegel_eil|http://www.spiegel.de/schlagzeilen/eilmeldungen/index.rss|#snews
-      _spiegel_top|http://www.spiegel.de/schlagzeilen/tops/index.rss|#snews
-      _standardmedia_ke|http://www.standardmedia.co.ke/rss/headlines.php|#snews
-      _stern|http://www.stern.de/feed/standard/all/|#snews
-      _stz|http://www.stuttgarter-zeitung.de/rss/topthemen.rss.feed|#snews
-      _sz_politik|http://rss.sueddeutsche.de/rss/Politik|#snews
-      _sz_wirtschaft|http://rss.sueddeutsche.de/rss/Wirtschaft|#snews
-      _sz_wissen|http://rss.sueddeutsche.de/rss/Wissen|#snews
-      _tagesschau|http://www.tagesschau.de/newsticker.rdf|#snews
-      _taz|http://taz.de/Themen-des-Tages/!p15;rss/|#snews
-      _telegraph|http://www.telegraph.co.uk/rss.xml|#snews
-      _telepolis|http://www.heise.de/tp/rss/news-atom.xml|#snews
-      _the_insider|http://www.theinsider.org/rss/news/headlines-xml.asp|#snews
-      _tigsource|http://www.tigsource.com/feed/|#snews
-      _tinc|http://tinc-vpn.org/news/index.rss|#snews
-      _torr_bits|http://feeds.feedburner.com/TorrentfreakBits|#snews
-      _torrentfreak|http://feeds.feedburner.com/Torrentfreak|#snews
-      _torr_news|http://feed.torrentfreak.com/Torrentfreak/|#snews
-      _travel_warnings|http://feeds.travel.state.gov/ca/travelwarnings-alerts|#snews
-      _un_afr|http://www.un.org/apps/news/rss/rss_africa.asp|#snews
-      _un_am|http://www.un.org/apps/news/rss/rss_americas.asp|#snews
-      _un_eu|http://www.un.org/apps/news/rss/rss_europe.asp|#snews
-      _un_me|http://www.un.org/apps/news/rss/rss_mideast.asp|#snews
-      _un_pac|http://www.un.org/apps/news/rss/rss_asiapac.asp|#snews
-      _un_top|http://www.un.org/apps/news/rss/rss_top.asp|#snews
-      _us_math_society|http://www.ams.org/cgi-bin/content/news_items.cgi?rss=1|#snews
-      _vimperator|https://sites.google.com/a/vimperator.org/www/blog/posts.xml|#snews
-      _weechat|http://dev.weechat.org/feed/atom|#snews
-      _xkcd|https://xkcd.com/rss.xml|#snews
-      _zdnet|http://www.zdnet.com/news/rss.xml|#snews
-    '';
+  krebs.brockman = {
+    enable = true;
+    config = {
+      irc.host = "localhost";
+      bots = {
+        aje = { feed ="http://www.aljazeera.com/Services/Rss/?PostingId=2007731105943979989"; channels = [ "#snews" ]; };
+        allafrica = { feed ="http://allafrica.com/tools/headlines/rdf/latest/headlines.rdf"; channels = [ "#snews" ]; };
+        antirez = { feed ="http://antirez.com/rss"; channels = [ "#snews" ]; };
+        archlinux = { feed ="http://www.archlinux.org/feeds/news/"; channels = [ "#snews" ]; };
+        ars = { feed ="http://feeds.arstechnica.com/arstechnica/index?format=xml"; channels = [ "#snews" ]; };
+        augustl = { feed ="http://augustl.com/atom.xml"; channels = [ "#snews" ]; };
+        bbc = { feed ="http://feeds.bbci.co.uk/news/rss.xml"; channels = [ "#snews" ]; };
+        bdt_aktuelle_themen = { feed ="http://www.bundestag.de/blueprint/servlet/service/de/14154/asFeed/index.rss"; channels = [ "#snews" ]; };
+        bdt_drucksachen = { feed ="http://www.bundestag.de/dip21rss/bundestag_drucksachen.rss"; channels = [ "#snews" ]; };
+        bdt_plenarproto = { feed ="http://www.bundestag.de/rss_feeds/plenarprotokolle.rss"; channels = [ "#snews" ]; };
+        bdt_pressemitteilungen = { feed ="http://www.bundestag.de/blueprint/servlet/service/de/273112/asFeed/index.rss"; channels = [ "#snews" ]; };
+        bitcoinpakistan = { feed ="https://bitcoinspakistan.com/feed/"; channels = [ "#snews" ]; };
+        cancer = { feed ="http://feeds.feedburner.com/ncinewsreleases?format=xml"; channels = [ "#snews" ]; };
+        carta = { feed ="http://feeds2.feedburner.com/carta-standard-rss"; channels = [ "#snews" ]; };
+        catholic_news = { feed ="http://feeds.feedburner.com/catholicnewsagency/dailynews"; channels = [ "#snews" ]; };
+        cbc_busi = { feed ="http://rss.cbc.ca/lineup/business.xml"; channels = [ "#snews" ]; };
+        cbc_offbeat = { feed ="http://www.cbc.ca/cmlink/rss-offbeat"; channels = [ "#snews" ]; };
+        cbc_pol = { feed ="http://rss.cbc.ca/lineup/politics.xml"; channels = [ "#snews" ]; };
+        cbc_tech = { feed ="http://rss.cbc.ca/lineup/technology.xml"; channels = [ "#snews" ]; };
+        cbc_top = { feed ="http://rss.cbc.ca/lineup/topstories.xml"; channels = [ "#snews" ]; };
+        ccc = { feed ="http://www.ccc.de/rss/updates.rdf"; channels = [ "#snews" ]; };
+        chan_biz = { feed ="http://boards.4chan.org/biz/index.rss"; channels = [ "#snews" ]; };
+        chan_g = { feed ="http://boards.4chan.org/g/index.rss"; channels = [ "#snews" ]; };
+        chan_int = { feed ="http://boards.4chan.org/int/index.rss"; channels = [ "#snews" ]; };
+        chan_sci = { feed ="http://boards.4chan.org/sci/index.rss"; channels = [ "#snews" ]; };
+        chan_x = { feed ="http://boards.4chan.org/x/index.rss"; channels = [ "#snews" ]; };
+        c = { feed ="http://www.tempolimit-lichtgeschwindigkeit.de/news.xml"; channels = [ "#snews" ]; };
+        cryptogon = { feed ="http://www.cryptogon.com/?feed=rss2"; channels = [ "#snews" ]; };
+        csm = { feed ="http://rss.csmonitor.com/feeds/csm"; channels = [ "#snews" ]; };
+        csm_world = { feed ="http://rss.csmonitor.com/feeds/world"; channels = [ "#snews" ]; };
+        danisch = { feed ="http://www.danisch.de/blog/feed/"; channels = [ "#snews" ]; };
+        dod = { feed ="http://www.defense.gov/news/afps2.xml"; channels = [ "#snews" ]; };
+        dwn = { feed ="http://deutsche-wirtschafts-nachrichten.de/feed/customfeed/"; channels = [ "#snews" ]; };
+        ecat = { feed ="http://ecat.com/feed"; channels = [ "#snews" ]; };
+        eia_press = { feed ="http://www.eia.gov/rss/press_rss.xml"; channels = [ "#snews" ]; };
+        eia_today = { feed ="http://www.eia.gov/rss/todayinenergy.xml"; channels = [ "#snews" ]; };
+        embargowatch = { feed ="https://embargowatch.wordpress.com/feed/"; channels = [ "#snews" ]; };
+        ethereum-comments = { feed ="http://blog.ethereum.org/comments/feed"; channels = [ "#snews" ]; };
+        ethereum = { feed ="http://blog.ethereum.org/feed"; channels = [ "#snews" ]; };
+        europa_ric = { feed ="http://ec.europa.eu/research/infocentre/rss/infocentre-rss.xml"; channels = [ "#snews" ]; };
+        eu_survei = { feed ="http://www.eurosurveillance.org/public/RSSFeed/RSS.aspx"; channels = [ "#snews" ]; };
+        exploitdb = { feed ="http://www.exploit-db.com/rss.xml"; channels = [ "#snews" ]; };
+        fars = { feed ="http://www.farsnews.com/rss.php"; channels = [ "#snews #test" ]; };
+        faz_feui = { feed ="http://www.faz.net/rss/aktuell/feuilleton/"; channels = [ "#snews" ]; };
+        faz_politik = { feed ="http://www.faz.net/rss/aktuell/politik/"; channels = [ "#snews" ]; };
+        faz_wirtschaft = { feed ="http://www.faz.net/rss/aktuell/wirtschaft/"; channels = [ "#snews" ]; };
+        fbi = { feed ="https://www.fbi.gov/news/rss.xml"; channels = [ "#snews" ]; };
+        fedreserve = { feed ="http://www.federalreserve.gov/feeds/press_all.xml"; channels = [ "#snews" ]; };
+        fefe = { feed ="http://blog.fefe.de/rss.xml"; channels = [ "#snews" ]; };
+        forbes = { feed ="http://www.forbes.com/forbes/feed2/"; channels = [ "#snews" ]; };
+        forbes_realtime = { feed ="http://www.forbes.com/real-time/feed2/"; channels = [ "#snews" ]; };
+        fox = { feed ="http://feeds.foxnews.com/foxnews/latest"; channels = [ "#snews" ]; };
+        geheimorganisation = { feed ="http://geheimorganisation.org/feed/"; channels = [ "#snews" ]; };
+        GerForPol = { feed ="http://www.german-foreign-policy.com/de/news/rss-2.0"; channels = [ "#snews" ]; };
+        gmanet = { feed ="http://www.gmanetwork.com/news/rss/news"; channels = [ "#snews" ]; };
+        golem = { feed ="http://rss.golem.de/rss.php"; channels = [ "#snews" ]; };
+        google = { feed ="http://news.google.com/?output=rss"; channels = [ "#snews" ]; };
+        greenpeace = { feed ="http://feeds.feedburner.com/GreenpeaceNews"; channels = [ "#snews" ]; };
+        guardian_uk = { feed ="http://feeds.theguardian.com/theguardian/uk-news/rss"; channels = [ "#snews" ]; };
+        gulli = { feed ="http://ticker.gulli.com/rss/"; channels = [ "#snews" ]; };
+        hackernews = { feed ="https://news.ycombinator.com/rss"; channels = [ "#snews" ]; };
+        handelsblatt = { feed ="http://www.handelsblatt.com/contentexport/feed/schlagzeilen"; channels = [ "#snews" ]; };
+        heise = { feed ="https://www.heise.de/newsticker/heise-atom.xml"; channels = [ "#snews" ]; };
+        hindu_business = { feed ="http://www.thehindubusinessline.com/?service=rss"; channels = [ "#snews" ]; };
+        hindu = { feed ="http://www.thehindu.com/?service=rss"; channels = [ "#snews" ]; };
+        ign = { feed ="http://feeds.ign.com/ign/all"; channels = [ "#snews" ]; };
+        independent = { feed ="http://www.independent.com/rss/headlines/"; channels = [ "#snews" ]; };
+        indymedia = { feed ="https://de.indymedia.org/rss.xml"; channels = [ "#snews" ]; };
+        info_libera = { feed ="http://www.informationliberation.com/rss.xml"; channels = [ "#snews" ]; };
+        klagen-gegen-rundfuckbeitrag = { feed ="http://klagen-gegen-rundfunkbeitrag.blogspot.com/feeds/posts/default"; channels = [ "#snews" ]; };
+        korea_herald = { feed ="http://www.koreaherald.com/rss_xml.php"; channels = [ "#snews" ]; };
+        linuxinsider = { feed ="http://www.linuxinsider.com/perl/syndication/rssfull.pl"; channels = [ "#snews" ]; };
+        lisp = { feed ="http://planet.lisp.org/rss20.xml"; channels = [ "#snews" ]; };
+        liveleak = { feed ="http://www.liveleak.com/rss"; channels = [ "#snews" ]; };
+        lolmythesis = { feed ="http://lolmythesis.com/rss"; channels = [ "#snews" ]; };
+        LtU = { feed ="http://lambda-the-ultimate.org/rss.xml"; channels = [ "#snews" ]; };
+        lukepalmer = { feed ="http://lukepalmer.wordpress.com/feed/"; channels = [ "#snews" ]; };
+        mit = { feed ="http://web.mit.edu/newsoffice/rss-feeds.feed?type=rss"; channels = [ "#snews" ]; };
+        mongrel2_master = { feed ="https://github.com/zedshaw/mongrel2/commits/master.atom"; channels = [ "#snews" ]; };
+        nds = { feed ="http://www.nachdenkseiten.de/?feed=atom"; channels = [ "#snews" ]; };
+        netzpolitik = { feed ="https://netzpolitik.org/feed/"; channels = [ "#snews" ]; };
+        newsbtc = { feed ="http://newsbtc.com/feed/"; channels = [ "#snews" ]; };
+        nnewsg = { feed ="http://www.net-news-global.net/rss/rssfeed.xml"; channels = [ "#snews" ]; };
+        npr_busi = { feed ="http://www.npr.org/rss/rss.php?id=1006"; channels = [ "#snews" ]; };
+        npr_headlines = { feed ="http://www.npr.org/rss/rss.php?id=1001"; channels = [ "#snews" ]; };
+        npr_pol = { feed ="http://www.npr.org/rss/rss.php?id=1012"; channels = [ "#snews" ]; };
+        npr_world = { feed ="http://www.npr.org/rss/rss.php?id=1004"; channels = [ "#snews" ]; };
+        nsa = { feed ="https://www.nsa.gov/rss.xml"; channels = [ "#snews #bullerei" ]; };
+        nytimes = { feed ="http://rss.nytimes.com/services/xml/rss/nyt/World.xml"; channels = [ "#snews" ]; };
+        painload = { feed ="https://github.com/krebs/painload/commits/master.atom"; channels = [ "#snews" ]; };
+        phys = { feed ="http://phys.org/rss-feed/"; channels = [ "#snews" ]; };
+        piraten = { feed ="https://www.piratenpartei.de/feed/"; channels = [ "#snews" ]; };
+        polizei_berlin = { feed ="http://www.berlin.de/polizei/presse-fahndung/_rss_presse.xml"; channels = [ "#snews" ]; };
+        presse_polizei = { feed ="http://www.presseportal.de/rss/polizei.rss2"; channels = [ "#snews" ]; };
+        presseportal = { feed ="http://www.presseportal.de/rss/presseportal.rss2"; channels = [ "#snews" ]; };
+        prisonplanet = { feed ="http://prisonplanet.com/feed.rss"; channels = [ "#snews" ]; };
+        rawstory = { feed ="http://www.rawstory.com/rs/feed/"; channels = [ "#snews" ]; };
+        reddit_4chan = { feed ="http://www.reddit.com/r/4chan/new/.rss"; channels = [ "#snews" ]; };
+        reddit_anticonsum = { feed ="http://www.reddit.com/r/Anticonsumption/new/.rss"; channels = [ "#snews" ]; };
+        reddit_btc = { feed ="http://www.reddit.com/r/Bitcoin/new/.rss"; channels = [ "#snews" ]; };
+        reddit_consp = { feed ="http://reddit.com/r/conspiracy/.rss"; channels = [ "#snews" ]; };
+        reddit_haskell = { feed ="http://www.reddit.com/r/haskell/.rss"; channels = [ "#snews" ]; };
+        reddit_nix = { feed ="http://www.reddit.com/r/nixos/.rss"; channels = [ "#snews" ]; };
+        reddit_prog = { feed ="http://www.reddit.com/r/programming/new/.rss"; channels = [ "#snews" ]; };
+        reddit_sci = { feed ="http://www.reddit.com/r/science/.rss"; channels = [ "#snews" ]; };
+        reddit_tech = { feed ="http://www.reddit.com/r/technology/.rss"; channels = [ "#snews" ]; };
+        reddit_tpp = { feed ="http://www.reddit.com/r/twitchplayspokemon/.rss"; channels = [ "#snews" ]; };
+        reddit_world = { feed ="http://www.reddit.com/r/worldnews/.rss"; channels = [ "#snews" ]; };
+        r-ethereum = { feed ="http://www.reddit.com/r/ethereum/.rss"; channels = [ "#snews" ]; };
+        reuters = { feed ="http://feeds.reuters.com/Reuters/worldNews"; channels = [ "#snews" ]; };
+        reuters-odd = { feed ="http://feeds.reuters.com/reuters/oddlyEnoughNews?format=xml"; channels = [ "#snews" ]; };
+        rt = { feed ="http://rt.com/rss/news/"; channels = [ "#snews" ]; };
+        schallurauch = { feed ="http://feeds.feedburner.com/SchallUndRauch"; channels = [ "#snews" ]; };
+        sciencemag = { feed ="http://news.sciencemag.org/rss/current.xml"; channels = [ "#snews" ]; };
+        scmp = { feed ="http://www.scmp.com/rss/91/feed"; channels = [ "#snews" ]; };
+        sec-db = { feed ="http://feeds.security-database.com/SecurityDatabaseToolsWatch"; channels = [ "#snews" ]; };
+        shackspace = { feed ="http://shackspace.de/atom.xml"; channels = [ "#snews" ]; };
+        shz_news = { feed ="http://www.shz.de/nachrichten/newsticker/rss"; channels = [ "#snews" ]; };
+        sky_busi = { feed ="http://feeds.skynews.com/feeds/rss/business.xml"; channels = [ "#snews" ]; };
+        sky_pol = { feed ="http://feeds.skynews.com/feeds/rss/politics.xml"; channels = [ "#snews" ]; };
+        sky_strange = { feed ="http://feeds.skynews.com/feeds/rss/strange.xml"; channels = [ "#snews" ]; };
+        sky_tech = { feed ="http://feeds.skynews.com/feeds/rss/technology.xml"; channels = [ "#snews" ]; };
+        sky_world = { feed ="http://feeds.skynews.com/feeds/rss/world.xml"; channels = [ "#snews" ]; };
+        slashdot = { feed ="http://rss.slashdot.org/Slashdot/slashdot"; channels = [ "#snews" ]; };
+        slate = { feed ="http://feeds.slate.com/slate"; channels = [ "#snews" ]; };
+        spiegel_eil = { feed ="http://www.spiegel.de/schlagzeilen/eilmeldungen/index.rss"; channels = [ "#snews" ]; };
+        spiegel_top = { feed ="http://www.spiegel.de/schlagzeilen/tops/index.rss"; channels = [ "#snews" ]; };
+        standardmedia_ke = { feed ="http://www.standardmedia.co.ke/rss/headlines.php"; channels = [ "#snews" ]; };
+        stern = { feed ="http://www.stern.de/feed/standard/all/"; channels = [ "#snews" ]; };
+        stz = { feed ="http://www.stuttgarter-zeitung.de/rss/topthemen.rss.feed"; channels = [ "#snews" ]; };
+        sz_politik = { feed ="http://rss.sueddeutsche.de/rss/Politik"; channels = [ "#snews" ]; };
+        sz_wirtschaft = { feed ="http://rss.sueddeutsche.de/rss/Wirtschaft"; channels = [ "#snews" ]; };
+        sz_wissen = { feed ="http://rss.sueddeutsche.de/rss/Wissen"; channels = [ "#snews" ]; };
+        tagesschau = { feed ="http://www.tagesschau.de/newsticker.rdf"; channels = [ "#snews" ]; };
+        taz = { feed ="http://taz.de/Themen-des-Tages/!p15;rss/"; channels = [ "#snews" ]; };
+        telegraph = { feed ="http://www.telegraph.co.uk/rss.xml"; channels = [ "#snews" ]; };
+        telepolis = { feed ="http://www.heise.de/tp/rss/news-atom.xml"; channels = [ "#snews" ]; };
+        the_insider = { feed ="http://www.theinsider.org/rss/news/headlines-xml.asp"; channels = [ "#snews" ]; };
+        tigsource = { feed ="http://www.tigsource.com/feed/"; channels = [ "#snews" ]; };
+        tinc = { feed ="http://tinc-vpn.org/news/index.rss"; channels = [ "#snews" ]; };
+        torr_bits = { feed ="http://feeds.feedburner.com/TorrentfreakBits"; channels = [ "#snews" ]; };
+        torrentfreak = { feed ="http://feeds.feedburner.com/Torrentfreak"; channels = [ "#snews" ]; };
+        torr_news = { feed ="http://feed.torrentfreak.com/Torrentfreak/"; channels = [ "#snews" ]; };
+        travel_warnings = { feed ="http://feeds.travel.state.gov/ca/travelwarnings-alerts"; channels = [ "#snews" ]; };
+        un_afr = { feed ="http://www.un.org/apps/news/rss/rss_africa.asp"; channels = [ "#snews" ]; };
+        un_am = { feed ="http://www.un.org/apps/news/rss/rss_americas.asp"; channels = [ "#snews" ]; };
+        un_eu = { feed ="http://www.un.org/apps/news/rss/rss_europe.asp"; channels = [ "#snews" ]; };
+        un_me = { feed ="http://www.un.org/apps/news/rss/rss_mideast.asp"; channels = [ "#snews" ]; };
+        un_pac = { feed ="http://www.un.org/apps/news/rss/rss_asiapac.asp"; channels = [ "#snews" ]; };
+        un_top = { feed ="http://www.un.org/apps/news/rss/rss_top.asp"; channels = [ "#snews" ]; };
+        us_math_society = { feed ="http://www.ams.org/cgi-bin/content/news_items.cgi?rss=1"; channels = [ "#snews" ]; };
+        vimperator = { feed ="https://sites.google.com/a/vimperator.org/www/blog/posts.xml"; channels = [ "#snews" ]; };
+        weechat = { feed ="http://dev.weechat.org/feed/atom"; channels = [ "#snews" ]; };
+        xkcd = { feed ="https://xkcd.com/rss.xml"; channels = [ "#snews" ]; };
+        zdnet = { feed ="http://www.zdnet.com/news/rss.xml"; channels = [ "#snews" ]; };
+      };
+    };
   };
 }
