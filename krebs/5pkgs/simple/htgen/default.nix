@@ -1,24 +1,22 @@
-{ coreutils, dash, fetchgit, gnused, stdenv, ucspi-tcp }:
-with import <stockholm/lib>;
-let
-  version = "1.2.8";
-in stdenv.mkDerivation {
-  name = "htgen-${version}";
+{ fetchgit, lib, pkgs, stdenv }:
+stdenv.mkDerivation rec {
+  pname = "htgen";
+  version = "1.3.0";
 
   src = fetchgit {
     url = "http://cgit.krebsco.de/htgen";
     rev = "refs/tags/v${version}";
-    sha256 = "046c05jswar2agagqixad3idqxca494aaf199h6bdn02cyzygnpq";
+    sha256 = "0p3517wkfpvip4z0axh0b4v1jm1nqpppldnhq4806c0p33vrjxnf";
   };
 
   installPhase = ''
     mkdir -p $out/bin
     {
-      echo '#! ${dash}/bin/dash'
-      echo 'export PATH=${makeBinPath [
-        coreutils
-        gnused
-        ucspi-tcp
+      echo '#! ${pkgs.dash}/bin/dash'
+      echo 'export PATH=${lib.makeBinPath [
+        pkgs.coreutils
+        pkgs.jq
+        pkgs.ucspi-tcp
       ]}''${PATH+":$PATH"}'
       sed 's:^Server=htgen$:&/${version}:' htgen
     } > $out/bin/htgen
