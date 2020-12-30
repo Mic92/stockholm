@@ -15,7 +15,6 @@ with import <stockholm/lib>;
   tv.x0vncserver.enable = true;
 
   boot.initrd.luks.devices.muca.device = "/dev/sda2";
-  boot.initrd.luks.cryptoModules = [ "aes" "sha512" "xts" ];
   boot.initrd.availableKernelModules = [ "ahci" ];
   boot.kernelModules = [ "fbcon" "kvm-intel" ];
   boot.extraModulePackages = [ ];

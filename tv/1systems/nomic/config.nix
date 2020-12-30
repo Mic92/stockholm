@@ -15,10 +15,7 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/xserver>
   ];
 
-  boot.initrd.luks = {
-    cryptoModules = [ "aes" "sha512" "xts" ];
-    devices.luks1.device = "/dev/sda2";
-  };
+  boot.initrd.luks.devices.luks1.device = "/dev/sda2";
 
   # Don't use UEFI because current disk was partitioned/formatted for AO753.
   # TODO remove following bool.loader section after repartitioning/reformatting

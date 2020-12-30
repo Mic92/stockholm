@@ -111,10 +111,7 @@ with import <stockholm/lib>;
     }
   ];
 
-  boot.initrd.luks = {
-    cryptoModules = [ "aes" "sha512" "xts" ];
-    devices.xuca.device = "/dev/sda2";
-  };
+  boot.initrd.luks.devices.xuca.device = "/dev/sda2";
 
   fileSystems = {
     "/" = {
@@ -154,6 +151,4 @@ with import <stockholm/lib>;
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "15.09";
-
-  virtualisation.virtualbox.host.enable = true;
 }
