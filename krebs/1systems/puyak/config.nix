@@ -1,11 +1,15 @@
 { config, pkgs, ... }:
-
 {
   imports = [
+    ./net.nix
     <stockholm/krebs>
     <stockholm/krebs/2configs>
     <stockholm/krebs/2configs/secret-passwords.nix>
     <stockholm/krebs/2configs/hw/x220.nix>
+
+    # see documentation in included getty-for-esp.nix:
+    # brain hosts/puyak/root
+    <stockholm/krebs/2configs/hw/getty-for-esp.nix>
 
 
     ## initrd unlocking
@@ -118,7 +122,6 @@
 
   krebs.build.host = config.krebs.hosts.puyak;
   sound.enable = false;
-
   boot = {
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
@@ -163,10 +166,6 @@
   services.logind.lidSwitchExternalPower = "ignore";
 
 
-  services.udev.extraRules = ''
-    SUBSYSTEM=="net", ATTR{address}=="8c:70:5a:b2:84:58", NAME="wl0"
-    SUBSYSTEM=="net", ATTR{address}=="3c:97:0e:07:b9:14", NAME="et0"
-  '';
 
   environment.systemPackages = [ pkgs.zsh ];
 
@@ -179,5 +178,4 @@
     isNormalUser = true;
     shell = "/run/current-system/sw/bin/zsh";
   };
-  networking.firewall.allowedTCPPorts = [ 5901 ];
 }

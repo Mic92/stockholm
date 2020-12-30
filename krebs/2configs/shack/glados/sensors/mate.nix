@@ -6,11 +6,15 @@ let
     name = "Füllstand ${name}";
     value_template = "{{ value_json.fuellstand }}";
   };
-in [
-  (fuellstand "Wasser"           1)
-  (fuellstand "Mate Cola"        2)
-  (fuellstand "Apfelschorle"     3)
-  (fuellstand "Zitronensprudel"  4)
-  (fuellstand "Mate 1"           26)
-  (fuellstand "Mate 2"           27)
-]
+in
+{
+  services.home-assistant.config.sensor =
+  [
+    (fuellstand "Wasser"           1)
+    (fuellstand "Mate Cola"        2)
+    (fuellstand "Apfelschorle"     3)
+    (fuellstand "Zitronensprudel"  4)
+    (fuellstand "Mate 1"           26)
+    (fuellstand "Mate 2"           27)
+  ];
+}

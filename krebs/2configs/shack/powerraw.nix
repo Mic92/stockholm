@@ -67,7 +67,7 @@ in {
     };
     sensor = "total";
     types  = [ "Voltage" "Current" "Power" ];
-    phases = [ 1 2 3 ];
+    phases = [ "1" "2" "3" ];
   in
     [ (genTopic "Power consumed" "/power/${sensor}/consumed"  { inherit sensor; }) ] ++
     (lib.flatten (map (type: (map (phase: (genTopic "Power" "/power/${sensor}/L${toString phase}/${type}" { inherit sensor phase type; }) ) phases)) types));
