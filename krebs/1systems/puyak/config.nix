@@ -24,8 +24,7 @@
 
     #### NEWS ####
     <stockholm/krebs/2configs/ircd.nix>
-    #<stockholm/krebs/2configs/news.nix>
-    <stockholm/krebs/2configs/news-spam.nix>
+    <stockholm/krebs/2configs/news.nix>
 
 
     ### shackspace ###
