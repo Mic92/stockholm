@@ -13,6 +13,7 @@ _:
     ./pyload.nix
     ./restic.nix
     ./screenlock.nix
+    ./sync-containers.nix
     ./usershadow.nix
     ./xjail.nix
     ./autowifi.nix
