@@ -1,6 +1,7 @@
 _:
 {
   imports = [
+    ./bindfs.nix
     ./dnsmasq.nix
     ./ejabberd
     ./folderPerms.nix
