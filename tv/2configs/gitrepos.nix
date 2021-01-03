@@ -65,6 +65,9 @@ let {
 
   public-repos = mapAttrs make-public-repo ({
   } // mapAttrs (_: recursiveUpdate { cgit.section = "1. miscellaneous"; }) {
+    crx = {
+      cgit.desc = "utilities for working with Chrome extensions";
+    };
     dic = {
       cgit.desc = "dict.leo.org command line interface";
     };
