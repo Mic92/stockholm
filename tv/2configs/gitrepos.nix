@@ -105,6 +105,9 @@ let {
     stockholm = {
       cgit.desc = "NixOS configuration";
     };
+    TabFS = {
+      cgit.desc = "mount browser tabs & co. as a filesystem";
+    };
     with-ssh = {};
   } // mapAttrs (_: recursiveUpdate { cgit.section = "2. Host configurations"; }) {
     ni = {
