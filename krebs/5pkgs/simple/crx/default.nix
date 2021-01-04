@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "crx";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = pkgs.fetchgit {
     url = https://cgit.krebsco.de/crx;
     rev = "refs/tags/v${version}";
-    sha256 = "0nrbqw94lb0fzk9991vaqplszqzdij6vbf1kb2hi48a9bzg8h6z3";
+    sha256 = "10xwrdxwbvqydayg6a4jcl3cfp4wi9ssm7a0dlnclkc4rmf6sv4a";
   };
 
   phases = [
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
           crxid = [
             pkgs.bc
             pkgs.coreutils
+            pkgs.file
             pkgs.gnused
             pkgs.openssl
             pkgs.xxd
