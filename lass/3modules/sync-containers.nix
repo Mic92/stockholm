@@ -97,9 +97,10 @@ in {
     })) cfg.containers);
 
     krebs.permown = (mapAttrs' (_: ctr: nameValuePair "${(paths ctr.name).${ctr.format}}" ({
-      owner = "root";
-      group = "syncthing";
-      umask = "0007";
+      file-mode = "u+rw";
+      directory-mode = "u+rwx";
+      owner = "syncthing";
+      keepGoing = false;
     })) cfg.containers);
 
     systemd.services = mapAttrs' (n: ctr: nameValuePair "containers@${ctr.name}" ({
