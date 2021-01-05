@@ -65,6 +65,9 @@ let {
 
   public-repos = mapAttrs make-public-repo ({
   } // mapAttrs (_: recursiveUpdate { cgit.section = "1. miscellaneous"; }) {
+    crx = {
+      cgit.desc = "utilities for working with Chrome extensions";
+    };
     dic = {
       cgit.desc = "dict.leo.org command line interface";
     };
@@ -101,6 +104,9 @@ let {
     regfish = {};
     stockholm = {
       cgit.desc = "NixOS configuration";
+    };
+    TabFS = {
+      cgit.desc = "mount browser tabs & co. as a filesystem";
     };
     with-ssh = {};
   } // mapAttrs (_: recursiveUpdate { cgit.section = "2. Host configurations"; }) {
