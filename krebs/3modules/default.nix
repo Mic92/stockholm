@@ -37,7 +37,6 @@ let
       ./kapacitor.nix
       ./konsens.nix
       ./monit.nix
-      ./newsbot-js.nix
       ./nixpkgs.nix
       ./on-failure.nix
       ./os-release.nix
