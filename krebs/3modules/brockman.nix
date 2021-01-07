@@ -9,7 +9,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.brockman.isNormalUser = false;
+    users.extraUsers.brockman = {
+      home = "/var/lib/brockman";
+      createHome = true;
+      isNormalUser = false;
+    };
 
     systemd.services.brockman = {
       description = "RSS to IRC broadcaster";
