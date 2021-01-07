@@ -11,12 +11,12 @@
       hello
     '';
     config = ''
+      loadmodule "extensions/m_omode";
       serverinfo {
         name = "${config.krebs.build.host.name}.irc.r";
         sid = "1as";
         description = "miep!";
         network_name = "irc.r";
-        hub = yes;
 
         vhost = "0.0.0.0";
         vhost6 = "::";
@@ -26,7 +26,7 @@
         #ssl_dh_params = "etc/dh.pem";
         #ssld_count = 1;
 
-        default_max_clients = 10000;
+        default_max_clients = 100000;
         #nicklen = 30;
       };
 
@@ -43,19 +43,31 @@
         /* Listen on IPv6 (if you used host= above). */
         host = "::";
         port = 6667;
-        sslport = 9999;
+        sslport = 6697;
       };
 
       class "users" {
         ping_time = 2 minutes;
         number_per_ident = 10;
-        number_per_ip = 2048;
+        number_per_ip = 4096;
         number_per_ip_global = 4096;
         cidr_ipv4_bitlen = 24;
         cidr_ipv6_bitlen = 64;
         number_per_cidr = 65536;
-        max_number = 3000;
-        sendq = 1 megabyte;
+        max_number = 100000;
+        sendq = 10 megabyte;
+      };
+
+      privset "op" {
+        privs = oper:admin;
+      };
+
+      operator "aids" {
+        user = "*@*";
+        password = "balls";
+        flags = ~encrypted;
+        snomask = "+s";
+        privset = "op";
       };
 
       exempt {
@@ -93,12 +105,13 @@
         channel_target_change = yes;
         disable_local_channels = no;
       };
+
       general {
         #maybe we want ident someday?
-        default_floodcount = 1000;
+        default_floodcount = 10000;
         disable_auth = yes;
         throttle_duration = 1;
-        throttle_count = 1000;
+        throttle_count = 10000;
       };
     '';
   };
