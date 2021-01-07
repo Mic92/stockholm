@@ -31,11 +31,11 @@
       }
 
       STATEDIR=$HOME
-      mkdir -p $STATEDIR/items
+      mkdir -p "$STATEDIR/items"
 
       case "$Method $Request_URI" in
         "GET /"*)
-          if item=$(find_item ''${Request_URI#/}); then
+          if item=$(find_item "''${Request_URI#/}"); then
             uri=$(cat "$item")
             printf 'HTTP/1.1 302 Found\r\n'
             printf 'Content-Type: text/plain\r\n'
@@ -45,26 +45,27 @@
             exit
           fi
         ;;
-        "POST /") #{ "uri": "http://nixos.org" }
+        "POST /")
           uri=$(mktemp -t htgen.$$.content.XXXXXXXX)
-          trap "rm $uri >&2" EXIT
+          trap 'rm $uri >&2' EXIT
 
-          head -c $req_content_length \
+          head -c "$req_content_length" \
             | grep -Eo 'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)' \
+            | head -1 \
             > $uri
-          sha256=$(sha256sum -b $uri | cut -d\  -f1)
-          base32=$(${pkgs.nixStable}/bin/nix-hash --to-base32 --type sha256 $sha256)
-          item=$STATEDIR/items/$base32
-          ref=http://$req_host/$base32
+          sha256=$(sha256sum -b "$uri" | cut -d\  -f1)
+          base32=$(${pkgs.nixStable}/bin/nix-hash --to-base32 --type sha256 "$sha256")
+          item="$STATEDIR/items/$base32"
+          ref="http://$req_host/$base32"
 
-          if ! test -e $item; then
-            mkdir -v -p $STATEDIR/items >&2
-            cp -v $uri $item >&2
+          if ! test -e "$item"; then
+            mkdir -v -p "$STATEDIR/items" >&2
+            cp -v $uri "$item" >&2
           fi
 
-          base32short=$(echo $base32 | cut -b-7)
-          if item=$(find_item $base32short); then
-            ref=$(echo "http://$req_host/$base32short")
+          base32short=$(echo "$base32" | cut -b-7)
+          if item=$(find_item "$base32short"); then
+            ref="http://$req_host/$base32short"
           fi
 
           printf 'HTTP/1.1 200 OK\r\n'
