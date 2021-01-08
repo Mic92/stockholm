@@ -131,6 +131,7 @@ in {
             "build.puyak.r"
             "cgit.puyak.r"
             "go.r"
+            "rss.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----

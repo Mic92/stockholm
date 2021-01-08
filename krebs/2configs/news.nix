@@ -1,6 +1,16 @@
 { pkgs, ... }:
 
 {
+  services.rss-bridge = {
+    enable = true;
+    whitelist = [ "*" ];
+  };
+  services.nginx.virtualHosts.rss-bridge = {
+    serverAliases = [
+      "rss.r"
+    ];
+  };
+
   krebs.brockman = {
     enable = true;
     config = {
