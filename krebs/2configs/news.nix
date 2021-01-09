@@ -15,6 +15,7 @@
     enable = true;
     config = {
       irc.host = "localhost";
+      channel = "#all";
       shortener = "http://go.r";
       controller = {
         nick = "brockman";
