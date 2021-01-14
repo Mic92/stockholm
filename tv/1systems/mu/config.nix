@@ -110,9 +110,8 @@ with import <stockholm/lib>;
 
   services.xserver.desktopManager.plasma5.enable = true;
 
-  services.xserver.displayManager.lightdm.autoLogin.enable = true;
-  services.xserver.displayManager.lightdm.autoLogin.user = "vv";
-  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.displayManager.autoLogin.enable = true;
+  services.xserver.displayManager.autoLogin.user = "vv";
 
   users.users.vv = {
     inherit (config.krebs.users.vv) home uid;
