@@ -17,6 +17,7 @@ with import <stockholm/lib>;
   boot.initrd.luks.devices.muca.device = "/dev/sda2";
   boot.initrd.availableKernelModules = [ "ahci" ];
   boot.kernelModules = [ "fbcon" "kvm-intel" ];
+  boot.kernelParams = [ "fsck.repair=yes" ];
   boot.extraModulePackages = [ ];
 
   fileSystems = {
