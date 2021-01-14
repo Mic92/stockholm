@@ -3,11 +3,7 @@
 stdenv.mkDerivation rec {
   name = "TabFS";
 
-  src = pkgs.fetchgit {
-    url = https://cgit.krebsco.de/TabFS;
-    rev = "1fc4845283a0e6aa46a8d8978f356d5ccdcedd13";
-    sha256 = "0bsm5fhxrr6zwbnm9p10h9pwm85llr02g2ch97a62r62dhjjrc8h";
-  };
+  src = pkgs.fetchgit (lib.importJSON ./src.json);
 
   phases = [
     "unpackPhase"
