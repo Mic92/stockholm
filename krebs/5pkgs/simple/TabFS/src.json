@@ -1,0 +1,10 @@
+{
+  "url": "https://cgit.krebsco.de/TabFS",
+  "rev": "a6045e0e29b85e3e66c468f3561009ded1db6ec5",
+  "date": "2021-01-14T23:56:09+01:00",
+  "path": "/nix/store/mbcywm1yq5vr7awxqb533faz34minfax-TabFS",
+  "sha256": "1z0kj95zh0jl8laa0whra1jys8pws3199sy29vmlv2nxrkz13blv",
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}
