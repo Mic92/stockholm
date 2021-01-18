@@ -17,7 +17,7 @@ in {
     # ./multi/flurlicht.nix
     ./multi/kurzzeitwecker.nix
     ./multi/the_playlist.nix
-    ./multi/fliegen-couter.nix
+    # ./multi/fliegen-couter.nix
 
     ./device_tracker/openwrt.nix
 
@@ -26,8 +26,14 @@ in {
     ./calendar/nextcloud.nix
 
     ./automation/firetv_restart.nix
+    ./automation/light_buttons.nix
+    ./automation/wohnzimmer_rf_fernbedienung.nix
+    ./automation/giesskanne.nix
+    ./automation/urlaub.nix
 
-    ./light/groups.nix
+    ./light/arbeitszimmer.nix
+    ./light/schlafzimmer.nix
+    ./light/wohnzimmer.nix
   ];
 
   services.home-assistant = {

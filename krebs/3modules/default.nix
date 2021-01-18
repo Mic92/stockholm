@@ -11,6 +11,7 @@ let
       ./apt-cacher-ng.nix
       ./backup.nix
       ./bepasty-server.nix
+      ./brockman.nix
       ./buildbot/master.nix
       ./buildbot/slave.nix
       ./build.nix
@@ -36,7 +37,6 @@ let
       ./kapacitor.nix
       ./konsens.nix
       ./monit.nix
-      ./newsbot-js.nix
       ./nixpkgs.nix
       ./on-failure.nix
       ./os-release.nix

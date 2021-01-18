@@ -44,6 +44,7 @@ in {
           matrix              60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           paste               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           radio               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          streaming           60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
         '';
       };
       nets = rec {
@@ -604,6 +605,7 @@ in {
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHXS60mmNWMdMRvaPxGn91Cm/hm7zY8xn5rkI4n2KG/f ";
+      syncthing.id = "JS4RFIL-MJP2SMJ-EOQXCPQ-MC3NB4V-BQ77GN5-LPKGLWY-GHDP732-G22OJQQ";
     };
     hilum = {
       cores = 1;

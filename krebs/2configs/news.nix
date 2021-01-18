@@ -1,22 +1,39 @@
 { pkgs, ... }:
 
 {
-  krebs.newsbot-js.news = {
-    feeds = pkgs.writeText "feeds" ''
-      antirez|http://antirez.com/rss|#news
-      archlinux|http://www.archlinux.org/feeds/news/|#news
-      ethereum|http://blog.ethereum.org/feed|#news
-      LtU|http://lambda-the-ultimate.org/rss.xml|#news
-      mongrel2_master|https://github.com/zedshaw/mongrel2/commits/master.atom|#news
-      painload|https://github.com/krebs/painload/commits/master.atom|#news
-      reddit_haskell|http://www.reddit.com/r/haskell/.rss|#news
-      reddit_nix|http://www.reddit.com/r/nixos/.rss|#news
-      shackspace|http://shackspace.de/atom.xml|#news
-      tinc|http://tinc-vpn.org/news/index.rss|#news
-      vimperator|https://sites.google.com/a/vimperator.org/www/blog/posts.xml|#news
-      weechat|http://dev.weechat.org/feed/atom|#news
-      xkcd|https://xkcd.com/rss.xml|#news
-      painload|https://github.com/krebs/painload/commits/master.atom|#news
-    '';
+  services.rss-bridge = {
+    enable = true;
+    whitelist = [ "*" ];
+  };
+  services.nginx.virtualHosts = {
+    rss-bridge = {
+      serverAliases = [
+        "rss.r"
+      ];
+    };
+    "brockman.r" = {
+      locations."/".extraConfig = ''
+        root /var/lib/brockman;
+        index brockman.json;
+      '';
+    };
+  };
+  systemd.tmpfiles.rules = [
+    "d /var/lib/brockman 1750 brockman nginx -"
+  ];
+
+  systemd.services.brockman.environment.BROCKMAN_LOG_LEVEL = "DEBUG";
+  krebs.brockman = {
+    enable = true;
+    config = {
+      irc.host = "localhost";
+      channel = "#all";
+      shortener = "http://go.r";
+      controller = {
+        nick = "brockman";
+        channels = [ "#all" ];
+      };
+      bots = {};
+    };
   };
 }

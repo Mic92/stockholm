@@ -1,9 +1,5 @@
 { config, pkgs, lib, ... }:
 let
-  shackopen = import ./multi/shackopen.nix;
-  wasser = import ./multi/wasser.nix;
-  badair = import ./multi/schlechte_luft.nix;
-  rollos = import ./multi/rollos.nix;
 in {
   services.nginx.virtualHosts."hass.shack" = {
     serverAliases = [ "glados.shack" ];
@@ -21,14 +17,28 @@ in {
         '';
     };
   };
+  imports = [
+    ./multi/shackopen.nix
+    ./multi/wasser.nix
+    ./multi/schlechte_luft.nix
+    ./multi/rollos.nix
+
+    ./switch/power.nix
+
+    ./sensors/power.nix
+    ./sensors/mate.nix
+    ./sensors/darksky.nix
+    ./sensors/spaceapi.nix
+    ./sensors/sensemap.nix
+
+    ./automation/shack-startup.nix
+    ./automation/party-time.nix
+    ./automation/hass-restart.nix
+
+  ];
   services.home-assistant =
     {
     enable = true;
-    package = pkgs.home-assistant.override {
-      extraPackages = ps: with ps; [
-        python-forecastio jsonrpc-async jsonrpc-websocket mpd2 pkgs.picotts
-      ];
-    };
     autoExtraComponents = true;
     config = {
       homeassistant = {
@@ -85,9 +95,6 @@ in {
           retain = true;
         };
       };
-      switch =
-        (import ./switch/power.nix)
-        ;
       light =  [];
       media_player = [
         { platform = "mpd";
@@ -100,34 +107,23 @@ in {
         }
       ];
 
-      sensor =
-           (import ./sensors/power.nix)
-        ++ (import ./sensors/mate.nix)
-        ++ (import ./sensors/darksky.nix { inherit lib;})
-        ++ shackopen.sensor
-        ++ wasser.sensor
-        ;
-      air_quality = (import ./sensors/sensemap.nix );
-
-      binary_sensor =
-           shackopen.binary_sensor
-        ++ (import ./sensors/spaceapi.nix)
-        ;
-
       camera = [];
-
       frontend = { };
       config = { };
+      sun = {};
       http = {
         base_url = "http://hass.shack";
         use_x_forwarded_for = true;
         trusted_proxies = "127.0.0.1";
       };
       #conversation = {};
-      # history = {};
-      #logbook = {};
-      logger.default = "info";
+
+      history = {};
+      logbook = {};
       #recorder = {};
+
+      logger.default = "info";
+
       tts = [
         { platform = "google_translate";
           service_name = "say";
@@ -136,15 +132,6 @@ in {
           time_memory = 57600;
         }
       ];
-      sun = {};
-
-      automation = wasser.automation
-        ++ badair.automation
-        ++ rollos.automation
-        ++ (import ./automation/shack-startup.nix)
-        ++ (import ./automation/party-time.nix)
-        ++ (import ./automation/hass-restart.nix);
-
       device_tracker = [];
     };
   };

@@ -121,6 +121,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/reaktor-coders.nix>
     <stockholm/lass/2configs/ciko.nix>
     <stockholm/lass/2configs/container-networking.nix>
+    <stockholm/lass/2configs/jitsi.nix>
     { # quasi bepasty.nix
       imports = [
         <stockholm/lass/2configs/bepasty.nix>

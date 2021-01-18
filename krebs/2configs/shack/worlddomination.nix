@@ -3,11 +3,11 @@
 with import <stockholm/lib>;
 let
   pkg = pkgs.stdenv.mkDerivation {
-    name = "worlddomination-2018-04-21";
+    name = "worlddomination-2020-12-01";
     src = pkgs.fetchgit {
-      url = "https://github.com/shackspace/worlddomination/";
-      rev = "1b32403b9";
-      sha256 = "10x7aiil13k3x9wqy95mi1ys999d6fxg5sys3jwv7a1p930gkl1i";
+      url = "https://git.shackspace.de/rz/worlddomination.git";
+      rev = "c7aedcde7cd1fcb870b5356a6125e1a384b0776c";
+      sha256 = "0y6haz5apwa33lz64l7b2x78wrrckbw39j4wzyd1hfk46478xi2y";
     };
     buildInputs = [
       (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
@@ -17,6 +17,7 @@ let
         grequests
         paramiko
         python
+        setuptools
       ]))
     ];
     installPhase = ''
