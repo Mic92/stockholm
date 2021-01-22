@@ -133,7 +133,8 @@ let {
     vnoremap u <nop>
 
     " fzf
-    nnoremap <esc>q :Files<cr>
+    nnoremap <esc>q :Buffers<cr>
+    nnoremap <esc>f :Files<cr>
     nnoremap <esc>w :Rg<cr>
 
     " edit alternate buffer
