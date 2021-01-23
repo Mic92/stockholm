@@ -227,7 +227,7 @@ let
     set sidebar_short_path
     set sidebar_folder_indent
     set sidebar_visible = yes
-    set sidebar_format = '%B%?F? [%F]?%* %?N?%N/? %?S?%S?'
+    set sidebar_format = '%D%?F? [%F]?%* %?N?%N/? %?S?%S?'
     set sidebar_width   = 20
     color sidebar_new yellow red
 
