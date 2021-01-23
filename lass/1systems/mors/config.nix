@@ -18,27 +18,27 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/steam.nix>
     <stockholm/lass/2configs/wine.nix>
     <stockholm/lass/2configs/git.nix>
-    <stockholm/lass/2configs/virtualbox.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/mail.nix>
     <stockholm/krebs/2configs/ircd.nix>
     <stockholm/lass/2configs/logf.nix>
     <stockholm/lass/2configs/syncthing.nix>
-    <stockholm/lass/2configs/otp-ssh.nix>
-    <stockholm/lass/2configs/c-base.nix>
+    <stockholm/lass/2configs/sync/sync.nix>
     <stockholm/lass/2configs/sync/decsync.nix>
     <stockholm/lass/2configs/sync/weechat.nix>
+    #<stockholm/lass/2configs/c-base.nix>
     <stockholm/lass/2configs/br.nix>
     <stockholm/lass/2configs/ableton.nix>
-    <stockholm/lass/2configs/starcraft.nix>
     <stockholm/lass/2configs/dunst.nix>
     <stockholm/lass/2configs/rtl-sdr.nix>
     <stockholm/lass/2configs/print.nix>
-    <stockholm/lass/2configs/blue-host.nix>
     <stockholm/lass/2configs/network-manager.nix>
     <stockholm/lass/2configs/nfs-dl.nix>
-    #<stockholm/lass/2configs/hardening.nix>
-    <stockholm/lass/2configs/ppp.nix>
+    <stockholm/lass/2configs/green-host.nix>
+    <stockholm/lass/2configs/ppp/x220-modem.nix>
+    <stockholm/lass/2configs/ppp/umts-stick.nix>
+    # <stockholm/lass/2configs/remote-builder/morpheus.nix>
+    # <stockholm/lass/2configs/remote-builder/prism.nix>
     {
       krebs.iptables.tables.filter.INPUT.rules = [
         #risk of rain
