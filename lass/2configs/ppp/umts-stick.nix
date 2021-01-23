@@ -1,10 +1,10 @@
 { pkgs, ... }: {
 
-  # usage: pppd call default
+  # usage: pppd call stick
 
-  environment.etc."ppp/peers/default".text = ''
-    /dev/ttyACM2
-    921600
+  environment.etc."ppp/peers/stick".text = ''
+    /dev/ttyUSB0
+    460800
     crtscts
     defaultroute
     holdoff 10
@@ -30,3 +30,4 @@
   ];
 
 }
+
