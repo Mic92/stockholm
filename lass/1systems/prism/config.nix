@@ -139,16 +139,6 @@ with import <stockholm/lib>;
       };
     }
     {
-      lass.ejabberd = {
-        enable = true;
-        hosts = [ "lassul.us" ];
-      };
-      krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-p tcp --dport xmpp-client"; target = "ACCEPT"; }
-        { predicate = "-p tcp --dport xmpp-server"; target = "ACCEPT"; }
-      ];
-    }
-    {
       imports = [
         <stockholm/lass/2configs/realwallpaper.nix>
       ];

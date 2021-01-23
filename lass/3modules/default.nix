@@ -3,7 +3,6 @@ _:
   imports = [
     ./bindfs.nix
     ./dnsmasq.nix
-    ./ejabberd
     ./folderPerms.nix
     ./hosts.nix
     ./klem.nix
