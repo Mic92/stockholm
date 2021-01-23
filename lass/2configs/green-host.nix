@@ -18,4 +18,12 @@
     localIp = "10.233.2.16";
     format = "ecryptfs";
   };
+
+  services.borgbackup.jobs.sync-green = {
+    encryption.mode = "none";
+    paths = "/var/lib/sync-containers/green/ecryptfs";
+    repo = "/var/lib/sync-containers/green/backup";
+    compression = "auto,lzma";
+    startAt = "daily";
+  };
 }
