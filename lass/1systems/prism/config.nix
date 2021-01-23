@@ -118,6 +118,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/iodined.nix>
     <stockholm/lass/2configs/paste.nix>
     <stockholm/lass/2configs/syncthing.nix>
+    <stockholm/lass/2configs/green-host.nix>
     <stockholm/lass/2configs/reaktor-coders.nix>
     <stockholm/lass/2configs/ciko.nix>
     <stockholm/lass/2configs/container-networking.nix>
