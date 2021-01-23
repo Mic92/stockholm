@@ -155,6 +155,8 @@ in {
 
         if [ -h /var/lib/containers/${ctr.name}/var/src/nixos-config ] && (! ping -c1 -q -w5 ${ctr.name}.r); then
           ${pkgs.nixos-container}/bin/nixos-container run ${ctr.name} -- nixos-rebuild -I /var/src switch
+        else
+          ${(stop ctr.name).${ctr.format}}
         fi
       '')
       (pkgs.writeDashBin "stop-${ctr.name}" ''
