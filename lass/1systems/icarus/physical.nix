@@ -51,12 +51,10 @@
     (1,     48,     60)
     (2,     50,     61)
     (3,     52,     63)
-    (6,     60,     65)
-    (7,     80,     85)
-    (127,   90,     32767)
+    (6,     60,     85)
+    (7,     80,     90)
+    (127,   89,     32767)
   '';
 
   services.logind.lidSwitch = "ignore";
-  services.logind.lidSwitchDocked = "ignore";
-
 }
