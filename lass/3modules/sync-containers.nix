@@ -10,6 +10,8 @@ with import <stockholm/lib>;
     plain = ''
     '';
     ecryptfs = ''
+      # we start and exit ecryptfs-manager again to circumvent a bug where mounting the ecryptfs fails
+      echo 4 | ${pkgs.ecryptfs}/bin/ecryptfs-manager
       if ! mount | grep -q '${cfg.dataLocation}/${cname}/ecryptfs on /var/lib/containers/${cname}/var/state type ecryptfs'; then
         if [ -e ${cfg.dataLocation}/${cname}/ecryptfs/.cfg.json ]; then
           ${pkgs.ecrypt}/bin/ecrypt mount ${cfg.dataLocation}/${cname}/ecryptfs /var/lib/containers/${cname}/var/state
