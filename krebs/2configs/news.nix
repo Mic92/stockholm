@@ -75,7 +75,7 @@
                     echo "$#"
                     exit 1
                   fi
-                  ${pkgs.curl}/bin/curl -Ss "https://feedsearch.dev/api/v1/search?url=$1&info=true&favicon=false" | \
+                  ${pkgs.curl}/bin/curl -Ss "https://feedsearch.dev/api/v1/search?url=$1&info=true&favicon=false" |
                     ${pkgs.jq}/bin/jq '.[].url'
                 '';
               };
