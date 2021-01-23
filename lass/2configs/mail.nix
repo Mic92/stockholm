@@ -21,6 +21,26 @@ let
     account default: prism
   '';
 
+  notmuch-config = pkgs.writeText "notmuch-config" ''
+    [database]
+    path=/home/lass/Maildir
+
+    [user]
+    name=lassulus
+    primary_email=lassulus@lassul.us
+    other_email=lass@mors.r;${concatStringsSep ";" (flatten (attrValues mailboxes))}
+
+    [new]
+    tags=unread;inbox;
+    ignore=
+
+    [search]
+    exclude_tags=deleted;spam;
+
+    [maildir]
+    synchronize_flags=true
+  '';
+
   msmtp = pkgs.writeBashBin "msmtp" ''
     ${pkgs.coreutils}/bin/tee >(${pkgs.notmuch}/bin/notmuch insert +sent) | \
       ${pkgs.msmtp}/bin/msmtp -C ${msmtprc} "$@"
@@ -232,6 +252,7 @@ let
   };
 
 in {
+  environment.variables.NOTMUCH_CONFIG = toString notmuch-config;
   environment.systemPackages = [
     msmtp
     mutt
