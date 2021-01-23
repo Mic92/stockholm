@@ -200,7 +200,7 @@ in {
         ${pkgs.mpc_cli}/bin/mpc idle player > /dev/null
         ${pkgs.mpc_cli}/bin/mpc current -f %file%
       done | while read track; do
-        listeners=$(${pkgs.iproute}/bin/ss -Hno state established '( sport = :8000 )' | wc -l)
+        listeners=$(${pkgs.iproute}/bin/ss -Hno state established 'sport = :8000' | wc -l)
         echo "$(date -Is)" "$track" | tee -a "$HISTORY_FILE"
         echo "$(tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
         ${write_to_irc} "playing: $track listeners: $listeners"
