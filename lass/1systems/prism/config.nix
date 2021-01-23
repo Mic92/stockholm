@@ -142,9 +142,14 @@ with import <stockholm/lib>;
       imports = [
         <stockholm/lass/2configs/realwallpaper.nix>
       ];
-      services.nginx.virtualHosts."lassul.us".locations."= /wallpaper.png".extraConfig = ''
-        alias /var/realwallpaper/realwallpaper.png;
-      '';
+      services.nginx.virtualHosts."lassul.us".locations = {
+        "= /wallpaper-marker.png".extraConfig = ''
+          alias /var/realwallpaper/realwallpaper-marker.png;
+        '';
+        "= /wallpaper.png".extraConfig = ''
+          alias /var/realwallpaper/realwallpaper.png;
+        '';
+      };
     }
     {
       users.users.jeschli = {
