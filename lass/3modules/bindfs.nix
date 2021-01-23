@@ -28,6 +28,13 @@ in {
           type = types.listOf types.str;
           default = [];
         };
+        clearTarget = mkOption {
+          description = ''
+            whether to clear the target folder before mounting
+          '';
+          type = types.bool;
+          default = false;
+        };
       };
     }));
     default = {};
@@ -41,6 +48,9 @@ in {
       path = [ pkgs.coreutils ];
       serviceConfig = {
         ExecStartPre = pkgs.writeDash "bindfs-init-${name}" ''
+          ${optionalString mount.clearTarget ''
+            rm -rf '${mount.target}'
+          ''}
           mkdir -p '${mount.source}'
           mkdir -p '${mount.target}'
         '';
