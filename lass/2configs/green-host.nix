@@ -10,7 +10,9 @@
       "shodan"
       "skynet"
       "mors"
+      "morpheus"
       "littleT"
+      "styx"
     ];
     hostIp = "10.233.2.15";
     localIp = "10.233.2.16";
