@@ -686,6 +686,7 @@ in {
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII3OpzRB3382d7c2apdHC+U/R0ZlaWxXZa3GFAj54ZhU ";
+      syncthing.id = "JAVJ6ON-WLCWOA3-YB7EHPX-VGIN4XF-635NIVZ-WZ4HN4M-QRMLT4N-5PL5MQN";
     };
   };
   users = rec {
