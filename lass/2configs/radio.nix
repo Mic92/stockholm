@@ -275,7 +275,7 @@ in {
     user = {
       name = "radio";
     };
-    script = ''
+    script = ''. ${pkgs.writeDash "radio" ''
       case "$Method $Request_URI" in
         "GET /current")
           printf 'HTTP/1.1 200 OK\r\n'
@@ -303,7 +303,7 @@ in {
           exit
         ;;
       esac
-    '';
+    ''}'';
   };
 
   services.nginx = {
