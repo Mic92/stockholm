@@ -3,7 +3,6 @@ with import <stockholm/lib>;
 {
   imports = [
     ./binary-cache/client.nix
-    ./backup.nix
     ./gc.nix
     ./mc.nix
     ./vim.nix

@@ -33,7 +33,6 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/starcraft.nix>
     <stockholm/lass/2configs/dunst.nix>
     <stockholm/lass/2configs/rtl-sdr.nix>
-    <stockholm/lass/2configs/backup.nix>
     <stockholm/lass/2configs/print.nix>
     <stockholm/lass/2configs/blue-host.nix>
     <stockholm/lass/2configs/network-manager.nix>
