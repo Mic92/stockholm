@@ -14,6 +14,8 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/wine.nix>
     <stockholm/lass/2configs/bitcoin.nix>
     <stockholm/lass/2configs/blue-host.nix>
+    <stockholm/lass/2configs/green-host.nix>
+    <stockholm/krebs/2configs/news-host.nix>
     <stockholm/lass/2configs/nfs-dl.nix>
     <stockholm/lass/2configs/gg23.nix>
     <stockholm/lass/2configs/hass>
