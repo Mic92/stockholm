@@ -68,6 +68,13 @@
     target = "root@${target}/var/src";
   };
 
+  # usage: $(nix-build --no-out-link --argstr name HOSTNAME --argstr target PATH -A populate)
+  populate = { target, force ? false }: pkgs.populate {
+    inherit force;
+    source = source { test = false; };
+    target = lib.mkTarget target;
+  };
+
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME --argstr target PATH -A test)
   test = { target }: pkgs.krops.writeTest "${name}-test" {
     force = true;
