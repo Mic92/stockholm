@@ -3,7 +3,7 @@ with import ../lib.nix { inherit lib; };
 
 {
   services.home-assistant.config = lib.mkMerge [
-    (lightswitch switches.dimmer.bett lights.bett)
+    (lightswitch "bett" switches.dimmer.bett lights.bett)
   ];
 
   # lass.hass.love = {
