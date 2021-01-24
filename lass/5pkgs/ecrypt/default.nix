@@ -3,7 +3,6 @@
 #usage: ecrypt mount /var/crypted /var/unencrypted
 pkgs.writers.writeDashBin "ecrypt" ''
   set -euf
-  set -x
 
   PATH=${lib.makeBinPath (with pkgs; [
     coreutils
@@ -32,6 +31,8 @@ pkgs.writers.writeDashBin "ecrypt" ''
         echo 'destination dir is not empty, aborting'
         exit 1
       else
+        # we start and exit ecryptfs-manager again to circumvent a bug where mounting the ecryptfs fails
+        echo 4 | ecryptfs-manager
         stty -echo
         printf "passphrase: "
         read  passphrase
@@ -59,6 +60,8 @@ pkgs.writers.writeDashBin "ecrypt" ''
       if keyctl list @u | grep -q "$old_sig"; then
         echo 'pw already saved'
       else
+        # we start and exit ecryptfs-manager again to circumvent a bug where mounting the ecryptfs fails
+        echo 4 | ecryptfs-manager
         stty -echo
         printf "passphrase: "
         read  passphrase
