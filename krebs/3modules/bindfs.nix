@@ -1,9 +1,9 @@
 with import <stockholm/lib>;
 { config, pkgs, ... }:
 let
-  cfg = config.lass.bindfs;
+  cfg = config.krebs.bindfs;
 in {
-  options.lass.bindfs = mkOption {
+  options.krebs.bindfs = mkOption {
     type = types.attrsOf (types.submodule ({ config, ... }: {
       options = {
         target = mkOption {

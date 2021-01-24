@@ -26,7 +26,7 @@ with import <stockholm/lib>;
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICMe23IAHn4Ow4J4i8M9GJshqvY80U11NKPLum6b1XLn" # weechat ssh tunnel
   ];
 
-  lass.bindfs = {
+  krebs.bindfs = {
     "/home/lass/.weechat" = {
       source = "/var/state/lass_weechat";
       options = [

@@ -11,6 +11,7 @@ let
       ./apt-cacher-ng.nix
       ./backup.nix
       ./bepasty-server.nix
+      ./bindfs.nix
       ./brockman.nix
       ./buildbot/master.nix
       ./buildbot/slave.nix
