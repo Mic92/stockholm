@@ -49,6 +49,7 @@ with import ./lib.nix { inherit lib; };
     };
     config = {};
     sun.elevation = 66;
+    shopping_list = {};
     discovery = {};
     frontend = {};
     mqtt = {
@@ -83,7 +84,6 @@ with import ./lib.nix { inherit lib; };
       (tasmota_s20 "Stereo Anlage" "stereo")
     ];
     mobile_app = {};
-    hue = {};
     weather = [
       {
         platform = "openweathermap";
