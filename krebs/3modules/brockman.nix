@@ -1,5 +1,5 @@
-{ pkgs, lib, config, ... }:
-with lib;
+{ pkgs, config, ... }:
+with import <stockholm/lib>;
 let
   cfg = config.krebs.brockman;
 in {
@@ -13,6 +13,7 @@ in {
       home = "/var/lib/brockman";
       createHome = true;
       isNormalUser = false;
+      uid = genid_uint31 "brockman";
     };
 
     systemd.services.brockman = {
