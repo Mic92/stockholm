@@ -92,6 +92,10 @@ in {
 
   config = mkIf (cfg.containers != {}) {
     programs.fuse.userAllowOther = true;
+    # allow syncthing to enter /var/lib/containers
+    system.activationScripts.syncthing-home = ''
+      ${pkgs.coreutils}/bin/chmod a+x /var/lib/containers
+    '';
 
     services.syncthing.declarative.folders = (mapAttrs' (_: ctr: nameValuePair "${(paths ctr.name).${ctr.format}}" ({
       devices = ctr.peers;
