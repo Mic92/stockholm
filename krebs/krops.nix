@@ -28,6 +28,7 @@
       git = {
         ref = (lib.importJSON ./nixpkgs.json).rev;
         url = https://github.com/NixOS/nixpkgs;
+        shallow = true;
       };
     };
     stockholm.file = toString ../.;
