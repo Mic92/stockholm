@@ -8,6 +8,7 @@ with import <stockholm/lib>;
   };
   start = cname: {
     plain = ''
+      :
     '';
     ecryptfs = ''
       if ! mount | grep -q '${cfg.dataLocation}/${cname}/ecryptfs on /var/lib/containers/${cname}/var/state type ecryptfs'; then
@@ -28,6 +29,7 @@ with import <stockholm/lib>;
   };
   stop = cname: {
     plain = ''
+      :
     '';
     ecryptfs = ''
       ${pkgs.ecrypt}/bin/ecrypt unmount ${cfg.dataLocation}/${cname}/ecryptfs /var/lib/containers/${cname}/var/state
