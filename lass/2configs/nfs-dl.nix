@@ -13,9 +13,9 @@
       "x-systemd.device-timeout=1"
       "x-systemd.idle-timeout=1min"
       "x-systemd.requires=retiolum.service"
-      "x-systemd.requires=wpa_supplicant.service"
       "user"
       "_netdev"
+      "soft"
     ];
   };
 }
