@@ -93,8 +93,7 @@ in {
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxFkBln23wUxt4RhIHE3GvdKeBpJbjn++6maupHqUHp";
     };
     news = {
-      cores = 1;
-      owner = config.krebs.users.krebs;
+      ci = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.5";
