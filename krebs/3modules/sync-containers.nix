@@ -1,6 +1,6 @@
 with import <stockholm/lib>;
 { config, pkgs, ... }: let
-  cfg = config.lass.sync-containers;
+  cfg = config.krebs.sync-containers;
   paths = cname: {
     plain = "/var/lib/containers/${cname}/var/state";
     ecryptfs = "${cfg.dataLocation}/${cname}/ecryptfs";
@@ -37,7 +37,7 @@ with import <stockholm/lib>;
     '';
   };
 in {
-  options.lass.sync-containers = {
+  options.krebs.sync-containers = {
     dataLocation = mkOption {
       description = ''
         location where the encrypted sync-container lie around

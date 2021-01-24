@@ -51,6 +51,7 @@ let
       ./secret.nix
       ./setuid.nix
       ./shadow.nix
+      ./sync-containers.nix
       ./tinc.nix
       ./tinc_graphs.nix
       ./urlwatch.nix

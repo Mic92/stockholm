@@ -4,7 +4,7 @@
     <stockholm/lass/2configs/container-networking.nix>
     <stockholm/lass/2configs/syncthing.nix>
   ];
-  lass.sync-containers.containers.green = {
+  krebs.sync-containers.containers.green = {
     peers = [
       "icarus"
       "shodan"
