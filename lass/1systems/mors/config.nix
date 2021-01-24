@@ -35,6 +35,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/network-manager.nix>
     <stockholm/lass/2configs/nfs-dl.nix>
     <stockholm/lass/2configs/green-host.nix>
+    <stockholm/krebs/2configs/news-host.nix>
     <stockholm/lass/2configs/ppp/x220-modem.nix>
     <stockholm/lass/2configs/ppp/umts-stick.nix>
     # <stockholm/lass/2configs/remote-builder/morpheus.nix>
