@@ -11,6 +11,7 @@
     <stockholm/lass/2configs/programs.nix>
     <stockholm/lass/2configs/network-manager.nix>
     <stockholm/lass/2configs/syncthing.nix>
+    <stockholm/lass/2configs/sync/sync.nix>
     <stockholm/lass/2configs/games.nix>
     <stockholm/lass/2configs/steam.nix>
     <stockholm/lass/2configs/wine.nix>

@@ -1,9 +1,7 @@
 _:
 {
   imports = [
-    ./bindfs.nix
     ./dnsmasq.nix
-    ./ejabberd
     ./folderPerms.nix
     ./hosts.nix
     ./klem.nix
@@ -13,7 +11,6 @@ _:
     ./pyload.nix
     ./restic.nix
     ./screenlock.nix
-    ./sync-containers.nix
     ./usershadow.nix
     ./xjail.nix
     ./autowifi.nix

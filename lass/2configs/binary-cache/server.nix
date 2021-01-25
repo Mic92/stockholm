@@ -6,6 +6,7 @@
   services.nix-serve = {
     enable = true;
     secretKeyFile = config.krebs.secret.files.nix-serve-key.path;
+    port = 5005;
   };
 
   systemd.services.nix-serve = {

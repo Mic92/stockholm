@@ -11,6 +11,7 @@ let
       ./apt-cacher-ng.nix
       ./backup.nix
       ./bepasty-server.nix
+      ./bindfs.nix
       ./brockman.nix
       ./buildbot/master.nix
       ./buildbot/slave.nix
@@ -51,6 +52,7 @@ let
       ./secret.nix
       ./setuid.nix
       ./shadow.nix
+      ./sync-containers.nix
       ./tinc.nix
       ./tinc_graphs.nix
       ./urlwatch.nix
@@ -90,8 +92,10 @@ let
           @ IN SOA dns19.ovh.net. tech.ovh.net. (2015052000 86400 3600 3600000 86400)
                                 IN NS     ns19.ovh.net.
                                 IN NS     dns19.ovh.net.
-                                IN A      192.30.252.154
-                                IN A      192.30.252.153
+                                IN A      185.199.108.153
+                                IN A      185.199.109.153
+                                IN A      185.199.110.153
+                                IN A      185.199.111.153
         '';
         };
     };

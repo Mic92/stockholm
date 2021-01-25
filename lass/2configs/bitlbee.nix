@@ -10,6 +10,10 @@ with (import <stockholm/lib>);
       pkgs.bitlbee-steam
       pkgs.bitlbee-discord
     ];
-    libpurple_plugins = [ pkgs.telegram-purple ];
+    libpurple_plugins = [
+      # pkgs.telegram-purple
+      pkgs.tdlib-purple
+      # pkgs.purple-gowhatsapp
+    ];
   };
 }

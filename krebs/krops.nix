@@ -28,6 +28,7 @@
       git = {
         ref = (lib.importJSON ./nixpkgs.json).rev;
         url = https://github.com/NixOS/nixpkgs;
+        shallow = true;
       };
     };
     stockholm.file = toString ../.;
@@ -65,6 +66,13 @@
   deploy = pkgs.krops.writeDeploy "${name}-deploy" {
     source = source { test = false; };
     target = "root@${target}/var/src";
+  };
+
+  # usage: $(nix-build --no-out-link --argstr name HOSTNAME --argstr target PATH -A populate)
+  populate = { target, force ? false }: pkgs.populate {
+    inherit force;
+    source = source { test = false; };
+    target = lib.mkTarget target;
   };
 
   # usage: $(nix-build --no-out-link --argstr name HOSTNAME --argstr target PATH -A test)

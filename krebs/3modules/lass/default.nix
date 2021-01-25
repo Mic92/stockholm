@@ -44,6 +44,7 @@ in {
           matrix              60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           paste               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           radio               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          jitsi               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           streaming           60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
         '';
       };
@@ -685,6 +686,7 @@ in {
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII3OpzRB3382d7c2apdHC+U/R0ZlaWxXZa3GFAj54ZhU ";
+      syncthing.id = "JAVJ6ON-WLCWOA3-YB7EHPX-VGIN4XF-635NIVZ-WZ4HN4M-QRMLT4N-5PL5MQN";
     };
   };
   users = rec {
@@ -698,6 +700,11 @@ in {
       mail = "lass@blue.r";
       pubkey = builtins.readFile ./ssh/blue.rsa;
       pgp.pubkeys.default = builtins.readFile ./pgp/blue.pgp;
+    };
+    lass-green = {
+      mail = "lass@green.r";
+      pubkey = builtins.readFile ./ssh/green.ed25519;
+      pgp.pubkeys.default = builtins.readFile ./pgp/green.pgp;
     };
     lass-mors = {
       mail = "lass@mors.r";

@@ -192,18 +192,15 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     fi
 
     # create marker file from json
-    if [ -s marker.json ]; then
-      jq -r 'to_entries[] | @json "\(.value.latitude) \(.value.longitude) image=krebs.png"' marker.json > marker_file
-      echo 'position=sun image=sun.png' >> marker_file
-      echo 'position=moon image=moon.png' >> marker_file
-      echo 'position=mercury image=mercury.png' >> marker_file
-      echo 'position=venus image=venus.png' >> marker_file
-      echo 'position=mars image=mars.png' >> marker_file
-      echo 'position=jupiter image=jupiter.png' >> marker_file
-      echo 'position=saturn image=saturn.png' >> marker_file
-      echo 'position=uranus image=uranus.png' >> marker_file
-      echo 'position=neptune image=neptune.png' >> marker_file
-    fi
+    echo 'position=sun image=sun.png' > marker_file
+    echo 'position=moon image=moon.png' >> marker_file
+    echo 'position=mercury image=mercury.png' >> marker_file
+    echo 'position=venus image=venus.png' >> marker_file
+    echo 'position=mars image=mars.png' >> marker_file
+    echo 'position=jupiter image=jupiter.png' >> marker_file
+    echo 'position=saturn image=saturn.png' >> marker_file
+    echo 'position=uranus image=uranus.png' >> marker_file
+    echo 'position=neptune image=neptune.png' >> marker_file
 
     # generate moon
     xplanet -body moon --num_times 1 -origin earth \
@@ -228,6 +225,24 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       ''}
 
     xplanet --num_times 1 --geometry $xplanet_out_size \
+      --output xplanet-marker-output.png --projection merc \
+      -config ${pkgs.writeText "xplanet-marker.config" ''
+        [earth]
+        "Earth"
+        map=daymap-final.png
+        night_map=nightmap-final.png
+        cloud_map=clouds.png
+        cloud_threshold=1
+        cloud_gamma=10
+        marker_file=marker_file
+        shade=15
+      ''}
+
+    if [ -s marker.json ]; then
+      jq -r 'to_entries[] | @json "\(.value.latitude) \(.value.longitude) image=krebs.png"' marker.json >> marker_file
+    fi
+
+    xplanet --num_times 1 --geometry $xplanet_out_size \
       --output xplanet-krebs-output.png --projection merc \
       -config ${pkgs.writeText "xplanet-krebs.config" ''
         [earth]
@@ -246,6 +261,13 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       convert xplanet-output.png -crop $out_geometry \
         realwallpaper-tmp.png
         mv realwallpaper-tmp.png realwallpaper.png
+    fi
+
+    # trim xplanet output
+    if needs_rebuild realwallpaper-marker.png xplanet-marker-output.png; then
+      convert xplanet-marker-output.png -crop $out_geometry \
+        realwallpaper-marker-tmp.png
+        mv realwallpaper-marker-tmp.png realwallpaper-marker.png
     fi
 
     if needs_rebuild realwallpaper-krebs.png xplanet-krebs-output.png; then

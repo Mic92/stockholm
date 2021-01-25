@@ -1,6 +1,6 @@
 with import <stockholm/lib>;
 { config, pkgs, ... }: let
-  cfg = config.lass.sync-containers;
+  cfg = config.krebs.sync-containers;
   paths = cname: {
     plain = "/var/lib/containers/${cname}/var/state";
     ecryptfs = "${cfg.dataLocation}/${cname}/ecryptfs";
@@ -8,6 +8,7 @@ with import <stockholm/lib>;
   };
   start = cname: {
     plain = ''
+      :
     '';
     ecryptfs = ''
       if ! mount | grep -q '${cfg.dataLocation}/${cname}/ecryptfs on /var/lib/containers/${cname}/var/state type ecryptfs'; then
@@ -28,6 +29,7 @@ with import <stockholm/lib>;
   };
   stop = cname: {
     plain = ''
+      :
     '';
     ecryptfs = ''
       ${pkgs.ecrypt}/bin/ecrypt unmount ${cfg.dataLocation}/${cname}/ecryptfs /var/lib/containers/${cname}/var/state
@@ -37,7 +39,7 @@ with import <stockholm/lib>;
     '';
   };
 in {
-  options.lass.sync-containers = {
+  options.krebs.sync-containers = {
     dataLocation = mkOption {
       description = ''
         location where the encrypted sync-container lie around
@@ -90,6 +92,10 @@ in {
 
   config = mkIf (cfg.containers != {}) {
     programs.fuse.userAllowOther = true;
+    # allow syncthing to enter /var/lib/containers
+    system.activationScripts.syncthing-home = ''
+      ${pkgs.coreutils}/bin/chmod a+x /var/lib/containers
+    '';
 
     services.syncthing.declarative.folders = (mapAttrs' (_: ctr: nameValuePair "${(paths ctr.name).${ctr.format}}" ({
       devices = ctr.peers;
@@ -153,6 +159,8 @@ in {
 
         if [ -h /var/lib/containers/${ctr.name}/var/src/nixos-config ] && (! ping -c1 -q -w5 ${ctr.name}.r); then
           ${pkgs.nixos-container}/bin/nixos-container run ${ctr.name} -- nixos-rebuild -I /var/src switch
+        else
+          ${(stop ctr.name).${ctr.format}}
         fi
       '')
       (pkgs.writeDashBin "stop-${ctr.name}" ''

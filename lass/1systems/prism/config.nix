@@ -118,6 +118,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/iodined.nix>
     <stockholm/lass/2configs/paste.nix>
     <stockholm/lass/2configs/syncthing.nix>
+    <stockholm/lass/2configs/green-host.nix>
     <stockholm/lass/2configs/reaktor-coders.nix>
     <stockholm/lass/2configs/ciko.nix>
     <stockholm/lass/2configs/container-networking.nix>
@@ -138,22 +139,17 @@ with import <stockholm/lib>;
       };
     }
     {
-      lass.ejabberd = {
-        enable = true;
-        hosts = [ "lassul.us" ];
-      };
-      krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-p tcp --dport xmpp-client"; target = "ACCEPT"; }
-        { predicate = "-p tcp --dport xmpp-server"; target = "ACCEPT"; }
-      ];
-    }
-    {
       imports = [
         <stockholm/lass/2configs/realwallpaper.nix>
       ];
-      services.nginx.virtualHosts."lassul.us".locations."= /wallpaper.png".extraConfig = ''
-        alias /var/realwallpaper/realwallpaper.png;
-      '';
+      services.nginx.virtualHosts."lassul.us".locations = {
+        "= /wallpaper-marker.png".extraConfig = ''
+          alias /var/realwallpaper/realwallpaper-marker.png;
+        '';
+        "= /wallpaper.png".extraConfig = ''
+          alias /var/realwallpaper/realwallpaper.png;
+        '';
+      };
     }
     {
       users.users.jeschli = {
@@ -282,8 +278,9 @@ with import <stockholm/lib>;
       services.murmur = {
         enable = true;
         bandwidth = 10000000;
+        registerName = "lassul.us";
+        autobanTime = 30;
       };
-      services.murmur.registerName = "lassul.us";
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-p tcp --dport 64738"; target = "ACCEPT";}
         { predicate = "-p udp --dport 64738"; target = "ACCEPT";}
@@ -354,6 +351,8 @@ with import <stockholm/lib>;
             palo.pubkey
             "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDB0d0JA20Vqn7I4lCte6Ne2EOmLZyMJyS9yIKJYXNLjbLwkQ4AYoQKantPBkTxR75M09E7d3j5heuWnCjWH45TrfQfe1EOSSC3ppCI6C6aIVlaNs+KhAYZS0m2Y8WkKn+TT5JLEa8yybYVN/RlZPOilpj/1QgjU6CQK+eJ1k/kK+QFXcwN82GDVh5kbTVcKUNp2tiyxFA+z9LY0xFDg/JHif2ROpjJVLQBJ+YPuOXZN5LDnVcuyLWKThjxy5srQ8iDjoxBg7dwLHjby5Mv41K4W61Gq6xM53gDEgfXk4cQhJnmx7jA/pUnsn2ZQDeww3hcc7vRf8soogXXz2KC9maiq0M/svaATsa9Ul4hrKnqPZP9Q8ScSEAUX+VI+x54iWrnW0p/yqBiRAzwsczdPzaQroUFTBxrq8R/n5TFdSHRMX7fYNOeVMjhfNca/gtfw9dYBVquCvuqUuFiRc0I7yK44rrMjjVQRcAbw6F8O7+04qWCmaJ8MPlmApwu2c05VMv9hiJo5p6PnzterRSLCqF6rIdhSnuOwrUIt1s/V+EEZXHCwSaNLaQJnYL0H9YjaIuGz4c8kVzxw4c0B6nl+hqW5y5/B2cuHiumnlRIDKOIzlv8ufhh21iN7QpIsPizahPezGoT1XqvzeXfH4qryo8O4yTN/PWoA+f7o9POU7L6hQ== lhebendanz@nixos"
             "AAAAB3NzaC1yc2EAAAADAQABAAABgQC4ECL9NSCWqs4KVe+FF+2BPtl5Bv5aQPHqnXllCyiESZykwRKLx6/AbF5SbUAUMVZtp9oDSdp28m3BvVeWJ/q7hAbIxUtfd/jp+JBRZ8Kj6K5GzUO7Bhgl/o0A7xEjAeOKHiYuLjdPMcFUyl6Ah4ey/mcQYf6AdU0+hYUDeUlKe/YxxYD6202W0GJq2xGdIqs/TbopT9iaX+sv0wdXDVfFY72nFqOUwJW3u6O2viKKRugrz/eo50Eo3ts7pYz/FpDXExrUvV9Vu/bQ34pa8nKgF3/AKQHgmzljNQSVZKyAV8OY0UFonjBMXCBg2tXtwfnlzdx2SyuQVv55x+0AuRKsi85G2xLpXu1A3921pseBTW6Q6kbYK9eqxAay2c/kNbwNqFnO+nCvQ6Ier/hvGddOtItMu96IuU2E7mPN6WgvM8/3fjJRFWnZxFxqu/k7iH+yYT8qwRgdiSqZc76qvkYEuabdk2itstTRY0A3SpI3hFMZDw/7bxgMZtqpfyoRk5s= philip@shiki11:15 <Profpatsch> AAAAB3NzaC1yc2EAAAADAQABAAABgQC4ECL9NSCWqs4KVe+FF+2BPtl5Bv5aQPHqnXllCyiESZykwRKLx6/AbF5SbUAUMVZtp9oDSdp28m3BvVeWJ/q7hAbIxUtfd/jp+JBRZ8Kj6K5GzUO7Bhgl/o0A7xEjAeOKHiYuLjdPMcFUyl6Ah4ey/mcQYf6AdU0+hYUDeUlKe/YxxYD6202W0GJq2xGdIqs/TbopT9iaX+sv0wdXDVfFY72nFqOUwJW3u6O2viKKRugrz/eo50Eo3ts7pYz/FpDXExrUvV9Vu/bQ34pa8nKgF3/AKQHgmzljNQSVZKyAV8OY0UFonjBMXCBg2tXtwfnlzdx2SyuQVv55x+0AuRKsi85G2xLpXu1A3921pseBTW6Q6kbYK9eqxAay2c/kNbwNqFnO+nCvQ6Ier/hvGddOtItMu96IuU2E7mPN6WgvM8/3fjJRFWnZxFxqu/k7iH+yYT8qwRgdiSqZc76qvkYEuabdk2itstTRY0A3SpI3hFMZDw/7bxgMZtqpfyoRk5s= philip@shiki"
+            mic92.pubkey
+            qubasa.pubkey
           ];
         };
       };
@@ -410,42 +409,6 @@ with import <stockholm/lib>;
         openssh.authorizedKeys.keys = [
           config.krebs.users.mic92.pubkey
         ];
-      };
-    }
-    { #macos mounting of yellow
-      krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-i wiregrill -p tcp --dport 139"; target = "ACCEPT"; }
-        { predicate = "-i wiregrill -p tcp --dport 445"; target = "ACCEPT"; }
-        { predicate = "-i wiregrill -p udp --dport 137"; target = "ACCEPT"; }
-        { predicate = "-i wiregrill -p udp --dport 138"; target = "ACCEPT"; }
-      ];
-      users.users.smbguest = {
-        name = "smbguest";
-        uid = config.ids.uids.smbguest;
-        description = "smb guest user";
-        home = "/home/share";
-        createHome = true;
-      };
-      services.samba = {
-        enable = true;
-        enableNmbd = true;
-        shares = {
-          download = {
-            path = "/var/download/finished";
-            "read only" = "yes";
-            browseable = "yes";
-            "guest ok" = "yes";
-          };
-        };
-        extraConfig = ''
-          guest account = smbguest
-          map to guest = bad user
-          # disable printing
-          load printers = no
-          printing = bsd
-          printcap name = /dev/null
-          disable spoolss = yes
-        '';
       };
     }
   ];

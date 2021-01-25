@@ -13,19 +13,18 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/programs.nix>
     <stockholm/lass/2configs/wine.nix>
     <stockholm/lass/2configs/bitcoin.nix>
-    <stockholm/lass/2configs/backup.nix>
     <stockholm/lass/2configs/blue-host.nix>
+    <stockholm/lass/2configs/green-host.nix>
+    <stockholm/krebs/2configs/news-host.nix>
     <stockholm/lass/2configs/nfs-dl.nix>
-    <stockholm/lass/2configs/gg23.nix>
-    <stockholm/lass/2configs/hass>
-    <stockholm/lass/2configs/br.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/home-media.nix>
+    <stockholm/lass/2configs/syncthing.nix>
+    <stockholm/lass/2configs/sync/sync.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.shodan;
 
   services.logind.lidSwitch = "ignore";
   services.logind.lidSwitchDocked = "ignore";
-
 }

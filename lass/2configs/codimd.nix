@@ -12,8 +12,9 @@ with import <stockholm/lib>;
     '';
   };
 
-  services.codimd = {
+  services.hedgedoc = {
     enable = true;
+    configuration.allowOrigin = [ "*" ];
     configuration = {
       db = {
         dialect = "sqlite";

@@ -97,6 +97,10 @@ let
     populate = {
       cgit.section = "software";
     };
+    reaktor2 = {
+      cgit.desc = "irc bot";
+      cgit.section = "software";
+    };
     stockholm = {
       cgit.desc = "take all the computers hostage, they'll love you!";
       cgit.section = "configuration";
@@ -108,6 +112,10 @@ let
     the_playlist = {
       cgit.desc = "Good Music collection + tools";
       cgit.section  = "art";
+    };
+    workadventure-nix = {
+      cgit.desc = "Nix packaging for workadventure";
+      cgit.section = "deployment";
     };
     xmonad-stockholm = {
       cgit.desc = "krebs xmonad modules";
@@ -142,9 +150,6 @@ let
           nick = config.krebs.build.host.name;
           channel = "#xxx";
           # TODO define refs in some kind of option per repo
-          refs = [
-            "refs/heads/master"
-          ];
           server = "irc.r";
           verbose = config.krebs.build.host.name == "prism";
         }}

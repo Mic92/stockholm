@@ -12,14 +12,17 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/browsers.nix>
     <stockholm/lass/2configs/programs.nix>
     <stockholm/lass/2configs/nfs-dl.nix>
-    # <stockholm/lass/2configs/gg23.nix>
-    # <stockholm/lass/2configs/hass>
+    <stockholm/lass/2configs/gg23.nix>
+    <stockholm/lass/2configs/hass>
+    <stockholm/lass/2configs/green-host.nix>
+    <stockholm/krebs/2configs/news-host.nix>
     # <stockholm/lass/2configs/br.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/home-media.nix>
-    # <stockholm/lass/2configs/syncthing.nix>
-    # <stockholm/lass/2configs/sync/sync.nix>
+    <stockholm/lass/2configs/syncthing.nix>
+    <stockholm/lass/2configs/sync/sync.nix>
     # <stockholm/lass/2configs/idc.nix>
+    <stockholm/lass/2configs/ppp/umts-stick.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.styx;
@@ -27,6 +30,8 @@ with import <stockholm/lib>;
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp --dport ${toString config.services.smokeping.port}"; target = "ACCEPT"; }
   ];
+  krebs.power-action.enable = mkForce false;
+
   services.smokeping = {
     enable = true;
     targetConfig = ''

@@ -23,7 +23,7 @@ rec {
   };
 
   friendly_names =
-    lib.mapAttrs' (n: v: lib.nameValuePair "light.${v}_light" { friendly_name = "l.${n}"; }) lights //
+    lib.mapAttrs' (n: v: lib.nameValuePair "light.${v}" { friendly_name = "l.${n}"; }) lights //
     lib.mapAttrs' (n: v: lib.nameValuePair "binary_sensor.${v}_update_available" { friendly_name = "s.${n}_up"; }) switches.dimmer //
     lib.mapAttrs' (n: v: lib.nameValuePair "binary_sensor.${v}_update_available" { friendly_name = "i.${n}_up"; }) sensors.movement //
     lib.mapAttrs' (n: v: lib.nameValuePair "binary_sensor.${v}_update_available" { friendly_name = "l.${n}_up"; }) lights //
@@ -41,11 +41,11 @@ rec {
     lib.mapAttrs' (n: v: lib.nameValuePair "sensor.${v}_illuminance" { friendly_name = "i.${n}_lux"; }) sensors.movement //
     {};
 
-  detect_movement = sensor: light: delay:
+  detect_movement = name: sensor: light: delay:
   let
-    id = "${sensor}_${light}";
+    id = name;
     sensor_ = "binary_sensor.${sensor}_occupancy";
-    light_ = "light.${light}_light";
+    light_ = "light.${light}";
   in {
     input_boolean."${id}" = {
     };
@@ -71,7 +71,6 @@ rec {
       # }
       {
         alias = "movement reset timer ${id}";
-        hide_entity = true;
         trigger = {
           platform = "state";
           entity_id = sensor_;
@@ -87,7 +86,6 @@ rec {
       }
       {
         alias = "movement on ${id}";
-        # hide_entity = true;
         trigger = {
           platform = "state";
           entity_id = "binary_sensor.${sensor}_occupancy";
@@ -124,7 +122,6 @@ rec {
       }
       {
         alias = "movement off ${id}";
-        hide_entity = true;
         trigger = {
           platform = "state";
           entity_id = sensor_;
@@ -144,7 +141,6 @@ rec {
       }
       {
         alias = "movement override ${id}";
-        hide_entity = true;
         trigger = {
           platform = "state";
           entity_id = light_;
@@ -164,7 +160,6 @@ rec {
       }
       {
         alias = "movement expired ${id}";
-        hide_entity = true;
         trigger = {
           platform = "event";
           event_type = "timer.finished";
@@ -186,11 +181,10 @@ rec {
     ];
   };
 
-  lightswitch = switch: light: {
+  lightswitch = name: switch: light: {
     automation = [
       {
-        alias = "lightswitch ${switch} turn on light ${light}";
-        hide_entity = "true";
+        alias = "lightswitch ${name} turn on";
         trigger = {
           platform = "mqtt";
           topic = "zigbee/${switch}";
@@ -225,15 +219,14 @@ rec {
           {
             service = "light.turn_on";
             data_template = {
-              entity_id = "light.${light}_light";
+              entity_id = "light.${light}";
               brightness = "{{ trigger.payload_json.brightness }}";
             };
           }
         ];
       }
       {
-        alias = "lightswitch ${switch} turn off light ${light}";
-        hide_entity = "true";
+        alias = "lightswitch ${name} turn off";
         trigger = {
           platform = "mqtt";
           topic = "zigbee/${switch}";
@@ -254,7 +247,7 @@ rec {
         action = {
           service = "light.turn_off";
           data_template = {
-            entity_id = "light.${light}_light";
+            entity_id = "light.${light}";
           };
         };
       }

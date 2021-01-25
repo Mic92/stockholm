@@ -29,7 +29,7 @@ pkgs.writeDashBin "l-gen-secrets" ''
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.changeme";
-          ip6.addr = "42:0:0:0:0:0:0:changeme";
+          ip6.addr = r6 "changeme";
           aliases = [
             "$HOSTNAME.r"
           ];
@@ -38,7 +38,7 @@ pkgs.writeDashBin "l-gen-secrets" ''
           ${"''"};
         };
         wiregrill = {
-          ip6.addr = (wip6 "changeme").address;
+          ip6.addr = w6 "changeme";
           aliases = [
             "$HOSTNAME.w"
           ];

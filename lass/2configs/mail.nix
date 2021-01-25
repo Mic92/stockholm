@@ -21,6 +21,26 @@ let
     account default: prism
   '';
 
+  notmuch-config = pkgs.writeText "notmuch-config" ''
+    [database]
+    path=/home/lass/Maildir
+
+    [user]
+    name=lassulus
+    primary_email=lassulus@lassul.us
+    other_email=lass@mors.r;${concatStringsSep ";" (flatten (attrValues mailboxes))}
+
+    [new]
+    tags=unread;inbox;
+    ignore=
+
+    [search]
+    exclude_tags=deleted;spam;
+
+    [maildir]
+    synchronize_flags=true
+  '';
+
   msmtp = pkgs.writeBashBin "msmtp" ''
     ${pkgs.coreutils}/bin/tee >(${pkgs.notmuch}/bin/notmuch insert +sent) | \
       ${pkgs.msmtp}/bin/msmtp -C ${msmtprc} "$@"
@@ -207,7 +227,7 @@ let
     set sidebar_short_path
     set sidebar_folder_indent
     set sidebar_visible = yes
-    set sidebar_format = '%B%?F? [%F]?%* %?N?%N/? %?S?%S?'
+    set sidebar_format = '%D%?F? [%F]?%* %?N?%N/? %?S?%S?'
     set sidebar_width   = 20
     color sidebar_new yellow red
 
@@ -232,6 +252,7 @@ let
   };
 
 in {
+  environment.variables.NOTMUCH_CONFIG = toString notmuch-config;
   environment.systemPackages = [
     msmtp
     mutt
