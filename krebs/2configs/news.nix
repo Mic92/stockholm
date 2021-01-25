@@ -12,6 +12,9 @@
       ];
     };
     "brockman.r" = {
+      serverAliases = [
+        "news.r"
+      ];
       locations."/".extraConfig = ''
         root /var/lib/brockman;
         index brockman.json;
