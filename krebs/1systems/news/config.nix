@@ -21,14 +21,14 @@
     "/var/lib/htgen-go" = {
       source = "/var/state/htgen-go";
       options = [
-        "-M ${toString config.users.users.htgen-go.uid}"
+        "-m ${toString config.users.users.htgen-go.uid}"
       ];
       clearTarget = true;
     };
     "/var/lib/brockman" = {
       source = "/var/state/brockman";
       options = [
-        "-M ${toString config.users.users.brockman.uid}"
+        "-m ${toString config.users.users.brockman.uid}:${toString config.users.users.nginx.uid}"
       ];
       clearTarget = true;
     };
