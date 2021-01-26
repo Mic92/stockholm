@@ -42,7 +42,7 @@
   krebs.reaktor2.news = {
     hostname = "localhost";
     port = "6667";
-    nick = "brockman-helper";
+    nick = "candyman";
     plugins = [
       {
         plugin = "register";
@@ -71,7 +71,7 @@
                     exit 1
                   fi
                   reddit_channel=$(echo "$1" | ${pkgs.jq}/bin/jq -Rr '[match("(\\S+)\\s*";"g").captures[].string][0]')
-                  echo "brockman: add r_$reddit_channel http://rss.r/?action=display&bridge=Telegram&username=$reddit_channel&format=Mrss"
+                  echo "brockman: add r_$reddit_channel http://rss.r/?action=display&bridge=Reddit&context=single&r=$reddit_channel&format=Atom"
                 '';
                 add-telegram.filename = pkgs.writeDash "add-telegram" ''
                   set -euf
