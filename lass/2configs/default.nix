@@ -3,7 +3,6 @@ with import <stockholm/lib>;
 {
   imports = [
     ./binary-cache/client.nix
-    ./backup.nix
     ./gc.nix
     ./mc.nix
     ./vim.nix
@@ -22,6 +21,7 @@ with import <stockholm/lib>;
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass-mors.pubkey
             config.krebs.users.lass-blue.pubkey
+            config.krebs.users.lass-green.pubkey
             config.krebs.users.lass-yubikey.pubkey
           ];
         };
@@ -40,6 +40,7 @@ with import <stockholm/lib>;
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass-mors.pubkey
             config.krebs.users.lass-blue.pubkey
+            config.krebs.users.lass-green.pubkey
             config.krebs.users.lass-yubikey.pubkey
           ];
         };

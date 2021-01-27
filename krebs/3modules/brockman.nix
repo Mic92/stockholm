@@ -1,5 +1,5 @@
-{ pkgs, lib, config, ... }:
-with lib;
+{ pkgs, config, ... }:
+with import <stockholm/lib>;
 let
   cfg = config.krebs.brockman;
 in {
@@ -9,7 +9,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.brockman.isNormalUser = false;
+    users.extraUsers.brockman = {
+      home = "/var/lib/brockman";
+      createHome = true;
+      isNormalUser = false;
+      uid = genid_uint31 "brockman";
+    };
 
     systemd.services.brockman = {
       description = "RSS to IRC broadcaster";

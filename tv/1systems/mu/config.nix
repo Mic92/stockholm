@@ -17,6 +17,7 @@ with import <stockholm/lib>;
   boot.initrd.luks.devices.muca.device = "/dev/sda2";
   boot.initrd.availableKernelModules = [ "ahci" ];
   boot.kernelModules = [ "fbcon" "kvm-intel" ];
+  boot.kernelParams = [ "fsck.repair=yes" ];
   boot.extraModulePackages = [ ];
 
   fileSystems = {
@@ -109,9 +110,8 @@ with import <stockholm/lib>;
 
   services.xserver.desktopManager.plasma5.enable = true;
 
-  services.xserver.displayManager.lightdm.autoLogin.enable = true;
-  services.xserver.displayManager.lightdm.autoLogin.user = "vv";
-  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.displayManager.autoLogin.enable = true;
+  services.xserver.displayManager.autoLogin.user = "vv";
 
   users.users.vv = {
     inherit (config.krebs.users.vv) home uid;

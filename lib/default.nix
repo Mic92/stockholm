@@ -12,6 +12,7 @@ let
       encodeName = replaceChars ["/"] ["\\x2f"];
     };
     types = nixpkgs-lib.types // import ./types.nix { inherit lib; };
+    uri = import ./uri.nix { inherit lib; };
     xml = import ./xml.nix { inherit lib; };
 
     eq = x: y: x == y;

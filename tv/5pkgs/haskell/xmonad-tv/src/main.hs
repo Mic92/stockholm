@@ -8,6 +8,7 @@ import System.Exit (exitFailure)
 
 import Control.Exception
 import Control.Monad.Extra (whenJustM)
+import qualified Data.List
 import Graphics.X11.ExtraTypes.XF86
 import Text.Read (readEither)
 import XMonad
@@ -59,6 +60,11 @@ main = getArgs >>= \case
     args -> hPutStrLn stderr ("bad arguments: " <> show args) >> exitFailure
 
 
+queryPrefix :: Query String -> String -> Query Bool
+queryPrefix query prefix =
+    fmap (Data.List.isPrefixOf prefix) query
+
+
 mainNoArgs :: IO ()
 mainNoArgs = do
     workspaces0 <- getWorkspaces0
@@ -82,7 +88,7 @@ mainNoArgs = do
             , manageHook =
                 composeAll
                   [ appName =? "fzmenu-urxvt" --> doCenterFloat
-                  , appName =? "pinentry" --> doCenterFloat
+                  , appName `queryPrefix` "pinentry" --> doCenterFloat
                   , title =? "Upload to Imgur" -->
                       doRectFloat (W.RationalRect 0 0 (1 % 8) (1 % 8))
                   , placeHook (smart (1,0))

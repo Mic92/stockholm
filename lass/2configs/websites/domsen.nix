@@ -285,7 +285,6 @@ in {
     ];
   };
 
-  boot.kernel.sysctl."fs.inotify.max_user_watches" = "1048576";
   services.syncthing.declarative.folders = {
     domsen-backups = {
       path = "/backups/domsen";

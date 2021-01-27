@@ -19,14 +19,6 @@
     <stockholm/krebs/2configs/binary-cache/nixos.nix>
     <stockholm/krebs/2configs/binary-cache/prism.nix>
 
-    ### Krebs ###
-    <stockholm/krebs/2configs/go.nix>
-
-    #### NEWS ####
-    <stockholm/krebs/2configs/ircd.nix>
-    <stockholm/krebs/2configs/news.nix>
-
-
     ### shackspace ###
     # handle the worlddomination map via coap
     <stockholm/krebs/2configs/shack/worlddomination.nix>

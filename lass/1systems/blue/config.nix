@@ -9,8 +9,8 @@ with import <stockholm/lib>;
 
     <stockholm/lass/2configs/blue.nix>
     <stockholm/lass/2configs/syncthing.nix>
+    <stockholm/lass/2configs/sync/sync.nix>
     <stockholm/lass/2configs/sync/decsync.nix>
-    <stockholm/lass/2configs/sync/weechat.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.blue;

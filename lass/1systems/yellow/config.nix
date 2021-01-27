@@ -9,30 +9,21 @@ with import <stockholm/lib>;
 
   krebs.build.host = config.krebs.hosts.yellow;
 
-  system.activationScripts.downloadFolder = ''
-    mkdir -p /var/download
-    chown transmission:download /var/download
-    chown transmission:download /var/download/finished
-    chmod 775 /var/download
-  '';
-
-  users.users.download = { uid = genid "download"; };
   users.groups.download.members = [ "transmission" ];
-  users.users.transmission.group = mkForce "download";
 
   systemd.services.transmission.bindsTo = [ "openvpn-nordvpn.service" ];
   systemd.services.transmission.after = [ "openvpn-nordvpn.service" ];
-  systemd.services.transmission.postStart = ''
-    chmod 775 /var/download/finished
-  '';
   services.transmission = {
     enable = true;
+    group = "download";
+    downloadDirPermissions = "775";
     settings = {
       download-dir = "/var/download/finished";
       incomplete-dir = "/var/download/incoming";
       incomplete-dir-enable = true;
+      rpc-bind-address = "0.0.0.0";
       message-level = 1;
-      umask = "002";
+      umask = 18;
       rpc-whitelist-enabled = false;
       rpc-host-whitelist-enabled = false;
     };
@@ -172,7 +163,7 @@ with import <stockholm/lib>;
     client
     dev tun
     proto udp
-    remote 185.230.127.27 1194
+    remote 91.207.172.77 1194
     resolv-retry infinite
     remote-random
     nobind
@@ -195,6 +186,7 @@ with import <stockholm/lib>;
     fast-io
     cipher AES-256-CBC
     auth SHA512
+
     <ca>
     -----BEGIN CERTIFICATE-----
     MIIFCjCCAvKgAwIBAgIBATANBgkqhkiG9w0BAQ0FADA5MQswCQYDVQQGEwJQQTEQ

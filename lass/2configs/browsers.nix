@@ -7,7 +7,6 @@
     enable = true;
     extensions = [
       "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
-      "ihlenndgcmojhcghmfjfneahoeklbjjh" #cVim
     ];
   };
 }

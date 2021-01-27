@@ -28,6 +28,9 @@ in {
       });
     '';
     systemd.services."slock-${cfg.user.name}@" = {
+      conflicts = [
+        "picom@%i.target"
+      ];
       environment = {
         DISPLAY = ":%I";
         LD_PRELOAD = pkgs.runCommandCC "slock-${cfg.user.name}.so" {
@@ -61,6 +64,8 @@ in {
       restartIfChanged = false;
       serviceConfig = {
         ExecStart = "${pkgs.slock}/bin/slock";
+        ExecStopPost =
+          "+${pkgs.systemd}/bin/systemctl start xsession@%i.target";
         OOMScoreAdjust = -1000;
         Restart = "on-failure";
         RestartSec = "100ms";

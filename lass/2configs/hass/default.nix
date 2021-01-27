@@ -13,7 +13,9 @@ with import ./lib.nix { inherit lib; };
     { predicate = "-i int0 -p tcp --dport 1883"; target = "ACCEPT"; } # mosquitto
     { predicate = "-i docker0 -p tcp --dport 1883"; target = "ACCEPT"; } # mosquitto
     { predicate = "-i int0 -p tcp --dport 8123"; target = "ACCEPT"; } # hass
+    { predicate = "-i int0 -p tcp --dport 1337"; target = "ACCEPT"; } # hass
     { predicate = "-i retiolum -p tcp --dport 8123"; target = "ACCEPT"; } # hass
+    { predicate = "-i retiolum -p tcp --dport 1337"; target = "ACCEPT"; } # hass frontend
     { predicate = "-i wiregrill -p tcp --dport 8123"; target = "ACCEPT"; } # hass
   ];
 
@@ -47,6 +49,7 @@ with import ./lib.nix { inherit lib; };
     };
     config = {};
     sun.elevation = 66;
+    shopping_list = {};
     discovery = {};
     frontend = {};
     mqtt = {
@@ -81,7 +84,6 @@ with import ./lib.nix { inherit lib; };
       (tasmota_s20 "Stereo Anlage" "stereo")
     ];
     mobile_app = {};
-    hue = {};
     weather = [
       {
         platform = "openweathermap";
