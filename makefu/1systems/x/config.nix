@@ -4,7 +4,30 @@
 { config, pkgs, lib, ... }:
 {
   imports =
-    [ # base
+    [
+      # hardware-dependent
+      # device
+
+
+      ./x13
+      # ./x230
+
+      # Common Hardware Components
+
+      # <stockholm/makefu/2configs/hw/mceusb.nix>
+      # <stockholm/makefu/2configs/hw/rtl8812au.nix>
+      <stockholm/makefu/2configs/hw/network-manager.nix>
+      # <stockholm/makefu/2configs/hw/stk1160.nix>
+      # <stockholm/makefu/2configs/hw/irtoy.nix>
+      # <stockholm/makefu/2configs/hw/malduino_elite.nix>
+      <stockholm/makefu/2configs/hw/switch.nix>
+      # <stockholm/makefu/2configs/hw/rad1o.nix>
+      <stockholm/makefu/2configs/hw/cc2531.nix>
+      <stockholm/makefu/2configs/hw/droidcam.nix>
+      <stockholm/makefu/2configs/hw/smartcard.nix>
+      <stockholm/makefu/2configs/hw/upower.nix>
+
+      # base
       <stockholm/makefu>
       <stockholm/makefu/2configs/nur.nix>
       <stockholm/makefu/2configs/home-manager>
@@ -19,8 +42,37 @@
       <stockholm/makefu/2configs/editor/neovim>
       <stockholm/makefu/2configs/tools/all.nix>
       { programs.adb.enable = true; }
+      {
+        services.openssh.hostKeys = [
+          { bits = 4096; path = (toString <secrets/ssh_host_rsa_key>); type = "rsa";}
+        ];
+      }
 
-      { systemd.services.docker.wantedBy = lib.mkForce []; }
+      #{
+      #  users.users.makefu.packages = with pkgs;[ mpc_cli ncmpcpp ];
+      #  services.ympd.enable = true;
+      #  services.mpd = {
+      #    enable = true;
+      #    extraConfig = ''
+      #      log_level "default"
+      #      auto_update "yes"
+
+      #      audio_output {
+      #        type "httpd"
+      #        name "lassulus radio"
+      #        encoder "vorbis" # optional
+      #        port "8000"
+      #        quality "5.0" # do not define if bitrate is defined
+      #        # bitrate "128" # do not define if quality is defined
+      #        format "44100:16:2"
+      #        always_on "yes" # prevent MPD from disconnecting all listeners when playback is stopped.
+      #        tags "yes" # httpd supports sending tags to listening streams.
+      #      }
+      #    '';
+      #  };
+      #}
+
+      # { systemd.services.docker.wantedBy = lib.mkForce []; }
       <stockholm/makefu/2configs/dict.nix>
       # <stockholm/makefu/2configs/legacy_only.nix>
       #<stockholm/makefu/3modules/netboot_server.nix>
@@ -59,10 +111,13 @@
       # <stockholm/makefu/2configs/deployment/hound>
       # <stockholm/makefu/2configs/deployment/photostore.krebsco.de.nix>
       # <stockholm/makefu/2configs/deployment/bureautomation/hass.nix>
+      <stockholm/makefu/2configs/bureautomation/office-radio>
 
       # Krebs
       <stockholm/makefu/2configs/tinc/retiolum.nix>
-      # <stockholm/makefu/2configs/share/gum-client.nix>
+      # <stockholm/makefu/2configs/share/anon-ftp.nix>
+      # <stockholm/makefu/2configs/share/anon-sftp.nix>
+      <stockholm/makefu/2configs/share/gum-client.nix>
       # <stockholm/makefu/2configs/share/temp-share-samba.nix>
 
 
@@ -75,7 +130,7 @@
       # Virtualization
       # <stockholm/makefu/2configs/virtualisation/libvirt.nix>
       <stockholm/makefu/2configs/virtualisation/docker.nix>
-      <stockholm/makefu/2configs/virtualisation/virtualbox.nix>
+      # <stockholm/makefu/2configs/virtualisation/virtualbox.nix>
       #{
       #  networking.firewall.allowedTCPPorts = [ 8080 ];
       #  networking.nat = {
@@ -96,26 +151,10 @@
       <stockholm/makefu/2configs/binary-cache/gum.nix>
       <stockholm/makefu/2configs/binary-cache/lass.nix>
 
-      # Hardware
-      <stockholm/makefu/2configs/hw/tp-x230.nix> # + bluetooth
-      # <stockholm/makefu/2configs/hw/mceusb.nix>
-      <stockholm/makefu/2configs/hw/tpm.nix>
-      # <stockholm/makefu/2configs/hw/rtl8812au.nix>
-      <stockholm/makefu/2configs/hw/network-manager.nix>
-      # <stockholm/makefu/2configs/hw/stk1160.nix>
-      # <stockholm/makefu/2configs/hw/irtoy.nix>
-      # <stockholm/makefu/2configs/hw/malduino_elite.nix>
-      <stockholm/makefu/2configs/hw/switch.nix>
-      # <stockholm/makefu/2configs/hw/rad1o.nix>
-      <stockholm/makefu/2configs/hw/cc2531.nix>
-      <stockholm/makefu/2configs/hw/smartcard.nix>
-      <stockholm/makefu/2configs/hw/upower.nix>
 
-      # Filesystem
-      <stockholm/makefu/2configs/fs/sda-crypto-root-home.nix>
 
       # Security
-      <stockholm/makefu/2configs/sshd-totp.nix>
+      # <stockholm/makefu/2configs/sshd-totp.nix>
 
       # temporary
       # { services.redis.enable = true; }
@@ -149,7 +188,6 @@
       }
     ];
 
-  makefu.server.primary-itf = "wlp3s0";
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.oraclejdk.accept_license = true;
@@ -158,19 +196,13 @@
 
   # configure pulseAudio to provide a HDMI sink as well
   networking.firewall.enable = true;
-  networking.firewall.allowedUDPPorts = [ 665 26061 ];
-  networking.firewall.trustedInterfaces = [ "vboxnet0" ];
+  networking.firewall.allowedUDPPorts = [ 665 26061 1514 ];
+  networking.firewall.trustedInterfaces = [ "vboxnet0" "enp0s25" ];
 
   krebs.build.host = config.krebs.hosts.x;
 
   krebs.tinc.retiolum.connectTo = [ "omo" "prism" "nextgum" "wbob" ];
 
-  # hard dependency because otherwise the device will not be unlocked
-  boot.initrd.luks.devices.luksroot =
-  {
-      device = "/dev/sda2";
-      allowDiscards = true;
-  };
 
   environment.systemPackages = [ pkgs.passwdqc-utils ];
 
