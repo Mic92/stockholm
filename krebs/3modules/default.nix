@@ -55,6 +55,7 @@ let
       ./sync-containers.nix
       ./tinc.nix
       ./tinc_graphs.nix
+      ./upstream
       ./urlwatch.nix
       ./repo-sync.nix
       ./xresources.nix

@@ -176,7 +176,7 @@ let
         ];
 
         environment = {
-          GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh -i ${cfg.stateDir}/ssh.priv";
+          GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh -i ${cfg.privateKeyFile.path}";
           REPONAME = "${name}.git";
         };
 

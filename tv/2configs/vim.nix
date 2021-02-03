@@ -72,7 +72,7 @@ let {
     set mouse=a
     set noruler
     set pastetoggle=<INS>
-    set runtimepath=$VIMRUNTIME,${extra-runtimepath}
+    set runtimepath=${extra-runtimepath},$VIMRUNTIME
     set shortmess+=I
     set showcmd
     set showmatch
@@ -133,7 +133,8 @@ let {
     vnoremap u <nop>
 
     " fzf
-    nnoremap <esc>q :Files<cr>
+    nnoremap <esc>q :Buffers<cr>
+    nnoremap <esc>f :Files<cr>
     nnoremap <esc>w :Rg<cr>
 
     " edit alternate buffer

@@ -20,6 +20,11 @@ let
           default = config._module.args.name;
         };
 
+        package = mkOption {
+          default = pkgs.htgen;
+          type = types.package;
+        };
+
         port = mkOption {
           type = types.uint;
         };
@@ -52,7 +57,7 @@ let
           User = htgen.user.name;
           PrivateTmp = true;
           Restart = "always";
-          ExecStart = "${pkgs.htgen}/bin/htgen --serve";
+          ExecStart = "${htgen.package}/bin/htgen --serve";
         };
       }
     ) cfg;

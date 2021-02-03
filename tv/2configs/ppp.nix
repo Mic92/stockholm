@@ -8,8 +8,10 @@
 in {
   assertions = [
     {
-      assertion = config.networking.resolvconf.enable;
-      message = "ppp configuration needs resolvconf";
+      assertion =
+        config.networking.resolvconf.enable ||
+        config.networking.useNetworkd;
+      message = "ppp configuration needs resolvconf or networkd";
     }
   ];
   environment.etc."ppp/ip-up".source = pkgs.writeDash "ppp.ip-up" ''

@@ -1,6 +1,15 @@
 with import <stockholm/lib>;
 self: super: {
 
+  bitlbee-facebook = super.bitlbee-facebook.overrideAttrs (old: {
+    src = self.fetchFromGitHub {
+      owner = "bitlbee";
+      repo = "bitlbee-facebook";
+      rev = "49ea312d98b0578b9b2c1ff759e2cfa820a41f4d";
+      sha256 = "0zg1p9pyfsdbfqac2qmyzcr6zjibwdn2907qgc808gljfx8bfnmk";
+    };
+  });
+
   flameshot = super.flameshot.overrideAttrs (old: rec {
     patches = old.patches or [] ++ [
       (self.writeText "flameshot-imgur.patch" /* diff */ ''
