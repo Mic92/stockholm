@@ -1,26 +1,26 @@
-{ mkDerivation, aeson, aeson-pretty, base, bloomfilter, bytestring
+{ mkDerivation, aeson, aeson-pretty, base, bytestring
 , case-insensitive, conduit, containers, directory, feed, filepath
-, hslogger, html-entity, http-client, irc-conduit, lens, network
-, optparse-applicative, random, safe, stdenv, text, time, timerep
-, wreq
+, hslogger, html-entity, http-client, irc-conduit, lens, lrucache
+, network, optparse-applicative, random, safe, stdenv, text, time
+, timerep, wreq
 , fetchFromGitHub
 }:
 mkDerivation rec {
   pname = "brockman";
-  version = "3.2.3";
+  version = "3.2.4";
   src = fetchFromGitHub {
     owner = "kmein";
     repo = "brockman";
     rev = version;
-    sha256 = "1qbjbf0l1ikfzmvky4cnvv7nlcwi2in4afliifh618j0a4f7j427";
+    sha256 = "1jh2i3rxbw8x0p5xs9ph95ixpsa6h6qm0msjb9xqnw9j8by2fkk2";
   };
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    aeson aeson-pretty base bloomfilter bytestring case-insensitive
-    conduit containers directory feed filepath hslogger html-entity
-    http-client irc-conduit lens network optparse-applicative random
-    safe text time timerep wreq
+    aeson aeson-pretty base bytestring case-insensitive conduit
+    containers directory feed filepath hslogger html-entity http-client
+    irc-conduit lens lrucache network optparse-applicative random safe
+    text time timerep wreq
   ];
   license = stdenv.lib.licenses.mit;
 }
