@@ -453,6 +453,29 @@ in {
         };
       };
     };
+
+    grandalf = {
+      owner = config.krebs.users.mic92;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.29.187";
+          aliases = [
+            "grandalf.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----                                      
+            MIIBCgKCAQEAn1wLOI8DluJAKvscyImoyG0gjxyVC1/Ky8A63YO7INy0SYBg3wU7    
+            XPSbix5VJZdADQ382LWg31ORYjnDg40c49gCGLfR6+awgd+Rb0sb4eAz07XENXJC    
+            qc70oQrrXLi8HIfeckCsJHe514LJOMA3pU+muaMShOiSygoTiTlEH6RRrkC8HROL    
+            2/V7Hm2Sg7YS+MY8bI/x61MIagfkQKH2eFyqGG54Y80bIhm5SohMkiANu78GdngI    
+            jb+EGlT/vq3+oGNFJ7Shy/VsR5GLDoZ5KCsT45DM87lOjGB7m+bOdizZQtWmJtC/    
+            /btEPWJPAD9lIY2iGtPrmeMWDNTW9c0iCwIDAQAB                            
+            -----END RSA PUBLIC KEY-----                                        
+          '';
+        };
+      };
+    };
+
     eva = {
       owner = config.krebs.users.mic92;
       nets = rec {
