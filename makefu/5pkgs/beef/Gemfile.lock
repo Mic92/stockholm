@@ -104,7 +104,7 @@ GEM
     rubydns (0.7.3)
       eventmachine (~> 1.0.0)
       rexec (~> 1.6.2)
-    rubyzip (1.2.1)
+    rubyzip (1.3.0)
     rushover (0.3.0)
       json
       rest-client
