@@ -1,0 +1,55 @@
+diff --git a/src/core.go b/src/core.go
+index a18c3a1..a3d92a4 100644
+--- a/src/core.go
++++ b/src/core.go
+@@ -331,6 +331,13 @@ func Run(opts *Options, version string, revision string) {
+ 							}
+ 						}
+ 						terminal.UpdateList(val, clearSelection())
++						if (opts.Complete1) {
++							count := val.Length()
++							if count == 1 {
++								opts.Printer(val.Get(0).item.AsString(opts.Ansi))
++								terminal.reqBox.Set(reqClose, nil)
++							}
++						}
+ 					}
+ 				}
+ 			}
+diff --git a/src/options.go b/src/options.go
+index a55dc34..7f121cd 100644
+--- a/src/options.go
++++ b/src/options.go
+@@ -92,6 +92,7 @@ const usage = `usage: fzf [options]
+     -1, --select-1        Automatically select the only match
+     -0, --exit-0          Exit immediately when there's no match
+     -f, --filter=STR      Filter mode. Do not start interactive finder.
++    --complete-1          Exit interactive finder when there's exactly one match
+     --print-query         Print query as the first line
+     --expect=KEYS         Comma-separated list of keys to complete fzf
+     --read0               Read input delimited by ASCII NUL characters
+@@ -208,6 +209,7 @@ type Options struct {
+ 	Query       string
+ 	Select1     bool
+ 	Exit0       bool
++	Complete1   bool
+ 	Filter      *string
+ 	ToggleSort  bool
+ 	Expect      map[tui.Event]string
+@@ -269,6 +271,7 @@ func defaultOptions() *Options {
+ 		Query:       "",
+ 		Select1:     false,
+ 		Exit0:       false,
++		Complete1:   false,
+ 		Filter:      nil,
+ 		ToggleSort:  false,
+ 		Expect:      make(map[tui.Event]string),
+@@ -1311,6 +1314,8 @@ func parseOptions(opts *Options, allArgs []string) {
+ 			opts.Exit0 = true
+ 		case "+0", "--no-exit-0":
+ 			opts.Exit0 = false
++		case "--complete-1":
++			opts.Complete1 = true
+ 		case "--read0":
+ 			opts.ReadZero = true
+ 		case "--no-read0":
