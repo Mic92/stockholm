@@ -9,8 +9,6 @@ with import <stockholm/lib>;
   api = mkOption {
     default = {};
     type = let
-      # TODO make wrapperDir configurable
-      inherit (config.security) wrapperDir;
       inherit (config.users) groups users;
     in types.attrsOf (types.submodule (self: let cfg = self.config; in {
       options = {
@@ -49,6 +47,10 @@ with import <stockholm/lib>;
             merge = mergeOneOption;
           };
         };
+        wrapperDir = mkOption {
+          default = config.security.wrapperDir;
+          type = types.absolute-pathname;
+        };
         activate = mkOption {
           type = types.str;
           visible = false;
@@ -59,8 +61,9 @@ with import <stockholm/lib>;
         src = pkgs.exec cfg.name {
           inherit (cfg) envp filename;
         };
-        dst = "${wrapperDir}/${cfg.name}";
+        dst = "${cfg.wrapperDir}/${cfg.name}";
       in ''
+        mkdir -p ${cfg.wrapperDir}
         cp ${src} ${dst}
         chown ${cfg.owner}.${cfg.group} ${dst}
         chmod ${cfg.mode} ${dst}
