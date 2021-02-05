@@ -4,19 +4,21 @@ with import <stockholm/lib>;
   cfg = config.krebs.shadow;
 
   mergeShadowsJq = pkgs.writeJq "merge-shadows.jq" ''
-    def fields_3_to_9: ["1", "", "", "", "", "", ""];
+    def is_int: . == (. | floor);
+    def fields_4_to_9: ["", "", "", "", "", ""];
+    def check_fields_3_to_9: (.[2] | tonumber | is_int) and .[3:] == fields_4_to_9;
 
     def read_value:
       split(":") |
       if length == 9 then
-        if .[2:] == fields_3_to_9 then
+        if check_fields_3_to_9 then
           .
         else
           error("unrecognized field contents")
         end
       elif length == 2 then
         if .[1] | test("^\\$6\\$") then
-          . + fields_3_to_9
+          . + ["1"] + fields_4_to_9
         else
           error("unrecognized hashed password")
         end
