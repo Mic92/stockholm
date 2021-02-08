@@ -97,6 +97,27 @@ in {
         };
       };
     };
+    dimitrios-desktop = {
+      owner = config.krebs.users.mic92;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.29.189";
+          aliases = [
+            "dimitrios-desktop.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAz9aKIhzk8+ZNBQmU054yc1yTdMyaw1aqWXYyQZoCmFaBIlMvF8I0
+            dd+56cGjK8O7KkEhheDL/ijj9cCcxbqHSTktXz47ScyTaN63h13+MBUIUzDwSO4E
+            9fRUUn3lbZenhGoON7hlaHb/qAR0yLxip0Tw77bcq4hvKleD74NnAJILPoP1KRDY
+            O5vs8C8wpdJUtnlsfkAa058wDI+7GNPb0cs0/pBQVR2GUGb1xqVJ5obO/lFKOJ/e
+            DKemnlg736cEaIF6v9M+w4VmL8mNudDy6RxA6/xIErP5Ru2aK5lH5UBHVCwdLLCy
+            8y3It9Tgji3G9nOFbhaeKDjeIAJ8sG+WjQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     donna = {
       owner = config.krebs.users.mic92;
       nets = rec {
