@@ -97,13 +97,13 @@ in {
         };
       };
     };
-    dimitrios-desktop = {
+    dimitriosxps = {
       owner = config.krebs.users.mic92;
       nets = {
         retiolum = {
           ip4.addr = "10.243.29.189";
           aliases = [
-            "dimitrios-desktop.r"
+            "dimitriosxps.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
