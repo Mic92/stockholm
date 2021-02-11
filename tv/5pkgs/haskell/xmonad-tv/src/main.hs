@@ -190,6 +190,9 @@ myKeys conf = Map.fromList $
     , ((_4, xK_Prior), forkFile Paths.xcalib ["-invert", "-alter"] Nothing)
 
     , ((0, xK_Print), forkFile Paths.flameshot [] Nothing)
+
+    , ((_C, xF86XK_Forward), forkFile Paths.xdpychvt ["next"] Nothing)
+    , ((_C, xF86XK_Back), forkFile Paths.xdpychvt ["prev"] Nothing)
     ]
     where
     _4 = mod4Mask
