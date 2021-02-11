@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tdlib-purple";
-  version = "0.7.6";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "ars3niy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1inamfzbrz0sy4y431jgwjfg6lz14a7c71khrg02481raxchhzzf";
+    sha256 = "17g54mcxsidcx37l6m4p8i06ln1hvq3347dhdl9xkkn7pqpwvv1c";
   };
 
   cmakeFlags = [

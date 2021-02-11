@@ -1,24 +1,20 @@
-{ config, pkgs, lib, ... }:
 with import <stockholm/lib>;
-let
-  cfg = config.krebs.setuid;
+{ config, pkgs, ... }: let
 
   out = {
     options.krebs.setuid = api;
-    config = mkIf (cfg != {}) imp;
+    config = mkIf (config.krebs.setuid != {}) imp;
   };
 
   api = mkOption {
     default = {};
     type = let
-      # TODO make wrapperDir configurable
-      inherit (config.security) wrapperDir;
       inherit (config.users) groups users;
-    in types.attrsOf (types.submodule ({ config, ... }: {
+    in types.attrsOf (types.submodule (self: let cfg = self.config; in {
       options = {
         name = mkOption {
           type = types.filename;
-          default = config._module.args.name;
+          default = cfg._module.args.name;
         };
         envp = mkOption {
           type = types.nullOr (types.attrsOf types.str);
@@ -51,6 +47,10 @@ let
             merge = mergeOneOption;
           };
         };
+        wrapperDir = mkOption {
+          default = config.security.wrapperDir;
+          type = types.absolute-pathname;
+        };
         activate = mkOption {
           type = types.str;
           visible = false;
@@ -58,21 +58,22 @@ let
         };
       };
       config.activate = let
-        src = pkgs.exec config.name {
-          inherit (config) envp filename;
+        src = pkgs.exec cfg.name {
+          inherit (cfg) envp filename;
         };
-        dst = "${wrapperDir}/${config.name}";
+        dst = "${cfg.wrapperDir}/${cfg.name}";
       in ''
+        mkdir -p ${cfg.wrapperDir}
         cp ${src} ${dst}
-        chown ${config.owner}.${config.group} ${dst}
-        chmod ${config.mode} ${dst}
+        chown ${cfg.owner}.${cfg.group} ${dst}
+        chmod ${cfg.mode} ${dst}
       '';
     }));
   };
 
   imp = {
     system.activationScripts."krebs.setuid" = stringAfter [ "wrappers" ]
-      (concatMapStringsSep "\n" (getAttr "activate") (attrValues cfg));
+      (concatMapStringsSep "\n" (getAttr "activate") (attrValues config.krebs.setuid));
   };
 
 in out

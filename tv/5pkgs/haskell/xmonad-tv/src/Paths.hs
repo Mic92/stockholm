@@ -29,3 +29,6 @@ urxvtc = findExecutable "urxvtc"
 
 xcalib :: FilePath
 xcalib = findExecutable "xcalib"
+
+xdpychvt :: FilePath
+xdpychvt = findExecutable "xdpychvt"

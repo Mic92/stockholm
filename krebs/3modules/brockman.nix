@@ -29,6 +29,7 @@ in {
         PrivateTmp = true;
         RuntimeDirectory = "brockman";
         WorkingDirectory = "%t/brockman";
+        RestartSec = 5;
       };
     };
   };

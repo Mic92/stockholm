@@ -1,5 +1,12 @@
 with import <stockholm/lib>;
 self: super: {
+  fzf = super.fzf.overrideAttrs (old: {
+    # XXX cannot use `patches` because fzf has a custom patchPhase
+    patchPhase = ''
+      patch -Np1 < ${./fzf.complete1.patch}
+      ${old.patchPhase}
+    '';
+  });
   input-fonts = super.input-fonts.overrideAttrs (old: rec {
     src = self.fetchurl {
       url = "http://xu.r/~tv/mirrors/input-fonts/Input-Font-2.zip";

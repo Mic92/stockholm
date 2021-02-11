@@ -39,10 +39,12 @@
     };
   };
 
-  krebs.reaktor2.news = {
+  krebs.reaktor2.news = let
+    name = "candyman";
+  in {
     hostname = "localhost";
     port = "6667";
-    nick = "brockman-helper";
+    nick = name;
     plugins = [
       {
         plugin = "register";
@@ -60,23 +62,23 @@
           hooks.PRIVMSG = [
             {
               activate = "match";
-              pattern = "^brockman-helper:\\s*(\\S*)(?:\\s+(.*\\S))?\\s*$";
+              pattern = "^${name}:\\s*(\\S*)(?:\\s+(.*\\S))?\\s*$";
               command = 1;
               arguments = [2];
               commands = {
                 add-reddit.filename = pkgs.writeDash "add-reddit" ''
                   set -euf
                   if [ "$#" -ne 1 ]; then
-                    echo 'usage: brockman-helper: add-reddit $reddit_channel'
+                    echo 'usage: ${name}: add-reddit $reddit_channel'
                     exit 1
                   fi
                   reddit_channel=$(echo "$1" | ${pkgs.jq}/bin/jq -Rr '[match("(\\S+)\\s*";"g").captures[].string][0]')
-                  echo "brockman: add r_$reddit_channel http://rss.r/?action=display&bridge=Telegram&username=$reddit_channel&format=Mrss"
+                  echo "brockman: add r_$reddit_channel http://rss.r/?action=display&bridge=Reddit&context=single&r=$reddit_channel&format=Atom"
                 '';
                 add-telegram.filename = pkgs.writeDash "add-telegram" ''
                   set -euf
                   if [ "$#" -ne 1 ]; then
-                    echo 'usage: brockman-helper: add-telegram $telegram_user'
+                    echo 'usage: ${name}: add-telegram $telegram_user'
                     exit 1
                   fi
                   telegram_user=$(echo "$1" | ${pkgs.jq}/bin/jq -Rr '[match("(\\S+)\\s*";"g").captures[].string][0]')
@@ -85,7 +87,7 @@
                 add-youtube.filename = pkgs.writeDash "add-youtube" ''
                   set -euf
                   if [ "$#" -ne 1 ]; then
-                    echo 'usage: brockman-helper: add-youtube $nick $channelid'
+                    echo 'usage: ${name}: add-youtube $nick $channelid'
                     exit 1
                   fi
                   youtube_nick=$(echo "$1" | ${pkgs.jq}/bin/jq -Rr '[match("(\\S+)\\s*";"g").captures[].string][0]')
@@ -95,7 +97,7 @@
                 search.filename = pkgs.writeDash "search" ''
                   set -euf
                   if [ "$#" -ne 1 ]; then
-                    echo 'usage: brockman-helper: search $searchterm'
+                    echo 'usage: ${name}: search $searchterm'
                     exit 1
                   fi
                   searchterm=$(echo "$1" | ${pkgs.jq}/bin/jq -Rr '[match("(\\S+)\\s*";"g").captures[].string][0]')

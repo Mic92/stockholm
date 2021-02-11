@@ -226,10 +226,14 @@ let
 
   # XXX Is one ping enough to determine fastest address?
   fastest-address = host: ''
-    { ${pkgs.fping}/bin/fping </dev/null -a \
+    { ${pkgs.fping}/bin/fping </dev/null -a -e \
         ${concatMapStringsSep " " shell.escape
           (mapAttrsToList (_: net: head net.aliases) host.nets)} \
-      | ${pkgs.coreutils}/bin/head -1; }
+      | ${pkgs.gnused}/bin/sed -r 's/^(\S+) \(([0-9.]+) ms\)$/\2\t\1/' \
+      | ${pkgs.coreutils}/bin/sort -n \
+      | ${pkgs.coreutils}/bin/cut -f2 \
+      | ${pkgs.coreutils}/bin/head -n 1
+    }
   '';
 
 in out
