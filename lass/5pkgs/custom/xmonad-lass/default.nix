@@ -35,6 +35,7 @@ import XMonad.Hooks.ManageHelpers (doCenterFloat, doRectFloat, (-?>))
 import XMonad.Hooks.Place (placeHook, smart)
 import XMonad.Hooks.UrgencyHook (focusUrgent)
 import XMonad.Hooks.UrgencyHook (withUrgencyHook, UrgencyHook(..))
+import XMonad.Layout.BoringWindows (boringWindows, focusDown, focusUp)
 import XMonad.Layout.FixedColumn (FixedColumn(..))
 import XMonad.Layout.Grid (Grid(..))
 import XMonad.Layout.Minimize (minimize)
@@ -93,7 +94,7 @@ main' = do
 
 myLayoutHook = defLayout
   where
-    defLayout = minimize $ ((avoidStruts $ Mirror (Tall 1 (3/100) (1/2))) ||| Full ||| FixedColumn 2 80 80 1 ||| Tall 1 (3/100) (1/2) ||| simplestFloat ||| mouseResizableTile ||| Grid)
+    defLayout = minimize . boringWindows $ ((avoidStruts $ Mirror (Tall 1 (3/100) (1/2))) ||| Full ||| FixedColumn 2 80 80 1 ||| Tall 1 (3/100) (1/2) ||| simplestFloat ||| mouseResizableTile ||| Grid)
 
 floatHooks = composeAll
    [ className =? "Pinentry" --> doCenterFloat
@@ -122,6 +123,11 @@ myKeyMap =
     , ("<XF86MonBrightnessUp>",   spawn "${pkgs.acpilight}/bin/xbacklight -time 0 -inc 1")
     , ("<XF86Launch1>", gridselectWorkspace gridConfig W.view)
     , ("M4-C-k", spawn "${pkgs.xorg.xkill}/bin/xkill")
+
+    , ("M4-<Tab>", focusDown)
+    , ("M4-S-<Tab>", focusUp)
+    , ("M4-j", focusDown)
+    , ("M4-k", focusUp)
 
     , ("M4-a", focusUrgent)
     , ("M4-S-r", renameWorkspace    myXPConfig)
