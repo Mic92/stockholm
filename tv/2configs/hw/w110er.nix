@@ -59,4 +59,7 @@ with import <stockholm/lib>;
   services.xserver = {
     videoDriver = "intel";
   };
+
+  tv.hw.screens.primary.width = 1366;
+  tv.hw.screens.primary.height = 768;
 }

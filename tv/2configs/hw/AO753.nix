@@ -44,4 +44,7 @@ with import <stockholm/lib>;
   '';
 
   krebs.nixpkgs.allowUnfreePredicate = pkg: packageName pkg == "broadcom-sta";
+
+  tv.hw.screens.primary.width = 1366;
+  tv.hw.screens.primary.height = 768;
 }
