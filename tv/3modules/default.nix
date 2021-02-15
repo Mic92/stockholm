@@ -5,6 +5,7 @@
     ./ejabberd
     ./focus.nix
     ./hosts.nix
+    ./hw.nix
     ./im.nix
     ./iptables.nix
     ./slock.nix
