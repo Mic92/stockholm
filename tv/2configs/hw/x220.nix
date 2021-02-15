@@ -1,4 +1,6 @@
-{ config, pkgs, ... }:
+{ config, pkgs, ... }: let
+  lib = import <stockholm/lib>;
+in
 {
   imports = [
     ../smartd.nix
@@ -74,4 +76,7 @@
   services.xserver = {
     videoDriver = "intel";
   };
+
+  tv.hw.screens.primary.width = lib.mkDefault 1366;
+  tv.hw.screens.primary.height = lib.mkDefault 768;
 }

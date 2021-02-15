@@ -16,4 +16,7 @@
   networking.interfaces.wwp0s29u1u4i6.useDHCP = true;
 
   system.stateVersion = "20.03";
+
+  tv.hw.screens.primary.width = 1920;
+  tv.hw.screens.primary.height = 1080;
 }

@@ -12,9 +12,9 @@ with import <stockholm/lib>;
         "${config.krebs.build.host.name}.hkw"
         "${config.krebs.build.host.name}.r"
       ];
-      locations."~ ^/~(.+?)(/.*)?\$".extraConfig = ''
-        alias /home/$1/public_html$2;
-      '';
+      locations."~ ^/~([a-z]+)(?:/(.*))?\$" = {
+        alias = "/srv/$1/public_html/$2";
+      };
     };
   };
   tv.iptables.input-internet-accept-tcp = singleton "http";
