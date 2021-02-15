@@ -303,6 +303,27 @@ in {
         };
       };
     };
+    okelmann = {
+      owner = config.krebs.users.mic92;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.29.190";
+          aliases = [
+            "okelmann.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAxquUuiW9a304H9Ls81+2BMm4bviDUU2Zogu0F1mPp6X8TpdjYpDs
+            +tlakSTEPHo+aIdcV9rHpjOC3tirNbYU56D8DdoSo1Ra6XNFbxWrw7usSR9gz7L+
+            kYp1Uij4gKTfg6YQkU0lkufk13if6zvb/GjoBUTS/Tx+8sZm2/JKEK8JLQaCkmMu
+            LAUTsHj35Q8S99TzCLAoQLo136AtvPqcwwHVwkdX+S4WqtlODxfJ7T+9KFxGg54B
+            1M6btg8iL5sdTFrLIBi7oK6GuLK9izvZ4O9O9H2bStW6LodqPtw2v5WA8li+YJx7
+            LBgLO4aAAA6bF9WFcYyKBh6iCX0WxB7LowIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     martha = {
       owner = config.krebs.users.mic92;
       nets = rec {
