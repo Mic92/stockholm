@@ -5,6 +5,8 @@
     6667 6669
   ];
 
+  systemd.services.charybdis.serviceConfig.LimitNOFILE = 16384;
+
   krebs.charybdis = {
     enable = true;
     motd = ''
@@ -15,7 +17,7 @@
       serverinfo {
         name = "${config.krebs.build.host.name}.irc.r";
         sid = "1as";
-        description = "miep!";
+        description = "irc!";
         network_name = "irc.r";
 
         vhost = "0.0.0.0";
@@ -26,7 +28,7 @@
         #ssl_dh_params = "etc/dh.pem";
         #ssld_count = 1;
 
-        default_max_clients = 100000;
+        default_max_clients = 2048;
         #nicklen = 30;
       };
 
@@ -38,12 +40,12 @@
          */
         host = "0.0.0.0";
         port = 6667;
-        sslport = 6697;
+        #sslport = 6697;
 
         /* Listen on IPv6 (if you used host= above). */
         host = "::";
         port = 6667;
-        sslport = 6697;
+        #sslport = 6697;
       };
 
       class "users" {
@@ -53,9 +55,9 @@
         number_per_ip_global = 4096;
         cidr_ipv4_bitlen = 24;
         cidr_ipv6_bitlen = 64;
-        number_per_cidr = 65536;
-        max_number = 100000;
-        sendq = 10 megabyte;
+        number_per_cidr = 65535;
+        max_number = 65535;
+        sendq = 1000 megabyte;
       };
 
       privset "op" {
@@ -91,7 +93,7 @@
         use_knock = yes;
         knock_delay = 5 minutes;
         knock_delay_channel = 1 minute;
-        max_chans_per_user = 15;
+        max_chans_per_user = 150;
         max_bans = 100;
         max_bans_large = 500;
         default_split_user_count = 0;
