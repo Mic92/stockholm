@@ -690,7 +690,7 @@ in {
     };
   };
   users = rec {
-    lass = lass-blue;
+    lass = lass-yubikey;
     lass-yubikey = {
       mail = lass.mail;
       pubkey = builtins.readFile ./ssh/yubikey.rsa;
