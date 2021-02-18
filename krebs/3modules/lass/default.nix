@@ -125,7 +125,6 @@ in {
           ip6.addr = r6 "1e1";
           aliases = [
             "uriel.r"
-            "cgit.uriel.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -151,7 +150,6 @@ in {
           ip6.addr = r6 "dea7";
           aliases = [
             "mors.r"
-            "cgit.mors.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -185,7 +183,6 @@ in {
           ip6.addr = r6 "50da";
           aliases = [
             "shodan.r"
-            "cgit.shodan.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -220,7 +217,6 @@ in {
           ip6.addr = r6 "1205";
           aliases = [
             "icarus.r"
-            "cgit.icarus.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -254,7 +250,6 @@ in {
           ip6.addr = r6 "daed";
           aliases = [
             "daedalus.r"
-            "cgit.daedalus.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -286,7 +281,6 @@ in {
           ip6.addr = r6 "5ce7";
           aliases = [
             "skynet.r"
-            "cgit.skynet.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
