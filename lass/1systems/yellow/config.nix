@@ -152,10 +152,11 @@ with import <stockholm/lib>;
   krebs.iptables = {
     enable = true;
     tables.filter.INPUT.rules = [
-      { predicate = "-p tcp --dport 80"; target = "ACCEPT"; }
-      { predicate = "-p tcp --dport 9091"; target = "ACCEPT"; }
-      { predicate = "-p tcp --dport 51413"; target = "ACCEPT"; }
-      { predicate = "-p udp --dport 51413"; target = "ACCEPT"; }
+      { predicate = "-p tcp --dport 80"; target = "ACCEPT"; } # nginx web dir
+      { predicate = "-p tcp --dport 9091"; target = "ACCEPT"; } # transmission-web
+      { predicate = "-p tcp --dport 51413"; target = "ACCEPT"; } # transmission-traffic
+      { predicate = "-p udp --dport 51413"; target = "ACCEPT"; } # transmission-traffic
+      { predicate = "-p tcp --dport 8096"; target = "ACCEPT"; } # jellyfin
     ];
   };
 
@@ -264,5 +265,10 @@ with import <stockholm/lib>;
         done
       '';
     };
+  };
+
+  services.jellyfin = {
+    enable = true;
+    group = "download";
   };
 }

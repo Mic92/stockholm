@@ -197,6 +197,15 @@ in {
           wg.euer           IN A      ${nets.internet.ip4.addr}
           wiki.euer         IN A      ${nets.internet.ip4.addr}
           wikisearch        IN A      ${nets.internet.ip4.addr}
+
+          meet.euer         IN A      ${nets.internet.ip4.addr}
+          work.euer         IN A      ${nets.internet.ip4.addr}
+          admin.work.euer   IN A      ${nets.internet.ip4.addr}
+          push.work.euer    IN A      ${nets.internet.ip4.addr}
+          api.work.euer     IN A      ${nets.internet.ip4.addr}
+          maps.work.euer    IN A      ${nets.internet.ip4.addr}
+          play.work.euer    IN A      ${nets.internet.ip4.addr}
+          ul.work.euer      IN A      ${nets.internet.ip4.addr}
         '';
       };
       cores = 8;
