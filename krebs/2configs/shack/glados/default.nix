@@ -1,5 +1,11 @@
 { config, pkgs, lib, ... }:
 let
+  unstable = import (pkgs.fetchFromGitHub {
+    owner = "nixos";
+    repo = "nixpkgs";
+    rev = (lib.importJSON ../../../nixpkgs-unstable.json).rev;
+    sha256 = (lib.importJSON ../../../nixpkgs-unstable.json).sha256;
+  }) {};
 in {
   services.nginx.virtualHosts."hass.shack" = {
     serverAliases = [ "glados.shack" ];
@@ -40,6 +46,9 @@ in {
     {
     enable = true;
     autoExtraComponents = true;
+    package = unstable.home-assistant.overrideAttrs (old: {
+      doInstallCheck = false;
+    });
     config = {
       homeassistant = {
         name = "Glados";
