@@ -60,9 +60,8 @@ main = getArgs >>= \case
     args -> hPutStrLn stderr ("bad arguments: " <> show args) >> exitFailure
 
 
-queryPrefix :: Query String -> String -> Query Bool
-queryPrefix query prefix =
-    fmap (Data.List.isPrefixOf prefix) query
+(=??) :: Query a -> (a -> Bool) -> Query Bool
+(=??) x p = fmap p x
 
 
 mainNoArgs :: IO ()
@@ -88,7 +87,7 @@ mainNoArgs = do
             , manageHook =
                 composeAll
                   [ appName =? "fzmenu-urxvt" --> doCenterFloat
-                  , appName `queryPrefix` "pinentry" --> doCenterFloat
+                  , appName =?? Data.List.isPrefixOf "pinentry" --> doCenterFloat
                   , title =? "Upload to Imgur" -->
                       doRectFloat (W.RationalRect 0 0 (1 % 8) (1 % 8))
                   , placeHook (smart (1,0))
