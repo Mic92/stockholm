@@ -114,6 +114,7 @@ let {
     };
   } // mapAttrs (_: recursiveUpdate { cgit.section = "3. Haskell libraries"; }) {
     blessings = {};
+    hack = {};
     hc = {};
     mime = {};
     quipper = {};
