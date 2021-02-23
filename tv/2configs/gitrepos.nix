@@ -96,6 +96,8 @@ let {
     nix-writers = {
       cgit.desc = "collection of package builders";
     };
+    pager = {
+    };
     populate = {
       cgit.desc = "source code installer";
     };
