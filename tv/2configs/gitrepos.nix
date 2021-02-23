@@ -115,6 +115,7 @@ let {
     ni = {
     };
   } // mapAttrs (_: recursiveUpdate { cgit.section = "3. Haskell libraries"; }) {
+    X11-aeson = {};
     blessings = {};
     hack = {};
     hc = {};
