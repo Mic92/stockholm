@@ -19,6 +19,10 @@
         root /var/lib/brockman;
         index brockman.json;
       '';
+      extraConfig = ''
+        add_header 'Access-Control-Allow-Origin' '*';
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+      '';
     };
   };
   systemd.tmpfiles.rules = [
