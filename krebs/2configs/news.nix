@@ -29,6 +29,36 @@
     "d /var/lib/brockman 1750 brockman nginx -"
   ];
 
+  systemd.services.brockman-graph = {
+    path = [
+      pkgs.graphviz
+      pkgs.jq
+      pkgs.inotifyTools
+    ];
+    serviceConfig = {
+      ExecStart = pkgs.writers.writeDash "brockman-graph" ''
+
+        while :; do
+          graphviz="$(cat /var/lib/brockman/brockman.json \
+            | jq -r '
+              .bots |
+              to_entries |
+              map(select(.value.extraChannels|length > 1 )) |
+              .[] |
+              "\"\(.key)\" -> {\(.value.extraChannels|map("\""+.+"\"")|join(" "))}"
+          ')"
+          echo "digraph news { $graphviz }" | circo -Tsvg > /var/lib/brockman/graph.svg
+
+          inotifywait -q -e MODIFY /var/lib/brockman/brockman.json
+        done
+      '';
+      User = "brockman";
+    };
+    wantedBy = [ "multi-user.target" ];
+  };
+
+  systemd.services.brockman.serviceConfig.LimitNOFILE = 16384;
+  systemd.services.brockman.environment.BROCKMAN_LOG_LEVEL = "DEBUG";
   krebs.brockman = {
     enable = true;
     config = {
@@ -57,6 +87,7 @@
             "#all"
             "#aluhut"
             "#news"
+            "#lasstube"
           ];
         };
       }
