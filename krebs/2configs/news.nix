@@ -122,12 +122,35 @@
                 add-youtube.filename = pkgs.writeDash "add-youtube" ''
                   set -euf
                   if [ "$#" -ne 1 ]; then
-                    echo 'usage: ${name}: add-youtube $nick $channelid'
+                    echo 'usage: ${name}: add-youtube $nick $channel/video/stream/id'
                     exit 1
                   fi
                   youtube_nick=$(echo "$1" | ${pkgs.jq}/bin/jq -Rr '[match("(\\S+)\\s*";"g").captures[].string][0]')
-                  youtube_id=$(echo "$1" | ${pkgs.jq}/bin/jq -Rr '[match("(\\S+)\\s*";"g").captures[].string][1]')
+                  youtube_url=$(echo "$1" | ${pkgs.jq}/bin/jq -Rr '[match("(\\S+)\\s*";"g").captures[].string][1]')
+                  if [ ''${#youtube_url} -eq 24 ]; then
+                    youtube_id=$youtube_url
+                  else
+                    youtube_id=$(${pkgs.youtube-dl}/bin/youtube-dl --max-downloads 1 -j "$youtube_url" | ${pkgs.jq}/bin/jq -r '.channel_id')
+                  fi
                   echo "brockman: add yt_$youtube_nick http://rss.r/?action=display&bridge=Youtube&context=By+channel+id&c=$youtube_id&duration_min=&duration_max=&format=Mrss"
+                '';
+                add-twitch.filename = pkgs.writeDash "add-twitch" ''
+                  set -euf
+                  if [ "$#" -ne 1 ]; then
+                    echo 'usage: ${name}: add-twitch $handle'
+                    exit 1
+                  fi
+                  twitch_nick=$(echo "$1" | ${pkgs.jq}/bin/jq -Rr '[match("(\\S+)\\s*";"g").captures[].string][0]')
+                  echo "brockman: add twitch_$twitch_nick http://rss.r/?action=display&bridge=Twitch&channel=$twitch_nick&type=all&format=Atom"
+                '';
+                add-twitter.filename = pkgs.writeDash "add-twitter" ''
+                  set -euf
+                  if [ "$#" -ne 1 ]; then
+                    echo 'usage: ${name}: add-twitter $handle'
+                    exit 1
+                  fi
+                  twitter_nick=$(echo "$1" | ${pkgs.jq}/bin/jq -Rr '[match("(\\S+)\\s*";"g").captures[].string][0]')
+                  echo "brockman: add tw_$twitter_nick http://rss.r/?action=display&bridge=Twitch&channel=$twitter_nick&type=all&format=Atom"
                 '';
                 search.filename = pkgs.writeDash "search" ''
                   set -euf
