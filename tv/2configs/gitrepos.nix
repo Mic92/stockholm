@@ -125,6 +125,7 @@ let {
     wai-middleware-time = {};
     web-routes-wai-custom = {};
     xintmap = {};
+    xmonad-aeson = {};
     xmonad-stockholm = {};
   } // mapAttrs (_: recursiveUpdate { cgit.section = "4. museum"; }) {
     cac-api = {
