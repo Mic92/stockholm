@@ -127,6 +127,7 @@ let {
     xintmap = {};
     xmonad-aeson = {};
     xmonad-stockholm = {};
+    xmonad-web = {};
   } // mapAttrs (_: recursiveUpdate { cgit.section = "4. museum"; }) {
     cac-api = {
       cgit.desc = "CloudAtCost API command line interface";
