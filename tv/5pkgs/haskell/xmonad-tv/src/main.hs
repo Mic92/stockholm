@@ -218,6 +218,19 @@ myKeys conf = Map.fromList $
         def { XMonad.Prompt.font = myFont }
 
 
+xdeny :: X ()
+xdeny =
+    forkFile
+        Paths.xterm
+        [ "-fn", myFont
+        , "-geometry", "300x100"
+        , "-name", "AlertFloat"
+        , "-bg", "#E4002B"
+        , "-e", "sleep", "0.05"
+        ]
+        Nothing
+
+
 pagerConfig :: PagerConfig
 pagerConfig = def
     { pc_font           = myFont
