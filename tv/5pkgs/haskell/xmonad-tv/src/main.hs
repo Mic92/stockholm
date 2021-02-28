@@ -88,6 +88,7 @@ mainNoArgs = do
                 composeAll
                   [ appName =? "fzmenu-urxvt" --> doCenterFloat
                   , appName =?? Data.List.isPrefixOf "pinentry" --> doCenterFloat
+                  , appName =?? Data.List.isInfixOf "Float" --> doCenterFloat
                   , title =? "Upload to Imgur" -->
                       doRectFloat (W.RationalRect 0 0 (1 % 8) (1 % 8))
                   , placeHook (smart (1,0))
