@@ -7,11 +7,12 @@ module Main (main) where
 import System.Exit (exitFailure)
 
 import Control.Exception
-import Control.Monad.Extra (whenJustM)
+import Control.Monad.Extra (ifM, whenJustM)
 import qualified Data.List
 import Graphics.X11.ExtraTypes.XF86
 import Text.Read (readEither)
 import XMonad
+import XMonad.Extra (isFloatingX)
 import System.IO (hPutStrLn, stderr)
 import System.Environment (getArgs, getEnv, getEnvironment, lookupEnv)
 import System.Posix.Process (executeFile)
@@ -154,8 +155,8 @@ myKeys conf = Map.fromList $
     , ((_S  , xK_Menu   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
     , ((_C  , xK_Menu   ), toggleWS)
 
-    , ((_4  , xK_space  ), sendMessage NextLayout)
-    , ((_4M , xK_space  ), resetLayout)
+    , ((_4  , xK_space  ), withFocused $ \w -> ifM (isFloatingX w) xdeny $ sendMessage NextLayout)
+    , ((_4M , xK_space  ), withFocused $ \w -> ifM (isFloatingX w) xdeny $ resetLayout)
 
     , ((_4  , xK_m      ), windows W.focusMaster)
     , ((_4  , xK_j      ), windows W.focusDown)
