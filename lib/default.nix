@@ -15,6 +15,10 @@ let
     uri = import ./uri.nix { inherit lib; };
     xml = import ./xml.nix { inherit lib; };
 
+    # compose a list of functions to be applied from left to right, i.e.
+    # compose :: [ (xm -> xn) ... (x1 -> x2) (x0 -> x1) ] -> x0 -> xn
+    compose = foldl' (f: g: x: f (g x)) id;
+
     eq = x: y: x == y;
     ne = x: y: x != y;
     mod = x: y: x - y * (x / y);
