@@ -239,7 +239,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       ''}
 
     if [ -s marker.json ]; then
-      jq -r 'to_entries[] | @json "\(.value.latitude) \(.value.longitude) image=krebs.png"' marker.json >> marker_file
+      jq -r 'to_entries[] | select(.value.latitude != null) | @json "\(.value.latitude) \(.value.longitude) image=krebs.png"' marker.json >> marker_file
     fi
 
     xplanet --num_times 1 --geometry $xplanet_out_size \
