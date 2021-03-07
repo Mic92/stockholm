@@ -13,7 +13,7 @@
     { predicate = "-p udp --dport 21027"; target = "ACCEPT";}
   ];
 
-  system.activationScripts.syncthing-home = ''
+  system.activationScripts.syncthing-home = mkDefault ''
     ${pkgs.coreutils}/bin/chmod a+x /home/lass
   '';
 
