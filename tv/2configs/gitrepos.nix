@@ -96,6 +96,8 @@ let {
     nix-writers = {
       cgit.desc = "collection of package builders";
     };
+    pager = {
+    };
     populate = {
       cgit.desc = "source code installer";
     };
@@ -113,7 +115,9 @@ let {
     ni = {
     };
   } // mapAttrs (_: recursiveUpdate { cgit.section = "3. Haskell libraries"; }) {
+    X11-aeson = {};
     blessings = {};
+    hack = {};
     hc = {};
     mime = {};
     quipper = {};
@@ -121,7 +125,9 @@ let {
     wai-middleware-time = {};
     web-routes-wai-custom = {};
     xintmap = {};
+    xmonad-aeson = {};
     xmonad-stockholm = {};
+    xmonad-web = {};
   } // mapAttrs (_: recursiveUpdate { cgit.section = "4. museum"; }) {
     cac-api = {
       cgit.desc = "CloudAtCost API command line interface";
