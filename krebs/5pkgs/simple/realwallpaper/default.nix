@@ -100,11 +100,11 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
 
     fetch_older_min 720 ice-raw.jpg $(get_neo_url \
       'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=NISE_D') &
-    fetch_older_days 3 snow-raw.jpg $(get_neo_url \
+    fetch_older_days 1 snow-raw.jpg $(get_neo_url \
       'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD10C1_E_SNOW') &
-    fetch_older_days 7 chlora-raw.jpg $(get_neo_url \
+    fetch_older_days 1 chlora-raw.jpg $(get_neo_url \
       'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MY1DMM_CHLORA') &
-    fetch_older_days 7 fire-raw.jpg $(get_neo_url \
+    fetch_older_days 1 fire-raw.jpg $(get_neo_url \
       'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD14A1_E_FIRE') &
 
     # regular fetches
