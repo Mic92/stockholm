@@ -28,6 +28,8 @@ with import <stockholm/lib>;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  hardware.enableRedistributableFirmware = true;
+
   hardware.opengl.driSupport32Bit = true;
   hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
 
