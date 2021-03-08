@@ -108,12 +108,6 @@ in {
       ci = false;
       cores = 1;
       nets = {
-        lan = {
-          ip4.addr = "192.168.1.12";
-          aliases = [
-            "filepimp.lan"
-          ];
-        };
         retiolum.ip4.addr = "10.243.153.102";
       };
     };
@@ -123,12 +117,6 @@ in {
       cores = 2;
 
       nets = {
-        lan = {
-          ip4.addr = "192.168.1.11";
-          aliases = [
-            "omo.lan"
-          ];
-        };
         retiolum = {
           ip4.addr = "10.243.0.89";
           aliases = [
@@ -143,13 +131,6 @@ in {
       ci = true;
       cores = 4;
       nets = {
-        lan = {
-          ip4.addr = "192.168.8.11";
-          aliases = [
-            "wbob.lan"
-            "log.wbob.lan"
-          ];
-        };
         retiolum = {
           ip4.addr = "10.243.214.15";
           aliases = [
