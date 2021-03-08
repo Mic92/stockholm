@@ -9,7 +9,7 @@ let
 in {
   krebs.realwallpaper.enable = true;
 
-  system.activationScripts.user-shadow = ''
+  system.activationScripts.wallpaper-chmod = ''
     ${pkgs.coreutils}/bin/chmod +x /var/realwallpaper
   '';
   services.nginx.virtualHosts.wallpaper = {
