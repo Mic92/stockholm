@@ -34,7 +34,6 @@ import XMonad.Actions.PerWorkspaceKeys (chooseAction)
 
 import XMonad.Stockholm.Pager
 import XMonad.Stockholm.Shutdown
-import qualified Paths
 
 import THEnv.JSON (getCompileEnvJSONExp)
 
@@ -72,7 +71,7 @@ mainNoArgs = do
     launch
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
-            { terminal          = Paths.urxvtc
+            { terminal          = {-pkg:rxvt_unicode-}"urxvtc"
             , modMask           = mod4Mask
             , keys              = myKeys
             , workspaces        = workspaces0
@@ -122,14 +121,14 @@ displaySomeException = displayException
 
 forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()
 forkFile path args env =
-    xfork (executeFile path False args env) >> return ()
+    xfork (executeFile path True args env) >> return ()
 
 
 spawnRootTerm :: X ()
 spawnRootTerm =
     forkFile
-        Paths.urxvtc
-        ["-name", "root-urxvt", "-e", Paths.su, "-"]
+        {-pkg:rxvt_unicode-}"urxvtc"
+        ["-name", "root-urxvt", "-e", "/run/wrappers/bin/su", "-"]
         Nothing
 
 
@@ -137,16 +136,16 @@ spawnTermAt :: String -> X ()
 spawnTermAt ws = do
     env <- io getEnvironment
     let env' = ("XMONAD_SPAWN_WORKSPACE", ws) : env
-    forkFile Paths.urxvtc [] (Just env')
+    forkFile {-pkg:rxvt_unicode-}"urxvtc" [] (Just env')
 
 
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf = Map.fromList $
-    [ ((_4  , xK_Escape ), forkFile Paths.slock [] Nothing)
+    [ ((_4  , xK_Escape ), forkFile {-pkg-}"slock" [] Nothing)
     , ((_4S , xK_c      ), kill)
 
-    , ((_4  , xK_o      ), forkFile Paths.otpmenu [] Nothing)
-    , ((_4  , xK_p      ), forkFile Paths.passmenu [] Nothing)
+    , ((_4  , xK_o      ), forkFile {-pkg:fzmenu-}"otpmenu" [] Nothing)
+    , ((_4  , xK_p      ), forkFile {-pkg:fzmenu-}"passmenu" [] Nothing)
 
     , ((_4  , xK_x      ), chooseAction spawnTermAt)
     , ((_4C , xK_x      ), spawnRootTerm)
@@ -188,12 +187,12 @@ myKeys conf = Map.fromList $
     , ((0, xF86XK_AudioMute), audioMute)
     , ((_4, xF86XK_AudioMute), pavucontrol [])
 
-    , ((_4, xK_Prior), forkFile Paths.xcalib ["-invert", "-alter"] Nothing)
+    , ((_4, xK_Prior), forkFile {-pkg-}"xcalib" ["-invert", "-alter"] Nothing)
 
-    , ((0, xK_Print), forkFile Paths.flameshot [] Nothing)
+    , ((0, xK_Print), forkFile {-pkg-}"flameshot" [] Nothing)
 
-    , ((_C, xF86XK_Forward), forkFile Paths.xdpychvt ["next"] Nothing)
-    , ((_C, xF86XK_Back), forkFile Paths.xdpychvt ["prev"] Nothing)
+    , ((_C, xF86XK_Forward), forkFile {-pkg:xdpytools-}"xdpychvt" ["next"] Nothing)
+    , ((_C, xF86XK_Back), forkFile {-pkg:xdpytools-}"xdpychvt" ["prev"] Nothing)
     ]
     where
     _4 = mod4Mask
@@ -206,8 +205,8 @@ myKeys conf = Map.fromList $
     _4CM = _4 .|. _C .|. _M
     _4SM = _4 .|. _S .|. _M
 
-    pactl args = forkFile Paths.pactl args Nothing
-    pavucontrol args = forkFile Paths.pavucontrol args Nothing
+    pactl args = forkFile {-pkg:pulseaudio-}"pactl" args Nothing
+    pavucontrol args = forkFile {-pkg-}"pavucontrol" args Nothing
 
     audioLowerVolume = pactl ["--", "set-sink-volume", "@DEFAULT_SINK@", "-5%"]
     audioRaiseVolume = pactl ["--", "set-sink-volume", "@DEFAULT_SINK@", "+5%"]
@@ -222,7 +221,7 @@ myKeys conf = Map.fromList $
 xdeny :: X ()
 xdeny =
     forkFile
-        Paths.xterm
+        {-pkg-}"xterm"
         [ "-fn", myFont
         , "-geometry", "300x100"
         , "-name", "AlertFloat"

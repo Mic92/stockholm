@@ -23,8 +23,6 @@ executable xmonad
     xmonad-contrib,
     xmonad-stockholm
   other-modules:
-    Helpers.Path,
-    Paths,
     THEnv.JSON
   default-language: Haskell2010
   ghc-options: -O2 -Wall -threaded
