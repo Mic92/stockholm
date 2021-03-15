@@ -5,6 +5,7 @@ let
     evalSource = import ./eval-source.nix;
 
     git = import ./git.nix { inherit lib; };
+    haskell = import ./haskell.nix { inherit lib; };
     krebs = import ./krebs lib;
     krops = import ../submodules/krops/lib;
     shell = import ./shell.nix { inherit lib; };
