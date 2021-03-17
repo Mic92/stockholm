@@ -12,13 +12,18 @@ in
   services.zigbee2mqtt = {
     enable = true;
     inherit dataDir;
+    config = {
+      permit_join = true;
+      serial.port = "/dev/cc2531";
+      homeassistant = true;
+    };
   };
 
-  state = [ "${dataDir}/configuration.yaml" "${dataDir}/state.json" ];
+  state = [ "${dataDir}/devices.yaml" "${dataDir}/state.json" ];
 
   systemd.services.zigbee2mqtt = {
     # override automatic configuration.yaml deployment
-    serviceConfig.ExecStartPre = lib.mkForce "${pkgs.coreutils}/bin/true";
+    environment.ZIGBEE2MQTT_DATA = dataDir;
     after = [
       "home-assistant.service"
       "mosquitto.service"
