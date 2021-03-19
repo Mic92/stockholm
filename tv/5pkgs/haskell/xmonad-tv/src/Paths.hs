@@ -32,3 +32,6 @@ xcalib = findExecutable "xcalib"
 
 xdpychvt :: FilePath
 xdpychvt = findExecutable "xdpychvt"
+
+xterm :: FilePath
+xterm = findExecutable "xterm"

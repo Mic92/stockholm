@@ -7,11 +7,12 @@ module Main (main) where
 import System.Exit (exitFailure)
 
 import Control.Exception
-import Control.Monad.Extra (whenJustM)
+import Control.Monad.Extra (ifM, whenJustM)
 import qualified Data.List
 import Graphics.X11.ExtraTypes.XF86
 import Text.Read (readEither)
 import XMonad
+import XMonad.Extra (isFloatingX)
 import System.IO (hPutStrLn, stderr)
 import System.Environment (getArgs, getEnv, getEnvironment, lookupEnv)
 import System.Posix.Process (executeFile)
@@ -60,9 +61,8 @@ main = getArgs >>= \case
     args -> hPutStrLn stderr ("bad arguments: " <> show args) >> exitFailure
 
 
-queryPrefix :: Query String -> String -> Query Bool
-queryPrefix query prefix =
-    fmap (Data.List.isPrefixOf prefix) query
+(=??) :: Query a -> (a -> Bool) -> Query Bool
+(=??) x p = fmap p x
 
 
 mainNoArgs :: IO ()
@@ -88,7 +88,8 @@ mainNoArgs = do
             , manageHook =
                 composeAll
                   [ appName =? "fzmenu-urxvt" --> doCenterFloat
-                  , appName `queryPrefix` "pinentry" --> doCenterFloat
+                  , appName =?? Data.List.isPrefixOf "pinentry" --> doCenterFloat
+                  , appName =?? Data.List.isInfixOf "Float" --> doCenterFloat
                   , title =? "Upload to Imgur" -->
                       doRectFloat (W.RationalRect 0 0 (1 % 8) (1 % 8))
                   , placeHook (smart (1,0))
@@ -154,8 +155,8 @@ myKeys conf = Map.fromList $
     , ((_S  , xK_Menu   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
     , ((_C  , xK_Menu   ), toggleWS)
 
-    , ((_4  , xK_space  ), sendMessage NextLayout)
-    , ((_4M , xK_space  ), resetLayout)
+    , ((_4  , xK_space  ), withFocused $ \w -> ifM (isFloatingX w) xdeny $ sendMessage NextLayout)
+    , ((_4M , xK_space  ), withFocused $ \w -> ifM (isFloatingX w) xdeny $ resetLayout)
 
     , ((_4  , xK_m      ), windows W.focusMaster)
     , ((_4  , xK_j      ), windows W.focusDown)
@@ -216,6 +217,19 @@ myKeys conf = Map.fromList $
 
     promptXPConfig =
         def { XMonad.Prompt.font = myFont }
+
+
+xdeny :: X ()
+xdeny =
+    forkFile
+        Paths.xterm
+        [ "-fn", myFont
+        , "-geometry", "300x100"
+        , "-name", "AlertFloat"
+        , "-bg", "#E4002B"
+        , "-e", "sleep", "0.05"
+        ]
+        Nothing
 
 
 pagerConfig :: PagerConfig
