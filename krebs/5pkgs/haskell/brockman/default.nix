@@ -7,12 +7,12 @@
 }:
 mkDerivation rec {
   pname = "brockman";
-  version = "3.4.0";
+  version = "3.4.3";
   src = fetchFromGitHub {
     owner = "kmein";
     repo = "brockman";
     rev = version;
-    sha256 = "02nval6a9xcddj6znzxvcb8g6klzjydj1lb4ych64i9mr4a8jvic";
+    sha256 = "0s8rvsj5m70wijl8j00fisz6c1kms7kx12lxfgk63mrx2ldp1fb4";
   };
   isLibrary = false;
   isExecutable = true;
