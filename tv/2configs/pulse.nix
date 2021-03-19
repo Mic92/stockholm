@@ -43,6 +43,21 @@ let
       "auth-anonymous=1"
       "socket=${runDir}/socket"
     ]}
+    ${lib.optionalString (config.krebs.build.host.name == "au") ''
+      load-module ${toString [
+        "module-native-protocol-tcp"
+        "auth-ip-acl=127.0.0.1;10.23.1.0/24"
+      ]}
+    ''}
+    ${lib.optionalString (config.krebs.build.host.name != "au") ''
+      load-module ${toString [
+        "module-tunnel-sink-new"
+        "server=au.hkw"
+        "sink_name=au"
+        "channels=2"
+        "rate=44100"
+      ]}
+    ''}
   '';
 in
 
