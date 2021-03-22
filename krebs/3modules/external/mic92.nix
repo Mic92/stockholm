@@ -252,23 +252,40 @@ in {
     };
     okelmann = {
       owner = config.krebs.users.mic92;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.29.190";
+      nets.retiolum = {
+        ip4.addr = "10.243.29.190";
           aliases = [
             "okelmann.r"
           ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAxquUuiW9a304H9Ls81+2BMm4bviDUU2Zogu0F1mPp6X8TpdjYpDs
-            +tlakSTEPHo+aIdcV9rHpjOC3tirNbYU56D8DdoSo1Ra6XNFbxWrw7usSR9gz7L+
-            kYp1Uij4gKTfg6YQkU0lkufk13if6zvb/GjoBUTS/Tx+8sZm2/JKEK8JLQaCkmMu
-            LAUTsHj35Q8S99TzCLAoQLo136AtvPqcwwHVwkdX+S4WqtlODxfJ7T+9KFxGg54B
-            1M6btg8iL5sdTFrLIBi7oK6GuLK9izvZ4O9O9H2bStW6LodqPtw2v5WA8li+YJx7
-            LBgLO4aAAA6bF9WFcYyKBh6iCX0WxB7LowIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
+        tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIIBCgKCAQEAxquUuiW9a304H9Ls81+2BMm4bviDUU2Zogu0F1mPp6X8TpdjYpDs
+          +tlakSTEPHo+aIdcV9rHpjOC3tirNbYU56D8DdoSo1Ra6XNFbxWrw7usSR9gz7L+
+          kYp1Uij4gKTfg6YQkU0lkufk13if6zvb/GjoBUTS/Tx+8sZm2/JKEK8JLQaCkmMu
+          LAUTsHj35Q8S99TzCLAoQLo136AtvPqcwwHVwkdX+S4WqtlODxfJ7T+9KFxGg54B
+          1M6btg8iL5sdTFrLIBi7oK6GuLK9izvZ4O9O9H2bStW6LodqPtw2v5WA8li+YJx7
+          LBgLO4aAAA6bF9WFcYyKBh6iCX0WxB7LowIDAQAB
+          -----END RSA PUBLIC KEY-----
+        '';
+      };
+    };
+    anindya = {
+      owner = config.krebs.users.mic92;
+      nets.retiolum = {
+        ip4.addr = "10.243.29.191";
+        aliases = [
+          "anindya.r"
+        ];
+        tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIIBCgKCAQEA8yWr01WlmM4RYuJdxvzvfdN3C5T3DOknWvK7U3y92HYgtQfYtZwu
+          +J8r1fpTsdIS8wKdSEqz7Mjhb1JabJBB1fv/2mkAF4V/gkMbP0jqZ6QQL29kgkNP
+          aI/+zG1yh4kEDgSn843J6XnTsJ/4Na2zmbVP1iIIQYMXyh+meWsBVR6DKV5ighjz
+          4h3wKbuMmDrS50aTk8ahgWoiqcE2DTUMeprw4SIL+RTepmsCINQtAJui5Ys6AAbK
+          ab6gxMzRH2txLBcTfSrbqTX3qHZHLlB9Ai5FEItWqMBxquD6OCxn8DNU+5LgGpt1
+          Z37SI1U0c4uu1oo7kOSx6wYP2ZVOatys6QIDAQAB
+          -----END RSA PUBLIC KEY-----
+        '';
       };
     };
     martha = {
