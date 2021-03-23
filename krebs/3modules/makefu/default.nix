@@ -187,6 +187,7 @@ in {
           maps.work.euer    IN A      ${nets.internet.ip4.addr}
           play.work.euer    IN A      ${nets.internet.ip4.addr}
           ul.work.euer      IN A      ${nets.internet.ip4.addr}
+          bw.euer           IN A      ${nets.internet.ip4.addr}
         '';
       };
       cores = 8;
