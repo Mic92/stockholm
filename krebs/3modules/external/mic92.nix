@@ -288,6 +288,25 @@ in {
         '';
       };
     };
+    dimitra = {
+      owner = config.krebs.users.mic92;
+      nets.retiolum = {
+        ip4.addr = "10.243.29.192";
+        aliases = [
+          "dimitra.r"
+        ];
+        tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIIBCgKCAQEAtgvjWP2KIawJDk32P8Uiwz95REACx43CXUIgcBx5qg9ZQrHnJZxH
+          RkXLnWUmjpnEmPUfvg/b8YCyoHgzD6GQEXcWaiMXBQ/nsrSEN4mpY7tzInerzGsv
+          /M66WzPUWSUC9kbncLXt+2A64B23h1ki+MyMyKGIpHq21+F1b6ZHW2rkMnk3BKa4
+          aJKNfadjP4V1lnPd40VBpcA3dlQfGF057GJz+2fzlfh1Bp41r/uP2NHieSAlyBws
+          IaVZPWbfxFyYU8JbrlYUAlLjdXFG1meo5On0K0N8tTBKfnD1nwSqTPAfM7WqOm4A
+          ImYB8LzjmIdXM+QUqbVFTgiY4jBDg61krwIDAQAB
+          -----END RSA PUBLIC KEY-----
+        '';
+      };
+    };
     martha = {
       owner = config.krebs.users.mic92;
       nets = rec {
