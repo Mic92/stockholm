@@ -177,6 +177,7 @@ in {
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPpVwKv9mQGfcn5oFwuitq+b6Dz4jBG9sGhVoCYFw5RY";
+      syncthing.id = "DK5CEE2-PNUXYCE-Q42H2HP-623GART-B7KS4VK-HU2RBGQ-EK6QPUP-HUL3PAR";
     };
     wolf = {
       ci = true;
