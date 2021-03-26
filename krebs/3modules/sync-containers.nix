@@ -93,7 +93,7 @@ in {
   config = mkIf (cfg.containers != {}) {
     programs.fuse.userAllowOther = true;
     # allow syncthing to enter /var/lib/containers
-    system.activationScripts.syncthing-home = ''
+    system.activationScripts.containers-enter = mkDefault ''
       ${pkgs.coreutils}/bin/chmod a+x /var/lib/containers
     '';
 
