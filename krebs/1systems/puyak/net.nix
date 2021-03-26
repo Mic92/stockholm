@@ -8,7 +8,7 @@ in {
     SUBSYSTEM=="net", ATTR{address}=="3c:97:0e:07:b9:14", NAME="${ext-if}"
   '';
   networking = {
-    firewall.enable = false;
+    firewall.enable = true;
     firewall.allowedTCPPorts = [ 8088 8086 8083 5901 ];
     interfaces."${ext-if}".ipv4.addresses = [
       {
