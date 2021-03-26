@@ -9,7 +9,7 @@ in {
   '';
   networking = {
     firewall.enable = true;
-    firewall.allowedTCPPorts = [ 8088 8086 8083 5901 ];
+    firewall.allowedTCPPorts = [ 80 443 8088 8086 8083 5901 ];
     interfaces."${ext-if}".ipv4.addresses = [
       {
         address = shack-ip;
