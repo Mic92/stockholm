@@ -1,24 +1,25 @@
-{ mkDerivation, async, base, blessings, data-default, directory
-, filepath, optparse-generic, pandoc, random, regex-tdfa, safe
-, scalpel, stdenv, text
+{ mkDerivation, ansi-terminal, async, base, binary, bytestring
+, data-default, directory, filepath, megaparsec
+, optparse-applicative, pandoc, random, safe, scalpel, stdenv, text
+, time
 , fetchFromGitHub
 }:
 mkDerivation rec {
   pname = "recht";
-  version = "0.1.0";
+  version = "0.3.0";
   src = fetchFromGitHub {
     owner = "kmein";
     repo = "recht";
-    rev = "e3ed36e969cca138e6fc8199b0234d4fe36b663d";
-    sha256 = "1cbdahjrhcx9jwmkncal04ss6rb2bf1ikyfxwvy6ngazfmj1d9f2";
+    rev = version;
+    sha256 = "07cyd06wbnzcp33v0nq8cxyggvqrnbni0v2g8cpxar6idn1wlz85";
 
   };
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    async base blessings data-default directory filepath
-    optparse-generic pandoc random regex-tdfa safe scalpel text
+    ansi-terminal async base binary bytestring data-default directory
+    filepath megaparsec optparse-applicative pandoc random safe scalpel
+    text time
   ];
-  license = "unknown";
-  hydraPlatforms = stdenv.lib.platforms.none;
+  license = stdenv.lib.licenses.mit;
 }
