@@ -68,6 +68,7 @@ in {
             "paste.r"
             "p.r"
           ];
+          tinc.port = 655;
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIECgKCBAEAtpI0+jz2deUiH18T/+JcRshQi7lq8zlRvaXpvyuxJlYCz+o5cLje
@@ -126,6 +127,7 @@ in {
           aliases = [
             "uriel.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIBCgKCAQEAzw0pvoEmqeqiZrzSOPH0IT99gr1rrvMZbvabXoU4MAiVgGoGrkmR
@@ -151,6 +153,7 @@ in {
           aliases = [
             "mors.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIBCgKCAQEAsj1PCibKOfF68gmFQ+wwyfhUWpqKqpznrJX1dZ+daae7l7nBHvsE
@@ -184,6 +187,7 @@ in {
           aliases = [
             "shodan.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIBCgKCAQEA9bUSItw8rEu2Cm2+3IGHyRxopre9lqpFjZNG2QTnjXkZ97QlDesT
@@ -218,6 +222,7 @@ in {
           aliases = [
             "icarus.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIBCgKCAQEAydCY+IWzF8DocCNzPiUM+xccbiDTWS/+r2le812+O4r+sUojXuzr
@@ -251,6 +256,7 @@ in {
           aliases = [
             "daedalus.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIBCgKCAQEAzlIJfYIoQGXishIQGFNOcaVoeelqy7a731FJ+VfrqeR8WURQ6D+8
@@ -282,6 +288,7 @@ in {
           aliases = [
             "skynet.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIBCgKCAQEArNpBoTs7MoaZq2edGJLYUjmoLa5ZtXhOFBHjS1KtQ3hMtWkcqpYX
@@ -315,6 +322,7 @@ in {
           aliases = [
             "littleT.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIECgKCBAEA2nPi6ui8nJhEL3lFzDoPelFbEwFWqPnQa0uVxLAhf2WnmT/vximF
@@ -364,6 +372,7 @@ in {
           aliases = [
             "xerxes.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIECgKCBAEArqEaK+m7WZe/9/Vbc+qx2TjkkRJ9lDgDMr1dvj98xb8/EveUME6U
@@ -414,6 +423,7 @@ in {
           aliases = [
             "red.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
             MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEArAN/62V2MV18wsZ9VMTG
@@ -444,6 +454,7 @@ in {
           aliases = [
             "yellow.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
             MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA6lHmzq8+04h3zivJmIbP
@@ -481,6 +492,7 @@ in {
           aliases = [
             "blue.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
             MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA28b+WMiQaWbwUPcJlacd
@@ -520,6 +532,7 @@ in {
           aliases = [
             "green.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
             MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAwpgFxMxWQ0Cp3I82bLWk
@@ -574,6 +587,7 @@ in {
           aliases = [
             "morpheus.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIICCgKCAgEAptrlSKQKsBH2QMQxllZR94S/fXneajpJifRjXR5bi+7ME2ThdQXY
@@ -611,6 +625,7 @@ in {
           aliases = [
             "hilum.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
             MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAul1zLdJ76kIqVWjxT2bb
@@ -651,6 +666,7 @@ in {
           aliases = [
             "styx.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
             MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAuMJFklzpbxoDGD8LQ3tn
@@ -692,6 +708,7 @@ in {
           aliases = [
             "coaxmetal.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
             MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAwcuMl/W6DZ7UMK4RHrxA
