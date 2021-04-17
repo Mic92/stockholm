@@ -67,6 +67,7 @@ in {
             "cgit.prism.r"
             "paste.r"
             "p.r"
+            "search.r"
           ];
           tinc.port = 655;
           tinc.pubkey = ''
