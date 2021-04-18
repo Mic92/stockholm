@@ -77,6 +77,7 @@ in {
             "wiki.r"
             "wiki.hotdog.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIBCgKCAQEAs9+Au3oj29C5ol/YnkG9GjfCH5z53wxjH2iy8UPike8C7GASZKqc
