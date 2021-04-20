@@ -87,6 +87,7 @@
       };
 
       channel {
+        autochanmodes = "+t";
         use_invex = yes;
         use_except = yes;
         use_forward = yes;

@@ -43,11 +43,9 @@ in {
 
   services.home-assistant = {
     enable = true;
-    package = (unstable.home-assistant.overrideAttrs (old: {
+    package = unstable.home-assistant.overrideAttrs (old: {
       doInstallCheck = false;
-    })).override {
-      extraPackages = _: [ dwdwfsapi ];
-    };
+    });
     configWritable = true;
     lovelaceConfigWritable = true;
     config = let

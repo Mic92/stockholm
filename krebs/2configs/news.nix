@@ -15,6 +15,16 @@
       serverAliases = [
         "news.r"
       ];
+      locations."/api".extraConfig = ''
+        proxy_pass http://127.0.0.1:7777/;
+        proxy_pass_header Server;
+      '';
+      locations."= /graph.html".extraConfig = ''
+        alias ${pkgs.fetchurl {
+          url = "https://raw.githubusercontent.com/kmein/brockman/05d33c8caaaf6255752f9600981974bb58390851/tools/graph.html";
+          sha256 = "0iw2vdzj6kzkix1c447ybmc953lns6z4ap6sr9pcib8bany4g43w";
+        }};
+      '';
       locations."/".extraConfig = ''
         root /var/lib/brockman;
         index brockman.json;
@@ -27,6 +37,7 @@
   };
   systemd.tmpfiles.rules = [
     "d /var/lib/brockman 1750 brockman nginx -"
+    "d /run/irc-api 1750 brockman nginx -"
   ];
 
   systemd.services.brockman-graph = {
@@ -67,12 +78,28 @@
       shortener = "http://go.r";
       controller = {
         nick = "brockman";
-        channels = [ "#all" ];
+        extraChannels = [ "#all" ];
       };
       bots = {};
     };
   };
 
+  krebs.reaktor2.api = {
+    hostname = "localhost";
+    port = "6667";
+    nick = "api";
+    API.listen = "inet://127.0.0.1:7777";
+    plugins = [
+      {
+        plugin = "register";
+        config = {
+          channels = [
+            "#all"
+          ];
+        };
+      }
+    ];
+  };
   krebs.reaktor2.news = let
     name = "candyman";
   in {

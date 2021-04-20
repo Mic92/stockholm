@@ -18,13 +18,6 @@
   boot.isContainer = true;
   networking.useDHCP = false;
   krebs.bindfs = {
-    "/var/lib/htgen-go" = {
-      source = "/var/state/htgen-go";
-      options = [
-        "-m ${toString config.users.users.htgen-go.uid}"
-      ];
-      clearTarget = true;
-    };
     "/var/lib/brockman" = {
       source = "/var/state/brockman";
       options = [
