@@ -386,6 +386,34 @@ in {
         };
       };
     };
+    sauron = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          ip4.addr = "129.215.165.75";
+          aliases = [ "sauron.i" ];
+        };
+        retiolum = {
+          via = internet;
+          addrs = [
+            config.krebs.hosts.sauron.nets.retiolum.ip4.addr
+            config.krebs.hosts.sauron.nets.retiolum.ip6.addr
+          ];
+          ip4.addr = "10.243.29.194";
+          aliases = [ "sauron.r" ];
+          tinc.pubkey = ''
+             -----BEGIN RSA PUBLIC KEY-----
+             MIIBCgKCAQEAxmCryT4ZEhPOvdZhWhYZsRS7sz1njSh2ozh6iwXRXhjRjZ9tYZVQ
+             GoYc6ADnWCnb9SGpPe1WqwFMblfKofnXCvC4wLQaFsch1GIMPhujosJ4Te84BHi1
+             XKqyompotE2F7iWYPE6i6UAdRK2dCapfCbiDBOjMhCnmmhM1oY5Bv/fBtx3/2N7E
+             W+iN6LG2t9cKibs8qrLzFtJIfWn8uXU9dkdhX3d9guCdplGOn/NT/Aq3ayvA+/Mf
+             74oJVJgBT5M1rTH2+u+MU+kC+x2UD+jjXEjS55owFWsEM1jI4rGra+dpsDuzdGdG
+             67wl9JlpDBy4Tkf2Bl3CQWZHsWDsR6jCqwIDAQAB
+             -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     rock = {
       owner = config.krebs.users.mic92;
       nets = {
