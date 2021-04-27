@@ -10,7 +10,8 @@ writers.writeDashBin "nomads-cloud" ''
 
   date=$(${coreutils}/bin/date +%Y%m%d)
   for hour in 18 12 06 00; do
-    url="https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25_1hr.pl?file=gfs.t''${hour}z.pgrb2.0p25.anl&lev_entire_atmosphere_%5C%28considered_as_a_single_layer%5C%29=on&var_CWAT=on&leftlon=-180&rightlon=180&toplat=90&bottomlat=-90&dir=%2Fgfs.$date%2F$hour"
+    url="https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25_1hr.pl?file=gfs.t''${hour}z.pgrb2.0p25.anl&lev_entire_atmosphere_%5C%28considered_as_a_single_layer%5C%29=on&var_CWAT=on&leftlon=-180&rightlon=180&toplat=90&bottomlat=-90&dir=%2Fgfs.''${date}%2F''${hour}%2Fatmos"
+    echo "$url"
     ${curl}/bin/curl -fsS "$url" > "$grib_path"
     if [ "$?" -eq 0 ]; then
       break
