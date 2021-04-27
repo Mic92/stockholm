@@ -42,15 +42,6 @@ let
       description = "real wallpaper generator";
       after = [ "network.target" ];
 
-      path = with pkgs; [
-        xplanet
-        imagemagick
-        inkscape
-        curl
-        file
-        jq
-      ];
-
       environment = {
         working_dir = cfg.workingDir;
         marker_url = cfg.marker;

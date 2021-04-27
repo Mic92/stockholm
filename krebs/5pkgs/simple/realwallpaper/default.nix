@@ -1,6 +1,21 @@
 { pkgs, ... }:
 pkgs.writers.writeDashBin "generate-wallpaper" ''
-  set -euf
+  set -xeuf
+
+  export PATH=${with pkgs; lib.makeBinPath [
+    coreutils
+    curl
+    gnugrep
+    gnused
+    file
+    findutils
+    grib2json
+    imagemagick
+    inkscape
+    jq
+    nomads-cloud
+    xplanet
+  ]}
 
   # usage: getimg FILENAME URL
   fetch() {
@@ -118,7 +133,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
 
     # fetch clouds if they are older than 3h
     if ! test "$(find clouds-raw.png -mmin -180)"; then
-      ${pkgs.nomads-cloud}/bin/nomads-cloud clouds-raw.png
+      nomads-cloud clouds-raw.png
     fi
 
     in_size=3600x1800
@@ -161,14 +176,14 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     fi
 
     if needs_rebuild krebs.png krebs-raw.svg; then
-      inkscape -z -e krebs.png -w 16 -h 16 krebs-raw.svg
+      inkscape --export-type="png" --export-width=16 --export-height=16 --export-filename=krebs.png krebs-raw.svg
     fi
 
     # -- Planets --
     for planet in mercury venus mars jupiter saturn uranus neptune; do
       if needs_rebuild "$planet".png "$planet"-raw.svg; then
         sed -i 's/#000/#FE8019/g' "$planet"-raw.svg
-        inkscape -z -e "$planet".png -w 40 -h 40 "$planet"-raw.svg
+        inkscape --export-type="png" --export-width=40 --export-height=40 --export-filename="$planet.png" "$planet-raw.svg"
       fi
     done
 
