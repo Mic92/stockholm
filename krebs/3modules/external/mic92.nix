@@ -414,6 +414,29 @@ in {
         };
       };
     };
+    bill = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        retiolum = {
+          addrs = [
+            config.krebs.hosts.bill.nets.retiolum.ip4.addr
+            config.krebs.hosts.bill.nets.retiolum.ip6.addr
+          ];
+          ip4.addr = "10.243.29.195";
+          aliases = [ "bill.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAzg0wJuDvsbflRKSJ7+ug9y7Gn+BH3CR44fuCPZpWmIcGIUbA6rXj
+            CD8pF5heOvXNCFlEip2wqTkaCJPnUs3x8BRtORmD6OxDdmqt0xH54u7CixKzrPp9
+            GIQydv+ZsGA2z3aDbmBydRPDIvYGhW68FJn10qlGRjCZ5zCl1eVEZ/wMddFXc0B8
+            KDbxh7qOkjXon6EOGACVbnrnUR3F1GsIvCxX0cCDrO0P8XHwwsZiAfUwXYkiqw7t
+            zPcty6Bbr34mSJbb9cFb/qQlfPWT0HVgo+Q65HVkr/64o/9tTyREZcj1dk5PpEPE
+            bt7PGlOF1oPZpVFQh8S+NviHTtqrvkuISQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     rock = {
       owner = config.krebs.users.mic92;
       nets = {
