@@ -437,16 +437,16 @@ in {
         };
       };
     };
-    nardile = {
+    nardole = {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
           addrs = [
-            config.krebs.hosts.nardile.nets.retiolum.ip4.addr
-            config.krebs.hosts.nardile.nets.retiolum.ip6.addr
+            config.krebs.hosts.nardole.nets.retiolum.ip4.addr
+            config.krebs.hosts.nardole.nets.retiolum.ip6.addr
           ];
           ip4.addr = "10.243.29.173";
-          aliases = [ "nardile.r" ];
+          aliases = [ "nardole.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIBCgKCAQEA05JzZLPH4+t2X8TI1nYsv4WCQ/OUmuMy9YbKUIRITE2EVA+x47Cf
