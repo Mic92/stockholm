@@ -51,7 +51,7 @@ let
 
             sha256=$(echo "$uri" | sha256sum -b | cut -d\  -f1)
             base32=$(${pkgs.nixStable}/bin/nix-hash --to-base32 --type sha256 "$sha256")
-            base32short=$(echo "$base32" | cut -b-5)
+            base32short=$(echo "$base32" | cut -c48-52)
             ${pkgs.redis}/bin/redis-cli set "$base32short" "$uri" >/dev/null
 
             ref="http://$req_host/$base32short"
