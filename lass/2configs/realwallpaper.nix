@@ -28,6 +28,9 @@ in {
     locations."/realwallpaper-krebs.png".extraConfig = ''
       root /var/realwallpaper/;
     '';
+    locations."/realwallpaper-krebs-stars.png".extraConfig = ''
+      root /var/realwallpaper/;
+    '';
     locations."/realwallpaper-video.mp4".extraConfig = ''
       root /var/realwallpaper/archive;
     '';
