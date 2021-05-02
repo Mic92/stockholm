@@ -271,6 +271,32 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
         shade=15
       ''}
 
+    ${pkgs.writers.writePython3 "get_constellations" {
+      libraries = [ pkgs.python3Packages.astropy ];
+    } ./get_constellations.py} ${pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/ofrohn/d3-celestial/d2e20e104b86429d90ac8227a5b021262b45d75a/data/constellations.lines.json";
+      sha256 = "0g71fdrnxvxd6pcqvihj2q9iaynrl7px45kzw6qm1kymynz6ckr9";
+    }} > constellations.arcs
+
+    xplanet --num_times 1 --geometry $xplanet_out_size \
+      --output xplanet-krebs-stars-output.png --projection merc \
+      -config ${pkgs.writeText "xplanet-krebs-stars.config" ''
+        [default]
+
+        arc_thickness=1
+        arc_file=constellations.arcs
+
+        [earth]
+        "Earth"
+        map=daymap-final.png
+        night_map=nightmap-final.png
+        cloud_map=clouds.png
+        cloud_threshold=1
+        cloud_gamma=10
+        marker_file=marker_file
+        shade=15
+      ''}
+
     # trim xplanet output
     if needs_rebuild realwallpaper.png xplanet-output.png; then
       convert xplanet-output.png -crop $out_geometry \
@@ -278,7 +304,6 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
         mv realwallpaper-tmp.png realwallpaper.png
     fi
 
-    # trim xplanet output
     if needs_rebuild realwallpaper-marker.png xplanet-marker-output.png; then
       convert xplanet-marker-output.png -crop $out_geometry \
         realwallpaper-marker-tmp.png
@@ -291,6 +316,12 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
         mv realwallpaper-krebs-tmp.png realwallpaper-krebs.png
         mkdir -p archive
         convert realwallpaper-krebs.png archive/"$(date -Is)".jpg
+    fi
+
+    if needs_rebuild realwallpaper-krebs-stars.png xplanet-krebs-stars-output.png; then
+      convert xplanet-krebs-stars-output.png -crop $out_geometry \
+        realwallpaper-krebs-stars-tmp.png
+        mv realwallpaper-krebs-stars-tmp.png realwallpaper-krebs-stars.png
     fi
   }
 
