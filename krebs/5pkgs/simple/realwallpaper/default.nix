@@ -297,6 +297,26 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
         shade=15
       ''}
 
+    xplanet --num_times 1 --geometry $xplanet_out_size \
+      --latitude 52.520008 --longitude 13.404954 \
+      --output xplanet-krebs-stars-berlin-output.png --projection merc \
+      -config ${pkgs.writeText "xplanet-krebs-stars.config" ''
+        [default]
+
+        arc_thickness=1
+        arc_file=constellations.arcs
+
+        [earth]
+        "Earth"
+        map=daymap-final.png
+        night_map=nightmap-final.png
+        cloud_map=clouds.png
+        cloud_threshold=1
+        cloud_gamma=10
+        marker_file=marker_file
+        shade=15
+      ''}
+
     # trim xplanet output
     if needs_rebuild realwallpaper.png xplanet-output.png; then
       convert xplanet-output.png -crop $out_geometry \
@@ -322,6 +342,12 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       convert xplanet-krebs-stars-output.png -crop $out_geometry \
         realwallpaper-krebs-stars-tmp.png
         mv realwallpaper-krebs-stars-tmp.png realwallpaper-krebs-stars.png
+    fi
+
+    if needs_rebuild realwallpaper-krebs-stars-berlin.png xplanet-krebs-stars-berlin-output.png; then
+      convert xplanet-krebs-stars-berlin-output.png -crop $out_geometry \
+        realwallpaper-krebs-stars-berlin-tmp.png
+        mv realwallpaper-krebs-stars-berlin-tmp.png realwallpaper-krebs-stars-berlin.png
     fi
   }
 
