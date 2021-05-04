@@ -671,6 +671,7 @@ in {
       pubkey = ssh-for "raute";
     };
     rtjure = {
+      pubkey = ssh-for "rtjure";
     };
     sokratess = {
     };
