@@ -450,6 +450,11 @@ in {
     nardole = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet = {
+          ip4.addr = "131.159.38.202";
+          ip6.addr = "2a09:80c0:38::202";
+          aliases = [ "nardole.i" ];
+        };
         retiolum = {
           addrs = [
             config.krebs.hosts.nardole.nets.retiolum.ip4.addr
@@ -459,12 +464,17 @@ in {
           aliases = [ "nardole.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEA05JzZLPH4+t2X8TI1nYsv4WCQ/OUmuMy9YbKUIRITE2EVA+x47Cf
-            qdYPucWUpF7ap1rykxHBcPnmORO/NjAymlt25FDyyYQ2uWm17VE7P7jefAUnX7xj
-            80Rt7aWCXfldQuRAbza35G+Kl50Y6ydkZYkKCbyQ8fMhuzNp6Wn/pAJD3yr+zdka
-            AsIoir9Ut9/9CKayRqGF+zaIf2Lj7nl5GL8bCAVJydU98GjlnXt7iuaWCt0H7NiK
-            FWOjkGhAUlQI9I6l+5ELWClpyk5X+isfbUbYaCCspZJvos+vDE8hJuH5PrH8NuJj
-            fJv8HrHkcGphn/Nn1TotpHBkyMyE5h6akwIDAQAB
+            MIICCgKCAgEAyYIN9FYtTmJTXUlBO4QYp9J7SZbglMEq0QCMpF9xQvCqJHl+C1vm
+            NzAswlhbaK5J1spi6+zUXtYJEVQyP1xesDlVm9G+hntS7woEWtuLO7VUL9whWINb
+            mO0OmYIEaWTMPIOKPTgc3tYsUhk7dw962/6I81JQczCHg1z2ItsRho/Kwi/Jo2Gj
+            jnPJQoRek45+xIzlf9Jx38ntioTQIaLuSw7/lplT1cHNcefLje8FQmVEojY79Ijc
+            6Ij4b9tPln8eQErw2sANS6kSUOVRnVkfeRW+3a4iRtd8SzXJ+aX5TCsq910Z1+/H
+            ClK91GctU0V11s/m8LCp/Wz+o+4Z89JLxnil/ZS/6NHsaHysQPFPbx0Uh5nASF64
+            RoWhzp2CSJTC9/UJKdPIpIokMIEGgKjy8Up3nY4yjoUnf6SZfzr4jmXfRmYmVaMp
+            cCjbMbxBo+MjfXlGRxJAFGkS9zO9/21SEDiWqfOVThg5jbBR/q9ysRGcXndS0ea7
+            NzsCbU1/0StxxmZLpBRz2MxGSHqlZbwInm9RjsXbCGa32tTiUz8VxjR3LTUMU8AP
+            xpPLaIo7TIPdkDvCFL+DtXB9lE2PDpnSHbxyXKVKqxmCW1i/+msrBs/gnQ9VjzyA
+            L1Ip2MBQd+CFUtaj+VdhjfulvpVcpr5e3nZe7cl38qucUp46tbVsJ3UCAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
         };
