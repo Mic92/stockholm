@@ -10,21 +10,6 @@ self: super: {
     };
   });
 
-  exim = super.exim.overrideAttrs (old: rec {
-    version = warnOldVersion old.version "4.95+fixes";
-    src = self.fetchgit {
-      url = "git://git.exim.org/exim.git";
-      rev = "cdb37db5c0ff060de7edfc94e830cab6b7f7c084";
-      sha256 = "1xaxs1p8yy5f04an5g9mxhj5cvbnzj0xfb50aa1xxkhkqkspzlsg";
-      postFetch = /* sh */ ''
-        ${self.gnutar}/bin/tar xf ${old.src}
-        ${self.rsync}/bin/rsync -vac "$out"/src/ exim-4.94/src
-        rm -R "$out"
-        mv exim-4.94 "$out"
-      '';
-    };
-  });
-
   flameshot = super.flameshot.overrideAttrs (old: rec {
     patches = old.patches or [] ++ [
       (self.writeText "flameshot-imgur.patch" /* diff */ ''
