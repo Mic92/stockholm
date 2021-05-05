@@ -467,7 +467,6 @@ in {
           ip4.addr = "10.243.29.171";
           aliases = [
             "rock.r"
-            "loki.r"
           ];
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
@@ -630,6 +629,7 @@ in {
           ip4.addr = "10.243.29.185";
           aliases = [
             "eva.r"
+            "loki.r"
             "prometheus.r"
             "alertmanager.r"
           ];
