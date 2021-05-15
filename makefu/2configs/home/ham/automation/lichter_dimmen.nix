@@ -1,17 +1,43 @@
-
+# This module maps the RF433 Remote Control to zigbee and wifi lights
 let
-  btn_state = light: btn: halfbright:
+  rf_turn_off = code: light:
+  {
+    alias = "Turn off ${light} via rf code ${code}";
+    trigger = {
+      platform = "event";
+      event_type = "esphome.rf_code_received";
+      event_data.code = code;
+    };
+    action = {
+      service = "light.turn_off";
+      data.entity_id = light;
+    };
+  };
+  rf_turn_on = code: light:
+  {
+    alias = "Turn on ${light} via rf code ${code}";
+    trigger = {
+      platform = "event";
+      event_type = "esphome.rf_code_received";
+      event_data.code = code;
+    };
+    action = {
+      service = "light.turn_on";
+      data.entity_id = light;
+    };
+  };
+  rf_state = code: light: halfbright:
   let
     maxbright = 255;
     transition = 0.2; # seconds
   in
   # this function implements a simple state machine based on the state and brightness of the light (light must support brightness
   {
-    alias = "Cycle through states of ${light} via button ${btn}";
+    alias = "Cycle through states of ${light} via rf code ${code}";
     trigger = {
-      platform = "state";
-      entity_id = "sensor.${btn}_click";
-      to = "single";
+      platform = "event";
+      event_type = "esphome.rf_code_received";
+      event_data.code = code;
     };
     action = {
       choose = [
@@ -73,25 +99,37 @@ let
         };
       }];
     };
-  };
-  turn_off_all = btn:
+  }
+;
+  rf_toggle = code: light:
   {
-    alias = "Turn of all lights via ${btn} double click";
+    alias = "Toggle ${light} via rf code ${code}";
     trigger = {
-      platform = "state";
-      entity_id = "sensor.${btn}_click";
-      to = "double";
+      platform = "event";
+      event_type = "esphome.rf_code_received";
+      event_data.code = code;
     };
     action = {
-      service = "light.turn_off";
-      entity_id = "all";
+      service = "light.toggle";
+      data.entity_id = light;
     };
   };
-in {
+in
+{
   services.home-assistant.config.automation = [
-    # (btn_state "light.arbeitszimmerbeleuchtung" "arbeitszimmer_btn1")
-    (btn_state "light.schlafzimmer_komode_osram" "schlafzimmer_btn2" 128)
-    # (btn_state "light.wohnzimmerbeleuchtung" "wohnzimmer_btn3")
-    (turn_off_all "schlafzimmer_btn2")
+      (rf_toggle "400551" "light.wohnzimmer_fernseher_led_strip")        # A
+      (rf_state "401151" "light.wohnzimmer_stehlampe_osram" 128)            # B
+      (rf_state "401451" "light.wohnzimmer_komode_osram" 128)               # C
+      (rf_state "401511" "light.wohnzimmer_schrank_osram" 128)              # D
+
+                                                                        # OFF Lane
+      (rf_turn_off "400554" "all")                                       # A
+      (rf_toggle "401154" "light.wohnzimmer_fenster_lichterkette_licht") # B
+      (rf_toggle "401454" "light.wohnzimmer_fernsehwand_led")            # C
+      # (rf_toggle "401514" "")   # D
   ];
+    # "400554" # A OFF
+    # "401154" # B OFF
+    # "401454" # C OFF
+    # "401514" # D OFF
 }
