@@ -293,25 +293,6 @@ in {
         '';
       };
     };
-    anindya = {
-      owner = config.krebs.users.mic92;
-      nets.retiolum = {
-        ip4.addr = "10.243.29.191";
-        aliases = [
-          "anindya.r"
-        ];
-        tinc.pubkey = ''
-          -----BEGIN RSA PUBLIC KEY-----
-          MIIBCgKCAQEA8yWr01WlmM4RYuJdxvzvfdN3C5T3DOknWvK7U3y92HYgtQfYtZwu
-          +J8r1fpTsdIS8wKdSEqz7Mjhb1JabJBB1fv/2mkAF4V/gkMbP0jqZ6QQL29kgkNP
-          aI/+zG1yh4kEDgSn843J6XnTsJ/4Na2zmbVP1iIIQYMXyh+meWsBVR6DKV5ighjz
-          4h3wKbuMmDrS50aTk8ahgWoiqcE2DTUMeprw4SIL+RTepmsCINQtAJui5Ys6AAbK
-          ab6gxMzRH2txLBcTfSrbqTX3qHZHLlB9Ai5FEItWqMBxquD6OCxn8DNU+5LgGpt1
-          Z37SI1U0c4uu1oo7kOSx6wYP2ZVOatys6QIDAQAB
-          -----END RSA PUBLIC KEY-----
-        '';
-      };
-    };
     dimitra = {
       owner = config.krebs.users.mic92;
       nets.retiolum = {
