@@ -136,7 +136,7 @@ in {
         }
         systemPlugin
       ];
-      username = "reaktor";
+      username = "reaktor2";
       port = "6697";
     };
     freenode = {
