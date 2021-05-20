@@ -17,7 +17,6 @@ let
       ./buildbot/slave.nix
       ./build.nix
       ./cachecache.nix
-      ./charybdis.nix
       ./ci.nix
       ./current.nix
       ./dns.nix
@@ -52,6 +51,7 @@ let
       ./secret.nix
       ./setuid.nix
       ./shadow.nix
+      ./solanum.nix
       ./sync-containers.nix
       ./tinc.nix
       ./tinc_graphs.nix
