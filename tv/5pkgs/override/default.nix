@@ -19,8 +19,4 @@ self: super: {
 
   nix-prefetch-github =
     self.python3Packages.callPackage ./nix-prefetch-github.nix {};
-
-  rxvt_unicode = self.callPackage ./rxvt_unicode.nix {
-    rxvt_unicode = super.rxvt_unicode;
-  };
 }
