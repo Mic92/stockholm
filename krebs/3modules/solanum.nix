@@ -88,9 +88,6 @@ in
       systemd.services.solanum = {
         description = "Solanum IRC daemon";
         wantedBy = [ "multi-user.target" ];
-        environment = {
-          BANDB_DBPATH = "${cfg.statedir}/ban.db";
-        };
         serviceConfig = {
           ExecStart   = "${solanum}/bin/solanum -foreground -logfile /dev/stdout -configfile ${configFile} -pidfile ${cfg.statedir}/ircd.pid";
           Group = cfg.group;
