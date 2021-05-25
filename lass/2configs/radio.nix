@@ -223,7 +223,7 @@ in {
   systemd.services."reaktor2-the_playlist".serviceConfig.DynamicUser = mkForce false;
 
   krebs.reaktor2.the_playlist = {
-    hostname = "irc.freenode.org";
+    hostname = "irc.hackint.org";
     port = "6697";
     useTLS = true;
     nick = "the_playlist";
