@@ -61,7 +61,7 @@
       };
 
       privset "op" {
-        privs = oper:admin;
+        privs = oper:admin, oper:general;
       };
 
       operator "aids" {
