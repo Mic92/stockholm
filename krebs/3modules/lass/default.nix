@@ -807,7 +807,7 @@ in {
     };
     lass-android = {
       mail = "lassulus@gmail.com";
-      pubkey = builtins.readFile ./ssh/android.rsa;
+      pubkey = builtins.readFile ./ssh/android.ed25519;
     };
   };
 }

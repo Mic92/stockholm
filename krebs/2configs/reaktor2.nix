@@ -122,6 +122,23 @@ in {
   };
 
   krebs.reaktor2 = {
+    hackint = {
+      hostname = "irc.hackint.org";
+      nick = "reaktor2|krebs";
+      plugins = [
+        {
+          plugin = "register";
+          config = {
+            channels = [
+              "#krebs"
+            ];
+          };
+        }
+        systemPlugin
+      ];
+      username = "reaktor2";
+      port = "6697";
+    };
     freenode = {
       hostname = "irc.freenode.org";
       nick = "reaktor2|krebs";

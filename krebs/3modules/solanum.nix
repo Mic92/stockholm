@@ -2,10 +2,10 @@
 
 let
   inherit (lib) mkEnableOption mkIf mkOption singleton types;
-  inherit (pkgs) coreutils charybdis;
-  cfg = config.krebs.charybdis;
+  inherit (pkgs) coreutils solanum;
+  cfg = config.krebs.solanum;
 
-  configFile = pkgs.writeText "charybdis.conf" ''
+  configFile = pkgs.writeText "solanum.conf" ''
     ${cfg.config}
   '';
 in
@@ -16,22 +16,22 @@ in
 
   options = {
 
-    krebs.charybdis = {
+    krebs.solanum = {
 
-      enable = mkEnableOption "Charybdis IRC daemon";
+      enable = mkEnableOption "Solanum IRC daemon";
 
       config = mkOption {
         type = types.str;
         description = ''
-          Charybdis IRC daemon configuration file.
+          Solanum IRC daemon configuration file.
         '';
       };
 
       statedir = mkOption {
-        type = types.str;
-        default = "/var/lib/charybdis";
+        type = types.path;
+        default = "/var/lib/solanum";
         description = ''
-          Location of the state directory of charybdis.
+          Location of the state directory of solanum.
         '';
       };
 
@@ -39,7 +39,7 @@ in
         type = types.str;
         default = "ircd";
         description = ''
-          Charybdis IRC daemon user.
+          Solanum IRC daemon user.
         '';
       };
 
@@ -47,7 +47,7 @@ in
         type = types.str;
         default = "ircd";
         description = ''
-          Charybdis IRC daemon group.
+          Solanum IRC daemon group.
         '';
       };
 
@@ -55,9 +55,9 @@ in
         type = types.nullOr types.lines;
         default = null;
         description = ''
-          Charybdis MOTD text.
+          Solanum MOTD text.
 
-          Charybdis will read its MOTD from /etc/charybdis/ircd.motd .
+          Solanum will read its MOTD from /etc/solanum/ircd.motd .
           If set, the value of this option will be written to this path.
         '';
       };
@@ -72,38 +72,33 @@ in
   config = mkIf cfg.enable (lib.mkMerge [
     {
       users.users.${cfg.user} = {
-        description = "Charybdis IRC daemon user";
+        description = "Solanum IRC daemon user";
         uid = config.ids.uids.ircd;
         group = cfg.group;
       };
 
       users.groups.${cfg.group} = {
-        name = cfg.group;
         gid = config.ids.gids.ircd;
       };
 
-      systemd.services.charybdis = {
-        description = "Charybdis IRC daemon";
+      systemd.tmpfiles.rules = [
+        "d ${cfg.statedir} - ${cfg.user} ${cfg.group} - -"
+      ];
+
+      systemd.services.solanum = {
+        description = "Solanum IRC daemon";
         wantedBy = [ "multi-user.target" ];
-        environment = {
-          BANDB_DBPATH = "${cfg.statedir}/ban.db";
-        };
         serviceConfig = {
-          ExecStart   = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile ${configFile}";
+          ExecStart   = "${solanum}/bin/solanum -foreground -logfile /dev/stdout -configfile ${configFile} -pidfile ${cfg.statedir}/ircd.pid";
           Group = cfg.group;
           User = cfg.user;
-          PermissionsStartOnly = true; # preStart needs to run with root permissions
         };
-        preStart = ''
-          ${coreutils}/bin/mkdir -p ${cfg.statedir}
-          ${coreutils}/bin/chown ${cfg.user}:${cfg.group} ${cfg.statedir}
-        '';
       };
 
     }
 
     (mkIf (cfg.motd != null) {
-      environment.etc."charybdis/ircd.motd".text = cfg.motd;
+      environment.etc."solanum/ircd.motd".text = cfg.motd;
     })
   ]);
 }

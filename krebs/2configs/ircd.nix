@@ -5,9 +5,9 @@
     6667 6669
   ];
 
-  systemd.services.charybdis.serviceConfig.LimitNOFILE = 16384;
+  systemd.services.solanum.serviceConfig.LimitNOFILE = 16384;
 
-  krebs.charybdis = {
+  krebs.solanum = {
     enable = true;
     motd = ''
       hello

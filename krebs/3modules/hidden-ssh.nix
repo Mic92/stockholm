@@ -17,7 +17,7 @@ let
     };
     server = mkOption {
       type = types.str;
-      default = "irc.freenode.org";
+      default = "irc.hackint.org";
     };
     message = mkOption {
       type = types.str;
