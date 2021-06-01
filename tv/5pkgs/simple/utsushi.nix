@@ -1,4 +1,6 @@
-{ boost, fetchurl, file, imagemagick, libudev, libusb, pkgconfig, stdenv
+{ fetchurl, lib, stdenv
+
+, boost, file, imagemagick, libudev, libusb, pkgconfig
 , coreutils, dash, patchelf, writeScriptBin # for add-rpath
 
 , guiSupport ? false, gtkmm2 ? null
@@ -81,7 +83,7 @@ let
 
     preFixup = ''
       patchelf --set-interpreter \
-          ${stdenv.glibc}/lib/ld-linux${stdenv.lib.optionalString stdenv.is64bit "-x86-64"}.so.2 \
+          ${stdenv.glibc}/lib/ld-linux${lib.optionalString stdenv.is64bit "-x86-64"}.so.2 \
           $out/lib/utsushi/networkscan
 
       # libstdc++.so.6
@@ -96,9 +98,9 @@ let
         Image Scan v3 scanner driver bundle, which can be used by Utsushi.
       '';
       homepage = "http://support.epson.net/linux/en/imagescanv3.php?version=${version}";
-      license = stdenv.lib.licenses.eapl;
-      maintainers = [ stdenv.lib.maintainers.tv ];
-      platforms = stdenv.lib.platforms.linux;
+      license = lib.licenses.eapl;
+      maintainers = [ lib.maintainers.tv ];
+      platforms = lib.platforms.linux;
     };
   };
 
@@ -129,7 +131,7 @@ stdenv.mkDerivation rec {
     # Allow configuration to be done via /etc/utsushi.conf
     ln -s /etc/utsushi.conf $out/etc/utsushi/utsushi.conf
 
-    ${stdenv.lib.optionalString saneSupport ''
+    ${lib.optionalString saneSupport ''
       # Make this package compatible with hardware.sane.extraBackends
       mkdir $out/etc/sane.d
       echo utsushi > $out/etc/sane.d/dll.conf
@@ -137,7 +139,7 @@ stdenv.mkDerivation rec {
       ln -s $out/lib/utsushi/sane/libsane-utsushi.* $out/lib/sane
     ''}
 
-    ${stdenv.lib.optionalString networkSupport ''
+    ${lib.optionalString networkSupport ''
       ln -s ${imagescan-plugin-networkscan}/lib/utsushi/networkscan \
         $out/libexec/utsushi/
     ''}
@@ -151,7 +153,7 @@ stdenv.mkDerivation rec {
   #
   preFixup = ''
     add-rpath ${boost}/lib $out/lib/utsushi/libdrv-esci.so
-    ${stdenv.lib.optionalString saneSupport ''
+    ${lib.optionalString saneSupport ''
       add-rpath ${boost}/lib $out/lib/utsushi/sane/libsane-utsushi.so
     ''}
   '';
@@ -167,10 +169,10 @@ stdenv.mkDerivation rec {
     libudev
     libusb
   ]
-  ++ stdenv.lib.optional guiSupport gtkmm2
-  ++ stdenv.lib.optional ocrSupport tesseract
-  ++ stdenv.lib.optional saneSupport saneBackends
-  ++ stdenv.lib.optional tiffSupport libtiff
+  ++ lib.optional guiSupport gtkmm2
+  ++ lib.optional ocrSupport tesseract
+  ++ lib.optional saneSupport saneBackends
+  ++ lib.optional tiffSupport libtiff
   ;
 
   NIX_CFLAGS_COMPILE = [
@@ -184,16 +186,16 @@ stdenv.mkDerivation rec {
     "--with-magick-pp"
     "--with-udev-confdir=$(out)/etc/udev"
   ]
-  ++ stdenv.lib.optionals guiSupport [
+  ++ lib.optionals guiSupport [
     "--with-gtkmm"
   ]
-  ++ stdenv.lib.optionals jpegSupport [
+  ++ lib.optionals jpegSupport [
     "--with-jpeg"
   ]
-  ++ stdenv.lib.optionals saneSupport [
+  ++ lib.optionals saneSupport [
     "--with-sane"
   ]
-  ++ stdenv.lib.optionals tiffSupport [
+  ++ lib.optionals tiffSupport [
     "--with-tiff"
   ]
   ;
@@ -210,8 +212,8 @@ stdenv.mkDerivation rec {
       around the SANE standard.
     '';
     homepage = http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.tv ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.tv ];
+    platforms = lib.platforms.linux;
   };
 }
