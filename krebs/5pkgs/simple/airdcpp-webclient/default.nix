@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, makeWrapper, which
+{ fetchurl, lib, makeWrapper, stdenv
+, which
 }:
 stdenv.mkDerivation rec {
   name = "airdcpp-webclient-${version}";
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
   nativeBuildInputs = [ makeWrapper ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     # to start it: airdcpp -p=<pid-file> -c=<config-store-path (must be writeable)> --configure
     description = "dcpp client (statically precompiled)";
     homepage = http://fixme;
