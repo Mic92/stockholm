@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv
+{ fetchFromGitHub, lib, stdenv
 , wiringPi ? WiringPi.wiringPi
 , wiringPiDev ? WiringPi.wiringPiDev
 , WiringPi ? rpiPackages.WiringPi
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   pname = "433Utils-RPi_utils";
   version = "2018-06-07";
 
-  src = fetchFromGitHub (stdenv.lib.importJSON ./src.json);
+  src = fetchFromGitHub (lib.importJSON ./src.json);
 
   patches = [
     ./rc-switch.protocols.patch
