@@ -1,4 +1,7 @@
-{ coreutils, dash, gnused, fzf, pass-otp, runCommand, rxvt_unicode, stdenv, utillinux, xdotool }:
+{ lib, stdenv
+, runCommand
+, coreutils, dash, gnused, fzf, pass-otp, rxvt_unicode, utillinux, xdotool
+}:
 
 runCommand "fzmenu" {
 } /* sh */ ''
@@ -8,7 +11,7 @@ runCommand "fzmenu" {
 
   substituteInPlace $out/bin/otpmenu \
       --replace '#! /bin/sh' '#! ${dash}/bin/dash' \
-      --replace '#PATH=' PATH=${stdenv.lib.makeBinPath [
+      --replace '#PATH=' PATH=${lib.makeBinPath [
         coreutils
         dash
         fzf
@@ -21,7 +24,7 @@ runCommand "fzmenu" {
 
   substituteInPlace $out/bin/passmenu \
       --replace '#! /bin/sh' '#! ${dash}/bin/dash' \
-      --replace '#PATH=' PATH=${stdenv.lib.makeBinPath [
+      --replace '#PATH=' PATH=${lib.makeBinPath [
         coreutils
         dash
         fzf
