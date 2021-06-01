@@ -4,7 +4,7 @@ self: super: {
     # XXX cannot use `patches` because fzf has a custom patchPhase
     patchPhase = ''
       patch -Np1 < ${./fzf.complete1.patch}
-      ${old.patchPhase}
+      ${old.patchPhase or ""}
     '';
   });
   input-fonts = super.input-fonts.overrideAttrs (old: rec {
