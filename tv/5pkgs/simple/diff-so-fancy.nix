@@ -1,4 +1,6 @@
-{stdenv, git, perl, ncurses, coreutils, fetchFromGitHub, makeWrapper, ...}:
+{ fetchFromGitHub, lib, stdenv
+, coreutils, git, makeWrapper, ncurses, perl
+}:
 
 stdenv.mkDerivation rec {
   name = "diff-so-fancy-${version}";
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${ncurses.out}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/so-fancy/diff-so-fancy;
     description = "Good-looking diffs filter for git";
     license = licenses.mit;
