@@ -1,7 +1,7 @@
-{ stdenv, pam,
-  fetchurl, lib,
-  wordset-file ? null, # set your own wordset-file
-  ... }:
+{ fetchurl, lib, stdenv
+, pam
+, wordset-file ? null, # set your own wordset-file
+}:
 
 stdenv.mkDerivation rec {
   name = "passwdqc-utils-${version}";
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "passwdqc utils (pwqgen,pwqcheck) and library";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.makefu ];
-    patforms = stdenv.lib.platforms.linux; # more installFlags must be set for Darwin,Solaris
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.makefu ];
+    patforms = lib.platforms.linux; # more installFlags must be set for Darwin,Solaris
   };
 }
