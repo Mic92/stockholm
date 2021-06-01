@@ -33,7 +33,7 @@ let {
       cgit = {
         settings = {
           about-filter = pkgs.exec "krebs.cgit.about-filter" rec {
-            filename = "${pkgs.pythonPackages.markdown2}/bin/markdown2";
+            filename = "${pkgs.python3Packages.markdown2}/bin/markdown2";
             argv = [
               filename
               "--extras=fenced-code-blocks"
