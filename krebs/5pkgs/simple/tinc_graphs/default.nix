@@ -1,4 +1,4 @@
-{stdenv,fetchurl,pkgs,python3Packages, ... }:
+{ fetchurl, lib, pkgs, python3Packages, stdenv }:
 
 python3Packages.buildPythonPackage rec {
   name = "tinc_graphs-${version}";
@@ -22,7 +22,7 @@ python3Packages.buildPythonPackage rec {
   meta = {
     homepage = http://krebsco.de/;
     description = "Create Graphs from Tinc Stats";
-    license = stdenv.lib.licenses.wtfpl;
+    license = lib.licenses.wtfpl;
   };
 }
 
