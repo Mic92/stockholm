@@ -1,4 +1,4 @@
-{stdenv, fetchurl,pkgs,... }:
+{ fetchurl, lib, pkgs, stdenv }:
 let
   s =
   rec {
@@ -8,7 +8,7 @@ let
     url=https://github.com/soimort/translate-shell/archive/v0.9.0.9.tar.gz;
     sha256="1269j4yr9dr1d8c5kmysbzfplbgdg8apqnzs5w57d29sd7gz2i34";
   };
-  searchpath = with pkgs; stdenv.lib.makeSearchPath "bin" [
+  searchpath = with pkgs; lib.makeSearchPath "bin" [
     fribidi
     gawk
     bash
@@ -35,9 +35,9 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = ''translate using google api'';
-    license = stdenv.lib.licenses.free;
-    maintainers = [stdenv.lib.maintainers.makefu];
-    platforms = stdenv.lib.platforms.linux ;
+    license = lib.licenses.free;
+    maintainers = [ lib.maintainers.makefu ];
+    platforms = lib.platforms.linux ;
   };
 }
 
