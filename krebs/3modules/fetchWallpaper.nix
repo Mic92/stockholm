@@ -57,6 +57,7 @@ let
       description = "fetchWallpaper user";
       home = cfg.stateDir;
       createHome = true;
+      isSystemUser = true;
     };
 
     systemd.timers.fetchWallpaper = {
