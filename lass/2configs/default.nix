@@ -32,6 +32,7 @@ with import <stockholm/lib>;
           group = "users";
           createHome = true;
           useDefaultShell = true;
+          isNormalUser = true;
           extraGroups = [
             "audio"
             "fuse"
