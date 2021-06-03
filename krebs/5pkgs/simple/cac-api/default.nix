@@ -1,4 +1,6 @@
-{ stdenv, fetchgit, bc, cac-cert, coreutils, curl, dash, gnugrep, gnused, inotifyTools, jq, ncurses, openssh, sshpass, ... }:
+{ fetchgit, lib, stdenv
+, bc, cac-cert, coreutils, curl, dash, gnugrep, gnused, inotifyTools, jq, ncurses, openssh, sshpass
+}:
 
 stdenv.mkDerivation {
   name = "cac-api-1.1.2";
@@ -18,7 +20,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     { cat <<\EOF
     #! ${dash}/bin/dash
-    export PATH=${stdenv.lib.makeBinPath [
+    export PATH=${lib.makeBinPath [
       bc
       coreutils
       curl

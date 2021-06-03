@@ -66,6 +66,7 @@ let
       nameValuePair htgen.user.name {
         inherit (htgen.user) home name uid;
         createHome = true;
+        isSystemUser = true;
       }
     ) cfg;
 

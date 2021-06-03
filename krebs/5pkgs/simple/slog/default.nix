@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchFromGitHub }:
+{ fetchFromGitHub, lib, pkgs, stdenv }:
 
 ## use with:
 # . $(command -v slog.sh)
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -m755 slog.sh $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "POSIX shell logging";
     license = licenses.mit;
   };

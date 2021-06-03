@@ -78,6 +78,7 @@ in {
         inherit (cfg.user) home name uid;
         createHome = true;
         group = cfg.group.name;
+        isSystemUser = true;
       };
     };
   };

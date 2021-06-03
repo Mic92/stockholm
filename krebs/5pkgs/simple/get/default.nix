@@ -1,4 +1,6 @@
-{ coreutils, gnugrep, gnused, fetchgit, jq, nix, stdenv, ... }:
+{ fetchgit, lib, stdenv
+, coreutils, gnugrep, gnused, jq, nix
+}:
 
 stdenv.mkDerivation {
   name = "get-1.4.1";
@@ -16,7 +18,7 @@ stdenv.mkDerivation {
 
   installPhase =
     let
-      path = stdenv.lib.makeBinPath [
+      path = lib.makeBinPath [
         coreutils
         gnugrep
         gnused

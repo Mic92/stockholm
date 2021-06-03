@@ -1,4 +1,6 @@
-{ coreutils, curl, fetchgit, gnugrep, gnused, stdenv, utillinux }:
+{ fetchgit, lib, stdenv
+, coreutils, curl, gnugrep, gnused, utillinux
+}:
 
 stdenv.mkDerivation {
   name = "dic";
@@ -16,7 +18,7 @@ stdenv.mkDerivation {
 
   installPhase =
     let
-      path = stdenv.lib.makeBinPath [
+      path = lib.makeBinPath [
         coreutils
         curl
         gnused
