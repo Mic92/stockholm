@@ -563,6 +563,58 @@ in {
         };
       };
     };
+    nxnx = {
+      owner = config.krebs.users.rtjure;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.122.126";
+          aliases = [
+            "nxnx.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEA2JWNe54YaFM+flK3LlPwgOSgVRmZi+e+Qhc6uJYIxkQcAvJKpKJQ
+            1M4h7OE7eiJLdDp/aGaHe4BuII15/0lFJwYf1Zt8E1zN54QtwuELkDgOhgkhgvVb
+            tO+maHh10xsQMFlhpUztEk8oQuBu5toC795nKY7lBR2o6V2dPbbVo1+qr7qArOWo
+            cBlshRhEDjuzJUMHLlUGu43/miWeDewAq4O7U/nNNEz/v8KbESqP9HtTjelAeWz6
+            zGha8hSn+Snkt76kP15drgn1L8MMFvnm5EeJ5VkehnpOi8Vi9Yqln+VGwlvbhEdK
+            ST0gxNBKoSvLITS1P/ypfiEXARUOffgq+kLA2Hyet0DfBjCMD+WkTBlj1QyXLs10
+            3/xBntlOQqBcLIdpi/yRs7miyQlyblqsyiQOCukIvibdHB1RLdVBhUE3A7hgw4R+
+            +3ug/mQR+fDOpNB/sOkorcTVgA04KENUHc+6OqA0dvoAYr8l7N4+az3AtyHDNr5x
+            4otjxOq4fmu80sbm5Ry9SoNYMc4fOuWIZDHZ/ntDKqzHw3BaNB9vNkpKj22nArI4
+            cwAMPPJMJJ+Ef7tIzZ+NKtPudqztoLa5AYNllV7K9gS6NG0Yzk6iIQ42bKgfsZFn
+            9AkCdv8EycNIAIbBomPv2XIKYlKs3RfWEjRcSl3TQl4b3bilCicgnLECAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
+    nxnv = {
+      owner = config.krebs.users.rtjure;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.122.127";
+          aliases = [
+            "nxnv.r"
+          ];
+          tinc.pubkey = ''
+           -----BEGIN RSA PUBLIC KEY-----
+           MIICCgKCAgEAxEs92W/wRl3wlB6fNS2KUS+ubFAPLkgQYhk4JXeEeTpUq1H27oxB
+           ZWgWOlLMqnvn3w+aHQviWWPl5F6jXCxDOWCwyLhZU4cs45+ub9KKezCeE8IN+gAt
+           NKDqmRFzao9EXoT7sR65BblqEUR/Aqpykv7n4JdL5pGDbw1GGJ6Xf5QZo2sYm4wp
+           wdqOROn/V2Sm8NgmD1K6Sa2i6BLHSvHqunI4qoTyMfGXl8sbw6I2iclpQy8td9bt
+           1WA7F9kVTZdhaWgfpiZ8sKQ9LoFKoy6jnoppQcl/E8V2XNnjPy8obaLX9rTJ/deT
+           eW9qmfZeYiFSaDLLWEIZjhaU2l9z72oWyUW8w8GZQD+ypGi+UDMkbAhRHiaVGOZy
+           S7AodiEL2Ebzj6XJaNYC3LYm5R8U6XlvcHwn4FDtgKkqwXz08cZsPwQLoBjXUEi/
+           9/A5WEwrmp62TJ/ZRcRwV8/dBklrc/4FT0q0CiMuCWcbjF891d68TvcXlVU3gCwN
+           ld80CS17o2dOsBBW4nft7+9tL545p7mMjw6Oa4kRUTo2n1mYkMdTGZR+tOCD6hvW
+           45IG7vGq5EnRwolekGoMRf8RthajU2RXcIoNWnVon0so0Rja+AU9G7dobd/2qila
+           jta1Mou2vzUSAbdwXtBwJHlV9882p1utMlU9XVEZwQXfWSt488tQqzsCAwEAAQ==
+           -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     ada = {
       owner = config.krebs.users.filly;
       nets = {

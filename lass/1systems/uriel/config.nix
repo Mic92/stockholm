@@ -23,6 +23,7 @@ with import <stockholm/lib>;
           "networkmanager"
         ];
         useDefaultShell = true;
+        isNormalUser = true;
       };
       networking.networkmanager.enable = true;
       hardware.pulseaudio = {

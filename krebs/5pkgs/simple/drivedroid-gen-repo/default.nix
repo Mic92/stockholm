@@ -1,10 +1,10 @@
-{stdenv,fetchurl,pkgs,python3Packages, ... }:
+{ fetchurl, lib, stdenv, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
   name = "drivedroid-gen-repo-${version}";
   version = "0.4.4";
 
-  propagatedBuildInputs = with pkgs;[
+  propagatedBuildInputs = [
     python3Packages.docopt
   ];
 
@@ -16,7 +16,7 @@ python3Packages.buildPythonPackage rec {
   meta = {
     homepage = http://krebsco.de/;
     description = "Generate Drivedroid repos";
-    license = stdenv.lib.licenses.wtfpl;
+    license = lib.licenses.wtfpl;
   };
 }
 

@@ -8,6 +8,8 @@ with import <stockholm/lib>;
     prefixLength = 24;
   }];
 
+  networking.domain = "gg23";
+
   services.dhcpd4 = {
     enable = true;
     interfaces = [ "int0" ];

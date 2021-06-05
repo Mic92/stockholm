@@ -1,4 +1,4 @@
-{ stdenv, pkgs, ... }:
+{ lib, pkgs, stdenv, pkgs }:
 with pkgs.python3Packages;
 buildPythonPackage rec {
   pname = "internetarchive";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     sed -i "s/'schema.*'/'schema>=0.4.0'/" setup.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "python library and cli for uploading files to internet archive";
     license = licenses.agpl3;
   };

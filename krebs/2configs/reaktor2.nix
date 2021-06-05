@@ -119,6 +119,7 @@ in {
   users.users.reaktor2 = {
     uid = genid_uint31 "reaktor2";
     home = stateDir;
+    isSystemUser = true;
   };
 
   krebs.reaktor2 = {

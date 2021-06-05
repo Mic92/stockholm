@@ -345,6 +345,7 @@ with import <stockholm/lib>;
           home = "/var/download";
           useDefaultShell = true;
           uid = genid "download";
+          isSystemUser = true;
           openssh.authorizedKeys.keys = with config.krebs.users; [
             lass.pubkey
             lass-android.pubkey

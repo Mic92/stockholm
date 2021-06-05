@@ -23,7 +23,7 @@ with import <stockholm/lib>;
 
   users.users.mainUser.openssh.authorizedKeys.keys = [
     config.krebs.users.lass-android.pubkey
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICMe23IAHn4Ow4J4i8M9GJshqvY80U11NKPLum6b1XLn" # weechat ssh tunnel
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK0rn3003CkJMk3jZrh/3MC6nVorHRymlFSI4x1brCKY" # weechat ssh tunnel
   ];
 
   krebs.bindfs = {

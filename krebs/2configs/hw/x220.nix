@@ -22,8 +22,6 @@ with import <stockholm/lib>;
     pkgs.vaapiVdpau
   ];
 
-  security.rngd.enable = mkDefault true;
-
   services.xserver = {
     videoDriver = "intel";
   };

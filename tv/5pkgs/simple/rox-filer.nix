@@ -1,4 +1,5 @@
-{ autoconf, stdenv, fetchFromGitLab, pkgconfig, libxml2, libSM, shared-mime-info
+{ fetchFromGitLab, lib, stdenv
+, autoconf, pkgconfig, libxml2, libSM, shared-mime-info
 , libxslt, docbook_xml_dtd_412, docbook_xsl
 , gtk ? gtk2, gtk2
 }:
@@ -84,7 +85,7 @@ stdenv.mkDerivation {
     ln -sv application-{msword,rtf}.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, lightweight, gtk2 file manager";
     homepage = "http://rox.sourceforge.net/desktop";
     license = with licenses; [ gpl2 lgpl2 ];

@@ -81,11 +81,6 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-    # config.General.Disable = "Headset";
-    extraConfig = ''
-      [General]
-      Disable = Headset
-    '';
   };
   hardware.pulseaudio.package = pkgs.pulseaudioFull;
   # hardware.pulseaudio.configFile = pkgs.writeText "default.pa" ''

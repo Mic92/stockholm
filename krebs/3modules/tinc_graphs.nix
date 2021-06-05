@@ -127,6 +127,7 @@ let
     users.extraUsers.tinc_graphs = {
       uid = genid_uint31 "tinc_graphs";
       home = "/var/spool/tinc_graphs";
+      isSystemUser = true;
     };
     services.nginx = mkIf cfg.nginx.enable {
       enable = mkDefault true;
