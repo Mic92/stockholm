@@ -322,6 +322,7 @@ let
       description = "Buildbot Master";
       home = cfg.workDir;
       createHome = false;
+      isSystemUser = true;
     };
 
     users.extraGroups.buildbotMaster = {
