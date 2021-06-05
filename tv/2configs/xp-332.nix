@@ -3,7 +3,7 @@ with import <stockholm/lib>;
 
   environment.etc."utsushi.conf".text = ''
     [devices]
-    dev1.udi = esci:networkscan://EPSON79678C.fritz.box:1865
+    dev1.udi = esci:networkscan://ep.hkw:1865
     dev1.model = XP-332
     dev1.vendor = EPSON
   '';
