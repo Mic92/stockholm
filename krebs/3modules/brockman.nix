@@ -12,7 +12,7 @@ in {
     users.extraUsers.brockman = {
       home = "/var/lib/brockman";
       createHome = true;
-      isNormalUser = false;
+      isSystemUser = true;
       uid = genid_uint31 "brockman";
     };
 
