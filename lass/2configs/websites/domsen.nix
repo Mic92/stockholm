@@ -170,6 +170,7 @@ in {
     home = "/home/UBIK-SFTP";
     useDefaultShell = true;
     createHome = true;
+    isNormalUser = true;
   };
 
   users.users.xanf = {
@@ -178,6 +179,7 @@ in {
     home = "/home/xanf";
     useDefaultShell = true;
     createHome = true;
+    isNormalUser = true;
   };
 
   users.users.domsen = {
@@ -185,8 +187,9 @@ in {
     description = "maintenance acc for domsen";
     home = "/home/domsen";
     useDefaultShell = true;
-    extraGroups = [ "nginx" "download" ];
+    extraGroups = [ "syncthing" "download" "xanf" ];
     createHome = true;
+    isNormalUser = true;
   };
 
   users.users.bruno = {
@@ -194,6 +197,7 @@ in {
     home = "/home/bruno";
     useDefaultShell = true;
     createHome = true;
+    isNormalUser = true;
   };
 
   users.users.jla-trading = {
@@ -201,6 +205,7 @@ in {
     home = "/home/jla-trading";
     useDefaultShell = true;
     createHome = true;
+    isNormalUser = true;
   };
 
   users.users.jms = {
@@ -208,6 +213,7 @@ in {
     home = "/home/jms";
     useDefaultShell = true;
     createHome = true;
+    isNormalUser = true;
   };
 
   users.users.ms = {
@@ -215,6 +221,7 @@ in {
     home = "/home/ms";
     useDefaultShell = true;
     createHome = true;
+    isNormalUser = true;
   };
 
   users.users.testuser = {
@@ -222,20 +229,23 @@ in {
     home = "/home/testuser";
     useDefaultShell = true;
     createHome = true;
+    isNormalUser = true;
   };
 
-  users.users.akayguen = {
-    uid = genid_uint31 "akayguen";
-    home = "/home/akayguen";
-    useDefaultShell = true;
-    createHome = true;
-  };
+  #users.users.akayguen = {
+  #  uid = genid_uint31 "akayguen";
+  #  home = "/home/akayguen";
+  #  useDefaultShell = true;
+  #  createHome = true;
+  #  isNormalUser = true;
+  #};
 
   users.users.bui = {
     uid = genid_uint31 "bui";
     home = "/home/bui";
     useDefaultShell = true;
     createHome = true;
+    isNormalUser = true;
   };
 
   users.users.klabusterbeere = {
@@ -243,6 +253,7 @@ in {
     home = "/home/klabusterbeere";
     useDefaultShell = true;
     createHome = true;
+    isNormalUser = true;
   };
 
   users.users.kasia = {
@@ -250,6 +261,7 @@ in {
     home = "/home/kasia";
     useDefaultShell = true;
     createHome = true;
+    isNormalUser = true;
   };
 
   users.users.XANF_TEAM = {
@@ -258,6 +270,25 @@ in {
     home = "/home/XANF_TEAM";
     useDefaultShell = true;
     createHome = true;
+    isNormalUser = true;
+  };
+
+  users.users.dif = {
+    uid = genid_uint31 "dif";
+    home = "/home/dif";
+    useDefaultShell = true;
+    extraGroups = [ "xanf" ];
+    createHome = true;
+    isNormalUser = true;
+  };
+
+  users.users.lavafilms = {
+    uid = genid_uint31 "lavafilms";
+    home = "/home/lavafilms";
+    useDefaultShell = true;
+    extraGroups = [ "xanf" ];
+    createHome = true;
+    isNormalUser = true;
   };
 
   users.groups.xanf = {};
