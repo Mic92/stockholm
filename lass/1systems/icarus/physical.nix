@@ -45,16 +45,5 @@
     SUBSYSTEM=="net", ATTR{address}=="f0:de:f1:71:cb:35", NAME="et0"
   '';
 
-  services.thinkfan.enable = true;
-  services.thinkfan.levels = ''
-    (0,     0,      55)
-    (1,     48,     60)
-    (2,     50,     61)
-    (3,     52,     63)
-    (6,     60,     85)
-    (7,     80,     90)
-    (127,   89,     32767)
-  '';
-
   services.logind.lidSwitch = "ignore";
 }
