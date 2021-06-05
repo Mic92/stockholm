@@ -456,8 +456,8 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         internet = {
-          ip4.addr = "131.159.38.202";
-          ip6.addr = "2a09:80c0:38::202";
+          ip4.addr = "131.159.102.2";
+          ip6.addr = "2a09:80c0:102::2";
           aliases = [ "nardole.i" ];
         };
         retiolum = {
