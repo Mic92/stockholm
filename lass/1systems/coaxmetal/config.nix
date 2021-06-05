@@ -16,27 +16,36 @@
     <stockholm/lass/2configs/steam.nix>
     <stockholm/lass/2configs/wine.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
-    <stockholm/lass/2configs/nfs-dl.nix>
+    # <stockholm/lass/2configs/nfs-dl.nix>
     <stockholm/lass/2configs/pass.nix>
     <stockholm/lass/2configs/mail.nix>
     <stockholm/lass/2configs/bitcoin.nix>
+
+    <stockholm/lass/2configs/xonsh.nix>
+    <stockholm/lass/2configs/review.nix>
+    <stockholm/lass/2configs/dunst.nix>
+    # <stockholm/krebs/2configs/ircd.nix>
+    <stockholm/krebs/2configs/ergo.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.coaxmetal;
 
-  environment.shellAliases = {
-    deploy = pkgs.writeDash "deploy" ''
+  environment.systemPackages = with pkgs; [
+    brain
+    bank
+    l-gen-secrets
+    (pkgs.writeDashBin "deploy" ''
       set -eu
       export SYSTEM="$1"
       $(nix-build $HOME/sync/stockholm/lass/krops.nix --no-out-link --argstr name "$SYSTEM" -A deploy)
-    '';
-    usb-tether-on = pkgs.writeDash "usb-tether-on" ''
+    '')
+    (pkgs.writeDashBin "usb-tether-on" ''
       adb shell su -c service call connectivity 33 i32 1 s16 text
-    '';
-    usb-tether-off = pkgs.writeDash "usb-tether-off" ''
+    '')
+    (pkgs.writeDashBin "usb-tether-off" ''
       adb shell su -c service call connectivity 33 i32 0 s16 text
-    '';
-  };
+    '')
+  ];
 
   programs.adb.enable = true;
 
@@ -50,4 +59,17 @@
     '';
   };
   hardware.pulseaudio.package = pkgs.pulseaudioFull;
+
+  lass.browser.config = {
+    dc = { browser = "chromium";  groups = [ "audio" "video" ]; hidden = true; };
+    ff = { browser = "firefox";  groups = [ "audio" "video" ]; hidden = true; };
+    fy = { browser = "chromium";  groups = [ "audio" "video" ]; hidden = true; };
+  };
+
+  nix.trustedUsers = [ "root" "lass" ];
+
+  services.tor = {
+    enable = true;
+    client.enable = true;
+  };
 }
