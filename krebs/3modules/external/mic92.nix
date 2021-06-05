@@ -448,6 +448,7 @@ in {
             qYbXI/LXzU2Ln1Abiu9m1OfxTmEOlH9C54zyUvkAfhjcD2/aZWc76g06Oj2L6kZ6
             EC9Ku7Hk37rVOgZjtXUjuf3eUAvImknQ/JMRM3YDQgmu4iU0tJ1UnqkCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = bN+knMGCqK+HkdOucynEXxeqGFOS2u8oWLRDV/gNIZI
           '';
         };
       };
@@ -481,6 +482,7 @@ in {
             xpPLaIo7TIPdkDvCFL+DtXB9lE2PDpnSHbxyXKVKqxmCW1i/+msrBs/gnQ9VjzyA
             L1Ip2MBQd+CFUtaj+VdhjfulvpVcpr5e3nZe7cl38qucUp46tbVsJ3UCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = BA8uWkeHofZb5s9bNy6PjefKNZwemETWAA+Q6okKn1M
           '';
         };
       };
