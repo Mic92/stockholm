@@ -89,9 +89,7 @@ with import <stockholm/lib>;
 
   services.timesyncd.enable = mkForce true;
 
-  systemd.tmpfiles.rules = [
-    "d /tmp 1777 root root - -"
-  ];
+  boot.tmpOnTmpfs = true;
 
   # multiple-definition-problem when defining environment.variables.EDITOR
   environment.extraInit = ''
