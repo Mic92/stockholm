@@ -65,6 +65,7 @@ let
     users.users.${user.name} = {
       inherit (user) uid;
       home = cfg.dataDir;
+      isSystemUser = true;
     };
   };
 
@@ -72,7 +73,6 @@ let
     mail = "${name}@${config.krebs.build.host.name}";
     name = "github-hosts-sync";
     uid = genid_uint31 name;
-    isSystemUser = true;
   };
 
   # TODO move to lib?
