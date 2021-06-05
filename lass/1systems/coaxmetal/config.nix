@@ -25,7 +25,6 @@
     <stockholm/lass/2configs/review.nix>
     <stockholm/lass/2configs/dunst.nix>
     # <stockholm/krebs/2configs/ircd.nix>
-    <stockholm/krebs/2configs/ergo.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.coaxmetal;
