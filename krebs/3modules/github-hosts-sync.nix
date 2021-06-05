@@ -72,6 +72,7 @@ let
     mail = "${name}@${config.krebs.build.host.name}";
     name = "github-hosts-sync";
     uid = genid_uint31 name;
+    isSystemUser = true;
   };
 
   # TODO move to lib?
