@@ -1,6 +1,6 @@
-{ pkgs, fetchFromGitHub, python2Packages, git, ... }:
+{ pkgs, fetchFromGitHub, python3Packages, git, ... }:
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "buildbot-classic-${version}";
   version = "0.8.18";
   namePrefix = "";
@@ -15,11 +15,10 @@ python2Packages.buildPythonApplication rec {
   postUnpack = "sourceRoot=\${sourceRoot}/master";
 
   propagatedBuildInputs = [
-    python2Packages.jinja2
-    python2Packages.twisted
-    python2Packages.dateutil
-    python2Packages.sqlalchemy_migrate
-    python2Packages.pysqlite
+    python3Packages.jinja2
+    python3Packages.twisted
+    python3Packages.dateutil
+    python3Packages.sqlalchemy_migrate
     pkgs.coreutils
   ];
   doCheck = false;
