@@ -14,6 +14,7 @@ in {
   networking.firewall.allowedUDPPorts = [ 2342 ];
   users.users.node-light = {
     inherit home;
+    isSystemUser = true;
     createHome = true;
   };
   services.nginx.virtualHosts."lounge.light.shack" = {

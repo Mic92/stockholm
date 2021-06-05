@@ -13,6 +13,7 @@ let
 in {
   users.users.muellshack = {
     inherit home;
+    isSystemUser = true;
     createHome = true;
   };
   services.nginx.virtualHosts."muell.shack" = {

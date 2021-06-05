@@ -4,6 +4,7 @@
     uid = config.ids.uids.smbguest;
     group = "share";
     description = "smb guest user";
+    isNormalUser = true;
     home = "/home/share";
     createHome = true;
   };

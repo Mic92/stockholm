@@ -12,6 +12,7 @@ let
 in {
   users.users.muell_mail = {
     inherit home;
+    isSystemUser = true;
     createHome = true;
   };
   systemd.services.muell_mail = {
