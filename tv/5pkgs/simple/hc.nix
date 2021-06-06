@@ -1,4 +1,6 @@
-{ coreutils, fetchgit, findutils, gawk, gnugrep, makeWrapper, qrencode, stdenv, texlive, utillinux, zbar }:
+{ fetchgit, lib, makeWrapper, stdenv
+, coreutils, findutils, gawk, gnugrep, qrencode, texlive, utillinux, zbar
+}:
 
 stdenv.mkDerivation rec {
   name = "hc-${meta.version}";
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
     cp $src/bin/hc $out/bin/hc
 
     wrapProgram $out/bin/hc \
-      --prefix PATH : ${stdenv.lib.makeBinPath [
+      --prefix PATH : ${lib.makeBinPath [
         coreutils
         findutils
         gawk

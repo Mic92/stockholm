@@ -1,4 +1,4 @@
-{ fetchFromGitHub, python3Packages, stdenv }:
+{ fetchFromGitHub, lib, python3Packages, stdenv }:
 
 python3Packages.buildPythonPackage rec {
   inherit (meta) version;
@@ -46,9 +46,9 @@ python3Packages.buildPythonPackage rec {
   meta = {
     description = "tool for ssh server auditing";
     homepage = "https://github.com/arthepsy/ssh-audit";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
-      stdenv.lib.maintainers.tv
+      lib.maintainers.tv
     ];
     version = "1.7.0";
   };

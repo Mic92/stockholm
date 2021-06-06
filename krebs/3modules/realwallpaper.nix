@@ -60,6 +60,7 @@ let
       uid = genid "realwallpaper";
       home = cfg.workingDir;
       createHome = true;
+      isSystemUser = true;
     };
   };
 

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, runCommand, stdenv }:
+{ fetchFromGitHub, lib, runCommand, stdenv }:
 
 let
   generic = name: extraAttrs:
@@ -6,7 +6,7 @@ let
       pname = "WiringPi-${name}";
       version = "2020-09-14";
 
-      src = fetchFromGitHub (stdenv.lib.importJSON ./src.json);
+      src = fetchFromGitHub (lib.importJSON ./src.json);
 
       buildPhase = ''
         runHook postBuild

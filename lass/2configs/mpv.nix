@@ -80,7 +80,7 @@ let
     name = "mpv";
     paths = [
       (pkgs.writeDashBin "mpv" ''
-        exec ${pkgs.mpv}/bin/mpv -vo=gpu --no-config --script=${autosub} "$@"
+        exec ${pkgs.mpv}/bin/mpv -vo=gpu --no-config "$@"  # TODO renable autosub when subliminal is in 21.05 again
       '')
       pkgs.mpv
     ];

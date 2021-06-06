@@ -32,9 +32,12 @@ in {
     user = "lass";
   };
 
-  users.users.power-action.extraGroups = [
-    "audio"
-  ];
+  users.users.power-action = {
+    isNormalUser = true;
+    extraGroups = [
+      "audio"
+    ];
+  };
 
   security.sudo.extraConfig = ''
     ${config.krebs.power-action.user} ALL= (root) NOPASSWD: ${suspend}

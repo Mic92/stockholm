@@ -14,8 +14,9 @@ in {
       ];
       createHome = true;
       packages = [
-        pkgs.wineMinimal
+        pkgs.wineWowPackages.stable
       ];
+      isNormalUser = true;
     };
   };
   security.sudo.extraConfig = ''

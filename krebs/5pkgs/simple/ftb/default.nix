@@ -1,9 +1,9 @@
-{ stdenv, fetchurl
+{ fetchurl, lib, stdenv
 , jre, libX11, libXext, libXcursor, libXrandr, libXxf86vm
 , openjdk
 , mesa_glu, openal
 , useAlsa ? false, alsaOss ? null }:
-with stdenv.lib;
+with lib;
 
 assert useAlsa -> alsaOss != null;
 

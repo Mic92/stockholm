@@ -116,6 +116,7 @@ in
       group = "pulse";
       extraGroups = [ "audio" ];
       home = "${runDir}/home";
+      isSystemUser = true;
     };
   };
 }

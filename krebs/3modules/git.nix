@@ -366,6 +366,7 @@ let
         # To allow running cgit-clear-cache via hooks.
         cfg.cgit.fcgiwrap.group.name
       ];
+      isSystemUser = true;
       shell = "/bin/sh";
       openssh.authorizedKeys.keys =
         unique
@@ -384,6 +385,7 @@ let
       users.${cfg.cgit.fcgiwrap.user.name} = {
         inherit (cfg.cgit.fcgiwrap.user) home name uid;
         group = cfg.cgit.fcgiwrap.group.name;
+        isSystemUser = true;
       };
     };
 

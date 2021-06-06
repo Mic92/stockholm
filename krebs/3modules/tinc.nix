@@ -236,6 +236,7 @@ let
       nameValuePair "${netname}" {
         inherit (cfg.user) home name uid;
         createHome = true;
+        isSystemUser = true;
       }
     ) config.krebs.tinc;
 

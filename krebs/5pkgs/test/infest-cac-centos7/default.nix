@@ -1,6 +1,6 @@
-{ stdenv, coreutils, makeWrapper,
-  cac-api, cac-cert, cac-panel, gnumake, gnused, jq, openssh, sshpass, proot,
-  ... }:
+{ lib, makeWrapper, stdenv
+, cac-api, cac-cert, cac-panel, coreutils, gnumake, gnused, jq, openssh, proot, sshpass
+}:
 
 stdenv.mkDerivation rec {
   name = "${shortname}-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
-  path = stdenv.lib.makeSearchPath "bin" [
+  path = lib.makeSearchPath "bin" [
     coreutils
     cac-api
     cac-panel
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
         --set REQUESTS_CA_BUNDLE ${cac-cert} \
         --set SSL_CERT_FILE ${cac-cert}
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://krebsco.de;
     description = "infest a CaC box with stockholm";
     license = licenses.wtfpl;

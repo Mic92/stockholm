@@ -1,4 +1,4 @@
-{ pkgs, stdenv, ... }:
+{ lib, pkgs, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "github-hosts-sync-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   installPhase = let
     ca-bundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-    path = stdenv.lib.makeBinPath [
+    path = lib.makeBinPath [
       pkgs.git
       pkgs.nettools
       pkgs.openssh

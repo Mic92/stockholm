@@ -4,12 +4,6 @@ let
   mainUser = config.users.extraUsers.mainUser;
 in {
 
-  krebs.per-user.bch.packages = [
-    pkgs.electron-cash
-  ];
-  krebs.per-user.bitcoin.packages = [
-    pkgs.electrum
-  ];
   users.extraUsers = {
     bch = {
       name = "bch";
@@ -17,6 +11,8 @@ in {
       home = "/home/bch";
       useDefaultShell = true;
       createHome = true;
+      packages = [ pkgs.electron-cash ];
+      isNormalUser = true;
     };
     bitcoin = {
       name = "bitcoin";
@@ -24,10 +20,25 @@ in {
       home = "/home/bitcoin";
       useDefaultShell = true;
       createHome = true;
+      packages = [ pkgs.electrum ];
+      isNormalUser = true;
+    };
+    monero = {
+      name = "monero";
+      description = "user for monero stuff";
+      home = "/home/monero";
+      useDefaultShell = true;
+      createHome = true;
+      packages = [
+        pkgs.monero
+        pkgs.monero-gui
+      ];
+      isNormalUser = true;
     };
   };
   security.sudo.extraConfig = ''
-    ${mainUser.name} ALL=(bitcoin) NOPASSWD: ALL
-    ${mainUser.name} ALL=(bch) NOPASSWD: ALL
+    ${mainUser.name} ALL=(bch) ALL
+    ${mainUser.name} ALL=(bitcoin) ALL
+    ${mainUser.name} ALL=(monero) ALL
   '';
 }

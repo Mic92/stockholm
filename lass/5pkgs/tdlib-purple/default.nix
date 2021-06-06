@@ -1,6 +1,24 @@
-{ stdenv, fetchFromGitHub, cmake, tdlib, pidgin, libwebp, libtgvoip } :
+{ stdenv, pkgs, fetchFromGitHub, cmake, pidgin, libwebp, libtgvoip } :
 
-stdenv.mkDerivation rec {
+let
+
+  tdlib = stdenv.mkDerivation rec {
+    version = "1.6.0";
+    pname = "tdlib";
+
+    src = fetchFromGitHub {
+      owner = "tdlib";
+      repo = "td";
+      rev = "v${version}";
+      sha256 = "0zlzpl6fgszg18kwycyyyrnkm255dvc6fkq0b0y32m5wvwwl36cv";
+    };
+
+    buildInputs = with pkgs; [ gperf openssl readline zlib ];
+    nativeBuildInputs = [ pkgs.cmake ];
+
+  };
+
+in stdenv.mkDerivation rec {
   pname = "tdlib-purple";
   version = "0.7.8";
 
