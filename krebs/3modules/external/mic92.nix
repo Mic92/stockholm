@@ -243,6 +243,8 @@ in {
             61Oahtwy/szBj9mWIAymMfnvFGpeiIcww3ZGzYNyKBCjp1TkkgFRV3Y6eoq1sJ13
             Pxol8FwH5+Q72bLtvg5Zva8D0Vx2U1jYSHEkRDDzaS5Z6Fus+zeZVMsCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+
+            Ed25519PublicKey = 7J1JgVyiy540akMdd/kONta0fMHSl5+FQJ1QhN84TzP
           '';
           tinc.subnets = [
             # docker network
@@ -676,6 +678,7 @@ in {
             6uuTTsn7s0PYBJDNdccOf1Qt8fqPPgzqUKqeUciHojYDDPTC5KQh5m2PBv4I4iIR
             LnKOqNUX7UCqbdaE/tfFRG0CAwEAAQ==
             -----END PUBLIC KEY-----
+            Ed25519PublicKey = 7rbs+10zzfwOPj5RoS1i/01QXuw7uIHGOHIgsjB2fHK
           '';
         };
       };
