@@ -39,6 +39,7 @@ in {
             DKhcgvE6xHCwZnVyJN8MMy1CVyDmnHVYoaTEZ2cCvNi/hXIXgO9KWjSpAv5tP764
             UkOE4dlDpEW6G1pNf84BERfRYGDj29A/Jk9LJC/6D09QJXNu18HR0sUCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = 6VktF9Fg9E0hCW5g+rwGnrPACPSx/8vkl+hPNaFYeND
           '';
         };
       };
@@ -72,6 +73,7 @@ in {
             UU8cQZ3yBLIhTtC+38pRlsdBQHt526q0j0rrnd30JXVAUdWBunP2UJ5QGtA8/mWn
             cWSlvRf5sfbyrISz6+mLPM2qGHnCkKwORNxmv/1DY07O3Rn6hX0OY4ECAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = qnJmS6W7QSKG3mjW1kPnHGeVmKzhGkyP9xBLGwH5XvD
           '';
         };
       };
@@ -148,6 +150,7 @@ in {
             IzbYu49VO/B1rktYzZ2l2ENQy6OILXWbvFjC8Pt8f1ZZQ4A21PyNA1AdyJ/rbVj7
             awm3OnnvKSvMCXWnwHPFHjksb3qMx96Aep1cw3ZBx0sQQ41UWBoOsi8CAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = ikUmx5IC1dvfaHFhpZM9xotwF2LH6EkvpcPTRm6TjeD
           '';
         };
       };
@@ -242,8 +245,6 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
           tinc.subnets = [
-            # ohorn lan
-            "fd42:4492:6a6d:500:8526:2adf:7451:8bbb"
             # docker network
             "42:0000:002b:1605:3::/80"
           ];
@@ -361,6 +362,7 @@ in {
             4frtEIGbfdKqQ6nNTvTpCrAo+WAm3NE3khTYqGe4LqX/JMoGtWXp/Ex9IdG+sflM
             mESMjuHp9vPY4aZGPtYPP93Cxv3q7gm+EfIGebajISpaG28J+XjiNNsCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = emKq1mfkW4/aCoCwmeFU3DtppKs+KsTvd9YGoFkFgdC
           '';
         };
       };
@@ -386,8 +388,6 @@ in {
             /vW066YCTe7wi+YrvrMDgkdbyfn/ecMTn2iXsTb4k9/fuO0+hsqL+isCAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
-          # ohorn lan
-          tinc.subnets = [ "fd42:4492:6a6d:500::/64" ];
         };
       };
     };
@@ -415,6 +415,7 @@ in {
              74oJVJgBT5M1rTH2+u+MU+kC+x2UD+jjXEjS55owFWsEM1jI4rGra+dpsDuzdGdG
              67wl9JlpDBy4Tkf2Bl3CQWZHsWDsR6jCqwIDAQAB
              -----END RSA PUBLIC KEY-----
+             Ed25519PublicKey = Z5+fArxMfP8oLqlHpXadkGc9ROOPHBqugAMD2czmNlJ
           '';
         };
       };
@@ -544,6 +545,7 @@ in {
             W3jpl1y5zShr5Hz90QoYcUTsxg9uk/+yqKpwUySZ6Gh4q0bo5k7nkM9i8mCMfNGZ
             0UU94QmwS9RoV4Mt4pSLYRcCs0mVeEjLuIfTFHkXc6LCjBWMn8ICfeMCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = PmZ8i6lB0Ij/d8qjA0y3QI2rMAlrTZn1ES/hUSNNWMP
           '';
         };
       };
@@ -570,9 +572,8 @@ in {
             W5SCP9wx2ONhvZUkRbeihBiTN5/h3DepjOeNWd1DvE6K0Ag8SXMyBGtyKfer4ykW
             OR0iCiRQQ5QBmNuJrBLRUyfoPqFUXBATT1SrRj8vzXO1TjTmANEMFD0CAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = bXEnZa/jn2ntL0R4sMsRd7NIoHgzrzUnJ3ReJUQ8iFG
           '';
-          # ohorn lan
-          tinc.subnets = [ "fd42:4492:6a6d:500:f610:15d1:27a3:674b" ];
         };
       };
     };
@@ -698,6 +699,7 @@ in {
             EMp7y5QJySmKwJ/XsS6yiHeYXLFwWvfReja/IRFL4RiDSW+6ES4PTEXxoLVDpqgv
             KF44qim4UBabCMTPVtZcU3Rr+ufBALKJCwIDAQAB
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = PmZ8i6lB0Ij/d8qjA0y3QI2rMAlrTZn1ES/hUSNNWMP
           '';
         };
       };
@@ -726,6 +728,7 @@ in {
             fuXAsh5UbnE5kt6vKL5aducScatyd5FRkNumKG5ji26eZR4lZmXn380JLDInV4n7
             SODZL2fQFBnSD1wTWcq9Q/luPh4FitzJUZzHexvNxR/KBZycZJtdVw8CAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = pjCpkZToBUBbjUNVMWfYJePZ6g7m7Ccr9WedfKEFsXD
           '';
         };
       };
