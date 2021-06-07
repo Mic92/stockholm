@@ -4,7 +4,6 @@ with import <stockholm/lib>;
 
 let
   name = "radio";
-  mainUser = config.users.extraUsers.mainUser;
 
   music_dir = "/home/radio/music";
 
@@ -128,8 +127,9 @@ in {
 
   services.mpd = {
     enable = true;
-    group = "radio";
+    user = "radio";
     musicDirectory = "${music_dir}";
+    dataDir = "/home/radio/state"; # TODO create this somwhere
     extraConfig = ''
       log_level "default"
       auto_update "yes"
