@@ -83,6 +83,17 @@ let
       }'
   '';
 
+  set_irc_topic = pkgs.writeDash "set_irc_topic" ''
+    ${pkgs.curl}/bin/curl -fsSv --unix-socket /home/radio/reaktor.sock http://z/ \
+      -H content-type:application/json \
+      -d "$(${pkgs.jq}/bin/jq -n \
+        --arg text "$1" '{
+          command:"TOPIC",
+          params:["#the_playlist",$text]
+        }'
+      )"
+  '';
+
   write_to_irc = pkgs.writeDash "write_to_irc" ''
     ${pkgs.curl}/bin/curl -fsSv --unix-socket /home/radio/reaktor.sock http://z/ \
       -H content-type:application/json \
@@ -203,7 +214,7 @@ in {
         listeners=$(${pkgs.iproute}/bin/ss -Hno state established 'sport = :8000' | wc -l)
         echo "$(date -Is)" "$track" | tee -a "$HISTORY_FILE"
         echo "$(tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
-        ${write_to_irc} "playing: $track listeners: $listeners"
+        ${set_irc_topic} "playing: $track listeners: $listeners"
       done
     '';
   in {
