@@ -1,14 +1,13 @@
 { mkDerivation, async, base, blessings, bytestring, dbus, fetchgit
-, iso8601-time, process, random, stdenv, text, time, unagi-chan
-, unix
+, iso8601-time, lib, process, random, text, time, unagi-chan, unix
 }:
 mkDerivation {
   pname = "flameshot-once";
-  version = "1.3.0";
+  version = "1.4.0";
   src = fetchgit {
     url = "https://cgit.krebsco.de/flameshot-once";
-    sha256 = "1jy73379srnkq79i7k3al406r0kb3pxwgg6f64i89jhzxjn7zmzl";
-    rev = "81ce6b9bb68c2739ec5bda067fcfaeab931d55dd";
+    sha256 = "03g6sxgp6hcmbww5lzbs5llssgii1w469i5pz14x94542l06cmkq";
+    rev = "5f0ba1cf326d215bd5c50ad74c634e92c785ae46";
     fetchSubmodules = true;
   };
   isLibrary = false;
@@ -17,5 +16,5 @@ mkDerivation {
     async base blessings bytestring dbus iso8601-time process random
     text time unagi-chan unix
   ];
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }
