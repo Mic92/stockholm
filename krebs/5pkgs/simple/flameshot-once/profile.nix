@@ -23,6 +23,7 @@ let
     REDO               = 16;
     PIN                = 17;
     TEXT               = 18;
+    CIRCLECOUNT        = 19;
   };
 
   cfg = eval.config;
@@ -48,6 +49,7 @@ let
             "SAVE"
             "EXIT"
             "BLUR"
+            "CIRCLECOUNT"
           ]
           ++ optional cfg.imgur.enable "IMAGEUPLOADER"
           ;
