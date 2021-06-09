@@ -27,7 +27,7 @@ let
 
 in
 {
-  krebs.gollum = {
+  services.gollum = {
     enable = true;
     extraConfig = ''
       Gollum::Hook.register(:post_commit, :hook_id) do |committer, sha1|
