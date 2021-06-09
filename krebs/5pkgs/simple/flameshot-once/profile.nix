@@ -157,7 +157,7 @@ let
     "QList<${t}>${le.x4 0}${le.x4 (length xs)}${concatMapStrings le.x4 xs}";
 
   XDG_CONFIG_HOME = pkgs.write "flameshot-config" {
-    "/Dharkael/flameshot.ini".text = ''
+    "/flameshot/flameshot.ini".text = ''
       [General]
       buttons=@Variant(\0\0\0\x7f\0\0\0\v${toQList "int" cfg.buttons})
       disabledTrayIcon=${toJSON cfg.disabledTrayIcon}
@@ -166,6 +166,8 @@ let
       savePath=${toJSON cfg.savePath}
       showDesktopNotification=${toJSON cfg.showDesktopNotification}
       showHelp=${toJSON cfg.showHelp}
+      [Shortcuts]
+      TYPE_COPY=Return
     '';
   };
 

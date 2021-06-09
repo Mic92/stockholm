@@ -20,6 +20,7 @@ let
       ./ci.nix
       ./current.nix
       ./dns.nix
+      ./ergo.nix
       ./exim.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
@@ -28,7 +29,6 @@ let
       ./github-known-hosts.nix
       ./git.nix
       ./go.nix
-      ./gollum.nix
       ./hidden-ssh.nix
       ./hosts.nix
       ./htgen.nix

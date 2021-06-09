@@ -4,7 +4,6 @@ with import <stockholm/lib>;
 
 let
   name = "radio";
-  mainUser = config.users.extraUsers.mainUser;
 
   music_dir = "/home/radio/music";
 
@@ -84,6 +83,17 @@ let
       }'
   '';
 
+  set_irc_topic = pkgs.writeDash "set_irc_topic" ''
+    ${pkgs.curl}/bin/curl -fsSv --unix-socket /home/radio/reaktor.sock http://z/ \
+      -H content-type:application/json \
+      -d "$(${pkgs.jq}/bin/jq -n \
+        --arg text "$1" '{
+          command:"TOPIC",
+          params:["#the_playlist",$text]
+        }'
+      )"
+  '';
+
   write_to_irc = pkgs.writeDash "write_to_irc" ''
     ${pkgs.curl}/bin/curl -fsSv --unix-socket /home/radio/reaktor.sock http://z/ \
       -H content-type:application/json \
@@ -128,11 +138,25 @@ in {
 
   services.mpd = {
     enable = true;
-    group = "radio";
+    user = "radio";
     musicDirectory = "${music_dir}";
+    dataDir = "/home/radio/state"; # TODO create this somwhere
     extraConfig = ''
       log_level "default"
       auto_update "yes"
+      volume_normalization "yes"
+
+      audio_output {
+        type "httpd"
+        name "lassulus radio mp3"
+        encoder "lame" # optional
+        port "8002"
+        quality "5.0" # do not define if bitrate is defined
+        # bitrate "128" # do not define if quality is defined
+        format "44100:16:2"
+        always_on "yes" # prevent MPD from disconnecting all listeners when playback is stopped.
+        tags "yes" # httpd supports sending tags to listening streams.
+      }
 
       audio_output {
         type "httpd"
@@ -152,6 +176,7 @@ in {
     tables = {
       filter.INPUT.rules = [
         { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; }
+        { predicate = "-p tcp --dport 8002"; target = "ACCEPT"; }
         { predicate = "-i retiolum -p tcp --dport 8001"; target = "ACCEPT"; }
       ];
     };
@@ -200,10 +225,10 @@ in {
         ${pkgs.mpc_cli}/bin/mpc idle player > /dev/null
         ${pkgs.mpc_cli}/bin/mpc current -f %file%
       done | while read track; do
-        listeners=$(${pkgs.iproute}/bin/ss -Hno state established 'sport = :8000' | wc -l)
+        listeners=$(${pkgs.iproute}/bin/ss -Hno state established 'sport = :8000' | grep '^mptcp' | wc -l)
         echo "$(date -Is)" "$track" | tee -a "$HISTORY_FILE"
         echo "$(tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
-        ${write_to_irc} "playing: $track listeners: $listeners"
+        ${set_irc_topic} "playing: $track listeners: $listeners"
       done
     '';
   in {
@@ -349,7 +374,7 @@ in {
   };
   services.syncthing.declarative.folders."the_playlist" = {
     path = "/home/radio/music/the_playlist";
-    devices = [ "mors" "phone" "prism" "xerxes" ];
+    devices = [ "mors" "phone" "prism" ];
   };
   krebs.permown."/home/radio/music/the_playlist" = {
     owner = "radio";

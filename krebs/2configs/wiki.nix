@@ -27,7 +27,7 @@ let
 
 in
 {
-  krebs.gollum = {
+  services.gollum = {
     enable = true;
     extraConfig = ''
       Gollum::Hook.register(:post_commit, :hook_id) do |committer, sha1|
@@ -35,6 +35,8 @@ in
       end
     '';
   };
+
+  systemd.services.gollum.environment.LC_ALL = "en_US.UTF-8";
 
   networking.firewall.allowedTCPPorts = [ 80 ];
   services.nginx = {
