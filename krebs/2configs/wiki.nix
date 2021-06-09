@@ -4,9 +4,9 @@ let
 
   setupGit = ''
     export PATH=${makeBinPath [ pkgs.git ]}
-    export GIT_SSH_COMMAND='${pkgs.openssh}/bin/ssh -i ${config.krebs.gollum.stateDir}/.ssh/id_ed25519'
+    export GIT_SSH_COMMAND='${pkgs.openssh}/bin/ssh -i ${config.services.gollum.stateDir}/.ssh/id_ed25519'
     repo='git@localhost:wiki'
-    cd ${config.krebs.gollum.stateDir}
+    cd ${config.services.gollum.stateDir}
     if ! url=$(git config remote.origin.url); then
       git remote add origin "$repo"
     elif test "$url" != "$repo"; then
@@ -89,7 +89,7 @@ in
   };
 
   krebs.secret.files.gollum = {
-    path = "${config.krebs.gollum.stateDir}/.ssh/id_ed25519";
+    path = "${config.services.gollum.stateDir}/.ssh/id_ed25519";
     owner = { name = "gollum"; };
     source-path = "${<secrets/gollum.id_ed25519>}";
   };
