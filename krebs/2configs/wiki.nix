@@ -36,6 +36,8 @@ in
     '';
   };
 
+  systemd.services.gollum.environment.LC_ALL = "en_US.UTF-8";
+
   networking.firewall.allowedTCPPorts = [ 80 ];
   services.nginx = {
     enable = true;
