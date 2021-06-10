@@ -9,8 +9,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     gnused
     file
     findutils
-    grib2json
-    imagemagick
+    imagemagick6
     inkscape
     jq
     nomads-cloud

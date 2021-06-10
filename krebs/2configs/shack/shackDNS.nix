@@ -30,6 +30,7 @@ in {
   users.users.shackDNS = {
     inherit home;
     createHome = true;
+    isSystemUser = true;
   };
   services.nginx.virtualHosts."leases.shack" = {
     locations."/" = {

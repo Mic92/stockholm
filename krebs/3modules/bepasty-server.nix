@@ -146,6 +146,7 @@ let
       uid = genid_uint31 "bepasty";
       group = "bepasty";
       home = "/var/lib/bepasty-server";
+      isSystemUser = true;
     };
     users.extraGroups.bepasty = {
       gid = genid_uint31 "bepasty";

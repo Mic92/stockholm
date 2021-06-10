@@ -589,6 +589,32 @@ in {
         };
       };
     };
+    nxnv = {
+      owner = config.krebs.users.rtjure;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.122.127";
+          aliases = [
+            "nxnv.r"
+          ];
+          tinc.pubkey = ''
+           -----BEGIN RSA PUBLIC KEY-----
+           MIICCgKCAgEAxEs92W/wRl3wlB6fNS2KUS+ubFAPLkgQYhk4JXeEeTpUq1H27oxB
+           ZWgWOlLMqnvn3w+aHQviWWPl5F6jXCxDOWCwyLhZU4cs45+ub9KKezCeE8IN+gAt
+           NKDqmRFzao9EXoT7sR65BblqEUR/Aqpykv7n4JdL5pGDbw1GGJ6Xf5QZo2sYm4wp
+           wdqOROn/V2Sm8NgmD1K6Sa2i6BLHSvHqunI4qoTyMfGXl8sbw6I2iclpQy8td9bt
+           1WA7F9kVTZdhaWgfpiZ8sKQ9LoFKoy6jnoppQcl/E8V2XNnjPy8obaLX9rTJ/deT
+           eW9qmfZeYiFSaDLLWEIZjhaU2l9z72oWyUW8w8GZQD+ypGi+UDMkbAhRHiaVGOZy
+           S7AodiEL2Ebzj6XJaNYC3LYm5R8U6XlvcHwn4FDtgKkqwXz08cZsPwQLoBjXUEi/
+           9/A5WEwrmp62TJ/ZRcRwV8/dBklrc/4FT0q0CiMuCWcbjF891d68TvcXlVU3gCwN
+           ld80CS17o2dOsBBW4nft7+9tL545p7mMjw6Oa4kRUTo2n1mYkMdTGZR+tOCD6hvW
+           45IG7vGq5EnRwolekGoMRf8RthajU2RXcIoNWnVon0so0Rja+AU9G7dobd/2qila
+           jta1Mou2vzUSAbdwXtBwJHlV9882p1utMlU9XVEZwQXfWSt488tQqzsCAwEAAQ==
+           -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
     ada = {
       owner = config.krebs.users.filly;
       nets = {
@@ -675,6 +701,7 @@ in {
             1T6DILDF71H92PNylujKSPA0CKI160xJ61Xy/T6MYl5u0+RblAgYr77o5HJwmXCe
             jFrCu3SKUIlJWYHWE8yNoR+VVYeXakbDFYE3KpVyBDG+ljUbia+Oel8CAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = 3IKIoZqg0jm9+pOOka2FEtihx0y8qAdJqKTuRfJtMpK
           '';
         };
       };

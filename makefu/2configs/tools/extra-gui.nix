@@ -16,7 +16,10 @@
     saleae-logic
     gitAndTools.gitFull
     signal-desktop
+    element-desktop
     # rambox
+
     vscode
+    chitubox
   ];
 }

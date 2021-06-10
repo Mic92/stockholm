@@ -78,6 +78,7 @@ in {
         # vdoomserver
         retroarchBare
       ];
+      isNormalUser = true;
     };
   };
 

@@ -39,6 +39,7 @@ in {
             DKhcgvE6xHCwZnVyJN8MMy1CVyDmnHVYoaTEZ2cCvNi/hXIXgO9KWjSpAv5tP764
             UkOE4dlDpEW6G1pNf84BERfRYGDj29A/Jk9LJC/6D09QJXNu18HR0sUCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = 6VktF9Fg9E0hCW5g+rwGnrPACPSx/8vkl+hPNaFYeND
           '';
         };
       };
@@ -72,6 +73,7 @@ in {
             UU8cQZ3yBLIhTtC+38pRlsdBQHt526q0j0rrnd30JXVAUdWBunP2UJ5QGtA8/mWn
             cWSlvRf5sfbyrISz6+mLPM2qGHnCkKwORNxmv/1DY07O3Rn6hX0OY4ECAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = qnJmS6W7QSKG3mjW1kPnHGeVmKzhGkyP9xBLGwH5XvD
           '';
         };
       };
@@ -148,6 +150,7 @@ in {
             IzbYu49VO/B1rktYzZ2l2ENQy6OILXWbvFjC8Pt8f1ZZQ4A21PyNA1AdyJ/rbVj7
             awm3OnnvKSvMCXWnwHPFHjksb3qMx96Aep1cw3ZBx0sQQ41UWBoOsi8CAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = ikUmx5IC1dvfaHFhpZM9xotwF2LH6EkvpcPTRm6TjeD
           '';
         };
       };
@@ -240,10 +243,10 @@ in {
             61Oahtwy/szBj9mWIAymMfnvFGpeiIcww3ZGzYNyKBCjp1TkkgFRV3Y6eoq1sJ13
             Pxol8FwH5+Q72bLtvg5Zva8D0Vx2U1jYSHEkRDDzaS5Z6Fus+zeZVMsCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+
+            Ed25519PublicKey = 7J1JgVyiy540akMdd/kONta0fMHSl5+FQJ1QhN84TzP
           '';
           tinc.subnets = [
-            # ohorn lan
-            "fd42:4492:6a6d:500:8526:2adf:7451:8bbb"
             # docker network
             "42:0000:002b:1605:3::/80"
           ];
@@ -269,21 +272,26 @@ in {
         '';
       };
     };
-    anindya = {
+    aendernix = {
       owner = config.krebs.users.mic92;
       nets.retiolum = {
-        ip4.addr = "10.243.29.191";
+        ip4.addr = "10.243.29.172";
         aliases = [
-          "anindya.r"
+          "aendernix.r"
         ];
         tinc.pubkey = ''
           -----BEGIN RSA PUBLIC KEY-----
-          MIIBCgKCAQEA8yWr01WlmM4RYuJdxvzvfdN3C5T3DOknWvK7U3y92HYgtQfYtZwu
-          +J8r1fpTsdIS8wKdSEqz7Mjhb1JabJBB1fv/2mkAF4V/gkMbP0jqZ6QQL29kgkNP
-          aI/+zG1yh4kEDgSn843J6XnTsJ/4Na2zmbVP1iIIQYMXyh+meWsBVR6DKV5ighjz
-          4h3wKbuMmDrS50aTk8ahgWoiqcE2DTUMeprw4SIL+RTepmsCINQtAJui5Ys6AAbK
-          ab6gxMzRH2txLBcTfSrbqTX3qHZHLlB9Ai5FEItWqMBxquD6OCxn8DNU+5LgGpt1
-          Z37SI1U0c4uu1oo7kOSx6wYP2ZVOatys6QIDAQAB
+          MIICCgKCAgEAt/dCDTvJU5jugP+5pk2CNM8X6cOnFonJv2eS253nsmKI97T9FSUa
+          QDt417MoqAJNEeZw7o4ve1fmdZmtfKgmXYdDJi2HSJCJoKY6FUgVOKevtzGg4akl
+          4mKTy2z59CxyIbA41MHyLq18W3NLabQ41NpWGBRt9jvHQpZfd+wI8t5IIzdvFrKo
+          JSOFRbzEBL5//Hc3N/443cUg4IMyDBTemS7/jaZ2/Mn+PVZAdoIPLEZjFeWewmTF
+          Jd8Bsc2thzAREYHYnawhq3PLJSebMJd91pCdkD0NB0i59VKORcQTFady3fzE9+w4
+          RSTqAdBTUDuxzU/B8g1dp89/qW+fVPiFuB5Pf7D9t2DgxTDAeSXMiId/4Hwa0B1G
+          QCnCedz0Qk2UdId16BTS8DSq8Pd9fawU6qCmPY6ahSiw5ZQ6odMvDISb480cKj41
+          pslLjhIItTk3WEs8MwnQCzweNABuCK7GzT7CNaYm3f9pznBlOB+KfoZ6mrlzKkEK
+          u+gFJXTFym0ZF0wheXO7FCJ1jp4LFHqKGS3zWQyT7isjLsbcQzpOe8/FdiFlQvlG
+          vltL+5JjcahAMHc/ba+pRa5rSy8ebqf68fg4jlkT94Za13bCIHdK5w7eAXR3s/9z
+          H2wZmhvajUIZAxQSgFUy+7kKWOIkWqFkGPIdmbdwTaHC88OWshvRv8ECAwEAAQ==
           -----END RSA PUBLIC KEY-----
         '';
       };
@@ -356,6 +364,7 @@ in {
             4frtEIGbfdKqQ6nNTvTpCrAo+WAm3NE3khTYqGe4LqX/JMoGtWXp/Ex9IdG+sflM
             mESMjuHp9vPY4aZGPtYPP93Cxv3q7gm+EfIGebajISpaG28J+XjiNNsCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = emKq1mfkW4/aCoCwmeFU3DtppKs+KsTvd9YGoFkFgdC
           '';
         };
       };
@@ -381,8 +390,6 @@ in {
             /vW066YCTe7wi+YrvrMDgkdbyfn/ecMTn2iXsTb4k9/fuO0+hsqL+isCAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
-          # ohorn lan
-          tinc.subnets = [ "fd42:4492:6a6d:500::/64" ];
         };
       };
     };
@@ -410,6 +417,7 @@ in {
              74oJVJgBT5M1rTH2+u+MU+kC+x2UD+jjXEjS55owFWsEM1jI4rGra+dpsDuzdGdG
              67wl9JlpDBy4Tkf2Bl3CQWZHsWDsR6jCqwIDAQAB
              -----END RSA PUBLIC KEY-----
+             Ed25519PublicKey = Z5+fArxMfP8oLqlHpXadkGc9ROOPHBqugAMD2czmNlJ
           '';
         };
       };
@@ -417,6 +425,11 @@ in {
     bill = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet = {
+          ip4.addr = "131.159.38.191";
+          ip6.addr = "2a09:80c0:38::191";
+          aliases = [ "bill.i" ];
+        };
         retiolum = {
           addrs = [
             config.krebs.hosts.bill.nets.retiolum.ip4.addr
@@ -426,13 +439,19 @@ in {
           aliases = [ "bill.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAzg0wJuDvsbflRKSJ7+ug9y7Gn+BH3CR44fuCPZpWmIcGIUbA6rXj
-            CD8pF5heOvXNCFlEip2wqTkaCJPnUs3x8BRtORmD6OxDdmqt0xH54u7CixKzrPp9
-            GIQydv+ZsGA2z3aDbmBydRPDIvYGhW68FJn10qlGRjCZ5zCl1eVEZ/wMddFXc0B8
-            KDbxh7qOkjXon6EOGACVbnrnUR3F1GsIvCxX0cCDrO0P8XHwwsZiAfUwXYkiqw7t
-            zPcty6Bbr34mSJbb9cFb/qQlfPWT0HVgo+Q65HVkr/64o/9tTyREZcj1dk5PpEPE
-            bt7PGlOF1oPZpVFQh8S+NviHTtqrvkuISQIDAQAB
+            MIICCgKCAgEAvzM5dWPpmzzmogjuZC5boNvz+MJcIO0WnE9IINBY+CLSw5ZpNDVB
+            b97EG0Irs92OLJ5eesdPdF5LIyfFcFHOpPN+NdVEfLDWpFZVgOYh4BRy5+JdEk6O
+            ybcxLFIdgBHxahd3W27FxXC1ALu/AInAA2b4rwYoNBi23idj8+wtL4MJldkr5QaQ
+            sx8VQxIMy1xY4AbKcHdOt/nMrPoU6GnE9ObdcLys5cGUl/7Vc0NAMK6RrFQo+jfn
+            2N0uWA1hZPAfZEEKP91xiOiRSx15WG3q9R/rqPmBh6l+rdPyWdRKcPVndCzVDrgw
+            WWPcR9A9Yzr0ZrpEIHOfrDOqb2Ur1HlrXHZRpt55IYOKwC7ZimZzKkMj7zl1t2Rq
+            nC07IJS7OI38amgLI0PSFI/Mx+mAPdYjd0fDcp8q7reOL63QT7cbrOw+cyOzNzGb
+            I7U7QaHaA2unOa1EYj5Ocd6jI1IyHqQe9FkUqgTaDVU44U3WEo/KY6FZfhqSPPHs
+            PsFzMj9nOWUGUr0cAn7DloIfNL49voO1C4HaiEvvhbSFIT/8suq3JznFxmP/q+Ph
+            qYbXI/LXzU2Ln1Abiu9m1OfxTmEOlH9C54zyUvkAfhjcD2/aZWc76g06Oj2L6kZ6
+            EC9Ku7Hk37rVOgZjtXUjuf3eUAvImknQ/JMRM3YDQgmu4iU0tJ1UnqkCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = bN+knMGCqK+HkdOucynEXxeqGFOS2u8oWLRDV/gNIZI
           '';
         };
       };
@@ -440,6 +459,11 @@ in {
     nardole = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet = {
+          ip4.addr = "131.159.102.2";
+          ip6.addr = "2a09:80c0:102::2";
+          aliases = [ "nardole.i" ];
+        };
         retiolum = {
           addrs = [
             config.krebs.hosts.nardole.nets.retiolum.ip4.addr
@@ -449,13 +473,19 @@ in {
           aliases = [ "nardole.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEA05JzZLPH4+t2X8TI1nYsv4WCQ/OUmuMy9YbKUIRITE2EVA+x47Cf
-            qdYPucWUpF7ap1rykxHBcPnmORO/NjAymlt25FDyyYQ2uWm17VE7P7jefAUnX7xj
-            80Rt7aWCXfldQuRAbza35G+Kl50Y6ydkZYkKCbyQ8fMhuzNp6Wn/pAJD3yr+zdka
-            AsIoir9Ut9/9CKayRqGF+zaIf2Lj7nl5GL8bCAVJydU98GjlnXt7iuaWCt0H7NiK
-            FWOjkGhAUlQI9I6l+5ELWClpyk5X+isfbUbYaCCspZJvos+vDE8hJuH5PrH8NuJj
-            fJv8HrHkcGphn/Nn1TotpHBkyMyE5h6akwIDAQAB
+            MIICCgKCAgEAyYIN9FYtTmJTXUlBO4QYp9J7SZbglMEq0QCMpF9xQvCqJHl+C1vm
+            NzAswlhbaK5J1spi6+zUXtYJEVQyP1xesDlVm9G+hntS7woEWtuLO7VUL9whWINb
+            mO0OmYIEaWTMPIOKPTgc3tYsUhk7dw962/6I81JQczCHg1z2ItsRho/Kwi/Jo2Gj
+            jnPJQoRek45+xIzlf9Jx38ntioTQIaLuSw7/lplT1cHNcefLje8FQmVEojY79Ijc
+            6Ij4b9tPln8eQErw2sANS6kSUOVRnVkfeRW+3a4iRtd8SzXJ+aX5TCsq910Z1+/H
+            ClK91GctU0V11s/m8LCp/Wz+o+4Z89JLxnil/ZS/6NHsaHysQPFPbx0Uh5nASF64
+            RoWhzp2CSJTC9/UJKdPIpIokMIEGgKjy8Up3nY4yjoUnf6SZfzr4jmXfRmYmVaMp
+            cCjbMbxBo+MjfXlGRxJAFGkS9zO9/21SEDiWqfOVThg5jbBR/q9ysRGcXndS0ea7
+            NzsCbU1/0StxxmZLpBRz2MxGSHqlZbwInm9RjsXbCGa32tTiUz8VxjR3LTUMU8AP
+            xpPLaIo7TIPdkDvCFL+DtXB9lE2PDpnSHbxyXKVKqxmCW1i/+msrBs/gnQ9VjzyA
+            L1Ip2MBQd+CFUtaj+VdhjfulvpVcpr5e3nZe7cl38qucUp46tbVsJ3UCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = BA8uWkeHofZb5s9bNy6PjefKNZwemETWAA+Q6okKn1M
           '';
         };
       };
@@ -467,7 +497,6 @@ in {
           ip4.addr = "10.243.29.171";
           aliases = [
             "rock.r"
-            "loki.r"
           ];
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
@@ -518,6 +547,7 @@ in {
             W3jpl1y5zShr5Hz90QoYcUTsxg9uk/+yqKpwUySZ6Gh4q0bo5k7nkM9i8mCMfNGZ
             0UU94QmwS9RoV4Mt4pSLYRcCs0mVeEjLuIfTFHkXc6LCjBWMn8ICfeMCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = 0O1LrgXAFOuei1NfU0vow+qUfim3htBOyCJvPrQFwHE
           '';
         };
       };
@@ -544,9 +574,8 @@ in {
             W5SCP9wx2ONhvZUkRbeihBiTN5/h3DepjOeNWd1DvE6K0Ag8SXMyBGtyKfer4ykW
             OR0iCiRQQ5QBmNuJrBLRUyfoPqFUXBATT1SrRj8vzXO1TjTmANEMFD0CAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = bXEnZa/jn2ntL0R4sMsRd7NIoHgzrzUnJ3ReJUQ8iFG
           '';
-          # ohorn lan
-          tinc.subnets = [ "fd42:4492:6a6d:500:f610:15d1:27a3:674b" ];
         };
       };
     };
@@ -621,8 +650,8 @@ in {
       nets = rec {
         internet = {
           # eva.thalheim.io
-          ip4.addr = "52.59.172.193";
-          ip6.addr = "2a05:d014:301:a601:ef0e:5434:d814:b8ed";
+          ip4.addr = "157.90.232.92";
+          ip6.addr = "2a01:4f8:1c1c:9a9::1";
           aliases = [ "eva.i" ];
         };
         retiolum = {
@@ -630,6 +659,7 @@ in {
           ip4.addr = "10.243.29.185";
           aliases = [
             "eva.r"
+            "loki.r"
             "prometheus.r"
             "alertmanager.r"
           ];
@@ -648,6 +678,7 @@ in {
             6uuTTsn7s0PYBJDNdccOf1Qt8fqPPgzqUKqeUciHojYDDPTC5KQh5m2PBv4I4iIR
             LnKOqNUX7UCqbdaE/tfFRG0CAwEAAQ==
             -----END PUBLIC KEY-----
+            Ed25519PublicKey = 7rbs+10zzfwOPj5RoS1i/01QXuw7uIHGOHIgsjB2fHK
           '';
         };
       };
@@ -671,6 +702,7 @@ in {
             EMp7y5QJySmKwJ/XsS6yiHeYXLFwWvfReja/IRFL4RiDSW+6ES4PTEXxoLVDpqgv
             KF44qim4UBabCMTPVtZcU3Rr+ufBALKJCwIDAQAB
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = PmZ8i6lB0Ij/d8qjA0y3QI2rMAlrTZn1ES/hUSNNWMP
           '';
         };
       };
@@ -699,6 +731,7 @@ in {
             fuXAsh5UbnE5kt6vKL5aducScatyd5FRkNumKG5ji26eZR4lZmXn380JLDInV4n7
             SODZL2fQFBnSD1wTWcq9Q/luPh4FitzJUZzHexvNxR/KBZycZJtdVw8CAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = pjCpkZToBUBbjUNVMWfYJePZ6g7m7Ccr9WedfKEFsXD
           '';
         };
       };

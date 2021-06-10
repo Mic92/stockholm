@@ -131,6 +131,7 @@ let
       description = "Buildbot Slave";
       home = cfg.workDir;
       createHome = false;
+      isSystemUser = true;
     };
 
     users.extraGroups.buildbotSlave = {

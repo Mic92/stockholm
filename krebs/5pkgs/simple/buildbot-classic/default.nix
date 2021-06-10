@@ -1,6 +1,9 @@
-{ pkgs, fetchFromGitHub, python2Packages, git, ... }:
+{ pkgs, fetchFromGitHub, python2Packages, git, ... }: let
 
-python2Packages.buildPythonApplication rec {
+  # we need the old sqlparse since the new one is python2 incompatible
+  sqlparse = python2Packages.callPackage ./sqlparse.nix {};
+
+in python2Packages.buildPythonApplication rec {
   name = "buildbot-classic-${version}";
   version = "0.8.18";
   namePrefix = "";
@@ -18,7 +21,7 @@ python2Packages.buildPythonApplication rec {
     python2Packages.jinja2
     python2Packages.twisted
     python2Packages.dateutil
-    python2Packages.sqlalchemy_migrate
+    (python2Packages.sqlalchemy_migrate.override { sqlparse = sqlparse; })
     python2Packages.pysqlite
     pkgs.coreutils
   ];

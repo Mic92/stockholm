@@ -65,6 +65,7 @@ let
     users.users.${user.name} = {
       inherit (user) uid;
       home = cfg.dataDir;
+      isSystemUser = true;
     };
   };
 

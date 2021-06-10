@@ -14,7 +14,10 @@ let
 in {
   # receive response from light.shack / standby.shack
   networking.firewall.allowedUDPPorts = [ 11111 ];
-  users.users.powermeter.extraGroups = [ "dialout" ];
+  users.users.powermeter = {
+    extraGroups = [ "dialout" ];
+    isSystemUser = true;
+  };
 
   # we make sure that usb-ttl has the correct permissions
   # creates /dev/powerraw

@@ -5,7 +5,9 @@ let
   cfg = config.lass.browser;
 
   browserScripts = {
-    chromium = "${pkgs.chromium}/bin/chromium";
+    brave = "${pkgs.brave}/bin/brave";
+    chrome = "${pkgs.google-chrome}/bin/chrome";
+    chromium = "${pkgs.ungoogled-chromium}/bin/chromium";
     firefox = "${pkgs.firefox.override {
         extraNativeMessagingHosts = [ pkgs.tridactyl-native ];
       }}/bin/firefox";
@@ -14,8 +16,9 @@ let
 
   browser-select = let
     sortedPaths = sort (a: b: a.value.precedence > b.value.precedence)
+                       (filter (x: ! x.value.hidden)
                        (mapAttrsToList (name: value: { inherit name value; })
-                                       cfg.config);
+                                       cfg.config));
   in if (lib.length sortedPaths) > 1 then
     pkgs.writeScriptBin "browser-select" ''
       BROWSER=$(echo -e "${concatStringsSep "\\n" (map (getAttr "name") sortedPaths)}" | ${pkgs.dmenu}/bin/dmenu)
@@ -48,6 +51,10 @@ in {
             type = types.str;
             default = config._module.args.name;
           };
+          hidden = mkOption {
+            type = types.bool;
+            default = false;
+          };
           precedence = mkOption {
             type = types.int;
             default = 0;
@@ -58,7 +65,7 @@ in {
           };
           browser = mkOption {
             type = types.enum (attrNames browserScripts);
-            default = "chromium";
+            default = "brave";
           };
           groups = mkOption {
             type = types.listOf types.str;

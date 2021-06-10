@@ -193,6 +193,7 @@ let
       inherit (user) uid;
       home = cfg.dataDir;
       createHome = true;
+      isSystemUser = true;
     };
   };
 

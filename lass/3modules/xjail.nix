@@ -147,6 +147,7 @@ with import <stockholm/lib>;
         useDefaultShell = true;
         createHome = true;
         extraGroups = cfg.groups;
+        isNormalUser = true;
       }
     ) config.lass.xjail;
 

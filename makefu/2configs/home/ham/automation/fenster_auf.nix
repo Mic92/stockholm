@@ -19,8 +19,8 @@ let
       [
         {
           service = "notify.signal_home";
-          data = {
-            message= "${name} seit ${toString min} Minuten offen\nBitte einmal checken ob das ok ist :)";
+          data_template = {
+            message = "${name} seit ${toString min} Minuten offen und draussen ist es gerade {{states.sensor.dark_sky_temperature.state}}°C bei {{states.sensor.dark_sky_humidity.state}}% Luftfeuchte";
           };
         }
         {
@@ -36,6 +36,7 @@ let
             platform = "state";
             entity_id = entity;
             to = "off";
+            for.seconds = 10;
           }
         ];
       condition = [
@@ -61,12 +62,13 @@ let
 in {
   services.home-assistant.config = {
     input_boolean = {
-      badezimmerfinester_lang_offen.name = "Badezimmer lange offen";
+      badezimmerfenster_lang_offen.name = "Badezimmer lange offen";
       duschfenster_lang_offen.name = "Duschfenster lange offen";
     };
     automation = [
       (fenster_geschlossen_lang "Badezimmerfenster" "binary_sensor.badezimmer_fenster_contact")
-      (fenster_geschlossen_lang "Duschfenster" "binary_sensor.badezimmer_fenster_contact")
+      (fenster_geschlossen_lang "Duschfenster" "binary_sensor.dusche_fenster_contact")
+
       (fenster_offen "Badezimmerfenster" "binary_sensor.badezimmer_fenster_contact")
       (fenster_offen "Duschfenster" "binary_sensor.dusche_fenster_contact")
     ];

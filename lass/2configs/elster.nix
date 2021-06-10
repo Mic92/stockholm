@@ -12,6 +12,7 @@ in {
       useDefaultShell = true;
       extraGroups = [];
       createHome = true;
+      isNormalUser = true;
     };
   };
   krebs.per-user.elster.packages = [

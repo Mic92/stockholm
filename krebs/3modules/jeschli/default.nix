@@ -49,6 +49,7 @@ in {
       };
     };
     enklave = {
+      ci = false;
       nets = rec {
         internet = {
           ip4.addr = "88.198.164.182";

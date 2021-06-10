@@ -14,6 +14,7 @@ in {
   users.users.s3_power = {
     inherit home;
     createHome = true;
+    isSystemUser = true;
   };
   systemd.services.s3-power = {
     startAt = "daily";
