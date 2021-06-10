@@ -9,15 +9,15 @@ in
 pkgs.stdenv.mkDerivation {
   name = "xserver.conf";
 
-  xfs = optionalString (cfg.useXFS != false)
-    ''FontPath "${toString cfg.useXFS}"'';
+  fontPath = optionalString (cfg.fontPath != null)
+    ''FontPath "${toString cfg.fontPath}"'';
 
   inherit (cfg) config;
 
   buildCommand =
     ''
       echo 'Section "Files"' >> $out
-      echo $xfs >> $out
+      echo $fontPath >> $out
 
       for i in ${toString config.fonts.fonts}; do
         if test "''${i:0:''${#NIX_STORE}}" == "$NIX_STORE"; then
