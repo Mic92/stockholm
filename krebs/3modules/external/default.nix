@@ -762,6 +762,10 @@ in {
       mail = "hase.christian92@gmail.com";
       pubkey = ssh-for "hase";
     };
+    neos = {
+      mail = "neos@shackspace.de";
+      pubkey = ssh-for "neos";
+    };
     "0x4A6F" = {
       mail = "0x4a6f@shackspace.de";
       pubkey = ssh-for "0x4A6F";
