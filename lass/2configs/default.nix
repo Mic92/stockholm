@@ -106,7 +106,6 @@ with import <stockholm/lib>;
     jq
 
   #style
-    most
     rxvt_unicode.terminfo
 
   #monitoring tools
@@ -117,6 +116,7 @@ with import <stockholm/lib>;
     iptables
     iftop
     tcpdump
+    mosh
 
   #stuff for dl
     aria2
@@ -125,28 +125,30 @@ with import <stockholm/lib>;
     file
     hashPassword
     kpaste
-    krebspaste
-    mosh
     pciutils
     pop
-    psmisc
     q
     rs
-    tmux
     untilport
     usbutils
     logify
     goify
 
   #unpack stuff
-    p7zip
-    unzip
-    unrar
+    libarchive
 
     (pkgs.writeDashBin "sshn" ''
       ${pkgs.openssh}/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$@"
     '')
   ];
+
+  environment.shellAliases = {
+    ll = "ls -l";
+    la = "ls -la";
+    ls = "ls --color";
+    ip = "ip -color=auto";
+    grep = "grep --color=auto";
+  };
 
   programs.bash = {
     enableCompletion = true;

@@ -220,6 +220,7 @@ in {
             Ya8buh4RgyE/0hp4QNpa4K7fvntriK+k6zHs7BcZcG2aMWP3O9/4DgjzBR3eslQV
             oou23ajP11wyfrmZK0/PQGTpsU472Jj+06KtMAaH0zo4vAR8s2kV1ukCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = s/HNXjzVyDiBZImQdhJqUmj7symv+po9D9uDj+/6c2F
           '';
         };
       };
@@ -761,6 +762,10 @@ in {
     hase = {
       mail = "hase.christian92@gmail.com";
       pubkey = ssh-for "hase";
+    };
+    neos = {
+      mail = "neos@shackspace.de";
+      pubkey = ssh-for "neos";
     };
     "0x4A6F" = {
       mail = "0x4a6f@shackspace.de";
