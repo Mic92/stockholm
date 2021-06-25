@@ -389,6 +389,7 @@ in {
             nCShp7V+MSmz4DnLK1HLksLVLmGyZmouGsLjYUnEa414EI6NJF3bfEO2ZRGaswyR
             /vW066YCTe7wi+YrvrMDgkdbyfn/ecMTn2iXsTb4k9/fuO0+hsqL+isCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = 1wPa2cmQ4FUFw9289d0KdG1DcDuMNIYMWzIUnVVHu2P
           '';
         };
       };
