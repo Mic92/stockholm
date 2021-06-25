@@ -149,6 +149,7 @@ let
       inherit (cfg.user) home name uid;
       createHome = true;
       description = "repo-sync user";
+      isSystemUser = true;
     };
 
     systemd.timers = mapAttrs' (name: repo:
