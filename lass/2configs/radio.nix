@@ -347,6 +347,19 @@ in {
       locations."= /recent".extraConfig = ''
         alias /tmp/played;
       '';
+      locations."= /current".extraConfig = ''
+        proxy_pass http://localhost:8001;
+      '';
+      locations."= /skip".extraConfig = ''
+        proxy_pass http://localhost:8001;
+      '';
+      locations."= /good".extraConfig = ''
+        proxy_pass http://localhost:8001;
+      '';
+      extraConfig = ''
+        add_header 'Access-Control-Allow-Origin' '*';
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+      '';
     };
     virtualHosts."lassul.us".locations."= /the_playlist".extraConfig = let
       html = pkgs.writeText "index.html" ''
