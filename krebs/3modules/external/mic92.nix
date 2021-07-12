@@ -432,6 +432,7 @@ in {
           aliases = [ "bill.i" ];
         };
         retiolum = {
+          via = internet;
           addrs = [
             config.krebs.hosts.bill.nets.retiolum.ip4.addr
             config.krebs.hosts.bill.nets.retiolum.ip6.addr
@@ -466,6 +467,7 @@ in {
           aliases = [ "nardole.i" ];
         };
         retiolum = {
+          via = internet;
           addrs = [
             config.krebs.hosts.nardole.nets.retiolum.ip4.addr
             config.krebs.hosts.nardole.nets.retiolum.ip6.addr
