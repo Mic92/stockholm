@@ -1,10 +1,13 @@
-{ config, pkgs, ... }:
-pkgs.writers.writeHaskellBin "xmonad" {
-  libraries = with pkgs.haskellPackages; [
-    extra
-    xmonad-stockholm
-  ];
-} /* haskell */ ''
+{ config, lib, pkgs, ... }:
+
+{
+  services.xserver.windowManager.xmonad = {
+    enable = true;
+    extraPackages = hs: [
+      hs.extra
+      hs.xmonad-stockholm
+    ];
+    config = /* haskell */ ''
 {-# LANGUAGE LambdaCase #-}
 
 
@@ -48,6 +51,7 @@ import XMonad.Prompt.Window (windowPromptGoto, windowPromptBringCopy)
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedWindows (getName)
 import XMonad.Util.Run (safeSpawn)
+import XMonad.Util.Ungrab (unGrab)
 
 import XMonad.Stockholm.Shutdown (newShutdownEventHandler, shutdown)
 import XMonad.Stockholm.Pager (defaultWindowColors, pager, MatchMethod(MatchPrefix), PagerConfig(..))
@@ -62,7 +66,9 @@ instance UrgencyHook LibNotifyUrgencyHook where
         safeSpawn "${pkgs.libnotify}/bin/notify-send" [show name, "workspace " ++ idx]
 
 myTerm :: FilePath
-myTerm = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtc"
+-- myTerm = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtc -e /run/current-system/sw/bin/xonsh"
+-- myTerm = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtc"
+myTerm = "/run/current-system/sw/bin/alacritty"
 
 myFont :: String
 myFont = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1"
@@ -109,19 +115,19 @@ floatHooks = composeAll
 
 myKeyMap :: [([Char], X ())]
 myKeyMap =
-    [ ("M4-<F11>", spawn "${config.lass.screenlock.command}")
-    , ("M4-C-p", spawn "${pkgs.scrot}/bin/scrot ~/public_html/scrot.png")
-    , ("M4-p", spawn "${pkgs.pass}/bin/passmenu --type")
-    , ("M4-S-p", spawn "${pkgs.otpmenu}/bin/otpmenu")
-    , ("M4-o", spawn "${pkgs.brain}/bin/brainmenu --type")
-    , ("M4-z", spawn "${pkgs.emot-menu}/bin/emoticons")
+    [ ("M4-C-p", forkFile "${pkgs.scrot}/bin/scrot" [ "~/public_html/scrot.png" ] Nothing )
+    , ("M4-p", forkFile "${pkgs.pass}/bin/passmenu" [ "--type" ] Nothing)
+    , ("M4-S-p", forkFile "${pkgs.otpmenu}/bin/otpmenu" [] Nothing)
+    , ("M4-o", forkFile "${pkgs.brain}/bin/brainmenu --type" [] Nothing)
+    , ("M4-z", forkFile "${pkgs.emot-menu}/bin/emoticons" [] Nothing)
+
+    , ("M4-S-q", restart "xmonad" True)
 
     , ("<XF86AudioMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-mute @DEFAULT_SINK@ toggle")
     , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ +4%")
     , ("<XF86AudioLowerVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ -4%")
     , ("<XF86MonBrightnessDown>", spawn "${pkgs.acpilight}/bin/xbacklight -time 0 -dec 1")
     , ("<XF86MonBrightnessUp>",   spawn "${pkgs.acpilight}/bin/xbacklight -time 0 -inc 1")
-    , ("<XF86Launch1>", gridselectWorkspace gridConfig W.view)
     , ("M4-C-k", spawn "${pkgs.xorg.xkill}/bin/xkill")
 
     , ("M4-<Tab>", focusDown)
@@ -137,7 +143,8 @@ myKeyMap =
     , ("M4-<Esc>", toggleWS)
     , ("M4-S-<Enter>", spawn myTerm)
     , ("M4-x", floatNext True >> spawn myTerm)
-    , ("M4-c", floatNext True >> spawn "${pkgs.termite}/bin/termite")
+    , ("M4-c", spawn "/run/current-system/sw/bin/emacsclient -c")
+    -- , ("M4-c", unGrab)
     , ("M4-f", floatNext True)
     , ("M4-b", spawn "/run/current-system/sw/bin/klem")
 
@@ -171,6 +178,9 @@ myKeyMap =
     , ("M4-<F9>", spawn "${pkgs.redshift}/bin/redshift -O 4000 -g 0.9:0.8:0.8")
     , ("M4-<F10>", spawn "${pkgs.redshift}/bin/redshift -x")
 
+    , ("M4-<F11>", spawn "${config.lass.screenlock.command}")
+    , ("M4-<F12>", spawn "${pkgs.systemd}/bin/systemctl suspend -i")
+
     , ("M4-u", spawn "${pkgs.xcalib}/bin/xcalib -invert -alter")
 
     , ("M4-s", spawn "${pkgs.knav}/bin/knav")
@@ -183,7 +193,7 @@ myKeyMap =
 
 forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()
 forkFile path args env =
-    xfork (executeFile path False args env) >> return ()
+    xfork (executeFile path True args env) >> return ()
 
 myXPConfig :: XPConfig
 myXPConfig = def
@@ -227,4 +237,6 @@ gridConfig = def
 allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
 allWorkspaceNames ws =
     return $ map W.tag (W.hidden ws ++ (map W.workspace $ W.visible ws)) ++ [W.tag $ W.workspace $ W.current ws]
-''
+    '';
+  };
+}
