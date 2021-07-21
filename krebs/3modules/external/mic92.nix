@@ -334,6 +334,25 @@ in {
         '';
       };
     };
+    paulheidekrueger = {
+      owner = config.krebs.users.mic92;
+      nets.retiolum = {
+        ip4.addr = "10.243.29.197";
+        aliases = [
+          "paulheidekrueger.r"
+        ];
+        tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIIBCgKCAQEA45fCjKIgzLBbiHxHNH8ar4ERlF+oS4rKtsei7+fqUVj2zVbFB5Dd
+          OPm3kn3ZYi2WlhQBSPCphThEAGP6MrLuY2liiPyECfYNrr0+iDXaBl3Eq+fEu0Rm
+          6rXa+paL49L86Lbe+ituS+9Q77rHcxixEir/2NBv4qENlgHJos9gZFn3kS8fLzly
+          kVkK8VRKvWgkW7sAfEKa2uQSXh+Ea08JCrTeGC0H19rYVIFZIIRSR7uXZygDHvOO
+          5Gbnqp9Ya2yP6I00VTDVmJRJuzQjUciufa5XC5b7J1JP7Wo23sa0wV5eYZ0ZPFF4
+          qJXjhuLtfSvaPrQTsIwrt7Z1s3tlXDlh8QIDAQAB
+          -----END RSA PUBLIC KEY-----
+        '';
+      };
+    };
     martha = {
       owner = config.krebs.users.mic92;
       nets = rec {
