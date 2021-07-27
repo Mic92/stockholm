@@ -1,12 +1,13 @@
 { fetchgit, lib, pkgs, stdenv }:
 stdenv.mkDerivation rec {
   pname = "htgen";
-  version = "1.3.0";
+  version = "1.3.1";
 
+  #src = <htgen>;
   src = fetchgit {
     url = "http://cgit.krebsco.de/htgen";
-    rev = "refs/tags/v${version}";
-    sha256 = "0p3517wkfpvip4z0axh0b4v1jm1nqpppldnhq4806c0p33vrjxnf";
+    rev = "refs/tags/${version}";
+    sha256 = "0ml8kp89bwkrwy6iqclzyhxgv2qn9dcpwaafbmsr4mgcl70zx22r";
   };
 
   installPhase = ''
