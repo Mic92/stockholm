@@ -263,23 +263,6 @@ in {
       username = "reaktor2";
       port = "6697";
     };
-    freenode = {
-      hostname = "irc.freenode.org";
-      nick = "reaktor2|krebs";
-      plugins = [
-        {
-          plugin = "register";
-          config = {
-            channels = [
-              "#krebs"
-            ];
-          };
-        }
-        systemPlugin
-      ];
-      username = "reaktor2";
-      port = "6697";
-    };
     r = {
       nick = "reaktor2|krebs";
       sendDelaySec = null;
