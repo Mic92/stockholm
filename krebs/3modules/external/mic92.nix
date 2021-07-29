@@ -334,22 +334,23 @@ in {
         '';
       };
     };
-    paulheidekrueger = {
+    yasmin = {
       owner = config.krebs.users.mic92;
       nets.retiolum = {
         ip4.addr = "10.243.29.197";
         aliases = [
-          "paulheidekrueger.r"
+          "yasmin.r"
         ];
         tinc.pubkey = ''
           -----BEGIN RSA PUBLIC KEY-----
-          MIIBCgKCAQEA45fCjKIgzLBbiHxHNH8ar4ERlF+oS4rKtsei7+fqUVj2zVbFB5Dd
-          OPm3kn3ZYi2WlhQBSPCphThEAGP6MrLuY2liiPyECfYNrr0+iDXaBl3Eq+fEu0Rm
-          6rXa+paL49L86Lbe+ituS+9Q77rHcxixEir/2NBv4qENlgHJos9gZFn3kS8fLzly
-          kVkK8VRKvWgkW7sAfEKa2uQSXh+Ea08JCrTeGC0H19rYVIFZIIRSR7uXZygDHvOO
-          5Gbnqp9Ya2yP6I00VTDVmJRJuzQjUciufa5XC5b7J1JP7Wo23sa0wV5eYZ0ZPFF4
-          qJXjhuLtfSvaPrQTsIwrt7Z1s3tlXDlh8QIDAQAB
+          MIIBCgKCAQEAnQ6HGgUPVQbDIsLZAawZu4vK9yHF02aDrIWU9SdzpAddhM8yqWeC
+          f55W6zyjZuoQ2w4UNthDl6gjQM6A9B+nEMRNz3Rnhp57Lyi0a6HZHF2Eok9vJBiu
+          IRbVUxPpPKOGE09w0m5cLOfDfaZVdAT+80lQYoaasDr2VlRJNa2/arzaq847/SVg
+          vaf4gOmE+iIK+4ZDHqLcTn1WD6jy+aMChZU/zI31vZ8vM4oPuGh1xbcB3wKP3Vf3
+          OTqpGN86CdrdBahJkzNJzIXYsPsRaZ2+8dWTH9gJjI0z+yywQQCrrh9K/oJtDUHF
+          BwmNc150BoSLqwduSWLtBonCa9p2/y/TDQIDAQAB
           -----END RSA PUBLIC KEY-----
+          Ed25519PublicKey = ZQt/OcrDlQZvtJyMEFcS6FKjtumBA9gBWr7VqGdbJBP
         '';
       };
     };
