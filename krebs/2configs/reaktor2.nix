@@ -120,7 +120,10 @@ in {
     uid = genid_uint31 "reaktor2";
     home = stateDir;
     isSystemUser = true;
+    extraGroups = [ "reaktor2" ];
   };
+
+  users.groups.reaktor2 = {};
 
   systemd.services.htgen-agenda.serviceConfig.StateDirectory = "reaktor2";
   krebs.htgen.agenda = {
@@ -245,6 +248,8 @@ in {
     };
   };
 
+  systemd.services.reaktor2-r.serviceConfig.DynamicUser = mkForce false;
+  systemd.services.reaktor2-hackint.serviceConfig.DynamicUser = mkForce false;
   krebs.reaktor2 = {
     hackint = {
       hostname = "irc.hackint.org";
