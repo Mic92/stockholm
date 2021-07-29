@@ -187,16 +187,18 @@ in {
       const params = Object.fromEntries(urlSearchParams.entries());
 
       if (params.hasOwnProperty("style")) {
-        fetch(params["style"])
-          .then((response) =>
-            response.text().then((css) => {
-              const title = document.getElementsByTagName("title")[0];
-              const style = document.createElement("style");
-              style.appendChild(document.createTextNode(css));
-              title.appendChild(style);
-            })
-          )
-          .catch(console.log);
+        const cssUrls = params["style"].split(" ").filter((x) => x.length > 0);
+        for (const cssUrl of cssUrls)
+          fetch(cssUrl)
+            .then((response) =>
+              response.text().then((css) => {
+                const title = document.getElementsByTagName("head")[0];
+                const style = document.createElement("style");
+                style.appendChild(document.createTextNode(css));
+                title.appendChild(style);
+              })
+            )
+            .catch(console.log);
       }
 
       fetch("/agenda.json")
