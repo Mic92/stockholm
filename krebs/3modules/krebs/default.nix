@@ -70,6 +70,7 @@ in {
           ip4.addr = "10.243.77.3";
           aliases = [
             "hotdog.r"
+            "agenda.r"
             "build.r"
             "build.hotdog.r"
             "cgit.hotdog.r"

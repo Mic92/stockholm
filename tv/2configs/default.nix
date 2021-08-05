@@ -123,7 +123,6 @@ with import <stockholm/lib>;
         pkgs.hashPassword
         pkgs.htop
         pkgs.kpaste
-        pkgs.krebspaste
         pkgs.nix-prefetch-scripts
         pkgs.ovh-zone
         pkgs.push

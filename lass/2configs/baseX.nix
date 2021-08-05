@@ -2,7 +2,6 @@
 with import <stockholm/lib>;
 let
   user = config.krebs.build.user;
-  xmonad-lass = pkgs.callPackage <stockholm/lass/5pkgs/custom/xmonad-lass> { inherit config; };
 in {
   imports = [
     ./mpv.nix
@@ -19,6 +18,7 @@ in {
       security.rtkit.enable = true;
       sound.enableOSSEmulation = false;
     }
+    ./xmonad.nix
     {
       krebs.per-user.lass.packages = [
         pkgs.sshuttle
@@ -120,30 +120,13 @@ in {
     xkbVariant = "altgr-intl";
     xkbOptions = "caps:escape";
     libinput.enable = true;
-    displayManager.lightdm.enable = true;
-    displayManager.defaultSession = "none+xmonad";
-    windowManager.session = [{
-      name = "xmonad";
-      start = ''
+    displayManager = {
+      lightdm.enable = true;
+      defaultSession = "none+xmonad";
+      sessionCommands = ''
         ${pkgs.xorg.xhost}/bin/xhost +LOCAL:
-        ${pkgs.systemd}/bin/systemctl --user start xmonad
-        exec ${pkgs.coreutils}/bin/sleep infinity
       '';
-    }];
-  };
-
-  systemd.user.services.xmonad = {
-    environment = {
-      DISPLAY = ":${toString config.services.xserver.display}";
-      RXVT_SOCKET = "%t/urxvtd-socket";
-      XMONAD_DATA_DIR = "/tmp";
     };
-    serviceConfig = {
-      SyslogIdentifier = "xmonad";
-      ExecStart = "${xmonad-lass}/bin/xmonad";
-      ExecStop = "${xmonad-lass}/bin/xmonad --shutdown";
-    };
-    restartIfChanged = false;
   };
 
   nixpkgs.config.packageOverrides = super: {

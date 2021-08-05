@@ -225,7 +225,7 @@ in {
         ${pkgs.mpc_cli}/bin/mpc idle player > /dev/null
         ${pkgs.mpc_cli}/bin/mpc current -f %file%
       done | while read track; do
-        listeners=$(${pkgs.iproute}/bin/ss -Hno state established 'sport = :8000' | grep '^mptcp' | wc -l)
+        listeners=$(${pkgs.iproute}/bin/ss -Hno state established 'sport = :8000' | grep '^tcp' | wc -l)
         echo "$(date -Is)" "$track" | tee -a "$HISTORY_FILE"
         echo "$(tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
         ${set_irc_topic} "playing: $track listeners: $listeners"
@@ -346,6 +346,19 @@ in {
       '';
       locations."= /recent".extraConfig = ''
         alias /tmp/played;
+      '';
+      locations."= /current".extraConfig = ''
+        proxy_pass http://localhost:8001;
+      '';
+      locations."= /skip".extraConfig = ''
+        proxy_pass http://localhost:8001;
+      '';
+      locations."= /good".extraConfig = ''
+        proxy_pass http://localhost:8001;
+      '';
+      extraConfig = ''
+        add_header 'Access-Control-Allow-Origin' '*';
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
       '';
     };
     virtualHosts."lassul.us".locations."= /the_playlist".extraConfig = let
