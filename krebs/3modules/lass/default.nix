@@ -65,6 +65,7 @@ in {
             "prism.r"
             "cache.prism.r"
             "cgit.prism.r"
+            "flix.r"
             "paste.r"
             "p.r"
             "search.r"

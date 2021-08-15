@@ -305,6 +305,12 @@ with import <stockholm/lib>;
         localAddress = "10.233.2.14";
       };
 
+      services.nginx.virtualHosts."flix.r" = {
+        locations."/".extraConfig = ''
+          proxy_pass http://10.233.2.14:80/;
+          proxy_set_header Accept-Encoding "";
+        '';
+      };
       services.nginx.virtualHosts."lassul.us" = {
         locations."^~ /flix/".extraConfig = ''
           if ($scheme != "https") {
