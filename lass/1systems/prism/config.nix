@@ -385,7 +385,44 @@ with import <stockholm/lib>;
         mountdPort = 4002;
         statdPort = 4000;
       };
+
+      services.samba = {
+        enable = true;
+        extraConfig = ''
+          workgroup = WORKGROUP
+          netbios name = PRISM
+          server string = PRISM
+          hosts allow = 42::/16
+          map to guest = Bad User
+          max log size = 50
+          dns proxy = no
+          security = user
+
+          [global]
+          syslog only = yes
+       '';
+        shares.public = {
+          comment = "Warez";
+          path = "/export";
+          public = "yes";
+          "only guest" = "yes";
+          "create mask" = "0644";
+          "directory mask" = "2777";
+          writable = "no";
+          printable = "no";
+        };
+      };
+
       krebs.iptables.tables.filter.INPUT.rules = [
+         # netbios
+         { predicate = "-i retiolum -p tcp --dport 139"; target = "ACCEPT"; }
+         # smbd
+         { predicate = "-i retiolum -p tcp --dport 445"; target = "ACCEPT"; }
+         # netbios-ns
+         { predicate = "-i retiolum -p udp --dport 137"; target = "ACCEPT"; }
+         # nmbd
+         { predicate = "-i retiolum -p udp --dport 138"; target = "ACCEPT"; }
+
          { predicate = "-i retiolum -p tcp --dport 111"; target = "ACCEPT"; }
          { predicate = "-i retiolum -p udp --dport 111"; target = "ACCEPT"; }
          { predicate = "-i retiolum -p tcp --dport 2049"; target = "ACCEPT"; }
