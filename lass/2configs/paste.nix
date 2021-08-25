@@ -31,6 +31,10 @@ with import <stockholm/lib>;
       proxy_pass http://127.0.0.1:${toString config.krebs.htgen.imgur.port};
       proxy_pass_header Server;
     '';
+    extraConfig = ''
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+    '';
   };
   services.nginx.virtualHosts."p.krebsco.de" = {
     enableACME = true;
@@ -50,6 +54,10 @@ with import <stockholm/lib>;
 
       proxy_pass http://127.0.0.1:${toString config.krebs.htgen.imgur.port};
       proxy_pass_header Server;
+    '';
+    extraConfig = ''
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
     '';
   };
 
