@@ -67,6 +67,7 @@ in {
             "cgit.prism.r"
             "flix.r"
             "paste.r"
+            "c.r"
             "p.r"
             "search.r"
           ];
