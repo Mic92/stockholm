@@ -388,12 +388,37 @@ with import <stockholm/lib>;
 
       services.samba = {
         enable = true;
+        enableNmbd = false;
         extraConfig = ''
           workgroup = WORKGROUP
           netbios name = PRISM
-          server string = prism
+          server string = ${config.networking.hostName}
+          # only allow retiolum addresses
           hosts allow = 42::/16 10.243.0.0/16
+          # Don't bind to the legacy 143 port
+          smb ports = 445
+          # Bind only to allowed interfaces
+          bind interfaces only = true
+          # only bind to retiolum network
           interfaces = tinc.retiolum
+
+          # Use sendfile() for performance gain
+          use sendfile = true
+
+          # No NetBIOS is needed
+          disable netbios = true
+
+          # Only mangle non-valid NTFS names, don't care about DOS support
+          mangled names = illegal
+
+          # Performance optimizations
+          socket options = TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=65536 SO_SNDBUF=65536
+
+          # Disable all printing
+          load printers = false
+          disable spoolss = true
+          printcap name = /dev/null
+
           map to guest = Bad User
           max log size = 50
           dns proxy = no
@@ -401,7 +426,7 @@ with import <stockholm/lib>;
 
           [global]
           syslog only = yes
-       '';
+        '';
         shares.public = {
           comment = "Warez";
           path = "/export";
