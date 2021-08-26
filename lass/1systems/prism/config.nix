@@ -391,8 +391,9 @@ with import <stockholm/lib>;
         extraConfig = ''
           workgroup = WORKGROUP
           netbios name = PRISM
-          server string = PRISM
-          hosts allow = 42::/16
+          server string = prism
+          hosts allow = 42::/16 10.243.0.0/16
+          interfaces = tinc.retiolum
           map to guest = Bad User
           max log size = 50
           dns proxy = no
@@ -414,14 +415,8 @@ with import <stockholm/lib>;
       };
 
       krebs.iptables.tables.filter.INPUT.rules = [
-         # netbios
-         { predicate = "-i retiolum -p tcp --dport 139"; target = "ACCEPT"; }
          # smbd
          { predicate = "-i retiolum -p tcp --dport 445"; target = "ACCEPT"; }
-         # netbios-ns
-         { predicate = "-i retiolum -p udp --dport 137"; target = "ACCEPT"; }
-         # nmbd
-         { predicate = "-i retiolum -p udp --dport 138"; target = "ACCEPT"; }
 
          { predicate = "-i retiolum -p tcp --dport 111"; target = "ACCEPT"; }
          { predicate = "-i retiolum -p udp --dport 111"; target = "ACCEPT"; }
