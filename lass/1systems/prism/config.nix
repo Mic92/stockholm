@@ -395,12 +395,6 @@ with import <stockholm/lib>;
           server string = ${config.networking.hostName}
           # only allow retiolum addresses
           hosts allow = 42::/16 10.243.0.0/16
-          # Don't bind to the legacy 143 port
-          smb ports = 445
-          # Bind only to allowed interfaces
-          bind interfaces only = true
-          # only bind to retiolum network
-          interfaces = tinc.retiolum
 
           # Use sendfile() for performance gain
           use sendfile = true
