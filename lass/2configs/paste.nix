@@ -36,6 +36,22 @@ with import <stockholm/lib>;
       add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
     '';
   };
+  services.nginx.virtualHosts."c.krebsco.de" = {
+    enableACME = true;
+    addSSL = true;
+    serverAliases = [ "c.krebsco.de" ];
+    locations."/".extraConfig = ''
+      if ($request_method != GET) {
+        return 403;
+      }
+      proxy_set_header Host $host;
+      proxy_pass http://127.0.0.1:${toString config.krebs.htgen.cyberlocker.port};
+    '';
+    extraConfig = ''
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+    '';
+  };
   services.nginx.virtualHosts."p.krebsco.de" = {
     enableACME = true;
     addSSL = true;
