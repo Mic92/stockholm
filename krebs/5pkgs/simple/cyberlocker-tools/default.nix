@@ -4,7 +4,7 @@ pkgs.symlinkJoin {
   paths = [
     (pkgs.writers.writeDashBin "cput" ''
       set -efu
-      path=$1
+      path=''${1:-$(hostname)}
 
       ${pkgs.curl}/bin/curl -Ss --data-binary @- "http://c.r/$path"
       echo "http://c.r/$path"
