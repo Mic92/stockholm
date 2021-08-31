@@ -57,10 +57,7 @@ case "$Method $path" in
 
     mkdir -v -p $STATEDIR/items >&2
     cp -v $content $item >&2
-
-    scheme=${req_x_forwarded_proto-http}
-    link=$scheme://$req_host/$path
-
+    exit
   ;;
   'GET /'*)
     item=$STATEDIR/items/$(echo "$path" | jq -rR @uri)
