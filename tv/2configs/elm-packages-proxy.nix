@@ -197,6 +197,36 @@ in {
 
           exit
         ;;
+        'DELETE /packages/'*)
+
+          author=$req_x_author
+          pname=$req_x_package
+          user=$req_x_user
+          version=$req_x_version
+
+          zipball=${cfg.packageDir}/$author/$pname/$version/zipball
+          elmjson=$HOME/cache/$author%2F$pname%2F$version%2Felm.json
+          endpointjson=$HOME/cache/$author%2F$pname%2F$version%2Fendpoint.json
+
+          if test -e "$zipball"; then
+            zipball_owner=$(attr -q -g X-User "$zipball" || :)
+            if test "$zipball_owner" = "$req_x_user"; then
+              echo "user $user is deleting package $author/$pname@$version" >&2
+              rm -f "$elmjson"
+              rm -f "$endpointjson"
+              rm "$zipball"
+              string_response 200 OK \
+                  "package deleted: $author/$pname@$version" \
+                  text/plain
+              exit
+            else
+              string_response 403 Forbidden \
+                  "package already exists: $author/$pname@$version" \
+                  text/plain
+              exit
+            fi
+          fi
+        ;;
         'GET /all-packages'|'POST /all-packages')
 
           response=$(mktemp -t htgen.$$.elm-packages-proxy.all-packages.XXXXXXXX)
