@@ -639,7 +639,7 @@ in {
      nets = {
        retiolum = {
          ip4.addr = "10.243.13.12";
-         aliases = [ "catalonia.r" ];
+         aliases = [ "catalonia.r" "aleph.r" ];
          tinc.pubkey = ''
            -----BEGIN RSA PUBLIC KEY-----
            MIICCgKCAgEAug+nej8/spuRHdzcfBYAuzUVoiq4YufmJqXSshvgf4aqjeVEt91Y
