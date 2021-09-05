@@ -233,6 +233,7 @@ in {
             "wiki.gum.r"
             "wiki.makefu.r"
             "warrior.gum.r"
+            "rss.makefu.r"
             "sick.makefu.r"
             "dl.gum.r"
             "dl.makefu.r"
