@@ -19,6 +19,14 @@ let
       type = types.str;
       default = "irc.hackint.org";
     };
+    port = mkOption {
+      type = types.int;
+      default = 6697;
+    };
+    tls = mkOption {
+      type = types.bool;
+      default = true;
+    };
     message = mkOption {
       type = types.str;
       default = "SSH Hidden Service at ";
@@ -53,10 +61,14 @@ let
             echo "still waiting for ${hiddenServiceDir}/hostname"
             sleep 1
           done
-          ${pkgs.untilport}/bin/untilport ${cfg.server} 6667 && \
-            ${pkgs.irc-announce}/bin/irc-announce \
-            ${cfg.server} 6667 ${config.krebs.build.host.name}-ssh \
-            \${cfg.channel} \
+          ${pkgs.untilport}/bin/untilport ${escapeShellArg cfg.server} ${toString cfg.port}
+
+          ${pkgs.irc-announce}/bin/irc-announce \
+            ${escapeShellArg cfg.server} \
+            ${toString cfg.port} \
+            "${config.krebs.build.host.name}-ssh" \
+            ${escapeShellArg cfg.channel} \
+            ${escapeShellArg cfg.tls} \
             "${cfg.message}$(cat ${hiddenServiceDir}/hostname)"
         '';
         PrivateTmp = "true";

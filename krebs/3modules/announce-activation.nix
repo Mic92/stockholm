@@ -9,6 +9,7 @@ with import <stockholm/lib>;
         ${shell.escape (toString cfg.irc.port)} \
         ${shell.escape cfg.irc.nick} \
         ${shell.escape cfg.irc.channel} \
+        ${escapeShellArg cfg.irc.tls} \
         "$message"
   '';
   default-get-message = pkgs.writeDash "announce-activation-get-message" ''
@@ -49,6 +50,10 @@ in {
       server = mkOption {
         default = "irc.r";
         type = types.hostname;
+      };
+      tls = mkOption {
+        default = false;
+        type = types.bool;
       };
     };
   };
