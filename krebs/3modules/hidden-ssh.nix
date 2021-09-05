@@ -27,14 +27,17 @@ let
 
   imp = let
     torDirectory = "/var/lib/tor"; # from tor.nix
-    hiddenServiceDir = torDirectory + "/ssh-announce-service";
+    hiddenServiceDir = torDirectory + "/onion/hidden-ssh";
   in {
     services.tor = {
       enable = true;
-      extraConfig = ''
-        HiddenServiceDir ${hiddenServiceDir}
-        HiddenServicePort 22 127.0.0.1:22
-      '';
+      relay.onionServices.hidden-ssh = {
+        version = 3;
+        map = [{
+          port = 22;
+          target.port = 22;
+        }];
+      };
       client.enable = true;
     };
     systemd.services.hidden-ssh-announce = {
