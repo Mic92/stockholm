@@ -7,11 +7,12 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/libvirt.nix>
     <stockholm/lass/2configs/tv.nix>
+    <stockholm/lass/2configs/websites/lassulus.nix>
+    <stockholm/lass/2configs/telegraf.nix>
     {
       services.nginx.enable = true;
       imports = [
         <stockholm/lass/2configs/websites/domsen.nix>
-        <stockholm/lass/2configs/websites/lassulus.nix>
       ];
       # needed by domsen.nix ^^
       lass.usershadow = {
