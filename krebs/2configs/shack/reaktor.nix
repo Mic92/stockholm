@@ -16,4 +16,15 @@
       }
     ];
   };
+  systemd.services.announce_doorstatus = {
+    startAt = "*:0/1";
+    path = with pkgs; [ curl jq ];
+    script = builtins.readFile ./doorstatus.sh;
+    serviceConfig = {
+      DynamicUser = true;
+      StateDirectory = "doorstatus";
+      WorkingDirectory = "/var/lib/doorstatus";
+      PrivateTmp = true;
+    };
+  };
 }
