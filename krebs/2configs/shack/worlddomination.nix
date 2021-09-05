@@ -4,8 +4,9 @@ with import <stockholm/lib>;
 let
   pkg = pkgs.stdenv.mkDerivation {
     name = "worlddomination-2020-12-01";
-    src = pkgs.fetchgit {
-      url = "https://git.shackspace.de/rz/worlddomination.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "shackspace";
+      repo = "worlddomination";
       rev = "c7aedcde7cd1fcb870b5356a6125e1a384b0776c";
       sha256 = "0y6haz5apwa33lz64l7b2x78wrrckbw39j4wzyd1hfk46478xi2y";
     };

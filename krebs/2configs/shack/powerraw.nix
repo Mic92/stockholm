@@ -6,8 +6,9 @@
 let
   influx-url = "http://influx.shack:8086";
   pkg = pkgs.python3.pkgs.callPackage (
-    pkgs.fetchgit {
-      url = "https://git.shackspace.de/rz/powermeter.git";
+    pkgs.fetchFromGitHub {
+      owner = "shackspace";
+      repo = "powermeter";
       rev = "438b08f";
       sha256 = "0c5czmrwlw985b7ia6077mfrvbf2fq51iajb481pgqbywgxqis5m";
     }) {};
