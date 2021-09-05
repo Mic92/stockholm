@@ -1,9 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  pkg = 
-    pkgs.fetchgit {
-      url = "https://git.shackspace.de/rz/shackdns";
+  pkg =
+    pkgs.fetchFromGitHub {
+      owner = "shackspace";
+      repo = "shackdns";
       rev = "e55cc906c734b398683f9607b93f1ad6435d8575";
       sha256 = "1hkwhf3hqb4fz06b1ckh7sl0zcyi4da5fgdlksian8lxyd19n8sq";
 	  };

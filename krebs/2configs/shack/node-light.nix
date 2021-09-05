@@ -2,8 +2,9 @@
 
 let
   pkg = pkgs.callPackage (
-    pkgs.fetchgit {
-      url = "https://git.shackspace.de/rz/node-light.git";
+    pkgs.fetchFromGitHub {
+      owner = "shackspace";
+      repo = "node-light";
       rev = "90a9347b73af3a9960bd992e6293b357226ef6a0";
       sha256 = "1av9w3w8aknlra25jw6gqxzbb01i9kdlfziy29lwz7mnryjayvwk";
     }) { };

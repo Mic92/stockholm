@@ -2,8 +2,9 @@
 
 let
   pkg = pkgs.callPackage (
-    pkgs.fetchgit {
-      url = "https://git.shackspace.de/rz/s3-power";
+    pkgs.fetchFromGitHub {
+      owner = "shackspace";
+      repo = "s3-power";
       rev = "0687ab64";
       sha256 = "1m8h4bwykv24bbgr5v51mam4wsbp5424xcrawhs4izv563jjf130";
     }) { mkYarnPackage = pkgs.yarn2nix-moretea.mkYarnPackage; };
