@@ -115,6 +115,9 @@
     ## Collect local statistics via collectd and send to collectd
     <stockholm/krebs/2configs/stats/shack-client.nix>
     <stockholm/krebs/2configs/stats/shack-debugging.nix>
+
+    ## shackie irc bot
+    <stockholm/krebs/2configs/shack/reaktor.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;
@@ -124,7 +127,6 @@
     loader.efi.canTouchEfiVariables = true;
 
     initrd.luks.devices.luksroot.device = "/dev/sda3";
-    initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
 
     kernelModules = [ "kvm-intel" ];
