@@ -21,6 +21,7 @@ in {
         "krebsco.de" = ''
           cache     IN A ${nets.internet.ip4.addr}
           p         IN A ${nets.internet.ip4.addr}
+          c         IN A ${nets.internet.ip4.addr}
           paste     IN A ${nets.internet.ip4.addr}
           prism     IN A ${nets.internet.ip4.addr}
         '';
@@ -65,7 +66,9 @@ in {
             "prism.r"
             "cache.prism.r"
             "cgit.prism.r"
+            "flix.r"
             "paste.r"
+            "c.r"
             "p.r"
             "search.r"
           ];

@@ -334,6 +334,26 @@ in {
         '';
       };
     };
+    yasmin = {
+      owner = config.krebs.users.mic92;
+      nets.retiolum = {
+        ip4.addr = "10.243.29.197";
+        aliases = [
+          "yasmin.r"
+        ];
+        tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIIBCgKCAQEAnQ6HGgUPVQbDIsLZAawZu4vK9yHF02aDrIWU9SdzpAddhM8yqWeC
+          f55W6zyjZuoQ2w4UNthDl6gjQM6A9B+nEMRNz3Rnhp57Lyi0a6HZHF2Eok9vJBiu
+          IRbVUxPpPKOGE09w0m5cLOfDfaZVdAT+80lQYoaasDr2VlRJNa2/arzaq847/SVg
+          vaf4gOmE+iIK+4ZDHqLcTn1WD6jy+aMChZU/zI31vZ8vM4oPuGh1xbcB3wKP3Vf3
+          OTqpGN86CdrdBahJkzNJzIXYsPsRaZ2+8dWTH9gJjI0z+yywQQCrrh9K/oJtDUHF
+          BwmNc150BoSLqwduSWLtBonCa9p2/y/TDQIDAQAB
+          -----END RSA PUBLIC KEY-----
+          Ed25519PublicKey = ZQt/OcrDlQZvtJyMEFcS6FKjtumBA9gBWr7VqGdbJBP
+        '';
+      };
+    };
     martha = {
       owner = config.krebs.users.mic92;
       nets = rec {
@@ -389,6 +409,7 @@ in {
             nCShp7V+MSmz4DnLK1HLksLVLmGyZmouGsLjYUnEa414EI6NJF3bfEO2ZRGaswyR
             /vW066YCTe7wi+YrvrMDgkdbyfn/ecMTn2iXsTb4k9/fuO0+hsqL+isCAwEAAQ==
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = 1wPa2cmQ4FUFw9289d0KdG1DcDuMNIYMWzIUnVVHu2P
           '';
         };
       };
@@ -426,11 +447,12 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         internet = {
-          ip4.addr = "131.159.38.191";
-          ip6.addr = "2a09:80c0:38::191";
+          ip4.addr = "131.159.102.1";
+          ip6.addr = "2a09:80c0:102::1";
           aliases = [ "bill.i" ];
         };
         retiolum = {
+          via = internet;
           addrs = [
             config.krebs.hosts.bill.nets.retiolum.ip4.addr
             config.krebs.hosts.bill.nets.retiolum.ip6.addr
@@ -465,6 +487,7 @@ in {
           aliases = [ "nardole.i" ];
         };
         retiolum = {
+          via = internet;
           addrs = [
             config.krebs.hosts.nardole.nets.retiolum.ip4.addr
             config.krebs.hosts.nardole.nets.retiolum.ip6.addr
@@ -618,6 +641,7 @@ in {
             FK5qRrQFMRFB8KGV+n3+cx3XCM2q0ZPTNf06N+Usx6vTKLASa/4GaTcbBx+9Dndm
             mFVWq9JjLa8e65tojzj8PhmgxqaNCf8aKwIDAQAB
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = oRGc9V9G9GFsY1bZIaJamoDEAZU2kphlpxXOMBxI2GN
           '';
         };
       };
@@ -640,6 +664,7 @@ in {
             jb+EGlT/vq3+oGNFJ7Shy/VsR5GLDoZ5KCsT45DM87lOjGB7m+bOdizZQtWmJtC/
             /btEPWJPAD9lIY2iGtPrmeMWDNTW9c0iCwIDAQAB
             -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = dzjT09UeUGJCbUFrBo+FtbnXrsxFQnmqmJw7tjpJQJL
           '';
         };
       };

@@ -164,7 +164,7 @@ with import <stockholm/lib>;
     client
     dev tun
     proto udp
-    remote 91.207.172.77 1194
+    remote 196.240.57.43 1194
     resolv-retry infinite
     remote-random
     nobind

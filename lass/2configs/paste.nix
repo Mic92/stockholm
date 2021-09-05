@@ -2,6 +2,18 @@
 with import <stockholm/lib>;
 
 {
+  services.nginx.virtualHosts.cyberlocker = {
+    serverAliases = [ "c.r" ];
+    locations."/".extraConfig = ''
+      client_max_body_size 4G;
+      proxy_set_header Host $host;
+      proxy_pass http://127.0.0.1:${toString config.krebs.htgen.cyberlocker.port};
+    '';
+    extraConfig = ''
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+    '';
+  };
   services.nginx.virtualHosts.paste = {
     serverAliases = [ "p.r" ];
     locations."/".extraConfig = ''
@@ -18,6 +30,26 @@ with import <stockholm/lib>;
 
       proxy_pass http://127.0.0.1:${toString config.krebs.htgen.imgur.port};
       proxy_pass_header Server;
+    '';
+    extraConfig = ''
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+    '';
+  };
+  services.nginx.virtualHosts."c.krebsco.de" = {
+    enableACME = true;
+    addSSL = true;
+    serverAliases = [ "c.krebsco.de" ];
+    locations."/".extraConfig = ''
+      if ($request_method != GET) {
+        return 403;
+      }
+      proxy_set_header Host $host;
+      proxy_pass http://127.0.0.1:${toString config.krebs.htgen.cyberlocker.port};
+    '';
+    extraConfig = ''
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
     '';
   };
   services.nginx.virtualHosts."p.krebsco.de" = {
@@ -39,6 +71,10 @@ with import <stockholm/lib>;
       proxy_pass http://127.0.0.1:${toString config.krebs.htgen.imgur.port};
       proxy_pass_header Server;
     '';
+    extraConfig = ''
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+    '';
   };
 
   krebs.htgen.paste = {
@@ -56,6 +92,12 @@ with import <stockholm/lib>;
     port = 7771;
     script = /* sh */ ''
       (. ${pkgs.htgen-imgur}/bin/htgen-imgur)
+    '';
+  };
+  krebs.htgen.cyberlocker = {
+    port = 7772;
+    script = /* sh */ ''
+      (. ${pkgs.htgen-cyberlocker}/bin/htgen-cyberlocker)
     '';
   };
   krebs.iptables.tables.filter.INPUT.rules = [

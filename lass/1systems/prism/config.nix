@@ -305,6 +305,12 @@ with import <stockholm/lib>;
         localAddress = "10.233.2.14";
       };
 
+      services.nginx.virtualHosts."flix.r" = {
+        locations."/".extraConfig = ''
+          proxy_pass http://10.233.2.14:80/;
+          proxy_set_header Accept-Encoding "";
+        '';
+      };
       services.nginx.virtualHosts."lassul.us" = {
         locations."^~ /flix/".extraConfig = ''
           if ($scheme != "https") {
@@ -379,7 +385,58 @@ with import <stockholm/lib>;
         mountdPort = 4002;
         statdPort = 4000;
       };
+
+      services.samba = {
+        enable = true;
+        enableNmbd = false;
+        extraConfig = ''
+          workgroup = WORKGROUP
+          netbios name = PRISM
+          server string = ${config.networking.hostName}
+          # only allow retiolum addresses
+          hosts allow = 42::/16 10.243.0.0/16
+
+          # Use sendfile() for performance gain
+          use sendfile = true
+
+          # No NetBIOS is needed
+          disable netbios = true
+
+          # Only mangle non-valid NTFS names, don't care about DOS support
+          mangled names = illegal
+
+          # Performance optimizations
+          socket options = TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=65536 SO_SNDBUF=65536
+
+          # Disable all printing
+          load printers = false
+          disable spoolss = true
+          printcap name = /dev/null
+
+          map to guest = Bad User
+          max log size = 50
+          dns proxy = no
+          security = user
+
+          [global]
+          syslog only = yes
+        '';
+        shares.public = {
+          comment = "Warez";
+          path = "/export";
+          public = "yes";
+          "only guest" = "yes";
+          "create mask" = "0644";
+          "directory mask" = "2777";
+          writable = "no";
+          printable = "no";
+        };
+      };
+
       krebs.iptables.tables.filter.INPUT.rules = [
+         # smbd
+         { predicate = "-i retiolum -p tcp --dport 445"; target = "ACCEPT"; }
+
          { predicate = "-i retiolum -p tcp --dport 111"; target = "ACCEPT"; }
          { predicate = "-i retiolum -p udp --dport 111"; target = "ACCEPT"; }
          { predicate = "-i retiolum -p tcp --dport 2049"; target = "ACCEPT"; }

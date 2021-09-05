@@ -1,0 +1,76 @@
+delete_response() {
+  jq -n -r \
+  --arg server "$Server" \
+  '
+    [ "HTTP/1.1 204 OK\r"
+    , "Connection: close\r"
+    , "Server: \($server)\r"
+    , "\r"
+    ][]
+  '
+}
+
+file_response() {(
+  type=$(file -ib "$1")
+  size=$(wc -c < "$1")
+  jq -n -r \
+  --arg type "$type" \
+  --arg size "$size" \
+  --arg server "$Server" \
+  '
+    [ "HTTP/1.1 200 OK\r"
+    , "Connection: close\r"
+    , "Content-Length: \($size)\r"
+    , "Content-Type: \($type)\r"
+    , "Server: \($server)\r"
+    , "\r"
+    ][]
+  '
+  cat "$1"
+)}
+
+read_uri() {
+  jq -cn --arg uri "$1" '
+    $uri |
+    capture("^((?<scheme>[^:]*):)?(//(?<authority>[^/]*))?(?<path>[^?#]*)([?](?<query>[^#]*))?([#](?<fragment>.*))?$") |
+    . + {
+      query: (.query | if . != null then
+        split("&") |
+        map(split("=") | {key:.[0],value:.[1]}) |
+        from_entries
+      else . end)
+    }
+  '
+}
+
+uri=$(read_uri "$Request_URI")
+path=$(jq -nr --argjson uri "$uri" '$uri.path')
+
+case "$Method $path" in
+  'POST /'*|'PUT /'*)
+    content=$(mktemp -t htgen.$$.content.XXXXXXXX)
+    trap "rm $content >&2" EXIT
+
+    head -c $req_content_length > $content
+
+    item=$STATEDIR/items/$(echo "$path" | jq -rR @uri)
+
+    mkdir -v -p $STATEDIR/items >&2
+    cp -v $content $item >&2
+    exit
+  ;;
+  'GET /'*)
+    item=$STATEDIR/items/$(echo "$path" | jq -rR @uri)
+    if [ -e "$item" ]; then
+      file_response "$item"
+      exit
+    fi
+  ;;
+  'DELETE /'*)
+    item=$STATEDIR/items/$(echo "$path" | jq -rR @uri)
+    if [ -e "$item" ]; then
+      rm "$item"
+      delete_response
+      exit
+    fi
+esac
