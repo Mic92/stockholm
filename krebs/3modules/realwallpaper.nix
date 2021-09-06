@@ -51,6 +51,7 @@ let
 
       serviceConfig = {
         Type = "simple";
+        Restart = "on-failure";
         ExecStart = "${pkgs.realwallpaper}/bin/generate-wallpaper";
         User = "realwallpaper";
       };
