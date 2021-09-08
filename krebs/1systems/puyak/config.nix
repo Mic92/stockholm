@@ -115,9 +115,6 @@
     ## Collect local statistics via collectd and send to collectd
     <stockholm/krebs/2configs/stats/shack-client.nix>
     <stockholm/krebs/2configs/stats/shack-debugging.nix>
-
-    ## shackie irc bot
-    <stockholm/krebs/2configs/shack/reaktor.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;
