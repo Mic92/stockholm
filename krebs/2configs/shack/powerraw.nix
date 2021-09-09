@@ -15,6 +15,7 @@ let
 in {
   # receive response from light.shack / standby.shack
   networking.firewall.allowedUDPPorts = [ 11111 ];
+  networking.firewall.allowedTCPPorts = [ 11111 ];
   users.users.powermeter = {
     extraGroups = [ "dialout" ];
     isSystemUser = true;
