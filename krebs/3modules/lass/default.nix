@@ -784,6 +784,7 @@ in {
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIn+o0uCBSot254kZKlNepVKFcwDPdr8s6+lQmYGM3Hd ";
+      syncthing.id = "TT4MBZS-YNDZUYO-Y6L4GOK-5IYUCXY-2RKFOSK-5SMZYSR-5QMOXSS-6DNJIAZ";
     };
 
     lasspi = {
