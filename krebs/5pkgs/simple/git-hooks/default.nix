@@ -116,7 +116,7 @@ with import <stockholm/lib>;
         "$port" \
         "$nick" \
         "$channel" \
-        "tls" \
+        "$tls" \
         "$message"
     fi
   '';
