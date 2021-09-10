@@ -276,19 +276,7 @@ with import <stockholm/lib>;
         { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
       ];
     }
-    {
-      services.murmur = {
-        enable = true;
-        bandwidth = 10000000;
-        registerName = "lassul.us";
-        autobanTime = 30;
-      };
-      krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-p tcp --dport 64738"; target = "ACCEPT";}
-        { predicate = "-p udp --dport 64738"; target = "ACCEPT";}
-      ];
-
-    }
+    <stockholm/lass/2configs/murmur.nix>
     {
       systemd.services."container@yellow".reloadIfChanged = mkForce false;
       containers.yellow = {
