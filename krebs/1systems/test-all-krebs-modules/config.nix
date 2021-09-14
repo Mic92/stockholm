@@ -10,7 +10,6 @@ in {
     enable = true;
     build.user = config.krebs.users.krebs;
     build.host = config.krebs.hosts.test-all-krebs-modules;
-    Reaktor.test = {};
     apt-cacher-ng.enable = true;
     backup.enable = true;
     bepasty.enable = true;

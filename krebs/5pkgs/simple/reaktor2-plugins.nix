@@ -14,10 +14,6 @@ rec {
 
   commands = {
 
-    hello = {
-      filename = "${pkgs.Reaktor.src}/reaktor/commands/hello";
-    };
-
     random-emoji = {
       filename = <stockholm/krebs/5pkgs/simple/Reaktor/scripts/random-emoji.sh>;
       env = {

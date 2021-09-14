@@ -43,7 +43,6 @@ let
       ./permown.nix
       ./per-user.nix
       ./power-action.nix
-      ./Reaktor.nix
       ./reaktor2.nix
       ./realwallpaper.nix
       ./retiolum-bootstrap.nix

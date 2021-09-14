@@ -47,7 +47,7 @@ let
           activate = "always";
           command = {
             filename =
-              "${pkgs.Reaktor.src}/reaktor/commands/tell-on_join";
+              <stockholm/krebs/5pkgs/simple/Reaktor/scripts/tell-on_join.sh>;
             env = {
               PATH = makeBinPath [
                 pkgs.coreutils # XXX env, touch
@@ -95,10 +95,10 @@ let
         }
         hooks.sed
         (generators.command_hook {
-          inherit (commands) hello random-emoji nixos-version;
+          inherit (commands) random-emoji nixos-version;
           tell = {
             filename =
-              "${pkgs.Reaktor.src}/reaktor/commands/tell-on_privmsg";
+              <stockholm/krebs/5pkgs/simple/Reaktor/scripts/tell-on_privmsg.sh>;
             env = {
               PATH = makeBinPath [
                 pkgs.coreutils # XXX date, env
