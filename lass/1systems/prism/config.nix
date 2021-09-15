@@ -277,6 +277,7 @@ with import <stockholm/lib>;
       ];
     }
     <stockholm/lass/2configs/murmur.nix>
+    <stockholm/lass/2configs/docker.nix>
     {
       systemd.services."container@yellow".reloadIfChanged = mkForce false;
       containers.yellow = {
