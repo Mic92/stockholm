@@ -186,7 +186,7 @@ in {
     group = "xanf";
     home = "/home/xanf";
     useDefaultShell = true;
-    createHome = true;
+    createHome = false; # creathome forces permissions
     isNormalUser = true;
   };
 
