@@ -340,14 +340,14 @@ in {
   '';
 
   krebs.permown = {
-    "/backups/domsen" = {
-      owner = "backup";
+    "/srv/http" = {
       group = "syncthing";
+      owner = "nginx";
       umask = "0007";
     };
-    "/srv/http" = {
-      owner = "syncthing";
-      group = "nginx";
+    "/home/xanf/XANF_TEAM" = {
+      owner = "XANF_TEAM";
+      group = "xanf";
       umask = "0007";
     };
   };
