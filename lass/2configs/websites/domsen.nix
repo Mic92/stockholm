@@ -299,6 +299,24 @@ in {
     isNormalUser = true;
   };
 
+  users.users.movematchers = {
+    uid = genid_uint31 "movematchers";
+    home = "/home/movematchers";
+    useDefaultShell = true;
+    extraGroups = [ "xanf" ];
+    createHome = true;
+    isNormalUser = true;
+  };
+
+  users.users.blackphoton = {
+    uid = genid_uint31 "blackphoton";
+    home = "/home/blackphoton";
+    useDefaultShell = true;
+    extraGroups = [ "xanf" ];
+    createHome = true;
+    isNormalUser = true;
+  };
+
   users.groups.xanf = {};
 
   krebs.on-failure.plans.restic-backups-domsen = {
