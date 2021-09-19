@@ -89,12 +89,18 @@ in {
     file_uploads = on
   '';
 
+  krebs.secret.files.nextcloud_pw = {
+    path = "/run/nextcloud.pw";
+    owner.name = "nextcloud";
+    group-name = "nextcloud";
+    source-path = toString <secrets> + "/nextcloud_pw";
+  };
   services.nextcloud = {
     enable = true;
     hostName = "o.xanf.org";
     package = pkgs.nextcloud20;
     config = {
-      adminpassFile = toString <secrets> + "/nextcloud_pw";
+      adminpassFile = "/run/nextcloud.pw";
       overwriteProtocol = "https";
     };
     https = true;
