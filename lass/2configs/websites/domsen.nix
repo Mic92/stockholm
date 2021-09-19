@@ -28,6 +28,7 @@ in {
     (servePage [ "aldonasiech.com" "www.aldonasiech.com" ])
     (servePage [ "apanowicz.de" "www.apanowicz.de" ])
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
+    (servePage [ "illustra.de" "www.illustra.de" ])
     (servePage [
       "freemonkey.art"
       "www.freemonkey.art"
