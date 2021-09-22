@@ -117,6 +117,7 @@ with import <stockholm/lib>;
     iftop
     tcpdump
     mosh
+    sshify
 
   #stuff for dl
     aria2
