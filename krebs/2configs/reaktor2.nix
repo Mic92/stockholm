@@ -224,7 +224,7 @@ in {
               spanDate.appendChild(document.createTextNode(entryDate));
 
               const link = document.createElement("a");
-              link.href = "http://wiki.r/agenda/" + encodeURIComponent(agendaItem.description.replaceAll("/", "\u29F8"));
+              link.href = "http://wiki.r/agenda/" + encodeURIComponent(agendaItem.description.replaceAll("/", "\u29F8")); // we use big solidus instead of slash because gollum will create directories
               link.appendChild(document.createTextNode(agendaItem.description));
 
               const dd = document.createElement("dd");
