@@ -7,11 +7,12 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/libvirt.nix>
     <stockholm/lass/2configs/tv.nix>
+    <stockholm/lass/2configs/websites/lassulus.nix>
+    <stockholm/lass/2configs/telegraf.nix>
     {
       services.nginx.enable = true;
       imports = [
         <stockholm/lass/2configs/websites/domsen.nix>
-        <stockholm/lass/2configs/websites/lassulus.nix>
       ];
       # needed by domsen.nix ^^
       lass.usershadow = {
@@ -275,19 +276,8 @@ with import <stockholm/lib>;
         { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
       ];
     }
-    {
-      services.murmur = {
-        enable = true;
-        bandwidth = 10000000;
-        registerName = "lassul.us";
-        autobanTime = 30;
-      };
-      krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-p tcp --dport 64738"; target = "ACCEPT";}
-        { predicate = "-p udp --dport 64738"; target = "ACCEPT";}
-      ];
-
-    }
+    <stockholm/lass/2configs/murmur.nix>
+    <stockholm/lass/2configs/docker.nix>
     {
       systemd.services."container@yellow".reloadIfChanged = mkForce false;
       containers.yellow = {

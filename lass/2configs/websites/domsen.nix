@@ -28,6 +28,7 @@ in {
     (servePage [ "aldonasiech.com" "www.aldonasiech.com" ])
     (servePage [ "apanowicz.de" "www.apanowicz.de" ])
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
+    (servePage [ "illustra.de" "www.illustra.de" ])
     (servePage [
       "freemonkey.art"
       "www.freemonkey.art"
@@ -81,6 +82,7 @@ in {
     "o_ubikmedia_de"
   ];
 
+  services.phpfpm.phpPackage = pkgs.php73;
   services.phpfpm.phpOptions = ''
     sendmail_path = ${sendmail} -t
     upload_max_filesize = 100M
@@ -88,12 +90,18 @@ in {
     file_uploads = on
   '';
 
+  krebs.secret.files.nextcloud_pw = {
+    path = "/run/nextcloud.pw";
+    owner.name = "nextcloud";
+    group-name = "nextcloud";
+    source-path = toString <secrets> + "/nextcloud_pw";
+  };
   services.nextcloud = {
     enable = true;
     hostName = "o.xanf.org";
-    package = pkgs.nextcloud20;
+    package = pkgs.nextcloud21;
     config = {
-      adminpassFile = toString <secrets> + "/nextcloud_pw";
+      adminpassFile = "/run/nextcloud.pw";
       overwriteProtocol = "https";
     };
     https = true;
@@ -178,7 +186,7 @@ in {
     group = "xanf";
     home = "/home/xanf";
     useDefaultShell = true;
-    createHome = true;
+    createHome = false; # creathome forces permissions
     isNormalUser = true;
   };
 
@@ -291,6 +299,24 @@ in {
     isNormalUser = true;
   };
 
+  users.users.movematchers = {
+    uid = genid_uint31 "movematchers";
+    home = "/home/movematchers";
+    useDefaultShell = true;
+    extraGroups = [ "xanf" ];
+    createHome = true;
+    isNormalUser = true;
+  };
+
+  users.users.blackphoton = {
+    uid = genid_uint31 "blackphoton";
+    home = "/home/blackphoton";
+    useDefaultShell = true;
+    extraGroups = [ "xanf" ];
+    createHome = true;
+    isNormalUser = true;
+  };
+
   users.groups.xanf = {};
 
   krebs.on-failure.plans.restic-backups-domsen = {
@@ -332,14 +358,14 @@ in {
   '';
 
   krebs.permown = {
-    "/backups/domsen" = {
-      owner = "backup";
+    "/srv/http" = {
       group = "syncthing";
+      owner = "nginx";
       umask = "0007";
     };
-    "/srv/http" = {
-      owner = "syncthing";
-      group = "nginx";
+    "/home/xanf/XANF_TEAM" = {
+      owner = "XANF_TEAM";
+      group = "xanf";
       umask = "0007";
     };
   };

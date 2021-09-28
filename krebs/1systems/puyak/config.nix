@@ -109,7 +109,7 @@
     <stockholm/krebs/2configs/shack/prometheus/node.nix>
     <stockholm/krebs/2configs/shack/prometheus/server.nix>
     <stockholm/krebs/2configs/shack/prometheus/blackbox.nix>
-    <stockholm/krebs/2configs/shack/prometheus/unifi.nix>
+    #<stockholm/krebs/2configs/shack/prometheus/unifi.nix>
     <stockholm/krebs/2configs/shack/prometheus/alertmanager-telegram.nix>
 
     ## Collect local statistics via collectd and send to collectd
@@ -124,7 +124,6 @@
     loader.efi.canTouchEfiVariables = true;
 
     initrd.luks.devices.luksroot.device = "/dev/sda3";
-    initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
 
     kernelModules = [ "kvm-intel" ];

@@ -10,14 +10,7 @@ in {
     ./urxvt.nix
     ./xdg-open.nix
     ./yubikey.nix
-    {
-      hardware.pulseaudio = {
-        enable = true;
-        systemWide = true;
-      };
-      security.rtkit.enable = true;
-      sound.enableOSSEmulation = false;
-    }
+    ./pipewire.nix
     ./xmonad.nix
     {
       krebs.per-user.lass.packages = [
@@ -50,7 +43,7 @@ in {
     }
   ];
 
-  users.extraUsers.mainUser.extraGroups = [ "audio" "video" ];
+  users.users.mainUser.extraGroups = [ "audio" "video" ];
 
   time.timeZone = "Europe/Berlin";
 

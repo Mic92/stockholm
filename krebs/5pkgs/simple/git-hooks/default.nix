@@ -12,6 +12,7 @@ with import <stockholm/lib>;
   , port ? 6667
   , refs ? []
   , server
+  , tls ? false
   , verbose ? false
   }: /* sh */ ''
     #! /bin/sh
@@ -39,6 +40,7 @@ with import <stockholm/lib>;
     nick=${escapeShellArg nick}
     channel=${escapeShellArg channel}
     server=${escapeShellArg server}
+    tls=${escapeShellArg tls}
     port=${toString port}
 
     host=$nick
@@ -114,6 +116,7 @@ with import <stockholm/lib>;
         "$port" \
         "$nick" \
         "$channel" \
+        "$tls" \
         "$message"
     fi
   '';

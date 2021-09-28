@@ -112,7 +112,8 @@ in {
         }
         { platform = "mpd";
           name = "kiosk";
-          host = "lounge.kiosk.shack";
+          #host = "lounge.kiosk.shack";
+          host = "kiosk.shack";
         }
       ];
 
@@ -123,7 +124,7 @@ in {
       http = {
         base_url = "http://hass.shack";
         use_x_forwarded_for = true;
-        trusted_proxies = "127.0.0.1";
+        trusted_proxies = [ "127.0.0.1" "::1" ];
       };
       #conversation = {};
 
@@ -139,6 +140,7 @@ in {
           language = "de";
           cache = true;
           time_memory = 57600;
+          base_url = "http://hass.shack";
         }
       ];
       device_tracker = [];

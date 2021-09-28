@@ -18,42 +18,14 @@ with import <stockholm/lib>;
 in {
 
   hosts = mapAttrs hostDefaults {
-    toum = {
-      owner = config.krebs.users.kmein;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.2.3";
-          aliases = [
-            "toum.r"
-            "toum.kmein.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN PUBLIC KEY-----
-            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA2tRtskPP6391+ZX9xzsx
-            CUotXuqYucYmnUbrRSIlxASVqTmAf3nDOE5EDBBcTdSwnb02JcJW4Zh7+BGgMxjF
-            GxDPs6ETI28mHK+6rp8TOkMnyDb5mtSGVZPvKJU9fFOt6aAX1J1BzTfwtHtVQq7K
-            WBzdpeKXlw4dIQ6K6SGmPIPpEh9pE1Xb+GuVljCXKxGJFbW40dmh2ZdadO7umBDu
-            vRk08jT9/BUnUP6KrZlvyePnG38z6srMrVU+XAHu5D2qZ9y+QIp3kw7Y5JUrNXc7
-            9q9P9TYx15GiIz2mSJKcLVmkLRebsaqdV7dBibPbfdGE+NB+F1FYPGDdW4cnonon
-            DzzjGm/FDfOCXEnSkYGQDBWpfd/8AWum1xGJxJCPNBJElGE2o5jDWo4Y1b9gHP0M
-            vARm8AOK8R1pQ7BP+pNMO0gGw2NDrtWiWpTeZ7SqXmZAZ/Gmyen9X+/fowcbTyDH
-            b9joIuMQeOtxbUV2JprZIdit9NBFSZq/7Re/GBUwjGBm3LabIXFNGKZovx/f9lf8
-            r5tVs4SPauiKzZS0K1Gz1NSq+3OXaY5EwVrBUXptYqRT7uyhVloOPRUsqRFeB0Fn
-            Y5xOpDJ0UiJxgFbdH5Vb81D/VjNO9Q4nZib8wSEuLrYLHGoceQPX4+Ov9IdhIL4B
-            BMTCaF+VCWC5PCLr0e61KqMCAwEAAQ==
-            -----END PUBLIC KEY-----
-          '';
-        };
-      };
-    };
-    wilde = {
+    kabsa = {
       owner = config.krebs.users.kmein;
       nets = {
         retiolum = {
           ip4.addr = "10.243.2.4";
           aliases = [
-            "wilde.r"
-            "wilde.kmein.r"
+            "kabsa.r"
+            "kabsa.kmein.r"
           ];
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
@@ -95,34 +67,6 @@ in {
             rG0FItgHXajPazulBfUV0N9ck7SwLTmStKxtQ8NKCoIJLpv2ip4C+t0CAwEAAQ==
             -----END RSA PUBLIC KEY-----
             Ed25519PublicKey = 47fX1g6qynVprA+PtniBLEonFp1B70nMrJ8SBCWNJnL
-          '';
-        };
-      };
-    };
-    homeros = {
-      owner = config.krebs.users.kmein;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.2.1";
-          aliases = [
-            "homeros.r"
-            "homeros.kmein.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN PUBLIC KEY-----
-            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAoZq6BwB6rV6EfTf8PWOd
-            ZhEWig5VcK1FcH0qi7KgojAhGSHhWmtFlvRSoGpQrSFRN0g5eTnrrguuTiIs6djc
-            6Al9HMqwSD1IOkqFm8jM4aG5NqjYg3in6blOFarBEOglfnsYHiUPt6T4fERxRZ9v
-            RguEWrishNMSv+D4vclKwctTB/6dQNsTAfnplcyDZ9un/ql9BG2cgU9yqeYLDdXd
-            vRvrWX9eZKGJvTrQmAiKONlSvspr1d28FxcUrUnCsdRLvP3Cc4JZiUhSA7ixFxn3
-            +LgGIZiMKTnl8syrsHk5nvLi5EUER7xkVX8iBlKA4JD4XTZVyBxPB1mJnOCUShQc
-            QK6nVr6auvJbRn7DHHKxDflSBgYt4qaf92+5A4xEsZtgMpmIFH5t6ifGQsQwgYsm
-            fOexviy9gMyZrHjQDUs4smQxxYq3AJLdfOg2jQXeAbgZpCVw5l8YHk3ECoAk7Fvh
-            VMJVPwukErGuVn2LpCHeVyFBXNft4bem1g0gtaf2SuGFEnl7ABetQ0bRwClRSLd7
-            k7PGDbdcCImsWhqyuLpkNcm95DfBrXa12GETm48Wv9jV52C5tfWFmOnJ0mOnvtxX
-            gpizJjFzHz275TVnJHhmIr2DkiGpaIVUL4FRkTslejSJQoUTZfDAvKF2gRyk+n6N
-            mJ/hywVtvLxNkNimyztoKKMCAwEAAQ==
-            -----END PUBLIC KEY-----
           '';
         };
       };
@@ -205,6 +149,7 @@ in {
           aliases = [
             "makanek.r"
             "makanek.kmein.r"
+            "grafana.kmein.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -317,6 +262,7 @@ in {
           aliases = [
             "zaatar.r"
             "zaatar.kmein.r"
+            "radio.kmein.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -639,7 +585,7 @@ in {
      nets = {
        retiolum = {
          ip4.addr = "10.243.13.12";
-         aliases = [ "catalonia.r" ];
+         aliases = [ "catalonia.r" "aleph.r" ];
          tinc.pubkey = ''
            -----BEGIN RSA PUBLIC KEY-----
            MIICCgKCAgEAug+nej8/spuRHdzcfBYAuzUVoiq4YufmJqXSshvgf4aqjeVEt91Y

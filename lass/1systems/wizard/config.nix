@@ -271,7 +271,7 @@ in {
     message = "lassulus: torify sshn root@";
   };
   systemd.services.hidden-ssh-announce.wantedBy = mkForce [];
-  services.mingetty.autologinUser = lib.mkForce "root";
+  services.getty.autologinUser = lib.mkForce "root";
 
   nixpkgs.config.packageOverrides = super: {
     dmenu = pkgs.writeDashBin "dmenu" ''

@@ -183,7 +183,6 @@ in {
     (sync-remote { name = "skytraq-datalogger"; url = "https://github.com/makefu/skytraq-datalogger"; })
     (sync-remote { name = "realwallpaper"; url = "https://github.com/lassulus/realwallpaper"; })
     (sync-remote { name = "painload"; url = "https://github.com/krebs/painload"; })
-    (sync-remote { name = "Reaktor"; url = "https://github.com/krebs/Reaktor"; })
     (sync-remote { name = "nixos-wiki"; url = "https://github.com/Mic92/nixos-wiki.wiki.git"; })
   ];
 }
