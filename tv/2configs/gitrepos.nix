@@ -83,6 +83,9 @@ let {
     htgen = {
       cgit.desc = "toy HTTP server";
     };
+    ircaids = {
+      cgit.desc = "Assortment of aids for working with Internet relay chat";
+    };
     krops = {
       cgit.desc = "deployment tools";
     };
