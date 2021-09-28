@@ -223,9 +223,13 @@ in {
               spanDate.title = new Date(entryDate).toString();
               spanDate.appendChild(document.createTextNode(entryDate));
 
+              const link = document.createElement("a");
+              link.href = "http://wiki.r/agenda/" + encodeURIComponent(agendaItem.description.replaceAll("/", "\u29F8"));
+              link.appendChild(document.createTextNode(agendaItem.description));
+
               const dd = document.createElement("dd");
               dd.className = "description";
-              dd.appendChild(document.createTextNode(agendaItem.description));
+              dd.appendChild(link);
               dd.appendChild(document.createTextNode(" "));
               dd.appendChild(spanDate);
 
