@@ -1,16 +1,18 @@
-{ fetchurl, lib, pkgs, python3Packages, stdenv }:
+{ fetchFromGitHub, lib, pkgs, python3Packages, stdenv }:
 
 python3Packages.buildPythonPackage rec {
   name = "tinc_graphs-${version}";
-  version = "0.3.11";
+  version = "0.4.0";
 
   propagatedBuildInputs = with pkgs;[
     python3Packages.pygeoip
     ## ${geolite-legacy}/share/GeoIP/GeoIPCity.dat
   ];
-  src = fetchurl {
-    url = "mirror://pypi/t/tinc_graphs/${name}.tar.gz";
-    sha256 = "0akvi2srwqny3cd4b9ghssq8wi4kcxd2khabnnvylzs1s9i28fpa";
+  src = fetchFromGitHub {
+    owner = "makefu";
+    repo = "tinc_graphs";
+    rev = version;
+    sha256 = "0dbnafzz65b1nbgvj7b6skyf4x3f9rrkizmdwpnfh4qgs9ch5xmz";
   };
 
   preFixup = with pkgs;''
