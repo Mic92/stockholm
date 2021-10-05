@@ -60,6 +60,11 @@ in {
 
       proxy_pass $new_uri;
     '';
+
+    locations."/search.json".extraConfig = ''
+      proxy_pass http://127.0.0.1:${toString config.krebs.htgen.elm-packages-proxy.port};
+      proxy_pass_header Server;
+    '';
   };
 
   krebs.htgen.elm-packages-proxy = {
@@ -192,6 +197,36 @@ in {
 
           exit
         ;;
+        'DELETE /packages/'*)
+
+          author=$req_x_author
+          pname=$req_x_package
+          user=$req_x_user
+          version=$req_x_version
+
+          zipball=${cfg.packageDir}/$author/$pname/$version/zipball
+          elmjson=$HOME/cache/$author%2F$pname%2F$version%2Felm.json
+          endpointjson=$HOME/cache/$author%2F$pname%2F$version%2Fendpoint.json
+
+          if test -e "$zipball"; then
+            zipball_owner=$(attr -q -g X-User "$zipball" || :)
+            if test "$zipball_owner" = "$req_x_user"; then
+              echo "user $user is deleting package $author/$pname@$version" >&2
+              rm -f "$elmjson"
+              rm -f "$endpointjson"
+              rm "$zipball"
+              string_response 200 OK \
+                  "package deleted: $author/$pname@$version" \
+                  text/plain
+              exit
+            else
+              string_response 403 Forbidden \
+                  "package already exists: $author/$pname@$version" \
+                  text/plain
+              exit
+            fi
+          fi
+        ;;
         'GET /all-packages'|'POST /all-packages')
 
           response=$(mktemp -t htgen.$$.elm-packages-proxy.all-packages.XXXXXXXX)
@@ -244,6 +279,76 @@ in {
             '
           } |
           jq -cs add > $response
+
+          file_response 200 OK "$response" 'application/json; charset=UTF-8'
+          exit
+        ;;
+        'GET /search.json')
+
+          searchjson=$HOME/cache/search.json
+          mkdir -p "$HOME/cache"
+
+          # update cached search.json
+          (
+            last_modified=$(
+              if test -f "$searchjson"; then
+                date -Rr "$searchjson"
+              else
+                date -R -d @0
+              fi
+            )
+            tempsearchjson=$(mktemp "$searchjson.XXXXXXXX")
+            trap 'rm "$tempsearchjson" >&2' EXIT
+            curl -fsS --compressed https://package.elm-lang.org/search.json \
+                -H "If-Modified-Since: $last_modified" \
+                -o "$tempsearchjson"
+            if test -s "$tempsearchjson"; then
+              mv "$tempsearchjson" "$searchjson"
+              trap - EXIT
+            fi
+          )
+
+          response=$(mktemp -t htgen.$$.elm-packages-proxy.search.XXXXXXXX)
+          trap 'rm "$response" >&2' EXIT
+
+          {
+            printf '{"upstream":'; cat "$searchjson"
+            printf ',"private":'; (cd ${cfg.packageDir}; find -mindepth 3 -maxdepth 3) |
+              jq -Rs '
+                split("\n") |
+                map(
+                  select(.!="") |
+                  match("^\\./(?<author>[^/]+)/(?<pname>[^/]+)/(?<version>[^/]+)$").captures |
+                  map({key:.name,value:.string}) |
+                  from_entries
+                ) |
+                map({
+                  key: "\(.author)/\(.pname)",
+                  value: .version,
+                }) |
+                from_entries
+              '
+            printf '}'
+          } |
+          jq -c '
+            reduce .upstream[] as $upstreamItem ({ private, output: [] };
+              .private[$upstreamItem.name] as $privateItem |
+              if $privateItem then
+                .output += [$upstreamItem * { version: $privateItem.version }] |
+                .private |= del(.[$upstreamItem.name])
+              else
+                .output += [$upstreamItem]
+              end
+            ) |
+
+            .output + (.private | to_entries | sort_by(.key) | map({
+              name: .key,
+              version: .value,
+              summary: "dummy summary",
+              license: "dummy license",
+            }))
+          ' \
+          > $response
 
           file_response 200 OK "$response" 'application/json; charset=UTF-8'
           exit
