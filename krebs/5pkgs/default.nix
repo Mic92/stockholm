@@ -1,17 +1,23 @@
-with import ../../lib;
+let
+  stockholm.lib = import ../../lib;
+in
+with stockholm.lib;
 self: super:
-
-# Import files and subdirectories like they are overlays.
-foldl' mergeAttrs {}
+fix (foldl' (flip extends) (self: super) (
+  [
+    (self: super: { inherit stockholm; })
+  ]
+  ++
   (map
-    (name: import (./. + "/${name}") self super)
+    (name: import (./. + "/${name}"))
     (filter
       (name: name != "default.nix" && !hasPrefix "." name)
       (attrNames (readDir ./.))))
-
-//
-
-{
-  brockman = self.haskellPackages.brockman;
-  reaktor2 = self.haskellPackages.reaktor2;
-}
+  ++
+  [
+    (self: super: {
+      brockman = self.haskellPackages.brockman;
+      reaktor2 = self.haskellPackages.reaktor2;
+    })
+  ]
+))

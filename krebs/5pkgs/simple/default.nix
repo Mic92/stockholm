@@ -2,7 +2,7 @@ self: super:
 
 let
   # This callPackage will try to detect obsolete overrides.
-  lib = import ../../../lib;
+  lib = super.stockholm.lib;
   callPackage = path: args: let
     override = self.callPackage path args;
     upstream = lib.optionalAttrs (override ? "name")
@@ -13,5 +13,4 @@ let
     then lib.trace "Upstream `${upstream.name}' gets overridden by `${override.name}'." override
     else override;
 in
-  { stockholm.lib = lib; } //
-    lib.mapNixDir (path: callPackage path {}) ./.
+  lib.mapNixDir (path: callPackage path {}) ./.
