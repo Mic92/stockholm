@@ -150,6 +150,7 @@ in {
             "makanek.r"
             "makanek.kmein.r"
             "grafana.kmein.r"
+            "names.kmein.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
