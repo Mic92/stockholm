@@ -1,5 +1,6 @@
-{ coreutils, curl, fetchgit, gawk, gnugrep, gnused, jq, stdenv, w3m, ... }:
-with import <stockholm/lib>;
+{ coreutils, curl, fetchgit, gawk, gnugrep, gnused, jq, stdenv, stockholm, w3m, ... }:
+with stockholm.lib;
+
 let
   readJSON = path: fromJSON (readFile path);
   sed.escape = replaceChars ["/"] ["\\/"]; # close enough

@@ -1,5 +1,4 @@
-with import <stockholm/lib>;
-
+with import ../../lib;
 self: super:
 
 # Import files and subdirectories like they are overlays.

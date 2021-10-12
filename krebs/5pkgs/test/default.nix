@@ -1,5 +1,3 @@
-with import <stockholm/lib>;
-
 self: super:
 
 {

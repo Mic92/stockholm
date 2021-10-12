@@ -1,8 +1,9 @@
-with import <stockholm/lib>;
+self: super:
+with self.stockholm.lib;
+
 let
   overrides = self: super: mapNixDir (path: self.callPackage path {}) ./.;
 in
-self: super:
 {
   haskell = super.haskell // {
     packages = mapAttrs (name: value:

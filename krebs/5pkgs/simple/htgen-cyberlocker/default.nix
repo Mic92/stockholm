@@ -1,5 +1,6 @@
-with import <stockholm/lib>;
-{ pkgs, stdenv }:
+{ pkgs, stockholm, stdenv }:
+with stockholm.lib;
+
 stdenv.mkDerivation rec {
   pname = "htgen-cyberlocker";
   version = "1.0.0";

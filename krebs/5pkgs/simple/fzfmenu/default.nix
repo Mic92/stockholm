@@ -1,5 +1,5 @@
-with import <stockholm/lib>;
-{ pkgs, ... }@args:
+{ pkgs, stockholm, ... }@args:
+with stockholm.lib;
 
 let
   # config cannot be declared in the input attribute set because that would

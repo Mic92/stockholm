@@ -1,6 +1,7 @@
-with import <stockholm/lib>;
-{ mkDerivation, base, fetchgit, hspec, QuickCheck, stdenv, text }: let
+{ mkDerivation, base, fetchgit, hspec, QuickCheck, stdenv, stockholm, text }:
+with stockholm.lib;
 
+let
   cfg = {
     "18.03" = {
       version = "1.1.0";

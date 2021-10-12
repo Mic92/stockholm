@@ -1,8 +1,10 @@
-with import <stockholm/lib>;
 { mkDerivation, attoparsec, base, base64-bytestring, bytestring
 , case-insensitive, containers, exceptions, fetchgit, QuickCheck
-, stdenv, tasty, tasty-quickcheck, text, text-icu, time
-}: let
+, stdenv, stockholm, tasty, tasty-quickcheck, text, text-icu, time
+}:
+with stockholm.lib;
+
+let
 
   cfg = {
     "18.03" = {

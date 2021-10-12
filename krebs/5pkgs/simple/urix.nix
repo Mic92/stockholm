@@ -1,5 +1,4 @@
-let lib = import <stockholm/lib>; in
-{ pkgs }:
+{ pkgs, stockholm }:
 
 # urix - URI eXtractor
 # Extract all the URIs from standard input and write them to standard output!
@@ -10,6 +9,6 @@ pkgs.execBin "urix" {
   argv = [
     "urix"
     "-Eo"
-    "\\b${lib.uri.posix-extended-regex}\\b"
+    "\\b${stockholm.lib.uri.posix-extended-regex}\\b"
   ];
 }
