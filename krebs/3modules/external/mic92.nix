@@ -761,5 +761,55 @@ in {
         };
       };
     };
+
+    graham = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        retiolum = {
+          addrs = [
+            config.krebs.hosts.graham.nets.retiolum.ip4.addr
+            config.krebs.hosts.graham.nets.retiolum.ip6.addr
+          ];
+          ip4.addr = "10.243.29.196";
+          aliases = [ "graham.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAtnM8VqFlEPLPYfKOZvN4kKklrVEyX4WewlqHO8vtxML9ND5BHCdn
+            UeRsThvbKVRqEvZLTAXKClZRYVr2IroHqfx0euTq3FYTUbNNQ4KgcFAfLKWoxGfK
+            HsQbYpS93/sUtmhRBGcgXPnEkE6yqvFBXxcmB1QqdmgYKdY2Gtikwrv/5hb4AlNe
+            /gyzKGtAKYogspLI6EpEwlD9CGDNIUPJ4uQ56gDhV/qtyMSE6X0igSSVZayDc+x1
+            InPkH90xsa0/uXjYDnXNdMguLArGkRzMhd6DzK4vEaPFIX59yMX+tEj46rGY7xAI
+            gUZUI2codqY5Z93W5GC+ws34y0bpfeMMWwIDAQAB
+            -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = xMJNMMXZRCbWkN9CzLFohkGUK54dPcrrosFD7xgIFXA
+          '';
+        };
+      };
+    };
+
+    ryan = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        retiolum = {
+          addrs = [
+            config.krebs.hosts.ryan.nets.retiolum.ip4.addr
+            config.krebs.hosts.ryan.nets.retiolum.ip6.addr
+          ];
+          ip4.addr = "10.243.29.198";
+          aliases = [ "ryan.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA0RE5jmBiEGmaYLVFmpCyVvlb6K3Zh2uxh7sVm44k31d9PEHHm4Wz
+            HQH+ueaefGVu19xLRJQGu4ZMl7oRbb5awiqKdSGgInhQaNzxUIHW4cCCdOVkgZSy
+            NjI9LMcc8tQtkoFGt6OhAzaViuGMo+aJAkLuXNf8hz5uR2flqQEeKfG5Kc7Z1DAQ
+            QNoBRtY0pltyK2y/Ip8cZ9cdxR5oLww67ykhY+eLy9tZLfKs6uWSq+2CV0cpNNQ9
+            Sh8fSbkjb4+JkxWAHDOyAnwFxnxstMcW0cscOW7nXYDi5IpvvesJlk698un7bLhm
+            vCkAd+WiNuTGfs9t0r6FDDVDREBhNk1sLwIDAQAB
+            -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = sOD149OLZ2yUEjRpwbGdwHULKF2qNY3F+9AsEi1G0ZM
+          '';
+        };
+      };
+    };
   };
 }
