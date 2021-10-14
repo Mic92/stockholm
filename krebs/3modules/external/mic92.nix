@@ -256,6 +256,10 @@ in {
     okelmann = {
       owner = config.krebs.users.mic92;
       nets.retiolum = {
+        addrs = [
+          config.krebs.hosts.okelmann.nets.retiolum.ip4.addr
+          config.krebs.hosts.okelmann.nets.retiolum.ip6.addr
+        ];
         ip4.addr = "10.243.29.190";
           aliases = [
             "okelmann.r"
@@ -275,6 +279,10 @@ in {
     aendernix = {
       owner = config.krebs.users.mic92;
       nets.retiolum = {
+        addrs = [
+          config.krebs.hosts.aendernix.nets.retiolum.ip4.addr
+          config.krebs.hosts.aendernix.nets.retiolum.ip6.addr
+        ];
         ip4.addr = "10.243.29.172";
         aliases = [
           "aendernix.r"
@@ -293,6 +301,30 @@ in {
           vltL+5JjcahAMHc/ba+pRa5rSy8ebqf68fg4jlkT94Za13bCIHdK5w7eAXR3s/9z
           H2wZmhvajUIZAxQSgFUy+7kKWOIkWqFkGPIdmbdwTaHC88OWshvRv8ECAwEAAQ==
           -----END RSA PUBLIC KEY-----
+        '';
+      };
+    };
+    aenderpad = {
+      owner = config.krebs.users.mic92;
+      nets.retiolum = {
+        addrs = [
+          config.krebs.hosts.aenderpad.nets.retiolum.ip4.addr
+          config.krebs.hosts.aenderpad.nets.retiolum.ip6.addr
+        ];
+        ip4.addr = "10.243.29.201";
+        aliases = [
+          "aendernix.r"
+        ];
+        tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIIBCgKCAQEAvHSVUd6/5P2rK3s9iQhVrxkjufDIi0Kn04iVB4Z0TpUvnmFAP+Hv
+          d7umo95lNkAPL9c3byv4ooQjOskrp7GmgQRijLUvJSAZ9FBVWPAjMXs+gk9oJnQj
+          6bovXJ3DurmW3h1ZRmkWn256j7g8lEMtf5LGFxs9Bwi4wqZTbI6DzTQhmNm76Spb
+          2UMSzr9kDcNj5r6LDhDKEDtx4P1Opshgsf9AusV81N5nqDcvAYsvEqYoPvjKIPwF
+          5jtfHY7hM7SdYoVgdAY8RFH7xuRkLQW4LBxPKjP3pEQPCgXcuEELm33PGr+w/vhC
+          jxeyKP+uSeuBBMSatTWG3kU8W2LxVML65QIDAQAB
+          -----END RSA PUBLIC KEY-----
+          Ed25519PublicKey = jC2UzKiUtWUlZF2ET88qM+Ot+GpoWxFFfpi8TCCr0uM
         '';
       };
     };
