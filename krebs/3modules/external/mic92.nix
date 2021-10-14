@@ -818,8 +818,8 @@ in {
       nets = rec {
         retiolum = {
           addrs = [
-            config.krebs.hosts.graham.nets.retiolum.ip4.addr
-            config.krebs.hosts.graham.nets.retiolum.ip6.addr
+            config.krebs.hosts.maurice.nets.retiolum.ip4.addr
+            config.krebs.hosts.maurice.nets.retiolum.ip6.addr
           ];
           ip4.addr = "10.243.29.200";
           aliases = [ "maurice.r" ];
