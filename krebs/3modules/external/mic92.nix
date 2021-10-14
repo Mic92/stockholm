@@ -812,5 +812,29 @@ in {
         };
       };
     };
+
+    maurice = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        retiolum = {
+          addrs = [
+            config.krebs.hosts.graham.nets.retiolum.ip4.addr
+            config.krebs.hosts.graham.nets.retiolum.ip6.addr
+          ];
+          ip4.addr = "10.243.29.200";
+          aliases = [ "maurice.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAsLKBfPtZkjWGu6uitCV+4c5aQox2t4N8XNhY2mqE806XsYrqAC+y
+            d0oLOxRMUjfh9stDnEW/YRoLEKz9oZdRYd4eenP0Q3c3HdRFDBNCs27M5a8ysqZD
+            5w9+B+9OfUmMv61NyKiaR6WtoGbE849cj1UNk1z04elshfU7h829D8QnD4j1A1gf
+            bOaNG+RzOP6qP/6Q30rxAiTxRPi+FhcHvxa33y1ZVobvnfGcJa+AzsTbgH9T9Yob
+            GuXFZvuQVSyWOLOgY/vVml904q8gScMpBesAsZJ7DEXxSTga0Rt99Ti3d9ABwBI5
+            1YabQlGLaAkrj3PMgrDyayzGBDDDva9fEQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+        };
+      };
+    };
   };
 }
