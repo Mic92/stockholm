@@ -1,6 +1,6 @@
 { mkDerivation, aeson, aeson-pretty, base, bytestring
 , case-insensitive, fetchgit, lens, optparse-applicative
-, purebred-email, stdenv, text, vector, word8
+, purebred-email, lib, text, vector, word8
 }:
 mkDerivation {
   pname = "mailaids";
@@ -17,5 +17,5 @@ mkDerivation {
     aeson aeson-pretty base bytestring case-insensitive lens
     optparse-applicative purebred-email text vector word8
   ];
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }
