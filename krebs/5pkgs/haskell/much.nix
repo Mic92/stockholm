@@ -2,9 +2,9 @@
 , blaze-builder, blessings, bytestring, case-insensitive
 , containers, data-default, deepseq, directory, either
 , email-header, fetchgit, filepath, friendly-time, http-types
-, hyphenation, linebreak, network, old-locale, optparse-applicative
-, process, random, rosezipper, safe, scanner, servant-server, split
-, stdenv, terminal-size, text, time, transformers
+, hyphenation, lib, linebreak, network, old-locale
+, optparse-applicative, process, random, rosezipper, safe, scanner
+, servant-server, split, terminal-size, text, time, transformers
 , transformers-compat, unix, vector, wai, warp
 }:
 mkDerivation {
@@ -32,5 +32,5 @@ mkDerivation {
     data-default deepseq directory filepath hyphenation linebreak
     process rosezipper safe scanner text time transformers unix
   ];
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }

@@ -1,4 +1,4 @@
-{ mkDerivation, aeson, base, fetchgit, stdenv, X11 }:
+{ mkDerivation, aeson, base, fetchgit, lib, X11 }:
 mkDerivation {
   pname = "X11-aeson";
   version = "1.0.0";
@@ -9,5 +9,5 @@ mkDerivation {
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [ aeson base X11 ];
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }

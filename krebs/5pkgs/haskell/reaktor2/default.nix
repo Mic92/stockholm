@@ -2,7 +2,7 @@
 , bytestring, containers, data-default, fetchgit, filepath
 , hashable, lens, lens-aeson, network, network-simple
 , network-simple-tls, network-uri, pcre-light, process, random
-, servant-server, stdenv, string-conversions, stringsearch, text
+, servant-server, lib, string-conversions, stringsearch, text
 , time, transformers, unagi-chan, unix, unordered-containers
 , vector, wai, warp
 }:
@@ -24,5 +24,5 @@ mkDerivation rec {
     random servant-server string-conversions stringsearch text time
     transformers unagi-chan unix unordered-containers vector wai warp
   ];
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }

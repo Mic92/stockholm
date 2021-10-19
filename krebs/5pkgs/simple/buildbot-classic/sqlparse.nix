@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # Package supports 3.x, but tests are clearly 2.x only.
   doCheck = !isPy3k;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Non-validating SQL parser for Python";
     longDescription = ''
       Provides support for parsing, splitting and formatting SQL statements.

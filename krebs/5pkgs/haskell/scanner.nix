@@ -1,4 +1,4 @@
-{ mkDerivation, base, fetchgit, stdenv }:
+{ mkDerivation, base, fetchgit, lib }:
 mkDerivation {
   pname = "scanner";
   version = "1.0.1";
@@ -9,5 +9,5 @@ mkDerivation {
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [ base ];
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }
