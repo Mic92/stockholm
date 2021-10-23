@@ -89,8 +89,6 @@ with import <stockholm/lib>;
 
   services.timesyncd.enable = mkForce true;
 
-  boot.tmpOnTmpfs = true;
-
   # multiple-definition-problem when defining environment.variables.EDITOR
   environment.extraInit = ''
     EDITOR=vim
