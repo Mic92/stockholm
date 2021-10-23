@@ -1,6 +1,5 @@
 { mkDerivation, base, blessings, containers, data-default, fetchgit
-, lens, mtl, old-locale, process, scanner, stdenv, time, unix
-, zippers
+, lens, lib, mtl, old-locale, process, scanner, time, unix, zippers
 }:
 mkDerivation {
   pname = "hack";
@@ -18,5 +17,5 @@ mkDerivation {
     base blessings containers data-default lens mtl old-locale process
     scanner time unix zippers
   ];
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }

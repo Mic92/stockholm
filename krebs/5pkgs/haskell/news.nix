@@ -1,5 +1,5 @@
 { mkDerivation, base, bloomfilter, bytestring, feed, fetchgit, lens
-, stdenv, wreq
+, lib, wreq
 }:
 mkDerivation {
   pname = "news";
@@ -14,5 +14,5 @@ mkDerivation {
   executableHaskellDepends = [
     base bloomfilter bytestring feed lens wreq
   ];
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }

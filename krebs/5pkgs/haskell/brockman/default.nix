@@ -2,7 +2,7 @@
 , case-insensitive, conduit, containers, directory, feed, filepath
 , hashable, hslogger, html-entity, http-client, irc-conduit, lens
 , lrucache, lrucaching, network, optparse-applicative, random, safe
-, stdenv, text, time, timerep, wreq
+, lib, text, time, timerep, wreq
 , fetchFromGitHub
 }:
 mkDerivation rec {
@@ -22,5 +22,5 @@ mkDerivation rec {
     http-client irc-conduit lens lrucache lrucaching network
     optparse-applicative random safe text time timerep wreq
   ];
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }

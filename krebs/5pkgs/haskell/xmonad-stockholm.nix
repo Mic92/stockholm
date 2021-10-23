@@ -1,4 +1,4 @@
-{ mkDerivation, base, containers, fetchgit, filepath, stdenv, unix, X11, X11-xft , X11-xshape, xmonad, xmonad-contrib
+{ mkDerivation, base, containers, fetchgit, filepath, lib, unix, X11, X11-xft , X11-xshape, xmonad, xmonad-contrib
 }:
 mkDerivation rec {
   pname = "xmonad-stockholm";
@@ -11,5 +11,5 @@ mkDerivation rec {
   libraryHaskellDepends = [
     base containers filepath unix X11 X11-xft X11-xshape xmonad xmonad-contrib
   ];
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }
