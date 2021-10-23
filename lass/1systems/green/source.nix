@@ -1,4 +1,4 @@
 { lib, pkgs, test, ... }:
-if test then {
+if test then {} else {
   nixpkgs-unstable = lib.mkForce { file = "/var/empty"; };
-} else {}
+}
