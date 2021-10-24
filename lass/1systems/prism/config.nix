@@ -112,7 +112,6 @@ with import <stockholm/lib>;
       };
     }
     <stockholm/lass/2configs/exim-smarthost.nix>
-    <stockholm/lass/2configs/ts3.nix>
     <stockholm/lass/2configs/privoxy-retiolum.nix>
     <stockholm/lass/2configs/radio.nix>
     <stockholm/lass/2configs/binary-cache/server.nix>
