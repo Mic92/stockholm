@@ -6,12 +6,12 @@
   ];
   krebs.sync-containers.containers.green = {
     peers = [
+      "echelon"
       "icarus"
+      "littleT"
+      "mors"
       "shodan"
       "skynet"
-      "mors"
-      "morpheus"
-      "littleT"
       "styx"
     ];
     hostIp = "10.233.2.15";
