@@ -82,7 +82,6 @@ in {
     "o_ubikmedia_de"
   ];
 
-  services.phpfpm.phpPackage = pkgs.php73;
   services.phpfpm.phpOptions = ''
     sendmail_path = ${sendmail} -t
     upload_max_filesize = 100M
