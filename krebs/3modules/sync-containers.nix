@@ -94,7 +94,7 @@ in {
     programs.fuse.userAllowOther = true;
     # allow syncthing to enter /var/lib/containers
     system.activationScripts.containers-enter = mkDefault ''
-      ${pkgs.coreutils}/bin/chmod a+x /var/lib/containers
+      ${pkgs.coreutils}/bin/chmod a+x /var/lib/containers || :
     '';
 
     services.syncthing.declarative.folders = (mapAttrs' (_: ctr: nameValuePair "${(paths ctr.name).${ctr.format}}" ({
