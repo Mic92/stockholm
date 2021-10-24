@@ -25,5 +25,9 @@
     repo = "/var/lib/sync-containers/green/backup";
     compression = "auto,lzma";
     startAt = "daily";
+    prune.keep = {
+      daily = 7;
+      weekly = 4;
+    };
   };
 }
