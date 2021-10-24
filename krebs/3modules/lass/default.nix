@@ -48,6 +48,7 @@ in {
           jitsi               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           streaming           60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           mumble              60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          mail                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
         '';
       };
       nets = rec {

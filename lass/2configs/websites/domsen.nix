@@ -117,6 +117,13 @@ in {
   # workaround for android 7
   security.acme.certs."lassul.us".keyType = "rsa4096";
 
+  services.roundcube = {
+    enable = true;
+    hostName = "mail.lassul.us";
+    extraConfig = ''
+      $config['smtp_port'] = 25;
+    '';
+  };
   services.dovecot2 = {
     enable = true;
     mailLocation = "maildir:~/Mail";
