@@ -1,7 +1,7 @@
 { lib, pkgs, test, ... }: let
   npkgs = lib.importJSON ../../../krebs/nixpkgs-unstable.json;
 in {
-  nixpkgs = lib.mkForce (if test then { derivation = let
+  nixpkgs = (if test then lib.mkForce ({ derivation = let
     rev = npkgs.rev;
     sha256 = npkgs.sha256;
   in ''
@@ -15,7 +15,7 @@ in {
       rev = "${rev}";
       sha256 = "${sha256}";
     }
-  ''; } else {
-    git.ref = npkgs.rev;
+  ''; }) else {
+    git.ref = lib.mkForce npkgs.rev;
   });
 }
