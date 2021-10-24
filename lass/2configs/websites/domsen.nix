@@ -323,6 +323,15 @@ in {
     isNormalUser = true;
   };
 
+  users.users.line = {
+    uid = genid_uint31 "line";
+    home = "/home/line";
+    useDefaultShell = true;
+    # extraGroups = [ "xanf" ];
+    createHome = true;
+    isNormalUser = true;
+  };
+
   users.groups.xanf = {};
 
   krebs.on-failure.plans.restic-backups-domsen = {
