@@ -16,7 +16,7 @@
     <stockholm/lass/2configs/steam.nix>
     <stockholm/lass/2configs/wine.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
-    # <stockholm/lass/2configs/nfs-dl.nix>
+    <stockholm/lass/2configs/prism-mounts/samba.nix>
     <stockholm/lass/2configs/pass.nix>
     <stockholm/lass/2configs/mail.nix>
     <stockholm/lass/2configs/bitcoin.nix>
