@@ -80,7 +80,12 @@ let
     name = "mpv";
     paths = [
       (pkgs.writeDashBin "mpv" ''
-        exec ${pkgs.mpv}/bin/mpv -vo=gpu --no-config --script=${autosub} "$@"
+        exec ${pkgs.mpv}/bin/mpv \
+         -vo=gpu \
+         --no-config \
+         --script=${autosub} \
+         --script-opts=ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp \
+         "$@"
       '')
       pkgs.mpv
     ];
