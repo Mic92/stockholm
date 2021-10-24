@@ -1,10 +1,10 @@
 { writers, coreutils, grib2json, curl, jq, findutils, imagemagick }:
 writers.writeDashBin "nomads-cloud" ''
   prefix=$(mktemp -d)
-  grib_path=$prefix.grib
-  json_path=$prefix.json
-  pgm_path=$prefix.pgm
-  png_path="$1"
+  grib_path=$prefix/clouds.grib
+  json_path=$prefix/clouds.json
+  pgm_path=$prefix/clouds.pgm
+  png_path=$1
 
   mkdir -p "$prefix"
 
