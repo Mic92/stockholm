@@ -29,6 +29,13 @@
       locations."/".extraConfig = ''
         proxy_pass http://localhost:${toString config.services.nix-serve.port};
       '';
+      locations."= /nix-cache-info".extraConfig = ''
+        alias ${pkgs.writeText "cache-info" ''
+          StoreDir: /nix/store
+          WantMassQuery: 1
+          Priority: 42
+        ''};
+      '';
     };
     virtualHosts."cache.krebsco.de" = {
       forceSSL = true;
