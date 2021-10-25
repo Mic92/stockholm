@@ -91,6 +91,7 @@ with import <stockholm/lib>;
   #stockholm
     deploy
     git
+    git-preview
     gnumake
     jq
 
@@ -115,6 +116,7 @@ with import <stockholm/lib>;
     file
     hashPassword
     kpaste
+    cyberlocker-tools
     pciutils
     pop
     q
