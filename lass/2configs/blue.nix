@@ -2,16 +2,13 @@ with (import <stockholm/lib>);
 { config, lib, pkgs, ... }:
 
 {
-
   imports = [
-    ./bitlbee.nix
     ./mail.nix
     ./pass.nix
   ];
 
   environment.systemPackages = with pkgs; [
     ag
-    brain
     dic
     nmap
     git-preview
