@@ -19,10 +19,9 @@ with import <stockholm/lib>;
       users.extraUsers = {
         root = {
           openssh.authorizedKeys.keys = [
-            config.krebs.users.lass-mors.pubkey
+            config.krebs.users.lass.pubkey
             config.krebs.users.lass-blue.pubkey
             config.krebs.users.lass-green.pubkey
-            config.krebs.users.lass-yubikey.pubkey
           ];
         };
         mainUser = {
@@ -35,25 +34,17 @@ with import <stockholm/lib>;
           isNormalUser = true;
           extraGroups = [
             "audio"
+            "video"
             "fuse"
             "wheel"
           ];
           openssh.authorizedKeys.keys = [
-            config.krebs.users.lass-mors.pubkey
+            config.krebs.users.lass.pubkey
             config.krebs.users.lass-blue.pubkey
             config.krebs.users.lass-green.pubkey
-            config.krebs.users.lass-yubikey.pubkey
-          ];
-        };
-        nix = {
-          isNormalUser = true;
-          uid = genid_uint31 "nix";
-          openssh.authorizedKeys.keys = [
-            config.krebs.hosts.mors.ssh.pubkey
           ];
         };
       };
-      nix.trustedUsers = ["nix"];
     }
     {
       environment.variables = {
