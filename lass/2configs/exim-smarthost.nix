@@ -19,8 +19,10 @@ in {
       "lassul.us"
     ];
     relay_from_hosts = map (host: host.nets.retiolum.ip6.addr) [
-      config.krebs.hosts.mors
       config.krebs.hosts.blue
+      config.krebs.hosts.coaxmetal
+      config.krebs.hosts.green
+      config.krebs.hosts.mors
       config.krebs.hosts.xerxes
     ];
     internet-aliases = map (from: { inherit from to; }) mails;
