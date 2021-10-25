@@ -23,6 +23,7 @@ let
     set directory=${dirs.swapdir}//
     set hlsearch
     set incsearch
+    set ttymouse=sgr
     set mouse=a
     set ruler
     set pastetoggle=<INS>
