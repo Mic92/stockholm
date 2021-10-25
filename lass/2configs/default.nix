@@ -61,7 +61,7 @@ with import <stockholm/lib>;
     {
       #for sshuttle
       environment.systemPackages = [
-        pkgs.pythonPackages.python
+        pkgs.python3Packages.python
       ];
     }
   ];
