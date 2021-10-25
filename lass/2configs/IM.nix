@@ -30,7 +30,7 @@ in {
   imports = [
     ./bitlbee.nix
   ];
-  environment.systemPackages = [ tmux ];
+  environment.systemPackages = [ tmux weechat ];
   systemd.services.chat = {
     description = "chat environment setup";
     after = [ "network.target" ];
