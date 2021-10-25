@@ -62,7 +62,8 @@ in {
     font-size
     fzfmenu
     gimp
-    gitAndTools.qgit
+    gitAndTools.hub
+    git-crypt
     git-preview
     gnome3.dconf
     iodine
@@ -86,6 +87,7 @@ in {
     xorg.xhost
     xsel
     zathura
+    flameshot-once
     (pkgs.writeDashBin "screenshot" ''
       set -efu
 
