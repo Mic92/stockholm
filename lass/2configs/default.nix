@@ -178,6 +178,7 @@ with import <stockholm/lib>;
   services.journald.extraConfig = ''
     SystemMaxUse=1G
     RuntimeMaxUse=128M
+    Storage=persistent
   '';
 
   krebs.iptables = {
