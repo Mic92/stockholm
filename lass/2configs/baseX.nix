@@ -11,6 +11,7 @@ in {
     ./xdg-open.nix
     ./yubikey.nix
     ./pipewire.nix
+    ./tmux.nix
     ./xmonad.nix
     {
       krebs.per-user.lass.packages = [
