@@ -454,7 +454,7 @@ in {
           </head>
           <body>
             <div style="display:inline-block;margin:0px;padding:0px;overflow:hidden">
-              <iframe src="https://kiwiirc.com/client/irc.freenode.org/?nick=kiwi_test|?&theme=cli#the_playlist" frameborder="0" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:95%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="95%" width="100%"></iframe>
+              <iframe src="https://kiwiirc.com/client/irc.hackint.org/?nick=kiwi_test|?&theme=cli#the_playlist" frameborder="0" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:95%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="95%" width="100%"></iframe>
             </div>
             <div style="position:absolute;bottom:1px;display:inline-block;background-color:red;">
               <audio controls autoplay="autoplay"><source src="http://lassul.us:8000/radio.ogg" type="audio/ogg">Your browser does not support the audio element.</audio>
