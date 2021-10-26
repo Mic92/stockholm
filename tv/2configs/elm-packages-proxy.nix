@@ -274,7 +274,7 @@ in {
                 select(.!="") |
                 sub("^\\./(?<author>[^/]+)/(?<pname>[^/]+)/(?<version>[^/]+)$";"\(.author)/\(.pname)@\(.version)")
               ) |
-              sort_by(split("@") | [.[0]]+(.[1]|split("."))) |
+              sort_by(split("@") | [.[0]]+(.[1]|split(".")|map(tonumber))) |
               reverse
             '
           } |
