@@ -1,8 +1,16 @@
 { config, pkgs, lib, ... }:
 with import <stockholm/lib>;
 let
-  domain = "codi.lassul.us";
+  domain = "pad.lassul.us";
 in {
+
+  # redirect legacy domain to new one
+  services.nginx.virtualHosts."codi.lassul.us" = {
+    enableACME = true;
+    addSSL = true;
+    locations."/".return = "301 https://${domain}\$request_uri";
+  };
+
   services.nginx.virtualHosts.${domain} = {
     enableACME = true;
     forceSSL = true;
