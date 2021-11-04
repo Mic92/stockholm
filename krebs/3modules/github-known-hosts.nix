@@ -2,8 +2,8 @@
   services.openssh.knownHosts.github = {
     hostNames = [
       "github.com"
-      # List generated with
-      # curl -sS https://api.github.com/meta | jq -r .git[] | nix-shell -p cidr2glob --run cidr2glob | jq -R .
+      # List generated with (IPv6 addresses are currently ignored):
+      # curl -sS https://api.github.com/meta | jq -r .git[] | grep -v : | nix-shell -p cidr2glob --run cidr2glob | jq -R .
       "192.30.252.*"
       "192.30.253.*"
       "192.30.254.*"
@@ -28,6 +28,22 @@
       "140.82.125.*"
       "140.82.126.*"
       "140.82.127.*"
+      "143.55.64.*"
+      "143.55.65.*"
+      "143.55.66.*"
+      "143.55.67.*"
+      "143.55.68.*"
+      "143.55.69.*"
+      "143.55.70.*"
+      "143.55.71.*"
+      "143.55.72.*"
+      "143.55.73.*"
+      "143.55.74.*"
+      "143.55.75.*"
+      "143.55.76.*"
+      "143.55.77.*"
+      "143.55.78.*"
+      "143.55.79.*"
       "13.114.40.48"
       "52.192.72.89"
       "52.69.186.44"
@@ -44,6 +60,9 @@
       "18.228.52.138"
       "18.228.67.229"
       "18.231.5.6"
+      "20.201.28.151"
+      "20.205.243.166"
+      "102.133.202.242"
       "18.181.13.223"
       "54.238.117.237"
       "54.168.17.15"
@@ -60,6 +79,9 @@
       "54.233.131.104"
       "18.231.104.233"
       "18.228.167.86"
+      "20.201.28.152"
+      "20.205.243.160"
+      "102.133.202.246"
     ];
     publicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==";
   };
