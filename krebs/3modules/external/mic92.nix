@@ -798,7 +798,14 @@ in {
     ryan = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet = {
+          # ryan.dse.in.tum.de
+          ip4.addr = "131.159.102.8";
+          ip6.addr = "2a09:80c0:102::8";
+          aliases = [ "ryan.i" ];
+        };
         retiolum = {
+          via = internet;
           addrs = [
             config.krebs.hosts.ryan.nets.retiolum.ip4.addr
             config.krebs.hosts.ryan.nets.retiolum.ip6.addr
@@ -823,7 +830,14 @@ in {
     graham = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet = {
+          # graham.dse.in.tum.de
+          ip4.addr = "131.159.102.9";
+          ip6.addr = "2a09:80c0:102::9";
+          aliases = [ "graham.i" ];
+        };
         retiolum = {
+          via = internet;
           addrs = [
             config.krebs.hosts.graham.nets.retiolum.ip4.addr
             config.krebs.hosts.graham.nets.retiolum.ip6.addr
