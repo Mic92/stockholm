@@ -1,4 +1,4 @@
-{ mkDerivation, base, stdenv, template-haskell, text }:
+{ mkDerivation, base, lib, template-haskell, text }:
 mkDerivation {
   pname = "th-env";
   version = "1.0.0";
@@ -6,5 +6,5 @@ mkDerivation {
   libraryHaskellDepends = [ base template-haskell text ];
   homepage = "https://stackoverflow.com/q/57635686";
   license = "unknown";
-  hydraPlatforms = stdenv.lib.platforms.none;
+  hydraPlatforms = lib.platforms.none;
 }

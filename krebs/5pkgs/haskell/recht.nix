@@ -1,6 +1,6 @@
 { mkDerivation, ansi-terminal, async, base, binary, bytestring
 , data-default, directory, filepath, megaparsec
-, optparse-applicative, pandoc, random, safe, scalpel, stdenv, text
+, optparse-applicative, pandoc, random, safe, scalpel, lib, text
 , time
 , fetchFromGitHub
 }:
@@ -21,5 +21,5 @@ mkDerivation rec {
     filepath megaparsec optparse-applicative pandoc random safe scalpel
     text time
   ];
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }

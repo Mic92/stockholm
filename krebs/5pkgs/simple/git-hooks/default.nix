@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, stockholm, ... }:
 
-with import <stockholm/lib>;
+with stockholm.lib;
 
 {
   # TODO irc-announce should return a derivation

@@ -189,7 +189,7 @@ let
     with git // config.krebs.users;
     repo:
       singleton {
-        user = [ lass lass-mors lass-blue lass-yubikey ];
+        user = [ lass lass-green ];
         repo = [ repo ];
         perm = push "refs/*" [ non-fast-forward create delete merge ];
       } ++

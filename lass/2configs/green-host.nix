@@ -6,12 +6,12 @@
   ];
   krebs.sync-containers.containers.green = {
     peers = [
+      "echelon"
       "icarus"
+      "littleT"
+      "mors"
       "shodan"
       "skynet"
-      "mors"
-      "morpheus"
-      "littleT"
       "styx"
     ];
     hostIp = "10.233.2.15";
@@ -25,5 +25,9 @@
     repo = "/var/lib/sync-containers/green/backup";
     compression = "auto,lzma";
     startAt = "daily";
+    prune.keep = {
+      daily = 7;
+      weekly = 4;
+    };
   };
 }

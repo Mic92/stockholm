@@ -1,8 +1,6 @@
-with import <stockholm/lib>;
-
-{ cache-root ? "/tmp/cgit", findutils, writeDashBin }:
+{ cache-root ? "/tmp/cgit", findutils, stockholm, writeDashBin }:
 
 writeDashBin "cgit-clear-cache" ''
   set -efu
-  ${findutils}/bin/find ${shell.escape cache-root} -type f -delete
+  ${findutils}/bin/find ${stockholm.lib.shell.escape cache-root} -type f -delete
 ''

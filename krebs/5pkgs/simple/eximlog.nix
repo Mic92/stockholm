@@ -1,7 +1,7 @@
-{ jq, systemd, writeDashBin }:
+{ jq, stockholm, systemd, writeDashBin }:
 
 let
-  lib = import <stockholm/lib>;
+  lib = stockholm.lib;
   user = "exim"; # TODO make this configurable
 in
 

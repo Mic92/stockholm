@@ -1,4 +1,3 @@
-with import <stockholm/lib>;
 self: super: {
 
   bitlbee-facebook = super.bitlbee-facebook.overrideAttrs (old: {

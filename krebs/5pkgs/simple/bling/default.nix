@@ -1,6 +1,5 @@
-{ imagemagick, runCommand, ... }:
-
-with import <stockholm/lib>;
+{ imagemagick, runCommand, stockholm, ... }:
+with stockholm.lib;
 
 let
   krebs-v2 = [

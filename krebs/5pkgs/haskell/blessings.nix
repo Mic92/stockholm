@@ -1,6 +1,7 @@
-with import <stockholm/lib>;
-{ mkDerivation, base, fetchgit, hspec, QuickCheck, stdenv, text }: let
+{ mkDerivation, base, fetchgit, hspec, QuickCheck, lib, stockholm, text }:
+with stockholm.lib;
 
+let
   cfg = {
     "18.03" = {
       version = "1.1.0";
@@ -23,5 +24,5 @@ in mkDerivation {
   testHaskellDepends = [ base hspec QuickCheck ];
   doHaddock = false;
   # WTFPL is the true license, which is unknown to cabal.
-  license = stdenv.lib.licenses.wtfpl;
+  license = lib.licenses.wtfpl;
 }

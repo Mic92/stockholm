@@ -237,7 +237,12 @@ let
         inherit (cfg.user) home name uid;
         createHome = true;
         isSystemUser = true;
+        group = netname;
       }
+    ) config.krebs.tinc;
+
+    users.groups = mapAttrs' (netname: cfg:
+      nameValuePair netname {}
     ) config.krebs.tinc;
 
     environment.etc = mapAttrs' (netname: cfg:

@@ -1,5 +1,4 @@
-{ lib, pkgs, ... }:
-{
+{ lib, pkgs, test, ... }:
+if test then {} else {
   nixpkgs-unstable = lib.mkForce { file = "/var/empty"; };
-  nixpkgs.git.shallow = true;
 }

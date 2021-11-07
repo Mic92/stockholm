@@ -6,8 +6,8 @@
 
   nixpkgs = {
     overlays = [
-      (import ./5pkgs)
       (import ../submodules/nix-writers/pkgs)
+      (import ./5pkgs)
     ];
   };
 

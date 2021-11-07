@@ -1,8 +1,10 @@
-with import <stockholm/lib>;
 { mkDerivation, attoparsec, base, base64-bytestring, bytestring
 , case-insensitive, containers, exceptions, fetchgit, QuickCheck
-, stdenv, tasty, tasty-quickcheck, text, text-icu, time
-}: let
+, lib, stockholm, tasty, tasty-quickcheck, text, text-icu, time
+}:
+with stockholm.lib;
+
+let
 
   cfg = {
     "18.03" = {
@@ -40,5 +42,5 @@ in mkDerivation {
   jailbreak = true;
   homepage = "http://github.com/knrafto/email-header";
   description = "Parsing and rendering of email and MIME headers";
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
 }

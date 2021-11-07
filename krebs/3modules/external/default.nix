@@ -150,6 +150,7 @@ in {
             "makanek.r"
             "makanek.kmein.r"
             "grafana.kmein.r"
+            "names.kmein.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -263,6 +264,7 @@ in {
             "zaatar.r"
             "zaatar.kmein.r"
             "radio.kmein.r"
+            "bvg.kmein.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -585,7 +587,7 @@ in {
      nets = {
        retiolum = {
          ip4.addr = "10.243.13.12";
-         aliases = [ "catalonia.r" "aleph.r" ];
+         aliases = [ "catalonia.r" ];
          tinc.pubkey = ''
            -----BEGIN RSA PUBLIC KEY-----
            MIICCgKCAgEAug+nej8/spuRHdzcfBYAuzUVoiq4YufmJqXSshvgf4aqjeVEt91Y

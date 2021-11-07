@@ -5,16 +5,6 @@ let
   out = {
     environment.systemPackages = [
       (hiPrio vim)
-      (pkgs.writeDashBin "govet" ''
-        go vet "$@"
-      '')
-      (hiPrio (pkgs.python3.withPackages (ps: [
-        ps.python-language-server
-        ps.pyls-isort
-        ps.pyflakes
-        ps.flake8
-        ps.yapf
-      ])))
     ];
 
     environment.etc.vimrc.source = vimrc;
@@ -33,6 +23,7 @@ let
     set directory=${dirs.swapdir}//
     set hlsearch
     set incsearch
+    set ttymouse=sgr
     set mouse=a
     set ruler
     set pastetoggle=<INS>
@@ -126,11 +117,7 @@ let
   '';
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
-    pkgs.vimPlugins.ack-vim
     pkgs.vimPlugins.undotree
-    pkgs.vimPlugins.vim-go
-    pkgs.vimPlugins.fzf-vim
-    pkgs.vimPlugins.LanguageClient-neovim
     (pkgs.vimUtils.buildVimPlugin {
       name = "file-line-1.0";
       src = pkgs.fetchFromGitHub {

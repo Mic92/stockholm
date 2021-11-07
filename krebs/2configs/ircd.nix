@@ -1,13 +1,13 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   networking.firewall.allowedTCPPorts = [
     6667 6669
   ];
 
-  systemd.services.solanum.serviceConfig.LimitNOFILE = 16384;
+  systemd.services.solanum.serviceConfig.LimitNOFILE = lib.mkForce 16384;
 
-  krebs.solanum = {
+  services.solanum = {
     enable = true;
     motd = ''
       hello

@@ -105,6 +105,7 @@ in {
             "go.r"
             "rss.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
             MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA9PY6t6P1ytgo8qYL2QDc
@@ -165,6 +166,7 @@ in {
             "build.puyak.r"
             "cgit.puyak.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIBCgKCAQEAwwDvaVKSJmAi1fpbsmjLz1DQVTgqnx56GkHKbz5sHwAfPVQej955

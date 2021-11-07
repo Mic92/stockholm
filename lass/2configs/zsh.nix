@@ -58,7 +58,6 @@
         rev = "a75fca8545f91abb8a5f802981033ef54bf1eac0";
         sha256="1lzj0qnj89mzh76ha137mnz2hf86k278rh0y9x124ghxj9yqsnb4";
       }}/LS_COLORS)
-      alias ls='ls --color'
       zstyle ':completion:*:default' list-colors ''${(s.:.)LS_COLORS}
 
       #emacs bindings
@@ -66,12 +65,6 @@
       bindkey "[8~" end-of-line
       bindkey "Oc" emacs-forward-word
       bindkey "Od" emacs-backward-word
-
-      #aliases
-      alias ll='ls -l'
-      alias la='ls -la'
-
-      #fancy window title magic
     '';
     promptInit = ''
       # TODO: figure out why we need to set this here

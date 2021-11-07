@@ -17,6 +17,8 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/IM.nix>
     <stockholm/lass/2configs/muchsync.nix>
     <stockholm/lass/2configs/pass.nix>
+
+    <stockholm/lass/2configs/git-brain.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.green;
@@ -65,6 +67,13 @@ with import <stockholm/lib>;
       source = "/var/state/lass_gnupg";
       options = [
         "-M ${toString config.users.users.mainUser.uid}"
+      ];
+      clearTarget = true;
+    };
+    "/var/lib/git" = {
+      source = "/var/state/git";
+      options = [
+        "-M ${toString config.users.users.git.uid}"
       ];
       clearTarget = true;
     };

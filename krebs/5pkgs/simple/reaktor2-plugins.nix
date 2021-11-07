@@ -1,5 +1,5 @@
-with import <stockholm/lib>;
-{ lib, pkgs, ... }:
+{ lib, pkgs, stockholm, ... }:
+with stockholm.lib;
 
 rec {
   generators = {

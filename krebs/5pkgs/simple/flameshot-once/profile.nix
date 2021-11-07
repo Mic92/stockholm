@@ -1,5 +1,5 @@
-with import <stockholm/lib>;
 { config, pkgs }:
+with pkgs.stockholm.lib;
 let
 
   # Refs https://github.com/lupoDharkael/flameshot/blob/master/src/widgets/capture/capturebutton.h

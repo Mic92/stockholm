@@ -1,7 +1,5 @@
 { lib, pkgs, ... }:
 
-with import <stockholm/lib>;
-
 let
   default-host-colors = pkgs.writeJSON "logf.default-host-colors.json" {
   };

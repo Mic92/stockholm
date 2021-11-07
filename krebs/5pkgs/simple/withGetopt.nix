@@ -1,5 +1,5 @@
-with import <stockholm/lib>;
-{ coreutils, quote, utillinux, writeDash }:
+{ coreutils, quote, stockholm, utillinux, writeDash }:
+with stockholm.lib;
 
 opt-spec: cmd-spec: let
 
