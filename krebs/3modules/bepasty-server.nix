@@ -58,6 +58,7 @@ let
             permissions will be set to 755
           '';
           default = config.users.extraUsers.bepasty.home;
+          defaultText = "<literal>\${config.users.extraUsers.bepasty.home}</literal>";
         };
 
         dataDir = mkOption {
@@ -67,6 +68,7 @@ let
             /var/lib/bepasty-server/data
           '';
           default = "${config.users.extraUsers.bepasty.home}/data";
+          defaultText = "<literal>\${config.users.extraUsers.bepasty.home}/data</literal>";
         };
 
         extraConfig = mkOption {
