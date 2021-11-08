@@ -137,7 +137,7 @@ let
       type = types.listOf types.str;
       example = [ "cac.json" ];
       description = ''
-        List of all the secrets in <secrets> which should be copied into the
+        List of all the secrets in ‹secrets› which should be copied into the
         buildbot master directory.
       '';
     };

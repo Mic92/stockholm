@@ -34,7 +34,7 @@ rec {
       ci = mkOption {
         description = ''
           If true, then the host wants to be tested by some CI system.
-          See <stockholm/krebs/2configs/buildbot-all.nix>
+          See ‹stockholm/krebs/2configs/buildbot-all.nix›
         '';
         type = bool;
         default = false;
@@ -43,7 +43,7 @@ rec {
       external = mkOption {
         description = ''
           Whether the host is defined externally (in contrast to being defined
-          in <stockholm>).  This is useful e.g. when legacy and/or adopted
+          in ‹stockholm›).  This is useful e.g. when legacy and/or adopted
           hosts should be part of retiolum or some other component.
         '';
         type = bool;
@@ -102,7 +102,14 @@ rec {
         default = config._module.args.name;
       };
       via = mkOption {
-        type = nullOr net;
+        type =
+          # XXX break infinite recursion when generating manuals
+          if config._module.args.name == "‹name›" then
+            mkOptionType {
+              name = "‹net›";
+            }
+          else
+            nullOr net;
         default = null;
       };
       addrs = mkOption {
@@ -128,7 +135,7 @@ rec {
             };
             prefix = mkOption ({
               type = cidr4;
-            } // optionalAttrs (config.name == "retiolum") {
+            } // optionalAttrs (config._module.args.name == "retiolum") {
               default = "10.243.0.0/16";
             });
           };
@@ -144,7 +151,7 @@ rec {
             };
             prefix = mkOption ({
               type = cidr6;
-            } // optionalAttrs (config.name == "retiolum") {
+            } // optionalAttrs (config._module.args.name == "retiolum") {
               default = "42::/16";
             });
           };
@@ -179,6 +186,12 @@ rec {
                 ++
                 [config.pubkey]
               );
+              defaultText = ''
+                Address = ‹addr› ‹port› # for each ‹net.via.addrs›
+                Subnet = ‹addr› # for each ‹net.addrs›
+                ‹extraConfig›
+                ‹pubkey›
+              '';
             };
             pubkey = mkOption {
               type = tinc-pubkey;
@@ -252,6 +265,7 @@ rec {
       path = mkOption {
         type = absolute-pathname;
         default = "/run/keys/${config.name}";
+        defaultText = "/run/keys/‹name›";
       };
       mode = mkOption {
         type = file-mode;
@@ -267,10 +281,12 @@ rec {
       service = mkOption {
         type = systemd.unit-name;
         default = "secret-${lib.systemd.encodeName config.name}.service";
+        defaultText = "secret-‹name›.service";
       };
       source-path = mkOption {
         type = str;
         default = toString <secrets> + "/${config.name}";
+        defaultText = "‹secrets/‹name››";
       };
     };
   });
@@ -379,6 +395,7 @@ rec {
       home = mkOption {
         type = absolute-pathname;
         default = "/home/${config.name}";
+        defaultText = "/home/‹name›";
       };
       mail = mkOption {
         type = nullOr str;
@@ -406,6 +423,7 @@ rec {
       uid = mkOption {
         type = int;
         default = genid_uint31 config.name;
+        defaultText = "genid_uint31 ‹name›";
       };
     };
   });
@@ -414,10 +432,12 @@ rec {
       name = mkOption {
         type = username;
         default = config._module.args.name;
+        defaultText = "genid_uint31 ‹name›";
       };
       gid = mkOption {
         type = int;
         default = genid_uint31 config.name;
+        defaultText = "genid_uint31 ‹name›";
       };
     };
   });

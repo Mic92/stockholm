@@ -96,7 +96,7 @@ let
           basic authentication to be used. If unset, no authentication will be
           enabled.
 
-          Refer to `services.nginx.virtualHosts.<name>.basicAuth`
+          Refer to `services.nginx.virtualHosts.‹name›.basicAuth`
         '';
         default = {};
       };

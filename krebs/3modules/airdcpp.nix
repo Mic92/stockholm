@@ -45,7 +45,7 @@ let
                 Nick Name for hub
               '';
               type = str;
-              default = cfg.Nick;
+              default = cfg.dcpp.Nick;
             };
             Password = mkOption {
               description = ''
