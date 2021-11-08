@@ -81,9 +81,16 @@ let
             ''}
             ${tinc.config.tincUpExtra}
           '';
+          defaultText = ''
+            ip -4 addr add ‹net.ip4.addr› dev ${netname}
+            ip -4 route add ‹net.ip4.prefix› dev ${netname}
+            ip -6 addr add ‹net.ip6.addr› dev ${netname}
+            ip -6 route add ‹net.ip6.prefix› dev ${netname}
+            ${tinc.config.tincUpExtra}
+          '';
           description = ''
             tinc-up script to be used. Defaults to setting the
-            krebs.host.nets.<netname>.ip4 and ip6 for the new ips and
+            krebs.host.nets.‹netname›.ip4 and ip6 for the new ips and
             configures forwarding of the respecitive netmask as subnet.
           '';
         };
@@ -103,6 +110,7 @@ let
           type = with types; attrsOf host;
           default =
             filterAttrs (_: h: hasAttr tinc.config.netname h.nets) config.krebs.hosts;
+          defaultText = "‹all-hosts-of-‹netname››";
           description = ''
             Hosts to generate <literal>config.krebs.tinc.retiolum.hostsPackage</literal>.
             Note that these hosts must have a network named
@@ -138,9 +146,10 @@ let
               '') tinc.config.hosts)}
             '';
           };
+          defaultText = "‹netname›-tinc-hosts";
           description = ''
             Package of tinc host configuration files.  By default, a package will
-            be generated from <literal>config.krebs.${tinc.config.netname}.hosts</literal>.  This
+            be generated from <literal>config.krebs.‹netname›.hosts</literal>.  This
             option's main purpose is to expose the generated hosts package to other
             modules, like <literal>config.krebs.tinc_graphs</literal>.  But it can
             also be used to provide a custom hosts directory.
@@ -168,6 +177,7 @@ let
             owner = tinc.config.user;
             source-path = toString <secrets> + "/${tinc.config.netname}.rsa_key.priv";
           };
+          defaultText = "‹secrets/‹netname›.rsa_key.priv›";
         };
 
         privkey_ed25519 = mkOption {
@@ -179,11 +189,12 @@ let
               owner = tinc.config.user;
               source-path = toString <secrets> + "/${tinc.config.netname}.ed25519_key.priv";
             };
+          defaultText = "‹secrets/‹netname›.ed25519_key.priv›";
         };
 
         connectTo = mkOption {
           type = types.listOf types.str;
-          ${if tinc.config.netname == "retiolum" then "default" else null} = [
+          ${if netname == "retiolum" then "default" else null} = [
             "gum"
             "ni"
             "prism"
@@ -194,8 +205,10 @@ let
             routeable IPv4 or IPv6 address.
 
             In stockholm this can be done by configuring:
-              krebs.hosts.${connect-host}.nets.${netname?"retiolum"}.via.ip4.addr = external-ip
-              krebs.hosts.${connect-host}.nets.${netname?"retiolum"}.tinc.port = 1655;
+            {
+              krebs.hosts.‹host›.nets.‹netname›.via.ip4.addr = external-ip;
+              krebs.hosts.‹host›.nets.‹netname›.tinc.port = 1655;
+            }
           '';
         };
 
@@ -204,6 +217,10 @@ let
           default = {
             name = tinc.config.netname;
             home = "/var/lib/${tinc.config.user.name}";
+          };
+          defaultText = {
+            name = "‹netname›";
+            home = "/var/lib/‹netname›";
           };
         };
       };
