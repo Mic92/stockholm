@@ -54,7 +54,10 @@ in {
       };
       nets = rec {
         internet = {
-          ip4.addr = "95.216.1.150";
+          ip4 = {
+            addr = "95.216.1.150";
+            prefix = "0.0.0.0/0";
+          };
           aliases = [
             "prism.i"
             "paste.i"
