@@ -13,7 +13,7 @@ let
     default = {};
     type = types.attrsOf (types.submodule ({ config, ... }: {
       options = {
-        enable = mkEnableOption "krebs.htgen-${config.name}";
+        enable = mkEnableOption "krebs.htgen-${config._module.args.name}";
 
         name = mkOption {
           type = types.username;
@@ -37,6 +37,10 @@ let
           default = {
             name = "htgen-${config.name}";
             home = "/var/lib/htgen-${config.name}";
+          };
+          defaultText = {
+            name = "htgen-‹name›";
+            home = "/var/lib/htgen-‹name›";
           };
         };
       };
