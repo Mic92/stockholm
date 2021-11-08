@@ -18,6 +18,7 @@ let
     srcDir = mkOption {
       type = types.str;
       default = "${config.krebs.tinc.retiolum.confDir}/hosts";
+      defaultText = "\${config.krebs.tinc.retiolum.confDir}/hosts";
     };
     ssh-identity-file = mkOption {
       type = types.suffixed-str [".ssh.id_ed25519" ".ssh.id_rsa"];
