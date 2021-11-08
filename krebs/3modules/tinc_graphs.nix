@@ -24,6 +24,7 @@ let
       type = types.str;
       description = "Path to Hosts directory";
       default = "${config.krebs.tinc.retiolum.hostsPackage}";
+      defaultText = "\${config.krebs.tinc.retiolum.hostsPackage}";
     };
 
     network = mkOption {
@@ -68,6 +69,7 @@ let
         Defaults to the new users home dir which defaults to
         /var/cache/tinc_graphs'';
       default = config.users.extraUsers.tinc_graphs.home;
+      defaultText = "<literal>\${config.users.extraUsers.tinc_graphs.home}</literal>";
     };
 
     timerConfig = mkOption {
