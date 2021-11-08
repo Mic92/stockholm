@@ -14,7 +14,7 @@ let
       default = {};
       type = types.attrsOf (types.submodule ({ config, ... }: {
         options = {
-          enable = mkEnableOption "krebs.backup.${config.name}" // {
+          enable = mkEnableOption "krebs.backup.${config._module.args.name}" // {
             default = true;
           };
           method = mkOption {
@@ -23,6 +23,7 @@ let
           name = mkOption {
             type = types.str;
             default = config._module.args.name;
+            defaultText = "‹name›";
           };
           src = mkOption {
             type = types.krebs.file-location;
