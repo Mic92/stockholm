@@ -55,11 +55,11 @@ in {
 
         The overrides file may contain either regular shadow(5) entries like:
 
-        <code>&lt;login-name&gt;:&lt;hashed-password&gt;:1::::::</code>
+        <code>‹login-name›:‹hashed-password›:1::::::</code>
 
         Or shortened entries only containing login name and password like:
 
-        <code>&lt;login-name&gt;:&lt;hashed-password&gt</code>
+        <code>‹login-name›:‹hashed-password›</code>
       '';
       type = types.nullOr (types.either types.path types.absolute-pathname);
     };
