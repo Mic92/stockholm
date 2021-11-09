@@ -632,8 +632,10 @@ in {
     };
     hydrogen = {
       owner = config.krebs.users.sandro;
-      nets = {
+      nets = rec {
+        internet.addrs = [ "hydrogen.supersandro.de" ];
         retiolum = {
+          via = internet;
           ip4.addr = "10.243.54.54";
           aliases = [ "hydrogen.r" ];
           tinc.pubkey = ''
