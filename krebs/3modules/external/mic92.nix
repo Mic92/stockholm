@@ -451,6 +451,7 @@ in {
       nets = rec {
         internet = {
           ip4.addr = "129.215.165.75";
+          ip6.addr = "2001:630:3c1:164:d65d:64ff:feb0:e8a8";
           aliases = [ "sauron.i" ];
         };
         retiolum = {
