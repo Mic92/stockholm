@@ -39,7 +39,10 @@ in {
       cores = 4;
       nets = {
         shack = {
-          ip4.addr =  "10.42.0.50" ;
+          ip4 = {
+            addr =  "10.42.0.50" ;
+            prefix = "10.42.0.0/16";
+          };
           aliases = [
             "filebitch.shack"
           ];
