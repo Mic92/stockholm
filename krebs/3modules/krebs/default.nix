@@ -158,6 +158,7 @@ in {
     };
     puyak = {
       ci = true;
+      cores = 4;
       nets = {
         retiolum = {
           ip4.addr = "10.243.77.2";
