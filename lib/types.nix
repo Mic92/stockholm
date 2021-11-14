@@ -137,6 +137,8 @@ rec {
               type = cidr4;
             } // optionalAttrs (config._module.args.name == "retiolum") {
               default = "10.243.0.0/16";
+            } // optionalAttrs (config._module.args.name == "wiregrill") {
+              default = "10.244.0.0/16";
             });
           };
         });
@@ -153,6 +155,8 @@ rec {
               type = cidr6;
             } // optionalAttrs (config._module.args.name == "retiolum") {
               default = "42::/16";
+            } // optionalAttrs (config._module.args.name == "wiregrill") {
+              default = "42:1::/32";
             });
           };
         });
@@ -240,6 +244,7 @@ rec {
             };
           };
         }));
+        default = null;
       };
     };
   });
