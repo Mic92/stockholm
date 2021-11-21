@@ -20,7 +20,7 @@ self: super: {
       "0.10.1" = [
         ./flameshot/flameshot_imgur_0.9.0.patch
       ];
-    }.${old.version};
+    }.${old.version} or [];
   });
 
   # https://github.com/proot-me/PRoot/issues/106
