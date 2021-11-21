@@ -80,9 +80,9 @@ let
       description = ''
         The zone configuration head which is being used to create the
         zone files. The string for each key is pre-pended to the zone file.
-        '';
-        # TODO: configure the default somewhere else,
-        # maybe use krebs.dns.providers
+      '';
+      # TODO: configure the default somewhere else,
+      # maybe use krebs.dns.providers
       default = {
 
         # github.io -> 192.30.252.154
@@ -96,7 +96,7 @@ let
                                 IN A      185.199.110.153
                                 IN A      185.199.111.153
         '';
-        };
+      };
     };
   };
 
