@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
         pkgs.netcat
         pkgs.nettools
         pkgs.openssl
-        pkgs.utillinux
+        pkgs.unixtools.getopt
       ]};
     ' $out/bin/ircsink
   '';
