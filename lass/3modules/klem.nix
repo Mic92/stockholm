@@ -38,7 +38,7 @@ in {
       # match filetype against patterns
       ${concatMapStringsSep "\n" (script: ''
         ${pkgs.xclip}/bin/xclip -selection clipboard -target TARGETS -out \
-          | grep -q '${script.target}'
+          | ${pkgs.gnugrep}/bin/grep -q '${script.target}'
         if [ $? -eq 0 ]; then
           labels="$labels:${script.label}"
         fi

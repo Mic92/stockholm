@@ -11,6 +11,7 @@ in {
     ./xdg-open.nix
     ./yubikey.nix
     ./pipewire.nix
+    ./tmux.nix
     ./xmonad.nix
     {
       krebs.per-user.lass.packages = [
@@ -61,7 +62,8 @@ in {
     font-size
     fzfmenu
     gimp
-    gitAndTools.qgit
+    gitAndTools.hub
+    git-crypt
     git-preview
     gnome3.dconf
     iodine
@@ -85,6 +87,7 @@ in {
     xorg.xhost
     xsel
     zathura
+    flameshot-once
     (pkgs.writeDashBin "screenshot" ''
       set -efu
 

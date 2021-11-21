@@ -24,7 +24,7 @@
         };
       };
     }
-    (if (lib.pathExists (./. + "/1systems/${name}/source.nix")) && (! test) then
+    (if lib.pathExists (./. + "/1systems/${name}/source.nix") then
       import (./. + "/1systems/${name}/source.nix") { inherit lib pkgs test; }
     else
       {}
@@ -33,9 +33,23 @@
 
 in {
 
-  # usage: $(nix-build --no-out-link --argstr name HOSTNAME -A deploy)
-  deploy = { target ? "root@${name}/var/src" }: pkgs.krops.writeDeploy "${name}-deploy" {
+  deploy = { target ? "root@${name}/var/src" }: pkgs.krops.writeCommand "deploy" {
+    command = targetPath: ''
+
+      set -fu
+
+      outDir=$(mktemp -d)
+      trap "rm -rf $outDir;" INT TERM EXIT
+
+      nix build \
+        -I "${targetPath}" \
+        -f '<nixpkgs/nixos>' config.system.build.toplevel \
+        -o "$outDir/out"
+
+      $outDir/out/bin/switch-to-configuration switch
+    '';
     source = source { test = false; };
+    allocateTTY = true;
     inherit target;
   };
 

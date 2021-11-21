@@ -365,10 +365,8 @@ let
     users.users.${cfg.user.name} = {
       inherit (cfg.user) home name uid;
       description = "Git repository hosting user";
-      extraGroups = [
-        # To allow running cgit-clear-cache via hooks.
-        cfg.cgit.fcgiwrap.group.name
-      ];
+      # To allow running cgit-clear-cache via hooks.
+      group = cfg.cgit.fcgiwrap.group.name;
       isSystemUser = true;
       shell = "/bin/sh";
       openssh.authorizedKeys.keys =

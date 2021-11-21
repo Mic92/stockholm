@@ -82,7 +82,6 @@ in {
     "o_ubikmedia_de"
   ];
 
-  services.phpfpm.phpPackage = pkgs.php73;
   services.phpfpm.phpOptions = ''
     sendmail_path = ${sendmail} -t
     upload_max_filesize = 100M
@@ -117,6 +116,13 @@ in {
   # workaround for android 7
   security.acme.certs."lassul.us".keyType = "rsa4096";
 
+  services.roundcube = {
+    enable = true;
+    hostName = "mail.lassul.us";
+    extraConfig = ''
+      $config['smtp_port'] = 25;
+    '';
+  };
   services.dovecot2 = {
     enable = true;
     mailLocation = "maildir:~/Mail";
@@ -138,7 +144,7 @@ in {
       driver = plaintext
       public_name = LOGIN
       server_prompts = "Username:: : Password::"
-      server_condition = ''${run{${config.lass.usershadow.path}/bin/verify_arg ${config.lass.usershadow.pattern} $auth1 $auth2}{yes}{no}}
+      server_condition = ''${run{/run/wrappers/bin/shadow_verify_arg ${config.lass.usershadow.pattern} $auth1 $auth2}{yes}{no}}
     '';
     internet-aliases = [
       { from = "dma@ubikmedia.de"; to = "domsen"; }
@@ -313,6 +319,15 @@ in {
     home = "/home/blackphoton";
     useDefaultShell = true;
     extraGroups = [ "xanf" ];
+    createHome = true;
+    isNormalUser = true;
+  };
+
+  users.users.line = {
+    uid = genid_uint31 "line";
+    home = "/home/line";
+    useDefaultShell = true;
+    # extraGroups = [ "xanf" ];
     createHome = true;
     isNormalUser = true;
   };

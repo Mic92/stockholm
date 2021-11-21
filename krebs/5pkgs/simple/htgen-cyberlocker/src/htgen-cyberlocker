@@ -1,3 +1,10 @@
+emptyok_response() {(
+  printf "HTTP/1.1 204 OK\r\n"
+  printf 'Connection: close\r\n'
+  printf 'Server: %s\r\n' "$Server"
+  printf '\r\n'
+)}
+
 delete_response() {
   jq -n -r \
   --arg server "$Server" \
@@ -44,7 +51,10 @@ read_uri() {
 }
 
 uri=$(read_uri "$Request_URI")
-path=$(jq -nr --argjson uri "$uri" '$uri.path')
+path=$(jq -nr --argjson uri "$uri" '
+  $uri.path |
+  gsub("/+"; "/")
+')
 
 case "$Method $path" in
   'POST /'*|'PUT /'*)
@@ -57,6 +67,8 @@ case "$Method $path" in
 
     mkdir -v -p $STATEDIR/items >&2
     cp -v $content $item >&2
+
+    emptyok_response
     exit
   ;;
   'GET /'*)

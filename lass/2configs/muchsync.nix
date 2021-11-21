@@ -4,6 +4,7 @@ with (import <stockholm/lib>);
 {
   systemd.services.muchsync = let
     hosts = [
+      "coaxmetal.r"
       "mors.r"
       "green.r"
       "blue.r"

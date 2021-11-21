@@ -16,6 +16,7 @@
   environment.systemPackages = with pkgs; [
     alsaUtils
     pulseaudioLight
+    ponymix
   ];
 
   environment.variables.PULSE_SERVER = "localhost:4713";
@@ -26,6 +27,7 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true;
+
     # https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/Migrate-PulseAudio#module-native-protocol-tcp
     config.pipewire-pulse = {
       "context.properties" = {

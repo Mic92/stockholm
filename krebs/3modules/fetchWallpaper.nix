@@ -55,10 +55,12 @@ let
       name = "fetchWallpaper";
       uid = genid_uint31 "fetchWallpaper";
       description = "fetchWallpaper user";
+      group = "fetchWallpaper";
       home = cfg.stateDir;
       createHome = true;
       isSystemUser = true;
     };
+    users.groups.fetchWallpaper = {};
 
     systemd.timers.fetchWallpaper = {
       description = "fetch wallpaper timer";

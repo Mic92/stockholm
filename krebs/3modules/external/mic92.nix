@@ -256,6 +256,10 @@ in {
     okelmann = {
       owner = config.krebs.users.mic92;
       nets.retiolum = {
+        addrs = [
+          config.krebs.hosts.okelmann.nets.retiolum.ip4.addr
+          config.krebs.hosts.okelmann.nets.retiolum.ip6.addr
+        ];
         ip4.addr = "10.243.29.190";
           aliases = [
             "okelmann.r"
@@ -275,6 +279,10 @@ in {
     aendernix = {
       owner = config.krebs.users.mic92;
       nets.retiolum = {
+        addrs = [
+          config.krebs.hosts.aendernix.nets.retiolum.ip4.addr
+          config.krebs.hosts.aendernix.nets.retiolum.ip6.addr
+        ];
         ip4.addr = "10.243.29.172";
         aliases = [
           "aendernix.r"
@@ -293,6 +301,30 @@ in {
           vltL+5JjcahAMHc/ba+pRa5rSy8ebqf68fg4jlkT94Za13bCIHdK5w7eAXR3s/9z
           H2wZmhvajUIZAxQSgFUy+7kKWOIkWqFkGPIdmbdwTaHC88OWshvRv8ECAwEAAQ==
           -----END RSA PUBLIC KEY-----
+        '';
+      };
+    };
+    aenderpad = {
+      owner = config.krebs.users.mic92;
+      nets.retiolum = {
+        addrs = [
+          config.krebs.hosts.aenderpad.nets.retiolum.ip4.addr
+          config.krebs.hosts.aenderpad.nets.retiolum.ip6.addr
+        ];
+        ip4.addr = "10.243.29.201";
+        aliases = [
+          "aendernix.r"
+        ];
+        tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIIBCgKCAQEAvHSVUd6/5P2rK3s9iQhVrxkjufDIi0Kn04iVB4Z0TpUvnmFAP+Hv
+          d7umo95lNkAPL9c3byv4ooQjOskrp7GmgQRijLUvJSAZ9FBVWPAjMXs+gk9oJnQj
+          6bovXJ3DurmW3h1ZRmkWn256j7g8lEMtf5LGFxs9Bwi4wqZTbI6DzTQhmNm76Spb
+          2UMSzr9kDcNj5r6LDhDKEDtx4P1Opshgsf9AusV81N5nqDcvAYsvEqYoPvjKIPwF
+          5jtfHY7hM7SdYoVgdAY8RFH7xuRkLQW4LBxPKjP3pEQPCgXcuEELm33PGr+w/vhC
+          jxeyKP+uSeuBBMSatTWG3kU8W2LxVML65QIDAQAB
+          -----END RSA PUBLIC KEY-----
+          Ed25519PublicKey = jC2UzKiUtWUlZF2ET88qM+Ot+GpoWxFFfpi8TCCr0uM
         '';
       };
     };
@@ -757,6 +789,82 @@ in {
             SODZL2fQFBnSD1wTWcq9Q/luPh4FitzJUZzHexvNxR/KBZycZJtdVw8CAwEAAQ==
             -----END RSA PUBLIC KEY-----
             Ed25519PublicKey = pjCpkZToBUBbjUNVMWfYJePZ6g7m7Ccr9WedfKEFsXD
+          '';
+        };
+      };
+    };
+
+
+    ryan = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        retiolum = {
+          addrs = [
+            config.krebs.hosts.ryan.nets.retiolum.ip4.addr
+            config.krebs.hosts.ryan.nets.retiolum.ip6.addr
+          ];
+          ip4.addr = "10.243.29.198";
+          aliases = [ "ryan.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA0RE5jmBiEGmaYLVFmpCyVvlb6K3Zh2uxh7sVm44k31d9PEHHm4Wz
+            HQH+ueaefGVu19xLRJQGu4ZMl7oRbb5awiqKdSGgInhQaNzxUIHW4cCCdOVkgZSy
+            NjI9LMcc8tQtkoFGt6OhAzaViuGMo+aJAkLuXNf8hz5uR2flqQEeKfG5Kc7Z1DAQ
+            QNoBRtY0pltyK2y/Ip8cZ9cdxR5oLww67ykhY+eLy9tZLfKs6uWSq+2CV0cpNNQ9
+            Sh8fSbkjb4+JkxWAHDOyAnwFxnxstMcW0cscOW7nXYDi5IpvvesJlk698un7bLhm
+            vCkAd+WiNuTGfs9t0r6FDDVDREBhNk1sLwIDAQAB
+            -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = sOD149OLZ2yUEjRpwbGdwHULKF2qNY3F+9AsEi1G0ZM
+          '';
+        };
+      };
+    };
+
+    graham = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        retiolum = {
+          addrs = [
+            config.krebs.hosts.graham.nets.retiolum.ip4.addr
+            config.krebs.hosts.graham.nets.retiolum.ip6.addr
+          ];
+          ip4.addr = "10.243.29.199";
+          aliases = [ "graham.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAtnM8VqFlEPLPYfKOZvN4kKklrVEyX4WewlqHO8vtxML9ND5BHCdn
+            UeRsThvbKVRqEvZLTAXKClZRYVr2IroHqfx0euTq3FYTUbNNQ4KgcFAfLKWoxGfK
+            HsQbYpS93/sUtmhRBGcgXPnEkE6yqvFBXxcmB1QqdmgYKdY2Gtikwrv/5hb4AlNe
+            /gyzKGtAKYogspLI6EpEwlD9CGDNIUPJ4uQ56gDhV/qtyMSE6X0igSSVZayDc+x1
+            InPkH90xsa0/uXjYDnXNdMguLArGkRzMhd6DzK4vEaPFIX59yMX+tEj46rGY7xAI
+            gUZUI2codqY5Z93W5GC+ws34y0bpfeMMWwIDAQAB
+            -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = xMJNMMXZRCbWkN9CzLFohkGUK54dPcrrosFD7xgIFXA
+          '';
+        };
+      };
+    };
+
+    maurice = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        retiolum = {
+          addrs = [
+            config.krebs.hosts.maurice.nets.retiolum.ip4.addr
+            config.krebs.hosts.maurice.nets.retiolum.ip6.addr
+          ];
+          ip4.addr = "10.243.29.200";
+          aliases = [ "maurice.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAsLKBfPtZkjWGu6uitCV+4c5aQox2t4N8XNhY2mqE806XsYrqAC+y
+            d0oLOxRMUjfh9stDnEW/YRoLEKz9oZdRYd4eenP0Q3c3HdRFDBNCs27M5a8ysqZD
+            5w9+B+9OfUmMv61NyKiaR6WtoGbE849cj1UNk1z04elshfU7h829D8QnD4j1A1gf
+            bOaNG+RzOP6qP/6Q30rxAiTxRPi+FhcHvxa33y1ZVobvnfGcJa+AzsTbgH9T9Yob
+            GuXFZvuQVSyWOLOgY/vVml904q8gScMpBesAsZJ7DEXxSTga0Rt99Ti3d9ABwBI5
+            1YabQlGLaAkrj3PMgrDyayzGBDDDva9fEQIDAQAB
+            -----END RSA PUBLIC KEY-----
+            Ed25519PublicKey = pkMuJ4kbyleQAdau+sfmLtzTuUy7uL+wwcgV/GWC7/N
           '';
         };
       };

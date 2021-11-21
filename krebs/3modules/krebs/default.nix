@@ -39,7 +39,10 @@ in {
       cores = 4;
       nets = {
         shack = {
-          ip4.addr =  "10.42.0.50" ;
+          ip4 = {
+            addr =  "10.42.0.50" ;
+            prefix = "10.42.0.0/16";
+          };
           aliases = [
             "filebitch.shack"
           ];
@@ -105,6 +108,7 @@ in {
             "go.r"
             "rss.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN PUBLIC KEY-----
             MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA9PY6t6P1ytgo8qYL2QDc
@@ -157,6 +161,7 @@ in {
     };
     puyak = {
       ci = true;
+      cores = 4;
       nets = {
         retiolum = {
           ip4.addr = "10.243.77.2";
@@ -165,6 +170,7 @@ in {
             "build.puyak.r"
             "cgit.puyak.r"
           ];
+          tinc.port = 0;
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIBCgKCAQEAwwDvaVKSJmAi1fpbsmjLz1DQVTgqnx56GkHKbz5sHwAfPVQej955

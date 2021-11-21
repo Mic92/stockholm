@@ -356,6 +356,89 @@ in {
       locations."= /good".extraConfig = ''
         proxy_pass http://localhost:8001;
       '';
+      locations."= /controls".extraConfig = ''
+        default_type "text/html";
+        alias ${pkgs.writeText "controls.html" ''
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>The_Playlist Voting!</title>
+<style>
+#good {
+    display: block;
+  width: 100%;
+  border: none;
+  background-color: #04AA6D;
+  padding: 14px;
+  margin: 14px 0 0 0;
+  height: 100px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+}
+#bad {
+    display: block;
+  width: 100%;
+  border: none;
+  background-color: red;
+  padding: 14px;
+    height: 100px;
+
+  margin: 14px 0 0 0;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+}
+</style>
+
+</head>
+
+<body>
+  <div id=votenote></div>
+  <button id=good type="button"> GUT </button>
+
+  <button id=bad type="button"> SCHLECHT </button>
+  <center>
+    Currently Running: <br/><div>
+      <b id=current></b>
+    </div>
+    <div id=vote>
+    </div>
+    <audio controls autoplay="autoplay">
+      <source src="https://radio.lassul.us/radio.ogg" type="audio/ogg">
+      Your browser does not support the audio element.
+    </audio>
+  </center>
+
+  <script>
+    document.getElementById("good").onclick=async ()=>{
+      let result = await fetch("https://radio.lassul.us/good", {"method": "POST"})
+      document.getElementById("vote").textContent =  "Dieses Lied findest du gut"
+    };
+    document.getElementById("bad").onclick=async ()=>{
+      let result = await fetch("https://radio.lassul.us/skip", {"method": "POST"})
+      document.getElementById("vote").textContent =  "Dieses Lied findest du schlecht"
+    };
+
+    async function current() {
+      let result = await fetch("https://radio.lassul.us/current", {"method": "GET"})
+      let data = await result.json()
+      document.getElementById("current").textContent = data.name
+    }
+    window.onload = function() {
+      window.setInterval('current()', 10000)
+      current()
+    }
+
+  </script>
+</body>
+</html>
+      ''};
+      '';
       extraConfig = ''
         add_header 'Access-Control-Allow-Origin' '*';
         add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
@@ -371,7 +454,7 @@ in {
           </head>
           <body>
             <div style="display:inline-block;margin:0px;padding:0px;overflow:hidden">
-              <iframe src="https://kiwiirc.com/client/irc.freenode.org/?nick=kiwi_test|?&theme=cli#the_playlist" frameborder="0" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:95%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="95%" width="100%"></iframe>
+              <iframe src="https://kiwiirc.com/client/irc.hackint.org/?nick=kiwi_test|?&theme=cli#the_playlist" frameborder="0" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:95%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="95%" width="100%"></iframe>
             </div>
             <div style="position:absolute;bottom:1px;display:inline-block;background-color:red;">
               <audio controls autoplay="autoplay"><source src="http://lassul.us:8000/radio.ogg" type="audio/ogg">Your browser does not support the audio element.</audio>

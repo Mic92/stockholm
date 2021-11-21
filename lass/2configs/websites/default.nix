@@ -8,12 +8,7 @@ with import <stockholm/lib>;
     recommendedOptimisation = true;
     recommendedTlsSettings = true;
 
-    virtualHosts._http = {
-      default = true;
-      extraConfig = ''
-        return 404;
-      '';
-    };
+    enableReload = true;
 
     virtualHosts.default = {
       locations."= /etc/os-release".extraConfig = ''

@@ -16,7 +16,7 @@
     StandardError = lib.mkForce "journal";
   };
   virtualisation.oci-containers.containers.mumble-web = {
-    image = "rankenstein/mumble-web";
+    image = "rankenstein/mumble-web:0.5";
     environment = {
       MUMBLE_SERVER = "lassul.us:64738";
     };
@@ -28,12 +28,9 @@
   services.nginx.virtualHosts."mumble.lassul.us" = {
     enableACME = true;
     forceSSL = true;
-    locations."/".extraConfig = ''
-      proxy_pass http://localhost:64739/;
-      proxy_set_header Accept-Encoding "";
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection $connection_upgrade;
-    '';
+    locations."/" = {
+      proxyPass = "http://localhost:64739";
+      proxyWebsockets = true;
+    };
   };
 }

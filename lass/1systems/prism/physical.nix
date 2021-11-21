@@ -65,6 +65,12 @@
     fsType = "ext4";
   };
 
+  # silence mdmonitor.service failures
+  # https://github.com/NixOS/nixpkgs/issues/72394
+  environment.etc."mdadm.conf".text = ''
+    MAILADDR root
+  '';
+
   nix.maxJobs = lib.mkDefault 8;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 

@@ -32,6 +32,7 @@ in {
   services.nginx.virtualHosts."lassul.us" = {
     addSSL = true;
     enableACME = true;
+    default = true;
     locations."/".extraConfig = ''
       root /srv/http/lassul.us;
     '';

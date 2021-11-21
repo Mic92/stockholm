@@ -37,6 +37,7 @@ in {
           default._domainkey  60 IN TXT    "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB"
           cache               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           cgit                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          pad                 60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           codi                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           go                  60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           io                  60 IN NS     ions.lassul.us.
@@ -48,11 +49,15 @@ in {
           jitsi               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           streaming           60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
           mumble              60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+          mail                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
         '';
       };
       nets = rec {
         internet = {
-          ip4.addr = "95.216.1.150";
+          ip4 = {
+            addr = "95.216.1.150";
+            prefix = "0.0.0.0/0";
+          };
           aliases = [
             "prism.i"
             "paste.i"
@@ -121,33 +126,6 @@ in {
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAsANFdMi825qWQXQbWLYuNZ6/fARt3lnh1KStQHQQMD";
       syncthing.id = "QITFKYQ-VEPIPL2-AZIXHMD-BBT62ML-YHSB35A-BSUIBXS-QYMPFHW-M7XN2QU";
-    };
-    uriel = {
-      monitoring = false;
-      cores = 1;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.81.176";
-          ip6.addr = r6 "1e1";
-          aliases = [
-            "uriel.r"
-          ];
-          tinc.port = 0;
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAzw0pvoEmqeqiZrzSOPH0IT99gr1rrvMZbvabXoU4MAiVgGoGrkmR
-            duJkk8Fj12ftMc+Of1gnwDkFhRcfAKOeH1RSc4CTircWVq99WyecTwEZoaR/goQb
-            MND022kIBoG6NQNxv1Y5I1B/h7hfloMFEPym9oFtOAXoGhBY2vVl4g64NNz+RLME
-            m1RipLXKANAh6LRNPGPQCUYX4TVY2ZJVxM3CM1XdomUAdOYXJmWFyUg9NcIKaacx
-            uRrmuy7J9yFBcihZX5Y7NV361kINrpRmZYxJRf9cr0hb5EkJJ7bMIKQMEFQ5RnYo
-            u7MPGKD7aNHa6hLLCeIfJ5u0igVmSLh3pwIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBryIo/Waw8SWvlQ0+5I+Bd/dJgcMd6iPXtELS6gQXoc";
-      secure = true;
     };
     mors = {
       cores = 2;
@@ -418,38 +396,6 @@ in {
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5HyLyaIvVH0qHIQ4ciKhDiElhSqsK+uXcA6lTvL+5n";
       syncthing.id = "EA76ZHP-DF2I3CJ-NNTFEUH-YGPQK5S-T7FQ6JA-BNQQUNC-GF2YL46-CKOZCQM";
     };
-    red = {
-      monitoring = false;
-      cores = 1;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.0.13";
-          ip6.addr = r6 "12ed";
-          aliases = [
-            "red.r"
-          ];
-          tinc.port = 0;
-          tinc.pubkey = ''
-            -----BEGIN PUBLIC KEY-----
-            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEArAN/62V2MV18wsZ9VMTG
-            4/cqsjvHlffAN8jYDq+GImgREvbiLlFhhHgxwKh0gcDTR8P1xX/00P3/fx/g5bRF
-            Te7LZT2AFmVFFFfx1n9NBweN/gG2/hzB9J8epbWLNT+RzpzHuAoREvDZ+jweSXaI
-            phdmQY2s36yrR3TAShqq0q4cwlXuHT00J+InDutM0mTftBQG/fvYkBhHOfq4WSY0
-            FeMK7DTKNbsqQiKKQ/kvWi7KfTW0F0c7SDpi7BLwbQzP2WbogtGy9MIrw9ZhE6Ox
-            TVdAksPKw0TlYdb16X/MkbzBqTYbxFlmWzpMJABMxIVwAfQx3ZGYvJDdDXmQS2qa
-            mDN2xBb/5pj3fbfp4wbwWlRVSd/AJQtRvaNY24F+UsRJb0WinIguDI6oRZx7Xt8w
-            oYirKqqq1leb3EYUt8TMIXQsOw0/Iq+JJCwB+ZyLLGVNB19XOxdR3RN1JYeZANpE
-            cMSS3SdFGgZ//ZAdhIN5kw9yMeKo6Rnt+Vdz3vZWTuSVp/xYO3IMGXNGAdIWIwrJ
-            7fwSl/rfXGG816h0sD46U0mxd+i68YOtHlzOKe+vMZ4/FJZYd/E5/IDQluV8HLwa
-            5lODfZXUmfStdV+GDA9KVEGUP5xSkC3rMnir66NgHzKpIL002/g/HfGu7O3MrvpW
-            ng7AMvRv5vbsYcJBj2HUhKUCAwEAAQ==
-            -----END PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKd/6eCR8yxC14zBJLIQgVa4Zbutv5yr2S8k08ztmBpp";
-    };
     yellow = {
       cores = 1;
       nets = {
@@ -582,44 +528,6 @@ in {
       external = true;
       ci = false;
       syncthing.id = "PWKVXPB-JCNO6E4-KVIQ7CK-6FSOWHM-AWORMDU-HVVYLKW-44DQTYW-XZT7DQJ";
-    };
-    morpheus = {
-      cores = 1;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.0.19";
-          ip6.addr = r6 "012f";
-          aliases = [
-            "morpheus.r"
-          ];
-          tinc.port = 0;
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAptrlSKQKsBH2QMQxllZR94S/fXneajpJifRjXR5bi+7ME2ThdQXY
-            T7yWiKaUuBJThWged9PdPltLUEMmv+ubQqpWHZq442VWSS36r1yMSGpUeKK+oYMN
-            /Sfu+1yC4m2uXno95wpJZIcDfbbn26jT6ldJ4Yd97zyrXKljvcdrz3wZzQq0tojh
-            S5Q59x/aQMJbnQpnlFnMIEVgULuFPW16+vPGsXIPdYNggaF1avcBaFl8i3M0EZVz
-            Swn4hArDynDJhR7M0QdlwOpOh7O+1iOnmXqqei3LxMVHb+YtzfHgxOPxggUsy7CR
-            bj9uBR9loGwgmZwaxXd1Vfbw8kn/feOb9FcW73u+SZyzwEA9HFRV0jGQe3P9mGfI
-            Bwe02DOTVXEB8jTAGCw5T3bXLIOX8kqdlCECuAWFfrt8H+GjZDuGUWRcMn32orMz
-            sMvkab95ZOHK6Q31mrhILOIOdyZWKPZIabL3HF6CZtu52h6MDHbmGS0w0OJYhj2+
-            VnT9ZBoaeooVg8QOE43rCXvmL5vzhLKrj4s/53wTGG5SpzLs9Q9rrJVgAnz4YQ7j
-            3Ov5q3Zxyr+vO6O7Pb5X49vCQw/jzK41S0/15GEmKcoxXemzeZCpX1mbeeTUtLvA
-            U7OJwldrElzictBJ1gT94L4BDvoGZVqAkXJCJPamfsWaiw6SsMqtTfECAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-        wiregrill = {
-          ip6.addr = w6 "012f";
-          aliases = [
-            "morpheus.w"
-          ];
-          wireguard.pubkey = "BdiIHJjJQThmZD8DehxPGA+bboBHjljedwaRaV5yyDY=";
-        };
-      };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHXS60mmNWMdMRvaPxGn91Cm/hm7zY8xn5rkI4n2KG/f ";
-      syncthing.id = "JS4RFIL-MJP2SMJ-EOQXCPQ-MC3NB4V-BQ77GN5-LPKGLWY-GHDP732-G22OJQQ";
     };
     hilum = {
       cores = 1;

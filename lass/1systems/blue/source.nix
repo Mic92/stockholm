@@ -1,5 +1,5 @@
 { lib, pkgs, test, ... }:
-{
+if test then {} else {
   nixpkgs = lib.mkIf (! test) (lib.mkForce {
     file = {
       path = toString (pkgs.fetchFromGitHub {
