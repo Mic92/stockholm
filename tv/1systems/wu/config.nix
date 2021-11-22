@@ -33,5 +33,11 @@ with import <stockholm/lib>;
   };
 
   networking.wireless.enable = true;
+  networking.wireless.interfaces = [
+    "wlp3s0"
+  ];
+  networking.interfaces.enp4s0f2.useDHCP = true;
+  networking.interfaces.wlp3s0.useDHCP = true;
+  networking.useDHCP = false;
 
 }
