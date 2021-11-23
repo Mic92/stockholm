@@ -13,6 +13,9 @@ mkDerivation {
     rev = "769b360643f699c0a8cd6f1c3a3de36cf0479834";
     fetchSubmodules = true;
   };
+  patches = [
+    ./untweak-mime-version-header.patch
+  ];
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
