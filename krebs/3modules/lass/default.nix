@@ -23,7 +23,10 @@ in {
       cores = 4;
       nets = rec {
         internet = {
-          ip4.addr = "144.76.172.188";
+          ip4 = rec {
+            addr = "157.90.232.92";
+            prefix = "${addr}/32";
+          };
           aliases = [
             "dishfire.i"
           ];
@@ -32,7 +35,7 @@ in {
         retiolum = {
           via = internet;
           ip4.addr = "10.243.133.99";
-          ip6.addr = "42:0000:0000:0000:0000:0000:d15f:1233";
+          ip6.addr = r6 "d15f:1233";
           aliases = [
             "dishfire.r"
           ];
@@ -46,7 +49,7 @@ in {
             HwgPw5pstabyrsDWXybSYUb+8LcZf+unGwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
-          tinc.port = 993;
+          tinc.port = 655;
         };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;

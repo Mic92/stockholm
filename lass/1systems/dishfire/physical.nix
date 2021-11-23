@@ -1,39 +1,21 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, modulesPath, ... }:
+
 {
   imports = [
     ./config.nix
-    <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
+    (modulesPath + "/profiles/qemu-guest.nix")
   ];
 
-  boot.loader.grub = {
-    device = "/dev/vda";
-    splashImage = null;
-  };
+  boot.initrd.availableKernelModules = [ "ata_piix" "virtio_pci" "xhci_pci" "sd_mod" "sr_mod" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ ];
+  boot.extraModulePackages = [ ];
+  boot.loader.grub.devices = [ "/dev/sda" ];
 
-  boot.initrd.availableKernelModules = [
-    "ata_piix"
-    "ehci_pci"
-    "uhci_hcd"
-    "virtio_pci"
-    "virtio_blk"
-  ];
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/84053adc-49bc-4e02-8a19-3838bf3a43fd";
+      fsType = "ext4";
+    };
 
-  fileSystems."/" = {
-    device = "/dev/mapper/pool-nix";
-    fsType = "ext4";
-  };
-
-  fileSystems."/srv/http" = {
-    device = "/dev/pool/srv_http";
-    fsType = "ext4";
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/vda1";
-    fsType = "ext4";
-  };
-  fileSystems."/bku" = {
-    device = "/dev/pool/bku";
-    fsType = "ext4";
-  };
+  swapDevices = [ ];
 }
