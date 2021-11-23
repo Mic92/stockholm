@@ -187,6 +187,8 @@ rec {
                 [config.extraConfig]
                 ++
                 [config.pubkey]
+                ++
+                optional (config.weight != null) "Weight = ${toString config.weight}"
               );
               defaultText = ''
                 Address = ‹addr› ‹port› # for each ‹net.via.addrs›
@@ -216,6 +218,15 @@ rec {
               type = listOf cidr;
               description = "tinc subnets";
               default = [];
+            };
+            weight = mkOption {
+              type = nullOr int;
+              description = ''
+                global tinc weight (latency in ms) of this particular node.
+                can be set to some high value to make it unprobable to be used as router.
+                if set to null, tinc will autogenerate the value based on latency.
+              '';
+              default = if net.via != null then null else 300;
             };
           };
         }));
