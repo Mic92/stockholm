@@ -9,7 +9,6 @@ _:
     ./news.nix
     ./nichtparasoup.nix
     ./pyload.nix
-    ./restic.nix
     ./screenlock.nix
     ./usershadow.nix
     ./xjail.nix

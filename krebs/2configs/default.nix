@@ -54,6 +54,9 @@ with import <stockholm/lib>;
     config.krebs.users.tv.pubkey
   ];
 
+  # enable documentation for our modules
+  documentation.nixos.includeAllModules = true;
+
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "17.03";
 }

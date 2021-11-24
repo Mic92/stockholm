@@ -31,6 +31,7 @@ let
               owner.name = "exim";
               source-path = toString <secrets> + "/${config.domain}.dkim.priv";
             };
+            defaultText = "‹secrets/‹domain›.dkim.priv›";
           };
           selector = mkOption {
             type = types.str;

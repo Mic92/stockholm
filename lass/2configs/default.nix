@@ -215,6 +215,8 @@ with import <stockholm/lib>;
     noipv4ll
   '';
 
+  documentation.nixos.includeAllModules = true;
+
   # use 24:00 time format, the default got sneakily changed around 20.03
   i18n.defaultLocale = mkDefault "C.UTF-8";
   time.timeZone = mkDefault"Europe/Berlin";

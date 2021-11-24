@@ -10,7 +10,7 @@ with import <stockholm/lib>;
     };
 
     profile = mkOption {
-      type = types.absolute-path;
+      type = types.absolute-pathname;
       default = "/nix/var/nix/profiles/system";
     };
 

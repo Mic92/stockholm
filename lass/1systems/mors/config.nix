@@ -183,35 +183,6 @@ with import <stockholm/lib>;
   users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
   virtualisation.docker.enable = true;
 
-  lass.restic = genAttrs [
-    "daedalus"
-    "icarus"
-    "littleT"
-    "prism"
-    "shodan"
-    "skynet"
-  ] (dest: {
-    dirs = [
-      "/home/lass/src"
-      "/home/lass/work"
-      "/home/lass/.gnupg"
-      "/home/lass/Maildir"
-      "/home/lass/stockholm"
-      "/home/lass/.password-store"
-      "/home/bitcoin"
-      "/home/bch"
-    ];
-    passwordFile = (toString <secrets>) + "/restic/${dest}";
-    repo = "sftp:backup@${dest}.r:/backups/mors";
-    #sshPrivateKey = config.krebs.build.host.ssh.privkey.path;
-    extraArguments = [
-      "sftp.command='ssh backup@${dest}.r -i ${config.krebs.build.host.ssh.privkey.path} -s sftp'"
-    ];
-    timerConfig = {
-      OnCalendar = "00:05";
-      RandomizedDelaySec = "5h";
-    };
-  });
   virtualisation.libvirtd.enable = true;
 
   services.earlyoom = {

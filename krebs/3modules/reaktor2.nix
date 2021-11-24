@@ -26,11 +26,13 @@ with import <stockholm/lib>;
         };
         stateDir = mkOption {
           default = "/var/lib/${self.config.username}";
+          defaultText = "/var/lib/‹username›";
           readOnly = true;
           type = types.absolute-pathname;
         };
         systemd-service-name = mkOption {
           default = "reaktor2${optionalString (name != "default") "-${name}"}";
+          defaultText = "reaktor2-‹name› or just reaktor2 if ‹name› is \"default\"";
           type = types.filename;
         };
         sendDelaySec = mkOption {
@@ -39,6 +41,7 @@ with import <stockholm/lib>;
         };
         username = mkOption {
           default = self.config.systemd-service-name;
+          defaultText = "‹systemd-service-name›";
           type = types.username;
         };
         useTLS = mkOption {

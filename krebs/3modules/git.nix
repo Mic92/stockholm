@@ -53,7 +53,7 @@ let
           control system, using a built in cache to decrease pressure on the
           git server.
           cgit in this module is being served via fastcgi nginx.This module
-          deploys a http://cgit.<hostname> nginx configuration and enables nginx
+          deploys a http://cgit.‹hostname› nginx configuration and enables nginx
           if not yet enabled.
           '';
     };
@@ -207,7 +207,7 @@ let
             List of users that should be able to do everything with this repo.
 
             This option is currently not used by krebs.git but instead can be
-            used to create rules.  See e.g. <stockholm/lass/2configs/git.nix> for
+            used to create rules.  See e.g. ‹stockholm/lass/2configs/git.nix› for
             an example.
           '';
         };
@@ -222,6 +222,7 @@ let
           path = mkOption {
             type = types.str;
             default = "${cfg.dataDir}/${config.name}";
+            defaultText = "${cfg.dataDir}/‹reponame›";
             description = ''
               An absolute path to the repository directory. For non-bare
               repositories this is the .git-directory.
@@ -237,6 +238,7 @@ let
           url = mkOption {
             type = types.str;
             default = config.name;
+            defaultText = "‹reponame›";
             description = ''
               The relative url used to access the repository.
             '';
@@ -249,7 +251,7 @@ let
             List of users that should be able to fetch from this repo.
 
             This option is currently not used by krebs.git but instead can be
-            used to create rules.  See e.g. <stockholm/tv/2configs/git.nix> for
+            used to create rules.  See e.g. ‹stockholm/tv/2configs/git.nix› for
             an example.
           '';
         };
@@ -258,6 +260,7 @@ let
           description = ''
             Repository name.
           '';
+          defaultText = "‹reponame›";
         };
         hooks = mkOption {
           type = types.attrsOf types.str;
