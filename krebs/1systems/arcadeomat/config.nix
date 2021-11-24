@@ -65,10 +65,10 @@ in
     enable = true;
     wideArea = false;
   };
-
+  environment.systemPackages = with pkgs;[ glxinfo sdlmame ];
   nixpkgs.config.allowUnfree = true;
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_340;
-  boot.kernelPackages = pkgs.linuxPackages_4_4;
+  boot.kernelPackages = pkgs.linuxPackages_5_4;
 
   services.xserver = {
     videoDrivers = [ "nvidia" ];
