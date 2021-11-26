@@ -113,7 +113,7 @@ rec {
         default = null;
       };
       addrs = mkOption {
-        type = listOf addr;
+        type = listOf (either addr str);
         default =
           optional (config.ip4 != null) config.ip4.addr ++
           optional (config.ip6 != null) config.ip6.addr;

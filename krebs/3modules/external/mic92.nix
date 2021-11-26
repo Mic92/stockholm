@@ -451,6 +451,7 @@ in {
       nets = rec {
         internet = {
           ip4.addr = "129.215.165.75";
+          ip6.addr = "2001:630:3c1:164:d65d:64ff:feb0:e8a8";
           aliases = [ "sauron.i" ];
         };
         retiolum = {
@@ -707,8 +708,8 @@ in {
       nets = rec {
         internet = {
           # eva.thalheim.io
-          ip4.addr = "157.90.232.92";
-          ip6.addr = "2a01:4f8:1c1c:9a9::1";
+          ip4.addr = "131.159.102.4";
+          ip6.addr = "2a09:80c0:102::4";
           aliases = [ "eva.i" ];
         };
         retiolum = {
@@ -798,7 +799,14 @@ in {
     ryan = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet = {
+          # ryan.dse.in.tum.de
+          ip4.addr = "131.159.102.8";
+          ip6.addr = "2a09:80c0:102::8";
+          aliases = [ "ryan.i" ];
+        };
         retiolum = {
+          via = internet;
           addrs = [
             config.krebs.hosts.ryan.nets.retiolum.ip4.addr
             config.krebs.hosts.ryan.nets.retiolum.ip6.addr
@@ -823,7 +831,14 @@ in {
     graham = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet = {
+          # graham.dse.in.tum.de
+          ip4.addr = "131.159.102.9";
+          ip6.addr = "2a09:80c0:102::9";
+          aliases = [ "graham.i" ];
+        };
         retiolum = {
+          via = internet;
           addrs = [
             config.krebs.hosts.graham.nets.retiolum.ip4.addr
             config.krebs.hosts.graham.nets.retiolum.ip6.addr
