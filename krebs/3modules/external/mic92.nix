@@ -224,10 +224,8 @@ in {
         retiolum = {
           via = internet;
           addrs = [
-            config.krebs.hosts.eve.nets.retiolum.ip4.addr
             config.krebs.hosts.eve.nets.retiolum.ip6.addr
           ];
-          ip4.addr = "10.243.29.174";
           aliases = [ "eve.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
