@@ -21,7 +21,7 @@ with import <stockholm/lib>;
       download-dir = "/var/download/finished";
       incomplete-dir = "/var/download/incoming";
       incomplete-dir-enable = true;
-      rpc-bind-address = "0.0.0.0";
+      rpc-bind-address = "::";
       message-level = 1;
       umask = 18;
       rpc-whitelist-enabled = false;
