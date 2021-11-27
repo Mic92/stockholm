@@ -575,6 +575,20 @@ in {
       ci = false;
       syncthing.id = "PWKVXPB-JCNO6E4-KVIQ7CK-6FSOWHM-AWORMDU-HVVYLKW-44DQTYW-XZT7DQJ";
     };
+    tablet = {
+      nets = {
+        wiregrill = {
+          ip4.addr = "10.244.1.14";
+          ip6.addr = w6 "b";
+          aliases = [
+            "tablet.w"
+          ];
+          wireguard.pubkey = "eIafsxYEFCqmWNFon6ZsYXeDrK4X1UJ9KD0zmNZjgEI=";
+        };
+      };
+      external = true;
+      ci = false;
+    };
     hilum = {
       cores = 1;
       nets = {
@@ -822,6 +836,9 @@ in {
     lass-android = {
       mail = "lassulus@gmail.com";
       pubkey = builtins.readFile ./ssh/android.ed25519;
+    };
+    lass-tablet = {
+      pubkey = builtins.readFile ./ssh/tablet.ed25519;
     };
   };
 }
