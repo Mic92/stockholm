@@ -71,6 +71,7 @@ in {
                               60 IN NS     ns16.ovh.net.
                               60 IN NS     dns16.ovh.net.
                               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+                              60 IN AAAA   ${config.krebs.hosts.prism.nets.internet.ip6.addr}
                                  IN MX   5 lassul.us.
                               60 IN TXT    v=spf1 mx a:lassul.us -all
                               60 IN TXT    ( "v=DKIM1; k=rsa; t=s; s=*; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB" )
@@ -97,6 +98,10 @@ in {
           ip4 = {
             addr = "95.216.1.150";
             prefix = "0.0.0.0/0";
+          };
+          ip6 = {
+            addr = "2a01:4f9:2a:1e9::1";
+            prefix = "2a01:4f9:2a:1e9::/64";
           };
           aliases = [
             "prism.i"
