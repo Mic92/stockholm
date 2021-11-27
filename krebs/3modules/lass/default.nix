@@ -118,6 +118,7 @@ in {
             "cache.prism.r"
             "cgit.prism.r"
             "flix.r"
+            "jelly.r"
             "paste.r"
             "c.r"
             "p.r"
