@@ -678,7 +678,6 @@ in {
         };
         retiolum = {
           via = internet;
-          ip4.addr = "10.243.29.185";
           aliases = [
             "eva.r"
             "loki.r"
