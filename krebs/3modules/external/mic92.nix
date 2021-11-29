@@ -19,10 +19,6 @@ in {
           aliases = [ "amy.i" ];
         };
         retiolum = {
-          addrs = [
-            config.krebs.hosts.amy.nets.retiolum.ip4.addr
-            config.krebs.hosts.amy.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.181";
           aliases = [ "amy.r" ];
           tinc.pubkey = ''
@@ -53,10 +49,6 @@ in {
           aliases = [ "clara.i" ];
         };
         retiolum = {
-          addrs = [
-            config.krebs.hosts.clara.nets.retiolum.ip4.addr
-            config.krebs.hosts.clara.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.182";
           aliases = [ "clara.r" ];
           tinc.pubkey = ''
@@ -130,10 +122,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.donna.nets.retiolum.ip4.addr
-            config.krebs.hosts.donna.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.180";
           aliases = [ "donna.r" ];
           tinc.pubkey = ''
@@ -159,10 +147,6 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
-          addrs = [
-            config.krebs.hosts.herbert.nets.retiolum.ip4.addr
-            config.krebs.hosts.herbert.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.177";
           aliases = [ "herbert.r" ];
           tinc.pubkey = ''
@@ -189,9 +173,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.eve.nets.retiolum.ip6.addr
-          ];
           aliases = [ "eve.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -220,10 +201,6 @@ in {
     okelmann = {
       owner = config.krebs.users.mic92;
       nets.retiolum = {
-        addrs = [
-          config.krebs.hosts.okelmann.nets.retiolum.ip4.addr
-          config.krebs.hosts.okelmann.nets.retiolum.ip6.addr
-        ];
         ip4.addr = "10.243.29.190";
           aliases = [
             "okelmann.r"
@@ -243,10 +220,6 @@ in {
     aendernix = {
       owner = config.krebs.users.mic92;
       nets.retiolum = {
-        addrs = [
-          config.krebs.hosts.aendernix.nets.retiolum.ip4.addr
-          config.krebs.hosts.aendernix.nets.retiolum.ip6.addr
-        ];
         ip4.addr = "10.243.29.172";
         aliases = [
           "aendernix.r"
@@ -271,10 +244,6 @@ in {
     aenderpad = {
       owner = config.krebs.users.mic92;
       nets.retiolum = {
-        addrs = [
-          config.krebs.hosts.aenderpad.nets.retiolum.ip4.addr
-          config.krebs.hosts.aenderpad.nets.retiolum.ip6.addr
-        ];
         ip4.addr = "10.243.29.201";
         aliases = [
           "aendernix.r"
@@ -360,10 +329,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.martha.nets.retiolum.ip4.addr
-            config.krebs.hosts.martha.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.179";
           aliases = [ "martha.r" ];
           tinc.pubkey = ''
@@ -420,10 +385,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.sauron.nets.retiolum.ip4.addr
-            config.krebs.hosts.sauron.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.194";
           aliases = [ "sauron.r" ];
           tinc.pubkey = ''
@@ -450,10 +411,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.bill.nets.retiolum.ip4.addr
-            config.krebs.hosts.bill.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.195";
           aliases = [ "bill.r" ];
           tinc.pubkey = ''
@@ -485,10 +442,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.nardole.nets.retiolum.ip4.addr
-            config.krebs.hosts.nardole.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.173";
           aliases = [ "nardole.r" ];
           tinc.pubkey = ''
@@ -547,10 +500,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.rose.nets.retiolum.ip4.addr
-            config.krebs.hosts.rose.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.178";
           aliases = [ "rose.r" ];
           tinc.pubkey = ''
@@ -708,10 +657,6 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
-          addrs = [
-            config.krebs.hosts.doctor.nets.retiolum.ip4.addr
-            config.krebs.hosts.doctor.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.186";
           aliases = [ "doctor.r" ];
           tinc.pubkey = ''
@@ -732,10 +677,6 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
-          addrs = [
-            config.krebs.hosts.bernie.nets.retiolum.ip4.addr
-            config.krebs.hosts.bernie.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.169";
           aliases = [ "bernie.r" ];
           tinc.pubkey = ''
@@ -770,10 +711,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.ryan.nets.retiolum.ip4.addr
-            config.krebs.hosts.ryan.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.198";
           aliases = [ "ryan.r" ];
           tinc.pubkey = ''
@@ -802,10 +739,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.graham.nets.retiolum.ip4.addr
-            config.krebs.hosts.graham.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.199";
           aliases = [ "graham.r" ];
           tinc.pubkey = ''
@@ -827,10 +760,6 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
-          addrs = [
-            config.krebs.hosts.maurice.nets.retiolum.ip4.addr
-            config.krebs.hosts.maurice.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.200";
           aliases = [ "maurice.r" ];
           tinc.pubkey = ''
