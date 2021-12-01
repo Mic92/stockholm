@@ -66,10 +66,13 @@ let
 
     users.users.${user.name} = {
       inherit (user) uid;
+      group = user.name;
       home = cfg.dataDir;
       isSystemUser = true;
     };
   };
+
+  users.groups.${user.name} = {};
 
   user = rec {
     mail = "${name}@${config.krebs.build.host.name}";
