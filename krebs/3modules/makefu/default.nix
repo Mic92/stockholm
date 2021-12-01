@@ -221,7 +221,7 @@ in {
             "cgit.gum.r"
             "dcpp.gum.r"
             "dcpp.nextgum.r"
-            "graph.r"
+            "graph.makefu.r"
             "logs.makefu.r"
             "netdata.makefu.r"
             "nextgum.r"

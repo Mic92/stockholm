@@ -284,6 +284,12 @@ with import <stockholm/lib>;
         localAddress = "10.233.2.14";
       };
 
+      services.nginx.virtualHosts."jelly.r" = {
+        locations."/".extraConfig = ''
+          proxy_pass http://10.233.2.14:8096/;
+          proxy_set_header Accept-Encoding "";
+        '';
+      };
       services.nginx.virtualHosts."flix.r" = {
         locations."/".extraConfig = ''
           proxy_pass http://10.233.2.14:80/;

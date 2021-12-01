@@ -65,6 +65,9 @@ let {
 
   public-repos = mapAttrs make-public-repo ({
   } // mapAttrs (_: recursiveUpdate { cgit.section = "1. miscellaneous"; }) {
+    couchfs = {
+      cgit.desc = "filesystem (in userspace) on top of CouchDB";
+    };
     crx = {
       cgit.desc = "utilities for working with Chrome extensions";
     };

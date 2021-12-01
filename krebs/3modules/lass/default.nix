@@ -71,6 +71,7 @@ in {
                               60 IN NS     ns16.ovh.net.
                               60 IN NS     dns16.ovh.net.
                               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+                              60 IN AAAA   ${config.krebs.hosts.prism.nets.internet.ip6.addr}
                                  IN MX   5 lassul.us.
                               60 IN TXT    v=spf1 mx a:lassul.us -all
                               60 IN TXT    ( "v=DKIM1; k=rsa; t=s; s=*; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB" )
@@ -98,6 +99,10 @@ in {
             addr = "95.216.1.150";
             prefix = "0.0.0.0/0";
           };
+          ip6 = {
+            addr = "2a01:4f9:2a:1e9::1";
+            prefix = "2a01:4f9:2a:1e9::/64";
+          };
           aliases = [
             "prism.i"
             "paste.i"
@@ -113,6 +118,7 @@ in {
             "cache.prism.r"
             "cgit.prism.r"
             "flix.r"
+            "jelly.r"
             "paste.r"
             "c.r"
             "p.r"
@@ -569,6 +575,20 @@ in {
       ci = false;
       syncthing.id = "PWKVXPB-JCNO6E4-KVIQ7CK-6FSOWHM-AWORMDU-HVVYLKW-44DQTYW-XZT7DQJ";
     };
+    tablet = {
+      nets = {
+        wiregrill = {
+          ip4.addr = "10.244.1.14";
+          ip6.addr = w6 "b";
+          aliases = [
+            "tablet.w"
+          ];
+          wireguard.pubkey = "eIafsxYEFCqmWNFon6ZsYXeDrK4X1UJ9KD0zmNZjgEI=";
+        };
+      };
+      external = true;
+      ci = false;
+    };
     hilum = {
       cores = 1;
       nets = {
@@ -816,6 +836,9 @@ in {
     lass-android = {
       mail = "lassulus@gmail.com";
       pubkey = builtins.readFile ./ssh/android.ed25519;
+    };
+    lass-tablet = {
+      pubkey = builtins.readFile ./ssh/tablet.ed25519;
     };
   };
 }

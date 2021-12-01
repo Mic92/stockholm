@@ -1,0 +1,65 @@
+diff --git a/src/Data/MIME.hs b/src/Data/MIME.hs
+index 19af53e..be8cbd4 100644
+--- a/src/Data/MIME.hs
++++ b/src/Data/MIME.hs
+@@ -810,7 +810,6 @@ multipart takeTillEnd boundary =
+ -- | Sets the @MIME-Version: 1.0@ header.
+ --
+ instance RenderMessage MIME where
+-  tweakHeaders = set (headers . at "MIME-Version") (Just "1.0")
+   buildBody h z = Just $ case z of
+     Part partbody -> Builder.byteString partbody
+     Encapsulated msg -> buildMessage msg
+diff --git a/tests/Generator.hs b/tests/Generator.hs
+index 9e1f166..23bd122 100644
+--- a/tests/Generator.hs
++++ b/tests/Generator.hs
+@@ -64,7 +64,7 @@ exampleMailsParseSuccessfully =
+ textPlain7bit :: MIMEMessage
+ textPlain7bit =
+     let m = createTextPlainMessage "This is a simple mail."
+-    in over headers (\(Headers xs) -> Headers $ (CI.mk "Subject", "Hello there") : xs) m
++    in over headers (\(Headers xs) -> Headers $ (CI.mk "MIME-Version", "1.0") : (CI.mk "Subject", "Hello there") : xs) m
+ 
+ multiPartMail :: MIMEMessage
+ multiPartMail =
+@@ -72,13 +72,16 @@ multiPartMail =
+         to' = Single $ Mailbox Nothing (AddrSpec "bar" (DomainDotAtom $ pure "bar.com"))
+         subject = "Hello there"
+         p = createTextPlainMessage "This is a simple mail."
++             & set (headers . at "MIME-Version") (Just "1.0")
+         a = createAttachment
+                 contentTypeApplicationOctetStream
+                 (Just "foo.bin")
+                 "fileContentsASDF"
++             & set (headers . at "MIME-Version") (Just "1.0")
+         now = UTCTime (ModifiedJulianDay 123) (secondsToDiffTime 123)
+     in createMultipartMixedMessage "asdf" (fromList [p, a])
+-       & set (headers . at "From") (Just $ renderMailboxes [from'])
++       & set (headers . at "MIME-Version") (Just "1.0")
++       . set (headers . at "From") (Just $ renderMailboxes [from'])
+        . set (headers . at "To") (Just $ renderAddresses [to'])
+        . set (headers . at "Date") (Just $ renderRFC5422Date now)
+        . set (headers . at "Subject") (Just $ T.encodeUtf8 subject)
+diff --git a/tests/Message.hs b/tests/Message.hs
+index 6711519..3e40397 100644
+--- a/tests/Message.hs
++++ b/tests/Message.hs
+@@ -29,7 +29,7 @@ import Data.Char (isPrint)
+ import Data.Foldable (fold)
+ import Data.List.NonEmpty (NonEmpty(..), intersperse)
+ 
+-import Control.Lens (set, view)
++import Control.Lens ((&), at, set, view)
+ import qualified Data.ByteString as B
+ import qualified Data.Text as T
+ 
+@@ -99,7 +99,7 @@ genMessage = Gen.choice [ genTextPlain, genMultipart, encapsulate <$> genMessage
+ prop_messageRoundTrip :: Property
+ prop_messageRoundTrip = property $ do
+   msg <- forAll genMessage
+-  parse (message mime) (renderMessage msg) === Right msg
++  parse (message mime) (renderMessage $ msg & set (headers . at "MIME-Version") (Just "1.0")) === Right msg
+ 
+ prop_messageFromRoundTrip :: Property
+ prop_messageFromRoundTrip = property $ do

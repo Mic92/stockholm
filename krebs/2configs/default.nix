@@ -45,6 +45,13 @@ with import <stockholm/lib>;
   services.cron.enable = false;
   services.ntp.enable = false;
 
+  # limit journald size
+  services.journald.extraConfig = ''
+    SystemMaxUse=1G
+    RuntimeMaxUse=128M
+    Storage=persistent
+  '';
+
   users.mutableUsers = false;
   users.extraUsers.root.openssh.authorizedKeys.keys = [
     config.krebs.users.jeschli-brauerei.pubkey
