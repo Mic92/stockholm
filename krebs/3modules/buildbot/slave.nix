@@ -128,6 +128,7 @@ let
 
     users.extraUsers.buildbotSlave = {
       uid = genid "buildbotSlave";
+      group = "buildbotSlave";
       description = "Buildbot Slave";
       home = cfg.workDir;
       createHome = false;
