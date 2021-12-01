@@ -59,10 +59,13 @@ let
 
     users.extraUsers.realwallpaper = {
       uid = genid "realwallpaper";
+      group = "realwallpaper";
       home = cfg.workingDir;
       createHome = true;
       isSystemUser = true;
     };
+
+    users.groups.realwallpaper = {};
   };
 
 in
