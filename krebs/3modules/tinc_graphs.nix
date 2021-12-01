@@ -128,9 +128,12 @@ let
 
     users.extraUsers.tinc_graphs = {
       uid = genid_uint31 "tinc_graphs";
+      group = "tinc_graphs";
       home = "/var/spool/tinc_graphs";
       isSystemUser = true;
     };
+    users.groups.tinc_graphs = {};
+
     services.nginx = mkIf cfg.nginx.enable {
       enable = mkDefault true;
       virtualHosts = {
