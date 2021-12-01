@@ -11,9 +11,22 @@ with (import <stockholm/lib>);
       pkgs.bitlbee-discord
     ];
     libpurple_plugins = [
-      # pkgs.telegram-purple
-      pkgs.tdlib-purple
+      pkgs.telegram-purple
+      # pkgs.tdlib-purple
       # pkgs.purple-gowhatsapp
     ];
+  };
+
+  users.users.bitlbee = {
+    uid = genid_uint31 "bitlbee";
+    isSystemUser = true;
+    group = "bitlbee";
+  };
+  users.groups.bitlbee = {};
+
+  systemd.services.bitlbee.serviceConfig = {
+    DynamicUser = lib.mkForce false;
+    User = "bitlbee";
+    StateDirectory = lib.mkForce null;
   };
 }
