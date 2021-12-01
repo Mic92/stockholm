@@ -69,10 +69,13 @@ let
     users.users = mapAttrs' (name: htgen:
       nameValuePair htgen.user.name {
         inherit (htgen.user) home name uid;
+        group = htgen.user.name;
         createHome = true;
         isSystemUser = true;
       }
     ) cfg;
+
+    users.groups = mapAttrs (_: _: {}) cfg;
 
   };
 in out
