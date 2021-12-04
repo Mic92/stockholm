@@ -40,6 +40,7 @@ in {
     ./automation/shack-startup.nix
     ./automation/party-time.nix
     ./automation/hass-restart.nix
+    ./automation/ampel.nix
 
   ];
   services.home-assistant =
