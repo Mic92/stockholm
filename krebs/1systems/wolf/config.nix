@@ -52,12 +52,6 @@ in
   #####################
   krebs.build.host = config.krebs.hosts.wolf;
 
-  boot.kernel.sysctl = {
-    # Enable IPv6 Privacy Extensions
-    "net.ipv6.conf.all.use_tempaddr" = 2;
-    "net.ipv6.conf.default.use_tempaddr" = 2;
-  };
-
   boot.initrd.availableKernelModules = [
     "ata_piix" "uhci_hcd" "ehci_pci" "virtio_pci" "virtio_blk"
   ];

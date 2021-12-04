@@ -51,11 +51,6 @@ in
     extraGroups = [ "audio" "video" ];
     isNormalUser = true;
   };
-  boot.kernel.sysctl = {
-    # Enable IPv6 Privacy Extensions
-    "net.ipv6.conf.all.use_tempaddr" = 2;
-    "net.ipv6.conf.default.use_tempaddr" = 2;
-  };
 
 
   time.timeZone = "Europe/Berlin";
