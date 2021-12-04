@@ -56,14 +56,4 @@
     xinput set-prop 'ETPS/2 Elantech TrackPoint' 'Evdev Wheel Emulation Button' 2
     xinput set-prop 'ETPS/2 Elantech TrackPoint' 'Evdev Wheel Emulation Axes' 6 7 4 5
   '';
-
-  # https://forums.lenovo.com/t5/Fedora/T14s-AMD-Trackpoint-almost-unusable/m-p/5064952?page=4
-  # https://bugzilla.kernel.org/show_bug.cgi?id=209167#c1
-  boot.kernelPatches = [{
-    name = "fix-trackpoint-jumping";
-    patch = pkgs.fetchurl {
-      url = "https://patchwork.kernel.org/project/linux-input/patch/20210729010940.5752-1-phoenix@emc.com.tw/raw/";
-      sha256 = "0apbf7c8w830dbdsrmxpip90d5zbg74a939x89jfgpvm5gbdqdjg";
-    };
-  }];
 }

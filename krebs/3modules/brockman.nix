@@ -11,10 +11,12 @@ in {
   config = mkIf cfg.enable {
     users.extraUsers.brockman = {
       home = "/var/lib/brockman";
+      group = "brockman";
       createHome = true;
       isSystemUser = true;
       uid = genid_uint31 "brockman";
     };
+    users.groups.brockman = {};
 
     systemd.services.brockman = {
       description = "RSS to IRC broadcaster";

@@ -28,23 +28,22 @@
       session required pam_permit.so
     '';
 
-    security.pam.services.dovecot2 = {
-      text = ''
-        auth required pam_exec.so expose_authtok /run/wrappers/bin/shadow_verify_pam ${cfg.pattern}
-        auth required pam_permit.so
-        account required pam_permit.so
-        session required pam_permit.so
-        session required pam_env.so envfile=${config.system.build.pamEnvironment}
-      '';
-    };
+    security.pam.services.dovecot2.text = ''
+      auth required pam_exec.so expose_authtok /run/wrappers/bin/shadow_verify_pam ${cfg.pattern}
+      auth required pam_permit.so
+      account required pam_permit.so
+      session required pam_permit.so
+    '';
 
     security.wrappers.shadow_verify_pam = {
       source = "${usershadow}/bin/verify_pam";
       owner = "root";
+      group = "root";
     };
     security.wrappers.shadow_verify_arg = {
       source = "${usershadow}/bin/verify_arg";
       owner = "root";
+      group = "root";
     };
   };
 

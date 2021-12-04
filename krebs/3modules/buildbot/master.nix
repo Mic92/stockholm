@@ -319,6 +319,7 @@ let
 
     users.extraUsers.buildbotMaster = {
       uid = genid "buildbotMaster";
+      group = "buildbotMaster";
       description = "Buildbot Master";
       home = cfg.workDir;
       createHome = false;

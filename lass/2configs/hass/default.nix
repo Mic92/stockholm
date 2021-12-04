@@ -119,13 +119,10 @@ in {
 
   services.mosquitto = {
     enable = true;
-    host = "0.0.0.0";
-    allowAnonymous = false;
-    checkPasswords = true;
-    users.gg23 = {
-      password = "gg23-mqtt";
-      acl = [ "topic readwrite #" ];
-    };
+    listeners = [{
+      acl = [ "topic pattern readwrite #" ];
+      users.gg23 = { acl = [ "topic readwrite #" ]; password = "gg23-mqtt"; };
+    }];
   };
 
   environment.systemPackages = [ pkgs.mosquitto ];
