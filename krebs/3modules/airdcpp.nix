@@ -269,6 +269,7 @@ let
         home = cfg.stateDir;
         createHome = true;
         isSystemUser = true;
+        group = "airdcpp";
         inherit (cfg) extraGroups;
       };
       groups.airdcpp.gid = genid "airdcpp";
