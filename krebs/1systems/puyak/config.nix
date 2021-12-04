@@ -93,7 +93,7 @@
 
     ## Collect local statistics via collectd and send to collectd
     # <stockholm/krebs/2configs/stats/shack-client.nix>
-    <stockholm/krebs/2configs/stats/shack-debugging.nix>
+    # <stockholm/krebs/2configs/stats/shack-debugging.nix>
 
     ## netbox.shack: Netbox is disabled as nobody seems to be using it anyway
     # <stockholm/krebs/2configs/shack/netbox.nix>
