@@ -194,7 +194,9 @@ let
       home = cfg.dataDir;
       createHome = true;
       isSystemUser = true;
+      group = user.name;
     };
+    users.groups.${user.name} = {};
   };
 
   user = rec {
