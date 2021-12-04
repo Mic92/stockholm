@@ -14,7 +14,10 @@ with import <stockholm/lib>;
     description = "smb guest user";
     home = "/home/share";
     createHome = true;
+    group = "share";
   };
+  users.groups.share = {};
+
   services.samba = {
     enable = true;
     enableNmbd = true;

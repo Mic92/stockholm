@@ -7,6 +7,7 @@
     home = "/home/share";
     createHome = true;
   };
+  users.groups.share = {};
 
   networking.firewall.allowedTCPPorts = [
     139 445 # samba
