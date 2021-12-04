@@ -17,7 +17,9 @@ in {
     inherit home;
     isSystemUser = true;
     createHome = true;
+    group = "node-light";
   };
+  users.groups.node-light = {};
   services.nginx.virtualHosts."lounge.light.shack" = {
     locations."/" = {
       proxyPass = "http://localhost:${port}/lounge/";

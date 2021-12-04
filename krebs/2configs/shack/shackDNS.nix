@@ -30,9 +30,11 @@ in {
 
   users.users.shackDNS = {
     inherit home;
+    group = "nogroup";
     createHome = true;
     isSystemUser = true;
   };
+  users.groups.shackDNS = {};
   services.nginx.virtualHosts."leases.shack" = {
     locations."/" = {
       proxyPass = "http://localhost:${port}/";

@@ -16,7 +16,9 @@ in {
     inherit home;
     isSystemUser = true;
     createHome = true;
+    group = "muellshack";
   };
+  users.groups.muellshack = {};
   services.nginx.virtualHosts."muell.shack" = {
     locations."/" = {
       proxyPass = "http://localhost:${port}/muellshack/";

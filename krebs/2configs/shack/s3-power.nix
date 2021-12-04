@@ -16,7 +16,9 @@ in {
     inherit home;
     createHome = true;
     isSystemUser = true;
+    group = "s3_power";
   };
+  users.groups.shackDNS = {};
   systemd.services.s3-power = {
     startAt = "daily";
     description = "s3-power";

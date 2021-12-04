@@ -19,7 +19,9 @@ in {
   users.users.powermeter = {
     extraGroups = [ "dialout" ];
     isSystemUser = true;
+    group = "powermeter";
   };
+  users.groups.powermeter = {};
 
   # we make sure that usb-ttl has the correct permissions
   # creates /dev/powerraw

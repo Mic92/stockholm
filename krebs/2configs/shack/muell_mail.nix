@@ -15,7 +15,9 @@ in {
     inherit home;
     isSystemUser = true;
     createHome = true;
+    group = "muell_mail";
   };
+  users.groups.muell_mail = {};
   systemd.services.muell_mail = {
     description = "muell_mail";
     wantedBy = [ "multi-user.target" ];
