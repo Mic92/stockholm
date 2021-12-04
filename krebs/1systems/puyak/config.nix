@@ -92,7 +92,7 @@
     <stockholm/krebs/2configs/shack/influx.nix>
 
     ## Collect local statistics via collectd and send to collectd
-    <stockholm/krebs/2configs/stats/shack-client.nix>
+    # <stockholm/krebs/2configs/stats/shack-client.nix>
     <stockholm/krebs/2configs/stats/shack-debugging.nix>
 
     ## netbox.shack: Netbox is disabled as nobody seems to be using it anyway
@@ -111,10 +111,6 @@
     <stockholm/krebs/2configs/shack/prometheus/blackbox.nix>
     #<stockholm/krebs/2configs/shack/prometheus/unifi.nix>
     <stockholm/krebs/2configs/shack/prometheus/alertmanager-telegram.nix>
-
-    ## Collect local statistics via collectd and send to collectd
-    <stockholm/krebs/2configs/stats/shack-client.nix>
-    <stockholm/krebs/2configs/stats/shack-debugging.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;
