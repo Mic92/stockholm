@@ -4,7 +4,6 @@
   "date": "2021-12-01T16:06:54+01:00",
   "path": "/nix/store/88zw2qrbzaq3bnnsmz9qc4lvkwg0168g-nixpkgs",
   "sha256": "1dyyzgcmlhpsdb4ngiy8m0x10qmh0r56ky75r8ppvvh730m3lhfj",
-  "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false
