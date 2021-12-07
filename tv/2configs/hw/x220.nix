@@ -26,6 +26,18 @@ in
          LIBINPUT_MODEL_LENOVO_X220_TOUCHPAD_FW81=1
       '';
     }
+
+    {
+      nix.buildCores = 2;
+      nix.maxJobs = 2;
+    }
+    (if lib.versionAtLeast lib.version "21.11" then {
+      nix.daemonCPUSchedPolicy = "batch";
+      nix.daemonIOSchedPriority = 1;
+    } else {
+      nix.daemonIONiceLevel = 1;
+      nix.daemonNiceLevel = 1;
+    })
   ];
 
   boot.extraModulePackages = [
@@ -54,12 +66,6 @@ in
     START_CHARGE_THRESH_BAT0 = 80;
   };
 
-  nix = {
-    buildCores = 2;
-    maxJobs = 2;
-    daemonIONiceLevel = 1;
-    daemonNiceLevel = 1;
-  };
 
   services.logind.extraConfig = ''
     HandleHibernateKey=ignore
