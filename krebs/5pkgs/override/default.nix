@@ -20,6 +20,9 @@ self: super: {
       "0.10.1" = [
         ./flameshot/flameshot_imgur_0.9.0.patch
       ];
+      "0.10.2" = [
+        ./flameshot/flameshot_imgur_0.9.0.patch
+      ];
     }.${old.version};
   });
 
