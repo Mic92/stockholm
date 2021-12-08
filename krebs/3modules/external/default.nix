@@ -754,7 +754,9 @@ in {
       mail = "xq@shackspace.de";
       pubkey = ssh-for "xq";
     };
-    xkey = {};
+    xkey = {
+      pubkey = ssh-for "xkey";
+    };
     miaoski = {
     };
     filly = {
