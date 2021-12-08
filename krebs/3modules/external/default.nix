@@ -293,6 +293,7 @@ in {
             "zaatar.kmein.r"
             "radio.kmein.r"
             "bvg.kmein.r"
+            "moodle.kmein.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
