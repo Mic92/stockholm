@@ -36,11 +36,13 @@
     '';
 
     security.wrappers.shadow_verify_pam = {
+      setuid = true;
       source = "${usershadow}/bin/verify_pam";
       owner = "root";
       group = "root";
     };
     security.wrappers.shadow_verify_arg = {
+      setuid = true;
       source = "${usershadow}/bin/verify_arg";
       owner = "root";
       group = "root";
