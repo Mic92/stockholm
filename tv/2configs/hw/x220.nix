@@ -31,7 +31,7 @@ in
       nix.buildCores = 2;
       nix.maxJobs = 2;
     }
-    (if lib.versionAtLeast lib.version "21.11" then {
+    (if lib.versionAtLeast (lib.versions.majorMinor lib.version) "21.11" then {
       nix.daemonCPUSchedPolicy = "batch";
       nix.daemonIOSchedPriority = 1;
     } else {
