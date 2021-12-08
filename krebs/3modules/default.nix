@@ -13,8 +13,6 @@ let
       ./bepasty-server.nix
       ./bindfs.nix
       ./brockman.nix
-      ./buildbot/master.nix
-      ./buildbot/slave.nix
       ./build.nix
       ./cachecache.nix
       ./ci.nix
