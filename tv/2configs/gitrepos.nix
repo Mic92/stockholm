@@ -116,6 +116,9 @@ let {
     TabFS = {
       cgit.desc = "mount browser tabs & co. as a filesystem";
     };
+    texnix = {
+      cgit.desc = "TeX live environment generator";
+    };
     with-ssh = {};
   } // mapAttrs (_: recursiveUpdate { cgit.section = "2. Host configurations"; }) {
     ni = {

@@ -94,8 +94,17 @@ with import <stockholm/lib>;
     {
       boot.kernel.sysctl = {
         # Enable IPv6 Privacy Extensions
-        "net.ipv6.conf.all.use_tempaddr" = 2;
-        "net.ipv6.conf.default.use_tempaddr" = 2;
+        #
+        # XXX use mkForce here because since NixOS 21.11 there's a collision in
+        # net.ipv6.conf.default.use_tempaddr, and boot.kernel.sysctl incapable
+        # of merging.
+        #
+        # XXX net.ipv6.conf.all.use_tempaddr is set because it was mentioned in
+        # https://tldp.org/HOWTO/Linux+IPv6-HOWTO/ch06s05.html
+        # TODO check if that is really necessary, otherwise we can rely solely
+        # on networking.tempAddresses in the future (when nothing is <21.11)
+        "net.ipv6.conf.all.use_tempaddr" = mkForce 2;
+        "net.ipv6.conf.default.use_tempaddr" = mkForce 2;
       };
     }
 
