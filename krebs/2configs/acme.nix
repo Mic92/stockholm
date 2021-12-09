@@ -7,15 +7,17 @@ in {
     email = "spam@krebsco.de";
     certs.${domain}.server = "https://${domain}:1443/acme/acme/directory"; # use 1443 here cause bootstrapping loop
   };
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
     virtualHosts.${domain} = {
-      forceSSL = true;
+      addSSL = true;
       enableACME = true;
       locations."/" = {
         proxyPass = "https://localhost:1443";
       };
+      locations."= /ca.crt".alias = ../6assets/krebsAcmeCA.crt;
     };
   };
   krebs.secret.files.krebsAcme = {

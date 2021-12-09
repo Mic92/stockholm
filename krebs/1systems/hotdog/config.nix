@@ -10,6 +10,7 @@
     <stockholm/krebs/2configs/ircd.nix>
     <stockholm/krebs/2configs/reaktor2.nix>
     <stockholm/krebs/2configs/wiki.nix>
+    <stockholm/krebs/2configs/acme.nix>
 
     ## shackie irc bot
     <stockholm/krebs/2configs/shack/reaktor.nix>
