@@ -48,6 +48,7 @@ let
       ./secret.nix
       ./setuid.nix
       ./shadow.nix
+      ./ssl.nix
       ./sync-containers.nix
       ./tinc.nix
       ./tinc_graphs.nix

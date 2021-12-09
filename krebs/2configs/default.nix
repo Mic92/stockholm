@@ -16,6 +16,9 @@ with import <stockholm/lib>;
   krebs.enable = true;
   krebs.tinc.retiolum.enable = mkDefault true;
 
+  # trust krebs ACME CA
+  krebs.ssl.trustIntermediate = true;
+
   krebs.build.user = mkDefault config.krebs.users.krebs;
 
   networking.hostName = config.krebs.build.host.name;
