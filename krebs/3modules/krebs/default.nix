@@ -80,7 +80,6 @@ in {
             "cgit.hotdog.r"
             "irc.r"
             "wiki.r"
-            "wiki.hotdog.r"
           ];
           tinc.port = 0;
           tinc.pubkey = ''

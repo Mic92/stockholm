@@ -38,11 +38,13 @@ in
 
   systemd.services.gollum.environment.LC_ALL = "en_US.UTF-8";
 
-  networking.firewall.allowedTCPPorts = [ 80 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  security.acme.certs."wiki.r".server = config.krebs.ssl.acmeURL;
   services.nginx = {
     enable = true;
-    virtualHosts.wiki = {
-      serverAliases = [ "wiki.r" "wiki.${config.networking.hostName}.r" ];
+    virtualHosts."wiki.r" = {
+      enableACME = true;
+      addSSL = true;
       locations."/".extraConfig = ''
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
