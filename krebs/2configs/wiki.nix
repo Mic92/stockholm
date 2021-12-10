@@ -29,7 +29,7 @@ in
 {
   services.gollum = {
     enable = true;
-    address = "::";
+    address = "::1";
     extraConfig = ''
       Gollum::Hook.register(:post_commit, :hook_id) do |committer, sha1|
         system('${pushCgit}')
@@ -47,7 +47,7 @@ in
       enableACME = true;
       addSSL = true;
       locations."/" = {
-        proxyPass = "http://[::]:${toString config.services.gollum.port}";
+        proxyPass = "http://[::1]:${toString config.services.gollum.port}";
         proxyWebsockets = true;
         extraConfig = ''
           proxy_set_header Host $host;
