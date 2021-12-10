@@ -33,10 +33,6 @@ with import <stockholm/lib>;
     "wl"
   ];
 
-  # broadcom_sta is marked as broken for 5.9+
-  # pkgs.linuxPackages_latest ist 5.9
-  boot.kernelPackages = pkgs.linuxPackages_5_8;
-
   boot.extraModulePackages = [
     config.boot.kernelPackages.broadcom_sta
   ];
