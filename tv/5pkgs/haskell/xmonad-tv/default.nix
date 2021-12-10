@@ -1,5 +1,5 @@
 { mkDerivation, aeson, base, bytestring, containers, directory
-, extra, stdenv, template-haskell, th-env, unix, X11, xmonad
+, extra, lib, template-haskell, th-env, unix, X11, xmonad
 , xmonad-contrib, xmonad-stockholm
 }:
 mkDerivation {
@@ -12,5 +12,5 @@ mkDerivation {
     aeson base bytestring containers directory extra template-haskell
     th-env unix X11 xmonad xmonad-contrib xmonad-stockholm
   ];
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }
