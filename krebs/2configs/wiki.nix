@@ -29,6 +29,7 @@ in
 {
   services.gollum = {
     enable = true;
+    address = "::";
     extraConfig = ''
       Gollum::Hook.register(:post_commit, :hook_id) do |committer, sha1|
         system('${pushCgit}')
@@ -45,12 +46,13 @@ in
     virtualHosts."wiki.r" = {
       enableACME = true;
       addSSL = true;
-      locations."/".extraConfig = ''
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host $host;
-        proxy_pass http://127.0.0.1:${toString config.services.gollum.port};
-      '';
+      locations."/" = {
+        proxyPass = "http://[::]:${toString config.services.gollum.port}";
+        proxyWebsockets = true;
+        extraConfig = ''
+          proxy_set_header Host $host;
+        '';
+      };
     };
   };
 
