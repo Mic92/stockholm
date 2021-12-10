@@ -5,6 +5,18 @@ with import <stockholm/lib>;
 {
   imports = [
     ../smartd.nix
+
+    {
+      nix.buildCores = 2;
+      nix.maxJobs = 2;
+    }
+    (if lib.versionAtLeast (lib.versions.majorMinor lib.version) "21.11" then {
+      nix.daemonCPUSchedPolicy = "batch";
+      nix.daemonIOSchedPriority = 1;
+    } else {
+      nix.daemonIONiceLevel = 1;
+      nix.daemonNiceLevel = 1;
+    })
   ];
 
   boot.loader.grub = {
@@ -28,13 +40,6 @@ with import <stockholm/lib>;
   boot.extraModulePackages = [
     config.boot.kernelPackages.broadcom_sta
   ];
-
-  nix = {
-    buildCores = 2;
-    maxJobs = 2;
-    daemonIONiceLevel = 1;
-    daemonNiceLevel = 1;
-  };
 
   services.logind.extraConfig = ''
     HandleHibernateKey=ignore
