@@ -108,8 +108,21 @@ let
                     # create a ShellCommand for each stage and add them to the build
                     stages = self.extract_stages(self.observer.getStdout())
                     self.build.addStepsAfterCurrentStep([
-                        steps.ShellCommand(name=stage, command=[stages[stage]])
-                        for stage in stages
+                        steps.ShellCommand(
+                          name=stage,
+                          env=dict(
+                            build_name = stage,
+                            build_script = stages[stage],
+                          ),
+                          command="${pkgs.writeDash "build.sh" ''
+                            set -xefu
+                            profile=${shell.escape profileRoot}/$build_name
+                            result=$("$build_script")
+                            if [ -n "$result" ]; then
+                              ${pkgs.nix}/bin/nix-env -p "$profile" --set "$result"
+                            fi
+                          ''}",
+                        ) for stage in stages
                     ])
 
                 return result
