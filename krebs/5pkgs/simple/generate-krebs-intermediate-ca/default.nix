@@ -23,6 +23,7 @@ pkgs.writers.writeDashBin "generate-intermediate-ca" ''
 
   ${pkgs.step-cli}/bin/step certificate create "Krebs ACME CA" intermediate_ca.crt intermediate_ca.key \
     --template "$TMPDIR/intermediate.tpl" \
+    --not-after 8760h \
     --ca "$TMPDIR/krebs/ca.crt" \
     --ca-key "$TMPDIR/krebs/ca.key" \
     --no-password --insecure

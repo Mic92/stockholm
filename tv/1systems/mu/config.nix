@@ -83,8 +83,11 @@ with import <stockholm/lib>;
 
   programs.ssh.startAgent = false;
 
-  security.wrappers = {
-    slock.source = "${pkgs.slock}/bin/slock";
+  krebs.setuid = {
+    slock = {
+      filename = "${pkgs.slock}/bin/slock";
+      mode = "4111";
+    };
   };
 
   security.pam.loginLimits = [

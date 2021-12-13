@@ -5,6 +5,18 @@ with import <stockholm/lib>;
 {
   imports = [
     ../smartd.nix
+
+    {
+      nix.buildCores = 2;
+      nix.maxJobs = 2;
+    }
+    (if lib.versionAtLeast (lib.versions.majorMinor lib.version) "21.11" then {
+      nix.daemonCPUSchedPolicy = "batch";
+      nix.daemonIOSchedPriority = 1;
+    } else {
+      nix.daemonIONiceLevel = 1;
+      nix.daemonNiceLevel = 1;
+    })
   ];
 
   boot.loader.grub = {
@@ -21,20 +33,9 @@ with import <stockholm/lib>;
     "wl"
   ];
 
-  # broadcom_sta is marked as broken for 5.9+
-  # pkgs.linuxPackages_latest ist 5.9
-  boot.kernelPackages = pkgs.linuxPackages_5_8;
-
   boot.extraModulePackages = [
     config.boot.kernelPackages.broadcom_sta
   ];
-
-  nix = {
-    buildCores = 2;
-    maxJobs = 2;
-    daemonIONiceLevel = 1;
-    daemonNiceLevel = 1;
-  };
 
   services.logind.extraConfig = ''
     HandleHibernateKey=ignore

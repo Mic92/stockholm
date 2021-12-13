@@ -1,7 +1,6 @@
-with import <stockholm/lib>;
-{ pkgs, ... }:
-
-{
+{ pkgs, ... }: let
+  lib = import <stockholm/lib>;
+in {
   imports = [
     ../smartd.nix
     {
@@ -16,6 +15,18 @@ with import <stockholm/lib>;
       #  "nvidia-settings"
       #];
     }
+
+    {
+      nix.buildCores = 4;
+      nix.maxJobs = 4;
+    }
+    (if lib.versionAtLeast (lib.versions.majorMinor lib.version) "21.11" then {
+      nix.daemonCPUSchedPolicy = "batch";
+      nix.daemonIOSchedPriority = 1;
+    } else {
+      nix.daemonIONiceLevel = 1;
+      nix.daemonNiceLevel = 1;
+    })
   ];
 
   boot.extraModprobeConfig = ''
@@ -34,13 +45,6 @@ with import <stockholm/lib>;
   hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
 
   networking.wireless.enable = true;
-
-  nix = {
-    buildCores = 4;
-    maxJobs = 4;
-    daemonIONiceLevel = 1;
-    daemonNiceLevel = 1;
-  };
 
   services.logind.extraConfig = ''
     HandleHibernateKey=ignore
