@@ -56,6 +56,10 @@ let
           ;
           type = types.listOf (types.enum (attrNames ButtonType));
         };
+        copyAndCloseAfterUpload = mkOption {
+          default = false;
+          type = types.bool;
+        };
         disabledTrayIcon = mkOption {
           default = true;
           type = types.bool;
@@ -166,6 +170,7 @@ let
           buttons = ''@Variant(\0\0\0\x7f\0\0\0\v${toQList "int" cfg.buttons})'';
           disabledTrayIcon = cfg.disabledTrayIcon;
           checkForUpdates = false;
+          copyAndCloseAfterUpload = cfg.copyAndCloseAfterUpload;
           drawThickness = cfg.drawThickness;
           filenamePattern = cfg.filenamePattern;
           savePath = cfg.savePath;
