@@ -165,6 +165,7 @@ let
         General = {
           buttons = ''@Variant(\0\0\0\x7f\0\0\0\v${toQList "int" cfg.buttons})'';
           disabledTrayIcon = cfg.disabledTrayIcon;
+          checkForUpdates = false;
           drawThickness = cfg.drawThickness;
           filenamePattern = cfg.filenamePattern;
           savePath = cfg.savePath;
