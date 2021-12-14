@@ -186,6 +186,7 @@ let
           showHelp = cfg.showHelp;
           showSidePanelButton = cfg.showSidePanelButton;
           showStartupLaunchMessage = cfg.showStartupLaunchMessage;
+          startupLaunch = false;
         };
         Shortcuts = {
           TYPE_COPY = "Return";
