@@ -64,6 +64,11 @@ let
           default = true;
           type = types.bool;
         };
+        drawColor = mkOption {
+          default = "#ff0000";
+          type =
+            types.addCheck types.str (test "#[0-9A-Fa-f]{6}");
+        };
         drawThickness = mkOption {
           default = 8;
           type = types.positive;
@@ -179,6 +184,7 @@ let
           disabledTrayIcon = cfg.disabledTrayIcon;
           checkForUpdates = false;
           copyAndCloseAfterUpload = cfg.copyAndCloseAfterUpload;
+          drawColor = cfg.drawColor;
           drawThickness = cfg.drawThickness;
           filenamePattern = cfg.filenamePattern;
           savePath = cfg.savePath;
