@@ -128,6 +128,10 @@ let
           default = false;
           type = types.bool;
         };
+        showStartupLaunchMessage = mkOption {
+          default = false;
+          type = types.bool;
+        };
         timeout = mkOption {
           default = 200;
           description = ''
@@ -181,6 +185,7 @@ let
           showDesktopNotification = cfg.showDesktopNotification;
           showHelp = cfg.showHelp;
           showSidePanelButton = cfg.showSidePanelButton;
+          showStartupLaunchMessage = cfg.showStartupLaunchMessage;
         };
         Shortcuts = {
           TYPE_COPY = "Return";
