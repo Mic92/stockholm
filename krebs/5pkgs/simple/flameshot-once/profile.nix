@@ -1,5 +1,6 @@
 { config, pkgs }:
 with pkgs.stockholm.lib;
+with generators;
 let
 
   # Refs https://github.com/lupoDharkael/flameshot/blob/master/src/widgets/capture/capturebutton.h
@@ -55,9 +56,18 @@ let
           ;
           type = types.listOf (types.enum (attrNames ButtonType));
         };
+        copyAndCloseAfterUpload = mkOption {
+          default = false;
+          type = types.bool;
+        };
         disabledTrayIcon = mkOption {
           default = true;
           type = types.bool;
+        };
+        drawColor = mkOption {
+          default = "#ff0000";
+          type =
+            types.addCheck types.str (test "#[0-9A-Fa-f]{6}");
         };
         drawThickness = mkOption {
           default = 8;
@@ -119,6 +129,14 @@ let
           default = false;
           type = types.bool;
         };
+        showSidePanelButton = mkOption {
+          default = false;
+          type = types.bool;
+        };
+        showStartupLaunchMessage = mkOption {
+          default = false;
+          type = types.bool;
+        };
         timeout = mkOption {
           default = 200;
           description = ''
@@ -159,18 +177,27 @@ let
     "QList<${t}>${le.x4 0}${le.x4 (length xs)}${concatMapStrings le.x4 xs}";
 
   XDG_CONFIG_HOME = pkgs.write "flameshot-config" {
-    "/flameshot/flameshot.ini".text = ''
-      [General]
-      buttons=@Variant(\0\0\0\x7f\0\0\0\v${toQList "int" cfg.buttons})
-      disabledTrayIcon=${toJSON cfg.disabledTrayIcon}
-      drawThickness=${toJSON cfg.drawThickness}
-      filenamePattern=${toJSON cfg.filenamePattern}
-      savePath=${toJSON cfg.savePath}
-      showDesktopNotification=${toJSON cfg.showDesktopNotification}
-      showHelp=${toJSON cfg.showHelp}
-      [Shortcuts]
-      TYPE_COPY=Return
-    '';
+    "/flameshot/flameshot.ini".text =
+      toINI {} {
+        General = {
+          buttons = ''@Variant(\0\0\0\x7f\0\0\0\v${toQList "int" cfg.buttons})'';
+          disabledTrayIcon = cfg.disabledTrayIcon;
+          checkForUpdates = false;
+          copyAndCloseAfterUpload = cfg.copyAndCloseAfterUpload;
+          drawColor = cfg.drawColor;
+          drawThickness = cfg.drawThickness;
+          filenamePattern = cfg.filenamePattern;
+          savePath = cfg.savePath;
+          showDesktopNotification = cfg.showDesktopNotification;
+          showHelp = cfg.showHelp;
+          showSidePanelButton = cfg.showSidePanelButton;
+          showStartupLaunchMessage = cfg.showStartupLaunchMessage;
+          startupLaunch = false;
+        };
+        Shortcuts = {
+          TYPE_COPY = "Return";
+        };
+      };
   };
 
 in
