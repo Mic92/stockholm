@@ -46,7 +46,9 @@ in {
         -f '<nixpkgs/nixos>' config.system.build.toplevel \
         -o "$outDir/out"
 
-      $outDir/out/bin/switch-to-configuration switch
+      nix-env -p /nix/var/nix/profiles/system --set "$outDir/out"
+
+      "$outDir/out/bin/switch-to-configuration" switch
     '';
     source = source { test = false; };
     allocateTTY = true;
