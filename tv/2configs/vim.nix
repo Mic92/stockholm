@@ -25,6 +25,7 @@ let {
     pkgs.tv.vimPlugins.vim
     pkgs.vimPlugins.fzfWrapper
     pkgs.vimPlugins.undotree
+    pkgs.vimPlugins.vim-nftables
   ];
 
   dirs = {
