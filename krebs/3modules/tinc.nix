@@ -102,7 +102,7 @@ let
 
         tincPackage = mkOption {
           type = types.package;
-          default = pkgs.tinc;
+          default = pkgs.tinc_pre;
           description = "Tincd package to use.";
         };
 
