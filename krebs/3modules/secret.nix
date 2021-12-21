@@ -27,7 +27,6 @@ in {
     systemd.services =
       mapAttrs'
         (name: file: nameValuePair "secret-trigger-${systemd.encodeName name}" {
-          wantedBy = ["multi-user.target"];
           serviceConfig = {
             Type = "oneshot";
             ExecStart = "${pkgs.systemd}/bin/systemctl restart ${shell.escape file.service}";
