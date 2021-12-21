@@ -73,7 +73,7 @@ let
     };
   };
 
-  imp = {
+  imp = mkMerge ([{
     networking.firewall.enable = false;
 
     systemd.services.krebs-iptables = {
@@ -97,7 +97,41 @@ let
 
       unitConfig.DefaultDependencies = false;
     };
-  };
+  }] ++ compat);
+
+  compat = [
+    ({
+      krebs.iptables.tables.filter.INPUT.rules = map
+        (port: { predicate = "-p tcp --dport ${toString port}"; target = "ACCEPT"; })
+        config.networking.firewall.allowedTCPPorts;
+    })
+    ({
+      krebs.iptables.tables.filter.INPUT.rules = map
+        (port: { predicate = "-p udp --dport ${toString port}"; target = "ACCEPT"; })
+        config.networking.firewall.allowedUDPPorts;
+    })
+    ({
+      krebs.iptables.tables.filter.INPUT.rules = map
+        (portRange: { predicate = "-p tcp --dport ${toString port.from}:${toString port.to}"; target = "ACCEPT"; })
+        config.networking.firewall.allowedTCPPortRanges;
+    })
+    ({
+      krebs.iptables.tables.filter.INPUT.rules = map
+        (portRange: { predicate = "-p udp --dport ${toString port.from}:${toString port.to}"; target = "ACCEPT"; })
+        config.networking.firewall.allowedUDPPortRanges;
+    })
+    ({
+      krebs.iptables.tables.filter.INPUT.rules = flatten (mapAttrsToList
+        (interface: interfaceConfig: [
+          (map (port: { predicate = "-i ${interface} -p tcp --dport ${toString port}"; target = "ACCEPT"; }) interfaceConfig.allowedTCPPorts)
+          (map (port: { predicate = "-i ${interface} -p udp --dport ${toString port}"; target = "ACCEPT"; }) interfaceConfig.allowedUDPPorts)
+          (map (portRange: { predicate = "-i ${interface} -p tcp --dport ${toString port.from}:${toString port.to}"; target = "ACCEPT"; }) interfaceConfig.allowedTCPPortRanges)
+          (map (portRange: { predicate = "-i ${interface} -p udp --dport ${toString port.from}:${toString port.to}"; target = "ACCEPT"; }) interfaceConfig.allowedUDPPortRanges)
+        ])
+        config.networking.firewall.interfaces
+      );
+    })
+  ];
 
   #buildTable :: iptablesVersion -> iptablesAttrSet` -> str
   #todo: differentiate by iptables-version
