@@ -4,17 +4,13 @@ with import <stockholm/lib>;
 {
   imports = [
     ./backup.nix
-    (let ca-bundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"; in {
-      environment.variables = {
-        CURL_CA_BUNDLE = ca-bundle;
-        GIT_SSL_CAINFO = ca-bundle;
-        SSL_CERT_FILE = ca-bundle;
-      };
-    })
   ];
   krebs.announce-activation.enable = true;
   krebs.enable = true;
   krebs.tinc.retiolum.enable = mkDefault true;
+
+  # trust krebs ACME CA
+  krebs.ssl.trustIntermediate = true;
 
   krebs.build.user = mkDefault config.krebs.users.krebs;
 

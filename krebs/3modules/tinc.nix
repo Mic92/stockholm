@@ -17,7 +17,6 @@ let
       in {
 
         enable = mkEnableOption "krebs.tinc.${netname}" // { default = true; };
-        enableLegacy = mkEnableOption "/etc/tinc/${netname}";
 
         confDir = mkOption {
           type = types.package;
@@ -102,7 +101,7 @@ let
 
         tincPackage = mkOption {
           type = types.package;
-          default = pkgs.tinc;
+          default = pkgs.tinc_pre;
           description = "Tincd package to use.";
         };
 
@@ -263,9 +262,9 @@ let
     ) config.krebs.tinc;
 
     environment.etc = mapAttrs' (netname: cfg:
-      nameValuePair "tinc/${netname}" (mkIf cfg.enableLegacy {
+      nameValuePair "tinc/${netname}" {
         source = cfg.confDir;
-      })
+      }
     ) config.krebs.tinc;
 
     systemd.services = mapAttrs (netname: cfg:
@@ -287,9 +286,12 @@ let
         ];
         wantedBy = [ "multi-user.target" ];
         path = [ tinc iproute ];
+        reloadIfChanged = true;
+        restartTriggers = [ cfg.confDir ];
         serviceConfig = rec {
           Restart = "always";
-          ExecStart = "${tinc}/sbin/tincd -c ${cfg.confDir} -d 0 -U ${cfg.user.name} -D --pidfile=/var/run/tinc.${SyslogIdentifier}.pid";
+          ExecStart = "${tinc}/sbin/tincd -c /etc/tinc/${netname} -d 0 -U ${cfg.user.name} -D --pidfile=/var/run/tinc.${SyslogIdentifier}.pid";
+          ExecReload = "${tinc}/sbin/tinc -n ${netname} reload";
           SyslogIdentifier = netname;
         };
       }

@@ -19,10 +19,6 @@ in {
           aliases = [ "amy.i" ];
         };
         retiolum = {
-          addrs = [
-            config.krebs.hosts.amy.nets.retiolum.ip4.addr
-            config.krebs.hosts.amy.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.181";
           aliases = [ "amy.r" ];
           tinc.pubkey = ''
@@ -53,10 +49,6 @@ in {
           aliases = [ "clara.i" ];
         };
         retiolum = {
-          addrs = [
-            config.krebs.hosts.clara.nets.retiolum.ip4.addr
-            config.krebs.hosts.clara.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.182";
           aliases = [ "clara.r" ];
           tinc.pubkey = ''
@@ -130,10 +122,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.donna.nets.retiolum.ip4.addr
-            config.krebs.hosts.donna.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.180";
           aliases = [ "donna.r" ];
           tinc.pubkey = ''
@@ -159,10 +147,6 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
-          addrs = [
-            config.krebs.hosts.herbert.nets.retiolum.ip4.addr
-            config.krebs.hosts.herbert.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.177";
           aliases = [ "herbert.r" ];
           tinc.pubkey = ''
@@ -173,40 +157,6 @@ in {
             fbvtf5QryBjJ9nRnb+wsPVpeFE/LncIMK/bYQsyE01T5QDu/muAaeYPbgm6FqaQH
             OJ4oEHsarWBvU1qzgz/IRz0BHHeTrbbP3AG/glTwL02Z1mtTXSjME7cfk7ZRM5Cj
             jXAqnqu2m1B08Kii+zYp4BPZDmPLT5gq+QIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-        };
-      };
-    };
-    eddie = {
-      owner = config.krebs.users.mic92;
-      nets = rec {
-        internet = {
-          # eddie.thalheim.io
-          ip4.addr = "129.215.197.11";
-          aliases = [ "eddie.i" ];
-        };
-        retiolum = {
-          via = internet;
-          addrs = [
-            config.krebs.hosts.eddie.nets.retiolum.ip4.addr
-            config.krebs.hosts.eddie.nets.retiolum.ip6.addr
-          ];
-          ip4.addr = "10.243.29.170";
-          aliases = [ "eddie.r" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAuRQphRlSIC/aqRTfvStPdJOJCx1ACeFIDEjRdgoxuu32qoBl7i6d
-            j7Voh+Msditf2a5+f0fVsNDaPnjPGfk0NkZBjmn+RZQDRXk0krpTNj2Vb6W5quTm
-            3yrjJMFJR9CU5khfppc47X+ir8bjn7RusWTFNEuDvUswHmRmnJHLS3Y+utOaRbCF
-            2hxpyxCn423gpsaBfORPEK8X90nPbuNpFDugWPnC+R45TpNmIf4qyKvfhd9OKrua
-            KNanGHG30xhBW/DclUwwWi8D44d94xFnIRVcG1O+Uto93WoUWZn90lI1qywSj5Aq
-            iWstBK4tc7VwvAj0UzPlaRYYPfFjOEkPQzj8xC6l/leJcgxkup252uo6m1njMx3t
-            6QWMgevjqosY22OZReZfIwb14aDWFKLTWs30J+zmWK4TjlRITdsOEKxlpODMbJAD
-            kfSoPwuwkWIzFhNOrFiD/NtKaRYmV8bTBCT3a9cvvObshJx13BP+IUFzBS1N1n/u
-            hJWYH5WFsQZn/8rHDwZGkS1zKPEaNoydjqCZNyJpJ5nhggyl6gpuD7wpXM/8tFay
-            pAjRP40+qRQLUWXmswV0hsZTOX1tvZs4f68y3WJ+GwCWw9HvvwmzYes5ayJrPsbJ
-            lyK301Jb42wGEsVWxu3Eo/PLtp8OdD+Wdh6o/ELcc0k/YCUGFMujUM8CAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
         };
@@ -223,9 +173,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.eve.nets.retiolum.ip6.addr
-          ];
           aliases = [ "eve.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -254,10 +201,6 @@ in {
     okelmann = {
       owner = config.krebs.users.mic92;
       nets.retiolum = {
-        addrs = [
-          config.krebs.hosts.okelmann.nets.retiolum.ip4.addr
-          config.krebs.hosts.okelmann.nets.retiolum.ip6.addr
-        ];
         ip4.addr = "10.243.29.190";
           aliases = [
             "okelmann.r"
@@ -277,10 +220,6 @@ in {
     aendernix = {
       owner = config.krebs.users.mic92;
       nets.retiolum = {
-        addrs = [
-          config.krebs.hosts.aendernix.nets.retiolum.ip4.addr
-          config.krebs.hosts.aendernix.nets.retiolum.ip6.addr
-        ];
         ip4.addr = "10.243.29.172";
         aliases = [
           "aendernix.r"
@@ -305,10 +244,6 @@ in {
     aenderpad = {
       owner = config.krebs.users.mic92;
       nets.retiolum = {
-        addrs = [
-          config.krebs.hosts.aenderpad.nets.retiolum.ip4.addr
-          config.krebs.hosts.aenderpad.nets.retiolum.ip6.addr
-        ];
         ip4.addr = "10.243.29.201";
         aliases = [
           "aendernix.r"
@@ -394,10 +329,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.martha.nets.retiolum.ip4.addr
-            config.krebs.hosts.martha.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.179";
           aliases = [ "martha.r" ];
           tinc.pubkey = ''
@@ -454,10 +385,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.sauron.nets.retiolum.ip4.addr
-            config.krebs.hosts.sauron.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.194";
           aliases = [ "sauron.r" ];
           tinc.pubkey = ''
@@ -484,10 +411,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.bill.nets.retiolum.ip4.addr
-            config.krebs.hosts.bill.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.195";
           aliases = [ "bill.r" ];
           tinc.pubkey = ''
@@ -519,10 +442,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.nardole.nets.retiolum.ip4.addr
-            config.krebs.hosts.nardole.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.173";
           aliases = [ "nardole.r" ];
           tinc.pubkey = ''
@@ -581,10 +500,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.rose.nets.retiolum.ip4.addr
-            config.krebs.hosts.rose.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.178";
           aliases = [ "rose.r" ];
           tinc.pubkey = ''
@@ -610,7 +525,6 @@ in {
       owner = config.krebs.users.mic92;
       nets = {
         retiolum = {
-          ip4.addr = "10.243.29.168";
           aliases = [
             "turingmachine.r"
           ];
@@ -712,7 +626,6 @@ in {
         };
         retiolum = {
           via = internet;
-          ip4.addr = "10.243.29.185";
           aliases = [
             "eva.r"
             "loki.r"
@@ -743,10 +656,6 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
-          addrs = [
-            config.krebs.hosts.doctor.nets.retiolum.ip4.addr
-            config.krebs.hosts.doctor.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.186";
           aliases = [ "doctor.r" ];
           tinc.pubkey = ''
@@ -767,10 +676,6 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
-          addrs = [
-            config.krebs.hosts.bernie.nets.retiolum.ip4.addr
-            config.krebs.hosts.bernie.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.169";
           aliases = [ "bernie.r" ];
           tinc.pubkey = ''
@@ -805,10 +710,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.ryan.nets.retiolum.ip4.addr
-            config.krebs.hosts.ryan.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.198";
           aliases = [ "ryan.r" ];
           tinc.pubkey = ''
@@ -837,10 +738,6 @@ in {
         };
         retiolum = {
           via = internet;
-          addrs = [
-            config.krebs.hosts.graham.nets.retiolum.ip4.addr
-            config.krebs.hosts.graham.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.199";
           aliases = [ "graham.r" ];
           tinc.pubkey = ''
@@ -862,10 +759,6 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
-          addrs = [
-            config.krebs.hosts.maurice.nets.retiolum.ip4.addr
-            config.krebs.hosts.maurice.nets.retiolum.ip6.addr
-          ];
           ip4.addr = "10.243.29.200";
           aliases = [ "maurice.r" ];
           tinc.pubkey = ''
@@ -878,6 +771,31 @@ in {
             1YabQlGLaAkrj3PMgrDyayzGBDDDva9fEQIDAQAB
             -----END RSA PUBLIC KEY-----
             Ed25519PublicKey = pkMuJ4kbyleQAdau+sfmLtzTuUy7uL+wwcgV/GWC7/N
+          '';
+        };
+      };
+    };
+
+    mickey = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        retiolum = {
+          aliases = [ "mickey.r" ];
+          tinc.pubkey = ''
+            Ed25519PublicKey = cE450gYxzp9kAzV5ytU9N7aV+WdnD7wQMjkPWV7r/bC
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEA7TwI3/tyl3z46Enr6p/0bpl5CpG6DZLxjAhsMcWBM+4xTL9s18IZ
+            2FGbyS3EyOBprMBQULrik1u0rfZ0AL8XdO6h+r1BD6XmlZtUu3FJaVeXrLBPGtC0
+            qqC0mZOj1ezTl3kC9/O7slU1/vuIRWiiRuvmvLnc6uWo+ShTl8fs0a3rY7/FsFVY
+            ZClf2M/5cJmeZpwy+PvgGmhSvjflO5+v+C+LvvhfVzoLw2zf8Gbi23ifS0uhhJt2
+            9ztGnmQg+n4+EWEN3XFS1XXHO2P2jyy1ss5NrN0JrO/1J519owHXxbo096MV12xr
+            azD6of8k0xHbfW4PW0/U1qzs9Ra1T54D+xtnyemLOyeCApwUy+bSg+XuqMz1Wy55
+            dci7cBguTIn+pnJqcf8lGSfWDSxlBiwrbXSPszlRQ6vO8MA2uciSmOKodKtNj4bQ
+            5IfdHHOHGAuuE+ZNt6owc/8QzQ3dVT+fVmTeN1PB4FmPmF5E2kOpe4NebZ0DhD+g
+            +g/bNO5FFlIy2M+LKauIXugAHlrVrxl4blfjVkb9xrfsSJHQl8/G/F9zMUAzUBv3
+            W8cVFn9mAw0FFaQljs9iha92we6Vs93v+ZvsmSG2MVOYBVwka4FJ7kjaABLFXcjN
+            RA8gQM/P3j1EmDvemlskWOoCLVELR40BtKdM9MFiGqxGMoNh3DvGWTECAwEAAQ==
+            -----END RSA PUBLIC KEY-----
           '';
         };
       };

@@ -227,6 +227,7 @@ rec {
       services.phpfpm.pools."${domain}" = {
         user = "nginx";
         group = "nginx";
+        phpPackage = pkgs.php74;
         extraConfig = ''
           listen = /srv/http/${domain}/phpfpm.pool
           pm = dynamic

@@ -39,148 +39,144 @@ let
 
   profileRoot = "/nix/var/nix/profiles/ci";
 
+  bcfg = config.services.buildbot-master;
+
   imp = {
-    krebs.buildbot.master = {
-      slaves = {
-        testslave = "lasspass";
-      };
+    services.buildbot-master = {
+      workers = [ "worker.Worker('testworker', 'pass')" ];
 
-      change_source = mapAttrs' (name: repo:
-        nameValuePair name (concatMapStrings (url: ''
-          cs.append(
-              changes.GitPoller(
-                  "${url}",
-                  workdir='${name}-${elemAt(splitString "." url) 1}', branches=True,
-                  project='${name}',
-                  pollinterval=100
-              )
+      changeSource = mapAttrsToList (name: repo:
+        concatMapStringsSep "," (url: ''
+          changes.GitPoller(
+              "${url}",
+              workdir='${name}-${elemAt(splitString "." url) 1}', branches=True,
+              project='${name}',
+              pollinterval=100
           )
-        '') repo.urls)
+        '') repo.urls
       ) cfg.repos;
 
-      scheduler = mapAttrs' (name: repo:
-        nameValuePair name ''
-          sched.append(
-              schedulers.SingleBranchScheduler(
-                  change_filter=util.ChangeFilter(
-                      branch_re=".*",
-                      project='${name}',
-                  ),
-                  treeStableTimer=60,
-                  name="${name}-all-branches",
-                  builderNames=[
-                      "${name}",
-                  ]
-              )
-          )
-          sched.append(
-              schedulers.ForceScheduler(
-                  name="${name}",
-                  builderNames=[
-                      "${name}",
-                  ]
-              )
-          )
-        ''
-      ) cfg.repos;
-      builder_pre = ''
-        from buildbot import interfaces
-        from buildbot.steps.shell import ShellCommand
+      schedulers = mapAttrsToList (name: repo: ''
+        schedulers.SingleBranchScheduler(
+            change_filter=util.ChangeFilter(
+                branch_re=".*",
+                project='${name}',
+            ),
+            treeStableTimer=60,
+            name="${name}-all-branches",
+            builderNames=[
+                "${name}",
+            ]
+        ),
+        schedulers.ForceScheduler(
+            name="${name}",
+            builderNames=[
+                "${name}",
+            ]
+        )
+      '') cfg.repos;
 
-        class StepToStartMoreSteps(ShellCommand):
+      builders = [];
+
+      extraConfig = ''
+        # https://docs.buildbot.net/latest/manual/configuration/buildfactories.html
+        from buildbot.plugins import util, steps
+        from buildbot.process import buildstep, logobserver
+        from twisted.internet import defer
+        import json
+
+        class GenerateStagesCommand(buildstep.ShellMixin, steps.BuildStep):
             def __init__(self, **kwargs):
-                ShellCommand.__init__(self, **kwargs)
+                kwargs = self.setupShellMixin(kwargs)
+                super().__init__(**kwargs)
+                self.observer = logobserver.BufferLogObserver()
+                self.addLogObserver('stdio', self.observer)
 
-            def addBuildSteps(self, steps_factories):
-                for sf in steps_factories:
-                    step = interfaces.IBuildStepFactory(sf).buildStep()
-                    step.setBuild(self.build)
-                    step.setBuildSlave(self.build.slavebuilder.slave)
-                    step_status = self.build.build_status.addStepWithName(step.name)
-                    step.setStepStatus(step_status)
-                    self.build.steps.append(step)
+            def extract_stages(self, stdout):
+                stages = json.loads(stdout)
+                return stages
 
-            def start(self):
-                props = self.build.getProperties()
-                new_steps = json.loads(props.getProperty('steps_json'))
-                for new_step in new_steps:
-                    self.addBuildSteps([steps.ShellCommand(
-                        name=str(new_step),
-                        command=[
-                          "${pkgs.writeDash "build-stepper.sh" ''
+            @defer.inlineCallbacks
+            def run(self):
+                # run nix-instanstiate to generate the dict of stages
+                cmd = yield self.makeRemoteShellCommand()
+                yield self.runCommand(cmd)
+
+                # if the command passes extract the list of stages
+                result = cmd.results()
+                if result == util.SUCCESS:
+                    # create a ShellCommand for each stage and add them to the build
+                    stages = self.extract_stages(self.observer.getStdout())
+                    self.build.addStepsAfterCurrentStep([
+                        steps.ShellCommand(
+                          name=stage,
+                          env=dict(
+                            build_name = stage,
+                            build_script = stages[stage],
+                          ),
+                          command="${pkgs.writeDash "build.sh" ''
                             set -xefu
                             profile=${shell.escape profileRoot}/$build_name
                             result=$("$build_script")
                             if [ -n "$result" ]; then
                               ${pkgs.nix}/bin/nix-env -p "$profile" --set "$result"
                             fi
-                          ''}"
-                        ],
-                        env={
-                          "build_name": new_step,
-                          "build_script": new_steps[new_step],
-                          "NIX_REMOTE": "daemon",
-                          "NIX_PATH": "secrets=/var/src/stockholm/null:/var/src",
-                        },
-                        timeout=90001,
-                        workdir='build', # TODO figure out why we need this?
-                    )])
+                          ''}",
+                        ) for stage in stages
+                    ])
 
-                ShellCommand.start(self)
+                return result
 
-      '';
 
-      builder = mapAttrs' (name: repo:
-        nameValuePair name ''
-          f_${name} = util.BuildFactory()
-          f_${name}.addStep(steps.Git(
+        ${concatStringsSep "\n" (mapAttrsToList (name: repo: ''
+          factory_${name} = util.BuildFactory()
+          factory_${name}.addStep(steps.Git(
               repourl=util.Property('repository', '${head repo.urls}'),
               method='clobber',
               mode='full',
               submodules=True,
           ))
 
-          f_${name}.addStep(steps.SetPropertyFromCommand(
+          factory_${name}.addStep(GenerateStagesCommand(
               env={
-                "NIX_REMOTE": "daemon",
-                "NIX_PATH": "secrets=/var/src/stockholm/null:/var/src",
+                  "NIX_REMOTE": "daemon",
+                  "NIX_PATH": "secrets=/var/src/stockholm/null:/var/src",
               },
-              name="get_steps",
-              command=["${getJobs}"],
-              extract_fn=lambda rc, stdout, stderr: { 'steps_json': stdout },
+              name="Generate build stages",
+              command=[
+                  "${getJobs}"
+              ],
+              haltOnFailure=True,
           ))
-          f_${name}.addStep(StepToStartMoreSteps(command=["echo"])) # TODO remove dummy command from here
 
-          bu.append(
+          c['builders'].append(
               util.BuilderConfig(
                   name="${name}",
-                  slavenames=slavenames,
-                  factory=f_${name}
+                  workernames=['testworker'],
+                  factory=factory_${name}
               )
           )
-        ''
-      ) cfg.repos;
+        '') cfg.repos)}
+      '';
 
       enable = true;
-      web.enable = true;
-      irc = {
-        enable = true;
-        nick = "build|${hostname}";
-        server = "irc.r";
-        channels = [ "xxx" "noise" ];
-        allowForce = true;
-      };
-      extraConfig = ''
-        c['buildbotURL'] = "http://build.${hostname}.r/"
-      '';
+      reporters = [''
+        reporters.IRC(
+          host = "irc.r",
+          nick = "buildbot|${hostname}",
+          notify_events = [ 'started', 'finished', 'failure', 'success', 'exception', 'problem' ],
+          channels = [{"channel": "#xxx"}],
+        )
+      ''];
+
+      buildbotUrl = "http://build.${hostname}.r/";
     };
 
-    krebs.buildbot.slave = {
+    services.buildbot-worker = {
       enable = true;
-      masterhost = "localhost";
-      username = "testslave";
-      password = "lasspass";
-      packages = with pkgs; [ gnumake jq nix populate gnutar lzma gzip ];
+      workerUser = "testworker";
+      workerPass = "pass";
+      packages = with pkgs; [ git gnutar gzip jq nix populate ];
     };
 
     system.activationScripts.buildbots-nix-profile = ''
@@ -192,11 +188,10 @@ let
     users = {
       groups.buildbots.gid = genid "buildbots";
       users = {
-        buildbotMaster.extraGroups = [ "buildbots" ];
-        buildbotSlave.extraGroups = [ "buildbots" ];
+        buildbot.extraGroups = [ "buildbots" ];
+        bbworker.extraGroups = [ "buildbots" ];
       };
     };
   };
 
 in out
-

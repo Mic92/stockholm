@@ -29,6 +29,7 @@ in
 {
   services.gollum = {
     enable = true;
+    address = "::1";
     extraConfig = ''
       Gollum::Hook.register(:post_commit, :hook_id) do |committer, sha1|
         system('${pushCgit}')
@@ -38,16 +39,20 @@ in
 
   systemd.services.gollum.environment.LC_ALL = "en_US.UTF-8";
 
-  networking.firewall.allowedTCPPorts = [ 80 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  security.acme.certs."wiki.r".server = config.krebs.ssl.acmeURL;
   services.nginx = {
     enable = true;
-    virtualHosts.wiki = {
-      serverAliases = [ "wiki.r" "wiki.${config.networking.hostName}.r" ];
-      locations."/".extraConfig = ''
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_pass http://127.0.0.1:${toString config.services.gollum.port};
-      '';
+    virtualHosts."wiki.r" = {
+      enableACME = true;
+      addSSL = true;
+      locations."/" = {
+        proxyPass = "http://[::1]:${toString config.services.gollum.port}";
+        proxyWebsockets = true;
+        extraConfig = ''
+          proxy_set_header Host $host;
+        '';
+      };
     };
   };
 
