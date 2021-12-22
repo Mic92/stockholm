@@ -14,7 +14,6 @@
   };
 
   krebs.tinc.retiolum = {
-    enableLegacy = true;
     enable = true;
     connectTo = [
       "prism"
