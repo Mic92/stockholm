@@ -39,6 +39,8 @@ let
       listToAttrs (map (name: nameValuePair name set.${name})
                        (filter (flip hasAttr set) names));
 
+    maybeHead = x: if isList x && length x > 0 then head x else null;
+
     packageName = pkg:
       pkg.pname or (parseDrvName pkg.name).name;
 
