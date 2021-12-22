@@ -120,8 +120,8 @@ in {
   services.mosquitto = {
     enable = true;
     listeners = [{
-      acl = [ "topic pattern readwrite #" ];
-      users.gg23 = { acl = [ "topic readwrite #" ]; password = "gg23-mqtt"; };
+      acl = [ ];
+      users.gg23 = { acl = [ "readwrite #" ]; password = "gg23-mqtt"; };
     }];
   };
 
