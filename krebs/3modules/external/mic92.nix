@@ -167,8 +167,8 @@ in {
       nets = rec {
         internet = {
           # eve.thalheim.io
-          ip4.addr = "95.216.112.61";
-          ip6.addr = "2a01:4f9:2b:1605::1";
+          ip4.addr = "88.99.244.96";
+          ip6.addr = "2a01:4f8:10b:49f::1";
           aliases = [ "eve.i" ];
         };
         retiolum = {
