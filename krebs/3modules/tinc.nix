@@ -237,41 +237,39 @@ let
       }
     ) config.krebs.tinc;
 
-    krebs.systemd.services = mapAttrs (netname: cfg:
-      let
-        tinc = cfg.tincPackage;
-        iproute = cfg.iproutePackage;
-      in {
-        description = "Tinc daemon for ${netname}";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        path = [ tinc iproute ];
-        reloadIfChanged = true;
-        restartTriggers = [ cfg.confDir ];
-        serviceConfig = {
-          LoadCredential = filter (x: x != "") [
-            (optionalString (cfg.privkey_ed25519 != null)
-              "ed25519_key:${cfg.privkey_ed25519}"
-            )
-            "rsa_key:${cfg.privkey}"
-          ];
-          Restart = "always";
-          ExecStart = toString [
-            "${tinc}/sbin/tincd"
-            "-D"
-            "-U ${cfg.user.name}"
-            "-c /etc/tinc/${netname}"
-            "-d 0"
-            (optionalString (cfg.privkey_ed25519 != null)
-              "-o Ed25519PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/ed25519_key"
-            )
-            "-o PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/rsa_key"
-            "--pidfile=/var/run/tinc.${netname}.pid"
-          ];
-          ExecReload = "${tinc}/sbin/tinc -n ${netname} reload";
-          SyslogIdentifier = netname;
-        };
-      }
-    ) config.krebs.tinc;
+    krebs.systemd.services = mapAttrs (netname: cfg: {
+      description = "Tinc daemon for ${netname}";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      path = [
+        cfg.iproutePackage
+        cfg.tincPackage
+      ];
+      reloadIfChanged = true;
+      restartTriggers = [ cfg.confDir ];
+      serviceConfig = {
+        LoadCredential = filter (x: x != "") [
+          (optionalString (cfg.privkey_ed25519 != null)
+            "ed25519_key:${cfg.privkey_ed25519}"
+          )
+          "rsa_key:${cfg.privkey}"
+        ];
+        Restart = "always";
+        ExecStart = toString [
+          "${cfg.tincPackage}/sbin/tincd"
+          "-D"
+          "-U ${cfg.user.name}"
+          "-c /etc/tinc/${netname}"
+          "-d 0"
+          (optionalString (cfg.privkey_ed25519 != null)
+            "-o Ed25519PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/ed25519_key"
+          )
+          "-o PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/rsa_key"
+          "--pidfile=/var/run/tinc.${netname}.pid"
+        ];
+        ExecReload = "${cfg.tincPackage}/sbin/tinc -n ${netname} reload";
+        SyslogIdentifier = netname;
+      };
+    }) config.krebs.tinc;
   };
 in out
