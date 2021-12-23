@@ -8,6 +8,9 @@ let
         imports = [
           ./krebs
           ./krebs/2configs
+          ({ config, ... }: {
+            krebs.build.host = config.krebs.hosts.test-all-krebs-modules;
+          })
         ];
       }];
     }

@@ -36,7 +36,7 @@ let
               type = types.user;
               default = {
                 name = "fcgiwrap";
-                home = toString pkgs.empty;
+                home = toString pkgs.emptyDirectory;
               };
             };
           };
@@ -111,7 +111,7 @@ let
       type = types.user;
       default = {
         name = "git";
-        home = toString pkgs.empty;
+        home = toString pkgs.emptyDirectory;
       };
     };
   };
