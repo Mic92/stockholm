@@ -28,10 +28,6 @@ let
                 Interface = ${netname}
                 Broadcast = no
                 ${concatMapStrings (c: "ConnectTo = ${c}\n") tinc.config.connectTo}
-                ${optionalString (tinc.config.privkey_ed25519 != null)
-                  "Ed25519PrivateKeyFile = ${tinc.config.privkey_ed25519.path}"
-                }
-                PrivateKeyFile = ${tinc.config.privkey.path}
                 Port = ${toString tinc.config.host.nets.${netname}.tinc.port}
                 ${tinc.config.extraConfig}
               '';
@@ -169,25 +165,17 @@ let
         };
 
         privkey = mkOption {
-          type = types.secret-file;
-          default = {
-            name = "${tinc.config.netname}.rsa_key.priv";
-            path = "${tinc.config.user.home}/tinc.rsa_key.priv";
-            owner = tinc.config.user;
-            source-path = toString <secrets> + "/${tinc.config.netname}.rsa_key.priv";
-          };
+          type = types.absolute-pathname;
+          default = toString <secrets> + "/${tinc.config.netname}.rsa_key.priv";
           defaultText = "‹secrets/‹netname›.rsa_key.priv›";
         };
 
         privkey_ed25519 = mkOption {
-          type = types.nullOr types.secret-file;
+          type = types.nullOr types.absolute-pathname;
           default =
-            if config.krebs.hosts.${tinc.config.host.name}.nets.${tinc.config.netname}.tinc.pubkey_ed25519 == null then null else {
-              name = "${tinc.config.netname}.ed25519_key.priv";
-              path = "${tinc.config.user.home}/tinc.ed25519_key.priv";
-              owner = tinc.config.user;
-              source-path = toString <secrets> + "/${tinc.config.netname}.ed25519_key.priv";
-            };
+            if tinc.config.host.nets.${netname}.tinc.pubkey_ed25519 == null
+              then null
+              else toString <secrets> + "/${tinc.config.netname}.ed25519_key.priv";
           defaultText = "‹secrets/‹netname›.ed25519_key.priv›";
         };
 
@@ -230,24 +218,6 @@ let
     # TODO `environment.systemPackages = [ cfg.tincPackage cfg.iproutePackage ]` for each network,
     # avoid conflicts in environment if the packages differ
 
-    krebs.secret.files =
-      let
-        ed25519_keys =
-          filterAttrs
-            (_: key: key != null)
-            (mapAttrs'
-              (netname: cfg:
-                nameValuePair "${netname}.ed25519_key.priv" cfg.privkey_ed25519
-              )
-              config.krebs.tinc);
-
-        rsa_keys =
-          mapAttrs'
-            (netname: cfg: nameValuePair "${netname}.rsa_key.priv" cfg.privkey)
-            config.krebs.tinc;
-      in
-        ed25519_keys // rsa_keys;
-
     users.users = mapAttrs' (netname: cfg:
       nameValuePair "${netname}" {
         inherit (cfg.user) home name uid;
@@ -267,30 +237,37 @@ let
       }
     ) config.krebs.tinc;
 
-    systemd.services = mapAttrs (netname: cfg:
+    krebs.systemd.services = mapAttrs (netname: cfg:
       let
         tinc = cfg.tincPackage;
         iproute = cfg.iproutePackage;
       in {
         description = "Tinc daemon for ${netname}";
-        after = [
-          "network.target"
-          config.krebs.secret.files."${netname}.rsa_key.priv".service
-        ] ++ optionals (cfg.privkey_ed25519 != null) [
-          config.krebs.secret.files."${netname}.ed25519_key.priv".service
-        ];
-        partOf = [
-          config.krebs.secret.files."${netname}.rsa_key.priv".service
-        ] ++ optionals (cfg.privkey_ed25519 != null) [
-          config.krebs.secret.files."${netname}.ed25519_key.priv".service
-        ];
+        after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         path = [ tinc iproute ];
         reloadIfChanged = true;
         restartTriggers = [ cfg.confDir ];
-        serviceConfig = rec {
+        serviceConfig = {
+          LoadCredential = filter (x: x != "") [
+            (optionalString (cfg.privkey_ed25519 != null)
+              "ed25519_key:${cfg.privkey_ed25519}"
+            )
+            "rsa_key:${cfg.privkey}"
+          ];
           Restart = "always";
-          ExecStart = "${tinc}/sbin/tincd -c /etc/tinc/${netname} -d 0 -U ${cfg.user.name} -D --pidfile=/var/run/tinc.${SyslogIdentifier}.pid";
+          ExecStart = toString [
+            "${tinc}/sbin/tincd"
+            "-D"
+            "-U ${cfg.user.name}"
+            "-c /etc/tinc/${netname}"
+            "-d 0"
+            (optionalString (cfg.privkey_ed25519 != null)
+              "-o Ed25519PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/ed25519_key"
+            )
+            "-o PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/rsa_key"
+            "--pidfile=/var/run/tinc.${netname}.pid"
+          ];
           ExecReload = "${tinc}/sbin/tinc -n ${netname} reload";
           SyslogIdentifier = netname;
         };
