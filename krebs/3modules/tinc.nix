@@ -1,12 +1,6 @@
 with import <stockholm/lib>;
-{ config, pkgs, ... }:
-let
-  out = {
-    options.krebs.tinc = api;
-    config = imp;
-  };
-
-  api = mkOption {
+{ config, pkgs, ... }: {
+  options.krebs.tinc = mkOption {
     default = {};
     description = ''
       define a tinc network
@@ -214,7 +208,7 @@ let
     }));
   };
 
-  imp = {
+  config = {
     # TODO `environment.systemPackages = [ cfg.tincPackage cfg.iproutePackage ]` for each network,
     # avoid conflicts in environment if the packages differ
 
@@ -272,4 +266,4 @@ let
       };
     }) config.krebs.tinc;
   };
-in out
+}
