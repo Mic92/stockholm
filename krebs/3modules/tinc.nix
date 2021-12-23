@@ -209,9 +209,6 @@ with import <stockholm/lib>;
   };
 
   config = {
-    # TODO `environment.systemPackages = [ cfg.tincPackage cfg.iproutePackage ]` for each network,
-    # avoid conflicts in environment if the packages differ
-
     users.users = mapAttrs' (netname: cfg:
       nameValuePair "${netname}" {
         inherit (cfg.user) home name uid;
