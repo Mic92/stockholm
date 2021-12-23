@@ -148,9 +148,12 @@ let
     users.users.${cfg.user.name} = {
       inherit (cfg.user) home name uid;
       createHome = true;
+      group = cfg.user.name;
       description = "repo-sync user";
       isSystemUser = true;
     };
+
+    users.groups.${cfg.user.name} = {};
 
     systemd.timers = mapAttrs' (name: repo:
       nameValuePair "repo-sync-${name}" {
