@@ -1,36 +1,39 @@
-{ config, options, pkgs, ... }: let {
+{ config, pkgs, ... }: let {
   lib = import ../../lib;
 
   body.options.krebs.systemd.services = lib.mkOption {
     default = {};
-    type = lib.types.attrs;
-    description = ''
-      Definition of systemd service units with bonus features.
-
-      Services defined using this option will be restarted whenever any file
-      (described by an absolute path) used in LoadCredential changes.
-    '';
+    type = lib.types.attrsOf (lib.types.submodule {
+      options = {
+        serviceConfig.LoadCredential = lib.mkOption {
+          apply = lib.toList;
+          type =
+            lib.types.either lib.types.str (lib.types.listOf lib.types.str);
+        };
+      };
+    });
   };
 
   body.config.systemd =
     lib.mkMerge
       (lib.flatten
         (lib.mapAttrsToList (serviceName: cfg: let
-          prefix = [ "krebs" "systemd" "services" serviceName ];
-          opts = options.systemd.services.type.getSubOptions prefix;
-
           paths =
             lib.filter
               lib.types.absolute-pathname.check
               (map
                 (lib.compose [ lib.maybeHead (lib.match "[^:]*:(.*)") ])
-                (cfg.serviceConfig.LoadCredential or []));
+                cfg.serviceConfig.LoadCredential);
         in
           lib.singleton {
-            services.${serviceName} = cfg;
+            services.${serviceName} = {
+              serviceConfig = {
+                LoadCredential = cfg.serviceConfig.LoadCredential;
+              };
+            };
           }
           ++
-          lib.optionals (cfg.enable or opts.enable.default) (map (path: let
+          map (path: let
             triggerName = "trigger-${lib.systemd.encodeName path}";
           in {
             paths.${triggerName} = {
@@ -46,6 +49,6 @@
                 ]);
               };
             };
-          }) paths)
+          }) paths
         ) config.krebs.systemd.services));
 }
