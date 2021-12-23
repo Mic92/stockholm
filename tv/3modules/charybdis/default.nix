@@ -84,7 +84,10 @@ in {
     users.users.${cfg.user.name} = {
       inherit (cfg.user) home name uid;
       createHome = true;
+      group = cfg.user.name;
       isSystemUser = true;
     };
+
+    users.groups.${cfg.user.name} = {};
   };
 }
