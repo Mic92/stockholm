@@ -127,7 +127,6 @@ with import <stockholm/lib>;
     transmission
 
     macchanger
-    dpass
 
     dnsutils
     woeusb
