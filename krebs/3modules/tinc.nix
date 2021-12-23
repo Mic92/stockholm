@@ -229,12 +229,6 @@ with import <stockholm/lib>;
     ) config.krebs.tinc;
 
     krebs.systemd.services = mapAttrs (netname: cfg: {
-      serviceConfig.LoadCredential = filter (x: x != "") [
-        (optionalString (cfg.privkey_ed25519 != null)
-          "ed25519_key:${cfg.privkey_ed25519}"
-        )
-        "rsa_key:${cfg.privkey}"
-      ];
     }) config.krebs.tinc;
 
     systemd.services = mapAttrs (netname: cfg: {
@@ -249,6 +243,12 @@ with import <stockholm/lib>;
       restartTriggers = [ cfg.confDir ];
       serviceConfig = {
         Restart = "always";
+        LoadCredential = filter (x: x != "") [
+          (optionalString (cfg.privkey_ed25519 != null)
+            "ed25519_key:${cfg.privkey_ed25519}"
+          )
+          "rsa_key:${cfg.privkey}"
+        ];
         ExecStart = toString [
           "${cfg.tincPackage}/sbin/tincd"
           "-D"

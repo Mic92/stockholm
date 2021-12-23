@@ -18,50 +18,30 @@
             null
           ];
         };
-        serviceConfig.LoadCredential = lib.mkOption {
-          apply = lib.toList;
-          type =
-            lib.types.either lib.types.str (lib.types.listOf lib.types.str);
-        };
       };
     });
   };
 
-  body.config.systemd =
-    lib.mkMerge
-      (lib.flatten
-        (lib.mapAttrsToList (serviceName: cfg: let
-          paths =
-            lib.filter
-              lib.types.absolute-pathname.check
-              (map
-                (lib.compose [ lib.maybeHead (lib.match "[^:]*:(.*)") ])
-                cfg.serviceConfig.LoadCredential);
-        in
-          lib.singleton {
-            services.${serviceName} = {
-              serviceConfig = {
-                LoadCredential = cfg.serviceConfig.LoadCredential;
-              };
-            };
-          }
-          ++
-          lib.optionals (cfg.ifCredentialsChange != null) (map (path: let
-            triggerName = "trigger-${lib.systemd.encodeName path}";
-          in {
-            paths.${triggerName} = {
-              wantedBy = ["multi-user.target"];
-              pathConfig.PathChanged = path;
-            };
-            services.${triggerName} = {
-              serviceConfig = {
-                Type = "oneshot";
-                ExecStart = lib.singleton (toString [
-                  "${pkgs.systemd}/bin/systemctl ${cfg.ifCredentialsChange}"
-                  (lib.shell.escape serviceName)
-                ]);
-              };
-            };
-          }) paths)
-        ) config.krebs.systemd.services));
+  body.config = {
+    systemd.paths = lib.mapAttrs' (serviceName: _:
+      lib.nameValuePair "trigger-${lib.systemd.encodeName serviceName}" {
+        wantedBy = [ "multi-user.target" ];
+        pathConfig.PathChanged =
+          lib.filter
+            lib.types.absolute-pathname.check
+            (map
+              (lib.compose [ lib.maybeHead (lib.match "[^:]*:(.*)") ])
+              config.systemd.services.${serviceName}.serviceConfig.LoadCredential);
+      }
+    ) config.krebs.systemd.services;
+
+    systemd.services = lib.mapAttrs' (serviceName: cfg:
+      lib.nameValuePair "trigger-${lib.systemd.encodeName serviceName}" {
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.systemd}/bin/systemctl ${cfg.ifCredentialsChange} ${lib.shell.escape serviceName}";
+        };
+      }
+    ) config.krebs.systemd.services;
+  };
 }
