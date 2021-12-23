@@ -50,6 +50,7 @@ let
       ./shadow.nix
       ./ssl.nix
       ./sync-containers.nix
+      ./systemd.nix
       ./tinc.nix
       ./tinc_graphs.nix
       ./upstream
