@@ -5,6 +5,19 @@
     default = {};
     type = lib.types.attrsOf (lib.types.submodule {
       options = {
+        ifCredentialsChange = lib.mkOption {
+          default = "restart";
+          description = ''
+            Whether to reload or restart the service whenever any its
+            credentials change.  Only credentials with an absolute path in
+            LoadCredential= are supported.
+          '';
+          type = lib.types.enum [
+            "reload"
+            "restart"
+            null
+          ];
+        };
         serviceConfig.LoadCredential = lib.mkOption {
           apply = lib.toList;
           type =
@@ -33,7 +46,7 @@
             };
           }
           ++
-          map (path: let
+          lib.optionals (cfg.ifCredentialsChange != null) (map (path: let
             triggerName = "trigger-${lib.systemd.encodeName path}";
           in {
             paths.${triggerName} = {
@@ -44,11 +57,11 @@
               serviceConfig = {
                 Type = "oneshot";
                 ExecStart = lib.singleton (toString [
-                  "${pkgs.systemd}/bin/systemctl restart"
+                  "${pkgs.systemd}/bin/systemctl ${cfg.ifCredentialsChange}"
                   (lib.shell.escape serviceName)
                 ]);
               };
             };
-          }) paths
+          }) paths)
         ) config.krebs.systemd.services));
 }
