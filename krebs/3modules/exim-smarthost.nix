@@ -228,6 +228,7 @@ let
             dkim_domain = $sender_address_domain
             dkim_private_key = ''${lookup{$sender_address_domain.dkim_private_key}dsearch,ret=full{''${env{CREDENTIALS_DIRECTORY}{$value}fail}}}
             dkim_selector = ''${lookup{$sender_address_domain}lsearch{${lsearch.dkim_selector}}}
+            dkim_strict = true
           '')}
           helo_data = ''${if eq{$acl_m_special_dom}{}  \
                                {$primary_hostname}   \
