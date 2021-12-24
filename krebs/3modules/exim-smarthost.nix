@@ -24,13 +24,8 @@ let
             type = types.str;
           };
           private_key = mkOption {
-            type = types.secret-file;
-            default = {
-              name = "exim.dkim_private_key/${config.domain}";
-              path = "/run/krebs.secret/${config.domain}.dkim_private_key";
-              owner.name = "exim";
-              source-path = toString <secrets> + "/${config.domain}.dkim.priv";
-            };
+            type = types.absolute-pathname;
+            default = toString <secrets> + "/${config.domain}.dkim.priv";
             defaultText = "‹secrets/‹domain›.dkim.priv›";
           };
           selector = mkOption {
@@ -111,24 +106,13 @@ let
   };
 
   imp = {
-    krebs.secret.files = listToAttrs (flip map cfg.dkim (dkim: {
-      name = "exim.dkim_private_key/${dkim.domain}";
-      value = dkim.private_key;
-    }));
-    systemd.services = mkIf (cfg.dkim != []) {
-      exim = {
-        after = flip map cfg.dkim (dkim:
-          config.krebs.secret.files."exim.dkim_private_key/${dkim.domain}".service
-        );
-        partOf = flip map cfg.dkim (dkim:
-          config.krebs.secret.files."exim.dkim_private_key/${dkim.domain}".service
-        );
-      };
-    };
+    krebs.systemd.services.exim = {};
+    systemd.services.exim.serviceConfig.LoadCredential =
+      map (dkim: "${dkim.domain}.dkim_private_key:${dkim.private_key}") cfg.dkim;
     krebs.exim = {
       enable = true;
       config = /* exim */ ''
-        keep_environment =
+        keep_environment = CREDENTIALS_DIRECTORY
 
         primary_hostname = ${cfg.primary_hostname}
 
@@ -242,7 +226,7 @@ let
           ${optionalString (cfg.dkim != []) (indent /* exim */ ''
             dkim_canon = relaxed
             dkim_domain = $sender_address_domain
-            dkim_private_key = ''${lookup{$sender_address_domain}lsearch{${lsearch.dkim_private_key}}}
+            dkim_private_key = ''${lookup{$sender_address_domain.dkim_private_key}dsearch,ret=full{''${env{CREDENTIALS_DIRECTORY}{$value}fail}}}
             dkim_selector = ''${lookup{$sender_address_domain}lsearch{${lsearch.dkim_selector}}}
           '')}
           helo_data = ''${if eq{$acl_m_special_dom}{}  \
@@ -281,10 +265,6 @@ let
     inherit (cfg) internet-aliases;
     inherit (cfg) system-aliases;
   } // optionalAttrs (cfg.dkim != []) {
-    dkim_private_key = flip map cfg.dkim (dkim: {
-      from = dkim.domain;
-      to = dkim.private_key.path;
-    });
     dkim_selector = flip map cfg.dkim (dkim: {
       from = dkim.domain;
       to = dkim.selector;
