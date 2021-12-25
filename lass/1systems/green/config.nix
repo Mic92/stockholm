@@ -42,13 +42,6 @@ with import <stockholm/lib>;
         "-M ${toString config.users.users.mainUser.uid}"
       ];
     };
-    "/home/lass/sync" = {
-      source = "/var/state/lass_sync";
-      options = [
-        "-M ${concatMapStringsSep ":" (u: toString config.users.users.${u}.uid) [ "syncthing" "mainUser" ]}"
-        "--create-for-user=${toString config.users.users.syncthing.uid}"
-      ];
-    };
     "/var/lib/bitlbee" = {
       source = "/var/state/bitlbee";
       options = [
