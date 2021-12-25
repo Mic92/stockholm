@@ -23,6 +23,10 @@
           name = "hosts/${name}";
         };
       };
+      stockholm.file = lib.mkForce {
+        path = toString ../.;
+        useChecksum = true;
+      };
     }
     (if lib.pathExists (./. + "/1systems/${name}/source.nix") then
       import (./. + "/1systems/${name}/source.nix") { inherit lib pkgs test; }
