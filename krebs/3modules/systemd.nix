@@ -31,7 +31,8 @@
             lib.types.absolute-pathname.check
             (map
               (lib.compose [ lib.maybeHead (lib.match "[^:]*:(.*)") ])
-              config.systemd.services.${serviceName}.serviceConfig.LoadCredential);
+              (lib.toList
+                config.systemd.services.${serviceName}.serviceConfig.LoadCredential));
       }
     ) config.krebs.systemd.services;
 

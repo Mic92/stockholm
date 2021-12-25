@@ -61,13 +61,13 @@ in toFile "charybdis.conf" ''
     vhost6 = ${toJSON config.krebs.build.host.nets.retiolum.ip6.addr};
 
     /* ssl_private_key: our ssl private key */
-    ssl_private_key = ${toJSON cfg.ssl_private_key.path};
+    ssl_private_key = "/tmp/credentials/ssl_private_key";
 
     /* ssl_cert: certificate for our ssl server */
     ssl_cert = ${toJSON cfg.ssl_cert};
 
     /* ssl_dh_params: DH parameters, generate with openssl dhparam -out dh.pem 1024 */
-    ssl_dh_params = ${toJSON cfg.ssl_dh_params.path};
+    ssl_dh_params = "/tmp/credentials/ssl_dh_params";
 
     /* ssld_count: number of ssld processes you want to start, if you
      * have a really busy server, using N-1 where N is the number of

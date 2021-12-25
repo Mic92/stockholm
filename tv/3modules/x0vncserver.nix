@@ -11,17 +11,12 @@ in {
     };
     enable = mkEnableOption "tv.x0vncserver";
     pwfile = mkOption {
-      default = {
-        name = "x0vncserver-pwfile";
-        owner = cfg.user;
-        path = "${cfg.user.home}/.vncpasswd";
-        source-path = toString <secrets> + "/vncpasswd";
-      };
+      default = toString <secrets> + "/vncpasswd";
       description = ''
         Use vncpasswd to edit pwfile.
         See: nix-shell -p tigervnc --run 'man vncpasswd'
       '';
-      type = types.secret-file;
+      type = types.absolute-pathname;
     };
     rfbport = mkOption {
       default = 5900;
@@ -33,26 +28,17 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    krebs.secret.files = {
-      x0vncserver-pwfile = cfg.pwfile;
-    };
+    krebs.systemd.services.x0vncserver = {};
     systemd.services.x0vncserver = {
-      after = [
-        config.krebs.secret.files.x0vncserver-pwfile.service
-        "graphical.target"
-      ];
-      partOf = [
-        config.krebs.secret.files.x0vncserver-pwfile.service
-      ];
-      requires = [
-        "graphical.target"
-      ];
+      after = [ "graphical.target" ];
+      requires = [ "graphical.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.tigervnc}/bin/x0vncserver ${toString [
           "-display ${cfg.display}"
-          "-passwordfile ${cfg.pwfile.path}"
+          "-passwordfile \${CREDENTIALS_DIRECTORY}/pwfile"
           "-rfbport ${toString cfg.rfbport}"
         ]}";
+        LoadCredential = "ssh_key:${cfg.pwfile}";
         User = cfg.user.name;
       };
     };

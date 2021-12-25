@@ -122,13 +122,9 @@ let
     };
 
     privateKeyFile = mkOption {
-      type = types.secret-file;
-      default = {
-        name = "repo-sync-key";
-        path = "${cfg.stateDir}/ssh.priv";
-        owner = cfg.user;
-        source-path = toString <secrets> + "/repo-sync.ssh.key";
-      };
+      type = types.absolute-pathname;
+      default = toString <secrets> + "/repo-sync.ssh.key";
+      defaultText = "‹secrets/repo-sync.ssh.key›";
     };
 
     unitConfig = mkOption {
@@ -144,13 +140,15 @@ let
   };
 
   imp = {
-    krebs.secret.files.repo-sync-key = cfg.privateKeyFile;
     users.users.${cfg.user.name} = {
       inherit (cfg.user) home name uid;
       createHome = true;
+      group = cfg.user.name;
       description = "repo-sync user";
       isSystemUser = true;
     };
+
+    users.groups.${cfg.user.name} = {};
 
     systemd.timers = mapAttrs' (name: repo:
       nameValuePair "repo-sync-${name}" {
@@ -158,6 +156,10 @@ let
         wantedBy = [ "timers.target" ];
         timerConfig = repo.timerConfig;
       }
+    ) cfg.repos;
+
+    krebs.systemd.services = mapAttrs' (name: _:
+      nameValuePair "repo-sync-${name}" {}
     ) cfg.repos;
 
     systemd.services = mapAttrs' (name: repo:
@@ -168,16 +170,10 @@ let
           });
       in nameValuePair "repo-sync-${name}" {
         description = "repo-sync";
-        after = [
-          config.krebs.secret.files.repo-sync-key.service
-          "network.target"
-        ];
-        partOf = [
-          config.krebs.secret.files.repo-sync-key.service
-        ];
+        after = [ "network.target" ];
 
         environment = {
-          GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh -i ${cfg.privateKeyFile.path}";
+          GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh -i $CREDENTIALS_DIRECTORY/ssh_key";
           REPONAME = "${name}.git";
         };
 
@@ -185,6 +181,7 @@ let
         serviceConfig = {
           Type = "simple";
           PermissionsStartOnly = true;
+          LoadCredential = "ssh_key:${cfg.privateKeyFile}";
           ExecStart = "${pkgs.repo-sync}/bin/repo-sync ${repo-sync-config}";
           WorkingDirectory = cfg.stateDir;
           User = "repo-sync";
