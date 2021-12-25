@@ -16,22 +16,8 @@ in {
   options.tv.ejabberd = {
     enable = mkEnableOption "tv.ejabberd";
     certfile = mkOption {
-      type = types.secret-file;
-      default = {
-        name = "ejabberd-certfile";
-        path = "${cfg.user.home}/ejabberd.pem";
-        owner = cfg.user;
-        source-path = toString <secrets> + "/ejabberd.pem";
-      };
-    };
-    dhfile = mkOption {
-      type = types.secret-file;
-      default = {
-        name = "ejabberd-dhfile";
-        path = "${cfg.user.home}/dhparams.pem";
-        owner = cfg.user;
-        source-path = "/dev/null";
-      };
+      type = types.absolute-pathname;
+      default = toString <secrets> + "/ejabberd.pem";
     };
     hosts = mkOption {
       type = with types; listOf str;
@@ -61,10 +47,6 @@ in {
         config.krebs.users.tv.mail
       ];
     };
-    s2s_certfile = mkOption {
-      type = types.secret-file;
-      default = cfg.certfile;
-    };
     user = mkOption {
       type = types.user;
       default = {
@@ -90,27 +72,24 @@ in {
       })
     ];
 
-    krebs.secret.files = {
-      ejabberd-certfile = cfg.certfile;
-      ejabberd-s2s_certfile = cfg.s2s_certfile;
-    };
+    krebs.systemd.services.ejabberd = {};
 
     systemd.services.ejabberd = {
       wantedBy = [ "multi-user.target" ];
-      after = [
-        config.krebs.secret.files.ejabberd-certfile.service
-        config.krebs.secret.files.ejabberd-s2s_certfile.service
-        "network.target"
-      ];
-      partOf = [
-        config.krebs.secret.files.ejabberd-certfile.service
-        config.krebs.secret.files.ejabberd-s2s_certfile.service
-      ];
+      after = [ "network.target" ];
       serviceConfig = {
-        ExecStartPre = "${gen-dhparam} ${cfg.dhfile.path}";
-        ExecStart = "${cfg.pkgs.ejabberd}/bin/ejabberdctl foreground";
+        ExecStart = pkgs.writeDash "ejabberd" ''
+          ${pkgs.coreutils}/bin/ln -s "$CREDENTIALS_DIRECTORY" /tmp/credentials
+          ${gen-dhparam} /var/lib/ejabberd/dhfile
+          exec ${cfg.pkgs.ejabberd}/bin/ejabberdctl foreground
+        '';
+        LoadCredential = [
+          "certfile:${cfg.certfile}"
+        ];
         PermissionsStartOnly = true;
+        PrivateTmp = true;
         SyslogIdentifier = "ejabberd";
+        StateDirectory = "ejabberd";
         User = cfg.user.name;
         TimeoutStartSec = 60;
       };

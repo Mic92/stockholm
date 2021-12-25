@@ -48,6 +48,9 @@ in /* yaml */ ''
         - "::1/128"
         - "::FFFF:127.0.0.1/128"
 
+  certfiles:
+    - /tmp/credentials/certfile
+
   hosts: ${toJSON config.hosts}
 
   language: "en"
@@ -58,9 +61,8 @@ in /* yaml */ ''
       ip: "::"
       module: ejabberd_c2s
       shaper: c2s_shaper
-      certfile: ${toJSON config.certfile.path}
       ciphers: ${toJSON ciphers}
-      dhfile: ${toJSON config.dhfile.path}
+      dhfile: /var/lib/ejabberd/dhfile
       protocol_options: ${toJSON protocol_options}
       starttls: true
       starttls_required: true
@@ -109,9 +111,8 @@ in /* yaml */ ''
     mod_http_api: {}
 
   s2s_access: s2s
-  s2s_certfile: ${toJSON config.s2s_certfile.path}
   s2s_ciphers: ${toJSON ciphers}
-  s2s_dhfile: ${toJSON config.dhfile.path}
+  s2s_dhfile: /var/lib/ejabberd/dhfile
   s2s_protocol_options: ${toJSON protocol_options}
   s2s_tls_compression: false
   s2s_use_starttls: required
