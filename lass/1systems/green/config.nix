@@ -87,4 +87,10 @@ with import <stockholm/lib>;
   krebs.iptables.tables.nat.PREROUTING.rules = [
     { predicate = "-i eth0 -p tcp -m tcp --dport 22"; target = "ACCEPT"; precedence = 101; }
   ];
+
+  # workaround for ssh access from yubikey via android
+  services.openssh.extraConfig = ''
+    HostKeyAlgorithms +ssh-rsa
+    PubkeyAcceptedAlgorithms +ssh-rsa
+  '';
 }
