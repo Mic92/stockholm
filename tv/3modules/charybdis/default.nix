@@ -15,22 +15,12 @@ in {
       type = types.path;
     };
     ssl_dh_params = mkOption {
-      type = types.secret-file;
-      default = {
-        name = "charybdis-ssl_dh_params";
-        path = "${cfg.user.home}/dh.pem";
-        owner = cfg.user;
-        source-path = toString <secrets> + "/charybdis.dh.pem";
-      };
+      type = types.absolute-pathname;
+      default = toString <secrets> + "/charybdis.dh.pem";
     };
     ssl_private_key = mkOption {
-      type = types.secret-file;
-      default = {
-        name = "charybdis-ssl_private_key";
-        path = "${cfg.user.home}/ssl.key.pem";
-        owner = cfg.user;
-        source-path = toString <secrets> + "/charybdis.key.pem";
-      };
+      type = types.absolute-pathname;
+      default = toString <secrets> + "/charybdis.key.pem";
     };
     sslport = mkOption {
       type = types.int;
@@ -46,22 +36,13 @@ in {
   };
   config = lib.mkIf cfg.enable {
 
-    krebs.secret.files.charybdis-ssl_dh_params = cfg.ssl_dh_params;
-    krebs.secret.files.charybdis-ssl_private_key = cfg.ssl_private_key;
-
     environment.etc."charybdis-ircd.motd".text = cfg.motd;
+
+    krebs.systemd.services.charybdis = {};
 
     systemd.services.charybdis = {
       wantedBy = [ "multi-user.target" ];
-      after = [
-        config.krebs.secret.files.charybdis-ssl_dh_params.service
-        config.krebs.secret.files.charybdis-ssl_private_key.service
-        "network-online.target"
-      ];
-      partOf = [
-        config.krebs.secret.files.charybdis-ssl_dh_params.service
-        config.krebs.secret.files.charybdis-ssl_private_key.service
-      ];
+      after = [ "network-online.target" ];
       environment = {
         BANDB_DBPATH = "${cfg.user.home}/ban.db";
       };
@@ -70,13 +51,19 @@ in {
         User = cfg.user.name;
         PrivateTmp = true;
         Restart = "always";
-        ExecStartPre =
-          "${pkgs.coreutils}/bin/ln -s /etc/charybdis-ircd.motd /tmp/ircd.motd";
+        ExecStartPre = [
+          "${pkgs.coreutils}/bin/ln -s /etc/charybdis-ircd.motd /tmp/ircd.motd"
+          "${pkgs.coreutils}/bin/ln -s \${CREDENTIALS_DIRECTORY} /tmp/credentials"
+        ];
         ExecStart = toString [
           "${pkgs.charybdis}/bin/charybdis"
             "-configfile ${import ./config.nix args}"
             "-foreground"
             "-logfile /dev/stderr"
+        ];
+        LoadCredential = [
+          "ssl_dh_params:${cfg.ssl_dh_params}"
+          "ssl_private_key:${cfg.ssl_private_key}"
         ];
       };
     };
