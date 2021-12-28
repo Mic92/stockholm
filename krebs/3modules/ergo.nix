@@ -50,7 +50,7 @@ in
             };
           };
           datastore = {
-            path = "${cfg.statedir}/ircd.db";
+            path = "/var/lib/ergo/ircd.db";
           };
           accounts = {
             authentication-enabled = true;
@@ -75,30 +75,6 @@ in
         };
       };
 
-      statedir = mkOption {
-        type = types.path;
-        default = "/var/lib/ergo";
-        description = ''
-          Location of the state directory of ergo.
-        '';
-      };
-
-      user = mkOption {
-        type = types.str;
-        default = "ergo";
-        description = ''
-          Ergo IRC daemon user.
-        '';
-      };
-
-      group = mkOption {
-        type = types.str;
-        default = "ergo";
-        description = ''
-          Ergo IRC daemon group.
-        '';
-      };
-
     };
 
   };
@@ -107,28 +83,14 @@ in
   ###### implementation
 
   config = mkIf cfg.enable ({
-    users.users.${cfg.user} = {
-      description = "Ergo IRC daemon user";
-      uid = config.ids.uids.ircd;
-      group = cfg.group;
-    };
-
-    users.groups.${cfg.group} = {
-      gid = config.ids.gids.ircd;
-    };
-
-    systemd.tmpfiles.rules = [
-      "d ${cfg.statedir} - ${cfg.user} ${cfg.group} - -"
-    ];
 
     systemd.services.ergo = {
       description = "Ergo IRC daemon";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStartPre = "${ergo}/bin/ergo initdb --conf ${configFile}";
         ExecStart = "${ergo}/bin/ergo run --conf ${configFile}";
-        Group = cfg.group;
-        User = cfg.user;
+        DynamicUser = true;
+        StateDirectory = "ergo";
       };
     };
 
