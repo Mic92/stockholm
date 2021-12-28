@@ -1,24 +1,8 @@
-{ config, lib, pkgs, ... }:
-
-let
-  inherit (lib) mkEnableOption mkIf mkOption types;
-  inherit (pkgs) coreutils ergo;
-  cfg = config.krebs.ergo;
-
-  configFile = pkgs.writeText "ergo.conf" (builtins.toJSON cfg.config);
-in
-
-{
-
-  ###### interface
-
+{ config, lib, options, pkgs, ... }: {
   options = {
-
     krebs.ergo = {
-
-      enable = mkEnableOption "Ergo IRC daemon";
-
-      config = mkOption {
+      enable = lib.mkEnableOption "Ergo IRC daemon";
+      config = lib.mkOption {
         type = (pkgs.formats.json {}).type;
         description = ''
           Ergo IRC daemon configuration file.
@@ -74,25 +58,22 @@ in
           };
         };
       };
-
     };
-
   };
-
-
-  ###### implementation
-
-  config = mkIf cfg.enable ({
-
+  config = let
+    cfg = config.krebs.ergo;
+    configFile = pkgs.writeJSON "ergo.conf" cfg.config;
+  in lib.mkIf cfg.enable ({
+    krebs.ergo.config =
+      lib.mapAttrsRecursive (_: lib.mkDefault) options.krebs.ergo.config.default;
     systemd.services.ergo = {
       description = "Ergo IRC daemon";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${ergo}/bin/ergo run --conf ${configFile}";
+        ExecStart = "${pkgs.ergo}/bin/ergo run --conf ${configFile}";
         DynamicUser = true;
         StateDirectory = "ergo";
       };
     };
-
   });
 }
