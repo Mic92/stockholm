@@ -188,6 +188,10 @@ rec {
                 ++
                 [config.pubkey]
                 ++
+                optional (config.pubkey_ed25519 != null) ''
+                  Ed25519PublicKey = ${config.pubkey_ed25519}
+                ''
+                ++
                 optional (config.weight != null) "Weight = ${toString config.weight}"
               );
               defaultText = ''
