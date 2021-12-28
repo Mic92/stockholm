@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
   inherit (lib) mkEnableOption mkIf mkOption types;
@@ -83,6 +83,9 @@ in
   ###### implementation
 
   config = mkIf cfg.enable ({
+
+    krebs.ergo.config =
+      lib.mapAttrsRecursive (_: lib.mkDefault) options.krebs.ergo.config.default;
 
     systemd.services.ergo = {
       description = "Ergo IRC daemon";
