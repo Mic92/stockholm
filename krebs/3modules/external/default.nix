@@ -67,8 +67,8 @@ in {
             PyB9OiK6tN+L63QFM7H1NFN9fPeOd2WbHvfoeX255kx8FHSALKL5rVSz9Ejwc97k
             rG0FItgHXajPazulBfUV0N9ck7SwLTmStKxtQ8NKCoIJLpv2ip4C+t0CAwEAAQ==
             -----END RSA PUBLIC KEY-----
-            Ed25519PublicKey = 47fX1g6qynVprA+PtniBLEonFp1B70nMrJ8SBCWNJnL
           '';
+          tinc.pubkey_ed25519 = "47fX1g6qynVprA+PtniBLEonFp1B70nMrJ8SBCWNJnL";
         };
       };
     };
@@ -221,8 +221,8 @@ in {
             6mAPiTLI7oFYpWIP0UiM7u4o6iDW9S8G9l+vLZJyEmhEUZJUkWoXRy2Ibd6ix0L3
             eA6izpRuehl1OLePY4HNkuqOgXiEf1mgNcoGnyx3kzKYa1cUlMP0ve8CAwEAAQ==
             -----END RSA PUBLIC KEY-----
-            Ed25519PublicKey = dqJq+qESCNakC3p9duc5LrG26D1scj58Hy1S5kPGtME
           '';
+          tinc.pubkey_ed25519 = "dqJq+qESCNakC3p9duc5LrG26D1scj58Hy1S5kPGtME";
         };
       };
     };
@@ -247,8 +247,8 @@ in {
             35bQuqjpFe/bwW1PuK6YspMRK2hQrYkypQNrvjcz0RJJc/1ULILTl0NaZEMtCcj2
             t7KpA6wY6WIz5+uTVBnc3vQrcBebfSWzl0IWxjaSufp8ojq5B7mz8s0CAwEAAQ==
             -----END RSA PUBLIC KEY-----
-            Ed25519PublicKey = HeSMxgGaB9alyS0n766TJ3qA2fAwvJmMyLPFbYhfZdJ
           '';
+          tinc.pubkey_ed25519 = "HeSMxgGaB9alyS0n766TJ3qA2fAwvJmMyLPFbYhfZdJ";
         };
       };
     };
@@ -452,8 +452,8 @@ in {
             2h+zZqkG4boV6CrMEjStb15EOXTUVfq0DPojFik6agCltslsJAwp+f1fb7NSee4d
             TNWb1CHfIQWLPnm1LFwphSqyHY/9ehcsX3PJ7oXI+/BnV8ivvoApWA0CAwEAAQ==
             -----END RSA PUBLIC KEY-----
-            Ed25519PublicKey = DWfh6H8Qco+GURdVRhKhLBAsN5epsEYhOM2+88dTdTE
           '';
+          tinc.pubkey_ed25519 = "DWfh6H8Qco+GURdVRhKhLBAsN5epsEYhOM2+88dTdTE";
         };
       };
     };
@@ -711,8 +711,8 @@ in {
             1T6DILDF71H92PNylujKSPA0CKI160xJ61Xy/T6MYl5u0+RblAgYr77o5HJwmXCe
             jFrCu3SKUIlJWYHWE8yNoR+VVYeXakbDFYE3KpVyBDG+ljUbia+Oel8CAwEAAQ==
             -----END RSA PUBLIC KEY-----
-            Ed25519PublicKey = 3IKIoZqg0jm9+pOOka2FEtihx0y8qAdJqKTuRfJtMpK
           '';
+          tinc.pubkey_ed25519 = "3IKIoZqg0jm9+pOOka2FEtihx0y8qAdJqKTuRfJtMpK";
         };
       };
     };
