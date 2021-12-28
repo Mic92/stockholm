@@ -43,7 +43,7 @@ in {
             QAD64zPmuo9wsHnSMR2oKs0CAwEAAQ==
             -----END PUBLIC KEY-----
           '';
-          tinc.pubkey_ed25519 = "Ed25519PublicKey = KhOetVTVLtGxB22NmZhkTWC0Uhg8rXJv4ayZqchSgCN";
+          tinc.pubkey_ed25519 = "KhOetVTVLtGxB22NmZhkTWC0Uhg8rXJv4ayZqchSgCN";
         };
       };
     };
@@ -169,7 +169,7 @@ in {
             oou23ajP11wyfrmZK0/PQGTpsU472Jj+06KtMAaH0zo4vAR8s2kV1ukCAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
-          tinc.pubkey_ed25519 = "Ed25519PublicKey = GiAe9EH3ss+K71lRlkGaOcg/MrV/zxNW5tDF0koEGvC";
+          tinc.pubkey_ed25519 = "GiAe9EH3ss+K71lRlkGaOcg/MrV/zxNW5tDF0koEGvC";
         };
       };
     };
@@ -197,7 +197,7 @@ in {
             qVnWMbvqqYlY9l//HCNxUXIhi0vcOr2PoCxBtcP5pHY8nNphQrPjRrcCAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
-          tinc.pubkey_ed25519 = "Ed25519PublicKey = CjSqXJMvJevjqX9W9sqDpLTJs9DXfC04YNAFpYqS2iN";
+          tinc.pubkey_ed25519 = "CjSqXJMvJevjqX9W9sqDpLTJs9DXfC04YNAFpYqS2iN";
         };
       };
     };
@@ -339,7 +339,7 @@ in {
             uYEZh8YBMJo0E4bR4s04SFA6uLIvLigPELxzb0jwZSKXRnQhay6zzZ0CAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
-          tinc.pubkey_ed25519 = "Ed25519PublicKey = GYg9UMw0rFWFS0Yr8HFe81HcGjQw0xbu9wqDWtQPDLH";
+          tinc.pubkey_ed25519 = "GYg9UMw0rFWFS0Yr8HFe81HcGjQw0xbu9wqDWtQPDLH";
         };
       };
     };
