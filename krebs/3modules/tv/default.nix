@@ -50,6 +50,7 @@ in {
             cPLMN0lWOZeDae/9SDT62l/YuETYQo6TxwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
+          tinc.pubkey_ed25519 = "Td6pRkmSzSGVJll26rULdr6W4U87xsHZ/87NEaglW3K";
         };
       };
       ssh.privkey.path = config.krebs.secret.file "ssh.id_rsa";
@@ -74,8 +75,7 @@ in {
             jjB+eZgXq5g81vc1116bA5yqcT2UNdOPWwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
-          tinc.pubkey_ed25519 =
-            "Ed25519PublicKey = bfDtJbxusBdosE6dMED32Yc6ZeYI3RFyXryQr7heZpO";
+          tinc.pubkey_ed25519 = "bfDtJbxusBdosE6dMED32Yc6ZeYI3RFyXryQr7heZpO";
         };
       };
       secure = true;
@@ -99,8 +99,7 @@ in {
             Brbw1bqZ3P+CGzvxVJZtirvR2f3HkidGPQIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
-          tinc.pubkey_ed25519 =
-            "Ed25519PublicKey = PV8Dz9ni2cPXyJGiG5oU0XWdJkUPgrMzDuzHj7kpMzO";
+          tinc.pubkey_ed25519 = "PV8Dz9ni2cPXyJGiG5oU0XWdJkUPgrMzDuzHj7kpMzO";
         };
       };
       secure = true;
@@ -126,6 +125,7 @@ in {
             FK6BsssQWdwiEWpv6xIl1Fi+s7F0riq2cwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
+          tinc.pubkey_ed25519 = "cEf/Kq/2Fo70yoIcVmhIp4it9eA7L3GdkgrVE9AWU6C";
         };
       };
       ssh.privkey.path = config.krebs.secret.file "ssh.id_ed25519";
@@ -172,6 +172,7 @@ in {
             Mf00uin+7uMuKtnG6+1z5nKb/AWrqN1RZu0rnG/IkZPKwa19HYsYcOkCAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
+          tinc.pubkey_ed25519 = "nDuK96NlNhcxzlX7G30w/706RxItb+FhkFkz/VhUgCE";
         };
         wiregrill.wireguard.subnets = [
           (krebs.genipv6 "wiregrill" "tv" 0).subnetCIDR
@@ -199,6 +200,7 @@ in {
             Wi9sMB1AUR6mZrxgcgTFpUjbjbLQf+36CwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
+          tinc.pubkey_ed25519 = "sBevGkYkcNKd39yf/Mp0whnsWIJfTGxSU1lbqN305nP";
         };
       };
       secure = true;
@@ -225,6 +227,7 @@ in {
             AFGCrMIov3F0GIeu3nDlrTIZPZDTodbFKQIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
+          tinc.pubkey_ed25519 = "urVOEGxTkBedkpszPH0XRCRMk+Fc2U9IneYMFDqGoIB";
         };
       };
       secure = true;
@@ -284,6 +287,7 @@ in {
             4o+9nGJPuzb9bpMVRaVGtKXd39jwY7mbqwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
+          tinc.pubkey_ed25519 = "xYgYM9rXS73RFKUHF3ekQWhcWzuBLOPYG2bimhpH2pM";
         };
       };
       secure = true;
