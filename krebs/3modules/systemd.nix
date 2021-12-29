@@ -5,18 +5,18 @@
     default = {};
     type = lib.types.attrsOf (lib.types.submodule {
       options = {
-        ifCredentialsChange = lib.mkOption {
-          default = "restart";
+        restartIfCredentialsChange = lib.mkOption {
+          # Enabling this by default only makes sense here as the user already
+          # bothered to write down krebs.systemd.services.* = {}.  If this
+          # functionality gets upstreamed to systemd.services, restarting
+          # should be disabled by default.
+          default = true;
           description = ''
-            Whether to reload or restart the service whenever any its
-            credentials change.  Only credentials with an absolute path in
-            LoadCredential= are supported.
+            Whether to restart the service whenever any of its credentials
+            change.  Only credentials with an absolute path in LoadCredential=
+            are supported.
           '';
-          type = lib.types.enum [
-            "reload"
-            "restart"
-            null
-          ];
+          type = lib.types.bool;
         };
       };
     });
@@ -40,7 +40,7 @@
       lib.nameValuePair "trigger-${lib.systemd.encodeName serviceName}" {
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${pkgs.systemd}/bin/systemctl ${cfg.ifCredentialsChange} ${lib.shell.escape serviceName}";
+          ExecStart = "${pkgs.systemd}/bin/systemctl restart ${lib.shell.escape serviceName}";
         };
       }
     ) config.krebs.systemd.services;
