@@ -50,12 +50,12 @@
               };
               bcrypt-cost = 4;
               email-verification.enabled = false;
-              multiclient = {
-                enabled = true;
-                allowed-by-default = true;
-                always-on = "opt-in";
-                auto-away = "opt-in";
-              };
+            };
+            multiclient = {
+              enabled = true;
+              allowed-by-default = true;
+              always-on = "opt-in";
+              auto-away = "opt-in";
             };
           };
           channels = {
