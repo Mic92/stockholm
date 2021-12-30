@@ -26,7 +26,7 @@ let
     setCommand = name: value: "/set ${name} \"${toWeechatValue value}\"";
 
     filterAddreplace = name: filter:
-      "/filter addreplace ${name} ${filter.buffer} ${lib.concatStringsSep "," filter.tags} ${filter.regex}";
+      "/filter addreplace ${name} ${filter.buffer} ${toWeechatValue filter.tags} ${filter.regex}";
   };
 
   cfg = eval.config;
@@ -65,7 +65,7 @@ let
               autojoin = [ "#krebs" ];
             };
             weechat.bar.buflist.hidden = true;
-            irc.server.hackint.command = lib.concatStringsSep ";" [
+            irc.server.hackint.command = lib.concatStringsSep "\\;" [
               "/msg nickserv IDENTIFY \\\${sec.data.hackint_password}"
               "/msg nickserv SET CLOAK ON"
             ];
