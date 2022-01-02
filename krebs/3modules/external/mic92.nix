@@ -679,7 +679,6 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
-          ip4.addr = "10.243.29.169";
           aliases = [ "bernie.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
