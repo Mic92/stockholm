@@ -26,7 +26,7 @@ with import <stockholm/lib>;
     (let
       pubkey-path = ./retiolum + "/${hostName}_ed25519.pub";
     in optionalAttrs (pathExists pubkey-path) {
-      nets.retiolum.tinc.pubkey_ed25519 = builtins.trace "using ed25519 key for host ${hostName}" (readFile pubkey-path);
+      nets.retiolum.tinc.pubkey_ed25519 = readFile pubkey-path;
     })
     # Wiregrill defaults
     (let
