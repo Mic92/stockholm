@@ -300,6 +300,11 @@ in {
     };
     yasmin = {
       owner = config.krebs.users.mic92;
+      nets.internet = {
+        ip4.addr = "131.159.102.7";
+        ip6.addr = "2a09:80c0:102::7";
+        aliases = [ "yasmin.i" ];
+      };
       nets.retiolum = {
         ip4.addr = "10.243.29.197";
         aliases = [
