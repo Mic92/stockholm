@@ -222,12 +222,6 @@ with import <stockholm/lib>;
       nameValuePair netname {}
     ) config.krebs.tinc;
 
-    environment.etc = mapAttrs' (netname: cfg:
-      nameValuePair "tinc/${netname}" {
-        source = cfg.confDir;
-      }
-    ) config.krebs.tinc;
-
     krebs.systemd.services = mapAttrs (netname: cfg: {
     }) config.krebs.tinc;
 
@@ -239,8 +233,6 @@ with import <stockholm/lib>;
         cfg.iproutePackage
         cfg.tincPackage
       ];
-      reloadIfChanged = true;
-      restartTriggers = [ cfg.confDir ];
       serviceConfig = {
         Restart = "always";
         LoadCredential = filter (x: x != "") [
@@ -249,6 +241,13 @@ with import <stockholm/lib>;
           )
           "rsa_key:${cfg.privkey}"
         ];
+        ExecStartPre = pkgs.writers.writeDash "init-tinc-${netname}" ''
+          ${pkgs.coreutils}/bin/mkdir -p /etc/tinc
+          ${pkgs.rsync}/bin/rsync -vaL --delete \
+            --chown ${cfg.user.name} \
+            --chmod u=rwX,g=rX \
+            ${cfg.confDir}/ /etc/tinc/${netname}/
+        '';
         ExecStart = toString [
           "${cfg.tincPackage}/sbin/tincd"
           "-D"
