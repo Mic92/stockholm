@@ -253,12 +253,12 @@ in {
       };
     };
 
-    pinpox-ahorn = {
+    ahorn = {
       owner = config.krebs.users.pinpox;
       nets = {
         retiolum = {
           ip4.addr = "10.243.100.100";
-          aliases = [ "pinpox-ahorn.r" ];
+          aliases = [ "ahorn.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIICCgKCAgEAyfCuWUYEqp4vEt+a6DRvFpIrBu+GlkpNs/mE4OHzATQLNnWooOXQ

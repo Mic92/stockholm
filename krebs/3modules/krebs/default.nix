@@ -92,6 +92,7 @@ in {
             h5ZUzfd1r1pTzQ0nYD5aRtlDd7zP7y5tUwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
+          tinc.pubkey_ed25519 = "ugy/sGReVro3YzjDuroV/5hdeBdqD18no9dMhTy9DYL";
         };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;

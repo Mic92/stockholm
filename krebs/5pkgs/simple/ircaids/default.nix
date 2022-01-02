@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ircaids";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = pkgs.fetchgit {
     url = "https://cgit.krebsco.de/ircaids";
     rev = "refs/tags/${version}";
-    sha256 = "049ln54llfrn99q0pzwlb7iaz4igd4f3n4rb6mpc9irsy32bv3qg";
+    sha256 = "128ryfl0prpc1789hhqw2mq16zy3jd82a24k6hkw7nj71hifzr3a";
   };
 
   buildPhase = null;
