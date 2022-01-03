@@ -52,6 +52,7 @@ let
       type = typeOf x;
       reject = throw "cannot convert ${type}";
     in {
+      int = toJSON x; # close enough
       list = "{ ${concatStringsSep ", " (map toC x)} }";
       null = "NULL";
       set = if isDerivation x then toJSON x else reject;
