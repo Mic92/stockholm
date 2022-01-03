@@ -22,6 +22,12 @@ with import <stockholm/lib>;
           (krebs.genipv6 "retiolum" "makefu" { inherit hostName; }).address;
       };
     })
+    # Retiolum ed25519 keys
+    (let
+      pubkey-path = ./retiolum + "/${hostName}_ed25519.pub";
+    in optionalAttrs (pathExists pubkey-path) {
+      nets.retiolum.tinc.pubkey_ed25519 = readFile pubkey-path;
+    })
     # Wiregrill defaults
     (let
       pubkey-path = ./wiregrill + "/${hostName}.pub";
