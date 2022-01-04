@@ -65,8 +65,9 @@ in {
         config.environment.etc."exim.conf".source
       ];
       serviceConfig = {
-        ExecStart = "${pkgs.exim}/bin/exim -bdf -q30m";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        ExecStart = "+${pkgs.exim}/bin/exim -bdf -q30m";
+        ExecReload = "+${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        User = cfg.user.name;
       };
       wantedBy = [ "multi-user.target" ];
     };
