@@ -320,7 +320,7 @@ in {
           aliases = [
             "zaatar.r"
             "zaatar.kmein.r"
-            "radio.kmein.r"
+            "grocy.kmein.r"
             "bvg.kmein.r"
             "moodle.kmein.r"
           ];
