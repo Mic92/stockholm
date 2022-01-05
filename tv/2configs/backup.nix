@@ -10,6 +10,24 @@ with import <stockholm/lib>;
       yearly   = { format = "%Y";                    };
     };
   }) {
+    bu-home-wu = {
+      method = "push";
+      src = { host = config.krebs.hosts.bu; path = "/home"; };
+      dst = { host = config.krebs.hosts.wu; path = "/bku/bu-home"; };
+      startAt = "05:15";
+    };
+    bu-home-xu = {
+      method = "push";
+      src = { host = config.krebs.hosts.bu; path = "/home"; };
+      dst = { host = config.krebs.hosts.xu; path = "/bku/bu-home"; };
+      startAt = "05:20";
+    };
+    bu-home-zu = {
+      method = "push";
+      src = { host = config.krebs.hosts.bu; path = "/home"; };
+      dst = { host = config.krebs.hosts.zu; path = "/bku/bu-home"; };
+      startAt = "05:25";
+    };
     nomic-home-xu = {
       method = "push";
       src = { host = config.krebs.hosts.nomic; path = "/home"; };
@@ -39,6 +57,12 @@ with import <stockholm/lib>;
       src = { host = config.krebs.hosts.wu; path = "/home"; };
       dst = { host = config.krebs.hosts.zu; path = "/bku/wu-home"; };
       startAt = "05:20";
+    };
+    xu-home-bu = {
+      method = "push";
+      src = { host = config.krebs.hosts.xu; path = "/home"; };
+      dst = { host = config.krebs.hosts.bu; path = "/bku/xu-home"; };
+      startAt = "04:50";
     };
     xu-home-nomic = {
       method = "push";

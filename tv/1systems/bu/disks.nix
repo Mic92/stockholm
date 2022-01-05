@@ -4,6 +4,10 @@
     device = "buda2/root";
     fsType = "zfs";
   };
+  fileSystems."/bku" = {
+    device = "buda2/bku";
+    fsType = "zfs";
+  };
   fileSystems."/home" = {
     device = "buda2/home";
     fsType = "zfs";
