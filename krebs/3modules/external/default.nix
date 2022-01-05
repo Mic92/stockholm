@@ -662,6 +662,7 @@ in {
            vDZ+BoHCjq9FfQrAu1+E83yCYyu+3fWrLSgYyrqjg0gPcCcnb1g6hqECAwEAAQ==
            -----END RSA PUBLIC KEY-----
          '';
+         tinc.pubkey_ed25519 = "PiqJGofbo6941m20NJM3yhUoWKTNyLCtTPzsKcrvFSL";
         };
       };
     };
@@ -686,6 +687,7 @@ in {
            /n/eHElmKWoMCXhkV/mee1Cl2Y74XKivM6ov3lLvIDRxdXl46PvBFVkCAwEAAQ==
            -----END RSA PUBLIC KEY-----
          '';
+         tinc.pubkey_ed25519 = "P9yurwK2l1npimgm3yk8WXigWLfEtJ6G1w/3kVCPG7F";
         };
       };
     };
