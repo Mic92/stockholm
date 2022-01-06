@@ -321,7 +321,6 @@ in {
             "zaatar.r"
             "zaatar.kmein.r"
             "grocy.kmein.r"
-            "bvg.kmein.r"
             "moodle.kmein.r"
           ];
           tinc.pubkey = ''
