@@ -157,7 +157,8 @@ let
     # of the deepest directory:
     # shellcheck disable=SC2174
     ${local.rsync} >&2 \
-        -aAXF --delete \
+        -aAX --delete \
+        --filter='dir-merge /.backup-filter' \
         --rsh=${shell.escape ssh} \
         --rsync-path=${shell.escape remote.rsync} \
         --link-dest=${shell.escape plan.dst.path}/current \
@@ -191,7 +192,8 @@ let
           echo >&2 "create snapshot: $ns/$name"
           mkdir -m 0700 -p "$dst_path/$ns"
           rsync >&2 \
-              -aAXF --delete \
+              -aAX --delete \
+              --filter='dir-merge /.backup-filter' \
               --link-dest="$dst_path/current" \
               "$dst_path/current/" \
               "$dst_path/$ns/.partial.$name"
