@@ -75,7 +75,12 @@ let
       }
     ) cfg;
 
-    users.groups = mapAttrs (_: _: {}) cfg;
+    users.groups = mapAttrs' (name: htgen:
+      nameValuePair htgen.user.name {
+        name = htgen.user.name;
+        gid = htgen.user.uid;
+      }
+    ) cfg;
 
   };
 in out
