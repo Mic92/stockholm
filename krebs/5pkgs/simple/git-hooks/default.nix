@@ -100,6 +100,7 @@ with stockholm.lib;
         add_message "$(
           git log \
               --format="$(orange %h) %s $(gray '(%ar)')" \
+              --no-merges \
               --reverse \
               $id2..$id
 
