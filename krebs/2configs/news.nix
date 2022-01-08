@@ -68,7 +68,8 @@
     wantedBy = [ "multi-user.target" ];
   };
 
-  systemd.services.brockman.bindsTo = [ "solanum.service" ];
+  krebs.ergo.openFilesLimit = 16384;
+  systemd.services.brockman.bindsTo = [ "ergo.service" ];
   systemd.services.brockman.serviceConfig.LimitNOFILE = 16384;
   systemd.services.brockman.environment.BROCKMAN_LOG_LEVEL = "DEBUG";
   krebs.brockman = {
