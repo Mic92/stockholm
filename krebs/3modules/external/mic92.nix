@@ -675,6 +675,25 @@ in {
         };
       };
     };
+    jarvis = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        retiolum = {
+          aliases = [ "jarvis.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA7PtJlYBpBr2TK5CAvAukkGvj+esC+sMPKd3mO9iDwdViBrqKdf+D
+            yEy8SI80Y02dpkL97NjvnzepKpyGQWpG1ZQflJLhCTj7oFyVpWd4XsbIuzYp5ES6
+            r8qKWs2xcItc1pbW0ZmrCBzdWsC1B0VAHlYkiz+7vM6pCTvg6hNQugP4c1TRCtJC
+            Sr+n+EjTXN/NTaKl+f7eoHJGnT5liDO3/xZVxm8AuLnron1xPPDghXClVHfDj5mt
+            f66f+CLwZhq3BrZuptwXp7TerMfrNtPyTx96b+EyuLPjrYxKeKL/+Nbr3VmmiDIV
+            tsraNc+0a8OBpVsYh4MQLp55NYwqxAoetQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "RRkMnGSg+nMkz4L2iqmdFf2fIf4wIfcTM0TlTWLLNCE";
+        };
+      };
+    };
     bernie = {
       owner = config.krebs.users.mic92;
       nets = rec {
