@@ -678,7 +678,9 @@ in {
     jarvis = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet.addrs = [ "jarvis.thalheim.io" ];
         retiolum = {
+          via = internet;
           aliases = [ "jarvis.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
