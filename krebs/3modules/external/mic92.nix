@@ -526,8 +526,10 @@ in {
     };
     turingmachine = {
       owner = config.krebs.users.mic92;
-      nets = {
+      nets = rec {
+        internet.addrs = [ "turingmachine.thalheim.io" ];
         retiolum = {
+          via = internet;
           aliases = [
             "turingmachine.r"
           ];
@@ -699,7 +701,9 @@ in {
     bernie = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet.addrs = [ "bernie.thalheim.io" ];
         retiolum = {
+          via = internet;
           aliases = [ "bernie.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -720,7 +724,6 @@ in {
         };
       };
     };
-
 
     ryan = {
       owner = config.krebs.users.mic92;
