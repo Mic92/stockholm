@@ -112,6 +112,15 @@ let
       stripRoot = false;
     };
   };
+
+  swahiliDictionaries = {
+    vickio = pkgs.fetchzip {
+      url = "http://swahili.vickio.net/files/Swahili-English.zip";
+      sha256 = "0m6wkwc83fcim43ijn17lcsda4clkra587gxaz6m59qd0yfwzakw";
+      stripRoot = false;
+    };
+  };
+
   makeStardictDataDir = dicts: pkgs.linkFarm "dictionaries" (lib.mapAttrsToList (name: path: { inherit name path; }) dicts);
 
   sdcvPager = pkgs.writeDash "sdcvPager" ''
@@ -220,6 +229,7 @@ pkgs.symlinkJoin {
   paths = [
     (mkDictBin "sd-classics" classicsDictionaries)
     (mkDictBin "sd-sanskrit" sanskritDictionaries)
+    (mkDictBin "sd-swahili" swahiliDictionaries)
     (mkDictBin "sd" englishGermanDictionaries)
   ];
 }
