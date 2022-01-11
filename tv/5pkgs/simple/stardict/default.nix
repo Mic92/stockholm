@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ lib, pkgs }:
 let
   classicsDictionaries = {
     Pape = pkgs.fetchzip {
@@ -206,60 +206,20 @@ let
       s#^\(-->.*\)\$#$(tput bold)\1$(tput sgr0)#
     "
   '';
+
+  mkDictBin = name: dicts:
+    pkgs.writers.writeDashBin name ''
+      set -efu
+      export SDCV_PAGER=${toString sdcvPager}
+      exec ${pkgs.sdcv}/bin/sdcv --data-dir ${makeStardictDataDir dicts} "$@"
+    '';
 in
-{
-  # https://github.com/latin-dict/Georges1910/releases/download/v1.0/Georges1910-stardict.zip
-  # https://github.com/nikita-moor/latin-dictionary/releases/download/2020-02-14/LiddellScott1940-stardict.zip
-  # http://download.huzheng.org/bigdict/stardict-Cambridge_Dictionary_of_American_Idioms-2.4.2.tar.bz2
-  # http://download.huzheng.org/bigdict/stardict-Concise_Oxford_Thesaurus_2nd_Ed-2.4.2.tar.bz2
-  # http://download.huzheng.org/bigdict/stardict-Urban_Dictionary_P1-2.4.2.tar.bz2
-  # http://download.huzheng.org/bigdict/stardict-Urban_Dictionary_P2-2.4.2.tar.bz2
-  environment.etc.stardict.source = toString (makeStardictDataDir (classicsDictionaries // {
-    Crum = builtins.fetchTarball {
-      url = "http://download.huzheng.org/misc/stardict-Coptic-English_all_dialects-2.4.2.tar.bz2";
-      sha256 = "1fi281mb9yzv40wjsdapi8fzpa7x2yscz582lv2qnss9g8zzzzr9";
-    };
-    LingvoGermanRussian = builtins.fetchTarball {
-      url = "http://download.huzheng.org/lingvo/stardict-GR-LingvoUniversal-2.4.2.tar.bz2";
-      sha256 = "0p353gs2z4vj70hqsdhffjaaw3a4zlmcs46flipmf35lm5wmaj0g";
-    };
-    LingvoRussianGerman = builtins.fetchTarball {
-      url = "http://download.huzheng.org/lingvo/stardict-RG-LingvoUniversal-2.4.2.tar.bz2";
-      sha256 = "03f9wdmkgpjifpms7dyh10ma29wf3ka1j3zlp1av0cybhdldk2a8";
-    };
-    SmithBiographyMythology = pkgs.fetchzip {
-      url = "https://github.com/latin-dict/Smith1873/releases/download/v1.0/Smith1873-stardict.zip";
-      sha256 = "01h5fxacp2m60xir8kzslkfy772vs3vmz07zhdwfhcwdaxif2af2";
-    };
-    SmithAntiquities = pkgs.fetchzip {
-      url = "https://github.com/latin-dict/Smith1890/releases/download/v1.0/Smith1890-stardict.zip";
-      sha256 = "0vpsv62p2lrzmgys4d1swpnc6lqhdi7rxwkj2ngy3lz5dk3fysyb";
-    };
-    OED1 = builtins.fetchTarball {
-      url = "http://download.huzheng.org/bigdict/stardict-Oxford_English_Dictionary_2nd_Ed._P1-2.4.2.tar.bz2";
-      sha256 = "0i5vv1rv44yfwyf9bfbdrb9brzhhpvz2jnh39fv8hh107nkv2vcf";
-    };
-    OED2 = builtins.fetchTarball {
-      url = "http://download.huzheng.org/bigdict/stardict-Oxford_English_Dictionary_2nd_Ed._P2-2.4.2.tar.bz2";
-      sha256 = "1pk234pbq4pk55d8sjk0pp9j5sajm82f8804kf2xm2x5p387q1rg";
-    };
-  } // sanskritDictionaries // englishGermanDictionaries));
 
-  environment.variables = {
-    SDCV_PAGER = toString sdcvPager;
-  };
-
-  home-manager.users.me = {
-    home.file.".goldendict/config".text = import <niveum/lib/goldendict-config.nix> {
-      path = "/etc/stardict";
-      inherit pkgs;
-    };
-  };
-
-  environment.systemPackages = [
-    pkgs.goldendict
-    (pkgs.writers.writeDashBin "sd-classics" ''${pkgs.sdcv}/bin/sdcv --data-dir ${makeStardictDataDir classicsDictionaries} "$@"'')
-    (pkgs.writers.writeDashBin "sd-sanskrit" ''${pkgs.sdcv}/bin/sdcv --data-dir ${makeStardictDataDir sanskritDictionaries} "$@"'')
-    (pkgs.writers.writeDashBin "sd" ''${pkgs.sdcv}/bin/sdcv --data-dir ${makeStardictDataDir englishGermanDictionaries} "$@"'')
+pkgs.symlinkJoin {
+  name = "stardict";
+  paths = [
+    (mkDictBin "sd-classics" classicsDictionaries)
+    (mkDictBin "sd-sanskrit" sanskritDictionaries)
+    (mkDictBin "sd" englishGermanDictionaries)
   ];
 }
