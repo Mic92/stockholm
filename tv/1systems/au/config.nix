@@ -5,6 +5,7 @@
     <stockholm/tv/2configs/hw/x220.nix>
     <stockholm/tv/2configs/ppp.nix>
     <stockholm/tv/2configs/retiolum.nix>
+    <stockholm/tv/2configs/xsessions>
   ];
 
   krebs.build.host = config.krebs.hosts.au;
