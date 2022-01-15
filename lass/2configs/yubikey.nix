@@ -55,6 +55,9 @@
     fi
   '';
 
+  # allow nix to acces remote builders via yubikey
+  systemd.services.nix-daemon.environment.SSH_AUTH_SOCK = "/run/user/1337/gnupg/S.gpg-agent.ssh";
+
   programs = {
     ssh.startAgent = false;
     gnupg.agent = {
