@@ -6,7 +6,6 @@
   ];
 
   services.udev.packages = with pkgs; [ yubikey-personalization ];
-  services.pcscd.enable = true;
   systemd.user.sockets.gpg-agent-ssh.wantedBy = [ "sockets.target" ];
 
   services.pcscd.enable = true;
