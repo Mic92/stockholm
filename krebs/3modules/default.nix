@@ -108,6 +108,7 @@ let
     { krebs = import ./makefu { inherit config; }; }
     { krebs = import ./external/palo.nix { inherit config; }; }
     { krebs = import ./external/mic92.nix { inherit config; }; }
+    { krebs = import ./external/kmein.nix { inherit config; }; }
     { krebs = import ./tv     { inherit config; }; }
     {
       krebs.dns.providers = {
