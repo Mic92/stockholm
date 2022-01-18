@@ -563,6 +563,31 @@ in {
         };
       };
     };
+    papawhakaaro = {
+      owner = config.krebs.users.feliks;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.10.243";
+          aliases = [ "papawhakaaro.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEA4bd0lVUVlzFmM8TuH77C5VctcK4lkw02LbMVQDJ5U+Ww075nNahw
+            oRHqPgJRwfGW0Tgu/1s5czZ2tAFU3lXoOSBYldAspM3KRZ4DKQsFrL9B0oWarGsK
+            sUgsuOJprlX4mkfj/eBNINqTqf2kVIH+p43VENQ9ioKmc+qJKm4xfRONRLp871GV
+            5jmIvRvQ6JP0RtNd2KpNLaeplzx8M61D9PBOAZkNYAUTpBs4LZBNJj4eFnXBugrz
+            GkBjmm3Rk7olz0uOZzbeTc6Slv2tgtN5FrQifdy4XIlsKcBTzMkYHEZstmldJgd9
+            pGvfmem6uPcXrF+eDJzqUn0ArH7eOIS4F0+DzugJz4qX+ytvE4ag7r2Vx0Pa9TCY
+            hpn0lqwW+ly1clM0SKt59v1nQ4oRW4UIbAZaIgp4UJbb3IGSwbq7NuadvHpNICHi
+            4pqQD+1sSEbGLAZ0bFjLIYFg9zzNjLeAxXpn49WHOEyRlq3h+SUQcG2EuVMI28DX
+            lILKSoOJsuQupURPubaxkiNEa5neYk9hZ8CWgwSG/VlyRLuNsVDVn2dBma43Mr10
+            LHMkX2/a9t7ghokugvV2XMP9Es9A9TGFShM9UtFAlovdad+SQ8FBPNheDwIhjCJe
+            l5NIrMrmQIveq7QJ1szxYhqfl1ifU0c+YxeMkg3tvEuQV/tk/oki/aECAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "5G49yQPjkkoGZxM6CeDy87y6tB/abtelUAk55wJ4GpP";
+        };
+      };
+    };
     hydrogen = {
       owner = config.krebs.users.sandro;
       nets = rec {
@@ -666,6 +691,9 @@ in {
     };
     pie_ = {};
     domsen = {
+    };
+    feliks = {
+      mail = "feliks@flipdot.org";
     };
   };
 }
