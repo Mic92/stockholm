@@ -805,10 +805,16 @@ in {
     mickey = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet = {
+          # mickey.dse.in.tum.de
+          ip4.addr = "131.159.102.10";
+          ip6.addr = "2a09:80c0:102::10";
+          aliases = [ "mickey.i" ];
+        };
         retiolum = {
+          via = internet;
           aliases = [ "mickey.r" ];
           tinc.pubkey = ''
-            Ed25519PublicKey = cE450gYxzp9kAzV5ytU9N7aV+WdnD7wQMjkPWV7r/bC
             -----BEGIN RSA PUBLIC KEY-----
             MIICCgKCAgEA7TwI3/tyl3z46Enr6p/0bpl5CpG6DZLxjAhsMcWBM+4xTL9s18IZ
             2FGbyS3EyOBprMBQULrik1u0rfZ0AL8XdO6h+r1BD6XmlZtUu3FJaVeXrLBPGtC0
@@ -823,8 +829,55 @@ in {
             RA8gQM/P3j1EmDvemlskWOoCLVELR40BtKdM9MFiGqxGMoNh3DvGWTECAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
+          tinc.pubkey_ed25519 = "cE450gYxzp9kAzV5ytU9N7aV+WdnD7wQMjkPWV7r/bC";
         };
       };
     };
+
+    astrid = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # astrid.dse.in.tum.de
+          ip4.addr = "131.159.102.11";
+          ip6.addr = "2a09:80c0:102::11";
+          aliases = [ "astrid.i" ];
+        };
+        retiolum = {
+          aliases = [ "astrid.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEArYO78+rLxDYBxt1MZ4VDjdSvoxJ8/De5R+/Yo0Uh1vJJtlkQUfAK
+            o2uOQvX76Y1EByAu1hMKsquDJrmnEQKyaBVUv1xkU9kQPxDoUkHdQaMoyjjCLKHV
+            7OjRRQ+PCAjCVfaIR4P0pXGXShBYVqITdr8R/fH7f+M6I+s/H4KTo9zpRY9YUzXV
+            V6t3PCTMBXWxa2kNTSTe1zpGHccOd3FWs6r+0DZ2bPg/6Qh/VszQI7NXRqgSLNgi
+            J1+PaO0h9IfICNYYaWg1r9gh6nd52U9S2B6eipizrdWdyHuufWzn52liNztSEe9g
+            5VC0PPAZFIxEkhoAP/HGTnNvXLOo960IXwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "I0rk5Co9QEuyramaxNSI2Rq43qgRF2tJr5Lf8nlBjUO";
+        };
+      };
+    };
+
+    # TODO
+    #dan = {
+    #  owner = config.krebs.users.mic92;
+    #  nets = rec {
+    #    internet = {
+    #      # dan.dse.in.tum.de
+    #      ip4.addr = "131.159.102.12";
+    #      ip6.addr = "2a09:80c0:102::12";
+    #      aliases = [ "dan.i" ];
+    #    };
+    #    retiolum = {
+    #      via = internet;
+    #      aliases = [ "dan.r" ];
+    #      tinc.pubkey = ''
+    #      '';
+    #      tinc.pubkey_ed25519 = "";
+    #    };
+    #  };
+    #};
   };
 }
