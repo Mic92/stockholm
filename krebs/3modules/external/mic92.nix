@@ -859,25 +859,36 @@ in {
         };
       };
     };
-
-    # TODO
-    #dan = {
-    #  owner = config.krebs.users.mic92;
-    #  nets = rec {
-    #    internet = {
-    #      # dan.dse.in.tum.de
-    #      ip4.addr = "131.159.102.12";
-    #      ip6.addr = "2a09:80c0:102::12";
-    #      aliases = [ "dan.i" ];
-    #    };
-    #    retiolum = {
-    #      via = internet;
-    #      aliases = [ "dan.r" ];
-    #      tinc.pubkey = ''
-    #      '';
-    #      tinc.pubkey_ed25519 = "";
-    #    };
-    #  };
-    #};
+    dan = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # dan.dse.in.tum.de
+          ip4.addr = "131.159.102.12";
+          ip6.addr = "2a09:80c0:102::12";
+          aliases = [ "dan.i" ];
+        };
+        retiolum = {
+          via = internet;
+          aliases = [ "dan.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAoZq+Nt1H+tcLRVE5LiJXyAItRIcIJNVeFenN54era7Yr0+OE7s14
+            r19N7g8cb3ytgbxb1P0t8Dd2ziKUdEoOdVK7/dqx6oM1lwjOBy4rtcGmy6hHGRhT
+            +Si6NxHnQVkswzL2/4DcBxg+D40GDIz0QlNhT7TC3TW6gtKbTopHMZoC3cyw1iXF
+            iZB8HEv22Daq+/gFt9rcV2cRhdsDIX3TEAu+wXhDMtB9V78CzgOHV7IBrlnQHTeq
+            3TmcQ+AHKZB3nY5cUDvbSUWHOrG4CQ0w2pf034s7l3AMLClXcr0IORZtCgEhCmE5
+            tgg9Y6vKH2S0a25naf5rOFCvEXt8TZF9lCc42hfKCJo/LE2LoqKluAMUWgXUtv6s
+            Od6AcV5RW3QkgRiDi6niPVVAnDGSUfqUNaJhmBzlfD6PzwBpPlcODf5dk/H/FhzZ
+            nGpG4lptvknrBZxz9Vdyv3a/CE9VA5FbgDdOJMk5fbNG6XH4BoESjKQ/tHwvDRwO
+            Xz11V5MQYk4aYq++AgkoyCgw37rWqgR2WE/X9tV63qUAiBHJoZ48QPmqrZwEt8LC
+            92eTKbxfl2iroqs5vBqKiXcRAWgXwO25rb+4CJUfD8b9AdAlm4unoCcoYluJ9rO1
+            5xs2x/b09U3YXkMgO67cju+Vg68ROnihokH+5pyfuMMsHSAANC+uWD8CAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "bEWH72WNDGtn6uGy1h1m3T8rH2pHoL8zNU1ADq4TW+L";
+        };
+      };
+    };
   };
 }
