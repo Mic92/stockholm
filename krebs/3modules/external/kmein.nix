@@ -19,9 +19,16 @@ let
   ssh-for = name: builtins.readFile (./ssh + "/${name}.pub");
 in
 {
-  users.kmein = {
-    mail = "kmein@posteo.de";
-    pubkey = ssh-for "kmein";
+  users = rec {
+    kmein = kmein-kabsa;
+    kmein-kabsa = {
+      mail = "kmein@posteo.de";
+      pubkey = ssh-for "kmein.kabsa";
+    };
+    kmein-manakish = {
+      inherit (kmein-kabsa) mail;
+      pubkey = ssh-for "kmein.manakish";
+    };
   };
   hosts = mapAttrs hostDefaults {
     kabsa = {
