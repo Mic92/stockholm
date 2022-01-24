@@ -681,7 +681,7 @@ in {
           aliases = [
             "styx.r"
           ];
-          tinc.port = 0;
+          tinc.port = 654;
           tinc = {
             pubkey = ''
               -----BEGIN PUBLIC KEY-----
