@@ -156,7 +156,8 @@ in {
     openssh.authorizedKeys.keys = with config.krebs.users; [
       lass.pubkey
       makefu.pubkey
-      kmein.pubkey
+      kmein-kabsa.pubkey
+      kmein-manakish.pubkey
       tv.pubkey
     ];
     packages = with pkgs; [
