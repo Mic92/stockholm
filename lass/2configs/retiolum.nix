@@ -17,13 +17,16 @@
     enable = true;
     connectTo = [
       "prism"
-      "gum"
       "ni"
+      "eve"
     ];
     extraConfig = ''
-      LocalDiscovery = yes
+      StrictSubnets = yes
     '';
   };
+
+  # never connect via gum (he eats our packets!)
+  krebs.hosts.gum.nets.retiolum.tinc.weight = 9000;
 
   nixpkgs.config.packageOverrides = pkgs: {
     tinc = pkgs.tinc_pre;
