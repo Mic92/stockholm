@@ -110,6 +110,7 @@ in
     };
     g7power = {
       nets.wiregrill = {
+        ip4.addr = "10.244.2.97";
         aliases = [ "phone.kmein.w" ];
         wireguard.pubkey = "09yVPHL/ucvqc6V5n7vFQ2Oi1LBMdwQZDL+7jBwy+iQ=";
       };
