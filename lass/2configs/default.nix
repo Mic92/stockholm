@@ -8,7 +8,7 @@ with import <stockholm/lib>;
     ./vim.nix
     ./zsh.nix
     ./htop.nix
-    ./security-workarounds.nix
+    <stockholm/krebs/2configs/security-workarounds.nix>
     ./wiregrill.nix
     {
       users.extraUsers =

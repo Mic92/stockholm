@@ -4,6 +4,7 @@ with import <stockholm/lib>;
 {
   imports = [
     ./backup.nix
+    ./security-workarounds.nix
   ];
   krebs.announce-activation.enable = true;
   krebs.enable = true;
