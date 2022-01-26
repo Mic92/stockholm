@@ -1,14 +1,14 @@
-{ buildGo116Module , fetchFromGitHub, lib }:
+{ buildGo117Module , fetchFromGitHub, lib }:
 
-buildGo116Module rec {
+buildGo117Module rec {
   pname = "ergo";
-  version = "2.8.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "ergochat";
     repo = "ergo";
     rev = "v${version}";
-    sha256 = "sha256-xKcSHNH1ksjH1IikqzDi88fOdHR5CHGs8ya4Fj65MbI=";
+    sha256 = "sha256-RxsmkTfHymferS/FRW0sLnstKfvGXkW6cEb/JbeS4lc=";
   };
 
   vendorSha256 = null;
@@ -17,7 +17,7 @@ buildGo116Module rec {
     description = "A modern IRC server (daemon/ircd) written in Go";
     homepage = "https://github.com/ergochat/ergo";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.tv ];
+    maintainers = with lib.maintainers; [ lassulus tv ];
     platforms = lib.platforms.linux;
   };
 }

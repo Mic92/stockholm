@@ -123,6 +123,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/ciko.nix>
     <stockholm/lass/2configs/container-networking.nix>
     <stockholm/lass/2configs/jitsi.nix>
+    <stockholm/lass/2configs/fysiirc.nix>
     {
       services.tor = {
         enable = true;

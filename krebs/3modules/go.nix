@@ -41,11 +41,17 @@ let
             fi
           ;;
           "POST /")
-            uri=$(head -c "$req_content_length" \
+            uri_candidate=$(head -c "$req_content_length" \
               | sed 's/+/ /g;s/%\(..\)/\\x\1/g;' \
               | xargs -0 echo -e \
-              | tee /tmp/tee.log \
-              | ${pkgs.urix}/bin/urix \
+            )
+
+            if $(echo "$uri_candidate" | grep -q '^uri=//.*'); then
+              # fix urls with missing https: in front
+              uri_candidate=$(echo "$uri_candidate" | sed 's,//,https://,g')
+            fi
+
+            uri=$(echo "$uri_candidate" | ${pkgs.urix}/bin/urix \
               | head -1 \
             )
 

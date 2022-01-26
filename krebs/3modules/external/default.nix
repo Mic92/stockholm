@@ -16,37 +16,7 @@ with import <stockholm/lib>;
   tinc-for = name: builtins.readFile (./tinc + "/${name}.pub");
 
 in {
-
   hosts = mapAttrs hostDefaults {
-    kabsa = {
-      owner = config.krebs.users.kmein;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.2.4";
-          aliases = [
-            "kabsa.r"
-            "kabsa.kmein.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN PUBLIC KEY-----
-            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtz/MY5OSxJqrEMv6Iwjk
-            g/V58MATljj+2bmOuOuPui/AUYHEZX759lHW4MgLjYdNbZEoVq8UgkxNk0KPGlSg
-            2lsJ7FneCU7jBSE2iLT1aHuNFFa56KzSThFUl6Nj6Vyg5ghSmDF2tikurtG2q+Ay
-            uxf5/yEhFUPc1ZxmvJDqVHMeW5RZkuKXH00C7yN+gdcPuuFEFq+OtHNkBVmaxu7L
-            a8Q6b/QbrwQJAR9FAcm5WSQIj2brv50qnD8pZrU4loVu8dseQIicWkRowC0bzjAo
-            IHZTbF/S+CK0u0/q395sWRQJISkD+WAZKz5qOGHc4djJHBR3PWgHWBnRdkYqlQYM
-            C9zA/n4I+Y2BEfTWtgkD2g0dDssNGP5dlgFScGmRclR9pJ/7dsIbIeo9C72c6q3q
-            sg0EIWggQ8xyWrUTXIMoDXt37htlTSnTgjGsuwRzjotAEMJmgynWRf3br3yYChrq
-            10Exq8Lej+iOuKbdAXlwjKEk0qwN7JWft3OzVc2DMtKf7rcZQkBoLfWKzaCTQ4xo
-            1Y7d4OlcjbgrkLwHltTaShyosm8kbttdeinyBG1xqQcK11pMO43GFj8om+uKrz57
-            lQUVipu6H3WIVGnvLmr0e9MQfThpC1em/7Aq2exn1JNUHhCdEho/mK2x/doiiI+0
-            QAD64zPmuo9wsHnSMR2oKs0CAwEAAQ==
-            -----END PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "KhOetVTVLtGxB22NmZhkTWC0Uhg8rXJv4ayZqchSgCN";
-        };
-      };
-    };
     helsinki = {
       owner = config.krebs.users.ajs124;
       nets = {
@@ -142,65 +112,6 @@ in {
         };
       };
     };
-    makanek = {
-      owner = config.krebs.users.kmein;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.2.84";
-          aliases = [
-            "makanek.r"
-            "makanek.kmein.r"
-            "grafana.kmein.r"
-            "names.kmein.r"
-            "graph.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAwvtxCG7Vua6+WoStGrkL+H/g4BABidL2eikDBtbxWN+oGv2Bjrwb
-            VzXB8lMTCsu6M2wb3YTXXzAkc5oI4gE1sSOiCKyhYnQRrndc91KewquxTPfKL19u
-            JiRqax/E49IvWKARPRPXUhPfU/NNw1oIxhbcFkjwJmqDvh9SWhl5VZVynCE28ov5
-            hjjhqNXZHOR8CQqPJeY8v38OAAwTWvJ6rhEQwp5dLBqmRAbvPXj7OOzCxKluDY2X
-            Dl4k6QAjI6NddJXsXHRYRNGiB0CP1UBC91NDtW2+HIjf1Q1Lip5agO4/SkkSUt39
-            de7uYKrNcfyDUBb9Suconw0HvW+Dv4Ce5um+aa1RUrWIQdqBCOECbsXYKp66vAnK
-            Hidf2uznFseWxiyxz1ow8AvvSseABej5GuHI/56lywnFlnHEZLREUF/4PT+BZ0vE
-            uPRkzqeSNybsYYFieK8aany/RmJaoIsduGutgAiKBvkCCHru895n02xuLhZVkM2G
-            zfVjA2le+Gxr21/sVPrHfxResLUh4RA8fkS7erWMRF4a3IOpIS4yrM+p4pZTlTxO
-            Ya8buh4RgyE/0hp4QNpa4K7fvntriK+k6zHs7BcZcG2aMWP3O9/4DgjzBR3eslQV
-            oou23ajP11wyfrmZK0/PQGTpsU472Jj+06KtMAaH0zo4vAR8s2kV1ukCAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "GiAe9EH3ss+K71lRlkGaOcg/MrV/zxNW5tDF0koEGvC";
-        };
-      };
-    };
-    manakish = {
-      owner = config.krebs.users.kmein;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.2.85";
-          aliases = [
-            "manakish.r"
-            "manakish.kmein.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAtZcWwm1tTFoMcO0EOwNdSrZW9m2tSNWzwTGjlfuNFQKPnHiKdFFH
-            Hym72+WtaIZmffermGTfYdMoB/lWgOB0glqH9oSBFvrLVDgdQL2il589EXBd/1Qy
-            7Ye5EVy2/xEA7iZGg3j0i+q1ic48tt6ePd4+QR0LmLEa8+Gz5X0Tp9TTf7gdv+lB
-            dVA6p7LJixKcBsC5W0jY5oTGUP0fM844AtWbpflmlz0JZNWrkJhCksOnfhUzeIsF
-            1m9rCsyK+3jGMV6ZxhEbwaOt99Wlv0N0ouPePw+xLnnGTu0rJ/RKWceYnWnrHIyb
-            GgGIHnm9GbMd4mAfyp63emRYDMclSQSrddpDUL2GK8TCTttr6bZm4M/pFuXQGJsQ
-            EG0iaE8FM+nCrhmCRnX8dRWcNmHybd34UoVGCDJ6u+ksLIivqgWeY41CauqN0vQw
-            U4zqp6XMXRB6vlVcyLzdTASxVKaLJt+BuvHcyqz/YslJ97z4yoLE3d7s/9gZkM//
-            +FD970bsyvKpKRx72rNRCO9tQJNgPsaMiW5nuHUFw71XxX8o0w//5a0h5cdbiT64
-            I4ISySa4ynmHI1/v0a937/sFS0IvRI1Va0Efh2VxasNIqpDmM3hA8auPDj0Js/4c
-            qVnWMbvqqYlY9l//HCNxUXIhi0vcOr2PoCxBtcP5pHY8nNphQrPjRrcCAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "CjSqXJMvJevjqX9W9sqDpLTJs9DXfC04YNAFpYqS2iN";
-        };
-      };
-    };
     qubasa = {
       owner = config.krebs.users.qubasa;
       nets = {
@@ -226,7 +137,6 @@ in {
         };
       };
     };
-
     keller = {
       owner = config.krebs.users.qubasa;
       nets = {
@@ -279,13 +189,6 @@ in {
       };
     };
 
-    rilke = {
-      owner = config.krebs.users.kmein;
-      nets.wiregrill = {
-        aliases = [ "rilke.w" ];
-        wireguard.pubkey = "09yVPHL/ucvqc6V5n7vFQ2Oi1LBMdwQZDL+7jBwy+iQ=";
-      };
-    };
     rtjure = {
       owner = config.krebs.users.rtjure;
       nets = {
@@ -309,37 +212,6 @@ in {
              UI8BvkKmFhMU2EHKUbe0qe5M1r218dsrOjPk99QI99iazMG34hyxQB8CAwEAAQ==
              -----END RSA PUBLIC KEY-----
           '';
-        };
-      };
-    };
-    zaatar = {
-      owner = config.krebs.users.kmein;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.2.34";
-          aliases = [
-            "zaatar.r"
-            "zaatar.kmein.r"
-            "grocy.kmein.r"
-            "bvg.kmein.r"
-            "moodle.kmein.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAyEeesa4mDNAT2QT/PxfmildhqawinWTcUiF3V2wsfy3eXJCFySKM
-            pRKrLnOpkd2RoLWA88o0/hAfTdel/fXRjAx8TtKlh1n+UoRhYOGqLJKUZDVGImjJ
-            xTPGCC+g4b2cNCYU3RVdttSu8+zlfO6ktkySULKbVkJN3ocQmSCmWs2tP6hYvk2i
-            5OB3Uxw+OwhtVO76dlby6Idmc8o++ZVm3snbYsgiR7RQf9vHZHR8lKr5fZ/ycq2Q
-            T+agY/cFLJ+jhfUi8LFtKKcqGLyKKrDywADQWTcIG+cjV33k6ftW678jvsEft6e6
-            2RgspZX5XciTbMPIPGMcH5NZPXi6youcUcqcqDtok7Y1Jj3N5dSmJno5ojyKolZp
-            PRt4bPx9WuerjzwL5gG9E6n6l24neX6Mq7RDyJfBYtpUvZblezXWUuoReGNczAvj
-            zZrAKXKnuCEgQ/du7pT8V6qHG5NjovIMm0VDxOJV5jBL4NUox3PGbW5g0vS/nxHc
-            xKWPq+4zoyA6MsL9sGCqIlSWEqNnSERX19GbJZNYjm1J+aGZ/fZ+MaDJGuCzlxn4
-            yjLBuuXSkIrPxxtIV+Yh8Wy5qDNRN7XS1wNxUcmjQn0+7Ou/4W+cTWJ/+yZyC1DK
-            uYEZh8YBMJo0E4bR4s04SFA6uLIvLigPELxzb0jwZSKXRnQhay6zzZ0CAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "GYg9UMw0rFWFS0Yr8HFe81HcGjQw0xbu9wqDWtQPDLH";
         };
       };
     };
@@ -691,6 +563,31 @@ in {
         };
       };
     };
+    papawhakaaro = {
+      owner = config.krebs.users.feliks;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.10.243";
+          aliases = [ "papawhakaaro.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEA4bd0lVUVlzFmM8TuH77C5VctcK4lkw02LbMVQDJ5U+Ww075nNahw
+            oRHqPgJRwfGW0Tgu/1s5czZ2tAFU3lXoOSBYldAspM3KRZ4DKQsFrL9B0oWarGsK
+            sUgsuOJprlX4mkfj/eBNINqTqf2kVIH+p43VENQ9ioKmc+qJKm4xfRONRLp871GV
+            5jmIvRvQ6JP0RtNd2KpNLaeplzx8M61D9PBOAZkNYAUTpBs4LZBNJj4eFnXBugrz
+            GkBjmm3Rk7olz0uOZzbeTc6Slv2tgtN5FrQifdy4XIlsKcBTzMkYHEZstmldJgd9
+            pGvfmem6uPcXrF+eDJzqUn0ArH7eOIS4F0+DzugJz4qX+ytvE4ag7r2Vx0Pa9TCY
+            hpn0lqwW+ly1clM0SKt59v1nQ4oRW4UIbAZaIgp4UJbb3IGSwbq7NuadvHpNICHi
+            4pqQD+1sSEbGLAZ0bFjLIYFg9zzNjLeAxXpn49WHOEyRlq3h+SUQcG2EuVMI28DX
+            lILKSoOJsuQupURPubaxkiNEa5neYk9hZ8CWgwSG/VlyRLuNsVDVn2dBma43Mr10
+            LHMkX2/a9t7ghokugvV2XMP9Es9A9TGFShM9UtFAlovdad+SQ8FBPNheDwIhjCJe
+            l5NIrMrmQIveq7QJ1szxYhqfl1ifU0c+YxeMkg3tvEuQV/tk/oki/aECAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "5G49yQPjkkoGZxM6CeDy87y6tB/abtelUAk55wJ4GpP";
+        };
+      };
+    };
     hydrogen = {
       owner = config.krebs.users.sandro;
       nets = rec {
@@ -739,10 +636,6 @@ in {
     };
     jonge = {
       mail = "jacek.galowicz@gmail.com";
-    };
-    kmein = {
-      mail = "kmein@posteo.de";
-      pubkey = ssh-for "kmein";
     };
     mic92 = {
       mail = "joerg@thalheim.io";
@@ -798,6 +691,9 @@ in {
     };
     pie_ = {};
     domsen = {
+    };
+    feliks = {
+      mail = "feliks@flipdot.org";
     };
   };
 }

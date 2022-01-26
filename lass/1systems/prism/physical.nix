@@ -79,9 +79,11 @@
   boot.loader.grub.devices = [ "/dev/sda" "/dev/sdb" ];
 
   boot.kernelParams = [ "net.ifnames=0" ];
+  networking.dhcpcd.enable = false;
   networking = {
     hostId = "2283aaae";
     defaultGateway = "95.216.1.129";
+    defaultGateway6 = { address = "fe80::1"; interface = "eth0"; };
     # Use google's public DNS server
     nameservers = [ "8.8.8.8" ];
     interfaces.eth0.ipv4.addresses = [
@@ -92,6 +94,12 @@
       {
         address = "95.216.1.130";
         prefixLength = 26;
+      }
+    ];
+    interfaces.eth0.ipv6.addresses = [
+      {
+        address = "2a01:4f9:2a:1e9::1";
+        prefixLength = 64;
       }
     ];
   };

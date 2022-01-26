@@ -21,6 +21,16 @@ rec {
       };
     };
 
+    dance = {
+      filename = pkgs.writeDash "dance" ''
+        echo "<(^.^<)"
+        echo "<(^.^)>"
+        echo "(>^.^)>"
+        echo "(7^.^)7"
+        echo "(>^.^<)"
+      '';
+    };
+
     nixos-version = {
       filename = pkgs.writeDash "nixos-version" ''
         . /etc/os-release

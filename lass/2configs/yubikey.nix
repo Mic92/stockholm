@@ -6,15 +6,41 @@
   ];
 
   services.udev.packages = with pkgs; [ yubikey-personalization ];
-  services.pcscd.enable = true;
   systemd.user.sockets.gpg-agent-ssh.wantedBy = [ "sockets.target" ];
 
-  ##restart pcscd if yubikey is plugged in
-  #services.udev.extraRules = ''
-  #  ACTION=="add", ATTRS{idVendor}=="04d9", ATTRS{idProduct}=="2013", RUN+="${pkgs.writeDash "restart_pcscd" ''
-  #    ${pkgs.systemd}/bin/systemctl restart pcscd.service
-  #  ''}"
-  #'';
+  services.pcscd.enable = true;
+  systemd.user.services.gpg-agent.serviceConfig.ExecStartPre = pkgs.writers.writeDash "init_gpg" ''
+    set -x
+    ${pkgs.coreutils}/bin/ln -sf ${pkgs.writeText "scdaemon.conf" ''
+      disable-ccid
+      pcsc-driver ${pkgs.pcsclite.out}/lib/libpcsclite.so.1
+      card-timeout 1
+
+      # Always try to use yubikey as the first reader
+      # even when other smart card readers are connected
+      # Name of the reader can be found using the pcsc_scan command
+      # If you have problems with gpg not recognizing the Yubikey
+      # then make sure that the string here matches exacly pcsc_scan
+      # command output. Also check journalctl -f for errors.
+      reader-port Yubico YubiKey
+    ''} $HOME/.gnupg/scdaemon.conf
+  '';
+
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      if (
+        (
+          action.id == "org.debian.pcsc-lite.access_pcsc" ||
+          action.id == "org.debian.pcsc-lite.access_card"
+        ) && subject.user == "lass"
+      ) {
+        return polkit.Result.YES;
+      }
+    });
+    polkit.addRule(function(action, subject) {
+     polkit.log("user " +  subject.user + " is attempting action " + action.id + " from PID " + subject.pid);
+    });
+  '';
 
   environment.shellInit = ''
     if [ "$UID" -eq 1337 ] && [ -z "$SSH_CONNECTION" ]; then
@@ -27,6 +53,9 @@
 
     fi
   '';
+
+  # allow nix to acces remote builders via yubikey
+  systemd.services.nix-daemon.environment.SSH_AUTH_SOCK = "/run/user/1337/gnupg/S.gpg-agent.ssh";
 
   programs = {
     ssh.startAgent = false;

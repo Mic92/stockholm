@@ -2,6 +2,13 @@
   options = {
     krebs.ergo = {
       enable = lib.mkEnableOption "Ergo IRC daemon";
+      openFilesLimit = lib.mkOption {
+        type = lib.types.int;
+        default = 1024;
+        description = ''
+          Maximum number of open files. Limits the clients and server connections.
+        '';
+      };
       config = lib.mkOption {
         type = (pkgs.formats.json {}).type;
         description = ''
@@ -54,8 +61,8 @@
             multiclient = {
               enabled = true;
               allowed-by-default = true;
-              always-on = "opt-in";
-              auto-away = "opt-in";
+              always-on = "opt-out";
+              auto-away = "opt-out";
             };
           };
           channels = {
@@ -111,13 +118,15 @@
     systemd.services.ergo = {
       description = "Ergo IRC daemon";
       wantedBy = [ "multi-user.target" ];
-      reloadIfChanged = true;
+      # reload currently not working as expected
+      # reloadIfChanged = true;
       restartTriggers = [ configFile ];
       serviceConfig = {
         ExecStart = "${pkgs.ergo}/bin/ergo run --conf /etc/ergo.yaml";
         ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
         DynamicUser = true;
         StateDirectory = "ergo";
+        LimitNOFILE = "${toString cfg.openFilesLimit}";
       };
     };
   });

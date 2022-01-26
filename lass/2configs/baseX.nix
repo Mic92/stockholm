@@ -65,7 +65,7 @@ in {
     gitAndTools.hub
     git-crypt
     git-preview
-    gnome3.dconf
+    dconf
     iodine
     libarchive
     lm_sensors
