@@ -30,6 +30,10 @@ with import <stockholm/lib>;
           };
           apply = toString;
         };
+        capabilities = mkOption {
+          default = [];
+          type = types.listOf types.str;
+        };
         owner = mkOption {
           default = "root";
           type = types.enum (attrNames users);
@@ -67,6 +71,9 @@ with import <stockholm/lib>;
         cp ${src} ${dst}
         chown ${cfg.owner}.${cfg.group} ${dst}
         chmod ${cfg.mode} ${dst}
+        ${optionalString (cfg.capabilities != []) /* sh */ ''
+          ${pkgs.libcap.out}/bin/setcap ${concatMapStringsSep "," shell.escape cfg.capabilities} ${dst}
+        ''}
       '';
     }));
   };
