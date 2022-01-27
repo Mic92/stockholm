@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
 
@@ -22,6 +22,9 @@
     ];
     extraConfig = ''
       StrictSubnets = yes
+      ${lib.optionalString (config.krebs.build.host.nets.retiolum.via != null) ''
+        LocalDiscovery = no
+      ''}
     '';
   };
 
