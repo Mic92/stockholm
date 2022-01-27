@@ -2,10 +2,16 @@
 {
   services.murmur = {
     enable = true;
+    allowHtml = false;
     bandwidth = 10000000;
     registerName = "lassul.us";
     autobanTime = 30;
+    sslCert = "/var/lib/acme/lassul.us/cert.pem";
+    sslKey = "/var/lib/acme/lassul.us/key.pem";
   };
+  users.groups.lasscert.members = [
+    "murmur"
+  ];
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp --dport 64738"; target = "ACCEPT";}
     { predicate = "-p udp --dport 64738"; target = "ACCEPT";}
