@@ -80,7 +80,12 @@ with import <stockholm/lib>;
 
   imp = {
     system.activationScripts."krebs.setuid" = stringAfter [ "wrappers" ]
-      (concatMapStringsSep "\n" (getAttr "activate") (attrValues config.krebs.setuid));
+      (concatMapStringsSep "\n"
+        (cfg: /* sh */ ''
+          ${cfg.activate}
+          rm -f ${cfg.wrapperDir}/${cfg.name}.real
+        '')
+        (attrValues config.krebs.setuid));
   };
 
 in out
