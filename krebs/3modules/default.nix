@@ -102,13 +102,13 @@ let
 
   imp = lib.mkMerge [
     { krebs = import ./external { inherit config; }; }
+    { krebs = import ./external/kmein.nix { inherit config; }; }
+    { krebs = import ./external/mic92.nix { inherit config; }; }
+    { krebs = import ./external/palo.nix { inherit config; }; }
     { krebs = import ./jeschli { inherit config; }; }
     { krebs = import ./krebs  { inherit config; }; }
     { krebs = import ./lass   { inherit config; }; }
     { krebs = import ./makefu { inherit config; }; }
-    { krebs = import ./external/palo.nix { inherit config; }; }
-    { krebs = import ./external/mic92.nix { inherit config; }; }
-    { krebs = import ./external/kmein.nix { inherit config; }; }
     { krebs = import ./tv     { inherit config; }; }
     {
       krebs.dns.providers = {
