@@ -66,7 +66,7 @@ with import <stockholm/lib>;
           inherit (cfg) envp filename;
         };
         dst = "${cfg.wrapperDir}/${cfg.name}";
-      in ''
+      in /* sh */ ''
         mkdir -p ${cfg.wrapperDir}
         cp ${src} ${dst}
         chown ${cfg.owner}.${cfg.group} ${dst}
