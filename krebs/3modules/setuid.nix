@@ -30,6 +30,10 @@ with import <stockholm/lib>;
           };
           apply = toString;
         };
+        capabilities = mkOption {
+          default = [];
+          type = types.listOf types.str;
+        };
         owner = mkOption {
           default = "root";
           type = types.enum (attrNames users);
@@ -62,18 +66,26 @@ with import <stockholm/lib>;
           inherit (cfg) envp filename;
         };
         dst = "${cfg.wrapperDir}/${cfg.name}";
-      in ''
+      in /* sh */ ''
         mkdir -p ${cfg.wrapperDir}
         cp ${src} ${dst}
         chown ${cfg.owner}.${cfg.group} ${dst}
         chmod ${cfg.mode} ${dst}
+        ${optionalString (cfg.capabilities != []) /* sh */ ''
+          ${pkgs.libcap.out}/bin/setcap ${concatMapStringsSep "," shell.escape cfg.capabilities} ${dst}
+        ''}
       '';
     }));
   };
 
   imp = {
     system.activationScripts."krebs.setuid" = stringAfter [ "wrappers" ]
-      (concatMapStringsSep "\n" (getAttr "activate") (attrValues config.krebs.setuid));
+      (concatMapStringsSep "\n"
+        (cfg: /* sh */ ''
+          ${cfg.activate}
+          rm -f ${cfg.wrapperDir}/${cfg.name}.real
+        '')
+        (attrValues config.krebs.setuid));
   };
 
 in out

@@ -205,12 +205,12 @@ myKeys conf = Map.fromList $
     _4CM = _4 .|. _C .|. _M
     _4SM = _4 .|. _S .|. _M
 
-    pactl args = forkFile {-pkg:pulseaudio-}"pactl" args Nothing
+    amixer args = forkFile {-pkg:alsaUtils-}"amixer" args Nothing
     pavucontrol args = forkFile {-pkg-}"pavucontrol" args Nothing
 
-    audioLowerVolume = pactl ["--", "set-sink-volume", "@DEFAULT_SINK@", "-5%"]
-    audioRaiseVolume = pactl ["--", "set-sink-volume", "@DEFAULT_SINK@", "+5%"]
-    audioMute = pactl ["--", "set-sink-mute", "@DEFAULT_SINK@", "toggle"]
+    audioLowerVolume = amixer ["-q", "sset", "Master", "5%-"]
+    audioRaiseVolume = amixer ["-q", "sset", "Master", "5%+"]
+    audioMute = amixer ["-q", "sset", "Master", "toggle"]
 
     resetLayout = setLayout $ XMonad.layoutHook conf
 

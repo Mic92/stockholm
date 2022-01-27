@@ -10,6 +10,7 @@ in {
     <stockholm/tv/2configs/gitconfig.nix>
     <stockholm/tv/2configs/pulse.nix>
     <stockholm/tv/2configs/retiolum.nix>
+    <stockholm/tv/2configs/xsessions>
   ];
 
   environment.homeBinInPath = true;

@@ -20,6 +20,7 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/br.nix>
     <stockholm/tv/2configs/xp-332.nix>
     <stockholm/tv/2configs/xserver>
+    <stockholm/tv/2configs/xsessions>
     <stockholm/tv/2configs/xserver/xkiller.nix>
     {
       environment.systemPackages = with pkgs; [
