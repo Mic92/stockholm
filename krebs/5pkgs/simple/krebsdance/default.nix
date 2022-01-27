@@ -13,14 +13,14 @@ writers.writePython3Bin "krebsdance" {} ''
       dict(
           up='(V)',
           down='(A)',
-          left='>)',
-          right='(<',
+          left='>)=',
+          right='=(<',
       ),
       dict(
           up='(U)',
           down='(n)',
-          left=')=',
-          right='=(',
+          left=')==',
+          right='==(',
       ),
   ]
 
@@ -29,7 +29,6 @@ writers.writePython3Bin "krebsdance" {} ''
       '*',
       '^',
       'ö',
-      '.',
       'o',
       'O',
       'X',
@@ -103,9 +102,9 @@ writers.writePython3Bin "krebsdance" {} ''
       mouth = random.choice(mouths)
       if args.dance:
           print(f'{clawstyle["down"]} {body["left"]}{eye}{mouth}{eye}{body["right"]}{clawstyle["up"]}')  # noqa
-          print(f'{clawstyle["left"]}{body["left"]}{eye}{mouth}{eye}{body["right"]} {clawstyle["right"]}')  # noqa
+          print(f' {clawstyle["left"]}{body["left"]}{eye}{mouth}{eye}{body["right"]} {clawstyle["right"]}')  # noqa
           print(f'{clawstyle["right"]} {body["left"]}{eye}{mouth}{eye}{body["right"]} {clawstyle["left"]}')  # noqa
-          print(f'{clawstyle["down"]}{body["left"]}{eye}{mouth}{eye}{body["right"]}{clawstyle["down"]}')  # noqa
+          print(f' {clawstyle["down"]}{body["left"]}{eye}{mouth}{eye}{body["right"]}{clawstyle["down"]}')  # noqa
       else:
           print(f'{clawstyle["up"]} {body["left"]}{eye}{mouth}{eye}{body["right"]} {clawstyle["up"]}')  # noqa
 
