@@ -19,13 +19,13 @@ let
       ./current.nix
       ./dns.nix
       ./ergo.nix
-      ./exim.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
+      ./exim.nix
       ./fetchWallpaper.nix
+      ./git.nix
       ./github-hosts-sync.nix
       ./github-known-hosts.nix
-      ./git.nix
       ./go.nix
       ./hidden-ssh.nix
       ./hosts.nix
@@ -38,11 +38,12 @@ let
       ./nixpkgs.nix
       ./on-failure.nix
       ./os-release.nix
-      ./permown.nix
       ./per-user.nix
+      ./permown.nix
       ./power-action.nix
       ./reaktor2.nix
       ./realwallpaper.nix
+      ./repo-sync.nix
       ./retiolum-bootstrap.nix
       ./rtorrent.nix
       ./secret.nix
@@ -55,7 +56,6 @@ let
       ./tinc_graphs.nix
       ./upstream
       ./urlwatch.nix
-      ./repo-sync.nix
       ./xresources.nix
       ./zones.nix
     ];
