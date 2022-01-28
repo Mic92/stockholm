@@ -1,5 +1,5 @@
 {
-  services.syncthing.declarative.folders.decsync = {
+  services.syncthing.folders.decsync = {
     path = "/home/lass/decsync";
     devices = [ "mors" "blue" "green" "phone" ];
   };

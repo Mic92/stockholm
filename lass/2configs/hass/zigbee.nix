@@ -15,7 +15,7 @@ in {
   services.zigbee2mqtt = {
     enable = true;
     package = unstable-pkgs.zigbee2mqtt;
-    config = {
+    settings = {
       homeassistant = true;
       frontend.port = 1337;
       experimental.new_api = true;
