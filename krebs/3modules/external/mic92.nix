@@ -279,25 +279,6 @@ in {
         '';
       };
     };
-    philipsaendig = {
-      owner = config.krebs.users.mic92;
-      nets.retiolum = {
-        ip4.addr = "10.243.29.193";
-        aliases = [
-          "philipsaendig.r"
-        ];
-        tinc.pubkey = ''
-          -----BEGIN RSA PUBLIC KEY-----
-          MIIBCgKCAQEAyWdCrXD0M9CIt0ZgVB6W5ozOvLDoxPmGzLBJUnAZV8f9oqfaIEIX
-          5TIaxozN3QMEgS0ChaOHTNFiQZjiiwJL/wPx1eFvKfDkkn7ayrRS/pP+bKhcDpKl
-          4tPejipee9T2ZhYg9tbk291CDBe1fHR5S2F8kPm8OuqwE2Fv9N8wldcsDLxHcTZl
-          +wp4Oe/Wn5WLvZb3SUao17vKnNBLfMMCGC01yRfhZub41NkGYVWBjErsIVxQ+/rF
-          Y7DdCekus+BQCKz+beEmtzG7d0Xwqwkif51HQ05CvwFNEtdUGodd8OrIO+gpIV6S
-          oN+Q5zxsenLo6QRfsLD+nn7A7qbzd57kUwIDAQAB
-          -----END RSA PUBLIC KEY-----
-        '';
-      };
-    };
     yasmin = {
       owner = config.krebs.users.mic92;
       nets.internet = {
@@ -467,7 +448,6 @@ in {
       owner = config.krebs.users.mic92;
       nets = {
         retiolum = {
-          ip4.addr = "10.243.29.171";
           aliases = [
             "rock.r"
           ];
