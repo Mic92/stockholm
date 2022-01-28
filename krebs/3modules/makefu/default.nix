@@ -102,6 +102,7 @@ in {
     x = {
       ci = true;
       cores = 4;
+      syncthing.id = "OA36OF6-JEFCUJQ-OEYVTMH-DPCACQI-3AJRE5G-BFVMOUG-RPYJQE3-4ZCUWA5";
       nets = {
         retiolum.ip4.addr = "10.243.0.91";
         wiregrill = {
@@ -121,7 +122,7 @@ in {
     omo = rec {
       ci = true;
       cores = 2;
-
+      syncthing.id = "Y5OTK3S-JOJLAUU-KTBXKUW-M7S5UEQ-MMQPUK2-7CXO5V6-NOUDLKP-PRGAFAK";
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.89";
