@@ -306,7 +306,6 @@ in {
         aliases = [ "yasmin.i" ];
       };
       nets.retiolum = {
-        ip4.addr = "10.243.29.197";
         aliases = [
           "yasmin.r"
         ];
@@ -414,7 +413,6 @@ in {
         };
         retiolum = {
           via = internet;
-          ip4.addr = "10.243.29.195";
           aliases = [ "bill.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -445,7 +443,6 @@ in {
         };
         retiolum = {
           via = internet;
-          ip4.addr = "10.243.29.173";
           aliases = [ "nardole.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -736,7 +733,6 @@ in {
         };
         retiolum = {
           via = internet;
-          ip4.addr = "10.243.29.198";
           aliases = [ "ryan.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -764,7 +760,6 @@ in {
         };
         retiolum = {
           via = internet;
-          ip4.addr = "10.243.29.199";
           aliases = [ "graham.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
