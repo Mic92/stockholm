@@ -123,6 +123,7 @@ in
           "zaatar.kmein.r"
           "grocy.kmein.r"
           "moodle.kmein.r"
+          "radio.kmein.r"
         ];
         tinc.pubkey = ''
           -----BEGIN RSA PUBLIC KEY-----

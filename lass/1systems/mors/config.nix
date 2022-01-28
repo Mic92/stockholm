@@ -26,6 +26,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/sync/sync.nix>
     <stockholm/lass/2configs/sync/decsync.nix>
     <stockholm/lass/2configs/sync/weechat.nix>
+    <stockholm/lass/2configs/sync/the_playlist.nix>
     #<stockholm/lass/2configs/c-base.nix>
     <stockholm/lass/2configs/br.nix>
     <stockholm/lass/2configs/ableton.nix>
