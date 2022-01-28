@@ -1,5 +1,5 @@
 { writers }:
-writers.writePython3Bin "krebsdance" {} ''
+writers.writePython3Bin "krebsdance" { flakeIgnore = [ "E501" ]; } ''
   import argparse
   import random
   import itertools
@@ -80,12 +80,16 @@ writers.writePython3Bin "krebsdance" {} ''
           yield f'{claw["up"]} {body["left"]}{eye}{mouth}{eye}{body["right"]} {claw["up"]}'
 
 
+  def escape_graph(text):
+      return text.replace("\\", "\\\\")
+
+
   def krebs_graph() -> str:
-      return "\n".join(
-          ["digraph {"]
-          + [f'"{krebs}"->"{generate(seed=krebs)}"' for krebs in all_krebses()]
-          + ["}"]
-      )
+      return "\n".join(itertools.chain(
+          ["digraph {"],
+          [escape_graph(f'"{krebs}"->"{generate(seed=krebs)}"') for krebs in all_krebses()],
+          "}",
+      ))
 
 
   def generate(*, seed: str, dancing: bool = False) -> str:
