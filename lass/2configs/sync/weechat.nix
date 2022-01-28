@@ -1,5 +1,5 @@
 {
-  services.syncthing.declarative.folders."/home/lass/.weechat".devices = [ "green" "mors" ];
+  services.syncthing.folders."/home/lass/.weechat".devices = [ "green" "mors" ];
   krebs.permown."/home/lass/.weechat" = {
     owner = "lass";
     group = "syncthing";

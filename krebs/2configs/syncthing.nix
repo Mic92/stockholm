@@ -8,11 +8,9 @@ in {
   services.syncthing = {
     enable = true;
     configDir = "/var/lib/syncthing";
-    declarative = {
-      devices = mk_peers used_peers;
-      key = toString <secrets/syncthing.key>;
-      cert = toString <secrets/syncthing.cert>;
-    };
+    devices = mk_peers used_peers;
+    key = toString <secrets/syncthing.key>;
+    cert = toString <secrets/syncthing.cert>;
   };
 
   boot.kernel.sysctl."fs.inotify.max_user_watches" = 524288;
