@@ -1,5 +1,33 @@
-{ config, lib, pkgs, ... }:
-{
+{ config, lib, pkgs, ... }: let
+
+  format-github-message = pkgs.writeDashBin "format-github-message" ''
+    set -xefu
+    export PATH=${lib.makeBinPath [
+      pkgs.jq
+    ]}
+    INPUT=$(jq -c .)
+    if $(echo "$INPUT" | jq 'has("issue") or has("pull_request")'); then
+      ${write_to_irc} "$(echo "$INPUT" | jq -r '
+        "\(.action): " +
+        "[\(.issue.title // .pull_request.title)] " +
+        "\(.comment.html_url // .issue.html_url // .pull_request.html_url) " +
+        "by \(.comment.user.login // .issue.user.login // .pull_request.user.login)"
+      ')"
+    fi
+  '';
+
+  write_to_irc = pkgs.writeDash "write_to_irc" ''
+    ${pkgs.curl}/bin/curl -fsSv http://localhost:44001 \
+      -H content-type:application/json \
+      -d "$(${pkgs.jq}/bin/jq -n \
+        --arg text "$1" '{
+          command:"PRIVMSG",
+          params:["#fysi",$text]
+        }'
+      )"
+  '';
+
+in {
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp --dport 44002"; target = "ACCEPT"; }
   ];
@@ -26,20 +54,14 @@
       name = "reaktor2-fysiweb-github";
     };
     script = ''. ${pkgs.writeDash "github-irc" ''
+      set -efu
       case "$Method $Request_URI" in
         "POST /")
           payload=$(head -c "$req_content_length" \
             | sed 's/+/ /g;s/%\(..\)/\\x\1/g;' \
             | xargs -0 echo -e \
           )
-          ${pkgs.curl}/bin/curl -fsSv http://localhost:44001/ \
-           -H content-type:application/json \
-           -d "$(echo "$payload" | ${pkgs.jq}/bin/jq \
-             '{
-               command:"PRIVMSG",
-               params:["#fysi", "\(.action): \(.comment.html_url // .issue.html_url // .pull_request.html_url)"]
-             }'
-           )"
+          echo "$payload" | ${format-github-message}/bin/format-github-message
           printf 'HTTP/1.1 200 OK\r\n'
           printf 'Connection: close\r\n'
           printf '\r\n'
