@@ -166,6 +166,8 @@ let
           nick = "buildbot|${hostname}",
           notify_events = [ 'started', 'finished', 'failure', 'success', 'exception', 'problem' ],
           channels = [{"channel": "#xxx"}],
+          showBlameList = True,
+          authz={'force': True},
         )
       ''];
 
