@@ -48,7 +48,7 @@ with import <stockholm/lib>;
         };
 
         extraConfig = mkOption {
-          type = types.str;
+          type = types.lines;
           default = "";
           description = ''
             Extra Configuration to be appended to tinc.conf
