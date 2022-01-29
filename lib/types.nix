@@ -7,7 +7,7 @@ let
     mkOptionType optional optionalAttrs optionals range splitString
     stringLength substring test testString typeOf;
   inherit (lib.types)
-    attrsOf bool either enum int listOf nullOr path str submodule;
+    attrsOf bool either enum int lines listOf nullOr path str submodule;
 in
 
 rec {
@@ -211,7 +211,7 @@ rec {
             extraConfig = mkOption {
               description = "Extra Configuration to be appended to the hosts file";
               default = "";
-              type = str;
+              type = lines;
             };
             port = mkOption {
               type = int;
