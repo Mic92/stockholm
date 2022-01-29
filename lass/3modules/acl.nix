@@ -1,19 +1,4 @@
 { config, lib, pkgs, ... }: let
-  generateACLs = attrs:
-    lib.mapAttrsToList (path: rules: pkgs.writeDash "acl-${builtins.baseNameOf path}" ''
-      mkdir -p "${path}"
-      ${generateRules rules path}
-    '') attrs;
-
-  generateRules = rules: path:
-    lib.concatStrings (
-      lib.mapAttrsToList (_: rule: ''
-        setfacl -${lib.optionalString rule.recursive "R"}m ${rule.rule} ${path}
-        ${lib.optionalString rule.default "setfacl -${lib.optionalString rule.recursive "R"}dm ${rule.rule} ${path}"}
-        ${lib.optionalString rule.parents (lib.concatMapStringsSep "\n" (folder: "setfacl -m ${rule.rule} ${folder}") (parents path))}
-      '') rules
-    );
-
   parents = dir:
     if dir == "/" then
       [ dir ]
@@ -48,17 +33,23 @@ in {
     default = {};
   };
   config = lib.mkIf (config.lass.acl != {}) {
-    systemd.services.set_acl = {
+    systemd.services = lib.mapAttrs' (path: rules: lib.nameValuePair "acl-${lib.replaceChars ["/"] ["_"] path}" {
       wantedBy = [ "multi-user.target" ];
       path = [
         pkgs.acl
         pkgs.coreutils
       ];
       serviceConfig = {
-        ExecStart = generateACLs config.lass.acl;
+        ExecStart = pkgs.writers.writeDash "acl" (lib.concatStrings (
+          lib.mapAttrsToList (_: rule: ''
+            setfacl -${lib.optionalString rule.recursive "R"}m ${rule.rule} ${path}
+            ${lib.optionalString rule.default "setfacl -${lib.optionalString rule.recursive "R"}dm ${rule.rule} ${path}"}
+            ${lib.optionalString rule.parents (lib.concatMapStringsSep "\n" (folder: "setfacl -m ${rule.rule} ${folder}") (parents path))}
+          '') rules
+        ));
         RemainAfterExit = true;
-        Type = "oneshot";
+        Type = "simple";
       };
-    };
+    }) config.lass.acl;
   };
 }
