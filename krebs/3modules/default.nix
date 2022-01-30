@@ -6,6 +6,7 @@ let
 
   out = {
     imports = [
+      ./acl.nix
       ./airdcpp.nix
       ./announce-activation.nix
       ./apt-cacher-ng.nix

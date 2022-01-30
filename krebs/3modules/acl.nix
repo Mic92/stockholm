@@ -6,7 +6,7 @@
       [ dir ] ++ parents (builtins.dirOf dir)
     ;
 in {
-  options.lass.acl = lib.mkOption {
+  options.krebs.acl = lib.mkOption {
     type = lib.types.attrsOf (lib.types.attrsOf (lib.types.submodule ({ config, ... }: {
       options = {
         rule = lib.mkOption {
@@ -32,7 +32,7 @@ in {
     })));
     default = {};
   };
-  config = lib.mkIf (config.lass.acl != {}) {
+  config = {
     systemd.services = lib.mapAttrs' (path: rules: lib.nameValuePair "acl-${lib.replaceChars ["/"] ["_"] path}" {
       wantedBy = [ "multi-user.target" ];
       path = [
@@ -50,6 +50,6 @@ in {
         RemainAfterExit = true;
         Type = "simple";
       };
-    }) config.lass.acl;
+    }) config.krebs.acl;
   };
 }

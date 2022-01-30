@@ -1,7 +1,6 @@
 _:
 {
   imports = [
-    ./acl.nix
     ./dnsmasq.nix
     ./folderPerms.nix
     ./hosts.nix
