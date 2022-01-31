@@ -200,9 +200,12 @@ in {
           '';
           tinc.pubkey_ed25519 = "nDuK96NlNhcxzlX7G30w/706RxItb+FhkFkz/VhUgCE";
         };
-        wiregrill.wireguard.subnets = [
-          (krebs.genipv6 "wiregrill" "tv" 0).subnetCIDR
-        ];
+        wiregrill = {
+          via = config.krebs.hosts.ni.nets.internet;
+          wireguard.subnets = [
+            (krebs.genipv6 "wiregrill" "tv" 0).subnetCIDR
+          ];
+        };
       };
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILGDdcKwFm6udU0/x6XGGb87k9py0VlrxF54HeYu9Izb";
     };
