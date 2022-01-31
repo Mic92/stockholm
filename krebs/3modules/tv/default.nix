@@ -202,6 +202,7 @@ in {
         };
         wiregrill = {
           via = config.krebs.hosts.ni.nets.internet;
+          ip4.addr = "10.244.3.1";
           wireguard.subnets = [
             (krebs.genipv6 "wiregrill" "tv" 0).subnetCIDR
           ];
