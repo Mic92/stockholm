@@ -48,7 +48,7 @@ with import <stockholm/lib>;
         };
 
         extraConfig = mkOption {
-          type = types.str;
+          type = types.lines;
           default = "";
           description = ''
             Extra Configuration to be appended to tinc.conf
@@ -233,6 +233,7 @@ with import <stockholm/lib>;
         cfg.iproutePackage
         cfg.tincPackage
       ];
+      reloadIfChanged = true;
       serviceConfig = {
         Restart = "always";
         LoadCredential = filter (x: x != "") [
@@ -260,7 +261,7 @@ with import <stockholm/lib>;
           "-o PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/rsa_key"
           "--pidfile=/var/run/tinc.${netname}.pid"
         ];
-        ExecReload = "${cfg.tincPackage}/sbin/tinc -n ${netname} reload";
+        ExecReload = "${cfg.tincPackage}/sbin/tinc -n ${netname} restart";
         SyslogIdentifier = netname;
       };
     }) config.krebs.tinc;

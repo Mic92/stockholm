@@ -219,6 +219,9 @@ in {
         retiolum = {
           via = internet;
           ip4.addr = "10.243.0.213";
+          # never connect via gum (he eats your packets!)
+          tinc.weight = 9001;
+
           aliases = [
             "gum.r"
             "backup.makefu.r"

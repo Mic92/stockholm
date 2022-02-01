@@ -97,7 +97,7 @@ in {
       ${pkgs.coreutils}/bin/chmod a+x /var/lib/containers || :
     '';
 
-    services.syncthing.declarative.folders = (mapAttrs' (_: ctr: nameValuePair "${(paths ctr.name).${ctr.format}}" ({
+    services.syncthing.folders = (mapAttrs' (_: ctr: nameValuePair "${(paths ctr.name).${ctr.format}}" ({
       devices = ctr.peers;
       ignorePerms = false;
     })) cfg.containers);

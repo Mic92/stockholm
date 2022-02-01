@@ -28,9 +28,6 @@
     '';
   };
 
-  # never connect via gum (he eats our packets!)
-  krebs.hosts.gum.nets.retiolum.tinc.weight = 9000;
-
   nixpkgs.config.packageOverrides = pkgs: {
     tinc = pkgs.tinc_pre;
   };

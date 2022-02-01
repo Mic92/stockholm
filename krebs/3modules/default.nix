@@ -6,6 +6,7 @@ let
 
   out = {
     imports = [
+      ./acl.nix
       ./airdcpp.nix
       ./announce-activation.nix
       ./apt-cacher-ng.nix
@@ -19,13 +20,13 @@ let
       ./current.nix
       ./dns.nix
       ./ergo.nix
-      ./exim.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
+      ./exim.nix
       ./fetchWallpaper.nix
+      ./git.nix
       ./github-hosts-sync.nix
       ./github-known-hosts.nix
-      ./git.nix
       ./go.nix
       ./hidden-ssh.nix
       ./hosts.nix
@@ -38,11 +39,12 @@ let
       ./nixpkgs.nix
       ./on-failure.nix
       ./os-release.nix
-      ./permown.nix
       ./per-user.nix
+      ./permown.nix
       ./power-action.nix
       ./reaktor2.nix
       ./realwallpaper.nix
+      ./repo-sync.nix
       ./retiolum-bootstrap.nix
       ./rtorrent.nix
       ./secret.nix
@@ -55,7 +57,6 @@ let
       ./tinc_graphs.nix
       ./upstream
       ./urlwatch.nix
-      ./repo-sync.nix
       ./xresources.nix
       ./zones.nix
     ];
@@ -102,13 +103,13 @@ let
 
   imp = lib.mkMerge [
     { krebs = import ./external { inherit config; }; }
+    { krebs = import ./external/kmein.nix { inherit config; }; }
+    { krebs = import ./external/mic92.nix { inherit config; }; }
+    { krebs = import ./external/palo.nix { inherit config; }; }
     { krebs = import ./jeschli { inherit config; }; }
     { krebs = import ./krebs  { inherit config; }; }
     { krebs = import ./lass   { inherit config; }; }
     { krebs = import ./makefu { inherit config; }; }
-    { krebs = import ./external/palo.nix { inherit config; }; }
-    { krebs = import ./external/mic92.nix { inherit config; }; }
-    { krebs = import ./external/kmein.nix { inherit config; }; }
     { krebs = import ./tv     { inherit config; }; }
     {
       krebs.dns.providers = {
