@@ -173,7 +173,7 @@ in {
         };
         retiolum = {
           via = internet;
-          aliases = [ "eve.r" "tts.r" ];
+          aliases = [ "eve.r" "tts.r" "flood.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIICCgKCAgEAw5cxGjnWCG8dcuhTddvGHzH0/VjxHA5V8qJXH2R5k8ki8dsM5FRH
