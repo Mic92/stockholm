@@ -1,6 +1,5 @@
 { config, pkgs, ... }:
-
-with import <stockholm/lib>;
+with pkgs.stockholm.lib;
 
 let
   name = "radio";
@@ -84,7 +83,7 @@ let
   '';
 
   set_irc_topic = pkgs.writeDash "set_irc_topic" ''
-    ${pkgs.curl}/bin/curl -fsSv --unix-socket /home/radio/reaktor.sock http://z/ \
+    ${pkgs.curl}/bin/curl -fsS --unix-socket /home/radio/reaktor.sock http://z/ \
       -H content-type:application/json \
       -d "$(${pkgs.jq}/bin/jq -n \
         --arg text "$1" '{
@@ -109,12 +108,12 @@ in {
   users.users = {
     "${name}" = rec {
       inherit name;
+      createHome = mkForce false;
       group = name;
       uid = genid_uint31 name;
       description = "radio manager";
       home = "/home/${name}";
       useDefaultShell = true;
-      createHome = true;
       openssh.authorizedKeys.keys = with config.krebs.users; [
         lass.pubkey
         lass-mors.pubkey
@@ -148,27 +147,37 @@ in {
 
       audio_output {
         type "httpd"
-        name "lassulus radio mp3"
-        encoder "lame" # optional
-        port "8002"
-        quality "5.0" # do not define if bitrate is defined
-        # bitrate "128" # do not define if quality is defined
+        name "raw radio"
+        encoder "wave"
+        port "7900"
         format "44100:16:2"
         always_on "yes" # prevent MPD from disconnecting all listeners when playback is stopped.
         tags "yes" # httpd supports sending tags to listening streams.
       }
+    '';
+  };
+  services.liquidsoap.streams.radio-news = pkgs.writeText "radio-news.liq" ''
+    source = mksafe(input.http("http://localhost:7900/raw.wave"))
 
-      audio_output {
-        type "httpd"
-        name "lassulus radio"
-        encoder "vorbis" # optional
-        port "8000"
-        quality "5.0" # do not define if bitrate is defined
-        # bitrate "128" # do not define if quality is defined
-        format "44100:16:2"
-        always_on "yes" # prevent MPD from disconnecting all listeners when playback is stopped.
-        tags "yes" # httpd supports sending tags to listening streams.
-      }
+    output.icecast(mount = '/music.ogg', password = 'hackme', %vorbis(quality = 1), source)
+    output.icecast(mount = '/music.mp3', password = 'hackme', %mp3.vbr(), source)
+    output.icecast(mount = '/music.opus', password = 'hackme', %opus(), source)
+
+    extra_input = audio_to_stereo(input.harbor("live", port=1338))
+
+    o = smooth_add(normal = source, special = extra_input)
+    output.icecast(mount = '/radio.ogg', password = 'hackme', %vorbis(quality = 1), o)
+    output.icecast(mount = '/radio.mp3', password = 'hackme', %mp3.vbr(), o)
+    output.icecast(mount = '/radio.opus', password = 'hackme', %opus(), o)
+  '';
+  services.icecast = {
+    enable = true;
+    hostname = "radio.lassul.us";
+    admin.password = "hackme";
+    extraConf = ''
+      <authentication>
+       <source-password>hackme</source-password>
+      </authentication>
     '';
   };
 
@@ -176,7 +185,6 @@ in {
     tables = {
       filter.INPUT.rules = [
         { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; }
-        { predicate = "-p tcp --dport 8002"; target = "ACCEPT"; }
         { predicate = "-i retiolum -p tcp --dport 8001"; target = "ACCEPT"; }
       ];
     };
@@ -219,12 +227,14 @@ in {
 
   systemd.services.radio-recent = let
     recentlyPlayed = pkgs.writeDash "recentlyPlayed" ''
+      set -xeu
       LIMIT=1000 #how many tracks to keep in the history
-      HISTORY_FILE=/tmp/played
+      HISTORY_FILE=/var/lib/radio/recent
       while :; do
         ${pkgs.mpc_cli}/bin/mpc idle player > /dev/null
         ${pkgs.mpc_cli}/bin/mpc current -f %file%
       done | while read track; do
+
         listeners=$(${pkgs.iproute}/bin/ss -Hno state established 'sport = :8000' | grep '^tcp' | wc -l)
         echo "$(date -Is)" "$track" | tee -a "$HISTORY_FILE"
         echo "$(tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
@@ -345,7 +355,8 @@ in {
         proxy_pass http://localhost:8000;
       '';
       locations."= /recent".extraConfig = ''
-        alias /tmp/played;
+        default_type "text/plain";
+        alias /var/lib/radio/recent;
       '';
       locations."= /current".extraConfig = ''
         proxy_pass http://localhost:8001;
