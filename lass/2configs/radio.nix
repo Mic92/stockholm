@@ -235,7 +235,8 @@ in {
         ${pkgs.mpc_cli}/bin/mpc current -f %file%
       done | while read track; do
 
-        listeners=$(${pkgs.iproute}/bin/ss -Hno state established 'sport = :8000' | grep '^tcp' | wc -l)
+        listeners=$(${pkgs.curl}/bin/curl lassul.us:8000/status-json.xsl |
+          ${pkgs.jq}/bin/jq '[.icestats.source[].listeners] | add')
         echo "$(date -Is)" "$track" | tee -a "$HISTORY_FILE"
         echo "$(tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
         ${set_irc_topic} "playing: $track listeners: $listeners"
