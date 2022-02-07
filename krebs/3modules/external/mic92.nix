@@ -865,5 +865,24 @@ in {
         };
       };
     };
+    hal9000 = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        retiolum = {
+          aliases = [ "hal9000.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA5aunzoz6WIjeQgfibml6T+UNsXXcoglhCqRkun7WaSHE93SQcCil
+            CDoUoq2aeiGTZ189LgdSyeRL7qmBzgVExIT4NlhfBCkNbHB/sz6epBb9qx49hLh5
+            K/tJfUBYKRd06ymSXPK+cCiO0/gM8fjzI+3GMlYvcbZ+ow11zTRgX/QB2lE1G8cW
+            Obh/nS0af7G6wmovHsKEpry5AxoAPLLi5JaP4hlc/i0iCbebMqb+szF0KBAbmDg3
+            JQ4MYIyQOw9kk7hfqTNFEvJhpbV66id2+ZIHX6QAw7OHBpaY6ZWFd/w2BkJHeayb
+            2jRnsJd0YgautgBGrBrjRWiVmn/f+lJ4XQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "krVYgJo5OFZkyUOgasH9dFve4OI3ewpt8IFhCPan7mB";
+        };
+      };
+    };
   };
 }
