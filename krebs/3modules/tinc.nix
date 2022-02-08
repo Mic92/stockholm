@@ -175,7 +175,7 @@ with import <stockholm/lib>;
         connectTo = mkOption {
           type = types.listOf types.str;
           ${if netname == "retiolum" then "default" else null} = [
-            "gum"
+            "eve"
             "ni"
             "prism"
           ];
