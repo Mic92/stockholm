@@ -20,7 +20,7 @@ let
     $(${pkgs.ddate}/bin/ddate | sed 's/YOLD/Year of Discord/')!
     It is $(date --utc +%H) o clock UTC.
     $(weather_report berlin)
-    $(weather_report stuttgart)
+    $(weather_report 70173)
     $(weather_report munich)
     "
   '';
