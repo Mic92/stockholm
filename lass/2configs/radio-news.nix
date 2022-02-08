@@ -32,12 +32,13 @@ in
       send_to_radio
       weather_report
       pkgs.curl
+      pkgs.retry
     ];
     script = ''
       set -efu
-      newsshow |
-        curl -SsG http://tts.r/api/tts --data-urlencode 'text@-' |
-        send_to_radio
+      retry -t 5 -d 10 -- newsshow |
+        retry -t 5 -d 10 -- curl -SsG http://tts.r/api/tts --data-urlencode 'text@-' |
+        retry -t 5 -d 10 -- send_to_radio
     '';
     startAt = "*:00:00";
   };
