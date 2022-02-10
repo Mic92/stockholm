@@ -1,12 +1,6 @@
 { config, lib, pkgs, ... }:
 with import ./lib.nix { inherit lib; };
 let
-  unstable = import (pkgs.fetchFromGitHub {
-    owner = "nixos";
-    repo = "nixpkgs";
-    rev = (lib.importJSON ../../../krebs/nixpkgs-unstable.json).rev;
-    sha256 = (lib.importJSON ../../../krebs/nixpkgs-unstable.json).sha256;
-  }) {};
   dwdwfsapi = pkgs.python3Packages.buildPythonPackage rec {
     pname = "dwdwfsapi";
     version = "1.0.3";
@@ -35,17 +29,14 @@ in {
     { predicate = "-i int0 -p tcp --dport 1883"; target = "ACCEPT"; } # mosquitto
     { predicate = "-i docker0 -p tcp --dport 1883"; target = "ACCEPT"; } # mosquitto
     { predicate = "-i int0 -p tcp --dport 8123"; target = "ACCEPT"; } # hass
-    { predicate = "-i int0 -p tcp --dport 1337"; target = "ACCEPT"; } # hass
+    { predicate = "-i int0 -p tcp --dport 1337"; target = "ACCEPT"; } # zigbee2mqtt frontend
     { predicate = "-i retiolum -p tcp --dport 8123"; target = "ACCEPT"; } # hass
-    { predicate = "-i retiolum -p tcp --dport 1337"; target = "ACCEPT"; } # hass frontend
+    { predicate = "-i retiolum -p tcp --dport 1337"; target = "ACCEPT"; } # zigbee2mqtt frontend
     { predicate = "-i wiregrill -p tcp --dport 8123"; target = "ACCEPT"; } # hass
   ];
 
   services.home-assistant = {
     enable = true;
-    package = unstable.home-assistant.overrideAttrs (old: {
-      doInstallCheck = false;
-    });
     configWritable = true;
     lovelaceConfigWritable = true;
     config = let
