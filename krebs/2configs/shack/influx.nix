@@ -17,6 +17,14 @@ in
       proxyPass = "http://localhost:${toString port}/";
     };
   };
+  nixpkgs.overlays = [ 
+    (self: super:
+      {
+        # Hotfix for https://github.com/NixOS/nixpkgs/issues/157543
+        collectd = super.collectd.override { xen = null; };
+      }
+    )
+  ];
   services.influxdb = {
     enable = true;
     extraConfig = {
