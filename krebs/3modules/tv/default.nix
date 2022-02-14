@@ -200,9 +200,13 @@ in {
           '';
           tinc.pubkey_ed25519 = "nDuK96NlNhcxzlX7G30w/706RxItb+FhkFkz/VhUgCE";
         };
-        wiregrill.wireguard.subnets = [
-          (krebs.genipv6 "wiregrill" "tv" 0).subnetCIDR
-        ];
+        wiregrill = {
+          via = config.krebs.hosts.ni.nets.internet;
+          ip4.addr = "10.244.3.1";
+          wireguard.subnets = [
+            (krebs.genipv6 "wiregrill" "tv" 0).subnetCIDR
+          ];
+        };
       };
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILGDdcKwFm6udU0/x6XGGb87k9py0VlrxF54HeYu9Izb";
     };
@@ -344,6 +348,9 @@ in {
       secure = true;
       ssh.privkey.path = <secrets/ssh.id_rsa>;
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDNjHxyUC7afNGSwfwBfQizmDnHTNLWDRHE8SY9W4oiw2lPhCFGTN8Jz84CKtnABbZhbNY1E8T58emF2h45WzDg/OGi8DPAk4VsXSkIhyvAto+nkTy2L4atjqfvXDvqxTDC9sui+t8p5OqOK+sghe4kiy+Vx1jhnjSnkQsx9Kocu24BYTkNqYxG7uwOz6t262XYNwMn13Y2K/yygDR3Uw3wTnEjpaYnObRxxJS3iTECDzgixiQ6ewXwYNggpzO/+EfW1BTz5vmuEVf4GbQ9iEc7IsVXHhR+N0boCscvSgae9KW9MBun0A2veRFXNkkfBEMfzelz+S63oeVfelkBq6N5aLsHYYGC4VQjimScelHYVwxR7O4fV+NttJaFF7H06FJeFzPt3NYZeoPKealD5y2Muh1UnewpmkMgza9hQ9EmI4/G1fMowqeMq0U6Hu0QMDUAagyalizN97AfsllY2cs0qLNg7+zHMPwc5RgLzs73oPUsF3umz0O42I5p5733vveUlWi5IZeI8CA1ZKdpwyMXXNhIOHs8u+yGsOLfSy3RgjVKp2GjN4lfnFd0LI+p7iEsEWDRkIAvGCOFepsebyVpBjGP+Kqs10bPGpk5dMcyn9iBJejoz9ka+H9+JAG04LnXwt6Rf1CRV3VRCRX1ayZEjRv9czV7U9ZpuFQcIlVRJQ== root@zu";
+    };
+    umz = {
+      nets.wiregrill.ip4.addr = "10.244.3.101";
     };
   };
   sitemap = {
