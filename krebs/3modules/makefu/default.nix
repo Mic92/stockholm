@@ -182,6 +182,7 @@ in {
 
           aliases = [
             "latte.r"
+            "torrent.latte.r"
           ];
         };
       };
