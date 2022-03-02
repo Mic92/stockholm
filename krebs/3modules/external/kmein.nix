@@ -63,6 +63,7 @@ in
           "names.kmein.r"
           "graph.r"
           "rrm.r"
+          "redaktion.r"
         ];
         ip4.addr = "10.243.2.84";
         tinc.pubkey = ''
