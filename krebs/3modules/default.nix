@@ -46,7 +46,6 @@ let
       ./realwallpaper.nix
       ./repo-sync.nix
       ./retiolum-bootstrap.nix
-      ./rtorrent.nix
       ./secret.nix
       ./setuid.nix
       ./shadow.nix
