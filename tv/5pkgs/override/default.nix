@@ -20,3 +20,5 @@ self: super: {
   });
 
 }
+//
+mapNixDir (path: import path self super) ./.
