@@ -22,12 +22,6 @@ fix
 //
 
 {
-  dhcpcd = overrideDerivation super.dhcpcd (old: {
-    configureFlags = old.configureFlags ++ [
-      "--dbdir=/var/lib/dhcpcd"
-    ];
-  });
-
   gitAndTools = super.gitAndTools // {
     inherit (self) diff-so-fancy;
   };
