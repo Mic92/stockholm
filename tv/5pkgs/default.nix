@@ -1,4 +1,11 @@
 with import <stockholm/lib>;
+let
+  pushBack = x: xs:
+    if elem x xs then
+      remove x xs ++ [ x ]
+    else
+      names;
+in
 
 self: super:
 
@@ -9,7 +16,8 @@ fix
       (name: import (./. + "/${name}"))
       (filter
         (name: name != "default.nix" && !hasPrefix "." name)
-        (attrNames (readDir ./.)))))
+        (pushBack "override"
+          (attrNames (readDir ./.))))))
 
 //
 
