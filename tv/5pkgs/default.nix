@@ -22,10 +22,6 @@ fix
 //
 
 {
-  ff = self.writeDashBin "ff" ''
-    exec ${self.firefoxWrapper}/bin/firefox "$@"
-  '';
-
   gnupg = self.gnupg22;
 
 }
