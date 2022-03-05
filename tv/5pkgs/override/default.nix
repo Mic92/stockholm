@@ -19,6 +19,4 @@ self: super: {
     outputHashMode = null;
   });
 
-  nix-prefetch-github =
-    self.python3Packages.callPackage ./nix-prefetch-github.nix {};
 }
