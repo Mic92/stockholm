@@ -18,10 +18,3 @@ fix
         (name: name != "default.nix" && !hasPrefix "." name)
         (pushBack "override"
           (attrNames (readDir ./.))))))
-
-//
-
-{
-  gnupg = self.gnupg22;
-
-}
