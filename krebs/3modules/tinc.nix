@@ -242,7 +242,9 @@ with import <stockholm/lib>;
         cfg.iproutePackage
         cfg.tincPackage
       ];
-      reloadIfChanged = true;
+      # Restart the service in a single step in order to prevent potential
+      # connection timeouts and subsequent issues while deploying via tinc.
+      stopIfChanged = false;
       serviceConfig = {
         Restart = "always";
         LoadCredential = filter (x: x != "") [
@@ -270,7 +272,6 @@ with import <stockholm/lib>;
           "-o PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/rsa_key"
           "--pidfile=/var/run/tinc.${netname}.pid"
         ];
-        ExecReload = "${cfg.tincPackage}/sbin/tinc -n ${netname} restart";
         SyslogIdentifier = netname;
       };
     }) config.krebs.tinc;
