@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
 
   # external-ip = config.krebs.build.host.nets.internet.ip4.addr;
@@ -10,44 +10,66 @@ let
 in {
 
   imports = [
-    <stockholm/makefu>
-    # configure your hw:
-    <stockholm/makefu/2configs/hw/CAC.nix>
-    <stockholm/makefu/2configs/tinc/retiolum.nix>
-    <stockholm/makefu/2configs/save-diskspace.nix>
+      ./1blu
+      <stockholm/makefu>
 
-    # Security
-    <stockholm/makefu/2configs/sshd-totp.nix>
-    # <stockholm/makefu/2configs/stats/client.nix>
+      # common
+      <stockholm/makefu/2configs/nur.nix>
+      <stockholm/makefu/2configs/home-manager>
+      <stockholm/makefu/2configs/home-manager/cli.nix>
 
-    # Tools
-    <stockholm/makefu/2configs/tools/core.nix>
-    <stockholm/makefu/2configs/zsh-user.nix>
-    # Services
-    <stockholm/makefu/2configs/remote-build/slave.nix>
-    <stockholm/makefu/2configs/torrent.nix>
+      # Security
+      <stockholm/makefu/2configs/sshd-totp.nix>
+
+      # Tools
+      <stockholm/makefu/2configs/tools/core.nix>
+      <stockholm/makefu/2configs/zsh-user.nix>
+
+      # NixOS Build
+      <stockholm/makefu/2configs/remote-build/slave.nix>
+
+      # Storage
+      <stockholm/makefu/2configs/share>
+      <stockholm/makefu/2configs/share/hetzner-client.nix>
+
+      # Services:
+      <stockholm/makefu/2configs/nix-community/mediawiki-matrix-bot.nix>
+      <stockholm/makefu/2configs/torrent/rtorrent.nix>
+      ## Web
+      <stockholm/makefu/2configs/deployment/rss.euer.krebsco.de.nix>
+      <stockholm/makefu/2configs/deployment/owncloud.nix>
+      ### Moving owncloud data dir to /media/cloud/nextcloud-data
+      {
+        users.users.nextcloud.extraGroups = [ "download" ];
+        # nextcloud-setup fails as it cannot set permissions for nextcloud
+        systemd.services.nextcloud-setup.serviceConfig.SuccessExitStatus = "0 1";
+        fileSystems."/var/lib/nextcloud/data" = {
+          device = "/media/cloud/nextcloud-data";
+          options = [ "bind" ];
+        };
+      }
+
+      # local usage:
+      <stockholm/makefu/2configs/mosh.nix>
+      <stockholm/makefu/2configs/bitlbee.nix>
+
+      # Supervision
+      <stockholm/makefu/2configs/nix-community/supervision.nix>
+
+      # Krebs
+      <stockholm/makefu/2configs/tinc/retiolum.nix>
+
+      # backup
+      <stockholm/makefu/2configs/backup/state.nix>
+
 
   ];
   krebs = {
     enable = true;
     build.host = config.krebs.hosts.latte;
   };
-  boot.initrd.availableKernelModules = [ "ata_piix" "ehci_pci" "virtio_pci" "virtio_blk" "virtio_net" "virtio_scsi" ];
 
-  boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.copyKernels = true;
-  fileSystems."/" = {
-    device = "/dev/vda1";
-    fsType = "ext4";
-  };
-  networking = {
-    firewall = {
-      allowPing = true;
-      logRefusedConnections = false;
-      allowedTCPPorts = [ ];
-      allowedUDPPorts = [ 655 ];
-    };
-    # network interface receives dhcp address
-    nameservers = [ "8.8.8.8" ];
-  };
+  makefu.dl-dir = "/media/cloud/download";
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+
 }

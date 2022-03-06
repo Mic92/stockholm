@@ -148,6 +148,46 @@ in {
         };
       };
     };
+    latte = rec {
+      ci = true;
+      extraZones = {
+        "krebsco.de" = ''
+          latte.euer     IN A      ${nets.internet.ip4.addr}
+          rss.euer          IN A      ${nets.internet.ip4.addr}
+        '';
+      };
+      cores = 4;
+      nets = rec {
+        internet = {
+          ip4.addr = "178.254.30.202";
+          ip6.addr = "2a00:6800:3:18c::2";
+          aliases = [
+            "latte.i"
+          ];
+        };
+        #wiregrill = {
+        #  via = internet;
+        #  ip4.addr = "10.244.245.1";
+        #  ip6.addr = w6 "1";
+        #  wireguard.port = 51821;
+        #  wireguard.subnets = [
+        #      (krebs.genipv6 "wiregrill" "makefu" 0).subnetCIDR
+        #      "10.244.245.0/24" # required for routing directly to gum via rockit
+        #  ];
+        #};
+        retiolum = {
+          via = internet;
+          ip4.addr = "10.243.0.214";
+          # never connect via gum (he eats your packets!)
+          #tinc.weight = 9001;
+
+          aliases = [
+            "latte.r"
+            "torrent.latte.r"
+          ];
+        };
+      };
+    };
     gum = rec {
       ci = true;
       extraZones = {
@@ -173,7 +213,6 @@ in {
           feed.euer         IN A      ${nets.internet.ip4.addr}
           board.euer        IN A      ${nets.internet.ip4.addr}
           etherpad.euer     IN A      ${nets.internet.ip4.addr}
-          rss.euer          IN A      ${nets.internet.ip4.addr}
           mediengewitter    IN CNAME  over.dose.io.
           mon.euer          IN A      ${nets.internet.ip4.addr}
           netdata.euer      IN A      ${nets.internet.ip4.addr}
@@ -220,7 +259,7 @@ in {
           via = internet;
           ip4.addr = "10.243.0.213";
           # never connect via gum (he eats your packets!)
-          tinc.weight = 9001;
+          #tinc.weight = 9001;
 
           aliases = [
             "gum.r"
