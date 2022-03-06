@@ -238,10 +238,6 @@ with import <stockholm/lib>;
       description = "Tinc daemon for ${netname}";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [
-        cfg.iproutePackage
-        cfg.tincPackage
-      ];
       # Restart the service in a single step in order to prevent potential
       # connection timeouts and subsequent issues while deploying via tinc.
       stopIfChanged = false;
