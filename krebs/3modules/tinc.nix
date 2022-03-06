@@ -260,13 +260,12 @@ with import <stockholm/lib>;
           "${cfg.tincPackage}/sbin/tincd"
           "-D"
           "-U ${cfg.user.name}"
-          "-c /etc/tinc/${netname}"
           "-d 0"
+          "-n ${netname}"
           (optionalString (cfg.privkey_ed25519 != null)
             "-o Ed25519PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/ed25519_key"
           )
           "-o PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/rsa_key"
-          "--pidfile=/var/run/tinc.${netname}.pid"
         ];
         SyslogIdentifier = netname;
       };
