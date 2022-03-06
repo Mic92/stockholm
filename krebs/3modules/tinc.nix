@@ -26,8 +26,7 @@ with import <stockholm/lib>;
                 Port = ${toString tinc.config.host.nets.${netname}.tinc.port}
                 ${tinc.config.extraConfig}
               '';
-              "tinc-up" = pkgs.writeScript "${netname}-tinc-up" ''
-                #!/bin/sh
+              "tinc-up" = pkgs.writeDash "${netname}-tinc-up" ''
                 ip link set ${netname} up
                 ${tinc.config.tincUp}
               '';
