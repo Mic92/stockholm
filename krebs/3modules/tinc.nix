@@ -245,16 +245,25 @@ with import <stockholm/lib>;
         Restart = "always";
         LoadCredential = filter (x: x != "") [
           (optionalString (cfg.privkey_ed25519 != null)
-            "ed25519_key:${cfg.privkey_ed25519}"
+            "ed25519_key.priv:${cfg.privkey_ed25519}"
           )
-          "rsa_key:${cfg.privkey}"
+          "rsa_key.priv:${cfg.privkey}"
         ];
         ExecStartPre = pkgs.writers.writeDash "init-tinc-${netname}" ''
           ${pkgs.coreutils}/bin/mkdir -p /etc/tinc
           ${pkgs.rsync}/bin/rsync -Lacv --delete \
             --chown ${cfg.user.name} \
             --chmod u=rwX,g=rX \
+            --exclude='/*.priv' \
             ${cfg.confDir}/ /etc/tinc/${netname}/
+          ${optionalString (cfg.privkey_ed25519 != null) /* sh */ ''
+            ${pkgs.coreutils}/bin/ln -fns \
+                "$CREDENTIALS_DIRECTORY"/ed25519_key.priv \
+                /etc/tinc/${netname}/
+          ''}
+          ${pkgs.coreutils}/bin/ln -fns \
+              "$CREDENTIALS_DIRECTORY"/rsa_key.priv \
+              /etc/tinc/${netname}/
         '';
         ExecStart = toString [
           "${cfg.tincPackage}/sbin/tincd"
@@ -262,10 +271,6 @@ with import <stockholm/lib>;
           "-U ${cfg.user.name}"
           "-d 0"
           "-n ${netname}"
-          (optionalString (cfg.privkey_ed25519 != null)
-            "-o Ed25519PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/ed25519_key"
-          )
-          "-o PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/rsa_key"
         ];
         SyslogIdentifier = netname;
       };
