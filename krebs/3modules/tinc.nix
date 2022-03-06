@@ -27,7 +27,7 @@ with import <stockholm/lib>;
                 ${tinc.config.extraConfig}
               '';
               "tinc-up" = pkgs.writeDash "${netname}-tinc-up" ''
-                ip link set ${netname} up
+                ${tinc.config.iproutePackage}/sbin/ip link set ${netname} up
                 ${tinc.config.tincUp}
               '';
             });
@@ -59,14 +59,15 @@ with import <stockholm/lib>;
           type = types.str;
           default = let
             net = tinc.config.host.nets.${netname};
+            iproute = tinc.config.iproutePackage;
           in ''
             ${optionalString (net.ip4 != null) /* sh */ ''
-              ip -4 addr add ${net.ip4.addr} dev ${netname}
-              ip -4 route add ${net.ip4.prefix} dev ${netname}
+              ${iproute}/sbin/ip -4 addr add ${net.ip4.addr} dev ${netname}
+              ${iproute}/sbin/ip -4 route add ${net.ip4.prefix} dev ${netname}
             ''}
             ${optionalString (net.ip6 != null) /* sh */ ''
-              ip -6 addr add ${net.ip6.addr} dev ${netname}
-              ip -6 route add ${net.ip6.prefix} dev ${netname}
+              ${iproute}/sbin/ip -6 addr add ${net.ip6.addr} dev ${netname}
+              ${iproute}/sbin/ip -6 route add ${net.ip6.prefix} dev ${netname}
             ''}
             ${tinc.config.tincUpExtra}
           '';
