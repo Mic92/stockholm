@@ -251,7 +251,7 @@ with import <stockholm/lib>;
         ];
         ExecStartPre = pkgs.writers.writeDash "init-tinc-${netname}" ''
           ${pkgs.coreutils}/bin/mkdir -p /etc/tinc
-          ${pkgs.rsync}/bin/rsync -vaL --delete \
+          ${pkgs.rsync}/bin/rsync -Lacv --delete \
             --chown ${cfg.user.name} \
             --chmod u=rwX,g=rX \
             ${cfg.confDir}/ /etc/tinc/${netname}/
