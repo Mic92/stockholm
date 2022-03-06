@@ -250,6 +250,7 @@ with import <stockholm/lib>;
           "rsa_key.priv:${cfg.privkey}"
         ];
         ExecStartPre = pkgs.writers.writeDash "init-tinc-${netname}" ''
+          set -efu
           ${pkgs.coreutils}/bin/mkdir -p /etc/tinc
           ${pkgs.rsync}/bin/rsync -Lacv --delete \
             --chown ${cfg.user.name} \
