@@ -6,9 +6,9 @@ with import <stockholm/lib>;
   krebs.tinc.retiolum = {
     enable = true;
     connectTo = filter (ne config.krebs.build.host.name) [
-      "gum"
       "ni"
       "prism"
+      "eve"
     ];
     extraConfig = ''
       LocalDiscovery = yes
