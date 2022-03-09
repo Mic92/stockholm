@@ -221,4 +221,7 @@ with import <stockholm/lib>;
   time.timeZone = mkDefault"Europe/Berlin";
 
   system.stateVersion = mkDefault "20.03";
+
+  # disable doc usually
+  documentation.nixos.enable = mkDefault false;
 }
