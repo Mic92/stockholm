@@ -66,4 +66,6 @@
     enable = true;
     client.enable = true;
   };
+
+  documentation.nixos.enable = true;
 }

@@ -19,13 +19,15 @@ with import <stockholm/lib>;
               "hosts" = tinc.config.hostsPackage;
               "tinc.conf" = pkgs.writeText "${netname}-tinc.conf" ''
                 Name = ${tinc.config.host.name}
+                LogLevel = ${toString tinc.config.logLevel}
                 Interface = ${netname}
                 Broadcast = no
                 ${concatMapStrings (c: "ConnectTo = ${c}\n") tinc.config.connectTo}
                 Port = ${toString tinc.config.host.nets.${netname}.tinc.port}
                 ${tinc.config.extraConfig}
               '';
-              "tinc-up" = pkgs.writeDash "${netname}-tinc-up" ''
+              "tinc-up" = pkgs.writeScript "${netname}-tinc-up" ''
+                #!/bin/sh
                 ip link set ${netname} up
                 ${tinc.config.tincUp}
               '';
@@ -190,6 +192,14 @@ with import <stockholm/lib>;
               krebs.hosts.‹host›.nets.‹netname›.tinc.port = 1655;
             }
           '';
+        };
+
+        logLevel = mkOption {
+          type = types.int;
+          description = ''
+            LogLevel in tinc.conf
+          '';
+          default = 3;
         };
 
         user = mkOption {

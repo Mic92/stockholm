@@ -184,7 +184,7 @@
                     exit 1
                   fi
                   twitter_nick=$(echo "$1" | ${pkgs.jq}/bin/jq -Rr '[match("(\\S+)\\s*";"g").captures[].string][0]')
-                  echo "brockman: add tw_$twitter_nick http://rss.r/?action=display&bridge=Twitch&channel=$twitter_nick&type=all&format=Atom"
+                  echo "brockman: add tw_$twitter_nick http://rss.r/?action=display&bridge=Twitter&context=By+username&u=$twitter_nick&norep=on&noretweet=on&nopinned=on&nopic=on&format=Atom"
                 '';
                 search.filename = pkgs.writeDash "search" ''
                   set -euf

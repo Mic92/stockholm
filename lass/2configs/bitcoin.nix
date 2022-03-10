@@ -5,15 +5,6 @@ let
 in {
 
   users.extraUsers = {
-    bch = {
-      name = "bch";
-      description = "user for bch stuff";
-      home = "/home/bch";
-      useDefaultShell = true;
-      createHome = true;
-      packages = [ pkgs.electron-cash ];
-      isNormalUser = true;
-    };
     bitcoin = {
       name = "bitcoin";
       description = "user for bitcoin stuff";
