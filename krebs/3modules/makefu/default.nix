@@ -154,6 +154,8 @@ in {
         "krebsco.de" = ''
           latte.euer     IN A      ${nets.internet.ip4.addr}
           rss.euer          IN A      ${nets.internet.ip4.addr}
+          o.euer            IN A      ${nets.internet.ip4.addr}
+          bw.euer           IN A      ${nets.internet.ip4.addr}
         '';
       };
       cores = 4;
@@ -217,7 +219,6 @@ in {
           mon.euer          IN A      ${nets.internet.ip4.addr}
           netdata.euer      IN A      ${nets.internet.ip4.addr}
           nixos.unstable    IN CNAME  krebscode.github.io.
-          o.euer            IN A      ${nets.internet.ip4.addr}
           photostore        IN A      ${nets.internet.ip4.addr}
           pigstarter        IN CNAME  makefu.github.io.
           share.euer        IN A      ${nets.internet.ip4.addr}
@@ -233,14 +234,13 @@ in {
           maps.work.euer    IN A      ${nets.internet.ip4.addr}
           play.work.euer    IN A      ${nets.internet.ip4.addr}
           ul.work.euer      IN A      ${nets.internet.ip4.addr}
-          bw.euer           IN A      ${nets.internet.ip4.addr}
         '';
       };
       cores = 8;
       nets = rec {
         internet = {
-          ip4.addr = "144.76.26.247";
-          ip6.addr = "2a01:4f8:191:12f6::2";
+          ip4.addr = "142.132.189.140";
+          ip6.addr = "fe80::9400:1ff:fe24:33f4";
           aliases = [
             "gum.i"
           ];
