@@ -26,9 +26,8 @@ with import <stockholm/lib>;
                 Port = ${toString tinc.config.host.nets.${netname}.tinc.port}
                 ${tinc.config.extraConfig}
               '';
-              "tinc-up" = pkgs.writeScript "${netname}-tinc-up" ''
-                #!/bin/sh
-                ip link set ${netname} up
+              "tinc-up" = pkgs.writeDash "${netname}-tinc-up" ''
+                ${tinc.config.iproutePackage}/sbin/ip link set ${netname} up
                 ${tinc.config.tincUp}
               '';
             });
@@ -60,14 +59,15 @@ with import <stockholm/lib>;
           type = types.str;
           default = let
             net = tinc.config.host.nets.${netname};
+            iproute = tinc.config.iproutePackage;
           in ''
             ${optionalString (net.ip4 != null) /* sh */ ''
-              ip -4 addr add ${net.ip4.addr} dev ${netname}
-              ip -4 route add ${net.ip4.prefix} dev ${netname}
+              ${iproute}/sbin/ip -4 addr add ${net.ip4.addr} dev ${netname}
+              ${iproute}/sbin/ip -4 route add ${net.ip4.prefix} dev ${netname}
             ''}
             ${optionalString (net.ip6 != null) /* sh */ ''
-              ip -6 addr add ${net.ip6.addr} dev ${netname}
-              ip -6 route add ${net.ip6.prefix} dev ${netname}
+              ${iproute}/sbin/ip -6 addr add ${net.ip6.addr} dev ${netname}
+              ${iproute}/sbin/ip -6 route add ${net.ip6.prefix} dev ${netname}
             ''}
             ${tinc.config.tincUpExtra}
           '';
@@ -238,39 +238,41 @@ with import <stockholm/lib>;
       description = "Tinc daemon for ${netname}";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [
-        cfg.iproutePackage
-        cfg.tincPackage
-      ];
-      reloadIfChanged = true;
+      # Restart the service in a single step in order to prevent potential
+      # connection timeouts and subsequent issues while deploying via tinc.
+      stopIfChanged = false;
       serviceConfig = {
         Restart = "always";
         LoadCredential = filter (x: x != "") [
           (optionalString (cfg.privkey_ed25519 != null)
-            "ed25519_key:${cfg.privkey_ed25519}"
+            "ed25519_key.priv:${cfg.privkey_ed25519}"
           )
-          "rsa_key:${cfg.privkey}"
+          "rsa_key.priv:${cfg.privkey}"
         ];
         ExecStartPre = pkgs.writers.writeDash "init-tinc-${netname}" ''
+          set -efu
           ${pkgs.coreutils}/bin/mkdir -p /etc/tinc
-          ${pkgs.rsync}/bin/rsync -vaL --delete \
+          ${pkgs.rsync}/bin/rsync -Lacv --delete \
             --chown ${cfg.user.name} \
             --chmod u=rwX,g=rX \
+            --exclude='/*.priv' \
             ${cfg.confDir}/ /etc/tinc/${netname}/
+          ${optionalString (cfg.privkey_ed25519 != null) /* sh */ ''
+            ${pkgs.coreutils}/bin/ln -fns \
+                "$CREDENTIALS_DIRECTORY"/ed25519_key.priv \
+                /etc/tinc/${netname}/
+          ''}
+          ${pkgs.coreutils}/bin/ln -fns \
+              "$CREDENTIALS_DIRECTORY"/rsa_key.priv \
+              /etc/tinc/${netname}/
         '';
         ExecStart = toString [
           "${cfg.tincPackage}/sbin/tincd"
           "-D"
           "-U ${cfg.user.name}"
-          "-c /etc/tinc/${netname}"
           "-d 0"
-          (optionalString (cfg.privkey_ed25519 != null)
-            "-o Ed25519PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/ed25519_key"
-          )
-          "-o PrivateKeyFile=\${CREDENTIALS_DIRECTORY}/rsa_key"
-          "--pidfile=/var/run/tinc.${netname}.pid"
+          "-n ${netname}"
         ];
-        ExecReload = "${cfg.tincPackage}/sbin/tinc -n ${netname} restart";
         SyslogIdentifier = netname;
       };
     }) config.krebs.tinc;
