@@ -162,6 +162,9 @@ in {
     };
     eve = {
       owner = config.krebs.users.mic92;
+      extraZones."krebsco.de" = ''
+        mukke     IN CNAME eve.thalheim.io.
+      '';
       nets = rec {
         internet = {
           # eve.thalheim.io
