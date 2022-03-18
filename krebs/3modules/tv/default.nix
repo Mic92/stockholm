@@ -7,7 +7,7 @@ with import <stockholm/lib>;
       name = hostName;
       owner = config.krebs.users.tv;
     }
-    (optionalAttrs (hostConfig.nets?retiolum) {
+    (optionalAttrs (hasAttrByPath ["nets" "retiolum"] hostConfig) {
       nets.retiolum = {
         ip6.addr =
           (krebs.genipv6 "retiolum" "tv" { inherit hostName; }).address;
