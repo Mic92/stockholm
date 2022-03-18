@@ -125,6 +125,7 @@ in
           "grocy.kmein.r"
           "moodle.kmein.r"
           "radio.kmein.r"
+          "home.kmein.r"
         ];
         tinc.pubkey = ''
           -----BEGIN RSA PUBLIC KEY-----

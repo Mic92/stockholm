@@ -146,7 +146,6 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
-          ip4.addr = "10.243.29.177";
           aliases = [ "herbert.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -163,6 +162,9 @@ in {
     };
     eve = {
       owner = config.krebs.users.mic92;
+      extraZones."krebsco.de" = ''
+        mukke     IN CNAME eve.thalheim.io.
+      '';
       nets = rec {
         internet = {
           # eve.thalheim.io
