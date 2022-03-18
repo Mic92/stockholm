@@ -25,6 +25,12 @@ with import <stockholm/lib>;
         wireguard.pubkey = readFile pubkey-path;
       };
     })
+    (host: mkIf (host.config.ssh.pubkey != null) {
+      ssh.privkey = mapAttrs (const mkDefault) {
+        path = config.krebs.secret.file "ssh.id_${host.config.ssh.privkey.type}";
+        type = head (toList (match "ssh-([^ ]+) .*" host.config.ssh.pubkey));
+      };
+    })
   ];
 
 in {
@@ -54,7 +60,6 @@ in {
           tinc.pubkey_ed25519 = "Td6pRkmSzSGVJll26rULdr6W4U87xsHZ/87NEaglW3K";
         };
       };
-      ssh.privkey.path = config.krebs.secret.file "ssh.id_rsa";
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDP9JS2Nyjx4Pn+/4MrFi1EvBBYVKkGm2Q4lhgaAiSuiGLol53OSsL2KIo01mbcSSBWow9QpQpn8KDoRnT2aMLDrdTFqL20ztDLOXmtrSsz3flgCjmW4f6uOaoZF0RNjAybd1coqwSJ7EINugwoqOsg1zzN2qeIGKYFvqFIKibYFAnQ8hcksmkvPdIO5O8CbdIiP9sZSrSDp0ZyLK2T0PML2jensVZOeqSPulQDFqLsbmavpVLkpDjdzzPRwbZWNB4++YeipbYNOkX4GR1EB4wMZ93IbBV7kpJtib2Zb2AnUf7UW37hxWBjILdstj9ClwNOQggn8kD9ub7YxBzH1dz0Xd8a0mPOAWIDJz9MypXgFRc3vdvPB/W1I4Se0CLbgOkORun9CkgijKr9oEY8JNt8HFd6viZcAaQxOyIm6PNHZTnHfdSc7bIBS2n3e3IZBv0fTd77knGLXg402aTuu2bm/kxsKivxsILXIaGbeXe4ceN3Fynr3FzSM2bUkzHb0mAHu1BQ9YaX0xzCwjVueA5nzGls7ODSFkXsiBfg2FvMN/sTLFca6tnwyqcnD6nujoiS5+BxjDWPgnZYqCaW3B/IkpTsRMsX6QrfhOFcsP8qlJ2Cp82orWoDK/D0vZ9pdzAc6PFGga0RofuJKY2yiq+SRZ7/e9E6VncIVCYZ1OfN0Q==";
     };
     au = {
@@ -80,7 +85,6 @@ in {
         };
       };
       secure = true;
-      ssh.privkey.path = config.krebs.secret.file "ssh.id_ed25519";
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBsqDuhGJpjpqNv4QmjoOhcODObrPyY3GHLvtVkgXV0g root@au";
     };
     bu = {
@@ -130,7 +134,6 @@ in {
         };
       };
       secure = true;
-      ssh.privkey.path = config.krebs.secret.file "ssh.id_ed25519";
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO+Rrf9tvuusYlnSZwUiHS4O+AhrpVZ/6n7peSRKojTc root@hu";
     };
     mu = {
@@ -155,7 +158,6 @@ in {
           tinc.pubkey_ed25519 = "cEf/Kq/2Fo70yoIcVmhIp4it9eA7L3GdkgrVE9AWU6C";
         };
       };
-      ssh.privkey.path = config.krebs.secret.file "ssh.id_ed25519";
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1vJsAddvxMA84u9iJEOrIkKn7pQiemMbfW5cfK1d7g root@mu";
     };
     ni = {
@@ -235,7 +237,6 @@ in {
         };
       };
       secure = true;
-      ssh.privkey.path = config.krebs.secret.file "ssh.id_ed25519";
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMIHmwXHV7E9UGuk4voVCADjlLkyygqNw054jvrsPn5t root@nomic";
     };
     wu = {
@@ -262,7 +263,6 @@ in {
         };
       };
       secure = true;
-      ssh.privkey.path = config.krebs.secret.file "ssh.id_ed25519";
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIcJvu8JDVzObLUtlAQg9qVugthKSfitwCljuJ5liyHa";
     };
     querel = {
@@ -291,7 +291,6 @@ in {
           '';
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPFM2GdL9yOjSBmYBE07ClywNOADc/zxqXwZuWd7Mael root@querel.r";
     };
     xu = {
@@ -322,7 +321,6 @@ in {
         };
       };
       secure = true;
-      ssh.privkey.path = config.krebs.secret.file "ssh.id_ed25519";
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPnjfceKuHNQu7S4eYFN1FqgzMqiL7haNZMh2ZLhvuhK root@xu";
     };
     zu = {
@@ -347,7 +345,6 @@ in {
         };
       };
       secure = true;
-      ssh.privkey.path = <secrets/ssh.id_rsa>;
       ssh.pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDNjHxyUC7afNGSwfwBfQizmDnHTNLWDRHE8SY9W4oiw2lPhCFGTN8Jz84CKtnABbZhbNY1E8T58emF2h45WzDg/OGi8DPAk4VsXSkIhyvAto+nkTy2L4atjqfvXDvqxTDC9sui+t8p5OqOK+sghe4kiy+Vx1jhnjSnkQsx9Kocu24BYTkNqYxG7uwOz6t262XYNwMn13Y2K/yygDR3Uw3wTnEjpaYnObRxxJS3iTECDzgixiQ6ewXwYNggpzO/+EfW1BTz5vmuEVf4GbQ9iEc7IsVXHhR+N0boCscvSgae9KW9MBun0A2veRFXNkkfBEMfzelz+S63oeVfelkBq6N5aLsHYYGC4VQjimScelHYVwxR7O4fV+NttJaFF7H06FJeFzPt3NYZeoPKealD5y2Muh1UnewpmkMgza9hQ9EmI4/G1fMowqeMq0U6Hu0QMDUAagyalizN97AfsllY2cs0qLNg7+zHMPwc5RgLzs73oPUsF3umz0O42I5p5733vveUlWi5IZeI8CA1ZKdpwyMXXNhIOHs8u+yGsOLfSy3RgjVKp2GjN4lfnFd0LI+p7iEsEWDRkIAvGCOFepsebyVpBjGP+Kqs10bPGpk5dMcyn9iBJejoz9ka+H9+JAG04LnXwt6Rf1CRV3VRCRX1ayZEjRv9czV7U9ZpuFQcIlVRJQ== root@zu";
     };
     umz = {
