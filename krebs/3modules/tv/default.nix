@@ -1,11 +1,13 @@
 with import <stockholm/lib>;
 { config, ... }: let
 
-  hostDefaults = hostName: host: foldl' recursiveUpdate {} [
+  evalHost = hostName: hostConfig: evalSubmodule types.host [
+    hostConfig
     {
+      name = hostName;
       owner = config.krebs.users.tv;
     }
-    (optionalAttrs (host.nets?retiolum) {
+    (optionalAttrs (hostConfig.nets?retiolum) {
       nets.retiolum = {
         ip6.addr =
           (krebs.genipv6 "retiolum" "tv" { inherit hostName; }).address;
@@ -23,14 +25,13 @@ with import <stockholm/lib>;
         wireguard.pubkey = readFile pubkey-path;
       };
     })
-    host
   ];
 
 in {
   dns.providers = {
     "viljetic.de" = "regfish";
   };
-  hosts = mapAttrs hostDefaults {
+  hosts = mapAttrs evalHost {
     alnus = {
       ci = true;
       cores = 2;
