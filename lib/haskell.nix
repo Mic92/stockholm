@@ -35,7 +35,7 @@ rec {
               "${pkg}/bin/${exename}"
             else
               trace (toString [
-                "lib.haskell.replacePkg:"
+                "lib.haskell.substitutePkgs:"
                 "warning:"
                 "while deriving ${sourceDescription}:"
                 "no substitute found for ${elemAt parse 1}"
