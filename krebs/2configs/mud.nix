@@ -5,7 +5,7 @@
     MUD_SERVER=''${MUD_SERVER:-127.0.0.1}
     MUD_PORT=''${MUD_PORT:-8080}
 
-    if $(${pkgs.netcat-openbsd}/bin/nc -z "$MUD_SERVER" "$MUD_PORT"); then
+    if $(${pkgs.libressl.nc}/bin/nc -z "$MUD_SERVER" "$MUD_PORT"); then
       ${nvim}/bin/nvim \
         +"let g:instant_username = \"$MUD_NICKNAME\"" \
         +":InstantJoinSession $MUD_SERVER $MUD_PORT" \

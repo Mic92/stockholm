@@ -13,6 +13,6 @@ pkgs.writeDashBin "untilport" ''
   if [ $# -ne 2 ]; then
     usage
   else
-    until ${pkgs.netcat-openbsd}/bin/nc -z "$@"; do sleep 1; done
+    until ${pkgs.libressl.nc}/bin/nc -z "$@"; do sleep 1; done
   fi
 ''
