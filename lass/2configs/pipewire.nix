@@ -22,4 +22,15 @@
     pulse.enable = true;
     jack.enable = true;
   };
+
+  systemd.services.wireplumber = {
+    environment = {
+      HOME = "/var/lib/wireplumber";
+      DISPLAY = ":0";
+    };
+    path = [
+      pkgs.dbus
+    ];
+    serviceConfig.StateDirectory = "wireplumber";
+  };
 }
