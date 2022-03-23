@@ -10,7 +10,7 @@
 
   environment.systemPackages = with pkgs; [
     alsaUtils
-    pulseaudioLight
+    pulseaudio
     ponymix
   ];
 
