@@ -96,12 +96,17 @@ in {
     '')
   ];
 
-  fonts.fonts = with pkgs; [
-    hack-font
-    hasklig
-    symbola
-    xlibs.fontschumachermisc
-  ];
+  fonts = {
+    fontDir.enable = true;
+    enableGhostscriptFonts = true;
+
+    fonts = with pkgs; [
+      hack-font
+      xorg.fontschumachermisc
+      terminus_font_ttf
+      inconsolata
+    ];
+  };
 
   services.udev.extraRules = ''
     SUBSYSTEM=="backlight", ACTION=="add", \
