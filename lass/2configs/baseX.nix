@@ -55,7 +55,7 @@ in {
   environment.systemPackages = with pkgs; [
     acpi
     acpilight
-    ag
+    ripgrep
     cabal2nix
     dic
     dmenu
