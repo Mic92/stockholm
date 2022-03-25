@@ -96,7 +96,7 @@ with stockholm.lib;
       #$host $GIT_SSH_REPO $ref $link
       add_message $(pink push) $link $(gray "($receive_mode)")
 
-      ${optionalString (verbose == false || typeOf verbose == "set") /* sh */ ''
+      ${optionalString (verbose == true || typeOf verbose == "set") /* sh */ ''
         ${optionalString (verbose.exclude or [] != []) /* sh */ ''
           case $ref in (${concatStringsSep "|" verbose.exclude})
             continue
