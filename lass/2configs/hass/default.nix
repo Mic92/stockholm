@@ -19,6 +19,7 @@ let
 
 in {
   imports = [
+    ./pyscript
     ./zigbee.nix
     ./rooms/bett.nix
     ./rooms/essen.nix
