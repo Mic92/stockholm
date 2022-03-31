@@ -26,7 +26,13 @@ import qualified XMonad.Prompt
 import qualified XMonad.StackSet as W
 import Data.Map (Map)
 import qualified Data.Map as Map
-import XMonad.Hooks.UrgencyHook (SpawnUrgencyHook(..), withUrgencyHook)
+import XMonad.Hooks.UrgencyHook
+  ( BorderUrgencyHook(BorderUrgencyHook,urgencyBorderColor)
+  , RemindWhen(Dont)
+  , SuppressWhen(Never)
+  , UrgencyConfig(UrgencyConfig,remindWhen,suppressWhen)
+  , withUrgencyHookC
+  )
 import XMonad.Hooks.ManageHelpers (doCenterFloat,doRectFloat)
 import Data.Ratio
 import XMonad.Hooks.Place (placeHook, smart)
@@ -55,7 +61,14 @@ mainNoArgs = do
     let
       config =
         id
-        $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
+        $ withUrgencyHookC
+            BorderUrgencyHook
+              { urgencyBorderColor = "#ff0000"
+              }
+            UrgencyConfig
+              { remindWhen = Dont
+              , suppressWhen = Never
+              }
         $ def
             { terminal          = {-pkg:rxvt_unicode-}"urxvtc"
             , modMask           = mod4Mask
