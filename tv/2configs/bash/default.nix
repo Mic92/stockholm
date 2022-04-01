@@ -6,7 +6,7 @@ with import <stockholm/lib>;
   programs.bash = {
     interactiveShellInit = /* sh */ ''
       HISTCONTROL='erasedups:ignorespace'
-      HISTSIZE=65536
+      HISTSIZE=900001
       HISTFILESIZE=$HISTSIZE
       HISTTIMEFORMAT=
 
