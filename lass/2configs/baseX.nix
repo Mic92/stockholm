@@ -13,6 +13,7 @@ in {
     ./pipewire.nix
     ./tmux.nix
     ./xmonad.nix
+    ./themes.nix
     {
       krebs.per-user.lass.packages = [
         pkgs.sshuttle
