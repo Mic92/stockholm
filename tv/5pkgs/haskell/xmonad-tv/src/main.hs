@@ -1,6 +1,4 @@
 {-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeApplications #-}
 
 module Main (main) where
 
@@ -35,22 +33,9 @@ import XMonad.Actions.PerWorkspaceKeys (chooseAction)
 import XMonad.Stockholm.Pager
 import XMonad.Stockholm.Shutdown
 
-import THEnv.JSON (getCompileEnvJSONExp)
 
 
-myFont :: String
-myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
-
-myScreenWidth :: Dimension
-myScreenWidth =
-  $(getCompileEnvJSONExp (id @Dimension) "XMONAD_BUILD_SCREEN_WIDTH")
-
-myTermFontWidth :: Dimension
-myTermFontWidth =
-  $(getCompileEnvJSONExp (id @Dimension) "XMONAD_BUILD_TERM_FONT_WIDTH")
-
-myTermPadding :: Dimension
-myTermPadding = 2
+import Build (myFont, myScreenWidth, myTermFontWidth, myTermPadding)
 
 
 main :: IO ()
