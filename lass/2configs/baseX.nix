@@ -4,6 +4,7 @@ let
   user = config.krebs.build.user;
 in {
   imports = [
+    ./alacritty.nix
     ./mpv.nix
     ./power-action.nix
     ./copyq.nix
