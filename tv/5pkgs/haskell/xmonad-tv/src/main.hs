@@ -164,6 +164,7 @@ myKeys conf = Map.fromList $
     , ((0, xF86XK_AudioLowerVolume), audioLowerVolume)
     , ((0, xF86XK_AudioRaiseVolume), audioRaiseVolume)
     , ((0, xF86XK_AudioMute), audioMute)
+    , ((0, xF86XK_AudioMicMute), audioMicMute)
     , ((_4, xF86XK_AudioMute), pavucontrol [])
 
     , ((_4, xK_Prior), forkFile {-pkg-}"xcalib" ["-invert", "-alter"] Nothing)
@@ -190,6 +191,7 @@ myKeys conf = Map.fromList $
     audioLowerVolume = amixer ["-q", "sset", "Master", "5%-"]
     audioRaiseVolume = amixer ["-q", "sset", "Master", "5%+"]
     audioMute = amixer ["-q", "sset", "Master", "toggle"]
+    audioMicMute = amixer ["-q", "sset", "Capture", "toggle"]
 
     resetLayout = setLayout $ XMonad.layoutHook conf
 
