@@ -1,15 +1,18 @@
-{ mkDerivation, base, containers, fetchgit, filepath, lib, unix, X11, X11-xft , X11-xshape, xmonad, xmonad-contrib
+{ mkDerivation, base, containers, directory, fetchgit, filepath
+, lib, unix, X11, X11-xft, X11-xshape, xmonad, xmonad-contrib
 }:
-mkDerivation rec {
+mkDerivation {
   pname = "xmonad-stockholm";
-  version = "1.3.0";
+  version = "1.3.1";
   src = fetchgit {
-    url = http://cgit.ni.krebsco.de/xmonad-stockholm;
-    rev = "refs/tags/v1.3.0";
-    sha256 = "1np5126wn67y0a1r60rnkq828s0w9zjnvai4b8zy3yc02xlkrjm9";
+    url = "https://cgit.krebsco.de/xmonad-stockholm";
+    sha256 = "1x5fjjrdgswv7fjnnmwvv2zicdszmkrsh564m7za4y54zg57wsx2";
+    rev = "3cd58b7d415d320e67516be952be8d30c020bd81";
+    fetchSubmodules = true;
   };
   libraryHaskellDepends = [
-    base containers filepath unix X11 X11-xft X11-xshape xmonad xmonad-contrib
+    base containers directory filepath unix X11 X11-xft X11-xshape
+    xmonad xmonad-contrib
   ];
   license = lib.licenses.mit;
 }
