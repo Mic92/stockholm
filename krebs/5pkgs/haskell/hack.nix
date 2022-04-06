@@ -3,11 +3,11 @@
 }:
 mkDerivation {
   pname = "hack";
-  version = "1.0.0";
+  version = "1.0.1";
   src = fetchgit {
     url = "https://cgit.krebsco.de/hack";
-    sha256 = "0hi6frpnxbg3h6s7gd48ri57jc226qycy4rnhmpzpq195xf8y3pf";
-    rev = "cb004b2e5f0fce6cea8d54e60558a1c1904dbe39";
+    sha256 = "0ry5ikn89ij512qvk1xhdhfz4s8a6b9yawgx6lxgnw5jkiyjd7ka";
+    rev = "f3ea150aca5cc86878fa10bc5b1f0918fc154e2a";
     fetchSubmodules = true;
   };
   isLibrary = true;
