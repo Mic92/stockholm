@@ -6,8 +6,8 @@ mkDerivation {
   version = "1.3.1";
   src = fetchgit {
     url = "https://cgit.krebsco.de/xmonad-stockholm";
-    sha256 = "1x5fjjrdgswv7fjnnmwvv2zicdszmkrsh564m7za4y54zg57wsx2";
-    rev = "3cd58b7d415d320e67516be952be8d30c020bd81";
+    sha256 = "1m4kkppy143jvjzhy5aawh8q6sglpnqhiajxbdcr42j02ibf3vvq";
+    rev = "89bae8aad73db8fe9e11da7d515f0b236e7fea51";
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [
