@@ -3,7 +3,7 @@
   services.printing = {
     enable = true;
     drivers = [
-      pkgs.foomatic_filters
+      pkgs.foomatic-filters
       pkgs.gutenprint
     ];
   };

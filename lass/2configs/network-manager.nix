@@ -11,6 +11,7 @@
       "vboxnet*"
     ];
   };
+  systemd.services.NetworkManager-wait-online.enable = false;
   users.users.mainUser = {
     extraGroups = [ "networkmanager" ];
     packages = with pkgs; [

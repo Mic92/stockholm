@@ -5,7 +5,7 @@
     enable = true;
     extraPackages = hs: [
       hs.extra
-      hs.xmonad-stockholm
+      hs.xmonad-contrib
     ];
     config = /* haskell */ ''
 {-# LANGUAGE LambdaCase #-}
@@ -53,9 +53,6 @@ import XMonad.Util.NamedWindows (getName)
 import XMonad.Util.Run (safeSpawn)
 import XMonad.Util.Ungrab (unGrab)
 
-import XMonad.Stockholm.Shutdown (newShutdownEventHandler, shutdown)
-import XMonad.Stockholm.Pager (defaultWindowColors, pager, MatchMethod(MatchPrefix), PagerConfig(..))
-
 data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
 
 instance UrgencyHook LibNotifyUrgencyHook where
@@ -74,15 +71,8 @@ myFont :: String
 myFont = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1"
 
 main :: IO ()
-main = getArgs >>= \case
-    [] -> main'
-    ["--shutdown"] -> shutdown
-    args -> hPutStrLn stderr ("bad arguments: " <> show args) >> exitFailure
-
-main' :: IO ()
-main' = do
-    handleShutdownEvent <- newShutdownEventHandler
-    launch $ ewmh
+main = do
+    xmonad $ ewmh
         $ withUrgencyHook LibNotifyUrgencyHook
         $ def
             { terminal           = myTerm
@@ -94,7 +84,6 @@ main' = do
                           (\path -> forkFile path [] Nothing)
             , normalBorderColor  = "#1c1c1c"
             , focusedBorderColor = "#ff0000"
-            , handleEventHook    = handleShutdownEvent
             , workspaces         = [ "dashboard", "sys", "wp" ]
             } `additionalKeysP` myKeyMap
 
@@ -104,6 +93,8 @@ myLayoutHook = defLayout
 
 floatHooks = composeAll
    [ className =? "Pinentry" --> doCenterFloat
+   , className =? "Pager" --> doCenterFloat
+   , title =? "pager" --> doCenterFloat
    , title =? "fzfmenu" --> doCenterFloat
    , title =? "glxgears" --> doCenterFloat
    , resource =? "Dialog" --> doFloat
@@ -123,9 +114,9 @@ myKeyMap =
 
     , ("M4-S-q", restart "xmonad" True)
 
-    , ("<XF86AudioMute>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-mute @DEFAULT_SINK@ toggle")
-    , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ +4%")
-    , ("<XF86AudioLowerVolume>", spawn "${pkgs.pulseaudioLight.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ -4%")
+    , ("<XF86AudioMute>", spawn "${pkgs.pulseaudio.out}/bin/pactl -- set-sink-mute @DEFAULT_SINK@ toggle")
+    , ("<XF86AudioRaiseVolume>", spawn "${pkgs.pulseaudio.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ +4%")
+    , ("<XF86AudioLowerVolume>", spawn "${pkgs.pulseaudio.out}/bin/pactl -- set-sink-volume @DEFAULT_SINK@ -4%")
     , ("<XF86MonBrightnessDown>", spawn "${pkgs.acpilight}/bin/xbacklight -time 0 -dec 1")
     , ("<XF86MonBrightnessUp>",   spawn "${pkgs.acpilight}/bin/xbacklight -time 0 -inc 1")
     , ("M4-C-k", spawn "${pkgs.xorg.xkill}/bin/xkill")
@@ -148,8 +139,9 @@ myKeyMap =
     , ("M4-f", floatNext True)
     , ("M4-b", spawn "/run/current-system/sw/bin/klem")
 
-    , ("M4-v", gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.greedyView) )
-    , ("M4-S-v", gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
+    , ("M4-v", spawn "${pkgs.pager}/bin/pager view")
+    -- , ("M4-S-v", spawn "${pkgs.pager}/bin/pager shift")
+    , ("M4-S-v", withWorkspace autoXPConfig (windows . W.shift))
     , ("M4-C-v", withWorkspace autoXPConfig (windows . copy))
 
     , ("M4-m", withFocused minimizeWindow)
@@ -166,7 +158,7 @@ myKeyMap =
 
     , ("M4-<F4>", spawn "${pkgs.nm-dmenu}/bin/nm-dmenu")
     , ("M4-<Insert>", spawn "${pkgs.writeDash "paste" ''
-      ${pkgs.coreutils}/bin/sleep 0.1
+      ${pkgs.coreutils}/bin/sleep 0.4
       ${pkgs.xclip}/bin/xclip -o | ${pkgs.xdotool}/bin/xdotool type -f -
     ''}")
 
@@ -182,6 +174,7 @@ myKeyMap =
     , ("M4-<F12>", spawn "${pkgs.systemd}/bin/systemctl suspend -i")
 
     , ("M4-u", spawn "${pkgs.xcalib}/bin/xcalib -invert -alter")
+    , ("M4-y", spawn "/run/current-system/sw/bin/switch-theme toggle")
 
     , ("M4-s", spawn "${pkgs.knav}/bin/knav")
     , ("M4-i", spawn "/run/current-system/sw/bin/screenshot")
@@ -210,21 +203,6 @@ infixAutoXPConfig = autoXPConfig
     { searchPredicate = isInfixOf
     }
 
-pagerConfig :: PagerConfig
-pagerConfig = def
-    { pc_font           = myFont
-    , pc_cellwidth      = 64
-    , pc_matchmethod    = MatchPrefix
-    , pc_windowColors   = windowColors
-    }
-    where
-    windowColors _ _ _ True _ = ("#ef4242","#ff2323")
-    windowColors wsf m c u wf = do
-        let y = defaultWindowColors wsf m c u wf
-        if m == False && wf == True
-            then ("#402020", snd y)
-            else y
-
 gridConfig :: GSConfig WorkspaceId
 gridConfig = def
     { gs_cellwidth = 100
@@ -234,9 +212,6 @@ gridConfig = def
     , gs_font = myFont
     }
 
-allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
-allWorkspaceNames ws =
-    return $ map W.tag (W.hidden ws ++ (map W.workspace $ W.visible ws)) ++ [W.tag $ W.workspace $ W.current ws]
     '';
   };
 }

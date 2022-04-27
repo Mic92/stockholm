@@ -54,14 +54,20 @@ in {
       name = "reaktor2-fysiweb-github";
     };
     script = ''. ${pkgs.writeDash "github-irc" ''
-      set -efu
+      set -xefu
       case "$Method $Request_URI" in
         "POST /")
-          payload=$(head -c "$req_content_length" \
-            | sed 's/+/ /g;s/%\(..\)/\\x\1/g;' \
-            | xargs -0 echo -e \
-          )
-          echo "$payload" | ${format-github-message}/bin/format-github-message
+          payload=$(head -c "$req_content_length")
+          echo "$payload" >&2
+          payload2=$payload
+          payload2=$(echo "$payload" | tr '\n' ' ' | tr -d '\r')
+          if [ "$payload" != "$payload2" ]; then
+            echo "payload has been mangled" >&2
+          else
+            echo "payload not mangled" >&2
+          fi
+          echo "$payload2" > /tmp/last_fysi_payload
+          echo "$payload2" | ${format-github-message}/bin/format-github-message
           printf 'HTTP/1.1 200 OK\r\n'
           printf 'Connection: close\r\n'
           printf '\r\n'

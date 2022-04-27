@@ -4,6 +4,7 @@ let
   user = config.krebs.build.user;
 in {
   imports = [
+    ./alacritty.nix
     ./mpv.nix
     ./power-action.nix
     ./copyq.nix
@@ -13,6 +14,7 @@ in {
     ./pipewire.nix
     ./tmux.nix
     ./xmonad.nix
+    ./themes.nix
     {
       krebs.per-user.lass.packages = [
         pkgs.sshuttle
@@ -55,7 +57,7 @@ in {
   environment.systemPackages = with pkgs; [
     acpi
     acpilight
-    ag
+    ripgrep
     cabal2nix
     dic
     dmenu
@@ -96,12 +98,17 @@ in {
     '')
   ];
 
-  fonts.fonts = with pkgs; [
-    hack-font
-    hasklig
-    symbola
-    xlibs.fontschumachermisc
-  ];
+  fonts = {
+    fontDir.enable = true;
+    enableGhostscriptFonts = true;
+
+    fonts = with pkgs; [
+      hack-font
+      xorg.fontschumachermisc
+      terminus_font_ttf
+      inconsolata
+    ];
+  };
 
   services.udev.extraRules = ''
     SUBSYSTEM=="backlight", ACTION=="add", \

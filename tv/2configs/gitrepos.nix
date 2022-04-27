@@ -188,7 +188,11 @@ let {
     # TODO make nick = config.krebs.build.host.name the default
     nick = config.krebs.build.host.name;
     server = "irc.r";
-    verbose = true;
+    verbose = {
+      exclude = [
+        "refs/heads/head"
+      ];
+    };
   } args);
 
   make-public-repo = name: { cgit ? {}, ... }: {

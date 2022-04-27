@@ -2,7 +2,22 @@ let
   nixpkgs-lib = import <nixpkgs/lib>;
   lib = with lib; nixpkgs-lib // builtins // {
 
+    evalModulesConfig = modules: let
+      eval = evalModules {
+        inherit modules;
+      };
+    in filterAttrsRecursive (name: _: !hasPrefix "_" name) eval.config;
+
     evalSource = import ./eval-source.nix;
+
+    evalSubmodule = submodule: modules: let
+      prefix = ["evalSubmodule"];
+    in evalModulesConfig [
+      {
+        options = removeAttrs (submodule.getSubOptions prefix) ["_module"];
+        imports = modules;
+      }
+    ];
 
     git = import ./git.nix { inherit lib; };
     haskell = import ./haskell.nix { inherit lib; };

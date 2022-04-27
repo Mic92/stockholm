@@ -9,19 +9,14 @@ rec {
   # "${pkgs.bar}/bin/foo" for each {-pkg:bar-}"foo".
   # If a package doesn't exist, a warning gets printed.
   substitutePkgs = name: { callsite ? null, pkgs, path }:
-    pkgs.writeText name (substitutePkgs' {
-      inherit pkgs;
+    let
       sourceDescription =
         if callsite != null then
           "${name} in ${toString callsite}"
         else
           "${name} from ${toString path}";
-      text = readFile path;
-    });
 
-  substitutePkgs' = { pkgs, sourceDescription, text }:
-    let
-      f = s:
+      f = dependencies: s:
         let
           parse = match "(.*)([{]-pkg(:([^}]+))?-[}]\"([^\"]+)\")(.*)" s;
           prefix = elemAt parse 0;
@@ -35,7 +30,7 @@ rec {
               "${pkg}/bin/${exename}"
             else
               trace (toString [
-                "lib.haskell.replacePkg:"
+                "lib.haskell.substitutePkgs:"
                 "warning:"
                 "while deriving ${sourceDescription}:"
                 "no substitute found for ${elemAt parse 1}"
@@ -43,9 +38,12 @@ rec {
               exename;
         in
         if parse == null then
-          s
+          (pkgs.writeText name s).overrideAttrs (old: {
+            dependencies = old.dependencies or [] ++ dependencies;
+          })
+
         else
-          f (prefix + toJSON substitute + suffix);
+          f (dependencies ++ [pkg]) (prefix + toJSON substitute + suffix);
     in
-    f text;
+    f [] (readFile path);
 }

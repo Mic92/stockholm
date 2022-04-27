@@ -96,7 +96,12 @@ with stockholm.lib;
       #$host $GIT_SSH_REPO $ref $link
       add_message $(pink push) $link $(gray "($receive_mode)")
 
-      ${optionalString verbose /* sh */ ''
+      ${optionalString (verbose == true || typeOf verbose == "set") /* sh */ ''
+        ${optionalString (verbose.exclude or [] != []) /* sh */ ''
+          case $ref in (${concatStringsSep "|" verbose.exclude})
+            continue
+          esac
+        ''}
         add_message "$(
           git log \
               --format="$(orange %h) %s $(gray '(%ar)')" \

@@ -116,6 +116,28 @@ in
         wireguard.pubkey = "09yVPHL/ucvqc6V5n7vFQ2Oi1LBMdwQZDL+7jBwy+iQ=";
       };
     };
+    tahina = {
+      nets.retiolum = {
+        ip4.addr = "10.243.2.74";
+        aliases = [ "tahina.r" "tahina.kmein.r" ];
+        tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIICCgKCAgEAtX6RpdFl9AqCF6Jy9ZhGY1bOUnEw5x3wm8gBK/aFb5592G3sGbWV
+          5Vv1msdLcoYQ5X4sgp3wizE5tbW7SiRVBwVB4mfYxe5KSiFJvTmXdp/VtKXs/hD8
+          VXNBjCdPeFOZ4Auh4AT+eibA/lW5veOnBkrsD/GkEcAkKb2MMEoxv4VqLDKuNzPv
+          EfE+mIb/J3vJmfpLG/+VGLrCuyShjPR2z0o5KMg8fI4ukcg6vwWwGE3Qd8JkSYMz
+          iy9oIGo/AJNyOUG0vQXL1JU/LFBXKty515UmXR2hO/Xi1w92DT8lxfLYRgoseT2u
+          i4aHmfl49LGkpQVIFejj6R0FrZBd5R2ElmQbmxSKS1PO9VheOOm02fgVXRpeoh6R
+          FdDkFWWmELW921UtEB2jSIMkf5xW8XmlJlGveaDnkld07aQlshnnOUfIs3r7H+T9
+          9g1QxiE7EFeoLrfIkgT81F+iL6RazSbf9DcTxvrKv+cZBrZKdcurcTtX0wFFD4wZ
+          0tzYPTcAnv/ytacf2/jv/Vm3xNFyjrBLM6ZtJtZ6NAJvD+OW4G/o2941KCu1Mqz/
+          VFAJW3djrqfASNCU1GqtHV0wdJMN8EszDNYdJ7pyw6+rG2PeYCVfE7wNe3b6zYqY
+          tUYhU1xkQQD4xgOMX3AdSI/JGjxMBBKlJXafwdDW8LMBWBPt+9Xq2vMCAwEAAQ==
+          -----END RSA PUBLIC KEY-----
+        '';
+        tinc.pubkey_ed25519 = "m8fnOzCx2KVsQx/616+AzVW5OTgAjBGDoT/PpKuyx+I";
+      };
+    };
     zaatar = {
       nets.retiolum = {
         ip4.addr = "10.243.2.34";
@@ -125,6 +147,7 @@ in
           "grocy.kmein.r"
           "moodle.kmein.r"
           "radio.kmein.r"
+          "home.kmein.r"
         ];
         tinc.pubkey = ''
           -----BEGIN RSA PUBLIC KEY-----

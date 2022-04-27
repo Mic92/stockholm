@@ -125,8 +125,8 @@ let
         (interface: interfaceConfig: [
           (map (port: { predicate = "-i ${interface} -p tcp --dport ${toString port}"; target = "ACCEPT"; }) interfaceConfig.allowedTCPPorts)
           (map (port: { predicate = "-i ${interface} -p udp --dport ${toString port}"; target = "ACCEPT"; }) interfaceConfig.allowedUDPPorts)
-          (map (portRange: { predicate = "-i ${interface} -p tcp --dport ${toString port.from}:${toString port.to}"; target = "ACCEPT"; }) interfaceConfig.allowedTCPPortRanges)
-          (map (portRange: { predicate = "-i ${interface} -p udp --dport ${toString port.from}:${toString port.to}"; target = "ACCEPT"; }) interfaceConfig.allowedUDPPortRanges)
+          (map (portRange: { predicate = "-i ${interface} -p tcp --dport ${toString portRange.from}:${toString portRange.to}"; target = "ACCEPT"; }) interfaceConfig.allowedTCPPortRanges)
+          (map (portRange: { predicate = "-i ${interface} -p udp --dport ${toString portRange.from}:${toString portRange.to}"; target = "ACCEPT"; }) interfaceConfig.allowedUDPPortRanges)
         ])
         config.networking.firewall.interfaces
       );
