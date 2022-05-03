@@ -160,6 +160,25 @@ in {
         };
       };
     };
+    rauter = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        retiolum = {
+          aliases = [ "rauter.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEArpSEoqFUdjaLiR3MpBlEoR0AOyaHPY9IPG4C5KsrfjeMDdfpOEGu
+            G0VHksBbkDV/MIgUVlK1B7LxZ73WUwKKB1YWGtY+QVX1tzoUqYwjMhp/xFVybyBw
+            M7nmTnM6Uq9Xd+S5mNMmOdvgNXfiP+zy4+iHJpn8YN/RnuyETqXhvVW9UasqVlmz
+            cY0dl+wsYFsJDnGc2ebpx5dzfpPgZKIFc0GlqDX0AqdQ2t2O9x4G5sFyUH0qPnDQ
+            776it6NXhwSKfl1h9xjQp8+qowIUlUqKgiVXfAzXHSxWmVQyxilCAkEk4vSs1HOj
+            ZNiK3LJKWEsy61hMt6K6AqpvSGlOdGa8WQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "bL0slCR9oHx7FBeVb4ubo/bX8QJJBgchVKVSlWh3y1D";
+        };
+      };
+    };
     eve = {
       owner = config.krebs.users.mic92;
       extraZones."krebsco.de" = ''

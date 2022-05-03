@@ -563,28 +563,28 @@ in {
         };
       };
     };
-    alsace = {
-      owner = config.krebs.users.xkey;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.73.31";
-          aliases = [ "alsace.r" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAn9mZHXfUcR1/oby6KB1Z8s1AAuie4l5G624r0UqbWu+4xowFIeZs
-            kv2dqd+yiqammAA9P207ooLbGBp+P6i4f5VMCemkCnv0sC1TJ+DNwYqWYcFRZE7I
-            j00fw/QI9d6L1c4CqZHJPQXEHG3v46qPuUow8FDJ6fjoBmy6biHjSd0XC7oHGqRh
-            GE5RolnqUiQhW0b4TkHJV4yUfVki+olxQtYd4xIHs1hcSqoMK898jsPX5cLgoCzR
-            NPZVyHf2BM0urPn4mu/th4ZDKpQtrqeI7h6yhnzJ0onhtValwHiA3/DcHcWmYvHC
-            vw6umyiCqFDx2kmzOnpkBWv65ugKUwDSZR8ibp3q7W9iPBiCPv0FtKXsQW9EngSS
-            asQWC8U6cB23nKuMYQrtD33fVwYn58FBIY6+avroc7XN5cPM/9VBHqyXSDZNAWtt
-            TwC/sXFWqT6AbTwLV6zY1TW4jiwKOh3KAVnHqQhUhNlEMk6EFOjR1CABSwUVXleR
-            5whr1RbKAsrhqMprGKHndvxLXjbKSh6A0bVdOLOzSs7BME2Oi1OdHd6tqqYmcyuV
-            XQnFcOYKxF0RM83/V8rEgvVisIxXTGVrGw8Kse7PGFA1dGldptTC6kofLUxzADNw
-            bRnXtRk8VR0BBzTuPNDgUXL2XQLht6FwDKCA/En2vId98yc2uuDk468CAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "lPvwNm2mfF+rX3noqt+80c7nlDCpC+98JPLWx2jJRLN";
+    rojava = {
+     owner = config.krebs.users.xkey;
+     nets = {
+       retiolum = {
+         ip4.addr = "10.243.23.42";
+         aliases = [ "rojava.r" ];
+         tinc.pubkey = ''
+           -----BEGIN RSA PUBLIC KEY-----
+           MIICCgKCAgEA3Xafx5PYDNRxRwWGo25paveBgEFQYWWOg5YYcqSlBsUzWkEwZPdd
+           B0O8xJDIS3SDZrDW5aC43RGe+l6L68OBzB79DNAhxcdzzDQkAqI4IsaWBzgEFIbb
+           HG+Asx2ZN1biykCR4GN77JYGwa7RrCgsA3LdT6ICGPWbLU3M/QeaIbTooDq/PF61
+           Eu8i/S/qqhC/KBDq9CXL+amiyjoe4l+iLIKtCmvJZge1v8cc9n4iHqfP1JPXMPrD
+           lu9Mshxy8um62oaC/jvyw9R511LaEcT/Hvxi030tiL/H/1dOIhx+4RJsapHGw4LW
+           +ud1UAU8WXSRmYqeRw11+obZycnxZF0R0xEKGVIxCnf+vAriEM2iqruRKP1gYVzs
+           3DW+dq5eirkzdmJZsTY3lX+q/hR9lfzQFuq9G6lrqKyx5L7FZNCMviMfw63TfHF2
+           vV4D77hrRH1yp/c5UUo8H9j9/u62JyZ/pSszjKgVy+nSD+zJ6waEZWip7T8V/pmx
+           HOTIZC5xGKyxX/6DTVU7YJzLlaiZLJ3RudNrTXY9w24NEhum5A7BaEmyJbbqRdx+
+           XJ3+vf9jPCW9wUGKO5vsu67x/xy8eEVx7Tm5aVWlpXGvlfTiOvhUCPNDOa/HMYp4
+           yuy4xLEIhAlt7jI02aYe3Cj3CbJEYdNJj+qBPzpfKCuCyATQzGmgaq0CAwEAAQ==
+           -----END RSA PUBLIC KEY-----
+         '';
+         tinc.pubkey_ed25519 = "WuvA0epfMZnPysLc+oKQydgWAz9/Mc+fM1DujeKj65F";
         };
       };
     };
