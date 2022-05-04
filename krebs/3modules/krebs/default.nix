@@ -163,8 +163,15 @@ in {
     ponte = {
       cores = 1;
       owner = config.krebs.users.krebs;
-      nets = {
+      nets = rec {
+        internet = {
+          ip4 = {
+            addr = "141.147.36.79";
+            prefix = "0.0.0.0/0";
+          };
+        };
         retiolum = {
+          via = internet;
           ip4.addr = "10.243.4.43";
           ip6.addr = "42::443";
           aliases = [
