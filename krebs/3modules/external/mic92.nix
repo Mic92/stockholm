@@ -163,6 +163,7 @@ in {
     rauter = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet.addrs = [ "rauter.thalheim.io" ];
         retiolum = {
           aliases = [ "rauter.r" ];
           tinc.pubkey = ''
@@ -472,6 +473,7 @@ in {
     rock = {
       owner = config.krebs.users.mic92;
       nets = {
+        internet.addrs = [ "rock.thalheim.io" ];
         retiolum = {
           aliases = [
             "rock.r"
