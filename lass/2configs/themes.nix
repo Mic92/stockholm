@@ -12,6 +12,7 @@
         ${pkgs.rsync}/bin/rsync --chown=lass:users -a --delete "/etc/themes/$1/" /var/theme/config/
         echo "$1" > /var/theme/current_theme
         ${pkgs.coreutils}/bin/chown lass:users /var/theme/current_theme
+        ${pkgs.xorg.xrdb}/bin/xrdb -merge /var/theme/config/xresources
         ${pkgs.procps}/bin/pkill -HUP xsettingsd
       else
         echo "theme $1 not found"
@@ -26,6 +27,8 @@ in {
     serviceConfig = {
       ExecStart = "${pkgs.xsettingsd}/bin/xsettingsd -c /var/theme/config/xsettings.conf";
       User = "lass";
+      Restart = "always";
+      RestartSec = "15s";
     };
   };
   systemd.tmpfiles.rules = [
@@ -38,11 +41,20 @@ in {
     "themes/light/xsettings.conf".text = ''
       Net/ThemeName "Adwaita" 
     '';
+    "themes/light/xresources".text = ''
+      *background: #ffffff
+      *foreground: #000000
+    '';
     "themes/dark/xsettings.conf".text = ''
       Net/ThemeName "Adwaita-dark" 
     '';
+    "themes/dark/xresources".text = ''
+      *background: #000000
+      *foreground: #ffffff
+    '';
   };
   system.activationScripts.theme.text = ''
+    export DISPLAY=:0
     if test -e /var/theme/current_theme; then
       ${switch-theme}/bin/switch-theme "$(cat /var/theme/current_theme)" ||
       ${switch-theme}/bin/switch-theme dark
