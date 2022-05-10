@@ -875,12 +875,10 @@ in {
     lass-blue = {
       mail = "lass@blue.r";
       pubkey = builtins.readFile ./ssh/blue.rsa;
-      pgp.pubkeys.default = builtins.readFile ./pgp/blue.pgp;
     };
     lass-green = {
       mail = "lass@green.r";
       pubkey = builtins.readFile ./ssh/green.ed25519;
-      pgp.pubkeys.default = builtins.readFile ./pgp/green.pgp;
     };
     lass-mors = {
       mail = "lass@mors.r";
