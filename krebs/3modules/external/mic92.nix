@@ -804,6 +804,26 @@ in {
       };
     };
 
+    maurice-home = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        retiolum = {
+          aliases = [ "maurice-home.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAwFmnVmH2n3sa/iJE1u7kSWHMW2nx66wnq7ZA2XF5Wt1hiky4BKBj
+            jxIIdXHlSmARhDSCMgBKl9Z6/8PsmCK3xEO8q60oTsT8PQIhN3eSF8n92iK3dyKx
+            PyUsUUHjkqkNtmo/M70T4gAEuB1b/QRkATco/pTv+lMVkYdIydtdALjSxU0YrTiz
+            J5Ntsngi9+yUJ5g3r/lCuWobKxd5Dlsx3nXg81jTsp9hlXW2HC0XTbOSyH2NC36C
+            97Kgx2T25cG/FPhtQztQOems+FhbyJTFyZTGa8v/5rXeJlwcVFRh8sZ7E5yPzbJV
+            ZlBaorcpRtx8NY4jd8FnZftHF0BeAQJoYwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "ohFUBMdmgS/DMe24sZ1+jNWzx65jCxto9pVjPnYIqzL";
+        };
+      };
+    };
+
     mickey = {
       owner = config.krebs.users.mic92;
       nets = rec {
