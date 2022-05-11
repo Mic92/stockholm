@@ -804,7 +804,7 @@ in {
       };
     };
 
-    maurice-home = {
+    mauricehome = {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
