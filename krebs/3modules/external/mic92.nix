@@ -808,7 +808,7 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
-          aliases = [ "maurice-home.r" ];
+          aliases = [ "mauricehome.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIBCgKCAQEAwFmnVmH2n3sa/iJE1u7kSWHMW2nx66wnq7ZA2XF5Wt1hiky4BKBj
