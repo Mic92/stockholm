@@ -306,7 +306,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.42.63";
-          ip6.addr = "42:4a6f::4263";
+          ip6.addr = "42:0:4a6f::4263";
           aliases = [
             "crustacea.r"
           ];
