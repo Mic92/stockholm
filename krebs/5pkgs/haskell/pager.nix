@@ -8,8 +8,8 @@ mkDerivation {
   version = "1.0.0";
   src = fetchgit {
     url = "https://cgit.krebsco.de/pager";
-    sha256 = "1kqd27faxinkwpxancyk0xl6n7ljlc8iqhnnq85l76bk4qi9b45i";
-    rev = "f4cdf79bd4a75e9eafe68b9a908f4cc68682b7ef";
+    sha256 = "1qlkhqidaa6w02ix9ambfdsm7lfyx30ap481b9ic1ppyfkhqzfp6";
+    rev = "fc6105a5e7d1e3a07bf07ea85e7902dd8e9fc849";
     fetchSubmodules = true;
   };
   isLibrary = false;
