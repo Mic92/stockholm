@@ -1,13 +1,28 @@
 { config, lib, pkgs, ... }:
 let
   weather_report = pkgs.writers.writeDashBin "weather_report" ''
-  set -efu
-  ${pkgs.curl}/bin/curl -fsSL https://wttr.in/''${1-}?format=j1 \
-    | ${pkgs.jq}/bin/jq -r '
-    [.nearest_area[0] | "Weather report for \(.areaName[0].value), \(.country[0].value)."]
-    + [.current_condition[0] | "Currently it is \(.weatherDesc[0].value) outside with a temperature of \(.temp_C) degrees."]
-    | join("\n")
-    '
+    set -efu
+    export PATH="${lib.makeBinPath [
+      pkgs.iproute2
+      pkgs.coreutils
+      pkgs.jq
+      pkgs.curl
+      pkgs.gnugrep
+      pkgs.gnused
+    ]}"
+    ss -Hno state established 'sport = :8000' |
+      grep '^tcp' | sed 's/.*\[.*\].*\[\(::ffff:\)\{0,1\}\(.*\)\].*/\2/' |
+      sed '/127.0.0.1/d;/:/d' |
+      while read -r ip; do
+        curl -sSL "https://wttr.in/@$ip?format=j1"
+      done | jq -rs 'unique_by(.nearest_area[0].areaName[0].value) |
+        map((.nearest_area[0] |
+          "Weather report for \(.areaName[0].value), \(.country[0].value).")
+          + (.current_condition[0] |
+            " Currently it is \(.weatherDesc[0].value) outside with a temperature of \(.temp_C) degrees."
+          )
+        ) | unique | .[]'
+      '
   '';
   send_to_radio = pkgs.writers.writeDashBin "send_to_radio" ''
     ${pkgs.vorbisTools}/bin/oggenc - |
@@ -26,17 +41,15 @@ let
   '';
 
   newsshow = pkgs.writers.writeDashBin "newsshow" /* sh */ ''
-    echo "
+    cat << EOF
     hello crabpeople!
-    $(${pkgs.ddate}/bin/ddate | sed 's/YOLD/Year of Discord/')!
+    $(${pkgs.ddate}/bin/ddate +'Today is %{%A, the %e of %B%}, %Y. %N%nCelebrate %H')
     It is $(date --utc +%H) o clock UTC.
     todays news:
     $(get_current_news)
     $(gc_news)
-    $(weather_report berlin)
-    $(weather_report 70173)
-    $(weather_report munich)
-    "
+    $(weather_report)
+    EOF
   '';
 in
 {
@@ -73,15 +86,23 @@ in
     };
     script = ''. ${pkgs.writers.writeDash "htgen-news" ''
       set -xefu
-      case "$Method $Request_URI" in
-        "POST /")
-          payload=$(head -c "$req_content_length" \
-            | sed 's/+/ /g;s/%\(..\)/\\x\1/g;' \
-            | xargs -0 echo -e \
-          )
-          echo "$payload" | jq 'has("from") and has("to") and has("text")' >&2
-          echo "$payload" | jq -c '{ from: (.from | fromdate | todate), to: (.to | fromdate | todate), text: .text }' >> $HOME/news
+      case "''${Method:-GET} $Request_URI" in
+        "GET /")
           printf 'HTTP/1.1 200 OK\r\n'
+          printf 'Access-Control-Allow-Origin: *\r\n';
+          printf 'Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n';
+          printf 'Connection: close\r\n'
+          printf '\r\n'
+          cat "$HOME"/news | jq -sc .
+          exit
+        ;;
+        "POST /")
+          payload=$(head -c "$req_content_length")
+          echo "$payload" | jq 'has("from") and has("to") and has("text")' >&2
+          echo "$payload" | jq -c '{ from: (.from | fromdate | todate), to: (.to | fromdate | todate), text: .text }' >> "$HOME"/news
+          printf 'HTTP/1.1 200 OK\r\n'
+          printf 'Access-Control-Allow-Origin: *\r\n';
+          printf 'Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n';
           printf 'Connection: close\r\n'
           printf '\r\n'
           exit
