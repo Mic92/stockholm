@@ -1,29 +1,27 @@
 { config, lib, pkgs, ... }:
 let
+  weather_for_ips = pkgs.writers.writePython3Bin "weather_for_ips" {
+    libraries = [ pkgs.python3Packages.geoip2 ];
+  } ./weather_for_ips.py;
+
   weather_report = pkgs.writers.writeDashBin "weather_report" ''
     set -efu
     export PATH="${lib.makeBinPath [
       pkgs.iproute2
       pkgs.coreutils
-      pkgs.jq
       pkgs.curl
       pkgs.gnugrep
       pkgs.gnused
     ]}"
+    curl -z /tmp/GeoLite2-City.mmdb -o /tmp/GeoLite2-City.mmdb http://c.r/GeoLite2-City.mmdb
+    MAXMIND_GEOIP_DB="/tmp/GeoLite2-City.mmdb"; export MAXMIND_GEOIP_DB
+    OPENWEATHER_API_KEY=$(cat "$CREDENTIALS_DIRECTORY/openweather_api"); export OPENWEATHER_API_KEY
     ss -Hno state established 'sport = :8000' |
       grep '^tcp' | sed 's/.*\[.*\].*\[\(::ffff:\)\{0,1\}\(.*\)\].*/\2/' |
-      sed '/127.0.0.1/d;/:/d' |
-      while read -r ip; do
-        curl -sSL "https://wttr.in/@$ip?format=j1"
-      done | jq -rs 'unique_by(.nearest_area[0].areaName[0].value) |
-        map((.nearest_area[0] |
-          "Weather report for \(.areaName[0].value), \(.country[0].value).")
-          + (.current_condition[0] |
-            " Currently it is \(.weatherDesc[0].value) outside with a temperature of \(.temp_C) degrees."
-          )
-        ) | unique | .[]'
-      '
+      sed '/127.0.0.1/d;/::1/d' |
+      ${weather_for_ips}/bin/weather_for_ips
   '';
+
   send_to_radio = pkgs.writers.writeDashBin "send_to_radio" ''
     ${pkgs.vorbisTools}/bin/oggenc - |
       ${pkgs.libshout}/bin/shout --format ogg --host localhost --port 1338 --mount /live
@@ -72,6 +70,9 @@ in
     startAt = "*:00:00";
     serviceConfig = {
       User = "radio-news";
+      LoadCredential = [
+        "openweather_api:${toString <secrets>}/openweather_api_key"
+      ];
     };
   };
 
