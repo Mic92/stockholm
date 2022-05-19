@@ -5,6 +5,13 @@ emptyok_response() {(
   printf '\r\n'
 )}
 
+not_modifed_response() {(
+  printf "HTTP/1.1 304 Not Modified\r\n"
+  printf 'Connection: close\r\n'
+  printf 'Server: %s\r\n' "$Server"
+  printf '\r\n'
+)}
+
 delete_response() {
   jq -n -r \
   --arg server "$Server" \
@@ -74,8 +81,20 @@ case "$Method $path" in
   'GET /'*)
     item=$STATEDIR/items/$(echo "$path" | jq -rR @uri)
     if [ -e "$item" ]; then
-      file_response "$item"
-      exit
+      if [ -z ${req_if_modified_since+x} ]; then
+        file_response "$item"
+        exit
+      else
+        age_file=$(date +%s -r "$item")
+        age_header=$(date +%s --date="$req_if_modified_since")
+        if [ "$age_file" -lt "$age_header" ]; then
+          not_modifed_response
+          exit
+        else
+          file_response "$item"
+          exit
+        fi
+      fi
     fi
   ;;
   'DELETE /'*)
