@@ -7,18 +7,22 @@ let
   weather_report = pkgs.writers.writeDashBin "weather_report" ''
     set -efu
     export PATH="${lib.makeBinPath [
-      pkgs.iproute2
       pkgs.coreutils
       pkgs.curl
-      pkgs.gnugrep
-      pkgs.gnused
+      pkgs.iproute2
+      pkgs.jc
+      pkgs.jq
     ]}"
     curl -z /tmp/GeoLite2-City.mmdb -o /tmp/GeoLite2-City.mmdb http://c.r/GeoLite2-City.mmdb
     MAXMIND_GEOIP_DB="/tmp/GeoLite2-City.mmdb"; export MAXMIND_GEOIP_DB
     OPENWEATHER_API_KEY=$(cat "$CREDENTIALS_DIRECTORY/openweather_api"); export OPENWEATHER_API_KEY
-    ss -Hno state established 'sport = :8000' |
-      grep '^tcp' | sed 's/.*\[.*\].*\[\(::ffff:\)\{0,1\}\(.*\)\].*/\2/' |
-      sed '/127.0.0.1/d;/::1/d' |
+    ss -no 'sport = :8000' |
+      jc --ss | jq -r '.[] |
+        select(
+          .local_address != "[::ffff:127.0.0.1]"
+          and .local_address != "[::1]"
+        ) | .peer_address | gsub("[\\[\\]]"; "")
+      ' |
       ${weather_for_ips}/bin/weather_for_ips
   '';
 

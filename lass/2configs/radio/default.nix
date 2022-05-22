@@ -372,15 +372,13 @@ in {
       locations."= /good".extraConfig = ''
         proxy_pass http://localhost:8001;
       '';
-      locations."= /radio.sh".extraConfig = ''
-        alias ${pkgs.writeScript "radio.sh" ''
-          #!/bin/sh
-          while sleep 1; do
-            mpv \
-              --cache-secs=0 --demuxer-readahead-secs=0 --untimed --cache-pause=no \
-              'http://lassul.us:8000/radio.opus'
-          done
-        ''};
+      locations."= /radio.sh".alias = pkgs.writeScript "radio.sh" ''
+        #!/bin/sh
+        while sleep 1; do
+          mpv \
+            --cache-secs=0 --demuxer-readahead-secs=0 --untimed --cache-pause=no \
+            'http://lassul.us:8000/radio.opus'
+        done
       '';
       locations."= /controls".extraConfig = ''
         default_type "text/html";
