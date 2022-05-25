@@ -80,10 +80,6 @@ in
     };
   };
 
-  krebs.iptables.tables.filter.INPUT.rules = [
-    { predicate = "-p tcp --dport 7999"; target = "ACCEPT"; }
-  ];
-
   services.nginx.virtualHosts."radio-news.r" = {
     locations."/" = {
       proxyPass = "http://localhost:7999";
