@@ -129,6 +129,7 @@ in {
             "c.r"
             "p.r"
             "search.r"
+            "radio-news.r"
           ];
           tinc.port = 655;
           tinc = {

@@ -84,6 +84,16 @@ in
     { predicate = "-p tcp --dport 7999"; target = "ACCEPT"; }
   ];
 
+  services.nginx.virtualHosts."radio-news.r" = {
+    locations."/" = {
+      proxyPass = "http://localhost:7999";
+      proxyWebsockets = true;
+      extraConfig = ''
+        add_header 'Access-Control-Allow-Origin' '*';
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+      '';
+    };
+  };
   krebs.htgen.news = {
     port = 7999;
     user = {
