@@ -31,6 +31,28 @@ in
     };
   };
   hosts = mapAttrs hostDefaults {
+    ful = {
+      nets.retiolum = {
+        aliases = [ "ful.r" ];
+        ip4.addr = "10.243.2.107";
+        tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIICCgKCAgEAwoaPWvnl+g9KYh8coXj/RAaxGHEtbuTG2NpWxbeJG0CemxBoYz2c
+          EE/2JbGRrSaNj3nrFWBTqmTuEB7nHyurFe06G0t+Or5eCBPg2zS5LiQE/LTZV08t
+          5jUm0jfOQHWbtCMrFGisH9R9Z3XId5cJGN1KsYg4R9RkKIKVVhKJ7maBWbsc+V5G
+          LxKEdDL7T4AfesQzzlAYUQ/s+zHlwJ2fyl3NrBg6Nc27C2A2g9pefhJbn0h8lWdn
+          I627DIrjDMvoSTiF1MKD/N4bXbF665gflUxbI5DTTHCtWf+0lP9i8mXP0kXQU4By
+          2QLdcpQzlHgnprI+qio1ioKuojcPcryYaOnpQWFHL6AqHzkRJRpMLPBhgQPbpz1v
+          BaShxGBasSHO+Htw5PbwrNwWvU8eH5joRQu3PBgzATS9M91RN58i03u2oQMt3Qif
+          e5USnfk3iYir/qkJWJk8m2kveZy0giI8AaRISu0jXNsB8euQXP2dxTKIF3BPEi5m
+          MZKTGTS4Tz3alpHWaeJtfJT0ihq4HME91rTKgP+CIHWYR4hmTPyYgrX0mm2MN+wi
+          G4vJXtcmBaCdcQZ1buCBVWJCUJ0bWZ3Fs4Ohjw6bP3iyb+Q5UOcXNyOi5NpaUbAi
+          47F5O6hvEWPxHRhvPD/9NASjRSxaUDbBVj5lieUXCHnhMSAHo1H3kHMCAwEAAQ==
+          -----END RSA PUBLIC KEY-----
+        '';
+        tinc.pubkey_ed25519 = "id5vF2fBwUCMrT5HLvIpeXmvQMQoksUBYXOdc9RyOUF";
+      };
+    };
     kabsa = {
       nets.retiolum = {
         aliases = [ "kabsa.r" "kabsa.kmein.r" ];

@@ -105,6 +105,10 @@ let
   '';
 
 in {
+  imports = [
+    ./news.nix
+  ];
+
   users.users = {
     "${name}" = rec {
       inherit name;
@@ -161,14 +165,14 @@ in {
 
     output.icecast(mount = '/music.ogg', password = 'hackme', %vorbis(quality = 1), source)
     output.icecast(mount = '/music.mp3', password = 'hackme', %mp3.vbr(), source)
-    output.icecast(mount = '/music.opus', password = 'hackme', %opus(), source)
+    output.icecast(mount = '/music.opus', password = 'hackme', %opus(bitrate = 64), source)
 
     extra_input = audio_to_stereo(input.harbor("live", port=1338))
 
     o = smooth_add(normal = source, special = extra_input)
     output.icecast(mount = '/radio.ogg', password = 'hackme', %vorbis(quality = 1), o)
     output.icecast(mount = '/radio.mp3', password = 'hackme', %mp3.vbr(), o)
-    output.icecast(mount = '/radio.opus', password = 'hackme', %opus(), o)
+    output.icecast(mount = '/radio.opus', password = 'hackme', %opus(bitrate = 64), o)
   '';
   services.icecast = {
     enable = true;
@@ -227,7 +231,7 @@ in {
 
   systemd.services.radio-recent = let
     recentlyPlayed = pkgs.writeDash "recentlyPlayed" ''
-      set -xeu
+      set -xefu
       LIMIT=1000 #how many tracks to keep in the history
       HISTORY_FILE=/var/lib/radio/recent
       while :; do
@@ -368,88 +372,17 @@ in {
       locations."= /good".extraConfig = ''
         proxy_pass http://localhost:8001;
       '';
+      locations."= /radio.sh".alias = pkgs.writeScript "radio.sh" ''
+        #!/bin/sh
+        while sleep 1; do
+          mpv \
+            --cache-secs=0 --demuxer-readahead-secs=0 --untimed --cache-pause=no \
+            'http://lassul.us:8000/radio.opus'
+        done
+      '';
       locations."= /controls".extraConfig = ''
         default_type "text/html";
-        alias ${pkgs.writeText "controls.html" ''
-<!doctype html>
-
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>The_Playlist Voting!</title>
-<style>
-#good {
-    display: block;
-  width: 100%;
-  border: none;
-  background-color: #04AA6D;
-  padding: 14px;
-  margin: 14px 0 0 0;
-  height: 100px;
-  font-size: 16px;
-  cursor: pointer;
-  text-align: center;
-}
-#bad {
-    display: block;
-  width: 100%;
-  border: none;
-  background-color: red;
-  padding: 14px;
-    height: 100px;
-
-  margin: 14px 0 0 0;
-  font-size: 16px;
-  cursor: pointer;
-  text-align: center;
-}
-</style>
-
-</head>
-
-<body>
-  <div id=votenote></div>
-  <button id=good type="button"> GUT </button>
-
-  <button id=bad type="button"> SCHLECHT </button>
-  <center>
-    Currently Running: <br/><div>
-      <b id=current></b>
-    </div>
-    <div id=vote>
-    </div>
-    <audio controls autoplay="autoplay">
-      <source src="https://radio.lassul.us/radio.ogg" type="audio/ogg">
-      Your browser does not support the audio element.
-    </audio>
-  </center>
-
-  <script>
-    document.getElementById("good").onclick=async ()=>{
-      let result = await fetch("https://radio.lassul.us/good", {"method": "POST"})
-      document.getElementById("vote").textContent =  "Dieses Lied findest du gut"
-    };
-    document.getElementById("bad").onclick=async ()=>{
-      let result = await fetch("https://radio.lassul.us/skip", {"method": "POST"})
-      document.getElementById("vote").textContent =  "Dieses Lied findest du schlecht"
-    };
-
-    async function current() {
-      let result = await fetch("https://radio.lassul.us/current", {"method": "GET"})
-      let data = await result.json()
-      document.getElementById("current").textContent = data.name
-    }
-    window.onload = function() {
-      window.setInterval('current()', 10000)
-      current()
-    }
-
-  </script>
-</body>
-</html>
-      ''};
+        alias ${./controls.html};
       '';
       extraConfig = ''
         add_header 'Access-Control-Allow-Origin' '*';
@@ -482,11 +415,9 @@ in {
   };
   services.syncthing.declarative.folders."the_playlist" = {
     path = "/home/radio/music/the_playlist";
-    devices = [ "mors" "phone" "prism" ];
+    devices = [ "mors" "phone" "prism" "omo" ];
   };
-  krebs.permown."/home/radio/music/the_playlist" = {
-    owner = "radio";
-    group = "syncthing";
-    umask = "0002";
-  };
+  krebs.acl."/home/radio/music/the_playlist"."u:syncthing:X".parents = true;
+  krebs.acl."/home/radio/music/the_playlist"."u:syncthing:rwX" = {};
+  krebs.acl."/home/radio/music/the_playlist"."u:radio:rwX" = {};
 }

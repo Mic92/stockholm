@@ -160,6 +160,46 @@ in {
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAcZg+iLaPZ0SpLM+nANxIjZC/RIsansjyutK0+gPhIe ";
     };
+    ponte = {
+      cores = 1;
+      owner = config.krebs.users.krebs;
+      nets = rec {
+        internet = {
+          ip4 = {
+            addr = "141.147.36.79";
+            prefix = "0.0.0.0/0";
+          };
+        };
+        retiolum = {
+          via = internet;
+          ip4.addr = "10.243.4.43";
+          ip6.addr = "42::443";
+          aliases = [
+            "ponte.r"
+          ];
+          tinc = {
+            pubkey = ''
+              -----BEGIN RSA PUBLIC KEY-----
+              MIICCgKCAgEA52Glj/C85oMy3cnaRAtg2qkleaJFWiqwaQNUsk4JgX1PwZJ8aInD
+              YAMXj0H0wz7h3mh5QVRDq4i11LXOIy1P6J6QAvb3lssYnFfJkR9j/dArCIFsEhHf
+              V41E4KMcHV9t17xO6wQitXqzvcmxodxly8qAx1k7ddlGdQPTWXVvQTRgWBwm9oQ9
+              w0d5p2fej/E5iOmbLyVjiJ72rFJIQdfPo782W78ZQftMSXsnyrr5OJu1b4qsga1Q
+              fYiAKjNE29OPiw5hLy9W/jLJMm0eR94LpUy0MZ5hYkYmvII1TqIqxVgj48gYfJ5v
+              QCjU9R2H5pUNfDiYutCqscRn5YDe44dcYBeG8Rkf0i4BTdqiE7h1AIciccXsJddt
+              HFxbWqi3HDoWlo7cFK9vYVUi4jgQP5cUVP85I43aDu3S3M3mszk1nyP+gDobE5Z9
+              jPGckgn7wTYXlDioIlExJJ6FCaSWSxvh0Zh0HDrTD+WKP6qJ2aYnAz2xptiQGNCu
+              rYEvFoWd5T7VMzI02Z2hCiE2fFWlH63Am1tKspFKl+lHjwMrwcwFA5WoNHCeXx2X
+              S1T3I7P4SkRZervYJ55wQxCBKLgvZP2I1J1JzMkyuTszg9tex14MdVdZZrKXVrnr
+              exCMJruliLbZmtrbHHTXoCngppylnJOxKXpfpogLTZzLGncO6Ry5G18CAwEAAQ==
+              -----END RSA PUBLIC KEY-----
+            '';
+            pubkey_ed25519 = "0l+q3Bg5gYcw8VDjSYV7+wVSO3t4Es5jizAYJ9UR8cA";
+          };
+        };
+      };
+      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJEw9fo8Qtb/DTLacdrJP7Ti7c4UXTm6wUUX+iRFweEo ";
+    };
     puyak = {
       ci = true;
       cores = 4;
