@@ -81,17 +81,28 @@ let
   '';
 
   mpvConfig = pkgs.writeText "mpv.conf" ''
+    osd-font-size=20
   '';
 
   mpv = pkgs.symlinkJoin {
     name = "mpv";
     paths = [
       (pkgs.writeDashBin "mpv" ''
+        set -efu
+        if [ -n "''${DISPLAY+x}" ]; then
+          Y_RES=$(${pkgs.xorg.xrandr}/bin/xrandr |
+            ${pkgs.jc}/bin/jc --xrandr |
+            ${pkgs.jq}/bin/jq '.screens[0].current_width'
+          )
+        else
+          Y_RES=1000
+        fi
         # we need to disable sponsorblock local database because of
         # https://github.com/po5/mpv_sponsorblock/issues/31
         exec ${pkgs.mpv.override {
-          scripts = [
-            pkgs.mpvScripts.sponsorblock
+          scripts = with pkgs.mpvScripts; [
+            sponsorblock
+            youtube-quality
           ];
         }}/bin/mpv \
          -vo=gpu \
@@ -99,6 +110,7 @@ let
          --input-conf=${mpvInput} \
          --include=${mpvConfig} \
          --script=${autosub} \
+         --ytdl-format="best[height<$Y_RES]" \
          --script-opts=ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp \
          --script-opts-append=sponsorblock-local_database=no \
          "$@"
