@@ -76,15 +76,31 @@ let
     mp.add_key_binding('S', "download_subs", download)
   '';
 
+  mpvInput = pkgs.writeText "mpv.input" ''
+    : script-binding console/enable
+  '';
+
+  mpvConfig = pkgs.writeText "mpv.conf" ''
+  '';
+
   mpv = pkgs.symlinkJoin {
     name = "mpv";
     paths = [
       (pkgs.writeDashBin "mpv" ''
-        exec ${pkgs.mpv}/bin/mpv \
+        # we need to disable sponsorblock local database because of
+        # https://github.com/po5/mpv_sponsorblock/issues/31
+        exec ${pkgs.mpv.override {
+          scripts = [
+            pkgs.mpvScripts.sponsorblock
+          ];
+        }}/bin/mpv \
          -vo=gpu \
          --no-config \
+         --input-conf=${mpvInput} \
+         --include=${mpvConfig} \
          --script=${autosub} \
          --script-opts=ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp \
+         --script-opts-append=sponsorblock-local_database=no \
          "$@"
       '')
       pkgs.mpv
