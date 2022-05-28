@@ -19,11 +19,6 @@
             inherit Nick;
           };
         };
-        mumble.lassulus = {
-          Server = "lassul.us:64738";
-          Nick = "krebs_bridge";
-          SkipTLSVerify = true;
-        };
         gateway = [
           {
             name = "krebs-bridge";
@@ -36,10 +31,6 @@
               {
                 account = "telegram.krebs";
                 channel = "-330372458";
-              }
-              {
-                account = "mumble.lassulus";
-                channel = 6; # "nixos"
               }
             ];
           }
