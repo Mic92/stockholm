@@ -74,6 +74,7 @@ in {
           aliases = [
             "hotdog.r"
             "agenda.r"
+            "kri.r"
             "build.r"
             "build.hotdog.r"
             "ca.r"

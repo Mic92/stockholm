@@ -148,6 +148,7 @@ in {
 
   services.nginx = {
     virtualHosts."agenda.r" = {
+      serverAliases = [ "kri.r" ];
       locations."= /index.html".extraConfig = ''
         alias ${pkgs.writeText "agenda.html" ''
 <!DOCTYPE html>
