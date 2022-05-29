@@ -43,7 +43,7 @@ with import <stockholm/lib>;
         libreoffice
         audacity
         zathura
-        skype
+        skypeforlinux
         wine
         geeqie
         vlc
