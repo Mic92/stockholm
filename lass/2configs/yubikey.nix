@@ -38,7 +38,7 @@
       }
     });
     polkit.addRule(function(action, subject) {
-     polkit.log("user " +  subject.user + " is attempting action " + action.id + " from PID " + subject.pid);
+     polkit.log("subject: " + subject + " action: " + action);
     });
   '';
 
