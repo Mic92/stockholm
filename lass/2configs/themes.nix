@@ -9,6 +9,7 @@
           ${placeholder "out"}/bin/switch-theme dark
         fi
       elif test -e "/etc/themes/$1"; then
+        ${pkgs.coreutils}/bin/mkdir -p /var/theme/config
         ${pkgs.rsync}/bin/rsync --chown=lass:users -a --delete "/etc/themes/$1/" /var/theme/config/
         echo "$1" > /var/theme/current_theme
         ${pkgs.coreutils}/bin/chown lass:users /var/theme/current_theme
