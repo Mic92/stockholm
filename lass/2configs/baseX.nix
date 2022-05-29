@@ -64,7 +64,7 @@ in {
     font-size
     fzfmenu
     gimp
-    gitAndTools.hub
+    gitAndTools.gh
     git-crypt
     git-preview
     dconf
