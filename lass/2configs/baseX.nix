@@ -79,11 +79,13 @@ in {
     ponymix
     powertop
     rxvt_unicode-with-plugins
+    sshvnc
     sxiv
     taskwarrior
     termite
     transgui
     wirelesstools
+    x11vnc
     xclip
     xephyrify
     xorg.xhost
