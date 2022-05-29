@@ -8,7 +8,6 @@ with (import <stockholm/lib>);
   ];
 
   environment.systemPackages = with pkgs; [
-    ag
     dic
     nmap
     git-preview
