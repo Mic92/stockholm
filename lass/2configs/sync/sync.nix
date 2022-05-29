@@ -2,12 +2,7 @@
   services.syncthing.folders."/home/lass/sync" = {
     devices = [ "mors" "icarus" "xerxes" "shodan" "green" "blue" "coaxmetal" ];
   };
-  krebs.permown."/home/lass/sync" = {
-    file-mode = "u+rw,g+rw";
-    owner = "lass";
-    group = "syncthing";
-    umask = "0002";
-    keepGoing = true;
-  };
+  krebs.acl."/home/lass/sync"."u:syncthing:X".parents = true;
+  krebs.acl."/home/lass/sync"."u:syncthing:rwX" = {};
+  krebs.acl."/home/lass/sync"."u:lass:rwX" = {};
 }
-
