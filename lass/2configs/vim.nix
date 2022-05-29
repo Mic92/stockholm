@@ -21,6 +21,7 @@ let
     set backup
     set backupdir=${dirs.backupdir}/
     set directory=${dirs.swapdir}//
+    set list listchars=tab:⇥\ ,extends:❯,precedes:❮,nbsp:␣,trail:· showbreak=¬
     set hlsearch
     set incsearch
     set ttymouse=sgr
