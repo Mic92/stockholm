@@ -29,6 +29,8 @@ in {
     (servePage [ "apanowicz.de" "www.apanowicz.de" ])
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
     (servePage [ "illustra.de" "www.illustra.de" ])
+    (servePage [ "nirwanabluete.de" "www.nirwanabluete.de" ])
+    (servePage [ "familienrat-hamburg.de" "www.familienrat-hamburg.de" ])
     (servePage [
       "freemonkey.art"
       "www.freemonkey.art"
@@ -36,20 +38,20 @@ in {
     (serveOwncloud [ "o.ubikmedia.de" ])
     (serveWordpress [
       "ubikmedia.de"
-      "nirwanabluete.de"
       "ubikmedia.eu"
       "youthtube.xyz"
       "joemisch.com"
       "weirdwednesday.de"
       "jarugadesign.de"
+      "beesmooth.ch"
 
-      "www.nirwanabluete.de"
       "www.ubikmedia.eu"
       "www.youthtube.xyz"
       "www.ubikmedia.de"
       "www.joemisch.com"
       "www.weirdwednesday.de"
       "www.jarugadesign.de"
+      "www.beesmooth.ch"
 
       "aldona2.ubikmedia.de"
       "cinevita.ubikmedia.de"
@@ -64,8 +66,12 @@ in {
       "jarugadesign.ubikmedia.de"
       "crypto4art.ubikmedia.de"
       "jarugadesign.ubikmedia.de"
+      "beesmooth.ubikmedia.de"
     ])
   ];
+
+  # https://github.com/nextcloud/server/issues/25436
+  services.mysql.settings.mysqld.innodb_read_only_compressed = 0;
 
   services.mysql.ensureDatabases = [ "ubikmedia_de" "o_ubikmedia_de" ];
   services.mysql.ensureUsers = [
@@ -159,6 +165,7 @@ in {
       { from = "ubik@ubikmedia.eu"; to = "domsen, jms, ms"; }
       { from = "kontakt@alewis.de"; to ="klabusterbeere"; }
       { from = "hallo@jarugadesign.de"; to ="kasia"; }
+      { from = "noreply@beeshmooth.ch"; to ="besmooth@gmx.ch"; }
 
       { from = "testuser@lassul.us"; to = "testuser"; }
       { from = "testuser@ubikmedia.eu"; to = "testuser"; }
@@ -170,10 +177,12 @@ in {
       "apanowicz.de"
       "alewis.de"
       "jarugadesign.de"
+      "beesmooth.ch"
     ];
     dkim = [
       { domain = "ubikmedia.eu"; }
       { domain = "apanowicz.de"; }
+      { domain = "beesmooth.ch"; }
     ];
     ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
     ssl_key = "/var/lib/acme/lassul.us/key.pem";
@@ -332,6 +341,27 @@ in {
     isNormalUser = true;
   };
 
+  users.users.avada = {
+    uid = genid_uint31 "avada";
+    home = "/home/avada";
+    useDefaultShell = true;
+    createHome = true;
+    isNormalUser = true;
+  };
+
+  users.users.familienrat = {
+    uid = genid_uint31 "familienrat";
+    home = "/home/familienrat";
+    useDefaultShell = true;
+    createHome = true;
+    isNormalUser = true;
+  };
+  krebs.acl."/srv/http/familienrat-hamburg.de"."u:familienrat:rwX" = {};
+  krebs.acl."/srv/http"."u:familienrat:X" = {
+    default = false;
+    recursive = false;
+  };
+
   users.groups.xanf = {};
 
   krebs.on-failure.plans.restic-backups-domsen = {
@@ -372,18 +402,14 @@ in {
     ${pkgs.coreutils}/bin/chmod 750 /backups
   '';
 
-  krebs.permown = {
-    "/srv/http" = {
-      group = "syncthing";
-      owner = "nginx";
-      umask = "0007";
-    };
-    "/home/xanf/XANF_TEAM" = {
-      owner = "XANF_TEAM";
-      group = "xanf";
-      umask = "0007";
-    };
+  # takes too long!!
+  # krebs.acl."/srv/http"."u:syncthing:rwX" = {};
+  # krebs.acl."/srv/http"."u:nginx:rwX" = {};
+  # krebs.acl."/srv/http/ubikmedia.de"."u:avada:rwX" = {};
+  krebs.acl."/home/xanf/XANF_TEAM"."g:xanf:rwX" = {};
+  krebs.acl."/home/xanf"."g:xanf:X" = {
+    default = false;
+    recursive = false;
   };
-
 }
 
