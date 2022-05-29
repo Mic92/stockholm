@@ -20,8 +20,6 @@ in {
     };
   };
 
-  krebs.tinc_graphs.enable = true;
-
   users.groups.lasscert.members = [
     "dovecot2"
     "ejabberd"
@@ -47,10 +45,6 @@ in {
     '';
     locations."= /wireguard-key".extraConfig = ''
       alias ${pkgs.writeText "prism.wg" config.krebs.hosts.prism.nets.wiregrill.wireguard.pubkey};
-    '';
-    locations."/tinc/".extraConfig = ''
-      index index.html;
-      alias ${config.krebs.tinc_graphs.workingDir}/external/;
     '';
     locations."= /krebspage".extraConfig = ''
       default_type "text/html";
