@@ -61,7 +61,7 @@ in {
       name = "games";
       description = "user playing games";
       home = "/home/games";
-      extraGroups = [ "audio" "video" "input" "loot" ];
+      extraGroups = [ "audio" "video" "input" "loot" "pipewire" ];
       createHome = true;
       useDefaultShell = true;
       packages = with pkgs; [
