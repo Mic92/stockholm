@@ -46,4 +46,6 @@ with import <stockholm/lib>;
     ];
   };
 
+  users.users.mainUser.extraGroups = [ "scanner" "lp" ];
+
 }

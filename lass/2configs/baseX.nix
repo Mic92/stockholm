@@ -16,7 +16,7 @@ in {
     ./xmonad.nix
     ./themes.nix
     {
-      krebs.per-user.lass.packages = [
+      users.users.mainUser.packages = [
         pkgs.sshuttle
       ];
       security.sudo.extraConfig = ''
