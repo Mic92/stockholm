@@ -7,10 +7,13 @@
     config = {
       enableWelcomePage = true;
       requireDisplayName = true;
+      analytics.disabled = true;
     };
     interfaceConfig = {
       SHOW_JITSI_WATERMARK = false;
       SHOW_WATERMARK_FOR_GUESTS = false;
+      DISABLE_PRESENCE_STATUS = true;
+      GENERATE_ROOMNAMES_ON_WELCOME_PAGE = false;
     };
   };
 
