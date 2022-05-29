@@ -57,13 +57,13 @@ in {
       alias ${initscript}/bin/init;
     '';
     locations."= /blue.pub".extraConfig = ''
-      alias ${pkgs.writeText "pub" config.krebs.users.lass.pubkey};
+      alias ${pkgs.writeText "pub" config.krebs.users.lass-blue.pubkey};
     '';
-    locations."= /mors.pub".extraConfig = ''
-      alias ${pkgs.writeText "pub" config.krebs.users.lass-mors.pubkey};
-    '';
-    locations."= /yubi.pub".extraConfig = ''
+    locations."= /ssh.pub".extraConfig = ''
       alias ${pkgs.writeText "pub" config.krebs.users.lass-yubikey.pubkey};
+    '';
+    locations."= /gpg.pub".extraConfig = ''
+      alias ${pkgs.writeText "pub" config.krebs.users.lass-yubikey.pgp.pubkeys.default};
     '';
   };
 
