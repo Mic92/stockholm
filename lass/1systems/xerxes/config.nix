@@ -47,7 +47,7 @@
     wantedBy = [ "multi-user.target" ];
     script = ''
       ${pkgs.xboxdrv.overrideAttrs(o: {
-        patches = [ (pkgs.fetchurl {
+        patches = o.patches ++ [ (pkgs.fetchurl {
           url = "https://patch-diff.githubusercontent.com/raw/xboxdrv/xboxdrv/pull/251.patch";
           sha256 = "17784y20mxqrlhgvwvszh8lprxrvgmb7ah9dknmbhj5jhkjl8wq5";
         }) ];
