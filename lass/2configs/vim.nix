@@ -135,49 +135,6 @@ let
         sha256 = "0z47zq9rqh06ny0q8lpcdsraf3lyzn9xvb59nywnarf3nxrk6hx0";
       };
     })
-    ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
-      name = "hack";
-    in {
-      name = "vim-color-${name}-1.0.2";
-      destination = "/colors/${name}.vim";
-      text = /* vim */ ''
-        set background=dark
-        hi clear
-        if exists("syntax_on")
-          syntax clear
-        endif
-
-        let colors_name = ${toJSON name}
-
-        hi Normal       ctermbg=016
-        hi Comment      ctermfg=255
-        hi Constant     ctermfg=229
-        hi Identifier   ctermfg=123
-        hi Function     ctermfg=041
-        hi Statement    ctermfg=167
-        hi PreProc      ctermfg=167
-        hi Type         ctermfg=046
-        hi Delimiter    ctermfg=251
-        hi Special      ctermfg=146
-
-        hi Garbage      ctermbg=124
-        hi TabStop      ctermbg=020
-        hi NBSP         ctermbg=056
-        hi NarrowNBSP   ctermbg=097
-        hi Todo         ctermfg=174 ctermbg=NONE
-
-        hi NixCode      ctermfg=190
-        hi NixData      ctermfg=149
-        hi NixQuote     ctermfg=119
-
-        hi diffNewFile  ctermfg=207
-        hi diffFile     ctermfg=207
-        hi diffLine     ctermfg=207
-        hi diffSubname  ctermfg=207
-        hi diffAdded    ctermfg=010
-        hi diffRemoved  ctermfg=009
-      '';
-    })))
     (pkgs.vimUtils.buildVimPlugin {
       name = "vim-dim-1.1.0";
       src = pkgs.fetchFromGitHub {
