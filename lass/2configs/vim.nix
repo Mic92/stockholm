@@ -51,7 +51,7 @@ let
     filetype plugin indent on
 
     set t_Co=256
-    colorscheme hack
+    colorscheme dim
     syntax on
 
     au Syntax * syn match Garbage containedin=ALL /\s\+$/
@@ -170,6 +170,15 @@ let
         hi diffRemoved  ctermfg=009
       '';
     })))
+    (pkgs.vimUtils.buildVimPlugin {
+      name = "vim-dim-1.1.0";
+      src = pkgs.fetchFromGitHub {
+        owner = "jeffkreeftmeijer";
+        repo = "vim-dim";
+        rev = "1.1.0";
+        sha256 = "sha256-lyTZUgqUEEJRrzGo1FD8/t8KBioPrtB3MmGvPeEVI/g=";
+      };
+    })
     ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
       name = "vim";
     in {
