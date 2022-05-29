@@ -4,10 +4,10 @@ with import <stockholm/lib>;
   users.users.media = {
     isNormalUser = true;
     uid = genid_uint31 "media";
-    extraGroups = [ "video" "audio" ];
+    extraGroups = [ "video" "audio" "pipewire" ];
   };
 
-  services.xserver.displayManager.lightdm.autoLogin = {
+  services.xserver.displayManager.autoLogin = {
     enable = true;
     user = "media";
   };
