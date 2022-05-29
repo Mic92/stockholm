@@ -124,6 +124,9 @@ with import <stockholm/lib>;
     q
     rs
     untilport
+    (pkgs.writeDashBin "urgent" ''
+      printf '\a'
+    '')
     usbutils
     logify
     goify
