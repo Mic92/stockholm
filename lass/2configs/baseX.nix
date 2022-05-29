@@ -46,7 +46,7 @@ in {
     }
   ];
 
-  users.users.mainUser.extraGroups = [ "audio" "video" ];
+  users.users.mainUser.extraGroups = [ "audio" "pipewire" "video" ];
 
   time.timeZone = "Europe/Berlin";
 
