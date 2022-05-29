@@ -10,6 +10,7 @@ with import <stockholm/lib>;
     ./htop.nix
     <stockholm/krebs/2configs/security-workarounds.nix>
     ./wiregrill.nix
+    ./tor-ssh.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
