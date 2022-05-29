@@ -115,10 +115,17 @@ let
 
     " copy/paste from/to xclipboard
     set clipboard=unnamedplus
+
+    " use fzf to switch files
+    nnoremap <C-p> :FZF<CR>
+    nnoremap <C-l> :Rg<CR>
+    let g:fzf_layout = { 'down': '~15%' }
   '';
 
   extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
     pkgs.vimPlugins.undotree
+    pkgs.vimPlugins.fzf-vim
+    pkgs.vimPlugins.fzfWrapper
     (pkgs.vimUtils.buildVimPlugin {
       name = "file-line-1.0";
       src = pkgs.fetchFromGitHub {
