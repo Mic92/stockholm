@@ -27,7 +27,7 @@ let
   '';
 
   send_to_radio = pkgs.writers.writeDashBin "send_to_radio" ''
-    ${pkgs.vorbisTools}/bin/oggenc - |
+    ${pkgs.vorbis-tools}/bin/oggenc - |
       ${pkgs.libshout}/bin/shout --format ogg --host localhost --port 1338 --mount /live
   '';
 
