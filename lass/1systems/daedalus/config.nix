@@ -56,22 +56,32 @@ with import <stockholm/lib>;
       services.xserver.layout = "de";
     }
     {
-      krebs.per-user.bitcoin.packages = [
-        pkgs.electrum
-        pkgs.electron-cash
-        pkgs.litecoin
-      ];
-      users.extraUsers = {
-        bitcoin = {
-          name = "bitcoin";
-          description = "user for bitcoin stuff";
-          home = "/home/bitcoin";
-          isNormalUser = true;
-          useDefaultShell = true;
-          createHome = true;
-          extraGroups = [ "audio" ];
+      users = {
+        groups.plugdev = {};
+        users = {
+          bitcoin = {
+            name = "bitcoin";
+            description = "user for bitcoin stuff";
+            home = "/home/bitcoin";
+            isNormalUser = true;
+            useDefaultShell = true;
+            createHome = true;
+            extraGroups = [
+              "audio"
+              "networkmanager"
+              "plugdev"
+            ];
+            packages = let
+              unstable = import <nixpkgs-unstable> { config.allowUnfree = true; };
+            in [
+              pkgs.electrum
+              pkgs.electron-cash
+              unstable.ledger-live-desktop
+            ];
+          };
         };
       };
+      hardware.ledger.enable = true;
       security.sudo.extraConfig = ''
         bubsy ALL=(bitcoin) NOPASSWD: ALL
       '';
