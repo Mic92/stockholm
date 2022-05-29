@@ -11,7 +11,7 @@ with (import <stockholm/lib>);
       pkgs.bitlbee-discord
     ];
     libpurple_plugins = [
-      pkgs.telegram-purple
+      # pkgs.telegram-purple
       # pkgs.tdlib-purple
       # pkgs.purple-gowhatsapp
     ];
