@@ -28,7 +28,6 @@ in {
     };
   };
   security.sudo.extraConfig = ''
-    ${mainUser.name} ALL=(bch) ALL
     ${mainUser.name} ALL=(bitcoin) ALL
     ${mainUser.name} ALL=(monero) ALL
   '';
