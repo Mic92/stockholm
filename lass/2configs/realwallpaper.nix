@@ -22,6 +22,10 @@ in {
       hostname
       "${hostname}.r"
     ];
+    locations."/realwallpaper/".extraConfig = ''
+      index on;
+      root /var/realwallpaper";
+    '';
     locations."/realwallpaper.png".extraConfig = ''
       root /var/realwallpaper/;
     '';
