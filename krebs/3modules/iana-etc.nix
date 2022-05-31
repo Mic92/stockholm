@@ -34,7 +34,7 @@ with import <stockholm/lib>;
             '')
             (filter (proto: entry.${proto} != null) ["tcp" "udp"])}
           '') (attrValues config.krebs.iana-etc.services)}
-        cat ${pkgs.iana_etc}/etc/services
+        cat ${pkgs.iana-etc}/etc/services
       } |
       sort -b -k 2,2 -u > $out
     '');
