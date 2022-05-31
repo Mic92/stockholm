@@ -45,7 +45,9 @@ with import <stockholm/lib>;
         netcup
         nmap
         p7zip
-        pass-otp
+        (pkgs.pass.withExtensions (ext: [
+          ext.pass-otp
+        ]))
         q
         qrencode
         texlive.combined.scheme-full

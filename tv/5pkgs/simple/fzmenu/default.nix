@@ -1,37 +1,38 @@
-{ lib, stdenv
-, runCommand
-, coreutils, dash, gnused, fzf, pass-otp, rxvt_unicode, utillinux, xdotool
-}:
+{ lib, pkgs, stdenv }:
 
-runCommand "fzmenu" {
+pkgs.runCommand "fzmenu" {
 } /* sh */ ''
   mkdir $out
 
   cp -r ${./bin} $out/bin
 
   substituteInPlace $out/bin/otpmenu \
-      --replace '#! /bin/sh' '#! ${dash}/bin/dash' \
+      --replace '#! /bin/sh' '#! ${pkgs.dash}/bin/dash' \
       --replace '#PATH=' PATH=${lib.makeBinPath [
-        coreutils
-        dash
-        fzf
-        gnused
-        pass-otp
-        rxvt_unicode
-        utillinux
-        xdotool
+        pkgs.coreutils
+        pkgs.dash
+        pkgs.fzf
+        pkgs.gnused
+        (pkgs.pass.withExtensions (ext: [
+          ext.pass-otp
+        ]))
+        pkgs.rxvt_unicode
+        pkgs.utillinux
+        pkgs.xdotool
       ]}
 
   substituteInPlace $out/bin/passmenu \
-      --replace '#! /bin/sh' '#! ${dash}/bin/dash' \
+      --replace '#! /bin/sh' '#! ${pkgs.dash}/bin/dash' \
       --replace '#PATH=' PATH=${lib.makeBinPath [
-        coreutils
-        dash
-        fzf
-        gnused
-        pass-otp
-        rxvt_unicode
-        utillinux
-        xdotool
+        pkgs.coreutils
+        pkgs.dash
+        pkgs.fzf
+        pkgs.gnused
+        (pkgs.pass.withExtensions (ext: [
+          ext.pass-otp
+        ]))
+        pkgs.rxvt_unicode
+        pkgs.utillinux
+        pkgs.xdotool
       ]}
 ''
