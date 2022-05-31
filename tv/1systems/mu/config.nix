@@ -97,7 +97,7 @@ with import <stockholm/lib>;
   ];
 
   fonts.fonts = [
-    pkgs.xlibs.fontschumachermisc
+    pkgs.xorg.fontschumachermisc
   ];
 
   services.xserver.enable = true;

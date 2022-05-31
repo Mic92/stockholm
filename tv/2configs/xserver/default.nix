@@ -38,7 +38,7 @@ in {
   ];
 
   fonts.fonts = [
-    pkgs.xlibs.fontschumachermisc
+    pkgs.xorg.fontschumachermisc
   ];
 
   services.xserver = {
