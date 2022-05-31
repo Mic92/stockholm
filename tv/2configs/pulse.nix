@@ -2,7 +2,7 @@
 
 with import <stockholm/lib>;
 let
-  pkg = pkgs.pulseaudioLight;
+  pkg = pkgs.pulseaudio;
   runDir = "/run/pulse";
 
   pkgs_i686 = pkgs.pkgsi686Linux;
