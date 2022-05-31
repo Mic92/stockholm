@@ -46,7 +46,7 @@ with import <stockholm/lib>;
 
     {
       # TODO check if both are required:
-      nix.sandboxPaths = [ "/etc/protocols" pkgs.iana_etc.outPath ];
+      nix.sandboxPaths = [ "/etc/protocols" pkgs.iana-etc.outPath ];
 
       nix.requireSignedBinaryCaches = true;
 
