@@ -1,31 +1,5 @@
 { config, lib, pkgs, ... }:
 let
-  weather_for_ips = pkgs.writers.writePython3Bin "weather_for_ips" {
-    libraries = [ pkgs.python3Packages.geoip2 ];
-    flakeIgnore = [ "E501" ];
-  } ./weather_for_ips.py;
-
-  weather_report = pkgs.writers.writeDashBin "weather_report" ''
-    set -efu
-    export PATH="${lib.makeBinPath [
-      pkgs.coreutils
-      pkgs.curl
-      pkgs.iproute2
-      pkgs.jc
-      pkgs.jq
-    ]}"
-    curl -z /tmp/GeoLite2-City.mmdb -o /tmp/GeoLite2-City.mmdb http://c.r/GeoLite2-City.mmdb
-    MAXMIND_GEOIP_DB="/tmp/GeoLite2-City.mmdb"; export MAXMIND_GEOIP_DB
-    OPENWEATHER_API_KEY=$(cat "$CREDENTIALS_DIRECTORY/openweather_api"); export OPENWEATHER_API_KEY
-    ss -no 'sport = :8000' |
-      jc --ss | jq -r '.[] |
-        select(
-          .local_address != "[::ffff:127.0.0.1]"
-          and .local_address != "[::1]"
-        ) | .peer_address | gsub("[\\[\\]]"; "")
-      ' |
-      ${weather_for_ips}/bin/weather_for_ips
-  '';
 
   send_to_radio = pkgs.writers.writeDashBin "send_to_radio" ''
     ${pkgs.vorbis-tools}/bin/oggenc - |
@@ -51,7 +25,6 @@ let
     todays news:
     $(get_current_news)
     $(gc_news)
-    $(weather_report)
     EOF
   '';
 in
@@ -62,7 +35,6 @@ in
       send_to_radio
       gc_news
       get_current_news
-      weather_report
       pkgs.curl
       pkgs.retry
     ];
@@ -75,9 +47,6 @@ in
     startAt = "*:00:00";
     serviceConfig = {
       User = "radio-news";
-      LoadCredential = [
-        "openweather_api:${toString <secrets>}/openweather_api_key"
-      ];
     };
   };
 

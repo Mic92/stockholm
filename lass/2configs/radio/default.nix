@@ -107,6 +107,7 @@ let
 in {
   imports = [
     ./news.nix
+    ./weather.nix
   ];
 
   users.users = {
