@@ -8,13 +8,21 @@ let
 
   gc_news = pkgs.writers.writeDashBin "gc_news" ''
     set -xefu
+    export TZ=UTC #workaround for jq parsing wrong timestamp
     ${pkgs.coreutils}/bin/cat $HOME/news | ${pkgs.jq}/bin/jq -cs 'map(select((.to|fromdateiso8601) > now)) | .[]' > $HOME/bla-news.tmp
     ${pkgs.coreutils}/bin/mv $HOME/bla-news.tmp $HOME/news
   '';
 
   get_current_news = pkgs.writers.writeDashBin "get_current_news" ''
     set -xefu
-    ${pkgs.coreutils}/bin/cat $HOME/news | ${pkgs.jq}/bin/jq -rs 'map(select(((.to | fromdateiso8601) > now) and (.from|fromdateiso8601) < now) | .text) | .[]'
+    export TZ=UTC #workaround for jq parsing wrong timestamp
+    ${pkgs.coreutils}/bin/cat $HOME/news | ${pkgs.jq}/bin/jq -rs '
+      sort_by(.priority) |
+      map(select(
+        ((.to | fromdateiso8601) > now) and
+        (.from|fromdateiso8601) < now) |
+        .text
+      ) | .[]'
   '';
 
   newsshow = pkgs.writers.writeDashBin "newsshow" /* sh */ ''
