@@ -2,6 +2,7 @@
 let
   weather_for_ips = pkgs.writers.writePython3Bin "weather_for_ips" {
     libraries = [ pkgs.python3Packages.geoip2 ];
+    flakeIgnore = [ "E501" ];
   } ./weather_for_ips.py;
 
   weather_report = pkgs.writers.writeDashBin "weather_report" ''
