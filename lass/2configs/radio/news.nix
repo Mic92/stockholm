@@ -108,8 +108,8 @@ in
         ;;
         "POST /")
           payload=$(head -c "$req_content_length")
-          echo "$payload" | jq 'has("from") and has("to") and has("text")' >&2
-          echo "$payload" | jq -c '{ from: (.from | fromdate | todate), to: (.to | fromdate | todate), text: .text }' >> "$HOME"/news
+          printf '%s' "$payload" | jq 'has("from") and has("to") and has("text")' >&2
+          printf '%s' "$payload" | jq -c '{ from: .from, to: .to, text: .text, priority: (.priority // 0)}' >> "$HOME"/news
           printf 'HTTP/1.1 200 OK\r\n'
           printf 'Connection: close\r\n'
           printf '\r\n'
