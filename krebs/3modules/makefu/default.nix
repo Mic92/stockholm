@@ -129,6 +129,7 @@ in {
           aliases = [
             "omo.r"
             "dcpp.omo.r"
+            "backup.makefu.r"
             "torrent.omo.r"
           ];
         };
@@ -153,9 +154,6 @@ in {
       extraZones = {
         "krebsco.de" = ''
           latte.euer     IN A      ${nets.internet.ip4.addr}
-          rss.euer          IN A      ${nets.internet.ip4.addr}
-          o.euer            IN A      ${nets.internet.ip4.addr}
-          bw.euer           IN A      ${nets.internet.ip4.addr}
         '';
       };
       cores = 4;
@@ -194,6 +192,9 @@ in {
       ci = true;
       extraZones = {
         "krebsco.de" = ''
+          rss.euer          IN A      ${nets.internet.ip4.addr}
+          o.euer            IN A      ${nets.internet.ip4.addr}
+          bw.euer           IN A      ${nets.internet.ip4.addr}
           bookmark.euer     IN A      ${nets.internet.ip4.addr}
           boot              IN A      ${nets.internet.ip4.addr}
           boot.euer         IN A      ${nets.internet.ip4.addr}
@@ -263,7 +264,6 @@ in {
 
           aliases = [
             "gum.r"
-            "backup.makefu.r"
             "blog.gum.r"
             "blog.makefu.r"
             "cache.gum.r"
