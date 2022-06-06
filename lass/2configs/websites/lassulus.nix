@@ -10,6 +10,7 @@ in {
   imports = [
     ./default.nix
     ../git.nix
+    ./ref.ptkk.de
   ];
 
   security.acme = {
@@ -20,11 +21,8 @@ in {
     };
   };
 
-  krebs.tinc_graphs.enable = true;
-
   users.groups.lasscert.members = [
     "dovecot2"
-    "ejabberd"
     "exim"
     "nginx"
   ];
@@ -48,10 +46,6 @@ in {
     locations."= /wireguard-key".extraConfig = ''
       alias ${pkgs.writeText "prism.wg" config.krebs.hosts.prism.nets.wiregrill.wireguard.pubkey};
     '';
-    locations."/tinc/".extraConfig = ''
-      index index.html;
-      alias ${config.krebs.tinc_graphs.workingDir}/external/;
-    '';
     locations."= /krebspage".extraConfig = ''
       default_type "text/html";
       alias ${pkgs.krebspage}/index.html;
@@ -64,13 +58,13 @@ in {
       alias ${initscript}/bin/init;
     '';
     locations."= /blue.pub".extraConfig = ''
-      alias ${pkgs.writeText "pub" config.krebs.users.lass.pubkey};
+      alias ${pkgs.writeText "pub" config.krebs.users.lass-blue.pubkey};
     '';
-    locations."= /mors.pub".extraConfig = ''
-      alias ${pkgs.writeText "pub" config.krebs.users.lass-mors.pubkey};
-    '';
-    locations."= /yubi.pub".extraConfig = ''
+    locations."= /ssh.pub".extraConfig = ''
       alias ${pkgs.writeText "pub" config.krebs.users.lass-yubikey.pubkey};
+    '';
+    locations."= /gpg.pub".extraConfig = ''
+      alias ${pkgs.writeText "pub" config.krebs.users.lass-yubikey.pgp.pubkeys.default};
     '';
   };
 
@@ -89,20 +83,6 @@ in {
     locations."/.well-known/acme-challenge".extraConfig = ''
       root /var/lib/acme/acme-challenge;
     '';
-  };
-
-  users.users.blog = {
-    uid = genid_uint31 "blog";
-    group = "nginx";
-    description = "lassul.us blog deployment";
-    home = "/srv/http/lassul.us";
-    useDefaultShell = true;
-    createHome = true;
-    isSystemUser = true;
-    openssh.authorizedKeys.keys = with config.krebs.users; [
-      lass.pubkey
-      lass-mors.pubkey
-    ];
   };
 }
 

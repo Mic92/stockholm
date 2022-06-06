@@ -28,7 +28,7 @@ let
 
 
   # TODO: get the list of all krebsministers
-  krebsminister = with config.krebs.users; [ makefu tv ];
+  krebsminister = with config.krebs.users; [ makefu tv kmein ];
   krebs-rules = repo:
     set-owners repo [ config.krebs.users.lass ] ++ set-ro-access repo krebsminister;
 

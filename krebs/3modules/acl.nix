@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }: let
   parents = dir:
     if dir == "/" then
-      [ dir ]
+      []
     else
       [ dir ] ++ parents (builtins.dirOf dir)
     ;
@@ -40,13 +40,16 @@ in {
         pkgs.coreutils
       ];
       serviceConfig = {
-        ExecStart = pkgs.writers.writeDash "acl" (lib.concatStrings (
-          lib.mapAttrsToList (_: rule: ''
-            setfacl -${lib.optionalString rule.recursive "R"}m ${rule.rule} ${path}
-            ${lib.optionalString rule.default "setfacl -${lib.optionalString rule.recursive "R"}dm ${rule.rule} ${path}"}
-            ${lib.optionalString rule.parents (lib.concatMapStringsSep "\n" (folder: "setfacl -m ${rule.rule} ${folder}") (parents path))}
-          '') rules
-        ));
+        ExecStart = pkgs.writers.writeDash "acl" ''
+          mkdir -p "${path}"
+          ${lib.concatStrings (
+            lib.mapAttrsToList (_: rule: ''
+              setfacl -${lib.optionalString rule.recursive "R"}m ${rule.rule} ${path}
+              ${lib.optionalString rule.default "setfacl -${lib.optionalString rule.recursive "R"}dm ${rule.rule} ${path}"}
+              ${lib.optionalString rule.parents (lib.concatMapStringsSep "\n" (folder: "setfacl -m ${rule.rule} ${folder}") (parents (builtins.dirOf path)))}
+            '') rules
+          )}
+        '';
         RemainAfterExit = true;
         Type = "simple";
       };

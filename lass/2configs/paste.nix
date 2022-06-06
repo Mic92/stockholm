@@ -57,10 +57,8 @@ with import <stockholm/lib>;
     addSSL = true;
     serverAliases = [ "p.krebsco.de" ];
     locations."/".extraConfig = ''
-      if ($request_method != GET) {
-        return 403;
-      }
       proxy_set_header Host $host;
+      proxy_set_header X-Forwarded-Proto $scheme;
       proxy_pass http://127.0.0.1:${toString config.krebs.htgen.paste.port};
     '';
     locations."/image".extraConfig = ''

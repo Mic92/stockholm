@@ -2,25 +2,26 @@ with import <stockholm/lib>;
 { config, pkgs, ... }:
 
 {
+  environment.etc."tmux.conf".text = ''
+    #prefix key to `
+    set-option -g prefix2 `
+
+    bind-key r source-file /etc/tmux.conf \; display-message "/etc/tmux.conf reloaded"
+
+    set-option -g default-terminal screen-256color
+
+    #use session instead of windows
+    bind-key c new-session
+    bind-key p switch-client -p
+    bind-key n switch-client -n
+    bind-key C-s switch-client -l
+  '';
   nixpkgs.config.packageOverrides = super: {
     tmux = pkgs.symlinkJoin {
       name = "tmux";
       paths = [
         (pkgs.writeDashBin "tmux" ''
-          exec ${super.tmux}/bin/tmux -f ${pkgs.writeText "tmux.conf" ''
-            #change prefix key to `
-            set-option -g prefix `
-            unbind-key C-b
-            bind ` send-prefix
-
-            set-option -g default-terminal screen-256color
-
-            #use session instead of windows
-            bind-key c new-session
-            bind-key p switch-client -p
-            bind-key n switch-client -n
-            bind-key C-s switch-client -l
-          ''} "$@"
+          exec ${super.tmux}/bin/tmux -f /etc/tmux.conf "$@"
         '')
         super.tmux
       ];

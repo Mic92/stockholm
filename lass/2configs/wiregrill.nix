@@ -18,6 +18,10 @@ in mkIf (hasAttr "wiregrill" config.krebs.build.host.nets) {
   ];
   krebs.iptables.tables.filter.FORWARD.rules = mkIf isRouter [
     { precedence = 1000; predicate = "-i wiregrill -o wiregrill"; target = "ACCEPT"; }
+    { precedence = 1000; predicate = "-i wiregrill -o retiolum"; target = "ACCEPT"; }
+    { precedence = 1000; predicate = "-i retiolum -o wiregrill"; target = "ACCEPT"; }
+    { precedence = 1000; predicate = "-i wiregrill -o eth0"; target = "ACCEPT"; }
+    { precedence = 1000; predicate = "-o wiregrill -m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; }
   ];
 
   networking.wireguard.interfaces.wiregrill = {

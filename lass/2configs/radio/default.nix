@@ -107,6 +107,7 @@ let
 in {
   imports = [
     ./news.nix
+    ./weather.nix
   ];
 
   users.users = {
@@ -165,14 +166,14 @@ in {
 
     output.icecast(mount = '/music.ogg', password = 'hackme', %vorbis(quality = 1), source)
     output.icecast(mount = '/music.mp3', password = 'hackme', %mp3.vbr(), source)
-    output.icecast(mount = '/music.opus', password = 'hackme', %opus(bitrate = 64), source)
+    output.icecast(mount = '/music.opus', password = 'hackme', %opus(bitrate = 96), source)
 
     extra_input = audio_to_stereo(input.harbor("live", port=1338))
 
     o = smooth_add(normal = source, special = extra_input)
     output.icecast(mount = '/radio.ogg', password = 'hackme', %vorbis(quality = 1), o)
     output.icecast(mount = '/radio.mp3', password = 'hackme', %mp3.vbr(), o)
-    output.icecast(mount = '/radio.opus', password = 'hackme', %opus(bitrate = 64), o)
+    output.icecast(mount = '/radio.opus', password = 'hackme', %opus(bitrate = 96), o)
   '';
   services.icecast = {
     enable = true;

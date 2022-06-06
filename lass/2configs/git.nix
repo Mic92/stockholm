@@ -122,12 +122,6 @@ let
       cgit.section = "configuration";
     };
   } // mapAttrs make-public-repo-silent {
-    nixos-aws = {
-      collaborators = [ {
-        name = "fabio";
-        pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDFst8DvnfOu4pQJYxcwdf//jWTvP+jj0iSrOdt59c9Gbujm/8K1mBXhcSQhHj/GBRC1Qc1wipf9qZsWnEHMI+SRwq6tDr8gqlAcdWmHAs1bU96jJtc8EgmUKbXTFG/VmympMPi4cEbNUtH93v6NUjQKwq9szvDhhqSW4Y8zE32xLkySwobQapNaUrGAtQp3eTxu5Lkx+cEaaartaAspt8wSosXjUHUJktg0O5/XOP+CiWAx89AXxbQCy4XTQvUExoRGdw9sdu0lF0/A0dF4lFF/dDUS7+avY8MrKEcQ8Fwk8NcW1XrKMmCdNdpvou0whL9aHCdTJ+522dsSB1zZWh63Si4CrLKlc1TiGKCXdvzmCYrD+6WxbPJdRpMM4dFNtpAwhCm/dM+CBXfDkP0s5veFiYvp1ri+3hUqV/sep9r5/+d+5/R1gQs8WDNjWqcshveFbD5LxE6APEySB4QByGxIrw7gFbozE+PNxtlVP7bq4MyE6yIzL6ofQgO1e4THquPcqSCfCvyib5M2Q1phi5DETlMemWp84AsNkqbhRa4BGRycuOXXrBzE+RgQokcIY7t3xcu3q0xJo2+HxW/Lqi72zYU1NdT4nJMETEaG49FfIAnUuoVaQWWvOz8mQuVEmmdw2Yzo2ikILYSUdHTp1VPOeo6aNPvESkPw1eM0xDRlQ== ada";
-      } ];
-    };
   };
 
   restricted-repos = mapAttrs make-restricted-repo (

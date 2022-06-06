@@ -164,7 +164,7 @@
                   if [ ''${#youtube_url} -eq 24 ]; then
                     youtube_id=$youtube_url
                   else
-                    youtube_id=$(${pkgs.youtube-dl}/bin/youtube-dl --max-downloads 1 -j "$youtube_url" | ${pkgs.jq}/bin/jq -r '.channel_id')
+                    youtube_id=$(${pkgs.yt-dlp}/bin/yt-dlp --max-downloads 1 -j "$youtube_url" | ${pkgs.jq}/bin/jq -r '.channel_id')
                   fi
                   echo "brockman: add yt_$youtube_nick http://rss.r/?action=display&bridge=Youtube&context=By+channel+id&c=$youtube_id&duration_min=&duration_max=&format=Mrss"
                 '';

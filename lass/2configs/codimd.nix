@@ -28,6 +28,10 @@ in {
     params.hedgedoc = {};
   };
 
+  systemd.services.hedgedoc.environment = {
+    CMD_COOKIE_POLICY = "none";
+    CMD_CSP_ALLOW_FRAMING = "true";
+  };
   services.hedgedoc = {
     enable = true;
     configuration.allowOrigin = [ domain ];
@@ -47,6 +51,7 @@ in {
       sslCertPath = "/var/lib/acme/${domain}/cert.pem";
       sslKeyPath = "/var/lib/acme/${domain}/key.pem";
       dhParamPath = config.security.dhparams.params.hedgedoc.path;
+
     };
   };
 }

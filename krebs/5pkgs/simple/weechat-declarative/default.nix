@@ -109,45 +109,60 @@ let
     };
   };
 
+  setFile = pkgs.writeText "weechat.set" (
+    lib.optionalString (cfg.settings != {})
+      (lib.concatStringsSep "\n" (
+        lib.optionals
+          (cfg.settings.irc or {} != {})
+          (lib.mapAttrsToList
+            (name: server: "/server add ${name} ${lib.toWeechatValue server.addresses}")
+            cfg.settings.irc.server)
+        ++
+        lib.optionals
+          (cfg.settings.matrix or {} != {})
+          (lib.mapAttrsToList
+            (name: server: "/matrix server add ${name} ${server.address}")
+            cfg.settings.matrix.server)
+        ++
+        lib.mapAttrsToList lib.setCommand (lib.attrPathsSep "." cfg.settings)
+        ++
+        lib.optionals
+          (cfg.settings.filters or {} != {})
+          (lib.mapAttrsToList lib.filterAddreplace cfg.settings.filters)
+        ++
+        lib.singleton cfg.extraCommands
+      ))
+  );
+
   weechat = pkgs.weechat.override {
     configure = _: {
-      init = lib.optionalString (cfg.settings != {})
-        (lib.concatStringsSep "\n" (
-          lib.optionals
-            (cfg.settings.irc or {} != {})
-            (lib.mapAttrsToList
-              (name: server: "/server add ${name} ${server.address}")
-              cfg.settings.irc.server)
-          ++
-          lib.optionals
-            (cfg.settings.matrix or {} != {})
-            (lib.mapAttrsToList
-              (name: server: "/matrix server add ${name} ${server.address}")
-              cfg.settings.matrix.server)
-          ++
-          lib.mapAttrsToList lib.setCommand (lib.attrPathsSep "." cfg.settings)
-          ++
-          lib.optionals
-            (cfg.settings.filters or {} != {})
-            (lib.mapAttrsToList lib.filterAddreplace cfg.settings.filters)
-          ++
-          lib.singleton cfg.extraCommands
-        ));
+      init = "/exec -oc cat ${setFile}";
 
       scripts = cfg.scripts;
     };
   };
 
-in pkgs.writers.writeDashBin "weechat" ''
-  CONFDIR=''${XDG_CONFIG_HOME:-$HOME/.config}/weechat
-  ${pkgs.coreutils}/bin/mkdir -p "$CONFDIR"
-  ${lib.concatStringsSep "\n"
-    (lib.mapAttrsToList
-      (name: target: /* sh */ ''
-        ${pkgs.coreutils}/bin/ln -s ${lib.escapeShellArg target} "$CONFDIR"/${lib.escapeShellArg name}
-      '')
-      cfg.files
-    )
-  }
-  exec ${weechat}/bin/weechat "$@"
-''
+  wrapper = pkgs.writers.writeDashBin "weechat" ''
+    CONFDIR=''${XDG_CONFIG_HOME:-$HOME/.config}/weechat
+    ${pkgs.coreutils}/bin/mkdir -p "$CONFDIR"
+    ${lib.concatStringsSep "\n"
+      (lib.mapAttrsToList
+        (name: target: /* sh */ ''
+          ${pkgs.coreutils}/bin/ln -s ${lib.escapeShellArg target} "$CONFDIR"/${lib.escapeShellArg name}
+        '')
+        cfg.files
+      )
+    }
+    exec ${weechat}/bin/weechat "$@"
+  '';
+
+in pkgs.symlinkJoin {
+  name = "weechat-configured";
+  paths = [
+    wrapper
+    pkgs.weechat
+  ];
+  postBuild = ''
+    ln -s ${setFile} $out/weechat.set
+  '';
+}

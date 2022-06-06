@@ -10,6 +10,8 @@ with import <stockholm/lib>;
     ./htop.nix
     <stockholm/krebs/2configs/security-workarounds.nix>
     ./wiregrill.nix
+    ./tmux.nix
+    ./tor-ssh.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
@@ -122,6 +124,9 @@ with import <stockholm/lib>;
     q
     rs
     untilport
+    (pkgs.writeDashBin "urgent" ''
+      printf '\a'
+    '')
     usbutils
     logify
     goify

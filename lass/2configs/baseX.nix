@@ -16,7 +16,7 @@ in {
     ./xmonad.nix
     ./themes.nix
     {
-      krebs.per-user.lass.packages = [
+      users.users.mainUser.packages = [
         pkgs.sshuttle
       ];
       security.sudo.extraConfig = ''
@@ -46,7 +46,7 @@ in {
     }
   ];
 
-  users.users.mainUser.extraGroups = [ "audio" "video" ];
+  users.users.mainUser.extraGroups = [ "audio" "pipewire" "video" ];
 
   time.timeZone = "Europe/Berlin";
 
@@ -64,7 +64,7 @@ in {
     font-size
     fzfmenu
     gimp
-    gitAndTools.hub
+    gitAndTools.gh
     git-crypt
     git-preview
     dconf
@@ -79,11 +79,13 @@ in {
     ponymix
     powertop
     rxvt_unicode-with-plugins
+    sshvnc
     sxiv
     taskwarrior
     termite
     transgui
     wirelesstools
+    x11vnc
     xclip
     xephyrify
     xorg.xhost
