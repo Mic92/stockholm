@@ -26,7 +26,7 @@ for ip in fileinput.input():
             f'Weather report for {location.city.name}, {location.country.name}. '
             f'Currently it is {weather["current"]["weather"][0]["description"]} outside '
             f'with a temperature of {weather["current"]["temp"]} degrees, '
-            f'and a windspeed of {weather["current"]["wind_speed"]} meter per second. '
+            f'and a wind speed of {weather["current"]["wind_speed"]} meters per second. '
             f'The probability of precipitation is {weather["hourly"][0]["pop"] * 100} percent. '
         )
 
