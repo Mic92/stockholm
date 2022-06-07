@@ -8,7 +8,7 @@ in {
         { name = "shack-env";
           rules = [
             {
-              alert = "RootPartitionFull";
+              alert = "Wolf RootPartitionFull";
               for = "30m";
               expr = ''(node_filesystem_avail_bytes{alias="wolf.shack",mountpoint="/"} * 100) / node_filesystem_size_bytes{alias="wolf.shack",mountpoint="/"} < ${disk_free_threshold}'';
               labels.severity = "warning";
@@ -24,7 +24,7 @@ in {
 6. as a last resort the root disk can be expanded via `lvresize -L +10G /dev/pool/root && btrfs filesystem resize max /` '';
             }
             {
-              alert = "RootPartitionFull";
+              alert = "Puyak RootPartitionFull";
               for = "30m";
               expr = ''(node_filesystem_avail_bytes{alias="puyak.shack",mountpoint="/"} * 100) / node_filesystem_size_bytes{alias="puyak.shack",mountpoint="/"} < ${disk_free_threshold}'';
               labels.severity = "warning";
