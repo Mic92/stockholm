@@ -32,8 +32,6 @@ in {
       # <stockholm/makefu/2configs/stats/netdata-server.nix>
 
       <stockholm/makefu/2configs/headless.nix>
-      <stockholm/makefu/2configs/smart-monitor.nix>
-      { services.smartd.devices = builtins.map (x: { device = x; }) allDisks; }
 
       # Security
       <stockholm/makefu/2configs/sshd-totp.nix>
@@ -135,6 +133,27 @@ in {
       # <stockholm/makefu/2configs/urlwatch>
       # Removed until move: avoid letsencrypt ban
       ### Web
+
+      <stockholm/makefu/2configs/bitwarden.nix> # postgres backend
+      <stockholm/makefu/2configs/deployment/rss/rss.euer.krebsco.de.nix> # postgres backend
+      <stockholm/makefu/2configs/deployment/rss/ratt.nix>
+
+      <stockholm/makefu/2configs/deployment/owncloud.nix> #postgres backend
+      ### Moving owncloud data dir to /media/cloud/nextcloud-data
+      {
+        users.users.nextcloud.extraGroups = [ "download" ];
+        # nextcloud-setup fails as it cannot set permissions for nextcloud
+        systemd.services.nextcloud-setup.serviceConfig.SuccessExitStatus = "0 1";
+        fileSystems."/var/lib/nextcloud/data" = {
+          device = "/media/cloud/nextcloud-data";
+          options = [ "bind" ];
+        };
+        fileSystems."/var/backup" = {
+          device = "/media/cloud/gum-backup";
+          options = [ "bind" ];
+        };
+      }
+
       <stockholm/makefu/2configs/nginx/dl.euer.krebsco.de.nix>
       #<stockholm/makefu/2configs/nginx/euer.test.nix>
       <stockholm/makefu/2configs/nginx/euer.mon.nix>
@@ -150,7 +169,7 @@ in {
       # <stockholm/makefu/2configs/deployment/photostore.krebsco.de.nix>
       <stockholm/makefu/2configs/deployment/graphs.nix>
       #<stockholm/makefu/2configs/deployment/owncloud.nix>
-      <stockholm/makefu/2configs/deployment/board.euer.krebsco.de.nix>
+      # <stockholm/makefu/2configs/deployment/board.euer.krebsco.de.nix>
       #<stockholm/makefu/2configs/deployment/feed.euer.krebsco.de>
       <stockholm/makefu/2configs/deployment/boot-euer.nix>
       <stockholm/makefu/2configs/deployment/gecloudpad>

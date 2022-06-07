@@ -23,6 +23,12 @@ in {
       { name = "vaultwarden"; ensurePermissions."DATABASE bitwarden" = "ALL PRIVILEGES"; } 
     ];
   };
+  services.postgresqlBackup = {
+    enable = true;
+    databases = [ "bitwarden" ];
+  };
+  systemd.services.postgresqlBackup-bitwarden.serviceConfig.SupplementaryGroups = [ "download" ];
+
 
   services.nginx.virtualHosts."bw.euer.krebsco.de" ={
     forceSSL = true;

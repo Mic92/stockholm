@@ -13,7 +13,7 @@
       # ./x230
 
       # Common Hardware Components
-
+      <nix-ld/modules/nix-ld.nix>
       # <stockholm/makefu/2configs/hw/mceusb.nix>
       # <stockholm/makefu/2configs/hw/rtl8812au.nix>
       <stockholm/makefu/2configs/hw/network-manager.nix>
