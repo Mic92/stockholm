@@ -46,7 +46,6 @@ in {
   services.home-assistant =
     {
     enable = true;
-    autoExtraComponents = true;
     package = unstable.home-assistant.overrideAttrs (old: {
       doInstallCheck = false;
     });
