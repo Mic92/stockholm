@@ -76,7 +76,7 @@ let
           };
         }
         {
-          pattern = ''^([\H-]*):?\s+([+-][1-9][0-9]*)\s+(\S+)$'';
+          pattern = ''^([\H-]*?):?\s+([+-][1-9][0-9]*)\s+(\S+)$'';
           activate = "match";
           arguments = [1 2 3];
           command = {
