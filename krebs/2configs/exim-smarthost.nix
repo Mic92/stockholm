@@ -25,7 +25,7 @@ in {
       "anmeldung@eloop.org" = eloop-ml;
       "brain@krebsco.de" = brain-ml;
       "cfp2019@eloop.org" = eloop-ml;
-      "eloop2019@krebsco.de" = eloop-ml;
+      "eloop2022@krebsco.de" = eloop-ml;
       "kontakt@eloop.org" = eloop-ml;
       "root@eloop.org" = eloop-ml;
       "youtube@eloop.org" = eloop-ml;
