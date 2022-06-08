@@ -24,8 +24,9 @@ in {
     in {
       "brain@krebsco.de" = brain-ml;
       "eloop2022@krebsco.de" = eloop-ml;
-      "root@eloop.org" = eloop-ml;
-      "youtube@eloop.org" = eloop-ml;
+      "root@eloop.org" = eloop-ml; # obsolete, use spam@eloop.org instead
+      "spam@eloop.org" = eloop-ml;
+      "youtube@eloop.org" = eloop-ml; # obsolete, use spam@eloop.org instead
       "postmaster@krebsco.de" = spam-ml; # RFC 822
       "lass@krebsco.de" = lass;
       "makefu@krebsco.de" = makefu;
