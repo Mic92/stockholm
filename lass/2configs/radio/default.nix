@@ -168,7 +168,7 @@ in {
     output.icecast(mount = '/music.mp3', password = 'hackme', %mp3.vbr(), source)
     output.icecast(mount = '/music.opus', password = 'hackme', %opus(bitrate = 96), source)
 
-    extra_input = audio_to_stereo(input.harbor("live", port=1338))
+    extra_input = amplify(1.4, audio_to_stereo(input.harbor("live", port=1338)))
 
     o = smooth_add(normal = source, special = extra_input)
     output.icecast(mount = '/radio.ogg', password = 'hackme', %vorbis(quality = 1), o)
