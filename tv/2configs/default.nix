@@ -15,6 +15,7 @@ with import <stockholm/lib>;
     ./bash
     ./htop.nix
     ./nets/hkw.nix
+    ./networkd.nix
     ./nginx
     ./pki
     ./ssh.nix
