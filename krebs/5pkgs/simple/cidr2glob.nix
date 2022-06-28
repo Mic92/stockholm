@@ -1,6 +1,7 @@
-{ python, writeScriptBin, ... }:
+{ python3, writeScriptBin, ... }:
 
 let
+  python = python3;
   pythonEnv = python.withPackages (ps: [ ps.netaddr ]);
 in
   writeScriptBin "cidr2glob" ''
@@ -25,6 +26,6 @@ in
     if __name__ == "__main__":
         for cidr in sys.stdin:
             for glob in cidr2glob(cidr):
-                print glob
+                print(glob)
 
   ''
