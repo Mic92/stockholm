@@ -102,6 +102,7 @@ let
 
   imp = lib.mkMerge [
     { krebs = import ./external { inherit config; }; }
+    { krebs = import ./external/dbalan.nix { inherit config; }; }
     { krebs = import ./external/kmein.nix { inherit config; }; }
     { krebs = import ./external/mic92.nix { inherit config; }; }
     { krebs = import ./external/palo.nix { inherit config; }; }

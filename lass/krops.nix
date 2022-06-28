@@ -37,18 +37,22 @@
 
 in {
 
-  deploy = { target ? "root@${name}/var/src" }: pkgs.krops.writeCommand "deploy" {
+  deploy = { target ? "root@${name}/var/src", offline ? false }: pkgs.krops.writeCommand "deploy" {
     command = targetPath: ''
 
-      set -fu
+      set -xfu
 
       outDir=$(mktemp -d)
       trap "rm -rf $outDir;" INT TERM EXIT
 
-      nix build \
+      build=$(command -v nom-build || echo "nix-build")
+
+      $build \
         -I "${targetPath}" \
-        -f '<nixpkgs/nixos>' config.system.build.toplevel \
-        -o "$outDir/out"
+        '<nixpkgs/nixos>' -A config.system.build.toplevel \
+        -o "$outDir/out" \
+        ${lib.optionalString offline "--option substitute false"} \
+        # -vvvvv --show-trace
 
       nix-env -p /nix/var/nix/profiles/system --set "$outDir/out"
 
