@@ -4,7 +4,7 @@ let
     if elem x xs then
       remove x xs ++ [ x ]
     else
-      names;
+      xs;
 in
 
 self: super:
