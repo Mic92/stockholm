@@ -15,9 +15,9 @@ with import <stockholm/lib>;
     };
   };
 
-  environment.systemPackages = with pkgs; [
-    firefoxWrapper
-    networkmanagerapplet
+  environment.systemPackages = [
+    pkgs.firefox
+    pkgs.networkmanagerapplet
     (pkgs.pidgin-with-plugins.override {
       plugins = [ pkgs.pidginotr ];
     })

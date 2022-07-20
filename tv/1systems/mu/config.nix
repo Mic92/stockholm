@@ -56,26 +56,26 @@ with import <stockholm/lib>;
     ${pkgs.kmod}/bin/modprobe -v iwlwifi
   '';
 
-  environment.systemPackages = with pkgs; [
-    chromium
-    firefoxWrapper
-    gimp
-    iptables
-    libreoffice
-    plasma-pa
+  environment.systemPackages = [
+    pkgs.chromium
+    pkgs.firefox
+    pkgs.gimp
+    pkgs.iptables
+    pkgs.libreoffice
+    pkgs.plasma-pa
     (pkgs.pidgin-with-plugins.override {
       plugins = [ pkgs.pidginotr ];
     })
-    skype
-    slock
-    tinc_pre
-    vim
-    xsane
+    pkgs.skypeforlinux
+    pkgs.slock
+    pkgs.tinc_pre
+    pkgs.vim
+    pkgs.xsane
 
-    #foomatic_filters
-    #gutenprint
-    #cups_pdf_filter
-    #ghostscript
+    #pkgs.foomatic_filters
+    #pkgs.gutenprint
+    #pkgs.cups_pdf_filter
+    #pkgs.ghostscript
   ];
 
 
@@ -97,7 +97,7 @@ with import <stockholm/lib>;
   ];
 
   fonts.fonts = [
-    pkgs.xlibs.fontschumachermisc
+    pkgs.xorg.fontschumachermisc
   ];
 
   services.xserver.enable = true;

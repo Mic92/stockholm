@@ -21,19 +21,19 @@ with import <stockholm/lib>;
     systemd-boot.enable = true;
   };
 
-  environment.systemPackages = with pkgs; [
-    firefoxWrapper
-    gimp
-    kate
-    libreoffice
+  environment.systemPackages = [
+    pkgs.firefox
+    pkgs.gimp
+    pkgs.kate
+    pkgs.libreoffice
     (pkgs.pidgin-with-plugins.override {
       plugins = [ pkgs.pidginotr ];
     })
-    sxiv
-    texlive.combined.scheme-full
-    vim
-    xsane
-    zathura
+    pkgs.sxiv
+    pkgs.texlive.combined.scheme-full
+    pkgs.vim
+    pkgs.xsane
+    pkgs.zathura
   ];
 
   fileSystems = {

@@ -17,21 +17,10 @@ self: super: {
       repo = "flameshot";
       rev = "v${version}";
       sha256 = "sha256-rZUiaS32C77tFJmEkw/9MGbVTVscb6LOCyWaWO5FyR4=";
-   };
-    patches = old.patches or [] ++ {
-      "0.6.0" = [
-        ./flameshot/flameshot_imgur_0.6.0.patch
-      ];
-      "0.9.0" = [
-        ./flameshot/flameshot_imgur_0.9.0.patch
-      ];
-      "0.10.1" = [
-        ./flameshot/flameshot_imgur_0.9.0.patch
-      ];
-      "0.10.2" = [
-        ./flameshot/flameshot_imgur_0.9.0.patch
-      ];
-    }.${old.version} or [];
+    };
+    patches = old.patches or [] ++ [
+      ./flameshot/flameshot_imgur_0.10.2.patch
+    ];
   });
 
   # https://github.com/proot-me/PRoot/issues/106

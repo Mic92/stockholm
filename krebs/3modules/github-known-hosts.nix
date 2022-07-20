@@ -57,6 +57,7 @@
       "20.201.28.151"
       "20.205.243.166"
       "102.133.202.242"
+      "20.248.137.48"
       "18.181.13.223"
       "54.238.117.237"
       "54.168.17.15"
@@ -70,6 +71,7 @@
       "20.201.28.152"
       "20.205.243.160"
       "102.133.202.246"
+      "20.248.137.50"
     ];
     publicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==";
   };
