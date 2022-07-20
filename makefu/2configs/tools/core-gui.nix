@@ -2,7 +2,7 @@
 
 {
   users.users.makefu.packages = with pkgs; [
-    at_spi2_core
+    at-spi2-core
     chromium
     feh
     clipit
@@ -12,7 +12,7 @@
     evince
     # replacement for mirage:
     sxiv
-    gnome3.dconf
+    dconf
     xdotool
     xorg.xbacklight
     scrot
