@@ -1,18 +1,18 @@
 { mkDerivation, aeson, async, attoparsec, base, blessings
-, bytestring, containers, data-default, fetchgit, filepath
-, hashable, lens, lens-aeson, network, network-simple
-, network-simple-tls, network-uri, pcre-light, process, random
-, servant-server, lib, string-conversions, stringsearch, text
-, time, transformers, unagi-chan, unix, unordered-containers
-, vector, wai, warp
+, bytestring, containers, data-default, filepath, hashable, lens
+, lens-aeson, lib, network, network-simple, network-simple-tls
+, network-uri, pcre-light, process, random, servant-server
+, string-conversions, stringsearch, text, time, transformers
+, unagi-chan, unix, unordered-containers, vector, wai, warp
+, fetchgit
 }:
-mkDerivation rec {
+mkDerivation {
   pname = "reaktor2";
-  version = "0.4.0a";
+  version = "0.4.2";
   src = fetchgit {
-    url = "https://cgit.lassul.us/reaktor2";
-    sha256 = "sha256-x1i2TWcycYVFij6832xaBiQa1RQ1VmSfu5Qt1QrUtds=";
-    rev = "6d3eb6de5e770ee26874bb7449934f0c55bd1efa";
+    url = "https://cgit.krebsco.de/reaktor2";
+    hash = "sha256-JPQyy0hDSH5JqQGjwoO5BNsD4qk+GKP1VH+j4/2cqes";
+    rev = "53a11f421fb18e8687fa06e5511cea8bd9defc36";
     fetchSubmodules = true;
   };
   isLibrary = false;
