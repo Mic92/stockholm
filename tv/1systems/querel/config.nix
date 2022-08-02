@@ -26,8 +26,8 @@ with import <stockholm/lib>;
     pkgs.gimp
     pkgs.kate
     pkgs.libreoffice
-    (pkgs.pidgin-with-plugins.override {
-      plugins = [ pkgs.pidginotr ];
+    (pkgs.pidgin.override {
+      plugins = [ pkgs.pidgin-otr ];
     })
     pkgs.sxiv
     pkgs.texlive.combined.scheme-full

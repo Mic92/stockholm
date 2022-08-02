@@ -63,8 +63,8 @@ with import <stockholm/lib>;
     pkgs.iptables
     pkgs.libreoffice
     pkgs.plasma-pa
-    (pkgs.pidgin-with-plugins.override {
-      plugins = [ pkgs.pidginotr ];
+    (pkgs.pidgin.override {
+      plugins = [ pkgs.pidgin-otr ];
     })
     pkgs.skypeforlinux
     pkgs.slock
