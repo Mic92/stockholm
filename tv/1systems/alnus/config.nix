@@ -18,8 +18,8 @@ with import <stockholm/lib>;
   environment.systemPackages = [
     pkgs.firefox
     pkgs.networkmanagerapplet
-    (pkgs.pidgin-with-plugins.override {
-      plugins = [ pkgs.pidginotr ];
+    (pkgs.pidgin.override {
+      plugins = [ pkgs.pidgin-otr ];
     })
   ];
 
