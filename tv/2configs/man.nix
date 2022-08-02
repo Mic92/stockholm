@@ -5,9 +5,9 @@
   #    s:^NROFF\t.*:& -Wbreak:
   #  '
   #'';
-  environment.systemPackages = with pkgs; [
-    manpages
-    posix_man_pages
-    xorg.xorgdocs
+  environment.systemPackages = [
+    pkgs.man-pages
+    pkgs.posix_man_pages
+    pkgs.xorg.xorgdocs
   ];
 }

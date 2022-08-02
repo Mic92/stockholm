@@ -7,7 +7,7 @@ module Main (main) where
 import System.Exit (exitFailure)
 
 import Control.Exception
-import Control.Monad.Extra (ifM, whenJustM)
+import Control.Monad.Extra (whenJustM)
 import qualified Data.List
 import Graphics.X11.ExtraTypes.XF86
 import Text.Read (readEither)
@@ -68,7 +68,9 @@ mainNoArgs :: IO ()
 mainNoArgs = do
     workspaces0 <- getWorkspaces0
     handleShutdownEvent <- newShutdownEventHandler
-    launch
+    let
+      config =
+        id
         $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
         $ def
             { terminal          = {-pkg:rxvt_unicode-}"urxvtc"
@@ -100,6 +102,8 @@ mainNoArgs = do
             , focusedBorderColor = "#f000b0"
             , handleEventHook = handleShutdownEvent
             }
+    directories <- getDirectories
+    launch config directories
 
 
 getWorkspaces0 :: IO [String]

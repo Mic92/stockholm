@@ -1,10 +1,10 @@
-with import <stockholm/lib>;
+with import ../../lib;
 let
   pushBack = x: xs:
     if elem x xs then
       remove x xs ++ [ x ]
     else
-      names;
+      xs;
 in
 
 self: super:

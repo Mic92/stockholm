@@ -38,7 +38,7 @@ in {
   ];
 
   fonts.fonts = [
-    pkgs.xlibs.fontschumachermisc
+    pkgs.xorg.fontschumachermisc
   ];
 
   services.xserver = {
@@ -128,7 +128,7 @@ in {
         config.imgur.xdg-open.browser = "/etc/profiles/per-user/tv/bin/cr";
         config.timeout = 200;
       })
-      pkgs.pulseaudioLight.out
+      pkgs.pulseaudio.out
       pkgs.rxvt_unicode
       pkgs.xcalib
       "/run/wrappers" # for su

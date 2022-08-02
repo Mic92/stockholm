@@ -1,24 +1,24 @@
-with import <stockholm/lib>;
 self: super: let
+  lib = super.lib;
 
   # This callPackage will try to detect obsolete overrides.
   callPackage = path: args: let
     override =  super.callPackage path args;
-    upstream = optionalAttrs (override ? "name")
-      (super.${(parseDrvName override.name).name} or {});
+    upstream = lib.optionalAttrs (override ? "name")
+      (super.${(builtins.parseDrvName override.name).name} or {});
   in if upstream ? "name" &&
         override ? "name" &&
-        compareVersions upstream.name override.name != -1
+        builtins.compareVersions upstream.name override.name != -1
     then
-      trace
+      builtins.trace
         "Upstream `${upstream.name}' gets overridden by `${override.name}'."
         override
     else override;
 
    subdirsOf = path:
-     mapAttrs (name: _: path + "/${name}")
-              (filterAttrs (_: eq "directory") (readDir path));
+     lib.mapAttrs (name: _: path + "/${name}")
+              (lib.filterAttrs (_: x: x == "directory") (builtins.readDir path));
 
-in mapAttrs (_: flip callPackage {})
-            (filterAttrs (_: dir: pathExists (dir + "/default.nix"))
+in lib.mapAttrs (_: lib.flip callPackage {})
+            (lib.filterAttrs (_: dir: lib.pathExists (dir + "/default.nix"))
                          (subdirsOf ./.))

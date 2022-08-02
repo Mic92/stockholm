@@ -15,6 +15,7 @@ with import <stockholm/lib>;
     ./bash
     ./htop.nix
     ./nets/hkw.nix
+    ./networkd.nix
     ./nginx
     ./pki
     ./ssh.nix
@@ -46,7 +47,7 @@ with import <stockholm/lib>;
 
     {
       # TODO check if both are required:
-      nix.sandboxPaths = [ "/etc/protocols" pkgs.iana_etc.outPath ];
+      nix.sandboxPaths = [ "/etc/protocols" pkgs.iana-etc.outPath ];
 
       nix.requireSignedBinaryCaches = true;
 
