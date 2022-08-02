@@ -61,7 +61,7 @@ let
       ];
       hooks.PRIVMSG = [
         {
-          pattern = "^bier bal(an(ce)?)?$";
+          pattern = "^bier (ballern|bal(an(ce)?)?)$";
           activate = "match";
           command = {
             env = {
