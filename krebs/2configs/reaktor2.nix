@@ -90,6 +90,10 @@ let
               amt=$2
               unit=$3
               printf '%s\n  %s  %d %s\n  %s  %d %s\n' "$(date -Id)" "$tonick" "$amt" "$unit" "$_from" "$(expr 0 - "''${amt#+}")" "$unit" >> $state_file
+              ${pkgs.hledger}/bin/hledger -f $state_file bal -N -O csv \
+                | ${pkgs.coreutils}/bin/tail +2 \
+                | ${pkgs.miller}/bin/mlr --icsv --opprint cat \
+                | ${pkgs.gnugrep}/bin/grep "$_from"
             '';
           };
         }
