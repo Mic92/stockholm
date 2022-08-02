@@ -8,7 +8,7 @@ self: super: let
       (super.${(builtins.parseDrvName override.name).name} or {});
   in if upstream ? "name" &&
         override ? "name" &&
-        lib.compareVersions upstream.name override.name != -1
+        builtins.compareVersions upstream.name override.name != -1
     then
       builtins.trace
         "Upstream `${upstream.name}' gets overridden by `${override.name}'."
