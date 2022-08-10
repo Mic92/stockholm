@@ -92,6 +92,16 @@ with import <stockholm/lib>;
     ];
   };
 
+  systemd.services.paste-gc = {
+    startAt = "daily";
+    serviceConfig = {
+      ExecStart = ''
+        ${pkgs.findutils}/bin/find /var/lib/htgen-paste/items -type f -mtime '+30' -exec rm {} \;
+      '';
+      User = "htgen-paste";
+    };
+  };
+
   krebs.htgen.paste-form = {
     port = 7770;
     script = /* sh */ ''
