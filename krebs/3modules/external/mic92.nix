@@ -10,66 +10,6 @@ with import <stockholm/lib>;
   });
 in {
   hosts = mapAttrs hostDefaults {
-    amy = {
-      owner = config.krebs.users.mic92;
-      nets = rec {
-        internet = {
-          ip4.addr = "129.215.165.57";
-          ip6.addr = "2001:630:3c1:164:b62e:99ff:fe3e:d369";
-          aliases = [ "amy.i" ];
-        };
-        retiolum = {
-          ip4.addr = "10.243.29.181";
-          aliases = [ "amy.r" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAr3jQRA1+hLKYVgHJA2ax5W8J3GVMTnaGpYw9Q2xXXrX/jxLZ6Ia8
-            hBjIcCBDVL5Q3FnyrKB9NJeeIvCOKg8WG+8O0+wKcePKd0Vhbsx4Whog/6PWs6qh
-            q2sURs2tp1hjHks4kZo2WtiYD7Ue9HHdV6FlUO6yuBV0bW2RzHdLPCDSGxnQVkBM
-            tSwAvMCZwvVBiv4m6RyMXqmpdbAPBzgJcmJS0FY+zGxpiwsR/AdoVvnzYyFMCVpG
-            iFl5+k9OGhUJq72MwAXzjW5ZdCPrG+2Dd+QBhhtIMJGA2sJiJteT8vdvpTNCiHJ/
-            HnW7movliN2mW86qwo7QqB5v0c9f9TjfpOld7sS/4vE3zlGi/Stf6SQWaoXez/u3
-            /P9GzupcYgj76m8Z3j7BMHXCBw8iwP2pZpL9hnLdIyCcyLrzXDIzq4hlt60DPhSU
-            klTDBUA/cUdSJGcSn2N+WHLOTfI6qeBNKqcTk70OQsa69jAJeAtA+I9OprNYOXqb
-            MmQakNNlrTaNtGQxfQqEL+wqHlo8CVDGm3O9pQSNF309P4TLNU1EYm+ItScNiVCE
-            DKhcgvE6xHCwZnVyJN8MMy1CVyDmnHVYoaTEZ2cCvNi/hXIXgO9KWjSpAv5tP764
-            UkOE4dlDpEW6G1pNf84BERfRYGDj29A/Jk9LJC/6D09QJXNu18HR0sUCAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "6VktF9Fg9E0hCW5g+rwGnrPACPSx/8vkl+hPNaFYeND";
-        };
-      };
-    };
-    clara = {
-      owner = config.krebs.users.mic92;
-      nets = rec {
-        internet = {
-          ip4.addr = "129.215.165.58";
-          ip6.addr = "2001:630:3c1:164:b62e:99ff:fe3d:70f2";
-          aliases = [ "clara.i" ];
-        };
-        retiolum = {
-          ip4.addr = "10.243.29.182";
-          aliases = [ "clara.r" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEA07G1n2sA804nnjWQzq0Fi9i6kxJUo+jVJjtkm5unw3hjflAAd/3d
-            WN+01GdJCk/gr7DfU/Xr5KnR39Z3ADoT1tbUb+i5AJZ5/8VHUwWM8D8mQAam6LBf
-            UEeLxhVH8rG6lHaKwVi9oe4gPhgptUOzX/YIlJOMYDlYRxc7Wbj7YQOAKlPuTAjY
-            Z5bLswfkqTMO0cioJNwwMCNWSMJf3jbKi3eTQ36sf7TDMEneNGSBUpeSjGddoNT/
-            rrVIDDT8tGmtACKr+3Y0H+EA2K5IxdQKKfnPRR31RBWiTkEXBbaJzYO/ZV5/xlbN
-            wmblskwq9d9IwDY7qeMctci+ZUZ3epG8MUwYa4faOrgmmkQpa5B+6UOMzw/WDJEc
-            jTfvSzfPo4anoj8C+MOQYzRvYmp60YEZKomv2BQdBvpGIpUul8WAR2aV0K+wz66e
-            mUamljAXmLiPxgGKduX5VFVuXzYxeMiBBujQCLTjc+xTB2EdwihxNX1rkxz10BDc
-            WrgPV+/VVyThKhOvVCifWARHtT2VGcZazfQOW/y3ZmEPOYuc5ZvrSEiMeG3f64+v
-            UU8cQZ3yBLIhTtC+38pRlsdBQHt526q0j0rrnd30JXVAUdWBunP2UJ5QGtA8/mWn
-            cWSlvRf5sfbyrISz6+mLPM2qGHnCkKwORNxmv/1DY07O3Rn6hX0OY4ECAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "qnJmS6W7QSKG3mjW1kPnHGeVmKzhGkyP9xBLGwH5XvD";
-        };
-      };
-    };
     dimitrios = {
       owner = config.krebs.users.mic92;
       nets = {
@@ -108,37 +48,6 @@ in {
             8y3It9Tgji3G9nOFbhaeKDjeIAJ8sG+WjQIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
-        };
-      };
-    };
-    donna = {
-      owner = config.krebs.users.mic92;
-      nets = rec {
-        internet = {
-          ip4.addr = "129.215.165.54";
-          ip6.addr = "2001:630:3c1:164:30a2:6e7b:c58b:cafd";
-          aliases = [ "donna.i" ];
-        };
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.29.180";
-          aliases = [ "donna.r" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAnv5zVPwjHk5Q72D3tv2rlQkp7SOsZD7Wvz8l1yI/mWkxoriJ9MVa
-            x8RziSB3KF8sF1lRWIKmuynkgLI3w0X/YFs/fAvtayxk6Qf8DOl23Vd8Is0h/i3I
-            0fCmCEIHhHboKsREW6NxY7w5WAI2+SFNmGef1P7vzrAv7iLyPbo9nQ8wlrAmc+PJ
-            Ao3BOf4U7kP778fhsPA4dlGtF2v9CBhygeGVI/DQR8jcvzeiPd2Dr0k/JvrVMYtf
-            wJW4xUwZkIpws/yfI8b4VJOFl2X/Yw9712Z8Jvga0rR32OG4YbnggvuCMum1g94k
-            YwMjaSckv1XTalvPQuf1Od96XzwL2hjPFpEK3Tdl4AitMnArgj9HNzhcRL+eGonf
-            U24zk52OToHnoP3palNpodi7DziIBeXIaIMl7VMXku2ymbOUJsI6zeew+uZahJkv
-            QIWjxveQ8N40BoTc8Yg6pea1AId3l4f3brtwJbQOVbb3bVQ5VcrxM9Q/TBvyADYR
-            Knwszxw3uBw5Za1FMbwCPwd8/y/Ar19qGCx25xK0QnsyqZZT/cHsbBOTzh6BBWwI
-            IzbYu49VO/B1rktYzZ2l2ENQy6OILXWbvFjC8Pt8f1ZZQ4A21PyNA1AdyJ/rbVj7
-            awm3OnnvKSvMCXWnwHPFHjksb3qMx96Aep1cw3ZBx0sQQ41UWBoOsi8CAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "ikUmx5IC1dvfaHFhpZM9xotwF2LH6EkvpcPTRm6TjeD";
         };
       };
     };
@@ -497,37 +406,6 @@ in {
         };
       };
     };
-    rose = {
-      owner = config.krebs.users.mic92;
-      nets = rec {
-        internet = {
-          ip4.addr = "129.215.165.52";
-          ip6.addr = "2001:630:3c1:164:6d4:c4ff:fe04:4e4b";
-          aliases = [ "rose.i" ];
-        };
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.29.178";
-          aliases = [ "rose.r" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEA0h88uEcgVFhggGh3xqHySt8T+oDdoSN8ve4ZPmMzrGCD4dnlWcUO
-            6uMiwE7XG667wvjB0J2RbCJ8n8/r6eQgp6sRfPzSQL/Mc74J+py+sOVOjjjL5wJX
-            btrYmASO3GKUSMhGmM0IiwHMIPrmUViaREDrweF3bUwK45d/ocqpBkc+nF27kksd
-            DMYjHMWRIkKuQaj592zo/kY1pAJ/yAvDPess0x1CLL6uDNbjTr2S/L7JHdzZs9Xq
-            1+SGdVtqD0sWgSBKA0PC/Mi+Divd4PC1SoSL7wZRWD0Y2DNgj3+xUc7hAWRCw2Gs
-            5wofK+qiwnyYAmeNYcyQfDLosKZF9hOM8U3UbxptkPLsOK3cfZoGoLQCuOryVDBe
-            6GfJkJ49WfuSSNWs3WPWL6/6zmVPeGR0TvoMt02VQ3cKTmeIkWyTIzSVoC7wYv5D
-            Dl8Xt3aFr9UFI2GxenesViyuDLi8cy2fOsM3r+gowXQtgEKoXc9W2vyPwIIlcWUJ
-            QrKVsyNlkKKL0YjsnGazaEvqdiE30/Iq7f7VBnXnWXRLnZhr85HbTdDQnpT4GcEv
-            W3jpl1y5zShr5Hz90QoYcUTsxg9uk/+yqKpwUySZ6Gh4q0bo5k7nkM9i8mCMfNGZ
-            0UU94QmwS9RoV4Mt4pSLYRcCs0mVeEjLuIfTFHkXc6LCjBWMn8ICfeMCAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "0O1LrgXAFOuei1NfU0vow+qUfim3htBOyCJvPrQFwHE";
-        };
-      };
-    };
     turingmachine = {
       owner = config.krebs.users.mic92;
       nets = rec {
@@ -658,26 +536,6 @@ in {
             -----END PUBLIC KEY-----
           '';
           tinc.pubkey_ed25519 = "7rbs+10zzfwOPj5RoS1i/01QXuw7uIHGOHIgsjB2fHK";
-        };
-      };
-    };
-    doctor = {
-      owner = config.krebs.users.mic92;
-      nets = rec {
-        retiolum = {
-          ip4.addr = "10.243.29.186";
-          aliases = [ "doctor.r" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAx0zdjPX9C0fBQR+8kdlsBTuMr4KxWhqw4ARqW02oSGKJxY+D57oO
-            ORVfjBhrvIiZJfXaY0M+/n+M4Bvt4r5ol3N1NxkT7vc0bAbz9Kk/0M8dlspNoSO9
-            WW+mITVfxg/DgzDegjj4TOrsWC1jBjo4PVrvA+PnxZC4VucnqZZ55JHWAk/mPtzs
-            PUc3mkn3e9pwwrJMQRy7qg9fbatljHCb/fJoDk6DiQP4ZRE/pCf4OYCx7huHibsd
-            EMp7y5QJySmKwJ/XsS6yiHeYXLFwWvfReja/IRFL4RiDSW+6ES4PTEXxoLVDpqgv
-            KF44qim4UBabCMTPVtZcU3Rr+ufBALKJCwIDAQAB
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "PmZ8i6lB0Ij/d8qjA0y3QI2rMAlrTZn1ES/hUSNNWMP";
         };
       };
     };
