@@ -8,18 +8,13 @@ with import <stockholm/lib>;
     recommendedOptimisation = true;
     recommendedTlsSettings = true;
 
-    virtualHosts._http = {
+    virtualHosts.${toJSON ""} = {
       default = true;
       extraConfig = ''
-        return 404;
+        error_page 400 =444 /;
+        return 444;
       '';
-    };
-
-    virtualHosts.default = {
-      locations."= /etc/os-release".extraConfig = ''
-        default_type text/plain;
-        alias /etc/os-release;
-      '';
+      rejectSSL = true;
     };
   };
   tv.iptables = {
