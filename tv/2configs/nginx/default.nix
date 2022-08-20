@@ -4,6 +4,8 @@ with import <stockholm/lib>;
 
 {
   services.nginx = {
+    enableReload = true;
+
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
     recommendedTlsSettings = true;
