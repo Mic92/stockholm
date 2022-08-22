@@ -82,20 +82,32 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = pkgs.writeDash "ejabberd" ''
-          ${pkgs.coreutils}/bin/ln -s "$CREDENTIALS_DIRECTORY" /tmp/credentials
-          ${gen-dhparam} ${cfg.stateDir}/dhfile
-          exec ${cfg.pkgs.ejabberd}/bin/ejabberdctl foreground
-        '';
+        ExecStartPre = [
+          "${pkgs.coreutils}/bin/ln -s \${CREDENTIALS_DIRECTORY} /tmp/credentials"
+          "${gen-dhparam} ${cfg.stateDir}/dhfile"
+        ];
+        ExecStart = "${cfg.pkgs.ejabberd}/bin/ejabberdctl foreground";
+        ExecStop = [
+          "${cfg.pkgs.ejabberd}/bin/ejabberdctl stop"
+          "${cfg.pkgs.ejabberd}/bin/ejabberdctl stopped"
+        ];
+        ExecReload = "${cfg.pkgs.ejabberd}/bin/ejabberdctl reload_config";
         LoadCredential = [
           "certfile:${cfg.certfile}"
         ];
+        LimitNOFILE = 65536;
+        PrivateDevices = true;
         PrivateTmp = true;
         SyslogIdentifier = "ejabberd";
         StateDirectory = "ejabberd";
         User = "ejabberd";
         DynamicUser = true;
-        TimeoutStartSec = 60;
+        TimeoutSec = 60;
+        RestartSec = 5;
+        Restart = "on-failure";
+        Type = "notify";
+        NotifyAccess = "all";
+        WatchdogSec = 30;
       };
     };
   };
