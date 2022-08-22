@@ -86,7 +86,6 @@ in {
         LoadCredential = [
           "certfile:${cfg.certfile}"
         ];
-        PermissionsStartOnly = true;
         PrivateTmp = true;
         SyslogIdentifier = "ejabberd";
         StateDirectory = "ejabberd";
