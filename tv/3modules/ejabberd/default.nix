@@ -33,8 +33,11 @@ in {
                   inherit pkgs;
                   config = cfg;
                 })} \
-                --logs ${shell.escape cfg.user.home} \
-                --spool ${shell.escape cfg.user.home} \
+                --ctl-config ${toFile "ejabberdctl.cfg" /* sh */ ''
+                  ERL_OPTIONS='-setcookie ${cfg.stateDir}/.erlang.cookie'
+                ''} \
+                --logs ${cfg.stateDir} \
+                --spool ${cfg.stateDir} \
                 "$@"
           '')
           pkgs.ejabberd
@@ -47,12 +50,10 @@ in {
         config.krebs.users.tv.mail
       ];
     };
-    user = mkOption {
-      type = types.user;
-      default = {
-        name = "ejabberd";
-        home = "/var/lib/ejabberd";
-      };
+    stateDir = mkOption {
+      type = types.absolute-pathname;
+      default = "/var/lib/ejabberd";
+      readOnly = true;
     };
   };
   config = lib.mkIf cfg.enable {
@@ -61,10 +62,13 @@ in {
         name = "ejabberd-sudo-wrapper";
         paths = [
           (pkgs.writeDashBin "ejabberdctl" ''
-            set -efu
-            cd ${shell.escape cfg.user.home}
-            exec /run/wrappers/bin/sudo \
-                -u ${shell.escape cfg.user.name} \
+            exec ${pkgs.systemd}/bin/systemd-run \
+                --unit=ejabberdctl \
+                --property=StateDirectory=ejabberd \
+                --property=User=ejabberd \
+                --collect \
+                --pipe \
+                --quiet \
                 ${cfg.pkgs.ejabberd}/bin/ejabberdctl "$@"
           '')
           cfg.pkgs.ejabberd
@@ -80,7 +84,7 @@ in {
       serviceConfig = {
         ExecStart = pkgs.writeDash "ejabberd" ''
           ${pkgs.coreutils}/bin/ln -s "$CREDENTIALS_DIRECTORY" /tmp/credentials
-          ${gen-dhparam} /var/lib/ejabberd/dhfile
+          ${gen-dhparam} ${cfg.stateDir}/dhfile
           exec ${cfg.pkgs.ejabberd}/bin/ejabberdctl foreground
         '';
         LoadCredential = [
@@ -89,18 +93,10 @@ in {
         PrivateTmp = true;
         SyslogIdentifier = "ejabberd";
         StateDirectory = "ejabberd";
-        User = cfg.user.name;
+        User = "ejabberd";
+        DynamicUser = true;
         TimeoutStartSec = 60;
       };
     };
-
-    users.users.${cfg.user.name} = {
-      inherit (cfg.user) home name uid;
-      createHome = true;
-      group = cfg.user.name;
-      isSystemUser = true;
-    };
-
-    users.groups.${cfg.user.name} = {};
   };
 }

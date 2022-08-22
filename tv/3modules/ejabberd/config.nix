@@ -62,7 +62,7 @@ in /* yaml */ ''
       module: ejabberd_c2s
       shaper: c2s_shaper
       ciphers: ${toJSON ciphers}
-      dhfile: /var/lib/ejabberd/dhfile
+      dhfile: ${config.stateDir}/dhfile
       protocol_options: ${toJSON protocol_options}
       starttls: true
       starttls_required: true
@@ -112,7 +112,7 @@ in /* yaml */ ''
 
   s2s_access: s2s
   s2s_ciphers: ${toJSON ciphers}
-  s2s_dhfile: /var/lib/ejabberd/dhfile
+  s2s_dhfile: ${config.stateDir}/dhfile
   s2s_protocol_options: ${toJSON protocol_options}
   s2s_tls_compression: false
   s2s_use_starttls: required
