@@ -109,7 +109,6 @@ let {
     };
     q = {};
     reaktor2 = {};
-    regfish = {};
     stockholm = {
       cgit.desc = "NixOS configuration";
     };
@@ -156,6 +155,7 @@ let {
     painload = {};
     push = {};
     Reaktor = {};
+    regfish = {};
     with-tmpdir = {};
     get = {};
     load-env = {};
