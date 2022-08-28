@@ -1,31 +1,27 @@
 { mkDerivation, attoparsec, base, base64-bytestring, bytestring
 , case-insensitive, concise, deepseq, fetchgit, hedgehog, lens, lib
-, QuickCheck, quickcheck-instances, semigroupoids, semigroups
+, QuickCheck, quickcheck-instances, random, semigroupoids
 , stringsearch, tasty, tasty-golden, tasty-hedgehog, tasty-hunit
 , tasty-quickcheck, text, time
 }:
 mkDerivation {
   pname = "purebred-email";
-  version = "0.4.3";
+  version = "0.5.1";
   src = fetchgit {
     url = "https://github.com/purebred-mua/purebred-email";
-    sha256 = "06xhccavrdzfsvg65mzdnp0a7b1ilk2rqpnyvkr171ir6mqdpb19";
-    rev = "769b360643f699c0a8cd6f1c3a3de36cf0479834";
+    sha256 = "0iilyy5dkbzbiazyyfjdz585c3x8b7c2piynmycm7krkc48993vw";
+    rev = "7ba346e10ad1521a923bc04a4ffeca479d8dd071";
     fetchSubmodules = true;
   };
-  patches = [
-    ./untweak-mime-version-header.patch
-  ];
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
     attoparsec base base64-bytestring bytestring case-insensitive
-    concise deepseq lens semigroupoids semigroups stringsearch text
-    time
+    concise deepseq lens random semigroupoids stringsearch text time
   ];
   testHaskellDepends = [
     attoparsec base bytestring case-insensitive hedgehog lens
-    QuickCheck quickcheck-instances semigroups tasty tasty-golden
+    QuickCheck quickcheck-instances random tasty tasty-golden
     tasty-hedgehog tasty-hunit tasty-quickcheck text time
   ];
   homepage = "https://github.com/purebred-mua/purebred-email";
