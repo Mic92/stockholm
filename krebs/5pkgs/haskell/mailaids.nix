@@ -1,14 +1,14 @@
 { mkDerivation, aeson, aeson-pretty, base, bytestring
-, case-insensitive, fetchgit, lens, optparse-applicative
-, purebred-email, lib, text, vector, word8
+, case-insensitive, fetchgit, lens, lib, optparse-applicative
+, purebred-email, text, vector, word8
 }:
 mkDerivation {
   pname = "mailaids";
-  version = "1.0.0";
+  version = "1.1.0";
   src = fetchgit {
     url = "https://cgit.krebsco.de/mailaids";
-    sha256 = "15h0k82czm89gkwhp1rwdy77jz8dmb626qdz7c2narvz9j7169v5";
-    rev = "8f11927ea74d6adb332c884502ebd9c486837523";
+    sha256 = "0mkq3b0j28h7ydg6aaqlqnvajb8nhdc9g7rmil2d4vl5fxxaqspv";
+    rev = "a25fc32eceefc10a91ef77ff2763b3f1b9324aaf";
     fetchSubmodules = true;
   };
   isLibrary = false;
