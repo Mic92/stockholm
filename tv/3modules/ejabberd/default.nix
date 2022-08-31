@@ -15,9 +15,19 @@
 in {
   options.tv.ejabberd = {
     enable = mkEnableOption "tv.ejabberd";
-    certfile = mkOption {
-      type = types.absolute-pathname;
-      default = toString <secrets> + "/ejabberd.pem";
+    certfiles = mkOption {
+      type = types.listOf types.absolute-pathname;
+      default = [
+        (toString <secrets> + "/ejabberd.pem")
+      ];
+    };
+    credentials.certfiles = mkOption {
+      internal = true;
+      readOnly = true;
+      default =
+        imap
+          (i: const /* yaml */ "/tmp/credentials/certfile${toJSON i}")
+          cfg.certfiles;
     };
     hosts = mkOption {
       type = with types; listOf str;
@@ -92,9 +102,11 @@ in {
           "${cfg.pkgs.ejabberd}/bin/ejabberdctl stopped"
         ];
         ExecReload = "${cfg.pkgs.ejabberd}/bin/ejabberdctl reload_config";
-        LoadCredential = [
-          "certfile:${cfg.certfile}"
-        ];
+        LoadCredential =
+          zipListsWith
+            (dst: src: "${baseNameOf dst}:${src}")
+            cfg.credentials.certfiles
+            cfg.certfiles;
         LimitNOFILE = 65536;
         PrivateDevices = true;
         PrivateTmp = true;

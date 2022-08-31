@@ -48,8 +48,7 @@ in /* yaml */ ''
         - "::1/128"
         - "::FFFF:127.0.0.1/128"
 
-  certfiles:
-    - /tmp/credentials/certfile
+  certfiles: ${toJSON config.credentials.certfiles}
 
   hosts: ${toJSON config.hosts}
 
