@@ -74,6 +74,8 @@ with import <stockholm/lib>;
   services.xserver.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "dv";
 
+  system.stateVersion = "22.05";
+
   users.users.dv = {
     inherit (config.krebs.users.dv) home uid;
     isNormalUser = true;
