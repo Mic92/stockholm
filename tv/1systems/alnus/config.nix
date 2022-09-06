@@ -71,11 +71,9 @@ with import <stockholm/lib>;
     };
 
     desktopManager.xfce.enable = true;
-
-    displayManager.lightdm.autoLogin.enable = true;
-    displayManager.lightdm.autoLogin.user = "dv";
-    displayManager.lightdm.enable = true;
   };
+  services.xserver.displayManager.autoLogin.enable = true;
+  services.xserver.displayManager.autoLogin.user = "dv";
 
   users.users.dv = {
     inherit (config.krebs.users.dv) home uid;
