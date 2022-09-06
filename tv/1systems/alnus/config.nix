@@ -69,9 +69,8 @@ with import <stockholm/lib>;
       enable = true;
       twoFingerScroll = true;
     };
-
-    desktopManager.xfce.enable = true;
   };
+  services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "dv";
 
