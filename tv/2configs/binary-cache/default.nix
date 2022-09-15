@@ -11,22 +11,7 @@
 
   services.nix-serve = {
     enable = true;
-    secretKeyFile = config.krebs.secret.files.binary-cache-seckey.path;
-  };
-
-  systemd.services.nix-serve = {
-    after = [
-      config.krebs.secret.files.binary-cache-seckey.service
-    ];
-    partOf = [
-      config.krebs.secret.files.binary-cache-seckey.service
-    ];
-  };
-
-  krebs.secret.files.binary-cache-seckey = {
-    path = "/run/secret/nix-serve.key";
-    owner.name = "nix-serve";
-    source-path = toString <secrets> + "/nix-serve.key";
+    secretKeyFile = toString <secrets> + "/nix-serve.key";
   };
 
   services.nginx = {
