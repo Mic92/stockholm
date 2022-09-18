@@ -20,4 +20,15 @@ with import <stockholm/lib>;
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp --dport 4713"; target = "ACCEPT"; } # pulseaudio
   ];
+
+  environment.systemPackages = [
+    (pkgs.writers.writeDashBin "snapmpv" ''
+      /run/current-system/sw/bin/mpv \
+        --audio-display=no --audio-channels=stereo \
+        --audio-samplerate=48000 --audio-format=s16 \
+        --ao-pcm-file=/run/snapserver/snapfifo --ao=pcm \
+        --audio-delay=-1 \
+        "$@"
+    '')
+  ];
 }
