@@ -1,6 +1,17 @@
-{ config, lib, pkgs, stockholm, ...}:
+{ config, lib, pkgs, ...}:
+let
 
+  nix-serve-ng-src = builtins.fetchTarball {
+    # Replace the URL and hash with whatever you actually need
+    url    = "https://github.com/aristanetworks/nix-serve-ng/archive/1937593598bb1285b41804f25cd6f9ddd4d5f1cb.tar.gz";
+    sha256 = "1lqd207gbx1wjbhky33d2r8xi6avfbx4v0kpsvn84zaanifdgz2g";
+  };
+
+  nix-serve-ng = import nix-serve-ng-src;
+
+in
 {
+  imports = [ nix-serve-ng.nixosModules.default ];
   # generate private key with:
   # nix-store --generate-binary-cache-key my-secret-key my-public-key
   services.nix-serve = {
