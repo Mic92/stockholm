@@ -71,7 +71,7 @@ in {
           export PATH=${lib.makeSearchPath "bin" [
             pkgs.tmux
             pkgs.gnugrep
-            pkgs.weechat
+            pkgs.weechat-tv
           ]}
           if tmux list-sessions -F\#S | grep -q '^im''$'; then
             exec tmux attach -t im

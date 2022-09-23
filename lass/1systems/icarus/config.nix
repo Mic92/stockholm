@@ -10,6 +10,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/git.nix>
     <stockholm/lass/2configs/exim-retiolum.nix>
     <stockholm/lass/2configs/baseX.nix>
+    <stockholm/lass/2configs/pipewire.nix>
     <stockholm/lass/2configs/browsers.nix>
     <stockholm/lass/2configs/programs.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
@@ -21,6 +22,7 @@ with import <stockholm/lib>;
     #<stockholm/lass/2configs/prism-share.nix>
     <stockholm/lass/2configs/network-manager.nix>
     <stockholm/lass/2configs/home-media.nix>
+    <stockholm/lass/2configs/snapclient.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.icarus;

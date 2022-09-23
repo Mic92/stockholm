@@ -164,15 +164,26 @@ in {
       extraZones = {
         "krebsco.de" = ''
           ni          60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
+          ni          60 IN AAAA ${config.krebs.hosts.ni.nets.internet.ip6.addr}
           cgit        60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
+          cgit        60 IN AAAA ${config.krebs.hosts.ni.nets.internet.ip6.addr}
           cgit.ni     60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
+          cgit.ni     60 IN AAAA ${config.krebs.hosts.ni.nets.internet.ip6.addr}
           krebsco.de. 60 IN MX 5 ni
           krebsco.de. 60 IN TXT v=spf1 mx -all
+          tv          300 IN NS ni
         '';
       };
       nets = {
         internet = {
-          ip4.addr = "188.68.36.196";
+          ip4 = rec {
+            addr = "188.68.36.196";
+            prefix = "${addr}/32";
+          };
+          ip6 = rec {
+            addr = "2a03:4000:13:4c::1";
+            prefix = "${addr}/64";
+          };
           aliases = [
             "ni.i"
             "cgit.ni.i"

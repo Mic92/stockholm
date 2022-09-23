@@ -8,6 +8,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/mouse.nix>
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/baseX.nix>
+    <stockholm/lass/2configs/pipewire.nix>
     <stockholm/lass/2configs/exim-retiolum.nix>
     <stockholm/lass/2configs/browsers.nix>
     <stockholm/lass/2configs/programs.nix>
@@ -23,6 +24,8 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/sync/sync.nix>
     # <stockholm/lass/2configs/idc.nix>
     <stockholm/lass/2configs/ppp/umts-stick.nix>
+    <stockholm/lass/2configs/snapserver.nix>
+    <stockholm/lass/2configs/snapclient.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.styx;

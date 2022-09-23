@@ -61,6 +61,11 @@ with import <stockholm/lib>;
       proxy_set_header X-Forwarded-Proto $scheme;
       proxy_pass http://127.0.0.1:${toString config.krebs.htgen.paste.port};
     '';
+    locations."/form".extraConfig = ''
+      client_max_body_size 4G;
+      proxy_set_header Host $host;
+      proxy_pass http://127.0.0.1:${toString config.krebs.htgen.paste-form.port};
+    '';
     locations."/image".extraConfig = ''
       proxy_set_header Host $host;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -85,6 +90,43 @@ with import <stockholm/lib>;
       "STATEDIR=$HOME"
       ". ${pkgs.htgen}/examples/paste"
     ];
+  };
+
+  systemd.services.paste-gc = {
+    startAt = "daily";
+    serviceConfig = {
+      ExecStart = ''
+        ${pkgs.findutils}/bin/find /var/lib/htgen-paste/items -type f -mtime '+30' -exec rm {} \;
+      '';
+      User = "htgen-paste";
+    };
+  };
+
+  krebs.htgen.paste-form = {
+    port = 7770;
+    script = /* sh */ ''
+      export PATH=${makeBinPath [
+        pkgs.curl
+        pkgs.gnused
+      ]}:$PATH
+      (. ${pkgs.writeScript "paste-form" ''
+        case "$Method" in
+          'POST')
+            ref=$(head -c $req_content_length | sed '0,/^\r$/d;$d' | curl -fSs --data-binary @- https://p.krebsco.de | sed '1d;s/^http:/https:/')
+
+            printf 'HTTP/1.1 200 OK\r\n'
+            printf 'Content-Type: text/plain; charset=UTF-8\r\n'
+            printf 'Server: %s\r\n' "$Server"
+            printf 'Connection: close\r\n'
+            printf 'Content-Length: %d\r\n' $(expr ''${#ref} + 1)
+            printf '\r\n'
+            printf '%s\n' "$ref"
+
+            exit
+          ;;
+        esac
+      ''})
+    '';
   };
   krebs.htgen.imgur = {
     port = 7771;

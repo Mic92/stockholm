@@ -8,11 +8,13 @@ in
   haskell = super.haskell // {
     packages = mapAttrs (name: value:
       if hasAttr "override" value
-        then value.override { inherit overrides; }
+        then value.override (old: {
+          overrides = composeExtensions (old.overrides or (_: _: {})) overrides;
+        })
         else value
     ) super.haskell.packages;
   };
-  haskellPackages = super.haskellPackages.override {
-    inherit overrides;
-  };
+  haskellPackages = super.haskellPackages.override (old: {
+    overrides = composeExtensions (old.overrides or (_: _: {})) overrides;
+  });
 }
