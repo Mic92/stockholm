@@ -891,7 +891,10 @@ in {
         };
         retiolum = {
           via = internet;
-          aliases = [ "jack.r" ];
+          aliases = [
+            "jack.r"
+            "stable-confusion.r"
+          ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIIBCgKCAQEAx5ROeRs0CxD2IPfkrFB4O03/Kf8Ajjmd/J1gpCvHROKL+gDvaCO1
