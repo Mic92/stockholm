@@ -16,7 +16,12 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     mypy
   ];
-  checkPhase = ''
-    mypy --strict mediawiki_matrix_bot
-  '';
+
+  doCheck = false;
+  #checkInputs = [
+  #  types-aiofiles
+  #];
+  #checkPhase = ''
+  #  mypy --strict mediawiki_matrix_bot
+  #'';
 }
