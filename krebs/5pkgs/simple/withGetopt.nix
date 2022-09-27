@@ -1,4 +1,4 @@
-{ coreutils, quote, stockholm, utillinux, writeDash }:
+{ coreutils, quote, stockholm, util-linux, writeDash }:
 with stockholm.lib;
 
 opt-spec: cmd-spec: let
@@ -46,7 +46,7 @@ in writeDash wrapper-name ''
   WITHGETOPT_ORIG_ARGS=$(${quote}/bin/quote "$@")
   export WITHGETOPT_ORIG_ARGS
 
-  args=$(${utillinux}/bin/getopt \
+  args=$(${util-linux}/bin/getopt \
       -l ${shell.escape
             (concatMapStringsSep ","
               (opt: opt.long + optionalString (!opt.switch) ":")

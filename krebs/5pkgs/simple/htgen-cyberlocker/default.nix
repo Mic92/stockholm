@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
         pkgs.gnugrep
         pkgs.jq
         pkgs.nix
-        pkgs.utillinux
+        pkgs.util-linux
       ]}
       echo STATEDIR=${shell.escape "\${STATEDIR-$HOME}"}
       cat $src/htgen-cyberlocker

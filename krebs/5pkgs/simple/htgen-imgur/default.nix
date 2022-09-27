@@ -1,4 +1,4 @@
-{ attr, coreutils, exiv2, findutils, gnugrep, jq, nix, stockholm, utillinux, stdenv }:
+{ attr, coreutils, exiv2, findutils, gnugrep, jq, nix, stockholm, util-linux, stdenv }:
 stdenv.mkDerivation rec {
   pname = "htgen-imgur";
   version = "1.0.0";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
         findutils
         gnugrep
         jq
-        nix utillinux
+        nix util-linux
       ]}
       echo STATEDIR=${stockholm.lib.shell.escape "\${STATEDIR-$HOME}"}
       cat $src/htgen-imgur

@@ -52,7 +52,7 @@ let
               PATH = makeBinPath [
                 pkgs.coreutils # XXX env, touch
                 pkgs.jq # XXX sed
-                pkgs.utillinux # XXX flock
+                pkgs.util-linux # XXX flock
               ];
               state_file = "${stateDir}/tell.json";
             };
@@ -107,7 +107,7 @@ let
               PATH = makeBinPath [
                 pkgs.coreutils # XXX date, env
                 pkgs.jq # XXX sed
-                pkgs.utillinux # XXX flock
+                pkgs.util-linux # XXX flock
               ];
               state_file = "${stateDir}/tell.txt";
             };

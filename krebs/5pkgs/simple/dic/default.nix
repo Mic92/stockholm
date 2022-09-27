@@ -1,5 +1,5 @@
 { fetchgit, lib, stdenv
-, coreutils, curl, gnugrep, gnused, utillinux
+, coreutils, curl, gnugrep, gnused, util-linux
 }:
 
 stdenv.mkDerivation {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
         curl
         gnused
         gnugrep
-        utillinux
+        util-linux
       ];
     in
     ''
