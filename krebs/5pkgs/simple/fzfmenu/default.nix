@@ -48,7 +48,7 @@ pkgs.writeDashBin "fzfmenu" ''
     exec 4>&1
     export FZFMENU_INPUT_FD=3
     export FZFMENU_OUTPUT_FD=4
-    exec ${pkgs.rxvt_unicode}/bin/urxvt \
+    exec ${pkgs.rxvt-unicode}/bin/urxvt \
         -name ${cfg.appName} \
         -title ${shell.escape cfg.windowTitle} \
         -e "$0" "$@"
