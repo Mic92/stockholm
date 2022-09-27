@@ -164,6 +164,31 @@ in {
         };
       };
     };
+    kfbox = {
+      owner = config.krebs.users.pinpox;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.100.102";
+          aliases = [ "kfbox.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAis/ORNebUUz/yBTjouXVNoBHTVaEcpZE+cD9EWv975k0evxxb4s5
+            W87fZ6YkQgYtgFScaBMgqDbUdi/zMAkhJb2cn+fOGvuH7QqfiuEdG+lncllN9JlS
+            LpkP11COWmf60ThFieOa39xOT6atZc4cE0MMhw7CJUdIK7Y/EsHH1rVCWFdAKRIw
+            4tM7H2Goi7+Tp2guRVFnM/lzRPnIbGOUQxrkMDB2gmpHdCpYWfAQZGzvxlIqrazC
+            oPcaF0Pk6URkxGWeRUqJnwcGWxxaiA1KW+okma+Mv5k1DMr8pIK0ywWULMkNzjpP
+            IIJybkeKomOaQmzjZ2RKulOS8A4OOxiDw9Y6I4x+1qFa1seAmYWWafnHCRPQb40g
+            q5LCTfJaSvYfEEhs9xfo7vBd4IoYsymIQpLUV4BeNINazpRwNIb2AmHSknMnPZFR
+            Hu8kvN/D6vNlSt7hR+sWU2XgNTJV/MizvG/6N+9wGSPL15dmt8XiSCjSv2mzBSaW
+            7bVFoa57Y0OOwZUeK9SRJKMKPfxcNH9zGTMsb0Qnn0zFwscNnkDyA8Z4zPt4GpCX
+            b3qlAwKFHHVByuDiWrjr6zfSKU/rEU/CRBoWnTcIwSZRhxvAiX82XgUf0qDtFKY9
+            Wh+K8/4tfwX9niGTznIIic6Qmbm1O5MNjaPSPCK2bEgEMhQt9YkA4scCAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "fXVRppte1zStbyfrbgJwamJXZnHYJkcC15f90u0sUJM";
+        };
+      };
+    };
     keller = {
       owner = config.krebs.users.qubasa;
       nets = {
