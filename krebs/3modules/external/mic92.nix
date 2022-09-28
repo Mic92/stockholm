@@ -933,6 +933,11 @@ in {
     dev1 = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet = {
+          ip4.addr = "65.108.192.175";
+          ip6.addr = "2a01:4f9:1a:94a4::1";
+          aliases = [ "dev1.i" ];
+        };
         retiolum = {
           aliases = [ "dev1.r" ];
           tinc.pubkey = ''
