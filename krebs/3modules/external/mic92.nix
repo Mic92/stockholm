@@ -930,22 +930,27 @@ in {
       };
     };
 
-    hal9000 = {
+    dev1 = {
       owner = config.krebs.users.mic92;
       nets = rec {
         retiolum = {
-          aliases = [ "hal9000.r" ];
+          aliases = [ "dev1.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEA5aunzoz6WIjeQgfibml6T+UNsXXcoglhCqRkun7WaSHE93SQcCil
-            CDoUoq2aeiGTZ189LgdSyeRL7qmBzgVExIT4NlhfBCkNbHB/sz6epBb9qx49hLh5
-            K/tJfUBYKRd06ymSXPK+cCiO0/gM8fjzI+3GMlYvcbZ+ow11zTRgX/QB2lE1G8cW
-            Obh/nS0af7G6wmovHsKEpry5AxoAPLLi5JaP4hlc/i0iCbebMqb+szF0KBAbmDg3
-            JQ4MYIyQOw9kk7hfqTNFEvJhpbV66id2+ZIHX6QAw7OHBpaY6ZWFd/w2BkJHeayb
-            2jRnsJd0YgautgBGrBrjRWiVmn/f+lJ4XQIDAQAB
+            MIICCgKCAgEAwx2l5llCtEdoTRT9UJKHqa/GTqd5f9mUWX/n3HKQHdeEVao6cH9J
+            LteQ2rJY+Gh2zt3FZYzRBykvArjGmu1qKKnouldFJis0DygUI1jZVbeeNKbA2lZx
+            7+jCUIz4kgpA0ggJt/9Nb0xHMGPpgXSMADPHLKODT2FPxA4026pI6xLAZWY1o1SY
+            oypaIxaOUbqi9M+eR5KRCngUGHBOQm3rGtgw5wYxHsfJqHvqCmFIicxHVifpbzOf
+            Hf0hDvk6E54PijcrDUfDBkXrEoa1hFezCMnzv0h+1Y4qfueFtCtPbJdYKUo87X04
+            PWT/P+x78VY9e7fJswi4bYflXmE6jVg/0gXPNpWNV1iBmbrFMJMduGNiuyBcSAxp
+            S1ubP/+5D2hgOLCuflLfnPOozPtvV6F/XYKatQGPmgo4d7+z7g4frFKv6Uu9ZMT0
+            p2CN/bnVNAEErPbTVLyk8zX6J3ruCBQxucr3dsqyw7pk74tTQlFwH9BY8tWfRrAP
+            v7rDLHzv/1KA9GRDkbVPJmCkwIlPd9PcqSeHL9pnV9IkFr0UTVJE5qBLDSRW9XAb
+            QY6wVgsMocMeAxwrx6q+pdX/NAPbBzrmr0IB+DwYfMhZdGWoWEw+NV1wOsQjBzjw
+            SA63+XAgJ30QR5Z87d5g2Y7560+6oQavMPdt+5kfPTGa48UR7WwYyzsCAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
-          tinc.pubkey_ed25519 = "krVYgJo5OFZkyUOgasH9dFve4OI3ewpt8IFhCPan7mB";
+          tinc.pubkey_ed25519 = "nu1d0uwAE1Lg16SfXkCgGz2blir402mlucwJMfHivrJ";
         };
       };
     };
