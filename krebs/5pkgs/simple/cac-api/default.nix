@@ -1,5 +1,5 @@
 { fetchgit, lib, stdenv
-, bc, cac-cert, coreutils, curl, dash, gnugrep, gnused, inotifyTools, jq, ncurses, openssh, sshpass
+, bc, cac-cert, coreutils, curl, dash, gnugrep, gnused, inotify-tools, jq, ncurses, openssh, sshpass
 }:
 
 stdenv.mkDerivation {
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
       curl
       gnugrep
       gnused
-      inotifyTools
+      inotify-tools
       jq
       ncurses
       openssh

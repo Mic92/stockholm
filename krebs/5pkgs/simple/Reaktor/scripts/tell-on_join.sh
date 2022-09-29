@@ -1,7 +1,7 @@
 #! /bin/sh
 set -euf
 
-# require flock from util-linux (pkgs.utillinux)
+# require flock from util-linux (pkgs.util-linux)
 if test "${FLOCK-}" != "$state_file"; then
   exec env FLOCK="$state_file" flock "$state_file" "$0" "$@"
 fi

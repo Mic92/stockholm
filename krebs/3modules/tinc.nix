@@ -155,7 +155,7 @@ with import <stockholm/lib>;
 
         iproutePackage = mkOption {
           type = types.package;
-          default = pkgs.iproute;
+          default = pkgs.iproute2;
           description = "Iproute2 package to use.";
         };
 

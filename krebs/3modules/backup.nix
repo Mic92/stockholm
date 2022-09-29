@@ -82,7 +82,7 @@ let
           gnused
           openssh
           rsync
-          utillinux
+          util-linux
         ];
         restartIfChanged = false;
         serviceConfig = rec {

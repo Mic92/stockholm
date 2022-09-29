@@ -204,7 +204,7 @@ let
       ${pkgs.iw}/bin/iw dev \
         | ${pkgs.gnused}/bin/sed -n 's/^\s*Interface\s\+\([0-9a-z]\+\)$/\1/p'
     ); do
-      inet=$(${pkgs.iproute}/bin/ip addr show $dev \
+      inet=$(${pkgs.iproute2}/bin/ip addr show $dev \
         | ${pkgs.gnused}/bin/sed -n '
             s/.*inet \([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p
           ') \

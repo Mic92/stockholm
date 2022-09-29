@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     pkgs.jack1
-    pkgs.pkgconfig
+    pkgs.pkg-config
   ];
 
   patchPhase = ''

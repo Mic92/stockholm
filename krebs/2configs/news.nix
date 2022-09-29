@@ -44,7 +44,7 @@
     path = [
       pkgs.graphviz
       pkgs.jq
-      pkgs.inotifyTools
+      pkgs.inotify-tools
     ];
     serviceConfig = {
       ExecStart = pkgs.writers.writeDash "brockman-graph" ''
