@@ -79,17 +79,34 @@ let
           pattern = "18@p";
           activate = "match";
           command = {
-            env.radius = toString 250; # metres around c-base to search
+            env = {
+              radius = toString 500; # metres around c-base to search
+              age_threshold = toString (24 * 60 * 60);
+              state_file = "${stateDir}/krebsfood";
+            };
             filename = pkgs.writeDash "krebsfood" ''
               set -efu
               expected_max_results=1024 # the upper bound on the number of restaurants
 
-              echo '[out:json];node(id:260050809)->.cbase;
-              (
-                node(around.cbase:'$radius')[amenity=fast_food];
-                node(around.cbase:'$radius')[amenity=restaurant];
-              );out;' \
-                | ${pkgs.curl}/bin/curl -sSL -d @- -X POST http://overpass-api.de/api/interpreter \
+              file_age_seconds() {
+                expr "$(date +%s)" - "$(date +%s -r "$1")"
+              }
+
+              get_restaurants() {
+                if [ -f "$state_file" ]; then
+                  [ "$(file_age_seconds "$state_file")" -lt "$age_threshold" ] && cat "$state_file"
+                else
+                  echo '[out:json];node(id:260050809)->.cbase;
+                    (
+                      node(around.cbase:'$radius')[amenity=fast_food];
+                      node(around.cbase:'$radius')[amenity=restaurant];
+                    );out;' \
+                      | ${pkgs.curl}/bin/curl -sSL -d @- -X POST http://overpass-api.de/api/interpreter \
+                      | tee "$state_file"
+                fi
+              }
+
+              get_restaurants \
                 | ${pkgs.jq}/bin/jq -r --argjson random "$(shuf -i 0-$expected_max_results -n 1)" '
                   .elements
                   | length as $length
