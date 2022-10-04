@@ -111,7 +111,7 @@ let
                   .elements
                   | length as $length
                   | .[$random % $length]
-                  | "How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id))?"
+                  | "How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"
                 '
             '';
           };
