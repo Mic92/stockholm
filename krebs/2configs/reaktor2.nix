@@ -80,7 +80,7 @@ let
           activate = "match";
           command = {
             env = {
-              radius = toString 250; # metres around c-base to search
+              radius = toString 500; # metres around c-base to search
               age_threshold = toString (24 * 60 * 60);
               state_file = "${stateDir}/krebsfood";
             };
