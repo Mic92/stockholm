@@ -315,6 +315,18 @@ in {
         };
       };
     };
+    petrosilia = {
+      owner = config.krebs.users.jan;
+      nets = {
+        retiolum = {
+          ip4.addr = "10.243.143.11";
+          aliases = [
+            "petrosilia.r"
+          ];
+          tinc.pubkey_ed25519 = "Rs5jdJk/YF4aXohp3isau4LHinD4VWlvSa9CcgznR+A";
+        };
+      };
+    };
     tpsw = {
       cores = 2;
       owner = config.krebs.users.ciko; # main laptop
