@@ -76,6 +76,30 @@ let
           };
         }
         {
+          pattern = "18@p";
+          activate = "match";
+          command = {
+            env.radius = toString 250; # metres around c-base to search
+            filename = pkgs.writeDash "krebsfood" ''
+              set -efu
+              expected_max_results=1024 # the upper bound on the number of restaurants
+
+              echo '[out:json];node(id:260050809)->.cbase;
+              (
+                node(around.cbase:'$radius')[amenity=fast_food];
+                node(around.cbase:'$radius')[amenity=restaurant];
+              );out;' \
+                | ${pkgs.curl}/bin/curl -sSL -d @- -X POST http://overpass-api.de/api/interpreter \
+                | ${pkgs.jq}/bin/jq -r --argjson random "$(shuf -i 0-$expected_max_results -n 1)" '
+                  .elements
+                  | length as $length
+                  | .[$random % $length]
+                  | "How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id))?"
+                '
+            '';
+          };
+        }
+        {
           pattern = ''^([\H-]*?):?\s+([+-][1-9][0-9]*)\s+(\S+)$'';
           activate = "match";
           arguments = [1 2 3];
