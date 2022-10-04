@@ -323,6 +323,21 @@ in {
           aliases = [
             "petrosilia.r"
           ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAxDumQ/06Yd3AQPSlHH9/kNngbc/tq5yBuT0ymbQGMHLL9X3pCz/f
+            y9GZVpQtaKm7EZ0Kj8ieaPOyG7BItH0AvTdSJV7rn4WKuKfe5E5S4E8YqsZfSu4N
+            IdEKVIisyBNCklXaDn6A7nxeUauwHQHuj0wOAnYKfaU+2haL+JzcFtQ1RpxDBsy1
+            FbcEXO5NOhsXK4mHjtRrK1GamnCo5gvJU3w1NrfLRXteOOBsR49HhTIWvi8L4tSf
+            fd/mFwWayB7D0feLhWBpMPQTa5TeeQPxhgJrlIwXJiONG8GWFWNCHEjbQaCuJJWn
+            e37n9xCpdH867P921Ei+gyKZi9t6d+U4blrCpQzIe95t8Uv0i2c+YNt9NQL5Z119
+            jt/Xhm7ccT9FeOuYsbjcO6g0BJumILEjD309vfQfWNims++vMd53q3dzxp4Kau+f
+            vdMyrzWiIytM+/iQmneG8XLv0b7I6FUPEahpCncZ14NqBDaKclwoJ/HfB+WZi6JV
+            yBVJHm9vogfzD1sLmDctHps3uJAeZHzszws8LMKdd5JxxQzVBRcrD1LKHYmmUYTU
+            5gyDxnFn8ZoZ3GFVH+5v2PJgZY++/6zdDxQ9flrdt2zRaoAq2Zayn7R8sQ/ZjMXK
+            eR8aXgHzEL/n/9BMKs+jLu3j8xaiJX8ctnRvwSnOFjU9wQvJ7QNQHk0CAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
           tinc.pubkey_ed25519 = "Rs5jdJk/YF4aXohp3isau4LHinD4VWlvSa9CcgznR+A";
         };
       };
