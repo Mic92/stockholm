@@ -25,7 +25,32 @@ in {
     };
     configFile = mkOption {
       type = types.either types.package types.absolute-pathname;
-      default = settingsFormat.generate "ejabberd.yaml" cfg.settings;
+      default =
+        (settingsFormat.generate "ejabberd.yaml" cfg.settings)
+          # XXX ejabberd cannot parse MQTT topic filters enclosed in single
+          # quotes.  By changing the YAML formatting style, double quotes will
+          # be used instead.
+          #
+          # Related error message:
+          #   Invalid value of option modules->mod_mqtt->access_publish:
+          #   Malformed topic filter
+          #
+          .overrideAttrs (old: {
+            nativeBuildInputs =
+              filter
+                (pkg: (parseDrvName pkg.name).name != "remarshal")
+                old.nativeBuildInputs
+              ++
+              singleton (pkgs.symlinkJoin {
+                name = "remarshal";
+                paths = [
+                  (pkgs.writeDashBin "json2yaml" ''
+                    exec ${pkgs.remarshal}/bin/json2yaml --yaml-style \> "$@"
+                  '')
+                  pkgs.remarshal
+                ];
+              });
+        });
     };
     ciphers = mkOption {
       type = types.listOf types.str;
