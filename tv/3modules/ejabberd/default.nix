@@ -115,9 +115,14 @@ in {
       default = {};
     };
     stateDir = mkOption {
-      type = types.absolute-pathname;
+      type =
+        types.addCheck
+          types.absolute-pathname
+          (path:
+            hasPrefix "/var/lib/" path &&
+            types.filename.check (removePrefix "/var/lib/" path)
+          );
       default = "/var/lib/ejabberd";
-      readOnly = true;
     };
   };
   config = lib.mkIf cfg.enable {
