@@ -87,14 +87,15 @@ let
               osm-restaurants-src = pkgs.fetchFromGitHub {
                 owner = "kmein";
                 repo = "scripts";
-                rev = "c7a1256040c7a32ef4fd700e057bb4135a19791f";
-                sha256 = "1f1cmm6wafsaii4mas1d9fishczmi6f6whkz3b1bh6jxmalwgka8";
+                rev = "66b2068d548d3418c81dd093bba3f80248c68196";
+                sha256 = "059sp2lz54iwklswaxv9w703sbm2vv7p0ccig10gsqshriq6v58z";
               };
               osm-restaurants = pkgs.callPackage "${osm-restaurants-src}/osm-restaurants" {};
             in pkgs.writeDash "krebsfood" ''
               set -efu
-              c_base=260050809
-              ${osm-restaurants}/bin/osm-restaurants --radius 500 --center "$c_base" \
+              ecke_lat=52.51252
+              ecke_lon=13.41740
+              ${osm-restaurants}/bin/osm-restaurants --radius 500 --latitude "$ecke_lat" --longitude "$ecke_lon" \
                 | ${pkgs.jq}/bin/jq -r '"How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"'
                 '
             '';
