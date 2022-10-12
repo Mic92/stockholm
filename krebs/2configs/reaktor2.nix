@@ -80,38 +80,22 @@ let
           activate = "match";
           command = {
             env = {
-              radius = toString 500; # metres around c-base to search
-              age_threshold = toString (24 * 60 * 60);
-              state_file = "${stateDir}/krebsfood";
+              CACHE_DIR = "${stateDir}/krebsfood";
             };
-            filename = pkgs.writeDash "krebsfood" ''
+            filename =
+            let
+              osm-restaurants-src = pkgs.fetchFromGitHub {
+                owner = "kmein";
+                repo = "scripts";
+                rev = "c7a1256040c7a32ef4fd700e057bb4135a19791f";
+                sha256 = "1f1cmm6wafsaii4mas1d9fishczmi6f6whkz3b1bh6jxmalwgka8";
+              };
+              osm-restaurants = pkgs.callPackage "${osm-restaurants-src}/osm-restaurants" {};
+            in pkgs.writeDash "krebsfood" ''
               set -efu
-              expected_max_results=1024 # the upper bound on the number of restaurants
-
-              file_age_seconds() {
-                expr "$(date +%s)" - "$(date +%s -r "$1")"
-              }
-
-              get_restaurants() {
-                if [ -f "$state_file" ]; then
-                  [ "$(file_age_seconds "$state_file")" -lt "$age_threshold" ] && cat "$state_file"
-                else
-                  echo '[out:json];node(id:260050809)->.cbase;
-                    (
-                      node(around.cbase:'$radius')[amenity=fast_food];
-                      node(around.cbase:'$radius')[amenity=restaurant];
-                    );out;' \
-                      | ${pkgs.curl}/bin/curl -sSL -d @- -X POST http://overpass-api.de/api/interpreter \
-                      | tee "$state_file"
-                fi
-              }
-
-              get_restaurants \
-                | ${pkgs.jq}/bin/jq -r --argjson random "$(shuf -i 0-$expected_max_results -n 1)" '
-                  .elements
-                  | length as $length
-                  | .[$random % $length]
-                  | "How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"
+              c_base=260050809
+              ${osm-restaurants}/bin/osm-restaurants --radius 500 --center "$c_base" \
+                | ${pkgs.jq}/bin/jq -r '"How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"'
                 '
             '';
           };
