@@ -929,35 +929,5 @@ in {
         };
       };
     };
-
-    dev1 = {
-      owner = config.krebs.users.mic92;
-      nets = rec {
-        internet = {
-          ip4.addr = "65.108.192.175";
-          ip6.addr = "2a01:4f9:1a:94a4::1";
-          aliases = [ "dev1.i" ];
-        };
-        retiolum = {
-          aliases = [ "dev1.r" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAwx2l5llCtEdoTRT9UJKHqa/GTqd5f9mUWX/n3HKQHdeEVao6cH9J
-            LteQ2rJY+Gh2zt3FZYzRBykvArjGmu1qKKnouldFJis0DygUI1jZVbeeNKbA2lZx
-            7+jCUIz4kgpA0ggJt/9Nb0xHMGPpgXSMADPHLKODT2FPxA4026pI6xLAZWY1o1SY
-            oypaIxaOUbqi9M+eR5KRCngUGHBOQm3rGtgw5wYxHsfJqHvqCmFIicxHVifpbzOf
-            Hf0hDvk6E54PijcrDUfDBkXrEoa1hFezCMnzv0h+1Y4qfueFtCtPbJdYKUo87X04
-            PWT/P+x78VY9e7fJswi4bYflXmE6jVg/0gXPNpWNV1iBmbrFMJMduGNiuyBcSAxp
-            S1ubP/+5D2hgOLCuflLfnPOozPtvV6F/XYKatQGPmgo4d7+z7g4frFKv6Uu9ZMT0
-            p2CN/bnVNAEErPbTVLyk8zX6J3ruCBQxucr3dsqyw7pk74tTQlFwH9BY8tWfRrAP
-            v7rDLHzv/1KA9GRDkbVPJmCkwIlPd9PcqSeHL9pnV9IkFr0UTVJE5qBLDSRW9XAb
-            QY6wVgsMocMeAxwrx6q+pdX/NAPbBzrmr0IB+DwYfMhZdGWoWEw+NV1wOsQjBzjw
-            SA63+XAgJ30QR5Z87d5g2Y7560+6oQavMPdt+5kfPTGa48UR7WwYyzsCAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "nu1d0uwAE1Lg16SfXkCgGz2blir402mlucwJMfHivrJ";
-        };
-      };
-    };
   };
 }
