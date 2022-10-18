@@ -9,6 +9,48 @@ let
   hooks = pkgs.reaktor2-plugins.hooks;
   commands = pkgs.reaktor2-plugins.commands;
 
+  # bedger - the bier ledger
+  #
+  # logo: http://c.r/bedger2
+  #
+  bedger-add = {
+    pattern = ''^([\H-]*?):?\s+([+-][1-9][0-9]*)\s+(\S+)$'';
+    activate = "match";
+    arguments = [1 2 3];
+    command = {
+      env = {
+        # TODO; get state as argument
+        state_file = "${stateDir}/ledger";
+      };
+      filename = pkgs.writeDash "bedger-add" ''
+        set -x
+        tonick=$1
+        amt=$2
+        unit=$3
+        printf '%s\n  %s  %d %s\n  %s  %d %s\n' "$(date -Id)" "$tonick" "$amt" "$unit" "$_from" "$(expr 0 - "''${amt#+}")" "$unit" >> $state_file
+        ${pkgs.hledger}/bin/hledger -f $state_file bal -N -O csv \
+          | ${pkgs.coreutils}/bin/tail +2 \
+          | ${pkgs.miller}/bin/mlr --icsv --opprint cat \
+          | ${pkgs.gnugrep}/bin/grep "$_from"
+      '';
+    };
+  };
+  bedger-balance = {
+    pattern = "^bier (ballern|bal(an(ce)?)?)$";
+    activate = "match";
+    command = {
+      env = {
+        state_file = "${stateDir}/ledger";
+      };
+      filename = pkgs.writeDash "bedger-balance" ''
+        ${pkgs.hledger}/bin/hledger -f $state_file bal -N -O csv \
+          | ${pkgs.coreutils}/bin/tail +2 \
+          | ${pkgs.miller}/bin/mlr --icsv --opprint cat \
+          | ${pkgs.gnused}/bin/sed 's/^\(.\)/\1‍/'
+      '';
+    };
+  };
+
   taskRcFile = builtins.toFile "taskrc" ''
     confirmation=no
   '';
@@ -92,21 +134,6 @@ let
         }
       ];
       hooks.PRIVMSG = [
-        {
-          pattern = "^bier (ballern|bal(an(ce)?)?)$";
-          activate = "match";
-          command = {
-            env = {
-              state_file = "${stateDir}/ledger";
-            };
-            filename = pkgs.writeDash "bier-balance" ''
-              ${pkgs.hledger}/bin/hledger -f $state_file bal -N -O csv \
-                | ${pkgs.coreutils}/bin/tail +2 \
-                | ${pkgs.miller}/bin/mlr --icsv --opprint cat \
-                | ${pkgs.gnused}/bin/sed 's/^\(.\)/\1‍/'
-            '';
-          };
-        }
         {
           pattern = "^list-locations";
           activate = "match";
@@ -205,6 +232,8 @@ let
             '';
           };
         }
+        bedger-add
+        bedger-balance
         hooks.sed
         (generators.command_hook {
           inherit (commands) dance random-emoji nixos-version;
