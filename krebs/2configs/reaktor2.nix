@@ -38,6 +38,38 @@ let
     };
   };
 
+  locationsLib = pkgs.writeText "locations.sh" ''
+    ENDPOINT=http://c.r/poi.json
+    get_locations() {
+      curl -fsS "$ENDPOINT"
+    }
+
+    set_locations() {
+      curl -fSs --data-binary @- "$ENDPOINT"
+    }
+
+    set_location() {
+      [ $# -eq 3 ] || return 1
+      get_locations \
+        | jq \
+            --arg name "$1" \
+            --arg latitude "$2" \
+            --arg longitude "$3" \
+            '.[$name] = { $latitude, $longitude }' \
+        | set_locations
+    }
+
+    get_location() {
+      [ $# -eq 1 ] || return 1
+      get_locations | jq --arg name "$1" '.[$name]'
+    }
+
+    delete_location() {
+      [ $# -eq 1 ] || return 1
+      get_locations | jq --arg name "$1" 'del(.[$name])' | set_locations
+    }
+  '';
+
   systemPlugin = {
     plugin = "system";
     config = {
@@ -72,6 +104,56 @@ let
                 | ${pkgs.coreutils}/bin/tail +2 \
                 | ${pkgs.miller}/bin/mlr --icsv --opprint cat \
                 | ${pkgs.gnused}/bin/sed 's/^\(.\)/\1‍/'
+            '';
+          };
+        }
+        {
+          pattern = "^list-locations";
+          activate = "match";
+          command = {
+            filename = pkgs.writeDash "list-locations" ''
+              export PATH=${makeBinPath [
+                pkgs.curl
+                pkgs.jq
+              ]}
+              set -efu
+              set -x
+              . ${locationsLib}
+              get_locations | jq -r 'to_entries[]|"\(.key) \(.value.latitude),\(.value.longitude)"'
+            '';
+          };
+        }
+        {
+          pattern = ''^add-location (\S+) ([0-9.]+),([0-9.]+)$'';
+          activate = "match";
+          arguments = [1 2 3];
+          command = {
+            filename = pkgs.writeDash "add-location" ''
+              export PATH=${makeBinPath [
+                pkgs.curl
+                pkgs.jq
+              ]}
+              set -efu
+              set -x
+              . ${locationsLib}
+              set_location "$1" $2 $3
+            '';
+          };
+        }
+        {
+          pattern = ''^delete-location (\S+)$'';
+          activate = "match";
+          arguments = [1];
+          command = {
+            filename = pkgs.writeDash "add-location" ''
+              export PATH=${makeBinPath [
+                pkgs.curl
+                pkgs.jq
+              ]}
+              set -efu
+              set -x
+              . ${locationsLib}
+              delete_location "$1"
             '';
           };
         }
