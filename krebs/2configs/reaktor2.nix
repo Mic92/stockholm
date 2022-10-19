@@ -185,8 +185,9 @@ let
           };
         }
         {
-          pattern = "18@p";
+          pattern = ''^18@p\s+(\S+)\s+(\d+)m$'';
           activate = "match";
+          arguments = [1 2];
           command = {
             env = {
               CACHE_DIR = "${stateDir}/krebsfood";
@@ -202,9 +203,16 @@ let
               osm-restaurants = pkgs.callPackage "${osm-restaurants-src}/osm-restaurants" {};
             in pkgs.writeDash "krebsfood" ''
               set -efu
-              ecke_lat=52.51252
-              ecke_lon=13.41740
-              ${osm-restaurants}/bin/osm-restaurants --radius 500 --latitude "$ecke_lat" --longitude "$ecke_lon" \
+              poi=$(curl -fsS http://c.r/poi.json | jq --arg name "$1" '.[$name]')
+              if [ "$poi" = null ]; then
+                latitude=52.51252
+                longitude=13.41740
+              else
+                latitude=$(echo "$poi" | jq -r .latitude)
+                longitude=$(echo "$poi" | jq -r .longitude)
+              fi
+
+              ${osm-restaurants}/bin/osm-restaurants --radius "$2" --latitude "$latitude" --longitude "$longitude" \
                 | ${pkgs.jq}/bin/jq -r '"How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"'
                 '
             '';
