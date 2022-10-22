@@ -9,6 +9,48 @@ let
   hooks = pkgs.reaktor2-plugins.hooks;
   commands = pkgs.reaktor2-plugins.commands;
 
+  # bedger - the bier ledger
+  #
+  # logo: http://c.r/bedger2
+  #
+  bedger-add = {
+    pattern = ''^([\H-]*?):?\s+([+-][1-9][0-9]*)\s+(\S+)$'';
+    activate = "match";
+    arguments = [1 2 3];
+    command = {
+      env = {
+        # TODO; get state as argument
+        state_file = "${stateDir}/ledger";
+      };
+      filename = pkgs.writeDash "bedger-add" ''
+        set -x
+        tonick=$1
+        amt=$2
+        unit=$3
+        printf '%s\n  %s  %d %s\n  %s  %d %s\n' "$(date -Id)" "$tonick" "$amt" "$unit" "$_from" "$(expr 0 - "''${amt#+}")" "$unit" >> $state_file
+        ${pkgs.hledger}/bin/hledger -f $state_file bal -N -O csv \
+          | ${pkgs.coreutils}/bin/tail +2 \
+          | ${pkgs.miller}/bin/mlr --icsv --opprint cat \
+          | ${pkgs.gnugrep}/bin/grep "$_from"
+      '';
+    };
+  };
+  bedger-balance = {
+    pattern = "^bier (ballern|bal(an(ce)?)?)$";
+    activate = "match";
+    command = {
+      env = {
+        state_file = "${stateDir}/ledger";
+      };
+      filename = pkgs.writeDash "bedger-balance" ''
+        ${pkgs.hledger}/bin/hledger -f $state_file bal -N -O csv \
+          | ${pkgs.coreutils}/bin/tail +2 \
+          | ${pkgs.miller}/bin/mlr --icsv --opprint cat \
+          | ${pkgs.gnused}/bin/sed 's/^\(.\)/\1‍/'
+      '';
+    };
+  };
+
   taskRcFile = builtins.toFile "taskrc" ''
     confirmation=no
   '';
@@ -38,6 +80,38 @@ let
     };
   };
 
+  locationsLib = pkgs.writeText "locations.sh" ''
+    ENDPOINT=http://c.r/poi.json
+    get_locations() {
+      curl -fsS "$ENDPOINT"
+    }
+
+    set_locations() {
+      curl -fSs --data-binary @- "$ENDPOINT"
+    }
+
+    set_location() {
+      [ $# -eq 3 ] || return 1
+      get_locations \
+        | jq \
+            --arg name "$1" \
+            --arg latitude "$2" \
+            --arg longitude "$3" \
+            '.[$name] = { $latitude, $longitude }' \
+        | set_locations
+    }
+
+    get_location() {
+      [ $# -eq 1 ] || return 1
+      get_locations | jq --arg name "$1" '.[$name]'
+    }
+
+    delete_location() {
+      [ $# -eq 1 ] || return 1
+      get_locations | jq --arg name "$1" 'del(.[$name])' | set_locations
+    }
+  '';
+
   systemPlugin = {
     plugin = "system";
     config = {
@@ -61,17 +135,78 @@ let
       ];
       hooks.PRIVMSG = [
         {
-          pattern = "^bier (ballern|bal(an(ce)?)?)$";
+          pattern = "^list-locations";
+          activate = "match";
+          command = {
+            filename = pkgs.writeDash "list-locations" ''
+              export PATH=${makeBinPath [
+                pkgs.curl
+                pkgs.jq
+              ]}
+              set -efu
+              set -x
+              . ${locationsLib}
+              get_locations | jq -r 'to_entries[]|"\(.key) \(.value.latitude),\(.value.longitude)"'
+            '';
+          };
+        }
+        {
+          pattern = ''^add-location (\S+) ([0-9.]+),([0-9.]+)$'';
+          activate = "match";
+          arguments = [1 2 3];
+          command = {
+            filename = pkgs.writeDash "add-location" ''
+              export PATH=${makeBinPath [
+                pkgs.curl
+                pkgs.jq
+              ]}
+              set -efu
+              set -x
+              . ${locationsLib}
+              set_location "$1" $2 $3
+            '';
+          };
+        }
+        {
+          pattern = ''^delete-location (\S+)$'';
+          activate = "match";
+          arguments = [1];
+          command = {
+            filename = pkgs.writeDash "add-location" ''
+              export PATH=${makeBinPath [
+                pkgs.curl
+                pkgs.jq
+              ]}
+              set -efu
+              set -x
+              . ${locationsLib}
+              delete_location "$1"
+            '';
+          };
+        }
+        {
+          pattern = "18@p";
           activate = "match";
           command = {
             env = {
-              state_file = "${stateDir}/ledger";
+              CACHE_DIR = "${stateDir}/krebsfood";
             };
-            filename = pkgs.writeDash "bier-balance" ''
-              ${pkgs.hledger}/bin/hledger -f $state_file bal -N -O csv \
-                | ${pkgs.coreutils}/bin/tail +2 \
-                | ${pkgs.miller}/bin/mlr --icsv --opprint cat \
-                | ${pkgs.gnused}/bin/sed 's/^\(.\)/\1‍/'
+            filename =
+            let
+              osm-restaurants-src = pkgs.fetchFromGitHub {
+                owner = "kmein";
+                repo = "scripts";
+                rev = "66b2068d548d3418c81dd093bba3f80248c68196";
+                sha256 = "059sp2lz54iwklswaxv9w703sbm2vv7p0ccig10gsqshriq6v58z";
+              };
+              osm-restaurants = pkgs.callPackage "${osm-restaurants-src}/osm-restaurants" {};
+            in pkgs.writeDash "krebsfood" ''
+              set -efu
+              ecke_lat=52.51252
+              ecke_lon=13.41740
+              ${osm-restaurants}/bin/osm-restaurants --radius 500 --latitude "$ecke_lat" --longitude "$ecke_lon" \
+                | ${pkgs.jq}/bin/jq -r '"How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"'
+                '
             '';
           };
         }
@@ -97,6 +232,8 @@ let
             '';
           };
         }
+        bedger-add
+        bedger-balance
         hooks.sed
         (generators.command_hook {
           inherit (commands) dance random-emoji nixos-version;

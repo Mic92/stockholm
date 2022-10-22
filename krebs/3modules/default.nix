@@ -25,8 +25,7 @@ let
       ./exim.nix
       ./fetchWallpaper.nix
       ./git.nix
-      ./github-hosts-sync.nix
-      ./github-known-hosts.nix
+      ./github
       ./go.nix
       ./hidden-ssh.nix
       ./hosts.nix
