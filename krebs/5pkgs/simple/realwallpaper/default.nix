@@ -1,6 +1,6 @@
 { pkgs, ... }:
 pkgs.writers.writeDashBin "generate-wallpaper" ''
-  set -xeuf
+  set -euf
 
   export PATH=${with pkgs; lib.makeBinPath [
     coreutils
@@ -86,7 +86,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
   }
 
   main() {
-    cd "$working_dir"
+    cd "''${working_dir:-$PWD}"
 
     # fetch source images in parallel
     fetch_once nightmap-raw.jpg \
@@ -113,16 +113,16 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
       'https://raw.githubusercontent.com/krebs/painload/master/cholerab/bling/krebs_aquarium.svg' &
 
     fetch_older_min 720 ice-raw.jpg $(get_neo_url \
-      'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=NISE_D') &
+      'https://neo.gsfc.nasa.gov/view.php?datasetId=NISE_D') &
     fetch_older_days 1 snow-raw.jpg $(get_neo_url \
-      'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD10C1_E_SNOW') &
+      'https://neo.gsfc.nasa.gov/view.php?datasetId=MOD10C1_E_SNOW') &
     fetch_older_days 1 chlora-raw.jpg $(get_neo_url \
-      'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MY1DMM_CHLORA') &
+      'https://neo.gsfc.nasa.gov/view.php?datasetId=MY1DMM_CHLORA') &
     fetch_older_days 1 fire-raw.jpg $(get_neo_url \
-      'https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD14A1_E_FIRE') &
+      'https://neo.gsfc.nasa.gov/view.php?datasetId=MOD14A1_E_FIRE') &
 
     # regular fetches
-    fetch marker.json.tmp "$marker_url" || :
+    fetch marker.json.tmp "''${marker_url:-}" || :
     if [ -s marker.json.tmp ]; then
       mv marker.json.tmp marker.json
     fi
