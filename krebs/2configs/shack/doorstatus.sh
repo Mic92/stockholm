@@ -54,7 +54,7 @@ Herr makefu an Kasse 3 bitte, Kasse 3 bitte Herr makefu. Der API Computer ist ma
 EOF
 )
 
-state=$(curl https://api.shackspace.de/v1/space | jq  .doorState.open)
+state=$(curl -fSsk https://api.shackspace.de/v1/space | jq  .doorState.open)
 prevstate=$(cat state ||:)
 
 if test "$state" == "$(cat state)";then
