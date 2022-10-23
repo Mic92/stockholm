@@ -16,7 +16,7 @@
   krebs.build.host = config.krebs.hosts.news;
 
   boot.isContainer = true;
-  networking.useDHCP = false;
+  networking.useDHCP = lib.mkForce true;
   krebs.bindfs = {
     "/var/lib/brockman" = {
       source = "/var/state/brockman";
