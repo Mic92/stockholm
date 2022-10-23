@@ -16,7 +16,7 @@ let
       ./brockman.nix
       ./build.nix
       ./cachecache.nix
-      ./ci.nix
+      ./ci
       ./current.nix
       ./dns.nix
       ./ergo.nix

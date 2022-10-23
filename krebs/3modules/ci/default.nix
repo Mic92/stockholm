@@ -51,7 +51,7 @@ let
               "${url}",
               workdir='${name}-${elemAt(splitString "." url) 1}', branches=True,
               project='${name}',
-              pollinterval=100
+              pollinterval=30
           )
         '') repo.urls
       ) cfg.repos;
@@ -84,6 +84,7 @@ let
         from buildbot.process import buildstep, logobserver
         from twisted.internet import defer
         import json
+        import sys
 
         class GenerateStagesCommand(buildstep.ShellMixin, steps.BuildStep):
             def __init__(self, **kwargs):
@@ -157,19 +158,29 @@ let
               )
           )
         '') cfg.repos)}
+
+        # fancy irc notification by Mic92 https://github.com/Mic92/dotfiles/tree/master/nixos/eve/modules/buildbot
+        sys.path.append("${./modules}")
+        from irc_notify import NotifyFailedBuilds
+        c['services'].append(
+            NotifyFailedBuilds("irc://buildbot|test@irc.r:6667/#xxx")
+        )
+
       '';
 
       enable = true;
-      reporters = [''
-        reporters.IRC(
-          host = "irc.r",
-          nick = "buildbot|${hostname}",
-          notify_events = [ 'started', 'finished', 'failure', 'success', 'exception', 'problem' ],
-          channels = [{"channel": "#xxx"}],
-          showBlameList = True,
-          authz={'force': True},
-        )
-      ''];
+      reporters = [
+        ''
+          reporters.IRC(
+            host = "irc.r",
+            nick = "buildbot|${hostname}",
+            notify_events = [ 'started', 'finished', 'failure', 'success', 'exception', 'problem' ],
+            channels = [{"channel": "#xxx"}],
+            showBlameList = True,
+            authz={'force': True},
+          )
+        ''
+      ];
 
       buildbotUrl = "http://build.${hostname}.r/";
     };
