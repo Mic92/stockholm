@@ -126,6 +126,7 @@ in {
             "prism.r"
             "cache.prism.r"
             "cgit.prism.r"
+            "bota.r"
             "flix.r"
             "jelly.r"
             "paste.r"
