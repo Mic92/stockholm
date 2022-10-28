@@ -19,7 +19,7 @@
         config = {
           hooks.PRIVMSG = [
             {
-              pattern = ".open$";
+              pattern = ''\.open\??$|\.offen\??$'';
               activate = "match";
               command.filename = pkgs.writers.writeDash "is_shack_open" ''
                 ${pkgs.curl}/bin/curl -fSsk https://api.shackspace.de/v1/space |
