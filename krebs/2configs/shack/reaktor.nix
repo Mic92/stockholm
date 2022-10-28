@@ -14,6 +14,21 @@
           ];
         };
       }
+      {
+        plugin = "system";
+        config = {
+          hooks.PRIVMSG = [
+            {
+              pattern = ".open$";
+              activate = "match";
+              command.filename = pkgs.writers.writeDash "is_shack_open" ''
+                ${pkgs.curl}/bin/curl -fSsk https://api.shackspace.de/v1/space |
+                  ${pkgs.jq}/bin/jq '.doorState.open'
+              '';
+            }
+          ];
+        };
+      }
     ];
   };
   systemd.services.announce_doorstatus = {
