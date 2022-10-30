@@ -55,7 +55,6 @@ in {
             '';
             pubkey_ed25519 = "P+bhzhgTNdohWdec//t/e+8cI7zUOsS+Kq/AOtineAO";
           };
-          tinc.port = 655;
         };
       };
       ssh.privkey.path = <secrets/ssh.id_ed25519>;
@@ -135,7 +134,6 @@ in {
             "search.r"
             "radio-news.r"
           ];
-          tinc.port = 655;
           tinc = {
             pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
@@ -196,7 +194,6 @@ in {
           aliases = [
             "mors.r"
           ];
-          tinc.port = 0;
           tinc = {
             pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
@@ -233,7 +230,6 @@ in {
           aliases = [
             "shodan.r"
           ];
-          tinc.port = 0;
           tinc = {
             pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
@@ -271,7 +267,6 @@ in {
           aliases = [
             "icarus.r"
           ];
-          tinc.port = 0;
           tinc = {
             pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
@@ -308,7 +303,6 @@ in {
           aliases = [
             "daedalus.r"
           ];
-          tinc.port = 0;
           tinc = {
             pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
@@ -343,7 +337,6 @@ in {
           aliases = [
             "skynet.r"
           ];
-          tinc.port = 0;
           tinc = {
             pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
@@ -380,7 +373,6 @@ in {
           aliases = [
             "littleT.r"
           ];
-          tinc.port = 0;
           tinc = {
             pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
@@ -433,7 +425,6 @@ in {
           aliases = [
             "xerxes.r"
           ];
-          tinc.port = 0;
           tinc = {
             pubkey = ''
               -----BEGIN RSA PUBLIC KEY-----
@@ -486,7 +477,6 @@ in {
           aliases = [
             "yellow.r"
           ];
-          tinc.port = 0;
           tinc = {
             pubkey = ''
               -----BEGIN PUBLIC KEY-----
@@ -527,7 +517,6 @@ in {
           aliases = [
             "blue.r"
           ];
-          tinc.port = 0;
           tinc = {
             pubkey = ''
               -----BEGIN PUBLIC KEY-----
@@ -570,7 +559,6 @@ in {
           aliases = [
             "green.r"
           ];
-          tinc.port = 0;
           tinc = {
             pubkey = ''
               -----BEGIN PUBLIC KEY-----
@@ -642,7 +630,6 @@ in {
           aliases = [
             "hilum.r"
           ];
-          tinc.port = 0;
           tinc = {
             pubkey = ''
               -----BEGIN PUBLIC KEY-----
@@ -686,7 +673,6 @@ in {
           aliases = [
             "styx.r"
           ];
-          tinc.port = 654;
           tinc = {
             pubkey = ''
               -----BEGIN PUBLIC KEY-----
@@ -731,7 +717,6 @@ in {
           aliases = [
             "coaxmetal.r"
           ];
-          tinc.port = 0;
           tinc = {
             pubkey = ''
               -----BEGIN PUBLIC KEY-----
