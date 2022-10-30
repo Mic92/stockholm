@@ -131,6 +131,8 @@ in {
             "dcpp.omo.r"
             "backup.makefu.r"
             "torrent.omo.r"
+            "music.omo.r"
+            "music.makefu.r"
           ];
         };
       };
