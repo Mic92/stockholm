@@ -628,7 +628,7 @@ let
           # TODO fix correctly with stringAfter
           chown -R ${toString config.users.users.git.uid}:nogroup "$repodir"
         fi
-        ln -s ${hooks} "$repodir/hooks"
+        ln -Tfs ${hooks} "$repodir/hooks"
       ''
     ) (attrValues cfg.repos)}
 
