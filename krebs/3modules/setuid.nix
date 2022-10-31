@@ -69,7 +69,7 @@ with import <stockholm/lib>;
       in /* sh */ ''
         mkdir -p ${cfg.wrapperDir}
         cp ${src} ${dst}
-        chown ${cfg.owner}.${cfg.group} ${dst}
+        chown ${cfg.owner}:${cfg.group} ${dst}
         chmod ${cfg.mode} ${dst}
         ${optionalString (cfg.capabilities != []) /* sh */ ''
           ${pkgs.libcap.out}/bin/setcap ${concatMapStringsSep "," shell.escape cfg.capabilities} ${dst}
