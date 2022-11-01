@@ -78,7 +78,7 @@ in {
     pavucontrol
     ponymix
     powertop
-    rxvt_unicode-with-plugins
+    rxvt-unicode
     sshvnc
     sxiv
     taskwarrior

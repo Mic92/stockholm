@@ -63,8 +63,6 @@ instance UrgencyHook LibNotifyUrgencyHook where
         safeSpawn "${pkgs.libnotify}/bin/notify-send" [show name, "workspace " ++ idx]
 
 myTerm :: FilePath
--- myTerm = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtc -e /run/current-system/sw/bin/xonsh"
--- myTerm = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtc"
 myTerm = "/run/current-system/sw/bin/alacritty"
 
 myFont :: String

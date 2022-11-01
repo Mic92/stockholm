@@ -34,7 +34,7 @@ in {
     config = { ... }: {
       environment.systemPackages = [
         pkgs.git
-        pkgs.rxvt_unicode.terminfo
+        pkgs.rxvt-unicode-unwrapped.terminfo
       ];
       services.openssh.enable = true;
       users.users.root.openssh.authorizedKeys.keys = [
