@@ -4,10 +4,15 @@
   nixpkgs.overlays = [
     (self: super: {
       exim =
-        super.exim.overrideAttrs (old: {
+        super.exim.overrideAttrs (old: let
+          key = if builtins.hasAttr "preBuild" old then
+            "preBuild"
+          else
+            "configurePhase";
+        in {
           buildInputs = old.buildInputs ++ [ self.gnutls ];
-          preBuild = /* sh */ ''
-            ${old.preBuild}
+          ${key} = /* sh */ ''
+            ${old.${key}}
             sed -Ei '
               s:^USE_OPENSSL=.*:# &:
               s:^# (USE_GNUTLS)=.*:\1=yes:
