@@ -210,28 +210,6 @@ let
             '';
           };
         }
-        {
-          pattern = ''^([\H-]*?):?\s+([+-][1-9][0-9]*)\s+(\S+)$'';
-          activate = "match";
-          arguments = [1 2 3];
-          command = {
-            env = {
-              # TODO; get state as argument
-              state_file = "${stateDir}/ledger";
-            };
-            filename = pkgs.writeDash "ledger-add" ''
-              set -x
-              tonick=$1
-              amt=$2
-              unit=$3
-              printf '%s\n  %s  %d %s\n  %s  %d %s\n' "$(date -Id)" "$tonick" "$amt" "$unit" "$_from" "$(expr 0 - "''${amt#+}")" "$unit" >> $state_file
-              ${pkgs.hledger}/bin/hledger -f $state_file bal -N -O csv \
-                | ${pkgs.coreutils}/bin/tail +2 \
-                | ${pkgs.miller}/bin/mlr --icsv --opprint cat \
-                | ${pkgs.gnugrep}/bin/grep "$_from"
-            '';
-          };
-        }
         bedger-add
         bedger-balance
         hooks.sed
