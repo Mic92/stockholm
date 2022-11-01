@@ -1,4 +1,4 @@
 { config, lib, pkgs, ... }:
-with import <stockholm/lib>;
 {
+  services.nginx.package = lib.mkDefault (pkgs.nginxStable.override { openssl = pkgs.libressl; });
 }
