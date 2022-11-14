@@ -588,6 +588,7 @@ in {
 
     massulus = {
       cores = 1;
+      ci = false;
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.113";
