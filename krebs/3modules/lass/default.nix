@@ -10,6 +10,7 @@ in {
   };
   hosts = mapAttrs (_: recursiveUpdate {
     owner = config.krebs.users.lass;
+    consul = true;
     ci = true;
     monitoring = true;
   }) {
@@ -412,6 +413,7 @@ in {
     };
     xerxes = {
       cores = 2;
+      consul = false;
       nets = rec {
         retiolum = {
           ip4.addr = "10.243.1.3";
@@ -632,6 +634,7 @@ in {
     };
 
     phone = {
+      consul = false;
       nets = {
         wiregrill = {
           ip4.addr = "10.244.1.13";
@@ -647,6 +650,7 @@ in {
       syncthing.id = "PWKVXPB-JCNO6E4-KVIQ7CK-6FSOWHM-AWORMDU-HVVYLKW-44DQTYW-XZT7DQJ";
     };
     tablet = {
+      consul = false;
       nets = {
         wiregrill = {
           ip4.addr = "10.244.1.14";
@@ -661,6 +665,7 @@ in {
       ci = false;
     };
     hilum = {
+      consul = false;
       cores = 1;
       nets = {
         retiolum = {
@@ -836,6 +841,7 @@ in {
     };
 
     lasspi = {
+      consul = false;
       cores = 1;
       nets = {
         retiolum = {
@@ -879,6 +885,7 @@ in {
     };
 
     domsen-pixel = {
+      consul = false;
       nets = {
         wiregrill = {
           ip4.addr = "10.244.1.17";
