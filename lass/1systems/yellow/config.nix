@@ -154,6 +154,7 @@ with import <stockholm/lib>;
     tables.filter.INPUT.rules = [
       { predicate = "-p tcp --dport 80"; target = "ACCEPT"; } # nginx web dir
       { predicate = "-p tcp --dport 9091"; target = "ACCEPT"; } # transmission-web
+      { predicate = "-p tcp --dport 9092"; target = "ACCEPT"; } # magnetico webinterface
       { predicate = "-p tcp --dport 51413"; target = "ACCEPT"; } # transmission-traffic
       { predicate = "-p udp --dport 51413"; target = "ACCEPT"; } # transmission-traffic
       { predicate = "-p tcp --dport 8096"; target = "ACCEPT"; } # jellyfin
@@ -270,5 +271,11 @@ with import <stockholm/lib>;
   services.jellyfin = {
     enable = true;
     group = "download";
+  };
+
+  services.magnetico = {
+    enable = true;
+    web.address = "0.0.0.0";
+    web.port = 9092;
   };
 }
