@@ -164,7 +164,7 @@ with import <stockholm/lib>;
     client
     dev tun
     proto udp
-    remote 196.240.57.43 1194
+    remote 194.110.84.106 1194
     resolv-retry infinite
     remote-random
     nobind
@@ -174,7 +174,7 @@ with import <stockholm/lib>;
     persist-key
     persist-tun
     ping 15
-    ping-restart 0
+    ping-restart 15
     ping-timer-rem
     reneg-sec 0
     comp-lzo no
