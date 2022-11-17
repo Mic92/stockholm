@@ -251,7 +251,7 @@ with import <stockholm/lib>;
     path = [
       pkgs.coreutils
       pkgs.findutils
-      pkgs.inotifyTools
+      pkgs.inotify-tools
     ];
     serviceConfig = {
       Restart = "always";
