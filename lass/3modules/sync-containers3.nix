@@ -99,12 +99,60 @@ in {
               set -efux
               consul lock sync_${ctr.name} ${pkgs.writers.writeDash "${ctr.name}-sync" ''
                 set -efux
-                if ping -c 1 ${ctr.name}.r; then
+                if /run/wrappers/bin/ping -c 1 ${ctr.name}.r; then
                   touch "$HOME"/incomplete
                   rsync -a -e "ssh -i $CREDENTIALS_DIRECTORY/ssh_key" --inplace container_sync@${ctr.name}.r:disk "$HOME"/disk
                   rm "$HOME"/incomplete
                 fi
               ''}
+            '';
+          };
+        }; }
+        { "${ctr.name}_watcher" = {
+          path = with pkgs; [
+            coreutils
+            consul
+            cryptsetup
+            curl
+            mount
+            util-linux
+            jq
+          ];
+          serviceConfig = {
+            ExecStart = pkgs.writers.writeDash "${ctr.name}_watcher" ''
+              set -efux
+              while sleep 5; do
+                # get the payload
+                # check if the host reacted recently
+                case $(curl -s -o /dev/null --retry 10 -w '%{http_code}' http://127.0.0.1:8500/v1/kv/containers/${ctr.name}) in
+                  404)
+                    echo 'got 404 from kv, should kill the container'
+                    break
+                    ;;
+                  500)
+                    echo 'got 500 from kv, will kill container'
+                    break
+                    ;;
+                  200)
+                    # echo 'got 200 from kv, will check payload'
+                    export payload=$(consul kv get containers/${ctr.name})
+                    if [ "$(jq -rn 'env.payload | fromjson.host')" = '${config.networking.hostName}' ]; then
+                      # echo 'we are the host, continuing'
+                      continue
+                    else
+                      echo 'we are not host, killing container'
+                      break
+                    fi
+                    ;;
+                  *)
+                    echo 'unknown state, continuing'
+                    continue
+                    ;;
+                esac
+              done
+              /run/current-system/sw/bin/nixos-container stop ${ctr.name} || :
+              umount /var/lib/sync-containers3/${ctr.name}/state || :
+              cryptsetup luksClose ${ctr.name} || :
             '';
           };
         }; }
@@ -116,36 +164,68 @@ in {
             cryptsetup
             mount
             util-linux
+            curl
             systemd
+            jq
             retry
+            bc
           ];
-          serviceConfig = let
-            containerDirectory = lib.removeSuffix "/%i" config.systemd.services."container@${ctr.name}".environment.root;
-          in {
+          serviceConfig = {
             Restart = "always";
-            RestartSec = "5s";
-            ExecStart = "${pkgs.consul}/bin/consul lock -verbose -monitor-retry 100 container_${ctr.name} ${pkgs.writers.writeBash "${ctr.name}-start" ''
+            RestartSec = "30s";
+            ExecStart = pkgs.writers.writeDash "${ctr.name}_scheduler" ''
               set -efux
+              # get the payload
+              # check if the host reacted recently
+              case $(curl -s -o /dev/null --retry 10 -w '%{http_code}' http://127.0.0.1:8500/v1/kv/containers/${ctr.name}) in
+                404)
+                  # echo 'got 404 from kv, will create container'
+                  ;;
+                500)
+                  # echo 'got 500 from kv, retrying again'
+                  exit 0
+                  ;;
+                200)
+                  # echo 'got 200 from kv, will check payload'
+                  export payload=$(consul kv get containers/${ctr.name})
+                  if [ "$(jq -rn 'env.payload | fromjson.host')" = '${config.networking.hostName}' ]; then
+                    echo 'we are the host, starting container'
+                  else
+                    # echo 'we are not host, checking timestamp'
+                    # if [ $(echo "$(date +%s) - $(jq -rn 'env.payload | fromjson.time') > 100" | bc) -eq 1 ]; then
+                    if [ "$(jq -rn 'env.payload | fromjson.time | now - tonumber > 100')" = 'true' ]; then
+                      echo 'last beacon is more than 100s ago, taking over'
+                    else
+                      # echo 'last beacon was recent. trying again'
+                      exit 0
+                    fi
+                  fi
+                  ;;
+                *)
+                  echo 'unknown state, bailing out'
+                  exit 0
+                  ;;
+              esac
               if test -e /var/lib/sync-containers3/${ctr.name}/incomplete; then
                 echo 'data is inconistent, start aborted'
                 exit 1
               fi
-              trap ${pkgs.writers.writeDash "stop-${ctr.name}" ''
-                set -efux
-                /run/current-system/sw/bin/nixos-container stop ${ctr.name} || :
-                umount /var/lib/sync-containers3/${ctr.name}/state || :
-                cryptsetup luksClose ${ctr.name} || :
-              ''} INT TERM EXIT
-              consul kv put containers/${ctr.name}/host ${config.networking.hostName}
-              cryptsetup luksOpen --key-file ${ctr.luksKey} /var/lib/sync-containers3/${ctr.name}/disk ${ctr.name}
-              mkdir -p /var/lib/sync-containers3/${ctr.name}/state
-              mount /dev/mapper/${ctr.name} /var/lib/sync-containers3/${ctr.name}/state
-              /run/current-system/sw/bin/nixos-container start ${ctr.name}
-              set +x
-              until /run/wrappers/bin/ping -q -c 1 ${ctr.name}.r > /dev/null; do sleep 5; done
-              while retry -t 5 -d 60 -- /run/wrappers/bin/ping -q -c 3 ${ctr.name}.r > /dev/null; do sleep 5; done
-              echo "lost tinc connection to container, shutting down"
-            ''}";
+              consul kv put containers/${ctr.name} "$(jq -cn '{host: "${config.networking.hostName}", time: now}')" >/dev/null
+              consul lock -verbose -monitor-retry=100 -timeout 30s -name container_${ctr.name} container_${ctr.name} ${pkgs.writers.writeBash "${ctr.name}-start" ''
+                set -efu
+                cryptsetup luksOpen --key-file ${ctr.luksKey} /var/lib/sync-containers3/${ctr.name}/disk ${ctr.name} || :
+                mkdir -p /var/lib/sync-containers3/${ctr.name}/state
+                mountpoint /var/lib/sync-containers3/${ctr.name}/state || mount /dev/mapper/${ctr.name} /var/lib/sync-containers3/${ctr.name}/state
+                /run/current-system/sw/bin/nixos-container start ${ctr.name}
+                # wait for system to become reachable for the first time
+                retry -t 10 -d 10 -- /run/wrappers/bin/ping -q -c 1 ${ctr.name}.r > /dev/null
+                systemctl start ${ctr.name}_watcher.service
+                while systemctl is-active container@${ctr.name}.service >/devnull && /run/wrappers/bin/ping -q -c 3 ${ctr.name}.r >/dev/null; do
+                  consul kv put containers/${ctr.name} "$(jq -cn '{host: "${config.networking.hostName}", time: now}')" >/dev/null
+                  sleep 10
+                done
+              ''}
+            '';
           };
         }; }
       ]) (lib.attrValues cfg.containers)));
