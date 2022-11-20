@@ -65,6 +65,9 @@
       bindkey "[8~" end-of-line
       bindkey "Oc" emacs-forward-word
       bindkey "Od" emacs-backward-word
+
+      # direnv integration
+      eval "$(${pkgs.direnv}/bin/direnv hook zsh)"
     '';
     promptInit = ''
       autoload -U promptinit
