@@ -1,6 +1,17 @@
 { config, lib, pkgs, ... }:
 {
-  environment.systemPackages = [ pkgs.fzf ];
+  environment.systemPackages = with pkgs; [
+    atuin
+    direnv
+    fzf
+  ];
+  environment.variables.ATUIN_CONFIG_DIR = toString (pkgs.writeTextDir "/config.toml" ''
+    auto_sync = true
+    update_check = false
+    sync_address = "http://green.r:8888"
+    sync_frequency = 0
+    style = "compact"
+  '');
   programs.zsh = {
     enable = true;
     shellInit = ''
@@ -12,27 +23,9 @@
       setopt autocd extendedglob
       bindkey -e
 
-      #history magic
-      bindkey "[A" up-line-or-local-history
-      bindkey "[B" down-line-or-local-history
 
-      up-line-or-local-history() {
-          zle set-local-history 1
-          zle up-line-or-history
-          zle set-local-history 0
-      }
-      zle -N up-line-or-local-history
-      down-line-or-local-history() {
-          zle set-local-history 1
-          zle down-line-or-history
-          zle set-local-history 0
-      }
-      zle -N down-line-or-local-history
-
-      setopt SHARE_HISTORY
-      setopt HIST_IGNORE_ALL_DUPS
-      # setopt inc_append_history
-      bindkey '^R' history-incremental-search-backward
+      # # setopt inc_append_history
+      # bindkey '^R' history-incremental-search-backward
 
       #C-x C-e open line in editor
       autoload -z edit-command-line
@@ -42,6 +35,13 @@
       #fzf inclusion
       source ${pkgs.fzf}/share/fzf/completion.zsh
       source ${pkgs.fzf}/share/fzf/key-bindings.zsh
+
+      # atuin distributed shell history
+      export ATUIN_NOBIND="true" # disable all keybdinings of atuin
+      eval "$(atuin init zsh)"
+      bindkey '^r' _atuin_search_widget # bind ctrl+r to atuin
+      # use zsh only session history
+      fc -p
 
       #completion magic
       autoload -Uz compinit
@@ -67,11 +67,6 @@
       bindkey "Od" emacs-backward-word
     '';
     promptInit = ''
-      # TODO: figure out why we need to set this here
-      HISTSIZE=900001
-      HISTFILESIZE=$HISTSIZE
-      SAVEHIST=$HISTSIZE
-
       autoload -U promptinit
       promptinit
 
