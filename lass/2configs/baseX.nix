@@ -108,10 +108,55 @@ in {
     enableGhostscriptFonts = true;
 
     fonts = with pkgs; [
-      hack-font
       xorg.fontschumachermisc
-      terminus_font_ttf
       inconsolata
+      noto-fonts
+      (iosevka.override {
+        privateBuildPlan = {
+          family = "Iosevka";
+          spacing = "normal";
+          serifs = "sans";
+          no-ligation = true;
+
+          variants.design = {
+            capital-i = "serifless";
+            capital-j = "serifless";
+            a = "double-storey-tailed";
+            b = "toothless-corner";
+            d = "toothless-corner-serifless";
+            f = "flat-hook-tailed";
+            g = "earless-corner";
+            i = "tailed";
+            j = "serifless";
+            l = "tailed";
+
+            m = "earless-corner-double-arch";
+            n = "earless-corner-straight";
+            p = "earless-corner";
+            q = "earless-corner";
+            r = "earless-corner";
+            u = "toothless-rounded";
+            y = "cursive-flat-hook";
+
+            one = "line";
+            two = "straight-neck";
+            three = "flat-top";
+            four = "open";
+            six = "open-contour";
+            seven = "straight-serifless";
+            eight = "two-circles";
+            nine = "open-contour";
+            tilde = "low";
+            asterisk = "hex-low";
+            number-sign = "upright";
+            at = "short";
+            dollar = "open";
+            percent = "dots";
+            question = "corner-flat-hooked";
+          };
+        };
+        set = "kookiefonts";
+      })
     ];
   };
 

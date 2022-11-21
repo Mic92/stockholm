@@ -1,21 +1,23 @@
 { config, lib, pkgs, ... }: let
 
   alacritty-cfg = extrVals: builtins.toJSON ({
-    font = {
+    font = let
+      family = "Iosevka";
+    in {
       normal = {
-        family = "Inconsolata";
+        family = family;
         style = "Regular";
       };
       bold = {
-        family = "Inconsolata";
+        family = family;
         style = "Bold";
       };
       italic = {
-        family = "Inconsolata";
+        family = family;
         style = "Italic";
       };
       bold_italic = {
-        family = "Inconsolata";
+        family = family;
         style = "Bold Italic";
       };
       size = 8;
