@@ -33,7 +33,7 @@ let
 
   eval = lib.evalModules {
     modules = lib.singleton {
-      _file = toString ./weechat-declarative.nix;
+      _file = toString ./default.nix;
       imports = lib.singleton config;
       options = {
         scripts = lib.mkOption {
