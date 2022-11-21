@@ -122,7 +122,7 @@
       # reloadIfChanged = true;
       restartTriggers = [ configFile ];
       serviceConfig = {
-        ExecStart = "${pkgs.ergo}/bin/ergo run --conf /etc/ergo.yaml";
+        ExecStart = "${pkgs.ergochat}/bin/ergo run --conf /etc/ergo.yaml";
         ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
         DynamicUser = true;
         StateDirectory = "ergo";
