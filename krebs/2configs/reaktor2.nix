@@ -51,6 +51,29 @@ let
     };
   };
 
+  confuse = {
+    pattern = "^!confuse (.*)$";
+    activate = "match";
+    arguments = [1];
+    command = {
+      filename = pkgs.writeDash "confuse" ''
+        set -efu
+        export PATH=${makeBinPath [
+          pkgs.coreutils
+          pkgs.curl
+          pkgs.gnused
+          pkgs.stable-generate
+        ]}
+        stable_url=$(stable-generate "$@")
+        paste_url=$(curl -Ss "$stable_url" |
+          curl -Ss https://p.krebsco.de --data-binary @- |
+          tail -1
+        )
+        echo "$_from: $paste_url"
+      '';
+    };
+  };
+
   taskRcFile = builtins.toFile "taskrc" ''
     confirmation=no
   '';
@@ -218,6 +241,7 @@ let
             '';
           };
         }
+        confuse
         bedger-add
         bedger-balance
         hooks.sed
