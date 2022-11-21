@@ -21,6 +21,8 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/git-brain.nix>
     <stockholm/lass/2configs/et-server.nix>
     <stockholm/lass/2configs/consul.nix>
+
+    <stockholm/lass/2configs/atuin-server.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.green;
@@ -31,6 +33,9 @@ with import <stockholm/lib>;
   };
 
   systemd.tmpfiles.rules = [
+    "d /home/lass/.local/share 0700 lass users -"
+    "d /home/lass/.local 0700 lass users -"
+
     "d /var/state/lass_mail 0700 lass users -"
     "L+ /home/lass/Maildir - - - - ../../var/state/lass_mail"
     "d /home/lass/notmuch 0700 lass users -"
