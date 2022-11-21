@@ -226,6 +226,12 @@ let
               osm-restaurants = pkgs.callPackage "${osm-restaurants-src}/osm-restaurants" {};
             in pkgs.writeDash "krebsfood" ''
               set -efu
+              export PATH=${makeBinPath [
+                osm-restaurants
+                pkgs.coreutils
+                pkgs.curl
+                pkgs.jq
+              ]}
               poi=$(curl -fsS http://c.r/poi.json | jq --arg name "$1" '.[$name]')
               if [ "$poi" = null ]; then
                 latitude=52.51252
@@ -235,9 +241,8 @@ let
                 longitude=$(echo "$poi" | jq -r .longitude)
               fi
 
-              ${osm-restaurants}/bin/osm-restaurants --radius "$2" --latitude "$latitude" --longitude "$longitude" \
-                | ${pkgs.jq}/bin/jq -r '"How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"'
-                '
+              osm-restaurants --radius "$2" --latitude "$latitude" --longitude "$longitude" \
+                | jq -r '"How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"'
             '';
           };
         }
