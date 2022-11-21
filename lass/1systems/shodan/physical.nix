@@ -27,11 +27,6 @@
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
     };
-    "/tmp" = {
-      device = "tmpfs";
-      fsType = "tmpfs";
-      options = ["nosuid" "nodev" "noatime"];
-    };
     "/bku" = {
       device = "/dev/pool/bku";
       fsType = "btrfs";
