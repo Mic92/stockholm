@@ -80,7 +80,10 @@ in {
     powertop
     rxvt-unicode
     sshvnc
-    sxiv
+    (pkgs.writers.writeDashBin "sxiv" ''
+      ${pkgs.nsxiv}/bin/nsxiv "$@"
+    '')
+    nsxiv
     taskwarrior
     termite
     transgui
