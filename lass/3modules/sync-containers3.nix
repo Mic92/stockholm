@@ -117,6 +117,7 @@ in {
             mount
             util-linux
             jq
+            retry
           ];
           serviceConfig = {
             ExecStart = pkgs.writers.writeDash "${ctr.name}_watcher" ''
@@ -124,7 +125,7 @@ in {
               while sleep 5; do
                 # get the payload
                 # check if the host reacted recently
-                case $(curl -s -o /dev/null --retry 10 -w '%{http_code}' http://127.0.0.1:8500/v1/kv/containers/${ctr.name}) in
+                case $(curl -s -o /dev/null --retry 10 --retry-delay 10 -w '%{http_code}' http://127.0.0.1:8500/v1/kv/containers/${ctr.name}) in
                   404)
                     echo 'got 404 from kv, should kill the container'
                     break
@@ -137,8 +138,14 @@ in {
                     # echo 'got 200 from kv, will check payload'
                     export payload=$(consul kv get containers/${ctr.name})
                     if [ "$(jq -rn 'env.payload | fromjson.host')" = '${config.networking.hostName}' ]; then
-                      # echo 'we are the host, continuing'
-                      continue
+                      # echo 'we are the host, trying to reach container'
+                      if $(retry -t 10 -d 10 -- /run/wrappers/bin/ping -q -c 1 ${ctr.name}.r > /dev/null); then
+                        # echo 'container is reachable, continueing'
+                        continue
+                      else
+                        # echo 'container seems dead, killing'
+                        break
+                      fi
                     else
                       echo 'we are not host, killing container'
                       break
