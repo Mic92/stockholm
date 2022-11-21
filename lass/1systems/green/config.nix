@@ -38,8 +38,6 @@ with import <stockholm/lib>;
 
     "d /var/state/lass_mail 0700 lass users -"
     "L+ /home/lass/Maildir - - - - ../../var/state/lass_mail"
-    "d /home/lass/notmuch 0700 lass users -"
-    "L+ /var/state/lass_mail/.notmuch - - - - /home/lass/notmuch"
 
     "d /var/state/lass_ssh 0700 lass users -"
     "L+ /home/lass/.ssh - - - - ../../var/state/lass_ssh"
