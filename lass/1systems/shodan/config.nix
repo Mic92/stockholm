@@ -18,9 +18,8 @@
     <stockholm/krebs/2configs/news-host.nix>
     <stockholm/lass/2configs/prism-mounts/samba.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
-    <stockholm/lass/2configs/home-media.nix>
-    <stockholm/lass/2configs/syncthing.nix>
-    <stockholm/lass/2configs/sync/sync.nix>
+    <stockholm/lass/2configs/consul.nix>
+    <stockholm/lass/2configs/red-host.nix>
     <stockholm/lass/2configs/snapclient.nix>
   ];
 
