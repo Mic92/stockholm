@@ -148,7 +148,8 @@ let
     ${lib.concatStringsSep "\n"
       (lib.mapAttrsToList
         (name: target: /* sh */ ''
-          ${pkgs.coreutils}/bin/ln -s ${lib.escapeShellArg target} "$CONFDIR"/${lib.escapeShellArg name}
+          ${pkgs.coreutils}/bin/cp ${lib.escapeShellArg target} "$CONFDIR"/${lib.escapeShellArg name}
+          ${pkgs.coreutils}/bin/chmod +w "$CONFDIR"/${lib.escapeShellArg name}
         '')
         cfg.files
       )
