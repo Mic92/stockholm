@@ -1,7 +1,12 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 pkgs.writers.writeDashBin "stable-generate" ''
   set -efu
+
+  export PATH=${lib.makeBinPath [
+    pkgs.curl
+    pkgs.jq
+  ]}
 
   STABLE_URL=''${STABLE_URL:-http://stable-confusion.r}
 
