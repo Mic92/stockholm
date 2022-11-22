@@ -220,8 +220,8 @@ let
               osm-restaurants-src = pkgs.fetchFromGitHub {
                 owner = "kmein";
                 repo = "scripts";
-                rev = "66b2068d548d3418c81dd093bba3f80248c68196";
-                sha256 = "059sp2lz54iwklswaxv9w703sbm2vv7p0ccig10gsqshriq6v58z";
+                rev = "dda381be26abff73a0cf364c6dfff6e1701f41ee";
+                sha256 = "sha256-J7jGWZeAULDA1EkO50qx+hjl+5IsUj389pUUMreKeNE=";
               };
               osm-restaurants = pkgs.callPackage "${osm-restaurants-src}/osm-restaurants" {};
             in pkgs.writeDash "krebsfood" ''
