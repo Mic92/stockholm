@@ -862,6 +862,7 @@ in {
       pubkey = ssh-for "xq";
     };
     xkey = {
+      mail = "xkey@krebsco.de";
       pubkey = ssh-for "xkey";
     };
     miaoski = {
