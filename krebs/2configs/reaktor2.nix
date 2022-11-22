@@ -64,12 +64,16 @@ let
           pkgs.gnused
           pkgs.stable-generate
         ]}
-        stable_url=$(stable-generate "$@")
-        paste_url=$(curl -Ss "$stable_url" |
-          curl -Ss https://p.krebsco.de --data-binary @- |
-          tail -1
-        )
-        echo "$_from: $paste_url"
+        if [ $_msgtarget = '#krebs' ] || [ $_msgtarget = '#xxx' ]; then
+          stable_url=$(stable-generate "$@")
+          paste_url=$(curl -Ss "$stable_url" |
+            curl -Ss https://p.krebsco.de --data-binary @- |
+            tail -1
+          )
+          echo "$_from: $paste_url"
+        else
+          echo "please use me in a public channel"
+        fi
       '';
     };
   };
