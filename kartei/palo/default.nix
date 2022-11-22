@@ -1,4 +1,4 @@
-with import <stockholm/lib>;
+with import ../../lib;
 { config, ... }: let
 
   hostDefaults = hostName: host: flip recursiveUpdate host ({
@@ -12,8 +12,6 @@ with import <stockholm/lib>;
     nets.wiregrill.ip6.addr =
       (krebs.genipv6 "wiregrill" "external" { inherit hostName; }).address;
   });
-  ssh-for = name: builtins.readFile (./ssh + "/${name}.pub");
-  tinc-for = name: builtins.readFile (./tinc + "/${name}.pub");
 
 in {
   hosts = mapAttrs hostDefaults {
@@ -24,7 +22,7 @@ in {
           ip4.addr = "10.243.23.1";
           tinc.port = 720;
           aliases = [ "pepe.r" ];
-          tinc.pubkey = tinc-for "palo";
+          tinc.pubkey = builtins.readFile ./retiolum.pub;
         };
       };
     };
@@ -35,7 +33,7 @@ in {
           ip4.addr = "10.243.23.2";
           tinc.port = 720;
           aliases = [ "schasch.r" ];
-          tinc.pubkey = tinc-for "palo";
+          tinc.pubkey = builtins.readFile ./retiolum.pub;
         };
       };
       syncthing.id = "FLY7DHI-TJLEQBJ-JZNC4YV-NBX53Z2-ZBRWADL-BKSFXYZ-L4FMDVH-MOSEVAQ";
@@ -49,7 +47,7 @@ in {
           aliases = [
             "sterni.r"
           ];
-          tinc.pubkey = tinc-for "palo";
+          tinc.pubkey = builtins.readFile ./retiolum.pub;
         };
       };
     };
@@ -60,7 +58,7 @@ in {
           ip4.addr = "10.243.23.5";
           tinc.port = 720;
           aliases = [ "workhorse.r" ];
-          tinc.pubkey = tinc-for "palo";
+          tinc.pubkey = builtins.readFile ./retiolum.pub;
         };
       };
     };
@@ -71,7 +69,7 @@ in {
           ip4.addr = "10.243.23.4";
           tinc.port = 720;
           aliases = [ "workout.r" ];
-          tinc.pubkey = tinc-for "palo";
+          tinc.pubkey = builtins.readFile ./retiolum.pub;
         };
       };
     };

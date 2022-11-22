@@ -1,4 +1,4 @@
-with import <stockholm/lib>;
+with import ../../lib;
 { config, ... }: let
   hostDefaults = hostName: host: flip recursiveUpdate host ({
     ci = false;
@@ -953,6 +953,12 @@ in {
           tinc.pubkey_ed25519 = "TV9byzSblknvqdUjQCwjgLmA8qCB4Tnl/DSd2mbsZTJ";
         };
       };
+    };
+  };
+  users = {
+    mic92 = {
+      mail = "joerg@thalheim.io";
+      pubkey = builtins.readFile ./ssh/mic92.pub;
     };
   };
 }

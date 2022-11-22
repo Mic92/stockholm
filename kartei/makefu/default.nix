@@ -2,7 +2,7 @@
 # tinc generate-keys
 # ssh-keygen -f ssh.id_ed25519 -t ed25519 -C host
 
-with import <stockholm/lib>;
+with import ../../lib;
 { config, ... }: let
 
   hostDefaults = hostName: host: foldl' recursiveUpdate {} [

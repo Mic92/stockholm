@@ -1,4 +1,4 @@
-with import <stockholm/lib>;
+with import ../../lib;
 { config, ... }:
 let
   maybeEmpty = attrset: key: if (attrset?key) then attrset.${key} else [];
