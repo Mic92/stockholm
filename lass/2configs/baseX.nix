@@ -119,7 +119,6 @@ in {
           no-ligation = true;
 
           variants.design = {
-            capital-i = "serifless";
             capital-j = "serifless";
             a = "double-storey-tailed";
             b = "toothless-corner";
