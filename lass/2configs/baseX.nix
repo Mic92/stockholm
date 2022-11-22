@@ -111,10 +111,11 @@ in {
       inconsolata
       noto-fonts
       (iosevka.override {
+        # https://typeof.net/Iosevka/customizer
         privateBuildPlan = {
           family = "Iosevka";
-          spacing = "normal";
-          serifs = "sans";
+          spacing = "term";
+          serifs = "slab";
           no-ligation = true;
 
           variants.design = {
@@ -125,7 +126,7 @@ in {
             d = "toothless-corner-serifless";
             f = "flat-hook-tailed";
             g = "earless-corner";
-            i = "tailed";
+            i = "hooky";
             j = "serifless";
             l = "tailed";
 
@@ -137,7 +138,7 @@ in {
             u = "toothless-rounded";
             y = "cursive-flat-hook";
 
-            one = "line";
+            one = "no-base-long-top-serif";
             two = "straight-neck";
             three = "flat-top";
             four = "open";
