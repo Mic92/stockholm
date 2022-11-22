@@ -51,6 +51,29 @@ let
     };
   };
 
+  confuse = {
+    pattern = "^!confuse (.*)$";
+    activate = "match";
+    arguments = [1];
+    command = {
+      filename = pkgs.writeDash "confuse" ''
+        set -efu
+        export PATH=${makeBinPath [
+          pkgs.coreutils
+          pkgs.curl
+          pkgs.gnused
+          pkgs.stable-generate
+        ]}
+        stable_url=$(stable-generate "$@")
+        paste_url=$(curl -Ss "$stable_url" |
+          curl -Ss https://p.krebsco.de --data-binary @- |
+          tail -1
+        )
+        echo "$_from: $paste_url"
+      '';
+    };
+  };
+
   taskRcFile = builtins.toFile "taskrc" ''
     confirmation=no
   '';
@@ -185,8 +208,9 @@ let
           };
         }
         {
-          pattern = "18@p";
+          pattern = ''^18@p\s+(\S+)\s+(\d+)m$'';
           activate = "match";
+          arguments = [1 2];
           command = {
             env = {
               CACHE_DIR = "${stateDir}/krebsfood";
@@ -202,14 +226,27 @@ let
               osm-restaurants = pkgs.callPackage "${osm-restaurants-src}/osm-restaurants" {};
             in pkgs.writeDash "krebsfood" ''
               set -efu
-              ecke_lat=52.51252
-              ecke_lon=13.41740
-              ${osm-restaurants}/bin/osm-restaurants --radius 500 --latitude "$ecke_lat" --longitude "$ecke_lon" \
-                | ${pkgs.jq}/bin/jq -r '"How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"'
-                '
+              export PATH=${makeBinPath [
+                osm-restaurants
+                pkgs.coreutils
+                pkgs.curl
+                pkgs.jq
+              ]}
+              poi=$(curl -fsS http://c.r/poi.json | jq --arg name "$1" '.[$name]')
+              if [ "$poi" = null ]; then
+                latitude=52.51252
+                longitude=13.41740
+              else
+                latitude=$(echo "$poi" | jq -r .latitude)
+                longitude=$(echo "$poi" | jq -r .longitude)
+              fi
+
+              osm-restaurants --radius "$2" --latitude "$latitude" --longitude "$longitude" \
+                | jq -r '"How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"'
             '';
           };
         }
+        confuse
         bedger-add
         bedger-balance
         hooks.sed

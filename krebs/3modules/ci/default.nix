@@ -115,6 +115,7 @@ let
                             build_name = stage,
                             build_script = stages[stage],
                           ),
+                          timeout = 3600,
                           command="${pkgs.writeDash "build.sh" ''
                             set -xefu
                             profile=${shell.escape profileRoot}/$build_name

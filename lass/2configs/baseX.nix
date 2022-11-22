@@ -7,7 +7,6 @@ in {
     ./alacritty.nix
     ./mpv.nix
     ./power-action.nix
-    ./copyq.nix
     ./urxvt.nix
     ./xdg-open.nix
     ./yubikey.nix
@@ -80,7 +79,10 @@ in {
     powertop
     rxvt-unicode
     sshvnc
-    sxiv
+    (pkgs.writers.writeDashBin "sxiv" ''
+      ${pkgs.nsxiv}/bin/nsxiv "$@"
+    '')
+    nsxiv
     taskwarrior
     termite
     transgui
@@ -105,10 +107,56 @@ in {
     enableGhostscriptFonts = true;
 
     fonts = with pkgs; [
-      hack-font
       xorg.fontschumachermisc
-      terminus_font_ttf
       inconsolata
+      noto-fonts
+      (iosevka.override {
+        # https://typeof.net/Iosevka/customizer
+        privateBuildPlan = {
+          family = "Iosevka";
+          spacing = "term";
+          serifs = "slab";
+          no-ligation = true;
+
+          variants.design = {
+            capital-i = "serifless";
+            capital-j = "serifless";
+            a = "double-storey-tailed";
+            b = "toothless-corner";
+            d = "toothless-corner-serifless";
+            f = "flat-hook-tailed";
+            g = "earless-corner";
+            i = "hooky";
+            j = "serifless";
+            l = "tailed";
+
+            m = "earless-corner-double-arch";
+            n = "earless-corner-straight";
+            p = "earless-corner";
+            q = "earless-corner";
+            r = "earless-corner";
+            u = "toothless-rounded";
+            y = "cursive-flat-hook";
+
+            one = "no-base-long-top-serif";
+            two = "straight-neck";
+            three = "flat-top";
+            four = "open";
+            six = "open-contour";
+            seven = "straight-serifless";
+            eight = "two-circles";
+            nine = "open-contour";
+            tilde = "low";
+            asterisk = "hex-low";
+            number-sign = "upright";
+            at = "short";
+            dollar = "open";
+            percent = "dots";
+            question = "corner-flat-hooked";
+          };
+        };
+        set = "kookiefonts";
+      })
     ];
   };
 
@@ -171,6 +219,22 @@ in {
       script = pkgs.writeDash "gocr" ''
         ${pkgs.netpbm}/bin/pngtopnm - \
           | ${pkgs.gocr}/bin/gocr -
+      '';
+    };
+  };
+
+  services.clipmenu.enable = true;
+
+  # synchronize all the clipboards
+  systemd.user.services.autocutsel = {
+    enable = true;
+    wantedBy = [ "graphical-session.target" ];
+    after = [ "graphical-session.target" ];
+    serviceConfig = {
+      Type = "forking";
+      ExecStart = pkgs.writers.writeDash "autocutsel" ''
+        ${pkgs.autocutsel}/bin/autocutsel -fork -selection PRIMARY
+        ${pkgs.autocutsel}/bin/autocutsel -fork -selection CLIPBOARD
       '';
     };
   };

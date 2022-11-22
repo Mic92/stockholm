@@ -10,14 +10,10 @@
           Charset = "utf-8";
         };
         telegram.krebs.Token = bridgeBotToken;
-        irc = let
+        irc.hackint = {
+          Server = "irc.hackint.org:6697";
+          UseTLS = true;
           Nick = "ponte";
-        in {
-          hackint = {
-            Server = "irc.hackint.org:6697";
-            UseTLS = true;
-            inherit Nick;
-          };
         };
         gateway = [
           {

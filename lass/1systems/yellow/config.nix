@@ -154,6 +154,7 @@ with import <stockholm/lib>;
     tables.filter.INPUT.rules = [
       { predicate = "-p tcp --dport 80"; target = "ACCEPT"; } # nginx web dir
       { predicate = "-p tcp --dport 9091"; target = "ACCEPT"; } # transmission-web
+      { predicate = "-p tcp --dport 9092"; target = "ACCEPT"; } # magnetico webinterface
       { predicate = "-p tcp --dport 51413"; target = "ACCEPT"; } # transmission-traffic
       { predicate = "-p udp --dport 51413"; target = "ACCEPT"; } # transmission-traffic
       { predicate = "-p tcp --dport 8096"; target = "ACCEPT"; } # jellyfin
@@ -164,7 +165,7 @@ with import <stockholm/lib>;
     client
     dev tun
     proto udp
-    remote 196.240.57.43 1194
+    remote 194.110.84.106 1194
     resolv-retry infinite
     remote-random
     nobind
@@ -174,7 +175,7 @@ with import <stockholm/lib>;
     persist-key
     persist-tun
     ping 15
-    ping-restart 0
+    ping-restart 15
     ping-timer-rem
     reneg-sec 0
     comp-lzo no
@@ -250,7 +251,7 @@ with import <stockholm/lib>;
     path = [
       pkgs.coreutils
       pkgs.findutils
-      pkgs.inotifyTools
+      pkgs.inotify-tools
     ];
     serviceConfig = {
       Restart = "always";
@@ -270,5 +271,11 @@ with import <stockholm/lib>;
   services.jellyfin = {
     enable = true;
     group = "download";
+  };
+
+  services.magnetico = {
+    enable = true;
+    web.address = "0.0.0.0";
+    web.port = 9092;
   };
 }

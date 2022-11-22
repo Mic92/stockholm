@@ -1,6 +1,6 @@
 { lib, pkgs, ... }:
 
-pkgs.writeDashBin "hashPassword" ''
+pkgs.writers.writeDashBin "hashPassword" ''
   # usage: hashPassword [...]
   set -euf
 

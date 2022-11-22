@@ -58,6 +58,14 @@ rec {
         default = false;
       };
 
+      consul = mkOption {
+        description = ''
+          Whether the host is a member of the global consul network
+        '';
+        type = bool;
+        default = false;
+      };
+
       owner = mkOption {
         type = user;
       };
