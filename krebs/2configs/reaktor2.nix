@@ -241,8 +241,8 @@ let
                 longitude=$(echo "$poi" | jq -r .longitude)
               fi
 
-              osm-restaurants --radius "$2" --latitude "$latitude" --longitude "$longitude" \
-                | jq -r '"How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"'
+              restaurant=$(osm-restaurants --radius "$2" --latitude "$latitude" --longitude "$longitude")
+              printf '%s' "$restaurant" | tail -1 | jq -r '"How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"'
             '';
           };
         }
