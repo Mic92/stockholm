@@ -15,8 +15,8 @@ pkgs.writers.writeDashBin "stable-generate" ''
     "",
     "None",
     "None",
-    20,
-    "Euler a",
+    20, # sampling steps
+    "Euler a", # sampling method
     false, # restore faces
     false,
     1,
