@@ -95,16 +95,6 @@ let
 
   imp = lib.mkMerge [
     {
-      krebs.dns.providers = {
-        "krebsco.de" = "zones";
-        shack = "hosts";
-        i = "hosts";
-        r = "hosts";
-        w = "hosts";
-      };
-
-      krebs.dns.search-domain = mkDefault "r";
-
       services.openssh.hostKeys =
         let inherit (config.krebs.build.host.ssh) privkey; in
         mkIf (privkey != null) [privkey];
