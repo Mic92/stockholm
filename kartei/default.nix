@@ -1,4 +1,8 @@
-{ config, lib, ... }: {
+{ config, lib, ... }: let
+  removeTemplate =
+    # TODO don't remove during CI
+    lib.flip builtins.removeAttrs ["template"];
+in {
   config =
     lib.mkMerge
       (lib.mapAttrsToList
@@ -7,7 +11,8 @@
         in {
           krebs = import path { inherit config; };
         })
-        (lib.filterAttrs
-          (_name: type: type == "directory")
-          (builtins.readDir ./.)));
+        (removeTemplate
+          (lib.filterAttrs
+            (_name: type: type == "directory")
+            (builtins.readDir ./.))));
 }
