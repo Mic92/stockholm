@@ -49,6 +49,7 @@ let
       ./secret.nix
       ./setuid.nix
       ./shadow.nix
+      ./sitemap.nix
       ./ssl.nix
       ./sync-containers.nix
       ./systemd.nix
@@ -66,11 +67,6 @@ let
 
   api = {
     enable = mkEnableOption "krebs";
-
-    sitemap = mkOption {
-      default = {};
-      type = types.attrsOf types.sitemap.entry;
-    };
 
     zone-head-config  = mkOption {
       type = with types; attrsOf str;
