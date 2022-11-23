@@ -57,6 +57,30 @@ let
     arguments = [1];
     command = {
       filename = pkgs.writeDash "confuse" ''
+        set -efux
+
+        export PATH=${makeBinPath [
+          pkgs.coreutils
+          pkgs.curl
+          pkgs.gnused
+          pkgs.stable-generate
+        ]}
+        stable_url=$(stable-generate "$@")
+        paste_url=$(curl -Ss "$stable_url" |
+          curl -Ss http://p.r --data-binary @- |
+          tail -1
+        )
+        echo "$_from: $paste_url"
+      '';
+    };
+  };
+
+  confuse_hackint = {
+    pattern = "^!confuse (.*)$";
+    activate = "match";
+    arguments = [1];
+    command = {
+      filename = pkgs.writeDash "confuse" ''
         set -efu
         export PATH=${makeBinPath [
           pkgs.coreutils
@@ -64,16 +88,14 @@ let
           pkgs.gnused
           pkgs.stable-generate
         ]}
-        if [ $_msgtarget = '#krebs' ] || [ $_msgtarget = '#xxx' ]; then
+        case $_msgtarget in \#*)
           stable_url=$(stable-generate "$@")
           paste_url=$(curl -Ss "$stable_url" |
             curl -Ss https://p.krebsco.de --data-binary @- |
             tail -1
           )
           echo "$_from: $paste_url"
-        else
-          echo "please use me in a public channel"
-        fi
+        esac
       '';
     };
   };
@@ -139,7 +161,7 @@ let
     }
   '';
 
-  systemPlugin = {
+  systemPlugin = { extra_privmsg_hooks ? [] }: {
     plugin = "system";
     config = {
       workdir = stateDir;
@@ -250,7 +272,6 @@ let
             '';
           };
         }
-        confuse
         bedger-add
         bedger-balance
         hooks.sed
@@ -270,7 +291,7 @@ let
           };
         })
         (task "agenda")
-      ];
+      ] ++ extra_privmsg_hooks;
     };
   };
 
@@ -430,7 +451,11 @@ in {
             ];
           };
         }
-        systemPlugin
+        (systemPlugin {
+          extra_privmsg_hooks = [
+            confuse_hackint
+          ];
+        })
       ];
       username = "reaktor2";
       port = "6697";
@@ -448,7 +473,11 @@ in {
             ];
           };
         }
-        systemPlugin
+        (systemPlugin {
+          extra_privmsg_hooks = [
+            confuse
+          ];
+        })
       ];
       username = "reaktor2";
     };
