@@ -56,6 +56,7 @@ let
       ./tinc_graphs.nix
       ./upstream
       ./urlwatch.nix
+      ./users.nix
       ./xresources.nix
       ./zones.nix
     ];
@@ -65,10 +66,6 @@ let
 
   api = {
     enable = mkEnableOption "krebs";
-
-    users = mkOption {
-      type = with types; attrsOf user;
-    };
 
     sitemap = mkOption {
       default = {};
@@ -111,18 +108,6 @@ let
       };
 
       krebs.dns.search-domain = mkDefault "r";
-
-      krebs.users = {
-        krebs = {
-          home = "/krebs";
-          mail = "spam@krebsco.de";
-        };
-        root = {
-          home = "/root";
-          pubkey = config.krebs.build.host.ssh.pubkey;
-          uid = 0;
-        };
-      };
 
       services.openssh.hostKeys =
         let inherit (config.krebs.build.host.ssh) privkey; in
