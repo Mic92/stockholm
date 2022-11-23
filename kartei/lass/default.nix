@@ -1,4 +1,4 @@
-with import <stockholm/lib>;
+with import ../../lib;
 { config, ... }: let
 
   r6 = ip: (krebs.genipv6 "retiolum" "lass" ip).address;

@@ -1,4 +1,4 @@
-with import <stockholm/lib>;
+with import ../../lib;
 { config, ... }: let
 
   hostDefaults = hostName: host: flip recursiveUpdate host ({
@@ -816,10 +816,6 @@ in {
     jonge = {
       mail = "jacek.galowicz@gmail.com";
     };
-    mic92 = {
-      mail = "joerg@thalheim.io";
-      pubkey = ssh-for "mic92";
-    };
     pinpox = {
       mail = "main@pablo.tools";
     };
@@ -862,6 +858,7 @@ in {
       pubkey = ssh-for "xq";
     };
     xkey = {
+      mail = "xkey@krebsco.de";
       pubkey = ssh-for "xkey";
     };
     miaoski = {

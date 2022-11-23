@@ -16,6 +16,14 @@ in {
         tv
       ];
       eloop-ml = spam-ml;
+      krebstel-ml = [
+        config.krebs.users."0x4A6F"
+        { mail = "krebstel-1rxz0mqa95nkmk298s1731ly0ii7vc36kkm36pnjj89hrq52pgn1@ni.r"; }
+        { mail = "krebstel-1difh7483axpiaq92ghi14r5cql822wbhixqb0nn3y3jkcj0b785@ni.r"; }
+        { mail = "lass@green.r"; }
+        tv
+        xkey
+      ];
       spam-ml = [
         lass
         makefu
@@ -28,6 +36,7 @@ in {
       "spam@eloop.org" = eloop-ml;
       "youtube@eloop.org" = eloop-ml; # obsolete, use spam@eloop.org instead
       "postmaster@krebsco.de" = spam-ml; # RFC 822
+      "krebstel@krebsco.de" = krebstel-ml;
       "lass@krebsco.de" = lass;
       "makefu@krebsco.de" = makefu;
       "spam@krebsco.de" = spam-ml;

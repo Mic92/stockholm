@@ -1,4 +1,4 @@
-with import ../../../lib;
+with import ../../lib;
 { config, ... }: let
 
   evalHost = hostName: hostConfig: evalSubmodule types.host [
