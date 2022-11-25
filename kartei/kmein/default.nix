@@ -138,6 +138,28 @@ in
         wireguard.pubkey = "09yVPHL/ucvqc6V5n7vFQ2Oi1LBMdwQZDL+7jBwy+iQ=";
       };
     };
+    tabula = {
+      nets.retiolum = {
+        ip4.addr = "10.243.2.78";
+        aliases = [ "tabula.r" "tabula.kmein.r" ];
+        tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIICCgKCAgEA4cdFDoKRA9t+r686w6gH1u4UjEQJBmhsf3tkPEkv7nyVr4ahcZQk
+          rQwlhNRJwv0wekwO0qG19VoAmBkVMzYu5JWn9WeYfIEUtP3ndPa7tqWQ4qIkYh8q
+          4KQ03Y3CZav5ClK9rLO7gj+dsP+BhVdqhte4pJANs4CyglYkyu6p0P4+R2P0tfcq
+          LTl8RB+SXuafqzhoQD+yhhA1HR8O1o9gHJjKiEVrSLwSFfD8WWH55yeWzIYAbuv8
+          8a5VzhS5zvDYUFTP1WUPTeGlKsJdslSZqsrZmBDpkh1iEpRzQUnwQNMJ/uGXIldE
+          3FKKoL9LKlvr1Iz9IcuxO4QLk+DoC8+Jc7yQrwIiQQCwAfwdyY6KcRDAqna1WZRd
+          MFRvPd6y1BmLVJMG43VpWm5POE9Gw5nj5IzSNAFshoNljf246y2+wf8EtULqtrJD
+          DMckquiYRnzQPco9PgjLfH/6SnlB/oXhvT4+rB4KceSoFKOLWq1pFogDGDy0xyB0
+          ufkPsXiYE2KRnkozDJWlKSqrkM3GSR2lTM5cAmLh8VzxkI6LeJu8/6qxFa6J6tn4
+          +kH8yjbcLqjmuUykfOZ2eL4GniaFexDvZcGgLD1I5f1ylEmSuU6boyx83WkCH7NH
+          1cmaBDQsy4x0gMUYlLDVDW7X2PECoq5mQ61FHBNkdNOujOM/JPnYf4UCAwEAAQ==
+          -----END RSA PUBLIC KEY-----
+        '';
+        tinc.pubkey_ed25519 = "eZsnMScJdH5k/W3Y5fILnz5Kc01R+dRzjjE/cnu96VF";
+      };
+    };
     tahina = {
       nets.retiolum = {
         ip4.addr = "10.243.2.74";
