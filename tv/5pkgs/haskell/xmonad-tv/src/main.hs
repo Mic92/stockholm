@@ -1,4 +1,5 @@
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE PatternSynonyms #-}
 
 module Main (main) where
 
@@ -20,6 +21,7 @@ import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Layout.NoBorders ( smartBorders )
 import XMonad.Layout.ResizableTile (ResizableTall(ResizableTall))
 import XMonad.Layout.ResizableTile (MirrorResize(MirrorExpand,MirrorShrink))
+import XMonad.Layout.StateFull (pattern StateFull)
 import qualified XMonad.Prompt
 import qualified XMonad.StackSet as W
 import Data.Map (Map)
@@ -67,7 +69,7 @@ mainNoArgs = do
                     (fromIntegral (80 * myTermFontWidth + 2 * (myTermPadding + borderWidth def)) / fromIntegral myScreenWidth)
                     []
                   |||
-                  Full
+                  StateFull
             , manageHook =
                 composeAll
                   [ appName =? "fzmenu-urxvt" --> doCenterFloat
