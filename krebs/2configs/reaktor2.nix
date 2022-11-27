@@ -62,7 +62,6 @@ let
         export PATH=${makeBinPath [
           pkgs.coreutils
           pkgs.curl
-          pkgs.gnused
           pkgs.stable-generate
         ]}
         stable_url=$(stable-generate "$@")
@@ -85,7 +84,6 @@ let
         export PATH=${makeBinPath [
           pkgs.coreutils
           pkgs.curl
-          pkgs.gnused
           pkgs.stable-generate
         ]}
         case $_msgtarget in \#*)
