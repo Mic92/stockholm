@@ -98,6 +98,30 @@ let
     };
   };
 
+  say = {
+    pattern = "^!say (.*)$";
+    activate = "match";
+    arguments = [1];
+    command = {
+      filename = pkgs.writeDash "say" ''
+        set -efu
+
+        export PATH=${makeBinPath [
+          pkgs.coreutils
+          pkgs.curl
+          pkgs.opusTools
+        ]}
+        paste_url=$(printf '%s' "$1" |
+          curl -fSsG http://tts.r/api/tts --data-urlencode 'text@-' |
+          opusenc - - |
+          curl -Ss https://p.krebsco.de --data-binary @- |
+          tail -1
+        )
+        echo "$_from: $paste_url"
+      '';
+    };
+  };
+
   taskRcFile = builtins.toFile "taskrc" ''
     confirmation=no
   '';
@@ -273,6 +297,7 @@ let
         bedger-add
         bedger-balance
         hooks.sed
+        say
         (generators.command_hook {
           inherit (commands) dance random-emoji nixos-version;
           tell = {
