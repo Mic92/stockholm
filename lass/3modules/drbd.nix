@@ -64,13 +64,42 @@ in {
     services.udev.packages = [ pkgs.drbd ];
     boot.kernelModules = [ "drbd" ];
 
-    environment.systemPackages = [ pkgs.drbd ];
+    environment.systemPackages = [
+      pkgs.drbd
+      (pkgs.writers.writeDashBin "drbd-change-nodeid" ''
+        # https://linbit.com/drbd-user-guide/drbd-guide-9_0-en/#s-using-truck-based-replication
+        set -efux
 
+        if [ "$#" -ne 2 ]; then
+          echo '$1 needs to be drbd volume name'
+          echo '$2 needs to be new node id'
+          exit 1
+        fi
+
+
+        TMPDIR=$(mktemp -d)
+        trap 'rm -rf $TMPDIR' EXIT
+
+        V=$1
+        NODE_TO=$2
+        META_DATA_LOCATION=internal
+
+        ${pkgs.drbd}/bin/drbdadm -- --force dump-md $V > "$TMPDIR"/md_orig.txt
+        NODE_FROM=$(cat "$TMPDIR"/md_orig.txt | ${pkgs.gnused}/bin/sed -n 's/^node-id \(.*\);$/\1/p')
+        ${pkgs.gnused}/bin/sed -e "s/node-id $NODE_FROM/node-id $NODE_TO/" \
+          -e "s/^peer.$NODE_FROM. /peer-NEW /" \
+          -e "s/^peer.$NODE_TO. /peer[$NODE_FROM] /" \
+          -e "s/^peer-NEW /peer[$NODE_TO] /" \
+          < "$TMPDIR"/md_orig.txt > "$TMPDIR"/md.txt
+
+        drbdmeta --force $(drbdadm sh-minor $V) v09 $(drbdadm sh-md-dev $V) $META_DATA_LOCATION restore-md "$TMPDIR"/md.txt
+      '')
+    ];
 
     networking.firewall.allowedTCPPorts = map (device: device.port) (lib.attrValues cfg);
     systemd.services = lib.mapAttrs' (_: device:
       lib.nameValuePair "drbd-${device.name}" {
-        after = [ "systemd-udev.settle.service" "network.target" ];
+        after = [ "systemd-udev.settle.service" "network.target" "retiolum.service" ];
         wants = [ "systemd-udev.settle.service" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
@@ -88,7 +117,7 @@ in {
             ''}
             if ! ${pkgs.drbd}/bin/drbdadm adjust ${device.name}; then
               ${pkgs.drbd}/bin/drbdadm down ${device.name}
-              ${pkgs.drbd}/bin/drbdadm create-md ${device.name}
+              ${pkgs.drbd}/bin/drbdadm create-md ${device.name}/0 --max-peers 31
               ${pkgs.drbd}/bin/drbdadm up ${device.name}
             fi
           '';

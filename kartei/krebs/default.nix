@@ -78,6 +78,7 @@ in {
             "build.r"
             "build.hotdog.r"
             "ca.r"
+            "calendar.r"
             "cgit.hotdog.r"
             "irc.r"
             "wiki.r"
