@@ -151,7 +151,14 @@ myKeyMap =
 
     , ("M4-S-q", return ())
 
-    , ("M4-d", floatNext True >> spawn "${pkgs.copyq}/bin/copyq show")
+    , ("M4-d", floatNext True >> spawn "${pkgs.writers.writeDash "clipmenu" ''
+      PATH=${lib.makeBinPath [
+        pkgs.coreutils
+        pkgs.gawk
+        pkgs.dmenu
+      ]}
+      ${pkgs.clipmenu}/bin/clipmenu
+    ''}")
 
     , ("M4-<F2>", windows copyToAll)
 
