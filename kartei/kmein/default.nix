@@ -82,6 +82,7 @@ in
           "makanek.r"
           "makanek.kmein.r"
           "grafana.kmein.r"
+          "alertmanager.kmein.r"
           "names.kmein.r"
           "graph.r"
           "rrm.r"
