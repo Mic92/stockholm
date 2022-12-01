@@ -169,6 +169,8 @@ in {
           cgit        60 IN AAAA ${config.krebs.hosts.ni.nets.internet.ip6.addr}
           cgit.ni     60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
           cgit.ni     60 IN AAAA ${config.krebs.hosts.ni.nets.internet.ip6.addr}
+          search.ni   60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
+          search.ni   60 IN AAAA ${config.krebs.hosts.ni.nets.internet.ip6.addr}
           krebsco.de. 60 IN MX 5 ni
           krebsco.de. 60 IN TXT v=spf1 mx -all
           tv          300 IN NS ni
@@ -196,6 +198,7 @@ in {
           aliases = [
             "ni.r"
             "cgit.ni.r"
+            "search.ni.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
