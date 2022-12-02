@@ -27,9 +27,6 @@ with import <stockholm/lib>;
   ];
 
   console.keyMap = "us";
-  i18n = {
-    defaultLocale = lib.mkForce "C";
-  };
 
   programs.ssh.startAgent = false;
 
@@ -60,4 +57,7 @@ with import <stockholm/lib>;
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "17.03";
+
+  # maybe fix Error: unsupported locales detected:
+  i18n.defaultLocale = mkDefault "C.UTF-8";
 }
