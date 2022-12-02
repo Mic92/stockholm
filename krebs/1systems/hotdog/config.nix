@@ -14,6 +14,7 @@
     <stockholm/krebs/2configs/mud.nix>
 
     <stockholm/krebs/2configs/cal.nix>
+    <stockholm/krebs/2configs/mastodon.nix>
 
     ## shackie irc bot
     <stockholm/krebs/2configs/shack/reaktor.nix>
