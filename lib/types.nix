@@ -136,7 +136,7 @@ rec {
         default = null;
       };
       ip4 = mkOption {
-        type = nullOr (submodule {
+        type = nullOr (submodule (ip4: {
           options = {
             addr = mkOption {
               type = addr4;
@@ -146,13 +146,15 @@ rec {
             } // {
               retiolum.default = "10.243.0.0/16";
               wiregrill.default = "10.244.0.0/16";
-            }.${config._module.args.name} or {});
+            }.${config._module.args.name} or {
+              default = "${ip4.config.addr}/32";
+            });
           };
-        });
+        }));
         default = null;
       };
       ip6 = mkOption {
-        type = nullOr (submodule {
+        type = nullOr (submodule (ip6: {
           options = {
             addr = mkOption {
               type = addr6;
@@ -163,9 +165,11 @@ rec {
             } // {
               retiolum.default = "42:0::/32";
               wiregrill.default = "42:1::/32";
-            }.${config._module.args.name} or {});
+            }.${config._module.args.name} or {
+              default = "${ip6.config.addr}/128";
+            });
           };
-        });
+        }));
         default = null;
       };
       ssh = mkOption {

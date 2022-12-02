@@ -49,6 +49,7 @@ let
       ./secret.nix
       ./setuid.nix
       ./shadow.nix
+      ./sitemap.nix
       ./ssl.nix
       ./sync-containers.nix
       ./systemd.nix
@@ -56,6 +57,7 @@ let
       ./tinc_graphs.nix
       ./upstream
       ./urlwatch.nix
+      ./users.nix
       ./xresources.nix
       ./zones.nix
     ];
@@ -65,15 +67,6 @@ let
 
   api = {
     enable = mkEnableOption "krebs";
-
-    users = mkOption {
-      type = with types; attrsOf user;
-    };
-
-    sitemap = mkOption {
-      default = {};
-      type = types.attrsOf types.sitemap.entry;
-    };
 
     zone-head-config  = mkOption {
       type = with types; attrsOf str;
@@ -102,28 +95,6 @@ let
 
   imp = lib.mkMerge [
     {
-      krebs.dns.providers = {
-        "krebsco.de" = "zones";
-        shack = "hosts";
-        i = "hosts";
-        r = "hosts";
-        w = "hosts";
-      };
-
-      krebs.dns.search-domain = mkDefault "r";
-
-      krebs.users = {
-        krebs = {
-          home = "/krebs";
-          mail = "spam@krebsco.de";
-        };
-        root = {
-          home = "/root";
-          pubkey = config.krebs.build.host.ssh.pubkey;
-          uid = 0;
-        };
-      };
-
       services.openssh.hostKeys =
         let inherit (config.krebs.build.host.ssh) privkey; in
         mkIf (privkey != null) [privkey];
