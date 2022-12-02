@@ -15,7 +15,7 @@
     configureNginx = true;
     trustedProxy = config.krebs.hosts.prism.nets.retiolum.ip6.addr;
     smtp.createLocally = false;
-    smtp.fromAddress = "mastodon@social.krebsco.de";
+    smtp.fromAddress = "derp";
   };
 
   services.nginx.virtualHosts.${config.services.mastodon.localDomain} = {
