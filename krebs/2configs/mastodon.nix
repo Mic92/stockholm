@@ -36,5 +36,11 @@
     (pkgs.writers.writeDashBin "tootctl" ''
       sudo -u mastodon /etc/profiles/per-user/mastodon/bin/mastodon-env /etc/profiles/per-user/mastodon/bin/tootctl "$@"
     '')
+    (pkgs.writers.writeDashBin "create-mastodon-user" ''
+      set -efu
+      nick=$1
+      /run/current-system/sw/bin/tootctl accounts create "$nick" --email "$nick"@krebsco.de --confirmed
+      /run/current-system/sw/bin/tootctl accounts approve "$nick"
+    '')
   ];
 }
