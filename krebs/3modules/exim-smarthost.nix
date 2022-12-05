@@ -123,6 +123,7 @@ let
         # XXX We abuse local_domains to mean "domains, we're the gateway for".
         domainlist local_domains = ${concatStringsSep ":" cfg.local_domains}
         domainlist relay_to_domains = ${concatStringsSep ":" cfg.relay_to_domains}
+        domainlist sender_domains = ${concatStringsSep ":" cfg.sender_domains}
         hostlist relay_from_hosts = <;${concatStringsSep ";" cfg.relay_from_hosts}
 
         acl_smtp_rcpt = acl_check_rcpt
@@ -173,7 +174,7 @@ let
 
         acl_check_data:
           warn
-            sender_domains = ${concatStringsSep ":" cfg.sender_domains}
+            sender_domains = +sender_domains
             set acl_m_special_dom = $sender_address_domain
 
           accept
