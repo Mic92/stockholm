@@ -1,7 +1,7 @@
 with import <stockholm/lib>;
 { pkgs }:
 
-(rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
+pkgs.tv.vim.makePlugin (pkgs.writeTextFile (let
   name = "hack";
 in {
   name = "vim-color-${name}-1.0.2";

@@ -13,7 +13,7 @@ let {
     environment.variables.VIMINIT = ":so /etc/vimrc";
   };
 
-  extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
+  extra-runtimepath = pkgs.tv.vim.makeRuntimePath [
     pkgs.tv.vimPlugins.elixir
     pkgs.tv.vimPlugins.file-line
     pkgs.tv.vimPlugins.fzf

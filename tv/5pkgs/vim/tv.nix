@@ -1,6 +1,6 @@
 { pkgs }:
 
-(rtp: rtp // { inherit rtp; }) (pkgs.write "vim-tv" {
+pkgs.tv.vim.makePlugin (pkgs.write "vim-tv" {
   #
   # Haskell
   #

@@ -1,6 +1,6 @@
 { pkgs }:
 
-(rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
+pkgs.tv.vim.makePlugin (pkgs.writeTextFile (let
   name = "showsyntax";
 in {
   name = "vim-plugin-${name}-1.0.0";
