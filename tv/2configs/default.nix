@@ -46,14 +46,15 @@ with import <stockholm/lib>;
     }
 
     {
+      nix.extraOptions = ''
+        auto-optimise-store = true
+      '';
+
       # TODO check if both are required:
-      nix.sandboxPaths = [ "/etc/protocols" pkgs.iana-etc.outPath ];
-
-      nix.requireSignedBinaryCaches = true;
-
-      nix.binaryCaches = ["https://cache.nixos.org"];
-
-      nix.useSandbox = true;
+      nix.settings.extra-sandbox-paths = [
+        "/etc/protocols"
+        pkgs.iana-etc.outPath
+      ];
     }
     {
       nixpkgs.config.allowUnfree = false;

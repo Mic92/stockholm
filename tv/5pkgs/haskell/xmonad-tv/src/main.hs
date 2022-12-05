@@ -1,6 +1,4 @@
 {-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeApplications #-}
 
 module Main (main) where
 
@@ -32,25 +30,9 @@ import Data.Ratio
 import XMonad.Hooks.Place (placeHook, smart)
 import XMonad.Actions.PerWorkspaceKeys (chooseAction)
 
-import XMonad.Stockholm.Pager
-import XMonad.Stockholm.Shutdown
+import Shutdown (shutdown, newShutdownEventHandler)
 
-import THEnv.JSON (getCompileEnvJSONExp)
-
-
-myFont :: String
-myFont = "-schumacher-*-*-*-*-*-*-*-*-*-*-*-iso10646-*"
-
-myScreenWidth :: Dimension
-myScreenWidth =
-  $(getCompileEnvJSONExp (id @Dimension) "XMONAD_BUILD_SCREEN_WIDTH")
-
-myTermFontWidth :: Dimension
-myTermFontWidth =
-  $(getCompileEnvJSONExp (id @Dimension) "XMONAD_BUILD_TERM_FONT_WIDTH")
-
-myTermPadding :: Dimension
-myTermPadding = 2
+import Build (myFont, myScreenWidth, myTermFontWidth, myTermPadding)
 
 
 main :: IO ()
@@ -154,8 +136,6 @@ myKeys conf = Map.fromList $
     , ((_4  , xK_x      ), chooseAction spawnTermAt)
     , ((_4C , xK_x      ), spawnRootTerm)
 
-    , ((0   , xK_Menu   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.view) )
-    , ((_S  , xK_Menu   ), gets windowset >>= allWorkspaceNames >>= pager pagerConfig (windows . W.shift) )
     , ((_C  , xK_Menu   ), toggleWS)
 
     , ((_4  , xK_space  ), withFocused $ \w -> ifM (isFloatingX w) xdeny $ sendMessage NextLayout)
@@ -233,23 +213,3 @@ xdeny =
         , "-e", "sleep", "0.05"
         ]
         Nothing
-
-
-pagerConfig :: PagerConfig
-pagerConfig = def
-    { pc_font           = myFont
-    , pc_cellwidth      = 64
-    , pc_matchmethod    = MatchPrefix
-    , pc_windowColors   = windowColors
-    }
-    where
-    windowColors _ _ _ True _ = ("#ef4242","#ff2323")
-    windowColors wsf m c u wf = do
-        let y = defaultWindowColors wsf m c u wf
-        if m == False && wf == True
-            then ("#402020", snd y)
-            else y
-
-
-allWorkspaceNames :: W.StackSet i l a sid sd -> X [i]
-allWorkspaceNames = return . map W.tag . W.workspaces

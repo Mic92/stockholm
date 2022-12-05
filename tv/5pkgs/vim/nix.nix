@@ -1,7 +1,7 @@
 with import <stockholm/lib>;
 { pkgs }:
 
-(rtp: rtp // { inherit rtp; }) (pkgs.write "vim-syntax-nix-nested" {
+pkgs.tv.vim.makePlugin (pkgs.write "vim-syntax-nix-nested" {
   "/syntax/haskell.vim".text = ''
     syn region String start=+\[[[:alnum:]]*|+ end=+|]+
 
