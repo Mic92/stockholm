@@ -73,7 +73,7 @@ in {
                               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
                               60 IN AAAA   ${config.krebs.hosts.prism.nets.internet.ip6.addr}
                                  IN MX     5 mail.lassul.us.
-                              60 IN TXT    v=spf1 mx a:lassul.us -all
+                              60 IN TXT    "v=spf1 mx -all"
                               60 IN TXT    ( "v=DKIM1; k=rsa; t=s; s=*; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB" )
           default._domainkey  60 IN TXT    "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB"
           cache               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
