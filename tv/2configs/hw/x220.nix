@@ -28,8 +28,8 @@ in
     }
 
     {
-      nix.buildCores = 2;
-      nix.maxJobs = 2;
+      nix.settings.cores = 2;
+      nix.settings.max-jobs = 2;
     }
     (if lib.versionAtLeast (lib.versions.majorMinor lib.version) "21.11" then {
       nix.daemonCPUSchedPolicy = "batch";
