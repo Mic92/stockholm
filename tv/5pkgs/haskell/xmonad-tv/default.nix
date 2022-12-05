@@ -1,6 +1,6 @@
 { mkDerivation, aeson, base, bytestring, containers, directory
-, extra, lib, template-haskell, th-env, unix, X11, xmonad
-, xmonad-contrib, xmonad-stockholm
+, extra, filepath, lib, systemd, template-haskell, th-env
+, transformers, unix, X11, xmonad, xmonad-contrib
 }:
 mkDerivation {
   pname = "xmonad-tv";
@@ -9,8 +9,8 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    aeson base bytestring containers directory extra template-haskell
-    th-env unix X11 xmonad xmonad-contrib xmonad-stockholm
+    aeson base bytestring containers directory extra filepath systemd
+    template-haskell th-env transformers unix X11 xmonad xmonad-contrib
   ];
   license = lib.licenses.mit;
 }

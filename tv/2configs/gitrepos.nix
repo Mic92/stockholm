@@ -134,7 +134,6 @@ let {
     web-routes-wai-custom = {};
     xintmap = {};
     xmonad-aeson = {};
-    xmonad-stockholm = {};
     xmonad-web = {};
   } // mapAttrs (_: recursiveUpdate { cgit.section = "4. museum"; }) {
     cac-api = {
@@ -165,6 +164,7 @@ let {
     soundcloud = {
       cgit.desc = "SoundCloud command line interface";
     };
+    xmonad-stockholm = {};
   });
 
   restricted-repos = mapAttrs make-restricted-repo (
