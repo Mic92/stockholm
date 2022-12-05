@@ -53,6 +53,10 @@ with import <stockholm/lib>;
 
       nix.binaryCaches = ["https://cache.nixos.org"];
 
+      nix.extraOptions = ''
+        auto-optimise-store = true
+      '';
+
       nix.useSandbox = true;
     }
     {
