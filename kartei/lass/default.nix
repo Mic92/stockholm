@@ -59,11 +59,12 @@ in {
       cores = 4;
       extraZones = {
         "krebsco.de" = ''
-          cache     IN A ${nets.internet.ip4.addr}
-          p         IN A ${nets.internet.ip4.addr}
-          c         IN A ${nets.internet.ip4.addr}
-          paste     IN A ${nets.internet.ip4.addr}
-          prism     IN A ${nets.internet.ip4.addr}
+          cache     60 IN A ${nets.internet.ip4.addr}
+          p         60 IN A ${nets.internet.ip4.addr}
+          c         60 IN A ${nets.internet.ip4.addr}
+          paste     60 IN A ${nets.internet.ip4.addr}
+          prism     60 IN A ${nets.internet.ip4.addr}
+          social    60 IN A ${nets.internet.ip4.addr}
         '';
         "lassul.us" = ''
           $TTL 3600
