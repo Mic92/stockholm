@@ -2,6 +2,12 @@
 
 with import <stockholm/lib>;
 let
+  optionalAttr = name: value:
+    if name != null then
+      { ${name} = value; }
+    else
+      {};
+
   cfg = config.krebs.htgen;
 
   out = {
@@ -30,8 +36,15 @@ let
         };
 
         script = mkOption {
-          type = types.str;
+          type = types.nullOr types.str;
+          default = null;
         };
+
+        scriptFile = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+        };
+
         user = mkOption {
           type = types.user;
           default = {
@@ -54,8 +67,10 @@ let
         after = [ "network.target" ];
         environment = {
           HTGEN_PORT = toString htgen.port;
-          HTGEN_SCRIPT = htgen.script;
-        };
+        }
+        // optionalAttr "HTGEN_SCRIPT" htgen.script
+        // optionalAttr "HTGEN_SCRIPT_FILE" htgen.scriptFile
+        ;
         serviceConfig = {
           SyslogIdentifier = "htgen";
           User = htgen.user.name;
