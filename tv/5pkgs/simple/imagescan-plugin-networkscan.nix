@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     patchelf --set-interpreter \
-        ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \
+        ${pkgs.pkgsi686Linux.glibc}/lib/ld-linux-x86-64.so.2 \
         $out/lib/utsushi/networkscan
 
     # libstdc++.so.6
