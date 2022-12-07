@@ -126,8 +126,9 @@ let
         domainlist sender_domains = ${concatStringsSep ":" cfg.sender_domains}
         hostlist relay_from_hosts = <;${concatStringsSep ";" cfg.relay_from_hosts}
 
-        acl_smtp_rcpt = acl_check_rcpt
         acl_smtp_data = acl_check_data
+        acl_smtp_mail = acl_check_mail
+        acl_smtp_rcpt = acl_check_rcpt
 
         never_users = root
 
@@ -179,6 +180,36 @@ let
 
           accept
 
+        acl_check_mail:
+          accept
+            sender_domains = +sender_domains
+            hosts = +relay_from_hosts
+          deny
+            spf = fail : softfail
+            log_message = spf=$spf_result
+            message = SPF validation failed: \
+                    $sender_host_address is not allowed to send mail from \
+                    ''${if def:sender_address_domain\
+                           {$sender_address_domain}\
+                           {$sender_helo_name}}
+          deny
+            spf = permerror
+            log_message = spf=$spf_result
+            message = SPF validation failed: \
+                    syntax error in SPF record(s) for \
+                    ''${if def:sender_address_domain\
+                           {$sender_address_domain}\
+                           {$sender_helo_name}}
+          defer
+            spf = temperror
+            log_message = spf=$spf_result; deferred
+            message = temporary error during SPF validation; \
+                    please try again later
+          warn
+            spf = none : neutral
+            log_message = spf=$spf_result
+          accept
+            add_header = $spf_received
 
         begin routers
 
