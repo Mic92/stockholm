@@ -182,6 +182,8 @@ let
 
         acl_check_mail:
           accept
+            authenticated = *
+          accept
             sender_domains = +sender_domains
             hosts = +relay_from_hosts
           deny
