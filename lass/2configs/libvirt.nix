@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
-  users.users.mainUser.extraGroups = [ "libvirtd" ];
   virtualisation.libvirtd.enable = true;
+  security.polkit.enable = true;
 
   krebs.iptables.tables.filter.INPUT.rules = [
     { v6 = false; predicate = "-i virbr0 -p udp -m udp --dport 53"; target = "ACCEPT"; }

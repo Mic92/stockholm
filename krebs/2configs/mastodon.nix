@@ -15,7 +15,7 @@
     configureNginx = true;
     trustedProxy = config.krebs.hosts.prism.nets.retiolum.ip6.addr;
     smtp.createLocally = false;
-    smtp.fromAddress = "mastodon@social.krebsco.de";
+    smtp.fromAddress = "derp";
   };
 
   services.nginx.virtualHosts.${config.services.mastodon.localDomain} = {
@@ -35,6 +35,12 @@
   environment.systemPackages = [
     (pkgs.writers.writeDashBin "tootctl" ''
       sudo -u mastodon /etc/profiles/per-user/mastodon/bin/mastodon-env /etc/profiles/per-user/mastodon/bin/tootctl "$@"
+    '')
+    (pkgs.writers.writeDashBin "create-mastodon-user" ''
+      set -efu
+      nick=$1
+      /run/current-system/sw/bin/tootctl accounts create "$nick" --email "$nick"@krebsco.de --confirmed
+      /run/current-system/sw/bin/tootctl accounts approve "$nick"
     '')
   ];
 }
