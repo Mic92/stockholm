@@ -12,6 +12,8 @@ let
   api = {
     enable = mkEnableOption "krebs.exim-smarthost";
 
+    enableSPFVerification = mkEnableOption "SPF verification";
+
     authenticators = mkOption {
       type = types.attrsOf types.str;
       default = {};
@@ -181,37 +183,40 @@ let
           accept
 
         acl_check_mail:
-          accept
-            authenticated = *
-          accept
-            sender_domains = +sender_domains
-            hosts = +relay_from_hosts
-          deny
-            spf = fail : softfail
-            log_message = spf=$spf_result
-            message = SPF validation failed: \
-                    $sender_host_address is not allowed to send mail from \
-                    ''${if def:sender_address_domain\
-                           {$sender_address_domain}\
-                           {$sender_helo_name}}
-          deny
-            spf = permerror
-            log_message = spf=$spf_result
-            message = SPF validation failed: \
-                    syntax error in SPF record(s) for \
-                    ''${if def:sender_address_domain\
-                           {$sender_address_domain}\
-                           {$sender_helo_name}}
-          defer
-            spf = temperror
-            log_message = spf=$spf_result; deferred
-            message = temporary error during SPF validation; \
-                    please try again later
-          warn
-            spf = none : neutral
-            log_message = spf=$spf_result
-          accept
-            add_header = $spf_received
+          ${if cfg.enableSPFVerification then indent /* exim */ ''
+            accept
+              authenticated = *
+            accept
+              hosts = +relay_from_hosts
+            deny
+              spf = fail : softfail
+              log_message = spf=$spf_result
+              message = SPF validation failed: \
+                      $sender_host_address is not allowed to send mail from \
+                      ''${if def:sender_address_domain\
+                             {$sender_address_domain}\
+                             {$sender_helo_name}}
+            deny
+              spf = permerror
+              log_message = spf=$spf_result
+              message = SPF validation failed: \
+                      syntax error in SPF record(s) for \
+                      ''${if def:sender_address_domain\
+                             {$sender_address_domain}\
+                             {$sender_helo_name}}
+            defer
+              spf = temperror
+              log_message = spf=$spf_result; deferred
+              message = temporary error during SPF validation; \
+                      please try again later
+            warn
+              spf = none : neutral
+              log_message = spf=$spf_result
+            accept
+              add_header = $spf_received
+          '' else indent /* exim */ ''
+            accept
+          ''}
 
         begin routers
 
