@@ -95,9 +95,12 @@ let
             path = dirPath + "/${relPath}";
           in
             nameValuePair (toPackageName name) (f path))
-          (filter
-            (name: name != "default.nix" && !hasPrefix "." name)
-            (attrNames (readDir dirPath))));
+          (attrNames
+            (filterAttrs
+              (name: type:
+                (type == "regular" && hasSuffix ".nix" name && name != "default.nix") ||
+                (type == "directory" && !hasPrefix "." name))
+              (readDir dirPath))));
 
     # https://tools.ietf.org/html/rfc5952
     normalize-ip6-addr =
