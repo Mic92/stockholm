@@ -96,11 +96,11 @@ let
           in
             nameValuePair (toPackageName name) (f path))
           (attrNames
-            (filterAttrs
-              (name: type:
-                (type == "regular" && hasSuffix ".nix" name && name != "default.nix") ||
-                (type == "directory" && !hasPrefix "." name))
-              (readDir dirPath))));
+            (filterAttrs isNixDirEntry (readDir dirPath))));
+
+    isNixDirEntry = name: type:
+      (type == "regular" && hasSuffix ".nix" name && name != "default.nix") ||
+      (type == "directory" && !hasPrefix "." name);
 
     # https://tools.ietf.org/html/rfc5952
     normalize-ip6-addr =
