@@ -8,6 +8,8 @@
   ];
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.logRefusedConnections = false;
+  networking.firewall.logRefusedUnicastsOnly = false;
 
   krebs.build.host = config.krebs.hosts.ponte;
 
