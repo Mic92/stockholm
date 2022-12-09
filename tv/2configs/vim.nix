@@ -77,6 +77,7 @@ with import ./lib;
     set showmatch
     set timeoutlen=0
     set ttimeoutlen=0
+    set ttymouse=sgr
     set undodir=${dirs.undodir}
     set undofile
     set undolevels=1000000
