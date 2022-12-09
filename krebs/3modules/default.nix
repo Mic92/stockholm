@@ -34,6 +34,7 @@ let
       ./iptables.nix
       ./kapacitor.nix
       ./konsens.nix
+      ./krebs-pages.nix
       ./monit.nix
       ./nixpkgs.nix
       ./on-failure.nix
