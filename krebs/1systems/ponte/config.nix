@@ -7,6 +7,8 @@
     <stockholm/krebs/2configs/matterbridge.nix>
   ];
 
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+
   krebs.build.host = config.krebs.hosts.ponte;
 
   krebs.pages.enable = true;
