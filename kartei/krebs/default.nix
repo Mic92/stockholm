@@ -165,6 +165,11 @@ in {
     ponte = {
       cores = 1;
       owner = config.krebs.users.krebs;
+      extraZones = {
+        "krebsco.de" = /* bindzone */ ''
+          krebsco.de. 60 IN A ${config.krebs.hosts.ponte.nets.internet.ip4.addr}
+        '';
+      };
       nets = rec {
         internet = {
           ip4 = {
