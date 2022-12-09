@@ -194,3 +194,4 @@ let
 in
 
 lib
+// { inherit lib; }
