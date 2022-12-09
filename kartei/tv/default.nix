@@ -198,6 +198,7 @@ in {
           aliases = [
             "ni.r"
             "cgit.ni.r"
+            "krebs.ni.r"
             "search.ni.r"
           ];
           tinc.pubkey = ''
@@ -319,7 +320,6 @@ in {
           aliases = [
             "xu.r"
             "cgit.xu.r"
-            "krebs.xu.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -369,7 +369,7 @@ in {
     "http://cgit.krebsco.de" = {
       desc = "Git repositories";
     };
-    "http://krebs.xu.r" = {
+    "http://krebs.ni.r" = {
       desc = "krebs-pages mirror";
     };
   };
