@@ -84,10 +84,6 @@ let
           @ IN SOA dns19.ovh.net. tech.ovh.net. (2015052000 86400 3600 3600000 86400)
                                 IN NS     ns19.ovh.net.
                                 IN NS     dns19.ovh.net.
-                                IN A      185.199.108.153
-                                IN A      185.199.109.153
-                                IN A      185.199.110.153
-                                IN A      185.199.111.153
         '';
       };
     };
