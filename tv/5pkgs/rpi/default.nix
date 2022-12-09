@@ -1,6 +1,4 @@
-let
-  lib = import <stockholm/lib>;
-in
+with import ./lib;
 
 self: super:
 

@@ -1,6 +1,5 @@
-{ config, pkgs, ... }@args:
-with import <stockholm/lib>;
-let
+with import ./lib;
+{ config, pkgs, ... }@args: let
   cfg = {
     cacheDir = cfg.dataDir;
     configDir = "/var/empty";

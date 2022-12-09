@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: with import <stockholm/lib>;
+{ config, lib, pkgs, ... }: with import ./lib;
 {
   environment.etc."binary-cache.pubkey".text =
     config.krebs.build.host.binary-cache.pubkey;

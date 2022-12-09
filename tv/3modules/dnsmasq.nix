@@ -1,4 +1,4 @@
-with import <stockholm/lib>;
+with import ./lib;
 { config, ... }: let
   cfg = config.tv.dnsmasq;
 in {

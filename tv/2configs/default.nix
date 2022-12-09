@@ -1,6 +1,5 @@
-with import <stockholm/lib>;
+with import ./lib;
 { config, pkgs, ... }: {
-
   boot.tmpOnTmpfs = true;
 
   krebs.enable = true;

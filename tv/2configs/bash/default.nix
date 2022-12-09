@@ -1,8 +1,5 @@
-{ config, lib, pkgs, ... }:
-
-with import <stockholm/lib>;
-
-{
+with import ./lib;
+{ config, pkgs, ... }: {
   programs.bash = {
     interactiveShellInit = /* sh */ ''
       HISTCONTROL='erasedups:ignorespace'

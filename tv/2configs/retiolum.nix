@@ -1,8 +1,5 @@
-{ config, lib, pkgs, ... }:
-
-with import <stockholm/lib>;
-
-{
+with import ./lib;
+{ config, pkgs, ... }: {
   krebs.tinc.retiolum = {
     enable = true;
     connectTo = filter (ne config.krebs.build.host.name) [

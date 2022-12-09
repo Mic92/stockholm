@@ -1,7 +1,5 @@
-{ config, pkgs, ... }: let
-  lib = import <stockholm/lib>;
-in
-{
+with import ./lib;
+{ config, pkgs, ... }: {
   imports = [
     ../smartd.nix
     {

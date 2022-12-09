@@ -1,5 +1,5 @@
-{ pkgs, ... }:
-with import <stockholm/lib>;
+with import ./lib;
+{ pkgs }:
 let
   q-cal = let
 

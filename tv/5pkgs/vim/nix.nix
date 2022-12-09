@@ -1,4 +1,4 @@
-with import <stockholm/lib>;
+with import ./lib;
 { pkgs }:
 
 pkgs.tv.vim.makePlugin (pkgs.write "vim-syntax-nix-nested" {

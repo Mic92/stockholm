@@ -1,4 +1,4 @@
-with import <stockholm/lib>;
+with import ./lib;
 let
   overrides = self: super:
     mapNixDir (path: self.callPackage path {}) [

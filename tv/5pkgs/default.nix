@@ -1,4 +1,4 @@
-with import ../../lib;
+with import ./lib;
 let
   pushBack = x: xs:
     if elem x xs then

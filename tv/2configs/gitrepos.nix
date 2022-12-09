@@ -1,8 +1,5 @@
-{ config, lib, pkgs, ... }:
-
-with import <stockholm/lib>;
-
-let {
+with import ./lib;
+{ config, pkgs, ... }: let {
 
   body = {
 

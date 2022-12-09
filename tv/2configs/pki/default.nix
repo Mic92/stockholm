@@ -1,4 +1,4 @@
-with import <stockholm/lib>;
+with import ./lib;
 { config, pkgs, ... }: let
 
   certFile = config.environment.etc."ssl/certs/ca-certificates.crt".source;

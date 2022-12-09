@@ -1,8 +1,7 @@
+with import ./lib;
 { pkgs, ... }@args:
 
 let
-  lib = import <stockholm/lib>;
-
   # config cannot be declared in the input attribute set because that would
   # cause callPackage to inject the wrong config.  Instead, get it from ...
   # via args.

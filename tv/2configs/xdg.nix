@@ -1,8 +1,5 @@
-{ config, lib, pkgs, ... }:
-
-with import <stockholm/lib>;
-
-{
+with import ./lib;
+{ config, pkgs, ... }: {
   environment.variables.XDG_RUNTIME_DIR = "/run/xdg/$LOGNAME";
 
   systemd.tmpfiles.rules = let

@@ -1,8 +1,6 @@
-with import <stockholm/lib>;
+with import ./lib;
 { config, pkgs, ... }: let
-
   cfg = config.tv.x0vncserver;
-
 in {
   options.tv.x0vncserver = {
     display = mkOption {
