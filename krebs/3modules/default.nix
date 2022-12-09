@@ -20,7 +20,6 @@ let
       ./ci
       ./current.nix
       ./dns.nix
-      ./ergo.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
       ./exim.nix
