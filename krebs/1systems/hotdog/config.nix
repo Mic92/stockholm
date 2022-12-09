@@ -22,6 +22,7 @@
 
   krebs.build.host = config.krebs.hosts.hotdog;
   krebs.github-hosts-sync.enable = true;
+  krebs.pages.enable = true;
 
   boot.isContainer = true;
   networking.useDHCP = false;
