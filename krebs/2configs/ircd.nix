@@ -5,9 +5,9 @@
     6667
   ];
 
-  krebs.ergo = {
+  services.ergochat = {
     enable = true;
-    config = {
+    settings = {
       server.secure-nets = [
         "42::0/16"
         "10.240.0.0/12"
