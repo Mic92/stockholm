@@ -172,9 +172,9 @@ in {
       };
       nets = rec {
         internet = {
-          ip4 = {
+          ip4 = rec {
             addr = "141.147.36.79";
-            prefix = "0.0.0.0/0";
+            prefix = "${addr}/32";
           };
         };
         retiolum = {
