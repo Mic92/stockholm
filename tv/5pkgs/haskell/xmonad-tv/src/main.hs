@@ -118,13 +118,6 @@ spawnRootTerm =
         Nothing
 
 
-spawnTermAt :: String -> X ()
-spawnTermAt ws = do
-    env <- io getEnvironment
-    let env' = ("XMONAD_SPAWN_WORKSPACE", ws) : env
-    forkFile {-pkg:rxvt_unicode-}"urxvtc" [] (Just env')
-
-
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf = Map.fromList $
     [ ((_4  , xK_Escape ), forkFile {-pkg-}"slock" [] Nothing)
@@ -133,7 +126,7 @@ myKeys conf = Map.fromList $
     , ((_4  , xK_o      ), forkFile {-pkg:fzmenu-}"otpmenu" [] Nothing)
     , ((_4  , xK_p      ), forkFile {-pkg:fzmenu-}"passmenu" [] Nothing)
 
-    , ((_4  , xK_x      ), chooseAction spawnTermAt)
+    , ((_4  , xK_x      ), forkFile {-pkg:rxvt_unicode-}"urxvtc" [] Nothing)
     , ((_4C , xK_x      ), spawnRootTerm)
 
     , ((_C  , xK_Menu   ), toggleWS)

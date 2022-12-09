@@ -14,8 +14,20 @@ with import ./lib;
 
       case $UID in
         ${shell.escape (toString config.krebs.users.tv.uid)})
-          if test ''${SHLVL-1} = 1; then
-            case ''${XMONAD_SPAWN_WORKSPACE-} in
+          if test ''${SHLVL-1} = 1 && test -n "''${DISPLAY-}"; then
+            _CURRENT_DESKTOP_NAME=''${_CURRENT_DESKTOP_NAME-$(
+              ${pkgs.xorg.xprop}/bin/xprop -notype -root \
+                  32i _NET_CURRENT_DESKTOP \
+                  8s _NET_DESKTOP_NAMES \
+                |
+              ${pkgs.gnused}/bin/sed -r 's/.* = //;s/"//g;s/, /\a/g' |
+              {
+                read -r _NET_CURRENT_DESKTOP
+                IFS=$'\a' read -ra _NET_DESKTOP_NAMES
+                echo "''${_NET_DESKTOP_NAMES[$_NET_CURRENT_DESKTOP]}"
+              }
+            )}
+            case $_CURRENT_DESKTOP_NAME in
               stockholm)
                 cd ~/stockholm
               ;;
