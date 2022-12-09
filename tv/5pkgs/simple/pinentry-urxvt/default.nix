@@ -52,25 +52,26 @@ in
       trap cleanup EXIT
 
       cleanup() {
+        ${pkgs.utillinux}/bin/kill -- $(${pkgs.coreutils}/bin/cat "$displayers")
+        rm "$displayers"
         rm "$screenshot"
-        # Kill process group in order to kill screenshot windows.
-        ${pkgs.utillinux}/bin/kill 0
       }
 
-      screenshot=$(${pkgs.coreutils}/bin/mktemp -t pinentry-urxvt.screenshot.XXXXXXXX)
+      displayers=$(${pkgs.coreutils}/bin/mktemp -t pinentry-urxvt.$$.displayers.XXXXXXXX)
+      screenshot=$(${pkgs.coreutils}/bin/mktemp -t pinentry-urxvt.$$.screenshot.XXXXXXXX)
 
       ${pkgs.xorg.xwd}/bin/xwd -root |
       ${pkgs.imagemagick}/bin/convert xwd:- -fill \#424242 -colorize 80% xwd:"$screenshot"
 
-      show_screenshot() {
-        ${pkgs.exec "pinentry-urxvt.show_screenshot" {
+      display_screenshot() {
+        ${pkgs.exec "pinentry-urxvt.display_screenshot" {
             filename = "${pkgs.xorg.xwud}/bin/xwud";
             argv = [
               cfg.xwud.className
               "-noclick"
             ];
         }} < "$screenshot" &
-        wait_for_screenshot $!
+        wait_for_screenshot $! && echo $! >>"$displayers"
       }
 
       # Wait for the xwud window by trying to intercept the call to munmap().
@@ -92,12 +93,12 @@ in
         fi
       }
 
-      show_screenshot
+      display_screenshot
 
       ${lib.optionalString (cfg.display != null) /* sh */ ''
         if test "$DISPLAY" != ${lib.shell.escape cfg.display}; then
           export DISPLAY=${lib.shell.escape cfg.display}
-          show_screenshot
+          display_screenshot
         fi
       ''}
 
