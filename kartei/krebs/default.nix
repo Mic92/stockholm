@@ -176,6 +176,9 @@ in {
             addr = "141.147.36.79";
             prefix = "${addr}/32";
           };
+          aliases = [
+            "ponte.i"
+          ];
         };
         retiolum = {
           via = internet;
