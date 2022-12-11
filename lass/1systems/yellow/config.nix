@@ -167,7 +167,9 @@ in {
         { v6 = false; predicate = "-d ${vpnIp}/32"; target = "ACCEPT"; }
         { predicate = "-o tun0"; target = "ACCEPT"; }
         { predicate = "-o retiolum"; target = "ACCEPT"; }
-        { v6 = false; predicate = "-o eth0 -d 10.233.0.0/24"; target = "ACCEPT"; }
+        { v6 = false; predicate = "-d 1.1.1.1/32"; target = "ACCEPT"; }
+        { v6 = false; predicate = "-d 1.0.0.1/32"; target = "ACCEPT"; }
+        { v6 = false; predicate = "-o eth0 -d 10.233.2.0/24"; target = "ACCEPT"; }
       ];
     };
   };
