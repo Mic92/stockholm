@@ -110,6 +110,7 @@
     <stockholm/krebs/2configs/shack/prometheus/server.nix>
     <stockholm/krebs/2configs/shack/prometheus/blackbox.nix>
     #<stockholm/krebs/2configs/shack/prometheus/unifi.nix>
+    # TODO: alertmanager 0.24+ supports telegram
     <stockholm/krebs/2configs/shack/prometheus/alertmanager-telegram.nix>
   ];
 
