@@ -165,12 +165,20 @@ in {
     ponte = {
       cores = 1;
       owner = config.krebs.users.krebs;
+      extraZones = {
+        "krebsco.de" = /* bindzone */ ''
+          krebsco.de. 60 IN A ${config.krebs.hosts.ponte.nets.internet.ip4.addr}
+        '';
+      };
       nets = rec {
         internet = {
-          ip4 = {
+          ip4 = rec {
             addr = "141.147.36.79";
-            prefix = "0.0.0.0/0";
+            prefix = "${addr}/32";
           };
+          aliases = [
+            "ponte.i"
+          ];
         };
         retiolum = {
           via = internet;

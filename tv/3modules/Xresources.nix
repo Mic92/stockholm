@@ -1,4 +1,4 @@
-with import <stockholm/lib>;
+with import ./lib;
 { config, pkgs, ... }: let
   cfg = {
     enable = config.services.xserver.enable && config.tv.Xresources != {};

@@ -1,6 +1,5 @@
-with import <stockholm/lib>;
+with import ./lib;
 { config, pkgs, ... }: {
-
   boot.tmpOnTmpfs = true;
 
   krebs.enable = true;
@@ -38,7 +37,7 @@ with import <stockholm/lib>;
     {
       i18n.defaultLocale = mkDefault "C.UTF-8";
       security.sudo.extraConfig = ''
-        Defaults env_keep+="SSH_CLIENT XMONAD_SPAWN_WORKSPACE"
+        Defaults env_keep+="SSH_CLIENT _CURRENT_DESKTOP_NAME"
         Defaults mailto="${config.krebs.users.tv.mail}"
         Defaults !lecture
       '';

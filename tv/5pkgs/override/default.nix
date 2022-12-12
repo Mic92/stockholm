@@ -1,4 +1,4 @@
-with import ../../../lib;
+with import ./lib;
 self: super:
 
 mapNixDir (path: import path self super) ./.

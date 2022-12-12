@@ -1,6 +1,5 @@
-with import <stockholm/lib>;
+with import ./lib;
 { config, pkgs, ... }: {
-
   services.nginx.virtualHosts."ni.r" = {
     locations."/image" = {
       extraConfig = /* nginx */ ''

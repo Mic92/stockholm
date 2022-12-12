@@ -1,7 +1,5 @@
-{ config, pkgs, ... }: let
-  lib = import ../../../lib;
-in {
-
+with import ./lib;
+{ config, pkgs, ... }: {
   imports = [
     ./disks.nix
     <stockholm/tv>

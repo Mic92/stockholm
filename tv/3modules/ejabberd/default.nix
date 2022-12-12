@@ -1,5 +1,5 @@
-{ config, lib, pkgs, ... }@args: with import <stockholm/lib>; let
-
+with import ./lib;
+{ config, pkgs, ... }: let
   cfg = config.tv.ejabberd;
 
   gen-dhparam = pkgs.writeDash "gen-dhparam" ''

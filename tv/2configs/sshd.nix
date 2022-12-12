@@ -1,4 +1,4 @@
-with import <stockholm/lib>;
+with import ./lib;
 { config, ... }: let
   cfg.host = config.krebs.build.host;
 in {

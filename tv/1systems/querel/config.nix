@@ -1,6 +1,5 @@
-with import <stockholm/lib>;
+with import ./lib;
 { config, pkgs, ... }: {
-
   imports = [
     <stockholm/tv>
     <stockholm/tv/2configs/retiolum.nix>

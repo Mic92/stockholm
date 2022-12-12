@@ -1,4 +1,4 @@
-{ config, ... }: with import <stockholm/lib>; let
+{ config, ... }: with import ./lib; let
   cfg = config.tv.charybdis;
 in toFile "charybdis.conf" ''
   /* doc/example.conf - brief example configuration file

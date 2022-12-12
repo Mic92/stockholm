@@ -1,4 +1,4 @@
-with import <stockholm/lib>;
+with import ./lib;
 { config, pkgs, ... }: let
   exec = filename: args: url: {
     inherit url;

@@ -1,8 +1,5 @@
-{ config, pkgs, ... }:
-
-with import <stockholm/lib>;
-
-{
+with import ./lib;
+{ config, pkgs, ... }: {
   # Override NixOS's "Allow DSA keys for now."
   environment.etc."ssh/ssh_config".text = mkForce ''
     AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
