@@ -151,6 +151,12 @@ in {
         };
       };
     };
+    # pixel3a
+    telex.nets.wiregrill = {
+      aliases =  ["telex.w"];
+      ip6.addr = (krebs.genipv6 "wiregrill" "makefu" { hostName = "telex"; }).address;
+    };
+
     latte = rec {
       ci = true;
       extraZones = {
