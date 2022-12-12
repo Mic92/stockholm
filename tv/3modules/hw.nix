@@ -1,5 +1,5 @@
+with import ./lib;
 let
-  lib = import <stockholm/lib>;
   local.types.screen = lib.types.submodule {
     options.width = lib.mkOption {
       type = lib.types.uint;

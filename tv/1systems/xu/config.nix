@@ -1,6 +1,5 @@
-with import <stockholm/lib>;
+with import ./lib;
 { config, pkgs, ... }: {
-
   krebs.build.host = config.krebs.hosts.xu;
 
   imports = [
@@ -11,7 +10,6 @@ with import <stockholm/lib>;
     <stockholm/tv/2configs/gitrepos.nix>
     <stockholm/tv/2configs/mail-client.nix>
     <stockholm/tv/2configs/man.nix>
-    <stockholm/tv/2configs/nginx/krebs-pages.nix>
     <stockholm/tv/2configs/nginx/public_html.nix>
     <stockholm/tv/2configs/ppp.nix>
     <stockholm/tv/2configs/pulse.nix>

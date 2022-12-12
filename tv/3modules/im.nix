@@ -1,6 +1,6 @@
+with import ./lib;
 { config, pkgs, ... }: let
   im = config.tv.im;
-  lib = import <stockholm/lib>;
 in {
   options = {
     tv.im.client.enable = lib.mkEnableOption "tv.im.client" // {

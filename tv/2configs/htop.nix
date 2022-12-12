@@ -1,8 +1,5 @@
-{ pkgs, ... }:
-
-with import <stockholm/lib>;
-
-{
+with import ./lib;
+{ pkgs, ... }: {
   nixpkgs.config.packageOverrides = super: {
     htop = pkgs.symlinkJoin {
       name = "htop";

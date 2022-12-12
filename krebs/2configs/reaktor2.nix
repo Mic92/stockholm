@@ -51,6 +51,77 @@ let
     };
   };
 
+  confuse = {
+    pattern = "^!confuse (.*)$";
+    activate = "match";
+    arguments = [1];
+    command = {
+      filename = pkgs.writeDash "confuse" ''
+        set -efux
+
+        export PATH=${makeBinPath [
+          pkgs.coreutils
+          pkgs.curl
+          pkgs.stable-generate
+        ]}
+        stable_url=$(stable-generate "$@")
+        paste_url=$(curl -Ss "$stable_url" |
+          curl -Ss http://p.r --data-binary @- |
+          tail -1
+        )
+        echo "$_from: $paste_url"
+      '';
+    };
+  };
+
+  confuse_hackint = {
+    pattern = "^!confuse (.*)$";
+    activate = "match";
+    arguments = [1];
+    command = {
+      filename = pkgs.writeDash "confuse" ''
+        set -efu
+        export PATH=${makeBinPath [
+          pkgs.coreutils
+          pkgs.curl
+          pkgs.stable-generate
+        ]}
+        case $_msgtarget in \#*)
+          stable_url=$(stable-generate "$@")
+          paste_url=$(curl -Ss "$stable_url" |
+            curl -Ss https://p.krebsco.de --data-binary @- |
+            tail -1
+          )
+          echo "$_from: $paste_url"
+        esac
+      '';
+    };
+  };
+
+  say = {
+    pattern = "^!say (.*)$";
+    activate = "match";
+    arguments = [1];
+    command = {
+      filename = pkgs.writeDash "say" ''
+        set -efu
+
+        export PATH=${makeBinPath [
+          pkgs.coreutils
+          pkgs.curl
+          pkgs.opusTools
+        ]}
+        paste_url=$(printf '%s' "$1" |
+          curl -fSsG http://tts.r/api/tts --data-urlencode 'text@-' |
+          opusenc - - |
+          curl -Ss https://p.krebsco.de --data-binary @- |
+          tail -1
+        )
+        echo "$_from: $paste_url"
+      '';
+    };
+  };
+
   taskRcFile = builtins.toFile "taskrc" ''
     confirmation=no
   '';
@@ -112,7 +183,7 @@ let
     }
   '';
 
-  systemPlugin = {
+  systemPlugin = { extra_privmsg_hooks ? [] }: {
     plugin = "system";
     config = {
       workdir = stateDir;
@@ -185,8 +256,9 @@ let
           };
         }
         {
-          pattern = "18@p";
+          pattern = ''^18@p\s+(\S+)\s+(\d+)m$'';
           activate = "match";
+          arguments = [1 2];
           command = {
             env = {
               CACHE_DIR = "${stateDir}/krebsfood";
@@ -196,45 +268,36 @@ let
               osm-restaurants-src = pkgs.fetchFromGitHub {
                 owner = "kmein";
                 repo = "scripts";
-                rev = "66b2068d548d3418c81dd093bba3f80248c68196";
-                sha256 = "059sp2lz54iwklswaxv9w703sbm2vv7p0ccig10gsqshriq6v58z";
+                rev = "dda381be26abff73a0cf364c6dfff6e1701f41ee";
+                sha256 = "sha256-J7jGWZeAULDA1EkO50qx+hjl+5IsUj389pUUMreKeNE=";
               };
               osm-restaurants = pkgs.callPackage "${osm-restaurants-src}/osm-restaurants" {};
             in pkgs.writeDash "krebsfood" ''
               set -efu
-              ecke_lat=52.51252
-              ecke_lon=13.41740
-              ${osm-restaurants}/bin/osm-restaurants --radius 500 --latitude "$ecke_lat" --longitude "$ecke_lon" \
-                | ${pkgs.jq}/bin/jq -r '"How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"'
-                '
-            '';
-          };
-        }
-        {
-          pattern = ''^([\H-]*?):?\s+([+-][1-9][0-9]*)\s+(\S+)$'';
-          activate = "match";
-          arguments = [1 2 3];
-          command = {
-            env = {
-              # TODO; get state as argument
-              state_file = "${stateDir}/ledger";
-            };
-            filename = pkgs.writeDash "ledger-add" ''
-              set -x
-              tonick=$1
-              amt=$2
-              unit=$3
-              printf '%s\n  %s  %d %s\n  %s  %d %s\n' "$(date -Id)" "$tonick" "$amt" "$unit" "$_from" "$(expr 0 - "''${amt#+}")" "$unit" >> $state_file
-              ${pkgs.hledger}/bin/hledger -f $state_file bal -N -O csv \
-                | ${pkgs.coreutils}/bin/tail +2 \
-                | ${pkgs.miller}/bin/mlr --icsv --opprint cat \
-                | ${pkgs.gnugrep}/bin/grep "$_from"
+              export PATH=${makeBinPath [
+                osm-restaurants
+                pkgs.coreutils
+                pkgs.curl
+                pkgs.jq
+              ]}
+              poi=$(curl -fsS http://c.r/poi.json | jq --arg name "$1" '.[$name]')
+              if [ "$poi" = null ]; then
+                latitude=52.51252
+                longitude=13.41740
+              else
+                latitude=$(echo "$poi" | jq -r .latitude)
+                longitude=$(echo "$poi" | jq -r .longitude)
+              fi
+
+              restaurant=$(osm-restaurants --radius "$2" --latitude "$latitude" --longitude "$longitude")
+              printf '%s' "$restaurant" | tail -1 | jq -r '"How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"'
             '';
           };
         }
         bedger-add
         bedger-balance
         hooks.sed
+        say
         (generators.command_hook {
           inherit (commands) dance random-emoji nixos-version;
           tell = {
@@ -251,7 +314,7 @@ let
           };
         })
         (task "agenda")
-      ];
+      ] ++ extra_privmsg_hooks;
     };
   };
 
@@ -411,7 +474,11 @@ in {
             ];
           };
         }
-        systemPlugin
+        (systemPlugin {
+          extra_privmsg_hooks = [
+            confuse_hackint
+          ];
+        })
       ];
       username = "reaktor2";
       port = "6697";
@@ -429,7 +496,11 @@ in {
             ];
           };
         }
-        systemPlugin
+        (systemPlugin {
+          extra_privmsg_hooks = [
+            confuse
+          ];
+        })
       ];
       username = "reaktor2";
     };

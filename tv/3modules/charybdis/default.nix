@@ -1,4 +1,5 @@
-{ config, lib, pkgs, ... }@args: with import <stockholm/lib>; let
+with import ./lib;
+{ config, pkgs, ... }@args: let
   cfg = config.tv.charybdis;
 in {
   options.tv.charybdis = {

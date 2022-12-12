@@ -1,8 +1,5 @@
-{ config, ... }:
-
-with import <stockholm/lib>;
-
-{
+with import ./lib;
+{ config, ... }: {
   options.tv.hosts = mkOption {
     type = types.attrsOf types.host;
     default =

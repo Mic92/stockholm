@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 
-with import <stockholm/lib>;
+with import ./lib;
 
 pkgs.writeText "Xmodmap" ''
   !keycode 66 = Caps_Lock

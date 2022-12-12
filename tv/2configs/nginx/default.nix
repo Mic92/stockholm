@@ -1,8 +1,5 @@
-{ config, lib, ... }:
-
-with import <stockholm/lib>;
-
-{
+with import ./lib;
+{ config, ... }: {
   services.nginx = {
     enableReload = true;
 

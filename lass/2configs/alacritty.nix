@@ -1,21 +1,23 @@
 { config, lib, pkgs, ... }: let
 
   alacritty-cfg = extrVals: builtins.toJSON ({
-    font = {
+    font = let
+      family = "Iosevka";
+    in {
       normal = {
-        family = "Inconsolata";
+        family = family;
         style = "Regular";
       };
       bold = {
-        family = "Inconsolata";
+        family = family;
         style = "Bold";
       };
       italic = {
-        family = "Inconsolata";
+        family = family;
         style = "Italic";
       };
       bold_italic = {
-        family = "Inconsolata";
+        family = family;
         style = "Bold Italic";
       };
       size = 8;
@@ -44,6 +46,7 @@
     name = "alacritty";
     paths = [
       (pkgs.writeDashBin "alacritty" ''
+        ${pkgs.alacritty}/bin/alacritty --config-file /var/theme/config/alacritty.yaml msg create-window "$@" ||
         ${pkgs.alacritty}/bin/alacritty --config-file /var/theme/config/alacritty.yaml "$@"
       '')
       pkgs.alacritty

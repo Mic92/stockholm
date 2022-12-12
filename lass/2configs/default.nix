@@ -98,7 +98,7 @@ with import <stockholm/lib>;
     jq
 
   #style
-    rxvt_unicode.terminfo
+    rxvt-unicode-unwrapped.terminfo
 
   #monitoring tools
     htop

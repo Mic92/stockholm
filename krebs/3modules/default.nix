@@ -6,6 +6,7 @@ let
 
   out = {
     imports = [
+      ../../kartei
       ./acl.nix
       ./airdcpp.nix
       ./announce-activation.nix
@@ -19,7 +20,6 @@ let
       ./ci
       ./current.nix
       ./dns.nix
-      ./ergo.nix
       ./exim-retiolum.nix
       ./exim-smarthost.nix
       ./exim.nix
@@ -34,6 +34,7 @@ let
       ./iptables.nix
       ./kapacitor.nix
       ./konsens.nix
+      ./krebs-pages.nix
       ./monit.nix
       ./nixpkgs.nix
       ./on-failure.nix
@@ -48,6 +49,7 @@ let
       ./secret.nix
       ./setuid.nix
       ./shadow.nix
+      ./sitemap.nix
       ./ssl.nix
       ./sync-containers.nix
       ./systemd.nix
@@ -55,6 +57,7 @@ let
       ./tinc_graphs.nix
       ./upstream
       ./urlwatch.nix
+      ./users.nix
       ./xresources.nix
       ./zones.nix
     ];
@@ -64,15 +67,6 @@ let
 
   api = {
     enable = mkEnableOption "krebs";
-
-    users = mkOption {
-      type = with types; attrsOf user;
-    };
-
-    sitemap = mkOption {
-      default = {};
-      type = types.attrsOf types.sitemap.entry;
-    };
 
     zone-head-config  = mkOption {
       type = with types; attrsOf str;
@@ -90,49 +84,13 @@ let
           @ IN SOA dns19.ovh.net. tech.ovh.net. (2015052000 86400 3600 3600000 86400)
                                 IN NS     ns19.ovh.net.
                                 IN NS     dns19.ovh.net.
-                                IN A      185.199.108.153
-                                IN A      185.199.109.153
-                                IN A      185.199.110.153
-                                IN A      185.199.111.153
         '';
       };
     };
   };
 
   imp = lib.mkMerge [
-    { krebs = import ./external { inherit config; }; }
-    { krebs = import ./external/dbalan.nix { inherit config; }; }
-    { krebs = import ./external/kmein.nix { inherit config; }; }
-    { krebs = import ./external/mic92.nix { inherit config; }; }
-    { krebs = import ./external/palo.nix { inherit config; }; }
-    { krebs = import ./jeschli { inherit config; }; }
-    { krebs = import ./krebs  { inherit config; }; }
-    { krebs = import ./lass   { inherit config; }; }
-    { krebs = import ./makefu { inherit config; }; }
-    { krebs = import ./tv     { inherit config; }; }
     {
-      krebs.dns.providers = {
-        "krebsco.de" = "zones";
-        shack = "hosts";
-        i = "hosts";
-        r = "hosts";
-        w = "hosts";
-      };
-
-      krebs.dns.search-domain = mkDefault "r";
-
-      krebs.users = {
-        krebs = {
-          home = "/krebs";
-          mail = "spam@krebsco.de";
-        };
-        root = {
-          home = "/root";
-          pubkey = config.krebs.build.host.ssh.pubkey;
-          uid = 0;
-        };
-      };
-
       services.openssh.hostKeys =
         let inherit (config.krebs.build.host.ssh) privkey; in
         mkIf (privkey != null) [privkey];

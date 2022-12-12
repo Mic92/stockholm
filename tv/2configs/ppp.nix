@@ -1,5 +1,5 @@
+with import ./lib;
 { config, pkgs, ... }: let
-  lib = import <stockholm/lib>;
   cfg = {
     pin = "@${toString <secrets/o2.pin>}";
     ttys.ppp = "/dev/ttyACM0";

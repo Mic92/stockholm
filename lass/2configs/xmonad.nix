@@ -45,6 +45,7 @@ import XMonad.Layout.Minimize (minimize)
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.MouseResizableTile (mouseResizableTile)
 import XMonad.Layout.SimplestFloat (simplestFloat)
+import XMonad.Layout.StateFull
 import XMonad.ManageHook (composeAll)
 import XMonad.Prompt (autoComplete, font, searchPredicate, XPConfig)
 import XMonad.Prompt.Window (windowPromptGoto, windowPromptBringCopy)
@@ -63,8 +64,6 @@ instance UrgencyHook LibNotifyUrgencyHook where
         safeSpawn "${pkgs.libnotify}/bin/notify-send" [show name, "workspace " ++ idx]
 
 myTerm :: FilePath
--- myTerm = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtc -e /run/current-system/sw/bin/xonsh"
--- myTerm = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtc"
 myTerm = "/run/current-system/sw/bin/alacritty"
 
 myFont :: String
@@ -89,7 +88,7 @@ main = do
 
 myLayoutHook = defLayout
   where
-    defLayout = minimize . boringWindows $ ((avoidStruts $ Mirror (Tall 1 (3/100) (1/2))) ||| Full ||| FixedColumn 2 80 80 1 ||| Tall 1 (3/100) (1/2) ||| simplestFloat ||| mouseResizableTile ||| Grid)
+    defLayout = minimize . boringWindows $ ((avoidStruts $ Mirror (Tall 1 (3/100) (1/2))) ||| StateFull ||| FixedColumn 2 80 80 1 ||| Tall 1 (3/100) (1/2) ||| simplestFloat ||| mouseResizableTile ||| Grid)
 
 floatHooks = composeAll
    [ className =? "Pinentry" --> doCenterFloat
@@ -152,7 +151,14 @@ myKeyMap =
 
     , ("M4-S-q", return ())
 
-    , ("M4-d", floatNext True >> spawn "${pkgs.copyq}/bin/copyq show")
+    , ("M4-d", floatNext True >> spawn "${pkgs.writers.writeDash "clipmenu" ''
+      PATH=${lib.makeBinPath [
+        pkgs.coreutils
+        pkgs.gawk
+        pkgs.dmenu
+      ]}
+      ${pkgs.clipmenu}/bin/clipmenu
+    ''}")
 
     , ("M4-<F2>", windows copyToAll)
 

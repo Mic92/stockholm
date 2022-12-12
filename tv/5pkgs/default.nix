@@ -1,4 +1,4 @@
-with import ../../lib;
+with import ./lib;
 let
   pushBack = x: xs:
     if elem x xs then
@@ -14,7 +14,6 @@ fix
   (foldl' (flip extends) (_: super)
     (map
       (name: import (./. + "/${name}"))
-      (filter
-        (name: name != "default.nix" && !hasPrefix "." name)
-        (pushBack "override"
-          (attrNames (readDir ./.))))))
+      (pushBack "override"
+        (attrNames
+          (filterAttrs isNixDirEntry (readDir ./.))))))

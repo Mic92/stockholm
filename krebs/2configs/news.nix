@@ -68,8 +68,8 @@
     wantedBy = [ "multi-user.target" ];
   };
 
-  krebs.ergo.openFilesLimit = 16384;
-  krebs.ergo.config = {
+  services.ergochat.openFilesLimit = 16384;
+  services.ergochat.settings = {
     limits.nicklen = 100;
     limits.identlen = 100;
     history.enabled = false;

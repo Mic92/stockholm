@@ -3,7 +3,8 @@ let
 
   send_to_radio = pkgs.writers.writeDashBin "send_to_radio" ''
     ${pkgs.vorbis-tools}/bin/oggenc - |
-      ${pkgs.libshout}/bin/shout --format ogg --host localhost --port 1338 --mount /live
+      ${pkgs.cyberlocker-tools}/bin/cput news.ogg
+    ${pkgs.curl}/bin/curl -fSs -X POST http://localhost:8002/newsshow
   '';
 
   gc_news = pkgs.writers.writeDashBin "gc_news" ''

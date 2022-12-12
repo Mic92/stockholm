@@ -1,4 +1,5 @@
-{ config, ... }: let lib = import ../../lib; in {
+with import ./lib;
+{ config, ... }: {
   options.org.freedesktop.machine1.host-shell.access = lib.mkOption {
     default = {};
     type =

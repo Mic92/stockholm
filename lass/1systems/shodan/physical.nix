@@ -11,7 +11,6 @@
     loader.grub.device = "/dev/sda";
 
     initrd.luks.devices.lusksroot.device = "/dev/sda2";
-    initrd.luks.cryptoModules = [ "aes" "sha512" "sha1" "xts" ];
     initrd.availableKernelModules = [ "xhci_hcd" "ehci_pci" "ahci" "usb_storage" ];
   };
   fileSystems = {
@@ -27,11 +26,6 @@
       device = "/dev/mapper/pool-home";
       fsType = "btrfs";
       options = ["defaults" "noatime" "ssd" "compress=lzo"];
-    };
-    "/tmp" = {
-      device = "tmpfs";
-      fsType = "tmpfs";
-      options = ["nosuid" "nodev" "noatime"];
     };
     "/bku" = {
       device = "/dev/pool/bku";

@@ -15,14 +15,15 @@ executable xmonad
     containers,
     directory,
     extra,
+    filepath,
     template-haskell,
     th-env,
     unix,
     X11,
     xmonad,
-    xmonad-contrib,
-    xmonad-stockholm
+    xmonad-contrib
   other-modules:
+    Shutdown,
     THEnv.JSON
   default-language: Haskell2010
   ghc-options: -O2 -Wall -threaded

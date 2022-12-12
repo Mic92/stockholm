@@ -1,8 +1,5 @@
-{ config, pkgs, ... }:
-
-with import <stockholm/lib>;
-
-{
+with import ./lib;
+{ config, pkgs, ... }: {
   environment.etc.gitconfig.text = ''
     [alias]
       patch = !${pkgs.git}/bin/git --no-pager diff --no-color

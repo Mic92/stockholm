@@ -24,7 +24,7 @@ in {
     restartIfChanged = false;
 
     path = [
-      pkgs.rxvt_unicode.terminfo
+      pkgs.rxvt-unicode-unwrapped.terminfo
     ];
 
     serviceConfig = {

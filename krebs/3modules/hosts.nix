@@ -11,7 +11,7 @@ in {
     };
   };
 
-  config = {
+  config = mkIf config.krebs.enable {
     networking.hosts =
       filterAttrs
         (_name: value: value != [])

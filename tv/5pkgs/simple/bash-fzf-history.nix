@@ -1,4 +1,4 @@
-with import <stockholm/lib>;
+with import ./lib;
 { pkgs
 
 , edit-key ? "ctrl-e"

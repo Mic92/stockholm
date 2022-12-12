@@ -1,7 +1,11 @@
-with import <stockholm/lib>;
+with import ./lib;
 
 self: super: {
   tv = super.tv // {
+    vim = {
+      makePlugin = outPath: outPath // { inherit outPath; };
+      makeRuntimePath = concatMapStringsSep "," (getAttr "outPath");
+    };
     vimPlugins = mapNixDir (path: self.callPackage path {}) ./.;
   };
 }

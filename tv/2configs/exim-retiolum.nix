@@ -1,8 +1,5 @@
-{ config, lib, pkgs, ... }:
-
-with import <stockholm/lib>;
-
-{
+with import ./lib;
+{ config, pkgs, ... }: {
   environment.systemPackages = [
     pkgs.eximlog
   ];

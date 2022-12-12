@@ -1,7 +1,5 @@
-{ config, pkgs, ... }: let
-  lib = import <stockholm/lib>;
-in
-{
+with import ./lib;
+{ config, pkgs, ... }: {
   imports = [
     ../smartd.nix
     {
@@ -28,8 +26,8 @@ in
     }
 
     {
-      nix.buildCores = 2;
-      nix.maxJobs = 2;
+      nix.settings.cores = 2;
+      nix.settings.max-jobs = 2;
     }
     (if lib.versionAtLeast (lib.versions.majorMinor lib.version) "21.11" then {
       nix.daemonCPUSchedPolicy = "batch";
@@ -60,6 +58,9 @@ in
     speed = 0;
     emulateWheel = true;
   };
+
+  # Conflicts with TLP, but gets enabled by DEs.
+  services.power-profiles-daemon.enable = false;
 
   services.tlp.enable = true;
   services.tlp.settings = {

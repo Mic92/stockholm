@@ -1,6 +1,5 @@
-{ config, pkgs, ... }: let
-  lib = import <stockholm/lib>;
-in {
+with import ./lib;
+{ config, pkgs, ... }: {
   krebs.repo-sync.enable = true;
   krebs.repo-sync.repos.wiki.branches.hotdog = {
     origin.url = "http://cgit.hotdog.r/wiki";

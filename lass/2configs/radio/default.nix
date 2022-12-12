@@ -1,85 +1,54 @@
-{ config, pkgs, ... }:
-with pkgs.stockholm.lib;
+{ config, pkgs, lib, ... }:
 
 let
   name = "radio";
 
   music_dir = "/home/radio/music";
 
-  add_random = pkgs.writeDashBin "add_random" ''
-    ${pkgs.mpc_cli}/bin/mpc add "$(${pkgs.findutils}/bin/find "${music_dir}/the_playlist" \
-      | grep -Ev '/other/|/.graveyard/' \
-      | grep '\.ogg$' \
-      | shuf -n1 \
-      | sed 's,${music_dir}/,,' \
-    )"
-  '';
-
-  get_current_track_position = pkgs.writeDash "get_current_track_position" ''
-    ${pkgs.mpc_cli}/bin/mpc status | ${pkgs.gawk}/bin/awk '/^\[playing\]/ { sub(/\/.+/,"",$3); split($3,a,/:/); print a[1]*60+a[2] }'
-  '';
-
-  skip_track = pkgs.writeBashBin "skip_track" ''
+  skip_track = pkgs.writers.writeBashBin "skip_track" ''
     set -eu
 
-    ${add_random}/bin/add_random
-    music_dir=${escapeShellArg music_dir}
-    current_track=$(${pkgs.mpc_cli}/bin/mpc current -f %file%)
-    track_infos=$(${print_current}/bin/print_current)
-    skip_count=$(${pkgs.attr}/bin/getfattr -n user.skip_count --only-values "$music_dir"/"$current_track" || echo 0)
-    if [[ "$current_track" =~ ^the_playlist/music/.* ]] && [ "$skip_count" -le 2 ]; then
-      skip_count=$((skip_count+1))
-      ${pkgs.attr}/bin/setfattr -n user.skip_count -v "$skip_count" "$music_dir"/"$current_track"
-      echo skipping: "$track_infos" skip_count: "$skip_count"
-    else
-      mkdir -p "$music_dir"/the_playlist/.graveyard/
-      mv "$music_dir"/"$current_track" "$music_dir"/the_playlist/.graveyard/
-      echo killing: "$track_infos"
-    fi
-    ${pkgs.mpc_cli}/bin/mpc -q next
+    # TODO come up with new rating, without moving files
+    # current_track=$(${pkgs.curl}/bin/curl -fSs http://localhost:8002/current | ${pkgs.jq}/bin/jq -r .filename)
+    # track_infos=$(${print_current}/bin/print_current)
+    # skip_count=$(${pkgs.attr}/bin/getfattr -n user.skip_count --only-values "$current_track" || echo 0)
+    # if [[ "$current_track" =~ .*/the_playlist/music/.* ]] && [ "$skip_count" -le 2 ]; then
+    #   skip_count=$((skip_count+1))
+    #   ${pkgs.attr}/bin/setfattr -n user.skip_count -v "$skip_count" "$current_track"
+    #   echo skipping: "$track_infos" skip_count: "$skip_count"
+    # else
+    #   mkdir -p "$music_dir"/the_playlist/.graveyard/
+    #   mv "$current_track" "$music_dir"/the_playlist/.graveyard/
+    #   echo killing: "$track_infos"
+    # fi
+    ${pkgs.curl}/bin/curl -fSs -X POST http://localhost:8002/skip |
+      ${pkgs.jq}/bin/jq -r '.filename'
   '';
 
   good_track = pkgs.writeBashBin "good_track" ''
     set -eu
 
-    music_dir=${escapeShellArg music_dir}
-    current_track=$(${pkgs.mpc_cli}/bin/mpc current -f %file%)
+    current_track=$(${pkgs.curl}/bin/curl -fSs http://localhost:8002/current | ${pkgs.jq}/bin/jq -r .filename)
     track_infos=$(${print_current}/bin/print_current)
-    if [[ "$current_track" =~ ^the_playlist/music/.* ]]; then
-      ${pkgs.attr}/bin/setfattr -n user.skip_count -v 0 "$music_dir"/"$current_track"
-    else
-      mv "$music_dir"/"$current_track" "$music_dir"/the_playlist/music/ || :
-    fi
+    # TODO come up with new rating, without moving files
+    # if [[ "$current_track" =~ .*/the_playlist/music/.* ]]; then
+    #   ${pkgs.attr}/bin/setfattr -n user.skip_count -v 0 "$current_track"
+    # else
+    #   mv "$current_track" "$music_dir"/the_playlist/music/ || :
+    # fi
     echo good: "$track_infos"
   '';
 
-  track_youtube_link = pkgs.writeDash "track_youtube_link" ''
-    ${pkgs.mpc_cli}/bin/mpc current -f %file% \
-      | ${pkgs.gnused}/bin/sed 's@.*\(.\{11\}\)\.ogg@https://www.youtube.com/watch?v=\1@'
-  '';
-
   print_current = pkgs.writeDashBin "print_current" ''
-    echo "$(${pkgs.mpc_cli}/bin/mpc current -f %file%) \
-    $(${track_youtube_link})"
-  '';
-
-  print_current_json = pkgs.writeDashBin "print_current_json" ''
-    ${pkgs.jq}/bin/jq -n -c \
-      --arg name "$(${pkgs.mpc_cli}/bin/mpc current)" \
-      --arg artist "$(${pkgs.mpc_cli}/bin/mpc current -f %artist%)" \
-      --arg title "$(${pkgs.mpc_cli}/bin/mpc current -f %title%)" \
-      --arg filename "$(${pkgs.mpc_cli}/bin/mpc current -f %file%)" \
-      --arg position "$(${get_current_track_position})" \
-      --arg length "$(${pkgs.mpc_cli}/bin/mpc current -f %time%)" \
-      --arg youtube "$(${track_youtube_link})" '{
-        name: $name,
-        artist: $artist,
-        title: $title,
-        filename: $filename,
-        position: $position,
-        length: $length,
-        youtube: $youtube
-      }'
+    file=$(${pkgs.curl}/bin/curl -fSs http://localhost:8002/current |
+      ${pkgs.jq}/bin/jq -r '.filename' |
+      ${pkgs.gnused}/bin/sed 's,^${music_dir},,'
+    )
+    link=$(${pkgs.curl}/bin/curl http://localhost:8002/current |
+      ${pkgs.jq}/bin/jq -r '.filename' |
+      ${pkgs.gnused}/bin/sed 's@.*\(.\{11\}\)\.ogg@https://youtu.be/\1@'
+    )
+    echo "$file": "$link"
   '';
 
   set_irc_topic = pkgs.writeDash "set_irc_topic" ''
@@ -113,15 +82,14 @@ in {
   users.users = {
     "${name}" = rec {
       inherit name;
-      createHome = mkForce false;
+      createHome = lib.mkForce false;
       group = name;
-      uid = genid_uint31 name;
+      uid = pkgs.stockholm.lib.genid_uint31 name;
       description = "radio manager";
       home = "/home/${name}";
       useDefaultShell = true;
       openssh.authorizedKeys.keys = with config.krebs.users; [
         lass.pubkey
-        lass-mors.pubkey
       ];
     };
   };
@@ -131,50 +99,35 @@ in {
   };
 
   krebs.per-user.${name}.packages = with pkgs; [
-    add_random
     good_track
     skip_track
     print_current
-    print_current_json
-    ncmpcpp
-    mpc_cli
   ];
 
-  services.mpd = {
-    enable = true;
-    user = "radio";
-    musicDirectory = "${music_dir}";
-    dataDir = "/home/radio/state"; # TODO create this somwhere
-    extraConfig = ''
-      log_level "default"
-      auto_update "yes"
-      volume_normalization "yes"
+  services.liquidsoap.streams.radio = ./radio.liq;
+  systemd.services.radio = {
+    environment = {
+      RADIO_PORT = "8002";
+      HOOK_TRACK_CHANGE = pkgs.writers.writeDash "on_change" ''
+        set -xefu
+        LIMIT=1000 #how many tracks to keep in the history
+        HISTORY_FILE=/var/lib/radio/recent
 
-      audio_output {
-        type "httpd"
-        name "raw radio"
-        encoder "wave"
-        port "7900"
-        format "44100:16:2"
-        always_on "yes" # prevent MPD from disconnecting all listeners when playback is stopped.
-        tags "yes" # httpd supports sending tags to listening streams.
-      }
-    '';
+        listeners=$(${pkgs.curl}/bin/curl -fSs lassul.us:8000/status-json.xsl |
+          ${pkgs.jq}/bin/jq '[.icestats.source[].listeners] | add' || echo 0)
+        echo "$(${pkgs.coreutils}/bin/date -Is)" "$filename" | ${pkgs.coreutils}/bin/tee -a "$HISTORY_FILE"
+        echo "$(${pkgs.coreutils}/bin/tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
+        ${set_irc_topic} "playing: $filename listeners: $listeners"
+      '';
+      MUSIC = "${music_dir}/the_playlist";
+      ICECAST_HOST = "localhost";
+    };
+    path = [
+      pkgs.yt-dlp
+    ];
+    serviceConfig.User = lib.mkForce "radio";
   };
-  services.liquidsoap.streams.radio-news = pkgs.writeText "radio-news.liq" ''
-    source = mksafe(input.http("http://localhost:7900/raw.wave"))
 
-    output.icecast(mount = '/music.ogg', password = 'hackme', %vorbis(quality = 1), source)
-    output.icecast(mount = '/music.mp3', password = 'hackme', %mp3.vbr(), source)
-    output.icecast(mount = '/music.opus', password = 'hackme', %opus(bitrate = 96), source)
-
-    extra_input = amplify(1.4, audio_to_stereo(input.harbor("live", port=1338)))
-
-    o = smooth_add(normal = source, special = extra_input)
-    output.icecast(mount = '/radio.ogg', password = 'hackme', %vorbis(quality = 1), o)
-    output.icecast(mount = '/radio.mp3', password = 'hackme', %mp3.vbr(), o)
-    output.icecast(mount = '/radio.opus', password = 'hackme', %opus(bitrate = 96), o)
-  '';
   services.icecast = {
     enable = true;
     hostname = "radio.lassul.us";
@@ -195,73 +148,8 @@ in {
     };
   };
 
-  systemd.timers.radio = {
-    description = "radio autoadder timer";
-    wantedBy = [ "timers.target" ];
-
-    timerConfig = {
-      OnCalendar = "*:0/1";
-    };
-  };
-
-  systemd.services.radio = let
-    autoAdd = pkgs.writeDash "autoAdd" ''
-      LIMIT=$1 #in seconds
-
-      timeLeft () {
-        playlistDuration=$(${pkgs.mpc_cli}/bin/mpc --format '%time%' playlist | ${pkgs.gawk}/bin/awk -F ':' 'BEGIN{t=0} {t+=$1*60+$2} END{print t}')
-        currentTime=$(${get_current_track_position})
-        expr ''${playlistDuration:-0} - ''${currentTime:-0}
-      }
-
-      if test $(timeLeft) -le $LIMIT; then
-        ${add_random}/bin/add_random
-      fi
-      ${pkgs.mpc_cli}/bin/mpc play > /dev/null
-    '';
-  in {
-    description = "radio playlist autoadder";
-    after = [ "network.target" ];
-
-    restartIfChanged = true;
-
-    serviceConfig = {
-      ExecStart = "${autoAdd} 150";
-    };
-  };
-
-  systemd.services.radio-recent = let
-    recentlyPlayed = pkgs.writeDash "recentlyPlayed" ''
-      set -xefu
-      LIMIT=1000 #how many tracks to keep in the history
-      HISTORY_FILE=/var/lib/radio/recent
-      while :; do
-        ${pkgs.mpc_cli}/bin/mpc idle player > /dev/null
-        ${pkgs.mpc_cli}/bin/mpc current -f %file%
-      done | while read track; do
-
-        listeners=$(${pkgs.curl}/bin/curl lassul.us:8000/status-json.xsl |
-          ${pkgs.jq}/bin/jq '[.icestats.source[].listeners] | add')
-        echo "$(date -Is)" "$track" | tee -a "$HISTORY_FILE"
-        echo "$(tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
-        ${set_irc_topic} "playing: $track listeners: $listeners"
-      done
-    '';
-  in {
-    description = "radio recently played";
-    after = [ "mpd.service" "network.target" ];
-    wantedBy = [ "multi-user.target" ];
-
-    restartIfChanged = true;
-
-    serviceConfig = {
-      ExecStart = recentlyPlayed;
-      User = "radio";
-    };
-  };
-
   # allow reaktor2 to modify files
-  systemd.services."reaktor2-the_playlist".serviceConfig.DynamicUser = mkForce false;
+  systemd.services."reaktor2-the_playlist".serviceConfig.DynamicUser = lib.mkForce false;
 
   krebs.reaktor2.the_playlist = {
     hostname = "irc.hackint.org";
@@ -300,6 +188,12 @@ in {
                 like.filename = "${good_track}/bin/good_track";
 
                 current.filename = "${print_current}/bin/print_current";
+                wish.filename = pkgs.writeDash "wish" ''
+                  echo "youtube-dl:$1" | ${pkgs.curl}/bin/curl -fSs http://localhost:8002/wish -d @- > /dev/null
+                '';
+                wishlist.filename = pkgs.writeDash "wishlist" ''
+                  ${pkgs.curl}/bin/curl -fSs http://localhost:8002/wish | ${pkgs.jq}/bin/jq -r '.[]'
+                '';
                 suggest.filename = pkgs.writeDash "suggest" ''
                   echo "$@" >> playlist_suggest
                 '';
@@ -316,15 +210,8 @@ in {
     user = {
       name = "radio";
     };
-    script = ''. ${pkgs.writeDash "radio" ''
+    scriptFile = pkgs.writeDash "radio" ''
       case "$Method $Request_URI" in
-        "GET /current")
-          printf 'HTTP/1.1 200 OK\r\n'
-          printf 'Connection: close\r\n'
-          printf '\r\n'
-          ${print_current_json}/bin/print_current_json
-          exit
-        ;;
         "POST /skip")
           printf 'HTTP/1.1 200 OK\r\n'
           printf 'Connection: close\r\n'
@@ -344,7 +231,7 @@ in {
           exit
         ;;
       esac
-    ''}'';
+    '';
   };
 
   services.nginx = {
@@ -365,7 +252,7 @@ in {
         alias /var/lib/radio/recent;
       '';
       locations."= /current".extraConfig = ''
-        proxy_pass http://localhost:8001;
+        proxy_pass http://localhost:8002;
       '';
       locations."= /skip".extraConfig = ''
         proxy_pass http://localhost:8001;
@@ -375,10 +262,11 @@ in {
       '';
       locations."= /radio.sh".alias = pkgs.writeScript "radio.sh" ''
         #!/bin/sh
+        trap 'exit 0' EXIT
         while sleep 1; do
           mpv \
             --cache-secs=0 --demuxer-readahead-secs=0 --untimed --cache-pause=no \
-            'http://lassul.us:8000/radio.opus'
+            'http://lassul.us:8000/radio.ogg'
         done
       '';
       locations."= /controls".extraConfig = ''

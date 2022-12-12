@@ -13,12 +13,16 @@
     <stockholm/krebs/2configs/acme.nix>
     <stockholm/krebs/2configs/mud.nix>
 
+    <stockholm/krebs/2configs/cal.nix>
+    <stockholm/krebs/2configs/mastodon.nix>
+
     ## shackie irc bot
     <stockholm/krebs/2configs/shack/reaktor.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.hotdog;
   krebs.github-hosts-sync.enable = true;
+  krebs.pages.enable = true;
 
   boot.isContainer = true;
   networking.useDHCP = false;

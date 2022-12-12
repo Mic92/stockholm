@@ -1,7 +1,5 @@
-{ config, lib, pkgs, ... }:
-
-with import <stockholm/lib>;
-let {
+with import ./lib;
+{ config, pkgs, ... }: let {
   body = {
     environment.systemPackages = [
       vim-wrapper
@@ -13,7 +11,7 @@ let {
     environment.variables.VIMINIT = ":so /etc/vimrc";
   };
 
-  extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
+  extra-runtimepath = pkgs.tv.vim.makeRuntimePath [
     pkgs.tv.vimPlugins.elixir
     pkgs.tv.vimPlugins.file-line
     pkgs.tv.vimPlugins.fzf
@@ -79,6 +77,7 @@ let {
     set showmatch
     set timeoutlen=0
     set ttimeoutlen=0
+    set ttymouse=sgr
     set undodir=${dirs.undodir}
     set undofile
     set undolevels=1000000
