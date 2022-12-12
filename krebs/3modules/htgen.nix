@@ -41,7 +41,7 @@ let
         };
 
         scriptFile = mkOption {
-          type = types.nullOr types.str;
+          type = types.nullOr (types.either types.package types.pathname);
           default = null;
         };
 
