@@ -24,9 +24,10 @@ for ip in fileinput.input():
         weather = json.loads(resp.text)
         output.append(
             f'Weather report for {location.city.name}, {location.country.name}. '
-            f'Currently it is {weather["current"]["weather"][0]["description"]} outside '
+            f'It is {weather["current"]["weather"][0]["description"]} outside '
             f'with a temperature of {weather["current"]["temp"]:.1f} degrees, '
-            f'and a wind speed of {weather["current"]["wind_speed"]:.1f} meters per second. '
+            f'a wind speed of {weather["current"]["wind_speed"]:.1f} meters per second '
+            f'and a humidity of {weather["current"]["humidity"]} percent. '
             f'The probability of precipitation is {weather["hourly"][0]["pop"] * 100:.0f} percent. '
         )
 
