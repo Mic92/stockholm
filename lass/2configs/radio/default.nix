@@ -210,7 +210,7 @@ in {
     user = {
       name = "radio";
     };
-    script = ''. ${pkgs.writeDash "radio" ''
+    scriptFile = pkgs.writeDash "radio" ''
       case "$Method $Request_URI" in
         "POST /skip")
           printf 'HTTP/1.1 200 OK\r\n'
@@ -231,7 +231,7 @@ in {
           exit
         ;;
       esac
-    ''}'';
+    '';
   };
 
   services.nginx = {
