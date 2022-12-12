@@ -9,7 +9,6 @@ let
     set -eu
 
     # TODO come up with new rating, without moving files
-    # music_dir=${lib.escapeShellArg music_dir}
     # current_track=$(${pkgs.curl}/bin/curl -fSs http://localhost:8002/current | ${pkgs.jq}/bin/jq -r .filename)
     # track_infos=$(${print_current}/bin/print_current)
     # skip_count=$(${pkgs.attr}/bin/getfattr -n user.skip_count --only-values "$current_track" || echo 0)
@@ -22,13 +21,13 @@ let
     #   mv "$current_track" "$music_dir"/the_playlist/.graveyard/
     #   echo killing: "$track_infos"
     # fi
-    ${pkgs.curl}/bin/curl -X POST http://localhost:8002/skip
+    ${pkgs.curl}/bin/curl -fSs -X POST http://localhost:8002/skip |
+      ${pkgs.jq}/bin/jq -r '.filename'
   '';
 
   good_track = pkgs.writeBashBin "good_track" ''
     set -eu
 
-    music_dir=${lib.escapeShellArg music_dir}
     current_track=$(${pkgs.curl}/bin/curl -fSs http://localhost:8002/current | ${pkgs.jq}/bin/jq -r .filename)
     track_infos=$(${print_current}/bin/print_current)
     # TODO come up with new rating, without moving files
@@ -41,7 +40,15 @@ let
   '';
 
   print_current = pkgs.writeDashBin "print_current" ''
-    ${pkgs.curl}/bin/curl -fSs http://localhost:8002/current | ${pkgs.jq}/bin/jq -r '"\(.filename): \(.purl)"'
+    file=$(${pkgs.curl}/bin/curl -fSs http://localhost:8002/current |
+      ${pkgs.jq}/bin/jq -r '.filename' |
+      ${pkgs.gnused}/bin/sed 's,^${music_dir},,'
+    )
+    link=$(${pkgs.curl}/bin/curl http://localhost:8002/current |
+      ${pkgs.jq}/bin/jq -r '.filename' |
+      ${pkgs.gnused}/bin/sed 's@.*\(.\{11\}\)\.ogg@https://youtu.be/\1@'
+    )
+    echo "$file": "$link"
   '';
 
   set_irc_topic = pkgs.writeDash "set_irc_topic" ''
@@ -181,6 +188,12 @@ in {
                 like.filename = "${good_track}/bin/good_track";
 
                 current.filename = "${print_current}/bin/print_current";
+                wish.filename = pkgs.writeDash "wish" ''
+                  echo "youtube-dl:$1" | ${pkgs.curl}/bin/curl -fSs http://localhost:8002/wish -d @- > /dev/null
+                '';
+                wishlist.filename = pkgs.writeDash "wishlist" ''
+                  ${pkgs.curl}/bin/curl -fSs http://localhost:8002/wish | ${pkgs.jq}/bin/jq -r '.[]'
+                '';
                 suggest.filename = pkgs.writeDash "suggest" ''
                   echo "$@" >> playlist_suggest
                 '';

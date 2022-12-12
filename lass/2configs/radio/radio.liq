@@ -30,6 +30,7 @@ port = string.to_int(env["RADIO_PORT"], default = 8000)
 all_music = playlist(env["MUSIC"], check_next = filter_graveyard)
 wishlist = request.queue()
 tracks = fallback(track_sensitive = true, [wishlist, all_music])
+tracks = blank.eat(tracks)
 
 last_metadata = ref([])
 def on_metadata(m) =
