@@ -110,7 +110,8 @@
     <stockholm/krebs/2configs/shack/prometheus/server.nix>
     <stockholm/krebs/2configs/shack/prometheus/blackbox.nix>
     #<stockholm/krebs/2configs/shack/prometheus/unifi.nix>
-    <stockholm/krebs/2configs/shack/prometheus/alertmanager-telegram.nix>
+    # TODO: alertmanager 0.24+ supports telegram
+    # <stockholm/krebs/2configs/shack/prometheus/alertmanager-telegram.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;

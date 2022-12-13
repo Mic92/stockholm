@@ -1,4 +1,9 @@
-{
+{pkgs, config, ... }:
+let
+  user = config.krebs.build.user.name;
+  window-manager = "awesome";
+in
+  {
   systemd.services.look-up = {
     startAt = "*:30";
     serviceConfig = {

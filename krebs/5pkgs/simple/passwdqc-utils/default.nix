@@ -1,17 +1,17 @@
 { fetchurl, lib, stdenv
 , libxcrypt
-, pam
+, linux-pam
 , wordset-file ? null, # set your own wordset-file
 }:
 
 stdenv.mkDerivation rec {
-  name = "passwdqc-utils-${version}";
-  version = "1.3.0";
-  buildInputs = [ libxcrypt pam ];
+  pname = "passwdqc-utils";
+  version = "2.0.2";
+  buildInputs = [ libxcrypt linux-pam ];
 
   src = fetchurl {
     url = "http://www.openwall.com/passwdqc/passwdqc-${version}.tar.gz";
-    sha256 = "0l3zbrp4pvah0dz33m48aqlz9nx663cc1fqhnlwr0p853b10la93";
+    hash = "sha256-/x9QV2TAIPakSEseDMT9vy4/cbUikm2QtHCRBMoGBKs=";
   };
 
   buildTargets = "utils";
