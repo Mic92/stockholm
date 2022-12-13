@@ -303,7 +303,18 @@ let
                 longitude=$(echo "$poi" | jq -r .longitude)
               fi
 
-              restaurant=$(osm-restaurants --radius "$2" --latitude "$latitude" --longitude "$longitude")
+              for api_endpoint in \
+                https://lz4.overpass-api.de/api/interpreter \
+                https://z.overpass-api.de/api/interpreter \
+                https://maps.mail.ru/osm/tools/overpass/api/interpreter \
+                https://overpass.openstreetmap.ru/api/interpreter \
+                https://overpass.kumi.systems/api/interpreter
+              do
+                restaurant=$(osm-restaurants --endpoint "$api_endpoint" --radius "$2" --latitude "$latitude" --longitude "$longitude")
+                if [ "$?" -eq 0 ]; then
+                  break
+                fi
+              done
               printf '%s' "$restaurant" | tail -1 | jq -r '"How about \(.tags.name) (https://www.openstreetmap.org/\(.type)/\(.id)), open \(.tags.opening_hours)?"'
             '';
           };
