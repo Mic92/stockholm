@@ -64,8 +64,7 @@ let
           pkgs.curl
           pkgs.stable-generate
         ]}
-        stable_url=$(stable-generate "$@")
-        paste_url=$(curl -Ss "$stable_url" |
+        paste_url=$(stable-generate "$@" |
           curl -Ss http://p.r --data-binary @- |
           tail -1
         )
@@ -87,8 +86,7 @@ let
           pkgs.stable-generate
         ]}
         case $_msgtarget in \#*)
-          stable_url=$(stable-generate "$@")
-          paste_url=$(curl -Ss "$stable_url" |
+          paste_url=$(stable-generate "$@" |
             curl -Ss https://p.krebsco.de --data-binary @- |
             tail -1
           )
