@@ -72,6 +72,22 @@ let
       '';
     };
   };
+  interrogate = {
+    pattern = "^!interrogate (.*)$";
+    activate = "match";
+    arguments = [1];
+    command = {
+      filename = pkgs.writeDash "interrogate" ''
+        set -efux
+
+        export PATH=${makeBinPath [
+          pkgs.stable-interrogate
+        ]}
+        caption=$(stable-interrogate "$@")
+        echo "$_from: $caption"
+      '';
+    };
+  };
 
   confuse_hackint = {
     pattern = "^!confuse (.*)$";
@@ -295,6 +311,7 @@ let
         bedger-add
         bedger-balance
         hooks.sed
+        interrogate
         say
         (generators.command_hook {
           inherit (commands) dance random-emoji nixos-version;
