@@ -38,6 +38,7 @@ in {
       enable = lib.mkDefault true;
       virtualHosts.${cfg.domain} = lib.mkMerge [ cfg.nginx {
         root = lib.mkForce cfg.package;
+        locations."= /ip".return = "200 $remote_addr";
         locations."= /redirect".return = "301 /redirect";
       }];
     };
