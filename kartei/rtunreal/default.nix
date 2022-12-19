@@ -15,13 +15,18 @@ let
       ip6.addr = (krebs.genipv6 "wiregrill" "external" { inherit hostName; }).address;
     };
   });
+  ssh-for = name: builtins.readFile (./ssh + "/${name}.pub");
 in
 {
   users = rec {
-    rtunreal = {
-      # Mail is temporary as it will change in the future and I
-      # don't want it to be semi permanent
-      # mail: krebscotemp(a)user-sites[point]de
+    rtunreal = rtunreal-spinner;
+    rtunreal-spinner = {
+      mail = "unreal@rtinf.net";
+      pubkey = ssh-for "rtunreal.spinner";
+    };
+    rtunreal-runner = {
+      inherit (rtunreal-spinner) mail;
+      pubkey = ssh-for "rtunreal.runner";
     };
   };
   hosts = mapAttrs hostDefaults {
@@ -45,6 +50,28 @@ in
           -----END RSA PUBLIC KEY-----
         '';
         tinc.pubkey_ed25519 = "eHWJxlhbUQY0rT2PLqbqb9W4hf7zHh3+gEIRaGrxAdB";
+      };
+    };
+    rtrunner = {
+      nets.retiolum = {
+        aliases = [ "runner.rtunreal.r" ];
+        ip4.addr = "10.243.20.22";
+        tinc.pubkey = ''
+          -----BEGIN RSA PUBLIC KEY-----
+          MIICCgKCAgEAwWSzslk21TbghFsEWk+A0FobqgxrYyyimzSw772OhIpDmCLd63Vr
+          x1A/ytEObngMgv/YDTZrp23uFo9uFipAIZPBFBPDPi3fa8OuaGY6MFP6961Ui30l
+          4cHBfhuokfdDZxaARwsUtk3RgvFjQvF//Wgj6MIMg3lBMxr00/U3bhegkhP2NyT6
+          NCB9xbM6iJQyzOum49u0NHXUEkDzpHWm85CcyV4UTv+MQEnXU4l2irYFu+ArTPEn
+          dHqbKBd8lPuLTH1ehiOTh85qC/KV36jHWwmguR96aVEplrFMgV43VnpJj5jLa1NQ
+          n00JiCkCVf89LkAz4ZXtQ+5cvDRSWQGYql+J3KJ28YynLPOIlVlEJ+HjhaSQT/3O
+          qiREOjp2KPpnSoY5561J2LfmL+shpsVzyFxO+2P0K2bE5K66LfTfmoLUiHKq4/SR
+          8EPBZfwvMyWbL3vxngFhZKI01LMsf0YJxu9FWCOPa2X6B7JAxr1jMn0Uzw3ZvNnq
+          q6QK/sJhuM1/ddmCMofKYeOtfdunnboniFzI2QValuIdmlOi7nYNqy+gSrxRSWnJ
+          PTzGoJB9R4/PufSGJxUr7FCRxSY/TN7fJF74YVG9iVz2ttEuwdUI3ORQVrORbpEI
+          wEtM64cb0Dt2WyB3Sit8UGtK59BPYJcU7PB+tMnNLynPzFdkj8gDZtsCAwEAAQ==
+          -----END RSA PUBLIC KEY-----
+        '';
+        tinc.pubkey_ed25519 = "YJE4KD9PhDjxucDAGrbec5Yqqf3A8/VU0J0NV8EPXuN";
       };
     };
   };
