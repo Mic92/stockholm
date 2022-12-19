@@ -70,8 +70,7 @@ pkgs.symlinkJoin {
       # Install stored configuration if it has changed.
       # This allows for both declarative updates and runtime modifications.
       ${pkgs.coreutils}/bin/mkdir -p "$HOME"
-      ref=$(${pkgs.coreutils}/bin/cat "$HOME"/ref)
-      if test "$ref" != ${config-file}; then
+      if test "$(${pkgs.coreutils}/bin/cat "$HOME"/ref)" != ${config-file}; then
         echo ${config-file} > "$HOME"/ref
         ${pkgs.coreutils}/bin/cp ${config-file} "$HOME"/.alacritty.yml
       fi
