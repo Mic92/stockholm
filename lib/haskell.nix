@@ -39,7 +39,12 @@ rec {
         in
         if parse == null then
           (pkgs.writeText name s).overrideAttrs (old: {
-            dependencies = old.dependencies or [] ++ dependencies;
+            dependencies =
+              lib.uniq
+                (lib.sort (lib.on lib.lessThan (lib.getAttr "name"))
+                  (filter
+                    (lib.ne null)
+                    (old.dependencies or [] ++ dependencies)));
           })
 
         else
