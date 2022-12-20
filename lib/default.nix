@@ -187,6 +187,30 @@ let
     in
       filter (x: x != []) ([acc.chunk] ++ acc.chunks);
 
+    # Filter adjacent duplicate elements.
+    uniq = uniqBy eq;
+
+    # Filter adjacent duplicate elements determined via the given function.
+    uniqBy = cmp: let
+      f = a: s:
+        if length s == 0 then
+          []
+        else let
+          b = head s;
+        in
+          if cmp a b then
+            f b (tail s)
+          else
+            [b] ++ f b (tail s);
+    in
+      s:
+        if length s == 0 then
+          []
+        else let
+          b = head s;
+        in
+          [b] ++ f b (tail s);
+
     warnOldVersion = oldName: newName:
       if compareVersions oldName newName != -1 then
         trace "Upstream `${oldName}' gets overridden by `${newName}'." newName
