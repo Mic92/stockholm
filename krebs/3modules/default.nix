@@ -7,6 +7,7 @@ let
   out = {
     imports = [
       ../../kartei
+      ../../submodules/disko/module.nix
       ./acl.nix
       ./airdcpp.nix
       ./announce-activation.nix
