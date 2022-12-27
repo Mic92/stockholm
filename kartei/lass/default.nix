@@ -19,6 +19,7 @@ in {
     consul = true;
     ci = true;
     monitoring = true;
+    ssh.privkey.path = <secrets/ssh.id_ed25519>;
   }) (
     lib.genAttrs hostFiles (host: import (./. + "/${host}.nix") { inherit config krebs lib r6 w6; })
   );
