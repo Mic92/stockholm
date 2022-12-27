@@ -8,6 +8,7 @@
   services.ergochat = {
     enable = true;
     settings = {
+      server.name = "irc.r";
       server.secure-nets = [
         "42::0/16"
         "10.240.0.0/12"

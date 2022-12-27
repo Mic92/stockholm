@@ -39,6 +39,8 @@ let
     ne = x: y: x != y;
     mod = x: y: x - y * (x / y);
 
+    on = b: u: x: y: b (u x) (u y);
+
     genid = lib.genid_uint32; # TODO remove
     genid_uint31 = x: ((lib.genid_uint32 x) + 16777216) / 2;
     genid_uint32 = import ./genid.nix { inherit lib; };
@@ -184,6 +186,30 @@ let
           (stringToCharacters s);
     in
       filter (x: x != []) ([acc.chunk] ++ acc.chunks);
+
+    # Filter adjacent duplicate elements.
+    uniq = uniqBy eq;
+
+    # Filter adjacent duplicate elements determined via the given function.
+    uniqBy = cmp: let
+      f = a: s:
+        if length s == 0 then
+          []
+        else let
+          b = head s;
+        in
+          if cmp a b then
+            f b (tail s)
+          else
+            [b] ++ f b (tail s);
+    in
+      s:
+        if length s == 0 then
+          []
+        else let
+          b = head s;
+        in
+          [b] ++ f b (tail s);
 
     warnOldVersion = oldName: newName:
       if compareVersions oldName newName != -1 then
