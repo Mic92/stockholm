@@ -8,7 +8,6 @@
   ];
 
   krebs.hosts.minimal = {
-    cores = 1;
     secure = false;
   };
 

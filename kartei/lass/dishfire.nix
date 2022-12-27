@@ -1,6 +1,5 @@
 { r6, w6, ... }:
 {
-  cores = 4;
   nets = rec {
     internet = {
       ip4 = rec {

@@ -18,9 +18,6 @@ rec {
         type = label;
         default = config._module.args.name;
       };
-      cores = mkOption {
-        type = uint;
-      };
       nets = mkOption {
         type = attrsOf net;
         default = {};

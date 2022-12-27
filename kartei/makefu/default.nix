@@ -58,21 +58,18 @@ with import ../../lib;
 in {
   hosts = mapAttrs hostDefaults {
     cake = rec {
-      cores = 4;
       ci = false;
       nets = {
         retiolum.ip4.addr = "10.243.136.236";
       };
     };
     crapi = rec { # raspi1
-      cores = 1;
       ci = false;
       nets = {
         retiolum.ip4.addr = "10.243.136.237";
       };
     };
     firecracker = {
-      cores = 4;
       nets = {
         retiolum.ip4.addr = "10.243.12.12";
       };
@@ -80,28 +77,24 @@ in {
 
     studio = rec {
       ci = false;
-      cores = 4;
       nets = {
         retiolum.ip4.addr = "10.243.227.163";
       };
     };
     fileleech = rec {
       ci = false;
-      cores = 4;
       nets = {
         retiolum.ip4.addr = "10.243.113.98";
       };
     };
     tsp = {
       ci = true;
-      cores = 1;
       nets = {
         retiolum.ip4.addr = "10.243.0.212";
       };
     };
     x = {
       ci = true;
-      cores = 4;
       syncthing.id = "OA36OF6-JEFCUJQ-OEYVTMH-DPCACQI-3AJRE5G-BFVMOUG-RPYJQE3-4ZCUWA5";
       nets = {
         retiolum.ip4.addr = "10.243.0.91";
@@ -113,7 +106,6 @@ in {
     };
     filepimp = rec {
       ci = false;
-      cores = 1;
       nets = {
         retiolum.ip4.addr = "10.243.153.102";
       };
@@ -121,7 +113,6 @@ in {
 
     omo = rec {
       ci = true;
-      cores = 2;
       syncthing.id = "Y5OTK3S-JOJLAUU-KTBXKUW-M7S5UEQ-MMQPUK2-7CXO5V6-NOUDLKP-PRGAFAK";
       nets = {
         retiolum = {
@@ -139,7 +130,6 @@ in {
     };
     wbob = rec {
       ci = true;
-      cores = 4;
       nets = {
         retiolum = {
           ip4.addr = "10.243.214.15";
@@ -164,7 +154,6 @@ in {
           latte.euer     IN A      ${nets.internet.ip4.addr}
         '';
       };
-      cores = 4;
       nets = rec {
         internet = {
           ip4.addr = "178.254.30.202";
@@ -246,7 +235,6 @@ in {
           music.euer        IN A      ${nets.internet.ip4.addr}
         '';
       };
-      cores = 8;
       nets = rec {
         internet = {
           ip4.addr = "142.132.189.140";
@@ -302,7 +290,6 @@ in {
 
     sdev = rec {
       ci = true;
-      cores = 1;
       nets = {
         retiolum.ip4.addr = "10.243.83.237";
       };
@@ -312,7 +299,6 @@ in {
 # non-stockholm
 
     flap = rec {
-      cores = 1;
       extraZones = {
         "krebsco.de" = ''
           flap              IN A      ${nets.internet.ip4.addr}
@@ -332,7 +318,6 @@ in {
     };
 
     nukular = rec {
-      cores = 1;
       nets = {
         retiolum = {
           ip4.addr = "10.243.231.219";
@@ -342,17 +327,14 @@ in {
 
 
     shackdev = rec { # router@shack
-      cores = 1;
       nets.wiregrill.ip4.addr = "10.244.245.2";
     };
 
     rockit = rec { # router@home
-      cores = 1;
       nets.wiregrill.ip4.addr = "10.244.245.3";
     };
 
     senderechner = rec {
-      cores = 2;
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.163";

@@ -1,6 +1,5 @@
 { config, krebs, r6, w6, ... }:
 rec {
-  cores = 4;
   extraZones = {
     "krebsco.de" = ''
       cache     60 IN A ${nets.internet.ip4.addr}

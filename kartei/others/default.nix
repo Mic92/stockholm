@@ -43,7 +43,6 @@ in {
       };
     };
     horisa = {
-      cores = 2;
       owner = config.krebs.users.ulrich; # main laptop
       nets = {
         retiolum = {
@@ -57,7 +56,6 @@ in {
       };
     };
     hasegateway = {
-      cores = 1;
       owner = config.krebs.users.hase;
       nets = {
         #internet = {
@@ -343,7 +341,6 @@ in {
       };
     };
     tpsw = {
-      cores = 2;
       owner = config.krebs.users.ciko; # main laptop
       nets = {
         retiolum = {

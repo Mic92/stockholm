@@ -15,7 +15,6 @@ with import ../../lib;
     "test-all-krebs-modules"
   ] (name: {
     inherit name;
-    cores = 1;
     nets = {
       retiolum = {
         ip4.addr = "10.243.73.57";
@@ -36,7 +35,6 @@ in {
   hosts = mapAttrs hostDefaults ({
     filebitch = {
       ci = true;
-      cores = 4;
       nets = {
         shack = {
           ip4 = {
@@ -134,7 +132,6 @@ in {
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHl5cDF9QheXyMlNYIX17ILbgd94K50fZy7w0fDLvZlo ";
     };
     onebutton = {
-      cores = 1;
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.101";
@@ -163,7 +160,6 @@ in {
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAcZg+iLaPZ0SpLM+nANxIjZC/RIsansjyutK0+gPhIe ";
     };
     ponte = {
-      cores = 1;
       owner = config.krebs.users.krebs;
       extraZones = {
         "krebsco.de" = /* bindzone */ ''
@@ -212,7 +208,6 @@ in {
     };
     puyak = {
       ci = true;
-      cores = 4;
       nets = {
         retiolum = {
           ip4.addr = "10.243.77.2";

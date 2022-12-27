@@ -1,6 +1,5 @@
 { r6, w6, ... }:
 {
-  cores = 1;
   ci = false;
   nets = {
     retiolum = {

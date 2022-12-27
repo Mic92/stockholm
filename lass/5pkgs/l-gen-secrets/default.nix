@@ -25,7 +25,6 @@ pkgs.writeDashBin "l-gen-secrets" ''
 
   cat <<EOF
     $HOSTNAME = {
-      cores = 1;
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.changeme";

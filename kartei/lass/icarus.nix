@@ -1,6 +1,5 @@
 { r6, w6, ... }:
 {
-  cores = 2;
   nets = rec {
     retiolum = {
       ip4.addr = "10.243.133.114";

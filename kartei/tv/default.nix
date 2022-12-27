@@ -40,7 +40,6 @@ in {
   hosts = mapAttrs evalHost {
     alnus = {
       ci = true;
-      cores = 2;
       nets = {
         retiolum = {
           ip4.addr = "10.243.21.1";
@@ -64,7 +63,6 @@ in {
     };
     au = {
       ci = true;
-      cores = 4;
       nets = {
         retiolum = {
           ip4.addr = "10.243.13.39";
@@ -89,7 +87,6 @@ in {
     };
     bu = {
       ci = true;
-      cores = 4;
       nets = {
         retiolum = {
           ip4.addr = "10.243.13.36";
@@ -138,7 +135,6 @@ in {
     };
     mu = {
       ci = true;
-      cores = 2;
       nets = {
         retiolum = {
           ip4.addr = "10.243.20.1";
@@ -230,7 +226,6 @@ in {
     };
     nomic = {
       ci = true;
-      cores = 2;
       nets = {
         retiolum = {
           ip4.addr = "10.243.0.110";
@@ -256,7 +251,6 @@ in {
     };
     wu = {
       ci = true;
-      cores = 4;
       nets = {
         retiolum = {
           ip4.addr = "10.243.13.37";
@@ -282,7 +276,6 @@ in {
     };
     querel = {
       ci = true;
-      cores = 2;
       nets = {
         retiolum = {
           ip4.addr = "10.243.22.22";
@@ -313,7 +306,6 @@ in {
         pubkey = "xu-1:pYRENvaxZqGeImwLA9qHmRwHV4jfKaYx4u1VcZ31x0s=";
       };
       ci = true;
-      cores = 4;
       nets = {
         retiolum = {
           ip4.addr = "10.243.13.38";
@@ -339,7 +331,6 @@ in {
     };
     zu = {
       ci = true;
-      cores = 4;
       nets = {
         retiolum = {
           ip4.addr = "10.243.13.40";

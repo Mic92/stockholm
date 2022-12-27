@@ -69,7 +69,6 @@ with import <stockholm/lib>;
   ];
 
   networking.hostName = config.krebs.build.host.name;
-  nix.maxJobs = config.krebs.build.host.cores;
 
   krebs = {
     enable = true;
