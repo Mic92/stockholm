@@ -23,6 +23,13 @@ in mkIf (hasAttr "wiregrill" config.krebs.build.host.nets) {
     { precedence = 1000; predicate = "-i wiregrill -o eth0"; target = "ACCEPT"; }
     { precedence = 1000; predicate = "-o wiregrill -m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; }
   ];
+  systemd.network.networks.wiregrill = {
+    matchConfig.Name = "wiregrill";
+    address =
+      (optional (!isNull self.ip4) "${self.ip4.addr}/16") ++
+      (optional (!isNull self.ip6) "${self.ip6.addr}/48")
+    ;
+  };
 
   networking.wireguard.interfaces.wiregrill = {
     ips =
