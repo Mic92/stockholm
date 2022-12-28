@@ -155,6 +155,7 @@ in {
     telex.nets.wiregrill = {
       aliases =  ["telex.w"];
       ip6.addr = (krebs.genipv6 "wiregrill" "makefu" { hostName = "telex"; }).address;
+      ip4.addr = "10.244.245.4";
     };
 
     latte = rec {
