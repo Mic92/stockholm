@@ -19,7 +19,7 @@ pkgs.writers.writeDashBin "l-gen-secrets" ''
   ${pkgs.coreutils}/bin/mv $TMPDIR/ssh.id_ed25519 $TMPDIR/out/
 
   # tor
-  ${pkgs.coreutils}/bin/timeout 1 ${pkgs.tor}/bin/tor --HiddenServiceDir $TMPDIR/tor --HiddenServicePort 1 --SocksPort 0 || :
+  ${pkgs.coreutils}/bin/timeout 1 ${pkgs.tor}/bin/tor --HiddenServiceDir $TMPDIR/tor --HiddenServicePort 1 --SocksPort 0 >/dev/null || :
   ${pkgs.coreutils}/bin/mv $TMPDIR/tor/hs_ed25519_secret_key $TMPDIR/out/ssh-tor.priv
 
   # tinc
@@ -62,7 +62,7 @@ pkgs.writers.writeDashBin "l-gen-secrets" ''
           "$HOSTNAME.r"
         ];
         tinc.pubkey = ${"''"}
-    $(cat $TMPDIR/tinc/rsa_key.pub | sed 's/^/        /')
+  $(cat $TMPDIR/tinc/rsa_key.pub | sed 's/^/        /')
         ${"''"};
         tinc.pubkey_ed25519 = "$(cat $TMPDIR/tinc/ed25519_key.pub | ${pkgs.gnused}/bin/sed 's/.* = //')";
       };
