@@ -27,6 +27,15 @@
         LocalDiscovery = no
       ''}
     '';
+    tincUp = lib.mkIf config.systemd.network.enable "";
+  };
+
+  systemd.network.networks.retiolum = {
+    matchConfig.Name = "retiolum";
+    address = [
+      "${config.krebs.build.host.nets.retiolum.ip4.addr}/16"
+      "${config.krebs.build.host.nets.retiolum.ip6.addr}/16"
+    ];
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
