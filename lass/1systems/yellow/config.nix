@@ -138,7 +138,15 @@ in {
     };
   };
 
-  systemd.services.bruellwuerfel = {
+  systemd.services.bruellwuerfel =
+  let
+    bruellwuerfelSrc = pkgs.fetchFromGitHub {
+      owner = "krebs";
+      repo = "bruellwuerfel";
+      rev = "dc73adf69249fb63a4b024f1f3fbc9e541b27015";
+      sha256 = "078jp1gbavdp8lnwa09xa5m6bbbd05fi4x5ldkkgin5z04hwlhmd";
+    };
+  in {
     wantedBy = [ "multi-user.target" ];
     environment = {
       IRC_CHANNEL = "#flix";
@@ -147,7 +155,7 @@ in {
       IRC_HISTORY_FILE = "/tmp/bruelli.history";
     };
     serviceConfig = {
-      ExecStart = "${pkgs.bruellwuerfel}/bin/bruellwuerfel";
+      ExecStart = "${pkgs.deno}/bin/deno run -A ${bruellwuerfelSrc}/src/index.ts";
     };
   };
 
