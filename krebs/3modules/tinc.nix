@@ -232,6 +232,7 @@ with import <stockholm/lib>;
     ) config.krebs.tinc;
 
     krebs.systemd.services = mapAttrs (netname: cfg: {
+      restartIfCredentialsChange = true;
     }) config.krebs.tinc;
 
     systemd.services = mapAttrs (netname: cfg: {

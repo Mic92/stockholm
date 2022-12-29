@@ -6,11 +6,7 @@
     type = lib.types.attrsOf (lib.types.submodule {
       options = {
         restartIfCredentialsChange = lib.mkOption {
-          # Enabling this by default only makes sense here as the user already
-          # bothered to write down krebs.systemd.services.* = {}.  If this
-          # functionality gets upstreamed to systemd.services, restarting
-          # should be disabled by default.
-          default = true;
+          default = false;
           description = ''
             Whether to restart the service whenever any of its credentials
             change.  Only credentials with an absolute path in LoadCredential=
