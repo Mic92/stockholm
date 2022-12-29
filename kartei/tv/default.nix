@@ -1,47 +1,5 @@
 with import ../../lib;
-{ config, ... }: let
-
-  evalHost = hostName: hostConfig: evalSubmodule types.host [
-    hostConfig
-    {
-      name = hostName;
-      owner = config.krebs.users.tv;
-    }
-    (optionalAttrs (hasAttrByPath ["nets" "retiolum"] hostConfig) {
-      nets.retiolum = {
-        ip6.addr =
-          (krebs.genipv6 "retiolum" "tv" { inherit hostName; }).address;
-      };
-    })
-    (let
-      pubkey-path = ./wiregrill + "/${hostName}.pub";
-    in optionalAttrs (pathExists pubkey-path) {
-      nets.wiregrill = {
-        aliases = [
-          "${hostName}.w"
-        ];
-        ip6.addr =
-          (krebs.genipv6 "wiregrill" "tv" { inherit hostName; }).address;
-        wireguard.pubkey = readFile pubkey-path;
-      };
-    })
-    (host: mkIf (host.config.ssh.pubkey != null) {
-      ssh.privkey = mapAttrs (const mkDefault) {
-        path = config.krebs.secret.file "ssh.id_${host.config.ssh.privkey.type}";
-        type = head (toList (match "ssh-([^ ]+) .*" host.config.ssh.pubkey));
-      };
-    })
-  ];
-
-  hostFiles =
-    mapAttrs'
-      (name: type: {
-        name = removeSuffix ".nix" name;
-        value = ./hosts + "/${name}";
-      })
-      (readDir ./hosts);
-
-in {
+{ config, ... }: {
   dns.providers = {
     "viljetic.de" = "regfish";
   };
@@ -53,9 +11,43 @@ in {
           lambda = hostSource { inherit config lib; };
           set = hostSource;
         };
-      in
-        evalHost hostName hostConfig)
-      hostFiles;
+      in evalSubmodule types.host [
+        hostConfig
+        {
+          name = hostName;
+          owner = config.krebs.users.tv;
+        }
+        (optionalAttrs (hasAttrByPath ["nets" "retiolum"] hostConfig) {
+          nets.retiolum = {
+            ip6.addr =
+              (krebs.genipv6 "retiolum" "tv" { inherit hostName; }).address;
+          };
+        })
+        (let
+          pubkey-path = ./wiregrill + "/${hostName}.pub";
+        in optionalAttrs (pathExists pubkey-path) {
+          nets.wiregrill = {
+            aliases = [
+              "${hostName}.w"
+            ];
+            ip6.addr =
+              (krebs.genipv6 "wiregrill" "tv" { inherit hostName; }).address;
+            wireguard.pubkey = readFile pubkey-path;
+          };
+        })
+        (host: mkIf (host.config.ssh.pubkey != null) {
+          ssh.privkey = mapAttrs (const mkDefault) {
+            path = config.krebs.secret.file "ssh.id_${host.config.ssh.privkey.type}";
+            type = head (toList (match "ssh-([^ ]+) .*" host.config.ssh.pubkey));
+          };
+        })
+      ])
+      (mapAttrs'
+        (name: type: {
+          name = removeSuffix ".nix" name;
+          value = ./hosts + "/${name}";
+        })
+        (readDir ./hosts));
   sitemap = {
     "http://cgit.krebsco.de" = {
       desc = "Git repositories";
