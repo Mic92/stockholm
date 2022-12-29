@@ -3,14 +3,28 @@
 
   body.options.krebs.systemd.services = lib.mkOption {
     default = {};
-    type = lib.types.attrsOf (lib.types.submodule {
+    type = lib.types.attrsOf (lib.types.submodule (cfg_: let
+      serviceName = cfg_.config._module.args.name;
+      cfg = config.systemd.services.${serviceName} // cfg_.config;
+    in {
       options = {
+        credentialPaths = lib.mkOption {
+          default =
+            lib.sort
+              lib.lessThan
+              (lib.filter
+                lib.types.absolute-pathname.check
+                (map
+                  (lib.compose [ lib.maybeHead (lib.match "[^:]*:(.*)") ])
+                  (lib.toList cfg.serviceConfig.LoadCredential)));
+          readOnly = true;
+        };
+        credentialUnitName = lib.mkOption {
+          default = "trigger-${lib.systemd.encodeName serviceName}";
+          readOnly = true;
+        };
         restartIfCredentialsChange = lib.mkOption {
-          # Enabling this by default only makes sense here as the user already
-          # bothered to write down krebs.systemd.services.* = {}.  If this
-          # functionality gets upstreamed to systemd.services, restarting
-          # should be disabled by default.
-          default = true;
+          default = false;
           description = ''
             Whether to restart the service whenever any of its credentials
             change.  Only credentials with an absolute path in LoadCredential=
@@ -19,30 +33,40 @@
           type = lib.types.bool;
         };
       };
-    });
+    }));
   };
 
-  body.config = {
-    systemd.paths = lib.mapAttrs' (serviceName: _:
-      lib.nameValuePair "trigger-${lib.systemd.encodeName serviceName}" {
-        wantedBy = [ "multi-user.target" ];
-        pathConfig.PathChanged =
-          lib.filter
-            lib.types.absolute-pathname.check
-            (map
-              (lib.compose [ lib.maybeHead (lib.match "[^:]*:(.*)") ])
-              (lib.toList
-                config.systemd.services.${serviceName}.serviceConfig.LoadCredential));
-      }
-    ) config.krebs.systemd.services;
+  body.config.systemd = lib.mkMerge (lib.mapAttrsToList (serviceName: cfg: {
+    paths.${cfg.credentialUnitName} = {
+      wantedBy = [ "multi-user.target" ];
+      pathConfig.PathChanged = cfg.credentialPaths;
+    };
+    services.${cfg.credentialUnitName} = {
+      serviceConfig = {
+        Type = "oneshot";
+        StateDirectory = "credentials";
+        ExecStart = pkgs.writeDash "${cfg.credentialUnitName}.sh" ''
+          set -efu
 
-    systemd.services = lib.mapAttrs' (serviceName: cfg:
-      lib.nameValuePair "trigger-${lib.systemd.encodeName serviceName}" {
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${pkgs.systemd}/bin/systemctl restart ${lib.shell.escape serviceName}";
-        };
-      }
-    ) config.krebs.systemd.services;
-  };
+          PATH=${lib.makeBinPath [
+            pkgs.coreutils
+            pkgs.diffutils
+            pkgs.systemd
+          ]}
+
+          cache=/var/lib/credentials/${lib.shell.escape serviceName}.sha1sum
+          tmpfile=$(mktemp -t "$(basename "$cache")".XXXXXXXX)
+          trap 'rm -f "$tmpfile"' EXIT
+
+          sha1sum ${toString cfg.credentialPaths} > "$tmpfile"
+          if test -f "$cache" && cmp -s "$tmpfile" "$cache"; then
+            exit
+          fi
+          mv "$tmpfile" "$cache"
+
+          systemctl restart ${lib.shell.escape serviceName}
+        '';
+      };
+    };
+  }) config.krebs.systemd.services);
 }

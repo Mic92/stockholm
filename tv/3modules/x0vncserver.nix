@@ -26,7 +26,7 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    krebs.systemd.services.x0vncserver = {};
+    krebs.systemd.services.x0vncserver.restartIfCredentialsChange = true;
     systemd.services.x0vncserver = {
       after = [ "graphical.target" ];
       requires = [ "graphical.target" ];

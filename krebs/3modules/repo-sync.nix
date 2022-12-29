@@ -159,7 +159,9 @@ let
     ) cfg.repos;
 
     krebs.systemd.services = mapAttrs' (name: _:
-      nameValuePair "repo-sync-${name}" {}
+      nameValuePair "repo-sync-${name}" {
+        restartIfCredentialsChange = true;
+      }
     ) cfg.repos;
 
     systemd.services = mapAttrs' (name: repo:
