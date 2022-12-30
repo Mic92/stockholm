@@ -64,7 +64,6 @@ in {
         privateNetwork = true;
         hostBridge = "ctr0";
         bindMounts = {
-          "/etc/resolv.conf".hostPath = "/etc/resolv.conf";
           "/var/lib/self/disk" = {
             hostPath = "/var/lib/sync-containers3/${ctr.name}/disk";
             isReadOnly = false;
@@ -257,44 +256,26 @@ in {
     })
     (lib.mkIf (cfg.containers != {}) {
       # networking
-      networking.networkmanager.unmanaged = [ "ctr0" ];
-      networking.interfaces.dummy0.virtual = true;
-      networking.bridges.ctr0.interfaces = [ "dummy0" ];
-      networking.interfaces.ctr0.ipv4.addresses = [{
-        address = "10.233.0.1";
-        prefixLength = 24;
-      }];
-      systemd.services."dhcpd-ctr0" = {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        serviceConfig = {
-          Type = "forking";
-          Restart = "always";
-          DynamicUser = true;
-          StateDirectory = "dhcpd-ctr0";
-          User = "dhcpd-ctr0";
-          Group = "dhcpd-ctr0";
-          AmbientCapabilities = [
-           "CAP_NET_RAW"          # to send ICMP messages
-           "CAP_NET_BIND_SERVICE" # to bind on DHCP port (67)
-          ];
-          ExecStartPre = "${pkgs.coreutils}/bin/touch /var/lib/dhcpd-ctr0/dhcpd.leases";
-          ExecStart = "${pkgs.dhcp}/bin/dhcpd -4 -lf /var/lib/dhcpd-ctr0/dhcpd.leases -cf ${pkgs.writeText "dhpd.conf" ''
-            default-lease-time 600;
-            max-lease-time 7200;
-            authoritative;
-            ddns-update-style interim;
-            log-facility local1; # see dhcpd.nix
-
-            option subnet-mask 255.255.255.0;
-            option routers 10.233.0.1;
-            # option domain-name-servers 8.8.8.8; # TODO configure dns server
-            subnet 10.233.0.0 netmask 255.255.255.0 {
-              range 10.233.0.10 10.233.0.250;
-            }
-          ''} ctr0";
+      systemd.network.networks.ctr0 = {
+        name = "ctr0";
+        address = [
+          "10.233.0.1/24"
+        ];
+        networkConfig = {
+          IPForward = "yes";
+          IPMasquerade = "both";
+          ConfigureWithoutCarrier = true;
+          DHCPServer = "yes";
         };
       };
+      systemd.network.netdevs.ctr0.netdevConfig = {
+        Kind = "bridge";
+        Name = "ctr0";
+      };
+      networking.networkmanager.unmanaged = [ "ctr0" ];
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-i ctr0"; target = "ACCEPT"; }
+      ];
     })
     (lib.mkIf cfg.inContainer.enable {
       users.groups.container_sync = {};
@@ -307,6 +288,17 @@ in {
         openssh.authorizedKeys.keys = [
           cfg.inContainer.pubkey
         ];
+      };
+
+      networking.useHostResolvConf = false;
+      networking.useNetworkd = true;
+      systemd.network = {
+        enable = true;
+        networks.eth0 = {
+          matchConfig.Name = "eth0";
+          DHCP = "yes";
+          dhcpV4Config.UseDNS = true;
+        };
       };
     })
   ];
