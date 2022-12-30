@@ -4,6 +4,7 @@ with import ./lib;
 
   imports = [
     <stockholm/tv>
+    ../../2configs/autotether.nix
     <stockholm/tv/2configs/hw/x220.nix>
     <stockholm/tv/2configs/exim-retiolum.nix>
     <stockholm/tv/2configs/gitconfig.nix>
