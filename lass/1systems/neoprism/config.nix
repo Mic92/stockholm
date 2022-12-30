@@ -15,8 +15,8 @@
         ];
       };
       # krebs.iptables.tables.filter.FORWARD.rules = [
-      #   { v6 = false; precedence = 1000; predicate = "--destination 95.216.1.130"; target = "ACCEPT"; }
-      #   { v6 = false; precedence = 1000; predicate = "--source 95.216.1.130"; target = "ACCEPT"; }
+      #   { v6 = false; predicate = "--destination 95.216.1.130"; target = "ACCEPT"; }
+      #   { v6 = false; predicate = "--source 95.216.1.130"; target = "ACCEPT"; }
       # ];
     }
   ];

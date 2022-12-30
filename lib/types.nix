@@ -146,6 +146,14 @@ rec {
             }.${config._module.args.name} or {
               default = "${ip4.config.addr}/32";
             });
+            prefixLength = mkOption ({
+              type = uint;
+            } // {
+              retiolum.default = 16;
+              wiregrill.default = 16;
+            }.${config._module.args.name} or {
+              default = 32;
+            });
           };
         }));
         default = null;
@@ -164,6 +172,14 @@ rec {
               wiregrill.default = "42:1::/32";
             }.${config._module.args.name} or {
               default = "${ip6.config.addr}/128";
+            });
+            prefixLength = mkOption ({
+              type = uint;
+            } // {
+              retiolum.default = 32;
+              wiregrill.default = 32;
+            }.${config._module.args.name} or {
+              default = 128;
             });
           };
         }));
