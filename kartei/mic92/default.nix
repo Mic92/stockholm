@@ -507,8 +507,8 @@ in {
       nets = rec {
         internet = {
           # eva.thalheim.io
-          ip4.addr = "131.159.102.4";
-          ip6.addr = "2a09:80c0:102::4";
+          ip4.addr = "89.58.27.144";
+          ip6.addr = "2a03:4000:62:fdb::";
           aliases = [ "eva.i" ];
         };
         retiolum = {
