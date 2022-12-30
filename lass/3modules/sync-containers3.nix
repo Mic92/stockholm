@@ -100,7 +100,7 @@ in {
                 set -efux
                 if /run/wrappers/bin/ping -c 1 ${ctr.name}.r; then
                   touch "$HOME"/incomplete
-                  rsync -a -e "ssh -i $CREDENTIALS_DIRECTORY/ssh_key" --inplace container_sync@${ctr.name}.r:disk "$HOME"/disk
+                  rsync -a -e "ssh -i $CREDENTIALS_DIRECTORY/ssh_key" --timeout=30 --inplace container_sync@${ctr.name}.r:disk "$HOME"/disk
                   rm "$HOME"/incomplete
                 fi
               ''}
