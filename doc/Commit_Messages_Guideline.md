@@ -21,11 +21,11 @@ rather fuzzy and may mean different things, just choose what would fit best.
 
 Here are a numbers of samples for defining the component:
 
-* Change `gum` in `krebs/3modules/makefu/default.nix`: `gum.r: change ip`
+* Change `gum` in `krebs/3modules/makefu/default.nix`: `gum: change ip`
 * Change `prepare.sh` in `krebs/4libs/infest`: `infest: prepare stockholm ISO`
 * Remove `concat` in `krebs/5pkgs`: `concat: RIP`, this commit may like some `<rationale>`
 * Update `types` in `krebs/3modules`: `lib/types: add managed bool to host type`
-* Change host `gum` in `makefu/1systems/gum`: `ma gum.r: add taskserver`
+* Change host `gum` in `makefu/1systems/gum`: `ma gum: add taskserver`
 * Change `tinc` module in `krebs/3modules`: `tinc module: add option enableLegacy`
 
 ## `<rationale>`
