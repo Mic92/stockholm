@@ -135,7 +135,8 @@ in {
                     ;;
                   200)
                     # echo 'got 200 from kv, will check payload'
-                    export payload=$(consul kv get containers/${ctr.name})
+                    payload=$(consul kv get containers/${ctr.name}) || continue
+                    export payload
                     if [ "$(jq -rn 'env.payload | fromjson.host')" = '${config.networking.hostName}' ]; then
                       # echo 'we are the host, trying to reach container'
                       if $(retry -t 10 -d 10 -- /run/wrappers/bin/ping -q -c 1 ${ctr.name}.r > /dev/null); then
