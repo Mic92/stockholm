@@ -43,10 +43,6 @@ let
                 target = mkOption {
                   type = str;
                 };
-                precedence = mkOption {
-                  type = int;
-                  default = 0;
-                };
                 v4 = mkOption {
                   type = bool;
                   default = true;
@@ -145,13 +141,11 @@ let
       buildChain = tn: cn:
         let
           filteredRules = filter (r: r."${v}") ts."${tn}"."${cn}".rules;
-          sortedRules = sort (a: b: a.precedence > b.precedence) filteredRules;
-
         in
           #TODO: double check should be unneccessary, refactor!
           if ts.${tn}.${cn}.rules or null != null then
             concatMapStringsSep "\n" (rule: "\n-A ${cn} ${rule}") ([]
-              ++ map (buildRule tn cn) sortedRules
+              ++ map (buildRule tn cn) filteredRules
             )
           else
             ""

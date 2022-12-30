@@ -20,8 +20,8 @@
   krebs.iptables.tables.filter.OUTPUT.rules = [
     { v6 = false; predicate = "-o virbr0 -p udp -m udp --dport 68"; target = "ACCEPT"; }
   ];
-  krebs.iptables.tables.nat.PREROUTING.rules = [
-    { v6 = false; predicate = "-s 192.168.122.0/24"; target = "ACCEPT"; precedence = 1000; }
+  krebs.iptables.tables.nat.PREROUTING.rules = lib.mkBefore [
+    { v6 = false; predicate = "-s 192.168.122.0/24"; target = "ACCEPT"; }
   ];
   krebs.iptables.tables.nat.POSTROUTING.rules = [
     { v6 = false; predicate = "-s 192.168.122.0/24 -d 224.0.0.0/24"; target = "RETURN"; }

@@ -8,8 +8,8 @@
     { v6 = false; predicate = "-o ve-+"; target = "REJECT --reject-with icmp-port-unreachable"; }
     { v6 = false; predicate = "-i ve-+"; target = "REJECT --reject-with icmp-port-unreachable"; }
   ];
-  krebs.iptables.tables.nat.PREROUTING.rules = [
-    { v6 = false; predicate = "-s 10.233.2.0/24"; target = "ACCEPT"; precedence = 1000; }
+  krebs.iptables.tables.nat.PREROUTING.rules = lib.mkBefore [
+    { v6 = false; predicate = "-s 10.233.2.0/24"; target = "ACCEPT"; }
   ];
   krebs.iptables.tables.nat.POSTROUTING.rules = [
     { v6 = false; predicate = "-s 10.233.2.0/24 -d 224.0.0.0/24"; target = "RETURN"; }

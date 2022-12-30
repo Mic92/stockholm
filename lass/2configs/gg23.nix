@@ -56,8 +56,8 @@ with import <stockholm/lib>;
     { v6 = false; predicate = "-o int0"; target = "REJECT --reject-with icmp-port-unreachable"; }
     { v6 = false; predicate = "-i int0"; target = "REJECT --reject-with icmp-port-unreachable"; }
   ];
-  krebs.iptables.tables.nat.PREROUTING.rules = [
-    { v6 = false; predicate = "-s 10.42.0.0/24"; target = "ACCEPT"; precedence = 1000; }
+  krebs.iptables.tables.nat.PREROUTING.rules = mkBefore [
+    { v6 = false; predicate = "-s 10.42.0.0/24"; target = "ACCEPT"; }
   ];
   krebs.iptables.tables.nat.POSTROUTING.rules = [
     { v6 = false; predicate = "-s 10.42.0.0/24 ! -d 10.42.0.0/24"; target = "MASQUERADE"; }
