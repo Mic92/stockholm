@@ -9,20 +9,23 @@ in {
 
   krebs.build.host = config.krebs.hosts.yellow;
 
+  lass.sync-containers3.inContainer = {
+    enable = true;
+    pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN737BAP36KiZO97mPKTIUGJUcr97ps8zjfFag6cUiYL";
+  };
+
   users.groups.download.members = [ "transmission" ];
 
   networking.useHostResolvConf = false;
   networking.useNetworkd = true;
-  systemd.services.transmission.bindsTo = [ "openvpn-nordvpn.service" ];
-  systemd.services.transmission.after = [ "openvpn-nordvpn.service" ];
   services.transmission = {
     enable = true;
+    home = "/var/state/transmission";
     group = "download";
     downloadDirPermissions = "775";
     settings = {
-      download-dir = "/var/download/finished";
-      incomplete-dir = "/var/download/incoming";
-      incomplete-dir-enable = true;
+      download-dir = "/var/download/transmission";
+      incomplete-dir-enabled = false;
       rpc-bind-address = "::";
       message-level = 1;
       umask = 18;
@@ -40,11 +43,8 @@ in {
     };
     virtualHosts.default = {
       default = true;
-      locations."/dl".extraConfig = ''
-        return 301 /;
-      '';
       locations."/" = {
-        root = "/var/download/finished";
+        root = "/var/download";
         extraConfig = ''
           fancyindex on;
           fancyindex_footer "/fancy.html";
@@ -136,6 +136,58 @@ in {
         ''};
       '';
     };
+    virtualHosts."jelly.r" = {
+      locations."/".extraConfig = ''
+        proxy_pass http://localhost:8096/;
+        proxy_set_header Accept-Encoding "";
+      '';
+    };
+  };
+
+  services.samba = {
+    enable = true;
+    enableNmbd = false;
+    extraConfig = ''
+      workgroup = WORKGROUP
+      server string = ${config.networking.hostName}
+      # only allow retiolum addresses
+      hosts allow = 42::/16 10.243.0.0/16 10.244.0.0/16
+
+      # Use sendfile() for performance gain
+      use sendfile = true
+
+      # No NetBIOS is needed
+      disable netbios = true
+
+      # Only mangle non-valid NTFS names, don't care about DOS support
+      mangled names = illegal
+
+      # Performance optimizations
+      socket options = TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=65536 SO_SNDBUF=65536
+
+      # Disable all printing
+      load printers = false
+      disable spoolss = true
+      printcap name = /dev/null
+
+      map to guest = Bad User
+      max log size = 50
+      dns proxy = no
+      security = user
+
+      [global]
+      syslog only = yes
+    '';
+    shares.public = {
+      comment = "Warez";
+      path = "/var/download";
+      public = "yes";
+      "only guest" = "yes";
+      "create mask" = "0644";
+      "directory mask" = "2777";
+      writable = "no";
+      printable = "no";
+    };
   };
 
   systemd.services.bruellwuerfel =
@@ -164,14 +216,33 @@ in {
     tables.filter.INPUT.rules = [
       { predicate = "-p tcp --dport 80"; target = "ACCEPT"; } # nginx web dir
       { predicate = "-p tcp --dport 9091"; target = "ACCEPT"; } # transmission-web
-      { predicate = "-p tcp --dport 9092"; target = "ACCEPT"; } # magnetico webinterface
       { predicate = "-p tcp --dport 51413"; target = "ACCEPT"; } # transmission-traffic
       { predicate = "-p udp --dport 51413"; target = "ACCEPT"; } # transmission-traffic
       { predicate = "-p tcp --dport 8096"; target = "ACCEPT"; } # jellyfin
+      { predicate = "-p tcp --dport 9696"; target = "ACCEPT"; } # prowlarr
+      { predicate = "-p tcp --dport 8989"; target = "ACCEPT"; } # sonarr
+      { predicate = "-p tcp --dport 7878"; target = "ACCEPT"; } # radarr
+
+      # smbd
+      { predicate = "-i retiolum -p tcp --dport 445"; target = "ACCEPT"; }
+      { predicate = "-i retiolum -p tcp --dport 111"; target = "ACCEPT"; }
+      { predicate = "-i retiolum -p udp --dport 111"; target = "ACCEPT"; }
+      { predicate = "-i retiolum -p tcp --dport 2049"; target = "ACCEPT"; }
+      { predicate = "-i retiolum -p udp --dport 2049"; target = "ACCEPT"; }
+      { predicate = "-i retiolum -p tcp --dport 4000:4002"; target = "ACCEPT"; }
+      { predicate = "-i retiolum -p udp --dport 4000:4002"; target = "ACCEPT"; }
+      { predicate = "-i wiregrill -p tcp --dport 445"; target = "ACCEPT"; }
+      { predicate = "-i wiregrill -p tcp --dport 111"; target = "ACCEPT"; }
+      { predicate = "-i wiregrill -p udp --dport 111"; target = "ACCEPT"; }
+      { predicate = "-i wiregrill -p tcp --dport 2049"; target = "ACCEPT"; }
+      { predicate = "-i wiregrill -p udp --dport 2049"; target = "ACCEPT"; }
+      { predicate = "-i wiregrill -p tcp --dport 4000:4002"; target = "ACCEPT"; }
+      { predicate = "-i wiregrill -p udp --dport 4000:4002"; target = "ACCEPT"; }
     ];
     tables.filter.OUTPUT = {
       policy = "DROP";
       rules = [
+        { predicate = "-o lo"; target = "ACCEPT"; }
         { v6 = false; predicate = "-d ${vpnIp}/32"; target = "ACCEPT"; }
         { predicate = "-o tun0"; target = "ACCEPT"; }
         { predicate = "-o retiolum"; target = "ACCEPT"; }
@@ -279,7 +350,7 @@ in {
       ExecStart = pkgs.writers.writeDash "flix-index" ''
         set -efu
 
-        DIR=/var/download/finished
+        DIR=/var/download
         cd "$DIR"
         while inotifywait -rq -e create -e move -e delete "$DIR"; do
           find . -type f > "$DIR"/index.tmp
@@ -294,9 +365,15 @@ in {
     group = "download";
   };
 
-  services.magnetico = {
+  services.radarr = {
     enable = true;
-    web.address = "0.0.0.0";
-    web.port = 9092;
+  };
+
+  services.sonarr = {
+    enable = true;
+  };
+
+  services.prowlarr = {
+    enable = true;
   };
 }

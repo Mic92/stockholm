@@ -4,7 +4,8 @@
   imports = [
     <stockholm/lass>
     <stockholm/lass/2configs/retiolum.nix>
-    <stockholm/lass/2configs/libvirt.nix>
+    <stockholm/lass/2configs/consul.nix>
+    <stockholm/lass/2configs/yellow-host.nix>
     { # TODO make new hfos.nix out of this vv
       users.users.riot = {
         uid = pkgs.stockholm.lib.genid_uint31 "riot";
