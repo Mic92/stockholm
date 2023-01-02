@@ -255,6 +255,24 @@ in {
         homeMode = "705";
       })) cfg.containers;
 
+      environment.systemPackages = lib.mapAttrsToList (_: ctr: (pkgs.writers.writeDashBin "${ctr.name}_init" ''
+        set -efux
+        export PATH=${lib.makeBinPath [
+          pkgs.coreutils
+          pkgs.cryptsetup
+          pkgs.libxfs.bin
+        ]}:$PATH
+        truncate -s 5G /var/lib/sync-containers3/${ctr.name}/disk
+        cryptsetup luksFormat /var/lib/sync-containers3/${ctr.name}/disk ${ctr.luksKey}
+        cryptsetup luksOpen --key-file ${ctr.luksKey} /var/lib/sync-containers3/${ctr.name}/disk ${ctr.name}
+        mkfs.xfs /dev/mapper/${ctr.name}
+        mkdir -p /var/lib/sync-containers3/${ctr.name}/state
+        mountpoint /var/lib/sync-containers3/${ctr.name}/state || mount /dev/mapper/${ctr.name} /var/lib/sync-containers3/${ctr.name}/state
+        /run/current-system/sw/bin/nixos-container start ${ctr.name}
+        /run/current-system/sw/bin/nixos-container run ${ctr.name} -- ${pkgs.writeDash "init" ''
+          mkdir -p /var/state
+        ''}
+      '')) cfg.containers;
     })
     (lib.mkIf (cfg.containers != {}) {
       # networking
