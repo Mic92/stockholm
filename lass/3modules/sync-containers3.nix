@@ -50,7 +50,8 @@ in {
             wantedBy = [ "multi-user.target" ];
             serviceConfig.ExecStart = pkgs.writers.writeDash "autoswitch" ''
               set -efu
-              ln -frs /var/state/var_src /var/src
+              mkdir -p /var/state/var_src
+              ln -Tfrs /var/state/var_src /var/src
               if test -e /var/src/nixos-config; then
                 /run/current-system/sw/bin/nixos-rebuild -I /var/src switch || :
               fi
