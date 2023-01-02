@@ -247,7 +247,7 @@ in {
       users.groups = lib.mapAttrs' (_: ctr: lib.nameValuePair "${ctr.name}_container" {
       }) cfg.containers;
       users.users = lib.mapAttrs' (_: ctr: lib.nameValuePair "${ctr.name}_container" ({
-        group = "container_${ctr.name}";
+        group = "${ctr.name}_container";
         isNormalUser = true;
         uid = slib.genid_uint31 "container_${ctr.name}";
         home = "/var/lib/sync-containers3/${ctr.name}";
