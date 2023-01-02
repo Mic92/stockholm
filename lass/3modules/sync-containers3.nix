@@ -28,6 +28,10 @@ in {
             type = lib.types.bool;
             default = false;
           };
+          runContainer = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+          };
         };
       }));
     };
@@ -74,7 +78,7 @@ in {
             isReadOnly = false;
           };
         };
-      }) cfg.containers;
+      }) (lib.filterAttrs (_: ctr: ctr.runContainer) cfg.containers);
 
       systemd.services = lib.foldr lib.recursiveUpdate {} (lib.flatten (map (ctr: [
         { "${ctr.name}_syncer" = {
@@ -108,7 +112,7 @@ in {
             '';
           };
         }; }
-        { "${ctr.name}_watcher" = {
+        { "${ctr.name}_watcher" = lib.mkIf ctr.runContainer {
           path = with pkgs; [
             coreutils
             consul
@@ -164,7 +168,7 @@ in {
             '';
           };
         }; }
-        { "${ctr.name}_scheduler" = {
+        { "${ctr.name}_scheduler" = lib.mkIf ctr.runContainer {
           wantedBy = [ "multi-user.target" ];
           path = with pkgs; [
             coreutils
