@@ -296,6 +296,10 @@ in {
       krebs.iptables.tables.filter.INPUT.rules = [
         { predicate = "-i ctr0"; target = "ACCEPT"; }
       ];
+      krebs.iptables.tables.filter.FORWARD.rules = [
+        { predicate = "-i ctr0"; target = "ACCEPT"; }
+        { predicate = "-o ctr0"; target = "ACCEPT"; }
+      ];
     })
     (lib.mkIf cfg.inContainer.enable {
       users.groups.container_sync = {};
