@@ -51,6 +51,20 @@ let
     scrolling.multiplier = 8;
   };
   config-file = pkgs.writeJSON "alacritty-tv.json" config;
+  profile = pkgs.writeText "alacritty-tv.profile" /* sh */ ''
+    # Use home so Alacritty can find the configuration without arguments.
+    # HOME will be reset once in Alacritty.
+    HOME=$TMPDIR/Alacritty
+    export HOME
+
+    # Install stored configuration if it has changed.
+    # This allows for both declarative updates and runtime modifications.
+    ${pkgs.coreutils}/bin/mkdir -p "$HOME"
+    if test "$(${pkgs.coreutils}/bin/cat "$HOME"/ref)" != ${config-file}; then
+      echo ${config-file} > "$HOME"/ref
+      ${pkgs.coreutils}/bin/cp ${config-file} "$HOME"/.alacritty.yml
+    fi
+  '';
 in
 
 pkgs.symlinkJoin {
@@ -62,27 +76,16 @@ pkgs.symlinkJoin {
 
       set -efu
 
-      # Use home so Alacritty can find the configuration without arguments.
-      # HOME will be reset once in Alacritty.
-      HOME=$TMPDIR/Alacritty
-      export HOME
-
-      # Install stored configuration if it has changed.
-      # This allows for both declarative updates and runtime modifications.
-      ${pkgs.coreutils}/bin/mkdir -p "$HOME"
-      if test "$(${pkgs.coreutils}/bin/cat "$HOME"/ref)" != ${config-file}; then
-        echo ${config-file} > "$HOME"/ref
-        ${pkgs.coreutils}/bin/cp ${config-file} "$HOME"/.alacritty.yml
-      fi
-
       case ''${1-} in
         --singleton)
           shift
           if ! ${pkgs.alacritty}/bin/alacritty msg create-window "$@"; then
+            . ${profile}
             ${pkgs.alacritty}/bin/alacritty "$@" &
           fi
           ;;
         *)
+          . ${profile}
           exec ${pkgs.alacritty}/bin/alacritty "$@"
           ;;
       esac
