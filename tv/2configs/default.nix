@@ -16,6 +16,7 @@ with import ./lib;
     ./nets/hkw.nix
     ./networkd.nix
     ./nginx
+    ./nix.nix
     ./pki
     ./ssh.nix
     ./sshd.nix
@@ -44,15 +45,6 @@ with import ./lib;
       time.timeZone = "Europe/Berlin";
     }
 
-    {
-      nix.settings.auto-optimise-store = true;
-
-      # TODO check if both are required:
-      nix.settings.extra-sandbox-paths = [
-        "/etc/protocols"
-        pkgs.iana-etc.outPath
-      ];
-    }
     {
       nixpkgs.config.allowUnfree = false;
     }
