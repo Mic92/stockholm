@@ -45,9 +45,7 @@ with import ./lib;
     }
 
     {
-      nix.extraOptions = ''
-        auto-optimise-store = true
-      '';
+      nix.settings.auto-optimise-store = true;
 
       # TODO check if both are required:
       nix.settings.extra-sandbox-paths = [
