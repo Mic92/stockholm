@@ -1,6 +1,6 @@
 {
-  fileSystems."/mnt/prism" = {
-    device = "//prism.r/public";
+  fileSystems."/mnt/yellow" = {
+    device = "//yellow.r/public";
     fsType = "cifs";
     options = [
       "guest"
