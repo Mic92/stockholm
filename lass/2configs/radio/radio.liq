@@ -10,7 +10,7 @@ def stringify_attrs(attrs) =
   out
 end
 
-def filter_graveyard(req) =
+def filter_music(req) =
   filename = request.filename(req)
   if string.match(pattern = '.*/\\.graveyard/.*', filename) then
     false
@@ -27,7 +27,7 @@ end
 env = environment()
 port = string.to_int(env["RADIO_PORT"], default = 8000)
 
-all_music = playlist(env["MUSIC"], check_next = filter_graveyard)
+all_music = playlist(env["MUSIC"], check_next = filter_music)
 wishlist = request.queue()
 tracks = fallback(track_sensitive = true, [wishlist, all_music])
 tracks = blank.eat(tracks)
@@ -36,7 +36,7 @@ last_metadata = ref([])
 def on_metadata(m) =
   last_metadata := m
   print("changing tracks")
-  out = process.read(env["HOOK_TRACK_CHANGE"], env = m)
+  out = process.read(env["HOOK_TRACK_CHANGE"], env = m, timeout = 5.0)
   print(out)
 end
 tracks.on_metadata(on_metadata)
