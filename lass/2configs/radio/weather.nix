@@ -18,11 +18,14 @@ let
     MAXMIND_GEOIP_DB="/tmp/GeoLite2-City.mmdb"; export MAXMIND_GEOIP_DB
     OPENWEATHER_API_KEY=$(cat "$CREDENTIALS_DIRECTORY/openweather_api"); export OPENWEATHER_API_KEY
     ss -no 'sport = :8000' |
-      jc --ss | jq -r '.[] |
-        select(
-          .local_address != "[::ffff:127.0.0.1]"
-          and .local_address != "[::1]"
-        ) | .peer_address | gsub("[\\[\\]]"; "")
+      jc --ss | jq -r '
+        [
+          .[] |
+            select(
+              .local_address != "[::ffff:127.0.0.1]"
+              and .local_address != "[::1]"
+            ) | .peer_address | gsub("[\\[\\]]"; "")
+        ] | unique[]
       ' |
       ${weather_for_ips}/bin/weather_for_ips
   '';

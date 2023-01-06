@@ -53,6 +53,7 @@ with import <stockholm/lib>;
     config.krebs.users.lass-mors.pubkey
     config.krebs.users.makefu.pubkey
     config.krebs.users.tv.pubkey
+    config.krebs.users.kmein.pubkey
   ];
 
   # The NixOS release to be compatible with for stateful data such as databases.

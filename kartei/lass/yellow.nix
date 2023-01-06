@@ -6,6 +6,7 @@
       ip6.addr = r6 "3110";
       aliases = [
         "yellow.r"
+        "jelly.r"
       ];
       tinc = {
         pubkey = ''

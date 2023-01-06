@@ -3,7 +3,7 @@
 let
   name = "radio";
 
-  music_dir = "/home/radio/music";
+  music_dir = "/var/music";
 
   skip_track = pkgs.writers.writeBashBin "skip_track" ''
     set -eu
@@ -303,10 +303,10 @@ in {
     '';
   };
   services.syncthing.declarative.folders."the_playlist" = {
-    path = "/home/radio/music/the_playlist";
+    path = "/var/music/the_playlist";
     devices = [ "mors" "phone" "prism" "omo" ];
   };
-  krebs.acl."/home/radio/music/the_playlist"."u:syncthing:X".parents = true;
-  krebs.acl."/home/radio/music/the_playlist"."u:syncthing:rwX" = {};
-  krebs.acl."/home/radio/music/the_playlist"."u:radio:rwX" = {};
+  krebs.acl."/var/music/the_playlist"."u:syncthing:X".parents = true;
+  krebs.acl."/var/music/the_playlist"."u:syncthing:rwX" = {};
+  krebs.acl."/var/music/the_playlist"."u:radio:rwX" = {};
 }
