@@ -113,7 +113,7 @@ in {
         LIMIT=1000 #how many tracks to keep in the history
         HISTORY_FILE=/var/lib/radio/recent
 
-        listeners=$(${pkgs.curl}/bin/curl -fSs lassul.us:8000/status-json.xsl |
+        listeners=$(${pkgs.curl}/bin/curl -fSs http://localhost:8000/status-json.xsl |
           ${pkgs.jq}/bin/jq '[.icestats.source[].listeners] | add' || echo 0)
         echo "$(${pkgs.coreutils}/bin/date -Is)" "$filename" | ${pkgs.coreutils}/bin/tee -a "$HISTORY_FILE"
         echo "$(${pkgs.coreutils}/bin/tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
