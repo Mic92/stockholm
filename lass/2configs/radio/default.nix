@@ -320,7 +320,7 @@ in {
   };
   services.syncthing.declarative.folders."the_playlist" = {
     path = "/var/music/the_playlist";
-    devices = [ "mors" "phone" "prism" "omo" ];
+    devices = [ "mors" "phone" "prism" "omo" "radio" ];
   };
   krebs.acl."/var/music/the_playlist"."u:syncthing:X".parents = true;
   krebs.acl."/var/music/the_playlist"."u:syncthing:rwX" = {};
