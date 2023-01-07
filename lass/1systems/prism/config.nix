@@ -97,9 +97,35 @@ with import <stockholm/lib>;
         localAddress = "10.233.2.2";
       };
     }
+    {
+      services.nginx.virtualHosts."radio.lassul.us" = {
+        enableACME = true;
+        addSSL = true;
+        locations."/" = {
+          # recommendedProxySettings = true;
+          proxyWebsockets = true;
+          proxyPass = "http://radio.r";
+          extraConfig = ''
+            proxy_set_header Host radio.r;
+            # get source ip for weather reports
+            proxy_set_header user-agent "$http_user_agent; client-ip=$remote_addr";
+          '';
+        };
+      };
+      krebs.htgen.radio-redirect = {
+        port = 8000;
+        scriptFile = pkgs.writers.writeDash "redir" ''
+          printf 'HTTP/1.1 301 Moved Permanently\r\n'
+          printf "Location: http://radio.lassul.us''${Request_URI}\r\n"
+          printf '\r\n'
+        '';
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; }
+      ];
+    }
     <stockholm/lass/2configs/exim-smarthost.nix>
     <stockholm/lass/2configs/privoxy-retiolum.nix>
-    <stockholm/lass/2configs/radio>
     <stockholm/lass/2configs/binary-cache/server.nix>
     <stockholm/lass/2configs/iodined.nix>
     <stockholm/lass/2configs/paste.nix>
