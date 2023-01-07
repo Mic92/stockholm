@@ -253,18 +253,38 @@ in {
     '';
   };
 
+  networking.firewall.allowedTCPPorts = [ 80 ];
   services.nginx = {
     enable = true;
-    virtualHosts."radio.lassul.us" = {
-      forceSSL = true;
-      enableACME = true;
+    virtualHosts."radio.r" = {
       locations."/".extraConfig = ''
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Host $host;
-        proxy_set_header X-Forwarded-Server $host;
-        proxy_set_header X-Real-IP $remote_addr;
+        # https://github.com/aswild/icecast-notes#core-nginx-config
         proxy_pass http://localhost:8000;
+        # Disable request size limit, very important for uploading large files
+        client_max_body_size 0;
+
+        # Enable support `Transfer-Encoding: chunked`
+        chunked_transfer_encoding on;
+
+        # Disable request and response buffering, minimize latency to/from Icecast
+        proxy_buffering off;
+        proxy_request_buffering off;
+
+        # Icecast needs HTTP/1.1, not 1.0 or 2
+        proxy_http_version 1.1;
+
+        # Forward all original request headers
+        proxy_pass_request_headers on;
+
+        # Set some standard reverse proxy headers. Icecast server currently ignores these,
+        # but may support them in a future version so that access logs are more useful.
+        proxy_set_header  Host              $host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+
+        # get source ip for weather reports
+        proxy_set_header user-agent "$http_user_agent; client-ip=$remote_addr";
       '';
       locations."= /recent".extraConfig = ''
         default_type "text/plain";
@@ -297,29 +317,6 @@ in {
         add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
       '';
     };
-    virtualHosts."lassul.us".locations."= /the_playlist".extraConfig = let
-      html = pkgs.writeText "index.html" ''
-        <!DOCTYPE html>
-        <html lang="en">
-          <head>
-            <meta charset="utf-8">
-            <title>lassulus playlist</title>
-          </head>
-          <body>
-            <div style="display:inline-block;margin:0px;padding:0px;overflow:hidden">
-              <iframe src="https://kiwiirc.com/client/irc.hackint.org/?nick=kiwi_test|?&theme=cli#the_playlist" frameborder="0" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:95%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="95%" width="100%"></iframe>
-            </div>
-            <div style="position:absolute;bottom:1px;display:inline-block;background-color:red;">
-              <audio controls autoplay="autoplay"><source src="http://lassul.us:8000/radio.ogg" type="audio/ogg">Your browser does not support the audio element.</audio>
-            </div>
-            <!-- page content -->
-          </body>
-        </html>
-      '';
-    in ''
-      default_type "text/html";
-      alias ${html};
-    '';
   };
   services.syncthing.declarative.folders."the_playlist" = {
     path = "/var/music/the_playlist";
