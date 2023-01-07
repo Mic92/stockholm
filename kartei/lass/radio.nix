@@ -6,6 +6,7 @@
       ip6.addr = r6 "4d10";
       aliases = [
         "radio.r"
+        "radio-news.r"
       ];
       tinc.pubkey = ''
         -----BEGIN RSA PUBLIC KEY-----

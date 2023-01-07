@@ -70,7 +70,6 @@ rec {
         "c.r"
         "p.r"
         "search.r"
-        "radio-news.r"
       ];
       tinc = {
         pubkey = ''
