@@ -128,14 +128,33 @@ in {
     serviceConfig.User = lib.mkForce "radio";
   };
 
+  nixpkgs.config.packageOverrides = opkgs: {
+    icecast = opkgs.icecast.overrideAttrs (old: rec {
+      version = "2.5-beta3";
+
+      src = pkgs.fetchurl {
+        url = "http://downloads.xiph.org/releases/icecast/icecast-${version}.tar.gz";
+        sha256 = "sha256-4FDokoA9zBDYj8RAO/kuTHaZ6jZYBLSJZiX/IYFaCW8=";
+      };
+
+      buildInputs = old.buildInputs ++ [ pkgs.pkg-config ];
+    });
+  };
   services.icecast = {
     enable = true;
     hostname = "radio.lassul.us";
     admin.password = "hackme";
     extraConf = ''
       <authentication>
-       <source-password>hackme</source-password>
+        <source-password>hackme</source-password>
+        <admin-user>admin</admin-user>
+        <admin-password>hackme</admin-password>
       </authentication>
+      <logging>
+        <accesslog>-</accesslog>
+        <errorlog>-</errorlog>
+        <loglevel>3</loglevel>
+      </logging>
     '';
   };
 
