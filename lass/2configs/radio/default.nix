@@ -305,7 +305,7 @@ in {
         while sleep 1; do
           mpv \
             --cache-secs=0 --demuxer-readahead-secs=0 --untimed --cache-pause=no \
-            'http://lassul.us:8000/radio.ogg'
+            'http://radio.lassul.us/radio.ogg'
         done
       '';
       locations."= /controls".extraConfig = ''
