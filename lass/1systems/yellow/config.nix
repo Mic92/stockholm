@@ -142,13 +142,13 @@ in {
         proxy_set_header Accept-Encoding "";
       '';
     };
-    virtualHosts."rada.r" = {
+    virtualHosts."radar.r" = {
       locations."/" = {
         proxyWebsockets = true;
         proxyPass = "http://localhost:7878";
       };
     };
-    virtualHosts."sona.r" = {
+    virtualHosts."sonar.r" = {
       locations."/" = {
         proxyWebsockets = true;
         proxyPass = "http://localhost:8989";

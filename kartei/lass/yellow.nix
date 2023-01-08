@@ -7,8 +7,8 @@
       aliases = [
         "yellow.r"
         "jelly.r"
-        "rada.r"
-        "sona.r"
+        "radar.r"
+        "sonar.r"
       ];
       tinc = {
         pubkey = ''
