@@ -144,11 +144,13 @@ in {
     };
     virtualHosts."rada.r" = {
       locations."/" = {
+        proxyWebsockets = true;
         proxyPass = "http://localhost:7878";
       };
     };
     virtualHosts."sona.r" = {
       locations."/" = {
+        proxyWebsockets = true;
         proxyPass = "http://localhost:8989";
       };
     };
