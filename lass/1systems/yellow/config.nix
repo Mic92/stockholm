@@ -142,6 +142,16 @@ in {
         proxy_set_header Accept-Encoding "";
       '';
     };
+    virtualHosts."rada.r" = {
+      locations."/" = {
+        proxyPass = "http://localhost:7878";
+      };
+    };
+    virtualHosts."sona.r" = {
+      locations."/" = {
+        proxyPass = "http://localhost:8989";
+      };
+    };
   };
 
   services.samba = {
