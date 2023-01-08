@@ -234,6 +234,7 @@ in {
       { predicate = "-p tcp --dport 9696"; target = "ACCEPT"; } # prowlarr
       { predicate = "-p tcp --dport 8989"; target = "ACCEPT"; } # sonarr
       { predicate = "-p tcp --dport 7878"; target = "ACCEPT"; } # radarr
+      { predicate = "-p tcp --dport 6767"; target = "ACCEPT"; } # bazarr
 
       # smbd
       { predicate = "-i retiolum -p tcp --dport 445"; target = "ACCEPT"; }
@@ -379,13 +380,20 @@ in {
 
   services.radarr = {
     enable = true;
+    group = "download";
   };
 
   services.sonarr = {
     enable = true;
+    group = "download";
   };
 
   services.prowlarr = {
     enable = true;
+  };
+
+  services.bazarr = {
+    enable = true;
+    group = "download";
   };
 }
