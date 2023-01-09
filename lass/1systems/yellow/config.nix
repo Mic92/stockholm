@@ -34,6 +34,12 @@ in {
     };
   };
 
+  security.acme.defaults.email = "spam@krebsco.de";
+  security.acme.acceptTerms = true;
+  security.acme.certs."yellow.r".server = config.krebs.ssl.acmeURL;
+  security.acme.certs."jelly.r".server = config.krebs.ssl.acmeURL;
+  security.acme.certs."radar.r".server = config.krebs.ssl.acmeURL;
+  security.acme.certs."sonar.r".server = config.krebs.ssl.acmeURL;
   services.nginx = {
     enable = true;
     package = pkgs.nginx.override {
@@ -41,8 +47,10 @@ in {
         fancyindex
       ];
     };
-    virtualHosts.default = {
+    virtualHosts."yellow.r" = {
       default = true;
+      enableACME = true;
+      addSSL = true;
       locations."/" = {
         root = "/var/download";
         extraConfig = ''
@@ -137,18 +145,24 @@ in {
       '';
     };
     virtualHosts."jelly.r" = {
+      enableACME = true;
+      addSSL = true;
       locations."/".extraConfig = ''
         proxy_pass http://localhost:8096/;
         proxy_set_header Accept-Encoding "";
       '';
     };
     virtualHosts."radar.r" = {
+      enableACME = true;
+      addSSL = true;
       locations."/" = {
         proxyWebsockets = true;
         proxyPass = "http://localhost:7878";
       };
     };
     virtualHosts."sonar.r" = {
+      enableACME = true;
+      addSSL = true;
       locations."/" = {
         proxyWebsockets = true;
         proxyPass = "http://localhost:8989";
@@ -227,6 +241,7 @@ in {
     enable = true;
     tables.filter.INPUT.rules = [
       { predicate = "-p tcp --dport 80"; target = "ACCEPT"; } # nginx web dir
+      { predicate = "-p tcp --dport 443"; target = "ACCEPT"; } # nginx web dir
       { predicate = "-p tcp --dport 9091"; target = "ACCEPT"; } # transmission-web
       { predicate = "-p tcp --dport 51413"; target = "ACCEPT"; } # transmission-traffic
       { predicate = "-p udp --dport 51413"; target = "ACCEPT"; } # transmission-traffic
