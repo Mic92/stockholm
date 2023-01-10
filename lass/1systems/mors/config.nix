@@ -41,6 +41,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/ppp/umts-stick.nix>
     # <stockholm/lass/2configs/remote-builder/morpheus.nix>
     # <stockholm/lass/2configs/remote-builder/prism.nix>
+    <stockholm/lass/2configs/autotether.nix>
     {
       krebs.iptables.tables.filter.INPUT.rules = [
         #risk of rain

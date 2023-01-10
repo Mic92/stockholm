@@ -69,7 +69,6 @@ with import <stockholm/lib>;
   ];
 
   networking.hostName = config.krebs.build.host.name;
-  nix.maxJobs = config.krebs.build.host.cores;
 
   krebs = {
     enable = true;
@@ -190,28 +189,34 @@ with import <stockholm/lib>;
     enable = true;
     tables = {
       nat.PREROUTING.rules = [
-        { predicate = "-i retiolum -p tcp -m tcp --dport 22"; target = "ACCEPT"; precedence = 101; }
-        { predicate = "-i wiregrill -p tcp -m tcp --dport 22"; target = "ACCEPT"; precedence = 101; }
-        { predicate = "-p tcp -m tcp --dport 22"; target = "REDIRECT --to-ports 0"; precedence = 100; }
-        { predicate = "-p tcp -m tcp --dport 45621"; target = "REDIRECT --to-ports 22"; precedence = 99; }
+        { predicate = "-i retiolum -p tcp -m tcp --dport 22"; target = "ACCEPT"; }
+        { predicate = "-i wiregrill -p tcp -m tcp --dport 22"; target = "ACCEPT"; }
+        { predicate = "-p tcp -m tcp --dport 22"; target = "REDIRECT --to-ports 0"; }
+        { predicate = "-p tcp -m tcp --dport 45621"; target = "REDIRECT --to-ports 22"; }
       ];
       nat.OUTPUT.rules = [
-        { predicate = "-o lo -p tcp -m tcp --dport 45621"; target = "REDIRECT --to-ports 22"; precedence = 100; }
+        { predicate = "-o lo -p tcp -m tcp --dport 45621"; target = "REDIRECT --to-ports 22"; }
       ];
       filter.INPUT.policy = "DROP";
       filter.FORWARD.policy = "DROP";
-      filter.INPUT.rules = [
-        { predicate = "-i retiolum -p udp --dport 60000:61000"; target = "ACCEPT";}
-        { predicate = "-m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; precedence = 10001; }
-        { predicate = "-p icmp"; target = "ACCEPT"; precedence = 10000; }
-        { predicate = "-p ipv6-icmp"; target = "ACCEPT"; v4 = false;  precedence = 10000; }
-        { predicate = "-i lo"; target = "ACCEPT"; precedence = 9999; }
-        { predicate = "-p tcp --dport 22"; target = "ACCEPT"; precedence = 9998; }
-        { predicate = "-p tcp -i retiolum"; target = "REJECT --reject-with tcp-reset"; precedence = -10000; }
-        { predicate = "-p udp -i retiolum"; target = "REJECT --reject-with icmp-port-unreachable"; v6 = false; precedence = -10000; }
-        { predicate = "-i retiolum"; target = "REJECT --reject-with icmp-proto-unreachable"; v6 = false; precedence = -10000; }
-        { predicate = "-i retiolum -p udp -m udp --dport 53"; target = "ACCEPT"; }
-        { predicate = "-i retiolum -p tcp --dport 19999"; target = "ACCEPT"; }
+      filter.INPUT.rules = mkMerge [
+        (mkBefore [
+          { predicate = "-m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; }
+          { predicate = "-p icmp"; target = "ACCEPT"; }
+          { predicate = "-p ipv6-icmp"; target = "ACCEPT"; v4 = false;  }
+          { predicate = "-i lo"; target = "ACCEPT"; }
+          { predicate = "-p tcp --dport 22"; target = "ACCEPT"; }
+        ])
+        (mkOrder 1000 [
+          { predicate = "-i retiolum -p udp --dport 60000:61000"; target = "ACCEPT"; }
+          { predicate = "-i retiolum -p udp -m udp --dport 53"; target = "ACCEPT"; }
+          { predicate = "-i retiolum -p tcp --dport 19999"; target = "ACCEPT"; }
+        ])
+        (mkAfter [
+          { predicate = "-p tcp -i retiolum"; target = "REJECT --reject-with tcp-reset"; }
+          { predicate = "-p udp -i retiolum"; target = "REJECT --reject-with icmp-port-unreachable"; v6 = false; }
+          { predicate = "-i retiolum"; target = "REJECT --reject-with icmp-proto-unreachable"; v6 = false; }
+        ])
       ];
     };
   };

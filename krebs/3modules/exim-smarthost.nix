@@ -108,7 +108,7 @@ let
   };
 
   imp = {
-    krebs.systemd.services.exim = {};
+    krebs.systemd.services.exim.restartIfCredentialsChange = true;
     systemd.services.exim.serviceConfig.LoadCredential =
       map (dkim: "${dkim.domain}.dkim_private_key:${dkim.private_key}") cfg.dkim;
     krebs.exim = {

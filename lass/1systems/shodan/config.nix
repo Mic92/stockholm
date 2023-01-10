@@ -16,7 +16,7 @@
     <stockholm/lass/2configs/blue-host.nix>
     <stockholm/lass/2configs/green-host.nix>
     <stockholm/krebs/2configs/news-host.nix>
-    <stockholm/lass/2configs/prism-mounts/samba.nix>
+    <stockholm/lass/2configs/yellow-mounts/samba.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/consul.nix>
     <stockholm/lass/2configs/red-host.nix>

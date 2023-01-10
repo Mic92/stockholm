@@ -28,6 +28,10 @@ in {
             type = lib.types.bool;
             default = false;
           };
+          runContainer = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+          };
         };
       }));
     };
@@ -50,7 +54,8 @@ in {
             wantedBy = [ "multi-user.target" ];
             serviceConfig.ExecStart = pkgs.writers.writeDash "autoswitch" ''
               set -efu
-              ln -frs /var/state/var_src /var/src
+              mkdir -p /var/state/var_src
+              ln -Tfrs /var/state/var_src /var/src
               if test -e /var/src/nixos-config; then
                 /run/current-system/sw/bin/nixos-rebuild -I /var/src switch || :
               fi
@@ -64,7 +69,6 @@ in {
         privateNetwork = true;
         hostBridge = "ctr0";
         bindMounts = {
-          "/etc/resolv.conf".hostPath = "/etc/resolv.conf";
           "/var/lib/self/disk" = {
             hostPath = "/var/lib/sync-containers3/${ctr.name}/disk";
             isReadOnly = false;
@@ -74,7 +78,7 @@ in {
             isReadOnly = false;
           };
         };
-      }) cfg.containers;
+      }) (lib.filterAttrs (_: ctr: ctr.runContainer) cfg.containers);
 
       systemd.services = lib.foldr lib.recursiveUpdate {} (lib.flatten (map (ctr: [
         { "${ctr.name}_syncer" = {
@@ -101,14 +105,14 @@ in {
                 set -efux
                 if /run/wrappers/bin/ping -c 1 ${ctr.name}.r; then
                   touch "$HOME"/incomplete
-                  rsync -a -e "ssh -i $CREDENTIALS_DIRECTORY/ssh_key" --inplace container_sync@${ctr.name}.r:disk "$HOME"/disk
+                  rsync -a -e "ssh -i $CREDENTIALS_DIRECTORY/ssh_key" --timeout=30 --inplace container_sync@${ctr.name}.r:disk "$HOME"/disk
                   rm "$HOME"/incomplete
                 fi
               ''}
             '';
           };
         }; }
-        { "${ctr.name}_watcher" = {
+        { "${ctr.name}_watcher" = lib.mkIf ctr.runContainer {
           path = with pkgs; [
             coreutils
             consul
@@ -136,7 +140,8 @@ in {
                     ;;
                   200)
                     # echo 'got 200 from kv, will check payload'
-                    export payload=$(consul kv get containers/${ctr.name})
+                    payload=$(consul kv get containers/${ctr.name}) || continue
+                    export payload
                     if [ "$(jq -rn 'env.payload | fromjson.host')" = '${config.networking.hostName}' ]; then
                       # echo 'we are the host, trying to reach container'
                       if $(retry -t 10 -d 10 -- /run/wrappers/bin/ping -q -c 1 ${ctr.name}.r > /dev/null); then
@@ -163,7 +168,7 @@ in {
             '';
           };
         }; }
-        { "${ctr.name}_scheduler" = {
+        { "${ctr.name}_scheduler" = lib.mkIf ctr.runContainer {
           wantedBy = [ "multi-user.target" ];
           path = with pkgs; [
             coreutils
@@ -246,7 +251,7 @@ in {
       users.groups = lib.mapAttrs' (_: ctr: lib.nameValuePair "${ctr.name}_container" {
       }) cfg.containers;
       users.users = lib.mapAttrs' (_: ctr: lib.nameValuePair "${ctr.name}_container" ({
-        group = "container_${ctr.name}";
+        group = "${ctr.name}_container";
         isNormalUser = true;
         uid = slib.genid_uint31 "container_${ctr.name}";
         home = "/var/lib/sync-containers3/${ctr.name}";
@@ -254,47 +259,51 @@ in {
         homeMode = "705";
       })) cfg.containers;
 
+      environment.systemPackages = lib.mapAttrsToList (_: ctr: (pkgs.writers.writeDashBin "${ctr.name}_init" ''
+        set -efux
+        export PATH=${lib.makeBinPath [
+          pkgs.coreutils
+          pkgs.cryptsetup
+          pkgs.libxfs.bin
+        ]}:$PATH
+        truncate -s 5G /var/lib/sync-containers3/${ctr.name}/disk
+        cryptsetup luksFormat /var/lib/sync-containers3/${ctr.name}/disk ${ctr.luksKey}
+        cryptsetup luksOpen --key-file ${ctr.luksKey} /var/lib/sync-containers3/${ctr.name}/disk ${ctr.name}
+        mkfs.xfs /dev/mapper/${ctr.name}
+        mkdir -p /var/lib/sync-containers3/${ctr.name}/state
+        mountpoint /var/lib/sync-containers3/${ctr.name}/state || mount /dev/mapper/${ctr.name} /var/lib/sync-containers3/${ctr.name}/state
+        /run/current-system/sw/bin/nixos-container start ${ctr.name}
+        /run/current-system/sw/bin/nixos-container run ${ctr.name} -- ${pkgs.writeDash "init" ''
+          mkdir -p /var/state
+        ''}
+      '')) cfg.containers;
     })
     (lib.mkIf (cfg.containers != {}) {
       # networking
-      networking.networkmanager.unmanaged = [ "ctr0" ];
-      networking.interfaces.dummy0.virtual = true;
-      networking.bridges.ctr0.interfaces = [ "dummy0" ];
-      networking.interfaces.ctr0.ipv4.addresses = [{
-        address = "10.233.0.1";
-        prefixLength = 24;
-      }];
-      systemd.services."dhcpd-ctr0" = {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        serviceConfig = {
-          Type = "forking";
-          Restart = "always";
-          DynamicUser = true;
-          StateDirectory = "dhcpd-ctr0";
-          User = "dhcpd-ctr0";
-          Group = "dhcpd-ctr0";
-          AmbientCapabilities = [
-           "CAP_NET_RAW"          # to send ICMP messages
-           "CAP_NET_BIND_SERVICE" # to bind on DHCP port (67)
-          ];
-          ExecStartPre = "${pkgs.coreutils}/bin/touch /var/lib/dhcpd-ctr0/dhcpd.leases";
-          ExecStart = "${pkgs.dhcp}/bin/dhcpd -4 -lf /var/lib/dhcpd-ctr0/dhcpd.leases -cf ${pkgs.writeText "dhpd.conf" ''
-            default-lease-time 600;
-            max-lease-time 7200;
-            authoritative;
-            ddns-update-style interim;
-            log-facility local1; # see dhcpd.nix
-
-            option subnet-mask 255.255.255.0;
-            option routers 10.233.0.1;
-            # option domain-name-servers 8.8.8.8; # TODO configure dns server
-            subnet 10.233.0.0 netmask 255.255.255.0 {
-              range 10.233.0.10 10.233.0.250;
-            }
-          ''} ctr0";
+      systemd.network.networks.ctr0 = {
+        name = "ctr0";
+        address = [
+          "10.233.0.1/24"
+        ];
+        networkConfig = {
+          IPForward = "yes";
+          IPMasquerade = "both";
+          ConfigureWithoutCarrier = true;
+          DHCPServer = "yes";
         };
       };
+      systemd.network.netdevs.ctr0.netdevConfig = {
+        Kind = "bridge";
+        Name = "ctr0";
+      };
+      networking.networkmanager.unmanaged = [ "ctr0" ];
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-i ctr0"; target = "ACCEPT"; }
+      ];
+      krebs.iptables.tables.filter.FORWARD.rules = [
+        { predicate = "-i ctr0"; target = "ACCEPT"; }
+        { predicate = "-o ctr0"; target = "ACCEPT"; }
+      ];
     })
     (lib.mkIf cfg.inContainer.enable {
       users.groups.container_sync = {};
@@ -307,6 +316,17 @@ in {
         openssh.authorizedKeys.keys = [
           cfg.inContainer.pubkey
         ];
+      };
+
+      networking.useHostResolvConf = false;
+      networking.useNetworkd = true;
+      systemd.network = {
+        enable = true;
+        networks.eth0 = {
+          matchConfig.Name = "eth0";
+          DHCP = "yes";
+          dhcpV4Config.UseDNS = true;
+        };
       };
     })
   ];

@@ -3,7 +3,7 @@
 let
   name = "radio";
 
-  music_dir = "/home/radio/music";
+  music_dir = "/var/music";
 
   skip_track = pkgs.writers.writeBashBin "skip_track" ''
     set -eu
@@ -113,7 +113,7 @@ in {
         LIMIT=1000 #how many tracks to keep in the history
         HISTORY_FILE=/var/lib/radio/recent
 
-        listeners=$(${pkgs.curl}/bin/curl -fSs lassul.us:8000/status-json.xsl |
+        listeners=$(${pkgs.curl}/bin/curl -fSs http://localhost:8000/status-json.xsl |
           ${pkgs.jq}/bin/jq '[.icestats.source[].listeners] | add' || echo 0)
         echo "$(${pkgs.coreutils}/bin/date -Is)" "$filename" | ${pkgs.coreutils}/bin/tee -a "$HISTORY_FILE"
         echo "$(${pkgs.coreutils}/bin/tail -$LIMIT "$HISTORY_FILE")" > "$HISTORY_FILE"
@@ -128,14 +128,33 @@ in {
     serviceConfig.User = lib.mkForce "radio";
   };
 
+  nixpkgs.config.packageOverrides = opkgs: {
+    icecast = opkgs.icecast.overrideAttrs (old: rec {
+      version = "2.5-beta3";
+
+      src = pkgs.fetchurl {
+        url = "http://downloads.xiph.org/releases/icecast/icecast-${version}.tar.gz";
+        sha256 = "sha256-4FDokoA9zBDYj8RAO/kuTHaZ6jZYBLSJZiX/IYFaCW8=";
+      };
+
+      buildInputs = old.buildInputs ++ [ pkgs.pkg-config ];
+    });
+  };
   services.icecast = {
     enable = true;
     hostname = "radio.lassul.us";
     admin.password = "hackme";
     extraConf = ''
       <authentication>
-       <source-password>hackme</source-password>
+        <source-password>hackme</source-password>
+        <admin-user>admin</admin-user>
+        <admin-password>hackme</admin-password>
       </authentication>
+      <logging>
+        <accesslog>-</accesslog>
+        <errorlog>-</errorlog>
+        <loglevel>3</loglevel>
+      </logging>
     '';
   };
 
@@ -234,18 +253,38 @@ in {
     '';
   };
 
+  networking.firewall.allowedTCPPorts = [ 80 ];
   services.nginx = {
     enable = true;
-    virtualHosts."radio.lassul.us" = {
-      forceSSL = true;
-      enableACME = true;
+    virtualHosts."radio.r" = {
       locations."/".extraConfig = ''
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Host $host;
-        proxy_set_header X-Forwarded-Server $host;
-        proxy_set_header X-Real-IP $remote_addr;
+        # https://github.com/aswild/icecast-notes#core-nginx-config
         proxy_pass http://localhost:8000;
+        # Disable request size limit, very important for uploading large files
+        client_max_body_size 0;
+
+        # Enable support `Transfer-Encoding: chunked`
+        chunked_transfer_encoding on;
+
+        # Disable request and response buffering, minimize latency to/from Icecast
+        proxy_buffering off;
+        proxy_request_buffering off;
+
+        # Icecast needs HTTP/1.1, not 1.0 or 2
+        proxy_http_version 1.1;
+
+        # Forward all original request headers
+        proxy_pass_request_headers on;
+
+        # Set some standard reverse proxy headers. Icecast server currently ignores these,
+        # but may support them in a future version so that access logs are more useful.
+        proxy_set_header  Host              $host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+
+        # get source ip for weather reports
+        proxy_set_header user-agent "$http_user_agent; client-ip=$remote_addr";
       '';
       locations."= /recent".extraConfig = ''
         default_type "text/plain";
@@ -266,7 +305,7 @@ in {
         while sleep 1; do
           mpv \
             --cache-secs=0 --demuxer-readahead-secs=0 --untimed --cache-pause=no \
-            'http://lassul.us:8000/radio.ogg'
+            'http://radio.lassul.us/radio.ogg'
         done
       '';
       locations."= /controls".extraConfig = ''
@@ -278,35 +317,12 @@ in {
         add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
       '';
     };
-    virtualHosts."lassul.us".locations."= /the_playlist".extraConfig = let
-      html = pkgs.writeText "index.html" ''
-        <!DOCTYPE html>
-        <html lang="en">
-          <head>
-            <meta charset="utf-8">
-            <title>lassulus playlist</title>
-          </head>
-          <body>
-            <div style="display:inline-block;margin:0px;padding:0px;overflow:hidden">
-              <iframe src="https://kiwiirc.com/client/irc.hackint.org/?nick=kiwi_test|?&theme=cli#the_playlist" frameborder="0" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:95%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="95%" width="100%"></iframe>
-            </div>
-            <div style="position:absolute;bottom:1px;display:inline-block;background-color:red;">
-              <audio controls autoplay="autoplay"><source src="http://lassul.us:8000/radio.ogg" type="audio/ogg">Your browser does not support the audio element.</audio>
-            </div>
-            <!-- page content -->
-          </body>
-        </html>
-      '';
-    in ''
-      default_type "text/html";
-      alias ${html};
-    '';
   };
   services.syncthing.declarative.folders."the_playlist" = {
-    path = "/home/radio/music/the_playlist";
-    devices = [ "mors" "phone" "prism" "omo" ];
+    path = "/var/music/the_playlist";
+    devices = [ "mors" "phone" "prism" "omo" "radio" ];
   };
-  krebs.acl."/home/radio/music/the_playlist"."u:syncthing:X".parents = true;
-  krebs.acl."/home/radio/music/the_playlist"."u:syncthing:rwX" = {};
-  krebs.acl."/home/radio/music/the_playlist"."u:radio:rwX" = {};
+  krebs.acl."/var/music/the_playlist"."u:syncthing:X".parents = true;
+  krebs.acl."/var/music/the_playlist"."u:syncthing:rwX" = {};
+  krebs.acl."/var/music/the_playlist"."u:radio:rwX" = {};
 }

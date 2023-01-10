@@ -16,13 +16,20 @@ in mkIf (hasAttr "wiregrill" config.krebs.build.host.nets) {
   krebs.iptables.tables.filter.INPUT.rules = [
      { predicate = "-p udp --dport ${toString self.wireguard.port}"; target = "ACCEPT"; }
   ];
-  krebs.iptables.tables.filter.FORWARD.rules = mkIf isRouter [
-    { precedence = 1000; predicate = "-i wiregrill -o wiregrill"; target = "ACCEPT"; }
-    { precedence = 1000; predicate = "-i wiregrill -o retiolum"; target = "ACCEPT"; }
-    { precedence = 1000; predicate = "-i retiolum -o wiregrill"; target = "ACCEPT"; }
-    { precedence = 1000; predicate = "-i wiregrill -o eth0"; target = "ACCEPT"; }
-    { precedence = 1000; predicate = "-o wiregrill -m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; }
-  ];
+  krebs.iptables.tables.filter.FORWARD.rules = mkIf isRouter (mkBefore [
+    { predicate = "-i wiregrill -o wiregrill"; target = "ACCEPT"; }
+    { predicate = "-i wiregrill -o retiolum"; target = "ACCEPT"; }
+    { predicate = "-i retiolum -o wiregrill"; target = "ACCEPT"; }
+    { predicate = "-i wiregrill -o eth0"; target = "ACCEPT"; }
+    { predicate = "-o wiregrill -m conntrack --ctstate RELATED,ESTABLISHED"; target = "ACCEPT"; }
+  ]);
+  systemd.network.networks.wiregrill = {
+    matchConfig.Name = "wiregrill";
+    address =
+      (optional (!isNull self.ip4) "${self.ip4.addr}/16") ++
+      (optional (!isNull self.ip6) "${self.ip6.addr}/48")
+    ;
+  };
 
   networking.wireguard.interfaces.wiregrill = {
     ips =

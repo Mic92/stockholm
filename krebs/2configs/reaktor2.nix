@@ -146,7 +146,7 @@ let
     command = 1;
     arguments = [2];
     env.TASKDATA = "${stateDir}/${name}";
-    commands = {
+    commands = rec {
       add.filename = pkgs.writeDash "${name}-task-add" ''
         ${pkgs.taskwarrior}/bin/task rc:${taskRcFile} add "$1"
       '';
@@ -159,6 +159,7 @@ let
       delete.filename = pkgs.writeDash "${name}-task-delete" ''
         ${pkgs.taskwarrior}/bin/task rc:${taskRcFile} delete "$1"
       '';
+      del = delete;
       done.filename = pkgs.writeDash "${name}-task-done" ''
         ${pkgs.taskwarrior}/bin/task rc:${taskRcFile} done "$1"
       '';

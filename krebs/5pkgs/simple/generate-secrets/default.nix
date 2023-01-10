@@ -23,7 +23,6 @@ pkgs.writers.writeDashBin "generate-secrets" ''
 
   cat <<EOF
     $HOSTNAME = {
-      cores = 1;
       owner = config.krebs.users.krebs;
       nets = {
         retiolum = {

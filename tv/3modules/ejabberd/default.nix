@@ -127,7 +127,7 @@ in {
       })
     ];
 
-    krebs.systemd.services.ejabberd = {};
+    krebs.systemd.services.ejabberd.restartIfCredentialsChange = true;
 
     systemd.services.ejabberd = {
       wantedBy = [ "multi-user.target" ];

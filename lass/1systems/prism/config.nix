@@ -33,9 +33,9 @@ with import <stockholm/lib>;
           "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6o6sdTu/CX1LW2Ff5bNDqGEAGwAsjf0iIe5DCdC7YikCct+7x4LTXxY+nDlPMeGcOF88X9/qFwdyh+9E4g0nUAZaeL14Uc14QDqDt/aiKjIXXTepxE/i4JD9YbTqStAnA/HYAExU15yqgUdj2dnHu7OZcGxk0ZR1OY18yclXq7Rq0Fd3pN3lPP1T4QHM9w66r83yJdFV9szvu5ral3/QuxQnCNohTkR6LoJ4Ny2RbMPTRtb+jPbTQYTWUWwV69mB8ot5nRTP4MRM9pu7vnoPF4I2S5DvSnx4C5zdKzsb7zmIvD4AmptZLrXj4UXUf00Xf7Js5W100Ne2yhYyhq+35 riot@lagrange"
         ];
       };
-      krebs.iptables.tables.filter.FORWARD.rules = [
-        { v6 = false; precedence = 1000; predicate = "--destination 95.216.1.130"; target = "ACCEPT"; }
-        { v6 = false; precedence = 1000; predicate = "--source 95.216.1.130"; target = "ACCEPT"; }
+      krebs.iptables.tables.filter.FORWARD.rules = mkBefore [
+        { v6 = false; predicate = "--destination 95.216.1.130"; target = "ACCEPT"; }
+        { v6 = false; predicate = "--source 95.216.1.130"; target = "ACCEPT"; }
       ];
     }
     {
@@ -97,9 +97,35 @@ with import <stockholm/lib>;
         localAddress = "10.233.2.2";
       };
     }
+    {
+      services.nginx.virtualHosts."radio.lassul.us" = {
+        enableACME = true;
+        addSSL = true;
+        locations."/" = {
+          # recommendedProxySettings = true;
+          proxyWebsockets = true;
+          proxyPass = "http://radio.r";
+          extraConfig = ''
+            proxy_set_header Host radio.r;
+            # get source ip for weather reports
+            proxy_set_header user-agent "$http_user_agent; client-ip=$remote_addr";
+          '';
+        };
+      };
+      krebs.htgen.radio-redirect = {
+        port = 8000;
+        scriptFile = pkgs.writers.writeDash "redir" ''
+          printf 'HTTP/1.1 301 Moved Permanently\r\n'
+          printf "Location: http://radio.lassul.us''${Request_URI}\r\n"
+          printf '\r\n'
+        '';
+      };
+      krebs.iptables.tables.filter.INPUT.rules = [
+        { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; }
+      ];
+    }
     <stockholm/lass/2configs/exim-smarthost.nix>
     <stockholm/lass/2configs/privoxy-retiolum.nix>
-    <stockholm/lass/2configs/radio>
     <stockholm/lass/2configs/binary-cache/server.nix>
     <stockholm/lass/2configs/iodined.nix>
     <stockholm/lass/2configs/paste.nix>
@@ -227,13 +253,13 @@ with import <stockholm/lib>;
       imports = [
         <stockholm/lass/2configs/wiregrill.nix>
       ];
-      krebs.iptables.tables.nat.PREROUTING.rules = [
-        { v6 = false; precedence = 1000; predicate = "-s 10.244.1.0/24"; target = "ACCEPT"; }
-        { v4 = false; precedence = 1000; predicate = "-s 42:1::/32"; target = "ACCEPT"; }
+      krebs.iptables.tables.nat.PREROUTING.rules = mkOrder 999 [
+        { v6 = false; predicate = "-s 10.244.1.0/24"; target = "ACCEPT"; }
+        { v4 = false; predicate = "-s 42:1::/32"; target = "ACCEPT"; }
       ];
-      krebs.iptables.tables.filter.FORWARD.rules = [
-        { precedence = 1000; predicate = "-i wiregrill -o retiolum"; target = "ACCEPT"; }
-        { precedence = 1000; predicate = "-i retiolum -o wiregrill"; target = "ACCEPT"; }
+      krebs.iptables.tables.filter.FORWARD.rules = mkBefore [
+        { predicate = "-i wiregrill -o retiolum"; target = "ACCEPT"; }
+        { predicate = "-i retiolum -o wiregrill"; target = "ACCEPT"; }
       ];
       krebs.iptables.tables.nat.POSTROUTING.rules = [
         { v4 = false; predicate = "-s 42:1::/32 ! -d 42:1::/48"; target = "MASQUERADE"; }
@@ -252,7 +278,7 @@ with import <stockholm/lib>;
     }
     {
       krebs.iptables.tables.filter.INPUT.rules = [
-        { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT";}
+        { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT"; }
       ];
     }
     <stockholm/lass/2configs/murmur.nix>
