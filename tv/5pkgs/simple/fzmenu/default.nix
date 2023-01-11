@@ -1,5 +1,15 @@
 { lib, pkgs, stdenv }:
 
+let
+  terminal = pkgs.writeDashBin "terminal" ''
+    # usage: terminal COMMAND [ARGS...]
+    exec ${pkgs.alacritty-tv}/bin/alacritty \
+        --profile=fzmenu \
+        --class AlacrittyFzmenuFloat \
+        -e "$@"
+  '';
+in
+
 pkgs.runCommand "fzmenu" {
 } /* sh */ ''
   mkdir $out
@@ -16,9 +26,9 @@ pkgs.runCommand "fzmenu" {
         (pkgs.pass.withExtensions (ext: [
           ext.pass-otp
         ]))
-        pkgs.rxvt_unicode
         pkgs.utillinux
         pkgs.xdotool
+        terminal
       ]}
 
   substituteInPlace $out/bin/passmenu \
@@ -31,8 +41,8 @@ pkgs.runCommand "fzmenu" {
         (pkgs.pass.withExtensions (ext: [
           ext.pass-otp
         ]))
-        pkgs.rxvt_unicode
         pkgs.utillinux
         pkgs.xdotool
+        terminal
       ]}
 ''
