@@ -7,7 +7,10 @@ import System.Exit (exitFailure)
 
 import Control.Exception
 import Control.Monad.Extra (whenJustM)
+import qualified Data.Aeson
+import qualified Data.ByteString.Char8
 import qualified Data.List
+import qualified Data.Maybe
 import Graphics.X11.ExtraTypes.XF86
 import Text.Read (readEither)
 import XMonad
@@ -40,8 +43,6 @@ import XMonad.Actions.PerWorkspaceKeys (chooseAction)
 
 import Shutdown (shutdown, newShutdownEventHandler)
 
-import Build (myFont, myScreenWidth, myTermFontWidth, myTermPadding)
-
 
 main :: IO ()
 main = getArgs >>= \case
@@ -53,9 +54,19 @@ main = getArgs >>= \case
 (=??) :: Query a -> (a -> Bool) -> Query Bool
 (=??) x p = fmap p x
 
+readEnv :: Data.Aeson.FromJSON b => String -> IO b
+readEnv name =
+    Data.Maybe.fromJust
+      . Data.Aeson.decodeStrict'
+      . Data.ByteString.Char8.pack
+      <$> getEnv name
 
 mainNoArgs :: IO ()
 mainNoArgs = do
+    myScreenWidth <- readEnv "XMONAD_SCREEN_WIDTH" :: IO Dimension
+    myTermFont <- getEnv "XMONAD_TERM_FONT"
+    myTermFontWidth <- readEnv "XMONAD_TERM_FONT_WIDTH" :: IO Dimension
+    myTermPadding <- readEnv "XMONAD_TERM_PADDING" :: IO Dimension
     workspaces0 <- getWorkspaces0
     handleShutdownEvent <- newShutdownEventHandler
     let
@@ -72,7 +83,7 @@ mainNoArgs = do
         $ def
             { terminal          = {-pkg:rxvt_unicode-}"urxvtc"
             , modMask           = mod4Mask
-            , keys              = myKeys
+            , keys              = myKeys myTermFont
             , workspaces        = workspaces0
             , layoutHook =
                 smartBorders $
@@ -133,8 +144,8 @@ spawnRootTerm =
         Nothing
 
 
-myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
-myKeys conf = Map.fromList $
+myKeys :: String -> XConfig Layout -> Map (KeyMask, KeySym) (X ())
+myKeys font conf = Map.fromList $
     [ ((_4  , xK_Escape ), forkFile {-pkg-}"slock" [] Nothing)
     , ((_4S , xK_c      ), kill)
 
@@ -209,17 +220,15 @@ myKeys conf = Map.fromList $
     resetLayout = setLayout $ XMonad.layoutHook conf
 
     promptXPConfig =
-        def { XMonad.Prompt.font = myFont }
+        def { XMonad.Prompt.font = font }
 
-
-xdeny :: X ()
-xdeny =
-    forkFile
-        {-pkg-}"xterm"
-        [ "-fn", myFont
-        , "-geometry", "300x100"
-        , "-name", "AlertFloat"
-        , "-bg", "#E4002B"
-        , "-e", "sleep", "0.05"
-        ]
-        Nothing
+    xdeny =
+        forkFile
+            {-pkg-}"xterm"
+            [ "-fn", font
+            , "-geometry", "300x100"
+            , "-name", "AlertFloat"
+            , "-bg", "#E4002B"
+            , "-e", "sleep", "0.05"
+            ]
+            Nothing
