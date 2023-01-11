@@ -6,7 +6,7 @@ let
     program = "${pkgs.font-size-alacritty}/bin/font-size-alacritty";
     args = [arg];
   };
-  config = {
+  configs.default = {
     bell.animation = "EaseOut";
     bell.duration = 50;
     bell.color = "#ff00ff";
@@ -50,16 +50,31 @@ let
     ];
     scrolling.multiplier = 8;
   };
-  config-file = pkgs.writeJSON "alacritty-tv.json" config;
-  profile = pkgs.writeText "alacritty-tv.profile" /* sh */ ''
+  writeProfile = name: config: let
+    config-file =
+      assert lib.types.filename.check name;
+      pkgs.writeJSON "alacritty-tv-${name}.json" config;
+  in pkgs.writeText "alacritty-tv-${name}.profile" /* sh */ ''
     # Use home so Alacritty can find the configuration without arguments.
     # HOME will be reset once in Alacritty.
-    HOME=$TMPDIR/Alacritty
+    HOME=$TMPDIR/Alacritty-${name}
     export HOME
+
+    # Tell Alacritty via XDG_RUNTIME_DIR where to create sockets.
+    # XDG_RUNTIME_DIR needs to be reset manually.
+    export ALACRITTY_XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR"
+    export BASH_EXTRA_INIT=${pkgs.writeDash "alacritty-tv.cleanup.sh" ''
+      XDG_RUNTIME_DIR=$ALACRITTY_XDG_RUNTIME_DIR
+      unset ALACRITTY_XDG_RUNTIME_DIR
+      unset BASH_EXTRA_INIT
+    ''}
+    export XDG_RUNTIME_DIR="$HOME"
 
     # Install stored configuration if it has changed.
     # This allows for both declarative updates and runtime modifications.
-    ${pkgs.coreutils}/bin/mkdir -p "$HOME"
+    # rust-xdg requires XDG_RUNTIME_DIR to be secure:
+    # https://docs.rs/xdg/2.4.1/src/xdg/lib.rs.html#311
+    ${pkgs.coreutils}/bin/mkdir -m 0700 -p "$HOME"
     if test "$(${pkgs.coreutils}/bin/cat "$HOME"/ref)" != ${config-file}; then
       echo ${config-file} > "$HOME"/ref
       ${pkgs.coreutils}/bin/cp ${config-file} "$HOME"/.alacritty.yml
@@ -72,20 +87,35 @@ pkgs.symlinkJoin {
   paths = [
     (pkgs.writeDashBin "alacritty" ''
       # usage:
-      #   alacritty [--singleton] [ARGS...]
+      #   alacritty [--profile=PROFILE] [--singleton] [ARGS...]
+      # where
+      #   PROFILE one of ${lib.toJSON (lib.attrNames configs)}
 
       set -efu
+
+      case ''${1-} in
+      ${lib.concatMapStringsSep "\n" (name: /* sh */ ''
+        --${lib.shell.escape name}|--profile=${lib.shell.escape name})
+          shift
+          profile=${writeProfile name configs.${name}}
+          ;;
+      '') (lib.attrNames configs)}
+        *)
+          profile=${writeProfile "default" configs.default}
+          ;;
+      esac
+
 
       case ''${1-} in
         --singleton)
           shift
           if ! ${pkgs.alacritty}/bin/alacritty msg create-window "$@"; then
-            . ${profile}
+            . "$profile"
             ${pkgs.alacritty}/bin/alacritty "$@" &
           fi
           ;;
         *)
-          . ${profile}
+          . "$profile"
           exec ${pkgs.alacritty}/bin/alacritty "$@"
           ;;
       esac
