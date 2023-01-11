@@ -50,6 +50,11 @@ let
     ];
     scrolling.multiplier = 8;
   };
+  configs.root = lib.recursiveUpdate configs.default {
+    colors.primary.background = "#230000";
+    colors.primary.foreground = "#e0c0c0";
+    colors.normal.black       = "#800000";
+  };
   writeProfile = name: config: let
     config-file =
       assert lib.types.filename.check name;
