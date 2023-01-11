@@ -81,7 +81,7 @@ mainNoArgs = do
               , suppressWhen = Never
               }
         $ def
-            { terminal          = {-pkg:rxvt_unicode-}"urxvtc"
+            { terminal          = {-pkg:alacritty-tv-}"alacritty"
             , modMask           = mod4Mask
             , keys              = myKeys myTermFont
             , workspaces        = workspaces0
@@ -139,8 +139,8 @@ forkFile path args env =
 spawnRootTerm :: X ()
 spawnRootTerm =
     forkFile
-        {-pkg:rxvt_unicode-}"urxvtc"
-        ["-name", "root-urxvt", "-e", "/run/wrappers/bin/su", "-"]
+        {-pkg:alacritty-tv-}"alacritty"
+        ["--profile=root", "-e", "/run/wrappers/bin/su", "-"]
         Nothing
 
 
@@ -152,7 +152,7 @@ myKeys font conf = Map.fromList $
     , ((_4  , xK_o      ), forkFile {-pkg:fzmenu-}"otpmenu" [] Nothing)
     , ((_4  , xK_p      ), forkFile {-pkg:fzmenu-}"passmenu" [] Nothing)
 
-    , ((_4  , xK_x      ), forkFile {-pkg:rxvt_unicode-}"urxvtc" [] Nothing)
+    , ((_4  , xK_x      ), forkFile {-pkg:alacritty-tv-}"alacritty" ["--singleton"] Nothing)
     , ((_4C , xK_x      ), spawnRootTerm)
 
     , ((_C  , xK_Menu   ), toggleWS)
