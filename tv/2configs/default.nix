@@ -49,6 +49,8 @@ with import ./lib;
       nixpkgs.config.allowUnfree = false;
     }
     {
+      environment.homeBinInPath = true;
+
       environment.profileRelativeEnvVars.PATH = mkForce [ "/bin" ];
 
       environment.systemPackages = with pkgs; [

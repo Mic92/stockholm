@@ -11,8 +11,6 @@ with import ./lib;
     <stockholm/tv/2configs/xsessions>
   ];
 
-  environment.homeBinInPath = true;
-
   krebs.build.host = config.krebs.hosts.bu;
 
   networking.hostId = lib.mkDefault "00000000";
