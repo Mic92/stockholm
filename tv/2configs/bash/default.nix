@@ -39,6 +39,10 @@ with import ./lib;
       esac
 
       ${pkgs.bash-fzf-history.bind}
+
+      if test -n "''${BASH_EXTRA_INIT-}"; then
+        . "$BASH_EXTRA_INIT"
+      fi
     '';
     promptInit = /* sh */ ''
       case $UID in
