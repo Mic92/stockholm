@@ -55,6 +55,11 @@ let
     colors.primary.foreground = "#e0c0c0";
     colors.normal.black       = "#800000";
   };
+  configs.fzmenu = lib.recursiveUpdate configs.default {
+    colors.primary.background = "#2A172A";
+    window.dimensions.columns = 70;
+    window.dimensions.lines = 9;
+  };
   writeProfile = name: config: let
     config-file =
       assert lib.types.filename.check name;
