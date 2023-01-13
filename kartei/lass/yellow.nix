@@ -9,6 +9,7 @@
         "jelly.r"
         "radar.r"
         "sonar.r"
+        "transmission.r"
       ];
       tinc = {
         pubkey = ''
