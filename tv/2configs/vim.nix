@@ -140,5 +140,16 @@ with import ./lib;
     " edit alternate buffer
     " For some reason neither putting <ctrl>6 nor <ctrl>^ works here...
     nnoremap <esc>a 
+
+    if $TOUCHSCREEN == 1
+      nnoremap <ScrollWheelUp> <C-y>
+      nnoremap <ScrollWheelDown> <C-e>
+      nnoremap <C-ScrollWheelUp> 3<C-y>
+      nnoremap <C-ScrollWheelDown> 3<C-e>
+      nnoremap <S-ScrollWheelUp> 3<C-y>
+      nnoremap <S-ScrollWheelDown> 3<C-e>
+      nnoremap <C-S-ScrollWheelUp> <PageUp>
+      nnoremap <C-S-ScrollWheelDown> <PageDown>
+    endif
   '';
 }
