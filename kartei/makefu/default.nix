@@ -74,6 +74,11 @@ in {
         retiolum.ip4.addr = "10.243.12.12";
       };
     };
+    snake = {
+      nets = {
+        retiolum.ip4.addr = "10.243.12.13";
+      };
+    };
 
     studio = rec {
       ci = false;
