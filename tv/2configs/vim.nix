@@ -11,18 +11,31 @@ with import ./lib;
     environment.variables.VIMINIT = ":so /etc/vimrc";
   };
 
-  extra-runtimepath = pkgs.tv.vim.makeRuntimePath [
-    pkgs.tv.vimPlugins.elixir
+  base-plugins = [
     pkgs.tv.vimPlugins.file-line
-    pkgs.tv.vimPlugins.fzf
     pkgs.tv.vimPlugins.hack
+    pkgs.vimPlugins.undotree
+    (pkgs.tv.vim.makePlugin (pkgs.write "vim-tv-base" {
+      "/ftplugin/haskell.vim".text = ''
+        if exists("g:vim_tv_ftplugin_haskell_loaded")
+          finish
+        endif
+        let g:vim_tv_ftplugin_haskell_loaded = 1
+
+        setlocal iskeyword+='
+      '';
+    }))
+  ];
+
+  extra-plugins = [
+    pkgs.tv.vimPlugins.elixir
+    pkgs.tv.vimPlugins.fzf
     pkgs.tv.vimPlugins.jq
     pkgs.tv.vimPlugins.nix
     pkgs.tv.vimPlugins.showsyntax
     pkgs.tv.vimPlugins.tv
     pkgs.tv.vimPlugins.vim
     pkgs.vimPlugins.fzfWrapper
-    pkgs.vimPlugins.undotree
     pkgs.vimPlugins.vim-nftables
   ];
 
@@ -71,7 +84,7 @@ with import ./lib;
     set mouse=a
     set noruler
     set pastetoggle=<INS>
-    set runtimepath=${extra-runtimepath},$VIMRUNTIME
+    set runtimepath=${pkgs.tv.vim.makeRuntimePath base-plugins},$VIMRUNTIME
     set shortmess+=I
     set showcmd
     set showmatch
@@ -88,13 +101,15 @@ with import ./lib;
     set wildmenu
     set wildmode=longest,full
 
+      set runtimepath^=${pkgs.tv.vim.makeRuntimePath extra-plugins}
+      syntax on
+
     set et ts=2 sts=2 sw=2
 
     filetype plugin indent on
 
     set t_Co=256
     colorscheme hack
-    syntax on
 
     au Syntax * syn match Garbage containedin=ALL /\s\+$/
             \ | syn match TabStop containedin=ALL /\t\+/
