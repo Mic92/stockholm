@@ -101,7 +101,8 @@ let
     # rust-xdg requires XDG_RUNTIME_DIR to be secure:
     # https://docs.rs/xdg/2.4.1/src/xdg/lib.rs.html#311
     ${pkgs.coreutils}/bin/mkdir -m 0700 -p "$HOME"
-    if test "$(${pkgs.coreutils}/bin/cat "$HOME"/ref)" != ${config-file}; then
+    ref=$(! test -e "$HOME"/ref || ${pkgs.coreutils}/bin/cat "$HOME"/ref)
+    if test "$ref" != ${config-file}; then
       echo ${config-file} > "$HOME"/ref
       ${pkgs.coreutils}/bin/cp ${config-file} "$HOME"/.alacritty.yml
     fi
