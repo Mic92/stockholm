@@ -133,6 +133,11 @@ with import ./lib;
     imap <f1> <esc><f1>
     imap <f2> <esc><f2>
 
+    nnoremap <S-f1> :tabm -1<cr>
+    nnoremap <S-f2> :tabm +1<cr>
+    imap <S-f1> <esc><S-f1>
+    imap <S-f2> <esc><S-f2>
+
     noremap <f3> :ShowSyntax<cr>
 
     " <C-{Up,Down,Right,Left>
