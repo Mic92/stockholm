@@ -83,7 +83,7 @@ let
   in pkgs.writeText "alacritty-tv-${name}.profile" /* sh */ ''
     # Use home so Alacritty can find the configuration without arguments.
     # HOME will be reset once in Alacritty.
-    HOME=$TMPDIR/Alacritty-${name}
+    HOME=$XDG_RUNTIME_DIR/Alacritty-${name}
     export HOME
 
     # Tell Alacritty via XDG_RUNTIME_DIR where to create sockets.
