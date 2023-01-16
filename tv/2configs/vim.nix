@@ -130,8 +130,8 @@ with import ./lib;
 
     nnoremap <f1> :tabp<cr>
     nnoremap <f2> :tabn<cr>
-    inoremap <f1> <esc>:tabp<cr>
-    inoremap <f2> <esc>:tabn<cr>
+    imap <f1> <esc><f1>
+    imap <f2> <esc><f2>
 
     noremap <f3> :ShowSyntax<cr>
 
