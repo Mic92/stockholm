@@ -71,7 +71,9 @@ with import ./lib;
     ];
   };
 
-  vimrc = pkgs.writeText "vimrc" ''
+  vimrc = pkgs.writeText "vimrc" /* vim */ ''
+    vim9script
+
     set nocompatible
 
     set autoindent
@@ -140,28 +142,28 @@ with import ./lib;
 
     noremap <f3> :ShowSyntax<cr>
 
-    " <C-{Up,Down,Right,Left>
+    # <C-{Up,Down,Right,Left}>
     noremap <esc>Oa <nop> | noremap! <esc>Oa <nop>
     noremap <esc>Ob <nop> | noremap! <esc>Ob <nop>
     noremap <esc>Oc <nop> | noremap! <esc>Oc <nop>
     noremap <esc>Od <nop> | noremap! <esc>Od <nop>
-    " <[C]S-{Up,Down,Right,Left>
+    # <[C]S-{Up,Down,Right,Left}>
     noremap <esc>[a <nop> | noremap! <esc>[a <nop>
     noremap <esc>[b <nop> | noremap! <esc>[b <nop>
     noremap <esc>[c <nop> | noremap! <esc>[c <nop>
     noremap <esc>[d <nop> | noremap! <esc>[d <nop>
     vnoremap u <nop>
 
-    " fzf
+    # fzf
     nnoremap <esc>q :Buffers<cr>
     nnoremap <esc>f :Files<cr>
     nnoremap <esc>w :Rg<cr>
 
-    " edit alternate buffer
-    " For some reason neither putting <ctrl>6 nor <ctrl>^ works here...
+    # edit alternate buffer
+    # For some reason neither putting <ctrl>6 nor <ctrl>^ works here...
     nnoremap <esc>a 
 
-    if $TOUCHSCREEN == 1
+    if $TOUCHSCREEN == "1"
       nnoremap <ScrollWheelUp> <C-y>
       nnoremap <ScrollWheelDown> <C-e>
       nnoremap <C-ScrollWheelUp> 3<C-y>
