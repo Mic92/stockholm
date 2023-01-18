@@ -2,9 +2,11 @@
 with import <stockholm/lib>;
 
 {
+  # ipv6 from vodafone is really really flaky
+  boot.kernel.sysctl."net.ipv6.conf.et0.disable_ipv6" = 1;
   systemd.network.networks."50-et0" = {
     matchConfig.Name = "et0";
-    DHCP = "yes";
+    DHCP = "ipv4";
     # dhcpV4Config.UseDNS = false;
     # dhcpV6Config.UseDNS = false;
     linkConfig = {
