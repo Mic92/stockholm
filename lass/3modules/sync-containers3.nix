@@ -225,8 +225,8 @@ in {
                 mountpoint /var/lib/sync-containers3/${ctr.name}/state || mount /dev/mapper/${ctr.name} /var/lib/sync-containers3/${ctr.name}/state
                 /run/current-system/sw/bin/nixos-container start ${ctr.name}
                 # wait for system to become reachable for the first time
-                retry -t 10 -d 10 -- /run/wrappers/bin/ping -q -c 1 ${ctr.name}.r > /dev/null
                 systemctl start ${ctr.name}_watcher.service
+                retry -t 10 -d 10 -- /run/wrappers/bin/ping -q -c 1 ${ctr.name}.r > /dev/null
                 while systemctl is-active container@${ctr.name}.service >/devnull && /run/wrappers/bin/ping -q -c 3 ${ctr.name}.r >/dev/null; do
                   consul kv put containers/${ctr.name} "$(jq -cn '{host: "${config.networking.hostName}", time: now}')" >/dev/null
                   sleep 10
