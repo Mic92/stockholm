@@ -282,14 +282,19 @@ in {
     })
     (lib.mkIf (cfg.containers != {}) {
       # networking
+
+      # needed because otherwise we lose local dns
+      environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/resolv.conf";
+
+      boot.kernel.sysctl."net.ipv4.ip_forward" = lib.mkDefault 1;
       systemd.network.networks.ctr0 = {
         name = "ctr0";
         address = [
           "10.233.0.1/24"
         ];
         networkConfig = {
-          IPForward = "yes";
-          IPMasquerade = "both";
+          # IPForward = "yes";
+          # IPMasquerade = "both";
           ConfigureWithoutCarrier = true;
           DHCPServer = "yes";
         };
@@ -305,6 +310,9 @@ in {
       krebs.iptables.tables.filter.FORWARD.rules = [
         { predicate = "-i ctr0"; target = "ACCEPT"; }
         { predicate = "-o ctr0"; target = "ACCEPT"; }
+      ];
+      krebs.iptables.tables.nat.POSTROUTING.rules = [
+        { v6 = false; predicate = "-s 10.233.0.0/24"; target = "MASQUERADE"; }
       ];
     })
     (lib.mkIf cfg.inContainer.enable {
