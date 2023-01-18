@@ -286,7 +286,7 @@ in {
       # needed because otherwise we lose local dns
       environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/resolv.conf";
 
-      boot.kernel.sysctl."net.ipv4.ip_forward" = lib.mkDefault 1;
+      boot.kernel.sysctl."net.ipv4.ip_forward" = lib.mkForce 1;
       systemd.network.networks.ctr0 = {
         name = "ctr0";
         address = [
