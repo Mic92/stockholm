@@ -5,6 +5,7 @@ module Main (main) where
 
 import System.Exit (exitFailure)
 import XMonad.Hooks.EwmhDesktops (ewmh)
+import XMonad.Hooks.RefocusLast (refocusLastLayoutHook, toggleFocus)
 
 import Control.Exception
 import Control.Monad.Extra (whenJustM)
@@ -87,6 +88,7 @@ mainNoArgs = do
             , keys              = myKeys myTermFont
             , workspaces        = workspaces0
             , layoutHook =
+                refocusLastLayoutHook $
                 smartBorders $
                   ResizableTall
                     1
@@ -160,6 +162,8 @@ myKeys font conf = Map.fromList $
 
     , ((_4  , xK_space  ), withFocused $ \w -> ifM (isFloatingX w) xdeny $ sendMessage NextLayout)
     , ((_4M , xK_space  ), withFocused $ \w -> ifM (isFloatingX w) xdeny $ resetLayout)
+
+    , ((_4  , xK_l      ), toggleFocus)
 
     , ((_4  , xK_m      ), windows W.focusMaster)
     , ((_4  , xK_j      ), windows W.focusDown)
