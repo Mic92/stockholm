@@ -4,6 +4,7 @@
 module Main (main) where
 
 import System.Exit (exitFailure)
+import XMonad.Hooks.EwmhDesktops (ewmh)
 
 import Control.Exception
 import Control.Monad.Extra (whenJustM)
@@ -71,7 +72,7 @@ mainNoArgs = do
     handleShutdownEvent <- newShutdownEventHandler
     let
       config =
-        id
+        ewmh
         $ withUrgencyHookC
             BorderUrgencyHook
               { urgencyBorderColor = "#ff0000"
