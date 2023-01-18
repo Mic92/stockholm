@@ -104,9 +104,8 @@ in {
               consul lock sync_${ctr.name} ${pkgs.writers.writeDash "${ctr.name}-sync" ''
                 set -efux
                 if /run/wrappers/bin/ping -c 1 ${ctr.name}.r; then
-                  touch "$HOME"/incomplete
-                  rsync -a -e "ssh -i $CREDENTIALS_DIRECTORY/ssh_key" --timeout=30 --inplace container_sync@${ctr.name}.r:disk "$HOME"/disk
-                  rm "$HOME"/incomplete
+                  nice --adjustment=30 rsync -a -e "ssh -i $CREDENTIALS_DIRECTORY/ssh_key" --timeout=30 container_sync@${ctr.name}.r:disk "$HOME"/disk
+                  rm -f "$HOME"/incomplete
                 fi
               ''}
             '';
@@ -218,10 +217,6 @@ in {
                   exit 0
                   ;;
               esac
-              if test -e /var/lib/sync-containers3/${ctr.name}/incomplete; then
-                echo 'data is inconistent, start aborted'
-                exit 1
-              fi
               consul kv put containers/${ctr.name} "$(jq -cn '{host: "${config.networking.hostName}", time: now}')" >/dev/null
               consul lock -verbose -monitor-retry=100 -timeout 30s -name container_${ctr.name} container_${ctr.name} ${pkgs.writers.writeBash "${ctr.name}-start" ''
                 set -efu
