@@ -8,9 +8,9 @@
 
   hardware.opengl.enable = true;
   hardware.opengl.extraPackages = [
-		pkgs.amdvlk
-  	pkgs.rocm-opencl-icd
-  	pkgs.rocm-opencl-runtime
+    pkgs.amdvlk
+    pkgs.rocm-opencl-icd
+    pkgs.rocm-opencl-runtime
   ];
 
   hardware.video.hidpi.enable = true;
