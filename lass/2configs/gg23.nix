@@ -25,14 +25,15 @@ with import <stockholm/lib>;
     #   Managed = true;
     # };
   };
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
   systemd.network.networks."50-int0" = {
     name = "int0";
     address = [
       "10.42.0.1/24"
     ];
     networkConfig = {
-      IPForward = "yes";
-      IPMasquerade = "both";
+      # IPForward = "yes";
+      # IPMasquerade = "both";
       ConfigureWithoutCarrier = true;
       DHCPServer = "yes";
       # IPv6SendRA = "yes";
@@ -50,6 +51,9 @@ with import <stockholm/lib>;
   ];
   krebs.iptables.tables.nat.PREROUTING.rules = mkBefore [
     { v6 = false; predicate = "-s 10.42.0.0/24"; target = "ACCEPT"; }
+  ];
+  krebs.iptables.tables.nat.POSTROUTING.rules = [
+    { v6 = false; predicate = "-s 10.42.0.0/24"; target = "MASQUERADE"; }
   ];
 
   networking.domain = "gg23";
