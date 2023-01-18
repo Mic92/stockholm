@@ -74,4 +74,12 @@ with import <stockholm/lib>;
       interface=int0
     '';
   };
+
+  environment.systemPackages = [
+    (pkgs.writers.writeDashBin "restart_router" ''
+      ${pkgs.mosquitto}/bin/mosquitto_pub -h localhost -t 'cmnd/router/POWER' -u gg23 -P gg23-mqtt -m OFF
+      sleep 2
+      ${pkgs.mosquitto}/bin/mosquitto_pub -h localhost -t 'cmnd/router/POWER' -u gg23 -P gg23-mqtt -m ON
+    '')
+  ];
 }
