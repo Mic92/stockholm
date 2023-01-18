@@ -58,6 +58,10 @@ with import <stockholm/lib>;
 
   networking.domain = "gg23";
 
+  networking.useHostResolvConf = false;
+  services.resolved.extraConfig = ''
+    DNSStubListener=no
+  '';
   services.dnsmasq = {
     enable = true;
     resolveLocalQueries = false;
