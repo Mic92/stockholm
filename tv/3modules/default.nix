@@ -14,5 +14,6 @@
     ./slock.nix
     ./x0vncserver.nix
     ./Xresources.nix
+    ./wwan.nix
   ];
 }
