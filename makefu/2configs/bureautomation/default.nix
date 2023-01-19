@@ -10,6 +10,7 @@ in {
     # ./puppy-proxy.nix
 
     ./zigbee2mqtt
+    ./rhasspy.nix
 
     # hass config
     ## complex configs
@@ -64,6 +65,7 @@ in {
     extraOptions = ["--net=host" ];
     volumes = [
       "${confdir}:/config"
+      "/data/music:/config/media"
       #"${confdir}/docker-run:/etc/services.d/home-assistant/run:"
     ];
   };

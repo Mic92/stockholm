@@ -74,6 +74,11 @@ in {
         retiolum.ip4.addr = "10.243.12.12";
       };
     };
+    snake = {
+      nets = {
+        retiolum.ip4.addr = "10.243.12.13";
+      };
+    };
 
     studio = rec {
       ci = false;
@@ -145,6 +150,7 @@ in {
     telex.nets.wiregrill = {
       aliases =  ["telex.w"];
       ip6.addr = (krebs.genipv6 "wiregrill" "makefu" { hostName = "telex"; }).address;
+      ip4.addr = "10.244.245.4";
     };
 
     latte = rec {
