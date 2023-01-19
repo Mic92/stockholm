@@ -1,8 +1,8 @@
 with import ./lib;
-{ config, pkgs, ... }: {
+{ config, modulesPath, pkgs, ... }: {
 
   imports = [
-    <nixpkgs/nixos/modules/services/hardware/sane_extra_backends/brscan4.nix>
+    (modulesPath + "/services/hardware/sane_extra_backends/brscan4.nix")
   ];
 
   krebs.nixpkgs.allowUnfreePredicate = pkg: any (eq (packageName pkg)) [

@@ -42,5 +42,8 @@ in {
     hi diffRemoved  ctermfg=009
 
     hi Search       cterm=NONE ctermbg=216
+
+    hi TabLine      cterm=underline guifg=#424242 guibg=#232323
+    hi TabLineFill  cterm=underline guifg=#424242 guibg=#232323
   '';
 }))

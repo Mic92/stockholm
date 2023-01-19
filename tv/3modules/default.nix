@@ -8,9 +8,12 @@
     ./hw.nix
     ./im.nix
     ./iptables.nix
+    ./lidControl.nix
     ./org.freedesktop.machine1.host-shell.nix
+    ./systemd.nix
     ./slock.nix
     ./x0vncserver.nix
     ./Xresources.nix
+    ./wwan.nix
   ];
 }

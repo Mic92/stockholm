@@ -2,17 +2,6 @@
 
 pkgs.tv.vim.makePlugin (pkgs.write "vim-tv" {
   #
-  # Haskell
-  #
-  "/ftplugin/haskell.vim".text = ''
-    if exists("g:vim_tv_ftplugin_haskell_loaded")
-      finish
-    endif
-    let g:vim_tv_ftplugin_haskell_loaded = 1
-
-    setlocal iskeyword+='
-  '';
-  #
   # TODO
   #
   "/ftdetect/todo.vim".text = ''

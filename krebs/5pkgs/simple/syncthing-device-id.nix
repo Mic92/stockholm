@@ -1,12 +1,13 @@
-{ openssl, writePython2Bin }:
+{ openssl, writePython3Bin }:
 
-writePython2Bin "syncthing-device-id" {
+writePython3Bin "syncthing-device-id" {
   flakeIgnore = [
     "E226"
     "E302"
     "E305"
     "E501"
     "F401"
+    "W504"
   ];
 } /* python */ ''
   import base64

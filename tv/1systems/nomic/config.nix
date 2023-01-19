@@ -41,8 +41,6 @@ with import ./lib;
       fsType = "btrfs";
     };
 
-  environment.homeBinInPath = true;
-
   environment.systemPackages = with pkgs; [
     (writeDashBin "play" ''
       set -euf

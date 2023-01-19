@@ -1,4 +1,6 @@
-{ pkgs }:
+{ pkgs
+, variant ? "x220"
+}:
 
 let
   lib = import ./lib;
@@ -6,7 +8,7 @@ let
     program = "${pkgs.font-size-alacritty}/bin/font-size-alacritty";
     args = [arg];
   };
-  config = {
+  configs.default = lib.recursiveUpdate variants.${variant} {
     bell.animation = "EaseOut";
     bell.duration = 50;
     bell.color = "#ff00ff";
@@ -30,10 +32,6 @@ let
     colors.bright.cyan        = "#72fbfb";
     colors.bright.white       = "#fbfbfb";
     draw_bold_text_with_bright_colors = true;
-    font.normal.family = "Clean";
-    font.bold.family = "Clean";
-    font.bold.style = "Regular";
-    font.size = 10;
     hints.enabled = [
       {
         regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\\u0000-\\u001F\\u007F-\\u009F<>\"\\s{-}\\^⟨⟩`]+";
@@ -42,15 +40,73 @@ let
         action = "Select";
       }
     ];
+    scrolling.multiplier = 8;
+  };
+  configs.root = lib.recursiveUpdate configs.default {
+    colors.primary.background = "#230000";
+    colors.primary.foreground = "#e0c0c0";
+    colors.normal.black       = "#800000";
+  };
+  configs.fzmenu = lib.recursiveUpdate configs.default {
+    colors.primary.background = "#2A172A";
+    window.dimensions.columns = 70;
+    window.dimensions.lines = 9;
+  };
+  variants.hidpi = {
+    font.normal.family = "iosevka-tv-1";
+    font.bold.family = "iosevka-tv-1";
+    font.italic.family = "iosevka-tv-1";
+    font.bold_italic.family = "iosevka-tv-1";
+    font.size = 5;
+    key_bindings = [
+      { key = "Up";   mods = "Control";       action = "IncreaseFontSize"; }
+      { key = "Down"; mods = "Control";       action = "DecreaseFontSize"; }
+      { key = "Down"; mods = "Shift|Control"; action = "ResetFontSize"; }
+    ];
+  };
+  variants.x220 = {
+    font.normal.family = "Clean";
+    font.bold.family = "Clean";
+    font.bold.style = "Regular";
+    font.size = 10;
     key_bindings = [
       { key = "Up";   mods = "Shift|Control"; command = font-size "=14"; }
       { key = "Up";   mods = "Control";       command = font-size "+1"; }
       { key = "Down"; mods = "Control";       command = font-size "-1"; }
       { key = "Down"; mods = "Shift|Control"; command = font-size "=0"; }
     ];
-    scrolling.multiplier = 8;
   };
-  config-file = pkgs.writeJSON "alacritty-tv.json" config;
+  writeProfile = name: config: let
+    config-file =
+      assert lib.types.filename.check name;
+      pkgs.writeJSON "alacritty-tv-${name}.json" config;
+  in pkgs.writeText "alacritty-tv-${name}.profile" /* sh */ ''
+    # Use home so Alacritty can find the configuration without arguments.
+    # HOME will be reset once in Alacritty.
+    HOME=$XDG_RUNTIME_DIR/Alacritty-${name}
+    export HOME
+
+    # Tell Alacritty via XDG_RUNTIME_DIR where to create sockets.
+    # XDG_RUNTIME_DIR needs to be reset manually.
+    export ALACRITTY_XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR"
+    export BASH_EXTRA_INIT=${pkgs.writeDash "alacritty-tv.cleanup.sh" ''
+      XDG_RUNTIME_DIR=$ALACRITTY_XDG_RUNTIME_DIR
+      unset ALACRITTY_XDG_RUNTIME_DIR
+      unset BASH_EXTRA_INIT
+    ''}
+    export XDG_RUNTIME_DIR="$HOME"
+
+    # Install stored configuration if it has changed.
+    # This allows for both declarative updates and runtime modifications.
+    # rust-xdg requires XDG_RUNTIME_DIR to be secure:
+    # https://docs.rs/xdg/2.4.1/src/xdg/lib.rs.html#311
+    ${pkgs.coreutils}/bin/mkdir -m 0700 -p "$HOME"
+    ref=$(! test -e "$HOME"/ref || ${pkgs.coreutils}/bin/cat "$HOME"/ref)
+    if test "$ref" != ${config-file}; then
+      echo ${config-file} > "$HOME"/ref
+      ${pkgs.coreutils}/bin/cp ${config-file} "$HOME"/.alacritty.yml
+    fi
+  '';
 in
 
 pkgs.symlinkJoin {
@@ -58,31 +114,35 @@ pkgs.symlinkJoin {
   paths = [
     (pkgs.writeDashBin "alacritty" ''
       # usage:
-      #   alacritty [--singleton] [ARGS...]
+      #   alacritty [--profile=PROFILE] [--singleton] [ARGS...]
+      # where
+      #   PROFILE one of ${lib.toJSON (lib.attrNames configs)}
 
       set -efu
 
-      # Use home so Alacritty can find the configuration without arguments.
-      # HOME will be reset once in Alacritty.
-      HOME=$TMPDIR/Alacritty
-      export HOME
+      case ''${1-} in
+      ${lib.concatMapStringsSep "\n" (name: /* sh */ ''
+        --${lib.shell.escape name}|--profile=${lib.shell.escape name})
+          shift
+          profile=${writeProfile name configs.${name}}
+          ;;
+      '') (lib.attrNames configs)}
+        *)
+          profile=${writeProfile "default" configs.default}
+          ;;
+      esac
 
-      # Install stored configuration if it has changed.
-      # This allows for both declarative updates and runtime modifications.
-      ${pkgs.coreutils}/bin/mkdir -p "$HOME"
-      if test "$(${pkgs.coreutils}/bin/cat "$HOME"/ref)" != ${config-file}; then
-        echo ${config-file} > "$HOME"/ref
-        ${pkgs.coreutils}/bin/cp ${config-file} "$HOME"/.alacritty.yml
-      fi
 
       case ''${1-} in
         --singleton)
           shift
           if ! ${pkgs.alacritty}/bin/alacritty msg create-window "$@"; then
+            . "$profile"
             ${pkgs.alacritty}/bin/alacritty "$@" &
           fi
           ;;
         *)
+          . "$profile"
           exec ${pkgs.alacritty}/bin/alacritty "$@"
           ;;
       esac

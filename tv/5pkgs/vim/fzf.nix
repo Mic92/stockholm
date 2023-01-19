@@ -2,10 +2,10 @@
 
 # cannot use pkgs.vimPlugins.fzf-vim as it's missing :Rg
 pkgs.vimUtils.buildVimPlugin {
-  name = "fzf-2018-11-14";
+  name = "fzf-2023-01-16";
   src = pkgs.fetchgit {
     url = https://github.com/junegunn/fzf.vim;
-    rev = "ad1833ecbc9153b6e34a4292dc089a58c4bcb8dc";
-    sha256 = "1z2q71q6l9hq9fqfqpj1svhyk4yk1bzw1ljhksx4bnpz8gkfbx2m";
+    rev = "bdf48c282ad2174c25c059b3cdb7956427b07a99";
+    hash = "sha256-eCCk+Q596Ljjdtjd0cYGqR77K3Me5gf+ts5icP22S3Y=";
   };
 }
