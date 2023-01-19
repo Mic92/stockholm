@@ -52,7 +52,7 @@ let
   };
 
   confuse = {
-    pattern = "^!confuse (.*)$";
+    pattern = "!confuse (.*)$";
     activate = "match";
     arguments = [1];
     command = {
@@ -90,7 +90,7 @@ let
   };
 
   confuse_hackint = {
-    pattern = "^!confuse (.*)$";
+    pattern = "!confuse (.*)$";
     activate = "match";
     arguments = [1];
     command = {
