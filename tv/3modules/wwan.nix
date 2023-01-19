@@ -33,6 +33,20 @@ with import ./lib;
           (pkgs.writeDashBin "uqmi" ''
             exec ${pkgs.uqmi}/bin/uqmi --device=${cfg.device} "$@"
           '')
+          (pkgs.writeTextDir "share/bash-completion/completions/uqmi" /* sh */''
+            _uqmi_complete() {
+              case ''${#COMP_WORDS[@]} in
+                2)
+                  COMPREPLY=($(compgen -W "$(
+                    ${pkgs.uqmi}/bin/uqmi --help 2>&1 |
+                    ${pkgs.coreutils}/bin/tr , \\n |
+                    ${pkgs.gnused}/bin/sed -nr 's/^ *(-[a-z-]+).*/\1/p'
+                  )" -- "''${COMP_WORDS[1]}"))
+                ;;
+              esac
+            }
+            complete -F _uqmi_complete uqmi
+          '')
           pkgs.uqmi
         ];
       };
