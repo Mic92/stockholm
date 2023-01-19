@@ -26,9 +26,19 @@ with import ./lib;
   config = let
     cfg = config.tv.wwan;
   in mkIf cfg.enable {
+    nixpkgs.overlays = singleton (self: super: {
+      uqmi-wrapper = pkgs.symlinkJoin {
+        name = "uqmi-wrapper";
+        paths = [
+          (pkgs.writeDashBin "uqmi" ''
+            exec ${pkgs.uqmi}/bin/uqmi --device=${cfg.device} "$@"
+          '')
+          pkgs.uqmi
+        ];
+      };
+    });
     systemd.services.wwan = {
       environment = {
-        DEVICE = cfg.device;
         SECRETS = "%d/secrets";
       };
       path = [
@@ -36,21 +46,12 @@ with import ./lib;
         pkgs.coreutils
         pkgs.iproute2
         pkgs.jq
-        (pkgs.symlinkJoin {
-          name = "uqmi-wrapper";
-          paths = [
-            (pkgs.writeDashBin "uqmi" ''
-              set -efu
-              exec ${pkgs.uqmi}/bin/uqmi --device="$DEVICE" "$@"
-            '')
-            pkgs.uqmi
-          ];
-        })
+        pkgs.uqmi-wrapper
         (pkgs.writeDashBin "get-interface" (
           if cfg.interface != null then /* sh */ ''
             echo ${cfg.interface}
           '' else /* sh */ ''
-            exec ${pkgs.libqmi}/bin/qmicli -d "$DEVICE" -p --get-wwan-iface
+            exec ${pkgs.libqmi}/bin/qmicli -d ${cfg.device} -p --get-wwan-iface
           ''
         ))
       ];
@@ -158,6 +159,9 @@ with import ./lib;
         '';
       };
     };
+    users.users.root.packages = [
+      pkgs.uqmi-wrapper
+    ];
     tv.systemd.services.wwan.operators = cfg.operators;
   };
 }
