@@ -128,9 +128,9 @@ with import <stockholm/lib>;
           default =
             pkgs.write "${tinc.config.netname}-tinc-hosts"
               (mapAttrs'
-                (_: host: (nameValuePair "/${host.name}" {
+                (_: host: nameValuePair "/${host.name}" {
                   text = host.nets.${tinc.config.netname}.tinc.config;
-                }))
+                })
                 tinc.config.hosts);
           defaultText = "‹netname›-tinc-hosts";
           description = ''
