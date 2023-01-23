@@ -26,10 +26,7 @@ with import <stockholm/lib>;
                 Port = ${toString tinc.config.host.nets.${netname}.tinc.port}
                 ${tinc.config.extraConfig}
               '';
-              "tinc-up" = pkgs.writeDash "${netname}-tinc-up" /* sh */ ''
-                ${tinc.config.tincUp}
-                ${tinc.config.tincUpExtra}
-              '';
+              "tinc-up" = pkgs.writeDash "${netname}-tinc-up" tinc.config.tincUp;
             });
         };
 
@@ -83,11 +80,6 @@ with import <stockholm/lib>;
             krebs.host.nets.‹netname›.ip4 and ip6 for the new ips and
             configures forwarding of the respecitive netmask as subnet.
           '';
-        };
-
-        tincUpExtra = mkOption {
-          type = types.str;
-          default = "";
         };
 
         tincPackage = mkOption {
