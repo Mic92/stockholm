@@ -12,11 +12,18 @@
       };
       config.environment.etc.hilum-disk.text = config.mainDisk;
     }
+    {
+      options.luksPassFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+      };
+    }
   ];
 
   disko.devices = import ./disk.nix {
     inherit lib;
     disk = config.mainDisk;
+    keyFile = config.luksPassFile;
   };
 
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "xhci_pci" "usb_storage" "sd_mod" "sdhci_pci" ];

@@ -1,4 +1,4 @@
-{ lib, disk, ... }:
+{ lib, disk, keyFile, ... }:
 {
   disk = {
     main = {
@@ -37,7 +37,7 @@
             content = {
               type = "luks";
               name = "hilum_luks";
-              # keyFile = "/tmp/secret.key";
+              keyFile = keyFile;
               content = {
                 type = "filesystem";
                 format = "xfs";
