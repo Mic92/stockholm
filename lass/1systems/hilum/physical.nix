@@ -6,9 +6,16 @@
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     {
       # nice hack to carry around state passed impurely at the beginning
-      options.mainDisk = lib.mkOption {
+      options.mainDisk = let
+        tryFile = path: default:
+          if lib.elem (builtins.baseNameOf path) (lib.attrNames (builtins.readDir (builtins.dirOf path))) then
+            builtins.readFile path
+          else
+            default
+          ;
+      in lib.mkOption {
         type = lib.types.str;
-        default = builtins.readFile "/etc/hilum-disk";
+        default = tryFile "/etc/hilum-disk" "/dev/sdz";
       };
       config.environment.etc.hilum-disk.text = config.mainDisk;
     }
