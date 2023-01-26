@@ -9,6 +9,7 @@
     <stockholm/lass/2configs/consul.nix>
     <stockholm/lass/2configs/yellow-host.nix>
     <stockholm/lass/2configs/radio/container-host.nix>
+    <stockholm/lass/2configs/ubik-host.nix>
 
     # other containers
     <stockholm/lass/2configs/riot.nix>
