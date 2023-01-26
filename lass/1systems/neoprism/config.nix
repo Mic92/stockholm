@@ -16,4 +16,9 @@
   ];
 
   krebs.build.host = config.krebs.hosts.neoprism;
+
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  services.nginx.enable = true;
+  security.acme.acceptTerms = true;
+  security.acme.defaults.email = "acme@lassul.us";
 }
