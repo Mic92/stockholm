@@ -32,6 +32,10 @@
 
   services.illum.enable = true;
 
+  services.logind.extraConfig = /* ini */ ''
+    HandlePowerKey=ignore
+  '';
+
   tv.lidControl.enable = true;
 
   tv.hw.screens.primary.width = 2560;
