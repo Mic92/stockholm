@@ -12,9 +12,9 @@ with import <stockholm/lib>;
     linkConfig = {
       RequiredForOnline = "routable";
     };
-    # networkConfig = {
-    #   LinkLocalAddressing = "no";
-    # };
+    networkConfig = {
+      LinkLocalAddressing = "no";
+    };
     # dhcpV6Config = {
     #   PrefixDelegationHint = "::/60";
     # };
