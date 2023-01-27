@@ -196,6 +196,8 @@ myKeys font conf = Map.fromList $
     , ((0, xF86XK_AudioMicMute), audioMicMute)
     , ((_4, xF86XK_AudioMute), pavucontrol [])
 
+    , ((_S, xK_F12), forkFile {-pkg-}"xdotool" ["click", "2"] Nothing)
+
     , ((_4, xK_Prior), forkFile {-pkg-}"xcalib" ["-invert", "-alter"] Nothing)
 
     , ((0, xK_Print), forkFile {-pkg-}"flameshot" [] Nothing)
