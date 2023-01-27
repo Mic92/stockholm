@@ -1,26 +1,20 @@
 self: super:
 
 let
-  prebuilt =
-    self.stdenv.mkDerivation rec {
-      pname = "iosevka-tv-1";
-      version = "15.6.3";
-      src = self.fetchurl {
-        urls = [
-          "https://c.krebsco.de/iosevka-tv-1-${version}.tar.gz"
-          "https://ni.krebsco.de/~tv/mirrors/iosevka/iosevka-tv-1-${version}.tar.gz"
-        ];
-        hash = "sha256-88OfNUbuNbGx3hFzYZ+gAYgOWZ+A8IYo45I1n/qOyhM=";
-      };
-      installPhase = ''
-        mkdir $out
-        mv * $out/
-      '';
-    };
+  srcpkg = super.iosevka-tv-1;
+  binpkg = self.fetchzip {
+    inherit (srcpkg) pname version;
+    stripRoot = false;
+    hash = "sha256-QIuTS70vUQSvDDXjY4uI6SCcu1XT4HjvzpthvrNX4h0=";
+    urls = [
+      "https://c.krebsco.de/${srcpkg.name}.tar.gz"
+      "https://ni.krebsco.de/~tv/mirrors/iosevka/${srcpkg.name}.tar.gz"
+    ];
+  };
 in
 
-if super.iosevka.version == prebuilt.version then
-  prebuilt
+if srcpkg.version == binpkg.version then
+  binpkg
 
 else
-  super.iosevka-tv-1
+  srcpkg
