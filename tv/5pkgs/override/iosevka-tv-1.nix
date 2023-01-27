@@ -10,11 +10,11 @@ let
           "https://c.krebsco.de/iosevka-tv-1-${version}.tar.gz"
           "https://ni.krebsco.de/~tv/mirrors/iosevka/iosevka-tv-1-${version}.tar.gz"
         ];
-        sha256 = "0shsvlb1cmn39l33nzd5bj8g0h9jg7rdq8hvlac8qvnzfhpi5s6k";
+        hash = "sha256-88OfNUbuNbGx3hFzYZ+gAYgOWZ+A8IYo45I1n/qOyhM=";
       };
       installPhase = ''
-        mkdir -p $out/share/fonts/truetype
-        mv -v *.ttf $out/share/fonts/truetype
+        mkdir $out
+        mv * $out/
       '';
     };
 in
@@ -23,4 +23,4 @@ if super.iosevka.version == prebuilt.version then
   prebuilt
 
 else
-  super.iosevka
+  super.iosevka-tv-1

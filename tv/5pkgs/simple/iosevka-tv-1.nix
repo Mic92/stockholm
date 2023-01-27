@@ -3,7 +3,7 @@
 pkgs.iosevka.override {
   # https://typeof.net/Iosevka/customizer
   privateBuildPlan = {
-    family = "iosevka-tv-1";
+    family = "iosevka tv 1";
     spacing = "term";
     serifs = "sans";
     export-glyph-names = true;
@@ -14,5 +14,5 @@ pkgs.iosevka.override {
     widths.normal.menu = 5;
     widths.normal.css = "normal";
   };
-  set = "iosevka-tv-1";
+  set = "tv-1";
 }
