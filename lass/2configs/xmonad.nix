@@ -106,11 +106,9 @@ floatHooks = composeAll
 
 myKeyMap :: [([Char], X ())]
 myKeyMap =
-    [ ("M4-C-p", forkFile "${pkgs.scrot}/bin/scrot" [ "~/public_html/scrot.png" ] Nothing )
-    , ("M4-p", forkFile "${pkgs.pass}/bin/passmenu" [ "--type" ] Nothing)
+    [ ("M4-p", forkFile "${pkgs.pass}/bin/passmenu" [ "--type" ] Nothing)
     , ("M4-S-p", forkFile "${pkgs.otpmenu}/bin/otpmenu" [] Nothing)
-    , ("M4-o", forkFile "${pkgs.brain}/bin/brainmenu --type" [] Nothing)
-    , ("M4-z", forkFile "${pkgs.emot-menu}/bin/emoticons" [] Nothing)
+    , ("M4-z", forkFile "${pkgs.unimenu}/bin/unimenu" [] Nothing)
 
     , ("M4-S-q", restart "xmonad" True)
 
