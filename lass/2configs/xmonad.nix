@@ -180,7 +180,7 @@ myKeyMap =
     , ("M4-u", spawn "${pkgs.xcalib}/bin/xcalib -invert -alter")
     , ("M4-y", spawn "/run/current-system/sw/bin/switch-theme toggle")
 
-    , ("M4-s", spawn "${pkgs.knav}/bin/knav")
+    ${lib.optionalString (builtins.hasAttr "warpd" pkgs) '', ("M4-s", spawn "${pkgs.warpd}/bin/warpd --hint")''}
     , ("M4-i", spawn "/run/current-system/sw/bin/screenshot")
     , ("S-<F12>", pasteSelection)
 
