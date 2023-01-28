@@ -1,5 +1,4 @@
-with import <stockholm/lib>;
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
 
@@ -14,7 +13,6 @@ let
       port 465
       tls on
       tls_starttls off
-      tls_fingerprint 9C:82:3B:0F:31:CE:1B:8E:96:00:CC:C9:FF:E7:BE:66:95:92:4F:22:DD:D6:2E:0E:1D:90:76:BE:8E:9E:8E:16
       auth on
       user lassulus
       passwordeval pass show c-base/pass
@@ -24,11 +22,12 @@ let
   notmuch-config = pkgs.writeText "notmuch-config" ''
     [database]
     path=/home/lass/Maildir
+    mail_root=/home/lass/Maildir
 
     [user]
     name=lassulus
     primary_email=lassulus@lassul.us
-    other_email=lass@mors.r;${concatStringsSep ";" (flatten (attrValues mailboxes))}
+    other_email=lass@mors.r;${lib.concatStringsSep ";" (lib.flatten (lib.attrValues mailboxes))}
 
     [new]
     tags=unread;inbox;
@@ -93,11 +92,37 @@ let
 
   tag-new-mails = pkgs.writeDashBin "nm-tag-init" ''
     ${pkgs.notmuch}/bin/notmuch new
-    ${concatMapStringsSep "\n" (i: ''${pkgs.notmuch}/bin/notmuch tag -inbox +${i.name} -- tag:inbox ${concatMapStringsSep " or " (f: "${f}") i.value}'') (mapAttrsToList nameValuePair mailboxes)}
+    ${lib.concatMapStringsSep "\n" (i: ''
+    '') (lib.mapAttrsToList lib.nameValuePair mailboxes)}
+    ${lib.concatMapStringsSep "\n" (i: ''
+      mkdir -p "$HOME/Maildir/.${i.name}/cur"
+      for mail in $(${pkgs.notmuch}/bin/notmuch search --output=files 'tag:inbox and (${lib.concatMapStringsSep " or " (f: "${f}") i.value})'); do
+        if test -e "$mail"; then
+          mv "$mail" "$HOME/Maildir/.${i.name}/cur/"
+        else
+          echo "$mail does not exist"
+        fi
+      done
+      ${pkgs.notmuch}/bin/notmuch tag -inbox +${i.name} -- tag:inbox ${lib.concatMapStringsSep " or " (f: "${f}") i.value}
+    '') (lib.mapAttrsToList lib.nameValuePair mailboxes)}
+    ${pkgs.notmuch}/bin/notmuch new
+    ${pkgs.notmuch}/bin/notmuch dump > "$HOME/Maildir/notmuch.backup"
   '';
 
   tag-old-mails = pkgs.writeDashBin "nm-tag-old" ''
-    ${concatMapStringsSep "\n" (i: ''${pkgs.notmuch}/bin/notmuch tag -inbox -archive +${i.name} -- ${concatMapStringsSep " or " (f: "${f}") i.value}'') (mapAttrsToList nameValuePair mailboxes)}
+    set -efux
+    ${lib.concatMapStringsSep "\n" (i: ''
+      ${pkgs.notmuch}/bin/notmuch tag -inbox -archive +${i.name} -- ${lib.concatMapStringsSep " or " (f: "${f}") i.value}
+      mkdir -p "$HOME/Maildir/.${i.name}/cur"
+      for mail in $(${pkgs.notmuch}/bin/notmuch search --output=files ${lib.concatMapStringsSep " or " (f: "${f}") i.value}); do
+        if test -e "$mail"; then
+          mv "$mail" "$HOME/Maildir/.${i.name}/cur/"
+        else
+          echo "$mail does not exist"
+        fi
+      done
+    '') (lib.mapAttrsToList lib.nameValuePair mailboxes)}
+    ${pkgs.notmuch}/bin/notmuch new --no-hooks
   '';
 
   muttrc = pkgs.writeText "muttrc" ''
@@ -110,17 +135,6 @@ let
     set crypt_verify_sig = yes
     set pgp_verify_command = "gpg --no-verbose --batch --output - --verify %s %f"
 
-    macro index \Cv \
-    "<enter-command> set my_crypt_verify_sig=\$crypt_verify_sig<enter> \
-    <enter-command> set crypt_verify_sig=yes<enter> \
-    <display-message><enter-command> set crypt_verify_sig=\$my_crypt_verify_sig<enter>" \
-     'Verify PGP signature and open the message'
-
-    macro pager \Cv \
-    "<exit><enter-command> set my_crypt_verify_sig=\$crypt_verify_sig<enter> \
-    <enter-command> set crypt_verify_sig=yes<enter> \
-    <display-message><enter-command> set crypt_verify_sig=\$my_crypt_verify_sig<enter>" \
-     'Verify PGP signature'
 
     # read html mails
     auto_view text/html
@@ -138,8 +152,8 @@ let
     set sendmail="${msmtp}/bin/msmtp"            # enables parsing of outgoing mail
     set from="lassulus@lassul.us"
     alternates ^.*@lassul\.us$ ^.*@.*\.r$
-    set use_from=yes
-    set envelope_from=yes
+    unset envelope_from_address
+    set use_envelope_from
     set reverse_name
 
     set sort=threads
@@ -148,7 +162,7 @@ let
 
     virtual-mailboxes "Unread" "notmuch://?query=tag:unread"
     virtual-mailboxes "INBOX" "notmuch://?query=tag:inbox"
-    ${concatMapStringsSep "\n" (i: ''${"  "}virtual-mailboxes "${i.name}" "notmuch://?query=tag:${i.name}"'') (mapAttrsToList nameValuePair mailboxes)}
+    ${lib.concatMapStringsSep "\n" (i: ''${"  "}virtual-mailboxes "${i.name}" "notmuch://?query=tag:${i.name}"'') (lib.mapAttrsToList lib.nameValuePair mailboxes)}
     virtual-mailboxes "TODO" "notmuch://?query=tag:TODO"
     virtual-mailboxes "Starred" "notmuch://?query=tag:*"
     virtual-mailboxes "Archive" "notmuch://?query=tag:archive"
@@ -212,6 +226,9 @@ let
     macro pager ,@2 "<enter-command> set pager_index_lines=3; macro pager ] ,@3 'Toggle indexbar<Enter>"
     macro pager ,@3 "<enter-command> set pager_index_lines=7; macro pager ] ,@1 'Toggle indexbar<Enter>"
     macro pager ] ,@1 'Toggle indexbar
+
+    # urlview
+    macro pager \cb <pipe-entry>'${pkgs.urlview}/bin/urlview'<enter> 'Follow links with urlview'
 
     # sidebar
     set sidebar_divider_char = '│'
