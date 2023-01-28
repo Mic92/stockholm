@@ -180,6 +180,15 @@ let
     macro index + "<modify-labels>+*\n<sync-mailbox>"         # tag as starred
     macro index - "<modify-labels>-*\n<sync-mailbox>"         # tag as unstarred
 
+    # muchsync
+    bind index \Cr noop
+    macro index \Cr \
+    "<enter-command>unset wait_key<enter> \
+    <shell-escape>${pkgs.writeDash "muchsync" ''
+      set -efu
+      ${pkgs.muchsync}/bin/muchsync -F lass@green.r
+    ''}<enter> \
+    'run muchsync to green.r'
 
     #killed
     bind index d noop
