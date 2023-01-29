@@ -79,31 +79,34 @@ let
     echo "VT: $(${pkgs.systemd}/bin/systemd-detect-virt)"
   '';
 
-  q-wireless = /* sh */ ''
+  q-net = /* sh */ ''
     for dev in $(
-      ${pkgs.iw}/bin/iw dev \
-        | ${pkgs.gnused}/bin/sed -n 's/^\s*Interface\s\+\([0-9a-z]\+\)$/\1/p'
+      ${pkgs.iproute}/bin/ip a |
+      ${pkgs.gnused}/bin/sed -rn 's/^[0-9]+: ([^:]+):.*/\1/p' |
+      ${pkgs.gnugrep}/bin/grep -Ev '^(lo|retiolum|wiregrill)$'
+      # TODO wiregrill ping ni.w, retiolum ping ni.r
     ); do
-      inet=$(${pkgs.iproute}/bin/ip addr show $dev \
-        | ${pkgs.gnused}/bin/sed -n '
-            s/.*inet \([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p
-          ') \
-        || unset inet
-      ssid=$(${pkgs.iw}/bin/iw dev $dev link \
-        | ${pkgs.gnused}/bin/sed -n '
-            s/.*\tSSID: \(.*\)/\1/p
-          ') \
-        || unset ssid
-      echo "$dev''${inet+ $inet}''${ssid+ $ssid}"
+      {
+        inet=$(${pkgs.iproute}/bin/ip addr show $dev \
+          | ${pkgs.gnused}/bin/sed -n '
+              s/.*inet \([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p
+            ')
+        ssid=$(${pkgs.iw}/bin/iw dev $dev link \
+          | ${pkgs.gnused}/bin/sed -n '
+              s/.*\tSSID: \(.*\)/\1/p
+            ')
+        latency=$(
+          /run/wrappers/bin/ping -W .25 -c 1 -I "$dev" ni.i 2>&1 |
+          ${pkgs.gnused}/bin/sed -rn '
+            s/.*time=([0-9.]+).*/online ni=[38;5;085m\1[m/p
+            s/.*Network is unreachable.*/offline/p
+            s/.*100% packet loss.*/offline/p
+          '
+        )
+        echo "$dev''${inet:+ $inet}''${ssid:+ $ssid} $latency"
+      } &
     done
-  '';
-
-  q-online = /* sh */ ''
-    if ${pkgs.curl}/bin/curl -s google.com >/dev/null; then
-      echo '[32;1monline[m'
-    else
-      echo offline
-    fi
+    wait
   '';
 
   q-thermal_zone = /* sh */ ''
@@ -152,8 +155,7 @@ pkgs.writeBashBin "q" ''
   (${q-intel_backlight}) &
   ${pkgs.q-power_supply}/bin/q-power_supply &
   (${q-virtualization}) &
-  (${q-wireless}) &
-  (${q-online}) &
+  (${q-net}) &
   (${q-thermal_zone}) &
   wait
   if test "$PWD" != "$HOME" && test -e "$HOME/TODO"; then
