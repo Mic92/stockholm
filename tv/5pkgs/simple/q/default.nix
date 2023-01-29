@@ -34,22 +34,20 @@ let
     '
   '';
 
-  q-isodate = /* sh */ ''
+  q-isodate = TZ: color: /* sh */ ''
+    TZ=${shell.escape TZ} \
     ${pkgs.coreutils}/bin/date \
-        '+[1m%Y-%m-%d[;30mT[;38;5;085m%H:%M[m:%S%:z'
+        '+[m%Y-%m-%d[38;5;243mT[;'${shell.escape color}'m%H:%M[38;5;243m:[m%S%:z'
   '';
+
+  q-deudate = q-isodate "Europe/Berlin" "38;5;085";
 
   # Singapore's red is #ED2E38
-  q-sgtdate = /* sh */ ''
-    TZ=Asia/Singapore \
-    ${pkgs.coreutils}/bin/date \
-        '+[1m%Y-%m-%d[;30mT[;38;5;088m%H:%M[m:%S%:z'
-  '';
+  q-sgtdate = q-isodate "Asia/Singapore" "38;2;237;46;56";
 
-  q-utcdate = /* sh */ ''
-    ${pkgs.coreutils}/bin/date -u \
-        '+[1m%Y-%m-%d[;30mT[;38;5;065m%H:%M[m:%S%:z'
-  '';
+  q-thadate = q-isodate "Asia/Bangkok" "38;5;226";
+
+  q-utcdate = q-isodate "UTC" "38;5;065";
 
   q-gitdir = /* sh */ ''
     if test -d .git; then
@@ -148,7 +146,7 @@ pkgs.writeBashBin "q" ''
   export PATH=/var/empty
   ${q-cal}
   ${q-utcdate}
-  ${q-isodate}
+  ${q-deudate}
   ${q-sgtdate}
   (${q-gitdir}) &
   (${q-intel_backlight}) &
