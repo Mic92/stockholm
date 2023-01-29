@@ -24,24 +24,41 @@ writeDashBin "q-power_supply" ''
         return sprintf("%dh%dm", h, m)
       }
 
-      function print_bar(n, r, t1, t2, t_col) {
-        t1 = int(r * n)
-        t2 = n - t1
-        if (r >= .42)     t_col = "1;32"
-        else if (r >= 23) t_col = "1;33"
-        else if (r >= 11) t_col = "1;31"
-        else              t_col = "5;1;31"
-        return sgr(t_col) strdup("■", t1) sgr(";30") strdup("■", t2) sgr()
+      function print_bar(r) {
+        return \
+          (r >= .1 ? bar_gradient[0] : bar_background) "■" \
+          (r >= .2 ? bar_gradient[1] : bar_background) "■" \
+          (r >= .3 ? bar_gradient[2] : bar_background) "■" \
+          (r >= .4 ? bar_gradient[3] : bar_background) "■" \
+          (r >= .5 ? bar_gradient[4] : bar_background) "■" \
+          (r >= .6 ? bar_gradient[5] : bar_background) "■" \
+          (r >= .7 ? bar_gradient[6] : bar_background) "■" \
+          (r >= .8 ? bar_gradient[7] : bar_background) "■" \
+          (r >= .9 ? bar_gradient[8] : bar_background) "■" \
+          (r >=  1 ? bar_gradient[9] : bar_background) "■" \
+          sgr()
+      }
+
+      function rgb(r, g, b) {
+        return sgr("38;2;" r ";" g ";" b)
       }
 
       function sgr(p) {
         return "\x1b[" p "m"
       }
 
-      function strdup(s,n,t) {
-        t = sprintf("%"n"s","")
-        gsub(/ /,s,t)
-        return t
+      BEGIN {
+        bar_gradient[0] = rgb(216, 100,  83)
+        bar_gradient[1] = rgb(210, 113,  72)
+        bar_gradient[2] = rgb(201, 125,  65)
+        bar_gradient[3] = rgb(190, 137,  63)
+        bar_gradient[4] = rgb(178, 148,  67)
+        bar_gradient[5] = rgb(166, 158,  75)
+        bar_gradient[6] = rgb(153, 167,  88)
+        bar_gradient[7] = rgb(140, 174, 104)
+        bar_gradient[8] = rgb(127, 181, 122)
+        bar_gradient[9] = rgb(116, 187, 141)
+        bar_background  = rgb( 64,  64,  64)
       }
 
       END {
@@ -101,7 +118,7 @@ writeDashBin "q-power_supply" ''
         charge_ratio = charge_now / charge_full
 
         out = out name
-        out = out sprintf(" %s", print_bar(10, charge_ratio))
+        out = out sprintf(" %s", print_bar(charge_ratio))
         out = out sprintf(" %d%", charge_ratio * 100)
         out = out sprintf(" %.2f%s", charge_now, charge_unit)
         if (current_now != 0) {
