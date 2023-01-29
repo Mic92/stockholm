@@ -166,6 +166,7 @@ with import ./lib;
 
           interface=$(get-interface)
 
+          ip addr flush "$interface"
           ip link set dev "$interface" down
           uqmi --stop-network 0xFFFFFFFF --autoconnect
           uqmi --sync
