@@ -10,53 +10,28 @@ let
     hspace = 2;
 
     # Return number of columns required to print n calenders side by side.
-    need_width = n:
-      assert n >= 1;
-      n * calwidth + (n - 1) * hspace;
+    need_width = n: assert n >= 1; n * calwidth + (n - 1) * hspace;
 
-    pad = /* sh */ ''{
-      ${pkgs.gnused}/bin/sed '
-            # rtrim
-            s/ *$//
-
-            # delete last empty line
-            ''${/^$/d}
-          ' \
-        | ${pkgs.gawk}/bin/awk '{printf "%-${toString calwidth}s\n", $0}' \
-        | ${pkgs.gnused}/bin/sed '
-              # colorize header
-              1,2s/.*/[38;5;238;1m&[39;22m/
-
-              # colorize week number
-              s/^[ 1-9][0-9]/[38;5;238;1m&[39;22m/
-            '
-    }'';
   in /* sh */ ''
     cols=$(${pkgs.ncurses}/bin/tput cols)
-    ${pkgs.coreutils}/bin/paste \
-        <(if test $cols -ge ${toString (need_width 3)}; then
-          ${pkgs.utillinux}/bin/cal -mw \
-              $(${pkgs.coreutils}/bin/date +'%m %Y' -d 'last month') \
-            | ${pad}
-        fi) \
-        <(if test $cols -ge ${toString (need_width 1)}; then
-          ${pkgs.utillinux}/bin/cal -mw \
-            | ${pkgs.gnused}/bin/sed '
-                # colorize day of month
-                s/\(^\| \)'"$(${pkgs.coreutils}/bin/date +%e)"'\>/[31;1m&[39;22m/
-              ' \
-            | ${pad}
-        fi) \
-        <(if test $cols -ge ${toString (need_width 2)}; then
-          ${pkgs.utillinux}/bin/cal -mw \
-              $(${pkgs.coreutils}/bin/date +'%m %Y' -d 'next month') \
-            | ${pad}
-        fi) \
-      | ${pkgs.gnused}/bin/sed '
-          s/^\t//
-          s/\t$//
-          s/\t/${lpad hspace " " ""}/g
-        '
+    if test $cols -ge ${toString (need_width 3)}; then
+      ${pkgs.utillinux}/bin/cal --color=always -mw3
+    elif test $cols -ge ${toString (need_width 2)}; then
+      ${pkgs.utillinux}/bin/cal --color=always -mw -n 2
+    elif test $cols -ge ${toString (need_width 1)}; then
+      ${pkgs.utillinux}/bin/cal --color=always -mw1
+    else
+      :
+    fi |
+    ${pkgs.gnused}/bin/sed -r '
+      # dim week numbers
+      s/((^ *|  )[ 1-5][0-9](   *)?)(([ 1-3][0-9])*)/[38;5;243m\1[m\4/g
+      # dim month and day names
+      s/^ *[A-Z].*/[38;5;243m&[m/
+      # highlight current date
+      s/\[7m/[38;5;009;1m/
+      s/\[27m/[m/
+    '
   '';
 
   q-isodate = /* sh */ ''
