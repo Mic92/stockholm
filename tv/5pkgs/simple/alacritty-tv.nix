@@ -104,7 +104,7 @@ let
     ref=$(! test -e "$HOME"/ref || ${pkgs.coreutils}/bin/cat "$HOME"/ref)
     if test "$ref" != ${config-file}; then
       echo ${config-file} > "$HOME"/ref
-      ${pkgs.coreutils}/bin/cp ${config-file} "$HOME"/.alacritty.yml
+      ${pkgs.coreutils}/bin/install -m 644 ${config-file} "$HOME"/.alacritty.yml
     fi
   '';
 in
