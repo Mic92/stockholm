@@ -53,10 +53,10 @@ let
     window.dimensions.lines = 9;
   };
   variants.hidpi = {
-    font.normal.family = "iosevka tv 1";
-    font.bold.family = "iosevka tv 1";
-    font.italic.family = "iosevka tv 1";
-    font.bold_italic.family = "iosevka tv 1";
+    font.normal.family      = "iosevka tv 2 Light";
+    font.italic.family      = "iosevka tv 2 Light";
+    font.bold.family        = "iosevka tv 2 Medium";
+    font.bold_italic.family = "iosevka tv 2 Medium";
     font.size = 5;
     key_bindings = [
       { key = "Up";   mods = "Control";       action = "IncreaseFontSize"; }
