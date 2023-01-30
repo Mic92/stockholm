@@ -6,7 +6,7 @@ pkgs.writeDashBin "font-size-alacritty" ''
 
   set -efu
 
-  min_size=8
+  min_size=5
 
   op=''${1%%[0-9]*}
   op=''${op:-=}

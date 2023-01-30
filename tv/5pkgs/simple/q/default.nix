@@ -10,71 +10,44 @@ let
     hspace = 2;
 
     # Return number of columns required to print n calenders side by side.
-    need_width = n:
-      assert n >= 1;
-      n * calwidth + (n - 1) * hspace;
+    need_width = n: assert n >= 1; n * calwidth + (n - 1) * hspace;
 
-    pad = /* sh */ ''{
-      ${pkgs.gnused}/bin/sed '
-            # rtrim
-            s/ *$//
-
-            # delete last empty line
-            ''${/^$/d}
-          ' \
-        | ${pkgs.gawk}/bin/awk '{printf "%-${toString calwidth}s\n", $0}' \
-        | ${pkgs.gnused}/bin/sed '
-              # colorize header
-              1,2s/.*/[38;5;238;1m&[39;22m/
-
-              # colorize week number
-              s/^[ 1-9][0-9]/[38;5;238;1m&[39;22m/
-            '
-    }'';
   in /* sh */ ''
     cols=$(${pkgs.ncurses}/bin/tput cols)
-    ${pkgs.coreutils}/bin/paste \
-        <(if test $cols -ge ${toString (need_width 3)}; then
-          ${pkgs.utillinux}/bin/cal -mw \
-              $(${pkgs.coreutils}/bin/date +'%m %Y' -d 'last month') \
-            | ${pad}
-        fi) \
-        <(if test $cols -ge ${toString (need_width 1)}; then
-          ${pkgs.utillinux}/bin/cal -mw \
-            | ${pkgs.gnused}/bin/sed '
-                # colorize day of month
-                s/\(^\| \)'"$(${pkgs.coreutils}/bin/date +%e)"'\>/[31;1m&[39;22m/
-              ' \
-            | ${pad}
-        fi) \
-        <(if test $cols -ge ${toString (need_width 2)}; then
-          ${pkgs.utillinux}/bin/cal -mw \
-              $(${pkgs.coreutils}/bin/date +'%m %Y' -d 'next month') \
-            | ${pad}
-        fi) \
-      | ${pkgs.gnused}/bin/sed '
-          s/^\t//
-          s/\t$//
-          s/\t/${lpad hspace " " ""}/g
-        '
+    if test $cols -ge ${toString (need_width 3)}; then
+      ${pkgs.utillinux}/bin/cal --color=always -mw3
+    elif test $cols -ge ${toString (need_width 2)}; then
+      ${pkgs.utillinux}/bin/cal --color=always -mw -n 2
+    elif test $cols -ge ${toString (need_width 1)}; then
+      ${pkgs.utillinux}/bin/cal --color=always -mw1
+    else
+      :
+    fi |
+    ${pkgs.gnused}/bin/sed -r '
+      # dim week numbers
+      s/((^ *|  )[ 1-5][0-9](   *)?)(([ 1-3][0-9])*)/[38;5;243m\1[m\4/g
+      # dim month and day names
+      s/^ *[A-Z].*/[38;5;243m&[m/
+      # highlight current date
+      s/\[7m/[38;5;009;1m/
+      s/\[27m/[m/
+    '
   '';
 
-  q-isodate = /* sh */ ''
+  q-isodate = TZ: color: /* sh */ ''
+    TZ=${shell.escape TZ} \
     ${pkgs.coreutils}/bin/date \
-        '+[1m%Y-%m-%d[;30mT[;38;5;085m%H:%M[m:%S%:z'
+        '+[m%Y-%m-%d[38;5;243mT[;'${shell.escape color}'m%H:%M[38;5;243m:[m%S%:z'
   '';
+
+  q-deudate = q-isodate "Europe/Berlin" "38;5;085";
 
   # Singapore's red is #ED2E38
-  q-sgtdate = /* sh */ ''
-    TZ=Asia/Singapore \
-    ${pkgs.coreutils}/bin/date \
-        '+[1m%Y-%m-%d[;30mT[;38;5;088m%H:%M[m:%S%:z'
-  '';
+  q-sgtdate = q-isodate "Asia/Singapore" "38;2;237;46;56";
 
-  q-utcdate = /* sh */ ''
-    ${pkgs.coreutils}/bin/date -u \
-        '+[1m%Y-%m-%d[;30mT[;38;5;065m%H:%M[m:%S%:z'
-  '';
+  q-thadate = q-isodate "Asia/Bangkok" "38;5;226";
+
+  q-utcdate = q-isodate "UTC" "38;5;065";
 
   q-gitdir = /* sh */ ''
     if test -d .git; then
@@ -106,31 +79,34 @@ let
     echo "VT: $(${pkgs.systemd}/bin/systemd-detect-virt)"
   '';
 
-  q-wireless = /* sh */ ''
+  q-net = /* sh */ ''
     for dev in $(
-      ${pkgs.iw}/bin/iw dev \
-        | ${pkgs.gnused}/bin/sed -n 's/^\s*Interface\s\+\([0-9a-z]\+\)$/\1/p'
+      ${pkgs.iproute}/bin/ip a |
+      ${pkgs.gnused}/bin/sed -rn 's/^[0-9]+: ([^:]+):.*/\1/p' |
+      ${pkgs.gnugrep}/bin/grep -Ev '^(lo|retiolum|wiregrill)$'
+      # TODO wiregrill ping ni.w, retiolum ping ni.r
     ); do
-      inet=$(${pkgs.iproute}/bin/ip addr show $dev \
-        | ${pkgs.gnused}/bin/sed -n '
-            s/.*inet \([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p
-          ') \
-        || unset inet
-      ssid=$(${pkgs.iw}/bin/iw dev $dev link \
-        | ${pkgs.gnused}/bin/sed -n '
-            s/.*\tSSID: \(.*\)/\1/p
-          ') \
-        || unset ssid
-      echo "$dev''${inet+ $inet}''${ssid+ $ssid}"
+      {
+        inet=$(${pkgs.iproute}/bin/ip addr show $dev \
+          | ${pkgs.gnused}/bin/sed -n '
+              s/.*inet \([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p
+            ')
+        ssid=$(${pkgs.iw}/bin/iw dev $dev link \
+          | ${pkgs.gnused}/bin/sed -n '
+              s/.*\tSSID: \(.*\)/\1/p
+            ')
+        latency=$(
+          /run/wrappers/bin/ping -W .25 -c 1 -I "$dev" ni.i 2>&1 |
+          ${pkgs.gnused}/bin/sed -rn '
+            s/.*time=([0-9.]+).*/online ni=[38;5;085m\1[m/p
+            s/.*Network is unreachable.*/offline/p
+            s/.*100% packet loss.*/offline/p
+          '
+        )
+        echo "$dev''${inet:+ $inet}''${ssid:+ $ssid} $latency"
+      } &
     done
-  '';
-
-  q-online = /* sh */ ''
-    if ${pkgs.curl}/bin/curl -s google.com >/dev/null; then
-      echo '[32;1monline[m'
-    else
-      echo offline
-    fi
+    wait
   '';
 
   q-thermal_zone = /* sh */ ''
@@ -173,14 +149,13 @@ pkgs.writeBashBin "q" ''
   export PATH=/var/empty
   ${q-cal}
   ${q-utcdate}
-  ${q-isodate}
+  ${q-deudate}
   ${q-sgtdate}
   (${q-gitdir}) &
   (${q-intel_backlight}) &
   ${pkgs.q-power_supply}/bin/q-power_supply &
   (${q-virtualization}) &
-  (${q-wireless}) &
-  (${q-online}) &
+  (${q-net}) &
   (${q-thermal_zone}) &
   wait
   if test "$PWD" != "$HOME" && test -e "$HOME/TODO"; then

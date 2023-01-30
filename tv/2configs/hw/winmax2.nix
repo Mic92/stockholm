@@ -1,7 +1,21 @@
 { pkgs, ... }: {
+
+  imports = [
+    ../smartd.nix
+  ];
+
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "thunderbolt" "usbhid" ];
   boot.initrd.kernelModules = [ "amdgpu" ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelModules = [
+    "amd-pstate"
+    "kvm-amd"
+  ];
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelParams = [
+    "amd_pstate=passive"
+  ];
+
+  hardware.bluetooth.enable = true;
 
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
@@ -24,6 +38,10 @@
   nixpkgs.hostPlatform = "x86_64-linux";
 
   services.illum.enable = true;
+
+  services.logind.extraConfig = /* ini */ ''
+    HandlePowerKey=ignore
+  '';
 
   tv.lidControl.enable = true;
 

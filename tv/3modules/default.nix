@@ -1,19 +1,8 @@
+with import ./lib;
 {
-  imports = [
-    ./charybdis
-    ./dnsmasq.nix
-    ./ejabberd
-    ./focus.nix
-    ./hosts.nix
-    ./hw.nix
-    ./im.nix
-    ./iptables.nix
-    ./lidControl.nix
-    ./org.freedesktop.machine1.host-shell.nix
-    ./systemd.nix
-    ./slock.nix
-    ./x0vncserver.nix
-    ./Xresources.nix
-    ./wwan.nix
-  ];
+  imports =
+    map
+      (name: ./. + "/${name}")
+      (attrNames
+        (filterAttrs isNixDirEntry (readDir ./.)));
 }
