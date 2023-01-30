@@ -53,6 +53,7 @@ let
       ./sitemap.nix
       ./ssl.nix
       ./sync-containers.nix
+      ./sync-containers3.nix
       ./systemd.nix
       ./tinc.nix
       ./tinc_graphs.nix

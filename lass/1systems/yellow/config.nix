@@ -9,7 +9,7 @@ in {
 
   krebs.build.host = config.krebs.hosts.yellow;
 
-  lass.sync-containers3.inContainer = {
+  krebs.sync-containers3.inContainer = {
     enable = true;
     pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN737BAP36KiZO97mPKTIUGJUcr97ps8zjfFag6cUiYL";
   };

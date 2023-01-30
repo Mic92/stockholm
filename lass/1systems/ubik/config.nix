@@ -9,7 +9,7 @@ with import <stockholm/lib>;
 
   krebs.build.host = config.krebs.hosts.ubik;
 
-  lass.sync-containers3.inContainer = {
+  krebs.sync-containers3.inContainer = {
     enable = true;
     pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPBFGMjH0+Dco6DVFZbByENMci8CFTLXCL7j53yctPnM";
   };

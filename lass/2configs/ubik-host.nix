@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 {
-  lass.sync-containers3.containers.ubik = {
+  krebs.sync-containers3.containers.ubik = {
     sshKey = "${toString <secrets>}/ubik.sync.key";
   };
   containers.ubik.bindMounts."/var/lib" = {

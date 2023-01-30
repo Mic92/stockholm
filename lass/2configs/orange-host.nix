@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 {
-  lass.sync-containers3.containers.orange = {
+  krebs.sync-containers3.containers.orange = {
     sshKey = "${toString <secrets>}/orange.sync.key";
   };
   services.nginx.virtualHosts."lassul.us" = {

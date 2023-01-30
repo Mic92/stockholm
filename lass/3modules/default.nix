@@ -15,6 +15,5 @@ _:
     ./xjail.nix
     ./autowifi.nix
     ./browsers.nix
-    ./sync-containers3.nix
   ];
 }
