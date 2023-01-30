@@ -8,7 +8,7 @@ writeDashBin "q-power_supply" ''
       s/^\([A-Z_]\+=[0-9A-Za-z_-]*\)$/export \1/p
     ' $uevent)"
     case $POWER_SUPPLY_NAME in
-      AC)
+      AC|Mains)
         exit # not battery
         ;;
     esac
