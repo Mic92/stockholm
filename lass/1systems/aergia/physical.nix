@@ -69,4 +69,9 @@
       };
     });
   };
+
+  # keyboard quirks
+  services.xserver.displayManager.sessionCommands = ''
+    xmodmap -e 'keycode 96 = F12 Insert F12 F12' # rebind shift + F12 to shift + insert
+  '';
 }
