@@ -1,12 +1,18 @@
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE PatternSynonyms #-}
 
 module Main (main) where
 
 import System.Exit (exitFailure)
+import XMonad.Hooks.EwmhDesktops (ewmh)
+import XMonad.Hooks.RefocusLast (refocusLastLayoutHook, toggleFocus)
 
 import Control.Exception
 import Control.Monad.Extra (whenJustM)
+import qualified Data.Aeson
+import qualified Data.ByteString.Char8
 import qualified Data.List
+import qualified Data.Maybe
 import Graphics.X11.ExtraTypes.XF86
 import Text.Read (readEither)
 import XMonad
@@ -20,19 +26,24 @@ import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Layout.NoBorders ( smartBorders )
 import XMonad.Layout.ResizableTile (ResizableTall(ResizableTall))
 import XMonad.Layout.ResizableTile (MirrorResize(MirrorExpand,MirrorShrink))
+import XMonad.Layout.StateFull (pattern StateFull)
 import qualified XMonad.Prompt
 import qualified XMonad.StackSet as W
 import Data.Map (Map)
 import qualified Data.Map as Map
-import XMonad.Hooks.UrgencyHook (SpawnUrgencyHook(..), withUrgencyHook)
+import XMonad.Hooks.UrgencyHook
+  ( BorderUrgencyHook(BorderUrgencyHook,urgencyBorderColor)
+  , RemindWhen(Dont)
+  , SuppressWhen(Never)
+  , UrgencyConfig(UrgencyConfig,remindWhen,suppressWhen)
+  , withUrgencyHookC
+  )
 import XMonad.Hooks.ManageHelpers (doCenterFloat,doRectFloat)
 import Data.Ratio
 import XMonad.Hooks.Place (placeHook, smart)
 import XMonad.Actions.PerWorkspaceKeys (chooseAction)
 
 import Shutdown (shutdown, newShutdownEventHandler)
-
-import Build (myFont, myScreenWidth, myTermFontWidth, myTermPadding)
 
 
 main :: IO ()
@@ -45,21 +56,39 @@ main = getArgs >>= \case
 (=??) :: Query a -> (a -> Bool) -> Query Bool
 (=??) x p = fmap p x
 
+readEnv :: Data.Aeson.FromJSON b => String -> IO b
+readEnv name =
+    Data.Maybe.fromJust
+      . Data.Aeson.decodeStrict'
+      . Data.ByteString.Char8.pack
+      <$> getEnv name
 
 mainNoArgs :: IO ()
 mainNoArgs = do
+    myScreenWidth <- readEnv "XMONAD_SCREEN_WIDTH" :: IO Dimension
+    myTermFont <- getEnv "XMONAD_TERM_FONT"
+    myTermFontWidth <- readEnv "XMONAD_TERM_FONT_WIDTH" :: IO Dimension
+    myTermPadding <- readEnv "XMONAD_TERM_PADDING" :: IO Dimension
     workspaces0 <- getWorkspaces0
     handleShutdownEvent <- newShutdownEventHandler
     let
       config =
-        id
-        $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ")
+        ewmh
+        $ withUrgencyHookC
+            BorderUrgencyHook
+              { urgencyBorderColor = "#ff0000"
+              }
+            UrgencyConfig
+              { remindWhen = Dont
+              , suppressWhen = Never
+              }
         $ def
-            { terminal          = {-pkg:rxvt_unicode-}"urxvtc"
+            { terminal          = {-pkg:alacritty-tv-}"alacritty"
             , modMask           = mod4Mask
-            , keys              = myKeys
+            , keys              = myKeys myTermFont
             , workspaces        = workspaces0
             , layoutHook =
+                refocusLastLayoutHook $
                 smartBorders $
                   ResizableTall
                     1
@@ -67,7 +96,7 @@ mainNoArgs = do
                     (fromIntegral (80 * myTermFontWidth + 2 * (myTermPadding + borderWidth def)) / fromIntegral myScreenWidth)
                     []
                   |||
-                  Full
+                  StateFull
             , manageHook =
                 composeAll
                   [ appName =? "fzmenu-urxvt" --> doCenterFloat
@@ -113,26 +142,28 @@ forkFile path args env =
 spawnRootTerm :: X ()
 spawnRootTerm =
     forkFile
-        {-pkg:rxvt_unicode-}"urxvtc"
-        ["-name", "root-urxvt", "-e", "/run/wrappers/bin/su", "-"]
+        {-pkg:alacritty-tv-}"alacritty"
+        ["--profile=root", "-e", "/run/wrappers/bin/su", "-"]
         Nothing
 
 
-myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
-myKeys conf = Map.fromList $
+myKeys :: String -> XConfig Layout -> Map (KeyMask, KeySym) (X ())
+myKeys font conf = Map.fromList $
     [ ((_4  , xK_Escape ), forkFile {-pkg-}"slock" [] Nothing)
     , ((_4S , xK_c      ), kill)
 
     , ((_4  , xK_o      ), forkFile {-pkg:fzmenu-}"otpmenu" [] Nothing)
     , ((_4  , xK_p      ), forkFile {-pkg:fzmenu-}"passmenu" [] Nothing)
 
-    , ((_4  , xK_x      ), forkFile {-pkg:rxvt_unicode-}"urxvtc" [] Nothing)
+    , ((_4  , xK_x      ), forkFile {-pkg:alacritty-tv-}"alacritty" ["--singleton"] Nothing)
     , ((_4C , xK_x      ), spawnRootTerm)
 
     , ((_C  , xK_Menu   ), toggleWS)
 
     , ((_4  , xK_space  ), withFocused $ \w -> ifM (isFloatingX w) xdeny $ sendMessage NextLayout)
     , ((_4M , xK_space  ), withFocused $ \w -> ifM (isFloatingX w) xdeny $ resetLayout)
+
+    , ((_4  , xK_l      ), toggleFocus)
 
     , ((_4  , xK_m      ), windows W.focusMaster)
     , ((_4  , xK_j      ), windows W.focusDown)
@@ -162,6 +193,7 @@ myKeys conf = Map.fromList $
     , ((0, xF86XK_AudioLowerVolume), audioLowerVolume)
     , ((0, xF86XK_AudioRaiseVolume), audioRaiseVolume)
     , ((0, xF86XK_AudioMute), audioMute)
+    , ((0, xF86XK_AudioMicMute), audioMicMute)
     , ((_4, xF86XK_AudioMute), pavucontrol [])
 
     , ((_4, xK_Prior), forkFile {-pkg-}"xcalib" ["-invert", "-alter"] Nothing)
@@ -188,21 +220,20 @@ myKeys conf = Map.fromList $
     audioLowerVolume = amixer ["-q", "sset", "Master", "5%-"]
     audioRaiseVolume = amixer ["-q", "sset", "Master", "5%+"]
     audioMute = amixer ["-q", "sset", "Master", "toggle"]
+    audioMicMute = amixer ["-q", "sset", "Capture", "toggle"]
 
     resetLayout = setLayout $ XMonad.layoutHook conf
 
     promptXPConfig =
-        def { XMonad.Prompt.font = myFont }
+        def { XMonad.Prompt.font = font }
 
-
-xdeny :: X ()
-xdeny =
-    forkFile
-        {-pkg-}"xterm"
-        [ "-fn", myFont
-        , "-geometry", "300x100"
-        , "-name", "AlertFloat"
-        , "-bg", "#E4002B"
-        , "-e", "sleep", "0.05"
-        ]
-        Nothing
+    xdeny =
+        forkFile
+            {-pkg-}"xterm"
+            [ "-fn", font
+            , "-geometry", "300x100"
+            , "-name", "AlertFloat"
+            , "-bg", "#E4002B"
+            , "-e", "sleep", "0.05"
+            ]
+            Nothing

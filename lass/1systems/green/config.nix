@@ -27,7 +27,7 @@ with import <stockholm/lib>;
 
   krebs.build.host = config.krebs.hosts.green;
 
-  lass.sync-containers3.inContainer = {
+  krebs.sync-containers3.inContainer = {
     enable = true;
     pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFlUMf943qEQG64ob81p6dgoHq4jUjq7tSvmSdEOEU2y";
   };

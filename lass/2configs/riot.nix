@@ -31,26 +31,30 @@
     privateNetwork = true;
     hostAddress = "10.233.1.1";
     localAddress = "10.233.1.2";
-    forwardPorts = [
-      { hostPort = 45622; containerPort = 22; }
-    ];
   };
 
   systemd.network.networks."50-ve-riot" = {
     matchConfig.Name = "ve-riot";
 
     networkConfig = {
-      IPForward = "yes";
       # weirdly we have to use POSTROUTING MASQUERADE here
+      # and set ip_forward manually
+      # IPForward = "yes";
       # IPMasquerade = "both";
       LinkLocalAddressing = "no";
       KeepConfiguration = "static";
     };
   };
 
-  # networking.nat can be used instead of this
+  boot.kernel.sysctl."net.ipv4.ip_forward" = lib.mkDefault 1;
+
   krebs.iptables.tables.nat.POSTROUTING.rules = [
     { v6 = false; predicate = "-s ${config.containers.riot.localAddress}"; target = "MASQUERADE"; }
+  ];
+
+  # networking.nat can be used instead of this
+  krebs.iptables.tables.nat.PREROUTING.rules = [
+    { predicate = "-p tcp --dport 45622"; target = "DNAT --to-destination ${config.containers.riot.localAddress}:22"; v6 = false; }
   ];
   krebs.iptables.tables.filter.FORWARD.rules = [
     { predicate = "-i ve-riot"; target = "ACCEPT"; }

@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }: let
-  cfg = config.lass.sync-containers3;
+  cfg = config.krebs.sync-containers3;
   slib = pkgs.stockholm.lib;
 in {
-  options.lass.sync-containers3 = {
+  options.krebs.sync-containers3 = {
     inContainer = {
       enable = lib.mkEnableOption "container config for syncing";
       pubkey = lib.mkOption {
@@ -104,9 +104,8 @@ in {
               consul lock sync_${ctr.name} ${pkgs.writers.writeDash "${ctr.name}-sync" ''
                 set -efux
                 if /run/wrappers/bin/ping -c 1 ${ctr.name}.r; then
-                  touch "$HOME"/incomplete
-                  rsync -a -e "ssh -i $CREDENTIALS_DIRECTORY/ssh_key" --timeout=30 --inplace container_sync@${ctr.name}.r:disk "$HOME"/disk
-                  rm "$HOME"/incomplete
+                  nice --adjustment=30 rsync -a -e "ssh -i $CREDENTIALS_DIRECTORY/ssh_key" --timeout=30 container_sync@${ctr.name}.r:disk "$HOME"/disk
+                  rm -f "$HOME"/incomplete
                 fi
               ''}
             '';
@@ -218,10 +217,6 @@ in {
                   exit 0
                   ;;
               esac
-              if test -e /var/lib/sync-containers3/${ctr.name}/incomplete; then
-                echo 'data is inconistent, start aborted'
-                exit 1
-              fi
               consul kv put containers/${ctr.name} "$(jq -cn '{host: "${config.networking.hostName}", time: now}')" >/dev/null
               consul lock -verbose -monitor-retry=100 -timeout 30s -name container_${ctr.name} container_${ctr.name} ${pkgs.writers.writeBash "${ctr.name}-start" ''
                 set -efu
@@ -230,13 +225,20 @@ in {
                 mountpoint /var/lib/sync-containers3/${ctr.name}/state || mount /dev/mapper/${ctr.name} /var/lib/sync-containers3/${ctr.name}/state
                 /run/current-system/sw/bin/nixos-container start ${ctr.name}
                 # wait for system to become reachable for the first time
-                retry -t 10 -d 10 -- /run/wrappers/bin/ping -q -c 1 ${ctr.name}.r > /dev/null
                 systemctl start ${ctr.name}_watcher.service
+                retry -t 10 -d 10 -- /run/wrappers/bin/ping -q -c 1 ${ctr.name}.r > /dev/null
                 while systemctl is-active container@${ctr.name}.service >/devnull && /run/wrappers/bin/ping -q -c 3 ${ctr.name}.r >/dev/null; do
                   consul kv put containers/${ctr.name} "$(jq -cn '{host: "${config.networking.hostName}", time: now}')" >/dev/null
                   sleep 10
                 done
               ''}
+            '';
+          };
+        }; }
+        { "container@${ctr.name}" = lib.mkIf ctr.runContainer {
+          serviceConfig = {
+            ExecStop = pkgs.writers.writeDash "remove_interface" ''
+              ${pkgs.iproute2}/bin/ip link del vb-${ctr.name}
             '';
           };
         }; }
@@ -280,14 +282,19 @@ in {
     })
     (lib.mkIf (cfg.containers != {}) {
       # networking
+
+      # needed because otherwise we lose local dns
+      environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/resolv.conf";
+
+      boot.kernel.sysctl."net.ipv4.ip_forward" = lib.mkForce 1;
       systemd.network.networks.ctr0 = {
         name = "ctr0";
         address = [
           "10.233.0.1/24"
         ];
         networkConfig = {
-          IPForward = "yes";
-          IPMasquerade = "both";
+          # IPForward = "yes";
+          # IPMasquerade = "both";
           ConfigureWithoutCarrier = true;
           DHCPServer = "yes";
         };
@@ -303,6 +310,9 @@ in {
       krebs.iptables.tables.filter.FORWARD.rules = [
         { predicate = "-i ctr0"; target = "ACCEPT"; }
         { predicate = "-o ctr0"; target = "ACCEPT"; }
+      ];
+      krebs.iptables.tables.nat.POSTROUTING.rules = [
+        { v6 = false; predicate = "-s 10.233.0.0/24"; target = "MASQUERADE"; }
       ];
     })
     (lib.mkIf cfg.inContainer.enable {

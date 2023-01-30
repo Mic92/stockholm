@@ -502,6 +502,40 @@ in {
       };
     };
 
+    doctor = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # monitoring.dse.in.tum.de
+          ip4.addr = "131.159.102.4";
+          ip6.addr = "2a09:80c0:102::4";
+          aliases = [ "doctor.i" ];
+        };
+        retiolum = {
+          via = internet;
+          aliases = [
+            "doctor.r"
+          ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAuXYfR5PRMcJkJG6yjxw0tQvjtzRwZI/k2ks1SBgVhtCh1TcMFraq
+            /u367B6E9BrGHhPZNtTcceMunC+Tow1+JIAHQPQU1+l1w+6n3esNgYUvakv0C/Dj
+            opOh5mWzS81UL1r+ifXKdEs4/u561GPUdhhScxnk2lsudh0fem0Rn7yDXuGofrIo
+            kAD49TLV0ZEflCQLe9/ck+qvzM8yPOnDsCZlCdCZJVpOW0Aq1cfghI6BiStVkDDU
+            DaBj74m3eK0wtPJlj0flebF91VNMsmQ4XSmFZeDtdx/xOJmqzB29C7tTynuPD5FV
+            zREKo5wxgvaf/J3da5K5nCP/sOBIishlYVBNZeJqwQiTze405ycdglNiYVISpYaF
+            8ikv0w19E9nI3GVjwm6mYH29eKbHuEJSou5J/7lS2tlyVaGI9opGRLV+X7GLwE1D
+            01uaQsyTYB7mK33broIABp5Mu/Il1+Mi3uwMKzCL/ciPMMFoSbR+zth2QoU1wRUz
+            A6OK3t6w5//ufq9bKGcZ3rhU/rYzfk8nHY1F/5QBPM95WTGZZ7CjAMPzyc6Is/CL
+            +7jtPZPrT05yc9HKPqG2RPWP3dziw4l1TX6NXstMzizyaayeF0yPQ6chNTqgvfFJ
+            s3ABq1R8UV0LUBmdDAxeyKOOEqrqBcShHFxWmEzk95ghdT6P5XSMMCUCAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "StFqqnSArvIfK07//ejbxkP3V4nnXsj8vu5km8LcM/P";
+        };
+      };
+    };
+
     eva = {
       owner = config.krebs.users.mic92;
       nets = rec {

@@ -17,7 +17,7 @@ with import <stockholm/lib>;
     defaults.email = "acme@lassul.us";
   };
 
-  lass.sync-containers3.inContainer = {
+  krebs.sync-containers3.inContainer = {
     enable = true;
     pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOvPKdbVwMEFCDMyNAzR8NdVjTbQL2G+03Xomxn6KKFt";
   };

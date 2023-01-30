@@ -1,6 +1,20 @@
 { r6, w6, ... }:
 {
-  nets = {
+  nets = rec {
+    internet = {
+      ip4 = rec {
+        addr = "95.217.192.59";
+        prefix = "${addr}/32";
+      };
+      ip6 = rec {
+        addr = "2a01:4f9:4a:4f1a::1";
+        prefix = "${addr}/64";
+      };
+      aliases = [
+        "neoprism.i"
+      ];
+      ssh.port = 45621;
+    };
     retiolum = {
       ip4.addr = "10.243.0.99";
       ip6.addr = r6 "99";

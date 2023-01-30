@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 {
-  lass.sync-containers3.containers.yellow = {
+  krebs.sync-containers3.containers.yellow = {
     sshKey = "${toString <secrets>}/yellow.sync.key";
   };
   containers.yellow.bindMounts."/var/lib" = {

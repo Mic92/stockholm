@@ -125,17 +125,13 @@ with import <stockholm/lib>;
 
         hostsPackage = mkOption {
           type = types.package;
-          default = pkgs.stdenv.mkDerivation {
-            name = "${tinc.config.netname}-tinc-hosts";
-            phases = [ "installPhase" ];
-            installPhase = ''
-              mkdir $out
-              ${concatStrings (mapAttrsToList (_: host: ''
-                echo ${shell.escape host.nets."${tinc.config.netname}".tinc.config} \
-                  > $out/${shell.escape host.name}
-              '') tinc.config.hosts)}
-            '';
-          };
+          default =
+            pkgs.write "${tinc.config.netname}-tinc-hosts"
+              (mapAttrs'
+                (_: host: (nameValuePair "/${host.name}" {
+                  text = host.nets.${tinc.config.netname}.tinc.config;
+                }))
+                tinc.config.hosts);
           defaultText = "‹netname›-tinc-hosts";
           description = ''
             Package of tinc host configuration files.  By default, a package will

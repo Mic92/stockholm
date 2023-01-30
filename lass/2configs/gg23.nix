@@ -2,17 +2,19 @@
 with import <stockholm/lib>;
 
 {
+  # ipv6 from vodafone is really really flaky
+  boot.kernel.sysctl."net.ipv6.conf.et0.disable_ipv6" = 1;
   systemd.network.networks."50-et0" = {
     matchConfig.Name = "et0";
-    DHCP = "yes";
+    DHCP = "ipv4";
     # dhcpV4Config.UseDNS = false;
     # dhcpV6Config.UseDNS = false;
     linkConfig = {
       RequiredForOnline = "routable";
     };
-    # networkConfig = {
-    #   LinkLocalAddressing = "no";
-    # };
+    networkConfig = {
+      LinkLocalAddressing = "no";
+    };
     # dhcpV6Config = {
     #   PrefixDelegationHint = "::/60";
     # };
@@ -23,14 +25,15 @@ with import <stockholm/lib>;
     #   Managed = true;
     # };
   };
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
   systemd.network.networks."50-int0" = {
     name = "int0";
     address = [
       "10.42.0.1/24"
     ];
     networkConfig = {
-      IPForward = "yes";
-      IPMasquerade = "both";
+      # IPForward = "yes";
+      # IPMasquerade = "both";
       ConfigureWithoutCarrier = true;
       DHCPServer = "yes";
       # IPv6SendRA = "yes";
@@ -49,9 +52,16 @@ with import <stockholm/lib>;
   krebs.iptables.tables.nat.PREROUTING.rules = mkBefore [
     { v6 = false; predicate = "-s 10.42.0.0/24"; target = "ACCEPT"; }
   ];
+  krebs.iptables.tables.nat.POSTROUTING.rules = [
+    { v6 = false; predicate = "-s 10.42.0.0/24"; target = "MASQUERADE"; }
+  ];
 
   networking.domain = "gg23";
 
+  networking.useHostResolvConf = false;
+  services.resolved.extraConfig = ''
+    DNSStubListener=no
+  '';
   services.dnsmasq = {
     enable = true;
     resolveLocalQueries = false;
@@ -64,4 +74,12 @@ with import <stockholm/lib>;
       interface=int0
     '';
   };
+
+  environment.systemPackages = [
+    (pkgs.writers.writeDashBin "restart_router" ''
+      ${pkgs.mosquitto}/bin/mosquitto_pub -h localhost -t 'cmnd/router/POWER' -u gg23 -P gg23-mqtt -m OFF
+      sleep 2
+      ${pkgs.mosquitto}/bin/mosquitto_pub -h localhost -t 'cmnd/router/POWER' -u gg23 -P gg23-mqtt -m ON
+    '')
+  ];
 }

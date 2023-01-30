@@ -6,7 +6,7 @@ set -efu
 case ${FZMENU_PHASE-0} in
   0)
     export FZMENU_PHASE=1
-    exec setsid -f urxvt -name fzmenu-urxvt -e dash "$0"
+    exec setsid -f terminal dash "$0"
     ;;
   1)
     if result=$(

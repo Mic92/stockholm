@@ -34,6 +34,10 @@ with import ./lib;
           type = with types; listOf str;
           default = [];
         };
+        filter.Wiregrill = mkOption {
+          type = with types; listOf str;
+          default = [];
+        };
       };
     };
   };
@@ -62,6 +66,16 @@ with import ./lib;
     };
 
     input-retiolum-accept-udp = mkOption {
+      type = with types; listOf (either int str);
+      default = [];
+    };
+
+    input-wiregrill-accept-tcp = mkOption {
+      type = with types; listOf (either int str);
+      default = [];
+    };
+
+    input-wiregrill-accept-udp = mkOption {
       type = with types; listOf (either int str);
       default = [];
     };
@@ -141,6 +155,7 @@ with import ./lib;
       :FORWARD DROP [0:0]
       :OUTPUT ACCEPT [0:0]
       :Retiolum - [0:0]
+      :Wiregrill - [0:0]
       ${concatMapStringsSep "\n" (rule: "-A INPUT ${rule}") ([]
         ++ [
           "-m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT"
@@ -150,6 +165,7 @@ with import ./lib;
         ++ map accept-tcp (unique (map toString cfg.input-internet-accept-tcp))
         ++ map accept-udp (unique (map toString cfg.input-internet-accept-udp))
         ++ ["-i retiolum -j Retiolum"]
+        ++ ["-i wiregrill -j Wiregrill"]
       )}
       ${formatTable cfg.extra.filter}
       ${formatTable cfg."extra${toString iptables-version}".filter}
@@ -157,6 +173,23 @@ with import ./lib;
         ++ optional (cfg.accept-echo-request == "retiolum") accept-echo-request
         ++ map accept-tcp (unique (map toString cfg.input-retiolum-accept-tcp))
         ++ map accept-udp (unique (map toString cfg.input-retiolum-accept-udp))
+        ++ {
+          ip4tables = [
+            "-p tcp -j REJECT --reject-with tcp-reset"
+            "-p udp -j REJECT --reject-with icmp-port-unreachable"
+            "-j REJECT --reject-with icmp-proto-unreachable"
+          ];
+          ip6tables = [
+            "-p tcp -j REJECT --reject-with tcp-reset"
+            "-p udp -j REJECT --reject-with icmp6-port-unreachable"
+            "-j REJECT"
+          ];
+        }."ip${toString iptables-version}tables"
+      )}
+      ${concatMapStringsSep "\n" (rule: "-A Wiregrill ${rule}") ([]
+        ++ optional (cfg.accept-echo-request == "wiregrill") accept-echo-request
+        ++ map accept-tcp (unique (map toString cfg.input-wiregrill-accept-tcp))
+        ++ map accept-udp (unique (map toString cfg.input-wiregrill-accept-udp))
         ++ {
           ip4tables = [
             "-p tcp -j REJECT --reject-with tcp-reset"

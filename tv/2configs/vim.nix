@@ -11,18 +11,31 @@ with import ./lib;
     environment.variables.VIMINIT = ":so /etc/vimrc";
   };
 
-  extra-runtimepath = pkgs.tv.vim.makeRuntimePath [
-    pkgs.tv.vimPlugins.elixir
+  base-plugins = [
     pkgs.tv.vimPlugins.file-line
-    pkgs.tv.vimPlugins.fzf
     pkgs.tv.vimPlugins.hack
+    pkgs.vimPlugins.undotree
+    (pkgs.tv.vim.makePlugin (pkgs.write "vim-tv-base" {
+      "/ftplugin/haskell.vim".text = ''
+        if exists("g:vim_tv_ftplugin_haskell_loaded")
+          finish
+        endif
+        let g:vim_tv_ftplugin_haskell_loaded = 1
+
+        setlocal iskeyword+='
+      '';
+    }))
+  ];
+
+  extra-plugins = [
+    pkgs.tv.vimPlugins.elixir
+    pkgs.tv.vimPlugins.fzf
     pkgs.tv.vimPlugins.jq
     pkgs.tv.vimPlugins.nix
     pkgs.tv.vimPlugins.showsyntax
     pkgs.tv.vimPlugins.tv
     pkgs.tv.vimPlugins.vim
     pkgs.vimPlugins.fzfWrapper
-    pkgs.vimPlugins.undotree
     pkgs.vimPlugins.vim-nftables
   ];
 
@@ -58,7 +71,9 @@ with import ./lib;
     ];
   };
 
-  vimrc = pkgs.writeText "vimrc" ''
+  vimrc = pkgs.writeText "vimrc" /* vim */ ''
+    vim9script
+
     set nocompatible
 
     set autoindent
@@ -71,7 +86,7 @@ with import ./lib;
     set mouse=a
     set noruler
     set pastetoggle=<INS>
-    set runtimepath=${extra-runtimepath},$VIMRUNTIME
+    set runtimepath=${pkgs.tv.vim.makeRuntimePath base-plugins},$VIMRUNTIME
     set shortmess+=I
     set showcmd
     set showmatch
@@ -88,13 +103,15 @@ with import ./lib;
     set wildmenu
     set wildmode=longest,full
 
+      set runtimepath^=${pkgs.tv.vim.makeRuntimePath extra-plugins}
+      syntax on
+
     set et ts=2 sts=2 sw=2
 
     filetype plugin indent on
 
     set t_Co=256
     colorscheme hack
-    syntax on
 
     au Syntax * syn match Garbage containedin=ALL /\s\+$/
             \ | syn match TabStop containedin=ALL /\t\+/
@@ -115,30 +132,52 @@ with import ./lib;
 
     nnoremap <f1> :tabp<cr>
     nnoremap <f2> :tabn<cr>
-    inoremap <f1> <esc>:tabp<cr>
-    inoremap <f2> <esc>:tabn<cr>
+    imap <f1> <esc><f1>
+    imap <f2> <esc><f2>
+
+    nnoremap <S-f1> :tabm -1<cr>
+    nnoremap <S-f2> :tabm +1<cr>
+    imap <S-f1> <esc><S-f1>
+    imap <S-f2> <esc><S-f2>
 
     noremap <f3> :ShowSyntax<cr>
 
-    " <C-{Up,Down,Right,Left>
+    # <C-{Up,Down,Right,Left}>
     noremap <esc>Oa <nop> | noremap! <esc>Oa <nop>
     noremap <esc>Ob <nop> | noremap! <esc>Ob <nop>
     noremap <esc>Oc <nop> | noremap! <esc>Oc <nop>
     noremap <esc>Od <nop> | noremap! <esc>Od <nop>
-    " <[C]S-{Up,Down,Right,Left>
+    # <[C]S-{Up,Down,Right,Left}>
     noremap <esc>[a <nop> | noremap! <esc>[a <nop>
     noremap <esc>[b <nop> | noremap! <esc>[b <nop>
     noremap <esc>[c <nop> | noremap! <esc>[c <nop>
     noremap <esc>[d <nop> | noremap! <esc>[d <nop>
     vnoremap u <nop>
 
-    " fzf
+    # fzf
     nnoremap <esc>q :Buffers<cr>
     nnoremap <esc>f :Files<cr>
     nnoremap <esc>w :Rg<cr>
 
-    " edit alternate buffer
-    " For some reason neither putting <ctrl>6 nor <ctrl>^ works here...
+    # edit alternate buffer
+    # For some reason neither putting <ctrl>6 nor <ctrl>^ works here...
     nnoremap <esc>a 
+
+    if $TOUCHSCREEN == "1"
+      nnoremap <ScrollWheelUp> <C-y>
+      nnoremap <ScrollWheelDown> <C-e>
+      nnoremap <C-ScrollWheelUp> 3<C-y>
+      nnoremap <C-ScrollWheelDown> 3<C-e>
+      nnoremap <S-ScrollWheelUp> 3<C-y>
+      nnoremap <S-ScrollWheelDown> 3<C-e>
+      nnoremap <C-S-ScrollWheelUp> <PageUp>
+      nnoremap <C-S-ScrollWheelDown> <PageDown>
+    endif
+
+    # remember last position
+    autocmd BufReadPost *
+         \ if line("'\"") > 0 && line("'\"") <= line("$") |
+         \   exe "normal! g`\"" |
+         \ endif
   '';
 }
