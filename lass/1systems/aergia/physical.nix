@@ -80,4 +80,7 @@
       KEYBOARD_KEY_70026=reserved
       KEYBOARD_KEY_70027=reserved
   '';
+
+  # ignore power key
+  services.logind.extraConfig = "HandlePowerKey=ignore";
 }
