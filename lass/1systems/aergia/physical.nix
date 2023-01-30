@@ -74,4 +74,10 @@
   services.xserver.displayManager.sessionCommands = ''
     xmodmap -e 'keycode 96 = F12 Insert F12 F12' # rebind shift + F12 to shift + insert
   '';
+  services.udev.extraHwdb = /* sh */ ''
+    # disable back buttons
+    evdev:input:b0003v2F24p0135* # /dev/input/event2
+      KEYBOARD_KEY_70026=reserved
+      KEYBOARD_KEY_70027=reserved
+  '';
 }
