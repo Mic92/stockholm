@@ -10,6 +10,6 @@ super.flameshot.overrideAttrs (old: rec {
     sha256 = "sha256-rZUiaS32C77tFJmEkw/9MGbVTVscb6LOCyWaWO5FyR4=";
   };
   patches = old.patches or [] ++ [
-    ./flameshot/flameshot_imgur_0.10.2.patch
+    ./flameshot_imgur_0.10.2.patch
   ];
 })
