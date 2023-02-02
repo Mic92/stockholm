@@ -9,6 +9,9 @@ with import ./lib;
   };
   json = json' ["."];
   json' = exec "${pkgs.jq}/bin/jq";
+  urigrep' = exec (pkgs.writeDash "urigrep" ''
+    ${pkgs.urix}/bin/urix | ${pkgs.gnugrep}/bin/grep -E "$1"
+  '');
   xml = xml' ["--format" "-"];
   xml' = exec "${pkgs.libxml2}/bin/xmllint";
 in {
@@ -69,6 +72,8 @@ in {
       https://raw.githubusercontent.com/NixOS/nixpkgs/master/nixos/modules/services/x11/xserver.nix
 
       https://www.rabbitmq.com/changelog.html
+
+      (urigrep' ["software-resources"] https://semiconductor.samsung.com/consumer-storage/support/tools/)
     ];
     hooksFile = toFile "hooks.py" ''
       import subprocess
