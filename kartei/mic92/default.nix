@@ -107,6 +107,7 @@ in {
             "eve.r"
             "tts.r"
             "flood.r"
+            "warez.r"
             "navidrome.r"
           ];
           tinc.pubkey = ''

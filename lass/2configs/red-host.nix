@@ -8,7 +8,7 @@ in
   ];
 
 
-  lass.sync-containers3.containers.red = {
+  krebs.sync-containers3.containers.red = {
     sshKey = "${toString <secrets>}/containers/red/sync.key";
     ephemeral = true;
   };

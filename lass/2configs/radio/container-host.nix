@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 {
-  lass.sync-containers3.containers.radio = {
+  krebs.sync-containers3.containers.radio = {
     sshKey = "${toString <secrets>}/radio.sync.key";
   };
   containers.radio = {

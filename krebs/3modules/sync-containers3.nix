@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }: let
-  cfg = config.lass.sync-containers3;
+  cfg = config.krebs.sync-containers3;
   slib = pkgs.stockholm.lib;
 in {
-  options.lass.sync-containers3 = {
+  options.krebs.sync-containers3 = {
     inContainer = {
       enable = lib.mkEnableOption "container config for syncing";
       pubkey = lib.mkOption {

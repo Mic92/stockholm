@@ -52,34 +52,6 @@ with import <stockholm/lib>;
       ];
     }
     {
-      services.syncthing.declarative = {
-        devices.schasch.addresses = [ "schasch.r:22000" ];
-        folders = {
-          the_playlist = {
-            path = "/home/lass/tmp/the_playlist";
-            devices = [ "mors" "phone" "prism" "xerxes" ];
-          };
-          free_music = {
-            id = "mu9mn-zgvsw";
-            path = "/home/lass/tmp/free_music";
-            devices = [ "mors" "schasch" ];
-          };
-        };
-      };
-      krebs.permown = {
-        "/home/lass/tmp/free_music" = {
-          owner = "lass";
-          group = "syncthing";
-          umask = "0007";
-        };
-        "/home/lass/tmp/the_playlist" = {
-          owner = "lass";
-          group = "syncthing";
-          umask = "0007";
-        };
-      };
-    }
-    {
       services.nginx = {
         enable = true;
         virtualHosts.default = {

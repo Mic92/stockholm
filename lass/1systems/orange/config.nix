@@ -5,12 +5,9 @@ with import <stockholm/lib>;
     <stockholm/lass>
     <stockholm/lass/2configs>
     <stockholm/lass/2configs/retiolum.nix>
-
-    <stockholm/lass/2configs/syncthing.nix>
-    <stockholm/lass/2configs/radio>
   ];
 
-  krebs.build.host = config.krebs.hosts.radio;
+  krebs.build.host = config.krebs.hosts.orange;
 
   security.acme = {
     acceptTerms = true;
@@ -19,6 +16,6 @@ with import <stockholm/lib>;
 
   krebs.sync-containers3.inContainer = {
     enable = true;
-    pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOvPKdbVwMEFCDMyNAzR8NdVjTbQL2G+03Xomxn6KKFt";
+    pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFQWzKuXrwQopBc1mzb2VpljmwAs7Y8bRl9a8hBXLC+l";
   };
 }
