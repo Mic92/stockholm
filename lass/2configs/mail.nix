@@ -93,8 +93,6 @@ let
   tag-new-mails = pkgs.writeDashBin "nm-tag-init" ''
     ${pkgs.notmuch}/bin/notmuch new
     ${lib.concatMapStringsSep "\n" (i: ''
-    '') (lib.mapAttrsToList lib.nameValuePair mailboxes)}
-    ${lib.concatMapStringsSep "\n" (i: ''
       mkdir -p "$HOME/Maildir/.${i.name}/cur"
       for mail in $(${pkgs.notmuch}/bin/notmuch search --output=files 'tag:inbox and (${lib.concatMapStringsSep " or " (f: "${f}") i.value})'); do
         if test -e "$mail"; then
