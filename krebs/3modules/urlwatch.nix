@@ -181,8 +181,11 @@ let
                   sed '1!s/^  //'
                 )
                 echo To: ${shell.escape cfg.mailto}
+                echo Mime-Version: 1.0
+                echo Content-Type: text/plain\; charset=UTF-8
+                echo Content-Transfer-Encoding: base64
                 echo
-                cat changes
+                base64 changes
               } | /run/wrappers/bin/sendmail -t
             fi
           ''}
