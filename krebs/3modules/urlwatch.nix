@@ -71,7 +71,7 @@ let
       description = "URL to watch.";
       example = [
         https://nixos.org/channels/nixos-unstable/git-revision
-        { url = http://localhost ; filter = "grep:important.*stuff"; }
+        { url = http://localhost ; filter = [ (grep "important.*stuff") ]; }
       ];
       apply = map (x: getAttr (typeOf x) {
         set = x;
@@ -211,7 +211,9 @@ let
       };
       filter = mkOption {
         default = null;
-        type = with types; nullOr str; # TODO nullOr subtypes.filter
+        type =
+          with types;
+          nullOr (either str (listOf (pkgs.formats.json {}).type));
       };
       ignore_cached = mkOption {
         default = null;
