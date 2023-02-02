@@ -1,6 +1,6 @@
 { pkgs }:
 
-pkgs.writeGawk "nixos-format-error" ''
+pkgs.writeGawkBin "nixos-format-error" ''
   # usage: nixos-rebuild ... 2>&1 | nixos-format-error
 
   function out() {
