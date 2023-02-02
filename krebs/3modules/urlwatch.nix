@@ -177,8 +177,8 @@ let
                 echo Date: $(date -R)
                 echo From: ${shell.escape cfg.from}
                 echo Subject: $(
-                  sed -n 's/^\(CHANGED\|ERROR\|NEW\): //p' changes \
-                    | tr '\n' ' '
+                  sed -nr 's/^(CHANGED|ERROR|NEW): //p' changes |
+                  sed '1!s/^  //'
                 )
                 echo To: ${shell.escape cfg.mailto}
                 echo
