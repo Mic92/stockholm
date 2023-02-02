@@ -30,14 +30,14 @@ pkgs.writeGawkBin "nixos-format-error" ''
   }
 
   state == IDLE {
-    if ($0 == "building the system configuration...") {
+    if ($0 ~ /^building the system configuration\.\.\.?$/) {
       state = ACTIVE
     }
     out()
   }
 
   state == ACTIVE {
-    if ($1 == "error:") {
+    if ($1 ~ /(\[[0-9;]+m)?error:(\[[0-9;]m)?/) {
       state = ERROR
       sub(/^/,"\x1b[31;1m"); sub(/$/,"\x1b[m")
       trace[trace_count++] = $0
@@ -57,6 +57,8 @@ pkgs.writeGawkBin "nixos-format-error" ''
   }
 
   state == ERROR {
+    sub(/$/, "")
+    gsub(/\[[0-9;]*m/, "")
 
     if ($0 ~ /^\s*at /) {
       location = gensub(/^\s*at (.*):$/,"\\1","1")
