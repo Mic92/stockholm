@@ -6,6 +6,7 @@ with import ./lib;
 
   krebs.build.user = config.krebs.users.tv;
 
+  networking.hostId = mkDefault (hashToLength 8 config.networking.hostName);
   networking.hostName = config.krebs.build.host.name;
 
   imports = [
