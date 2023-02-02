@@ -2,9 +2,10 @@ with import ./lib;
 { config, pkgs, ... }: let
   exec = filename: args: url: {
     inherit url;
-    filter = "system:${
-      concatMapStringsSep " " shell.escape ([filename] ++ toList args)
-    }";
+    filter = singleton {
+      system =
+        concatMapStringsSep " " shell.escape ([filename] ++ toList args);
+    };
   };
   json = json' ["."];
   json' = exec "${pkgs.jq}/bin/jq";
@@ -73,17 +74,23 @@ in {
       import subprocess
       import urlwatch
 
-      class CaseFilter(urlwatch.filters.FilterBase):
+      class SystemFilter(urlwatch.filters.FilterBase):
           """Filter for piping data through an external process"""
 
           __kind__ = 'system'
 
+          __supported_subfilters__ = {
+              'command': 'shell command line to tranform data',
+          }
+
+          __default_subfilter__ = 'command'
+
           def filter(self, data, subfilter=None):
-              if subfilter is None:
-                  raise ValueError('The system filter needs a command')
+              if 'command' not in subfilter:
+                  raise ValueError('{} filter needs a command'.format(self.__kind__))
 
               proc = subprocess.Popen(
-                  subfilter,
+                  subfilter['command'],
                   shell=True,
                   stdin=subprocess.PIPE,
                   stdout=subprocess.PIPE,
