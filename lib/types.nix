@@ -293,15 +293,21 @@ rec {
     merge = mergeOneOption;
   };
 
+  lowerBoundedInt = min: mkOptionType {
+    name = "lower bounded integer";
+    check = x: isInt x && min <= x;
+    merge = mergeOneOption;
+  };
+
   positive = mkOptionType {
+    inherit (lowerBoundedInt 1) check;
     name = "positive integer";
-    check = x: isInt x && x > 0;
     merge = mergeOneOption;
   };
 
   uint = mkOptionType {
+    inherit (lowerBoundedInt 0) check;
     name = "unsigned integer";
-    check = x: isInt x && x >= 0;
     merge = mergeOneOption;
   };
 
