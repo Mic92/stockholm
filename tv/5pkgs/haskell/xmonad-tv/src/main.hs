@@ -23,6 +23,7 @@ import System.Posix.Process (executeFile)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace
                                         , removeEmptyWorkspace)
 import XMonad.Actions.CycleWS (toggleWS)
+import XMonad.Layout.Gaps (Direction2D(U,R,D,L), gaps)
 import XMonad.Layout.NoBorders ( smartBorders )
 import XMonad.Layout.ResizableTile (ResizableTall(ResizableTall))
 import XMonad.Layout.ResizableTile (MirrorResize(MirrorExpand,MirrorShrink))
@@ -58,13 +59,19 @@ main = getArgs >>= \case
 
 readEnv :: Data.Aeson.FromJSON b => String -> IO b
 readEnv name =
-    Data.Maybe.fromJust
+    readEnv' (error $ "could not get environment variable: " <> name) name
+
+readEnv' :: Data.Aeson.FromJSON b => b -> String -> IO b
+readEnv' defaultValue name =
+    Data.Maybe.fromMaybe defaultValue
       . Data.Aeson.decodeStrict'
       . Data.ByteString.Char8.pack
-      <$> getEnv name
+      . Data.Maybe.fromMaybe mempty
+      <$> lookupEnv name
 
 mainNoArgs :: IO ()
 mainNoArgs = do
+    myScreenGaps <- readEnv' [] "XMONAD_SCREEN_GAPS" :: IO [Int]
     myScreenWidth <- readEnv "XMONAD_SCREEN_WIDTH" :: IO Dimension
     myTermFont <- getEnv "XMONAD_TERM_FONT"
     myTermFontWidth <- readEnv "XMONAD_TERM_FONT_WIDTH" :: IO Dimension
@@ -89,6 +96,7 @@ mainNoArgs = do
             , workspaces        = workspaces0
             , layoutHook =
                 refocusLastLayoutHook $
+                gaps (zip [U,R,D,L] myScreenGaps) $
                 smartBorders $
                   ResizableTall
                     1
