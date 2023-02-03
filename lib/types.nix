@@ -287,6 +287,12 @@ rec {
     };
   });
 
+  boundedInt = min: max: mkOptionType {
+    name = "bounded integer";
+    check = x: isInt x && min <= x && x <= max;
+    merge = mergeOneOption;
+  };
+
   positive = mkOptionType {
     name = "positive integer";
     check = x: isInt x && x > 0;
