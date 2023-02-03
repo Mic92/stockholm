@@ -91,11 +91,11 @@ in {
     xorg.xhost
     xsel
     zathura
-    flameshot-once
+    flameshot
     (pkgs.writeDashBin "screenshot" ''
       set -efu
 
-      ${pkgs.flameshot-once}/bin/flameshot-once
+      ${pkgs.flameshot}/bin/flameshot
       ${pkgs.klem}/bin/klem
     '')
   ];
