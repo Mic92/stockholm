@@ -28,8 +28,8 @@ in
     systemd.network.networks.wiregrill = {
       matchConfig.Name = "wiregrill";
       address =
-        optional (!isNull cfg.net.ip4) (toCidrNotation cfg.net.ip4) ++
-        optional (!isNull cfg.net.ip6) (toCidrNotation cfg.net.ip6);
+        optional (cfg.net.ip4 != null) (toCidrNotation cfg.net.ip4) ++
+        optional (cfg.net.ip6 != null) (toCidrNotation cfg.net.ip6);
     };
     tv.iptables.extra.filter.INPUT = [
       "-p udp --dport ${toString cfg.net.wireguard.port} -j ACCEPT"
