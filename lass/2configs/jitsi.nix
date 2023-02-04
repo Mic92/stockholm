@@ -8,6 +8,16 @@
       enableWelcomePage = true;
       requireDisplayName = true;
       analytics.disabled = true;
+      startAudioOnly = true;
+      channelLastN = 4;
+      stunServers = [
+        # - https://www.kuketz-blog.de/jitsi-meet-server-einstellungen-fuer-einen-datenschutzfreundlichen-betrieb/
+        { urls = "turn:turn.matrix.org:3478?transport=udp"; }
+        { urls = "turn:turn.matrix.org:3478?transport=tcp"; }
+        # - services.coturn:
+        #{ urls = "turn:turn.${domainName}:3479?transport=udp"; }
+        #{ urls = "turn:turn.${domainName}:3479?transport=tcp"; }
+      ];
     };
     interfaceConfig = {
       SHOW_JITSI_WATERMARK = false;
@@ -15,6 +25,10 @@
       DISABLE_PRESENCE_STATUS = true;
       GENERATE_ROOMNAMES_ON_WELCOME_PAGE = false;
     };
+  };
+
+  services.jitsi-videobridge.config = {
+    org.jitsi.videobridge.TRUST_BWE = false;
   };
 
   krebs.iptables.tables.filter.INPUT.rules = [
