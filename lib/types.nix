@@ -7,7 +7,7 @@ let
     mkOption mkOptionType optional optionalAttrs optionals range splitString
     stringLength substring test testString typeOf;
   inherit (lib.types)
-    attrsOf bool either enum int lines listOf nullOr path str submodule;
+    addCheck attrsOf bool either enum int lines listOf nullOr path str submodule;
 in
 
 rec {
@@ -594,6 +594,9 @@ rec {
       };
     };
   };
+
+  flameshot.color =
+    either (addCheck str (test "#[0-9A-Fa-f]{6}")) svg.color-keyword;
 
   file-mode = mkOptionType {
     name = "file mode";
