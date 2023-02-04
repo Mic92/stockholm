@@ -45,6 +45,8 @@ let
     genid_uint31 = x: ((lib.genid_uint32 x) + 16777216) / 2;
     genid_uint32 = import ./genid.nix { inherit lib; };
 
+    hexchars = stringToCharacters "0123456789abcdef";
+
     lpad = n: c: s:
       if lib.stringLength s < n
         then lib.lpad n c (c + s)

@@ -32,6 +32,5 @@ let out = genid;
   hexint = x: hexvals.${toLower x};
 
   # :: attrset char uint4
-  hexvals = listToAttrs (imap (i: c: { name = c; value = i - 1; })
-                        (stringToCharacters "0123456789abcdef"));
+  hexvals = listToAttrs (imap (i: c: { name = c; value = i - 1; }) hexchars);
 in out
