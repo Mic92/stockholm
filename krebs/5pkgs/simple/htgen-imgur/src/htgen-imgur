@@ -99,7 +99,7 @@ case "$Method $path" in
 
     if item=$(find_item $base32short); then
 
-      deletehash=$(uuidgen)
+      deletehash=$(uuidgen | tr -d -)
 
       info=$(
         exiv2 print "$item" |
