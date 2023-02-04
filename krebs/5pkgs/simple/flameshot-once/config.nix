@@ -79,6 +79,8 @@ in
     };
     settings = {
       # Options without a description are not documented in flameshot's README.
+      # Compare with:
+      #   nix-shell -p flameshot-once.dev --run get-recognizedGeneralOptions
       General = mapAttrs (_: recursiveUpdate { default = null; }) {
         allowMultipleGuiInstances = mkOption {
           description = ''
@@ -100,6 +102,8 @@ in
         };
         buttons = let
           buttonTypes = {
+            # Generated with:
+            #   nix-shell -p flameshot-once.dev --run get-buttonTypes
             TYPE_PENCIL = 0;
             TYPE_DRAWER = 1;
             TYPE_ARROW = 2;
@@ -126,6 +130,8 @@ in
             TYPE_ACCEPT = 23;
           };
           iterableButtonTypes = [
+            # Generated with:
+            #   nix-shell -p flameshot-once.dev --run get-iterableButtonTypes
             "TYPE_ACCEPT"
             "TYPE_ARROW"
             "TYPE_CIRCLE"
@@ -359,6 +365,8 @@ in
         };
       };
       Shortcuts = genAttrs [
+        # Generated with:
+        #   nix-shell -p flameshot-once.dev --run get-Shortcuts
         "TYPE_ACCEPT"
         "TYPE_ARROW"
         "TYPE_CIRCLE"

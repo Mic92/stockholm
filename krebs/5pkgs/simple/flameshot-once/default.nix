@@ -69,3 +69,81 @@ pkgs.symlinkJoin {
     })
   ];
 }
+// {
+  dev = pkgs.write "flameshot-once-tools" {
+    "/bin/get-buttonTypes" = {
+      executable = true;
+      text = /* sh */ ''
+        #! ${pkgs.dash}/bin/dash
+        indent=$(${placeholder "out"}/bin/indent-of buttonTypes)
+        src=${cfg.package.src}/src/tools/capturetool.h
+        ${pkgs.coreutils}/bin/cat "$src" |
+        ${pkgs.gnused}/bin/sed -nr '
+          s/^\s*(TYPE_\S+)\s*=\s*([0-9]+),/\1 = \2;/p
+        ' |
+        ${placeholder "out"}/bin/prefix "  $indent"
+      '';
+    };
+    "/bin/get-iterableButtonTypes" = {
+      executable = true;
+      text = /* sh */ ''
+        #! ${pkgs.dash}/bin/dash
+        indent=$(${placeholder "out"}/bin/indent-of iterableButtonTypes)
+        src=${cfg.package.src}/src/widgets/capture/capturetoolbutton.cpp
+        ${pkgs.coreutils}/bin/cat "$src" |
+        ${pkgs.gnused}/bin/sed -n '/\<iterableButtonTypes = {/,/^}/p' |
+        ${pkgs.gcc}/bin/cpp |
+        ${pkgs.coreutils}/bin/tr , \\n |
+        ${pkgs.gnused}/bin/sed -rn 's/^ *CaptureTool::(TYPE_[A-Z_]+).*/"\1"/p' |
+        ${pkgs.coreutils}/bin/sort |
+        ${placeholder "out"}/bin/prefix "  $indent"
+      '';
+    };
+    "/bin/get-recognizedGeneralOptions" = {
+      executable = true;
+      text = /* sh */ ''
+        #! ${pkgs.dash}/bin/dash
+        src=${cfg.package.src}/src/utils/confighandler.cpp
+        ${pkgs.coreutils}/bin/cat "$src" |
+        ${pkgs.gnused}/bin/sed -n '/\<recognizedGeneralOptions = {/,/^};/p' |
+        ${pkgs.gcc}/bin/cpp |
+        ${pkgs.gnugrep}/bin/grep -F OPTION |
+        ${pkgs.coreutils}/bin/sort
+      '';
+    };
+    "/bin/get-Shortcuts" = {
+      executable = true;
+      text = /* sh */ ''
+        #! ${pkgs.dash}/bin/dash
+        indent=$(${placeholder "out"}/bin/indent-of Shortcuts)
+        src=${cfg.package.src}/src/utils/confighandler.cpp
+        ${pkgs.coreutils}/bin/cat "$src" |
+        ${pkgs.gnused}/bin/sed -n '/recognizedShortcuts = {/,/^};/p ' |
+        ${pkgs.gcc}/bin/cpp |
+        ${pkgs.gnused}/bin/sed -nr 's/^\s*SHORTCUT\("(TYPE_[^"]+).*/"\1"/p' |
+        ${pkgs.coreutils}/bin/sort |
+        ${placeholder "out"}/bin/prefix "  $indent"
+      '';
+    };
+    "/bin/indent-of" = {
+      executable = true;
+      text = /* sh */ ''
+        #! ${pkgs.dash}/bin/dash
+        # usage: indent-of NAME NIX_FILE
+        exec ${pkgs.gawk}/bin/awk -v name="$1" '
+          $1 == name && $2 == "=" {
+            sub("[^ ].*", "")
+            print
+          }
+        ' ${./config.nix}
+      '';
+    };
+    "/bin/prefix" = {
+      executable = true;
+      text = /* sh */ ''
+        #! ${pkgs.dash}/bin/dash
+        ${pkgs.gawk}/bin/awk -v prefix="$1" '{ print prefix $0 }'
+      '';
+    };
+  };
+}
