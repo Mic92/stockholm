@@ -74,7 +74,7 @@
     limits.identlen = 100;
     history.enabled = false;
   };
-  systemd.services.brockman.bindsTo = [ "ergo.service" ];
+  systemd.services.brockman.bindsTo = [ "ergochat.service" ];
   systemd.services.brockman.serviceConfig.LimitNOFILE = 16384;
   systemd.services.brockman.environment.BROCKMAN_LOG_LEVEL = "DEBUG";
   krebs.brockman = {
@@ -87,6 +87,7 @@
         nick = "brockman";
         extraChannels = [ "#all" ];
       };
+      statePath = "/var/state/brockman/brockman.json";
       bots = {};
     };
   };

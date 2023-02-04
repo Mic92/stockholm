@@ -1,10 +1,5 @@
 {
-  krebs.sync-containers.containers.news = {
-    peers = [
-      "shodan"
-      "mors"
-      "styx"
-    ];
-    format = "plain";
+  krebs.sync-containers3.containers.news = {
+    sshKey = "${toString <secrets>}/news.sync.key";
   };
 }
