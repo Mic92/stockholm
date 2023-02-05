@@ -206,7 +206,7 @@ myKeys font conf = Map.fromList $
 
     , ((_4, xK_Prior), forkFile {-pkg-}"xcalib" ["-invert", "-alter"] Nothing)
 
-    , ((0, xK_Print), forkFile {-pkg-}"flameshot" [] Nothing)
+    , ((0, xK_Print), forkFile {-pkg:flameshot-once-tv-}"flameshot-once" [] Nothing)
 
     , ((_C, xF86XK_Forward), forkFile {-pkg:xdpytools-}"xdpychvt" ["next"] Nothing)
     , ((_C, xF86XK_Back), forkFile {-pkg:xdpytools-}"xdpychvt" ["prev"] Nothing)

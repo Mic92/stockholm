@@ -120,13 +120,7 @@ in {
     };
     path = [
       config.tv.slock.package
-      (pkgs.flameshot-once.override {
-        config.imgur.enable = true;
-        config.imgur.createUrl = "http://ni.r/image";
-        config.imgur.deleteUrl = "http://ni.r/image/delete/%1";
-        config.imgur.xdg-open.browser = "/etc/profiles/per-user/tv/bin/cr";
-        config.timeout = 200;
-      })
+      pkgs.flameshot-once-tv
       pkgs.pulseaudio.out
       pkgs.rxvt_unicode
       pkgs.xcalib
