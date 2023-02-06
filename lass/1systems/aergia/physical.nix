@@ -109,7 +109,7 @@
 
   # keyboard quirks
   services.xserver.displayManager.sessionCommands = ''
-    xmodmap -e 'keycode 96 = F12 Insert F12 F12' # rebind shift + F12 to shift + insert
+    ${pkgs.xorg.xmodmap}/bin/xmodmap -e 'keycode 96 = F12 Insert F12 F12' # rebind shift + F12 to shift + insert
   '';
   services.udev.extraHwdb = /* sh */ ''
     # disable back buttons
