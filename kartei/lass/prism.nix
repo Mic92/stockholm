@@ -21,7 +21,7 @@ rec {
                           60 IN TXT    ( "v=DKIM1; k=rsa; t=s; s=*; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB" )
       default._domainkey  60 IN TXT    "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB"
       cache               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      cgit                CNAME        ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+      cgit                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
       pad                 60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
       codi                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
       go                  60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
