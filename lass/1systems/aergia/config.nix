@@ -26,6 +26,7 @@
     <stockholm/lass/2configs/dunst.nix>
     <stockholm/lass/2configs/print.nix>
     <stockholm/lass/2configs/br.nix>
+    <stockholm/lass/2configs/c-base.nix>
   ];
 
   system.stateVersion = "22.11";
