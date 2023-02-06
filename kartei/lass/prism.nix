@@ -38,6 +38,7 @@ rec {
       mail                60 IN AAAA   ${config.krebs.hosts.prism.nets.internet.ip6.addr}
       flix                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
       testing             60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+      schrott             60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
     '';
   };
   nets = rec {
