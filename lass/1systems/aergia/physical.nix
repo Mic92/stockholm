@@ -120,4 +120,7 @@
 
   # ignore power key
   services.logind.extraConfig = "HandlePowerKey=ignore";
+
+  # update cpu microcode
+  hardware.cpu.amd.updateMicrocode = true;
 }
