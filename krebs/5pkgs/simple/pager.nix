@@ -31,10 +31,10 @@ pkgs.symlinkJoin {
       exec ${pkgs.xterm}/bin/xterm \
           -name "$name" \
           -ti vt340 \
-          -xrm 'Pager*geometry: 32x10' \
-          -xrm 'Pager*internalBorder: 2' \
-          -xrm 'Pager*background: #050505' \
-          -xrm 'Pager*foreground: #d0d7d0' \
+          -xrm '*geometry: 32x10' \
+          -xrm '*internalBorder: 2' \
+          -xrm '*background: #050505' \
+          -xrm '*foreground: #d0d7d0' \
           -e ${pkgs.haskellPackages.pager}/bin/pager "$@"
     '')
     pkgs.haskellPackages.pager
