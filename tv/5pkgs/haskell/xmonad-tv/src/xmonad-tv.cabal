@@ -17,8 +17,6 @@ executable xmonad
     , directory
     , extra
     , filepath
-    , template-haskell
-    , th-env
     , unix
     , xmonad
     , xmonad-contrib
