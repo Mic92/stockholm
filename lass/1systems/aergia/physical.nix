@@ -25,6 +25,9 @@
 
     # for ryzenadj -i
     "iomem=relaxed"
+
+    # suspend
+    "resume_offset=178345675"
   ];
 
   boot.kernelModules = [
@@ -119,8 +122,17 @@
   '';
 
   # ignore power key
-  services.logind.extraConfig = "HandlePowerKey=ignore";
 
   # update cpu microcode
   hardware.cpu.amd.updateMicrocode = true;
+
+  # suspend to disk
+  swapDevices = [{
+    device = "/swapfile";
+  }];
+  boot.resumeDevice = "/dev/mapper/aergia1";
+  services.logind.lidSwitch = "suspend-then-hibernate";
+  services.logind.extraConfig = ''
+    HandlePowerKey=hibernate
+  '';
 }
