@@ -5,16 +5,15 @@ module Main (main) where
 
 import System.Exit (exitFailure)
 import XMonad.Hooks.EwmhDesktops (ewmh)
+import XMonad.Hooks.EwmhDesktops.Extra (ewmhExtra)
 import XMonad.Hooks.RefocusLast (refocusLastLayoutHook, toggleFocus)
 
-import Control.Exception
 import Control.Monad.Extra (whenJustM)
 import qualified Data.Aeson
 import qualified Data.ByteString.Char8
 import qualified Data.List
 import qualified Data.Maybe
 import Graphics.X11.ExtraTypes.XF86
-import Text.Read (readEither)
 import XMonad
 import XMonad.Extra (isFloatingX)
 import System.IO (hPutStrLn, stderr)
@@ -76,11 +75,10 @@ mainNoArgs = do
     myTermFont <- getEnv "XMONAD_TERM_FONT"
     myTermFontWidth <- readEnv "XMONAD_TERM_FONT_WIDTH" :: IO Dimension
     myTermPadding <- readEnv "XMONAD_TERM_PADDING" :: IO Dimension
-    workspaces0 <- getWorkspaces0
     handleShutdownEvent <- newShutdownEventHandler
-    let
-      config =
-        ewmh
+    config <-
+      ewmhExtra
+        $ ewmh
         $ withUrgencyHookC
             BorderUrgencyHook
               { urgencyBorderColor = "#ff0000"
@@ -93,7 +91,6 @@ mainNoArgs = do
             { terminal          = {-pkg:alacritty-tv-}"alacritty"
             , modMask           = mod4Mask
             , keys              = myKeys myTermFont
-            , workspaces        = workspaces0
             , layoutHook =
                 refocusLastLayoutHook $
                 gaps (zip [U,R,D,L] myScreenGaps) $
@@ -123,23 +120,6 @@ mainNoArgs = do
             }
     directories <- getDirectories
     launch config directories
-
-
-getWorkspaces0 :: IO [String]
-getWorkspaces0 =
-    try (getEnv "XMONAD_WORKSPACES0_FILE") >>= \case
-      Left e -> warn (displaySomeException e)
-      Right p -> try (readFile p) >>= \case
-        Left e -> warn (displaySomeException e)
-        Right x -> case readEither x of
-          Left e -> warn e
-          Right y -> return y
-  where
-    warn msg = hPutStrLn stderr ("getWorkspaces0: " ++ msg) >> return []
-
-
-displaySomeException :: SomeException -> String
-displaySomeException = displayException
 
 
 forkFile :: FilePath -> [String] -> Maybe [(String, String)] -> X ()
@@ -206,7 +186,7 @@ myKeys font conf = Map.fromList $
 
     , ((_4, xK_Prior), forkFile {-pkg-}"xcalib" ["-invert", "-alter"] Nothing)
 
-    , ((0, xK_Print), forkFile {-pkg-}"flameshot" [] Nothing)
+    , ((0, xK_Print), forkFile {-pkg:flameshot-once-tv-}"flameshot-once" [] Nothing)
 
     , ((_C, xF86XK_Forward), forkFile {-pkg:xdpytools-}"xdpychvt" ["next"] Nothing)
     , ((_C, xF86XK_Back), forkFile {-pkg:xdpytools-}"xdpychvt" ["prev"] Nothing)

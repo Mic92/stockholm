@@ -1,7 +1,7 @@
 { attr, coreutils, exiv2, findutils, gnugrep, jq, nix, stockholm, util-linux, stdenv }:
 stdenv.mkDerivation rec {
   pname = "htgen-imgur";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = ./src;
 
