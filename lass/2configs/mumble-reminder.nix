@@ -23,7 +23,7 @@
     Kois
     Faulaffen
     Schraubenziegen
-    Nachtigalle
+    Nachtigallen
     Okapis
     Stachelschweine
     Kurzschwanzkängurus
@@ -49,7 +49,7 @@
           pattern = "^nerv nicht$";
           activate = "match";
           command = {
-            filename = pkgs.writeDash "add_remind" ''
+            filename = pkgs.writeDash "del_remind" ''
               ${pkgs.gnused}/bin/sed -i "/$_from/d" /var/lib/reaktor2-mumble-reminder/users
               echo "okok, Ich werde $_from nich mehr errinern"
             '';
@@ -80,7 +80,7 @@ in {
   };
   systemd.services.mumble-reminder-nixos = {
     description = "weekly reminder for nixos mumble";
-    startAt = "Thu *-*-* 19:00:00 Europe/Berlin";
+    startAt = "Thu *-*-* 17:00:00 Europe/Berlin";
     serviceConfig = {
       ExecStart = pkgs.writers.writeDash "mumble_reminder" ''
         animals='
