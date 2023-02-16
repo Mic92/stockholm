@@ -137,7 +137,6 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/jitsi.nix>
     <stockholm/lass/2configs/fysiirc.nix>
     <stockholm/lass/2configs/bgt-bot>
-    <stockholm/lass/2configs/mumble-reminder.nix>
     <stockholm/krebs/2configs/mastodon-proxy.nix>
     {
       services.tor = {

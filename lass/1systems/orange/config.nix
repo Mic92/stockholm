@@ -5,6 +5,7 @@ with import <stockholm/lib>;
     <stockholm/lass>
     <stockholm/lass/2configs>
     <stockholm/lass/2configs/retiolum.nix>
+    <stockholm/lass/2configs/mumble-reminder.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.orange;
