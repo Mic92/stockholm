@@ -3,6 +3,7 @@
   imports = [
     ./config.nix
     (modulesPath + "/installer/scan/not-detected.nix")
+    <stockholm/lass/2configs/antimicrox>
   ];
   disko.devices = import ./disk.nix;
 
