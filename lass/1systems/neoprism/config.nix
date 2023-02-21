@@ -8,7 +8,7 @@
     # sync-containers
     <stockholm/lass/2configs/consul.nix>
     <stockholm/lass/2configs/yellow-host.nix>
-    <stockholm/lass/2configs/radio/container-host.nix>
+    <stockholm/lass/2configs/services/radio/container-host.nix>
     <stockholm/lass/2configs/ubik-host.nix>
     <stockholm/krebs/2configs/hotdog-host.nix>
 
