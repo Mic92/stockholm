@@ -22,6 +22,7 @@
     # Enable energy savings during sleep
     "mem_sleep_default=deep"
 
+    # use less power with pstate
     "amd_pstate=passive"
 
     # for ryzenadj -i
@@ -136,4 +137,7 @@
   services.logind.extraConfig = ''
     HandlePowerKey=hibernate
   '';
+
+  # firefox touchscreen support
+  environment.sessionVariables.MOZ_USE_XINPUT2 = "1";
 }
