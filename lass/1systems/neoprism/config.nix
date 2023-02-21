@@ -7,7 +7,7 @@
 
     # sync-containers
     <stockholm/lass/2configs/consul.nix>
-    <stockholm/lass/2configs/yellow-host.nix>
+    <stockholm/lass/2configs/services/flix/container-host.nix>
     <stockholm/lass/2configs/services/radio/container-host.nix>
     <stockholm/lass/2configs/ubik-host.nix>
     <stockholm/krebs/2configs/hotdog-host.nix>
@@ -17,6 +17,7 @@
 
     # proxying of services
     <stockholm/lass/2configs/services/radio/proxy.nix>
+    <stockholm/lass/2configs/services/flix/proxy.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.neoprism;
