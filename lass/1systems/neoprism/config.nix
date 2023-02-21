@@ -14,6 +14,9 @@
 
     # other containers
     <stockholm/lass/2configs/riot.nix>
+
+    # proxying of services
+    <stockholm/lass/2configs/services/radio/proxy.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.neoprism;
