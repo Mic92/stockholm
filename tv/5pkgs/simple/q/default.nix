@@ -25,7 +25,7 @@ let
     fi |
     ${pkgs.gnused}/bin/sed -r '
       # dim week numbers
-      s/((^ *|  )[ 1-5][0-9](   *)?)(([ 1-3][0-9])*)/[38;5;243m\1[m\4/g
+      s/((^|  )[ 1-5][0-9])(( ..| \[7m..\[27m){7})/[38;5;243m\1[m\3/g
       # dim month and day names
       s/^ *[A-Z].*/[38;5;243m&[m/
       # highlight current date
