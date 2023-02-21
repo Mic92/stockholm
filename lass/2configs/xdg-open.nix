@@ -1,12 +1,13 @@
 { config, pkgs, lib, ... }: with import <stockholm/lib>; let
 
   xdg-open-wrapper = pkgs.writeDashBin "xdg-open" ''
-    /run/wrappers/bin/sudo -u lass ${xdg-open} "$@"
+     exec ${xdg-open}/bin/xdg-open "$@" >> /tmp/xdg-debug.log 2>&1
   '';
 
-  xdg-open = pkgs.writeBash "xdg-open" ''
-    set -e
+  xdg-open = pkgs.writeBashBin "xdg-open" ''
+    set -xe
     FILE="$1"
+    PATH=/run/current-system/sw/bin
     mime=
 
     case "$FILE" in
@@ -35,15 +36,13 @@
 
     case "$mime" in
       special/mailaddress)
-        urxvtc --execute vim "$FILE" ;;
-      ${optionalString (hasAttr "browser" config.lass) ''
+        alacritty --execute vim "$FILE" ;;
       text/html)
-        ${config.lass.browser.select}/bin/browser-select "$FILE" ;;
+        firefox "$FILE" ;;
       text/xml)
-        ${config.lass.browser.select}/bin/browser-select "$FILE" ;;
-      ''}
+        firefox "$FILE" ;;
       text/*)
-        urxvtc --execute vim "$FILE" ;;
+        alacritty --execute vim "$FILE" ;;
       image/*)
         sxiv "$FILE" ;;
       application/x-bittorrent)
@@ -51,17 +50,18 @@
       application/pdf)
         zathura "$FILE" ;;
       inode/directory)
-        sudo -u lass -i urxvtc --execute mc "$FILE" ;;
+        alacritty --execute mc "$FILE" ;;
       *)
         # open dmenu and ask for program to open with
-        $(dmenu_path | dmenu) "$FILE";;
+        runner=$(print -rC1 -- ''${(ko)commands} | dmenu)
+        exec $runner "$FILE";;
     esac
   '';
 in {
   environment.systemPackages = [ xdg-open-wrapper ];
 
   security.sudo.extraConfig = ''
-    cr ALL=(lass) NOPASSWD: ${xdg-open} *
-    ff ALL=(lass) NOPASSWD: ${xdg-open} *
+    cr ALL=(lass) NOPASSWD: ${xdg-open}/bin/xdg-open *
+    ff ALL=(lass) NOPASSWD: ${xdg-open}/bin/xdg-open *
   '';
 }
