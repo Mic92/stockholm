@@ -18,6 +18,11 @@
         #{ urls = "turn:turn.${domainName}:3479?transport=udp"; }
         #{ urls = "turn:turn.${domainName}:3479?transport=tcp"; }
       ];
+      constraints.video.height = {
+        ideal = 720;
+        max = 1080;
+        min = 240;
+      };
     };
     interfaceConfig = {
       SHOW_JITSI_WATERMARK = false;
