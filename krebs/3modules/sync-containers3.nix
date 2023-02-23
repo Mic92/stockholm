@@ -104,7 +104,9 @@ in {
               consul lock sync_${ctr.name} ${pkgs.writers.writeDash "${ctr.name}-sync" ''
                 set -efux
                 if /run/wrappers/bin/ping -c 1 ${ctr.name}.r; then
-                  nice --adjustment=30 rsync -a -e "ssh -i $CREDENTIALS_DIRECTORY/ssh_key" --timeout=30 container_sync@${ctr.name}.r:disk "$HOME"/disk
+                  nice --adjustment=30 rsync -a -e "ssh -i $CREDENTIALS_DIRECTORY/ssh_key" --timeout=30 --inplace --sparse container_sync@${ctr.name}.r:disk "$HOME"/disk.rsync
+                  touch "$HOME"/incomplete
+                  nice --adjustment=30 rsync --inplace "$HOME"/disk.rsync "$HOME"/disk
                   rm -f "$HOME"/incomplete
                 fi
               ''}
