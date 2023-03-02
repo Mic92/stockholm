@@ -26,4 +26,8 @@
 
   boot.isContainer = true;
   networking.useDHCP = false;
+  krebs.sync-containers3.inContainer = {
+    enable = true;
+    pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM20tYHHvwIgrJZzR35ATzH9AlTrM1enNKEQJ7IP6lBh";
+  };
 }

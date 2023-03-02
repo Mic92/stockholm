@@ -1,4 +1,3 @@
-with import <stockholm/lib>;
 { config, lib, pkgs, ... }:
 let
 in
@@ -18,9 +17,9 @@ in
   };
   environment.systemPackages = with pkgs; [
     vim
-    rxvt_unicode.terminfo
+    rxvt-unicode-unwrapped.terminfo
   ];
   services.openssh.enable = true;
 
-  system.stateVersion = "21.05";
+  system.stateVersion = "22.05";
 }

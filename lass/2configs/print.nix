@@ -6,5 +6,19 @@
       pkgs.foomatic-filters
       pkgs.gutenprint
     ];
+    browsing = true;
+    browsedConf = ''
+      BrowseDNSSDSubTypes _cups,_print
+      BrowseLocalProtocols all
+      BrowseRemoteProtocols all
+      CreateIPPPrinterQueues All
+
+      BrowseProtocols all
+    '';
+  };
+  services.avahi = {
+    enable = true;
+    openFirewall = true;
+    nssmdns = true;
   };
 }

@@ -159,14 +159,14 @@ myKeyMap =
       ${pkgs.clipmenu}/bin/clipmenu
     ''}")
 
-    , ("M4-<F2>", windows copyToAll)
-
-    , ("M4-<F4>", spawn "${pkgs.nm-dmenu}/bin/nm-dmenu")
     , ("M4-<Insert>", spawn "${pkgs.writeDash "paste" ''
       ${pkgs.coreutils}/bin/sleep 0.4
       ${pkgs.xclip}/bin/xclip -o | ${pkgs.xdotool}/bin/xdotool type -f -
     ''}")
 
+    , ("M4-<F1>", spawn "/run/current-system/sw/bin/gamepad_mouse_toggle")
+    , ("M4-<F2>", windows copyToAll)
+    , ("M4-<F4>", spawn "${pkgs.nm-dmenu}/bin/nm-dmenu")
     , ("M4-<F5>", spawn "${pkgs.acpilight}/bin/xbacklight -set 1")
     , ("M4-<F6>", spawn "${pkgs.acpilight}/bin/xbacklight -set 10")
     , ("M4-<F7>", spawn "${pkgs.acpilight}/bin/xbacklight -set 33")

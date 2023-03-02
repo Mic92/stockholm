@@ -17,13 +17,8 @@
 
   boot.isContainer = true;
   networking.useDHCP = lib.mkForce true;
-  krebs.bindfs = {
-    "/var/lib/brockman" = {
-      source = "/var/state/brockman";
-      options = [
-        "-m ${toString config.users.users.brockman.uid}:${toString config.users.users.nginx.uid}"
-      ];
-      clearTarget = true;
-    };
+  krebs.sync-containers3.inContainer = {
+    enable = true;
+    pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMBVZomw68WDQy0HsHhNbWK1KpzaR5aRUG1oioE7IgCv";
   };
 }

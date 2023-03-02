@@ -35,6 +35,7 @@ with import <stockholm/lib>;
   systemd.tmpfiles.rules = [
     "d /home/lass/.local/share 0700 lass users -"
     "d /home/lass/.local 0700 lass users -"
+    "d /home/lass/.config 0700 lass users -"
 
     "d /var/state/lass_mail 0700 lass users -"
     "L+ /home/lass/Maildir - - - - ../../var/state/lass_mail"

@@ -95,7 +95,7 @@ in {
     (pkgs.writeDashBin "screenshot" ''
       set -efu
 
-      ${pkgs.flameshot}/bin/flameshot
+      ${pkgs.flameshot}/bin/flameshot gui
       ${pkgs.klem}/bin/klem
     '')
   ];

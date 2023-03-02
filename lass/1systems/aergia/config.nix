@@ -26,6 +26,7 @@
     <stockholm/lass/2configs/dunst.nix>
     <stockholm/lass/2configs/print.nix>
     <stockholm/lass/2configs/br.nix>
+    <stockholm/lass/2configs/c-base.nix>
   ];
 
   system.stateVersion = "22.11";
@@ -46,11 +47,6 @@
     powerOnBoot = true;
   };
   hardware.pulseaudio.package = pkgs.pulseaudioFull;
-
-  lass.browser.config = {
-    fy = { browser = "chromium";  groups = [ "audio" "video" ]; hidden = true; };
-    qt = { browser = "qutebrowser";  groups = [ "audio" "video" ]; hidden = true; };
-  };
 
   nix.trustedUsers = [ "root" "lass" ];
 
