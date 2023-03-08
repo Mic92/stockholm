@@ -134,10 +134,9 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/reaktor-coders.nix>
     <stockholm/lass/2configs/ciko.nix>
     <stockholm/lass/2configs/container-networking.nix>
-    <stockholm/lass/2configs/jitsi.nix>
+    <stockholm/lass/2configs/services/coms/jitsi.nix>
     <stockholm/lass/2configs/fysiirc.nix>
     <stockholm/lass/2configs/bgt-bot>
-    <stockholm/lass/2configs/mumble-reminder.nix>
     <stockholm/krebs/2configs/mastodon-proxy.nix>
     {
       services.tor = {
@@ -281,7 +280,7 @@ with import <stockholm/lib>;
         { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT"; }
       ];
     }
-    <stockholm/lass/2configs/murmur.nix>
+    <stockholm/lass/2configs/services/coms/murmur.nix>
     <stockholm/lass/2configs/docker.nix>
     {
       systemd.services."container@yellow".reloadIfChanged = mkForce false;

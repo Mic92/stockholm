@@ -48,10 +48,11 @@ pkgs.writeDashBin "fzfmenu" ''
     exec 4>&1
     export FZFMENU_INPUT_FD=3
     export FZFMENU_OUTPUT_FD=4
-    exec ${pkgs.rxvt-unicode}/bin/urxvt \
-        -name ${cfg.appName} \
-        -title ${shell.escape cfg.windowTitle} \
-        -e "$0" "$@"
+    exec ${pkgs.alacritty}/bin/alacritty \
+        --config-file /var/theme/config/alacritty.yaml \
+        --class ${cfg.appName} \
+        --title ${shell.escape cfg.windowTitle} \
+        --command "$0" "$@"
   else
     exec 0<&''${FZFMENU_INPUT_FD-0}
     exec 1>&''${FZFMENU_OUTPUT_FD-1}

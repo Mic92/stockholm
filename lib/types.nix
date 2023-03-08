@@ -3,11 +3,11 @@
 let
   inherit (lib)
     all any attrNames concatMapStringsSep concatStringsSep const filter flip
-    genid_uint31 hasSuffix head isInt isString length mergeOneOption mkOption
-    mkOptionType optional optionalAttrs optionals range splitString
+    genid_uint31 hasSuffix head importJSON isInt isString length mergeOneOption
+    mkOption mkOptionType optional optionalAttrs optionals range splitString
     stringLength substring test testString typeOf;
   inherit (lib.types)
-    attrsOf bool either enum int lines listOf nullOr path str submodule;
+    addCheck attrsOf bool either enum int lines listOf nullOr path str submodule;
 in
 
 rec {
@@ -287,15 +287,27 @@ rec {
     };
   });
 
+  boundedInt = min: max: mkOptionType {
+    name = "bounded integer";
+    check = x: isInt x && min <= x && x <= max;
+    merge = mergeOneOption;
+  };
+
+  lowerBoundedInt = min: mkOptionType {
+    name = "lower bounded integer";
+    check = x: isInt x && min <= x;
+    merge = mergeOneOption;
+  };
+
   positive = mkOptionType {
+    inherit (lowerBoundedInt 1) check;
     name = "positive integer";
-    check = x: isInt x && x > 0;
     merge = mergeOneOption;
   };
 
   uint = mkOptionType {
+    inherit (lowerBoundedInt 0) check;
     name = "unsigned integer";
-    check = x: isInt x && x >= 0;
     merge = mergeOneOption;
   };
 
@@ -583,6 +595,9 @@ rec {
     };
   };
 
+  flameshot.color =
+    either (addCheck str (test "#[0-9A-Fa-f]{6}")) svg.color-keyword;
+
   file-mode = mkOptionType {
     name = "file mode";
     check = test "[0-7]{4}";
@@ -599,6 +614,19 @@ rec {
     name = "Haskell module identifier";
     check = x: isString x && all haskell.conid.check (splitString "." x);
     merge = mergeOneOption;
+  };
+
+  # SVG 1.1, 4.4 Recognized color keyword names
+  #
+  # svg-colors.json has been generated with:
+  #   curl -sS https://www.w3.org/TR/SVG11/types.html#ColorKeywords |
+  #   fq -d html '[
+  #     grep_by(.["@class"]=="color-keywords") |
+  #     grep_by(.["@class"]=="prop-value"and.["#text"]!="").["#text"]
+  #   ] | sort'
+  #
+  svg.color-keyword = enum (importJSON ./svg-colors.json) // {
+    name = "SVG 1.1 recognized color keyword";
   };
 
   systemd.unit-name = mkOptionType {

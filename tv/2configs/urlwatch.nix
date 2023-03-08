@@ -2,12 +2,16 @@ with import ./lib;
 { config, pkgs, ... }: let
   exec = filename: args: url: {
     inherit url;
-    filter = "system:${
-      concatMapStringsSep " " shell.escape ([filename] ++ toList args)
-    }";
+    filter = singleton {
+      system =
+        concatMapStringsSep " " shell.escape ([filename] ++ toList args);
+    };
   };
   json = json' ["."];
   json' = exec "${pkgs.jq}/bin/jq";
+  urigrep' = exec (pkgs.writeDash "urigrep" ''
+    ${pkgs.urix}/bin/urix | ${pkgs.gnugrep}/bin/grep -E "$1"
+  '');
   xml = xml' ["--format" "-"];
   xml' = exec "${pkgs.libxml2}/bin/xmllint";
 in {
@@ -68,22 +72,30 @@ in {
       https://raw.githubusercontent.com/NixOS/nixpkgs/master/nixos/modules/services/x11/xserver.nix
 
       https://www.rabbitmq.com/changelog.html
+
+      (urigrep' ["software-resources"] https://semiconductor.samsung.com/consumer-storage/support/tools/)
     ];
     hooksFile = toFile "hooks.py" ''
       import subprocess
       import urlwatch
 
-      class CaseFilter(urlwatch.filters.FilterBase):
+      class SystemFilter(urlwatch.filters.FilterBase):
           """Filter for piping data through an external process"""
 
           __kind__ = 'system'
 
+          __supported_subfilters__ = {
+              'command': 'shell command line to tranform data',
+          }
+
+          __default_subfilter__ = 'command'
+
           def filter(self, data, subfilter=None):
-              if subfilter is None:
-                  raise ValueError('The system filter needs a command')
+              if 'command' not in subfilter:
+                  raise ValueError('{} filter needs a command'.format(self.__kind__))
 
               proc = subprocess.Popen(
-                  subfilter,
+                  subfilter['command'],
                   shell=True,
                   stdin=subprocess.PIPE,
                   stdout=subprocess.PIPE,

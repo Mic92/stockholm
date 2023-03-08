@@ -17,13 +17,28 @@ let
 in
 {
   hosts = mapAttrs hostDefaults {
-    sterni = {
+    sol = {
       owner = config.krebs.users.palo;
       nets = {
         retiolum = {
           tinc.port = 720;
-          aliases = [ "sterni.r" ];
-          tinc.pubkey = builtins.readFile ./retiolum.pub;
+          aliases = [ "sol.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIICCgKCAgEAxrvdMSAcOJXM1TbIIDZ+zPojrcRG3RVMfPC2/0DasRpBFSuS+L60
+            mQEs0l0ptAL6Sbr4+9gfaHkdETfYpeKB4Q4lCPahMq88YfTyB1f3tEOqW3vP22nC
+            Z+Yf+W/sTLWVRoDoS/Eok6wS95R1IQ74vr37YXdbJTD/eeX6sAJkn2I2RV5PD6Bu
+            lHsMuunAj+PyhAgqb2P393h7FN4exL0xM6UbHbgsd9OSp5qKTjZE3jeOyWmounK1
+            7n+8pyRjI0VE47ontnj/GANwpsxRFFtRGmG/S5KhUBXMv7wZr/vaVETRphAu+KhT
+            NqdclmGkQlB/YBodzJID7C21Zz4b33kcn12TU3nc6AL5u9j3sU2sEu/22fAZBWLV
+            yOZ9l/Qe4aJkIbdL70Gvp9G8m7+M4vkdM+e/nA5cZT0N9ArI2D5ltJRd7VLVzxef
+            Y0t/bS9bVOcNt2Sgd81Ubg0OmF2paHGGboAAMqXhf3afwCMyXcDsP6sgPXOIEu7Q
+            hjuo5rg6Fu8eK9edAAQ2afl52GiFUawzjHbjGANwVyea1JTQ3uR6eBtxGOEaYpkr
+            vbl75CxLwE0YA0L3VwhJTNLMVldTrUi2M76QedjzyePkJHMijHT5+0nqTlsmjcNg
+            uv89Mh9shNKdqulfGjTAFyKjTCuUe/rCprJ5CeZWBaEuQKYkcZuMkJsCAwEAAQ==
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "qCJvjlNz5YNOz5IEiwGaoK3InSVCL76uNl+xVBUa/AP";
         };
       };
     };

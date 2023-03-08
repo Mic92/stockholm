@@ -13,8 +13,6 @@ with import ./lib;
 
   krebs.build.host = config.krebs.hosts.bu;
 
-  networking.hostId = lib.mkDefault "00000000";
-
   networking.wireless.enable = true;
   networking.useDHCP = false;
   networking.interfaces.enp0s25.useDHCP = true;

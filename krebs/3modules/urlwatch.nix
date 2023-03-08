@@ -71,7 +71,7 @@ let
       description = "URL to watch.";
       example = [
         https://nixos.org/channels/nixos-unstable/git-revision
-        { url = http://localhost ; filter = "grep:important.*stuff"; }
+        { url = http://localhost ; filter = [ (grep "important.*stuff") ]; }
       ];
       apply = map (x: getAttr (typeOf x) {
         set = x;
@@ -177,12 +177,15 @@ let
                 echo Date: $(date -R)
                 echo From: ${shell.escape cfg.from}
                 echo Subject: $(
-                  sed -n 's/^\(CHANGED\|ERROR\|NEW\): //p' changes \
-                    | tr '\n' ' '
+                  sed -nr 's/^(CHANGED|ERROR|NEW): //p' changes |
+                  sed '1!s/^  //'
                 )
                 echo To: ${shell.escape cfg.mailto}
+                echo Mime-Version: 1.0
+                echo Content-Type: text/plain\; charset=UTF-8
+                echo Content-Transfer-Encoding: base64
                 echo
-                cat changes
+                base64 changes
               } | /run/wrappers/bin/sendmail -t
             fi
           ''}
@@ -211,7 +214,9 @@ let
       };
       filter = mkOption {
         default = null;
-        type = with types; nullOr str; # TODO nullOr subtypes.filter
+        type =
+          with types;
+          nullOr (either str (listOf (pkgs.formats.json {}).type));
       };
       ignore_cached = mkOption {
         default = null;

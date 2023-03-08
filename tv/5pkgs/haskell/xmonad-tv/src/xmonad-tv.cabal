@@ -9,20 +9,21 @@ cabal-version: >=1.10
 executable xmonad
   main-is: main.hs
   build-depends:
-    aeson,
-    base,
-    bytestring,
-    containers,
-    directory,
-    extra,
-    filepath,
-    template-haskell,
-    th-env,
-    unix,
-    X11,
-    xmonad,
-    xmonad-contrib
+      base
+    , X11
+    , aeson
+    , bytestring
+    , containers
+    , directory
+    , extra
+    , filepath
+    , pager
+    , unix
+    , xmonad
+    , xmonad-contrib
   other-modules:
     Shutdown
+    XMonad.Extra
+    XMonad.Hooks.EwmhDesktops.Extra
   default-language: Haskell2010
-  ghc-options: -O2 -Wall -threaded
+  ghc-options: -O2 -Wall

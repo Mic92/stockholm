@@ -54,12 +54,6 @@
   };
   hardware.pulseaudio.package = pkgs.pulseaudioFull;
 
-  lass.browser.config = {
-    dc = { browser = "chromium";  groups = [ "audio" "video" ]; hidden = true; };
-    ff = { browser = "firefox";  groups = [ "audio" "video" ]; hidden = true; };
-    fy = { browser = "chromium";  groups = [ "audio" "video" ]; hidden = true; };
-  };
-
   nix.trustedUsers = [ "root" "lass" ];
 
   services.tor = {

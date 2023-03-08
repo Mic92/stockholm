@@ -3,6 +3,7 @@
   imports = [
     ./config.nix
     (modulesPath + "/installer/scan/not-detected.nix")
+    <stockholm/lass/2configs/antimicrox>
   ];
   disko.devices = import ./disk.nix;
 
@@ -20,15 +21,41 @@
   boot.kernelParams = [
     # Enable energy savings during sleep
     "mem_sleep_default=deep"
-    "initcall_blacklist=acpi_cpufreq_init"
+
+    # use less power with pstate
+    "amd_pstate=passive"
 
     # for ryzenadj -i
     "iomem=relaxed"
+
+    # suspend
+    "resume_offset=178345675"
   ];
 
-  # Enables the amd cpu scaling https://www.kernel.org/doc/html/latest/admin-guide/pm/amd-pstate.html
-  # On recent AMD CPUs this can be more energy efficient.
-  boot.kernelModules = [ "amd-pstate" "kvm-amd" ];
+  boot.kernelModules = [
+    # Enables the amd cpu scaling https://www.kernel.org/doc/html/latest/admin-guide/pm/amd-pstate.html
+    # On recent AMD CPUs this can be more energy efficient.
+    "amd-pstate"
+    "kvm-amd"
+
+    # needed for zenstates
+    "msr"
+
+    # zenpower
+    "zenpower"
+  ];
+
+  boot.extraModulePackages = [
+    (config.boot.kernelPackages.zenpower.overrideAttrs (old: {
+      src = pkgs.fetchFromGitea {
+        domain = "git.exozy.me";
+        owner = "a";
+        repo = "zenpower3";
+        rev = "c176fdb0d5bcba6ba2aba99ea36812e40f47751f";
+        hash = "sha256-d2WH8Zv7F0phZmEKcDiaak9On+Mo9bAFhMulT/N5FWI=";
+      };
+    }))
+  ];
 
   # hardware.cpu.amd.updateMicrocode = true;
 
@@ -36,7 +63,16 @@
     "amdgpu"
   ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "thunderbolt"
+    "xhci_pci"
+    "usbhid"
+  ];
+
+  boot.initrd.kernelModules = [
+    "amdgpu"
+  ];
 
   environment.systemPackages = [
     pkgs.vulkan-tools
@@ -54,7 +90,13 @@
   hardware.video.hidpi.enable = lib.mkDefault true;
 
   # corectrl
-  programs.corectrl.enable = true;
+  programs.corectrl = {
+    enable = true;
+    gpuOverclock = {
+      enable = true;
+      ppfeaturemask = "0xffffffff";
+    };
+  };
   users.users.mainUser.extraGroups = [ "corectrl" ];
 
   # use newer ryzenadj
@@ -72,7 +114,7 @@
 
   # keyboard quirks
   services.xserver.displayManager.sessionCommands = ''
-    xmodmap -e 'keycode 96 = F12 Insert F12 F12' # rebind shift + F12 to shift + insert
+    ${pkgs.xorg.xmodmap}/bin/xmodmap -e 'keycode 96 = F12 Insert F12 F12' # rebind shift + F12 to shift + insert
   '';
   services.udev.extraHwdb = /* sh */ ''
     # disable back buttons
@@ -82,5 +124,20 @@
   '';
 
   # ignore power key
-  services.logind.extraConfig = "HandlePowerKey=ignore";
+
+  # update cpu microcode
+  hardware.cpu.amd.updateMicrocode = true;
+
+  # suspend to disk
+  swapDevices = [{
+    device = "/swapfile";
+  }];
+  boot.resumeDevice = "/dev/mapper/aergia1";
+  services.logind.lidSwitch = "suspend-then-hibernate";
+  services.logind.extraConfig = ''
+    HandlePowerKey=hibernate
+  '';
+
+  # firefox touchscreen support
+  environment.sessionVariables.MOZ_USE_XINPUT2 = "1";
 }

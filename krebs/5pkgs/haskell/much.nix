@@ -7,13 +7,13 @@
 , servant-server, split, terminal-size, text, time, transformers
 , transformers-compat, unix, vector, wai, warp
 }:
-mkDerivation {
+mkDerivation rec {
   pname = "much";
-  version = "1.3.1";
+  version = "1.3.2";
   src = fetchgit {
     url = "https://cgit.krebsco.de/much";
-    sha256 = "0gwyhqcvg9ywna8fhb9hnx97qh5inglj3l0pcwkgwcvm27mfpcqa";
-    rev = "77357335a3a88a4b93f91a46ab939a1a9b192977";
+    hash = "sha256-q65EYO1d3NYVv2NECkGWPb1TyHGdARNi/GX4pgQmljc=";
+    rev = "refs/tags/${version}";
     fetchSubmodules = true;
   };
   isLibrary = true;
