@@ -222,37 +222,6 @@ in {
         tinc.pubkey_ed25519 = "ZQt/OcrDlQZvtJyMEFcS6FKjtumBA9gBWr7VqGdbJBP";
       };
     };
-    martha = {
-      owner = config.krebs.users.mic92;
-      nets = rec {
-        internet = {
-          ip4.addr = "129.215.165.53";
-          ip6.addr = "2001:630:3c1:164:6d4:c4ff:fe04:4aba";
-          aliases = [ "martha.i" ];
-        };
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.29.179";
-          aliases = [ "martha.r" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEA3lR3Wup2yd9SYs9n9a7lq/jXxlKdwjgp9gPEirLn3/XCFM7NpLIp
-            LRm3Wdplv0NWim4zI3AsdGmUBrV3y0Ugj48Td4RpXlOiFjS8NHnvRbamCZF7m/pJ
-            3T/QpQx98+QEKXb3gZ5aDGgcHLRbUYUBuwFOxAKaikuDe2qJxqXqOmA7RXZDkEqe
-            FrQE/H1/+8HqJ1vhgZKi3Vu7zLRB1EV8nggWFjQKR8o0AeViLwM3OxFtGyKTaXuK
-            WAQrvSdKQDpQwqAPogyeftGesOfW7z0xrelkux10p42YM9epYvZDFRG97/nupw/S
-            iYGiTTFDBDTzpyT3zl1uwhmQ3re/nJXf5e4fgnZEcsweU8ysHtDhbimqrm9impVn
-            XdKnnuNa9F8VlyHCT2pVC9+WDKDNtA2M8f+8lG8/hoJ7hhp5HhBZ3ncROyQqOg4F
-            e6YtaFidi+fYXjQkdUXHv5FCkqFJnoxZdI2vwqU2DumltG/o+qsksI2WSsLsuMVs
-            sa4KUq0+5OsmCJnIAKWV2YwbLVf1tJMjPGA0jQECrHPL6SKobRefqav6MPuTbytC
-            4frtEIGbfdKqQ6nNTvTpCrAo+WAm3NE3khTYqGe4LqX/JMoGtWXp/Ex9IdG+sflM
-            mESMjuHp9vPY4aZGPtYPP93Cxv3q7gm+EfIGebajISpaG28J+XjiNNsCAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "emKq1mfkW4/aCoCwmeFU3DtppKs+KsTvd9YGoFkFgdC";
-        };
-      };
-    };
     matchbox = {
       owner = config.krebs.users.mic92;
       nets = {
@@ -876,6 +845,83 @@ in {
             -----END RSA PUBLIC KEY-----
           '';
           tinc.pubkey_ed25519 = "TV9byzSblknvqdUjQCwjgLmA8qCB4Tnl/DSd2mbsZTJ";
+        };
+      };
+    };
+
+    amy = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # amy.dse.in.tum.de
+          ip4.addr = "131.159.102.20";
+          ip6.addr = "2a09:80c0:102::20";
+          aliases = [ "amy.i" ];
+        };
+        retiolum = {
+          aliases = [ "amy.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEApa/qv4uKxr8lpQQau3dqgNqtXOtnN/u/5VlF2f/oNt+cDUAmAgaq
+            6ktUv5HT27xCye1lJ2XNaXDF1lSUNgpdhmv7lnqqwDYi3m8HBnBMUlgXuT1mFtFv
+            RybbrvbedKka4+MMXsUmFJj1udOzJSBfRIVO+M4lRvyWUbm2R18mnrz6DK9++EmL
+            JCTOcBZYzjCa7OciBPJfjLrLAZZC9JnRxrvAnF2tMzGZiaCI4uX5ZKUMeMO/pwBD
+            13MhxdDJeXOl98+nKRBZzft9K0qZmAnfR1a9a0dS6hstUWvl1xDLQP3L+/89sjee
+            PjchaS9qQxdjj6USCEqMJOyetWzN3rabSwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "a4tdZ49nmEgYqhW11FDPhV+Oj2IFsOV2PSjxgJlceeH";
+        };
+      };
+    };
+    rose = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # clara.dse.in.tum.de
+          ip4.addr = "131.159.102.21";
+          ip6.addr = "2a09:80c0:102::21";
+          aliases = [ "rose.i" ];
+        };
+        retiolum = {
+          aliases = [ "rose.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAtinCwGjGfFTdpU+CnugM4MH6z4XLFlLMIW4Z642iq2arXOrrCq09
+            yRG5UC6CBqORnF2FZhHu+wJQMexLXNILavyG6JXERvCm6S5MaFc2YlHSyBcV4AqE
+            Zrjb1wSvlXGcom8C6/HGElsHqI9ULtiUqEEzES6UgUVcO7QrEy03264KZ0y4M/Ov
+            5CpXbyg6tRl3CoLJE+eXyLdOGwHo/eN7M+YSaTU6bEYjJGYAltnJDO9DZxtnaZn2
+            qSImJEwRD7YMPvs/zf/kKI6ihaF/oQMWyj/f0Ik/eif7rd3DRBlWFaZYr+JQBRZg
+            jkaQ6EEX94WKHv6RgI25dqh8hpMaoY0OYQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "GZyz9AVjJlbE34pS2zURwVBZCCzpD0S+VqToLlB5aBI";
+        };
+      };
+    };
+
+    clara = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # clara.dse.in.tum.de
+          ip4.addr = "131.159.102.22";
+          ip6.addr = "2a09:80c0:102::22";
+          aliases = [ "clara.i" ];
+        };
+        retiolum = {
+          aliases = [ "clara.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAqebCzWDLcSU0uSA54Ublw8JSM5kErwJlOr2QOFVm0/QPWNDDqoV4
+            rquS25NRZ37c4hj3BuINQrItAy7pOVrp0SARXZdyqMz3VoGndDge6p/8KEuRFQZi
+            nmYrnsSuys0HOLfb2xQkOkGKBwyEc1hNGHFcw8XtJJMZSFBchQp1C8o3B3uXZq7j
+            yBdUAh0crLPbL+B/xzZPDdLMigh922ejuPuGhtrTKOIQ1Jhyi5ft/Xif5JJja1Ru
+            i/FUxzy/PBz+h7X3yTv4DOIyuMYMJQZpsUGBj7cwueab6rgxyV8upHLdZQ/2YI7m
+            Q6cFnskLkLGlnR/gXcamgj3Sa7J3HQX9TwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "WjXoFt4TG0SqCewYXyH563MACWxhjDixCv1Dk8mDe9B";
         };
       };
     };
