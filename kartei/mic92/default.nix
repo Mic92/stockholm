@@ -222,37 +222,6 @@ in {
         tinc.pubkey_ed25519 = "ZQt/OcrDlQZvtJyMEFcS6FKjtumBA9gBWr7VqGdbJBP";
       };
     };
-    martha = {
-      owner = config.krebs.users.mic92;
-      nets = rec {
-        internet = {
-          ip4.addr = "129.215.165.53";
-          ip6.addr = "2001:630:3c1:164:6d4:c4ff:fe04:4aba";
-          aliases = [ "martha.i" ];
-        };
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.29.179";
-          aliases = [ "martha.r" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEA3lR3Wup2yd9SYs9n9a7lq/jXxlKdwjgp9gPEirLn3/XCFM7NpLIp
-            LRm3Wdplv0NWim4zI3AsdGmUBrV3y0Ugj48Td4RpXlOiFjS8NHnvRbamCZF7m/pJ
-            3T/QpQx98+QEKXb3gZ5aDGgcHLRbUYUBuwFOxAKaikuDe2qJxqXqOmA7RXZDkEqe
-            FrQE/H1/+8HqJ1vhgZKi3Vu7zLRB1EV8nggWFjQKR8o0AeViLwM3OxFtGyKTaXuK
-            WAQrvSdKQDpQwqAPogyeftGesOfW7z0xrelkux10p42YM9epYvZDFRG97/nupw/S
-            iYGiTTFDBDTzpyT3zl1uwhmQ3re/nJXf5e4fgnZEcsweU8ysHtDhbimqrm9impVn
-            XdKnnuNa9F8VlyHCT2pVC9+WDKDNtA2M8f+8lG8/hoJ7hhp5HhBZ3ncROyQqOg4F
-            e6YtaFidi+fYXjQkdUXHv5FCkqFJnoxZdI2vwqU2DumltG/o+qsksI2WSsLsuMVs
-            sa4KUq0+5OsmCJnIAKWV2YwbLVf1tJMjPGA0jQECrHPL6SKobRefqav6MPuTbytC
-            4frtEIGbfdKqQ6nNTvTpCrAo+WAm3NE3khTYqGe4LqX/JMoGtWXp/Ex9IdG+sflM
-            mESMjuHp9vPY4aZGPtYPP93Cxv3q7gm+EfIGebajISpaG28J+XjiNNsCAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "emKq1mfkW4/aCoCwmeFU3DtppKs+KsTvd9YGoFkFgdC";
-        };
-      };
-    };
     matchbox = {
       owner = config.krebs.users.mic92;
       nets = {
