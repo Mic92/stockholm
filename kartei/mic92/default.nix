@@ -879,6 +879,83 @@ in {
         };
       };
     };
+
+    amy = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # amy.dse.in.tum.de
+          ip4.addr = "131.159.102.20";
+          ip6.addr = "2a09:80c0:102::20";
+          aliases = [ "amy.i" ];
+        };
+        retiolum = {
+          aliases = [ "amy.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEApa/qv4uKxr8lpQQau3dqgNqtXOtnN/u/5VlF2f/oNt+cDUAmAgaq
+            6ktUv5HT27xCye1lJ2XNaXDF1lSUNgpdhmv7lnqqwDYi3m8HBnBMUlgXuT1mFtFv
+            RybbrvbedKka4+MMXsUmFJj1udOzJSBfRIVO+M4lRvyWUbm2R18mnrz6DK9++EmL
+            JCTOcBZYzjCa7OciBPJfjLrLAZZC9JnRxrvAnF2tMzGZiaCI4uX5ZKUMeMO/pwBD
+            13MhxdDJeXOl98+nKRBZzft9K0qZmAnfR1a9a0dS6hstUWvl1xDLQP3L+/89sjee
+            PjchaS9qQxdjj6USCEqMJOyetWzN3rabSwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "a4tdZ49nmEgYqhW11FDPhV+Oj2IFsOV2PSjxgJlceeH";
+        };
+      };
+    };
+    rose = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # clara.dse.in.tum.de
+          ip4.addr = "131.159.102.21";
+          ip6.addr = "2a09:80c0:102::21";
+          aliases = [ "rose.i" ];
+        };
+        retiolum = {
+          aliases = [ "rose.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAtinCwGjGfFTdpU+CnugM4MH6z4XLFlLMIW4Z642iq2arXOrrCq09
+            yRG5UC6CBqORnF2FZhHu+wJQMexLXNILavyG6JXERvCm6S5MaFc2YlHSyBcV4AqE
+            Zrjb1wSvlXGcom8C6/HGElsHqI9ULtiUqEEzES6UgUVcO7QrEy03264KZ0y4M/Ov
+            5CpXbyg6tRl3CoLJE+eXyLdOGwHo/eN7M+YSaTU6bEYjJGYAltnJDO9DZxtnaZn2
+            qSImJEwRD7YMPvs/zf/kKI6ihaF/oQMWyj/f0Ik/eif7rd3DRBlWFaZYr+JQBRZg
+            jkaQ6EEX94WKHv6RgI25dqh8hpMaoY0OYQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "GZyz9AVjJlbE34pS2zURwVBZCCzpD0S+VqToLlB5aBI";
+        };
+      };
+    };
+
+    clara = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # clara.dse.in.tum.de
+          ip4.addr = "131.159.102.22";
+          ip6.addr = "2a09:80c0:102::22";
+          aliases = [ "clara.i" ];
+        };
+        retiolum = {
+          aliases = [ "clara.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAqebCzWDLcSU0uSA54Ublw8JSM5kErwJlOr2QOFVm0/QPWNDDqoV4
+            rquS25NRZ37c4hj3BuINQrItAy7pOVrp0SARXZdyqMz3VoGndDge6p/8KEuRFQZi
+            nmYrnsSuys0HOLfb2xQkOkGKBwyEc1hNGHFcw8XtJJMZSFBchQp1C8o3B3uXZq7j
+            yBdUAh0crLPbL+B/xzZPDdLMigh922ejuPuGhtrTKOIQ1Jhyi5ft/Xif5JJja1Ru
+            i/FUxzy/PBz+h7X3yTv4DOIyuMYMJQZpsUGBj7cwueab6rgxyV8upHLdZQ/2YI7m
+            Q6cFnskLkLGlnR/gXcamgj3Sa7J3HQX9TwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "WjXoFt4TG0SqCewYXyH563MACWxhjDixCv1Dk8mDe9B";
+        };
+      };
+    };
   };
   users = {
     mic92 = {
