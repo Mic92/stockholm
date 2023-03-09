@@ -55,6 +55,7 @@ let
           };
         };
       }));
+      default = [];
     };
 
     local_domains = mkOption {
@@ -109,6 +110,7 @@ let
           };
         };
       }));
+      default = [];
     };
   };
 
