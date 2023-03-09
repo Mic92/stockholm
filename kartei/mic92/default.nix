@@ -827,7 +827,14 @@ in {
     ruby = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet = {
+          # of4.dse.cit.tum.de.
+          ip4.addr = "131.159.38.101";
+          ip6.addr = "2a09:80c0:38::101";
+          aliases = [ "ruby.i" ];
+        };
         retiolum = {
+          via = internet;
           aliases = [ "ruby.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -859,6 +866,7 @@ in {
           aliases = [ "amy.i" ];
         };
         retiolum = {
+          via = internet;
           aliases = [ "amy.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -884,6 +892,7 @@ in {
           aliases = [ "rose.i" ];
         };
         retiolum = {
+          via = internet;
           aliases = [ "rose.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
@@ -910,6 +919,7 @@ in {
           aliases = [ "clara.i" ];
         };
         retiolum = {
+          via = internet;
           aliases = [ "clara.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
