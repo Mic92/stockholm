@@ -21,21 +21,21 @@
       disko.urls = [
         "http://cgit.gum.r/disko"
         "http://cgit.ni.r/disko"
-        "http://cgit.prism.r/disko"
+        "http://cgit.orange.r/disko"
       ];
       krops.urls = [
         "http://cgit.ni.r/krops"
-        "http://cgit.prism.r/krops"
+        "http://cgit.orange.r/krops"
         "https://github.com/krebs/krops.git"
       ];
       nix_writers.urls = [
         "http://cgit.ni.r/nix-writers"
-        "http://cgit.prism.r/nix-writers"
+        "http://cgit.orange.r/nix-writers"
       ];
       stockholm.urls = [
         "http://cgit.gum.r/stockholm"
         "http://cgit.ni.r/stockholm"
-        "http://cgit.prism.r/stockholm"
+        "http://cgit.orange.r/stockholm"
       ];
     };
   };
