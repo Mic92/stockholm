@@ -145,7 +145,7 @@ let
           channel = "#xxx";
           # TODO define refs in some kind of option per repo
           server = "irc.r";
-          verbose = config.krebs.build.host.name == "prism";
+          verbose = config.krebs.build.host.name == "orange";
         }}
         ${cgit-clear-cache}/bin/cgit-clear-cache
       '';
