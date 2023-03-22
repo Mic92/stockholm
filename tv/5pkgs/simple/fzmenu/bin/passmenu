@@ -10,14 +10,18 @@ case ${FZMENU_PHASE-0} in
     ;;
   1)
     if result=$(
+      PASSWORD_STORE_DIR=${PASSWORD_STORE_DIR-$HOME/.password-store}
       FZF_DEFAULT_OPTS=${FZMENU_FZF_DEFAULT_OPTS-}
       if test -n "$FZF_DEFAULT_OPTS"; then
         export FZF_DEFAULT_OPTS
       fi
-      pass git ls-files '*/*.gpg' | \
-      sed '
-        /\/otp\.gpg$:/d
-        s/\.gpg$//
+      find -L "$PASSWORD_STORE_DIR" -type f -name '*.gpg' |
+      awk -F / -v PASSWORD_STORE_DIR="$PASSWORD_STORE_DIR" '
+        { n = length(PASSWORD_STORE_DIR "/") }
+        $NF == "otp.gpg" { next }
+        /.*\.gpg$/ {
+          print substr($0, 1 + n, length($0)-length(".gpg")-n)
+        }
       ' |
       exec fzf \
           --history=/dev/null \
