@@ -20,8 +20,6 @@
     <stockholm/lass/2configs/pass.nix>
     <stockholm/lass/2configs/mail.nix>
     <stockholm/lass/2configs/bitcoin.nix>
-
-    <stockholm/lass/2configs/xonsh.nix>
     <stockholm/lass/2configs/review.nix>
     <stockholm/lass/2configs/dunst.nix>
     # <stockholm/krebs/2configs/ircd.nix>
