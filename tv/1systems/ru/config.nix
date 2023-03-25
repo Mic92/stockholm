@@ -12,20 +12,23 @@ with import ./lib;
   boot.loader.systemd-boot.enable = true;
 
   fileSystems."/" = {
-    device = "main/root";
-    fsType = "zfs";
+    device = "/dev/mapper/ruvg0-root";
+    fsType = "btrfs";
+    options = ["defaults" "noatime" "compress=zstd"];
   };
   fileSystems."/boot" = {
     device = "/dev/nvme0n1p1";
     fsType = "vfat";
   };
   fileSystems."/home" = {
-    device = "main/home";
-    fsType = "zfs";
+    device = "/dev/mapper/ruvg0-home";
+    fsType = "btrfs";
+    options = ["defaults" "noatime" "compress=zstd"];
   };
   fileSystems."/bku" = {
-    device = "main/bku";
-    fsType = "zfs";
+    device = "/dev/mapper/ruvg0-bku";
+    fsType = "btrfs";
+    options = ["defaults" "noatime" "compress=zstd"];
   };
 
   krebs.build.host = config.krebs.hosts.ru;

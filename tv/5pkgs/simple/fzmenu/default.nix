@@ -21,8 +21,9 @@ pkgs.runCommand "fzmenu" {
       --replace '#PATH=' PATH=${lib.makeBinPath [
         pkgs.coreutils
         pkgs.dash
+        pkgs.findutils
         pkgs.fzf
-        pkgs.gnused
+        pkgs.gawk
         (pkgs.pass.withExtensions (ext: [
           ext.pass-otp
         ]))
@@ -36,8 +37,9 @@ pkgs.runCommand "fzmenu" {
       --replace '#PATH=' PATH=${lib.makeBinPath [
         pkgs.coreutils
         pkgs.dash
+        pkgs.findutils
         pkgs.fzf
-        pkgs.gnused
+        pkgs.gawk
         (pkgs.pass.withExtensions (ext: [
           ext.pass-otp
         ]))
