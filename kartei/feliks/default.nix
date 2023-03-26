@@ -1,10 +1,19 @@
+with import ../../lib;
 { config, ... }: let
-  lib = import ../../lib;
+  hostDefaults = hostName: host: flip recursiveUpdate host ({
+    ci = false;
+    external = true;
+    monitoring = false;
+  } // optionalAttrs (host.nets?retiolum) {
+    nets.retiolum.ip6.addr =
+      (krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
+  });
+in {
 in {
   users.feliks = {
     mail = "feliks@flipdot.org";
   };
-  hosts = {
+  hosts = mapAttrs hostDefaults {
     papawhakaaro = {
       owner = config.krebs.users.feliks;
       nets = {
