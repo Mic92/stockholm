@@ -9,7 +9,6 @@ with import ../../lib;
       (krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
   });
 in {
-in {
   users.feliks = {
     mail = "feliks@flipdot.org";
   };
