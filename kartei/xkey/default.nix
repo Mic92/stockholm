@@ -6,7 +6,7 @@ let
     ci = false;
     external = true;
     monitoring = false;
-    owner = config.krebs.users.kmein;
+    owner = config.krebs.users.xkey;
   } // optionalAttrs (host.nets?retiolum) {
     nets.retiolum = {
       ip6.addr = (krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
@@ -27,34 +27,17 @@ in
   };
   hosts = mapAttrs hostDefaults {
     aland = {
-     nets = {
-       retiolum = {
-         ip4.addr = "10.243.12.34";
-         aliases = [ "aland.r" ];
-         tinc.pubkey = ''
-           -----BEGIN RSA PUBLIC KEY-----
-           MIICCgKCAgEAwR1e8/4Lx7gqSyFhA5WpfT4LsnXqYARR6y+gYAOSre6wMvBm/OBY
-           CKEYCCfqQD3naukID9FqleXaZdIxp6xxBIYZ1yi1Xn032MPP0S37oZAxJlXvlEaU
-           plG9ct6Zh6qTzpghP2UyYD4RxhLwvsRTycwLF93D+a1z1/CNNDLSoTS11BLtvhDb
-           DmxTVY/1hWJUiVR4KyRsYnJ3N1Heg/4R/Su4oFm+DatfFYdzhaNsk9q3YYIRdRcx
-           aHLF65ygVTjG/rUJp/OvkeU1G5rc0ldpd7zR8N8kkjgI1lmZe50mUGghKr1zexV+
-           OkIjXGrwTk4RZk3kZO6PZu56rrsR8HZirfrtJWRy7UgAm3S/lZku7X4SN3+7pfL1
-           ero6/XB4CHeQ9OpQemcR5o6AR0ncE0TApqeoLd1U710XmwM09ifawAO3jm9ER19X
-           TKFHeBzqsToPmternXnAKgg2NYyKStkavQu6JTl/uOXdfqfMc9TU6mzV8aBo7ZDa
-           aLdlg0phcFCcZT8zJGzA3des70AHWmQ7G49pBysnXk8p+1l3SPazGAlIWBCT6oZX
-           zUUauGEgsuTkDC+JijUm/1HrrMfiigHeBTZKPLqe/75MkumukXqTzd3zfUEcA5Vf
-           VgEnL2jNVFfocJtmhLQdkmnSiIQslRSOHMC94ZWa0ku0kHZ3XawwwY0CAwEAAQ==
-           -----END RSA PUBLIC KEY-----
-         '';
-         tinc.pubkey_ed25519 = "gOEzoUsuJyaGIjoZIyS9uZa+zLYfN6BEZrbCTeAWW7A";
-        };
+      nets.wiregrill = {
+        ip4.addr = "10.244.12.34";
+        aliases = [ "aland.xkey.w" ];
+        wireguard.pubkey = "m2IymGYQiRma2cyZbwRsOw1rCpB5ZdFkfYII1hnHzGE=";
       };
     };
     catalonia = {
       nets = {
        retiolum = {
          ip4.addr = "10.243.13.12";
-         aliases = [ "catalonia.r" ];
+         aliases = [ "catalonia.xkey.r" ];
          tinc.pubkey = ''
            -----BEGIN RSA PUBLIC KEY-----
            MIICCgKCAgEAug+nej8/spuRHdzcfBYAuzUVoiq4YufmJqXSshvgf4aqjeVEt91Y
@@ -74,11 +57,17 @@ in
         };
       };
     };
+    cybercube = {
+      nets.wiregrill = {
+        aliases = [ "cybercube.xkey.w" ];
+        wireguard.pubkey = "ZPOCyThKQUlR/gPFWoJ4XICHYFMNtI70XH+y5v2f6VQ=";
+      };
+    };
     rojava = {
      nets = {
        retiolum = {
          ip4.addr = "10.243.23.42";
-         aliases = [ "rojava.r" ];
+         aliases = [ "rojava.xkey.r" ];
          tinc.pubkey = ''
            -----BEGIN RSA PUBLIC KEY-----
            MIICCgKCAgEA3Xafx5PYDNRxRwWGo25paveBgEFQYWWOg5YYcqSlBsUzWkEwZPdd
@@ -102,7 +91,7 @@ in
      nets = {
        retiolum = {
          ip4.addr = "10.243.161.1";
-         aliases = [ "sicily.r" "mukke.r" ];
+         aliases = [ "sicily.xkey.r" "mukke.r" ];
          tinc.pubkey = ''
            -----BEGIN RSA PUBLIC KEY-----
            MIICCgKCAgEAzjCrsMRptg22QJTXsNgrxE/CjpGiDD9NYExqiDQ7kyKJ7+nrjtJg
