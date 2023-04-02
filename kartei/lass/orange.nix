@@ -6,6 +6,7 @@
       ip6.addr = r6 "012a";
       aliases = [
         "orange.r"
+        "cgit.orange.r"
       ];
       tinc.pubkey = ''
         -----BEGIN RSA PUBLIC KEY-----

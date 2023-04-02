@@ -6,10 +6,13 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs>
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/mumble-reminder.nix>
+    <stockholm/lass/2configs/services/git>
   ];
 
   krebs.build.host = config.krebs.hosts.orange;
 
+  services.nginx.enable = true;
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
   security.acme = {
     acceptTerms = true;
     defaults.email = "acme@lassul.us";

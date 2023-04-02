@@ -39,6 +39,11 @@ let
       default = [];
     };
 
+    extraRouters = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+    };
+
     internet-aliases = mkOption {
       type = types.listOf (types.submodule ({
         options = {
@@ -50,6 +55,7 @@ let
           };
         };
       }));
+      default = [];
     };
 
     local_domains = mkOption {
@@ -104,6 +110,7 @@ let
           };
         };
       }));
+      default = [];
     };
   };
 
@@ -253,6 +260,8 @@ let
           check_local_user
           transport = home_maildir
           cannot_route_message = Unknown user
+
+        ${lib.optionalString (cfg.extraRouters != null) cfg.extraRouters}
 
         begin transports
 

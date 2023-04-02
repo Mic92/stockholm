@@ -16,6 +16,7 @@ in
   services.nginx.streamConfig = ''
     ${lib.concatMapStringsSep "\n" (port: ''
       server {
+        listen [::]:${toString port};
         listen ${toString port};
         proxy_pass ${target}:${toString port};
       }
