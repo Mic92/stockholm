@@ -87,7 +87,6 @@
 
   # textsize
   services.xserver.dpi = 200;
-  hardware.video.hidpi.enable = lib.mkDefault true;
 
   # corectrl
   programs.corectrl = {
