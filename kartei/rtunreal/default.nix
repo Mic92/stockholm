@@ -74,5 +74,11 @@ in
         tinc.pubkey_ed25519 = "YJE4KD9PhDjxucDAGrbec5Yqqf3A8/VU0J0NV8EPXuN";
       };
     };
+    rtgraphene = {
+      nets.wiregrill = {
+        aliases = [ "graphene.rtunreal.w" ];
+        wireguard.pubkey = "IZ7tnD5ZVqO886hFzk6k92R70p1J6jYvyIEAWUccehU=";
+      };
+    };
   };
 }
