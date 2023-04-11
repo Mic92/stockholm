@@ -12,6 +12,7 @@
     <stockholm/krebs/2configs/wiki.nix>
     <stockholm/krebs/2configs/acme.nix>
     <stockholm/krebs/2configs/mud.nix>
+    <stockholm/krebs/2configs/repo-sync.nix>
 
     <stockholm/krebs/2configs/cal.nix>
     <stockholm/krebs/2configs/mastodon.nix>
