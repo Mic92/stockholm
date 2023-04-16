@@ -90,6 +90,7 @@ in {
             "tts.r"
             "flood.r"
             "warez.r"
+            "bing-gpt.r"
             "navidrome.r"
           ];
           tinc.pubkey = ''
