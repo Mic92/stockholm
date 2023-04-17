@@ -55,7 +55,7 @@ let
     pattern = "!bing (.*)$";
     activate = "match";
     arguments = [1];
-    timeoutSec = 42;
+    timeoutSec = 1337;
     command = {
       filename = pkgs.writeDash "bing" ''
         set -efu
@@ -64,10 +64,21 @@ let
           pkgs.curl
           pkgs.jq
         ]}
-        printf '%s' "$*" |
-          curl -SsG http://bing-gpt.r/api/chat --data-urlencode 'prompt@-' |
-          jq -r '.item.messages[1].text' |
-          echo "$_from: $(cat)"
+        response=$(printf '%s' "$*" |
+          curl -SsG http://bing-gpt.r/api/chat --data-urlencode 'prompt@-'
+        )
+        if [ "$?" -ne 0 ]; then
+          printf '%s' "$response" |
+            curl -Ss http://p.r --data-binary @- |
+            tail -1
+        else
+          printf '%s' "$response" |
+            jq -r '.item.messages[1].text' |
+            echo "$_from: $(cat)"
+
+          printf '%s' "$response" |
+            jq -r '[.item.messages[1].sourceAttributions[].seeMoreUrl] | to_entries[] | "[\(.key)]: \(.value)"'
+        fi
       '';
     };
   };
