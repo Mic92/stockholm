@@ -911,6 +911,33 @@ in {
       };
     };
 
+    donna = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # clara.dse.in.tum.de
+          ip4.addr = "131.159.38.222";
+          ip6.addr = "2a09:80c0:38::222";
+          aliases = [ "donna.i" ];
+        };
+        retiolum = {
+          via = internet;
+          aliases = [ "donna.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAs34lPq8SnVdzMdPkWQMfeM061Yh95wqqGOdGODiyoWdsP0ErRH3/
+            HjgmB7luMl7MdL3ZKIpZe/IR2OSAL+6HBE/JPIapO2e1DFFEg42AI58lgjrR0yEr
+            Q59ZeGu+V95l+jC08IUoS9K6SVTkDCVe2b4Akf5oMtHAAG+ELtzh2zrPH6lkrXYd
+            LvzIWcrmqu1AnmmUiHT1JleCDfSn2m/ev+LcY109lN7LCFA5VL12/EP2FhM3ELHq
+            j2gAdvD1LAKq4var2MnR0MnKg0k1vMGSgwK+hj0AoLNiYivo8bxoRBNbUb94o4jQ
+            8xfbYyAFxpxdi/bFDmT1UjkouJ1Y8I8GJwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "8XlFDxQoGq6Fr40PTDyF8GUwP2+YSDp8By0vlKn1OlO";
+        };
+      };
+    };
+
     clara = {
       owner = config.krebs.users.mic92;
       nets = rec {
