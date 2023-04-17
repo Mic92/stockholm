@@ -77,7 +77,7 @@ let
             echo "$_from: $(cat)"
 
           printf '%s' "$response" |
-            jq -r '[.item.messages[1].sourceAttributions[].seeMoreUrl] | to_entries[] | "[\(.key)]: \(.value)"'
+            jq -r '[.item.messages[1].sourceAttributions[].seeMoreUrl] | to_entries[] | "[\(.key + 1)]: \(.value)"'
         fi
       '';
     };
