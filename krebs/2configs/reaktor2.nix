@@ -354,6 +354,7 @@ let
         }
         bedger-add
         bedger-balance
+        bing
         hooks.sed
         interrogate
         say
@@ -558,7 +559,6 @@ in {
         (systemPlugin {
           extra_privmsg_hooks = [
             confuse
-            bing
           ];
         })
       ];
