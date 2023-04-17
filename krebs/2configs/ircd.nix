@@ -38,6 +38,8 @@
         hidden = false;
         password = "$2a$04$0AtVycWQJ07ymrDdKyAm2un3UVSVIzpzL3wsWbWb3PF95d1CZMcMO";
       };
+      server.max-line-length = 1024;
+      server.lookup-hostnames = true;
     };
   };
 }
