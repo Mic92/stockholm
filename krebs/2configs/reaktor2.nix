@@ -51,6 +51,27 @@ let
     };
   };
 
+  bing = {
+    pattern = "!bing (.*)$";
+    activate = "match";
+    arguments = [1];
+    timeoutSec = 42;
+    command = {
+      filename = pkgs.writeDash "bing" ''
+        set -efu
+        export PATH=${makeBinPath [
+          pkgs.coreutils
+          pkgs.curl
+          pkgs.jq
+        ]}
+        printf '%s' "$*" |
+          curl -SsG http://bing-gpt.r/api/chat --data-urlencode 'prompt@-' |
+          jq -r '.item.messages[1].text' |
+          echo "$_from: $(cat)"
+      '';
+    };
+  };
+
   confuse = {
     pattern = "!confuse (.*)$";
     activate = "match";
@@ -526,6 +547,7 @@ in {
         (systemPlugin {
           extra_privmsg_hooks = [
             confuse
+            bing
           ];
         })
       ];
