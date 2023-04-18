@@ -7,6 +7,9 @@ with import ../../lib;
   } // optionalAttrs (host.nets?retiolum) {
     nets.retiolum.ip6.addr =
       (krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
+  } // optionalAttrs (host.nets?wiregrill) {
+    nets.wiregrill.ip6.addr =
+      (krebs.genipv6 "wiregrill" "external" { inherit hostName; }).address;
   });
 in {
   users.feliks = {
@@ -18,7 +21,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.10.243";
-          aliases = [ "papawhakaaro.r" ];
+          aliases = [ "papawhakaaro.r" "tp.feliks.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIICCgKCAgEA4bd0lVUVlzFmM8TuH77C5VctcK4lkw02LbMVQDJ5U+Ww075nNahw
@@ -43,7 +46,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.10.244";
-          aliases = [ "iti.r" ];
+          aliases = [ "iti.r" "ltd.feliks.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIICCgKCAgEA5TXEmw3F3lCekITBPW8QYF1ciKHN8RSi47k1vW+jXb6gdWcVo5KL
@@ -68,7 +71,7 @@ in {
       nets = {
         retiolum = {
           ip4.addr = "10.243.10.245";
-          aliases = [ "tumaukainga.r" ];
+          aliases = [ "tumaukainga.r" "hs.feliks.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIICCgKCAgEAj1q28QzUlag0i+2ZEpZyQEbrtuODj6pCCt2IX1Uz1B83outO2l/n
@@ -86,6 +89,12 @@ in {
           '';
           tinc.pubkey_ed25519 = "li5wJeMjS+fNAMjrn3KVxZby/kGfH6ZoWArYSGMFAQD";
         };
+      };
+    };
+    ahuatangata = {
+      nets.wiregrill = {
+        aliases = [ "ahuatangata" "ndrd.feliks.r" ];
+        wireguard.pubkey = "IZ7tnD5ZVqO886hFzk6k92R70p1J6jYvyIEAWUccehU=";
       };
     };
   };
