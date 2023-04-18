@@ -95,7 +95,7 @@ in {
       nets.wiregrill = {
         ip4.addr = "10.243.10.246";
         aliases = [ "ahuatangata" "ndrd.feliks.r" ];
-        wireguard.pubkey = "IZ7tnD5ZVqO886hFzk6k92R70p1J6jYvyIEAWUccehU=";
+        wireguard.pubkey = "QPDGBEYJ1znqUdjy6JWZJ+cqPMcU67dHlOX5beTM6TA=";
       };
     };
   };
