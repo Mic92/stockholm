@@ -93,7 +93,7 @@ in {
     };
     ahuatangata = {
       nets.wiregrill = {
-        ip4.addr = "10.243.10.246";
+        ip4.addr = "10.244.10.246";
         aliases = [ "ahuatangata" "ndrd.feliks.r" ];
         wireguard.pubkey = "QPDGBEYJ1znqUdjy6JWZJ+cqPMcU67dHlOX5beTM6TA=";
       };
