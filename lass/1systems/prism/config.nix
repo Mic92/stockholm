@@ -127,6 +127,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/exim-smarthost.nix>
     <stockholm/lass/2configs/privoxy-retiolum.nix>
     <stockholm/lass/2configs/binary-cache/server.nix>
+    <stockholm/lass/2configs/binary-cache/proxy.nix>
     <stockholm/lass/2configs/iodined.nix>
     <stockholm/lass/2configs/paste.nix>
     <stockholm/lass/2configs/syncthing.nix>
