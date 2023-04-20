@@ -80,26 +80,26 @@ in {
   };
   systemd.services.mumble-reminder-nixos = {
     description = "weekly reminder for nixos mumble";
-    startAt = "Thu *-*-* 17:00:00 Europe/Berlin";
+    startAt = "Wed *-*-* 19:00:00 Europe/Berlin";
     serviceConfig = {
       ExecStart = pkgs.writers.writeDash "mumble_reminder" ''
         animals='
           ${animals}
         '
-        ${write_to_irc "#nixos"} "Es ist Donnerstag meine $(echo "$animals" | grep -v '^$' | shuf -n1 )!"
+        ${write_to_irc "#nixos"} "Es ist Mittwoch meine $(echo "$animals" | grep -v '^$' | shuf -n1 )!"
         ${write_to_irc "#nixos"} "kommt auf mumble://lassul.us"
       '';
     };
   };
   systemd.services.mumble-reminder-krebs = {
     description = "weekly reminder for nixos mumble";
-    startAt = "Thu *-*-* 19:00:00 Europe/Berlin";
+    startAt = "Wed *-*-* 19:00:00 Europe/Berlin";
     serviceConfig = {
       ExecStart = pkgs.writers.writeDash "mumble_reminder" ''
         animals='
           ${animals}
         '
-        ${write_to_irc "#krebs"} "Es ist Donnerstag meine $(echo "$animals" | grep -v '^$' | shuf -n1 )!"
+        ${write_to_irc "#krebs"} "Es ist Mittwoch meine $(echo "$animals" | grep -v '^$' | shuf -n1 )!"
         ${write_to_irc "#krebs"} "$(cat /var/lib/reaktor2-mumble-reminder/users | ${pkgs.findutils}/bin/xargs echo) : mumble?"
       '';
     };
