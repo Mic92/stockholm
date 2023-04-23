@@ -4,6 +4,7 @@
   nix = {
     binaryCaches = [
       "http://cache.prism.r"
+      "http://cache.neoprism.r"
       "https://cache.nixos.org/"
     ];
     binaryCachePublicKeys = [

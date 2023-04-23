@@ -39,10 +39,13 @@ let
   };
 
   imp = {
+    users.groups.konsens.gid = genid "konsens";
     users.users.konsens = rec {
       name = "konsens";
+      group = "konsens";
       uid = genid name;
       home = "/var/lib/konsens";
+      isSystemUser = true;
       createHome = true;
     };
 

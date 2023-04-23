@@ -51,6 +51,45 @@ let
     };
   };
 
+  bing = {
+    pattern = "!bing (.*)$";
+    activate = "match";
+    arguments = [1];
+    timeoutSec = 1337;
+    command = {
+      filename = pkgs.writeDash "bing" ''
+        set -efu
+        report_error() {
+          printf '%s' "$*" |
+            curl -Ss http://p.r --data-binary @- |
+            tail -1 |
+            echo "error $(cat)"
+          exit 0
+        }
+        export PATH=${makeBinPath [
+          pkgs.coreutils
+          pkgs.curl
+          pkgs.jq
+        ]}
+        response=$(printf '%s' "$*" |
+          curl -SsG http://bing-gpt.r/api/chat --data-urlencode 'prompt@-'
+        )
+        if [ "$?" -ne 0 ]; then
+          report_error "$response"
+        else
+          if ! text=$(printf '%s' "$response" | jq -er '.item.messages[1].text'); then
+            echo "$_from: $(report_error "$response")"
+            exit 0
+          fi
+          printf '%s' "$text" | echo "$_from: $(cat)"
+
+          printf '%s' "$response" |
+            jq -r '[.item.messages[1].sourceAttributions[].seeMoreUrl] | to_entries[] | "[\(.key + 1)]: \(.value)"'
+        fi
+      '';
+    };
+  };
+
   confuse = {
     pattern = "!confuse (.*)$";
     activate = "match";
@@ -322,6 +361,7 @@ let
         }
         bedger-add
         bedger-balance
+        bing
         hooks.sed
         interrogate
         say

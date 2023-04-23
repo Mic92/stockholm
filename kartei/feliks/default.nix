@@ -1,12 +1,16 @@
 with import ../../lib;
 { config, ... }: let
   hostDefaults = hostName: host: flip recursiveUpdate host ({
+    owner = config.krebs.users.feliks;
     ci = false;
     external = true;
     monitoring = false;
   } // optionalAttrs (host.nets?retiolum) {
     nets.retiolum.ip6.addr =
       (krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
+  } // optionalAttrs (host.nets?wiregrill) {
+    nets.wiregrill.ip6.addr =
+      (krebs.genipv6 "wiregrill" "external" { inherit hostName; }).address;
   });
 in {
   users.feliks = {
@@ -14,11 +18,10 @@ in {
   };
   hosts = mapAttrs hostDefaults {
     papawhakaaro = {
-      owner = config.krebs.users.feliks;
       nets = {
         retiolum = {
           ip4.addr = "10.243.10.243";
-          aliases = [ "papawhakaaro.r" ];
+          aliases = [ "papawhakaaro.r" "tp.feliks.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIICCgKCAgEA4bd0lVUVlzFmM8TuH77C5VctcK4lkw02LbMVQDJ5U+Ww075nNahw
@@ -39,11 +42,10 @@ in {
       };
     };
     iti = {
-      owner = config.krebs.users.feliks;
       nets = {
         retiolum = {
           ip4.addr = "10.243.10.244";
-          aliases = [ "iti.r" ];
+          aliases = [ "iti.r" "ltd.feliks.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIICCgKCAgEA5TXEmw3F3lCekITBPW8QYF1ciKHN8RSi47k1vW+jXb6gdWcVo5KL
@@ -64,11 +66,10 @@ in {
       };
     };
     tumaukainga = {
-      owner = config.krebs.users.feliks;
       nets = {
         retiolum = {
           ip4.addr = "10.243.10.245";
-          aliases = [ "tumaukainga.r" ];
+          aliases = [ "tumaukainga.r" "hs.feliks.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
             MIICCgKCAgEAj1q28QzUlag0i+2ZEpZyQEbrtuODj6pCCt2IX1Uz1B83outO2l/n
@@ -86,6 +87,13 @@ in {
           '';
           tinc.pubkey_ed25519 = "li5wJeMjS+fNAMjrn3KVxZby/kGfH6ZoWArYSGMFAQD";
         };
+      };
+    };
+    ahuatangata = {
+      nets.wiregrill = {
+        ip4.addr = "10.244.10.246";
+        aliases = [ "ahuatangata" "ndrd.feliks.r" ];
+        wireguard.pubkey = "QPDGBEYJ1znqUdjy6JWZJ+cqPMcU67dHlOX5beTM6TA=";
       };
     };
   };

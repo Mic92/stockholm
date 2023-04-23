@@ -14,7 +14,7 @@
   services.nginx = {
     enable = true;
     virtualHosts.nix-serve = {
-      serverAliases = [ "cache.prism.r" ];
+      serverAliases = [ "cache.${config.networking.hostName}.r" ];
       locations."/".extraConfig = ''
         proxy_pass http://localhost:${toString config.services.nix-serve.port};
       '';
@@ -24,14 +24,6 @@
           WantMassQuery: 1
           Priority: 42
         ''};
-      '';
-    };
-    virtualHosts."cache.krebsco.de" = {
-      forceSSL = true;
-      serverAliases = [ "cache.lassul.us" ];
-      enableACME = true;
-      locations."/".extraConfig = ''
-        proxy_pass http://localhost:${toString config.services.nix-serve.port};
       '';
     };
   };
