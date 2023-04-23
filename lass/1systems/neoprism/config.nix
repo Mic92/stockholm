@@ -4,6 +4,7 @@
   imports = [
     <stockholm/lass>
     <stockholm/lass/2configs/retiolum.nix>
+    <stockholm/lass/2configs/gsm-wiki.nix>
 
     # sync-containers
     <stockholm/lass/2configs/consul.nix>
