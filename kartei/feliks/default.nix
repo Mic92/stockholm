@@ -1,6 +1,7 @@
 with import ../../lib;
 { config, ... }: let
   hostDefaults = hostName: host: flip recursiveUpdate host ({
+    owner = config.krebs.users.feliks;
     ci = false;
     external = true;
     monitoring = false;
@@ -17,7 +18,6 @@ in {
   };
   hosts = mapAttrs hostDefaults {
     papawhakaaro = {
-      owner = config.krebs.users.feliks;
       nets = {
         retiolum = {
           ip4.addr = "10.243.10.243";
@@ -42,7 +42,6 @@ in {
       };
     };
     iti = {
-      owner = config.krebs.users.feliks;
       nets = {
         retiolum = {
           ip4.addr = "10.243.10.244";
@@ -67,7 +66,6 @@ in {
       };
     };
     tumaukainga = {
-      owner = config.krebs.users.feliks;
       nets = {
         retiolum = {
           ip4.addr = "10.243.10.245";
