@@ -789,7 +789,7 @@ in {
           aliases = [
             "jack.r"
             "stable-confusion.r"
-            "llama.r"
+            "vicuna.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
