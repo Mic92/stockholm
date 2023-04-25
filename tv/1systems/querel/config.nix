@@ -3,7 +3,6 @@ with import ./lib;
   imports = [
     <stockholm/tv>
     <stockholm/tv/2configs/retiolum.nix>
-    <stockholm/tv/2configs/xp-332.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.querel;
