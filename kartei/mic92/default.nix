@@ -809,7 +809,14 @@ in {
     blob64 = {
       owner = config.krebs.users.mic92;
       nets = rec {
+        internet = {
+          # of2.dse.cit.tum.de.
+          ip4.addr = "131.159.38.25";
+          ip6.addr = "2a09:80c0:38::25";
+          aliases = [ "blob64.i" ];
+        };
         retiolum = {
+          via = internet;
           aliases = [ "blob64.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
