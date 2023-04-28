@@ -1,0 +1,63 @@
+find_item() {
+  if test ${#1} -ge 7; then
+    set -- "$(find "$STATEDIR/items" -mindepth 1 -maxdepth 1 \
+        -regex "$STATEDIR/items/$1[0-9A-Za-z]*$")"
+    if test -n "$1" && test $(echo "$1" | wc -l) = 1; then
+      echo "$1"
+      return 0
+    fi
+  fi
+  return 1
+}
+
+abs_path=${Request_URI%%\?*}
+
+case "$Method $abs_path" in
+  "GET /"[0-9a-z]*)
+      if item=$(find_item ${abs_path#/}); then
+        printf 'HTTP/1.1 200 OK\r\n'
+        printf 'Content-Type: %s\r\n' "$(file -ib $item)"
+        printf 'Server: %s\r\n' "$Server"
+        printf 'Connection: close\r\n'
+        printf 'Content-Length: %d\r\n' $(wc -c < $item)
+        printf '\r\n'
+        cat $item
+        exit
+      fi
+    ;;
+  "POST /")
+    content=$(mktemp -t htgen.$$.content.XXXXXXXX)
+    trap "rm $content >&2" EXIT
+
+    case ${req_expect-} in 100-continue)
+      printf 'HTTP/1.1 100 Continue\r\n\r\n'
+    esac
+
+    head -c $req_content_length > $content
+
+    sha256=$(sha256sum -b $content | cut -d\  -f1)
+    base32=$(nix-hash --to-base32 --type sha256 $sha256)
+    item=$STATEDIR/items/$base32
+    ref=http://$req_host/$base32
+
+    if ! test -e $item; then
+      mkdir -v -p $STATEDIR/items >&2
+      cp -v $content $item >&2
+    fi
+
+    base32short=$(echo $base32 | cut -b-7)
+    if item=$(find_item $base32short); then
+      ref=$(echo "$ref"; echo "http://$req_host/$base32short")
+    fi
+
+    printf 'HTTP/1.1 200 OK\r\n'
+    printf 'Content-Type: text/plain; charset=UTF-8\r\n'
+    printf 'Server: %s\r\n' "$Server"
+    printf 'Connection: close\r\n'
+    printf 'Content-Length: %d\r\n' $(expr ${#ref} + 1)
+    printf '\r\n'
+    printf '%s\n' "$ref"
+
+    exit
+  ;;
+esac
