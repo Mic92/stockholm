@@ -15,8 +15,9 @@ abs_path=${Request_URI%%\?*}
 case "$Method $abs_path" in
   "GET /"[0-9a-z]*)
       if item=$(find_item ${abs_path#/}); then
+        content_type=$(cat "$item".content_type 2>/dev/null || file -ib "$item")
         printf 'HTTP/1.1 200 OK\r\n'
-        printf 'Content-Type: %s\r\n' "$(file -ib $item)"
+        printf 'Content-Type: %s\r\n' "$content_type"
         printf 'Server: %s\r\n' "$Server"
         printf 'Connection: close\r\n'
         printf 'Content-Length: %d\r\n' $(wc -c < $item)
@@ -43,6 +44,10 @@ case "$Method $abs_path" in
     if ! test -e $item; then
       mkdir -v -p $STATEDIR/items >&2
       cp -v $content $item >&2
+    fi
+
+    if test -n ${reg_content_type-}; then
+      echo -n "$req_content_type" > "$item".content_type
     fi
 
     base32short=$(echo $base32 | cut -b-7)
