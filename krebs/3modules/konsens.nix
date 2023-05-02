@@ -60,7 +60,10 @@ let
     systemd.services = mapAttrs' (name: repo:
       nameValuePair "konsens-${name}" {
         after = [ "network.target" ];
-        path = [ pkgs.git ];
+        path = [
+          pkgs.git
+          pkgs.openssh
+        ];
         restartIfChanged = false;
         serviceConfig = {
           Type = "simple";
