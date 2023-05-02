@@ -66,6 +66,8 @@ let
           Type = "simple";
           PermissionsStartOnly = true;
           ExecStart = pkgs.writeDash "konsens-${name}" ''
+            set -efu
+            git config --global --replace-all safe.directory *
             if ! test -e ${name}; then
               git clone ${repo.url} ${name}
             fi
