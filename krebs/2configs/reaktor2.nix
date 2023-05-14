@@ -81,7 +81,8 @@ let
             echo "$_from: $(report_error "$response")"
             exit 0
           fi
-          printf '%s' "$text" | echo "$_from: $(cat)"
+          # value seems to be 512 - overhead
+          echo "$_from: $text" | fold -s -w 426
 
           printf '%s' "$response" |
             jq -r '[.item.messages[1].sourceAttributions[].seeMoreUrl] | to_entries[] | "[\(.key + 1)]: \(.value)"'
