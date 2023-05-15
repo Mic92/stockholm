@@ -96,6 +96,9 @@ with import ./lib;
     nix-writers = {
       cgit.desc = "collection of package builders";
     };
+    nixpkgs = {
+      cgit.desc = "Nix Packages collection";
+    };
     pager = {
     };
     populate = {
