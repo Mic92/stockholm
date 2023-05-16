@@ -82,14 +82,9 @@ with import <stockholm/lib>;
 
   krebs.htgen.paste = {
     port = 9081;
-    script = toString [
-      "PATH=${makeBinPath [
-        pkgs.nix
-        pkgs.file
-      ]}:$PATH"
-      "STATEDIR=$HOME"
-      ". ${pkgs.htgen}/examples/paste"
-    ];
+    script = /* sh */ ''
+      (. ${pkgs.htgen-paste}/bin/htgen-paste)
+    '';
   };
 
   systemd.services.paste-gc = {
