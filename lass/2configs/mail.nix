@@ -178,8 +178,7 @@ let
       until ${pkgs.muchsync}/bin/muchsync -F lass@green.r; do
         sleep 1
       done
-    ''}<enter> \
-    'run muchsync to green.r'
+    ''}<enter>
 
     #killed
     bind index d noop
