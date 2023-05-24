@@ -44,13 +44,17 @@ in
       send_to_radio
       gc_news
       get_current_news
-      pkgs.curl
       pkgs.retry
+      pkgs.larynx
     ];
     script = ''
       set -efu
-      retry -t 5 -d 10 -- newsshow |
-        retry -t 5 -d 10 -- curl -fSsG http://tts.r/api/tts --data-urlencode 'text@-' |
+      retry -t 5 -d 10 -- newsshow | tr '\n' ' ' |
+        retry -t 5 -d 10 -- larynx --model ${pkgs.fetchzip {
+          url = "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-us-libritts-high.tar.gz";
+          hash = "sha256-jCoK4p0O7BuF0nr6Sfj40tpivCvU5M3GHKQRg1tfIO8=";
+          stripRoot = false;
+        }}/en-us-libritts-high.onnx -s $[ $RANDOM % 900 ] -f - |
         retry -t 5 -d 10 -- send_to_radio
     '';
     startAt = "*:00:00";
