@@ -190,35 +190,16 @@ with import <stockholm/lib>;
           default = 3;
         };
 
-        user = mkOption {
-          type = types.user;
-          default = {
-            name = tinc.config.netname;
-            home = "/var/lib/${tinc.config.user.name}";
-          };
-          defaultText = {
-            name = "‹netname›";
-            home = "/var/lib/‹netname›";
-          };
+        username = mkOption {
+          type = types.username;
+          default = tinc.config.netname;
+          defaultText = literalExample "netname";
         };
       };
     }));
   };
 
   config = {
-    users.users = mapAttrs' (netname: cfg:
-      nameValuePair "${netname}" {
-        inherit (cfg.user) home name uid;
-        createHome = true;
-        isSystemUser = true;
-        group = netname;
-      }
-    ) config.krebs.tinc;
-
-    users.groups = mapAttrs' (netname: cfg:
-      nameValuePair netname {}
-    ) config.krebs.tinc;
-
     krebs.systemd.services = mapAttrs (netname: cfg: {
       restartIfCredentialsChange = true;
     }) config.krebs.tinc;
@@ -238,11 +219,11 @@ with import <stockholm/lib>;
           )
           "rsa_key.priv:${cfg.privkey}"
         ];
-        ExecStartPre = pkgs.writers.writeDash "init-tinc-${netname}" ''
+        ExecStartPre = "+" + pkgs.writers.writeDash "init-tinc-${netname}" ''
           set -efu
           ${pkgs.coreutils}/bin/mkdir -p /etc/tinc
           ${pkgs.rsync}/bin/rsync -Lacv --delete \
-            --chown ${cfg.user.name} \
+            --chown ${cfg.username} \
             --chmod u=rwX,g=rX \
             --exclude='/*.priv' \
             ${cfg.confDir}/ /etc/tinc/${netname}/
@@ -255,14 +236,16 @@ with import <stockholm/lib>;
               "$CREDENTIALS_DIRECTORY"/rsa_key.priv \
               /etc/tinc/${netname}/
         '';
-        ExecStart = toString [
+        ExecStart = "+" + toString [
           "${cfg.tincPackage}/sbin/tincd"
           "-D"
-          "-U ${cfg.user.name}"
+          "-U ${cfg.username}"
           "-d 0"
           "-n ${netname}"
         ];
         SyslogIdentifier = netname;
+        DynamicUser = true;
+        User = cfg.username;
       };
     }) config.krebs.tinc;
   };
