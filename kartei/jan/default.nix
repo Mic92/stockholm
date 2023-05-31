@@ -66,6 +66,7 @@ in {
     owner = config.krebs.users.jan;
     nets.retiolum = {
       aliases = [ "grill.r" ];
+      ip4.addr = "10.243.217.217";
       ip6.addr = (lib.krebs.genipv6 "retiolum" "jan" { hostName = "grill"; }).address;
       tinc.pubkey = ''
         -----BEGIN RSA PUBLIC KEY-----
