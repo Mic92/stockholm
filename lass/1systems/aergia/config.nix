@@ -65,8 +65,4 @@
   ];
 
   boot.cleanTmpDir = true;
-
-  # vbox
-  virtualisation.virtualbox.host.enable = true;
-  users.users.mainUser.extraGroups = [ "vboxusers" ];
 }

@@ -63,6 +63,7 @@ writeDashBin "q-power_supply" ''
 
       END {
         name = ENVIRON["POWER_SUPPLY_NAME"]
+        status = ENVIRON["POWER_SUPPLY_STATUS"]
 
         charge_unit = "Ah"
         charge_now = ENVIRON["POWER_SUPPLY_CHARGE_NOW"] / 10^6
@@ -131,6 +132,8 @@ writeDashBin "q-power_supply" ''
         if (current_now != 0) {
           out = out sprintf(" %s", print_hm(charge_now / current_now))
         }
+
+        out = out " " status
 
         print out
       }
