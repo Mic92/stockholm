@@ -104,7 +104,8 @@ in {
       nets = {
         retiolum.ip4.addr = "10.243.0.91";
         wiregrill = {
-          # defaults
+          ip4.addr = "10.243.245.6";
+          aliases = [ "x.w" ];
         };
       };
 
@@ -120,6 +121,12 @@ in {
       ci = true;
       syncthing.id = "Y5OTK3S-JOJLAUU-KTBXKUW-M7S5UEQ-MMQPUK2-7CXO5V6-NOUDLKP-PRGAFAK";
       nets = {
+        wiregrill = {
+          aliases =  ["omo.w" "hass.omo.w" "jelly.omo.w" "jelly.makefu.w" ];
+          ip6.addr = (krebs.genipv6 "wiregrill" "makefu" { hostName = "omo"; }).address;
+          ip4.addr = "10.244.245.5";
+
+        };
         retiolum = {
           ip4.addr = "10.243.0.89";
           aliases = [
@@ -239,6 +246,7 @@ in {
           play.work.euer    IN A      ${nets.internet.ip4.addr}
           ul.work.euer      IN A      ${nets.internet.ip4.addr}
           music.euer        IN A      ${nets.internet.ip4.addr}
+          ntfy.euer         IN A      ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
