@@ -46,10 +46,8 @@
     # light.shack web-ui
     <stockholm/krebs/2configs/shack/light.shack.nix> #light.shack
 
-    # powerraw usb serial to mqtt and raw socket
-    <stockholm/krebs/2configs/shack/powerraw.nix> # powerraw.shack standby.shack
-    # send power stats to s3
-    <stockholm/krebs/2configs/shack/s3-power.nix> # powerraw.shack must be available
+    # fetch the u300 power stats
+    <stockholm/krebs/2configs/shack/power/u300-power.nix>
 
 
     { # do not log to /var/spool/log
