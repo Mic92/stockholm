@@ -35,12 +35,13 @@ in
   '';
   networking = {
     firewall.enable = true;
-    interfaces.et0.ipv4.addresses = [
-      {
-        address = shack-ip;
-        prefixLength = 20;
-      }
-    ];
+    interfaces.et0.useDHCP = true;
+    #interfaces.et0.ipv4.addresses = [
+    #  {
+    #    address = shack-ip;
+    #    prefixLength = 20;
+    #  }
+    #];
 
     defaultGateway = "10.42.0.1";
     nameservers = [ "10.42.0.100" "10.42.0.200" ];
