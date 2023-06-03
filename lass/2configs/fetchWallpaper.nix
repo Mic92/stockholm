@@ -5,7 +5,7 @@ let
 in {
   krebs.fetchWallpaper = {
     enable = true;
-    url = "prism/realwallpaper-krebs-stars-berlin.png";
+    url = "http://wallpaper.r/realwallpaper-krebs-stars-berlin.png";
   };
 }
 

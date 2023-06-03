@@ -19,8 +19,7 @@ in {
       }
     '';
     serverAliases = [
-      hostname
-      "${hostname}.r"
+      "wallpaper.r"
     ];
     locations."/realwallpaper/".extraConfig = ''
       index on;

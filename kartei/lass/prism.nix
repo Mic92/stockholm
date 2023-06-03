@@ -71,6 +71,7 @@ rec {
         "c.r"
         "p.r"
         "search.r"
+        "wallpaper.r"
       ];
       tinc = {
         pubkey = ''
