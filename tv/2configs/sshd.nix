@@ -9,10 +9,14 @@ in {
   tv.iptables.extra.nat.OUTPUT = [
     "-o lo -p tcp --dport 11423 -j REDIRECT --to-ports 22"
   ];
-  tv.iptables.extra4.nat.PREROUTING = [
-    "-d ${cfg.host.nets.retiolum.ip4.addr} -p tcp --dport 22 -j ACCEPT"
-    "-d ${cfg.host.nets.wiregrill.ip4.addr} -p tcp --dport 22 -j ACCEPT"
-  ];
+  tv.iptables.extra4.nat.PREROUTING =
+    map
+      (net: "-d ${net.ip4.addr} -p tcp --dport 22 -j ACCEPT")
+      (filter (net: net.ip4 != null)
+              [
+                cfg.host.nets.retiolum
+                cfg.host.nets.wiregrill
+              ]);
   tv.iptables.extra6.nat.PREROUTING = [
     "-d ${cfg.host.nets.retiolum.ip6.addr} -p tcp --dport 22 -j ACCEPT"
     "-d ${cfg.host.nets.wiregrill.ip6.addr} -p tcp --dport 22 -j ACCEPT"
