@@ -27,8 +27,6 @@
     pkgs.rocm-opencl-runtime
   ];
 
-  hardware.video.hidpi.enable = true;
-
   networking.wireless.enable = true;
   networking.wireless.interfaces = [
     "wlp1s0"
