@@ -21,6 +21,17 @@
         ./krebs/1systems/hotdog/config.nix
       ];
     };
+
+    nixosModules =
+    let
+      inherit (nixpkgs) lib;
+    in builtins.listToAttrs
+      (map
+        (name: {name = lib.removeSuffix ".nix" name; value = import (./krebs/3modules + "/${name}");})
+        (lib.filter
+          (name: name != "default.nix" && !lib.hasPrefix "." name)
+          (lib.attrNames (builtins.readDir ./krebs/3modules))));
+
     kartei = {
       hosts = self.nixosConfigurations.hotdog.config.krebs.hosts;
       users = self.nixosConfigurations.hotdog.config.krebs.users;
