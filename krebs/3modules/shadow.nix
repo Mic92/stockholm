@@ -1,5 +1,6 @@
-with import <stockholm/lib>;
-{ config, pkgs, ... }: let
+{ config, pkgs, lib, ... }:
+with lib;
+let
 
   cfg = config.krebs.shadow;
 
@@ -47,7 +48,7 @@ in {
       default = cfg.overridesFile != null;
     };
     overridesFile = mkOption {
-      apply = x: if typeOf x == "path" then toString x else x;
+      apply = x: if builtins.typeOf x == "path" then toString x else x;
       default = null;
       description = ''
         Path to a file containing additional shadow entries, used for adding

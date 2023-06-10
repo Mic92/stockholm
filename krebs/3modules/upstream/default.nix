@@ -1,4 +1,5 @@
-with import <stockholm/lib>;
+{ pkgs, lib, ... }:
+with lib;
 
 {
   imports =
@@ -6,5 +7,5 @@ with import <stockholm/lib>;
       (name: ./. + "/${name}")
       (filter
         (name: name != "default.nix" && !hasPrefix "." name)
-        (attrNames (readDir ./.)));
+        (attrNames (builtins.readDir ./.)));
 }

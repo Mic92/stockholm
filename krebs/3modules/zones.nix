@@ -1,5 +1,5 @@
-with import <stockholm/lib>;
-{ config, pkgs, ... }: {
+{ config, pkgs, lib, ... }:
+with lib; {
 
   config = {
     environment.etc =

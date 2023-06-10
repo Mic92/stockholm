@@ -1,5 +1,5 @@
-{ config, ... }: let
-  lib = import ../../lib;
+{ config, lib, ... }: let
+  slib = import ../../lib/pure.nix { inherit lib; };
 in {
 
   users.jan = {
@@ -67,7 +67,7 @@ in {
     nets.retiolum = {
       aliases = [ "grill.r" ];
       ip4.addr = "10.243.217.217";
-      ip6.addr = (lib.krebs.genipv6 "retiolum" "jan" { hostName = "grill"; }).address;
+      ip6.addr = (slib.krebs.genipv6 "retiolum" "jan" { hostName = "grill"; }).address;
       tinc.pubkey = ''
         -----BEGIN RSA PUBLIC KEY-----
         MIICCgKCAgEAs4P6CfRcwFGCqkfv1tyTbbk2eHh08kEqxPNQ655sMKWxMhgRnRII

@@ -1,5 +1,5 @@
-{ config, pkgs, ... }:
-with import <stockholm/lib>;
+{ config, lib, pkgs, ... }:
+with import ../../../lib/pure.nix { inherit lib; };
 let
   root = "/var/srv/drivedroid";
 in

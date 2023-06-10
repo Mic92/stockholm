@@ -1,5 +1,5 @@
-{ config, ... }:
-with import <stockholm/lib>;
+{ config, lib, ... }:
+with lib;
 let
   nixos-version-id = if (hasAttr "nixos" config.system) then
     "${config.system.nixos.version}" else "${config.system.nixosVersion}";
@@ -9,7 +9,7 @@ let
   nixos-pretty-name = "NixOS ${nixos-version}";
 
   stockholm-version-id = let
-    eval = tryEval (removeSuffix "\n" (readFile <stockholm-version>));
+    eval = builtins.tryEval (removeSuffix "\n" (readFile <stockholm-version>));
   in
     if eval.success then eval.value else "unknown";
 

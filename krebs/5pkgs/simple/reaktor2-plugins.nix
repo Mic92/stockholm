@@ -1,5 +1,5 @@
 { lib, pkgs, stockholm, ... }:
-with stockholm.lib;
+with (builtins.trace (lib.attrNames stockholm) stockholm).lib;
 
 rec {
   generators = {
@@ -15,27 +15,27 @@ rec {
   commands = {
 
     random-emoji = {
-      filename = <stockholm/krebs/5pkgs/simple/Reaktor/scripts/random-emoji.sh>;
+      filename = stockholm.outPath + "/krebs/5pkgs/simple/Reaktor/scripts/random-emoji.sh";
       env = {
         PATH = makeBinPath (with pkgs; [ coreutils gnused gnugrep xmlstarlet wget ]);
       };
     };
 
     dance = {
-      filename = pkgs.writeDash "dance" ''
+      filename = pkgs.writers.writeDash "dance" ''
         ${pkgs.krebsdance}/bin/krebsdance --dance "$@";
       '';
     };
 
     nixos-version = {
-      filename = pkgs.writeDash "nixos-version" ''
+      filename = pkgs.writers.writeDash "nixos-version" ''
         . /etc/os-release
         echo "$PRETTY_NAME"
       '';
     };
 
     stockholm-issue = {
-      filename = <stockholm/krebs/5pkgs/simple/Reaktor/scripts/random-issue.sh>;
+      filename = stockholm.outPath + "/krebs/5pkgs/simple/Reaktor/scripts/random-issue.sh";
       env = {
         PATH = makeBinPath (with pkgs; [ coreutils git gnused haskellPackages.lentil ]);
         origin = "http://cgit.gum/stockholm";
@@ -56,10 +56,10 @@ rec {
           PATH = makeBinPath (with pkgs; [ gnused ]);
           state_dir = "/tmp";
         };
-        filename = pkgs.writeDash "sed-plugin" ''
+        filename = pkgs.writers.writeDash "sed-plugin" ''
           set -efu
           exec ${pkgs.python3}/bin/python \
-              ${<stockholm/krebs/5pkgs/simple/Reaktor/scripts/sed-plugin.py>} "$@"
+              ${stockholm.outPath + "/krebs/5pkgs/simple/Reaktor/scripts/sed-plugin.py"} "$@"
         '';
       };
     };
@@ -68,7 +68,7 @@ rec {
       activate = "match";
       pattern = "^(.*Shack.*)$";
       arguments = [1];
-      command.filename = <stockholm/krebs/5pkgs/simple/Reaktor/scripts/shack-correct.sh>;
+      command.filename = stockholm.outPath + "/krebs/5pkgs/simple/Reaktor/scripts/shack-correct.sh";
     };
 
 

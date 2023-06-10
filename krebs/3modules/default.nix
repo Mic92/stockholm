@@ -1,13 +1,12 @@
 { config, lib, ... }:
 
-with import <stockholm/lib>;
+with lib;
 let
   cfg = config.krebs;
 
   out = {
     imports = [
       ../../kartei
-      ../../submodules/disko/module.nix
       ./acl.nix
       ./airdcpp.nix
       ./announce-activation.nix

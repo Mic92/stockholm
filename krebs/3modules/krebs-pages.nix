@@ -1,6 +1,5 @@
-{ config, modulesPath, pkgs, ... }: let
+{ config, modulesPath, pkgs, lib, ... }: let
   cfg = config.krebs.pages;
-  lib = import ../../lib;
   extraTypes.nginx-vhost = lib.types.submodule (
     lib.recursiveUpdate
       (import (modulesPath + "/services/web-servers/nginx/vhost-options.nix")
@@ -11,7 +10,7 @@ in {
   options.krebs.pages = {
     enable = lib.mkEnableOption "krebs-pages";
     domain = lib.mkOption {
-      type = lib.types.hostname;
+      type = pkgs.stockholm.lib.types.hostname;
       default = "krebsco.de";
     };
     nginx = lib.mkOption {

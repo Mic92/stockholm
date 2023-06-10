@@ -1,13 +1,12 @@
-{ config, ... }: let
-  lib = import ../../lib;
-
+{ config, lib, ... }: let
+  slib = import ../../lib/pure.nix { inherit lib; };
   hostDefaults = hostName: host: lib.flip lib.recursiveUpdate host ({
     ci = false;
     external = true;
     monitoring = false;
   } // lib.optionalAttrs (host.nets?retiolum) {
     nets.retiolum.ip6.addr =
-      (lib.krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
+      (slib.krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
   });
 
 in {

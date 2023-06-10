@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with builtins;
-with import <stockholm/lib>;
+with lib;
 
 let
   cfg = config.krebs.monit;

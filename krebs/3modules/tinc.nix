@@ -1,5 +1,5 @@
-with import <stockholm/lib>;
-{ config, pkgs, ... }: {
+{ config, pkgs, lib, ... }:
+with import ../../lib/pure.nix { inherit lib; }; {
   options.krebs.tinc = mkOption {
     default = {};
     description = ''

@@ -1,6 +1,7 @@
-{ pkgs, config, ... }:
-with import <stockholm/lib>;
+{ pkgs, config, lib, ... }:
+with lib;
 let
+  slib = import ../../lib/pure.nix { inherit lib; };
   cfg = config.krebs.brockman;
 in {
   options.krebs.brockman = {
@@ -14,7 +15,7 @@ in {
       group = "brockman";
       createHome = true;
       isSystemUser = true;
-      uid = genid_uint31 "brockman";
+      uid = slib.genid_uint31 "brockman";
     };
     users.groups.brockman = {};
 

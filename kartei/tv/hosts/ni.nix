@@ -1,4 +1,6 @@
-{ config, lib, ... }: {
+{ config, lib, ... }: let
+  slib = import ../../../lib/pure.nix { inherit lib; };
+in {
   extraZones = {
     "krebsco.de" = ''
       ni          60 IN A ${config.krebs.hosts.ni.nets.internet.ip4.addr}
@@ -60,7 +62,7 @@
       via = config.krebs.hosts.ni.nets.internet;
       ip4.addr = "10.244.3.1";
       wireguard.subnets = [
-        (lib.krebs.genipv6 "wiregrill" "tv" 0).subnetCIDR
+        (slib.krebs.genipv6 "wiregrill" "tv" 0).subnetCIDR
       ];
     };
   };

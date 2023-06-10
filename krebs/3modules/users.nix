@@ -1,8 +1,8 @@
-{ config, ... }: let
-  lib = import ../../lib;
+{ config, lib, pkgs, ... }: let
+  slib = import ../../lib/pure.nix { inherit lib; };
 in {
   options.krebs.users = lib.mkOption {
-    type = with lib.types; attrsOf user;
+    type = lib.types.attrsOf slib.types.user;
   };
   config = lib.mkIf config.krebs.enable {
     krebs.users = {

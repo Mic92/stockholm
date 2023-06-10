@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with import <stockholm/lib>;
 {
   networking.wireless.enable = lib.mkDefault true;
 

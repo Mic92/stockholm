@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }: let
   cfg = config.krebs.sync-containers3;
-  slib = pkgs.stockholm.lib;
+  slib = import ../../lib/pure.nix { inherit lib; };
 in {
   options.krebs.sync-containers3 = {
     inContainer = {

@@ -1,5 +1,6 @@
-with import <stockholm/lib>;
-{ config, pkgs, ... }: let
+{ config, pkgs, lib, ... }:
+with import ../../lib/pure.nix { inherit lib; };
+let
 
   out = {
     options.krebs.setuid = api;

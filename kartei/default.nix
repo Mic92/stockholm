@@ -9,7 +9,7 @@ in {
         (name: _type: let
           path = ./. + "/${name}";
         in {
-          krebs = import path { inherit config; };
+          krebs = import path { inherit config lib; };
         })
         (removeTemplate
           (lib.filterAttrs

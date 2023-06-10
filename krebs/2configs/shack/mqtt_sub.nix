@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with import <stockholm/lib>;
+with import ../../../lib/pure.nix { inherit lib; };
 let
   pkg = pkgs.stdenv.mkDerivation {
     name = "mqtt2graphite-2017-05-29";

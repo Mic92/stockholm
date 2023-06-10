@@ -1,6 +1,6 @@
-{ config, ... }:
+{ config, lib, pkgs, ... }:
 
-with import <stockholm/lib>;
+with import ../../lib/pure.nix { inherit lib; };
 
 {
   options.krebs.build = {

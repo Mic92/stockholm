@@ -1,6 +1,6 @@
-{ config, ... }:
+{ config, lib, ... }:
 let
-  lib = import ../../lib;
+  slib = import ../../lib/pure.nix { inherit lib; };
 in
 {
   users.ynnel = {
@@ -10,7 +10,7 @@ in
     owner = config.krebs.users.ynnel;
     nets.retiolum = {
       aliases = [ "mokemoke.ynnel.r" ];
-      ip6.addr = (lib.krebs.genipv6 "retiolum" "ynnel" { hostName = "mokemoke"; }).address;
+      ip6.addr = (slib.krebs.genipv6 "retiolum" "ynnel" { hostName = "mokemoke"; }).address;
       tinc.pubkey = ''
         -----BEGIN RSA PUBLIC KEY-----
         MIICCgKCAgEA7rS560SZEPcSekW30dRF6ZTHOnb8WvuVgt3BFLRWhTgV5DqLqFa8

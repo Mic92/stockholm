@@ -2,23 +2,23 @@
 
 {
   imports = [
-    <stockholm/krebs>
-    <stockholm/krebs/2configs>
+    ../../../krebs
+    ../../../krebs/2configs
 
-    <stockholm/krebs/2configs/buildbot-stockholm.nix>
-    <stockholm/krebs/2configs/binary-cache/nixos.nix>
-    <stockholm/krebs/2configs/ircd.nix>
-    <stockholm/krebs/2configs/reaktor2.nix>
-    <stockholm/krebs/2configs/wiki.nix>
-    <stockholm/krebs/2configs/acme.nix>
-    <stockholm/krebs/2configs/mud.nix>
-    <stockholm/krebs/2configs/repo-sync.nix>
+    ../../../krebs/2configs/buildbot-stockholm.nix
+    ../../../krebs/2configs/binary-cache/nixos.nix
+    ../../../krebs/2configs/ircd.nix
+    ../../../krebs/2configs/reaktor2.nix
+    ../../../krebs/2configs/wiki.nix
+    ../../../krebs/2configs/acme.nix
+    ../../../krebs/2configs/mud.nix
+    ../../../krebs/2configs/repo-sync.nix
 
-    <stockholm/krebs/2configs/cal.nix>
-    <stockholm/krebs/2configs/mastodon.nix>
+    ../../../krebs/2configs/cal.nix
+    ../../../krebs/2configs/mastodon.nix
 
-    ## shackie irc bot
-    <stockholm/krebs/2configs/shack/reaktor.nix>
+    ## (shackie irc bot
+    ../../../krebs/2configs/shack/reaktor.nix
   ];
 
   krebs.build.host = config.krebs.hosts.hotdog;

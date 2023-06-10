@@ -1,5 +1,6 @@
-with import <stockholm/lib>;
-{ config, pkgs, ... }: let
+{ config, pkgs, lib, ... }:
+with lib;
+let
   cfg = config.krebs.sync-containers;
   paths = cname: {
     plain = "/var/lib/containers/${cname}/var/state";
