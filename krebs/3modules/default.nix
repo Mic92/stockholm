@@ -45,6 +45,7 @@
     ./secret.nix
     ./setuid.nix
     ./shadow.nix
+    ./ssh.nix
     ./sitemap.nix
     ./ssl.nix
     ./sync-containers.nix
