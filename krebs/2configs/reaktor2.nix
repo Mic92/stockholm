@@ -77,7 +77,7 @@ let
         if [ "$?" -ne 0 ]; then
           report_error "$response"
         else
-          if ! text=$(printf '%s' "$response" | jq -er '.item.messages[1].text'); then
+          if ! text=$(printf '%s' "$response" | jq -er '.item.messages[-1].text'); then
             echo "$_from: $(report_error "$response")"
             exit 0
           fi
@@ -85,7 +85,7 @@ let
           echo "$_from: $text" | fold -s -w 426
 
           printf '%s' "$response" |
-            jq -r '[.item.messages[1].sourceAttributions[].seeMoreUrl] | to_entries[] | "[\(.key + 1)]: \(.value)"'
+            jq -r '[.item.messages[-1].sourceAttributions[].seeMoreUrl] | to_entries[] | "[\(.key + 1)]: \(.value)"'
         fi
       '';
     };
@@ -158,6 +158,7 @@ let
       '';
     };
   };
+
   interrogate = {
     pattern = "^!interrogate (.*)$";
     activate = "match";
