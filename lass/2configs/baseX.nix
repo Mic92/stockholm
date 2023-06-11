@@ -99,7 +99,6 @@ in {
       ${pkgs.flameshot}/bin/flameshot gui
       ${pkgs.klem}/bin/klem
     '')
-
   ];
 
   services.udev.extraRules = ''
