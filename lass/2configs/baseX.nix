@@ -14,6 +14,7 @@ in {
     ./tmux.nix
     ./xmonad.nix
     ./themes.nix
+    ./fonts.nix
     {
       users.users.mainUser.packages = [
         pkgs.sshuttle
@@ -26,15 +27,15 @@ in {
       options.lass.fonts = {
         regular = mkOption {
           type = types.str;
-          default = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1";
+          default = "xft:Iosevka Term SS15:style=regular";
         };
         bold = mkOption {
           type = types.str;
-          default = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1";
+          default = "xft:Iosevka Term SS15:style=bold";
         };
         italic = mkOption {
           type = types.str;
-          default = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1";
+          default = "xft:Iosevka Term SS15:style=italic";
         };
       };
       config.krebs.xresources.resources.X = ''
@@ -98,64 +99,8 @@ in {
       ${pkgs.flameshot}/bin/flameshot gui
       ${pkgs.klem}/bin/klem
     '')
+
   ];
-
-  fonts = {
-    fontDir.enable = true;
-    enableGhostscriptFonts = true;
-
-    fonts = with pkgs; [
-      xorg.fontschumachermisc
-      inconsolata
-      noto-fonts
-      (iosevka.override {
-        # https://typeof.net/Iosevka/customizer
-        privateBuildPlan = {
-          family = "Iosevka";
-          spacing = "term";
-          serifs = "slab";
-          no-ligation = true;
-
-          variants.design = {
-            capital-j = "serifless";
-            a = "double-storey-tailed";
-            b = "toothless-corner";
-            d = "toothless-corner-serifless";
-            f = "flat-hook-tailed";
-            g = "earless-corner";
-            i = "hooky";
-            j = "serifless";
-            l = "tailed";
-
-            m = "earless-corner-double-arch";
-            n = "earless-corner-straight";
-            p = "earless-corner";
-            q = "earless-corner";
-            r = "earless-corner";
-            u = "toothless-rounded";
-            y = "cursive-flat-hook";
-
-            one = "no-base-long-top-serif";
-            two = "straight-neck";
-            three = "flat-top";
-            four = "open";
-            six = "open-contour";
-            seven = "straight-serifless";
-            eight = "two-circles";
-            nine = "open-contour";
-            tilde = "low";
-            asterisk = "hex-low";
-            number-sign = "upright";
-            at = "short";
-            dollar = "open";
-            percent = "dots";
-            question = "corner-flat-hooked";
-          };
-        };
-        set = "kookiefonts";
-      })
-    ];
-  };
 
   services.udev.extraRules = ''
     SUBSYSTEM=="backlight", ACTION=="add", \
