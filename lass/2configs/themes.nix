@@ -15,6 +15,7 @@
         ${pkgs.coreutils}/bin/chown lass:users /var/theme/current_theme
         ${pkgs.xorg.xrdb}/bin/xrdb -merge /var/theme/config/xresources
         ${pkgs.procps}/bin/pkill -HUP xsettingsd
+        ${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface gtk-theme "$(cat /var/theme/config/gtk-theme)"
       else
         echo "theme $1 not found"
       fi
@@ -37,17 +38,25 @@ in {
   ];
   environment.systemPackages = [
     switch-theme
+    pkgs.dracula-theme
+    pkgs.gnome3.adwaita-icon-theme
   ];
   environment.etc = {
+    "themes/light/gtk-theme".text = ''
+      Adwaita
+    '';
     "themes/light/xsettings.conf".text = ''
-      Net/ThemeName "Adwaita" 
+      Net/ThemeName "Adwaita"
     '';
     "themes/light/xresources".text = ''
       *background: #ffffff
       *foreground: #000000
     '';
+    "themes/dark/gtk-theme".text = ''
+      Dracula
+    '';
     "themes/dark/xsettings.conf".text = ''
-      Net/ThemeName "Adwaita-dark" 
+      Net/ThemeName "Dracula"
     '';
     "themes/dark/xresources".text = ''
       *background: #000000

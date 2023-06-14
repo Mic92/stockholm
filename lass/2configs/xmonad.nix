@@ -68,7 +68,7 @@ myTerm :: FilePath
 myTerm = "/run/current-system/sw/bin/alacritty"
 
 myFont :: String
-myFont = "-*-clean-*-*-*-*-*-*-*-*-*-*-iso10646-1"
+myFont = "${config.lass.fonts.regular}"
 
 main :: IO ()
 main = do

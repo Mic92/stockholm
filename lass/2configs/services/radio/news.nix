@@ -1,6 +1,31 @@
 { config, lib, pkgs, ... }:
 let
 
+  tts = pkgs.writers.writeBashBin "tts" ''
+    set -efu
+
+    offset=0
+    OUTPUT=$(mktemp -d)
+    trap 'rm -rf "$OUTPUT"' EXIT
+    SPEAKER=$[ $RANDOM % 900 ]
+    while read line; do
+      echo "$line" |
+        ${pkgs.larynx}/bin/larynx \
+          --model ${pkgs.fetchzip {
+            url = "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-us-libritts-high.tar.gz";
+            hash = "sha256-jCoK4p0O7BuF0nr6Sfj40tpivCvU5M3GHKQRg1tfIO8=";
+            stripRoot = false;
+          }}/en-us-libritts-high.onnx \
+          -s "$SPEAKER" \
+          -f "$OUTPUT"/"$offset".wav
+
+      ((offset+=1))
+    done
+
+    ${pkgs.sox}/bin/sox "$OUTPUT"/*.wav "$OUTPUT"/all.wav
+    cat "$OUTPUT"/all.wav
+  '';
+
   send_to_radio = pkgs.writers.writeDashBin "send_to_radio" ''
     ${pkgs.vorbis-tools}/bin/oggenc - |
       ${pkgs.cyberlocker-tools}/bin/cput news.ogg
@@ -41,16 +66,16 @@ in
   systemd.services.newsshow = {
     path = [
       newsshow
+      tts
       send_to_radio
       gc_news
       get_current_news
-      pkgs.curl
       pkgs.retry
     ];
     script = ''
       set -efu
       retry -t 5 -d 10 -- newsshow |
-        retry -t 5 -d 10 -- curl -fSsG http://tts.r/api/tts --data-urlencode 'text@-' |
+        retry -t 5 -d 10 -- tts |
         retry -t 5 -d 10 -- send_to_radio
     '';
     startAt = "*:00:00";

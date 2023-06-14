@@ -82,7 +82,7 @@ in {
   users.users = {
     "${name}" = rec {
       inherit name;
-      createHome = lib.mkForce false;
+      createHome = true;
       group = name;
       uid = pkgs.stockholm.lib.genid_uint31 name;
       description = "radio manager";
