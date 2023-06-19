@@ -10,6 +10,12 @@ in {
       <stockholm/makefu>
       ./hetznercloud
       {
+        # wait for mount
+        systemd.services.rtorrent.wantedBy = lib.mkForce [];
+        systemd.services.phpfpm-nextcloud.wantedBy = lib.mkForce [];
+        systemd.services.samba-smbd.wantedBy = lib.mkForce [];
+      }
+      {
         users.users.lass = {
           uid = 19002;
           isNormalUser = true;
@@ -103,6 +109,7 @@ in {
       # <stockholm/makefu/2configs/sabnzbd.nix>
       # <stockholm/makefu/2configs/mail/mail.euer.nix>
       { krebs.exim.enable = mkDefault true; }
+      <stockholm/makefu/2configs/nix-community/mediawiki-matrix-bot.nix>
 
       # sharing
       <stockholm/makefu/2configs/share/gum.nix> # samba sahre
@@ -125,7 +132,7 @@ in {
       <stockholm/makefu/2configs/backup/server.nix>
       <stockholm/makefu/2configs/backup/state.nix>
       <stockholm/makefu/2configs/wireguard/server.nix>
-      # <stockholm/makefu/2configs/wireguard/wiregrill.nix>
+      <stockholm/makefu/2configs/wireguard/wiregrill.nix>
 
       { # recent changes mediawiki bot
         networking.firewall.allowedUDPPorts = [ 5005 5006 ];
@@ -139,6 +146,7 @@ in {
       <stockholm/makefu/2configs/deployment/rss/rss.euer.krebsco.de.nix> # postgres backend
       <stockholm/makefu/2configs/deployment/rss/ratt.nix>
 
+      <stockholm/makefu/2configs/deployment/ntfysh.nix>
       <stockholm/makefu/2configs/deployment/owncloud.nix> #postgres backend
       ### Moving owncloud data dir to /media/cloud/nextcloud-data
       {
@@ -173,7 +181,7 @@ in {
       # <stockholm/makefu/2configs/nginx/iso.euer.nix>
 
       # <stockholm/makefu/2configs/deployment/photostore.krebsco.de.nix>
-      <stockholm/makefu/2configs/deployment/graphs.nix>
+      # <stockholm/makefu/2configs/deployment/graphs.nix>
       #<stockholm/makefu/2configs/deployment/owncloud.nix>
       # <stockholm/makefu/2configs/deployment/board.euer.krebsco.de.nix>
       #<stockholm/makefu/2configs/deployment/feed.euer.krebsco.de>
@@ -184,7 +192,7 @@ in {
       <stockholm/makefu/2configs/bgt/etherpad.euer.krebsco.de.nix>
       # <stockholm/makefu/2configs/deployment/systemdultras-rss.nix>
 
-      # <stockholm/makefu/2configs/shiori.nix>
+      <stockholm/makefu/2configs/shiori.nix>
       #<stockholm/makefu/2configs/workadventure>
 
       <stockholm/makefu/2configs/bgt/download.binaergewitter.de.nix>

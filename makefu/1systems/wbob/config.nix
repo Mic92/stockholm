@@ -22,7 +22,7 @@ in {
       # <stockholm/makefu/2configs/virtualisation/virtualbox.nix>
       <stockholm/makefu/2configs/tinc/retiolum.nix>
       <stockholm/makefu/2configs/gui/wbob-kiosk.nix>
-      { environment.systemPackages = [  pkgs.nano ]; }
+      { environment.systemPackages = [ pkgs.brother_ql_web pkgs.nano ]; }
 
       # <stockholm/makefu/2configs/gui/studio-virtual.nix>
       # <stockholm/makefu/2configs/audio/jack-on-pulse.nix>
@@ -53,6 +53,7 @@ in {
 
       <stockholm/makefu/2configs/bureautomation> # new hass entry point
       <stockholm/makefu/2configs/bureautomation/led-fader.nix>
+      <stockholm/makefu/2configs/bureautomation/printer.nix>
       # <stockholm/makefu/2configs/bureautomation/kalauerbot.nix> now runs in thales
       # <stockholm/makefu/2configs/bureautomation/visitor-photostore.nix>
       # <stockholm/makefu/2configs/bureautomation/mpd.nix> #mpd is only used for TTS, this is the web interface
@@ -100,7 +101,9 @@ in {
       <stockholm/makefu/2configs/backup/state.nix>
       # temporary
       # <stockholm/makefu/2configs/temp/rst-issue.nix>
-      { services.jellyfin.enable = true; }
+      {
+        services.jellyfin.enable = true;
+      }
   ];
 
   krebs = {

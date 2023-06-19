@@ -3,6 +3,7 @@
 {
   imports = [
     ./alert-rules.nix
+    ./irc-hooks.nix
   ];
   networking = {
     firewall.allowedTCPPorts = [
@@ -129,11 +130,11 @@
             "group_wait" = "30s";
             "group_interval" = "2m";
             "repeat_interval" = "4h";
-            "receiver" = "team-admins";
+            "receiver" = "shack-admins";
           };
           "receivers" = [
             {
-              "name" = "team-admins";
+              "name" = "shack-admins";
               "email_configs" = [ ];
               "webhook_configs" = [
                 {

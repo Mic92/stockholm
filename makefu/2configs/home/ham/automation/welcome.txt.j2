@@ -7,7 +7,7 @@ Heute ist {{ weekday }}, du solltest gar nicht arbeiten!
 {% else %}
 Willkommen auf Arbeit Felix. 
 {% endif -%}
-Das aktuell gewählte Projekt ist {{ states("sensor.felix_project") }}.
+Dein Projekt ist {{ states("sensor.felix_project") }}.
 
 {% set inside = states("sensor.wohnzimmer_temp_temperature") | float | round(2) -%}
 {% set outside = states("sensor.dark_sky_temperature") | float | round(2) -%}
