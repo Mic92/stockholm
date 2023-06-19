@@ -27,7 +27,7 @@
         '';
       } else {
         git = {
-          ref = (lib.importJSON ./nixpkgs.json).rev;
+          ref = (lib.importJSON ../krebs/nixpkgs.json).rev;
           url = https://github.com/NixOS/nixpkgs;
           shallow = true;
         };
