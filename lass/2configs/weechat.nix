@@ -3,7 +3,7 @@
   weechat-configured = pkgs.weechat-declarative.override {
     config = {
       scripts = [
-        pkgs.weechat-matrix
+        pkgs.weechatScripts.weechat-matrix
         pkgs.weechatScripts.wee-slack
       ];
       settings = {
