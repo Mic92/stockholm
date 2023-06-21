@@ -125,7 +125,7 @@ in {
       nets = {
         wiregrill = {
           aliases =  ["omo.w" "hass.omo.w" "jelly.omo.w" "jelly.makefu.w" ];
-          ip6.addr = (krebs.genipv6 "wiregrill" "makefu" { hostName = "omo"; }).address;
+          ip6.addr = (slib.krebs.genipv6 "wiregrill" "makefu" { hostName = "omo"; }).address;
           ip4.addr = "10.244.245.5";
 
         };
