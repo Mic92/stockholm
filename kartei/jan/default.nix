@@ -39,7 +39,7 @@ in {
     nets = {
       retiolum = {
         ip4.addr = "10.243.143.11";
-        ip6.addr = (lib.krebs.genipv6 "retiolum" "jan" { hostName = "petrosilia"; }).address;
+        ip6.addr = (slib.krebs.genipv6 "retiolum" "jan" { hostName = "petrosilia"; }).address;
         aliases = [
           "petrosilia.r"
         ];
