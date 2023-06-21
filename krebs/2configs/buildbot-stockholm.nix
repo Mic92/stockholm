@@ -1,5 +1,5 @@
-{ config, ... }: with import <stockholm/lib>;
-
+{ config, lib, ... }:
+with import ../../lib/pure.nix { inherit lib; };
 {
   networking.firewall.allowedTCPPorts = [ 80 ];
   services.nginx = {

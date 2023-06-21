@@ -1,5 +1,6 @@
-{ config, pkgs, ... }: let {
-  lib = import ../../lib;
+{ config, pkgs, lib, ... }: let {
+
+  slib = import ../../lib/pure.nix { inherit lib; };
 
   body.options.krebs.systemd.services = lib.mkOption {
     default = {};
@@ -13,14 +14,14 @@
             lib.sort
               lib.lessThan
               (lib.filter
-                lib.types.absolute-pathname.check
+                slib.types.absolute-pathname.check
                 (map
-                  (lib.compose [ lib.maybeHead (lib.match "[^:]*:(.*)") ])
+                  (slib.compose [ slib.maybeHead (builtins.match "[^:]*:(.*)") ])
                   (lib.toList cfg.serviceConfig.LoadCredential)));
           readOnly = true;
         };
         credentialUnitName = lib.mkOption {
-          default = "trigger-${lib.systemd.encodeName serviceName}";
+          default = "trigger-${slib.systemd.encodeName serviceName}";
           readOnly = true;
         };
         restartIfCredentialsChange = lib.mkOption {
@@ -54,7 +55,7 @@
             pkgs.systemd
           ]}
 
-          cache=/var/lib/credentials/${lib.shell.escape serviceName}.sha1sum
+          cache=/var/lib/credentials/${slib.shell.escape serviceName}.sha1sum
           tmpfile=$(mktemp -t "$(basename "$cache")".XXXXXXXX)
           trap 'rm -f "$tmpfile"' EXIT
 
@@ -64,7 +65,7 @@
           fi
           mv "$tmpfile" "$cache"
 
-          systemctl restart ${lib.shell.escape serviceName}
+          systemctl restart ${slib.shell.escape serviceName}
         '';
       };
     };

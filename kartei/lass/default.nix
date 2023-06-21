@@ -1,8 +1,8 @@
-with import ../../lib;
-{ config, ... }: let
+{ config, lib, ... }: let
+  slib = import ../../lib/pure.nix { inherit lib; };
 
-  r6 = ip: (krebs.genipv6 "retiolum" "lass" ip).address;
-  w6 = ip: (krebs.genipv6 "wiregrill" "lass" ip).address;
+  r6 = ip: (slib.krebs.genipv6 "retiolum" "lass" ip).address;
+  w6 = ip: (slib.krebs.genipv6 "wiregrill" "lass" ip).address;
   hostFiles =
     builtins.map (lib.removeSuffix ".nix") (
       builtins.filter
@@ -14,14 +14,17 @@ in {
   dns.providers = {
     "lassul.us" = "zones";
   };
-  hosts = mapAttrs (_: recursiveUpdate {
+  hosts = lib.mapAttrs (_: lib.recursiveUpdate {
     owner = config.krebs.users.lass;
     consul = true;
     ci = true;
     monitoring = true;
     ssh.privkey.path = <secrets/ssh.id_ed25519>;
   }) (
-    lib.genAttrs hostFiles (host: import (./. + "/${host}.nix") { inherit config krebs lib r6 w6; })
+    lib.genAttrs hostFiles (host: import (./. + "/${host}.nix") {
+      inherit config lib r6 w6;
+      inherit (slib) krebs;
+    })
   );
   users = rec {
     lass = lass-yubikey;

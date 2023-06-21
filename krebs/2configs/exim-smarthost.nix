@@ -1,5 +1,6 @@
-with import <stockholm/lib>;
-{ config, ... }: let
+{ config, lib, ... }:
+with import ../../lib/pure.nix { inherit lib; };
+let
 
   format = from: to: {
     inherit from;

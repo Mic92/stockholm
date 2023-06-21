@@ -1,5 +1,5 @@
-{ config, ... }: let
-  lib = import ../../lib;
+{ config, lib, ... }: let
+  slib = import ../../lib/pure.nix { inherit lib; };
 in {
   users.oxzi = {
     mail = "post@0x21.biz";
@@ -13,7 +13,7 @@ in {
           "gosh.r"
         ];
         ip4.addr = "10.243.32.1";
-        ip6.addr = (lib.krebs.genipv6 "retiolum" "oxzi" { hostName = "ancha"; }).address;
+        ip6.addr = (slib.krebs.genipv6 "retiolum" "oxzi" { hostName = "ancha"; }).address;
         tinc.pubkey = ''
           -----BEGIN RSA PUBLIC KEY-----
           MIICCgKCAgEA5RSP7nWZ1c04kvQBxoHqcdRKpJuRDzD3f0Nl2KhS7QsAqHJGdK7T
@@ -39,7 +39,7 @@ in {
           "marohu.oxzi.r"
         ];
         ip4.addr = "10.243.32.2";
-        ip6.addr = (lib.krebs.genipv6 "retiolum" "oxzi" { hostName = "marohu"; }).address;
+        ip6.addr = (slib.krebs.genipv6 "retiolum" "oxzi" { hostName = "marohu"; }).address;
         tinc.pubkey = ''
           -----BEGIN RSA PUBLIC KEY-----
           MIICCgKCAgEAxHLkvuH9JMXay/fEmoWTEqLHg9A50EzkxPVBn4nyezgp5vxsUqJz

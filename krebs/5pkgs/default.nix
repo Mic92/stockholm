@@ -1,8 +1,11 @@
-let
-  stockholm.lib = import ../../lib;
+self: super: let
+  stockholm = {
+    lib = import ../../lib/pure.nix { lib = super.lib; };
+    outPath = toString ../.;
+  };
 in
 with stockholm.lib;
-self: super:
+
 fix (foldl' (flip extends) (self: super) (
   [
     (self: super: { inherit stockholm; })

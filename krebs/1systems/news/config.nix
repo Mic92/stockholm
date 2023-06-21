@@ -2,15 +2,15 @@
 
 {
   imports = [
-    <stockholm/krebs>
-    <stockholm/krebs/2configs>
+    ../../../krebs
+    ../../../krebs/2configs
 
-    <stockholm/krebs/2configs/ircd.nix>
-    <stockholm/krebs/2configs/go.nix>
+    ../../../krebs/2configs/ircd.nix
+    ../../../krebs/2configs/go.nix
 
     #### NEWS ####
-    <stockholm/krebs/2configs/ircd.nix>
-    <stockholm/krebs/2configs/news.nix>
+    ../../../krebs/2configs/ircd.nix
+    ../../../krebs/2configs/news.nix
   ];
 
   krebs.build.host = config.krebs.hosts.news;

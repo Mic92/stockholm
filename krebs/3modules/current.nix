@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 
-with import <stockholm/lib>;
+with lib;
 
 let
   cfg = config.krebs.current;

@@ -1,6 +1,9 @@
 with import ./lib;
 { config, ... }: let
   cfg.host = config.krebs.build.host;
+  nets =
+    optional (cfg.host.nets?retiolum) cfg.host.nets.retiolum ++
+    optional (cfg.host.nets?wiregrill) cfg.host.nets.wiregrill;
 in {
   services.openssh = {
     enable = true;
@@ -12,15 +15,11 @@ in {
   tv.iptables.extra4.nat.PREROUTING =
     map
       (net: "-d ${net.ip4.addr} -p tcp --dport 22 -j ACCEPT")
-      (filter (net: net.ip4 != null)
-              [
-                cfg.host.nets.retiolum
-                cfg.host.nets.wiregrill
-              ]);
-  tv.iptables.extra6.nat.PREROUTING = [
-    "-d ${cfg.host.nets.retiolum.ip6.addr} -p tcp --dport 22 -j ACCEPT"
-    "-d ${cfg.host.nets.wiregrill.ip6.addr} -p tcp --dport 22 -j ACCEPT"
-  ];
+      (filter (net: net.ip4 != null) nets);
+  tv.iptables.extra6.nat.PREROUTING =
+    map
+      (net: "-d ${net.ip6.addr} -p tcp --dport 22 -j ACCEPT")
+      (filter (net: net.ip6 != null) nets);
   tv.iptables.extra.nat.PREROUTING = [
     "-p tcp --dport 22 -j REDIRECT --to-ports 0"
     "-p tcp --dport 11423 -j REDIRECT --to-ports 22"

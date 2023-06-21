@@ -5,16 +5,16 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    <stockholm/krebs>
-    <stockholm/krebs/2configs>
-    # <stockholm/krebs/2configs/secret-passwords.nix>
+    ../../../krebs
+    ../../../krebs/2configs
+    # ../../../krebs/2configs/secret-passwords.nix
 
-    # <stockholm/krebs/2configs/binary-cache/nixos.nix>
-    # <stockholm/krebs/2configs/binary-cache/prism.nix>
-    <stockholm/krebs/2configs/shack/ssh-keys.nix>
-    <stockholm/krebs/2configs/shack/prometheus/node.nix>
+    # ../../../krebs/2configs/binary-cache/nixos.nix
+    # ../../../krebs/2configs/binary-cache/prism.nix
+    ../../../krebs/2configs/shack/ssh-keys.nix
+    ../../../krebs/2configs/shack/prometheus/node.nix
     # provides access to /home/share for smbuser via smb
-    <stockholm/krebs/2configs/shack/share.nix>
+    ../../../krebs/2configs/shack/share.nix
     {
       fileSystems."/home/share" =
         { device = "/serve";
@@ -23,8 +23,8 @@ in
     }
 
     ## Collect local statistics via collectd and send to collectd
-    # <stockholm/krebs/2configs/stats/shack-client.nix>
-    # <stockholm/krebs/2configs/stats/shack-debugging.nix>
+    # ../../../krebs/2configs/stats/shack-client.nix
+    # ../../../krebs/2configs/stats/shack-debugging.nix
   ];
 
   krebs.build.host = config.krebs.hosts.filebitch;

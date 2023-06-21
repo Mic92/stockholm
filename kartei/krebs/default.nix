@@ -1,11 +1,12 @@
-with import ../../lib;
-{ config, ... }: let
+{ config, lib, ... }: let
+  inherit (lib) flip genAttrs mapAttrs optionalAttrs recursiveUpdate;
+  slib = import ../../lib/pure.nix { inherit lib; };
 
   hostDefaults = hostName: host: flip recursiveUpdate host ({
     owner = config.krebs.users.krebs;
   } // optionalAttrs (host.nets?retiolum) {
     nets.retiolum.ip6.addr =
-      (krebs.genipv6 "retiolum" "krebs" { inherit hostName; }).address;
+      (slib.krebs.genipv6 "retiolum" "krebs" { inherit hostName; }).address;
   });
 
   testHosts = genAttrs [
@@ -66,7 +67,6 @@ in {
           tinc.pubkey_ed25519 = "D5TYSZW9OAkdnvQ/NL98UgheRC2Zg4SMNZ8M4/KwdeL";
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKRpjW68lSlTL8jBQcXKOTdGa+olQw5ghaU5df2yAE64";
     };
     hotdog = {
@@ -100,7 +100,6 @@ in {
           tinc.pubkey_ed25519 = "ugy/sGReVro3YzjDuroV/5hdeBdqD18no9dMhTy9DYL";
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxFkBln23wUxt4RhIHE3GvdKeBpJbjn++6maupHqUHp";
     };
     news = {
@@ -133,7 +132,6 @@ in {
           '';
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHl5cDF9QheXyMlNYIX17ILbgd94K50fZy7w0fDLvZlo ";
     };
     onebutton = {
@@ -161,7 +159,6 @@ in {
           '';
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAcZg+iLaPZ0SpLM+nANxIjZC/RIsansjyutK0+gPhIe ";
     };
     ponte = {
@@ -208,7 +205,6 @@ in {
           };
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJEw9fo8Qtb/DTLacdrJP7Ti7c4UXTm6wUUX+iRFweEo ";
     };
     puyak = {
@@ -234,7 +230,6 @@ in {
           '';
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPpVwKv9mQGfcn5oFwuitq+b6Dz4jBG9sGhVoCYFw5RY";
       syncthing.id = "DK5CEE2-PNUXYCE-Q42H2HP-623GART-B7KS4VK-HU2RBGQ-EK6QPUP-HUL3PAR";
     };
@@ -259,7 +254,6 @@ in {
           '';
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOu6EVN3928qWiWszqBUzOjeQJRvFozTBl4xAhBP/Ymc";
     };
     wolf = {
@@ -296,7 +290,6 @@ in {
           '';
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKYMXMWZIK0jjnZDM9INiYAKcwjXs2241vew54K8veCR";
     };
   } // testHosts);

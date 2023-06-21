@@ -1,5 +1,5 @@
 { config, lib, ... }:
-with import <stockholm/lib>;
+with lib;
 {
   krebs.backup.plans = {
   } // mapAttrs (_: recursiveUpdate {

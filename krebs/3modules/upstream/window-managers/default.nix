@@ -13,8 +13,8 @@
       imports = [ ./xmonad.nix ];
       nixpkgs.overlays = [(self: super: {
         writers = super.writers // {
-          writeHaskellBin = name: spec: with import <stockholm/lib>;
-            super.writers.writeHaskellBin name (removeAttrs spec ["ghcArgs"]);
+          writeHaskellBin = name: spec:
+            super.writers.writeHaskellBin name (builtins.removeAttrs spec ["ghcArgs"]);
         };
       })];
     }

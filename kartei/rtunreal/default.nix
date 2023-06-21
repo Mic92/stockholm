@@ -1,6 +1,8 @@
-with import ../../lib;
-{ config, ... }:
+{ config, lib, ... }:
 let
+  inherit (lib) flip mapAttrs optionalAttrs recursiveUpdate;
+  slib = import ../../lib/pure.nix { inherit lib; };
+
   hostDefaults = hostName: host: flip recursiveUpdate host ({
     ci = false;
     external = true;
@@ -8,11 +10,11 @@ let
     owner = config.krebs.users.rtunreal;
   } // optionalAttrs (host.nets?retiolum) {
     nets.retiolum = {
-      ip6.addr = (krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
+      ip6.addr = (slib.krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
     };
   } // optionalAttrs (host.nets?wiregrill) {
     nets.wiregrill = {
-      ip6.addr = (krebs.genipv6 "wiregrill" "external" { inherit hostName; }).address;
+      ip6.addr = (slib.krebs.genipv6 "wiregrill" "external" { inherit hostName; }).address;
     };
   });
   ssh-for = name: builtins.readFile (./ssh + "/${name}.pub");

@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 
-with import <stockholm/lib>;
+with lib;
 let
   acng-config = pkgs.writeTextFile {
     name = "acng-configuration";

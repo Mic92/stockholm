@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with import <stockholm/lib>;
+with lib;
 let
   gunicorn = pkgs.python3Packages.gunicorn;
   bepasty = pkgs.bepasty;

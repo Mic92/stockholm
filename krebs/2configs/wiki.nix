@@ -1,5 +1,5 @@
-{ config, pkgs, ... }:
-with import <stockholm/lib>;
+{ config, lib, pkgs, ... }:
+with import ../../lib/pure.nix { inherit lib; };
 let
 
   setupGit = ''
@@ -14,13 +14,13 @@ let
     fi
   '';
 
-  pushGollum = pkgs.writeDash "push_gollum" ''
+  pushGollum = pkgs.writers.writeDash "push_gollum" ''
     ${setupGit}
     git fetch origin
     git merge --ff-only origin/master
   '';
 
-  pushCgit = pkgs.writeDash "push_cgit" ''
+  pushCgit = pkgs.writers.writeDash "push_cgit" ''
     ${setupGit}
     git push origin master
   '';

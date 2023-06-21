@@ -1,4 +1,5 @@
 { config, lib, pkgs, ... }: let
+  slib = import ../../lib/pure.nix { inherit lib; };
 
   setupGit = ''
     export PATH=${lib.makeBinPath [
@@ -23,13 +24,13 @@
     git add .gitignore
   '';
 
-  pushCal = pkgs.writeDash "push_cal" ''
+  pushCal = pkgs.writers.writeDash "push_cal" ''
     ${setupGit}
     git fetch origin
     git merge --ff-only origin/master || :
   '';
 
-  pushCgit = pkgs.writeDash "push_cgit" ''
+  pushCgit = pkgs.writers.writeDash "push_cgit" ''
     ${setupGit}
     git push origin master
   '';
@@ -73,7 +74,7 @@ in {
     cgit.settings = {
       root-title = "krebs repos";
     };
-    rules = with pkgs.stockholm.lib.git; [
+    rules = with slib.git; [
       {
         user = [
           {

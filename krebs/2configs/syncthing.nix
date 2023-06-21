@@ -1,4 +1,6 @@
-{ options, config, pkgs, ... }: with import <stockholm/lib>; let
+{ config, lib, options, pkgs, ... }:
+with import ../../lib/pure.nix { inherit lib; };
+let
   mk_peers = mapAttrs (n: v: { id = v.syncthing.id; });
 
   all_peers = filterAttrs (n: v: v.syncthing.id != null) config.krebs.hosts;

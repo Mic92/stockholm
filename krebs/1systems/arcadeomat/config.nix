@@ -9,15 +9,15 @@ in
 {
   imports = [
     ./hw.nix
-    <stockholm/krebs>
-    <stockholm/krebs/2configs>
+    ../../../krebs
+    ../../../krebs/2configs
 
-    #<stockholm/krebs/2configs/binary-cache/nixos.nix>
-    #<stockholm/krebs/2configs/binary-cache/prism.nix>
+    #../../../krebs/2configs/binary-cache/nixos.nix
+    #../../../krebs/2configs/binary-cache/prism.nix
 
-    <stockholm/krebs/2configs/shack/ssh-keys.nix>
-    <stockholm/krebs/2configs/save-diskspace.nix>
-    <stockholm/krebs/2configs/shack/prometheus/node.nix>
+    ../../../krebs/2configs/shack/ssh-keys.nix
+    ../../../krebs/2configs/save-diskspace.nix
+    ../../../krebs/2configs/shack/prometheus/node.nix
 
   ];
   # use your own binary cache, fallback use cache.nixos.org (which is used by

@@ -1,17 +1,19 @@
-with import <stockholm/lib>;
-{ config, ... }: let
+{ config, lib, pkgs, ... }:
+with lib; let
   check = hostname: any (domain: hasSuffix ".${domain}" hostname) domains;
-  domains = attrNames (filterAttrs (_: eq "hosts") config.krebs.dns.providers);
+  domains = attrNames (filterAttrs (_: slib.eq "hosts") config.krebs.dns.providers);
+  # we need this import because we have infinite recursion otherwise
+  slib = import ../../lib/pure.nix { inherit lib; };
 in {
 
   options = {
     krebs.hosts = mkOption {
       default = {};
-      type = types.attrsOf types.host;
+      type = types.attrsOf slib.types.host;
     };
   };
 
-  config = mkIf config.krebs.enable {
+  config = lib.mkIf config.krebs.enable {
     networking.hosts =
       filterAttrs
         (_name: value: value != [])
@@ -91,7 +93,7 @@ in {
             (concatLists (attrValues netAliases));
       }
       //
-      genAttrs' (attrNames netAliases) (netname: rec {
+      slib.genAttrs' (attrNames netAliases) (netname: rec {
         name = "krebs-hosts-${netname}";
         value = writeHosts name netAliases.${netname};
       });

@@ -1,5 +1,5 @@
-with import <stockholm/lib>;
-{ config, lib, pkgs, ... }: let
+{ config, lib, pkgs, ... }:
+with import ../../lib/pure.nix { inherit lib; }; let
   cfg = config.krebs.secret;
 in {
   options.krebs.secret = {
@@ -12,7 +12,7 @@ in {
       readOnly = true;
     };
     files = mkOption {
-      type = with types; attrsOf secret-file;
+      type = with pkgs.stockholm.lib.types; attrsOf secret-file;
       default = {};
     };
   };

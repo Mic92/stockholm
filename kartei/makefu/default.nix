@@ -2,8 +2,10 @@
 # tinc generate-keys
 # ssh-keygen -f ssh.id_ed25519 -t ed25519 -C host
 
-with import ../../lib;
-{ config, ... }: let
+{ config, lib, ... }: let
+  inherit (builtins) foldl' mapAttrs pathExists readFile;
+  inherit (lib) optionalAttrs recursiveUpdate;
+  slib = import ../../lib/pure.nix { inherit lib; };
 
   hostDefaults = hostName: host: foldl' recursiveUpdate {} [
     {
@@ -19,7 +21,7 @@ with import ../../lib;
           "${hostName}.r"
         ];
         ip6.addr =
-          (krebs.genipv6 "retiolum" "makefu" { inherit hostName; }).address;
+          (slib.krebs.genipv6 "retiolum" "makefu" { inherit hostName; }).address;
       };
     })
     # Retiolum ed25519 keys
@@ -37,7 +39,7 @@ with import ../../lib;
           "${hostName}.w"
         ];
         ip6.addr =
-          (krebs.genipv6 "wiregrill" "makefu" { inherit hostName; }).address;
+          (slib.krebs.genipv6 "wiregrill" "makefu" { inherit hostName; }).address;
         wireguard.pubkey = readFile pubkey-path;
       };
     })
@@ -54,7 +56,7 @@ with import ../../lib;
   ];
 
   pub-for = name: builtins.readFile (./ssh + "/${name}.pub");
-  w6 = ip: (krebs.genipv6 "wiregrill" "makefu" ip).address;
+  w6 = ip: (slib.krebs.genipv6 "wiregrill" "makefu" ip).address;
 in {
   hosts = mapAttrs hostDefaults {
     cake = rec {
@@ -156,7 +158,7 @@ in {
     # pixel3a
     telex.nets.wiregrill = {
       aliases =  ["telex.w"];
-      ip6.addr = (krebs.genipv6 "wiregrill" "makefu" { hostName = "telex"; }).address;
+      ip6.addr = (slib.krebs.genipv6 "wiregrill" "makefu" { hostName = "telex"; }).address;
       ip4.addr = "10.244.245.4";
     };
 
@@ -263,7 +265,7 @@ in {
           ip6.addr = w6 "1";
           wireguard.port = 51821;
           wireguard.subnets = [
-              (krebs.genipv6 "wiregrill" "makefu" 0).subnetCIDR
+              (slib.krebs.genipv6 "wiregrill" "makefu" 0).subnetCIDR
               "10.244.245.0/24" # required for routing directly to gum via rockit
           ];
         };

@@ -1,5 +1,5 @@
-{ config, ... }: let
-  lib = import ../../lib;
+{ config, lib, ... }: let
+  slib = import ../../lib/pure.nix { inherit lib; };
 in {
   users.DUMMYUSER = {
     mail = "DUMMYUSER@example.ork";
@@ -8,7 +8,7 @@ in {
     owner = config.krebs.users.DUMMYUSER;
     nets.retiolum = {
       aliases = [ "DUMMYHOST.DUMMYUSER.r" ];
-      ip6.addr = (lib.krebs.genipv6 "retiolum" "DUMMYUSER" { hostName = "DUMMYHOST"; }).address;
+      ip6.addr = (slib.krebs.genipv6 "retiolum" "DUMMYUSER" { hostName = "DUMMYHOST"; }).address;
       tinc.pubkey = ''
         -----BEGIN RSA PUBLIC KEY-----
         DUMMYTINCPUBKEYRSA

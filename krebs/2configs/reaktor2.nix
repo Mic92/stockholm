@@ -1,5 +1,5 @@
-with import <stockholm/lib>;
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
+with import ../../lib/pure.nix { inherit lib; };
 
 let
   #for shared state directory
@@ -22,7 +22,7 @@ let
         # TODO; get state as argument
         state_file = "${stateDir}/ledger";
       };
-      filename = pkgs.writeDash "bedger-add" ''
+      filename = pkgs.writers.writeDash "bedger-add" ''
         set -x
         tonick=$1
         amt=$2
@@ -42,7 +42,7 @@ let
       env = {
         state_file = "${stateDir}/ledger";
       };
-      filename = pkgs.writeDash "bedger-balance" ''
+      filename = pkgs.writers.writeDash "bedger-balance" ''
         ${pkgs.hledger}/bin/hledger -f $state_file bal -N -O csv \
           | ${pkgs.coreutils}/bin/tail +2 \
           | ${pkgs.miller}/bin/mlr --icsv --opprint cat \
@@ -57,7 +57,7 @@ let
     arguments = [1];
     timeoutSec = 1337;
     command = {
-      filename = pkgs.writeDash "bing" ''
+      filename = pkgs.writers.writeDash "bing" ''
         set -efu
         report_error() {
           printf '%s' "$*" |
@@ -97,7 +97,7 @@ let
     arguments = [1];
     timeoutSec = 1337;
     command = {
-      filename = pkgs.writeDash "bing-img" ''
+      filename = pkgs.writers.writeDash "bing-img" ''
         set -efu
         report_error() {
           printf '%s' "$*" |
@@ -142,7 +142,7 @@ let
     activate = "match";
     arguments = [1];
     command = {
-      filename = pkgs.writeDash "confuse" ''
+      filename = pkgs.writers.writeDash "confuse" ''
         set -efux
 
         export PATH=${makeBinPath [
@@ -164,7 +164,7 @@ let
     activate = "match";
     arguments = [1];
     command = {
-      filename = pkgs.writeDash "interrogate" ''
+      filename = pkgs.writers.writeDash "interrogate" ''
         set -efux
 
         export PATH=${makeBinPath [
@@ -181,7 +181,7 @@ let
     activate = "match";
     arguments = [1];
     command = {
-      filename = pkgs.writeDash "confuse" ''
+      filename = pkgs.writers.writeDash "confuse" ''
         set -efu
         export PATH=${makeBinPath [
           pkgs.coreutils
@@ -204,7 +204,7 @@ let
     activate = "match";
     arguments = [1];
     command = {
-      filename = pkgs.writeDash "say" ''
+      filename = pkgs.writers.writeDash "say" ''
         set -efu
 
         export PATH=${makeBinPath [
@@ -234,20 +234,20 @@ let
     arguments = [2];
     env.TASKDATA = "${stateDir}/${name}";
     commands = rec {
-      add.filename = pkgs.writeDash "${name}-task-add" ''
+      add.filename = pkgs.writers.writeDash "${name}-task-add" ''
         ${pkgs.taskwarrior}/bin/task rc:${taskRcFile} add "$1"
       '';
-      list.filename = pkgs.writeDash "${name}-task-list" ''
+      list.filename = pkgs.writers.writeDash "${name}-task-list" ''
         ${pkgs.taskwarrior}/bin/task rc:${taskRcFile} export \
           | ${pkgs.jq}/bin/jq -r '
               .[] | select(.id != 0) | "\(.id) \(.description)"
             '
       '';
-      delete.filename = pkgs.writeDash "${name}-task-delete" ''
+      delete.filename = pkgs.writers.writeDash "${name}-task-delete" ''
         ${pkgs.taskwarrior}/bin/task rc:${taskRcFile} delete "$1"
       '';
       del = delete;
-      done.filename = pkgs.writeDash "${name}-task-done" ''
+      done.filename = pkgs.writers.writeDash "${name}-task-done" ''
         ${pkgs.taskwarrior}/bin/task rc:${taskRcFile} done "$1"
       '';
     };
@@ -293,8 +293,7 @@ let
         {
           activate = "always";
           command = {
-            filename =
-              <stockholm/krebs/5pkgs/simple/Reaktor/scripts/tell-on_join.sh>;
+            filename = ../5pkgs/simple/Reaktor/scripts/tell-on_join.sh;
             env = {
               PATH = makeBinPath [
                 pkgs.coreutils # XXX env, touch
@@ -311,7 +310,7 @@ let
           pattern = "^list-locations";
           activate = "match";
           command = {
-            filename = pkgs.writeDash "list-locations" ''
+            filename = pkgs.writers.writeDash "list-locations" ''
               export PATH=${makeBinPath [
                 pkgs.curl
                 pkgs.jq
@@ -328,7 +327,7 @@ let
           activate = "match";
           arguments = [1 2 3];
           command = {
-            filename = pkgs.writeDash "add-location" ''
+            filename = pkgs.writers.writeDash "add-location" ''
               export PATH=${makeBinPath [
                 pkgs.curl
                 pkgs.jq
@@ -345,7 +344,7 @@ let
           activate = "match";
           arguments = [1];
           command = {
-            filename = pkgs.writeDash "add-location" ''
+            filename = pkgs.writers.writeDash "add-location" ''
               export PATH=${makeBinPath [
                 pkgs.curl
                 pkgs.jq
@@ -374,7 +373,7 @@ let
                 sha256 = "sha256-J7jGWZeAULDA1EkO50qx+hjl+5IsUj389pUUMreKeNE=";
               };
               osm-restaurants = pkgs.callPackage "${osm-restaurants-src}/osm-restaurants" {};
-            in pkgs.writeDash "krebsfood" ''
+            in pkgs.writers.writeDash "krebsfood" ''
               set -efu
               export PATH=${makeBinPath [
                 osm-restaurants
@@ -417,8 +416,7 @@ let
         (generators.command_hook {
           inherit (commands) dance random-emoji nixos-version;
           tell = {
-            filename =
-              <stockholm/krebs/5pkgs/simple/Reaktor/scripts/tell-on_privmsg.sh>;
+            filename = ../5pkgs/simple/Reaktor/scripts/tell-on_privmsg.sh;
             env = {
               PATH = makeBinPath [
                 pkgs.coreutils # XXX date, env
@@ -452,7 +450,7 @@ in {
      name = "reaktor2";
      home = stateDir;
     };
-    script = ''. ${pkgs.writeDash "agenda" ''
+    script = ''. ${pkgs.writers.writeDash "agenda" ''
       echo "$Method $Request_URI" >&2
       case "$Method" in
         "GET")

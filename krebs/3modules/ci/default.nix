@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
-
-with import <stockholm/lib>;
+with import ../../../lib/pure.nix { inherit lib; };
 
 let
   cfg = config.krebs.ci;
@@ -25,7 +24,7 @@ let
   };
 
   hostname = config.networking.hostName;
-  getJobs = pkgs.writeDash "get_jobs" ''
+  getJobs = pkgs.writers.writeDash "get_jobs" ''
     set -efu
     ${pkgs.nix}/bin/nix-build --no-out-link --quiet --show-trace -Q ./ci.nix >&2
     json="$(${pkgs.nix}/bin/nix-instantiate --quiet -Q --eval --strict --json ./ci.nix)"
@@ -116,7 +115,7 @@ let
                             build_script = stages[stage],
                           ),
                           timeout = 3600,
-                          command="${pkgs.writeDash "build.sh" ''
+                          command="${pkgs.writers.writeDash "build.sh" ''
                             set -xefu
                             profile=${shell.escape profileRoot}/$build_name
                             result=$("$build_script")

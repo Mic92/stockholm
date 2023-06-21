@@ -1,5 +1,5 @@
 { config, lib, pkgs, ... }:
-with import <stockholm/lib>;
+with import ../../lib/pure.nix { inherit lib; };
 let
   out = {
     options.krebs.backup = api;

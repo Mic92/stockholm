@@ -6,14 +6,14 @@
 # TODO when authorized_keys changes, then restart ssh
 #       (or kill already connected users somehow)
 
-with import <stockholm/lib>;
+with import ../../lib/pure.nix { inherit lib; };
 let
   cfg = config.krebs.git;
 
   out = {
     options.krebs.git = api;
-    config = with lib; mkIf cfg.enable (mkMerge [
-      (mkIf cfg.cgit.enable cgit-imp)
+    config = with lib; lib.mkIf cfg.enable (mkMerge [
+      (lib.mkIf cfg.cgit.enable cgit-imp)
       git-imp
     ]);
   };
@@ -446,7 +446,7 @@ let
       ];
       locations."/".extraConfig = ''
         include             ${pkgs.nginx}/conf/fastcgi_params;
-        fastcgi_param       SCRIPT_FILENAME ${pkgs.writeDash "cgit-wrapper" ''
+        fastcgi_param       SCRIPT_FILENAME ${pkgs.writers.writeDash "cgit-wrapper" ''
           set -efu
           exec 3>&1
           ${pkgs.cgit}/cgit/cgit.cgi "$@" 2>&1 >&3 3>&- \

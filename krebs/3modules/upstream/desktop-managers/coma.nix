@@ -1,5 +1,6 @@
-with import <stockholm/lib>;
-{ config, pkgs, ... }: {
+{ config, pkgs, lib, ... }:
+with lib;
+{
   options = {
     services.xserver.desktopManager.coma = {
       enable = mkEnableOption "sleep as a desktop manager";

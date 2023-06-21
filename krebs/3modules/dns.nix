@@ -1,5 +1,5 @@
-with import <stockholm/lib>;
-{ config, ... }: {
+{ config, lib, pkgs, ... }:
+with import ../../lib/pure.nix { inherit lib; }; {
   options = {
     krebs.dns.providers = mkOption {
       type = types.attrsOf types.str;
@@ -8,7 +8,7 @@ with import <stockholm/lib>;
       type = types.nullOr types.hostname;
     };
   };
-  config = mkIf config.krebs.enable {
+  config = lib.mkIf config.krebs.enable {
     krebs.dns.providers = {
       "krebsco.de" = "zones";
       shack = "hosts";

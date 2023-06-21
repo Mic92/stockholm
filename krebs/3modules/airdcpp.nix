@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
-with import <stockholm/lib>; #genid
+with lib;
 let
+  slib = import ../../lib/pure.nix { inherit lib; };
   cfg = config.krebs.airdcpp;
 
   out = {
@@ -265,14 +266,14 @@ let
     };
     users = lib.mkIf (cfg.user == "airdcpp") {
       users.airdcpp = {
-        uid = genid "airdcpp";
+        uid = slib.genid "airdcpp";
         home = cfg.stateDir;
         createHome = true;
         isSystemUser = true;
         group = "airdcpp";
         inherit (cfg) extraGroups;
       };
-      groups.airdcpp.gid = genid "airdcpp";
+      groups.airdcpp.gid = slib.genid "airdcpp";
     };
   };
 in

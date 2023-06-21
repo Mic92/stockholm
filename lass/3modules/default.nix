@@ -1,6 +1,7 @@
 _:
 {
   imports = [
+    ../../submodules/disko/module.nix
     ./dnsmasq.nix
     ./drbd.nix
     ./folderPerms.nix

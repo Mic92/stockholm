@@ -1,5 +1,11 @@
-with import ../../lib;
-{ config, ... }: {
+{ config, lib, ... }@attrs: let
+  inherit (builtins)
+    getAttr head mapAttrs match pathExists readDir readFile typeOf;
+  inherit (lib)
+    const hasAttrByPath mapAttrs' mkDefault mkIf optionalAttrs removeSuffix
+    toList;
+  slib = import ../../lib/pure.nix { inherit lib; };
+in {
   dns.providers = {
     "viljetic.de" = "regfish";
   };
@@ -8,10 +14,10 @@ with import ../../lib;
       (hostName: hostFile: let
         hostSource = import hostFile;
         hostConfig = getAttr (typeOf hostSource) {
-          lambda = hostSource { inherit config lib; };
+          lambda = hostSource attrs;
           set = hostSource;
         };
-      in evalSubmodule types.host [
+      in slib.evalSubmodule slib.types.host [
         hostConfig
         {
           name = hostName;
@@ -20,7 +26,7 @@ with import ../../lib;
         (optionalAttrs (hasAttrByPath ["nets" "retiolum"] hostConfig) {
           nets.retiolum = {
             ip6.addr =
-              (krebs.genipv6 "retiolum" "tv" { inherit hostName; }).address;
+              (slib.krebs.genipv6 "retiolum" "tv" { inherit hostName; }).address;
           };
         })
         (let
@@ -31,14 +37,14 @@ with import ../../lib;
               "${hostName}.w"
             ];
             ip6.addr =
-              (krebs.genipv6 "wiregrill" "tv" { inherit hostName; }).address;
+              (slib.krebs.genipv6 "wiregrill" "tv" { inherit hostName; }).address;
             wireguard.pubkey = readFile pubkey-path;
           };
         })
         (host: mkIf (host.config.ssh.pubkey != null) {
           ssh.privkey = mapAttrs (const mkDefault) {
             path = config.krebs.secret.file "ssh.id_${host.config.ssh.privkey.type}";
-            type = head (toList (match "ssh-([^ ]+) .*" host.config.ssh.pubkey));
+            type = head (toList (builtins.match "ssh-([^ ]+) .*" host.config.ssh.pubkey));
           };
         })
       ])

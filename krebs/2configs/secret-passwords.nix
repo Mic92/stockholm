@@ -1,4 +1,5 @@
-{ ... }: with import <stockholm/lib>;
+{ lib, ... }:
+with lib;
 {
   users.extraUsers =
     mapAttrs (_: h: { hashedPassword = h; })

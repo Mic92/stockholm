@@ -1,5 +1,5 @@
-with import <stockholm/lib>;
-{ config, pkgs, ... }: let
+{ config, pkgs, lib, ... }:
+with lib; let
   cfg = config.krebs.per-user;
 in {
   options.krebs.per-user = mkOption {

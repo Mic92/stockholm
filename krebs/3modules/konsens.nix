@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
-
-with import <stockholm/lib>;
+with import ../../lib/pure.nix { inherit lib; };
 
 let
   cfg = config.krebs.konsens;
@@ -68,7 +67,7 @@ let
         serviceConfig = {
           Type = "simple";
           PermissionsStartOnly = true;
-          ExecStart = pkgs.writeDash "konsens-${name}" ''
+          ExecStart = pkgs.writers.writeDash "konsens-${name}" ''
             set -efu
             git config --global --replace-all safe.directory *
             if ! test -e ${name}; then

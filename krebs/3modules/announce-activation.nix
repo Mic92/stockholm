@@ -1,20 +1,21 @@
-with import <stockholm/lib>;
-{ config, pkgs, ... }: let
+{ config, pkgs, lib, ... }:
+let
+  slib = import ../../lib/pure.nix { inherit lib; };
   cfg = config.krebs.announce-activation;
   announce-activation = pkgs.writeDash "announce-activation" ''
     set -efu
     message=$(${cfg.get-message})
     exec ${pkgs.irc-announce}/bin/irc-announce \
-        ${shell.escape cfg.irc.server} \
-        ${shell.escape (toString cfg.irc.port)} \
-        ${shell.escape cfg.irc.nick} \
-        ${shell.escape cfg.irc.channel} \
-        ${escapeShellArg cfg.irc.tls} \
+        ${slib.shell.escape cfg.irc.server} \
+        ${slib.shell.escape (toString cfg.irc.port)} \
+        ${slib.shell.escape cfg.irc.nick} \
+        ${slib.shell.escape cfg.irc.channel} \
+        ${lib.escapeShellArg cfg.irc.tls} \
         "$message"
   '';
   default-get-message = pkgs.writeDash "announce-activation-get-message" ''
     set -efu
-    PATH=${makeBinPath [
+    PATH=${lib.makeBinPath [
       pkgs.coreutils
       pkgs.gawk
       pkgs.gnused
@@ -28,37 +29,37 @@ with import <stockholm/lib>;
   '';
 in {
   options.krebs.announce-activation = {
-    enable = mkEnableOption "announce-activation";
-    get-message = mkOption {
+    enable = lib.mkEnableOption "announce-activation";
+    get-message = lib.mkOption {
       default = default-get-message;
-      type = types.package;
+      type = lib.types.package;
     };
     irc = {
       # TODO rename channel to target?
-      channel = mkOption {
+      channel = lib.mkOption {
         default = "#xxx";
-        type = types.str; # TODO types.irc-channel
+        type = lib.types.str; # TODO types.irc-channel
       };
-      nick = mkOption {
+      nick = lib.mkOption {
         default = config.krebs.build.host.name;
-        type = types.label;
+        type = slib.types.label;
       };
-      port = mkOption {
+      port = lib.mkOption {
         default = 6667;
-        type = types.int;
+        type = lib.types.int;
       };
-      server = mkOption {
+      server = lib.mkOption {
         default = "irc.r";
-        type = types.hostname;
+        type = slib.types.hostname;
       };
-      tls = mkOption {
+      tls = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
       };
     };
   };
-  config = mkIf cfg.enable {
-    system.activationScripts.announce-activation = stringAfter [ "etc" ] ''
+  config = lib.mkIf cfg.enable {
+    system.activationScripts.announce-activation = lib.stringAfter [ "etc" ] ''
       ${announce-activation}
     '';
   };
