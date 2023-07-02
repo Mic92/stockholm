@@ -88,6 +88,7 @@ let
          --ytdl-format="best[height<$Y_RES]" \
          --script-opts=ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp \
          --script-opts-append=sponsorblock-local_database=no \
+         --audio-channels=2 \
          "$@"
       '')
       pkgs.mpv
