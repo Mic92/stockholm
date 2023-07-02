@@ -59,6 +59,8 @@ let
 
   mpvInput = pkgs.writeText "mpv.input" ''
     : script-binding console/enable
+    x add audio-delay -0.050
+    X add audio-delay 0.050
   '';
 
   mpvConfig = pkgs.writeText "mpv.conf" ''
