@@ -104,6 +104,7 @@ in {
   };
   services.nextcloud = {
     enable = true;
+    enableBrokenCiphersForSSE = false;
     hostName = "o.xanf.org";
     package = pkgs.nextcloud25;
     config = {
