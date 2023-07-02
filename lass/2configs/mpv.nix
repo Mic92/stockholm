@@ -1,28 +1,10 @@
 { pkgs, lib, ... }:
 
 let
-
-  download_subs = pkgs.writers.writePython3 "download_sub" {
-    libraries = [ pkgs.python3Packages.subliminal ];
-  } ''
-    from subliminal import download_best_subtitles, scan_video
-    from babelfish import Language
-    import sys
-
-    video_filename = sys.argv[1]
-
-    vid = scan_video(video_filename)
-    try:
-        sub = download_best_subtitles([vid], {Language('eng')})[vid][0]
-
-        filename = '/tmp/' + vid.title + '.srt'
-
-        with open(filename, 'wb+') as file:
-            file.write(sub.content)
-
-        print(filename)
-    except:  # noqa
-        print("/dev/null")
+  dl_subs = pkgs.writers.writeDashBin "dl_subs" ''
+    filename=$1
+    ${pkgs.subdl}/bin/subdl --output='/tmp/{m}.{M}.sub' "$filename" 1>&2
+    echo "/tmp/$(basename "$filename").sub"
   '';
 
   autosub = pkgs.writeText "autosub.lua" ''
@@ -39,10 +21,9 @@ let
 
     function download()
         log('Searching subtitles ...', 10)
-        table = { args = {"${download_subs}", mp.get_property('path')} }
-        result = utils.subprocess(table)
+        path = mp.get_property('path')
+        result = utils.subprocess({ args = {"${dl_subs}/bin/dl_subs", path} })
         if result.error == nil then
-            -- remove trailing newline from subtitle filename
             filename = string.gsub(result.stdout, "\n", "")
             log(filename)
             mp.commandv('sub_add', filename)
@@ -122,5 +103,6 @@ let
 in {
   environment.systemPackages = [
     mpv
+    dl_subs
   ];
 }
