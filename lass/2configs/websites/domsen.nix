@@ -29,8 +29,10 @@ in {
     (servePage [ "apanowicz.de" "www.apanowicz.de" ])
     (servePage [ "reich-gebaeudereinigung.de" "www.reich-gebaeudereinigung.de" ])
     (servePage [ "illustra.de" "www.illustra.de" ])
-    (servePage [ "nirwanabluete.de" "www.nirwanabluete.de" ])
+    (servePage [ "event-extra.de" "www.event-extra.de" ])
+    # (servePage [ "nirwanabluete.de" "www.nirwanabluete.de" ])
     (servePage [ "familienrat-hamburg.de" "www.familienrat-hamburg.de" ])
+    (servePage [ "karlaskop.de" ])
     (servePage [
       "freemonkey.art"
       "www.freemonkey.art"
@@ -58,7 +60,6 @@ in {
       "factscloud.ubikmedia.de"
       "illucloud.ubikmedia.de"
       "joemisch.ubikmedia.de"
-      "karlaskop.ubikmedia.de"
       "nb.ubikmedia.de"
       "youthtube.ubikmedia.de"
       "weirdwednesday.ubikmedia.de"
