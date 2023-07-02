@@ -72,14 +72,7 @@ let
     paths = [
       (pkgs.writeDashBin "mpv" ''
         set -efu
-        if [ -n "''${DISPLAY+x}" ]; then
-          Y_RES=$(${pkgs.xorg.xrandr}/bin/xrandr |
-            ${pkgs.jc}/bin/jc --xrandr |
-            ${pkgs.jq}/bin/jq '.screens[0].current_width'
-          )
-        else
-          Y_RES=1000
-        fi
+        Y_RES=1081
         # we need to disable sponsorblock local database because of
         # https://github.com/po5/mpv_sponsorblock/issues/31
         exec ${pkgs.mpv.override {
@@ -88,7 +81,6 @@ let
             youtube-quality
           ];
         }}/bin/mpv \
-         -vo=gpu \
          --no-config \
          --input-conf=${mpvInput} \
          --include=${mpvConfig} \
