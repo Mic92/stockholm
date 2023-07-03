@@ -15,7 +15,7 @@
         ${pkgs.coreutils}/bin/chown lass:users /var/theme/current_theme
         ${pkgs.xorg.xrdb}/bin/xrdb -merge /var/theme/config/xresources
         ${pkgs.procps}/bin/pkill -HUP xsettingsd
-        ${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface gtk-theme "$(cat /var/theme/config/gtk-theme)"
+        ${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface gtk-theme "$(cat /var/theme/config/gtk-theme)" || :
       else
         echo "theme $1 not found"
       fi
