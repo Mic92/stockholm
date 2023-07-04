@@ -26,7 +26,7 @@ let
     krops = import ../submodules/krops/lib;
     shell = import ./shell.nix { inherit (stockholm) lib; };
     systemd = {
-      encodeName = replaceChars ["/"] ["\\x2f"];
+      encodeName = replaceStrings ["/"] ["\\x2f"];
     };
     types = nixpkgs-lib.types // import ./types.nix { lib = stockholm.lib; };
     uri = import ./uri.nix { inherit (stockholm) lib; };
@@ -79,7 +79,7 @@ let
       string = toJSON x; # close enough
     }.${type} or reject;
 
-    indent = replaceChars ["\n"] ["\n  "];
+    indent = replaceStrings ["\n"] ["\n  "];
 
     stripAttr = converge (filterAttrsRecursive (n: v: v != {} && v != null));
 

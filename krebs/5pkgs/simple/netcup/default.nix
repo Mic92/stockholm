@@ -3,7 +3,7 @@ with stockholm.lib;
 
 let
   readJSON = path: fromJSON (readFile path);
-  sed.escape = replaceChars ["/"] ["\\/"]; # close enough
+  sed.escape = replaceStrings ["/"] ["\\/"]; # close enough
   PATH = makeBinPath [
     coreutils
     curl
