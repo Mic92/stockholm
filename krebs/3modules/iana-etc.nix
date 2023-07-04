@@ -1,5 +1,6 @@
-{ config, pkgs, lib, ... }:
-with lib; {
+{ config, lib, pkgs, ... }: let
+  slib = import ../../lib/pure.nix { inherit lib; };
+in with lib; {
 
   options.krebs.iana-etc.services = mkOption {
     default = {};
@@ -7,7 +8,7 @@ with lib; {
       options = {
         port = mkOption {
           default = config._module.args.name;
-          type = types.addCheck types.str (test "[1-9][0-9]*");
+          type = types.addCheck types.str (slib.test "[1-9][0-9]*");
         };
       } // genAttrs ["tcp" "udp"] (protocol: mkOption {
         default = null;
@@ -30,7 +31,7 @@ with lib; {
             (proto: let
               line = "${entry.${proto}.name} ${entry.port}/${proto}";
             in /* sh */ ''
-              echo ${shell.escape line}
+              echo ${slib.shell.escape line}
             '')
             (filter (proto: entry.${proto} != null) ["tcp" "udp"])}
           '') (attrValues config.krebs.iana-etc.services)}
