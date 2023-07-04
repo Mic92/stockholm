@@ -52,12 +52,6 @@ in {
     enable = true;
     display = mkForce 11;
     tty = mkForce 11;
-
-    synaptics = {
-      enable = true;
-      twoFingerScroll = true;
-      accelFactor = "0.035";
-    };
   };
 
   systemd.services.display-manager.enable = false;
