@@ -22,6 +22,7 @@
   ];
 
   krebs.build.host = config.krebs.hosts.hotdog;
+  krebs.hosts.hotdog.ssh.privkey.path = <secrets/ssh.id_ed25519>;
   krebs.pages.enable = true;
 
   boot.isContainer = true;

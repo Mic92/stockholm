@@ -29,7 +29,7 @@ in {
   users = rec {
     lass = lass-yubikey;
     lass-yubikey = {
-      mail = "lass@lassul.us";
+      mail = "lass@green.r";
       pubkey = builtins.readFile ./ssh/yubikey.rsa;
       pgp.pubkeys.default = builtins.readFile ./pgp/yubikey.pgp;
     };
