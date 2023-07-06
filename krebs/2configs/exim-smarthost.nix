@@ -42,6 +42,7 @@ in {
       "makefu@krebsco.de" = makefu;
       "spam@krebsco.de" = spam-ml;
       "tv@krebsco.de" = tv;
+      "xkey@krebsco.de" = { mail = "lennart@cope.cool"; };
       # XXX These are no internet aliases
       # XXX exim-retiolum hosts should be able to relay to retiolum addresses
       "lass@retiolum" = lass;
