@@ -27,6 +27,13 @@
     <stockholm/lass/2configs/print.nix>
     <stockholm/lass/2configs/br.nix>
     <stockholm/lass/2configs/c-base.nix>
+    # steam-deck like experience https://github.com/Jovian-Experiments/Jovian-NixOS
+    {
+      imports = [
+        "${builtins.fetchTarball "https://github.com/Jovian-Experiments/Jovian-NixOS/archive/master.tar.gz"}/modules"
+      ];
+      jovian.steam.enable = true;
+    }
   ];
 
   system.stateVersion = "22.11";
