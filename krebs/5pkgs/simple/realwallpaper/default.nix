@@ -9,7 +9,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     gnused
     file
     findutils
-    imagemagick6
+    imagemagick
     inkscape
     jq
     nomads-cloud
