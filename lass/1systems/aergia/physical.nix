@@ -99,4 +99,8 @@
 
   # firefox touchscreen support
   environment.sessionVariables.MOZ_USE_XINPUT2 = "1";
+  # reinit usb after docking station connect
+  services.udev.extraRules = ''
+    SUBSYSTEM=="drm", ACTION=="change", RUN+="${pkgs.dash}/bin/dash -c 'echo 0 > /sys/bus/usb/devices/usb9/authorized; echo 1 > /sys/bus/usb/devices/usb9/authorized'"
+  '';
 }
