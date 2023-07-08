@@ -6,7 +6,8 @@ with import <stockholm/lib>;
     <stockholm/lass>
 
     <stockholm/lass/2configs/retiolum.nix>
-    <stockholm/lass/2configs/nfs-dl.nix>
+    <stockholm/lass/2configs/pipewire.nix>
+    # <stockholm/lass/2configs/nfs-dl.nix>
     {
       # bubsy config
       users.users.bubsy = {
@@ -17,22 +18,20 @@ with import <stockholm/lib>;
         extraGroups = [
           "audio"
           "networkmanager"
+          "pipewire"
+          # "plugdev"
         ];
         useDefaultShell = true;
         isNormalUser = true;
       };
       networking.networkmanager.enable = true;
       networking.wireless.enable = mkForce false;
-      hardware.pulseaudio = {
-        enable = true;
-        systemWide = true;
-      };
-      programs.chromium = {
-        enable = true;
-        extensions = [
-          "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
-        ];
-      };
+      # programs.chromium = {
+      #   enable = true;
+      #   extensions = [
+      #     "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
+      #   ];
+      # };
       environment.systemPackages = with pkgs; [
         ark
         pavucontrol
@@ -48,7 +47,9 @@ with import <stockholm/lib>;
         geeqie
         vlc
         zsnes
+        telegram-desktop
       ];
+      # services.udev.packages = [ pkgs.ledger-udev-rules ];
       nixpkgs.config.firefox.enableAdobeFlash = true;
       services.xserver.enable = true;
       services.xserver.displayManager.lightdm.enable = true;
@@ -72,12 +73,10 @@ with import <stockholm/lib>;
               "networkmanager"
               "plugdev"
             ];
-            packages = let
-              unstable = import <nixpkgs-unstable> { config.allowUnfree = true; };
-            in [
+            packages = [
               pkgs.electrum
               pkgs.electron-cash
-              unstable.ledger-live-desktop
+              pkgs.ledger-live-desktop
             ];
           };
         };
