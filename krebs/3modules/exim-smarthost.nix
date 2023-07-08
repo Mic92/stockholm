@@ -40,7 +40,7 @@ let
     };
 
     extraRouters = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.lines;
       default = null;
     };
 
