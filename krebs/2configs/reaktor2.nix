@@ -626,6 +626,7 @@ in {
             channels = [
               "#noise"
               "#xxx"
+              "#fin"
             ];
           };
         }
