@@ -103,6 +103,9 @@ with import <stockholm/lib>;
 
     dnsutils
     woeusb
+    (pkgs.writeDashBin "play-on" ''
+      HOST=$(echo 'styx\nshodan' | fzfmenu)
+      ssh -t "$HOST" -- mpv "$@"
     '')
   ];
 
