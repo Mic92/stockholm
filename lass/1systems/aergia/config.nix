@@ -115,6 +115,8 @@
     bank
     l-gen-secrets
     generate-secrets
+    nixpkgs-review
+    pipenv
   ];
 
   programs.adb.enable = true;
@@ -142,4 +144,5 @@
   ];
 
   boot.cleanTmpDir = true;
+  programs.noisetorch.enable = true;
 }
