@@ -19,14 +19,10 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.kernelParams = [
-    # Enable energy savings during sleep
-    "mem_sleep_default=deep"
 
     # use less power with pstate
     "amd_pstate=passive"
 
-    # for ryzenadj -i
-    "iomem=relaxed"
 
     # suspend
     "resume_offset=178345675"
@@ -37,24 +33,6 @@
     # On recent AMD CPUs this can be more energy efficient.
     "amd-pstate"
     "kvm-amd"
-
-    # needed for zenstates
-    "msr"
-
-    # zenpower
-    "zenpower"
-  ];
-
-  boot.extraModulePackages = [
-    (config.boot.kernelPackages.zenpower.overrideAttrs (old: {
-      src = pkgs.fetchFromGitea {
-        domain = "git.exozy.me";
-        owner = "a";
-        repo = "zenpower3";
-        rev = "c176fdb0d5bcba6ba2aba99ea36812e40f47751f";
-        hash = "sha256-d2WH8Zv7F0phZmEKcDiaak9On+Mo9bAFhMulT/N5FWI=";
-      };
-    }))
   ];
 
   # hardware.cpu.amd.updateMicrocode = true;
@@ -76,7 +54,6 @@
 
   environment.systemPackages = [
     pkgs.vulkan-tools
-    pkgs.ryzenadj
     (pkgs.writers.writeDashBin "set_tdp" ''
       set -efux
       watt=$1
@@ -85,31 +62,9 @@
     '')
   ];
 
-  # textsize
-  services.xserver.dpi = 200;
-
   # corectrl
-  programs.corectrl = {
-    enable = true;
-    gpuOverclock = {
-      enable = true;
-      ppfeaturemask = "0xffffffff";
-    };
-  };
-  users.users.mainUser.extraGroups = [ "corectrl" ];
 
   # use newer ryzenadj
-  nixpkgs.config.packageOverrides = super: {
-    ryzenadj = super.ryzenadj.overrideAttrs (old: {
-      version = "unstable-2023-01-15";
-      src = pkgs.fetchFromGitHub {
-        owner = "FlyGoat";
-        repo = "RyzenAdj";
-        rev = "1052fb52b2c0e23ac4cd868c4e74d4a9510be57c"; # unstable on 2023-01-15
-        sha256 = "sha256-/IxkbQ1XrBrBVrsR4EdV6cbrFr1m+lGwz+rYBqxYG1k=";
-      };
-    });
-  };
 
   # keyboard quirks
   services.xserver.displayManager.sessionCommands = ''
@@ -122,10 +77,15 @@
       KEYBOARD_KEY_70027=reserved
   '';
 
-  # ignore power key
-
   # update cpu microcode
   hardware.cpu.amd.updateMicrocode = true;
+
+  hardware.opengl.enable = true;
+  hardware.opengl.extraPackages = [
+    pkgs.amdvlk
+    pkgs.rocm-opencl-icd
+    pkgs.rocm-opencl-runtime
+  ];
 
   # suspend to disk
   swapDevices = [{
