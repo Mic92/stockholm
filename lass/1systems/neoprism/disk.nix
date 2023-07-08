@@ -9,14 +9,12 @@
       partitions = [
         {
           name = "boot";
-          type = "partition";
           start = "0";
           end = "1M";
           part-type = "primary";
           flags = ["bios_grub"];
         }
         {
-          type = "partition";
           name = "ESP";
           start = "1M";
           end = "1GiB";
@@ -28,7 +26,6 @@
           };
         }
         {
-          type = "partition";
           name = "zfs";
           start = "1GiB";
           end = "100%";
@@ -69,7 +66,7 @@
       rootFsOptions = {
       };
       datasets.reserved = {
-        zfs_type = "filesystem";
+        type = "zfs_fs";
         options.refreservation = "1G";
       };
     };
@@ -77,38 +74,53 @@
       type = "zpool";
       datasets = {
         reserved = {
-          zfs_type = "filesystem";
+          type = "zfs_fs";
           options.refreservation = "1G";
         };
         containers = {
-          zfs_type = "filesystem";
+          type = "zfs_fs";
           mountpoint = "/var/lib/containers";
+          options = {
+            canmount = "noauto";
+          };
         };
         home = {
-          zfs_type = "filesystem";
+          type = "zfs_fs";
           mountpoint = "/home";
+          options = {
+            canmount = "noauto";
+          };
         };
         srv = {
-          zfs_type = "filesystem";
+          type = "zfs_fs";
           mountpoint = "/srv";
+          options = {
+            canmount = "noauto";
+          };
         };
         libvirt = {
-          zfs_type = "filesystem";
+          type = "zfs_fs";
           mountpoint = "/var/lib/libvirt";
+          options = {
+            canmount = "noauto";
+          };
         };
         # encrypted = {
-        #   zfs_type = "filesystem";
+        #   type = "zfs_fs";
         #   options = {
+        #     canmount = "noauto";
         #     mountpoint = "none";
         #     encryption = "aes-256-gcm";
         #     keyformat = "passphrase";
         #     keylocation = "prompt";
         #   };
         # };
-
         # "encrypted/download" = {
-        #   zfs_type = "filesystem";
+        #   type = "zfs_fs";
         #   mountpoint = "/var/download";
+        #   options = {
+        #     canmount = "noauto";
+        #   };
         # };
       };
     };
