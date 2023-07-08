@@ -14,31 +14,31 @@ rec {
       @ IN SOA dns16.ovh.net. tech.ovh.net. (2017093001 86400 3600 3600000 300)
                           60 IN NS     ns16.ovh.net.
                           60 IN NS     dns16.ovh.net.
-                          60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-                          60 IN AAAA   ${config.krebs.hosts.prism.nets.internet.ip6.addr}
+                          60 IN A      ${nets.internet.ip4.addr}
+                          60 IN AAAA   ${nets.internet.ip4.addr}
                              IN MX     5 mail.lassul.us.
                           60 IN TXT    "v=spf1 mx -all"
                           60 IN TXT    ( "v=DKIM1; k=rsa; t=s; s=*; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB" )
       default._domainkey  60 IN TXT    "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUv3DMndFellqu208feABEzT/PskOfTSdJCOF/HELBR0PHnbBeRoeHEm9XAcOe/Mz2t/ysgZ6JFXeFxCtoM5fG20brUMRzsVRxb9Ur5cEvOYuuRrbChYcKa+fopu8pYrlrqXD3miHISoy6ErukIYCRpXWUJHi1TlNQhLWFYqAaywIDAQAB"
-      cache               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      cgit                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      pad                 60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      codi                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      go                  60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+      cache               60 IN A      ${nets.internet.ip4.addr}
+      cgit                60 IN A      ${nets.internet.ip4.addr}
+      pad                 60 IN A      ${nets.internet.ip4.addr}
+      codi                60 IN A      ${nets.internet.ip4.addr}
+      go                  60 IN A      ${nets.internet.ip4.addr}
       io                  60 IN NS     ions.lassul.us.
-      ions                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      lol                 60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      matrix              60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      paste               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      radio               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      jitsi               60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      streaming           60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      mumble              60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      mail                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      mail                60 IN AAAA   ${config.krebs.hosts.prism.nets.internet.ip6.addr}
-      flix                60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      testing             60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
-      schrott             60 IN A      ${config.krebs.hosts.prism.nets.internet.ip4.addr}
+      ions                60 IN A      ${nets.internet.ip4.addr}
+      lol                 60 IN A      ${nets.internet.ip4.addr}
+      matrix              60 IN A      ${nets.internet.ip4.addr}
+      paste               60 IN A      ${nets.internet.ip4.addr}
+      radio               60 IN A      ${nets.internet.ip4.addr}
+      jitsi               60 IN A      ${nets.internet.ip4.addr}
+      streaming           60 IN A      ${nets.internet.ip4.addr}
+      mumble              60 IN A      ${nets.internet.ip4.addr}
+      mail                60 IN A      ${nets.internet.ip4.addr}
+      mail                60 IN AAAA   ${nets.internet.ip6.addr}
+      flix                60 IN A      ${nets.internet.ip4.addr}
+      testing             60 IN A      ${nets.internet.ip4.addr}
+      schrott             60 IN A      ${nets.internet.ip4.addr}
     '';
   };
   nets = rec {
