@@ -1,6 +1,6 @@
 { pkgs, lib, ... }:
 
-pkgs.writeDashBin "irc-announce" ''
+pkgs.writers.writeDashBin "irc-announce" ''
   set -euf
 
   IRC_SERVER=$1
