@@ -20,6 +20,7 @@
       ip6.addr = r6 "99";
       aliases = [
         "neoprism.r"
+        "cache.neoprism.r"
       ];
       tinc.pubkey = ''
         -----BEGIN RSA PUBLIC KEY-----
