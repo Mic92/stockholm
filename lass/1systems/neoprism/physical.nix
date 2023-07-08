@@ -8,6 +8,8 @@
   ];
 
   disko.devices = import ./disk.nix;
+  networking.hostId = "9c0a74ac";
+
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   boot.loader.grub.efiSupport = true;
