@@ -39,7 +39,7 @@ let
   };
 in
 
-pkgs.writeDashBin "fzfmenu" ''
+pkgs.writers.writeDashBin "fzfmenu" ''
   set -efu
 
   # Spawn terminal if called without one, like e.g. from a window manager.
