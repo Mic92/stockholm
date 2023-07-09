@@ -38,19 +38,6 @@
           ];
         };
       };
-      wu = {
-        nets.hkw = {
-          ip4 = {
-            addr = "10.23.1.37";
-            prefix = "10.23.1.0/24";
-          };
-          aliases = [
-            "wu.hkw"
-            "cache.wu.hkw"
-          ];
-          ssh.port = 11423;
-        };
-      };
       xu = {
         nets.hkw = {
           ip4 = {

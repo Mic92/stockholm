@@ -51,6 +51,7 @@ in
   # uninteresting stuff
   #####################
   krebs.build.host = config.krebs.hosts.wolf;
+  krebs.hosts.wolf.ssh.privkey.path = <secrets/ssh.id_ed25519>;
 
   boot.initrd.availableKernelModules = [
     "ata_piix" "uhci_hcd" "ehci_pci" "virtio_pci" "virtio_blk"

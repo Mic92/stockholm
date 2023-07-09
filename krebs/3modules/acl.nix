@@ -33,7 +33,7 @@ in {
     default = {};
   };
   config = {
-    systemd.services = lib.mapAttrs' (path: rules: lib.nameValuePair "acl-${lib.replaceChars ["/"] ["_"] path}" {
+    systemd.services = lib.mapAttrs' (path: rules: lib.nameValuePair "acl-${lib.replaceStrings ["/"] ["_"] path}" {
       wantedBy = [ "multi-user.target" ];
       path = [
         pkgs.acl

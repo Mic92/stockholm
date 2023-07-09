@@ -15,7 +15,6 @@ with import ./lib;
     ];
     relay_from_hosts = concatMap (host: host.nets.retiolum.addrs) [
       config.krebs.hosts.nomic
-      config.krebs.hosts.wu
       config.krebs.hosts.xu
     ];
     internet-aliases = with config.krebs.users; [

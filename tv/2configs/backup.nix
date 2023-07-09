@@ -9,12 +9,6 @@ with import ./lib;
       yearly   = { format = "%Y";                    };
     };
   }) {
-    bu-home-wu = {
-      method = "push";
-      src = { host = config.krebs.hosts.bu; path = "/home"; };
-      dst = { host = config.krebs.hosts.wu; path = "/bku/bu-home"; };
-      startAt = "05:15";
-    };
     bu-home-xu = {
       method = "push";
       src = { host = config.krebs.hosts.bu; path = "/home"; };
@@ -45,18 +39,6 @@ with import ./lib;
       dst = { host = config.krebs.hosts.nomic; path = "/fs/ponyhof/bku/querel-home"; };
       startAt = "22:00";
     };
-    wu-home-xu = {
-      method = "push";
-      src = { host = config.krebs.hosts.wu; path = "/home"; };
-      dst = { host = config.krebs.hosts.xu; path = "/bku/wu-home"; };
-      startAt = "05:00";
-    };
-    wu-home-zu = {
-      method = "push";
-      src = { host = config.krebs.hosts.wu; path = "/home"; };
-      dst = { host = config.krebs.hosts.zu; path = "/bku/wu-home"; };
-      startAt = "05:20";
-    };
     xu-home-bu = {
       method = "push";
       src = { host = config.krebs.hosts.xu; path = "/home"; };
@@ -68,12 +50,6 @@ with import ./lib;
       src = { host = config.krebs.hosts.xu; path = "/home"; };
       dst = { host = config.krebs.hosts.nomic; path = "/fs/cis3hG/bku/xu-home"; };
       startAt = "05:20";
-    };
-    xu-home-wu = {
-      method = "push";
-      src = { host = config.krebs.hosts.xu; path = "/home"; };
-      dst = { host = config.krebs.hosts.wu; path = "/bku/xu-home"; };
-      startAt = "06:00";
     };
     xu-home-zu = {
       method = "push";
@@ -128,11 +104,6 @@ with import ./lib;
       method = "pull";
       src = { host = config.krebs.hosts.xu; path = "/tmp/xu-bku-test-data"; };
       dst = { host = config.krebs.hosts.xu; path = "/bku/xu-test-pull"; };
-    };
-    xu-test-push-wu = {
-      method = "push";
-      src = { host = config.krebs.hosts.xu; path = "/tmp/xu-bku-test-data"; };
-      dst = { host = config.krebs.hosts.wu; path = "/bku/xu-test-push"; };
     };
   };
 }

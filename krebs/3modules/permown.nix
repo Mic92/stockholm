@@ -1,4 +1,6 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }: let
+  slib = import ../../lib/pure.nix { inherit lib; };
+in
 with lib; {
 
   options.krebs.permown = mkOption {
@@ -16,7 +18,7 @@ with lib; {
         group = mkOption {
           apply = x: if x == null then "" else x;
           default = null;
-          type = types.nullOr types.groupname;
+          type = types.nullOr slib.types.groupname;
         };
         keepGoing = mkOption {
           default = false;
@@ -28,15 +30,15 @@ with lib; {
           '';
         };
         owner = mkOption {
-          type = types.username;
+          type = slib.types.username;
         };
         path = mkOption {
           default = config._module.args.name;
-          type = types.absolute-pathname;
+          type = slib.types.absolute-pathname;
         };
         umask = mkOption {
           default = "0027";
-          type = types.file-mode;
+          type = slib.types.file-mode;
         };
       };
     }));
@@ -48,11 +50,11 @@ with lib; {
 
     system.activationScripts.permown = let
       mkdir = plan: /* sh */ ''
-        ${pkgs.coreutils}/bin/mkdir -p ${shell.escape plan.path}
+        ${pkgs.coreutils}/bin/mkdir -p ${slib.shell.escape plan.path}
       '';
     in concatMapStrings mkdir plans;
 
-    systemd.services = genAttrs' plans (plan: let
+    systemd.services = slib.genAttrs' plans (plan: let
       continuable = command:
         if plan.keepGoing
           then /* sh */ "{ ${command}; } || :"

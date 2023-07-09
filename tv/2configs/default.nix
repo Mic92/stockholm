@@ -130,11 +130,4 @@ with import ./lib;
       ];
     }
   ];
-
-  nixpkgs.overlays =
-    mkAfter (optional config.hardware.video.hidpi.enable (self: super: {
-      alacritty-tv = super.alacritty-tv.override {
-        variant = "hidpi";
-      };
-    }));
 }
