@@ -36,6 +36,7 @@
       hosts = self.nixosConfigurations.hotdog.config.krebs.hosts;
       users = self.nixosConfigurations.hotdog.config.krebs.users;
     };
+    overlays.default = import ./krebs/5pkgs/default.nix;
     lib = import (self.outPath + "/lib/pure.nix") { lib = nixpkgs.lib; };
   };
 }
