@@ -12,6 +12,7 @@ with import <stockholm/lib>;
     ./wiregrill.nix
     ./tmux.nix
     ./tor-ssh.nix
+    ./networkd.nix
     {
       users.extraUsers =
         mapAttrs (_: h: { hashedPassword = h; })
