@@ -31,9 +31,9 @@ with import <stockholm/lib>;
 
   krebs.build.host = config.krebs.hosts.styx;
 
-  krebs.iptables.tables.filter.INPUT.rules = [
-    { predicate = "-p tcp --dport ${toString config.services.smokeping.port}"; target = "ACCEPT"; }
-  ];
+  networking.firewall.interfaces.int0.allowedTCPPorts = [ config.services.smokeping.port ];
+  networking.firewall.interfaces.retiolum.allowedTCPPorts = [ config.services.smokeping.port ];
+  networking.firewall.interfaces.wiregrill.allowedTCPPorts = [ config.services.smokeping.port ];
   krebs.power-action.enable = mkForce false;
 
   services.smokeping = {
