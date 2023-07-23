@@ -9,8 +9,6 @@ let
 in {
   imports = [
     ./default.nix
-    ../git.nix
-    ./ref.ptkk.de
   ];
 
   security.acme = {
@@ -68,21 +66,6 @@ in {
     '';
   };
 
-  security.acme.certs."cgit.lassul.us" = {
-    email = "lassulus@lassul.us";
-    webroot = "/var/lib/acme/acme-challenge";
-    group = "nginx";
-  };
 
 
-  services.nginx.virtualHosts.cgit = {
-    serverName = "cgit.lassul.us";
-    addSSL = true;
-    sslCertificate = "/var/lib/acme/cgit.lassul.us/fullchain.pem";
-    sslCertificateKey = "/var/lib/acme/cgit.lassul.us/key.pem";
-    locations."/.well-known/acme-challenge".extraConfig = ''
-      root /var/lib/acme/acme-challenge;
-    '';
-  };
 }
-
