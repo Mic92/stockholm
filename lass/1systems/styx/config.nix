@@ -85,5 +85,8 @@ with import <stockholm/lib>;
       host = prism.r
     '';
   };
+
+  # for usb internet
+  hardware.usbWwan.enable = true;
 }
 
