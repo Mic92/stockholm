@@ -34,6 +34,18 @@ in {
                 net {
                   protocol a;
                   ping-int 10;
+                  csums-alg crc32c;
+                  connect-int 3;
+                  after-sb-0pri discard-older-primary;
+                  after-sb-1pri discard-secondary;
+
+                  # seems to be drbd-proxy premium feature
+                  on-congestion pull-ahead;
+                  congestion-fill 1G;
+                  congestion-extents 500;
+
+                  sndbuf-size 10M;
+                  max-epoch-size 20000;
                 }
                 device minor ${toString config.blockMinor};
                 disk ${config.disk};
