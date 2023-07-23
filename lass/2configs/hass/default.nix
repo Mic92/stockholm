@@ -41,8 +41,7 @@ in {
     configWritable = true;
     lovelaceConfigWritable = true;
     config = let
-      tasmota_s20 = name: topic: {
-        platform = "mqtt";
+      tasmota = name: topic: {
         inherit name;
         state_topic = "stat/${topic}/POWER";
         command_topic = "cmnd/${topic}/POWER";
@@ -57,7 +56,7 @@ in {
         longitude = "13.41489";
         elevation = 90;
         unit_system = "metric";
-        customize = friendly_names;
+        # customize = friendly_names;
       };
       config = {};
       sun.elevation = 66;
@@ -65,36 +64,37 @@ in {
       discovery = {};
       frontend = {};
       http = {};
-      mqtt = {
-        broker = "localhost";
-        port = 1883;
-        client_id = "home-assistant";
-        username = "gg23";
-        password = "gg23-mqtt";
-        keepalive = 60;
-        protocol = 3.1;
+      # mqtt = {
+      #   broker = "localhost";
+      #   port = 1883;
+      #   client_id = "home-assistant";
+      #   username = "gg23";
+      #   password = "gg23-mqtt";
+      #   keepalive = 60;
+      #   protocol = 3.1;
 
-        discovery = true;
-        birth_message = {
-          topic = "/hass/status";
-          payload = "online";
-        };
-        will_message = {
-          topic = "/hass/status";
-          payload = "offline";
-        };
-      };
+      #   discovery = true;
+      #   birth_message = {
+      #     topic = "/hass/status";
+      #     payload = "online";
+      #   };
+      #   will_message = {
+      #     topic = "/hass/status";
+      #     payload = "offline";
+      #   };
+      # };
       sensor = [
         {
           platform = "dwd_weather_warnings";
           region_name = "Berlin";
         }
       ];
-      switch = [
-        (tasmota_s20 "TV" "tv")
-        (tasmota_s20 "Drucker Strom" "drucker")
-        (tasmota_s20 "Waschmaschine" "wasch")
-        (tasmota_s20 "Stereo Anlage" "stereo")
+      mqtt.switch = [
+        (tasmota "TV" "tv")
+        (tasmota "Drucker Strom" "drucker")
+        (tasmota "Waschmaschine" "wasch")
+        (tasmota "Stereo Anlage" "stereo")
+        (tasmota "Wohnzimmer Lampe" "wohn_lampe")
       ];
       mobile_app = {};
       weather = [
