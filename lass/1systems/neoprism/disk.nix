@@ -4,37 +4,27 @@
     type = "disk";
     device = disk;
     content = {
-      type = "table";
-      format = "gpt";
-      partitions = [
-        {
-          name = "boot";
-          start = "0";
-          end = "1M";
-          part-type = "primary";
-          flags = ["bios_grub"];
-        }
-        {
-          name = "ESP";
-          start = "1M";
-          end = "1GiB";
-          fs-type = "fat32";
-          bootable = true;
+      type = "gpt";
+      partitions = {
+        boot = {
+          size = "1M";
+          type = "EF02";
+        };
+        ESP = {
+          size = "1G";
           content = {
             type = "mdraid";
             name = "boot";
           };
-        }
-        {
-          name = "zfs";
-          start = "1GiB";
-          end = "100%";
+        };
+        zfs = {
+          size = "100%";
           content = {
             type = "zfs";
             pool = "zroot";
           };
-        }
-      ];
+        };
+      };
     };
   })) // {
     hdd1 = {
