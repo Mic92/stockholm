@@ -19,10 +19,8 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.kernelParams = [
-
     # use less power with pstate
     "amd_pstate=passive"
-
 
     # suspend
     "resume_offset=178345675"
@@ -63,6 +61,14 @@
   ];
 
   # corectrl
+  programs.corectrl = {
+    enable = true;
+    gpuOverclock = {
+      enable = true;
+      ppfeaturemask = "0xffffffff";
+    };
+  };
+  users.users.mainUser.extraGroups = [ "corectrl" ];
 
   # use newer ryzenadj
 
