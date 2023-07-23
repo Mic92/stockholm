@@ -13,6 +13,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/browsers.nix>
     <stockholm/lass/2configs/programs.nix>
     <stockholm/lass/2configs/nfs-dl.nix>
+    <stockholm/lass/2configs/yellow-mounts/samba.nix>
     <stockholm/lass/2configs/gg23.nix>
     <stockholm/lass/2configs/hass>
     <stockholm/lass/2configs/green-host.nix>
