@@ -96,6 +96,7 @@ in {
     file_uploads = on
   '';
 
+  systemd.services.nextcloud-setup.after = [ "secret-nextcloud_pw.service" ];
   krebs.secret.files.nextcloud_pw = {
     path = "/run/nextcloud.pw";
     owner.name = "nextcloud";
@@ -121,18 +122,17 @@ in {
   # MAIL STUFF
   # TODO: make into its own module
 
-  # workaround for android 7
-  security.acme.certs."lassul.us".keyType = "rsa4096";
-
   services.roundcube = {
     enable = true;
     hostName = "mail.lassul.us";
     extraConfig = ''
-      $config['smtp_port'] = 25;
+      $config['smtp_debug'] = true;
+      $config['smtp_host'] = "localhost:25";
     '';
   };
   services.dovecot2 = {
     enable = true;
+    showPAMFailure = true;
     mailLocation = "maildir:~/Mail";
     sslServerCert = "/var/lib/acme/lassul.us/fullchain.pem";
     sslServerKey = "/var/lib/acme/lassul.us/key.pem";
@@ -140,6 +140,17 @@ in {
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp --dport pop3s"; target = "ACCEPT"; }
     { predicate = "-p tcp --dport imaps"; target = "ACCEPT"; }
+  ];
+
+  environment.systemPackages = [
+    (pkgs.writers.writeDashBin "debug_exim" ''
+      set -ef
+      export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
+      echo "$@" >> /tmp/xxx
+      /run/wrappers/bin/shadow_verify_arg "${config.lass.usershadow.pattern}" "$2" "$3" 2>>/tmp/xxx1
+      echo "ok" >> /tmp/yyy
+      exit 23
+    '')
   ];
 
   krebs.exim-smarthost = {
@@ -153,6 +164,7 @@ in {
       public_name = LOGIN
       server_prompts = "Username:: : Password::"
       server_condition = ''${run{/run/wrappers/bin/shadow_verify_arg ${config.lass.usershadow.pattern} $auth1 $auth2}{yes}{no}}
+      # server_condition = ''${run{/run/current-system/sw/bin/debug_exim ${config.lass.usershadow.pattern} $auth1 $auth2}{yes}{no}}
     '';
     internet-aliases = [
       { from = "dma@ubikmedia.de"; to = "domsen"; }
@@ -180,14 +192,13 @@ in {
       "alewis.de"
       "jarugadesign.de"
       "beesmooth.ch"
+      "event-extra.de"
     ];
     dkim = [
       { domain = "ubikmedia.eu"; }
       { domain = "apanowicz.de"; }
       { domain = "beesmooth.ch"; }
     ];
-    ssl_cert = "/var/lib/acme/lassul.us/fullchain.pem";
-    ssl_key = "/var/lib/acme/lassul.us/key.pem";
   };
 
   users.users.UBIK-SFTP = {
