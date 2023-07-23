@@ -106,6 +106,10 @@ in {
       system_health = {};
       history = {};
       shopping_list = {};
+      media_player = {
+        platform = "snapcast";
+        host = "127.0.0.1";
+      };
     };
   };
 
