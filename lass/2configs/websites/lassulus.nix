@@ -64,6 +64,9 @@ in {
     locations."= /gpg.pub".extraConfig = ''
       alias ${pkgs.writeText "pub" config.krebs.users.lass-yubikey.pgp.pubkeys.default};
     '';
+    locations."= /ip".extraConfig = ''
+      return 200 '$remote_addr';
+    '';
   };
 
 
