@@ -166,7 +166,7 @@ in {
     qrcode = {
       target = "image";
       script = pkgs.writeDash "zbar" ''
-        ${pkgs.zbar}/bin/zbarimg -q -
+        ${pkgs.zbar}/bin/zbarimg -q --raw -
       '';
     };
     ocr = {
