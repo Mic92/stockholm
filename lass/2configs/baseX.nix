@@ -98,7 +98,7 @@ in {
     (pkgs.writeDashBin "screenshot" ''
       set -efu
 
-      ${pkgs.flameshot}/bin/flameshot gui
+      ${pkgs.flameshot}/bin/flameshot gui &&
       ${pkgs.klem}/bin/klem
     '')
     (pkgs.writers.writeDashBin "IM" ''
