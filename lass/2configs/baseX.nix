@@ -89,7 +89,9 @@ in {
     x11vnc
     xclip
     xephyrify
+    xorg.xmodmap
     xorg.xhost
+    xdotool
     xsel
     zathura
     flameshot
@@ -99,6 +101,18 @@ in {
       ${pkgs.flameshot}/bin/flameshot gui
       ${pkgs.klem}/bin/klem
     '')
+    (pkgs.writers.writeDashBin "IM" ''
+      ${pkgs.mosh}/bin/mosh green.r -- tmux new-session -A -s IM -- weechat
+    '')
+    (pkgs.writers.writeDashBin "deploy_hm" ''
+      target=$1
+      shift
+
+      hm_profile=$(${pkgs.home-manager}/bin/home-manager -f ~/sync/stockholm/lass/2configs/home-manager.nix build "$@")
+      nix-copy-closure --to "$target" "$hm_profile"
+      ssh "$target" -- "$hm_profile"/activate
+    '')
+    zbar
   ];
 
   services.udev.extraRules = ''
