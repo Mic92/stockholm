@@ -145,7 +145,6 @@ in {
   };
 
   krebs.xresources.enable = true;
-  lass.screenlock.enable = true;
 
   lass.klem = {
     kpaste.script = pkgs.writeDash "kpaste-wrapper" ''
