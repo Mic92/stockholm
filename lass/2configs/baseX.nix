@@ -128,6 +128,7 @@ in {
     xkbVariant = "altgr-intl";
     xkbOptions = "caps:escape";
     libinput.enable = true;
+    exportConfiguration = true;
     displayManager = {
       lightdm.enable = true;
       defaultSession = "none+xmonad";
