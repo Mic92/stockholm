@@ -83,6 +83,9 @@
   boot.kernelParams = [ "pcie_aspm=off" "net.ifnames=0" ];
   networking.dhcpcd.enable = false;
 
+
+  networking.useNetworkd = lib.mkForce false;
+  systemd.network.enable = lib.mkForce false;
   # bridge config
   networking.bridges."ext-br".interfaces = [ "eth0" ];
   networking = {
