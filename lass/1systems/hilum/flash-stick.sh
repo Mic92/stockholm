@@ -3,9 +3,13 @@ set -efux
 
 disk=$1
 
+cd "$(dirname "$0")"
 export NIXPKGS_ALLOW_UNFREE=1
 (umask 077; pass show admin/hilum/luks > /tmp/hilum.luks)
 trap 'rm -f /tmp/hilum.luks' EXIT
+echo "$disk" > /tmp/hilum-disk
+trap 'rm -f /tmp/hilum-disk' EXIT
+
 stockholm_root=$(git rev-parse --show-toplevel)
 ssh root@localhost -t -- $(nix-build \
   --no-out-link \
@@ -31,7 +35,9 @@ $(nix-build \
   --arg force true
 )
 ssh root@localhost << SSH
-NIXOS_CONFIG=/mnt/hilum/var/src/nixos-config nixos-install --no-root-password --root /mnt/hilum -I /var/src
+set -efux
+mkdir -p /mnt/hilum/etc
+NIXOS_CONFIG=/mnt/hilum/var/src/nixos-config nixos-install --no-bootloader --no-root-password --root /mnt/hilum -I /var/src
 nixos-enter --root /mnt/hilum -- nixos-rebuild -I /var/src switch --install-bootloader
 umount -Rv /mnt/hilum
 SSH

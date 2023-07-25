@@ -62,6 +62,7 @@
     ᕦ(ò_óˇ)ᕤ    strong flex muscle bicep
     (๑>ᴗ<๑)    excite
     (∩ ` -´)⊃━━☆ﾟ.*･｡ﾟ    wizard spell magic
+    ╰( ͡° ͜ʖ ͡° )つ──☆*:・ﾟ    wizard spell magic
     ◕ ◡ ◕    puss in boots big eye
     ≋≋≋≋≋̯̫⌧̯̫(ˆ•̮ ̮•ˆ)    nyan cat
     ʕ•ᴥ•ʔ    bear
@@ -71,6 +72,15 @@
     ＼(º □ º )/    panic
     𓂺    penis
     𓂸    penis
+    __〆(￣ー￣ )    write down
+    __〆(º □ º)    write down
+    __〆(^_^)    write down
+    C= C= C= C= C=┌(;・ω・)┘    running fast here
+    ▓▒░(°◡°)░▒▓    dont care
+    (๑ᵔ⤙ᵔ๑)    nom food eating
+    (·•᷄ࡇ •᷅ )    ohoh sad
+    ᕕ( ᐛ )ᕗ     hehe lol letsgo
+    (^_~)    wink
   '';
 in
   # ref https://github.com/LukeSmithxyz/voidrice/blob/9fe6802122f6e0392c7fe20eefd30437771d7f8e/.local/bin/dmenuunicode

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with import <stockholm/lib>;
 {
@@ -8,6 +8,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/mouse.nix>
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/baseX.nix>
+    <stockholm/lass/2configs/pipewire.nix>
     <stockholm/lass/2configs/exim-retiolum.nix>
     <stockholm/lass/2configs/programs.nix>
     <stockholm/lass/2configs/bitcoin.nix>
@@ -17,10 +18,8 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/elster.nix>
     <stockholm/lass/2configs/steam.nix>
     <stockholm/lass/2configs/wine.nix>
-    <stockholm/lass/2configs/git.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/mail.nix>
-    <stockholm/krebs/2configs/ircd.nix>
     <stockholm/lass/2configs/logf.nix>
     <stockholm/lass/2configs/syncthing.nix>
     <stockholm/lass/2configs/sync/sync.nix>
@@ -104,28 +103,9 @@ with import <stockholm/lib>;
 
     dnsutils
     woeusb
-    l-gen-secrets
-    generate-secrets
-    (pkgs.writeDashBin "btc-coinbase" ''
-      ${pkgs.curl}/bin/curl -Ss 'https://api.coinbase.com/v2/prices/spot?currency=EUR' | ${pkgs.jq}/bin/jq '.data.amount'
-    '')
-    (pkgs.writeDashBin "btc-wex" ''
-      ${pkgs.curl}/bin/curl -Ss 'https://wex.nz/api/3/ticker/btc_eur' | ${pkgs.jq}/bin/jq '.btc_eur.avg'
-    '')
-    (pkgs.writeDashBin "btc-kraken" ''
-      ${pkgs.curl}/bin/curl -Ss  'https://api.kraken.com/0/public/Ticker?pair=BTCEUR' | ${pkgs.jq}/bin/jq '.result.XXBTZEUR.a[0]'
-    '')
-    (pkgs.writeDashBin "krebsco.de" ''
-      TMPDIR=$(${pkgs.coreutils}/bin/mktemp -d)
-      ${pkgs.brain}/bin/brain show krebs-secrets/ovh-secrets.json > "$TMPDIR"/ovh-secrets.json
-      OVH_ZONE_CONFIG="$TMPDIR"/ovh-secrets.json ${pkgs.krebszones}/bin/krebszones import
-      ${pkgs.coreutils}/bin/rm -rf "$TMPDIR"
-    '')
-    (pkgs.writeDashBin "lassul.us" ''
-      TMPDIR=$(${pkgs.coreutils}/bin/mktemp -d)
-      ${pkgs.pass}/bin/pass show admin/ovh/api.config > "$TMPDIR"/ovh-secrets.json
-      OVH_ZONE_CONFIG="$TMPDIR"/ovh-secrets.json ${pkgs.ovh-zone}/bin/ovh-zone import /etc/zones/lassul.us lassul.us
-      ${pkgs.coreutils}/bin/rm -rf "$TMPDIR"
+    (pkgs.writeDashBin "play-on" ''
+      HOST=$(echo 'styx\nshodan' | fzfmenu)
+      ssh -t "$HOST" -- mpv "$@"
     '')
   ];
 

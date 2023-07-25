@@ -12,12 +12,12 @@ output = []
 for ip in fileinput.input():
     if "80.147.140.51" in ip:
         output.append(
-            'Weather report for c-base, space.'
+            'Weather report for c-base, space. '
             'It is empty space outside '
             'with a temperature of -270 degrees, '
             'a lightspeed of 299792 kilometers per second '
             'and a humidity of Not a Number percent. '
-            f'The probability of reincarnation is {random.randrange(0, 100)} percent.'
+            f'The probability of reincarnation is {random.randrange(0, 100)} percent. '
         )
     else:
         try:

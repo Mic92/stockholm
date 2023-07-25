@@ -1,24 +1,24 @@
 { lib, ... }:
 rec {
   lights = {
-    bett = "0x0017880106ed3bd8";
-    essen = "0x0017880108327622";
-    arbeit = "0x0017880106ee2865";
-    nass = "0x00178801082e9f2f";
+    bett = "l_bett";
+    essen = "l_essen";
+    arbeit = "l_arbeit";
+    nass = "l_nass";
   };
 
   switches = {
     dimmer = {
-      bett = "0x00178801086ac38c";
-      essen = "0x00178801086ad1fb";
-      nass = "0x00178801086ac373";
+      bett = "i_bett";
+      essen = "i_essen";
+      nass = "i_nass";
     };
   };
 
   sensors = {
     movement = {
-      essen = "0x0017880106f772f2";
-      nass =  "0x0017880106f77f30";
+      essen = "s_essen";
+      nass =  "s_nass";
     };
   };
 

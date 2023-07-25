@@ -89,16 +89,30 @@ in {
     x11vnc
     xclip
     xephyrify
+    xorg.xmodmap
     xorg.xhost
+    xdotool
     xsel
     zathura
     flameshot
     (pkgs.writeDashBin "screenshot" ''
       set -efu
 
-      ${pkgs.flameshot}/bin/flameshot gui
+      ${pkgs.flameshot}/bin/flameshot gui &&
       ${pkgs.klem}/bin/klem
     '')
+    (pkgs.writers.writeDashBin "IM" ''
+      ${pkgs.mosh}/bin/mosh green.r -- tmux new-session -A -s IM -- weechat
+    '')
+    (pkgs.writers.writeDashBin "deploy_hm" ''
+      target=$1
+      shift
+
+      hm_profile=$(${pkgs.home-manager}/bin/home-manager -f ~/sync/stockholm/lass/2configs/home-manager.nix build "$@")
+      nix-copy-closure --to "$target" "$hm_profile"
+      ssh "$target" -- "$hm_profile"/activate
+    '')
+    zbar
   ];
 
   services.udev.extraRules = ''
@@ -114,6 +128,7 @@ in {
     xkbVariant = "altgr-intl";
     xkbOptions = "caps:escape";
     libinput.enable = true;
+    exportConfiguration = true;
     displayManager = {
       lightdm.enable = true;
       defaultSession = "none+xmonad";
@@ -130,7 +145,6 @@ in {
   };
 
   krebs.xresources.enable = true;
-  lass.screenlock.enable = true;
 
   lass.klem = {
     kpaste.script = pkgs.writeDash "kpaste-wrapper" ''
@@ -152,7 +166,7 @@ in {
     qrcode = {
       target = "image";
       script = pkgs.writeDash "zbar" ''
-        ${pkgs.zbar}/bin/zbarimg -q -
+        ${pkgs.zbar}/bin/zbarimg -q --raw -
       '';
     };
     ocr = {

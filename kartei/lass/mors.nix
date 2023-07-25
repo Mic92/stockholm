@@ -1,5 +1,6 @@
 { r6, w6, ... }:
 {
+  consul = false;
   nets = {
     retiolum = {
       ip4.addr = "10.243.0.2";

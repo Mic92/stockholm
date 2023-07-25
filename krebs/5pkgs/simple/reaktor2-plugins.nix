@@ -59,7 +59,7 @@ rec {
         filename = pkgs.writers.writeDash "sed-plugin" ''
           set -efu
           exec ${pkgs.python3}/bin/python \
-              ${stockholm.outPath + "/krebs/5pkgs/simple/Reaktor/scripts/sed-plugin.py"} "$@"
+            ${./Reaktor/scripts/sed-plugin.py} "$@"
         '';
       };
     };

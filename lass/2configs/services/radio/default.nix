@@ -169,6 +169,7 @@ in {
 
   # allow reaktor2 to modify files
   systemd.services."reaktor2-the_playlist".serviceConfig.DynamicUser = lib.mkForce false;
+  systemd.services."reaktor2-the_playlist".serviceConfig.Group = lib.mkForce "radio";
 
   krebs.reaktor2.the_playlist = {
     hostname = "irc.hackint.org";

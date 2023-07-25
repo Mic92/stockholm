@@ -9,8 +9,6 @@ let
 in {
   imports = [
     ./default.nix
-    ../git.nix
-    ./ref.ptkk.de
   ];
 
   security.acme = {
@@ -66,23 +64,11 @@ in {
     locations."= /gpg.pub".extraConfig = ''
       alias ${pkgs.writeText "pub" config.krebs.users.lass-yubikey.pgp.pubkeys.default};
     '';
-  };
-
-  security.acme.certs."cgit.lassul.us" = {
-    email = "lassulus@lassul.us";
-    webroot = "/var/lib/acme/acme-challenge";
-    group = "nginx";
-  };
-
-
-  services.nginx.virtualHosts.cgit = {
-    serverName = "cgit.lassul.us";
-    addSSL = true;
-    sslCertificate = "/var/lib/acme/cgit.lassul.us/fullchain.pem";
-    sslCertificateKey = "/var/lib/acme/cgit.lassul.us/key.pem";
-    locations."/.well-known/acme-challenge".extraConfig = ''
-      root /var/lib/acme/acme-challenge;
+    locations."= /ip".extraConfig = ''
+      return 200 '$remote_addr';
     '';
   };
-}
 
+
+
+}

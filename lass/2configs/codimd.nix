@@ -21,7 +21,7 @@ in {
   };
 
   security.acme.certs.${domain}.group = "hedgecert";
-  users.groups.hedgecert.members = [ "codimd" "nginx" ];
+  users.groups.hedgecert.members = [ "hedgedoc" "nginx" ];
 
   security.dhparams = {
     enable = true;
@@ -35,10 +35,10 @@ in {
   services.hedgedoc = {
     enable = true;
     configuration.allowOrigin = [ domain ];
-    configuration = {
+    settings = {
       db = {
         dialect = "sqlite";
-        storage = "/var/lib/codimd/db.codimd.sqlite";
+        storage = "/var/lib/hedgedoc/db.hedgedoc.sqlite";
       };
       useCDN = false;
       port = 3091;

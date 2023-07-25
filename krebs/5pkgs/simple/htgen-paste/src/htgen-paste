@@ -46,8 +46,8 @@ case "$Method $abs_path" in
       cp -v $content $item >&2
     fi
 
-    if test -n ${reg_content_type-}; then
-      echo -n "$req_content_type" > "$item".content_type
+    if test -n "${req_content_type_override-}"; then
+      echo -n "$req_content_type_override" > "$item".content_type
     fi
 
     base32short=$(echo $base32 | cut -b-7)

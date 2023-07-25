@@ -13,6 +13,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/browsers.nix>
     <stockholm/lass/2configs/programs.nix>
     <stockholm/lass/2configs/nfs-dl.nix>
+    <stockholm/lass/2configs/yellow-mounts/samba.nix>
     <stockholm/lass/2configs/gg23.nix>
     <stockholm/lass/2configs/hass>
     <stockholm/lass/2configs/green-host.nix>
@@ -30,13 +31,37 @@ with import <stockholm/lib>;
 
   krebs.build.host = config.krebs.hosts.styx;
 
-  krebs.iptables.tables.filter.INPUT.rules = [
-    { predicate = "-p tcp --dport ${toString config.services.smokeping.port}"; target = "ACCEPT"; }
-  ];
+  networking.firewall.interfaces.int0.allowedTCPPorts = [ config.services.smokeping.port ];
+  networking.firewall.interfaces.retiolum.allowedTCPPorts = [ config.services.smokeping.port ];
+  networking.firewall.interfaces.wiregrill.allowedTCPPorts = [ config.services.smokeping.port ];
   krebs.power-action.enable = mkForce false;
 
+  environment.systemPackages = with pkgs; [
+    wol
+    (writeDashBin "wake-alien" ''
+      ${wol}/bin/wol -h 10.42.0.255 10:65:30:68:83:a3
+    '')
+    (writers.writeDashBin "iptv" ''
+      set -efu
+      /run/current-system/sw/bin/mpv \
+        --audio-display=no --audio-channels=stereo \
+        --audio-samplerate=48000 --audio-format=s16 \
+        --ao-pcm-file=/run/snapserver/snapfifo --ao=pcm \
+        --audio-delay=-1 \
+        --playlist=https://iptv-org.github.io/iptv/index.nsfw.m3u \
+        --idle=yes \
+        --input-ipc-server=/tmp/mpv.ipc \
+        "$@"
+    '')
+  ];
+
+  users.users.mainUser.openssh.authorizedKeys.keys = [
+    config.krebs.users.lass-android.pubkey
+  ];
+  # http://10.42.0.1:8081/smokeping.fcgi
   services.smokeping = {
     enable = true;
+    host = null;
     targetConfig = ''
       probe = FPing
       menu = top
@@ -84,5 +109,8 @@ with import <stockholm/lib>;
       host = prism.r
     '';
   };
+
+  # for usb internet
+  hardware.usbWwan.enable = true;
 }
 

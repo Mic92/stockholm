@@ -34,117 +34,42 @@ in {
       advanced = {
         pan_id = 4222;
       };
-    };
-  };
+      devices = let
+        set_device = id: name:
+          lib.nameValuePair id {
+          };
+      in {
+        # lights https://www.zigbee2mqtt.io/devices/9290022166.html#philips-9290022166
+        "0x0017880106ed3bd8".friendly_name = "l_bett";
+        "0x0017880108327622".friendly_name = "l_essen";
+        "0x0017880106ee2865".friendly_name = "l_arbeit";
+        "0x00178801082e9f2f".friendly_name = "l_nass";
 
-  services.home-assistant.config = {
-    sensor = [
-      # Sensor for monitoring the bridge state
-      {
-        platform = "mqtt";
-        name = "Zigbee2mqtt Bridge state";
-        state_topic = "/zigbee2mqtt/bridge/state";
-        icon = "mdi:router-wireless";
-      }
-      # Sensor for Showing the Zigbee2mqtt Version
-      {
-        platform = "mqtt";
-        name = "Zigbee2mqtt Version";
-        state_topic = "/zigbee2mqtt/bridge/config";
-        value_template = "{{ value_json.version }}";
-        icon = "mdi:zigbee";
-      }
-      # Sensor for Showing the Coordinator Version
-      {
-        platform = "mqtt";
-        name = "Coordinator Version";
-        state_topic = "/zigbee2mqtt/bridge/config";
-        value_template = "{{ value_json.coordinator }}";
-        icon = "mdi:chip";
-      }
-    ];
-    switch = [
-      {
-        platform = "mqtt";
-        name = "zigbee2mqtt_join";
-        state_topic = "/zigbee2mqtt/bridge/config/permit_join";
-        command_topic = "/zigbee2mqtt/bridge/config/permit_join";
-        payload_on = "true";
-        payload_off = "false";
-      }
-    ];
-    automation = [
-      #{
-      #  alias = "Zigbee2mqtt Log Level";
-      #  initial_state = "on";
-      #  trigger = {
-      #    platform = "state";
-      #    entity_id = "input_select.zigbee2mqtt_log_level";
-      #  };
-      #  action = [
-      #    {
-      #      service =  "mqtt.publish";
-      #      data = {
-      #        payload_template = "{{ states('input_select.zigbee2mqtt_log_level') }}";
-      #        topic =  "/zigbee2mqtt/bridge/config/log_level";
-      #      };
-      #    }
-      #  ];
-      #}
-      # Automation to start timer when enable join is turned on
-      {
-        id = "zigbee_join_enabled";
-        alias = "";
-        trigger = {
-          platform = "state";
-          entity_id = "switch.zigbee2mqtt_join";
-          to = "on";
-        };
-        action = {
-          service = "timer.start";
-          entity_id = "timer.zigbee_permit_join";
-        };
-      }
-      # Automation to stop timer when switch turned off and turn off switch when timer finished
-      {
-        id = "zigbee_join_disabled";
-        trigger = [
-          {
-            platform = "event";
-            event_type = "timer.finished";
-            event_data.entity_id = "timer.zigbee_permit_join";
-          }
-          {
-            platform = "state";
-            entity_id = "switch.zigbee2mqtt_join";
-            to = "off";
-          }
-        ];
-        action = [
-          { service = "timer.cancel";
-            data.entity_id = "timer.zigbee_permit_join";
-          }
-          { service = "switch.turn_off";
-            entity_id = "switch.zigbee2mqtt_join";
-          }
-        ];
-      }
-    ];
-    #input_select.zigbee2mqtt_log_level = {
-    #  name = "Zigbee2mqtt Log Level";
-    #  options = [
-    #    "debug"
-    #    "info"
-    #    "warn"
-    #    "error"
-    #  ];
-    #  initial = "info";
-    #  icon = "mdi:format-list-bulleted";
-    #};
+        # switches https://www.zigbee2mqtt.io/devices/324131092621.html#philips-324131092621
+        "0x00178801086ac38c".friendly_name = "i_bett";
+        "0x00178801086ad1fb".friendly_name = "i_essen";
+        "0x00178801086ac373".friendly_name = "i_nass";
 
-    timer.zigbee_permit_join = {
-      name = "Zigbee Time remaining";
-      duration = 120;
+        # sensors https://www.zigbee2mqtt.io/devices/9290012607.html#philips-9290012607
+        "0x0017880106f772f2".friendly_name = "s_essen";
+        "0x0017880106f77f30".friendly_name = "s_nass";
+
+        # heat https://www.zigbee2mqtt.io/devices/701721.html#popp-701721
+        "0x842e14fffe27109a".friendly_name = "t_bett";
+        "0x842e14fffe269a73".friendly_name = "t_nass";
+        "0x842e14fffe269a56".friendly_name = "t_arbeit";
+
+        # rotation https://www.zigbee2mqtt.io/devices/E1744.html
+        "0x8cf681fffe065493" = {
+          friendly_name = "r_test";
+          device_id = "r_test";
+          simulated_brightness = {
+            delta = 2;
+            interval = 100;
+          };
+        };
+
+      };
     };
   };
 }

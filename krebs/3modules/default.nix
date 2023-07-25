@@ -1,7 +1,6 @@
 { config, lib, ... }:
 {
   imports = [
-    ../../kartei
     ./acl.nix
     ./airdcpp.nix
     ./announce-activation.nix
@@ -28,9 +27,10 @@
     ./iana-etc.nix
     ./iptables.nix
     ./kapacitor.nix
+    ./kartei.nix
     ./konsens.nix
-    ./krebs.nix
     ./krebs-pages.nix
+    ./krebs.nix
     ./monit.nix
     ./nixpkgs.nix
     ./on-failure.nix
@@ -45,8 +45,8 @@
     ./secret.nix
     ./setuid.nix
     ./shadow.nix
-    ./ssh.nix
     ./sitemap.nix
+    ./ssh.nix
     ./ssl.nix
     ./sync-containers.nix
     ./sync-containers3.nix

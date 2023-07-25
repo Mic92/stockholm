@@ -15,7 +15,7 @@
           ;
       in lib.mkOption {
         type = lib.types.str;
-        default = tryFile "/etc/hilum-disk" "/dev/sdz";
+        default = tryFile "/etc/hilum-disk" (tryFile "/tmp/hilum-disk" "/dev/sdz");
       };
       config.environment.etc.hilum-disk.text = config.mainDisk;
     }
@@ -47,4 +47,7 @@
 
   nix.maxJobs = lib.mkDefault 4;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+
+  #weird bug with nixos-enter
+  services.logrotate.enable = false;
 }

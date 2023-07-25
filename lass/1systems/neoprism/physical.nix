@@ -8,6 +8,8 @@
   ];
 
   disko.devices = import ./disk.nix;
+  networking.hostId = "9c0a74ac";
+
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   boot.loader.grub.efiSupport = true;
@@ -17,26 +19,58 @@
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   # networking config
-  boot.kernelParams = [ "net.ifnames=0" ];
-  networking.bridges."ext-br".interfaces = [ "eth0" ];
-  networking = {
-    hostId = "2283aaae";
-    defaultGateway = "95.217.192.1";
-    defaultGateway6 = { address = "fe80::1"; interface = "ext-br"; };
-    # Use google's public DNS server
-    nameservers = [ "8.8.8.8" ];
-    interfaces.ext-br.ipv4.addresses = [
-      {
-        address = "95.217.192.59";
-        prefixLength = 26;
-      }
-    ];
-    interfaces.ext-br.ipv6.addresses = [
-      {
-        address = "2a01:4f9:4a:4f1a::1";
-        prefixLength = 64;
-      }
-    ];
+  networking.useNetworkd = true;
+  systemd.network = {
+    enable = true;
+    config = {
+      networkConfig.SpeedMeter = true;
+    };
+    # netdevs.ext-br.netdevConfig = {
+    #   Kind = "bridge";
+    #   Name = "ext-br";
+    #   MACAddress = "a8:a1:59:0f:2d:69";
+    # };
+    # networks.ext-br = {
+    #   name = "ext-br";
+    #   address = [
+    #     "95.217.192.59/26"
+    #     "2a01:4f9:4a:4f1a::1/64"
+    #   ];
+    #   gateway = [
+    #     "95.217.192.1"
+    #     "fe80::1"
+    #   ];
+    # };
+    networks.eth0 = {
+      #bridge = [ "ext-br" ];
+      matchConfig.Name = "eth0";
+       address = [
+         "95.217.192.59/26"
+         "2a01:4f9:4a:4f1a::1/64"
+       ];
+       gateway = [
+         "95.217.192.1"
+         "fe80::1"
+       ];
+    };
   };
 
+  networking.useDHCP = false;
+  boot.initrd.network = {
+    enable = true;
+    ssh = {
+      enable = true;
+      authorizedKeys = [ config.krebs.users.lass.pubkey ];
+      port = 2222;
+      hostKeys = [
+        (toString <secrets/ssh.id_ed25519>)
+        (toString <secrets/ssh.id_rsa>)
+      ];
+    };
+  };
+  boot.kernelParams = [
+    "net.ifnames=0"
+    "ip=dhcp"
+    "boot.trace"
+  ];
 }
