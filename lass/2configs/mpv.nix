@@ -78,7 +78,7 @@ let
         exec ${pkgs.mpv.override {
           scripts = with pkgs.mpvScripts; [
             sponsorblock
-            youtube-quality
+            quality-menu
           ];
         }}/bin/mpv \
          --no-config \
