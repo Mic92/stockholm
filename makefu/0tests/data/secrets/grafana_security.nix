@@ -1,5 +1,0 @@
-{
-  adminUser = "dick";
-  adminPassword = "butt";
-}
-
