@@ -1,4 +1,0 @@
-{
-  username = "lol";
-  password = "wut";
-}

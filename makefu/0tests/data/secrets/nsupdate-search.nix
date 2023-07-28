@@ -1,3 +1,0 @@
-{
-  "dick.nsupdate.info" = "butt";
-}
