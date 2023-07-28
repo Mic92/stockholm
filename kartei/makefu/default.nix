@@ -9,6 +9,7 @@
 
   hostDefaults = hostName: host: foldl' recursiveUpdate {} [
     {
+      ci = false;
       owner = config.krebs.users.makefu;
     }
     # Retiolum defaults
@@ -60,13 +61,11 @@
 in {
   hosts = mapAttrs hostDefaults {
     cake = rec {
-      ci = false;
       nets = {
         retiolum.ip4.addr = "10.243.136.236";
       };
     };
     crapi = rec { # raspi1
-      ci = false;
       nets = {
         retiolum.ip4.addr = "10.243.136.237";
       };
@@ -83,25 +82,21 @@ in {
     };
 
     studio = rec {
-      ci = false;
       nets = {
         retiolum.ip4.addr = "10.243.227.163";
       };
     };
     fileleech = rec {
-      ci = false;
       nets = {
         retiolum.ip4.addr = "10.243.113.98";
       };
     };
     tsp = {
-      ci = true;
       nets = {
         retiolum.ip4.addr = "10.243.0.212";
       };
     };
     x = {
-      ci = true;
       syncthing.id = "OA36OF6-JEFCUJQ-OEYVTMH-DPCACQI-3AJRE5G-BFVMOUG-RPYJQE3-4ZCUWA5";
       nets = {
         retiolum.ip4.addr = "10.243.0.91";
@@ -113,14 +108,12 @@ in {
 
     };
     filepimp = rec {
-      ci = false;
       nets = {
         retiolum.ip4.addr = "10.243.153.102";
       };
     };
 
     omo = rec {
-      ci = true;
       syncthing.id = "Y5OTK3S-JOJLAUU-KTBXKUW-M7S5UEQ-MMQPUK2-7CXO5V6-NOUDLKP-PRGAFAK";
       nets = {
         wiregrill = {
@@ -143,7 +136,6 @@ in {
       };
     };
     wbob = rec {
-      ci = true;
       nets = {
         retiolum = {
           ip4.addr = "10.243.214.15";
@@ -163,7 +155,6 @@ in {
     };
 
     latte = rec {
-      ci = true;
       extraZones = {
         "krebsco.de" = ''
           latte.euer     IN A      ${nets.internet.ip4.addr}
@@ -201,7 +192,6 @@ in {
       };
     };
     gum = rec {
-      ci = true;
       extraZones = {
         "krebsco.de" = ''
           rss.euer          IN A      ${nets.internet.ip4.addr}
@@ -305,7 +295,6 @@ in {
     };
 
     sdev = rec {
-      ci = true;
       nets = {
         retiolum.ip4.addr = "10.243.83.237";
       };
