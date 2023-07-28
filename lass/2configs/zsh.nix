@@ -51,6 +51,18 @@
       #enable automatic rehashing of $PATH
       zstyle ':completion:*' rehash true
 
+      # fancy mv which interactively gets the second argument if not given
+      function mv() {
+        if [[ "$#" -ne 1 ]] || [[ ! -e "$1" ]]; then
+          command mv -v "$@"
+          return
+        fi
+
+        newfilename="$1"
+        vared newfilename
+        command mv -v -- "$1" "$newfilename"
+      }
+
       #beautiful colors
       eval $(dircolors -b ${pkgs.fetchFromGitHub {
         owner = "trapd00r";
