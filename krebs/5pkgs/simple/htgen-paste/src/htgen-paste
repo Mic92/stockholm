@@ -22,7 +22,17 @@ case "$Method $abs_path" in
         printf 'Connection: close\r\n'
         printf 'Content-Length: %d\r\n' $(wc -c < $item)
         printf '\r\n'
-        cat $item
+        cat "$item"
+        exit
+      fi
+    ;;
+  "DELETE /"[0-9a-z]*)
+      if item=$(find_item ${abs_path#/}); then
+        printf 'HTTP/1.1 200 OK\r\n'
+        printf 'Server: %s\r\n' "$Server"
+        printf 'Connection: close\r\n'
+        printf '\r\n'
+        rm "$item"
         exit
       fi
     ;;
