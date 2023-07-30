@@ -597,7 +597,7 @@ in {
   krebs.reaktor2 = {
     hackint = {
       hostname = "irc.hackint.org";
-      nick = "reaktor2|krebs";
+      nick = "reaktor";
       plugins = [
         {
           plugin = "register";
@@ -617,7 +617,7 @@ in {
       port = "6697";
     };
     r = {
-      nick = "reaktor2|krebs";
+      nick = "reaktor";
       sendDelaySec = null;
       plugins = [
         {
