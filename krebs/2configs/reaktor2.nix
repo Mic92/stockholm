@@ -498,6 +498,36 @@ in {
     '';
   };
 
+  krebs.htgen.bedger = {
+    port = 8011;
+    user = {
+     name = "reaktor2";
+     home = stateDir;
+    };
+    script = ''. ${pkgs.writers.writeDash "bedger" ''
+      case "$Method" in
+        "GET")
+          printf 'HTTP/1.1 200 OK\r\n'
+          printf 'Connection: close\r\n'
+          printf '\r\n'
+          ${pkgs.hledger}/bin/hledger -f ${stateDir}/ledger bal -N -O json
+          exit
+        ;;
+      esac
+    ''}'';
+  };
+
+  services.nginx.virtualHosts."hotdog.r" = {
+    locations."/bedger.json".extraConfig = ''
+      proxy_set_header Host $host;
+      proxy_pass http://localhost:8011;
+    '';
+    extraConfig = ''
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+    '';
+  };
+
   systemd.services.reaktor2-r.serviceConfig.DynamicUser = mkForce false;
   systemd.services.reaktor2-hackint.serviceConfig.DynamicUser = mkForce false;
   krebs.reaktor2 = {
