@@ -5,6 +5,7 @@
     <stockholm/krebs>
     <stockholm/krebs/2configs>
     <stockholm/krebs/2configs/matterbridge.nix>
+    <stockholm/krebs/2configs/nameserver.nix>
   ];
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
