@@ -166,6 +166,7 @@ in {
       extraZones = {
         "krebsco.de" = /* bindzone */ ''
           krebsco.de. 60 IN A ${config.krebs.hosts.ponte.nets.internet.ip4.addr}
+          ns1 IN A ${config.krebs.hosts.ponte.nets.internet.ip4.addr}
         '';
       };
       nets = rec {
