@@ -9,10 +9,9 @@ with lib; {
     '';
     default = {
       "krebsco.de" = /* bindzone */ ''
-        $TTL 86400
-        @ IN SOA dns19.ovh.net. tech.ovh.net. (2015052000 86400 3600 3600000 86400)
-        @ IN NS ns19.ovh.net.
-        @ IN NS dns19.ovh.net.
+        $TTL 60
+        @ 3600 IN SOA spam.krebsco.de. spam.krebsco.de. 0 7200 3600 86400 3600
+        @ 3600 IN NS ns1
       '';
     };
   };
