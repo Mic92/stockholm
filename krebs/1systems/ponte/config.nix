@@ -31,8 +31,23 @@
 
   krebs.pages.enable = true;
   krebs.pages.nginx.addSSL = true;
-  krebs.pages.nginx.enableACME = true;
+  krebs.pages.nginx.useACMEHost = "krebsco.de";
 
   security.acme.acceptTerms = true;
-  security.acme.certs.${config.krebs.pages.domain}.email = "spam@krebsco.de";
+  security.acme.certs."krebsco.de" = {
+    domain = "krebsco.de";
+    extraDomainNames = [
+      "*.krebsco.de"
+    ];
+    email = "spam@krebsco.de";
+    reloadServices = [
+      "knsupdate-krebsco.de.service"
+      "nginx.service"
+    ];
+    keyType = "ec384";
+    dnsProvider = "rfc2136";
+    credentialsFile = "/var/src/secrets/acme-credentials";
+  };
+
+  users.users.nginx.extraGroups = [ "acme" ];
 }
