@@ -179,6 +179,12 @@ in {
             "ponte.i"
           ];
         };
+        intranet = {
+          ip4 = rec {
+            addr = "10.0.0.234";
+            prefix = "${addr}/24";
+          };
+        };
         retiolum = {
           via = internet;
           ip4.addr = "10.243.4.43";
