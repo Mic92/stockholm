@@ -486,7 +486,7 @@ in {
   services.nginx.virtualHosts."agenda.r" = {
     serverAliases = [ "kri.r" ];
     locations."= /index.html".extraConfig = ''
-      alias ./agenda.html;
+      alias ${./agenda.html};
     '';
     locations."/agenda.json".extraConfig = ''
       proxy_set_header Host $host;
