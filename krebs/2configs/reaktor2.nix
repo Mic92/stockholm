@@ -28,7 +28,7 @@ let
         amt=$2
         unit=$3
         printf '%s\n  %s  %d %s\n  %s  %d %s\n' "$(date -Id)" "$tonick" "$amt" "$unit" "$_from" "$(expr 0 - "''${amt#+}")" "$unit" >> $state_file
-        ${pkgs.hledger}/bin/hledger -f $state_file bal -N -O csv \
+        ${pkgs.hledger}/bin/hledger -f "$state_file" bal -N -O csv \
           | ${pkgs.coreutils}/bin/tail +2 \
           | ${pkgs.miller}/bin/mlr --icsv --opprint cat \
           | ${pkgs.gnugrep}/bin/grep "$_from"
@@ -483,113 +483,49 @@ in {
     ''}'';
   };
 
-  services.nginx = {
-    virtualHosts."agenda.r" = {
-      serverAliases = [ "kri.r" ];
-      locations."= /index.html".extraConfig = ''
-        alias ${pkgs.writeText "agenda.html" ''
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Agenda</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      html {
-        font-family: monospace;
-      }
+  services.nginx.virtualHosts."agenda.r" = {
+    serverAliases = [ "kri.r" ];
+    locations."= /index.html".extraConfig = ''
+      alias ./agenda.html;
+    '';
+    locations."/agenda.json".extraConfig = ''
+      proxy_set_header Host $host;
+      proxy_pass http://localhost:8009;
+    '';
+    extraConfig = ''
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+    '';
+  };
 
-      dt {
-        float: left;
-        clear: left;
-        width: 30px;
-        text-align: right;
-        font-weight: bold;
-      }
-
-      dd {
-        margin: 0 0 0 40px;
-        padding: 0 0 0.5em 0;
-      }
-
-      .date {
-        color: grey;
-        font-style: italic;
-      }
-    </style>
-  </head>
-  <body>
-    <dl id="agenda"></dl>
-    <script>
-      const urlSearchParams = new URLSearchParams(window.location.search);
-      const params = Object.fromEntries(urlSearchParams.entries());
-
-      if (params.hasOwnProperty("style")) {
-        const cssUrls = params["style"].split(" ").filter((x) => x.length > 0);
-        for (const cssUrl of cssUrls)
-          fetch(cssUrl)
-            .then((response) =>
-              response.text().then((css) => {
-                const title = document.getElementsByTagName("head")[0];
-                const style = document.createElement("style");
-                style.appendChild(document.createTextNode(css));
-                title.appendChild(style);
-              })
-            )
-            .catch(console.log);
-      }
-
-      fetch("/agenda.json")
-        .then((response) => {
-          response.json().then((agenda) => {
-            const dl = document.getElementById("agenda");
-            for (const agendaItem of agenda) {
-              if (agendaItem.status !== "pending") continue;
-              // task warrior date format to ISO
-              const entryDate = agendaItem.entry.replace(
-                /(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/,
-                "$1-$2-$3T$4:$5:$6Z"
-              );
-
-              const dt = document.createElement("dt");
-              dt.className = "id";
-              dt.appendChild(document.createTextNode(agendaItem.id.toString()));
-              dl.appendChild(dt);
-
-              const spanDate = document.createElement("span");
-              spanDate.className = "date";
-              spanDate.title = new Date(entryDate).toString();
-              spanDate.appendChild(document.createTextNode(entryDate));
-
-              const link = document.createElement("a");
-              link.href = "http://wiki.r/agenda/" + encodeURIComponent(agendaItem.description.replaceAll("/", "\u29F8")); // we use big solidus instead of slash because gollum will create directories
-              link.appendChild(document.createTextNode(agendaItem.description));
-
-              const dd = document.createElement("dd");
-              dd.className = "description";
-              dd.appendChild(link);
-              dd.appendChild(document.createTextNode(" "));
-              dd.appendChild(spanDate);
-
-              dl.appendChild(dd);
-            }
-          });
-        })
-        .then((data) => console.log(data));
-    </script>
-  </body>
-</html>
-        ''};
-      '';
-      locations."/agenda.json".extraConfig = ''
-        proxy_set_header Host $host;
-        proxy_pass http://localhost:8009;
-      '';
-      extraConfig = ''
-        add_header 'Access-Control-Allow-Origin' '*';
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-      '';
+  krebs.htgen.bedger = {
+    port = 8011;
+    user = {
+     name = "reaktor2";
+     home = stateDir;
     };
+    script = ''. ${pkgs.writers.writeDash "bedger" ''
+      case "$Method" in
+        "GET")
+          printf 'HTTP/1.1 200 OK\r\n'
+          printf 'Connection: close\r\n'
+          printf '\r\n'
+          ${pkgs.hledger}/bin/hledger -f ${stateDir}/ledger bal -N -O json
+          exit
+        ;;
+      esac
+    ''}'';
+  };
+
+  services.nginx.virtualHosts."hotdog.r" = {
+    locations."/bedger.json".extraConfig = ''
+      proxy_set_header Host $host;
+      proxy_pass http://localhost:8011;
+    '';
+    extraConfig = ''
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+    '';
   };
 
   systemd.services.reaktor2-r.serviceConfig.DynamicUser = mkForce false;
@@ -597,7 +533,7 @@ in {
   krebs.reaktor2 = {
     hackint = {
       hostname = "irc.hackint.org";
-      nick = "reaktor2|krebs";
+      nick = "reaktor";
       plugins = [
         {
           plugin = "register";
@@ -617,7 +553,7 @@ in {
       port = "6697";
     };
     r = {
-      nick = "reaktor2|krebs";
+      nick = "reaktor";
       sendDelaySec = null;
       plugins = [
         {

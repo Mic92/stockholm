@@ -92,7 +92,7 @@ in
      nets = {
        retiolum = {
          ip4.addr = "10.243.161.1";
-         aliases = [ "sicily.xkey.r" "mukke.r" ];
+         aliases = [ "sicily.xkey.r" "mukke.r" "bie.r" ];
          tinc.pubkey = ''
            -----BEGIN RSA PUBLIC KEY-----
            MIICCgKCAgEAzjCrsMRptg22QJTXsNgrxE/CjpGiDD9NYExqiDQ7kyKJ7+nrjtJg

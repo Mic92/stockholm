@@ -233,29 +233,6 @@ in {
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPpVwKv9mQGfcn5oFwuitq+b6Dz4jBG9sGhVoCYFw5RY";
       syncthing.id = "DK5CEE2-PNUXYCE-Q42H2HP-623GART-B7KS4VK-HU2RBGQ-EK6QPUP-HUL3PAR";
     };
-    arcadeomat = {
-      ci = true;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.77.67";
-          aliases = [
-            "arcadeomat.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAzpXyEATt8+ElxPq650/fkboEC9RvTWqN6UIAl/R4Zu+uDhAZ2ekb
-            HBjoSbRxu/0w2I37nwWUhEOemxGm4PXCgWrtO0jeRF4nVNYu3ZBppA3vuVALUWq7
-            apxRUEL9FdsWQlXGo4PVd20dGaDTi8M/Ggo755MStVTY0rRLluxyPq6VAa015sNg
-            4NOFuWm0NDn4e+qrahTCTiSjbCU8rWixm0GktV40kdg0QAiFbEcRhuXF1s9/yojk
-            7JT/nFg6LELjWUSSNZnioj5oSfVbThDRelIld9VaAKBAZZ5/zy6T2XSeDfoepytH
-            8aw6itEuTCy1M1DTiTG+12SPPw+ubG+NqQIDAQAB
-            -----END RSA PUBLIC KEY-----
-            Ed25519PublicKey = n/HMlgTTyLa0fcXqSBO/G6sVOUYh2yZ5PfU4vLI9CJO
-          '';
-        };
-      };
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOu6EVN3928qWiWszqBUzOjeQJRvFozTBl4xAhBP/Ymc";
-    };
     wolf = {
       ci = true;
       nets = {

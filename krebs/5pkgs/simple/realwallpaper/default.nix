@@ -275,7 +275,7 @@ pkgs.writers.writeDashBin "generate-wallpaper" ''
     } ./get_constellations.py} ${pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/ofrohn/d3-celestial/d2e20e104b86429d90ac8227a5b021262b45d75a/data/constellations.lines.json";
       sha256 = "0g71fdrnxvxd6pcqvihj2q9iaynrl7px45kzw6qm1kymynz6ckr9";
-    }} > constellations.arcs
+    }} > constellations.arcs || :  # seems like astropy doesn't want to convert from icrs to itrs anymore
 
     xplanet --num_times 1 --geometry $xplanet_out_size \
       --output xplanet-krebs-stars-output.png --projection merc \
