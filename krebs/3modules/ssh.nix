@@ -4,30 +4,7 @@ let
   cfg = config.krebs;
 
   out = {
-    options.krebs = api;
     config = lib.mkIf cfg.enable imp;
-  };
-
-  api = {
-    zone-head-config  = mkOption {
-      type = with types; attrsOf str;
-      description = ''
-        The zone configuration head which is being used to create the
-        zone files. The string for each key is pre-pended to the zone file.
-      '';
-      # TODO: configure the default somewhere else,
-      # maybe use krebs.dns.providers
-      default = {
-
-        # github.io -> 192.30.252.154
-        "krebsco.de" = ''
-          $TTL 86400
-          @ IN SOA dns19.ovh.net. tech.ovh.net. (2015052000 86400 3600 3600000 86400)
-                                IN NS     ns19.ovh.net.
-                                IN NS     dns19.ovh.net.
-        '';
-      };
-    };
   };
 
   imp = lib.mkMerge [

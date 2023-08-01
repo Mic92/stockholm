@@ -1,6 +1,22 @@
 { config, pkgs, lib, ... }:
 with lib; {
 
+  options.krebs.zone-head-config = mkOption {
+    type = lib.types.attrsOf lib.types.str;
+    description = ''
+      The zone configuration head which is being used to create the
+      zone files. The string for each key is pre-pended to the zone file.
+    '';
+    default = {
+      "krebsco.de" = /* bindzone */ ''
+        $TTL 86400
+        @ IN SOA dns19.ovh.net. tech.ovh.net. (2015052000 86400 3600 3600000 86400)
+        @ IN NS ns19.ovh.net.
+        @ IN NS dns19.ovh.net.
+      '';
+    };
+  };
+
   config = {
     environment.etc =
       mapAttrs'
