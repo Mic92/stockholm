@@ -13,6 +13,8 @@ with lib; {
         @ 3600 IN SOA spam.krebsco.de. spam.krebsco.de. 0 7200 3600 86400 3600
         @ 3600 IN NS ns1
         @ 3600 IN NS ni
+        @ 3600 IN NS ns2.he.net.
+        @ 3600 IN NS ns3.he.net.
       '';
     };
   };

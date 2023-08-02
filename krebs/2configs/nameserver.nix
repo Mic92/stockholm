@@ -60,6 +60,9 @@ in {
           any: debug
 
       remote:
+        - id: henet_ns1
+          address: 216.218.130.2
+
         - id: krebscode_ni
           address: ${config.krebs.hosts.ni.nets.internet.ip4.addr}
           key: krebs_transfer_notify_key
@@ -72,6 +75,11 @@ in {
         - id: dane_acl
           key: dane
           action: update
+
+        - id: transfer_to_henet_secondary
+          key: henet_transfer_key
+          address: [ 216.218.133.2, 2001:470:600::2 ]
+          action: transfer
 
         - id: transfer_to_krebscode_secondary
           key: krebs_transfer_notify_key
@@ -101,7 +109,9 @@ in {
           file: ${pkgs.krebs.zones."krebsco.de"}
           dnssec-signing: on
           dnssec-policy: rsa2k
+          notify: henet_ns1
           notify: krebscode_ni
+          acl: transfer_to_henet_secondary
           acl: transfer_to_krebscode_secondary
           acl: dane_acl
 
