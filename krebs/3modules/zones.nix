@@ -15,6 +15,7 @@ with lib; {
         @ 3600 IN NS ni
         @ 3600 IN NS ns2.he.net.
         @ 3600 IN NS ns3.he.net.
+        @ 3600 IN NS ns2.hosting.de.
       '';
     };
   };

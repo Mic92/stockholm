@@ -63,6 +63,9 @@ in {
         - id: henet_ns1
           address: 216.218.130.2
 
+        - id: hostingde_ns1
+          address: 134.0.30.178
+
         - id: krebscode_ni
           address: ${config.krebs.hosts.ni.nets.internet.ip4.addr}
           key: krebs_transfer_notify_key
@@ -79,6 +82,11 @@ in {
         - id: transfer_to_henet_secondary
           key: henet_transfer_key
           address: [ 216.218.133.2, 2001:470:600::2 ]
+          action: transfer
+
+        # https://www.hosting.de/helpdesk/produkte/dns/dns-master-ips/
+        - id: transfer_to_hostingde_secondary
+          address: [ 134.0.30.178, 194.126.196.2, 2a03:2900:3:1::2, 2a03:2902:3:1::2 ]
           action: transfer
 
         - id: transfer_to_krebscode_secondary
@@ -110,8 +118,10 @@ in {
           dnssec-signing: on
           dnssec-policy: rsa2k
           notify: henet_ns1
+          notify: hostingde_ns1
           notify: krebscode_ni
           acl: transfer_to_henet_secondary
+          acl: transfer_to_hostingde_secondary
           acl: transfer_to_krebscode_secondary
           acl: dane_acl
 
