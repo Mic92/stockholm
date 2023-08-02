@@ -35,12 +35,6 @@
       export SYSTEM="$1"
       $(nix-build $HOME/sync/stockholm/lass/krops.nix --no-out-link --argstr name "$SYSTEM" -A deploy)
     '')
-    (pkgs.writeDashBin "krebsco.de" ''
-      TMPDIR=$(${pkgs.coreutils}/bin/mktemp -d)
-      ${pkgs.brain}/bin/brain show krebs-secrets/ovh-secrets.json > "$TMPDIR"/ovh-secrets.json
-      OVH_ZONE_CONFIG="$TMPDIR"/ovh-secrets.json ${pkgs.krebszones}/bin/krebszones import
-      ${pkgs.coreutils}/bin/rm -rf "$TMPDIR"
-    '')
     (pkgs.writeDashBin "lassul.us" ''
       TMPDIR=$(${pkgs.coreutils}/bin/mktemp -d)
       ${pkgs.pass}/bin/pass show admin/ovh/api.config > "$TMPDIR"/ovh-secrets.json
