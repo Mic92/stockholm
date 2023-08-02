@@ -60,6 +60,9 @@ in {
           any: debug
 
       remote:
+        - id: krebscode_ni
+          address: ${config.krebs.hosts.ni.nets.internet.ip4.addr}
+          key: krebs_transfer_notify_key
 
       acl:
         - id: acme_acl
@@ -69,6 +72,10 @@ in {
         - id: dane_acl
           key: dane
           action: update
+
+        - id: transfer_to_krebscode_secondary
+          key: krebs_transfer_notify_key
+          action: transfer
 
       mod-rrl:
         - id: default
@@ -94,6 +101,8 @@ in {
           file: ${pkgs.krebs.zones."krebsco.de"}
           dnssec-signing: on
           dnssec-policy: rsa2k
+          notify: krebscode_ni
+          acl: transfer_to_krebscode_secondary
           acl: dane_acl
 
         - domain: _acme-challenge.krebsco.de
