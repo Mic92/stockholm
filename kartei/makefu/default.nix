@@ -96,14 +96,14 @@ in {
         retiolum.ip4.addr = "10.243.0.212";
       };
     };
-    "podcast.savar.de" = rec {
+    savarcast = rec {
       nets = {
         retiolum.ip4 = {
           addr = "10.243.136.238";
-          aliases = [
+        };
+        retiolum.aliases = [
             "sava.r"
           ];
-        };
       };
     };
     x = {
