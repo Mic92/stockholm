@@ -96,6 +96,16 @@ in {
         retiolum.ip4.addr = "10.243.0.212";
       };
     };
+    "podcast.savar.de" = rec {
+      nets = {
+        retiolum.ip4 = {
+          addr = "10.243.136.238";
+          aliases = [
+            "sava.r"
+          ];
+        };
+      };
+    };
     x = {
       syncthing.id = "OA36OF6-JEFCUJQ-OEYVTMH-DPCACQI-3AJRE5G-BFVMOUG-RPYJQE3-4ZCUWA5";
       nets = {
