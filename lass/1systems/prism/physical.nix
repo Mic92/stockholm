@@ -9,6 +9,7 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "sd_mod" ];
   boot.kernelModules = [ "kvm-intel" ];
+  boot.swraid.enable = true;
 
   fileSystems."/" = {
     device = "rpool/root/nixos";
@@ -80,7 +81,7 @@
 
   # we don't pay for power there and this might solve a problem we observed at least once
   # https://www.thomas-krenn.com/de/wiki/PCIe_Bus_Error_Status_00001100_beheben
-  boot.kernelParams = [ "pcie_aspm=off" "net.ifnames=0" ];
+  boot.kernelParams = [ "pcie_aspm=off" "net.ifnames=0" "nomodeset" ];
   networking.dhcpcd.enable = false;
 
 
