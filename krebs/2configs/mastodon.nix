@@ -33,8 +33,10 @@
   ];
 
   environment.systemPackages = [
-    (pkgs.writers.writeDashBin "tootctl" ''
-      sudo -u mastodon /etc/profiles/per-user/mastodon/bin/mastodon-env /etc/profiles/per-user/mastodon/bin/tootctl "$@"
+    (pkgs.writers.writeDashBin "clear-mastodon-cache" ''
+      mastodon-tootctl media remove --prune-profiles --days=14 --concurrency=30
+      mastodon-tootctl media remove-orphans
+      mastodon-tootctl preview_cards remove --days=14
     '')
     (pkgs.writers.writeDashBin "create-mastodon-user" ''
       set -efu
