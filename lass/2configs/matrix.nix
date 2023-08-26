@@ -2,24 +2,6 @@
 with import <stockholm/lib>;
 {
   services.matrix-synapse = {
-    # synapse 1.60.0 errors during startup with:
-    # https://github.com/matrix-org/synapse/issues/15809
-    package = pkgs.matrix-synapse.overrideAttrs (oldAttrs: rec {
-      version = "1.85.2";
-      name = "matrix-synapse-${version}";
-      src = pkgs.fetchFromGitHub {
-        owner = "matrix-org";
-        repo = "synapse";
-        rev = "v${version}";
-        hash = "sha256-pFafBsisBPfpDnFYWcimUuBgfFVPZzLna3yHeqIBAAE=";
-      };
-      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
-        inherit src;
-        name = "matrix-synapse-${version}";
-        hash = "sha256-dnno+5Ma0YNYpmj3oZ5UG22uAanKwVT67BwQW+mHoFc=";
-      };
-      doCheck = false;
-    });
     enable = true;
     settings = {
       server_name = "lassul.us";
