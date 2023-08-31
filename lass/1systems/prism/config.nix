@@ -3,6 +3,7 @@ with import <stockholm/lib>;
 
 {
   imports = [
+    ./backup.nix
     <stockholm/lass>
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/libvirt.nix>

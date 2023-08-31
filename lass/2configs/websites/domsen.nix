@@ -200,7 +200,25 @@ in {
       { domain = "beesmooth.ch"; }
     ];
   };
-
+  services.borgbackup.jobs.hetzner.paths = [
+    "/home/xanf"
+    "/home/domsen"
+    "/home/bruno"
+    "/home/jla-trading"
+    "/home/jms"
+    "/home/ms"
+    "/home/bui"
+    "/home/klabusterbeere"
+    "/home/akayguen"
+    "/home/kasia"
+    "/home/dif"
+    "/home/lavafilms"
+    "/home/movematchers"
+    "/home/blackphoton"
+    "/home/avada"
+    "/home/sts"
+    "/home/familienrat"
+  ];
   users.users.UBIK-SFTP = {
     uid = genid_uint31 "UBIK-SFTP";
     home = "/home/UBIK-SFTP";
@@ -357,6 +375,14 @@ in {
   users.users.avada = {
     uid = genid_uint31 "avada";
     home = "/home/avada";
+    useDefaultShell = true;
+    createHome = true;
+    isNormalUser = true;
+  };
+
+  users.users.sts = {
+    uid = genid_uint31 "sts";
+    home = "/home/sts";
     useDefaultShell = true;
     createHome = true;
     isNormalUser = true;
