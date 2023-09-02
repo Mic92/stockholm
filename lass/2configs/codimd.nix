@@ -34,7 +34,10 @@ in
     CMD_CSP_ALLOW_FRAMING = "true";
   };
 
-  services.borgbackup.jobs.hetzner.paths = [ "/var/backup" ];
+  services.borgbackup.jobs.hetzner.paths = [
+    "/var/backup"
+    "/var/lib/hedgedoc"
+  ];
   systemd.services.hedgedoc-backup = {
     startAt = "daily";
     serviceConfig = {
