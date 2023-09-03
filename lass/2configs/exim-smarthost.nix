@@ -14,18 +14,22 @@ in {
     dkim = [
       { domain = "lassul.us"; }
     ];
+    ssl_cert = "/var/lib/acme/mail.lassul.us/fullchain.pem";
+    ssl_key = "/var/lib/acme/mail.lassul.us/key.pem";
     primary_hostname = "lassul.us";
     sender_domains = [
       "lassul.us"
     ];
     relay_from_hosts = map (host: host.nets.retiolum.ip6.addr) [
+      config.krebs.hosts.aergia
       config.krebs.hosts.blue
       config.krebs.hosts.coaxmetal
       config.krebs.hosts.green
       config.krebs.hosts.mors
       config.krebs.hosts.xerxes
     ];
-    internet-aliases = map (from: { inherit from to; }) mails;
+    internet-aliases = map (from: { inherit from to; }) mails ++ [
+    ];
     system-aliases = [
       { from = "mailer-daemon"; to = "postmaster"; }
       { from = "postmaster"; to = "root"; }
@@ -44,5 +48,15 @@ in {
   };
   krebs.iptables.tables.filter.INPUT.rules = [
     { predicate = "-p tcp --dport smtp"; target = "ACCEPT"; }
+  ];
+
+  security.acme.certs."mail.lassul.us" = {
+    group = "lasscert";
+    webroot = "/var/lib/acme/acme-challenge";
+  };
+  users.groups.lasscert.members = [
+    "dovecot2"
+    "exim"
+    "nginx"
   ];
 }
