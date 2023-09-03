@@ -24,6 +24,7 @@ import System.IO (hPutStrLn, stderr)
 import System.Posix.Process (executeFile)
 import Data.Ratio
 
+import XMonad.Actions.Commands (defaultCommands, runCommand)
 import XMonad.Actions.CopyWindow (copy, copyToAll, kill1)
 import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt, renameWorkspace, removeEmptyWorkspace)
@@ -42,18 +43,18 @@ import XMonad.Layout.BoringWindows (boringWindows, focusDown, focusUp)
 import XMonad.Layout.FixedColumn (FixedColumn(..))
 import XMonad.Layout.Grid (Grid(..))
 import XMonad.Layout.Minimize (minimize)
-import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.NoBorders (smartBorders, noBorders)
 import XMonad.Layout.MouseResizableTile (mouseResizableTile)
 import XMonad.Layout.SimplestFloat (simplestFloat)
 import XMonad.Layout.StateFull
 import XMonad.ManageHook (composeAll)
-import XMonad.Prompt (autoComplete, font, searchPredicate, XPConfig)
+import XMonad.Prompt (autoComplete, font, height, searchPredicate, XPConfig)
 import XMonad.Prompt.Window (windowPromptGoto, windowPromptBringCopy)
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedWindows (getName)
 import XMonad.Util.Run (safeSpawn)
 import XMonad.Util.Ungrab (unGrab)
-import XMonad.Util.Paste (pasteSelection)
+import XMonad.Util.Paste (sendKey)
 
 data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
 
@@ -77,7 +78,7 @@ main = do
         $ def
             { terminal           = myTerm
             , modMask            = mod4Mask
-            , layoutHook         = smartBorders $ myLayoutHook
+            , layoutHook         = myLayoutHook
             , manageHook         = floatHooks
             , startupHook =
                 whenJustM (liftIO (lookupEnv "XMONAD_STARTUP_HOOK"))
@@ -89,7 +90,18 @@ main = do
 
 myLayoutHook = defLayout
   where
-    defLayout = minimize . boringWindows $ ((avoidStruts $ Mirror (Tall 1 (3/100) (1/2))) ||| StateFull ||| FixedColumn 2 80 80 1 ||| Tall 1 (3/100) (1/2) ||| simplestFloat ||| mouseResizableTile ||| Grid)
+    defLayout = smartBorders $
+      minimize .
+      boringWindows $
+      (
+        noBorders StateFull |||
+        (avoidStruts $ Mirror (Tall 1 (3/100) (1/2))) |||
+        FixedColumn 2 80 80 1 |||
+        Tall 1 (3/100) (1/2) |||
+        simplestFloat |||
+        mouseResizableTile |||
+        Grid
+      )
 
 floatHooks = composeAll
    [ className =? "Pinentry" --> doCenterFloat
@@ -137,8 +149,10 @@ myKeyMap =
     , ("M4-f", floatNext True)
     , ("M4-b", spawn "/run/current-system/sw/bin/klem")
 
-    , ("M4-v", spawn "${pkgs.pager}/bin/pager view")
+    , ("M4-c", defaultCommands >>= runCommand)
+    -- , ("M4-v", spawn "${pkgs.pager}/bin/pager view")
     -- , ("M4-S-v", spawn "${pkgs.pager}/bin/pager shift")
+    , ("M4-v", withWorkspace autoXPConfig (windows . W.greedyView))
     , ("M4-S-v", withWorkspace autoXPConfig (windows . W.shift))
     , ("M4-C-v", withWorkspace autoXPConfig (windows . copy))
 
@@ -159,7 +173,7 @@ myKeyMap =
       ${pkgs.clipmenu}/bin/clipmenu
     ''}")
 
-    , ("M4-<Insert>", spawn "${pkgs.writeDash "paste" ''
+    , ("M4-<Insert>", spawn "${pkgs.writers.writeDash "paste" ''
       ${pkgs.coreutils}/bin/sleep 0.4
       ${pkgs.xclip}/bin/xclip -o | ${pkgs.xdotool}/bin/xdotool type -f -
     ''}")
@@ -182,7 +196,6 @@ myKeyMap =
 
     ${lib.optionalString (builtins.hasAttr "warpd" pkgs) '', ("M4-s", spawn "${pkgs.warpd}/bin/warpd --hint")''}
     , ("M4-i", spawn "/run/current-system/sw/bin/screenshot")
-    , ("S-<F12>", pasteSelection)
 
     --, ("M4-w", screenWorkspace 0 >>= (windows . W.greedyView))
     --, ("M4-e", screenWorkspace 1 >>= (windows . W.greedyView))
@@ -196,6 +209,7 @@ forkFile path args env =
 myXPConfig :: XPConfig
 myXPConfig = def
     { font = myFont
+    , height = 40
     }
 
 autoXPConfig :: XPConfig
