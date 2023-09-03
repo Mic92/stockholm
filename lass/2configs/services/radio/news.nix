@@ -122,10 +122,9 @@ in
     ''}'';
   };
 
-  ## debug
-  # environment.systemPackages = [
-  #   weather_report
-  #   send_to_radio
-  #   newsshow
-  # ];
+  # debug
+  environment.systemPackages = [
+    send_to_radio
+    newsshow
+  ];
 }
