@@ -25,7 +25,7 @@ with import <stockholm/lib>;
             }
             {
               names = [ "federation" ];
-              compress = false;
+              compress = true;
             }
           ];
         }
