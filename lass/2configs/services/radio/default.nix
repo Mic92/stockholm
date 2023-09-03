@@ -104,6 +104,22 @@ in {
     print_current
   ];
 
+
+  systemd.services.radio_watcher = {
+    wantedBy = [ "multi-user.target" ];
+    after = [ "radio.service" ];
+    serviceConfig = {
+      ExecStart = pkgs.writers.writeDash "radio_watcher" ''
+        set -efux
+        while :; do
+          ${pkgs.curl}/bin/curl -Ss http://localhost:8000/radio.ogg -o /dev/null
+          ${pkgs.systemd}/bin/systemctl restart radio
+          sleep 60
+        done
+      '';
+    };
+  };
+
   services.liquidsoap.streams.radio = ./radio.liq;
   systemd.services.radio = {
     environment = {
@@ -124,6 +140,7 @@ in {
     };
     path = [
       pkgs.yt-dlp
+      pkgs.bubblewrap
     ];
     serviceConfig.User = lib.mkForce "radio";
   };
@@ -163,6 +180,7 @@ in {
       filter.INPUT.rules = [
         { predicate = "-p tcp --dport 8000"; target = "ACCEPT"; }
         { predicate = "-i retiolum -p tcp --dport 8001"; target = "ACCEPT"; }
+        { predicate = "-i retiolum -p tcp --dport 8002"; target = "ACCEPT"; }
       ];
     };
   };
