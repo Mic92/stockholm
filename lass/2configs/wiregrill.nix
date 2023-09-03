@@ -29,17 +29,21 @@ in mkIf (hasAttr "wiregrill" config.krebs.build.host.nets) {
       (optional (!isNull self.ip4) "${self.ip4.addr}/16") ++
       (optional (!isNull self.ip6) "${self.ip6.addr}/48")
     ;
+    networkConfig = {
+      IgnoreCarrierLoss = "10s";
+    };
   };
 
   networking.wireguard.interfaces.wiregrill = {
     ips =
-      (optional (!isNull self.ip4) self.ip4.addr) ++
-      (optional (!isNull self.ip6) self.ip6.addr);
+      (optional (!isNull self.ip4 && !config.systemd.network.enable) self.ip4.addr) ++
+      (optional (!isNull self.ip6 && !config.systemd.network.enable) self.ip6.addr);
     listenPort = 51820;
     privateKeyFile = (toString <secrets>) + "/wiregrill.key";
     allowedIPsAsRoutes = true;
     peers = mapAttrsToList
-      (_: host: {
+      (name: host: {
+        # inherit name;
         allowedIPs = if isRouter then
           (optional (!isNull host.nets.wiregrill.ip4) host.nets.wiregrill.ip4.addr) ++
           (optional (!isNull host.nets.wiregrill.ip6) host.nets.wiregrill.ip6.addr)
