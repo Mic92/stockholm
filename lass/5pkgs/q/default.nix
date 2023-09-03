@@ -21,18 +21,18 @@ let
     }'';
   in ''
     ${pkgs.coreutils}/bin/paste \
-        <(${pkgs.utillinux}/bin/cal -mw \
+        <(${pkgs.util-linux}/bin/cal -mw \
               $(${pkgs.coreutils}/bin/date +'%m %Y' -d 'last month') \
             | ${pad}
         ) \
-        <(${pkgs.utillinux}/bin/cal -mw \
+        <(${pkgs.util-linux}/bin/cal -mw \
             | ${pkgs.gnused}/bin/sed '
                 # colorize day of month
                 s/\(^\| \)'"$(${pkgs.coreutils}/bin/date +%e)"'\>/[31;1m&[39;22m/
               ' \
             | ${pad}
         ) \
-        <(${pkgs.utillinux}/bin/cal -mw \
+        <(${pkgs.util-linux}/bin/cal -mw \
               $(${pkgs.coreutils}/bin/date +'%m %Y' -d 'next month') \
             | ${pad}
         ) \
