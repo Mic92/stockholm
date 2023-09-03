@@ -13,7 +13,10 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   boot.loader.grub.efiSupport = true;
-  boot.loader.grub.devices = [ "/dev/nvme0n1" "/dev/nvme1n1" ];
+  boot.loader.grub.devices = [
+    config.disko.devices.disk."/dev/nvme0n1".device
+    config.disko.devices.disk."/dev/nvme1n1".device
+  ];
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "sd_mod" ];
   boot.kernelModules = [ "kvm-amd" ];
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
@@ -56,21 +59,21 @@
   };
 
   networking.useDHCP = false;
-  boot.initrd.network = {
-    enable = true;
-    ssh = {
-      enable = true;
-      authorizedKeys = [ config.krebs.users.lass.pubkey ];
-      port = 2222;
-      hostKeys = [
-        (toString <secrets/ssh.id_ed25519>)
-        (toString <secrets/ssh.id_rsa>)
-      ];
-    };
-  };
-  boot.kernelParams = [
-    "net.ifnames=0"
-    "ip=dhcp"
-    "boot.trace"
-  ];
+  # boot.initrd.network = {
+  #   enable = true;
+  #   ssh = {
+  #     enable = true;
+  #     authorizedKeys = [ config.krebs.users.lass.pubkey ];
+  #     port = 2222;
+  #     hostKeys = [
+  #       (<secrets/ssh.id_ed25519>)
+  #       (<secrets/ssh.id_rsa>)
+  #     ];
+  #   };
+  # };
+  # boot.kernelParams = [
+  #   "net.ifnames=0"
+  #   "ip=dhcp"
+  #   "boot.trace"
+  # ];
 }
