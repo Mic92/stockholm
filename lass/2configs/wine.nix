@@ -14,7 +14,7 @@ in {
       ];
       createHome = true;
       packages = [
-        pkgs.wineWowPackages.stable
+        pkgs.winePackages.minimal
       ];
       isNormalUser = true;
     };
