@@ -39,6 +39,14 @@ with import <stockholm/lib>;
       # IPv6SendRA = "yes";
       # DHCPPrefixDelegation = "yes";
     };
+    dhcpServerStaticLeases = [
+      {
+        dhcpServerStaticLeaseConfig = {
+          Address = "10.42.0.4";
+          MACAddress = "3c:2a:f4:22:28:37";
+        };
+      }
+    ];
   };
   networking.networkmanager.unmanaged = [ "int0" ];
   krebs.iptables.tables.filter.INPUT.rules = [
