@@ -7,7 +7,6 @@ with (import <stockholm/lib>);
       "coaxmetal.r"
       "mors.r"
       "green.r"
-      "blue.r"
     ];
   in {
     description = "sync mails";
