@@ -1,9 +1,12 @@
-{ config, lib, pkgs, ... }:
-{
+{ config, lib, pkgs, ... }: let
+  domains = [
+    "hackerfleet.eu"
+    "hackerfleet.de"
+  ];
+in {
   containers.riot = {
     config = {
       environment.systemPackages = [
-        pkgs.dhcpcd
         pkgs.git
         pkgs.jq
       ];
@@ -19,8 +22,11 @@
         wantedBy = [ "multi-user.target" ];
         serviceConfig.ExecStart = pkgs.writers.writeDash "autoswitch" ''
           set -efu
-          if test -e /var/src/nixos-config; then
-            /run/current-system/sw/bin/nixos-rebuild -I /var/src switch || :
+          if test -e /etc/nixos/configuration.nix; then
+            /run/current-system/sw/bin/nixos-rebuild switch \
+              -I nixpkgs=channel:$(cat /etc/nixos/channel) \
+              -I nixos-config=/etc/nixos/configuration.nix \
+              || :
           fi
         '';
         unitConfig.X-StopOnRemoval = false;
@@ -32,6 +38,7 @@
     hostAddress = "10.233.1.1";
     localAddress = "10.233.1.2";
   };
+  systemd.services."container@riot".restartIfChanged = lib.mkForce false;
 
   systemd.network.networks."50-ve-riot" = {
     matchConfig.Name = "ve-riot";
@@ -60,4 +67,21 @@
     { predicate = "-i ve-riot"; target = "ACCEPT"; }
     { predicate = "-o ve-riot"; target = "ACCEPT"; }
   ];
+
+
+  # non container stuff
+
+  services.nginx.virtualHosts.riot = {
+    serverName = null;
+    serverAliases = domains;
+  };
+
+  krebs.exim-smarthost.extraRouters = ''
+    forward_riot:
+      driver = manualroute
+      domains = ${lib.concatStringsSep ":" domains}
+      transport = remote_smtp
+      route_list = * riot
+      no_more
+  '';
 }
