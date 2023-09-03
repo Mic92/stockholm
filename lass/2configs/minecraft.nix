@@ -8,8 +8,6 @@ in {
     eula = true;
     package = unstable.minecraft-server;
   };
-  krebs.iptables.tables.filter.INPUT.rules = [
-    { predicate = "-p tcp --dport 25565"; target = "ACCEPT"; }
-    { predicate = "-p udp --dport 25565"; target = "ACCEPT"; }
-  ];
+  networking.firewall.allowedTCPPorts = [ 25565 ];
+  networking.firewall.allowedUDPPorts = [ 25565 ];
 }
