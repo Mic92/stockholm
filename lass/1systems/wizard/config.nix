@@ -183,7 +183,7 @@ in {
 
   #style
     most
-    rxvt_unicode.terminfo
+    rxvt-unicode-unwrapped.terminfo
 
   #monitoring tools
     htop
@@ -192,6 +192,7 @@ in {
   #network
     iptables
     iftop
+    nm-dmenu
 
   #stuff for dl
     aria2
