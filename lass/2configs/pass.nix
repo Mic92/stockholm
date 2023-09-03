@@ -14,5 +14,8 @@
   ];
 
   programs.gnupg.agent.enable = true;
+  systemd.tmpfiles.rules = [
+    "L+ /home/lass/.password-store - - - - sync/pwstore"
+  ];
 
 }
