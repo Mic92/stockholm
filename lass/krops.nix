@@ -54,7 +54,7 @@
 
 in {
 
-  deploy = { target ? "root@${name}/var/src", offline ? false }: pkgs.krops.writeCommand "deploy" {
+  deploy = { target ? "root@${name}/var/src", offline ? false, command ? "switch" }: pkgs.krops.writeCommand "deploy" {
     command = targetPath: ''
 
       set -xfu
@@ -73,9 +73,20 @@ in {
 
       nix-env -p /nix/var/nix/profiles/system --set "$outDir/out"
 
-      "$outDir/out/bin/switch-to-configuration" switch
+      "$outDir/out/bin/switch-to-configuration" ${command}
     '';
     source = source { test = false; };
+    allocateTTY = true;
+    backup = false;
+    inherit target;
+  };
+
+  deployWithFlake = { target ? "root@${name}/var/src", offline ? false }: pkgs.krops.writeCommand "deploy" {
+    source = {
+      inherit (source { test = false; }) stockholm secrets;
+    };
+    command = targetPath: ''
+    '';
     allocateTTY = true;
     inherit target;
   };
@@ -92,5 +103,43 @@ in {
     force = true;
     inherit target;
     source = source { test = true; };
+  };
+
+  deploy-with-diff = { target ? "root@${name}/var/src" }: pkgs.krops.writeCommand "${name}-deploy" {
+    command = targetPath: ''
+      set -xu
+      deployScript=$(mktemp)
+      cat << EOF > "$deployScript"
+      #! /usr/bin/env nix-shell
+      #! nix-shell -p nix-diff proot rsync -i bash
+      set -xfu
+
+      oldPath=\$(echo "${targetPath}" | sed 's/-new$//')
+      oldSystemDrv=\$(nix show-derivation /run/current-system | jq -r 'keys[0]')
+      newSystemDrv=\$(proot -b /var/src-new:/var/src nix-instantiate -I /var/src '<nixpkgs/nixos>' -A config.system.build.toplevel)
+
+      (
+        diff -rq -x '.git' "\$oldPath" "${targetPath}"
+        nix-diff --color always --line-oriented "\$oldSystemDrv" "\$newSystemDrv"
+      ) | less -R
+      echo 'continue? [(Y)es]/(n)o'
+      read yn
+      case \$yn in
+        [Nn]* ) exit;;
+      esac
+      rsync -ra --delete /var/src-new/ /var/src/
+      nixos-rebuild -I /var/src switch
+      EOF
+
+      chmod +x "$deployScript"
+      echo "$deployScript"
+      cat "$deployScript"
+      exec "$deployScript"
+      rm "$deployScript"
+    '';
+    target = "${target}-new";
+    source = source { test = false; };
+    force = true;
+    allocateTTY = true;
   };
 }
