@@ -10,7 +10,7 @@ in {
   krebs.realwallpaper.enable = true;
 
   system.activationScripts.wallpaper-chmod = ''
-    ${pkgs.coreutils}/bin/chmod +x /var/realwallpaper
+    ${pkgs.coreutils}/bin/chmod +rx /var/realwallpaper
   '';
   services.nginx.virtualHosts.wallpaper = {
     extraConfig = ''
@@ -21,9 +21,9 @@ in {
     serverAliases = [
       "wallpaper.r"
     ];
-    locations."/realwallpaper/".extraConfig = ''
-      index on;
-      root /var/realwallpaper";
+    locations."/".extraConfig = ''
+      autoindex on;
+      root /var/realwallpaper/;
     '';
     locations."/realwallpaper.png".extraConfig = ''
       root /var/realwallpaper/;
