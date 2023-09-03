@@ -154,7 +154,7 @@ with import <stockholm/lib>;
       restartIfChanged = true;
       serviceConfig = {
         Restart = "always";
-        ExecStart = "${pkgs.nichtparasoup}/bin/nichtparasoup -c ${pkgs.writeText "config.ini"config.lass.nichtparasoup.config}";
+        ExecStart = "${pkgs.nichtparasoup}/bin/nichtparasoup -c ${pkgs.writeText "config.ini" config.lass.nichtparasoup.config}";
       };
     };
   };
