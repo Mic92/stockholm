@@ -61,11 +61,6 @@
     fsType = "zfs";
   };
 
-  fileSystems."/home/xanf" = {
-    device = "/dev/disk/by-id/wwn-0x500a07511becb076";
-    fsType = "ext4";
-  };
-
   # silence mdmonitor.service failures
   # https://github.com/NixOS/nixpkgs/issues/72394
   environment.etc."mdadm.conf".text = ''
