@@ -17,7 +17,7 @@ in {
     };
     routes = [
       { routeConfig = {
-        Destination = "10.0.1.0/24";
+        Destination = "10.0.0.0/23";
         Gateway = "172.31.77.1";
       };}
       { routeConfig = {
