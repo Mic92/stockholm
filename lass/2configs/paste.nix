@@ -10,8 +10,8 @@ with import <stockholm/lib>;
       proxy_pass http://127.0.0.1:${toString config.krebs.htgen.cyberlocker.port};
     '';
     extraConfig = ''
-      add_header 'Access-Control-Allow-Origin' '*';
-      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+      add_header Access-Control-Allow-Origin * always;
+      add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS';
     '';
   };
   services.nginx.virtualHosts.paste = {
@@ -48,8 +48,8 @@ with import <stockholm/lib>;
       proxy_pass http://127.0.0.1:${toString config.krebs.htgen.cyberlocker.port};
     '';
     extraConfig = ''
-      add_header 'Access-Control-Allow-Origin' '*';
-      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+      add_header Access-Control-Allow-Origin * always;
+      add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS' always;
     '';
   };
   services.nginx.virtualHosts."p.krebsco.de" = {
@@ -57,6 +57,10 @@ with import <stockholm/lib>;
     addSSL = true;
     serverAliases = [ "p.krebsco.de" ];
     locations."/".extraConfig = ''
+      if ($request_method = 'OPTIONS') {
+        return 204;
+      }
+      client_max_body_size 4G;
       proxy_set_header Host $host;
       proxy_set_header X-Forwarded-Proto $scheme;
       proxy_pass http://127.0.0.1:${toString config.krebs.htgen.paste.port};
@@ -75,8 +79,9 @@ with import <stockholm/lib>;
       proxy_pass_header Server;
     '';
     extraConfig = ''
-      add_header 'Access-Control-Allow-Origin' '*';
-      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+      add_header Access-Control-Allow-Headers Authorization always;
+      add_header Access-Control-Allow-Origin * always;
+      add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS' always;
     '';
   };
 
