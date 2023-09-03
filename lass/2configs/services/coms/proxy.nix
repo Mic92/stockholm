@@ -21,13 +21,12 @@ in
         proxy_pass ${target}:${toString port};
       }
     '') tcpports}
-    ${lib.concatMapStringsSep "\n" (port: ''
-      server {
-        listen ${toString port} udp;
-        proxy_pass ${target}:${toString port};
-      }
-    '') udpports}
   '';
+
+  krebs.iptables.tables.nat.PREROUTING.rules = lib.flatten (map (port: [
+    { predicate = "-p udp --dport ${toString port}"; target = "DNAT --to-destination ${config.krebs.hosts.orange.nets.retiolum.ip4.addr}:${toString port}"; v6 = false; }
+    { predicate = "-p udp --dport ${toString port}"; target = "DNAT --to-destination [${config.krebs.hosts.orange.nets.retiolum.ip6.addr}]:${toString port}"; v4 = false; }
+  ]) udpports);
 
   services.nginx.virtualHosts."jitsi.lassul.us" = {
     enableACME = true;
@@ -36,7 +35,7 @@ in
     locations."/" = {
       recommendedProxySettings = true;
       proxyWebsockets = true;
-      proxyPass = "http://${target}";
+      proxyPass = "https://${target}";
     };
   };
 }
