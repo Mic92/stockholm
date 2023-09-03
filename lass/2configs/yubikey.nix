@@ -48,19 +48,6 @@
     });
   '';
 
-  environment.shellInit = ''
-    if [ "$UID" -eq 1337 ] && [ -z "$SSH_CONNECTION" ]; then
-      export GPG_TTY="$(tty)"
-      mkdir -p $HOME/.gnupg
-      gpg-connect-agent --quiet updatestartuptty /bye > /dev/null
-      export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
-      if [ -z "$SSH_AUTH_SOCK" ]; then
-        export SSH_AUTH_SOCK=$(${pkgs.gnupg}/bin/gpgconf --list-dirs agent-ssh-socket)
-      fi
-
-    fi
-  '';
-
   # allow nix to acces remote builders via yubikey
   systemd.services.nix-daemon.environment.SSH_AUTH_SOCK = "/run/user/1337/gnupg/S.gpg-agent.ssh";
 
@@ -69,7 +56,7 @@
     gnupg.agent = {
       enable = true;
       pinentryFlavor = "qt";
-      # enableSSHSupport = true;
+      enableSSHSupport = true;
     };
   };
 }
