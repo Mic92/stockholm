@@ -16,9 +16,4 @@
       BrowseProtocols all
     '';
   };
-  services.avahi = {
-    enable = true;
-    openFirewall = true;
-    nssmdns = true;
-  };
 }
