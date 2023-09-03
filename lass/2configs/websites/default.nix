@@ -1,7 +1,5 @@
 { config, lib, ... }:
 
-with import <stockholm/lib>;
-
 {
   services.nginx = {
     enable = true;
