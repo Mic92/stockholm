@@ -1,13 +1,13 @@
 { config, lib, pkgs, ... }: let
 
   format-github-message = pkgs.writeDashBin "format-github-message" ''
-    set -xefu
+    set -efu
     export PATH=${lib.makeBinPath [
       pkgs.jq
     ]}
     INPUT=$(jq -c .)
-    if $(echo "$INPUT" | jq 'has("issue") or has("pull_request")'); then
-      ${write_to_irc} "$(echo "$INPUT" | jq -r '
+    if $(printf '%s' "$INPUT" | jq 'has("issue") or has("pull_request")'); then
+      ${write_to_irc} "$(printf '%s' "$INPUT" | jq -r '
         "\(.action): " +
         "[\(.issue.title // .pull_request.title)] " +
         "\(.comment.html_url // .issue.html_url // .pull_request.html_url) "
@@ -57,16 +57,7 @@ in {
       case "$Method $Request_URI" in
         "POST /")
           payload=$(head -c "$req_content_length")
-          raw=$(printf '%s' "$payload" | ${pkgs.curl}/bin/curl --data-binary @- http://p.krebsco.de | tail -1)
-          payload2=$payload
-          payload2=$(printf '%s' "$payload" | tr '\n' ' ' | tr -d '\r')
-          if [ "$payload" != "$payload2" ]; then
-            echo "payload has been mangled" >&2
-          else
-            echo "payload not mangled" >&2
-          fi
-          echo "$payload2" | ${format-github-message}/bin/format-github-message
-          ${write_to_irc} "$raw"
+          printf '%s' "$payload" | ${format-github-message}/bin/format-github-message
           printf 'HTTP/1.1 200 OK\r\n'
           printf 'Connection: close\r\n'
           printf '\r\n'
