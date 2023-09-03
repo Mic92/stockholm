@@ -7,16 +7,15 @@
     <stockholm/lass/2configs/retiolum.nix>
     <stockholm/lass/2configs/exim-retiolum.nix>
     <stockholm/lass/2configs/baseX.nix>
+    <stockholm/lass/2configs/pipewire.nix>
     <stockholm/lass/2configs/browsers.nix>
     <stockholm/lass/2configs/programs.nix>
     <stockholm/lass/2configs/network-manager.nix>
     <stockholm/lass/2configs/syncthing.nix>
     <stockholm/lass/2configs/sync/sync.nix>
-    <stockholm/lass/2configs/games.nix>
     <stockholm/lass/2configs/steam.nix>
     <stockholm/lass/2configs/wine.nix>
     <stockholm/lass/2configs/fetchWallpaper.nix>
-    <stockholm/lass/2configs/nfs-dl.nix>
     <stockholm/lass/2configs/pass.nix>
     <stockholm/lass/2configs/mail.nix>
   ];
@@ -59,24 +58,6 @@
 
   services.logind.lidSwitch = "suspend";
   lass.screenlock.enable = lib.mkForce false;
-
-  systemd.services.suspend-again = {
-    after = [ "suspend.target" ];
-    requiredBy = [ "suspend.target" ];
-    # environment = {
-    #   DISPLAY = ":${toString config.services.xserver.display}";
-    # };
-    serviceConfig = {
-      ExecStart = pkgs.writeDash "suspend-again" ''
-        ${pkgs.gnugrep}/bin/grep -q closed /proc/acpi/button/lid/LID0/state
-        if [ "$?" -eq 0 ]; then
-          echo 'wakeup with closed lid'
-          ${pkgs.systemd}/bin/systemctl suspend
-        fi
-      '';
-      Type = "simple";
-    };
-  };
 
   hardware.bluetooth = {
     enable = true;
