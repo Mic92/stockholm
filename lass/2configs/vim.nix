@@ -1,15 +1,15 @@
 { config, lib, pkgs, ... }:
 
-with import <stockholm/lib>;
 let
   out = {
     environment.systemPackages = [
-      (hiPrio vim)
+      (lib.hiPrio vim)
     ];
 
     environment.etc.vimrc.source = vimrc;
+    environment.etc.vim.source = vim;
 
-    environment.variables.EDITOR = mkForce "vim";
+    environment.variables.EDITOR = lib.mkForce "vim";
     environment.variables.VIMINIT = ":so /etc/vimrc";
   };
 
@@ -42,6 +42,9 @@ let
     set wildignore+=*.o,*.class,*.hi,*.dyn_hi,*.dyn_o
     set wildmenu
     set wildmode=longest,full
+
+    " enable better-whitespace
+    let g:better_whitespace_enabled=1
 
     set title
     set titleold=
@@ -122,10 +125,12 @@ let
     let g:fzf_layout = { 'down': '~15%' }
   '';
 
-  extra-runtimepath = concatMapStringsSep "," (pkg: "${pkg.rtp}") [
+  extra-runtimepath = lib.concatMapStringsSep "," (pkg: "${pkg.rtp}") [
+    pkgs.vimPlugins.copilot-vim
     pkgs.vimPlugins.undotree
     pkgs.vimPlugins.fzf-vim
     pkgs.vimPlugins.fzfWrapper
+    pkgs.vimPlugins.vim-better-whitespace
     (pkgs.vimUtils.buildVimPlugin {
       name = "file-line-1.0";
       src = pkgs.fetchFromGitHub {
@@ -144,19 +149,6 @@ let
         sha256 = "sha256-lyTZUgqUEEJRrzGo1FD8/t8KBioPrtB3MmGvPeEVI/g=";
       };
     })
-    ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
-      name = "vim";
-    in {
-      name = "vim-syntax-${name}-1.0.0";
-      destination = "/syntax/${name}.vim";
-      text = /* vim */ ''
-        ${concatMapStringsSep "\n" (s: /* vim */ ''
-          syn keyword vimColor${s} ${s}
-            \ containedin=ALLBUT,vimComment,vimLineComment
-          hi vimColor${s} ctermfg=${s}
-        '') (map (i: lpad 3 "0" (toString i)) (range 0 255))}
-      '';
-    })))
     ((rtp: rtp // { inherit rtp; }) (pkgs.writeTextFile (let
       name = "showsyntax";
     in {
@@ -193,16 +185,19 @@ let
   };
 
   mkdirs = let
-    dirOf = s: let out = concatStringsSep "/" (init (splitString "/" s));
+    dirOf = s: let out = lib.concatStringsSep "/" (lib.init (lib.splitString "/" s));
                in assert out != ""; out;
-    alldirs = attrValues dirs ++ map dirOf (attrValues files);
-  in unique (sort lessThan alldirs);
+    alldirs = lib.attrValues dirs ++ map dirOf (lib.attrValues files);
+  in lib.unique (lib.sort lib.lessThan alldirs);
 
   vim = pkgs.symlinkJoin {
     name = "vim";
     paths = [
-      (pkgs.writeDashBin "vim" ''
+      (pkgs.writers.writeDashBin "vim" ''
         set -efu
+        export PATH=$PATH:${lib.makeBinPath [
+          pkgs.nodejs
+        ]}
         (umask 0077; exec ${pkgs.coreutils}/bin/mkdir -p ${toString mkdirs})
         exec ${pkgs.vim}/bin/vim "$@"
       '')
@@ -267,18 +262,18 @@ let
     syn cluster nix_ind_strings contains=NixIND_STRING
     syn cluster nix_strings contains=NixSTRING
 
-    ${concatStringsSep "\n" (mapAttrsToList (lang: { extraStart ? null }: let
-      startAlts = filter isString [
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (lang: { extraStart ? null }: let
+      startAlts = lib.filter lib.isString [
         ''/\* ${lang} \*/''
         extraStart
       ];
-      sigil = ''\(${concatStringsSep ''\|'' startAlts}\)[ \t\r\n]*'';
+      sigil = ''\(${lib.concatStringsSep ''\|'' startAlts}\)[ \t\r\n]*'';
     in /* vim */ ''
       syn include @nix_${lang}_syntax syntax/${lang}.vim
       unlet b:current_syntax
 
       syn match nix_${lang}_sigil
-        \ X${replaceStrings ["X"] ["\\X"] sigil}\ze\('''\|"\)X
+        \ X${lib.replaceStrings ["X"] ["\\X"] sigil}\ze\('''\|"\)X
         \ nextgroup=nix_${lang}_region_IND_STRING,nix_${lang}_region_STRING
         \ transparent
 
