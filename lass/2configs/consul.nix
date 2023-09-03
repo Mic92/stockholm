@@ -17,9 +17,6 @@
 
       # try to fix random lock loss on leader reelection
       retry_interval = "3s";
-      performance = {
-        raft_multiplier = 8;
-      };
     };
   };
 
