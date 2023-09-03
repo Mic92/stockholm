@@ -9,7 +9,6 @@ python3Packages.buildPythonPackage rec {
   name = "ovh-zone-${version}";
   version = "0.4.4";
   propagatedBuildInputs = with pkgs.python3Packages;[
-    d2to1 # for setup to work
     ovh
     docopt
   ];
