@@ -1,7 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }: let
 
-with import <stockholm/lib>;
-{
+  vmip = "192.168.122.208";
+
+in {
   users.users.riot = {
     uid = genid "riot";
     isNormalUser = true;
@@ -11,7 +12,7 @@ with import <stockholm/lib>;
     ];
   };
 
-  networking.interfaces.et0.ip4 = [
+  networking.interfaces."eth0:0".ip4 = [
     {
       address = "213.239.205.246";
       prefixLength = 24;
