@@ -3,6 +3,10 @@
   krebs.sync-containers3.containers.orange = {
     sshKey = "${toString <secrets>}/orange.sync.key";
   };
+  containers.orange.bindMounts."/var/lib" = {
+    hostPath = "/var/lib/sync-containers3/orange/state";
+    isReadOnly = false;
+  };
   services.nginx.virtualHosts."lassul.us" = {
     # enableACME = config.security;
     # forceSSL = true;
