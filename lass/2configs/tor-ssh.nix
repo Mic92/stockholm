@@ -9,6 +9,8 @@
       }];
       secretKey = <secrets/ssh-tor.priv>;
     };
+    controlSocket.enable = true;
+    client.enable = true;
   };
 }
 
