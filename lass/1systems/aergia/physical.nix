@@ -16,7 +16,7 @@
     efiInstallAsRemovable = true;
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.kernelParams = [
     # use less power with pstate
@@ -70,8 +70,6 @@
   };
   users.users.mainUser.extraGroups = [ "corectrl" ];
 
-  # use newer ryzenadj
-
   # keyboard quirks
   services.xserver.displayManager.sessionCommands = ''
     ${pkgs.xorg.xmodmap}/bin/xmodmap -e 'keycode 96 = F12 Insert F12 F12' # rebind shift + F12 to shift + insert
@@ -102,9 +100,16 @@
   services.logind.extraConfig = ''
     HandlePowerKey=hibernate
   '';
+  # systemd.sleep.extraConfig = ''
+  #   HibernateDelaySec=1800
+  # '';
 
   # firefox touchscreen support
   environment.sessionVariables.MOZ_USE_XINPUT2 = "1";
+
+  # enable thunderbolt
+  services.hardware.bolt.enable = true;
+
   # reinit usb after docking station connect
   services.udev.extraRules = ''
     SUBSYSTEM=="drm", ACTION=="change", RUN+="${pkgs.dash}/bin/dash -c 'echo 0 > /sys/bus/usb/devices/usb9/authorized; echo 1 > /sys/bus/usb/devices/usb9/authorized'"
