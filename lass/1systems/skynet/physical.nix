@@ -12,15 +12,15 @@
 
   networking.hostId = "06442b9a";
 
-  fileSystems."/" =
-    { device = "rpool/root";
-      fsType = "zfs";
-    };
+  fileSystems."/" = {
+    device = "rpool/root";
+    fsType = "zfs";
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/0876-B308";
-      fsType = "vfat";
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/0876-B308";
+    fsType = "vfat";
+  };
 
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="10:0b:a9:a6:44:04", NAME="wl0"
