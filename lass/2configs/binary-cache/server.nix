@@ -1,8 +1,8 @@
 { config, lib, pkgs, ...}:
 {
-  nixpkgs.config.packageOverrides = p: {
-    nix-serve = p.haskellPackages.nix-serve-ng;
-  };
+  # nixpkgs.config.packageOverrides = p: {
+  #   nix-serve = p.haskellPackages.nix-serve-ng;
+  # };
   # generate private key with:
   # nix-store --generate-binary-cache-key my-secret-key my-public-key
   services.nix-serve = {
