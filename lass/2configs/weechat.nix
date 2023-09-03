@@ -17,10 +17,12 @@
           autojoin = [
             "#c3-gsm"
             "#panthermoderns"
+            "#feldoffice"
             "#36c3"
             "#cccac"
             "#nixos"
             "#krebs"
+            "#krebstel"
             "#c-base"
             "#afra"
             "#tvl"
@@ -95,12 +97,6 @@
           password = "\${sec.data.matrix_lassulus}";
           device_name = config.networking.hostName;
         };
-        matrix.server.nixos_dev = {
-          address = "matrix.nixos.dev";
-          username = "@lassulus:nixos.dev";
-          device_name = config.networking.hostName;
-          sso_helper_listening_port = 55123;
-        };
         plugins.var.python.go.short_name = true;
         plugins.var.python.go.short_name_server = true;
         plugins.var.python.go.fuzzy_search = true;
@@ -114,8 +110,6 @@
         logger.file.mask = "$plugin.$name/%Y-%m-%d.weechatlog";
         logger.file.path = "/var/state/weechat_logs";
         logger.look.backlog = 1000;
-        weechat.notify.python.matrix.nixos_dev."!YLoVsCxScyQODoqIbb:hackint.org" = "none"; #c-base
-        weechat.notify.python.matrix.nixos_dev."!bohcSYPVoePqBDWlvE:hackint.org" = "none"; #krebs
         weechat.notify.irc.news."#all" = "highlight";
 
         # setting logger levels for channels is currently not possible declarativly
@@ -184,7 +178,6 @@
         libera_sasl = "9500B5AC3B29F9CAA273F1B89DC99550E038AF95C4B47442B1FB4CB9F0D6B86B26015988AD39E642CA9C4A78DED7F42D1F409B268C93E778"
         r_sasl = "CB6FB1421ED5A9094CD2C05462DB1FA87C4A675628ABD9AEC9928A1A6F3F96C07D9F26472331BAF80B7B73270680EB1BBEFD"
         c3-gsm = "C49DD845900CFDFA93EEBCE4F1ABF4A963EF6082B7DA6410FA701CC77A04BB6C201FCB864988C4F2B97ED7D44D5A28F162"
-        matrix.server.nixos_dev.access_token = "C40FE41B9B7B73553D51D8FCBD53871E940FE7FCCAB543E7F4720A924B8E1D58E2B1E1F460F5476C954A223F78CCB956337F6529159C0ECD7CB0384C13CB7170FF1270A577B1C4FF744D20FCF5C708259896F8D9"
         bitlbee = "814ECAC59D9CF6E8340B566563E5D7E92AB92209B49C1EDE4CAAC32DD0DF1EC511D97C75E840C45D69BB9E3D03E79C"
         matrix_lassulus = "0CA5C0F70A9F893881370F4A665B4CC40FBB1A41E53BC94916CD92B029103528611EC0B390116BE60FA79AE10F486E96E17B0824BE2DE1C97D87B88F5407330DAD70C044147533C36B09B7030CAD97"
       '');
