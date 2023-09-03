@@ -3,10 +3,6 @@ let
   ctr.name = "red";
 in
 {
-  imports = [
-    <stockholm/lass/2configs/container-networking.nix>
-  ];
-
 
   krebs.sync-containers3.containers.red = {
     sshKey = "${toString <secrets>}/containers/red/sync.key";
