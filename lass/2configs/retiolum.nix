@@ -22,7 +22,6 @@
     ];
     extraConfig = ''
       AutoConnect = no
-      StrictSubnets = yes
       ${lib.optionalString (config.krebs.build.host.nets.retiolum.via != null) ''
         LocalDiscovery = no
       ''}
@@ -36,6 +35,14 @@
       "${config.krebs.build.host.nets.retiolum.ip4.addr}/16"
       "${config.krebs.build.host.nets.retiolum.ip6.addr}/16"
     ];
+    linkConfig = {
+      MTUBytes = "1377";
+      RequiredForOnline = "no";
+    };
+    networkConfig = {
+      IgnoreCarrierLoss = "10s";
+      LinkLocalAddressing = "no";
+    };
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
