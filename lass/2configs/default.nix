@@ -40,6 +40,7 @@ with import <stockholm/lib>;
             "video"
             "fuse"
             "wheel"
+            "tor"
           ];
           openssh.authorizedKeys.keys = [
             config.krebs.users.lass.pubkey
@@ -74,6 +75,7 @@ with import <stockholm/lib>;
   krebs = {
     enable = true;
     build.user = config.krebs.users.lass;
+    ssl.trustIntermediate = true;
   };
 
   nix.useSandbox = true;
@@ -93,12 +95,15 @@ with import <stockholm/lib>;
   #stockholm
     deploy
     git
+    git-absorb
     git-preview
     gnumake
     jq
+    nix-output-monitor
 
   #style
     rxvt-unicode-unwrapped.terminfo
+    alacritty.terminfo
 
   #monitoring tools
     htop
@@ -109,6 +114,7 @@ with import <stockholm/lib>;
     iftop
     tcpdump
     mosh
+    eternal-terminal
     sshify
 
   #stuff for dl
@@ -226,12 +232,17 @@ with import <stockholm/lib>;
     noipv4ll
   '';
 
+  networking.extraHosts = ''
+    10.42.0.1 styx.gg23
+  '';
+
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
 
   # use 24:00 time format, the default got sneakily changed around 20.03
   i18n.defaultLocale = mkDefault "C.UTF-8";
   time.timeZone = mkDefault"Europe/Berlin";
-
-  system.stateVersion = mkDefault "20.03";
 
   # disable doc usually
   documentation.nixos.enable = mkDefault false;
