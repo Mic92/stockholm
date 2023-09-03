@@ -22,11 +22,11 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/fetchWallpaper.nix>
     <stockholm/lass/2configs/home-media.nix>
     <stockholm/lass/2configs/syncthing.nix>
-    <stockholm/lass/2configs/sync/sync.nix>
     # <stockholm/lass/2configs/idc.nix>
     <stockholm/lass/2configs/ppp/umts-stick.nix>
     <stockholm/lass/2configs/snapserver.nix>
     <stockholm/lass/2configs/snapclient.nix>
+    <stockholm/lass/2configs/consul.nix>
   ];
 
   krebs.build.host = config.krebs.hosts.styx;

@@ -16,7 +16,6 @@
   boot.loader.grub.device = "/dev/disk/by-id/ata-SanDisk_SSD_G5_BICS4_20248F446514";
   boot.loader.grub.efiInstallAsRemovable = true;
 
-
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/ee5c9099-17fa-401e-852e-67cb4ae068f4";
       fsType = "ext4";
