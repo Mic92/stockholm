@@ -12,9 +12,29 @@
     '';
   };
 
+  services.nginx.virtualHosts."c3gsm.de" = {
+    forceSSL = true;
+    enableACME = true;
+    locations."/".extraConfig = ''
+      root /srv/http/c3gsm.de;
+    '';
+  };
+
   users.users.c3gsm-docs = {
     isNormalUser = true;
     home = "/srv/http/docs.c3gsm.de";
+    createHome = true;
+    homeMode = "750";
+    useDefaultShell = true;
+    group = "nginx";
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAlW1fvCrVXhVH/z76fXBWYR/qyecYTE9VOOkFLJ6OwG user@osmocom-dev"
+    ];
+  };
+
+  users.users.c3gsm = {
+    isNormalUser = true;
+    home = "/srv/http/c3gsm.de";
     createHome = true;
     homeMode = "750";
     useDefaultShell = true;
