@@ -15,18 +15,20 @@ with (import <stockholm/lib>);
       # pkgs.tdlib-purple
       # pkgs.purple-gowhatsapp
     ];
+    configDir = "/var/state/bitlbee";
   };
-
-  users.users.bitlbee = {
-    uid = genid_uint31 "bitlbee";
-    isSystemUser = true;
-    group = "bitlbee";
-  };
-  users.groups.bitlbee = {};
 
   systemd.services.bitlbee.serviceConfig = {
-    DynamicUser = lib.mkForce false;
-    User = "bitlbee";
-    StateDirectory = lib.mkForce null;
+    ExecStartPre = [
+      "+${pkgs.writeDash "setup-bitlbee" ''
+        ${pkgs.coreutils}/bin/chown bitlbee:bitlbee /var/state/bitlbee || :
+      ''}"
+    ];
+    ReadWritePaths = [
+      "/var/state/bitlbee"
+    ];
   };
+  systemd.tmpfiles.rules = [
+    "d /var/state/bitlbee 0700 - - -"
+  ];
 }
