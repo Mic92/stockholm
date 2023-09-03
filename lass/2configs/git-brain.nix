@@ -7,7 +7,6 @@ let
 
   krebs-repos = mapAttrs make-krebs-repo {
     brain = { };
-    krebs-secrets = { };
   };
 
 
