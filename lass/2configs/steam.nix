@@ -1,10 +1,6 @@
 { config, pkgs, ... }:
 
 {
-
-  imports = [
-    ./games.nix
-  ];
   #
   # Steam stuff
   # source: https://nixos.org/wiki/Talk:Steam
