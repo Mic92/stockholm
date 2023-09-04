@@ -101,6 +101,25 @@
               };
             };
           };
+          docked1_hack = {
+            fingerprint = {
+              eDP = config.services.autorandr.profiles.default.fingerprint.eDP;
+              HDMI-A-0 = "00ffffffffffff0010ac31d14c3346300f20010380462878ea26f5af4f46a5240f5054a54b00714f8140818081c081009500b300d1c0565e00a0a0a0295030203500b9882100001a000000ff00444342375847330a2020202020000000fc0044454c4c204733323233440a20000000fd0030901ee63c000a20202020202001db020346f14d030212110113042f141f05103f2309070783010000e200ea67030c001000383c67d85dc4017888006d1a0000020b3090e607622c622ce305c000e606050162622c40e7006aa0a0675008209804b9882100001a6fc200a0a0a05550302035001d4e3100001a000000000000000000000000000000000000000000fc";
+            };
+            config = {
+              HDMI-A-0 = {
+                enable = true;
+                primary = true;
+                position = "0x0";
+                mode = "2560x1440";
+                rate = "165.08";
+              };
+              eDP = config.services.autorandr.profiles.default.config.eDP // {
+                primary = false;
+                position = "640x1440";
+              };
+            };
+          };
         };
       };
     }
