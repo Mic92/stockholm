@@ -15,7 +15,6 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/weechat.nix>
     <stockholm/lass/2configs/bitlbee.nix>
 
-    <stockholm/lass/2configs/muchsync.nix>
     <stockholm/lass/2configs/pass.nix>
 
     <stockholm/lass/2configs/git-brain.nix>
