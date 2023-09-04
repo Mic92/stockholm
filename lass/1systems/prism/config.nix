@@ -345,6 +345,25 @@ with import <stockholm/lib>;
          { predicate = "-i wiregrill -p udp --dport 4000:4002"; target = "ACCEPT"; }
       ];
     }
+    { # acme fallback for neoprism migration
+      services.nginx.virtualHosts."lassul.us".acmeFallbackHost = "orange.r";
+      services.nginx.virtualHosts."radio.lassul.us".acmeFallbackHost = "neoprism.r";
+      services.nginx.virtualHosts."flix.lassul.us".acmeFallbackHost = "neoprism.r";
+      services.nginx.virtualHosts."jitsi.lassul.us".acmeFallbackHost = "neoprism.r";
+      services.nginx.virtualHosts."cgit.lassul.us".acmeFallbackHost = "orange.r";
+      services.nginx.virtualHosts."mail.lassul.us".acmeFallbackHost = "neoprism.r";
+      services.nginx.virtualHosts."mumble.lassul.us".acmeFallbackHost = "neoprism.r";
+      services.nginx.virtualHosts."mail.ubikmedia.eu" = {
+        enableACME = true;
+        forceSSL = true;
+        acmeFallbackHost = "ubik.r";
+        locations."/" = {
+          recommendedProxySettings = true;
+          proxyWebsockets = true;
+          proxyPass = "https://ubik.r";
+        };
+      };
+    }
   ];
 
   krebs.build.host = config.krebs.hosts.prism;
