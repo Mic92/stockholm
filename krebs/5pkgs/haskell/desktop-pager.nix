@@ -4,7 +4,7 @@
 , utf8-string, X11
 }:
 mkDerivation {
-  pname = "pager";
+  pname = "desktop-pager";
   version = "1.0.0";
   src = fetchgit {
     url = "https://cgit.krebsco.de/pager";
