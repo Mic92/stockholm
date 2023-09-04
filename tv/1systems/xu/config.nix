@@ -37,7 +37,6 @@ with import ./lib;
         gnupg1compat
         haskellPackages.hledger
         jq
-        krebszones
         mkpasswd
         netcat
         netcup
