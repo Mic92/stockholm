@@ -200,6 +200,14 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/docker.nix>
     {
 
+      services.nginx.virtualHosts."flix.lassul.us" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://yellow.r:8096";
+          proxyWebsockets = true;
+          recommendedProxySettings = true;
+        };
       };
       services.nginx.virtualHosts."lassul.us" = {
         locations."^~ /flix/".extraConfig = ''
@@ -210,7 +218,7 @@ with import <stockholm/lib>;
           auth_basic_user_file ${pkgs.writeText "flix-user-pass" ''
             krebs:$apr1$1Fwt/4T0$YwcUn3OBmtmsGiEPlYWyq0
           ''};
-          proxy_pass http://10.233.2.14:80/;
+          proxy_pass http://yellow.r:80/;
           proxy_set_header Accept-Encoding "";
           sub_filter "https://lassul.us/" "https://lassul.us/flix/";
           sub_filter_once off;
