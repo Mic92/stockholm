@@ -177,7 +177,7 @@ let
       ${buildTables iptables-version cfg.tables}
     '';
 
-  startScript = pkgs.writeDash "krebs-iptables_start" ''
+  startScript = pkgs.writers.writeDash "krebs-iptables_start" ''
     set -euf
     iptables-restore < ${rules "v4"}
     ip6tables-restore < ${rules "v6"}
