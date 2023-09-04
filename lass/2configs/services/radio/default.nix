@@ -117,6 +117,7 @@ in {
           sleep 60
         done
       '';
+      Restart = "on-failure";
     };
   };
 
