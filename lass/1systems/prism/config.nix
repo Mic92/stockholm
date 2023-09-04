@@ -200,17 +200,6 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/docker.nix>
     {
 
-      services.nginx.virtualHosts."jelly.r" = {
-        locations."/".extraConfig = ''
-          proxy_pass http://10.233.2.14:8096/;
-          proxy_set_header Accept-Encoding "";
-        '';
-      };
-      services.nginx.virtualHosts."flix.r" = {
-        locations."/".extraConfig = ''
-          proxy_pass http://10.233.2.14:80/;
-          proxy_set_header Accept-Encoding "";
-        '';
       };
       services.nginx.virtualHosts."lassul.us" = {
         locations."^~ /flix/".extraConfig = ''
