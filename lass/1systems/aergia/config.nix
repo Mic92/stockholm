@@ -112,7 +112,6 @@
 
   environment.systemPackages = with pkgs; [
     brain
-    bank
     l-gen-secrets
     generate-secrets
     nixpkgs-review
