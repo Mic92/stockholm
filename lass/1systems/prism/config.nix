@@ -160,40 +160,6 @@ with import <stockholm/lib>;
       };
     }
     {
-      users.users.jeschli = {
-        uid = genid_uint31 "jeschli";
-        isNormalUser = true;
-        openssh.authorizedKeys.keys = with config.krebs.users; [
-          jeschli.pubkey
-          jeschli-bln.pubkey
-          jeschli-bolide.pubkey
-          jeschli-brauerei.pubkey
-        ];
-      };
-      krebs.git.rules = [
-        {
-          user = with config.krebs.users; [
-            jeschli
-            jeschli-bln
-            jeschli-bolide
-            jeschli-brauerei
-          ];
-          repo = [ config.krebs.git.repos.xmonad-stockholm ];
-          perm = with git; push "refs/heads/jeschli*" [ fast-forward non-fast-forward create delete merge ];
-        }
-        {
-          user = with config.krebs.users; [
-            jeschli
-            jeschli-bln
-            jeschli-bolide
-            jeschli-brauerei
-          ];
-          repo = [ config.krebs.git.repos.stockholm ];
-          perm = with git; push "refs/heads/staging/jeschli*" [ fast-forward non-fast-forward create delete merge ];
-        }
-      ];
-    }
-    {
       krebs.repo-sync.repos.stockholm.timerConfig = {
         OnBootSec = "5min";
         OnUnitInactiveSec = "2min";
