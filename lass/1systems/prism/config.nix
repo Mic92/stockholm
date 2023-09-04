@@ -168,7 +168,6 @@ with import <stockholm/lib>;
     }
     <stockholm/lass/2configs/minecraft.nix>
     <stockholm/lass/2configs/codimd.nix>
-    <stockholm/lass/2configs/searx.nix>
     <stockholm/lass/2configs/go.nix>
     {
       environment.systemPackages = [ pkgs.cryptsetup ];
