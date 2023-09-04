@@ -9,7 +9,9 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/libvirt.nix>
     <stockholm/lass/2configs/tv.nix>
     <stockholm/lass/2configs/websites/lassulus.nix>
+    <stockholm/lass/2configs/services/git/proxy.nix>
     <stockholm/lass/2configs/monitoring/telegraf.nix>
+    <stockholm/lass/2configs/consul.nix>
     {
       services.nginx.enable = true;
       imports = [
@@ -114,11 +116,9 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/iodined.nix>
     <stockholm/lass/2configs/paste.nix>
     <stockholm/lass/2configs/syncthing.nix>
-    <stockholm/lass/2configs/green-host.nix>
     <stockholm/lass/2configs/reaktor-coders.nix>
     <stockholm/lass/2configs/ciko.nix>
     <stockholm/lass/2configs/container-networking.nix>
-    <stockholm/lass/2configs/services/coms/jitsi.nix>
     <stockholm/lass/2configs/fysiirc.nix>
     <stockholm/lass/2configs/bgt-bot>
     <stockholm/lass/2configs/matrix.nix>
@@ -139,13 +139,9 @@ with import <stockholm/lib>;
         "= /wallpaper.png".extraConfig = ''
           alias /var/realwallpaper/realwallpaper.png;
         '';
-      };
-    }
-    {
-      krebs.repo-sync.repos.stockholm.timerConfig = {
-        OnBootSec = "5min";
-        OnUnitInactiveSec = "2min";
-        RandomizedDelaySec = "2min";
+        "= /wallpaper-stars-berlin.png".extraConfig = ''
+          alias /var/realwallpaper/realwallpaper-krebs-stars-berlin.png;
+        '';
       };
     }
     <stockholm/lass/2configs/minecraft.nix>
@@ -196,8 +192,8 @@ with import <stockholm/lib>;
         { predicate = "-p udp --dport 60000:61000"; target = "ACCEPT"; }
       ];
     }
+    <stockholm/lass/2configs/services/coms/jitsi.nix>
     <stockholm/lass/2configs/services/coms/murmur.nix>
-    <stockholm/lass/2configs/docker.nix>
     {
 
       services.nginx.virtualHosts."flix.lassul.us" = {
@@ -243,7 +239,7 @@ with import <stockholm/lib>;
       users.groups.download = {};
       users.users = {
         download = {
-          createHome = true;
+          createHome = false;
           group = "download";
           name = "download";
           home = "/var/download";
