@@ -60,7 +60,7 @@ let
     };
   };
 
-  startScript = pkgs.writeDash "power-action" ''
+  startScript = pkgs.writers.writeDash "power-action" ''
     set -euf
 
     power="$(${powerlvl})"
@@ -77,11 +77,11 @@ let
   writeRule = _: plan:
     "if [ $power -ge ${toString plan.lowerLimit} ] && [ $power -le ${toString plan.upperLimit} ] ${charging_check plan}; then ${plan.action}; fi";
 
-  powerlvl = pkgs.writeDash "powerlvl" ''
+  powerlvl = pkgs.writers.writeDash "powerlvl" ''
     cat /sys/class/power_supply/${cfg.battery}/capacity
   '';
 
-  state = pkgs.writeDash "state" ''
+  state = pkgs.writers.writeDash "state" ''
     if [ "$(cat /sys/class/power_supply/${cfg.battery}/status)" = "Discharging" ]
       then echo "false"
       else echo "true"
