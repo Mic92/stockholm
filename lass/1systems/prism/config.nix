@@ -81,24 +81,6 @@ with import <stockholm/lib>;
       };
     }
     {
-      #hotdog
-      systemd.services."container@hotdog".reloadIfChanged = mkForce false;
-      containers.hotdog = {
-        config = { ... }: {
-          environment.systemPackages = [ pkgs.git ];
-          services.openssh.enable = true;
-          users.users.root.openssh.authorizedKeys.keys = [
-            config.krebs.users.lass.pubkey
-          ];
-        };
-        autoStart = false;
-        enableTun = true;
-        privateNetwork = true;
-        hostAddress = "10.233.2.1";
-        localAddress = "10.233.2.2";
-      };
-    }
-    {
       services.nginx.virtualHosts."radio.lassul.us" = {
         enableACME = true;
         addSSL = true;
