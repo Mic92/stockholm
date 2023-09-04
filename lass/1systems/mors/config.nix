@@ -33,13 +33,13 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/rtl-sdr.nix>
     <stockholm/lass/2configs/print.nix>
     <stockholm/lass/2configs/network-manager.nix>
-    <stockholm/lass/2configs/nfs-dl.nix>
-    <stockholm/lass/2configs/green-host.nix>
-    <stockholm/krebs/2configs/news-host.nix>
+    <stockholm/lass/2configs/yellow-mounts/samba.nix>
     <stockholm/lass/2configs/ppp/x220-modem.nix>
     <stockholm/lass/2configs/ppp/umts-stick.nix>
     # <stockholm/lass/2configs/remote-builder/morpheus.nix>
     # <stockholm/lass/2configs/remote-builder/prism.nix>
+    <stockholm/lass/2configs/consul.nix>
+    <stockholm/lass/2configs/networkd.nix>
     <stockholm/lass/2configs/autotether.nix>
     {
       krebs.iptables.tables.filter.INPUT.rules = [
@@ -133,13 +133,17 @@ with import <stockholm/lib>;
 
   nixpkgs.config.android_sdk.accept_license = true;
   programs.adb.enable = true;
-  users.users.mainUser.extraGroups = [ "adbusers" "docker" ];
-  virtualisation.docker.enable = true;
 
-  virtualisation.libvirtd.enable = true;
 
   services.earlyoom = {
     enable = true;
     freeMemThreshold = 5;
   };
+
+
+
+  nix.trustedUsers = [ "root" "lass" ];
+
+  services.nscd.enableNsncd = true;
+
 }
