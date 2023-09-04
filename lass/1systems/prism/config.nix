@@ -152,28 +152,6 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/codimd.nix>
     <stockholm/lass/2configs/go.nix>
     {
-      environment.systemPackages = [ pkgs.cryptsetup ];
-      systemd.services."container@red".reloadIfChanged = mkForce false;
-      containers.red = {
-        config = { ... }: {
-          environment.systemPackages = [ pkgs.git ];
-          services.openssh.enable = true;
-          users.users.root.openssh.authorizedKeys.keys = [
-            config.krebs.users.lass.pubkey
-          ];
-        };
-        autoStart = false;
-        enableTun = true;
-        privateNetwork = true;
-        hostAddress = "10.233.2.3";
-        localAddress = "10.233.2.4";
-      };
-    }
-    {
-      users.users.download.openssh.authorizedKeys.keys = [
-      ];
-    }
-    {
       lass.nichtparasoup.enable = true;
       services.nginx = {
         enable = true;
