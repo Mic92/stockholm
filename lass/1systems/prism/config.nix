@@ -9,7 +9,7 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/libvirt.nix>
     <stockholm/lass/2configs/tv.nix>
     <stockholm/lass/2configs/websites/lassulus.nix>
-    <stockholm/lass/2configs/telegraf.nix>
+    <stockholm/lass/2configs/monitoring/telegraf.nix>
     {
       services.nginx.enable = true;
       imports = [
