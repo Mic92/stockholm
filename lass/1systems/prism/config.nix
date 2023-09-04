@@ -169,7 +169,7 @@ with import <stockholm/lib>;
         <stockholm/lass/2configs/wiregrill.nix>
       ];
       krebs.iptables.tables.nat.PREROUTING.rules = mkOrder 999 [
-        { v6 = false; predicate = "-s 10.244.1.0/24"; target = "ACCEPT"; }
+        { v6 = false; predicate = "-s 10.244.0.0/16"; target = "ACCEPT"; }
         { v4 = false; predicate = "-s 42:1::/32"; target = "ACCEPT"; }
       ];
       krebs.iptables.tables.filter.FORWARD.rules = mkBefore [
@@ -178,7 +178,7 @@ with import <stockholm/lib>;
       ];
       krebs.iptables.tables.nat.POSTROUTING.rules = [
         { v4 = false; predicate = "-s 42:1::/32 ! -d 42:1::/48"; target = "MASQUERADE"; }
-        { v6 = false; predicate = "-s 10.244.1.0/24 ! -d 10.244.1.0/24"; target = "MASQUERADE"; }
+        { v6 = false; predicate = "-s 10.244.0.0/16 ! -d 10.244.0.0/16"; target = "MASQUERADE"; }
       ];
       services.dnsmasq = {
         enable = true;
