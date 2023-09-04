@@ -10,7 +10,7 @@ let
     SPEAKER=$[ $RANDOM % 900 ]
     while read line; do
       echo "$line" |
-        ${pkgs.larynx}/bin/larynx \
+        ${pkgs.piper-tts}/bin/piper \
           --model ${pkgs.fetchzip {
             url = "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-us-libritts-high.tar.gz";
             hash = "sha256-jCoK4p0O7BuF0nr6Sfj40tpivCvU5M3GHKQRg1tfIO8=";
@@ -126,5 +126,6 @@ in
   environment.systemPackages = [
     send_to_radio
     newsshow
+    tts
   ];
 }
