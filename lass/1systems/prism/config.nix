@@ -199,21 +199,6 @@ with import <stockholm/lib>;
     <stockholm/lass/2configs/services/coms/murmur.nix>
     <stockholm/lass/2configs/docker.nix>
     {
-      systemd.services."container@yellow".reloadIfChanged = mkForce false;
-      containers.yellow = {
-        config = { ... }: {
-          environment.systemPackages = [ pkgs.git ];
-          services.openssh.enable = true;
-          users.users.root.openssh.authorizedKeys.keys = [
-            config.krebs.users.lass.pubkey
-          ];
-        };
-        autoStart = false;
-        enableTun = true;
-        privateNetwork = true;
-        hostAddress = "10.233.2.13";
-        localAddress = "10.233.2.14";
-      };
 
       services.nginx.virtualHosts."jelly.r" = {
         locations."/".extraConfig = ''
