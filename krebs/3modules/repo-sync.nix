@@ -123,7 +123,7 @@ let
 
     privateKeyFile = mkOption {
       type = types.absolute-pathname;
-      default = toString <secrets> + "/repo-sync.ssh.key";
+      default = "${config.krebs.secret.directory}/repo-sync.ssh.key";
       defaultText = "‹secrets/repo-sync.ssh.key›";
     };
 

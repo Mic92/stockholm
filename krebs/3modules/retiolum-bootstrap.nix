@@ -14,12 +14,12 @@ in
     sslCertificate = mkOption {
         type = types.str;
         description = "Certificate file to use for ssl";
-        default = "${toString <secrets>}/tinc.krebsco.de.crt" ;
+        default = "${config.krebs.secret.directory}/tinc.krebsco.de.crt" ;
     };
     sslCertificateKey = mkOption {
         type = types.str;
         description = "Certificate key to use for ssl";
-        default = "${toString <secrets>}/tinc.krebsco.de.key";
+        default = "${config.krebs.secret.directory}/tinc.krebsco.de.key";
     };
     # in use:
     #  <secrets/tinc.krebsco.de.crt>
