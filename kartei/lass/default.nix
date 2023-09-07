@@ -17,7 +17,7 @@ in {
   hosts = lib.mapAttrs (_: lib.recursiveUpdate {
     owner = config.krebs.users.lass;
     consul = true;
-    ci = true;
+    ci = false;
     monitoring = true;
   }) (
     lib.genAttrs hostFiles (host: import (./. + "/${host}.nix") {
