@@ -17,7 +17,7 @@ let
             stripRoot = false;
           }}/en-us-libritts-high.onnx \
           -s "$SPEAKER" \
-          -f "$OUTPUT"/"$offset".wav
+          -f "$OUTPUT"/"$offset".wav >/dev/null
 
       ((offset+=1))
     done
