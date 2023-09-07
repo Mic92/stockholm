@@ -2,7 +2,7 @@
 
   alacritty-cfg = extrVals: builtins.toJSON ({
     font = let
-      family = "Iosevka";
+      family = "Iosevka Term SS15";
     in {
       normal = {
         family = family;
@@ -20,13 +20,14 @@
         family = family;
         style = "Bold Italic";
       };
-      size = 8;
+      size = 12;
     };
     live_config_reload = true;
     window.dimensions = {
       columns = 80;
       lines = 20;
     };
+    env.WINIT_X11_SCALE_FACTOR = "1.0";
     # window.opacity = 0;
     hints.enabled = [
       {
