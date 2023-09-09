@@ -1,6 +1,25 @@
 { config, pkgs, lib, ... }:
 with lib; {
 
+  options.krebs.zone-head-config = mkOption {
+    type = lib.types.attrsOf lib.types.str;
+    description = ''
+      The zone configuration head which is being used to create the
+      zone files. The string for each key is pre-pended to the zone file.
+    '';
+    default = {
+      "krebsco.de" = /* bindzone */ ''
+        $TTL 60
+        @ 3600 IN SOA spam.krebsco.de. spam.krebsco.de. 0 7200 3600 86400 3600
+        @ 3600 IN NS ns1
+        @ 3600 IN NS ni
+        @ 3600 IN NS ns2.he.net.
+        @ 3600 IN NS ns3.he.net.
+        @ 3600 IN NS ns2.hosting.de.
+      '';
+    };
+  };
+
   config = {
     environment.etc =
       mapAttrs'

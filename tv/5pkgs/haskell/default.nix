@@ -4,7 +4,11 @@ let
     mapNixDir (path: self.callPackage path {}) [
       <stockholm/krebs/5pkgs/haskell>
       ./.
-    ];
+    ] // {
+      xmonad-tv = self.callPackage ./xmonad-tv {
+        pager = self.desktop-pager;
+      };
+    };
 in
   self: super: {
     haskell = super.haskell // {

@@ -24,7 +24,7 @@ in {
     path = "/var/lib/step-ca/intermediate_ca.key";
     owner.name = "root";
     mode = "1444";
-    source-path = builtins.toString <secrets> + "/acme_ca.key";
+    source-path = "${config.krebs.secret.directory}/acme_ca.key";
   };
   services.step-ca = {
     enable = true;

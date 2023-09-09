@@ -96,7 +96,7 @@ in
   krebs.secret.files.gollum = {
     path = "${config.services.gollum.stateDir}/.ssh/id_ed25519";
     owner = { name = "gollum"; };
-    source-path = "${<secrets/gollum.id_ed25519>}";
+    source-path = "${config.krebs.secret.directory}/gollum.id_ed25519";
   };
 
   security.sudo.extraConfig = ''

@@ -108,7 +108,7 @@ in {
   krebs.secret.files.calendar = {
     path = "/var/lib/radicale/.ssh/id_ed25519";
     owner = { name = "radicale"; };
-    source-path = "${<secrets/radicale.id_ed25519>}";
+    source-path = "${config.krebs.secret.directory}/radicale.id_ed25519";
   };
 
   security.sudo.extraConfig = ''

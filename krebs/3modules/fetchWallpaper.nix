@@ -40,7 +40,7 @@ let
     };
   };
 
-  fetchWallpaperScript = pkgs.writeDash "fetchWallpaper" ''
+  fetchWallpaperScript = pkgs.writers.writeDash "fetchWallpaper" ''
     set -euf
 
     mkdir -p ${cfg.stateDir}

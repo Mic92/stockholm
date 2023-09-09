@@ -98,7 +98,7 @@ in {
   krebs.secret.files.konsens = {
     path = "/var/lib/konsens/.ssh/id_ed25519";
     owner = konsens-user;
-    source-path = "${<secrets/konsens.id_ed25519>}";
+    source-path = "${config.krebs.secret.directory}/konsens.id_ed25519>";
   };
 
   imports = [

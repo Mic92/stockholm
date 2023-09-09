@@ -33,7 +33,7 @@ pkgs.symlinkJoin {
           -ti vt340 \
           -xrm '*geometry: 32x10' \
           -xrm '*internalBorder: 2' \
-          -e ${pkgs.haskellPackages.pager}/bin/pager "$@"
+          -e ${pkgs.haskellPackages.desktop-pager}/bin/pager "$@"
     '')
     pkgs.haskellPackages.pager
   ];

@@ -165,7 +165,8 @@ in {
       owner = config.krebs.users.krebs;
       extraZones = {
         "krebsco.de" = /* bindzone */ ''
-          krebsco.de. 60 IN A ${config.krebs.hosts.ponte.nets.internet.ip4.addr}
+          @ IN A ${config.krebs.hosts.ponte.nets.internet.ip4.addr}
+          ns1 IN A ${config.krebs.hosts.ponte.nets.internet.ip4.addr}
         '';
       };
       nets = rec {
@@ -177,6 +178,12 @@ in {
           aliases = [
             "ponte.i"
           ];
+        };
+        intranet = {
+          ip4 = rec {
+            addr = "10.0.0.234";
+            prefix = "${addr}/24";
+          };
         };
         retiolum = {
           via = internet;
