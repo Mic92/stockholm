@@ -10,8 +10,8 @@ in {
   services.syncthing = {
     enable = true;
     configDir = "/var/lib/syncthing";
-    key = toString <secrets/syncthing.key>;
-    cert = toString <secrets/syncthing.cert>;
+    key = "${config.krebs.secret.directory}/syncthing.key";
+    cert = "${config.krebs.secret.directory}/syncthing.cert";
     # workaround for infinite recursion on unstable, remove in 23.11
   } // (if builtins.hasAttr "settings" options.services.syncthing then
     { settings.devices = mk_peers used_peers; }

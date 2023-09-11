@@ -13,12 +13,12 @@
       config.krebs.users.makefu.pubkey
       config.krebs.users.tv.pubkey
     ];
-    hostKeys = [ <secrets/initrd/openssh_host_ecdsa_key> ];
+    hostKeys = [ "${config.krebs.secret.directory}/initrd/openssh_host_ecdsa_key" ];
   };
   boot.initrd.availableKernelModules = [ "e1000e" ];
 
   boot.initrd.secrets = {
-    "/etc/tor/onion/bootup" = <secrets/initrd>;
+    "/etc/tor/onion/bootup" = "${config.krebs.secret.directory}/initrd";
   };
 
   boot.initrd.extraUtilsCommands = ''

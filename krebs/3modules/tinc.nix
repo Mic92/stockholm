@@ -149,7 +149,7 @@ with import ../../lib/pure.nix { inherit lib; }; {
 
         privkey = mkOption {
           type = types.absolute-pathname;
-          default = toString <secrets> + "/${tinc.config.netname}.rsa_key.priv";
+          default = "${config.krebs.secret.directory}/${tinc.config.netname}.rsa_key.priv";
           defaultText = "‹secrets/‹netname›.rsa_key.priv›";
         };
 
@@ -158,7 +158,7 @@ with import ../../lib/pure.nix { inherit lib; }; {
           default =
             if tinc.config.host.nets.${netname}.tinc.pubkey_ed25519 == null
               then null
-              else toString <secrets> + "/${tinc.config.netname}.ed25519_key.priv";
+              else "${config.krebs.secret.directory}/${tinc.config.netname}.ed25519_key.priv";
           defaultText = "‹secrets/‹netname›.ed25519_key.priv›";
         };
 

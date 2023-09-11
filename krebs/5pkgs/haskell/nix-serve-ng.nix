@@ -6,11 +6,11 @@
 }:
 mkDerivation {
   pname = "nix-serve-ng";
-  version = "1.0.0";
+  version = "1.0.1";
   src = fetchgit {
     url = "https://github.com/aristanetworks/nix-serve-ng";
-    sha256 = "0mqp67z5mi8rsjahdh395n7ppf0b65k8rd3pvnl281g02rbr69y2";
-    rev = "433f70f4daae156b84853f5aaa11987aa5ce7277";
+    sha256 = "sha256-PkzwtjUgYuqfWtCH1nRqVRaajihN1SqMVjWmoSG/CCY=";
+    rev = "9b546864f4090736f3f9069a01ea5d42cf7bab7c";
     fetchSubmodules = true;
   };
   isLibrary = false;

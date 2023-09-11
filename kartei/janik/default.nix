@@ -1,12 +1,12 @@
-with import ../../lib;
-{ config, ... }: let
-  hostDefaults = hostName: host: flip recursiveUpdate host ({
+{ config, lib, ... }: let
+  slib = import ../../lib/pure.nix { inherit lib; };
+  hostDefaults = hostName: host: lib.flip lib.recursiveUpdate host ({
     ci = false;
     external = true;
     monitoring = false;
-  } // optionalAttrs (host.nets?retiolum) {
+  } // lib.optionalAttrs (host.nets?retiolum) {
     nets.retiolum.ip6.addr =
-      (krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
+      (slib.krebs.genipv6 "retiolum" "external" { inherit hostName; }).address;
   });
 in {
   users.janik = {
@@ -16,7 +16,7 @@ in {
     owner = config.krebs.users.janik;
     nets.retiolum = {
       aliases = [ "hertz.janik.r" ];
-      ip6.addr = (lib.krebs.genipv6 "retiolum" "janik" { hostName = "hertz"; }).address;
+      ip6.addr = (slib.krebs.genipv6 "retiolum" "janik" { hostName = "hertz"; }).address;
       tinc.pubkey = ''
         -----BEGIN RSA PUBLIC KEY-----
         MIICCgKCAgEA0mqxrdVU9wFhNZYGWEknJpKV4yIodNlaCIKDPVhU5wmlzh2szKUS

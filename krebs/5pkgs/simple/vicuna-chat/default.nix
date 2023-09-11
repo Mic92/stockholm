@@ -23,7 +23,7 @@ pkgs.writers.writeDashBin "vicuna-chat" ''
   add_to_context "{\"role\": \"user\", \"content\": \"$PROMPT\"}"
   response=$(
     jq -nc --slurpfile context "$CONTEXT" '{
-      model: "vicuna-13b",
+      model: "vicuna-13b-v1.5-16k",
       messages: $context[0],
     }' |
       curl -Ss http://vicuna.r/v1/chat/completions -H 'Content-Type: application/json' -d @-

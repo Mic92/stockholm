@@ -20,14 +20,14 @@ let
     };
 
     dkim = mkOption {
-      type = types.listOf (types.submodule ({ config, ... }: {
+      type = types.listOf (types.submodule (dkim: {
         options = {
           domain = mkOption {
             type = types.str;
           };
           private_key = mkOption {
             type = types.absolute-pathname;
-            default = toString <secrets> + "/${config.domain}.dkim.priv";
+            default = "${config.krebs.secret.directory}/${dkim.config.domain}.dkim.priv";
             defaultText = "‹secrets/‹domain›.dkim.priv›";
           };
           selector = mkOption {

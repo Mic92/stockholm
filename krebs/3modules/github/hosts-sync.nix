@@ -22,7 +22,7 @@ let
     };
     ssh-identity-file = mkOption {
       type = types.suffixed-str [".ssh.id_ed25519" ".ssh.id_rsa"];
-      default = toString <secrets/github-hosts-sync.ssh.id_ed25519>;
+      default = "${config.krebs.secret.directory}/github-hosts-sync.ssh.id_ed25519";
       defaultText = "‹secrets/github-hosts-sync.ssh.id_ed25519›";
     };
     url = mkOption {

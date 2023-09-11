@@ -43,7 +43,7 @@ pkgs.writers.writeDashBin "fzfmenu" ''
   set -efu
 
   # Spawn terminal if called without one, like e.g. from a window manager.
-  if [ -z ''${TERM+x} ]; then
+  if [ -z ''${TERM+x} ] || [ $TERM = dumb ]; then
     exec 3<&0
     exec 4>&1
     export FZFMENU_INPUT_FD=3
