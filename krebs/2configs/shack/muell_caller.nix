@@ -21,7 +21,7 @@ let
       install -m755 -D call.py  $out/bin/call-muell
     '';
   };
-  cfg = "${toString <secrets>}/tell.json";
+  cfg = "${config.krebs.secret.directory}/tell.json";
 in {
   systemd.services.call_muell = {
     description = "call muell";

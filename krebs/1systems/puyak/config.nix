@@ -113,7 +113,7 @@
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;
-  krebs.hosts.puyak.ssh.privkey.path = <secrets/ssh.id_ed25519>;
+  krebs.hosts.puyak.ssh.privkey.path = "${config.krebs.secret.directory}/ssh.id_ed25519";
 
   sound.enable = false;
   boot = {

@@ -1,4 +1,4 @@
-{ pkgs,lib, ... }:
+{ config, lib, pkgs, ... }:
 {
   boot.kernel.sysctl."net.ipv4.ip_forward" = true;
   services.gitlab-runner = {
@@ -10,7 +10,7 @@
         # File should contain at least these two variables:
         # `CI_SERVER_URL`
         # `REGISTRATION_TOKEN`
-        registrationConfigFile = toString <secrets/shackspace-gitlab-ci>;
+        registrationConfigFile = "${config.krebs.secret.directory}/shackspace-gitlab-ci";
         dockerImage = "alpine";
         dockerVolumes = [
           "/nix/store:/nix/store:ro"

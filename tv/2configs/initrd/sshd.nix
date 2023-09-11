@@ -12,6 +12,6 @@
     ignoreEmptyHostKeys = true;
   };
   boot.initrd.secrets = {
-    "/etc/ssh/ssh_host_rsa_key" = <secrets/initrd/ssh_host_rsa_key>;
+    "/etc/ssh/ssh_host_rsa_key" = "${config.krebs.secret.directory}/initrd/ssh_host_rsa_key";
   };
 }

@@ -12,7 +12,7 @@ in
         optional (cfg.net.ip4 != null) cfg.net.ip4.addr ++
         optional (cfg.net.ip6 != null) cfg.net.ip6.addr;
       listenPort = 51820;
-      privateKeyFile = (toString <secrets>) + "/wiregrill.key";
+      privateKeyFile = "${config.krebs.secret.directory}/wiregrill.key";
       allowedIPsAsRoutes = true;
       peers = mapAttrsToList
         (_: host: {

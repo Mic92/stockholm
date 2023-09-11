@@ -19,7 +19,7 @@ with import ./lib;
     };
     tv.wwan.secrets = mkOption {
       type = with types; pathname;
-      default = toString <secrets/wwan.json>;
+      default = "${config.krebs.secret.directory}/wwan.json";
       # format: {"pin1":number}
     };
   };

@@ -1,7 +1,6 @@
-let
+{ config, ... }: let
   port = 3000;
 in {
-
   networking.firewall.allowedTCPPorts = [ port ]; # legacy
   services.nginx.virtualHosts."grafana.shack" = {
     locations."/" = {
@@ -25,6 +24,6 @@ in {
     users.allowOrgCreate = true;
     users.autoAssignOrg = true;
     auth.anonymous.enable = true;
-    security = import <secrets/grafana_security.nix>;
+    security = import "${config.krebs.secret.directory}/grafana_security.nix";
   };
 }

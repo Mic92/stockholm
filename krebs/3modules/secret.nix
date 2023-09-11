@@ -7,13 +7,17 @@ in {
       default = toString <secrets>;
       type = types.absolute-pathname;
     };
-    file = mkOption {
-      default = relpath: "${cfg.directory}/${relpath}";
-      readOnly = true;
-    };
     files = mkOption {
       type = with pkgs.stockholm.lib.types; attrsOf secret-file;
       default = {};
+      apply = mapAttrs (name: secret-file:
+        if types.absolute-pathname.check secret-file.source-path then
+          secret-file
+        else
+          secret-file // {
+            source-path = "${config.krebs.secret.directory}/secret-file.source-path";
+          }
+      );
     };
   };
   config = lib.mkIf (cfg.files != {}) {

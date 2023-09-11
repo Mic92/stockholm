@@ -178,9 +178,7 @@ with import ./lib;
           '';
         };
       };
-    } //
-    # TODO don't put secrets/repos.nix into the store
-    import <secrets/repos.nix> { inherit config lib pkgs; }
+    }
   );
 
   irc-announce = args: pkgs.git-hooks.irc-announce (recursiveUpdate {

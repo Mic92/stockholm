@@ -1,7 +1,7 @@
 with import ./lib;
 { config, pkgs, ... }: let
   cfg = {
-    pin = "@${toString <secrets/o2.pin>}";
+    pin = "@${config.krebs.secret.directory}/o2.pin";
     ttys.ppp = "/dev/ttyACM0";
     ttys.com = "/dev/ttyACM1";
   };

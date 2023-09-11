@@ -11,7 +11,7 @@
 
   services.nix-serve = {
     enable = true;
-    secretKeyFile = toString <secrets> + "/nix-serve.key";
+    secretKeyFile = "${config.krebs.secret.directory}/nix-serve.key";
   };
 
   services.nginx = {

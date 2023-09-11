@@ -20,7 +20,7 @@ in {
     certfiles = mkOption {
       type = types.listOf types.absolute-pathname;
       default = [
-        (toString <secrets> + "/ejabberd.pem")
+        "${config.krebs.secret.directory}/ejabberd.pem"
       ];
     };
     configFile = mkOption {

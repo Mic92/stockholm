@@ -9,7 +9,7 @@ in {
     };
     enable = mkEnableOption "tv.x0vncserver";
     pwfile = mkOption {
-      default = toString <secrets> + "/vncpasswd";
+      default = "${config.krebs.secret.directory}/vncpasswd";
       description = ''
         Use vncpasswd to edit pwfile.
         See: nix-shell -p tigervnc --run 'man vncpasswd'

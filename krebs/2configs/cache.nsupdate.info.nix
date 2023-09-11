@@ -9,7 +9,7 @@ in {
     enable = true;
     server = "ipv4.nsupdate.info";
     username = domain;
-    password = import ((toString <secrets>) + "/nsupdate-cache.nix");
+    password = import "${config.krebs.secret.directory}/nsupdate-cache.nix";
     domains = [ domain ];
     use= "if, if=et0";
     # use = "web, web=http://ipv4.nsupdate.info/myip";

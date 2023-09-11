@@ -10,7 +10,6 @@ with import ./lib;
   networking.hostName = config.krebs.build.host.name;
 
   imports = [
-    <secrets>
     ./backup.nix
     ./bash
     ./htop.nix
@@ -28,6 +27,11 @@ with import ./lib;
         defaultUserShell = "/run/current-system/sw/bin/bash";
         mutableUsers = false;
         users = {
+          root = {
+            openssh.authorizedKeys.keys = [
+              config.krebs.users.tv.pubkey
+            ];
+          };
           tv = {
             inherit (config.krebs.users.tv) home uid;
             isNormalUser = true;

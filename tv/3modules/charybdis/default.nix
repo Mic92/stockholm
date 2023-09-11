@@ -17,11 +17,11 @@ in {
     };
     ssl_dh_params = mkOption {
       type = types.absolute-pathname;
-      default = toString <secrets> + "/charybdis.dh.pem";
+      default = "${config.krebs.secret.directory}/charybdis.dh.pem";
     };
     ssl_private_key = mkOption {
       type = types.absolute-pathname;
-      default = toString <secrets> + "/charybdis.key.pem";
+      default = "${config.krebs.secret.directory}/charybdis.key.pem";
     };
     sslport = mkOption {
       type = types.int;
