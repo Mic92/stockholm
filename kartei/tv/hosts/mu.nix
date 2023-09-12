@@ -1,5 +1,4 @@
 {
-  ci = true;
   nets = {
     retiolum = {
       ip4.addr = "10.243.20.1";
