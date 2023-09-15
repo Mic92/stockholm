@@ -66,7 +66,6 @@ rec {
         "cache.prism.r"
         "cgit.prism.r"
         "bota.r"
-        "flix.r"
         "paste.r"
         "c.r"
         "p.r"

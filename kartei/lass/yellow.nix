@@ -7,6 +7,7 @@
       aliases = [
         "yellow.r"
         "jelly.r"
+        "flix.r"
         "radar.r"
         "sonar.r"
         "transmission.r"
