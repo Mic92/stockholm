@@ -844,9 +844,9 @@ in {
       owner = config.krebs.users.mic92;
       nets = rec {
         internet = {
-          # of4.dse.cit.tum.de.
-          ip4.addr = "131.159.38.101";
-          ip6.addr = "2a09:80c0:38::101";
+          # ruby.dse.cit.tum.de.
+          ip4.addr = "131.159.38.70";
+          ip6.addr = "2a09:80c0:38::70";
           aliases = [ "ruby.i" ];
         };
         retiolum = {
