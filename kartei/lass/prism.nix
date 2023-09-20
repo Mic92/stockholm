@@ -37,6 +37,8 @@ rec {
       mail                60 IN A      ${nets.internet.ip4.addr}
       mail                60 IN AAAA   ${nets.internet.ip6.addr}
       flix                60 IN A      ${nets.internet.ip4.addr}
+      flex                60 IN A      ${nets.internet.ip4.addr}
+      flux                60 IN A      ${nets.internet.ip4.addr}
       testing             60 IN A      ${nets.internet.ip4.addr}
       schrott             60 IN A      ${nets.internet.ip4.addr}
     '';
