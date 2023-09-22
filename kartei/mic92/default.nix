@@ -978,6 +978,33 @@ in {
         };
       };
     };
+
+    vislor = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # vislor.dos.cit.tum.de
+          ip4.addr = "131.159.102.25";
+          ip6.addr = "2a09:80c0:102::25";
+          aliases = [ "vislor.i" ];
+        };
+        retiolum = {
+          via = internet;
+          aliases = [ "vislor.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAnAIEtqtJzQmhAOLMDOp6LvlMoElNezeFarvZ6LshbZbLPL7Mv2Iy
+            buEoduzGNlqUbqEypsv7pQBSqw4Kqn9jMnpk8EpPiLiqIaBJeGqS1eIHi4DdRIyC
+            wwOgAqbc0e55LGSRyLS2GgbzD3kHh0UgVF2/MM01r4l53w8ftSJwR5dL6tpKnfgm
+            wjc8hwQtxen+zym2RJV7E+YPKg2t/ZGTJZbgk54/19l5Eeb18xxfTyxBNdUWBBCo
+            vnR/h2gfCZnmsj4UiSor+z+00eaDyespfjLw3X7XQkCdlfgx0BVfhXH2RGOtdH+P
+            AdnLFg7OfGh9V8zAiOC7jyuCrlbh0q0QoQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "PqpTiIldNgPTKQVnouiGNo8mX0wqSVtg9al6ve/sj2E";
+        };
+      };
+    };
   };
   users = {
     mic92 = {
