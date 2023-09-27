@@ -4,10 +4,10 @@ in {
   users.Ra33it0 = {
     mail = "Ra33it0@posteo.net";
   };
-  hosts.DUMMYHOST = {
+  hosts.unispore = {
     owner = config.krebs.users.Ra33it0;
     nets.retiolum = {
-      aliases = [ "Ra33it0.Ra33it0.r" ];
+      aliases = [ "unispore.Ra33it0.r" ];
       ip6.addr = (slib.krebs.genipv6 "retiolum" "Ra33it0" { hostName = "unispore"; }).address;
       tinc.pubkey = ''
         -----BEGIN RSA PUBLIC KEY-----
