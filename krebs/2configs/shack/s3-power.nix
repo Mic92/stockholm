@@ -10,7 +10,7 @@ let
     }) { mkYarnPackage = pkgs.yarn2nix-moretea.mkYarnPackage; };
 
     home = "/var/lib/s3-power";
-    cfg = toString <secrets/shack/s3-power.json>;
+    cfg = "${config.krebs.secret.directory}/shack/s3-power.json";
 in {
   users.users.s3_power = {
     inherit home;

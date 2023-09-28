@@ -9,7 +9,7 @@ let
       sha256 = "0hgchwam5ma96s2v6mx2jfkh833psadmisjbm3k3153rlxp46frx";
     }) { mkYarnPackage = pkgs.yarn2nix-moretea.mkYarnPackage; };
     home = "/var/lib/muell_mail";
-    cfg = toString <secrets/shack/muell_mail.js>;
+    cfg = "${config.krebs.secret.directory}/shack/muell_mail.js";
 in {
   users.users.muell_mail = {
     inherit home;

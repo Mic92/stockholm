@@ -22,8 +22,8 @@ in
         default = "${config.krebs.secret.directory}/tinc.krebsco.de.key";
     };
     # in use:
-    #  <secrets/tinc.krebsco.de.crt>
-    #  <secrets/tinc.krebsco.de.key>
+    #  ${config.krebs.secret.directory}/tinc.krebsco.de.crt
+    #  ${config.krebs.secret.directory}/tinc.krebsco.de.key
   };
 
   config = mkIf cfg.enable {

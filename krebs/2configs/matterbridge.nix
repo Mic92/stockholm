@@ -2,7 +2,7 @@
   services.matterbridge = {
     enable = true;
     configPath = let
-      bridgeBotToken = lib.strings.fileContents <secrets/telegram.token>;
+      bridgeBotToken = lib.strings.fileContents "${config.krebs.secret.directory}/telegram.token";
     in
       toString ((pkgs.formats.toml {}).generate "config.toml" {
         general = {

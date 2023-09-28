@@ -43,7 +43,7 @@ in {
         })
         (host: mkIf (host.config.ssh.pubkey != null) {
           ssh.privkey = mapAttrs (const mkDefault) {
-            path = config.krebs.secret.file "ssh.id_${host.config.ssh.privkey.type}";
+            path = "${config.krebs.secret.directory}/ssh.id_${host.config.ssh.privkey.type}";
             type = head (toList (builtins.match "ssh-([^ ]+) .*" host.config.ssh.pubkey));
           };
         })

@@ -51,7 +51,7 @@
       ssh.pubkey = readFile pubkey-path;
       # We assume that if the sshd pubkey exits then there must be a privkey in
       # the screts store as well
-      ssh.privkey.path = <secrets/ssh_host_ed25519_key>;
+      ssh.privkey.path = "${config.krebs.secret.directory}/ssh_host_ed25519_key";
     })
     host
   ];

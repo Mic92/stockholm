@@ -340,7 +340,7 @@ rec {
       };
       source-path = mkOption {
         type = str;
-        default = toString <secrets> + "/${config.name}";
+        default = config.name;
         defaultText = "‹secrets/‹name››";
       };
     };

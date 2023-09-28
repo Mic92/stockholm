@@ -39,7 +39,7 @@ pkgs.writers.writeDashBin "generate-secrets" ''
           };
         };
       };
-      ssh.privkey.path = <secrets/ssh.id_ed25519>;
+      ssh.privkey.path = "\''${config.krebs.secret.directory}/ssh.id_ed25519";
       ssh.pubkey = "$(cat $TMPDIR/ssh.id_ed25519.pub)";
     };
   EOF

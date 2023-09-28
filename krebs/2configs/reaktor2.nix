@@ -528,6 +528,24 @@ in {
     '';
   };
 
+  services.nginx.virtualHosts."bedge.r" = {
+    locations."/".extraConfig = ''
+      proxy_set_header Host $host;
+      proxy_pass http://localhost:${toString config.services.hledger-web.port};
+    '';
+    locations."/bedger.json".extraConfig = ''
+      proxy_set_header Host $host;
+      proxy_pass http://localhost:8011;
+    '';
+    extraConfig = ''
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+    '';
+  };
+  services.hledger-web = {
+    enable = true;
+  };
+
   systemd.services.reaktor2-r.serviceConfig.DynamicUser = mkForce false;
   systemd.services.reaktor2-hackint.serviceConfig.DynamicUser = mkForce false;
   krebs.reaktor2 = {

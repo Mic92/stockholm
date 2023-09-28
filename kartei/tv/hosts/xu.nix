@@ -2,7 +2,6 @@
   binary-cache = {
     pubkey = "xu-1:pYRENvaxZqGeImwLA9qHmRwHV4jfKaYx4u1VcZ31x0s=";
   };
-  ci = true;
   nets = {
     retiolum = {
       ip4.addr = "10.243.13.38";
