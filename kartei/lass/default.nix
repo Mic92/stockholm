@@ -25,36 +25,11 @@ in {
       inherit (slib) krebs;
     })
   );
-  users = rec {
-    lass = lass-yubikey;
-    lass-yubikey = {
+  users = {
+    lass = {
       mail = "lass@green.r";
       pubkey = builtins.readFile ./ssh/yubikey.rsa;
       pgp.pubkeys.default = builtins.readFile ./pgp/yubikey.pgp;
-    };
-    lass-blue = {
-      mail = "lass@blue.r";
-      pubkey = builtins.readFile ./ssh/blue.rsa;
-    };
-    lass-green = {
-      mail = "lass@green.r";
-      pubkey = builtins.readFile ./ssh/green.ed25519;
-    };
-    lass-red = {
-      mail = "lass@red.r";
-      pubkey = builtins.readFile ./ssh/red.ed25519;
-    };
-    lass-mors = {
-      mail = "lass@mors.r";
-      pubkey = builtins.readFile ./ssh/mors.rsa;
-      pgp.pubkeys.default = builtins.readFile ./pgp/mors.pgp;
-    };
-    lass-android = {
-      mail = "lassulus@gmail.com";
-      pubkey = builtins.readFile ./ssh/android.ed25519;
-    };
-    lass-tablet = {
-      pubkey = builtins.readFile ./ssh/tablet.ed25519;
     };
   };
 }
