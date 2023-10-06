@@ -15,5 +15,5 @@
     };
   };
   ssh.pubkey = builtins.readFile ./ignavia/ssh.id_ed25519.pub;
-  syncthing.id = builtins.readFile ./ignavia/syncthing.pub;
+  syncthing.id = builtins.replaceStrings [ "\n" ] [ "" ] (builtins.readFile ./ignavia/syncthing.pub);
 }
