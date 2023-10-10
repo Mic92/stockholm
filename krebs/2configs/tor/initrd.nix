@@ -7,9 +7,7 @@
     enable = true;
     port = 22;
     authorizedKeys = [
-      config.krebs.users.jeschli-brauerei.pubkey
       config.krebs.users.lass.pubkey
-      config.krebs.users.lass-mors.pubkey
       config.krebs.users.makefu.pubkey
       config.krebs.users.tv.pubkey
     ];

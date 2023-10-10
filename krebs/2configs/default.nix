@@ -48,9 +48,7 @@ with import ../../lib/pure.nix { inherit lib; };
 
   users.mutableUsers = false;
   users.extraUsers.root.openssh.authorizedKeys.keys = [
-    config.krebs.users.jeschli-brauerei.pubkey
     config.krebs.users.lass.pubkey
-    config.krebs.users.lass-mors.pubkey
     config.krebs.users.makefu.pubkey
     config.krebs.users.tv.pubkey
     config.krebs.users.kmein.pubkey

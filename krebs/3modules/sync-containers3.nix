@@ -32,6 +32,17 @@ in {
             type = lib.types.bool;
             default = true;
           };
+          startCommand = lib.mkOption {
+            type = lib.types.str;
+            default = ''
+              set -efu
+              mkdir -p /var/state/var_src
+              ln -Tfrs /var/state/var_src /var/src
+              if test -e /var/src/nixos-config; then
+                /run/current-system/sw/bin/nixos-rebuild -I /var/src switch || :
+              fi
+            '';
+          };
         };
       }));
     };
@@ -52,14 +63,7 @@ in {
               NIX_REMOTE = "daemon";
             };
             wantedBy = [ "multi-user.target" ];
-            serviceConfig.ExecStart = pkgs.writers.writeDash "autoswitch" ''
-              set -efu
-              mkdir -p /var/state/var_src
-              ln -Tfrs /var/state/var_src /var/src
-              if test -e /var/src/nixos-config; then
-                /run/current-system/sw/bin/nixos-rebuild -I /var/src switch || :
-              fi
-            '';
+            serviceConfig.ExecStart = pkgs.writers.writeDash "autoswitch" ctr.startCommand;
             unitConfig.X-StopOnRemoval = false;
           };
         };
