@@ -17,6 +17,8 @@ with lib; {
         @ 3600 IN NS ns3.he.net.
         @ 3600 IN NS ns2.hosting.de.
 
+        _acme-challenge IN NS ns1
+
         panda NS panda
         panda A 130.61.237.100
       '';
