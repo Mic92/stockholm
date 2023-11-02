@@ -80,7 +80,7 @@ let
   };
 
   imp = {
-    system.activationScripts."krebs.setuid" = stringAfter [ "wrappers" ]
+    system.activationScripts."krebs.setuid" = stringAfter [ "usrbinenv" ]
       (concatMapStringsSep "\n"
         (cfg: /* sh */ ''
           ${cfg.activate}
