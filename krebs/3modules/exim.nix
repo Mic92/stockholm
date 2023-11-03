@@ -50,14 +50,18 @@ in {
       '';
       systemPackages = [ pkgs.exim ];
     };
-    krebs.setuid = {
+    security.wrappers = {
       exim = {
-        filename = "${pkgs.exim}/bin/exim";
-        mode = "4111";
+        source = "${pkgs.exim}/bin/exim";
+        owner = "root";
+        group = "root";
+        setuid = true;
       };
       sendmail = {
-        filename = "${pkgs.exim}/bin/exim";
-        mode = "4111";
+        source = "${pkgs.exim}/bin/exim";
+        owner = "root";
+        group = "root";
+        setuid = true;
       };
     };
     systemd.services.exim = {
