@@ -376,6 +376,7 @@ let
                      (filter (user: isString user.pubkey)
                              (concatMap (getAttr "user") cfg.rules))));
     };
+    users.groups.${cfg.cgit.fcgiwrap.group.name} = {};
   };
 
   cgit-imp = {
