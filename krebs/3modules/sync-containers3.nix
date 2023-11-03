@@ -88,6 +88,7 @@ in {
         { "${ctr.name}_syncer" = {
           path = with pkgs; [
             coreutils
+            inetutils
             consul
             rsync
             openssh
@@ -107,7 +108,7 @@ in {
               set -efux
               consul lock sync_${ctr.name} ${pkgs.writers.writeDash "${ctr.name}-sync" ''
                 set -efux
-                if /run/wrappers/bin/ping -c 1 ${ctr.name}.r; then
+                if ping -c 1 ${ctr.name}.r; then
                   nice --adjustment=30 rsync -a -e "ssh -i $CREDENTIALS_DIRECTORY/ssh_key" --timeout=30 --inplace --sparse container_sync@${ctr.name}.r:disk "$HOME"/disk.rsync
                   touch "$HOME"/incomplete
                   nice --adjustment=30 rsync --inplace "$HOME"/disk.rsync "$HOME"/disk
@@ -120,6 +121,7 @@ in {
         { "${ctr.name}_watcher" = lib.mkIf ctr.runContainer {
           path = with pkgs; [
             coreutils
+            inetutils
             consul
             cryptsetup
             curl
@@ -149,7 +151,7 @@ in {
                     export payload
                     if [ "$(jq -rn 'env.payload | fromjson.host')" = '${config.networking.hostName}' ]; then
                       # echo 'we are the host, trying to reach container'
-                      if $(retry -t 10 -d 10 -- /run/wrappers/bin/ping -q -c 1 ${ctr.name}.r > /dev/null); then
+                      if $(retry -t 10 -d 10 -- ping -q -c 1 ${ctr.name}.r > /dev/null); then
                         # echo 'container is reachable, continueing'
                         continue
                       else
@@ -177,6 +179,7 @@ in {
           wantedBy = [ "multi-user.target" ];
           path = with pkgs; [
             coreutils
+            inetutils
             consul
             cryptsetup
             mount
@@ -232,8 +235,8 @@ in {
                 /run/current-system/sw/bin/nixos-container start ${ctr.name}
                 # wait for system to become reachable for the first time
                 systemctl start ${ctr.name}_watcher.service
-                retry -t 10 -d 10 -- /run/wrappers/bin/ping -q -c 1 ${ctr.name}.r > /dev/null
-                while systemctl is-active container@${ctr.name}.service >/devnull && /run/wrappers/bin/ping -q -c 3 ${ctr.name}.r >/dev/null; do
+                retry -t 10 -d 10 -- ping -q -c 1 ${ctr.name}.r > /dev/null
+                while systemctl is-active container@${ctr.name}.service >/devnull && ping -q -c 3 ${ctr.name}.r >/dev/null; do
                   consul kv put containers/${ctr.name} "$(jq -cn '{host: "${config.networking.hostName}", time: now}')" >/dev/null
                   sleep 10
                 done
