@@ -993,15 +993,15 @@ in {
           aliases = [ "vislor.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAnAIEtqtJzQmhAOLMDOp6LvlMoElNezeFarvZ6LshbZbLPL7Mv2Iy
-            buEoduzGNlqUbqEypsv7pQBSqw4Kqn9jMnpk8EpPiLiqIaBJeGqS1eIHi4DdRIyC
-            wwOgAqbc0e55LGSRyLS2GgbzD3kHh0UgVF2/MM01r4l53w8ftSJwR5dL6tpKnfgm
-            wjc8hwQtxen+zym2RJV7E+YPKg2t/ZGTJZbgk54/19l5Eeb18xxfTyxBNdUWBBCo
-            vnR/h2gfCZnmsj4UiSor+z+00eaDyespfjLw3X7XQkCdlfgx0BVfhXH2RGOtdH+P
-            AdnLFg7OfGh9V8zAiOC7jyuCrlbh0q0QoQIDAQAB
+            MIIBCgKCAQEAzMOrwiMFgDbITQEnXBJev4bSprV2Hg04xuEUmdoMJB4OJdBrWY7G
+            71aHXtAjBqJqRYbvSoRPa+jQcpqRHNdNctfE1wq3nUkOYSM0OHGoFwb3kfybh+vu
+            flmAY75ZlVRz3srITjMADpHeiuAEOmGPmlbLiUY09I2qjcaSzYYsTiGnyWSp95tL
+            g3CRqiC4kj4fM0B7lCp/dz/iXDvqWEgoGEQH34x4xIIToA+DkHX5/2NAl4aaiq9m
+            JQ8YCz5qBox3nD6W6bwwsEyG4vOHNcCLHBdVLEbfUFHM8XDjF3dJZ+RjCYxdiEjM
+            dZUckPeLf/8XDkNMZm1eKMIJBvcH3UESLQIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
-          tinc.pubkey_ed25519 = "PqpTiIldNgPTKQVnouiGNo8mX0wqSVtg9al6ve/sj2E";
+          tinc.pubkey_ed25519 = "ZMFZ4fd75fh2OLg/SuiTsavs013E2tUaCDqX76LPI6K";
         };
       };
     };
