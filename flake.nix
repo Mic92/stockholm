@@ -12,15 +12,15 @@
   description = "stockholm";
 
   outputs = { self, nixpkgs, nix-writers }: {
-    nixosConfigurations.hotdog = nixpkgs.lib.nixosSystem {
+    nixosConfigurations = nixpkgs.lib.mapAttrs (machineName: _: nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs.stockholm = self;
       specialArgs.nix-writers = nix-writers;
-      specialArgs.secrets = toString ./krebs/0tests/data/secrets;
+      specialArgs.secrets = nixpkgs.lib.mkDefault (toString ./krebs/0tests/data/secrets);
       modules = [
-        ./krebs/1systems/hotdog/config.nix
+        ./krebs/1systems/${machineName}/config.nix
       ];
-    };
+    }) (builtins.readDir ./krebs/1systems);
 
     nixosModules =
     let
