@@ -208,10 +208,9 @@ with import ../../lib/pure.nix { inherit lib; }; {
       description = "Tinc daemon for ${netname}";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      # Restart the service in a single step in order to prevent potential
-      # connection timeouts and subsequent issues while deploying via tinc.
-      stopIfChanged = false;
+      reloadIfChanged = true;
       serviceConfig = {
+        ExecReload = "+${cfg.tincPackage}/sbin/tinc -n ${netname} reload";
         Restart = "always";
         LoadCredential = filter (x: x != "") [
           (optionalString (cfg.privkey_ed25519 != null)
