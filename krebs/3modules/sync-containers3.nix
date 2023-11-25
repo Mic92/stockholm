@@ -246,9 +246,11 @@ in {
         }; }
         { "container@${ctr.name}" = lib.mkIf ctr.runContainer {
           serviceConfig = {
-            ExecStop = pkgs.writers.writeDash "remove_interface" ''
-              ${pkgs.iproute2}/bin/ip link del vb-${ctr.name}
-            '';
+            ExecStartPost = [
+              (pkgs.writers.writeDash "bind-to-bridge" ''
+                ${pkgs.iproute2}/bin/ip link set "vb-$INSTANCE" master ctr0
+              '')
+            ];
           };
         }; }
       ]) (lib.attrValues cfg.containers)));
