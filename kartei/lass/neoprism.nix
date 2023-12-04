@@ -7,7 +7,7 @@
         prefix = "${addr}/32";
       };
       ip6 = rec {
-        addr = "2a01:4f9:4a:4f1a::1";
+        addr = "2a01:4f9:4a:4f1a::2";
         prefix = "${addr}/64";
       };
       aliases = [

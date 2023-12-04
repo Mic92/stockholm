@@ -17,7 +17,6 @@
     ./exim-retiolum.nix
     ./exim-smarthost.nix
     ./exim.nix
-    ./fetchWallpaper.nix
     ./git.nix
     ./github
     ./go.nix

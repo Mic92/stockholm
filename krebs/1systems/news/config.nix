@@ -14,6 +14,7 @@
   ];
 
   krebs.build.host = config.krebs.hosts.news;
+  krebs.hosts.news.ssh.privkey.path = "${config.krebs.secret.directory}/ssh.id_ed25519";
 
   boot.isContainer = true;
   networking.useDHCP = lib.mkForce true;
