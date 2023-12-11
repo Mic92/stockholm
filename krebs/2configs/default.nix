@@ -52,6 +52,7 @@ with import ../../lib/pure.nix { inherit lib; };
     config.krebs.users.makefu.pubkey
     config.krebs.users.tv.pubkey
     config.krebs.users.kmein.pubkey
+    config.krebs.users.mic92.pubkey
   ];
 
   # The NixOS release to be compatible with for stateful data such as databases.
