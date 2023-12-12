@@ -3,7 +3,7 @@
   services.postgresql = {
     enable = true;
     dataDir = "/var/state/postgresql/${config.services.postgresql.package.psqlSchema}";
-    package = pkgs.postgresql_11;
+    package = pkgs.postgresql_16;
   };
   systemd.tmpfiles.rules = [
     "d /var/state/postgresql 0700 postgres postgres -"
