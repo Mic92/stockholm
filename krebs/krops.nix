@@ -10,8 +10,8 @@
   krebs-source = { test ? false }: rec {
     nixpkgs = if test then {
       derivation = let
-        rev = (lib.importJSON ./nixpkgs.json).rev;
-        sha256 = (lib.importJSON ./nixpkgs.json).sha256;
+        rev = (lib.importJSON ../flake.lock).nodes.nixpkgs.locked.rev;
+        sha256 = (lib.importJSON ../flake.lock).nixpkgs.locked.narHash;
       in ''
         with import (builtins.fetchTarball {
           url = "https://github.com/nixos/nixpkgs/archive/${rev}.tar.gz";
@@ -26,8 +26,8 @@
       '';
     } else {
       git = {
-        ref = (lib.importJSON ./nixpkgs.json).rev;
-        url = https://github.com/NixOS/nixpkgs;
+        ref = (lib.importJSON ../flake.lock).nodes.nixpkgs.locked.rev;
+        url = "https://github.com/NixOS/nixpkgs";
         shallow = true;
       };
     };
