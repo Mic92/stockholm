@@ -155,7 +155,7 @@ in {
                         # echo 'container is reachable, continueing'
                         continue
                       else
-                        # echo 'container seems dead, killing'
+                        echo 'container seems dead, killing'
                         break
                       fi
                     else
