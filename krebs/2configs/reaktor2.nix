@@ -526,6 +526,8 @@ in {
       add_header 'Access-Control-Allow-Origin' '*';
       add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
     '';
+    # needed for acmeFallback in sync-containers, or other machines not reachable globally
+    locations."~ ^/.well-known/acme-challenge/".root = "/var/lib/acme/acme-challenge";
   };
 
   services.nginx.virtualHosts."bedge.r" = {

@@ -19,18 +19,11 @@
     smtp.fromAddress = "derp";
   };
 
-  services.nginx.virtualHosts.${config.services.mastodon.localDomain} = {
-    forceSSL = lib.mkForce false;
-    enableACME = lib.mkForce false;
-    locations."@proxy".extraConfig = ''
-      proxy_redirect off;
-      proxy_pass_header Server;
-      proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
-    '';
-  };
+  security.acme.certs."social.krebsco.de".server = "https://acme-staging-v02.api.letsencrypt.org/directory";
 
   networking.firewall.allowedTCPPorts = [
     80
+    443
   ];
 
   environment.systemPackages = [
