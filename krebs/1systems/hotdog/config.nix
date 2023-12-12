@@ -4,6 +4,7 @@
   imports = [
     ../../../krebs
     ../../../krebs/2configs
+    ../../../krebs/2configs/nginx.nix
 
     ../../../krebs/2configs/buildbot-stockholm.nix
     ../../../krebs/2configs/binary-cache/nixos.nix
