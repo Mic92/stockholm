@@ -5,6 +5,7 @@
     virtualHosts."social.krebsco.de" = {
       forceSSL = true;
       enableACME = true;
+      acmeFallbackHost = "hotdog.r";
       locations."/" = {
         # TODO use this in 22.11
         # recommendedProxySettings = true;
