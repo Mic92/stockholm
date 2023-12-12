@@ -8,7 +8,15 @@ with import ../../lib/pure.nix { inherit lib; };
   ];
   krebs.announce-activation.enable = true;
   krebs.enable = true;
-  krebs.tinc.retiolum.enable = mkDefault true;
+
+  # retiolum
+  krebs.tinc.retiolum = {
+    enable = mkDefault true;
+    extraConfig = ''
+      AutoConnect = yes
+      LocalDiscovery = yes
+    '';
+  };
   networking.firewall.allowedTCPPorts = [ 655 ];
   networking.firewall.allowedUDPPorts = [ 655 ];
 
