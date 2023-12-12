@@ -11,7 +11,7 @@
     nixpkgs = if test then {
       derivation = let
         rev = (lib.importJSON ../flake.lock).nodes.nixpkgs.locked.rev;
-        sha256 = (lib.importJSON ../flake.lock).nixpkgs.locked.narHash;
+        sha256 = (lib.importJSON ../flake.lock).nodes.nixpkgs.locked.narHash;
       in ''
         with import (builtins.fetchTarball {
           url = "https://github.com/nixos/nixpkgs/archive/${rev}.tar.gz";
