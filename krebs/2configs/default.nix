@@ -9,6 +9,8 @@ with import ../../lib/pure.nix { inherit lib; };
   krebs.announce-activation.enable = true;
   krebs.enable = true;
   krebs.tinc.retiolum.enable = mkDefault true;
+  networking.firewall.allowedTCPPorts = [ 655 ];
+  networking.firewall.allowedUDPPorts = [ 655 ];
 
   # trust krebs ACME CA
   krebs.ssl.trustIntermediate = true;
