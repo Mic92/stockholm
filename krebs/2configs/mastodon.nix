@@ -3,7 +3,7 @@
   services.postgresql = {
     enable = true;
     dataDir = "/var/state/postgresql/${config.services.postgresql.package.psqlSchema}";
-    package = pkgs.postgresql_11;
+    package = pkgs.postgresql_16;
   };
   systemd.tmpfiles.rules = [
     "d /var/state/postgresql 0700 postgres postgres -"
@@ -13,23 +13,17 @@
     enable = true;
     localDomain = "social.krebsco.de";
     configureNginx = true;
+    streamingProcesses = 3;
     trustedProxy = config.krebs.hosts.prism.nets.retiolum.ip6.addr;
     smtp.createLocally = false;
     smtp.fromAddress = "derp";
   };
 
-  services.nginx.virtualHosts.${config.services.mastodon.localDomain} = {
-    forceSSL = lib.mkForce false;
-    enableACME = lib.mkForce false;
-    locations."@proxy".extraConfig = ''
-      proxy_redirect off;
-      proxy_pass_header Server;
-      proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
-    '';
-  };
+  security.acme.certs."social.krebsco.de".server = "https://acme-staging-v02.api.letsencrypt.org/directory";
 
   networking.firewall.allowedTCPPorts = [
     80
+    443
   ];
 
   environment.systemPackages = [

@@ -16,9 +16,11 @@
       system = "x86_64-linux";
       specialArgs.stockholm = self;
       specialArgs.nix-writers = nix-writers;
-      specialArgs.secrets = nixpkgs.lib.mkDefault (toString ./krebs/0tests/data/secrets);
       modules = [
         ./krebs/1systems/${machineName}/config.nix
+        {
+          krebs.secret.directory = "/var/src/secrets";
+        }
       ];
     }) (builtins.readDir ./krebs/1systems);
 

@@ -155,7 +155,7 @@ in {
                         # echo 'container is reachable, continueing'
                         continue
                       else
-                        # echo 'container seems dead, killing'
+                        echo 'container seems dead, killing'
                         break
                       fi
                     else
@@ -249,6 +249,11 @@ in {
             ExecStop = pkgs.writers.writeDash "remove_interface" ''
               ${pkgs.iproute2}/bin/ip link del vb-${ctr.name}
             '';
+            ExecStartPost = [
+              (pkgs.writers.writeDash "bind-to-bridge" ''
+                ${pkgs.iproute2}/bin/ip link set "vb-$INSTANCE" master ctr0
+              '')
+            ];
           };
         }; }
       ]) (lib.attrValues cfg.containers)));
