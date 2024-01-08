@@ -58,6 +58,8 @@ in {
             pkgs.jq
           ];
           networking.useDHCP = lib.mkForce true;
+          networking.useHostResolvConf = false;
+          services.resolved.enable = true;
           systemd.services.autoswitch = {
             environment = {
               NIX_REMOTE = "daemon";
@@ -297,9 +299,6 @@ in {
     (lib.mkIf (cfg.containers != {}) {
       # networking
 
-      # needed because otherwise we lose local dns
-      environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/resolv.conf";
-
       boot.kernel.sysctl."net.ipv4.ip_forward" = lib.mkForce 1;
       systemd.network.networks.ctr0 = {
         name = "ctr0";
@@ -311,6 +310,9 @@ in {
           # IPMasquerade = "both";
           ConfigureWithoutCarrier = true;
           DHCPServer = "yes";
+        };
+        dhcpServerConfig = {
+          DNS = "9.9.9.9";
         };
       };
       systemd.network.netdevs.ctr0.netdevConfig = {
@@ -344,6 +346,12 @@ in {
 
       networking.useHostResolvConf = false;
       networking.useNetworkd = true;
+      services.resolved = {
+        enable = true;
+        extraConfig = ''
+          Domains=~.
+        '';
+      };
       systemd.network = {
         enable = true;
         networks.eth0 = {
