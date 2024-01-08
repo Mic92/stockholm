@@ -1,7 +1,7 @@
 {
   nets = {
     retiolum = {
-      ip4.addr = "10.243.13.43";
+      ip4.addr = "10.243.13.45";
       aliases = [
         "zoppo.r"
       ];
