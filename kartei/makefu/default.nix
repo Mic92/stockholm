@@ -137,6 +137,7 @@ in {
           aliases = [
             "omo.r"
             "dcpp.omo.r"
+            "hass.omo.r"
             "backup.makefu.r"
             "torrent.omo.r"
             "music.omo.r"
@@ -249,6 +250,7 @@ in {
           ul.work.euer      IN A      ${nets.internet.ip4.addr}
           music.euer        IN A      ${nets.internet.ip4.addr}
           ntfy.euer         IN A      ${nets.internet.ip4.addr}
+          paper.euer        IN A      ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
