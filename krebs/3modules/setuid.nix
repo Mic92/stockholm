@@ -80,13 +80,25 @@ let
   };
 
   imp = {
-    system.activationScripts."krebs.setuid" = stringAfter [ "usrbinenv" ]
-      (concatMapStringsSep "\n"
-        (cfg: /* sh */ ''
-          ${cfg.activate}
-          rm -f ${cfg.wrapperDir}/${cfg.name}.real
-        '')
-        (attrValues config.krebs.setuid));
+    systemd.services."krebs.setuid" = {
+      wantedBy = [ "suid-sgid-wrappers.service" ];
+      after = [ "suid-sgid-wrappers.service" ];
+      path = [
+        pkgs.coreutils
+      ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = pkgs.writeDash "krebs.setuid.sh" ''
+          ${concatMapStringsSep "\n"
+            (getAttr "activate")
+            (attrValues config.krebs.setuid)
+          }
+        '';
+      };
+      unitConfig = {
+        DefaultDependencies = false;
+      };
+    };
   };
 
 in out

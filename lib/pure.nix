@@ -23,7 +23,6 @@ let
     git = import ./git.nix { inherit (stockholm) lib; };
     haskell = import ./haskell.nix { inherit (stockholm) lib; };
     krebs = import ./krebs stockholm.lib;
-    krops = import ../submodules/krops/lib;
     shell = import ./shell.nix { inherit (stockholm) lib; };
     systemd = {
       encodeName = replaceStrings ["/"] ["\\x2f"];

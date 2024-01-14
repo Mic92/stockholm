@@ -8,7 +8,17 @@ with import ../../lib/pure.nix { inherit lib; };
   ];
   krebs.announce-activation.enable = true;
   krebs.enable = true;
-  krebs.tinc.retiolum.enable = mkDefault true;
+
+  # retiolum
+  krebs.tinc.retiolum = {
+    enable = mkDefault true;
+    extraConfig = ''
+      AutoConnect = yes
+      LocalDiscovery = yes
+    '';
+  };
+  networking.firewall.allowedTCPPorts = [ 655 ];
+  networking.firewall.allowedUDPPorts = [ 655 ];
 
   # trust krebs ACME CA
   krebs.ssl.trustIntermediate = true;
@@ -52,6 +62,7 @@ with import ../../lib/pure.nix { inherit lib; };
     config.krebs.users.makefu.pubkey
     config.krebs.users.tv.pubkey
     config.krebs.users.kmein.pubkey
+    config.krebs.users.mic92.pubkey
   ];
 
   # The NixOS release to be compatible with for stateful data such as databases.

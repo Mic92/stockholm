@@ -58,6 +58,8 @@ in {
             pkgs.jq
           ];
           networking.useDHCP = lib.mkForce true;
+          networking.useHostResolvConf = false;
+          services.resolved.enable = true;
           systemd.services.autoswitch = {
             environment = {
               NIX_REMOTE = "daemon";
@@ -155,7 +157,7 @@ in {
                         # echo 'container is reachable, continueing'
                         continue
                       else
-                        # echo 'container seems dead, killing'
+                        echo 'container seems dead, killing'
                         break
                       fi
                     else
@@ -246,6 +248,9 @@ in {
         }; }
         { "container@${ctr.name}" = lib.mkIf ctr.runContainer {
           serviceConfig = {
+            ExecStop = pkgs.writers.writeDash "remove_interface" ''
+              ${pkgs.iproute2}/bin/ip link del vb-${ctr.name}
+            '';
             ExecStartPost = [
               (pkgs.writers.writeDash "bind-to-bridge" ''
                 ${pkgs.iproute2}/bin/ip link set "vb-$INSTANCE" master ctr0
@@ -294,9 +299,6 @@ in {
     (lib.mkIf (cfg.containers != {}) {
       # networking
 
-      # needed because otherwise we lose local dns
-      environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/resolv.conf";
-
       boot.kernel.sysctl."net.ipv4.ip_forward" = lib.mkForce 1;
       systemd.network.networks.ctr0 = {
         name = "ctr0";
@@ -308,6 +310,9 @@ in {
           # IPMasquerade = "both";
           ConfigureWithoutCarrier = true;
           DHCPServer = "yes";
+        };
+        dhcpServerConfig = {
+          DNS = "9.9.9.9";
         };
       };
       systemd.network.netdevs.ctr0.netdevConfig = {
@@ -341,6 +346,12 @@ in {
 
       networking.useHostResolvConf = false;
       networking.useNetworkd = true;
+      services.resolved = {
+        enable = true;
+        extraConfig = ''
+          Domains=~.
+        '';
+      };
       systemd.network = {
         enable = true;
         networks.eth0 = {
