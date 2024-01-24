@@ -17,6 +17,9 @@
       '';
       tinc.pubkey_ed25519 = " qmxNtjkjzXP4QCIJwXLncYFrIfU7royMlQNSVvR3XKH";
     };
+    wiregrill = {
+      ip4.addr = "10.244.3.43";
+    };
   };
   secure = true;
   ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGiputkYYQbg8sUHu+dMVOEuqhPYwPhPdmkS6LopPx17 root@leg";
