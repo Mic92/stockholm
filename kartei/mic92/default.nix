@@ -473,21 +473,15 @@ in {
           aliases = [ "ryan.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEApu7U9HP1Uo+kTDI+KTCs+YFLcSYct1qPuMkntKonYgdiW9Z4Ud99
-            tU0VmJWdDnKaRxIcjC2Bmy342G3QN+UgdnTxyEWggWRKHUDjWMXBuj5n+uBgzTyM
-            XDwuQR7RZmStBG6vDRIQWL07/b0u/wzyrhXDERx7o2msOLfnaU271aVrDM/Y67fL
-            PMfKBtfckv7+W5e7KspJRIyhj7mqXMsSHaroqgoikK+Xyv44OxlklV7VnmACaNLf
-            Yg0AiSjIrMtkTQ85m9t6q147lWBKlAK7yqEHUPyVNGMf/Mh6M1Xg1t0oc9hcb7/F
-            VAPNbwFiwm0rR8ugjW5Gn5i/uZDeDDSQcc8m1tsB+86peuS16sfOXZewXH9bYDFo
-            9n28+vFjyF5FRI1J6fAjneFm5PyoLvowgwvVECEDRgUF2+ySwfWawF+LPDpRZiZ4
-            NfHN2qT81QWa1UfWdaudCYbwMK5iQskCUtRw20ABsR0Kg6oHGG/uiLZ4pYReeM/n
-            agefDCe9PN5bkjonwOxN2klV8QgYQeznm1gdsFjMdvJUcba2kZICpRy8Wx9Sc0ai
-            oO8HKLqRoO5sV4Nv1FcY6EFq05AR1PPt6LoE0AY5REwVuNZSyiBp8lzzDj2E3JYf
-            obeZ8RtCYmNkXL3I+wfm/73SrIrX/ombqeaWGJB/rX2DEwco0IFau4ECAwEAAQ==
+            MIIBCgKCAQEAzvThkmiCHUWwof7UYZQ7BPTYN4ibQqO3WMig/FNalZHLBJeyyhu3
+            oEvw065RyJukX4eEFySdys8JU8GWRU0EB/opquKLy1tkLokBfH+/z0/C/VhtTWUC
+            S/ZqC53N7BkYuxkLsvp5fc2G1Ttm04vQUJ/dHMpxnIfw4SLEJnNBL/5/cYEtCRWn
+            I4BXmvkW8K34NypVLumJuWfQ5S2NVryXe/il1GUd/TaCiBWNwZ86x9bfJuKc2/p7
+            Se8PIAQaN1GdpmGIsj/2yNkxI1Y87E9DE6UJFD444IQ/fFMq3oLuAMFrRJSM2rTy
+            15h5kZ5KV2nkarPZmIRADTp/tzoMdJmh5wIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
-          
-          tinc.pubkey_ed25519 = "/KoqKeQsdRWnhva7/YTX65mUxuyKaFNjA8LlxmAUQXP";
+          tinc.pubkey_ed25519 = "saaS/b0GU3s268Move4i4mxNmxWACTiOvdGY6TpT0uH";
         };
       };
     };
@@ -506,15 +500,15 @@ in {
           aliases = [ "graham.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEAtnM8VqFlEPLPYfKOZvN4kKklrVEyX4WewlqHO8vtxML9ND5BHCdn
-            UeRsThvbKVRqEvZLTAXKClZRYVr2IroHqfx0euTq3FYTUbNNQ4KgcFAfLKWoxGfK
-            HsQbYpS93/sUtmhRBGcgXPnEkE6yqvFBXxcmB1QqdmgYKdY2Gtikwrv/5hb4AlNe
-            /gyzKGtAKYogspLI6EpEwlD9CGDNIUPJ4uQ56gDhV/qtyMSE6X0igSSVZayDc+x1
-            InPkH90xsa0/uXjYDnXNdMguLArGkRzMhd6DzK4vEaPFIX59yMX+tEj46rGY7xAI
-            gUZUI2codqY5Z93W5GC+ws34y0bpfeMMWwIDAQAB
+            MIIBCgKCAQEAs+UnyCIjHAGiecv6lFHVRw9pLuHfqmIlyKToQChJKvsMEh1G5KpO
+            KdvLuXcCzWQlhg3Tuh2a8vAYfACeJkqHY9YgH9ZSCrP+Fn9hb7eeosspQzLbC/6S
+            xq4QXSLgnGmwolS5TV4FgaxPgi/cKCAfT+Az9yXyVYWX3xmyfgPULUDiFdoTXBZ+
+            H2M+tDhzd9mNIZYHNcHPE7hccRETFhM80w1R9w1eyb4MkZ4XA3FBZ8hm4L7/XSNJ
+            EtDiBnB3q1HwlfGzcju+TLCHal7Z+wZJ8u/1iNmhieGxzg5tQTuhMa1bn/uaqyct
+            bdqnXGk6UcOUlxV8gdJh1I4M6MF8DXH4hwIDAQAB
             -----END RSA PUBLIC KEY-----
           '';
-          tinc.pubkey_ed25519 = "xMJNMMXZRCbWkN9CzLFohkGUK54dPcrrosFD7xgIFXA";
+          tinc.pubkey_ed25519 = "WOyyqCmTWMqjakFBnUoxsJv9o/XvdIJT9UHt6JfRuQM";
         };
       };
     };
