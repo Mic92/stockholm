@@ -18,7 +18,7 @@ pkgs.writers.writeBashBin "stable-generate" ''
   filename=$(mktemp)
   curl -Ssf "$STABLE_URL/sdapi/v1/txt2img" \
     -X POST \
-    --Header 'Content-Type: application/json' \
+    --header 'Content-Type: application/json' \
     --data "$PAYLOAD" |
       jq -r '.images[0]' |
       base64 --decode > "$filename"
