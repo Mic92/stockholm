@@ -76,6 +76,8 @@ in {
             serviceConfig.ExecStart = pkgs.writers.writeDash "autoswitch" ctr.startCommand;
             unitConfig.X-StopOnRemoval = false;
           };
+          # get rid of stateVersion not set warning;
+          system.stateVersion = config.system.nixos.release;
         };
         autoStart = false;
         enableTun = true;
