@@ -1,7 +1,7 @@
-{ lib, pkgs, stockholm, ... }:
-with (builtins.trace (lib.attrNames stockholm) stockholm).lib;
+{ pkgs, stockholm, ... }:
+with stockholm.lib;
 
-rec {
+{
   generators = {
     command_hook = commands: {
       pattern =
