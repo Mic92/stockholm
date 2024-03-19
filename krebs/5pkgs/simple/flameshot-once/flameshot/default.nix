@@ -12,5 +12,6 @@ pkgs.flameshot.overrideAttrs (old: rec {
   patches = old.patches or [] ++ [
     ./flameshot-12.imgur.patch
     ./flameshot-12.history.patch
+    ./flameshot-12.applauncher.patch
   ];
 })

@@ -1,0 +1,26 @@
+diff --git a/src/tools/launcher/applauncherwidget.cpp b/src/tools/launcher/applauncherwidget.cpp
+index 8a202c89..7427aeb9 100644
+--- a/src/tools/launcher/applauncherwidget.cpp
++++ b/src/tools/launcher/applauncherwidget.cpp
+@@ -20,6 +20,7 @@
+ #include <QProcess>
+ #include <QStandardPaths>
+ #include <QTabWidget>
++#include <stdlib.h>
+ 
+ namespace {
+ #if defined(Q_OS_WIN)
+@@ -66,7 +67,12 @@ AppLauncherWidget::AppLauncherWidget(const QPixmap& p, QWidget* parent)
+     QDir appsDirLocal(dirLocal);
+     m_parser.processDirectory(appsDirLocal);
+ 
+-    QString dir = QStringLiteral("/usr/share/applications/");
++    const char *USER = secure_getenv("USER");
++    QString dirUser = "/etc/profiles/per-user/" + QString::fromUtf8(USER) + "/share/applications/";
++    QDir appsDirUser(dirUser);
++    m_parser.processDirectory(appsDirUser);
++
++    QString dir = QStringLiteral("/run/current-system/sw/share/applications/");
+     QDir appsDir(dir);
+     m_parser.processDirectory(appsDir);
+ #endif
