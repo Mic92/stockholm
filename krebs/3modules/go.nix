@@ -20,9 +20,7 @@ let
   };
 
   imp = {
-    services.redis = {
-      enable = true;
-    };
+    services.redis.servers.go.enable = true;
 
     krebs.htgen.go = {
       port = cfg.port;
