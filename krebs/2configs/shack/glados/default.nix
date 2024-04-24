@@ -18,6 +18,7 @@ in {
     extraOptions = ["--net=host" "--device=/dev/zigbee" ];
     volumes = [
       "${confdir}:/config"
+      "${./zigbee-quirks}:/quirks"
       #"${confdir}/docker-run:/etc/services.d/home-assistant/run:"
     ];
   };
