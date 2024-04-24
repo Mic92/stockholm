@@ -23,7 +23,6 @@ in {
         { mail = "krebstel-1difh7483axpiaq92ghi14r5cql822wbhixqb0nn3y3jkcj0b785@ni.r"; }
         { mail = "lass@green.r"; }
         tv
-        xkey
       ];
       spam-ml = [
         lass
