@@ -10,9 +10,6 @@ in {
     image = "homeassistant/home-assistant:latest";
     environment = {
       TZ = "Europe/Berlin";
-      # TODO create unique users
-      PUID = toString config.users.users.news_container.uid;
-      PGID = toString config.users.groups.news_container.gid;
       UMASK = "007";
     };
     extraOptions = ["--net=host" "--device=/dev/zigbee" ];
@@ -25,7 +22,7 @@ in {
   systemd.tmpfiles.rules = [
     #"f ${confdir}/docker-run 0770 kiosk kiosk - -"
     # TODO:
-    "d ${confdir} 0770 news_container news_container - -"
+    "d ${confdir} 0770 root root - -"
   ];
 
   services.nginx.virtualHosts."hass.shack" = {
