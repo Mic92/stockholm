@@ -3,10 +3,9 @@ let
   kodi-host = "192.168.8.11";
   confdir = "/var/lib/homeassistant-docker";
 in {
-  imports = [
-  ];
+  imports = [ ./zigbee.nix ];
 
-  # networking.firewall.allowedTCPPorts = [ 8123 ];
+  networking.firewall.allowedTCPPorts = [ 8123 ];
   virtualisation.oci-containers.containers.hass = {
     image = "homeassistant/home-assistant:latest";
     environment = {
@@ -16,7 +15,7 @@ in {
       PGID = toString config.users.groups.news_container.gid;
       UMASK = "007";
     };
-    extraOptions = ["--net=host" ];
+    extraOptions = ["--net=host" "--device=/dev/zigbee" ];
     volumes = [
       "${confdir}:/config"
       #"${confdir}/docker-run:/etc/services.d/home-assistant/run:"

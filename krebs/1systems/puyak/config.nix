@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
   imports = [
     ./net.nix
@@ -170,4 +170,5 @@
     isNormalUser = true;
     shell = "/run/current-system/sw/bin/zsh";
   };
+  system.stateVersion = lib.mkForce "24.05";
 }
