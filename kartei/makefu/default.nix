@@ -96,6 +96,16 @@ in {
         retiolum.ip4.addr = "10.243.0.212";
       };
     };
+    savarcast = rec {
+      nets = {
+        retiolum.ip4 = {
+          addr = "10.243.136.238";
+        };
+        retiolum.aliases = [
+            "sava.r"
+          ];
+      };
+    };
     x = {
       syncthing.id = "OA36OF6-JEFCUJQ-OEYVTMH-DPCACQI-3AJRE5G-BFVMOUG-RPYJQE3-4ZCUWA5";
       nets = {
@@ -127,6 +137,7 @@ in {
           aliases = [
             "omo.r"
             "dcpp.omo.r"
+            "hass.omo.r"
             "backup.makefu.r"
             "torrent.omo.r"
             "music.omo.r"
@@ -239,6 +250,7 @@ in {
           ul.work.euer      IN A      ${nets.internet.ip4.addr}
           music.euer        IN A      ${nets.internet.ip4.addr}
           ntfy.euer         IN A      ${nets.internet.ip4.addr}
+          paper.euer        IN A      ${nets.internet.ip4.addr}
         '';
       };
       nets = rec {
