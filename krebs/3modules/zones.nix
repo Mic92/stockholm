@@ -21,6 +21,9 @@ with lib; {
 
         panda NS panda
         panda A 130.61.237.100
+
+        xkey A 217.197.83.17
+        xkey AAAA 2a0a:4580:5011::1
       '';
     };
   };
