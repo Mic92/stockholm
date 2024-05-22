@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
   imports = [
     ./net.nix
@@ -73,6 +73,7 @@
 
     # hass.shack
     <stockholm/krebs/2configs/shack/glados>
+    <stockholm/krebs/2configs/shack/esphome.nix>
 
     # connect to git.shackspace.de as group runner for rz
     <stockholm/krebs/2configs/shack/gitlab-runner.nix>
@@ -170,4 +171,5 @@
     isNormalUser = true;
     shell = "/run/current-system/sw/bin/zsh";
   };
+  system.stateVersion = lib.mkForce "24.05";
 }
