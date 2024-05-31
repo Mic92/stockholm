@@ -6,7 +6,6 @@
     ../../../krebs/2configs
     ../../../krebs/2configs/nginx.nix
 
-    ../../../krebs/2configs/buildbot-stockholm.nix
     ../../../krebs/2configs/binary-cache/nixos.nix
     ../../../krebs/2configs/ircd.nix
     ../../../krebs/2configs/reaktor2.nix
@@ -14,6 +13,10 @@
     ../../../krebs/2configs/acme.nix
     ../../../krebs/2configs/mud.nix
     ../../../krebs/2configs/repo-sync.nix
+
+    # ../../../krebs/2configs/buildbot-stockholm.nix
+    ../../../krebs/2configs/buildbot/master.nix
+    ../../../krebs/2configs/buildbot/worker.nix
 
     ../../../krebs/2configs/cal.nix
     ../../../krebs/2configs/mastodon.nix
