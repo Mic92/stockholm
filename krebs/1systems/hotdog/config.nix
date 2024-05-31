@@ -14,9 +14,9 @@
     ../../../krebs/2configs/mud.nix
     ../../../krebs/2configs/repo-sync.nix
 
-    # ../../../krebs/2configs/buildbot-stockholm.nix
-    ../../../krebs/2configs/buildbot/master.nix
-    ../../../krebs/2configs/buildbot/worker.nix
+    ../../../krebs/2configs/buildbot-stockholm.nix
+    #../../../krebs/2configs/buildbot/master.nix
+    #../../../krebs/2configs/buildbot/worker.nix
 
     ../../../krebs/2configs/cal.nix
     ../../../krebs/2configs/mastodon.nix
