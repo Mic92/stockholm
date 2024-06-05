@@ -468,6 +468,16 @@ let
         include ${pkgs.nginx}/conf/fastcgi_params;
         fastcgi_param GIT_HTTP_EXPORT_ALL "";
         fastcgi_param GIT_PROJECT_ROOT ${cfg.dataDir};
+        fastcgi_param HOME ${pkgs.write "git-http-backend.home" {
+          "/.gitconfig".text = /* ini */ ''
+            [safe]
+            directory = .
+            ${concatMapStrings
+              (repo: "directory = ${cfg.dataDir}/${repo.name}\n")
+              (attrValues cfg.repos)
+            }
+          '';
+        }};
         fastcgi_param PATH_INFO $fastcgi_script_name;
         fastcgi_param SCRIPT_FILENAME ${pkgs.git}/bin/git-http-backend;
         fastcgi_pass unix:${config.services.fcgiwrap.socketAddress};
