@@ -1,4 +1,4 @@
-{ pkgs, lib, ...  }: {
+{ pkgs, lib, config, ...  }: {
   services.matterbridge = {
     enable = true;
     configPath = let

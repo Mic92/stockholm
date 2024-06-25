@@ -211,6 +211,7 @@ in {
           bookmark.euer     IN A      ${nets.internet.ip4.addr}
           boot              IN A      ${nets.internet.ip4.addr}
           boot.euer         IN A      ${nets.internet.ip4.addr}
+          build.euer     IN A      ${nets.internet.ip4.addr}
           cache.euer        IN A      ${nets.internet.ip4.addr}
           cache.gum         IN A      ${nets.internet.ip4.addr}
           cgit.euer         IN A      ${nets.internet.ip4.addr}
