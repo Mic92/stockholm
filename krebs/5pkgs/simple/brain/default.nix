@@ -3,11 +3,11 @@
 write "brain" {
   "/bin/brain".link = writeDash "brain" ''
     PASSWORD_STORE_DIR=$HOME/brain \
-    exec ${pass}/bin/pass $@
+    exec ${pass}/bin/pass "$@"
   '';
   "/bin/brainmenu".link = writeDash "brainmenu" ''
     PASSWORD_STORE_DIR=$HOME/brain \
-    exec ${pass}/bin/passmenu $@
+    exec ${pass}/bin/passmenu "$@"
   '';
   "/share/bash-completion/completions/brain".link =
     runCommand "brain-completions" {
