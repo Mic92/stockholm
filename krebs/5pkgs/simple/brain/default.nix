@@ -1,16 +1,22 @@
-{ pass, runCommand, write, writeDash, ... }:
+{ pkgs }:
 
-write "brain" {
-  "/bin/brain".link = writeDash "brain" ''
+let
+  pass = pkgs.pass.withExtensions (ext: [
+    ext.pass-otp
+  ]);
+in
+
+pkgs.write "brain" {
+  "/bin/brain".link = pkgs.writeDash "brain" ''
     PASSWORD_STORE_DIR=$HOME/brain \
     exec ${pass}/bin/pass "$@"
   '';
-  "/bin/brainmenu".link = writeDash "brainmenu" ''
+  "/bin/brainmenu".link = pkgs.writeDash "brainmenu" ''
     PASSWORD_STORE_DIR=$HOME/brain \
     exec ${pass}/bin/passmenu "$@"
   '';
   "/share/bash-completion/completions/brain".link =
-    runCommand "brain-completions" {
+    pkgs.runCommand "brain-completions" {
     } /* sh */ ''
       sed -r '
         s/\<_pass?(_|\>)/_brain\1/g
