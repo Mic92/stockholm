@@ -51,20 +51,20 @@ in
           aliases = [ "cream.r" ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEAxqrCGJriL5L1ehBf7CrdpL6Ao/ssyj5ZoPdlTP47WtBRahQcp8e0
-            xWkAACyiSW2rdvK9hBE4Z7cXHenm8obABl69Q6rLdkxIOM7GBK08cX7ZZrRAdyA1
-            Bp9FQWoeHZFq4zBayp889HjPgauglguVlPiXaxh5NhqQkKX4Bkcp4f+OtBMvV0Uf
-            kf80J5pknliV/I85VDt0Ofyuuvot9p4GAegeaGaTgIpMrbGvqdpnB+ZiI9lFylCf
-            tubRvrX1TsaqrWzFu8B2XL6ZXGCY0IrJXs7P0RsG9OysCK7N9WPVrpX+zGFSCCk+
-            3UuKan9AFVOWA72Jj+glIU2i2d3D+Re8kvNmLCQ9GCM2c8Gy+r38UPN1/WTEe7az
-            94ivkczOgg4tIzMCN2JuAYLtoy3JK46Bbexk3i9KgtX5acNrKilQBDKHktqr0oJ8
-            Bz53kFP/X7oY+0RIPePL9OPQu8LRyFXeWeuQQUBgqDmttoWBtHEO6vicKFgwN0bl
-            5J6urUJQYC7aabfYO4aDfgVSRr7cELZkbIsx6Lkj5bOrraaJ2pS5H3QGSBUFifAq
-            mUdKKkBsYltKe8BsqKvQEysT3cGaGlkeP5OaKHN4qG7hGvLk71YjrYlWlIswdMAp
-            D2UgJ5/fcDswSAnFBlLYIqQwC7vMLoqTZPkQ0AN/DxHJCuXfRoU2vhkCAwEAAQ==
+            MIICCgKCAgEAnzhalF1rqLdSsT6HAGuQ6x1kC9Ty3FjoKR2Y5RCO9YIyEgRE8qfR
+            jkne+wIIleODUDMZYuvUe9X5hm8w6wDzxlwCPitwhDlOxoSBnXfbL6YL9rZBn3lC
+            JFkpEPtAJYnfM64R4/UjSndHlCVuH7tltD/1tmfG6IbSsIeDVz+pWZdEmBJfCiDl
+            aqP2gb1oIwe9TgJX2EC2ugW+6Jh9oPNIOP2Q5eLvty5WPhUSGQDWVMr5u0Rgc1oU
+            hhAvrfue7MFqUwX+o0Zq93eVAu/51dhTtqwwVgZVlHK7Wkak4yTRGPAP9v9vbKeK
+            7GpQuvbiI5OphhSFPjyCN1XMqVgFxqsnLsflIPbQdxCkBgFxhmNf31BDlXWHWD5e
+            7BfFYc1tZFcEWKhguoCSesJvh1BVsiZzfya96lGd/+ttcKBUKX4tdznEQsV/MVhC
+            cVnQD6k8PN4BIWVJtcq5oM9h6Yt6avtv8TeuaLp/Janco4JmYYFIfRETnz6ye/fG
+            OiKJnGQ1yohSE6n8ZUK1QYdYezZfI8QhF7GHK7he9x13L9xmXoybV+REXlRvh4S2
+            bi9lWTKhQVIHb/qLIdQuaAnK1xg4tdNzL43KEpPstGlAnG8uUNL8hCJL3m220RPK
+            lEbtLhayRzQ9zgj/hBQZa/hMGGyiqV1hiTbEEWAusJdGTUPYhjAelOkCAwEAAQ==
             -----END RSA PUBLIC KEY-----
           '';
-          tinc.pubkey_ed25519 = "lkvs1E4lCXt+Q7lvg/vU2JQyDfqseYo68Ecbb/Hg8YA";
+          tinc.pubkey_ed25519 = "B3EKYRxqFjIGR2VYajjDqX0gltPJNwcno5PUhafKWKB";
         };
       };
     };
