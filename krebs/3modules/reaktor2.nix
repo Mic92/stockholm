@@ -70,7 +70,7 @@ with import ../../lib/pure.nix { inherit lib; }; {
           DynamicUser = true;
           StateDirectory = cfg.username;
           ExecStart = let
-            configFile = pkgs.writeJSON configFileName configValue;
+            configFile = pkgs.writers.writeJSON configFileName configValue;
             configFileName = "${cfg.systemd-service-name}.config.json";
             configValue = stripAttr (
               recursiveUpdate {
