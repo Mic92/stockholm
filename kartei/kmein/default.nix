@@ -38,6 +38,7 @@ in
           "brockman.r"
           "ful.r"
           "news.r"
+          "rss.r"
         ];
         ip4.addr = "10.243.2.107";
         tinc.pubkey = ''
