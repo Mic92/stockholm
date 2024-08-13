@@ -34,7 +34,11 @@ in
   hosts = mapAttrs hostDefaults {
     ful = {
       nets.retiolum = {
-        aliases = [ "ful.r" ];
+        aliases = [
+          "brockman.r"
+          "ful.r"
+          "news.r"
+        ];
         ip4.addr = "10.243.2.107";
         tinc.pubkey = ''
           -----BEGIN RSA PUBLIC KEY-----

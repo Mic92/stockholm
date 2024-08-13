@@ -108,8 +108,6 @@ in {
         retiolum = {
           ip4.addr = "10.243.0.5";
           aliases = [
-            "news.r"
-            "brockman.r"
             "go.r"
             "rss.r"
           ];
