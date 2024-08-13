@@ -21,6 +21,7 @@
       aliases = [
         "neoprism.r"
         "cache.neoprism.r"
+        "go.r"
       ];
       tinc.pubkey = ''
         -----BEGIN RSA PUBLIC KEY-----
