@@ -19,8 +19,6 @@
     <stockholm/krebs/2configs/binary-cache/nixos.nix>
     <stockholm/krebs/2configs/binary-cache/prism.nix>
 
-    ## news host
-
     <stockholm/krebs/2configs/container-networking.nix>
     <stockholm/krebs/2configs/syncthing.nix>
 

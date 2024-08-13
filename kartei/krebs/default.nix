@@ -102,34 +102,6 @@ in {
       };
       ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxFkBln23wUxt4RhIHE3GvdKeBpJbjn++6maupHqUHp";
     };
-    news = {
-      ci = true;
-      nets = {
-        retiolum = {
-          ip4.addr = "10.243.0.5";
-          aliases = [
-            "rss.r"
-          ];
-          tinc.pubkey = ''
-            -----BEGIN PUBLIC KEY-----
-            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA9PY6t6P1ytgo8qYL2QDc
-            cgPezX8yGmA0nuTyCUPtXbWyWee9HnzYqekzJYvBHwgBDvZ8UhLZTCXD15agDfaf
-            cbzd4uM5bCDgqI8sezzD95tqj7mzvIEurIShDXYSWC6YRat1h1Opp86JngBJRvHZ
-            Gb6NAyfnr4v2eyMrmH9/j+sECxjCAaC5QLpJWyoDPilFU8dXBarmiZNYYlXQt1pn
-            yxZSF5pElmrdiZ6vlKlnEHwFtExm1gv63ZjAlusrXM+bKMvdVKRnhahq76A5VXjc
-            kbOhQi+wYGaVK4jB2a1UilmKYh1wKLE7HULoHDRrqEe4jemNZg+JOBPTU+jM/JzM
-            XdPy0KAMxHOUZCe8IX0LgF1snVaMF05Qkoe3QKr0YJ3KTD7UdsJpa1Br216Z/w2f
-            koz+cRn/Z/8TO8SIRKvy5TfXeH+ra6rp/CvwryNlNL4FB+25LFDkJtLIZGqAsz3G
-            vRXUiGN4l1FR4TbX7XaK2rvIlA/+4isJ02bBdnZhe7kmuuBeECyPaR1+Ui6pElXe
-            ZamnxTAmj86Q8pDx6Wn2cg8YAJlVV3UCfhda34DZokJmmmKucGupg/6Xt0Bhm9d5
-            exNrTIDG3lXTxmg2mfiZJeg/fsnalvtN0j/VB+NmmKzie+ZohMK4nUfslq8o5CO9
-            j7ZLmZzm062GzX0RenxNkwUCAwEAAQ==
-            -----END PUBLIC KEY-----
-          '';
-        };
-      };
-      ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHl5cDF9QheXyMlNYIX17ILbgd94K50fZy7w0fDLvZlo ";
-    };
     onebutton = {
       nets = {
         retiolum = {
