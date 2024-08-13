@@ -991,6 +991,106 @@ in {
         };
       };
     };
+
+    tegan = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # tegan.dos.cit.tum.de
+          ip4.addr = "131.159.38.2";
+          ip6.addr = "2a09:80c0:38::2";
+          aliases = [ "tegan.i" ];
+        };
+        retiolum = {
+          via = internet;
+          aliases = [ "tegan.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA0Rg6R8RZkQ8lYMegQDOy8OB6y31jfcVufBHx/QWFzzX/aaoyJDNo
+            QPVwn7qWnArqXvvwMYT6boPLJPmEFfxt9mwHX3lTEQKj82FT86hjG5axujIx1EAa
+            5v1A5UbZiBwntQPhHP+ULaQLPhwRfU+NftCpf3NC1frP0xd4U0fzdmO86jVp9Mwr
+            T07IvJzaSg1tIodT8F4CYktRCC9u8uQmtOrU/8FoPcWHMFxYMLR+qB3KQ3WF4EPU
+            qw3vtADATjDpagFr5+E12dc//04iTJc9sQ254WcLH9kfb+i+AFJ9G8H24iM9Iyal
+            YuEAYPV1XOQ8SZ9PNrKcSJxvMebzOkhvmQIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "7AlLnzY96NqA9I0og/RaY+HekMSUGlxoDFNy5VRzE+L";
+        };
+      };
+    };
+
+    xavier = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # xavier.dos.cit.tum.de
+          ip4.addr = "131.159.102.27";
+          ip6.addr = "2a09:80c0:102::27";
+          aliases = [ "xavier.i" ];
+        };
+        retiolum = {
+          via = internet;
+          aliases = [ "xavier.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA4mAnaYD/tImIFmpDVK819M8XqY5j6i85E1FuBfqkx4FFRY4qHlpT
+            1ykybkPPI64y0B2Nr698vg52LQB9jclbo8sm5q8X/kkgwOM7jS9uwO2k8XnUqi3l
+            bV22v5xTXjqPklP71Bc5dlvjVUfX5KwkEpzrSQ+NqIPrlzs9/nIeQONVdhrEsRBk
+            kMaSGHzRcBBP+rbsi+GqIN4VKUKlUmP3XiDGj9yGUnTSDbMf0CoOksmle9i6s2rV
+            J5Kp78LhIZ5el7Gd+wMtwWQYKcHbZJwpFt4ODlefKknLeDV0uJgJpUmF0r32Hlj0
+            OAkmtpaRdweKj/Va31jNvhgJidDe/qgrFwIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "CkupwxlJG2SH5FkqxathLC4PSZCsrDMpOTOtvCqid3A";
+        };
+      };
+    };
+
+    #vicky = {
+    #  owner = config.krebs.users.mic92;
+    #  nets = rec {
+    #    internet = {
+    #      ip4.addr = "";
+    #      ip6.addr = "";
+    #      aliases = [ "vicky.i" ];
+    #    };
+    #    retiolum = {
+    #      via = internet;
+    #      aliases = [ "vicky.r" ];
+    #      tinc.pubkey = ''
+    #      '';
+    #      tinc.pubkey_ed25519 = "";
+    #    };
+    #  };
+    #};
+
+    irene = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # irene.dos.cit.tum.de
+          ip4.addr = "131.159.102.28";
+          ip6.addr = "2a09:80c0:102::28";
+          aliases = [ "irene.i" ];
+        };
+        retiolum = {
+          via = internet;
+          aliases = [ "irene.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEA2P7QtdfRmrI1gDBKQJv+kAJBeNz5/bDuJfCcLJ6fkOt3MduZvLDt
+            qCj2LBhdXBAEcIKzrvzgR9r9mfEU38hr6JgO01xBvyEHg9YSJJ/5iGu17ZdyeS96
+            3RRpUs2WtepA3vrhSH7xgncXXC3xoercdUGs2GK3qlx9VAcAR0hy5teQmkBGJecm
+            C2wXwwEajOL4HAAvv7gyEp6S5ow1DHSJXxe32FQb18YnR2WHXh40RfWJnvs+zeaV
+            QYN4v6XNJKGC3hux1QyGQbfABUeEnNzl9bDmVICpcNPAy09VWX10UCymmWX6612L
+            EYXB0lt3PhcsvRcXNlV8ZZrukY8EU+UY1wIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "CAyCg6zgO14v5oI4sV9dpwmjS7jy9Ttb4SiuKI5OQyN";
+        };
+      };
+    };
+
   };
   users = {
     mic92 = {
