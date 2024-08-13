@@ -18,7 +18,7 @@ with import ../../lib/pure.nix { inherit lib; }; {
         };
         port = mkOption {
           default = "6667";
-          # TODO type = types.service-name
+          type = types.str;
         };
         plugins = mkOption {
           default = [];
