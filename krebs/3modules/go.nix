@@ -21,6 +21,7 @@ let
 
   imp = {
     services.redis.servers.go.enable = true;
+    users.users.htgen-go.extraGroups = [ "redis-go" ];
 
     krebs.htgen.go = {
       port = cfg.port;
@@ -29,7 +30,7 @@ let
 
         case "$Method $Request_URI" in
           "GET /"*)
-            if item=$(${pkgs.redis}/bin/redis-cli --raw get "''${Request_URI#/}"); then
+            if item=$(${pkgs.redis}/bin/redis-cli -s /run/redis-go/redis.sock --raw get "''${Request_URI#/}"); then
               printf 'HTTP/1.1 302 Found\r\n'
               printf 'Content-Type: text/plain\r\n'
               printf 'Connection: closed\r\n'
@@ -54,11 +55,10 @@ let
             )
 
             sha256=$(echo "$uri" | sha256sum -b | cut -d\  -f1)
-            base32=$(${pkgs.nixStable}/bin/nix-hash --to-base32 --type sha256 "$sha256")
-            base32short=$(echo "$base32" | cut -c48-52)
-            ${pkgs.redis}/bin/redis-cli set "$base32short" "$uri" >/dev/null
+            short=$(echo "$sha256" | cut -c1-8)
+            ${pkgs.redis}/bin/redis-cli -s /run/redis-go/redis.sock set "$short" "$uri" >/dev/null
 
-            ref="http://$req_host/$base32short"
+            ref="http://$req_host/$short"
 
             printf 'HTTP/1.1 200 OK\r\n'
             printf 'Content-Type: text/plain; charset=UTF-8\r\n'
