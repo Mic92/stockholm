@@ -113,7 +113,6 @@
   krebs.build.host = config.krebs.hosts.puyak;
   krebs.hosts.puyak.ssh.privkey.path = "${config.krebs.secret.directory}/ssh.id_ed25519";
 
-  sound.enable = false;
   boot = {
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;

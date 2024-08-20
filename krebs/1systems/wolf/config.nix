@@ -73,7 +73,6 @@ in
   '';
 
   time.timeZone = "Europe/Berlin";
-  sound.enable = false;
 
   # avahi
   services.avahi = {

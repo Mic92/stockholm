@@ -28,7 +28,6 @@ in
   ];
 
   krebs.build.host = config.krebs.hosts.filebitch;
-  sound.enable = false;
 
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ATTR{address}=="60:a4:4c:3d:52:cf", NAME="et0"
