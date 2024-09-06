@@ -205,53 +205,56 @@ in {
     gum = rec {
       extraZones = {
         "krebsco.de" = ''
-          rss.euer          IN A      ${nets.internet.ip4.addr}
-          o.euer            IN A      ${nets.internet.ip4.addr}
-          bw.euer           IN A      ${nets.internet.ip4.addr}
+          admin.work.euer   IN A      ${nets.internet.ip4.addr}
+          api.work.euer     IN A      ${nets.internet.ip4.addr}
+          atuin.euer        IN A      ${nets.internet.ip4.addr}
+          board.euer        IN A      ${nets.internet.ip4.addr}
           bookmark.euer     IN A      ${nets.internet.ip4.addr}
           boot              IN A      ${nets.internet.ip4.addr}
           boot.euer         IN A      ${nets.internet.ip4.addr}
-          build.euer     IN A      ${nets.internet.ip4.addr}
+          build.euer        IN A      ${nets.internet.ip4.addr}
+          bw.euer           IN A      ${nets.internet.ip4.addr}
           cache.euer        IN A      ${nets.internet.ip4.addr}
           cache.gum         IN A      ${nets.internet.ip4.addr}
           cgit.euer         IN A      ${nets.internet.ip4.addr}
           dl.euer           IN A      ${nets.internet.ip4.addr}
           dns.euer          IN A      ${nets.internet.ip4.addr}
           dockerhub         IN A      ${nets.internet.ip4.addr}
+          etherpad.euer     IN A      ${nets.internet.ip4.addr}
           euer              IN A      ${nets.internet.ip4.addr}
-          euer              IN MX 1   aspmx.l.google.com.
+          feed.euer         IN A      ${nets.internet.ip4.addr}
           ghook             IN A      ${nets.internet.ip4.addr}
           git.euer          IN A      ${nets.internet.ip4.addr}
           gold              IN A      ${nets.internet.ip4.addr}
           graph             IN A      ${nets.internet.ip4.addr}
           gum               IN A      ${nets.internet.ip4.addr}
-          io                IN NS     gum.krebsco.de.
           iso.euer          IN A      ${nets.internet.ip4.addr}
-          feed.euer         IN A      ${nets.internet.ip4.addr}
-          board.euer        IN A      ${nets.internet.ip4.addr}
-          etherpad.euer     IN A      ${nets.internet.ip4.addr}
-          mediengewitter    IN CNAME  over.dose.io.
+          maps.work.euer    IN A      ${nets.internet.ip4.addr}
+          meet.euer         IN A      ${nets.internet.ip4.addr}
           mon.euer          IN A      ${nets.internet.ip4.addr}
+          music.euer        IN A      ${nets.internet.ip4.addr}
           netdata.euer      IN A      ${nets.internet.ip4.addr}
-          nixos.unstable    IN CNAME  krebscode.github.io.
+          ntfy.euer         IN A      ${nets.internet.ip4.addr}
+          o.euer            IN A      ${nets.internet.ip4.addr}
+          paper.euer        IN A      ${nets.internet.ip4.addr}
           photostore        IN A      ${nets.internet.ip4.addr}
-          pigstarter        IN CNAME  makefu.github.io.
+          play.work.euer    IN A      ${nets.internet.ip4.addr}
+          push.work.euer    IN A      ${nets.internet.ip4.addr}
+          rss.euer          IN A      ${nets.internet.ip4.addr}
           share.euer        IN A      ${nets.internet.ip4.addr}
+          ul.work.euer      IN A      ${nets.internet.ip4.addr}
           wg.euer           IN A      ${nets.internet.ip4.addr}
           wiki.euer         IN A      ${nets.internet.ip4.addr}
           wikisearch        IN A      ${nets.internet.ip4.addr}
-
-          meet.euer         IN A      ${nets.internet.ip4.addr}
           work.euer         IN A      ${nets.internet.ip4.addr}
-          admin.work.euer   IN A      ${nets.internet.ip4.addr}
-          push.work.euer    IN A      ${nets.internet.ip4.addr}
-          api.work.euer     IN A      ${nets.internet.ip4.addr}
-          maps.work.euer    IN A      ${nets.internet.ip4.addr}
-          play.work.euer    IN A      ${nets.internet.ip4.addr}
-          ul.work.euer      IN A      ${nets.internet.ip4.addr}
-          music.euer        IN A      ${nets.internet.ip4.addr}
-          ntfy.euer         IN A      ${nets.internet.ip4.addr}
-          paper.euer        IN A      ${nets.internet.ip4.addr}
+
+          mediengewitter    IN CNAME  over.dose.io.
+          nixos.unstable    IN CNAME  krebscode.github.io.
+          pigstarter        IN CNAME  makefu.github.io.
+
+          euer              IN MX 1   aspmx.l.google.com.
+
+          io                IN NS     gum.krebsco.de.
         '';
       };
       nets = rec {
@@ -284,6 +287,7 @@ in {
             "blog.makefu.r"
             "cache.gum.r"
             "cgit.gum.r"
+            "git.gum.r"
             "dcpp.gum.r"
             "dcpp.nextgum.r"
             "graph.makefu.r"
