@@ -2,49 +2,52 @@
 {
   imports = [
     ./net.nix
-    <stockholm/krebs>
-    <stockholm/krebs/2configs>
-    <stockholm/krebs/2configs/secret-passwords.nix>
-    <stockholm/krebs/2configs/hw/x220.nix>
+    ../../../krebs
+    ../../../krebs/2configs
+    ../../2configs/secret-passwords.nix
+    ../../2configs/hw/x220.nix
 
     # see documentation in included getty-for-esp.nix:
     # brain hosts/puyak/root
-    <stockholm/krebs/2configs/hw/getty-for-esp.nix>
+    ../../2configs/hw/getty-for-esp.nix
 
+    ../../2configs/buildbot/worker.nix
 
     ## initrd unlocking
-    # (brain hosts/puyak/luks-ssd;echo)  | ssh root@$(brain krebs-secrets/puyak/initrd/hostname) 'cat > /crypt-ramfs/passphrase'
-    <stockholm/krebs/2configs/tor/initrd.nix>
+    # (brain hosts/puyak/luks-ssd;echo)  | ssh root@$(brain krebs-secrets/puyak/initrd/hostname) 'cat  /crypt-ramfs/passphrase'
+    ../../2configs/tor/initrd.nix
 
-    <stockholm/krebs/2configs/binary-cache/nixos.nix>
-    <stockholm/krebs/2configs/binary-cache/prism.nix>
+    ../../2configs/binary-cache/nixos.nix
+    ../../2configs/binary-cache/prism.nix
 
-    <stockholm/krebs/2configs/container-networking.nix>
-    <stockholm/krebs/2configs/syncthing.nix>
+    ## news host
+
+    ../../2configs/container-networking.nix
+    ../../2configs/syncthing.nix
 
     ### shackspace ###
     # handle the worlddomination map via coap
-    <stockholm/krebs/2configs/shack/worlddomination.nix>
-    <stockholm/krebs/2configs/shack/ssh-keys.nix>
+    ../../2configs/shack/worlddomination.nix
+    ../../2configs/shack/ssh-keys.nix
 
     # drivedroid.shack for shackphone
-    <stockholm/krebs/2configs/shack/drivedroid.nix>
-    # <stockholm/krebs/2configs/shack/nix-cacher.nix>
+    ../../2configs/shack/drivedroid.nix
+    # ../../2configs/shack/nix-cacher.nix
 
     # Say if muell will be collected
-    <stockholm/krebs/2configs/shack/muell_caller.nix>
+    ../../2configs/shack/muell_caller.nix
     # provide muellshack api: muell.shack
-    <stockholm/krebs/2configs/shack/muellshack.nix>
+    ../../2configs/shack/muellshack.nix
     # send mail if muell was not handled
-    <stockholm/krebs/2configs/shack/muell_mail.nix>
+    ../../2configs/shack/muell_mail.nix
 
     # provide light control api
-    <stockholm/krebs/2configs/shack/node-light.nix> # light.shack lounge.light.shack power.light.shack openhab.shack lightapi.shack
+    ../../2configs/shack/node-light.nix # light.shack lounge.light.shack power.light.shack openhab.shack lightapi.shack
     # light.shack web-ui
-    <stockholm/krebs/2configs/shack/light.shack.nix> #light.shack
+    ../../2configs/shack/light.shack.nix #light.shack
 
     # fetch the u300 power stats
-    <stockholm/krebs/2configs/shack/power/u300-power.nix>
+    ../../2configs/shack/power/u300-power.nix
 
 
     { # do not log to /var/spool/log
@@ -64,50 +67,50 @@
     }
 
     # create samba share for anonymous usage with the laser and 3d printer pc
-    <stockholm/krebs/2configs/shack/share.nix>
+    ../../2configs/shack/share.nix
 
     # mobile.lounge.mpd.shack
-    <stockholm/krebs/2configs/shack/mobile.mpd.nix>
+    ../../2configs/shack/mobile.mpd.nix
 
     # hass.shack
-    <stockholm/krebs/2configs/shack/glados>
-    <stockholm/krebs/2configs/shack/esphome.nix>
+    ../../2configs/shack/glados
+    ../../2configs/shack/esphome.nix
 
     # connect to git.shackspace.de as group runner for rz
-    <stockholm/krebs/2configs/shack/gitlab-runner.nix>
+    ../../2configs/shack/gitlab-runner.nix
 
     # Statistics collection and visualization
-    # <stockholm/krebs/2configs/shack/graphite.nix> # graphiteApi is broken and unused(hopefully)
+    # ../../2configs/shack/graphite.nix # graphiteApi is broken and unused(hopefully)
     ## Collect data from mqtt.shack and store in graphite database
-    <stockholm/krebs/2configs/shack/mqtt_sub.nix>
+    ../../2configs/shack/mqtt_sub.nix
     ## Collect radioactive data and put into graphite
-    <stockholm/krebs/2configs/shack/radioactive.nix>
+    ../../2configs/shack/radioactive.nix
     ## mqtt.shack
-    <stockholm/krebs/2configs/shack/mqtt.nix>
+    ../../2configs/shack/mqtt.nix
     ## influx.shack
-    <stockholm/krebs/2configs/shack/influx.nix>
+    ../../2configs/shack/influx.nix
 
     ## Collect local statistics via collectd and send to collectd
-    # <stockholm/krebs/2configs/stats/shack-client.nix>
-    # <stockholm/krebs/2configs/stats/shack-debugging.nix>
+    # ../../2configs/stats/shack-client.nix
+    # ../../2configs/stats/shack-debugging.nix
 
     ## netbox.shack: Netbox is disabled as nobody seems to be using it anyway
-    # <stockholm/krebs/2configs/shack/netbox.nix>
+    # ../../2configs/shack/netbox.nix
 
     # grafana.shack
-    <stockholm/krebs/2configs/shack/grafana.nix>
+    ../../2configs/shack/grafana.nix
 
     # shackdns.shack
     # replacement for leases.shack and shackles.shack
-    <stockholm/krebs/2configs/shack/shackDNS.nix>
+    ../../2configs/shack/shackDNS.nix
 
     # monitoring: prometheus.shack
-    <stockholm/krebs/2configs/shack/prometheus/node.nix>
-    <stockholm/krebs/2configs/shack/prometheus/server.nix>
-    <stockholm/krebs/2configs/shack/prometheus/blackbox.nix>
-    #<stockholm/krebs/2configs/shack/prometheus/unifi.nix>
+    ../../2configs/shack/prometheus/node.nix
+    ../../2configs/shack/prometheus/server.nix
+    ../../2configs/shack/prometheus/blackbox.nix
+    #../../2configs/shack/prometheus/unifi.nix
     # TODO: alertmanager 0.24+ supports telegram
-    # <stockholm/krebs/2configs/shack/prometheus/alertmanager-telegram.nix>
+    # ../../2configs/shack/prometheus/alertmanager-telegram.nix
   ];
 
   krebs.build.host = config.krebs.hosts.puyak;
