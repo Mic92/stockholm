@@ -391,12 +391,14 @@ let
       };
     };
 
-    services.fcgiwrap = {
+    services.fcgiwrap.instances.cgit = {
       enable = true;
-      user = cfg.cgit.fcgiwrap.user.name;
-      group = cfg.cgit.fcgiwrap.group.name;
-      # socketAddress = "/run/fcgiwrap.sock" (default)
-      # socketType = "unix" (default)
+      process.user = cfg.cgit.fcgiwrap.user.name;
+      socket.user = cfg.cgit.fcgiwrap.user.name;
+      process.group = cfg.cgit.fcgiwrap.group.name;
+      socket.group = cfg.cgit.fcgiwrap.group.name;
+      socket.address = "/run/fcgiwrap.sock";
+      # socket.type = "unix" (default)
     };
 
     environment.etc."cgitrc".text = let
