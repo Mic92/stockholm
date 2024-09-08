@@ -13,7 +13,7 @@
 
   description = "stockholm";
 
-  outputs = { self, nixpkgs, nix-writers, buildbot-nix, ... }@inputs: {
+  outputs = { self, nixpkgs, nix-writers, buildbot-nix, ... }: {
     nixosConfigurations = nixpkgs.lib.mapAttrs (machineName: _: nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs.stockholm = self;
