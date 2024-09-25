@@ -108,12 +108,12 @@ let
     })
     ({
       krebs.iptables.tables.filter.INPUT.rules = map
-        (portRange: { predicate = "-p tcp --dport ${toString port.from}:${toString port.to}"; target = "ACCEPT"; })
+        (portRange: { predicate = "-p tcp --dport ${toString portRange.from}:${toString portRange.to}"; target = "ACCEPT"; })
         config.networking.firewall.allowedTCPPortRanges;
     })
     ({
       krebs.iptables.tables.filter.INPUT.rules = map
-        (portRange: { predicate = "-p udp --dport ${toString port.from}:${toString port.to}"; target = "ACCEPT"; })
+        (portRange: { predicate = "-p udp --dport ${toString portRange.from}:${toString portRange.to}"; target = "ACCEPT"; })
         config.networking.firewall.allowedUDPPortRanges;
     })
     ({
