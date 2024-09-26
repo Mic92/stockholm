@@ -391,12 +391,12 @@ let
       };
     };
 
-    services.fcgiwrap = {
-      enable = true;
-      user = cfg.cgit.fcgiwrap.user.name;
-      group = cfg.cgit.fcgiwrap.group.name;
-      # socketAddress = "/run/fcgiwrap.sock" (default)
-      # socketType = "unix" (default)
+    services.fcgiwrap.instances.cgit = {
+      process.user = cfg.cgit.fcgiwrap.user.name;
+      process.group = cfg.cgit.fcgiwrap.group.name;
+      socket.user = cfg.cgit.fcgiwrap.user.name;
+      socket.group = config.services.nginx.group;
+      socket.mode = "0660";
     };
 
     environment.etc."cgitrc".text = let
@@ -460,7 +460,7 @@ let
         fastcgi_param       PATH_INFO       $uri;
         fastcgi_param       QUERY_STRING    $args;
         fastcgi_param       HTTP_HOST       $server_name;
-        fastcgi_pass        unix:${config.services.fcgiwrap.socketAddress};
+        fastcgi_pass        unix:${config.services.fcgiwrap.instances.cgit.socket.address};
       '';
       # Smart HTTP transport.  Regex based on.
       # https://github.com/git/git/blob/v2.27.0/http-backend.c#L708-L721
@@ -480,7 +480,7 @@ let
         }};
         fastcgi_param PATH_INFO $fastcgi_script_name;
         fastcgi_param SCRIPT_FILENAME ${pkgs.git}/bin/git-http-backend;
-        fastcgi_pass unix:${config.services.fcgiwrap.socketAddress};
+        fastcgi_pass unix:${config.services.fcgiwrap.instances.cgit.socket.address};
       '';
       locations."/static/".extraConfig = ''
         root ${pkgs.cgit}/cgit;
