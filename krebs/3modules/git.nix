@@ -392,7 +392,6 @@ let
     };
 
     services.fcgiwrap.instances.cgit = {
-      enable = true;
       process.user = cfg.cgit.fcgiwrap.user.name;
       socket.user = cfg.cgit.fcgiwrap.user.name;
       process.group = cfg.cgit.fcgiwrap.group.name;
