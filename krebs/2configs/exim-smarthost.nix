@@ -32,6 +32,7 @@ in {
     in {
       "brain@krebsco.de" = brain-ml;
       "eloop2022@krebsco.de" = eloop-ml;
+      "2024@eloop.org" = eloop-ml;
       "root@eloop.org" = eloop-ml; # obsolete, use spam@eloop.org instead
       "spam@eloop.org" = eloop-ml;
       "youtube@eloop.org" = eloop-ml; # obsolete, use spam@eloop.org instead
