@@ -461,7 +461,7 @@ let
         fastcgi_param       PATH_INFO       $uri;
         fastcgi_param       QUERY_STRING    $args;
         fastcgi_param       HTTP_HOST       $server_name;
-        fastcgi_pass        unix:${config.services.fcgiwrap.socketAddress};
+        fastcgi_pass        unix:${config.services.fcgiwrap.instances.cgit.socket.address};
       '';
       # Smart HTTP transport.  Regex based on.
       # https://github.com/git/git/blob/v2.27.0/http-backend.c#L708-L721
@@ -481,7 +481,7 @@ let
         }};
         fastcgi_param PATH_INFO $fastcgi_script_name;
         fastcgi_param SCRIPT_FILENAME ${pkgs.git}/bin/git-http-backend;
-        fastcgi_pass unix:${config.services.fcgiwrap.socketAddress};
+        fastcgi_pass unix:${config.services.fcgiwrap.instances.cgit.socket.address};
       '';
       locations."/static/".extraConfig = ''
         root ${pkgs.cgit}/cgit;
