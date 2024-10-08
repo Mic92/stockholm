@@ -16,7 +16,9 @@ in {
         makefu
         tv
       ];
-      eloop-ml = spam-ml;
+      eloop-ml = spam-ml ++ [
+        { mail = "unreal@rtinf.net"; }
+      ];
       krebstel-ml = [
         config.krebs.users."0x4A6F"
         { mail = "krebstel-1rxz0mqa95nkmk298s1731ly0ii7vc36kkm36pnjj89hrq52pgn1@ni.r"; }
