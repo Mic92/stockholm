@@ -10,15 +10,20 @@
       tinc = {
         pubkey = ''
           -----BEGIN RSA PUBLIC KEY-----
-          MIIBCgKCAQEA9bUSItw8rEu2Cm2+3IGHyRxopre9lqpFjZNG2QTnjXkZ97QlDesT
-          YYZgM2lBkYcDN3/LdGaFFKrQQSGiF90oXA2wFqPuIfycx+1+TENGCzF8pExwbTd7
-          ROSVnISbghXYDgr3TqkjpPmnM+piFKymMDBGhxWuy1bw1AUfvRzhQwPAvtjB4VvF
-          7AVN/Z9dAZ/LLmYfYq7fL8V7PzQNvR+f5DP6+Eubx0xCuyuo63bWuGgp3pqKupx4
-          xsixtMQPuqMBvOUo0SBCCPa9a+6I8dSwqAmKWM5BhmNlNCRDi37mH/m96av7SIiZ
-          V29hwypVnmLoJEFiDzPMCdiH9wJNpHuHuQIDAQAB
+          MIICCgKCAgEAx362jbzjyKsPG4zAeZW1mgDWzaBoTz6JpJlN6ycsTLkrAAQrHiCs
+          Dz6sbE0zkQUcdFFuagqwROrQU81kx663azBAlHHsMs/vkVmbQk/ilXHHOYYbkRUS
+          zCfBe1JwXNPUyZ+v46IgOuvLLBfO00prcDj69sIqWdRMGAvKqYssSHuelBO3UdMl
+          7r5nQ+Kc5hOqfHjf1xW7eSL3BsAA1GP/nuHkhUJN4TOKXqlywTxpcJQKI35k1gR/
+          zCH53qZQ6/GHe6lHEWIjrKdzg51h7cu6UbyfpVN0zoFSY3gcFemRNKk/LI8DxVZs
+          DjBQCpNVzRkrbmRIS0jTpzwSIvA7O204Z4Z7Q7ocrlFP5gKKT7M+Hk18CU0DIHwp
+          e5shYBGLPAswmWJQJUyXRyMjS580+ymxw5DRIym2Ogu8w3ztSOxbcWunvLAn9I84
+          U6/njQxdKHeuCYBqlO1YHOJ+qKvU4HsV3EYjwGvVzxL4XVg24KvQJ4M6QZvjLYfS
+          oysx64tLBW4hYv4dTA0vLSa9/0zreNKucJRAaHYGw9rC6FZDK3b8AZiNOCSz2tWC
+          I/C/sw/UgZMev66MHVuO/K6xR5hpi1tW6ONZ3ecFp4N+MS8lUOQrCQ/L6UU58Qgr
+          AmAP6hM3FM1TCHEOC2jpLcUIHAdLf+xdzdp2ExPZJiMAUeV310i/dlECAwEAAQ==
           -----END RSA PUBLIC KEY-----
         '';
-        pubkey_ed25519 = "Ptc5VuYkRd5+zHibZwNe3DEgGHHvAk0Ul00dW1YXsrC";
+        pubkey_ed25519 = "iuu6UcJpUu+72IywGkeGh/PpJJZ9UidbsdTR00JbFQL";
       };
     };
     wiregrill = {
