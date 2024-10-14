@@ -393,11 +393,10 @@ let
 
     services.fcgiwrap.instances.cgit = {
       process.user = cfg.cgit.fcgiwrap.user.name;
-      socket.user = cfg.cgit.fcgiwrap.user.name;
       process.group = cfg.cgit.fcgiwrap.group.name;
-      socket.group = cfg.cgit.fcgiwrap.group.name;
-      socket.address = "/run/fcgiwrap.sock";
-      # socket.type = "unix" (default)
+      socket.user = cfg.cgit.fcgiwrap.user.name;
+      socket.group = config.services.nginx.group;
+      socket.mode = "0660";
     };
 
     environment.etc."cgitrc".text = let

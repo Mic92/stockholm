@@ -16,7 +16,9 @@ in {
         makefu
         tv
       ];
-      eloop-ml = spam-ml;
+      eloop-ml = spam-ml ++ [
+        { mail = "unreal@rtinf.net"; }
+      ];
       krebstel-ml = [
         config.krebs.users."0x4A6F"
         { mail = "krebstel-1rxz0mqa95nkmk298s1731ly0ii7vc36kkm36pnjj89hrq52pgn1@ni.r"; }
@@ -32,6 +34,7 @@ in {
     in {
       "brain@krebsco.de" = brain-ml;
       "eloop2022@krebsco.de" = eloop-ml;
+      "2024@eloop.org" = eloop-ml;
       "root@eloop.org" = eloop-ml; # obsolete, use spam@eloop.org instead
       "spam@eloop.org" = eloop-ml;
       "youtube@eloop.org" = eloop-ml; # obsolete, use spam@eloop.org instead
