@@ -10,20 +10,20 @@
       tinc = {
         pubkey = ''
           -----BEGIN RSA PUBLIC KEY-----
-          MIICCgKCAgEAx362jbzjyKsPG4zAeZW1mgDWzaBoTz6JpJlN6ycsTLkrAAQrHiCs
-          Dz6sbE0zkQUcdFFuagqwROrQU81kx663azBAlHHsMs/vkVmbQk/ilXHHOYYbkRUS
-          zCfBe1JwXNPUyZ+v46IgOuvLLBfO00prcDj69sIqWdRMGAvKqYssSHuelBO3UdMl
-          7r5nQ+Kc5hOqfHjf1xW7eSL3BsAA1GP/nuHkhUJN4TOKXqlywTxpcJQKI35k1gR/
-          zCH53qZQ6/GHe6lHEWIjrKdzg51h7cu6UbyfpVN0zoFSY3gcFemRNKk/LI8DxVZs
-          DjBQCpNVzRkrbmRIS0jTpzwSIvA7O204Z4Z7Q7ocrlFP5gKKT7M+Hk18CU0DIHwp
-          e5shYBGLPAswmWJQJUyXRyMjS580+ymxw5DRIym2Ogu8w3ztSOxbcWunvLAn9I84
-          U6/njQxdKHeuCYBqlO1YHOJ+qKvU4HsV3EYjwGvVzxL4XVg24KvQJ4M6QZvjLYfS
-          oysx64tLBW4hYv4dTA0vLSa9/0zreNKucJRAaHYGw9rC6FZDK3b8AZiNOCSz2tWC
-          I/C/sw/UgZMev66MHVuO/K6xR5hpi1tW6ONZ3ecFp4N+MS8lUOQrCQ/L6UU58Qgr
-          AmAP6hM3FM1TCHEOC2jpLcUIHAdLf+xdzdp2ExPZJiMAUeV310i/dlECAwEAAQ==
+          MIICCgKCAgEAzttBobc7FsMm3ngFeOwnY0sB/lC9Y+JHHfLlh9j8kROjBhIzu+Ky
+          3OVr5Zs3iAUw4yOtMVdEQX9kTkN993qcIUriBMsPBnnQPvPX9hlLvLJ80Mputqdq
+          xUmnjn29DYff56VEzAfOEYeaXX63XUovQmALIk4DvAWxzCL6yyth8IJKQDnsieHN
+          QmhAgQN4/rqHzaqkdN4pcnjff3Xw2dHZd0zhnQBA6pMKuBTmu0wV1HMKWHmjNUXG
+          lMtXKZ8rsJsNxo9NKKxYfMX5LNf497rZHC7iMDsNSGmMa8Rhw/By94Tax7MQ2++w
+          dGg0A8ON6eyM9qcLbFgNbkslEC9ustb3bWqHZJyHRyvTJ0CnTSYoeqyDtdzAL+tg
+          FBqiWbDrxUDYD4kdsIt6waPx2pmVjvO/z5njbiuLYSmrICpQkRlu3SOBXPbgouoG
+          6DmwakOvpHA9pPlRUCa0koAkSM2iwaICsbsdk8KghfbjX5Kbu2b8oK1V7FKpYnKF
+          lLrRJk1G3tc3JV5slsbiaV/zL/JZ8IhNY1m6DYIyLeCGKLmc844o3ZoRVPqfMpDc
+          a4RSEoORv3oUAc4fWXPil+AjvTSxfRSRX6L/1STJ4HtUqSwuAinCZx4ecP/qqCv6
+          KpVr4zMR/x+6o5DBCHNriW8uVnOEzuxaq1k9tIUDuawED3XodTzGKtECAwEAAQ==
           -----END RSA PUBLIC KEY-----
         '';
-        pubkey_ed25519 = "iuu6UcJpUu+72IywGkeGh/PpJJZ9UidbsdTR00JbFQL";
+        pubkey_ed25519 = "v3VPuvfH/2JS5aUx2C9MtYoYoBU9J5LkvUdbyabKgrL";
       };
     };
     wiregrill = {
@@ -32,10 +32,9 @@
       aliases = [
         "shodan.w"
       ];
-      wireguard.pubkey = "0rI/I8FYQ3Pba7fQ9oyvtP4a54GWsPa+3zAiGIuyV30=";
+      wireguard.pubkey = "J1RTYvWmWZrLe+IqOrmy+wYxGyc2j6sUjIGgM1No2AQ=";
     };
   };
   secure = true;
-  ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC9vup68R0I+62FK+8LNtwM90V9P4ukBmU7G7d54wf4C";
-  syncthing.id = "AU5RTWC-HXNMDRT-TN4ZHXY-JMQ6EQB-4ZPOZL7-AICZMCZ-LNS2XXQ-DGTI2Q6";
+  ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGkp+Fw9S/Af31vUP+n24cQLzbteUYosVFmV+7RSJm18";
 }
