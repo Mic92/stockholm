@@ -14,7 +14,6 @@
     localDomain = "social.krebsco.de";
     configureNginx = true;
     streamingProcesses = 3;
-    trustedProxy = config.krebs.hosts.prism.nets.retiolum.ip6.addr;
     smtp.createLocally = false;
     smtp.fromAddress = "derp";
   };
