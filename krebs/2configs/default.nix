@@ -33,7 +33,6 @@ with import ../../lib/pure.nix { inherit lib; };
   environment.systemPackages = with pkgs; [
     git
     vim
-    rxvt_unicode.terminfo
   ];
 
   console.keyMap = "us";
