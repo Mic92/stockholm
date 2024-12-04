@@ -10,6 +10,7 @@
         "flix.r"
         "radar.r"
         "sonar.r"
+        "jellyseer.r"
         "transmission.r"
       ];
       tinc = {
