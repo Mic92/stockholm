@@ -253,24 +253,6 @@ let
     };
   };
 
-  vicuna = {
-    pattern = "^!vicuna (.*)$";
-    activate = "match";
-    arguments = [1];
-    timeoutSec = 1337;
-    command = {
-      filename = pkgs.writeDash "vicuna" ''
-        set -efu
-
-        mkdir -p ${stateDir}/vicuna
-        export CONTEXT=${stateDir}/vicuna/"$_msgtarget".context
-        ${pkgs.vicuna-chat}/bin/vicuna-chat "$@" |
-          echo "$_from: $(cat)" |
-          fold -s -w 426
-      '';
-    };
-  };
-
   locationsLib = pkgs.writeText "locations.sh" ''
     ENDPOINT=http://c.r/poi.json
     get_locations() {
@@ -431,7 +413,6 @@ let
         hooks.sed
         interrogate
         say
-        vicuna
         (generators.command_hook {
           inherit (commands) dance random-emoji nixos-version;
           tell = {
