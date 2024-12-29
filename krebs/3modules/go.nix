@@ -25,7 +25,7 @@ let
 
     krebs.htgen.go = {
       port = cfg.port;
-      script = ''. ${pkgs.writeDash "go" ''
+      script = ''. ${pkgs.writers.writeDash "go" ''
         set -x
 
         case "$Method $Request_URI" in
