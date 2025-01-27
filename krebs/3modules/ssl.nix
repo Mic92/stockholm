@@ -22,7 +22,7 @@ in {
       default = false;
       description = ''
         whether to trust the krebs root CA.
-        This implies that krebs can forge a certficate for every domain
+        This implies that krebs can forge a certificate for every domain
       '';
     };
     trustIntermediate = lib.mkOption {
