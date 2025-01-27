@@ -1023,6 +1023,58 @@ in {
     };
 
     ace = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # irene.dos.cit.tum.de
+          ip4.addr = "131.159.38.181";
+          ip6.addr = "2a09:80c0:38::181";
+          aliases = [ "ace.i" ];
+        };
+        retiolum = {
+          via = internet;
+          aliases = [ "ace.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAtUCw2AeXPFdD1Wisx4+SlEIUulSl2LMELcgbwDia4WSikC9rljLy
+            RZwUss9Ue0bZgt1IcTj5p5LjWXU+jEauhZnJSXdYvgzWQd+oPOH6zM4K4MEt1SIa
+            iC3UkY900gTiUx6VUHlCTMH6+2dPOhMsOVVXwaywkpL2YwXVGar+NMolOkoBy+ZA
+            DmKrcWfapnuvkXeCDNIXkmACapjyJAgC+0OII9tOTtVa0t4eI6bqBBe2NvVUXUCh
+            UUkvezLxHE3OnV8HW8L4vxURlgIWH5kd7gGy8WFTSqusqtv7MAjXX48BJxSgJKfq
+            wqTwgA4V6SCuFoui4W51KAFxP7eS755B2wIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+
+          tinc.pubkey_ed25519 = "aiUOGsOxowPNBG10vMOVJN1u2Xm2tL8M91oeO8u2AXC";
+        };
+      };
+    };
+
+    ian = {
+      owner = config.krebs.users.mic92;
+      nets = rec {
+        internet = {
+          # ian.dos.cit.tum.de
+          ip4.addr = "131.159.102.30";
+          ip6.addr = "2a09:80c0:102::30";
+          aliases = [ "ian.i" ];
+        };
+        retiolum = {
+          via = internet;
+          aliases = [ "ian.r" ];
+          tinc.pubkey = ''
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEAyfm4Bqg7SOHjXl6PRUVwdDAsYigj7aOYhL7lPKoEADUYIXO0/d+Y
+            t6KzKGV0Lvz0cKMiY4sGVJ8KGvEb1VhfKLSUdqCPY5spT44zbpvyrOSck6aGOB50
+            Fu1EEtGj9uPtJorJx0UtjMi4WPEUs5Xg1YxxncmFB8pFfQcqIVUh7l5lPiCB2Udq
+            P+GPwnewTDTJvqCN7Rc6zW8WKjxJseNXkFF/hdZuNPSKE+fvQdkrfDmYt8KbWVV+
+            0LlsCxT4rLkIhvqEXMA6wELtnGAw8PflBV3tFmBBRTG64Bj7Sni7QI359QL+5sBo
+            rXgOTExX37JnSPIXtAmKm6r3+eexZwOB4wIDAQAB
+            -----END RSA PUBLIC KEY-----
+          '';
+          tinc.pubkey_ed25519 = "pjccEHqFQ0eq+TvTFm9mjTkisS7aOMVimi5wMGsgwnB";
+        };
+      };
     };
   };
   users = {
