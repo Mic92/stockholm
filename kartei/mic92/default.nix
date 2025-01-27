@@ -713,7 +713,6 @@ in {
           via = internet;
           aliases = [
             "jack.r"
-            "stable-confusion.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
