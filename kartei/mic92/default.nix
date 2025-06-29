@@ -85,11 +85,9 @@ in {
           via = internet;
           aliases = [
             "eve.r"
-            "tts.r"
             "flood.r"
             "warez.r"
-            "bing-gpt.r"
-            "navidrome.r"
+            "ca.r"
           ];
           tinc.pubkey = ''
             -----BEGIN RSA PUBLIC KEY-----
