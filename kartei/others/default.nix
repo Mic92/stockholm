@@ -508,33 +508,6 @@ in {
       syncthing.id = "22NLFY5-QMRM3BH-76QIBYI-OPMKVGM-DU4FNZI-3KN2POF-V4WIC6M-2SFFUAC";
       nets = {};
     };
-    hydrogen = {
-      owner = config.krebs.users.sandro;
-      nets = rec {
-        internet.addrs = [ "hydrogen.supersandro.de" ];
-        retiolum = {
-          via = internet;
-          ip4.addr = "10.243.54.54";
-          aliases = [ "hydrogen.r" ];
-          tinc.pubkey = ''
-            -----BEGIN RSA PUBLIC KEY-----
-            MIICCgKCAgEA6bnwRKS+oWNc+ExOnJdqGHR1bnCEE9zkCqyONK3+xLg8QQIz6SvZ
-            Nt5cO9kdZw9rA+4Dshg5m0RSnaP2TVtiDxcyv3zAW4TSOTGaBRp9WZmwhcKyxiON
-            hvTBirsC1Domorew6++qHoZxtmHMKaF/uPoFLBqSvw3RHVoGzEAhGW9/LqZVa9k2
-            D8dDRg7jTqH2oiIHct33Up5+zeFbmCo5xyDzl+pcwHxldi8sAupvpHx4KxXH1zMX
-            YQATS2Rp8b52bGEQ52UKAbSOpJqyt9/o5vb+z2JZ52N1dDrphWHGfIcJa8DVt2VO
-            n/V0kWuUhDh3Wwt7aIFcY0bUq4OurcVQQ5eMgwGbOEthdjLf1ou2gUJhf0zAeVQp
-            IiaqeHTNn1+mtxBjl4+v+b0H/lhZPSgO74Jo28fAse+/itjM3kgkIKV0ldD5tWpv
-            MHaKMB5Ui6swHZDV6nUxf5vlKPAM71/14cy1e/0ANFo5JvE66jWn7m5wn60HYwpB
-            XnTOgIxue2rJ4F+Xtm8CTgS5TcV1AKR0cnmlU7WfVOVJHD2/4QTRYYTCR53/RoVq
-            1T6DILDF71H92PNylujKSPA0CKI160xJ61Xy/T6MYl5u0+RblAgYr77o5HJwmXCe
-            jFrCu3SKUIlJWYHWE8yNoR+VVYeXakbDFYE3KpVyBDG+ljUbia+Oel8CAwEAAQ==
-            -----END RSA PUBLIC KEY-----
-          '';
-          tinc.pubkey_ed25519 = "3IKIoZqg0jm9+pOOka2FEtihx0y8qAdJqKTuRfJtMpK";
-        };
-      };
-    };
     verex = {
       owner = config.krebs.users.lc4r;
       nets = {
