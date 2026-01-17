@@ -1237,7 +1237,7 @@ in {
         };
       };
     };
-    dorits-laptop = {
+    doritslaptop = {
       owner = config.krebs.users.mic92;
       nets = {
         retiolum = {
