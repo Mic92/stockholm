@@ -80,6 +80,22 @@
         "type": "github"
       }
     },
+    "kartei": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1778097895,
+        "narHash": "sha256-IuXgi6ZZaq6M7PZy5z1rXaW0gV0VaocHVAqsQDurgNU=",
+        "owner": "Mic92",
+        "repo": "kartei",
+        "rev": "1c3c1ee1c1e0f25f6e6cb12cd8a349afbc080f0e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "kartei",
+        "type": "github"
+      }
+    },
     "nix-writers": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -120,6 +136,7 @@
     "root": {
       "inputs": {
         "buildbot-nix": "buildbot-nix",
+        "kartei": "kartei",
         "nix-writers": "nix-writers",
         "nixpkgs": "nixpkgs"
       }

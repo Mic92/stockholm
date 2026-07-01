@@ -1,6 +1,0 @@
-{ r6, w6, ... }:
-{
-  consul = false;
-  secure = true;
-  ssh.pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP017KDMPZgXeb5pwo8sOD9R16vEaHFp523HGyeWPIIa";
-}

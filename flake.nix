@@ -7,16 +7,19 @@
     # disko.inputs.nixpkgs.follows = "nixpkgs";
     buildbot-nix.url = "github:Mic92/buildbot-nix";
     buildbot-nix.inputs.nixpkgs.follows = "nixpkgs";
+    kartei.url = "github:Mic92/kartei";
+    kartei.flake = false;
   };
 
   description = "stockholm";
 
-  outputs = { self, nixpkgs, nix-writers, buildbot-nix, ... }: {
+  outputs = { self, nixpkgs, nix-writers, buildbot-nix, kartei, ... }: {
     nixosConfigurations = nixpkgs.lib.mapAttrs (machineName: _: nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs.stockholm = self;
       specialArgs.nix-writers = nix-writers;
       specialArgs.buildbot-nix = buildbot-nix;
+      specialArgs.kartei = kartei;
       modules = [
         ./krebs/1systems/${machineName}/config.nix
         {

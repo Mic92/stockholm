@@ -1,3 +1,4 @@
+{ kartei, ... }:
 {
-  imports = [ ../../kartei ];
+  imports = [ kartei.outPath ];
 }
